@@ -50,22 +50,24 @@ extern STRING qShaslnk;
 
 static INT count_xrefs_in_list(STRING xref, NODE list);
 static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
+static void remove_name_list(NODE name, CNSTRING key);
+static void remove_refn_list(NODE refn, CNSTRING key);
 
 /*================================================================
- * remove_indi -- Delete person and links; if this leaves families
+ * remove_indi_by_root -- Delete person and links; if this leaves families
  *   with no links, remove them.
  *   This should not fail.
  *  indi:  [in]  person to remove - (must be valid)
  * Created: 2001/11/08, Perry Rapp
  *==============================================================*/
 void
-remove_indi (NODE indi)
+remove_indi_by_root (NODE indi)
 {
-	STRING key;
+	STRING key = rmvat(nxref(indi));
 	NODE name, refn, sex, body, famc, fams;
 	NODE node, husb, wife, chil, rest, fam, fref;
-	INT keyint;
 
+/* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 
 /* Remove person from families he/she is in as a parent */
@@ -97,64 +99,23 @@ remove_indi (NODE indi)
 			remove_empty_fam(fam);
 	}
 
-/* Add key to list of unused keys */
-	key = rmvat(nxref(indi));
-	keyint = atoi(key + 1);
-	addixref(keyint);
 
 /* Remove indi from cache */
 	remove_indi_cache(key);
 
 /* Remove any name and refn entries */
-	for (node = name; node; node = nsibling(node))
-		{
-		remove_name(nval(node), key);
-		}
-	for (node = refn; node; node = nsibling(node))
-		{
-		if (nval(node))
-			{
-			remove_refn(nval(node), key);
-			}
-		}
+	remove_name_list(name, key);
+	remove_refn_list(refn, key);
+
 /* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
 
 /* Remove from on-disk database */
 	del_in_dbase(key);
 
-/* Delete the in-memory record we're holding (indi) */
+/* Reassemble & delete the in-memory record we're holding (indi) */
 	join_indi(indi, name, refn, sex, body, famc, fams);
 	free_nodes(indi);
-}
-/*==========================================
- * remove_any_xrefs_node_list -- 
- *  Remove from list any occurrences of xref
- * Eg, removing @I2@ from a husband list of a family
- * Returns head of list (which might be different if first node removed)
- *========================================*/
-static NODE
-remove_any_xrefs_node_list (STRING xref, NODE list)
-{
-	NODE prev = NULL;
-	NODE curr = list;
-	NODE rtn = list;
-
-	ASSERT(xref);
-
-	while (curr) {
-		if (eqstr(xref, nval(curr))) {
-			NODE next = nsibling(curr);
-			if (prev)
-				nsibling(prev) = next;
-			else
-				rtn = next;
-			nsibling(curr) = NULL;
-			free_nodes(curr);
-			curr = next;
-		}
-	}
-	return rtn;
 }
 /*==========================================
  * remove_empty_fam -- Delete family from database
@@ -165,10 +126,15 @@ BOOLEAN
 remove_empty_fam (NODE fam)
 {
 	STRING key;
-	NODE node, husb, wife, chil, rest, refn;
-	INT keyint;
+	NODE husb, wife, chil, rest, refn;
+
 	if (!fam) return TRUE;
+	key = rmvat(nxref(fam));
+
+/* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
 	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+
+	/* We're only supposed to be called for empty families */
 	if (husb || wife || chil) {
 		/* TO DO - This probably should never happen, and maybe could be
 		changed to an assertion, 2001/11/08, Perry, but I've not checked
@@ -177,15 +143,20 @@ remove_empty_fam (NODE fam)
 		join_fam(fam, refn, husb, wife, chil, rest);
 		return FALSE;
 	}
-	key = rmvat(nxref(fam));
-	keyint = atoi(key + 1);
-	addfxref(keyint);
-	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+
+/* Remove fam from cache */
 	remove_fam_cache(key);
+
+/* Remove any refn entries */
+	remove_refn_list(refn, key);
+
+/* Remove from on-disk database */
 	del_in_dbase(key);
+
+/* Reassemble & delete the in-memory record we're holding (fam) */
 	join_fam(fam, refn, husb, wife, chil, rest);
 	free_nodes(fam);
+
 	return TRUE;
 }
 /*=========================================
@@ -266,6 +237,64 @@ remove_spouse (NODE indi, NODE fam)
 
 	return TRUE;
 }
+/*================================================================
+ * remove_fam_record -- Delete family (and any family lineage linking)
+ *   This should not fail.
+ *  fam:  [in]  family to remove - (must be valid)
+ * Created: 2005/01/08, Perry Rapp
+ *==============================================================*/
+BOOLEAN
+remove_fam_record (RECORD frec)
+{
+	message(_("Families may not yet be removed in this fashion."));
+	return FALSE;
+}
+
+/*================================================================
+ * remove_any_record -- Delete record (and any family lineage linking)
+ *   This should not fail.
+ *  record:  [in]  record to remove - (must be valid)
+ * Created: 2005/01/08, Perry Rapp
+ *==============================================================*/
+BOOLEAN
+remove_any_record (RECORD record)
+{
+	NODE root=0;
+	STRING key = nzkey(record);
+	NODE rest, refn;
+
+	ASSERT(record);
+
+	/* indi & family records take special handling, for lineage-linking */
+	if (nztype(record) == 'I') {
+		remove_indi_by_root(nztop(record));
+		return TRUE;
+	}
+	if (nztype(record) == 'F') {
+		return remove_fam_record(record);
+	}
+
+	root = nztop(record);
+	
+/* Factor out portions critical to lifelines (refns) */
+	split_othr(root, &refn, &rest);
+
+/* Remove record from cache */
+	remove_from_cache_by_key(key);
+	record=NULL; /* record no longer valid */
+
+/* Remove any refn entries */
+	remove_refn_list(refn, key);
+
+/* Remove from on-disk database */
+	del_in_dbase(key);
+
+/* Reassemble & delete the in-memory record we're holding (root) */
+	join_othr(root, refn, rest);
+	free_nodes(root);
+
+	return TRUE;
+}
 /*=======================================================
  * num_fam_xrefs -- Find number of person links in family
  *   LOOSEEND -- How about other links in the future???
@@ -280,4 +309,60 @@ num_fam_xrefs (NODE fam)
 	num = length_nodes(husb) + length_nodes(wife) + length_nodes(chil);
 	join_fam(fam, fref, husb, wife, chil, rest);
 	return num;
+}
+/*==========================================
+ * remove_any_xrefs_node_list -- 
+ *  Remove from list any occurrences of xref
+ * Eg, removing @I2@ from a husband list of a family
+ * Returns head of list (which might be different if first node removed)
+ *========================================*/
+static NODE
+remove_any_xrefs_node_list (STRING xref, NODE list)
+{
+	NODE prev = NULL;
+	NODE curr = list;
+	NODE rtn = list;
+
+	ASSERT(xref);
+
+	while (curr) {
+		if (eqstr(xref, nval(curr))) {
+			NODE next = nsibling(curr);
+			if (prev)
+				nsibling(prev) = next;
+			else
+				rtn = next;
+			nsibling(curr) = NULL;
+			free_nodes(curr);
+			curr = next;
+		}
+	}
+	return rtn;
+}
+/*=========================================
+ * remove_name_list -- Remove all names in passed list
+ *  key is key of record to which name chain belongs
+ *  silent function, does not fail
+ *=======================================*/
+static void
+remove_name_list (NODE name, CNSTRING key)
+{
+	NODE node=0;
+	for (node = name; node; node = nsibling(node)) {
+		remove_name(nval(node), key);
+	}
+}
+/*=========================================
+ * remove_refn_list -- Remove all refns in passed list
+ *  key is key of record to which refn chain belongs
+ *  silent function, does not fail
+ *=======================================*/
+static void
+remove_refn_list (NODE refn, CNSTRING key)
+{
+	NODE node;
+	for (node = refn; node; node = nsibling(node)) {
+		if (nval(node)) 
+			remove_refn(nval(node), key);
+	}
 }

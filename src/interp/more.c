@@ -50,7 +50,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING qSnotone, qSifone;
+extern STRING qSnotonei, qSifonei;
 extern STRING nonint1,nonintx,nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 
@@ -471,7 +471,7 @@ __chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 	seq = pvalue_to_seq(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
-	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
+	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 	if (!indi) return NULL;
 	return create_pvalue_from_indi(indi);
 }
@@ -493,7 +493,7 @@ __choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	newseq = copy_indiseq(seq);
-	msg = (length_indiseq(newseq) > 1) ? _(qSnotone ): _(qSifone);
+	msg = (length_indiseq(newseq) > 1) ? _(qSnotonei): _(qSifonei);
 	if (-1 == choose_list_from_indiseq(msg, newseq)) {
 		remove_indiseq(newseq);
 		newseq = NULL;
@@ -525,7 +525,7 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		INDISEQ seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
-		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
+		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 		remove_indiseq(seq);
 		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	} else if (*key == 'F') {
@@ -534,7 +534,7 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		INDISEQ seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue_from_indi(NULL);
-		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
+		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 		remove_indiseq(seq);
 		return create_pvalue_from_indi(indi); /* indi may be NULL */
 	}
@@ -558,7 +558,7 @@ __choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue_from_indi(NULL);
-	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
+	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 	remove_indiseq(seq);
 	return create_pvalue_from_indi(indi); /* indi may be NULL */
 }
@@ -578,7 +578,7 @@ __choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue_from_fam(NULL);
-	fam = nztop(choose_from_indiseq(seq, DOASK1, _(qSifone), _(qSnotone)));
+	fam = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 	remove_indiseq(seq);
 	return create_pvalue_from_fam(fam); /* fam may be NULL */
 }

@@ -172,10 +172,15 @@ traverse_db_key_recs (BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *p
 }
 /*=================================================
  * del_in_dbase -- Write deleted record to database
+ *  Also update xreffile (module of free keys)
  *===============================================*/
 void
 del_in_dbase (STRING key)
 {
 	if (!key || *key == 0) return;
+
+/* Add key to list of unused keys */
+	addxref(key);
+/* Free record in database */
 	ASSERT(store_record(key, "DELE\n", 5));
 }

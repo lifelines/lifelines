@@ -394,7 +394,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
 
-	remove_indi(indi01);	/* this is the original indi1 */
+	remove_indi_by_root(indi01);	/* this is the original indi1 */
 	return node_to_record(indi02);   /* this is the updated indi2 */
 }
 /*=================================================================

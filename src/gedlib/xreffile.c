@@ -67,7 +67,7 @@ typedef struct deleteset_s *DELETESET;
 static BOOLEAN readxrefs(void);
 static void readrecs(DELETESET set);
 static STRING getxref(DELETESET set);
-static void addxref(INT key, DELETESET set);
+static void add_xref_to_set(INT key, DELETESET set);
 static void growxrefs(DELETESET set);
 static INT num_set(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
@@ -302,11 +302,11 @@ writexrefs (void)
 	return TRUE;
 }
 /*=====================================
- * addxref -- Add deleted key to xrefs.
+ * add_xref_to_set -- Add deleted key to xrefs.
  *  generic for all types
  *===================================*/
 static void
-addxref (INT key, DELETESET set)
+add_xref_to_set (INT key, DELETESET set)
 {
 	INT lo,hi,md, i;
 	if (key <= 0 || !xreffp || (set->n) < 1) FATAL();
@@ -338,14 +338,29 @@ addxref (INT key, DELETESET set)
 	maxkeynum=-1;
 }
 /*===================================================
- * add?xref -- Wrappers for each type to addxref (qv)
+ * add?xref -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-void addixref (INT key) { addxref(key, &irecs); }
-void addfxref (INT key) { addxref(key, &frecs); }
-void addsxref (INT key) { addxref(key, &srecs); }
-void addexref (INT key) { addxref(key, &erecs); }
-void addxxref (INT key) { addxref(key, &xrecs); }
+void addixref (INT key) { add_xref_to_set(key, &irecs); }
+void addfxref (INT key) { add_xref_to_set(key, &frecs); }
+void addsxref (INT key) { add_xref_to_set(key, &srecs); }
+void addexref (INT key) { add_xref_to_set(key, &erecs); }
+void addxxref (INT key) { add_xref_to_set(key, &xrecs); }
+/*===================================================
+ * addxref -- Mark key free (accepts string key, any type)
+ *=================================================*/
+void addxref (STRING key)
+{
+	INT keyint = atoi(key + 1);
+	switch(key[0]) {
+	case 'I': addixref(keyint); break;
+	case 'F': addfxref(keyint); break;
+	case 'S': addsxref(keyint); break;
+	case 'E': addexref(keyint); break;
+	case 'X': addxxref(keyint); break;
+	default: ASSERT(0); break;
+	}
+}
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
  *  generic for all types

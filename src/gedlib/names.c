@@ -451,7 +451,7 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
  *  key:  [in] person's INDI key
  *===========================================*/
 void
-remove_name (STRING name, STRING key)
+remove_name (STRING name, CNSTRING key)
 {
 	INT i;
 	RKEY rkeyid = str2rkey(key);

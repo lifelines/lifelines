@@ -51,7 +51,7 @@ static void annotate_node(NODE node, BOOLEAN expand_refns, BOOLEAN annotate_poin
 static BOOLEAN is_annotated_xref(CNSTRING val, INT * len);
 static STRING symbolic_link(CNSTRING);
 static void parserefnrec(RKEY rkey, CNSTRING p);
-static RKEY refn2rkey(STRING);
+static RKEY refn2rkey(CNSTRING refn);
 static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
 
 /*********************************************
@@ -150,7 +150,7 @@ parserefnrec (RKEY rkey, CNSTRING p)
  * getrefnrec -- Read refn record and store in globals
  *==================================================*/
 BOOLEAN
-getrefnrec (STRING refn)
+getrefnrec (CNSTRING refn)
 {
 	STRING p;
 /* Convert refn to key and read refn record */
@@ -174,7 +174,7 @@ getrefnrec (STRING refn)
  * refn2rkey - Convert refn to refn record key
  *==========================================*/
 static RKEY
-refn2rkey (STRING refn)
+refn2rkey (CNSTRING refn)
 {
 	RKEY rkey;
 	rkey.r_rkey[0] = rkey.r_rkey[1] = ' ';
@@ -263,8 +263,8 @@ add_refn (STRING refn,  /* record's user refn key */
  * remove_refn -- Remove entry from refn record
  *===========================================*/
 BOOLEAN
-remove_refn (STRING refn,       /* record's refn */
-             STRING key)        /* record's GEDCOM key */
+remove_refn (CNSTRING refn,       /* record's refn */
+             CNSTRING key)        /* record's GEDCOM key */
 {
 	STRING rec, p;
 	INT i, len, off;

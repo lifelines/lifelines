@@ -51,7 +51,8 @@
 extern INT listbadkeys;
 extern char badkeylist[];
 
-extern STRING qSntchld,qSntprnt,qSidfbrs,qSentnam,qSnotone,qSifone;
+extern STRING qSntchld,qSntprnt,qSidfbrs,qSentnam;
+extern STRING qSnotonei,qSnotonex,qSifonei,qSifonex;
 extern STRING qSnofopn,qSidbrws,qSwhtfname,qSwhtfnameext;
 extern STRING qSnonamky,qSparadox,qSaskint,qSmisskeys,qSbadkeyptr;
 extern STRING qSfn2long,qSidkyrfn,qSduprfn;
@@ -305,8 +306,7 @@ ask_for_indiseq (STRING ttl, char ctype, INT *prc)
 	return seq;
 }
 /*============================================================
- * ask_for_any_once -- Have user identify sequence and select
- *   person
+ * ask_for_any_once -- Have user identify sequence and select record
  *  ttl:   [IN]  title to present
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  *  ask1:  [IN]  whether to present list if only one matches their desc.
@@ -318,7 +318,11 @@ ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
 	RECORD indi = 0;
 	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = choose_from_indiseq(seq, ask1, _(qSifone), _(qSnotone));
+	if (ctype == 'I') {
+		indi = choose_from_indiseq(seq, ask1, _(qSifonei), _(qSnotonei));
+	} else {
+		indi = choose_from_indiseq(seq, ask1, _(qSifonex), _(qSnotonex));
+	}
 	remove_indiseq(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
@@ -375,7 +379,7 @@ ask_for_indi_list_once (STRING ttl,
 	INDISEQ seq = ask_for_indiseq(ttl, 'I', prc);
 	INT rv;
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	rv = choose_list_from_indiseq(_(qSnotone), seq);
+	rv = choose_list_from_indiseq(_(qSnotonei), seq);
 	if (rv == -1) {
 		remove_indiseq(seq);
 		seq = NULL;

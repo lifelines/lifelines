@@ -56,10 +56,11 @@ NODE my_prompt_add_child(NODE child, NODE fam);
 void term_browse_module(void);
 
 /* delete.c */
-void delete_indi(NODE, BOOLEAN);
+void choose_and_remove_indi(NODE indi, CONFIRMQ confirmq);
 void choose_and_delete_family(void);
 BOOLEAN choose_and_remove_child(RECORD irec, RECORD frec, BOOLEAN nolast);
 BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
+BOOLEAN choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
 
 /* edit.c */
 BOOLEAN edit_family(RECORD frec1, RFMT rfmt);

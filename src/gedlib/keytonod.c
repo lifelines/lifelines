@@ -1054,6 +1054,21 @@ remove_fam_cache (STRING key)
 	remove_from_cache(famcache, key);
 }
 /*=============================================
+ * remove_from_cache_by_key -- Remove record from cache
+ *===========================================*/
+void
+remove_from_cache_by_key (STRING key)
+{
+	switch(key[0]) {
+	case 'I': remove_from_cache(indicache, key); break;
+	case 'F': remove_from_cache(famcache, key); break;
+	case 'S': remove_from_cache(sourcache, key); break;
+	case 'E': remove_from_cache(evencache, key); break;
+	case 'X': remove_from_cache(othrcache, key); break;
+	default: ASSERT(0); break;
+	}
+}
+/*=============================================
  * remove_from_cache -- Move cache entry to free list
  *===========================================*/
 static void

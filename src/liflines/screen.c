@@ -118,7 +118,8 @@ extern STRING qSmn_notimpl;
 extern STRING qShitkey;
 
 extern STRING qSmn_add_ttl,qSmn_add_indi,qSmn_add_fam,qSmn_add_chil,qSmn_add_spou;
-extern STRING qSmn_del_ttl,qSmn_del_chil,qSmn_del_spou,qSmn_del_indi,qSmn_del_fam;
+extern STRING qSmn_del_ttl,qSmn_del_chil,qSmn_del_spou;
+extern STRING qSmn_del_indi,qSmn_del_fam,qSmn_del_any;
 extern STRING qSmn_sca_ttl,qSmn_sca_nmfu,qSmn_sca_nmfr,qSmn_sca_refn;
 extern STRING qSmn_sea_ttl,qSmn_sea_vhis,qSmn_sea_vhi2,qSmn_sea_vhix;
 extern STRING qSmn_sea_chis,qSmn_sea_chi2,qSmn_sea_chix,qSmn_sea_scan;
@@ -1773,7 +1774,7 @@ invoke_del_menu (void)
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	if (!del_menu_win) {
-		del_menu_win = create_newwin2("del_menu", 8, 66);
+		del_menu_win = create_newwin2("del_menu", 9, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_delete_menu(del_menu_win);
 	}
@@ -1782,14 +1783,15 @@ invoke_del_menu (void)
 
 	activate_uiwin(uiwin);
 	wmove(win, 1, 30);
-	code = interact(uiwin, "csifq", -1);
+	code = interact(uiwin, "csifoq", -1);
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
 	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
 	case 's': choose_and_remove_spouse(NULL, NULL, FALSE); break;
-	case 'i': delete_indi(NULL, TRUE); break;
+	case 'i': choose_and_remove_indi(NULL, DOCONFIRM); break;
 	case 'f': choose_and_remove_family(); break;
+	case 'o': choose_and_remove_any_record(NULL, DOCONFIRM); break;
 	case 'q': break;
 	}
 }
@@ -3437,6 +3439,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_del_spou));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_indi));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_fam));
+	mvccwaddstr(win, row++, 4, _(qSmn_del_any));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*=====================================

@@ -41,7 +41,7 @@
 #include "feedback.h"
 
 
-extern STRING qSidpdel, qScfpdel, qScffdel, qScffdeld;
+extern STRING qSidpdel, qSidodel, qScfpdel, qScfodel, qScffdel, qScffdeld;
 extern STRING qSidfrmv, qSidfrsp, qSidfrch;
 extern STRING qSidcrmv, qSntchld, qSntprnt, qSidsrmv, qSidsrmf, qSnormls, qScfcrmv;
 extern STRING qSokcrmv, qSntsinf, qSntcinf, qScfsrmv, qSoksrmv, qSronlye, qSidcrmf;
@@ -115,22 +115,41 @@ choose_and_remove_family (void)
 	remove_indiseq(chseq);
 }
 /*================================================================
- * delete_indi -- Delete person and links; if this leaves families
+ * choose_and_remove_indi -- Prompt & delete person and links; if this leaves families
  *   with no links, remove them
  *  indi:  [in]  person to remove - (if null, will ask for person)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 void
-delete_indi (NODE indi, BOOLEAN conf)
+choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), NOCONFIRM, DOASK1))))
 		return;
 	/* confirm if caller desired */
-	if (conf && !ask_yes_or_no(_(qScfpdel))) return;
+	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfpdel))) return;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
-	remove_indi(indi);
+	remove_indi_by_root(indi);
+}
+/*================================================================
+ * choose_and_remove_any_record -- Prompt & delete any record
+ *   (delete any empty families produced)
+ *  record:  [in]  record to remove (if null, will ask for record)
+ *  conf:  [in]  have user confirm ?
+ *==============================================================*/
+BOOLEAN
+choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
+{
+	/* prompt if needed */
+	if (!record && !(record = ask_for_any(_(qSidodel), NOCONFIRM, DOASK1)))
+		return FALSE;
+	/* confirm if caller desired */
+	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfodel)))
+		return FALSE;
+
+	/* alright, we finished the UI, so delegate to the internal workhorse */
+	return remove_any_record(record);
 }
 /*===========================================
  * choose_and_remove_spouse -- Remove spouse 
