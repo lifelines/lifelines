@@ -1,5 +1,8 @@
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/date.c: Make 'struct monthstrs[]' static, as it is only
+	used in this file.
+	
 	* hdrs/screen.h hdrs/standard.h: Make sure TRUE and FALSE
 	constants are of type BOOLEAN.  This removed some warnings when
 	running lclint.

@@ -51,7 +51,7 @@ static void set_date_string(STRING);
 static INT get_date_tok(INT*, STRING*);
 static void init_monthtbl(void);
 
-struct {
+static struct {
 	char *sl, *su, *ll, *lu;
 } monthstrs[19] = {
 	{ "Jan", "JAN", "January", "JANUARY" },
