@@ -215,6 +215,8 @@ validate_list (LIST list)
 {
 #ifdef LIST_ASSERTS
 	ASSERT(!list || (lfirst(list)&&llast(list)) || (!lfirst(list)&&!llast(list)));
+#else
+	list=list; /* unused */
 #endif
 }
 /*========================================

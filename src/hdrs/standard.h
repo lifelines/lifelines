@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * standard.h -- Define standard macros and types
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
@@ -212,30 +211,10 @@ typedef struct lldate_s {
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
 	RECORD_STATUS;
 
-/* Need config.h for ENABLE_NLS */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-/* NLS (National Language Support) */
-#if ENABLE_NLS
-/*#include <libintl.h>*/
-#include "libgnuintl.h"
-/* _() is used for normally translated strings */
-#define _(String) gettext(String)
-/* xgettext won't handle macros for ngettext, so we can't use _pl() */
-/* #define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) */
-/* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
-/* N_() is used for strings needing translation elsewhere, eg static inits */
-#define N_(String) (String)
-#else
-/* null out NLS (gettext) support */
-#define _(String) String
-#define N_(String) (String)
-#define textdomain(Domain)
-#define bindtextdomain(Package, Directory)
-#define ngettext(Singular, Plural, Num) Plural
-#endif
+/*
+ Pull in declarations & macros for NLS (National Language Support)
+*/
+#include "llnls.h"
 
 
 #endif

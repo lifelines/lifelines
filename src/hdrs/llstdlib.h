@@ -94,6 +94,9 @@ void __deallocate(void*, STRING file, int line);
 void * __reallocate(void*, int size, STRING file, int line);
 INT alloc_count(void);
 void report_alloc_live_count(STRING str);
+char * ngettext_null (const char *, const char *, unsigned long int);
+char * dngettext_null(const char *, const char *, const char *, unsigned long int);
+char * dcngettext_null(const char *, const char *, const char *, unsigned long int, int);
 
 /* path.c */
 STRING check_file_for_unicode(FILE * fp);

@@ -109,8 +109,9 @@ init_lifelines_global (STRING * pmsg)
 	gettext has a lot of nice code for this stuff, but it doesn't
 	know about DOS console windows, and will default to the MS-Windows default
 	codepage, which is not very close :(
+	TODO: So revise this to use the codeset we determine at startup
 	*/
-#endif
+#endif /* ENABLE_NLS */
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */

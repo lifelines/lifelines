@@ -8,6 +8,15 @@
 
 	Updating system recognition autotools scripts.
 
+	* ChangeLog configure.in gedlib/init.c hdrs/Makefile.am
+	hdrs/llstdlib.h hdrs/standard.h stdlib/Makefile.am
+	stdlib/double.c stdlib/memalloc.c
+	*NEW hdrs/llnls.h stdlib/llnls.c:
+
+	Test for ngettext & bind_textdomain_codeset in configure.in, and provide
+	null implementations in llnls.c if missing & needed.
+	Move NLS stuff from standard.h into llnls.h.
+
 2002-06-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editvtab.c gedlib/init.c gedlib/names.c

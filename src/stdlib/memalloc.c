@@ -149,3 +149,4 @@ report_alloc_live_count (STRING str)
 	snprintf(buffer, sizeof(buffer), "Live count: %d", live_allocs);
 	alloc_out(buffer);
 }
+
