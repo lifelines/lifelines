@@ -534,12 +534,14 @@ unlock_cache (CACHEEL cel)
 	ASSERT(cnode(cel));
 	cclock(cel)--;
 }
-/*================================
- * cache_stats -- Show cache stats
- *==============================*/
-void
-cache_stats (void)
+/*=========================================
+ * get_cache_stats -- Calculate cache stats
+ *  returns in static buffer
+ *=======================================*/
+STRING
+get_cache_stats (void)
 {
+	static char buffer[64];
 	CACHE c = indicache;
 	CACHE f = famcache;
 	INT n = 0;
@@ -547,8 +549,9 @@ cache_stats (void)
 	for (cel = cfirstdir(c); cel; cel = cnext(cel)) {
 		if (cclock(cel)) n++;
 	}
-	mprintf_info("Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
+	sprintf(buffer, "Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
 	    csizedir(c), csizeind(c), n, csizedir(f), csizeind(f));
+	return buffer;
 }
 /*============================================
  * indi_to_cache -- Add person to person cache

@@ -131,7 +131,7 @@ BOOLEAN add_name(STRING, STRING);
 BOOLEAN add_refn(STRING, STRING);
 NODE add_unlinked_indi(NODE indi);
 INT ask_child_order(NODE fam, PROMPTQ promptq);
-void cache_stats(void);
+STRING get_cache_stats(void);
 NODE choose_any_source(void);
 NODE choose_child(NODE, NODE, STRING, STRING, BOOLEAN);
 NODE choose_father(NODE, NODE, STRING, STRING, BOOLEAN);

@@ -909,9 +909,11 @@ sibling_indiseq (INDISEQ seq,
 }
 /*=========================================================
  * ancestor_indiseq -- Create ancestor sequence of sequence
+ *  values are created with the generation number
+ *  (passed to create_value callback)
  *=======================================================*/
 INDISEQ
-ancestor_indiseq (INDISEQ seq)
+ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 {
 	TABLE tab;
 	LIST anclist, genlist;
@@ -937,7 +939,7 @@ ancestor_indiseq (INDISEQ seq)
 		if (fath && !in_table(tab, pkey = indi_to_key(fath))) {
 			pkey = strsave(pkey);
 			append_indiseq(anc, pkey, NULL,
-				create_pvalue(PINT, (WORD)gen), TRUE, TRUE);
+				(*create_value_fnc)(gen), TRUE, TRUE);
 			enqueue_list(anclist, (WORD)pkey);
 			enqueue_list(genlist, (WORD)gen);
 			insert_table(tab, pkey, NULL);
@@ -945,7 +947,7 @@ ancestor_indiseq (INDISEQ seq)
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
 			pkey = strsave(pkey);
 			append_indiseq(anc, pkey, NULL,
-				create_pvalue(PINT, (WORD)gen), TRUE, TRUE);
+				(*create_value_fnc)(gen), TRUE, TRUE);
 			enqueue_list(anclist, (WORD)pkey);
 			enqueue_list(genlist, (WORD)gen);
 			insert_table(tab, pkey, NULL);
@@ -958,9 +960,11 @@ ancestor_indiseq (INDISEQ seq)
 }
 /*=============================================================
  * descendant_indiseq -- Create descendant sequence of sequence
+ *  values are created with the generation number
+ *  (passed to create_value callback)
  *===========================================================*/
 INDISEQ
-descendent_indiseq (INDISEQ seq)
+descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 {
 	INT gen;
 	TABLE itab, ftab;
@@ -992,7 +996,7 @@ descendent_indiseq (INDISEQ seq)
 				    dkey = indi_to_key(child))) {
 					dkey = strsave(dkey);
 					append_indiseq(des, dkey, NULL, 
-					    create_pvalue(PINT, (WORD)gen),
+					    (*create_value_fnc)(gen),
 					    TRUE, TRUE);
 					enqueue_list(deslist, (WORD)dkey);
 					enqueue_list(genlist, (WORD)gen);

@@ -39,10 +39,6 @@
 #include "indiseq.h"
 
 LIST keysets;
-INDISEQ union_indiseq(), intersect_indiseq(), child_indiseq();
-INDISEQ parent_indiseq(), spouse_indiseq(), ancestor_indiseq();
-INDISEQ descendent_indiseq(), difference_indiseq();
-INDISEQ sibling_indiseq();
 
 /*======================================================+
  * initset -- Initialize list that holds created INDISEQs
@@ -463,6 +459,15 @@ __spouseset (PNODE node,
 	push_list(keysets, seq);
 	return val;
 }
+/*===================================================+
+ * create_value_pvalue -- Callback for creating values
+ *  with pvalue indiseqs
+ *==================================================*/
+WORD
+create_value_pvalue (INT gen)
+{
+	return create_pvalue(PINT, (WORD)gen);
+}
 /*================================================+
  * ancestorset -- Create ancestor set of an INDISEQ
  *   ancestorset(SET) -> SET
@@ -479,13 +484,13 @@ __ancestorset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = ancestor_indiseq(seq));
+	seq = ancestor_indiseq(seq, create_value_pvalue);
+	set_pvalue(val, PSET, seq);
 	push_list(keysets, seq);
 	return val;
 }
 /*====================================================+
  * descendentset -- Create descendent set of an INDISEQ
- *   descendentset(SET) -> SET
  *   descendantset(SET) -> SET
  *===================================================*/
 PVALUE
@@ -500,7 +505,8 @@ __descendentset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = descendent_indiseq(seq));
+	seq = descendent_indiseq(seq, create_value_pvalue);
+	set_pvalue(val, PSET, seq);
 	push_list(keysets, seq);
 	return val;
 }

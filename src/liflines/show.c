@@ -781,3 +781,12 @@ void show_childnumbers ()
 {
 	number_child_enable = !number_child_enable;
 }
+/*================================
+ * cache_stats -- Show cache stats
+ *==============================*/
+void
+display_cache_stats (void)
+{
+	STRING stats = get_cache_stats();
+	mprintf_info(stats);
+}

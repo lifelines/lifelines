@@ -65,19 +65,20 @@ BOOLEAN remove_spouse(NODE, NODE, BOOLEAN);
 NODE name_scan(void);
 
 /* show.c */
+void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT flag);
+void show_aux_display(NODE, INT, INT);
+void show_childnumbers();
 void show_list(INDISEQ, INT, INT, INT);
+void show_long_family(NODE, INT, INT);
 void show_pedigree(NODE);
 void show_person(NODE, INT, INT);
 void show_person2(NODE, INT, INT);
-void show_aux_display(NODE, INT, INT);
-void show_sour_display(NODE, INT, INT);
-void show_short_family(NODE, INT, INT);
-void show_long_family(NODE, INT, INT);
 void show_reset_scroll();
+void show_short_family(NODE, INT, INT);
+void show_sour_display(NODE, INT, INT);
 void show_scroll(INT delta);
 void show_scroll2(INT delta);
-void show_childnumbers();
 
 /* swap.c */
 BOOLEAN swap_children(NODE, NODE);

@@ -949,7 +949,7 @@ utils_menu (void)
 	case 'k': key_util(); break;
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
-	case 'm': cache_stats(); break;
+	case 'm': display_cache_stats(); break;
 	case 'e': edit_valtab("VPLAC", &placabbvs, ':', abverr); break;
 	case 'o': edit_valtab("VUOPT", &useropts, '=', uoperr); break;
 	case 'q': break;

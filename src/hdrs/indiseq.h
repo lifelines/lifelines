@@ -82,13 +82,13 @@ typedef struct  {
  *===================*/
 
 void add_browse_list(STRING, INDISEQ);
-INDISEQ ancestor_indiseq(INDISEQ);
+INDISEQ ancestor_indiseq(INDISEQ seq, WORD (*create_value_fnc)(INT gen));
 void append_indiseq(INDISEQ, STRING, STRING, WORD, BOOLEAN, BOOLEAN);
 INDISEQ child_indiseq(INDISEQ);
 INDISEQ copy_indiseq(INDISEQ);
 INDISEQ create_indiseq(void);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
-INDISEQ descendent_indiseq(INDISEQ);
+INDISEQ descendent_indiseq(INDISEQ seq, WORD (*create_value_fnc)(INT gen));
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 BOOLEAN elementval_indiseq(INDISEQ, INT, STRING*, INT *, STRING*);
