@@ -57,7 +57,6 @@ static CACHEEL access_cel_from_pvalue(PVALUE val);
 static void clear_pv_indiseq(INDISEQ seq);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
-static void delete_vptr_pvalue(VPTR ptr);
 static void free_all_pvalues(void);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void symtab_cleaner(ENTRY ent);
@@ -343,10 +342,13 @@ clear_pvalue (PVALUE val)
 	case PSET:
 		{
 			INDISEQ seq = (INDISEQ)pvalue(val);
-			IRefcnt(seq)--;
-			if (!IRefcnt(seq)) {
-				clear_pv_indiseq(seq);
-				remove_indiseq(seq);
+			/* because of getindiset, seq might be NULL */
+			if (seq) {
+				IRefcnt(seq)--;
+				if (!IRefcnt(seq)) {
+					clear_pv_indiseq(seq);
+					remove_indiseq(seq);
+				}
 			}
 		}
 		return;
@@ -369,7 +371,8 @@ static void
 clear_pv_indiseq (INDISEQ seq)
 {
 	PVALUE val=NULL;
-	ASSERT(IValtype(seq) == ISVAL_PTR);
+	/* NUL value indiseqs can get into reports via getindiset */
+	ASSERT(IValtype(seq) == ISVAL_PTR || IValtype(seq) == ISVAL_NUL);
 	FORINDISEQ(seq, el, ncount)
 		val = (PVALUE) sval(el).w;
 		if (val) {
@@ -395,7 +398,7 @@ table_pvcleaner (ENTRY ent)
  *  (passed in as a VPTR)
  * Created: 2001/03/24, Perry Rapp
  *======================================*/
-static void
+void
 delete_vptr_pvalue (VPTR ptr)
 {
 	PVALUE val = (PVALUE)ptr;
@@ -419,15 +422,14 @@ delete_pvalue (PVALUE val)
 }
 /*====================================
  * copy_pvalue -- Create a new pvalue & copy into it
+ *  handles NULL
  *==================================*/
 PVALUE
 copy_pvalue (PVALUE val)
 {
 	VPTR newval;
-	if (!val) {
-		llwprintf("copy_pvalue: copying null pvalue\n");
+	if (!val)
 		return NULL;
-	}
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory
@@ -478,7 +480,10 @@ copy_pvalue (PVALUE val)
 	case PSET:
 		{
 			INDISEQ seq = (INDISEQ)pvalue(val);
-			IRefcnt(seq)++;
+			/* because of getindiset, seq might be NULL */
+			if (seq) {
+				IRefcnt(seq)++;
+			}
 		}
 		break;
 	}

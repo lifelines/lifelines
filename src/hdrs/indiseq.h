@@ -85,8 +85,8 @@ typedef struct stag {
 typedef UNION (*SEQ_COPY_VALUE_FNC)(UNION uval, INT valtype);
 /* delete a value (failing uniqueness check in append */
 typedef void (*SEQ_DELETE_VALUE)(UNION uval, INT valtype);
-/* create a value for ancestors or descendants */
-typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT valtype);
+/* create a value for ancestors or descendants (may change value type from NUL) */
+typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT * valtype);
 /* vtable for handling values in INDISEQ */
 typedef struct indiseq_value_vtable_s
 {
@@ -147,7 +147,7 @@ INDISEQ create_indiseq_pval(void);
 INDISEQ create_indiseq_sval(void);
 UNION default_copy_value(UNION uval, INT valtype);
 void default_delete_value(UNION uval, INT valtype);
-UNION default_create_gen_value(INT gen, INT valtype);
+UNION default_create_gen_value(INT gen, INT * valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);

@@ -300,6 +300,8 @@ ask_for_indi (STRING ttl,
 /*===============================================================
  * ask_for_indi_list_once -- Ask user to identify person sequence
  *   and then select sub-sequence of them
+ * returns null value indiseq
+ * used by both reports & interactive use
  *=============================================================*/
 static INDISEQ
 ask_for_indi_list_once (STRING ttl,
@@ -314,6 +316,8 @@ ask_for_indi_list_once (STRING ttl,
 /*===================================================================
  * ask_for_indi_list -- Ask user to identify person sequence and then
  *   select one person from it; use reask protocol
+ * returns null value indiseq
+ * used by both reports & interactive use
  *=================================================================*/
 INDISEQ
 ask_for_indi_list (STRING ttl,

@@ -1,5 +1,14 @@
 2001-04-08 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog gedlib/indiseq.c gedlib/xreffile.c hdrs/indiseq.h
+	hdrs/interp.h hdrs/menuitem.h interp/builtin.c
+	interp/intrpseq.c interp/pvalue.c liflines/ask.c
+	liflines/screen.c:
+	Fixed bug in addxref.
+	Fixes for ancestorset & descendantset to work with null value indiseqs.
+	Allow create_gen callback to set valuetype of null value indiseq.
+	Fixes for report code to work with null indiseqs.
+
 	* ChangeLog hdrs/menuitem.h liflines/menuitem.c
 	liflines/screen.c:
 	Renamed global ScreenInfo variable in menuitem.h, fixed decl to extern.

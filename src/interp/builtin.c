@@ -175,6 +175,8 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=================================================+
  * __getindiset -- Have user identify set of persons
  *   usage: getindiset(IDEN [,STRING]) --> VOID
+ * This introduces both null value indiseqs and null
+ * indiseqs into reports so report code must handle them
  *================================================*/
 PVALUE
 __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -2799,7 +2801,7 @@ __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		case PSTRING:
 			if(pvalue(val)) stdfree((STRING)pvalue(val)); break;
 		case PLIST:
-			if(pvalue(val)) remove_list(pvalue(val), delete_pvalue);
+			if(pvalue(val)) remove_list(pvalue(val), delete_vptr_pvalue);
 			break;
 		case PTABLE: break;
 		case PSET:

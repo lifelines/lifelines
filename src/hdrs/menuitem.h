@@ -62,8 +62,10 @@ typedef struct MenuItemOption_struct {
 */
 
 /* special menu items added on the fly */
-MenuItem g_MenuItemOther, g_MenuItemQuit, g_MenuItemOptions;
-MenuItem f_MenuItemSyncMoves;
+extern MenuItem g_MenuItemOther, g_MenuItemQuit;
+/* this is for navigating top & bottom simultaneously
+in tandem screens, and is not implemented in this version! */
+extern MenuItem f_MenuItemSyncMoves;
 
 typedef struct CmdItem_s * CMDITEM;
 typedef struct CmdArray_s * CMDARRAY;

@@ -223,6 +223,7 @@ PVALUE create_pvalue_from_indi_keynum(INT i);
 PVALUE create_pvalue_from_sour_keynum(INT i);
 PVALUE create_pvalue_from_even_keynum(INT i);
 PVALUE create_pvalue_from_othr_keynum(INT i);
+void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);
 void delete_symtab(SYMTAB stab, STRING iden);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);

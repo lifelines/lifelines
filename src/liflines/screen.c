@@ -893,6 +893,8 @@ resize_win:
 /*==========================================================
  * choose_list_from_indiseq -- User chooses subsequence from
  *   person sequence
+ * returns input sequence, but may have deleted elements
+ * called by both reports & interactive use
  *========================================================*/
 INDISEQ
 choose_list_from_indiseq (STRING ttl,

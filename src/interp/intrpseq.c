@@ -44,7 +44,7 @@
 
 static UNION pvseq_copy_value(UNION uval, INT valtype);
 static void pvseq_delete_value(UNION uval, INT valtype);
-static UNION pvseq_create_gen_value(INT gen, INT valtype);
+static UNION pvseq_create_gen_value(INT gen, INT * valtype);
 
 /*********************************************
  * local variables
@@ -566,8 +566,8 @@ pvseq_copy_value (UNION uval, INT valtype)
 {
 	UNION retval;
 	PVALUE val = (PVALUE)uval.w;
-	ASSERT(valtype == ISVAL_PTR);
-	ASSERT(is_pvalue(val));
+	ASSERT(valtype == ISVAL_PTR || valtype == ISVAL_NUL);
+	ASSERT(is_pvalue(val) || !val);
 	retval.w = copy_pvalue(val);
 	return retval;
 }
@@ -579,21 +579,23 @@ static void
 pvseq_delete_value (UNION uval, INT valtype)
 {
 	PVALUE val = (PVALUE)uval.w;
-	ASSERT(valtype == ISVAL_PTR);
-	ASSERT(is_pvalue(val));
+	ASSERT(valtype == ISVAL_PTR || valtype == ISVAL_NUL);
+	ASSERT(is_pvalue(val) || !val);
 	delete_pvalue(val);
 }
 /*=====================================+
  * pvseq_create_gen_value -- Create a PVALUE 
  *  for a specific generation in an ancestor
  *  or descendant set in an INDISEQ
+ * Assumes seq is NUL or PTR type
  * Created: 2001/03/25, Perry Rapp
  *====================================*/
 static UNION
-pvseq_create_gen_value (INT gen, INT valtype)
+pvseq_create_gen_value (INT gen, INT * valtype)
 {
 	UNION uval;
-	ASSERT(valtype == ISVAL_PTR);
+	ASSERT(*valtype == ISVAL_PTR || *valtype == ISVAL_NUL);
+	*valtype = ISVAL_PTR;
 	uval.w = create_pvalue(PINT, (VPTR)gen);
 	return uval;
 }

@@ -202,13 +202,22 @@ deleteval (INDISEQ seq, UNION uval)
 	(*IValvtbl(seq)->delete_fnc)(uval, IValtype(seq));
 }
 /*==============================
- * deleteval -- Delete a value using the value vtable
+ * creategenval -- Create a value for a new element
+ *  of a particular generation
+ * (This is for ancestorset & descendantset)
+ * Handle case that seq is null value type, and callee
+ *  assigns a value type.
  * Created: 2001/03/25, Perry Rapp
  *============================*/
 static UNION
 creategenval (INDISEQ seq, INT gen)
 {
-	return (*IValvtbl(seq)->create_gen_fnc)(gen, IValtype(seq));
+	INT valtype = IValtype(seq);
+	return (*IValvtbl(seq)->create_gen_fnc)(gen, &valtype);
+	if (valtype != IValtype(seq)) {
+		ASSERT(IValtype(seq) == ISVAL_NUL);
+		IValtype(seq) = valtype;
+	}
 }
 /*==============================
  * copy_indiseq -- Copy sequence
@@ -755,8 +764,8 @@ unique_indiseq (INDISEQ seq)
 static INT
 get_combined_valtype (INDISEQ one, INDISEQ two)
 {
-	if (length_indiseq(one)) {
-		if (length_indiseq(two)) {
+	if (length_indiseq(one) && IValtype(one) != ISVAL_NUL) {
+		if (length_indiseq(two) && IValtype(two) != ISVAL_NUL) {
 			ASSERT(IValtype(one) == IValtype(two));
 			return IValtype(one);
 		} else {
@@ -768,6 +777,7 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 }
 /*===============================================
  * union_indiseq -- Create union of two sequences
+ * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *=============================================*/
 INDISEQ
 union_indiseq (INDISEQ one, INDISEQ two)
@@ -831,6 +841,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 }
 /*==========================================================
  * intersect_indiseq -- Create intersection of two sequences
+ * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *========================================================*/
 INDISEQ
 intersect_indiseq (INDISEQ one, INDISEQ two)
@@ -872,6 +883,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 }
 /*=========================================================
  * difference_indiseq -- Create difference of two sequences
+ * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *=======================================================*/
 INDISEQ
 difference_indiseq (INDISEQ one,
@@ -1569,6 +1581,7 @@ key_to_indiseq (STRING name)
  *  2. key, with or without the leading "I"
  *  3. REFN
  *  4. name
+ * Returned indiseq is null type
  *===========================================================*/
 INDISEQ
 str_to_indiseq (STRING name)
@@ -1760,6 +1773,7 @@ INT
 get_indiseq_ival (INDISEQ seq, INT i)
 {
 	ASSERT(i >= 0 && i < ISize(seq));
+	ASSERT(IValtype(seq) == ISVAL_INT || IValtype(seq) == ISVAL_NUL);
 	return sval(IData(seq)[i]).i;
 
 }
@@ -1774,6 +1788,7 @@ set_indiseq_value_funcs (INDISEQ seq, INDISEQ_VALUE_VTABLE valvtbl)
 }
 /*=======================================================
  * default_copy_value -- copy a value
+ * (reports supply their own callback to replace this)
  * Created: 2001/03/25, Perry Rapp
  *=====================================================*/
 UNION
@@ -1789,6 +1804,7 @@ default_copy_value (UNION uval, INT valtype)
 }
 /*=======================================================
  * default_delete_value -- delete a value
+ * (reports supply their own callback to replace this)
  * Created: 2001/03/25, Perry Rapp
  *=====================================================*/
 void
@@ -1803,14 +1819,17 @@ default_delete_value (UNION uval, INT valtype)
 	}
 }
 /*=======================================================
- * default_delete_value -- delete a value
+ * default_create_gen_value -- create a value for a specific
+ *  generation (for ancestorset or descendantset)
+ *  default implementation
+ * (reports supply their own callback to replace this)
  * Created: 2001/03/25, Perry Rapp
  *=====================================================*/
 UNION
-default_create_gen_value(INT gen, INT valtype)
+default_create_gen_value (INT gen, INT * valtype)
 {
 	UNION uval;
-	if (valtype == ISVAL_INT)
+	if (*valtype == ISVAL_INT)
 		uval.i = gen;
 	else
 		uval.w = NULL;

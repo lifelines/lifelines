@@ -311,7 +311,7 @@ addxref (INT key, DELETESET set)
 			FATAL(); /* deleting a deleted record! */
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
-	for (i=lo; i<set->n; i++)
+	for (i=set->n-1; i>=lo; --i)
 		(set->recs)[i+1] = (set->recs)[i];
 	(set->recs)[lo] = key;
 	(set->n)++;
