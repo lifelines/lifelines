@@ -130,7 +130,7 @@ on_signals (int sig)
 	shutdown_ui(TRUE); /* pause */
 	if (msg[0])
 		printf(msg);
-	printf("Existing on signal %d:%s\n", sig, sig_msgs[sig]);
+	printf("Exiting on signal %d:%s\n", sig, sig_msgs[sig]);
 	ll_abort(sig);
 }
 

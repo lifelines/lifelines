@@ -4,19 +4,13 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# These can be overridden by useroptions in db
-#
-# 2001/10/29
+# 2001/11/09
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
 
 # Use new metadata code (not ready for production!)
 #AddMetadata=0
-
-#
-# These can not be overridden by useroptions in db
-#
 
 # Root path for utility/read command
 #InputPath=/home/user/LifeLines
@@ -73,4 +67,41 @@
 # As above, except that omitting this defaults to combining mode 12 (year only)
 #  (the traditional short form)
 #ShortDisplayDate=1,1,0,10,1
+
+# Set the default data for new persons
+#INDIREC=0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n1 BIRT\n  2 DATE\n  2 PLAC\n1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR
+# This sample version is the same as the default if none is given.
+
+# Set the default data for the body of a new family
+#FAMRECBODY=1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR
+# This sample version is the same as the default if none is given.
+# Note that for family, the program inserts the fam, spouse,
+# and children tags, so this is only data besides those tags.
+
+# Set the default data for new sources
+#SOURREC=0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author
+# This sample version is the same as the default if none is given.
+
+# Set the default data for new events
+#EVENREC=0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR
+# This sample version is the same as the default if none is given.
+
+# Set the default data for new other records
+#OTHRREC=0 XXXX\n1 REFN
+# This sample version is the same as the default if none is given.
+
+# Specify the SUBM line for the header (of GEDCOM exports)
+#  This is meant to specify who submitted the record.
+#HDR_SUBM=1 SUBM
+# This sample version is the same as the default if none is given.
+
+# Specify the GEDC line for the header (of GEDCOM exports)
+#  This is meant to specify what version of GEDCOM was used.
+#HDR_GEDC=1 GEDC\n2 VERS 5.5\nFORM LINEAGE-LINKED
+# This sample version is the same as the default if none is given.
+
+# Specify the GEDC line for the header (of GEDCOM exports)
+#  This is meant to specify what character set was used in the data.
+#HDR_CHAR=1 CHAR ASCII
+# This sample version is the same as the default if none is given.
 

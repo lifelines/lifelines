@@ -139,7 +139,14 @@ init_valtab_from_string (STRING str, TABLE tab, INT sep, STRING *pmsg)
 			if (c == '\n') break;
 			if (c == '\\') {
 				if ((c = *p++) == EOF) break;
-				*(q - 1) = c;
+					/* handle \n & \t escapes */
+				if (c == 'n')
+					*(q - 1) = '\n';
+				else if (c == 't')
+					*(q - 1) = '\t';
+				else
+					/* skip over backslash */
+					*(q - 1) = c;
 			}
 		}
 		*(q - 1) = 0;

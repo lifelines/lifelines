@@ -39,6 +39,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -72,8 +73,13 @@ add_indi_by_edit (void)
 /* Create person template for user to edit */
 
 	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
+	/* prefer useroption in this db */
 	if ((str = valueof_str(useropts, "INDIREC")))
 		fprintf(fp, "%s\n", str);
+	/* or user option from config file */
+	else if ((str = lloptions.indirec)[0])
+		fprintf(fp, "%s\n", str);
+	/* fallback to default */
 	else {
 		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");
 		fprintf(fp, "1 BIRT\n  2 DATE\n  2 PLAC\n");
@@ -464,7 +470,7 @@ add_family (NODE spouse1,
 	NODE fam1, fam2=0, refn, husb, wife, chil, body;
 	NODE node;
 	TRANTABLE tti = tran_tables[MEDIN], tto = tran_tables[MINED];
-	STRING xref, msg, key;
+	STRING xref, msg, key, str;
 	BOOLEAN emp;
 	FILE *fp;
 
@@ -525,7 +531,15 @@ editfam:
 	write_nodes(0, fp, tto, fam1, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);
-	fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
+	/* prefer user option in db */
+	if ((str = valueof_str(useropts, "FAMRECBODY")))
+		fprintf(fp, "%s\n", str);
+	/* or user option from config file */
+	else if ((str = lloptions.famrecbody)[0])
+		fprintf(fp, "%s\n", str);
+	/* fallback to default */
+	else
+		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
 	write_nodes(1, fp, tto, chil, TRUE, TRUE, TRUE);
 	fclose(fp);
 	join_fam(fam1, NULL, husb, wife, chil, NULL);

@@ -67,6 +67,14 @@ struct lloptions_s {
 	STRING disp_shrt_date_fmts; /* customized short date display format */
 	STRING uilocale; /* locale used for GUI */
 	STRING rptlocale; /* locale used in reports */
+	STRING indirec; /* template for new indi */
+	STRING famrecbody; /* template for body of new fam */
+	STRING sourrec; /* template for new source */
+	STRING evenrec; /* template for new event */
+	STRING othrrec; /* template for new other */
+	STRING hdr_gedc; /* GEDC block for export header */
+	STRING hdr_char; /* CHAR block for export header */
+	STRING hdr_subm; /* SUBM block for export header */
 };
 
 extern struct lloptions_s lloptions;

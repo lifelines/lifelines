@@ -37,6 +37,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "lloptions.h"
 
 #include "llinesi.h"
 
@@ -87,7 +88,10 @@ add_source (void)
 		return NULL;
 	}
 	str = valueof_str(useropts, "SOURREC");
-	if (!str) str = rstr;
+	if (!str || !str[0])
+		str = lloptions.sourrec;
+	if (!str || !str[0])
+		str = rstr;
 	return add_record(str, rredit, 'S', cfradd);
 }
 /*==============================================
@@ -102,7 +106,10 @@ add_event (void)
 		return NULL;
 	}
 	str = valueof_str(useropts, "EVENREC");
-	if (!str) str = estr;
+	if (!str || !str[0])
+		str = lloptions.evenrec;
+	if (!str || !str[0])
+		str = estr;
 	return add_record(str, eredit, 'E', cfeadd);
 }
 /*====================================================
@@ -117,7 +124,10 @@ add_other (void)
 		return NULL;
 	}
 	str = valueof_str(useropts, "OTHRREC");
-	if (!str) str = xstr;
+	if (!str || !str[0])
+		str = lloptions.othrrec;
+	if (!str || !str[0])
+		str = xstr;
 	return add_record(str, xredit, 'X', cfxadd);
 
 }

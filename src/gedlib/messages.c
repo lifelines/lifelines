@@ -251,6 +251,7 @@ STRING qrpt   = SS "What is the name of the program?";
 
 STRING norpt =  SS "No report was generated.";
 STRING whtout = SS "What is the name of the output file?";
+STRING opt2long    = SS "Malformed configuration file: line too long.";
 
 
 /* node.c errors */
@@ -362,13 +363,13 @@ STRING mn_ttexpdir = SS "export/import directory:";
 /* menu for edit translation table (these looks best if choices padded to same length)*/
 STRING mn_edttttl  = SS "Which character mapping do you want to edit?";
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
-STRING mn_ttedin = SS "e  Editor to Internal mapping ";
-STRING mn_ttined = SS "m  Internal to Editor mapping ";
-STRING mn_ttgdin = SS "i  GEDCOM to Internal mapping ";
-STRING mn_ttingd = SS "x  Internal to GEDCOM mapping ";
-STRING mn_ttdsin = SS "g  Display to Internal mapping";
-STRING mn_ttinds = SS "d  Internal to Display mapping";
-STRING mn_ttinrp = SS "r  Internal to Report mapping ";
+STRING mn_ttedin   = SS "e  Editor to Internal mapping ";
+STRING mn_ttined   = SS "m  Internal to Editor mapping ";
+STRING mn_ttgdin   = SS "i  GEDCOM to Internal mapping ";
+STRING mn_ttingd   = SS "x  Internal to GEDCOM mapping ";
+STRING mn_ttdsin   = SS "g  Display to Internal mapping";
+STRING mn_ttinds   = SS "d  Internal to Display mapping";
+STRING mn_ttinrp   = SS "r  Internal to Report mapping ";
 /* utility menu */
 STRING mn_uttl     = SS "What utility do you want to perform?";
 /* extra menu */

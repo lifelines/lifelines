@@ -32,7 +32,7 @@
 #endif
 #include "llstdlib.h"
 #include "gedcom.h"
-#include "liflines.h"
+#include "feedback.h"
 #include "lloptions.h"
 
 
@@ -41,6 +41,7 @@
  *********************************************/
 
 extern BOOLEAN selftest;
+extern STRING opt2long;
 
 /*********************************************
  * global/exported variables
@@ -103,6 +104,14 @@ static struct str_option_s str_options[] = {
 	,{ "ErrorLog", &lloptions.errorlog, "", DBNO }
 	,{ "LongDisplayDate", &lloptions.disp_long_date_fmts, "", DBNO }
 	,{ "ShortDisplayDate", &lloptions.disp_shrt_date_fmts, "", DBNO }
+	,{ "INDIREC", &lloptions.indirec, "", DBNO }
+	,{ "FAMRECBODY", &lloptions.famrecbody, "" , DBNO }
+	,{ "SOURREC", &lloptions.sourrec, "", DBNO }
+	,{ "EVENREC", &lloptions.evenrec, "", DBNO }
+	,{ "OTHRREC", &lloptions.othrrec, "", DBNO }
+	,{ "HDR_GEDC", &lloptions.hdr_gedc, "", DBNO }
+	,{ "HDR_CHAR", &lloptions.hdr_char, "", DBNO }
+	,{ "HDR_SUBM", &lloptions.hdr_subm, "", DBNO }
 };
 
 static TABLE opttab=0;
@@ -189,6 +198,34 @@ numtostr (INT num)
 	return buffer;
 }
 /*==========================================
+ * copy_expand -- copy config value line,
+ *  expanding any escape characters
+ *  We do not trim out backslashes, unless they 
+ *  are part of escape sequences. (This is mostly
+ *  because backslashes are so prevalent on
+ *  MS-Windows.)
+ * Created: 2001/11/09, Perry Rapp
+ *========================================*/
+static void
+copy_expand (STRING dest, STRING src)
+{
+	STRING q=dest,p=src;
+	char c;
+	while (*q++ = c = *p++) {
+		if (c == '\\') {
+			if (!(c = *p++)) break;
+			if (c == 'n')
+				q[-1] = '\n';
+			else if (c == 't')
+				q[-1] = '\t';
+			else if (c == '\\')
+				q[-1] = '\\';
+			else
+				--p;
+		}
+	}
+}
+/*==========================================
  * load_config_file -- read options in config file
  *  and load into table
  * Created: 2001/02/04, Perry Rapp
@@ -201,12 +238,17 @@ load_config_file (STRING file)
 	STRING oldval=NULL;
 	INT len;
 	BOOLEAN there;
-	char buffer[MAXLINELEN];
+	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	if (!fp)
 		return;
 	while (fgets(buffer, sizeof(buffer), fp)) {
 		if (buffer[0] == '#')
 			continue; /* ignore lines starting with # */
+		if (!feof(fp) && buffer[strlen(buffer)-1] != '\n') {
+			/* bail out if line too long */
+			message(opt2long);
+			break;
+		}
 		for (ptr = buffer; *ptr && *ptr!='='; ptr++)
 			;
 		if (*ptr != '=')
@@ -218,7 +260,8 @@ load_config_file (STRING file)
 		ASSERT(oldval); /* no nulls in opttab */
 		stdfree(oldval);
 		ptr++;
-		val = ptr;
+		copy_expand(valbuf, ptr);
+		val = valbuf;
 		len = strlen(val);
 		if (val[len-1]=='\n')
 			val[len-1] = 0;

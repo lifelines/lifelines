@@ -3162,10 +3162,18 @@ certain <STRUCTFIELD>PLAC</STRUCTFIELD> lines in this file, and if it finds that
 <PARA>
 
 This command allows you to edit the user options file. The user options file
-is a record kept in the database that holds user selectable options. Each option has a name and a
-string value. Each line in the options file has the format:<SYNOPSIS><REPLACEABLE>option</REPLACEABLE>=<REPLACEABLE>value</REPLACEABLE></SYNOPSIS>where option is the name of an option and value is the option's string value. If the value is more
-than one line long, then the last character in each non-final line must be a backslash. In version &llversion
-there are four options:<GLOSSLIST><GLOSSENTRY><GLOSSTERM>INDIREC</GLOSSTERM><GLOSSDEF>
+is a record kept in the database that holds user selectable options. Each
+option has a name and a string value. Each line in the options file has the
+format:<SYNOPSIS><REPLACEABLE>option</REPLACEABLE>=<REPLACEABLE>value</REPLACEABLE></SYNOPSIS>
+where option is the name of an option and value is the option's string value.
+If the value is more than one line long, then the last character in each
+non-final line must be a backslash. The escapes \n and \t are also recognized
+in version 3.0.7 and better. In version &llversion
+there are nine options. Note that all of these may also be specified in
+the configuration file, to apply to all databases, but if specified in 
+both places, the entry in the database (user options table) governs.
+
+<GLOSSLIST><GLOSSENTRY><GLOSSTERM>INDIREC</GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
@@ -3174,6 +3182,15 @@ Person record edit template
 </PARA>
 
 </GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>EVENREC</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+Family record body edit template (NB: Unlike the others, this should not
+include the 0 level FAM tag.)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>FAMRECBODY</GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
@@ -3194,6 +3211,42 @@ Source record edit template
 <PARA>
 
 Other record edit template
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>codeset</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+String denoting code set in use in data. Special handling is provided
+for utf-8, which may be entered as "UTF-8", "utf-8", or "65001". (This is
+actually a code set issue and not a character set issue, as this only enables
+the processing of multibyte sequences, without regard to their semantic 
+assignments).
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>HDR_GEDC</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+String containing the GEDC block for the header record when exporting GEDCOM.
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>HDR_CHAR</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+String containing the CHAR block for the header record when exporting GEDCOM.
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>HDR_SUBM</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+String containing the SUBM block for the header record when exporting GEDCOM.
 
 </PARA>
 
@@ -3218,7 +3271,8 @@ Example of replacing the default person record template
 
   0 INDI
   1 NAME //
-  1 SEX</PROGRAMLISTING></EXAMPLE>you would edit the user option file to contain:<EXAMPLE>
+  1 SEX</PROGRAMLISTING></EXAMPLE>
+you would edit the user option file to contain:<EXAMPLE>
 
 <TITLE>
 Example of replaced default person record template
@@ -3227,6 +3281,15 @@ Example of replaced default person record template
 <LITERALLAYOUT>INDIREC=0 INDI\
   1 NAME //\
   1 SEX</LITERALLAYOUT>
+</EXAMPLE>
+
+or, using the \n escape so as to keep the entry on one line:<EXAMPLE>
+
+<TITLE>
+Example of replaced single line default person record template
+</TITLE>
+
+<LITERALLAYOUT>INDIREC=0 INDI\n1 NAME //\n1 SEX</LITERALLAYOUT>
 </EXAMPLE>
 
 </PARA>

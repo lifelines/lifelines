@@ -5,6 +5,20 @@
 	Revised export headers (moved TIME to level 2,
 	added GEDC & children).
 
+	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
+	gedlib/messages.c gedlib/valtable.c hdrs/lloptions.h
+	interp/interp.c liflines/add.c liflines/ask.c
+	liflines/askprogram.c liflines/browse.c liflines/edit.c
+	liflines/export.c liflines/newrecs.c stdlib/lloptions.c
+	stdlib/signals.c:
+
+	Modified valtable to handle \n and \t escapes.
+	Added new options to lloptions (config file): INDIREC,
+	FAMRECBODY,SOURREC,EVENREC,OTHRREC,HDR_GEDC,HDR_CHAR,HDR_SUBM.
+	Modified config file read to handle \n, \t, and \\ escapes.
+	Added check for line overflow when reading config file (bail out
+	of reading config file).
+
 2001-11-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	Moved ui code from liflines/remove.c into liflines/delete.c,
