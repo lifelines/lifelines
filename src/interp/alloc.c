@@ -512,6 +512,7 @@ forindi_node (PACTX pactx, STRING ivar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) ivar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -529,6 +530,7 @@ forsour_node (PACTX pactx, STRING svar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) svar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -546,6 +548,7 @@ foreven_node (PACTX pactx, STRING evar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) evar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -563,6 +566,7 @@ forothr_node (PACTX pactx, STRING ovar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) ovar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -580,6 +584,7 @@ forfam_node (PACTX pactx, STRING fvar, STRING nvar, PNODE body)
 	ielement(node) = (VPTR) fvar;
 	inum(node) = (VPTR) nvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR + PN_INUM_HPTR;
 	set_parents(body, node);
 	return node;
 }
@@ -597,6 +602,7 @@ fornotes_node (PACTX pactx, PNODE nexpr, STRING vvar, PNODE body)
 	iloopexp(node) = (VPTR) nexpr;
 	ielement(node) = (VPTR) vvar;
 	ibody(node) = (VPTR) body;
+	node->i_flags = PN_IELEMENT_HPTR;
 	set_parents(body, node);
 	return node;
 }

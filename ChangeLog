@@ -25,6 +25,11 @@
 	fathers_node, mothers_node, parents_node, forindiset_node,
 	forlist_node.
 
+	* ChangeLog src/interp/alloc.c src/interp/yacc.y
+
+	Fix IDEN leak in forindi_node, fornotes_node, forfam_node,
+	forsour_node, foreven_node, forothr_node.
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 

@@ -175,29 +175,37 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	FORINDI m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $4 and $6 */
 			$$ = forindi_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
- 	|       FORNOTES m '(' expr ',' IDEN ')' '{' tmplts '}' {
-                        $$ = fornotes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
-                        ((PNODE)$$)->i_line = (INT) $2;
-                }
-	|	FORFAM m '(' IDEN ',' IDEN ')' '{' tmplts '}' {
+	|	FORNOTES m '(' expr ',' IDEN ')' '{' tmplts '}'
+		{
+			/* consumes $6 */
+			$$ = fornotes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
+			((PNODE)$$)->i_line = (INT) $2;
+		}
+	|	FORFAM m '(' IDEN ',' IDEN ')' '{' tmplts '}'
+		{
+			/* consumes $4 and $6 */
 			$$ = forfam_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FORSOUR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $4 and $6 */
 			$$ = forsour_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FOREVEN m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $4 and $6 */
 			$$ = foreven_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
 	|	FOROTHR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
+			/* consumes $4 and $6 */
 			$$ = forothr_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INT) $2;
 		}
