@@ -120,24 +120,15 @@ static char showing[150];
 static BOOLEAN now_showing = FALSE;
 
 /* forward refs */
-void win_list_init (void);
+void win_list_init(void);
 
-/* in show.c */
-void show_aux_display (NODE node,
-		       INT row,
-		       INT hgt);
-void show_list (INDISEQ seq,
-		INT top,
-		INT cur,
-		INT mark);
-/* export.c */
-BOOLEAN archive_in_file(void);
 /* import.c */
 BOOLEAN import_from_file(void);
+
 /* in miscutls.c */
-void key_util (void);
-void who_is_he_she (void);
-void show_database_stats (void);
+void key_util(void);
+void who_is_he_she(void);
+void show_database_stats(void);
 
 /*============================
  * init_screen -- Init screens
@@ -181,8 +172,8 @@ init_screen (void)
 	    PER_LINES += extralines;
 	    FAM_LINES += extralines;
 		 PED_LINES += extralines;
+		 AUX_LINES += extralines;
 	    LIST_LINES += extralines;
-	    if(extralines >= 16) PED_LINES += 16; /* one more generation */
 	    VIEWABLE += extralines;
 	    if(VIEWABLE > MAXVIEWABLE) VIEWABLE = MAXVIEWABLE;
 	}
@@ -412,7 +403,7 @@ paint_list_screen (void)
 	mvwaddstr(win, row++, col, "q  Return to main menu");
 }
 /*===========================================
- * paint_aux_screen -- Paint auxillary screen
+ * paint_aux_screen -- Paint auxiliary screen
  *=========================================*/
 void
 paint_aux_screen (void)
@@ -426,7 +417,7 @@ paint_aux_screen (void)
 	mvwaddstr(win, AUX_LINES+2, 2, plschs);
 	row = AUX_LINES+3; col = 3;
 	mvwaddstr(win, row++, col, "e  Edit the record");
-	mvwaddstr(win, row++, col, "i  Browse to record");
+	mvwaddstr(win, row++, col, "x  Not implemented");
 	mvwaddstr(win, row++, col, "x  Not implemented");
 	row = AUX_LINES+3; col = 3 + BAND;
 	mvwaddstr(win, row++, col, "x  Not implemented");
@@ -701,19 +692,18 @@ ped_browse (NODE indi)
 	return interact(main_win,
 		"eifmscoygb&()[]$123456789+-q");
 }
-#ifdef UNUSED
 /*=======================================
  * aux_browse -- Handle aux_browse screen
+ * Implemented: 2001/01/27, Perry Rapp
  *=====================================*/
 INT
 aux_browse (NODE node)
 {
 	if (cur_screen != AUX_SCREEN) paint_aux_screen();
-	show_aux_display(node, 1, 11);
+	show_aux_display(node);
 	display_screen(AUX_SCREEN);
-	return interact(main_win, "eq");
+	return interact(main_win, "e()+-q");
 }
-#endif
 /*=========================================
  * list_browse -- Handle list_browse screen
  *  cur & pindi are passed for GUI doing

@@ -100,16 +100,16 @@ rmvbrackets (STRING str)
  * returns 0 for failure
  *===========================================*/
 INT
-node_to_keynum(NODE nod, char ntype)
+node_to_keynum(char ntype, NODE nod)
 {
 	if (!nod) return 0;
-	return xrefval(nxref(nod), ntype);
+	return xrefval(ntype, nxref(nod));
 }
 /*=============================================
  * xrefval -- numeric value after removing @'s at both ends
  *===========================================*/
 INT
-xrefval (STRING str, char ntype)
+xrefval (char ntype, STRING str)
 {
 	INT val, i, len;
 	if ((str == NULL) || (*str == '\0')) return 0;

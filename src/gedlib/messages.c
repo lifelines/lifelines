@@ -110,6 +110,7 @@ STRING nocinf = SS "There are no children in the database for this family.";
 STRING nocofp = SS "This person has no children in the database.";
 STRING nochil = SS "No such child.";
 STRING nopers = SS "No such person.";
+STRING norec  = SS "No such record.";
 STRING nofam  = SS "No such family.";
 STRING nosour = SS "No sources present.";
 STRING idsour = SS "Please choose the source to view.";

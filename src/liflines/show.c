@@ -574,15 +574,14 @@ show_list (INDISEQ seq,
 		row++;
 	}
 }
-#if UNUSED
 /*========================================================
  * show_aux_display -- Show source, event or other record
  *======================================================*/
 void
-show_aux_display (NODE node,
-                  INT row,
-                  INT hgt)
+show_aux_display (NODE node)
 {
+	show_gedcom(node, 9);
+/*
 	STRING key;
 	INT i;
 
@@ -604,8 +603,8 @@ show_aux_display (NODE node,
 	case 'X':
 	}
 #endif
+*/
 }
-#endif
 #if UNUSED
 /*=========================================
  * show_sour_display -- Show source display

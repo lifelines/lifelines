@@ -38,16 +38,16 @@
 #include "liflines.h"
 #include "screen.h"
 
-INT csz_indi = 200;		/* cache size for indi */
-INT icsz_indi = 3000;		/* indirect cache size for indi */
-INT csz_fam = 200;		/* cache size for fam */
-INT icsz_fam = 2000;		/* indirect cache size for fam */
-INT csz_sour = 200;		/* cache size for sour */
-INT icsz_sour = 2000;		/* indirect cache size for sour */
-INT csz_even = 200;		/* cache size for even */
-INT icsz_even = 2000;		/* indirect cache size for even */
-INT csz_othr = 200;		/* cache size for othr */
-INT icsz_othr = 2000;		/* indirect cache size for othr */
+/*********************************************
+ * global variables (no header)
+ *********************************************/
+
+char badkeylist[100] = "";
+int listbadkeys = 0;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
 
 static CACHE create_cache(INT, INT);
 static NODE key_to_node(CACHE cache, STRING key, STRING tag);
@@ -62,20 +62,37 @@ static CACHEEL key_to_sour_cacheel (STRING key);
 static CACHEEL key_to_othr_cacheel (STRING key);
 
 
+INT csz_indi = 200;		/* cache size for indi */
+INT icsz_indi = 3000;		/* indirect cache size for indi */
+INT csz_fam = 200;		/* cache size for fam */
+INT icsz_fam = 2000;		/* indirect cache size for fam */
+INT csz_sour = 200;		/* cache size for sour */
+INT icsz_sour = 2000;		/* indirect cache size for sour */
+INT csz_even = 200;		/* cache size for even */
+INT icsz_even = 2000;		/* indirect cache size for even */
+INT csz_othr = 200;		/* cache size for othr */
+INT icsz_othr = 2000;		/* indirect cache size for othr */
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
 
 static char keybuf[10][32] = { "", "", "", "", "", "", "", "", "", ""};
 static int keyidx = 0;
 
-char badkeylist[100] = "";
-int listbadkeys = 0;
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*================================================
  * keynum_to_indi -- Convert a numeric key to an indi node
  * assert if failed (ie, no indi with that number)
  *==============================================*/
 NODE
-keynum_to_indi(int keynum)
+keynum_to_indi (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"I%d",keynum);
@@ -87,7 +104,7 @@ keynum_to_indi(int keynum)
  *  (ie, no indi with that number)
  *=======================================================*/
 NODE
-qkeynum_to_indi(int keynum)
+qkeynum_to_indi (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"I%d",keynum);
@@ -98,7 +115,7 @@ qkeynum_to_indi(int keynum)
  *  assert if failed (ie, no fam with that number)
  *==============================================*/
 NODE
-keynum_to_fam(int keynum)
+keynum_to_fam (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"F%d",keynum);
@@ -110,7 +127,7 @@ keynum_to_fam(int keynum)
  *  (ie, no fam with that number)
  *====================================================*/
 NODE
-qkeynum_to_fam(int keynum)
+qkeynum_to_fam (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"F%d",keynum);
@@ -121,12 +138,54 @@ qkeynum_to_fam(int keynum)
  *  assert if failed (ie, no sour with that number)
  *==============================================*/
 NODE
-keynum_to_sour(int keynum)
+keynum_to_sour (int keynum)
 {
 	char keystr[20];
 	sprintf(keystr,"S%d",keynum);
 	return key_to_sour(keystr);
 }
+/*================================================
+ * keynum_to_even -- Convert a numeric key to a even node
+ *  assert if failed (ie, no sour with that number)
+ * Created: 2001/01/27, Perry Rapp
+ *==============================================*/
+NODE
+keynum_to_even (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"E%d",keynum);
+	return key_to_even(keystr);
+}
+/*================================================
+ * keynum_to_othe -- Convert a numeric key to an other node
+ *  assert if failed (ie, no sour with that number)
+ * Created: 2001/01/27, Perry Rapp
+ *==============================================*/
+NODE
+keynum_to_othe (int keynum)
+{
+	char keystr[20];
+	sprintf(keystr,"X%d",keynum);
+	return key_to_othr(keystr);
+}
+/*=====================================
+ * keynum_to_node -- Convert keynum to node
+ * Created: 2001/01/27, Perry Rapp
+ *===================================*/
+NODE
+keynum_to_node (char ntype, int keynum)
+{
+	switch(ntype) {
+	case 'I': return keynum_to_indi(keynum);
+	case 'F': return keynum_to_fam(keynum);
+	case 'S': return keynum_to_sour(keynum);
+	case 'E': return keynum_to_even(keynum);
+	case 'X': return keynum_to_othe(keynum);
+	}
+	ASSERT(0);
+	return 0;
+}
+
 /*=====================================
  * key_to_type -- Convert key to node
  * TO DO - should become obsoleted by key_to_typ0
@@ -725,7 +784,7 @@ node_to_cache (CACHE cache,
  * add_node_to_direct -- Add node to direct part of cache
  *=====================================================*/
 static void
-add_node_to_direct(CACHE cache,
+add_node_to_direct (CACHE cache,
                    NODE node)
 {
 	CACHEEL cel;

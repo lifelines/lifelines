@@ -482,15 +482,16 @@ INT xref_nextf (INT i) { return xref_next_impl(&frecs, i); }
 INT xref_nexts (INT i) { return xref_next_impl(&srecs, i); }
 INT xref_nexte (INT i) { return xref_next_impl(&erecs, i); }
 INT xref_nextx (INT i) { return xref_next_impl(&xrecs, i); }
-INT xref_next (char ctype, INT i)
+INT xref_next (char ntype, INT i)
 {
-	switch(ctype) {
+	switch(ntype) {
 	case 'I': return xref_nexti(i);
 	case 'F': return xref_nextf(i);
 	case 'S': return xref_nexts(i);
 	case 'E': return xref_nexte(i);
-	default: return xref_nextx(i);
+	case 'X': return xref_nextx(i);
 	}
+	ASSERT(0); return 0;
 }
 /*================================================
  * xref_prev? -- Return prev valid indi/? before i
@@ -502,6 +503,17 @@ INT xref_prevf (INT i) { return xref_prev_impl(&frecs, i); }
 INT xref_prevs (INT i) { return xref_prev_impl(&srecs, i); }
 INT xref_preve (INT i) { return xref_prev_impl(&erecs, i); }
 INT xref_prevx (INT i) { return xref_prev_impl(&xrecs, i); }
+INT xref_prev (char ntype, INT i)
+{
+	switch(ntype) {
+	case 'I': return xref_previ(i);
+	case 'F': return xref_prevf(i);
+	case 'S': return xref_prevs(i);
+	case 'E': return xref_preve(i);
+	case 'X': return xref_prevx(i);
+	}
+	ASSERT(0); return 0;
+}
 /*=========================================
  * xref_first? -- Return first valid indi/?
  *  returns 0 if none found

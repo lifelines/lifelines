@@ -46,7 +46,7 @@
  *********************************************/
 
 NODE jumpnode; /* used by Ethel for direct navigation */
-extern STRING nochil, nopers, nofam, nosour, idsour;
+extern STRING nochil, nopers, nofam, nosour, idsour, norec;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
@@ -72,6 +72,20 @@ static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static NODE goto_indi_child(NODE indi, int childno);
 static NODE goto_fam_child(NODE fam, int childno);
 static INT display_indi(NODE indi, INT mode);
+static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq, INT indimode);
+static INT display_aux(NODE node, INT mode);
+static INT browse_aux(NODE node);
+static INT browse_indi(NODE *pindi1, NODE *pindi2, NODE *pfam1,
+	NODE *pfam2, INDISEQ *pseq);
+static INT display_fam(NODE fam, INT fammode);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static BOOLEAN gedcom_mode = FALSE;
+
 
 /*********************************************
  * local function definitions
@@ -160,10 +174,12 @@ display_indi (NODE indi, INT mode)
 	INT c;
 	icel = indi_to_cacheel(indi);
 	lock_cache(icel);
-	if (mode == 'i')
-		c = indi_browse(indi);
-	else if (mode == 'g')
-		c = indi_ged_browse(indi);
+	if (mode == 'i') {
+		if (gedcom_mode)
+			c = indi_ged_browse(indi);
+		else
+			c = indi_browse(indi);
+	}
 	else
 		c = ped_browse(indi);
 	unlock_cache(icel);
@@ -333,10 +349,8 @@ browse_indi_modes (NODE *pindi1,
 			*pindi1 = indi;
 			return BROWSE_PED;
 		case '!': /* Switch to gedcom mode */
-			if (indimode == 'g')
-				indimode = 'i';
-			else
-				indimode = 'g';
+			gedcom_mode = !gedcom_mode;
+			indimodep = 0; /* force redraw */
 			break;
 		case 'o':	/* Browse to older sib */
 			if (!(node = indi_to_prev_sib(indi)))
@@ -470,40 +484,126 @@ browse_indi_modes (NODE *pindi1,
 }
 /*================================================
  * browse_source_node -- Browse a source
- *  not really implemented yet
  * TO DO - should become obsoleted by browse_source
+ * Created: 2001/01/06, Perry Rapp
+ * Implemented: 2001/01/27, Perry Rapp
  *==============================================*/
 void
 browse_source_node (NODE sour)
 {
-	edit_source(sour);
+	browse_aux(sour);
 }
 /*=================================
  * browse_source -- Browse a source
- *  not really implemented yet
+ * Created: 2001/01/06, Perry Rapp
+ * Implemented: 2001/01/27, Perry Rapp
  *===============================*/
 void
 browse_source (NOD0 sour)
 {
-	edit_source(nztop(sour));
+	browse_source_node(nztop(sour));
 }
 /*=================================
  * browse_event -- Browse an event
- *  not really implemented yet
+ * Created: 2001/01/06, Perry Rapp
+ * Implemented: 2001/01/27, Perry Rapp
  *===============================*/
 void
 browse_event (NOD0 even)
 {
-	edit_source(nztop(even));
+	browse_aux(nztop(even));
 }
 /*=================================
  * browse_other -- Browse an other
- *  not really implemented yet
+ * Created: 2001/01/06, Perry Rapp
+ * Implemented: 2001/01/27, Perry Rapp
  *===============================*/
 void
 browse_other (NOD0 othr)
 {
-	edit_other(nztop(othr));
+	browse_aux(nztop(othr));
+}
+/*==========================================
+ * display_aux -- Show aux node in current mode
+ * Created: 2001/01/27, Perry Rapp
+ *========================================*/
+static INT
+display_aux (NODE node, INT mode)
+{
+	CACHEEL cel;
+	INT c;
+	cel = node_to_cacheel(node);
+	lock_cache(cel);
+	if (mode == 'x')
+		c = aux_browse(node);
+	else {
+		ASSERT(0); /* no other modes supported */
+	}
+	unlock_cache(cel);
+	return c;
+}
+/*====================================================
+ * browse_aux -- Handle aux node browse.
+ * Created: 2001/01/27, Perry Rapp
+ *==================================================*/
+static INT
+browse_aux (NODE node)
+{
+	STRING key = rmvat(nxref(node));
+	char ntype = key[0];
+	INT i, c;
+	INT nkeyp, auxmode, auxmodep;
+	auxmode = 'x';
+
+	if (!node) return BROWSE_QUIT;
+	show_reset_scroll();
+	nkeyp = 0;
+	auxmodep = auxmode;
+
+	while (TRUE) {
+		if (node_to_keynum(ntype, node) != nkeyp 
+			|| auxmode != auxmodep) {
+			show_reset_scroll();
+		}
+		c = display_aux(node, auxmode);
+		/* last keynum & mode, so can tell if changed */
+		nkeyp = node_to_keynum(ntype, node);
+		auxmodep = auxmode;
+		switch (c) {
+		case 'e':	/* Edit this person */
+			switch(ntype) {
+			case 'S': edit_source(node); break;
+			case 'E': edit_event(node); break;
+			case 'X': edit_other(node); break;
+			}
+			break;
+		case '+':	/* Go to next indi in db */
+			{
+				i = xref_next(ntype, nkeyp);
+				if (i)
+					node = keynum_to_node(ntype, i);
+				else message(norec);
+				break;
+			}
+		case '-':	/* Go to prev indi in db */
+			{
+				i = xref_prev(ntype, nkeyp);
+				if (i)
+					node = keynum_to_node(ntype, i);
+				else message(norec);
+				break;
+			}
+		case '(':       /* scroll details/pedigree up */
+			show_scroll(-1);
+			break;
+		case ')':       /* scroll details/pedigree down */
+			show_scroll(+1);
+			break;
+		case 'q':
+		default:
+			return BROWSE_QUIT;
+		}
+	}
 }
 /*================================================
  * browse_indi -- Handle person browse operations.
@@ -521,16 +621,17 @@ browse_indi (NODE *pindi1,
  * display_fam -- Show family in current mode
  *=========================================*/
 static INT
-display_fam(NODE fam, INT fammode)
+display_fam (NODE fam, INT fammode)
 {
 	CACHEEL icel;
 	INT c=0;
 	icel = fam_to_cacheel(fam);
 	lock_cache(icel);
-	if (fammode == 'f')
-		c = fam_browse(fam);
-	else if (fammode == 'g' ) {
-		c = fam_ged_browse(fam);
+	if (fammode == 'f') {
+		if (gedcom_mode)
+			c = fam_ged_browse(fam);
+		else
+			c = fam_browse(fam);
 	}
 	else {
 		ASSERT(0); /* no other modes */
@@ -801,10 +902,8 @@ browse_fam (NODE *pindi,
 				browse_source_node(node);
 			break;
 		case '!': /* Switch to gedcom mode */
-			if (fammode == 'g')
-				fammode = 'f';
-			else
-				fammode = 'g';
+			gedcom_mode = !gedcom_mode;
+			fammodep = 0; /* force redraw */
 			break;
 		case 'q':
 		default:

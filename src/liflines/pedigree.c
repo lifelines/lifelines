@@ -39,6 +39,10 @@
  *********************************************/
 
 /*********************************************
+ * global variables (no header)
+ *********************************************/
+
+/*********************************************
  * local types
  *********************************************/
 
@@ -234,7 +238,6 @@ node_lineprint (INT width, void * param)
 	NODE node=npp->node;
 	if (mylen>width)
 		mylen=width;
-	/* TO DO */
 	if (ntag(node)) {
 		llstrcatn(&ptr, ntag(node), &mylen);
 		llstrcatn(&ptr, " ", &mylen);

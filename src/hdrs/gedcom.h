@@ -259,6 +259,7 @@ NODE key_to_type(STRING key, INT reportmode);
 NOD0 key_to_typ0(STRING key, INT reportmode);
 NODE keynum_to_fam(int keynum);
 NODE keynum_to_indi(int keynum);
+NODE keynum_to_node(char ntype, int keynum);
 NODE keynum_to_sour(int keynum);
 INT length_nodes(NODE);
 STRING manip_name(STRING, TRANTABLE, BOOLEAN, BOOLEAN, INT);
@@ -274,7 +275,7 @@ STRING newsxref(STRING, BOOLEAN);
 STRING newxxref(STRING, BOOLEAN);
 void new_name_browse_list(STRING, STRING);
 NODE next_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
-INT node_to_keynum(NODE nod, char ntype);
+INT node_to_keynum(char ntype, NODE nod);
 void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
 NODE node_to_node(NODE, INT*);
@@ -369,18 +370,19 @@ INT xref_lastf(void);
 INT xref_lasti(void);
 INT xref_lasts(void);
 INT xref_lastx(void);
-INT xref_next(char ctype, INT i);
+INT xref_next(char ntype, INT i);
 INT xref_nexte(INT);
 INT xref_nextf(INT);
 INT xref_nexti(INT);
 INT xref_nexts(INT);
 INT xref_nextx(INT);
+INT xref_prev(char ntype, INT i);
 INT xref_preve(INT);
 INT xref_prevf(INT);
 INT xref_previ(INT);
 INT xref_prevs(INT);
 INT xref_prevx(INT);
-INT xrefval(STRING str, char ntype);
+INT xrefval(char ntype, STRING str);
 
 #define fam_to_event indi_to_event
 
@@ -414,9 +416,9 @@ INT xrefval(STRING str, char ntype);
  * indi_to_keynum, fam_to_keynum, etc - 
  *  return keynum of node, eg, 21
  *===========================================*/
-#define indi_to_keynum(indi) (node_to_keynum(indi, 'I'))
-#define fam_to_keynum(fam)  (node_to_keynum(fam, 'F'))
-#define sour_to_keynum(sour) (node_to_keynum(sour, 'S'))
+#define indi_to_keynum(indi) (node_to_keynum('I', indi))
+#define fam_to_keynum(fam)  (node_to_keynum('F', fam))
+#define sour_to_keynum(sour) (node_to_keynum('S', sour))
 
 /*=============================================
  * num_families - count spouses of indi
