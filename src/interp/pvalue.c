@@ -174,7 +174,7 @@ void
 dosemilock_record_in_cache (RECORD rec, BOOLEAN lock)
 {
 	if (rec) {
-		CACHEEL cel = (CACHEEL)rec->dbh;
+		CACHEEL cel = rec->cel;
 		if (cel) {
 				if (lock)
 					semilock_cache(cel);
@@ -194,7 +194,7 @@ dolock_node_in_cache (NODE node, BOOLEAN lock)
 	if (node) {
 		RECORD rec = node->n_rec;
 		if (rec) {
-			CACHEEL cel = (CACHEEL)rec->dbh;
+			CACHEEL cel = rec->cel;
 			if (cel) {
 				if (lock)
 					lock_cache(cel);

@@ -65,15 +65,15 @@ extern STRING qSaskstr,qSchoostrttl;
  *********************************************/
 
 static VPTR create_list_value_pvalue(LIST list);
-static INT normalize_year(struct dnum_s yr);
+static INT normalize_year(struct tag_dnum yr);
 static ZSTR decode(STRING str, INT * offset);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static struct rfmt_s rpt_long_rfmt; /* short form report format */
-static struct rfmt_s rpt_shrt_rfmt; /* long form report format */
+static struct tag_rfmt rpt_long_rfmt; /* short form report format */
+static struct tag_rfmt rpt_shrt_rfmt; /* long form report format */
 
 /*********************************************
  * local function definitions
@@ -989,12 +989,14 @@ __d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	static char scratch[20];
 	PVALUE val;
+	INT i;
 	val = eval_and_coerce(PINT, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonint1, "d");
 		return NULL;
 	}
-	sprintf(scratch, "%d", pvalue_to_int(val));
+	i = pvalue_to_int(val);
+	sprintf(scratch, "%d", i);
 	set_pvalue_string(val, scratch);
 	return val;
 }
@@ -2628,7 +2630,7 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * historical behavior is that 0 is the return for unknown year
  *====================================================*/
 static INT
-normalize_year (struct dnum_s yr)
+normalize_year (struct tag_dnum yr)
 {
 	if (yr.val == BAD_YEAR)
 		return 0;
@@ -3419,7 +3421,6 @@ eval_fam (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 PVALUE
 __free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-/*	extern LIST keysets;*/
 	PNODE arg = (PNODE) iargs(node);
 	BOOLEAN there;
 	PVALUE val;

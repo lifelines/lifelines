@@ -25,7 +25,7 @@
  *********************************************/
 
 /* This will go into translat.c when new system is working */
-struct xlat_s {
+struct tag_xlat {
 	/* All members either NULL or heap-alloc'd */
 	STRING name;
 	STRING src;
@@ -35,7 +35,7 @@ struct xlat_s {
 	BOOLEAN valid;
 };
 /* dynamically loadable translation table, entry in dyntt list */
-typedef struct dyntt_s {
+typedef struct tag_dyntt {
 	STRING path;
 	TRANTABLE tt; /* when loaded */
 	BOOLEAN loadfailure;
@@ -531,7 +531,7 @@ static void
 free_dyntts (void)
 {
 	if (f_dyntts) {
-		struct table_iter_s tabit;
+		struct tag_table_iter tabit;
 		xl_free_xlats(); /* xlats point into f_dyntts */
 		if (begin_table(f_dyntts, &tabit)) {
 			VPTR ptr;

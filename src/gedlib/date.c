@@ -69,35 +69,35 @@ extern STRING qSmon_fr12A,qSmon_fr12B,qSmon_fr13A,qSmon_fr13B;
  *********************************************/
 
 /* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
-struct nums_s { struct dnum_s num1; struct dnum_s num2; struct dnum_s num3; };
+struct tag_nums { struct tag_dnum num1; struct tag_dnum num2; struct tag_dnum num3; };
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static void analyze_numbers(GDATEVAL, struct gdate_s *, struct nums_s *);
-static void analyze_word(GDATEVAL gdv, struct gdate_s * pdate
-	, struct nums_s * nums, INT ival, BOOLEAN * newdate);
-static void assign_dnum(struct dnum_s * dest, struct dnum_s * src);
-static void clear_dnum(struct dnum_s * dnum);
-static void clear_numbers(struct nums_s * nums);
+static void analyze_numbers(GDATEVAL, struct tag_gdate *, struct tag_nums *);
+static void analyze_word(GDATEVAL gdv, struct tag_gdate * pdate
+	, struct tag_nums * nums, INT ival, BOOLEAN * newdate);
+static void assign_dnum(struct tag_dnum * dest, struct tag_dnum * src);
+static void clear_dnum(struct tag_dnum * dnum);
+static void clear_numbers(struct tag_nums * nums);
 static ZSTR do_zformat_date(STRING str, INT dfmt, INT mfmt,
              INT yfmt, INT sfmt, INT efmt, INT cmplx);
 static void format_cal(ZSTR zstr, INT cal);
 static ZSTR format_complex(GDATEVAL gdv, INT cmplx, STRING ymd2, STRING ymd3);
-static void format_day(struct dnum_s da, INT dfmt, STRING output);
-static STRING format_month(INT cal, struct dnum_s mo, INT mfmt);
+static void format_day(struct tag_dnum da, INT dfmt, STRING output);
+static STRING format_month(INT cal, struct tag_dnum mo, INT mfmt);
 static void format_eratime(ZSTR zstr, INT eratime, INT efmt);
-static STRING format_year(struct dnum_s yr, INT yfmt);
+static STRING format_year(struct tag_dnum yr, INT yfmt);
 static void format_ymd(ZSTR zstr, STRING syr, STRING smo, STRING sda, INT sfmt);
-static void free_gdate(struct gdate_s *);
-static INT get_date_tok(struct dnum_s*);
+static void free_gdate(struct tag_gdate *);
+static INT get_date_tok(struct tag_dnum*);
 static void init_keywordtbl(void);
 static void initialize_if_needed(void);
 static BOOLEAN is_date_delim(char c);
-static BOOLEAN is_valid_day(struct gdate_s * pdate, struct dnum_s day);
-static BOOLEAN is_valid_month(struct gdate_s * pdate, struct dnum_s month);
+static BOOLEAN is_valid_day(struct tag_gdate * pdate, struct tag_dnum day);
+static BOOLEAN is_valid_month(struct tag_gdate * pdate, struct tag_dnum month);
 static void load_lang(void);
 static void mark_freeform(GDATEVAL gdv);
 static void mark_invalid(GDATEVAL gdv);
@@ -695,7 +695,7 @@ format_ymd (ZSTR zstr, STRING syr, STRING smo, STRING sda, INT sfmt)
  *                must be at least 3 characters
  *=====================================*/
 static void
-format_day (struct dnum_s da, INT dfmt, STRING output)
+format_day (struct tag_dnum da, INT dfmt, STRING output)
 {
 	STRING p;
 	INT dayval = da.val; /* ignore complex days for now */
@@ -760,7 +760,7 @@ gedcom_month (INT cal, INT mo)
  *  returns static buffer or string constant or 0
  *=========================================*/
 static STRING
-format_month (INT cal, struct dnum_s mo, INT mfmt)
+format_month (INT cal, struct tag_dnum mo, INT mfmt)
 {
 	INT casing;
 	MONTH_NAMES * parr=0;
@@ -804,7 +804,7 @@ format_month (INT cal, struct dnum_s mo, INT mfmt)
  *  returns static buffer or 0
  *=======================================*/
 static STRING
-format_year (struct dnum_s yr, INT yfmt)
+format_year (struct tag_dnum yr, INT yfmt)
 {
 	static char scratch[7];
 	STRING p;
@@ -864,10 +864,10 @@ extract_date (STRING str)
 	date (with a full period or range, we may finish the
 	first date partway thru) */
 	INT tok;
-	struct dnum_s dnum = {BAD_YEAR, 0, 0};
-	struct nums_s nums = { {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0} };
+	struct tag_dnum dnum = {BAD_YEAR, 0, 0};
+	struct tag_nums nums = { {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0} };
 	GDATEVAL gdv = create_gdateval();
-	struct gdate_s * pdate = &gdv->date1;
+	struct tag_gdate * pdate = &gdv->date1;
 	BOOLEAN newdate;
 	if (!str)
 		return gdv;
@@ -948,7 +948,7 @@ extract_date (STRING str)
  * Created: 2001/12/28 (Perry Rapp)
  *=============================================*/
 static void
-analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
+analyze_word (GDATEVAL gdv, struct tag_gdate * pdate, struct tag_nums * nums
 	, INT ival, BOOLEAN * newdate)
 {
 	/* GEDCOM word modifiers */
@@ -1066,7 +1066,7 @@ analyze_word (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums
  * Created: 2001/12/28 (Perry Rapp)
  *=============================================*/
 static void
-analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
+analyze_numbers (GDATEVAL gdv, struct tag_gdate * pdate, struct tag_nums * nums)
 {
 	if (nums->num1.val == BAD_YEAR) {
 		/* if we have no numbers, we're done */
@@ -1195,7 +1195,7 @@ analyze_numbers (GDATEVAL gdv, struct gdate_s * pdate, struct nums_s * nums)
  * Created: 2002/02/03 (Perry Rapp)
  *=============================================*/
 static void
-clear_dnum (struct dnum_s * dnum)
+clear_dnum (struct tag_dnum * dnum)
 {
 	dnum->val = dnum->val2 = BAD_YEAR;
 	if (dnum->str) {
@@ -1209,7 +1209,7 @@ clear_dnum (struct dnum_s * dnum)
  * Created: 2002/02/03 (Perry Rapp)
  *=============================================*/
 static void
-clear_numbers (struct nums_s * nums)
+clear_numbers (struct tag_nums * nums)
 {
 	clear_dnum(&nums->num1);
 	clear_dnum(&nums->num2);
@@ -1220,7 +1220,7 @@ clear_numbers (struct nums_s * nums)
  * Created: 2002/02/03 (Perry Rapp)
  *=============================================*/
 static void
-assign_dnum (struct dnum_s * dest, struct dnum_s * src)
+assign_dnum (struct tag_dnum * dest, struct tag_dnum * src)
 {
 	dest->val = src->val;
 	dest->val2 = src->val2;
@@ -1249,7 +1249,7 @@ create_gdateval (void)
  * Created: 2001/12/28 (Perry Rapp)
  *=============================================*/
 void
-free_gdate (struct gdate_s * gdate)
+free_gdate (struct tag_gdate * gdate)
 {
 	clear_dnum(&gdate->year);
 	clear_dnum(&gdate->month);
@@ -1288,7 +1288,7 @@ set_date_string (STRING str)
  *                   (only used for slash years)
  *================================================*/
 static INT
-get_date_tok (struct dnum_s *pdnum)
+get_date_tok (struct tag_dnum *pdnum)
 {
 	static char scratch[90];
 	STRING p = scratch;
@@ -1694,7 +1694,7 @@ gdateval_isdual (GDATEVAL gdv)
  * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 static BOOLEAN
-is_valid_day (struct gdate_s * pdate, struct dnum_s day)
+is_valid_day (struct tag_gdate * pdate, struct tag_dnum day)
 {
 	/* To consider: Fancy code with calendars */
 	/* for now, use max (all cals all months), which is 31 */
@@ -1708,7 +1708,7 @@ is_valid_day (struct gdate_s * pdate, struct dnum_s day)
  * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 static BOOLEAN
-is_valid_month (struct gdate_s * pdate, struct dnum_s month)
+is_valid_month (struct tag_gdate * pdate, struct tag_dnum month)
 {
 	INT cal = pdate ? pdate->calendar : 0;
 	switch (cal) {

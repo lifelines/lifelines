@@ -25,12 +25,12 @@
  *********************************************/
 
 /* block of pvalues - see comments in alloc_pvalue_memory() */
-struct pv_block
+struct tag_pv_block
 {
-	struct pv_block * next;
-	struct ptag values[100]; /* arbitrary size may be adjusted */
+	struct tag_pv_block * next;
+	struct tag_pvalue values[100]; /* arbitrary size may be adjusted */
 };
-typedef struct pv_block *PV_BLOCK;
+typedef struct tag_pv_block *PV_BLOCK;
 #define BLOCK_VALUES (sizeof(((PV_BLOCK)0)->values)/sizeof(((PV_BLOCK)0)->values[0]))
 
 /*********************************************

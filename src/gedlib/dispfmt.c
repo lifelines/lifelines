@@ -19,8 +19,8 @@
  * global/exported variables
  *********************************************/
 
-struct rfmt_s disp_long_rfmt; /* reformatting used for display long forms */
-struct rfmt_s disp_shrt_rfmt; /* reformatting used for display short forms */
+struct tag_rfmt disp_long_rfmt; /* reformatting used for display long forms */
+struct tag_rfmt disp_shrt_rfmt; /* reformatting used for display short forms */
 
 
 /*********************************************

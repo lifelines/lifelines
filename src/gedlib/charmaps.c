@@ -44,8 +44,8 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
  *********************************************/
 
 /* nodes that make up the tree that is a custom character translation table */
-typedef struct xnode *XNODE;
-struct xnode {
+typedef struct tag_xnode *XNODE;
+struct tag_xnode {
 	XNODE parent;	/* parent node */
 	XNODE sibling;	/* next sib node */
 	XNODE child;	/* first child node */
@@ -55,7 +55,7 @@ struct xnode {
 };
 
 /* root of a custom character translation table */
-struct trantable_s {
+struct tag_trantable {
 	XNODE start[256];
 	char name[20];
 	INT total;

@@ -32,24 +32,24 @@
 
 /* GEDCOM dates */
 enum { BAD_YEAR=-99999 };
-struct dnum_s { INT val; INT val2; STRING str; };
-struct gdate_s {
+struct tag_dnum { INT val; INT val2; STRING str; };
+struct tag_gdate {
 	INT calendar;
-	struct dnum_s year;
-	struct dnum_s month;
-	struct dnum_s day;
+	struct tag_dnum year;
+	struct tag_dnum month;
+	struct tag_dnum day;
 	INT mod;
 	INT eratime; /* eg, AD, BC */
 };
-struct gdateval_s {
-	struct gdate_s date1;
-	struct gdate_s date2; /* used by period/from_to & range/bet_and */
+struct tag_gdateval {
+	struct tag_gdate date1;
+	struct tag_gdate date2; /* used by period/from_to & range/bet_and */
 	INT type;
 	INT subtype;
 	INT valid; /* -1=bad syntax, 0=freeform, 1=perfect GEDCOM date */
 	STRING text; /* copy of original */
 };
-typedef struct gdateval_s *GDATEVAL;
+typedef struct tag_gdateval *GDATEVAL;
 enum { GDV_PERIOD=1, GDV_RANGE, GDV_DATE, GDV_APPROX  };
 enum { GDVP_FROM=1, GDVP_TO, GDVP_FROM_TO }; /* period subtype */
 enum { GDVR_BEF=1, GDVR_AFT, GDVR_BET, GDVR_BET_AND }; /* range subtype */

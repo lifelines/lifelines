@@ -50,11 +50,11 @@ main()
 #endif
 
 /*
-TODO: right now each zstr takes two mallocs
-one to hold the zstr_s, and one with the string
-twould be more efficient to combine these
+Each ZSTR takes two mallocs
+But this cannot easily be changed, as clients
+now assume that ZSTR pointers are stable
 */
-struct zstr_s {
+struct tag_zstr {
 	int magic;
 	char * str;
 	char * end;

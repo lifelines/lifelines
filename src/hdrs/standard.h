@@ -161,15 +161,15 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 */
 #define ARRSIZE(qq) ((INT)(sizeof(qq)/sizeof(qq[0])))
 
-struct WAREHOUSE_S;
-typedef struct WAREHOUSE_S *WAREHOUSE;
+struct tag_warehouse;
+typedef struct tag_warehouse *WAREHOUSE;
 
 /*
  short format ISO style time string:
  20 bytes 0-terminated YYYY-MM-DD-HH:MM:SS ending with Z (GMT)
    0 filled DD,HH, and MM
 */
-typedef struct lldate_s {
+typedef struct tag_lldate {
 	char datestr[21];
 } LLDATE;
 
@@ -177,8 +177,8 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 	RECORD_STATUS;
 
 /* types for zstrings */
-struct zstr_s;
-typedef struct zstr_s * ZSTR;
+struct tag_zstr;
+typedef struct tag_zstr * ZSTR;
 typedef const ZSTR ZCSTR;
 
 /*

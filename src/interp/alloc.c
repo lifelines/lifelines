@@ -84,12 +84,12 @@ STRING badargx     = 0;
  * local types
  *********************************************/
 
-struct pn_block
+struct tag_pn_block
 {
-	struct pn_block * next;
-	struct itag nodes[100]; /* arbitrary size may be adjusted */
+	struct tag_pn_block * next;
+	struct tag_pnode nodes[100]; /* arbitrary size may be adjusted */
 };
-typedef struct pn_block *PN_BLOCK;
+typedef struct tag_pn_block *PN_BLOCK;
 #define BLOCK_NODES (sizeof(((PN_BLOCK)0)->nodes)/sizeof(((PN_BLOCK)0)->nodes[0]))
 
 /*********************************************
@@ -1087,7 +1087,7 @@ void
 clear_rptinfos (void)
 {
 	if (f_rptinfos) {
-		struct table_iter_s tabit;
+		struct tag_table_iter tabit;
 		STRING key=0;
 		VPTR ptr=0;
 		begin_table(f_rptinfos, &tabit);

@@ -93,36 +93,36 @@ ELMNT *index_data = NULL;
  *********************************************/
 
 /* alphabetical */
-static INT add_even_defn(struct import_feedback * ifeed, STRING, INT);
-static INT add_fam_defn(struct import_feedback * ifeed, STRING, INT);
-static INT add_indi_defn(struct import_feedback * ifeed, STRING, INT, ELMNT*);
-static INT add_othr_defn(struct import_feedback * ifeed, STRING, INT);
-static INT add_sour_defn(struct import_feedback * ifeed, STRING, INT);
+static INT add_even_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
+static INT add_fam_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
+static INT add_indi_defn(IMPORT_FEEDBACK ifeed, STRING, INT, ELMNT*);
+static INT add_othr_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
+static INT add_sour_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
 static INT add_to_structures(STRING, ELMNT);
 static void append_path(ZSTR zstr, char delim, CNSTRING str);
 static int check_akey (int firstchar, STRING keyp, INT *maxp);
-static void check_even_links(struct import_feedback * ifeed, ELMNT);
-static void check_fam_links(struct import_feedback * ifeed, ELMNT);
-static void check_indi_links(struct import_feedback * ifeed, ELMNT per);
-static void check_othr_links(struct import_feedback * ifeed, ELMNT);
-static void check_references(struct import_feedback * ifeed);
-static void check_sour_links(struct import_feedback * ifeed, ELMNT src);
+static void check_even_links(IMPORT_FEEDBACK ifeed, ELMNT);
+static void check_fam_links(IMPORT_FEEDBACK ifeed, ELMNT);
+static void check_indi_links(IMPORT_FEEDBACK ifeed, ELMNT per);
+static void check_othr_links(IMPORT_FEEDBACK ifeed, ELMNT);
+static void check_references(IMPORT_FEEDBACK ifeed);
+static void check_sour_links(IMPORT_FEEDBACK ifeed, ELMNT src);
 static void clear_structures(void);
-static void handle_fam_lev1(struct import_feedback * ifeed, STRING tag, STRING val, INT line);
-static void handle_indi_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
-static void handle_head_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
-static void handle_trlr_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
+static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line);
+static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
+static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
+static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
 static BOOLEAN openlog(void);
-static void handle_warn(struct import_feedback * ifeed, STRING, ...);
-static void handle_err(struct import_feedback * ifeed, STRING, ...);
+static void handle_warn(IMPORT_FEEDBACK ifeed, STRING, ...);
+static void handle_err(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void set_import_log(STRING logpath);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
  *=================================================*/
 BOOLEAN
-validate_gedcom (struct import_feedback * ifeed, FILE *fp)
+validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nhead, ntrlr, nindi, nfam, nsour, neven, nothr;
@@ -242,7 +242,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
  *  pel:
  *=====================================*/
 static INT
-add_indi_defn (struct import_feedback * ifeed, STRING xref, INT line, ELMNT *pel)
+add_indi_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line, ELMNT *pel)
 {
 	ELMNT el;
 	INT dex;
@@ -289,7 +289,7 @@ add_indi_defn (struct import_feedback * ifeed, STRING xref, INT line, ELMNT *pel
  *  line:    line num
  *====================================*/
 static INT
-add_fam_defn (struct import_feedback * ifeed, STRING xref, INT line)
+add_fam_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -332,7 +332,7 @@ add_fam_defn (struct import_feedback * ifeed, STRING xref, INT line)
  *  line:    line num
  *=====================================*/
 static INT
-add_sour_defn (struct import_feedback * ifeed, STRING xref, INT line)
+add_sour_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -377,7 +377,7 @@ add_sour_defn (struct import_feedback * ifeed, STRING xref, INT line)
  *  line:    line num
  *====================================*/
 static INT
-add_even_defn (struct import_feedback * ifeed, STRING xref, INT line)
+add_even_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -422,7 +422,7 @@ add_even_defn (struct import_feedback * ifeed, STRING xref, INT line)
  *  line:    line num
  *================================================*/
 static INT
-add_othr_defn (struct import_feedback * ifeed, STRING xref, INT line)
+add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -466,7 +466,7 @@ add_othr_defn (struct import_feedback * ifeed, STRING xref, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_head_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+handle_head_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 {
 	ifeed=ifeed; /* unused */
 	line=line; /* unused */
@@ -479,7 +479,7 @@ handle_head_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT li
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_trlr_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+handle_trlr_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 {
 	ifeed=ifeed; /* unused */
 	tag=tag; /* unused */
@@ -490,7 +490,7 @@ handle_trlr_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT li
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
 static void
-handle_indi_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 {
 	ELMNT indi, pers;
 	ASSERT(person != -1);
@@ -544,7 +544,7 @@ handle_indi_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT li
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
 static void
-handle_fam_lev1 (struct import_feedback * ifeed, STRING tag, STRING val, INT line)
+handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 {
 	ELMNT fam, pers;
 #ifdef DEBUG
@@ -698,7 +698,7 @@ addmissingkeys (INT t)          /* type of record: INDI_REC ... */
  * check_references -- Check for undefined problems
  *===============================================*/
 static void
-check_references (struct import_feedback * ifeed)
+check_references (IMPORT_FEEDBACK ifeed)
 {
 	INT i;
 	for (i = 0; i < struct_len; i++) {
@@ -717,7 +717,7 @@ check_references (struct import_feedback * ifeed)
  * check_indi_links -- Check person links
  *=====================================*/
 static void
-check_indi_links (struct import_feedback * ifeed, ELMNT per)
+check_indi_links (IMPORT_FEEDBACK ifeed, ELMNT per)
 {
 	BOOLEAN jm, jf, bm, bf;
 	if (Male(per) > 1)
@@ -757,7 +757,7 @@ check_indi_links (struct import_feedback * ifeed, ELMNT per)
  * check_fam_links -- Check family links
  *====================================*/
 static void
-check_fam_links (struct import_feedback * ifeed, ELMNT fam)
+check_fam_links (IMPORT_FEEDBACK ifeed, ELMNT fam)
 {
 	if (Line(fam) == 0) handle_err(ifeed, qSundfam, Key(fam));
 	if (Male(fam) > 1)
@@ -774,7 +774,7 @@ check_fam_links (struct import_feedback * ifeed, ELMNT fam)
  * check_even_links -- Check event links
  *====================================*/
 static void
-check_even_links (struct import_feedback * ifeed, ELMNT evn)
+check_even_links (IMPORT_FEEDBACK ifeed, ELMNT evn)
 {
 	if (Line(evn) == 0) handle_err(ifeed, qSundevn, Key(evn));
 }
@@ -782,7 +782,7 @@ check_even_links (struct import_feedback * ifeed, ELMNT evn)
  * check_sour_links -- Check source links
  *=====================================*/
 static void
-check_sour_links (struct import_feedback * ifeed, ELMNT src)
+check_sour_links (IMPORT_FEEDBACK ifeed, ELMNT src)
 {
 	if (Line(src) == 0) handle_err(ifeed, qSundsrc, Key(src));
 }
@@ -790,7 +790,7 @@ check_sour_links (struct import_feedback * ifeed, ELMNT src)
  * check_othr_links -- Check other links
  *====================================*/
 static void
-check_othr_links (struct import_feedback * ifeed, ELMNT otr)
+check_othr_links (IMPORT_FEEDBACK ifeed, ELMNT otr)
 {
 	if (Line(otr) == 0) handle_err(ifeed, qSundrec, Key(otr));
 }
@@ -818,7 +818,7 @@ handle_value (STRING val, INT line)
  * handle_err -- Handle GEDCOM error
  *================================*/
 static void
-handle_err (struct import_feedback * ifeed, STRING fmt, ...)
+handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
@@ -846,7 +846,7 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
 static void
-handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
+handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 

@@ -40,7 +40,7 @@ void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 
 /* screen.c types */
 /* data used in choose_from_array_x */
-typedef struct array_details_s {
+typedef struct tag_array_details {
   STRING * list; /* original array of choices */
   INT cur; /* currently selected choice */
   STRING * lines; /* lines of details */

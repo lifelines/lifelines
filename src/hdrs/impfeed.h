@@ -14,7 +14,7 @@
 #ifndef _IMPFEED_H
 #define _IMPFEED_H
 
-struct import_feedback {
+struct tag_import_feedback {
 	void (*validation_warning_fnc)(STRING msg);
 	void (*validation_error_fnc)(STRING msg);
 	void (*error_invalid_fnc)(STRING reason);
@@ -26,8 +26,12 @@ struct import_feedback {
 	void (*import_done_fnc)(INT nindi, INT nfam, INT nsour, INT neven, INT nothr);
 	void (*added_rec_fnc)(char ctype, STRING tag, INT count);
 };
+#ifndef IMPORT_FEEDBACK_type_defined
+typedef struct tag_import_feedback *IMPORT_FEEDBACK;
+#define IMPORT_FEEDBACK_type_defined
+#endif
 
-struct export_feedback {
+struct tag_export_feedback {
 	void (*added_rec_fnc)(char ctype, INT count);
 };
 

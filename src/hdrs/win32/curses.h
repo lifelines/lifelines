@@ -25,7 +25,7 @@ extern CHTYPE *acs_map;
 
 #define ERR (-1)
 
-struct _win_st
+struct tag_window
 {
 	short		_cury, _curx;	/* current coordinates */
 	short		_maxy, _maxx;	/* max coordinates */
@@ -36,10 +36,10 @@ struct _win_st
 	int		_boxed;		/* a box surrounds the window */
 	int		_mincy;		/* mimimum changed y (for refresh) */
 	int		_maxcy;		/* mimimum changed y (for refresh) */
-	struct _win_st * _parent;	/* parent window if a sub window */
+	struct tag_window * _parent;	/* parent window if a sub window */
 };
 
-typedef struct _win_st	WINDOW;
+typedef struct tag_window WINDOW;
 typedef	char bool;
 
 extern	int	LINES, COLS;

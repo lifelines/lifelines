@@ -198,7 +198,7 @@ void
 load_gedcom (BOOLEAN picklist)
 {
 	FILE *fp=NULL;
-	struct import_feedback ifeed;
+	struct tag_import_feedback ifeed;
 	STRING srcdir=NULL;
 	STRING fullpath=0;
 
@@ -240,7 +240,7 @@ BOOLEAN
 save_gedcom (void)
 {
 	FILE *fp=NULL;
-	struct export_feedback efeed;
+	struct tag_export_feedback efeed;
 	STRING srcdir=NULL, fname=0, fullpath=0;
 
 	srcdir = getoptstr("LLARCHIVES", ".");

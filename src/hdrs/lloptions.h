@@ -20,7 +20,7 @@
 #define LLOPTIONS_H_INCLUDED
 
 #ifndef TABLE_H_INCLUDED
-typedef struct table_s *TABLE;
+typedef struct tag_table *TABLE;
 #endif
 
 /* initialization & termination */

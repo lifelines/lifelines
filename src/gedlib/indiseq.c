@@ -105,7 +105,7 @@ static INT value_compare(SORTEL el1, SORTEL el2, VPTR param);
  * local variables
  *********************************************/
 
-static struct indiseq_value_vtable_s def_valvtbl =
+static struct tag_indiseq_value_vtable def_valvtbl =
 {
 	&default_copy_value
 	, &default_delete_value

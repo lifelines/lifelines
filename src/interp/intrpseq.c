@@ -51,7 +51,7 @@ static UNION pvseq_create_gen_value(INT gen, INT * valtype);
  * local variables
  *********************************************/
 
-static struct indiseq_value_vtable_s pvseq_vtbl =
+static struct tag_indiseq_value_vtable pvseq_vtbl =
 {
 	&pvseq_copy_value
 	, &pvseq_delete_value
@@ -64,17 +64,6 @@ static struct indiseq_value_vtable_s pvseq_vtbl =
  * body of module
  *********************************************/
 
-/*======================================================+
- * initset -- Initialize list that holds created INDISEQs
- * Nothing constructive was done with this (and it was a leak)
- * so I'm commenting out all code that uses it
- * 2001/01/20, Perry Rapp
- *=====================================================*/
-void
-initset (void)
-{
-/*	keysets = create_list(); */
-}
 /*======================================+
  * indiset -- Declare an INDISEQ variable
  *   indiset(VARB) -> VOID
@@ -86,6 +75,7 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE var = (PNODE) iargs(node);
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
+		/* TODO: change to prog_var_error */
 		prog_error(node, "the arg to indiset is not a variable.");
 		return NULL;
 	}
@@ -93,7 +83,6 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = create_indiseq_pval();
 	set_indiseq_value_funcs(seq, &pvseq_vtbl);
 	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
-/*	push_list(keysets, seq);*/
 	return NULL;
 }
 /*==================================+
@@ -357,7 +346,6 @@ __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	op2 = pvalue_to_seq(val);
 	set_pvalue(val, PSET, op2 = intersect_indiseq(op1, op2));
-/*	push_list(keysets, op2);*/
 	return val;
 }
 /*===============================================+
@@ -384,7 +372,6 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	op2 = pvalue_to_seq(val);
 	set_pvalue(val, PSET, op2 = difference_indiseq(op1, op2));
-/*	push_list(keysets, op2);*/
 	return val;
 }
 /*=========================================+
@@ -421,7 +408,6 @@ __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = pvalue_to_seq(val));
 	set_pvalue(val, PSET, seq = child_indiseq(seq));
-/*	push_list(keysets, seq);*/
 	return val;
 }
 /*==============================================+
@@ -439,7 +425,6 @@ __siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = pvalue_to_seq(val));
 	set_pvalue(val, PSET, seq = sibling_indiseq(seq, FALSE));
-/*	push_list(keysets, seq);*/
 	return val;
 }
 /*============================================+
@@ -457,7 +442,6 @@ __spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ASSERT(seq = pvalue_to_seq(val));
 	set_pvalue(val, PSET, seq = spouse_indiseq(seq));
-/*	push_list(keysets, seq);*/
 	return val;
 }
 /*================================================+
@@ -476,7 +460,6 @@ __ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ASSERT(seq = pvalue_to_seq(val));
 	seq = ancestor_indiseq(seq);
 	set_pvalue(val, PSET, seq);
-/*	push_list(keysets, seq);*/
 	return val;
 }
 /*====================================================+
@@ -495,7 +478,6 @@ __descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ASSERT(seq = pvalue_to_seq(val));
 	seq = descendent_indiseq(seq);
 	set_pvalue(val, PSET, seq);
-/*	push_list(keysets, seq);*/
 	return val;
 }
 /*===================================================+

@@ -508,7 +508,7 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	char buf[132];
 	INT maxcol = width-1;
 	WINDOW * win = uiw_win(uiwin);
-	struct llrect_s rect;
+	struct tag_llrect rect;
 
 	rect.bottom = row+hgt-1;
 	rect.top = row;
@@ -562,7 +562,7 @@ void
 show_ancestors (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
-	struct canvasdata_s canvas;
+	struct tag_canvasdata canvas;
 		/* parameters for drawing tree */
 	canvas.rect = rect;
 	canvas.scroll = *scroll;
@@ -581,7 +581,7 @@ void
 show_descendants (UIWINDOW uiwin, RECORD rec, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
-	struct canvasdata_s canvas;
+	struct tag_canvasdata canvas;
 		/* parameters for drawing tree */
 	canvas.rect = rect;
 	canvas.scroll = *scroll;
@@ -600,7 +600,7 @@ void
 show_gedcom (UIWINDOW uiwin, RECORD rec, INT gdvw, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
-	struct canvasdata_s canvas;
+	struct tag_canvasdata canvas;
 		/* parameters for drawing */
 	canvas.rect = rect;
 	canvas.scroll = *scroll;

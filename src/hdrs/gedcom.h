@@ -66,9 +66,9 @@
  its NODE tree). (E.g., its parent might be a NODE representing
  "1 BIRT".)
 */
-typedef struct ntag *NODE, NODE_struct;
-typedef struct nrec0 *RECORD;
-struct ntag {
+typedef struct tag_node *NODE;
+typedef struct tag_record *RECORD;
+struct tag_node {
 	STRING n_xref;      /* cross ref */
 	STRING n_tag;       /* tag */
 	STRING n_val;       /* value */
@@ -89,26 +89,26 @@ struct ntag {
 #define nrefcnt(n)  ((n)->n_refcnt)
 enum { ND_TEMP=1 };
 
-struct nkeytag { char ntype; INT keynum; STRING key; };
-typedef struct nkeytag NKEY;
+struct tag_nkey { char ntype; INT keynum; STRING key; };
+typedef struct tag_nkey NKEY;
 
 /*=====================================
  * RECORD -- Internal form of GEDCOM record
  *===================================*/
 /*
- A RECORD is a struct nrec0 which holds the in-memory representation
+ A RECORD is a struct record_s which holds the in-memory representation
  of an entire GEDCOM record, such as an INDI. It has a pointer to the
  root NODE of the INDI (which is of course a NODE representing a line
  such as "0 @I43@ INDI"), and it also contains some additional data.
  A RECORD will in the future contain a pointer to its cache element.
  LifeLines is very RECORD-oriented.
 */
-typedef struct dbhandle_s *DBHANDLE;
-struct nrec0 { /* RECORD */
+
+struct tag_record { /* RECORD */
 	NODE top;
 	NKEY nkey;
 	WAREHOUSE mdwh; /* metadata */
-	DBHANDLE dbh; /* db handle */
+	struct tag_cacheel * cel; /* cache wrapper */
 };
 NODE nztop(RECORD); /* function so it can handle NULL input */
 #define nzkey(n)    ((n)->nkey.key)
@@ -121,12 +121,12 @@ NODE nztop(RECORD); /* function so it can handle NULL input */
  either or both may be null, meaning use date or place exactly as
  occurs in data
 */
-struct rfmt_s {
+struct tag_rfmt {
 	STRING (*rfmt_date)(STRING); /* returns static buffer */
 	STRING (*rfmt_plac)(STRING); /* returns static buffer */
 	STRING combopic; /* stdalloc'd buffer, eg, "%1, %2" */
 };
-typedef struct rfmt_s *RFMT;
+typedef struct tag_rfmt *RFMT;
 
 
 /*==============================================

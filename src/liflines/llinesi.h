@@ -6,15 +6,20 @@
 #ifndef _LIFLINES_PRIV_H
 #define _LIFLINES_PRIV_H
 
-typedef struct llrect_s {
+typedef struct tag_llrect {
 	INT top;
 	INT bottom;
 	INT left;
 	INT right;
 } *LLRECT;
 
-struct import_feedback;
-struct export_feedback;
+struct tag_import_feedback;
+#ifndef IMPORT_FEEDBACK_type_defined
+typedef struct tag_import_feedback *IMPORT_FEEDBACK;
+#define IMPORT_FEEDBACK_type_defined
+#endif
+
+struct tag_export_feedback;
 
 /* add.c */
 RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
@@ -61,10 +66,10 @@ BOOLEAN edit_family(RECORD);
 BOOLEAN edit_indi(RECORD);
 
 /* export.c */
-BOOLEAN archive_in_file (struct export_feedback * efeed, FILE *fp);
+BOOLEAN archive_in_file (struct tag_export_feedback * efeed, FILE *fp);
 
 /* import.c */
-BOOLEAN import_from_gedcom_file(struct import_feedback * ifeed, FILE *fp);
+BOOLEAN import_from_gedcom_file(IMPORT_FEEDBACK ifeed, FILE *fp);
 
 /* lbrowse.c */
 INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
@@ -93,12 +98,12 @@ BOOLEAN edit_source(RECORD);
 enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	/* data for output canvas */
 	/* NB: pedigree will adjust scroll if out of limits */
-	struct canvasdata_s;
+	struct tag_canvasdata;
 		/* callback to output a line */
-	typedef void (*PEDLINE)(struct canvasdata_s * canvas, INT x, INT y
+	typedef void (*PEDLINE)(struct tag_canvasdata * canvas, INT x, INT y
 		, STRING string, INT overflow);
 		/* collection of data needed by pedigree */
-	typedef struct canvasdata_s { LLRECT rect; INT scroll; void * param;
+	typedef struct tag_canvasdata { LLRECT rect; INT scroll; void * param;
 		PEDLINE line; } *CANVASDATA;
 	/* functions */
 void pedigree_draw_ancestors(RECORD rec, CANVASDATA canvasdata, BOOLEAN reuse);
@@ -125,7 +130,7 @@ INT browse_2fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 void addmissingkeys (INT);
 int check_stdkeys (void);
 BOOLEAN scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
-BOOLEAN validate_gedcom (struct import_feedback * ifeed, FILE*);
+BOOLEAN validate_gedcom (IMPORT_FEEDBACK ifeed, FILE*);
 INT xref_to_index (STRING);
 
 

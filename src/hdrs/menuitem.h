@@ -61,23 +61,23 @@ extern MenuItem g_MenuItemOther, g_MenuItemQuit;
 in tandem screens, and is not implemented in this version! */
 extern MenuItem f_MenuItemSyncMoves;
 
-typedef struct CmdArray_s * CMDARRAY;
+typedef struct tag_cmdarray * CMDARRAY;
 
 /* One set of menus */
 /* This is the dynamically resizable menu system */
 /* Currently used only by browse screens, not list screens or main menus */
 /* need to move most of this into layout structure, & out of here, as it is only for curses */
-struct menuset_s {
+struct tag_menuset {
 	CMDARRAY Commands;
 	MenuItem ** items;  /* array of pointers to items */
 };
-typedef struct menuset_s *MENUSET;
+typedef struct tag_menuset *MENUSET;
 
 
 
 /* dynamically resizing & pageable menu */
-struct dynmenu_s {
-	struct menuset_s menuset;
+struct tag_dynmenu {
+	struct tag_menuset menuset;
 	INT rows;      /* height of menu (at start) */
 	INT cols;      /* (menu) columns in this menu (3 for big, 1 for list) */
 	INT size;      /* total #items in this menu */
@@ -96,7 +96,7 @@ struct dynmenu_s {
 	INT left;
 	INT width;
 };
-typedef struct dynmenu_s *DYNMENU;
+typedef struct tag_dynmenu *DYNMENU;
 
 
 /*

@@ -12,11 +12,11 @@
 #ifndef list_h_included
 #define list_h_included
 
-typedef struct ovtbl_s *OVTBL;
+typedef struct tag_ovtbl *OVTBL;
 
 /* types for lists */
-typedef struct lntag *LNODE;
-struct lntag {
+typedef struct tag_lnode *LNODE;
+struct tag_lnode {
 	LNODE l_prev;
 	LNODE l_next;
 	VPTR l_element;
@@ -25,7 +25,7 @@ struct lntag {
 #define lnext(n) ((n)->l_next)
 #define lelement(n) ((n)->l_element)
 
-typedef struct ltag {
+typedef struct tag_list {
 	INT l_refcnt;
 	LNODE l_head;
 	LNODE l_tail;

@@ -40,14 +40,13 @@
  *   and belong to the structure; names are always present for
  *   persons and belong; values do not belong to the structure
  *================================================================*/
-typedef struct stag {
+typedef struct tag_sortel {
 	STRING s_key;	/* person or family key */
 	STRING s_nam;	/* name of person */
 	UNION s_val;	/* any value */
 	STRING s_prn;	/* menu print string */
 	INT s_pri;	/* key as integer (exc valuesort_indiseq puts values here) */
-}
-	*SORTEL;
+} *SORTEL;
 #define skey(s) ((s)->s_key)
 #define snam(s) ((s)->s_nam)
 #define sval(s) ((s)->s_val)
@@ -90,7 +89,7 @@ typedef UNION (*SEQ_CREATE_GEN_VALUE)(INT gen, INT * valtype);
 /* compare two values */
 typedef INT (*SEQ_COMPARE_VALUES)(VPTR ptr1, VPTR ptr2, INT valtype);
 /* vtable for handling values in INDISEQ */
-typedef struct indiseq_value_vtable_s
+typedef struct tag_indiseq_value_vtable
 {
 	SEQ_COPY_VALUE_FNC copy_fnc;
 	SEQ_DELETE_VALUE delete_fnc;
@@ -102,7 +101,7 @@ typedef struct indiseq_value_vtable_s
 /*=================================================
  * INDISEQ -- Data type for an entire indi sequence
  *===============================================*/
-struct indiseq_s {
+struct tag_indiseq {
 	INT is_size;	/* current length of list  */
 	INT is_max;	/* max length before increment */
 	INT is_flags;	/* attribute flags */
@@ -114,7 +113,7 @@ struct indiseq_s {
 	INDISEQ_VALUE_VTABLE is_valvtbl;
 };
 #ifndef INDISEQ_type_defined
-typedef struct indiseq_s *INDISEQ;
+typedef struct tag_indiseq *INDISEQ;
 #define INDISEQ_type_defined
 #endif
 

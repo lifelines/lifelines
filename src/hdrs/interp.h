@@ -39,17 +39,17 @@
 
 #include "cache.h"
 
-struct rptinfo_s {
+struct tag_rptinfo {
 	STRING fullpath;
 	TABLE proctab;   /* all procs in this file */
 	TABLE functab;   /* all funcs in this file */
 	STRING codeset;  /* codeset of report */
 	STRING requires; /* version of lifelines report language required */
 };
-typedef struct rptinfo_s *RPTINFO;
+typedef struct tag_rptinfo *RPTINFO;
 
-typedef struct itag *PNODE;
-struct itag {
+typedef struct tag_pnode *PNODE;
+struct tag_pnode {
 	char     i_type;       /* type of node */
 	PNODE    i_prnt;       /* parent of this node */
 	INT      i_line;	     /* line where text of this node begins */
@@ -149,18 +149,20 @@ struct itag {
  * so the compiler will help find any misuse
  * Perry, 2002.02.17
  */
-typedef struct ptag *PVALUE;
-struct ptag {
+typedef struct tag_pvalue *PVALUE;
+struct tag_pvalue {
 	unsigned char type;	/* type of value */
 	VPTR value;	/* value */
 /*	UNION uval;*/
 };
 
-typedef struct symtab_s {
+/* symbol table data is just table data */
+typedef struct tag_symtab {
 	TABLE tab;
 } SYMTAB;
-typedef struct symtab_iter_s {
-	struct table_iter_s tabiters;
+/* symbol table iterator data is just table iterator data */
+typedef struct tag_symtab_iter {
+	struct tag_table_iter tabiters;
 } *SYMTAB_ITER;
 
 
@@ -216,9 +218,9 @@ extern INT nobuiltins;
 	}
 
 /* external types */
-typedef struct pactx_s *PACTX;
+typedef struct tag_pactx *PACTX;
 #ifndef INDISEQ_type_defined
-typedef struct indiseq_s *INDISEQ;
+typedef struct tag_indiseq *INDISEQ;
 #define INDISEQ_type_defined
 #endif
 
@@ -308,7 +310,6 @@ void zero_pventry(ENTRY);
 
 /* Report Interpreter */
 void initinterp(void);
-void initset(void);
 void initrassa(void);
 void interp_program_list(STRING, INT, VPTR*, LIST, STRING, BOOLEAN picklist);
 void finishinterp(void);

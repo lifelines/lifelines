@@ -1,3 +1,27 @@
+2003-02-23 Perry Rapp
+
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/date.c
+	src/gedlib/dispfmt.c src/gedlib/indiseq.c
+	src/gedlib/keytonod.c src/gedlib/xlat.c src/hdrs/cache.h
+	src/hdrs/date.h src/hdrs/gedcom.h src/hdrs/impfeed.h
+	src/hdrs/indiseq.h src/hdrs/interp.h src/hdrs/liflines.h
+	src/hdrs/list.h src/hdrs/lloptions.h src/hdrs/menuitem.h
+	src/hdrs/screen.h src/hdrs/standard.h src/hdrs/table.h
+	src/hdrs/translat.h src/hdrs/warehouse.h src/hdrs/zstr.h
+	src/hdrs/win32/curses.h src/interp/alloc.c
+	src/interp/builtin.c src/interp/interp.c src/interp/interpi.h
+	src/interp/intrpseq.c src/interp/pvalalloc.c
+	src/interp/pvalue.c src/interp/symtab.c
+	src/liflines/brwsmenu.c src/liflines/export.c
+	src/liflines/import.c src/liflines/llinesi.h
+	src/liflines/loadsave.c src/liflines/menuset.c
+	src/liflines/screen.c src/liflines/show.c
+	src/liflines/valgdcom.c src/stdlib/zstr.c
+
+	Fixed cacheel<->record linkage.
+	Regularized structure tags (eg, CACHEEL is struct tag_cacheel *).
+	Removed unused indiseq list (initset etc).
+
 2003-02-22 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp
@@ -85,19 +109,19 @@
 
 2003-02-08 Perry Rapp
 
-	* ChangeLog src/interp/builtin.c src/interp/write.c:
+	* ChangeLog src/interp/builtin.c src/interp/write.c
 
 	Check for null parent in addnode.
 
-	* ChangeLog src/gedlib/keytonod.c:
+	* ChangeLog src/gedlib/keytonod.c
 
 	ASSERT checks that lock & semilock stay nonnegative.
 
-	* ChangeLog src/liflines/show.c:
+	* ChangeLog src/liflines/show.c
 
 	Andreas Kirschbaum's fix to prevent crash in birth display.
 
-	* ChangeLog src/gedlib/editvtab.c:
+	* ChangeLog src/gedlib/editvtab.c
 
 	Andreas Kirschbaum's fix to prevent crash editing place abbrev.
 
@@ -111,14 +135,14 @@
 2003-02-06 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
-	src/hdrs/gedcom.h src/liflines/show.c:
+	src/hdrs/gedcom.h src/liflines/show.c
 
 	Add lock counts to cache display (for debugging).
 
 	* ChangeLog src/hdrs/indiseq.h src/hdrs/interp.h
 	src/interp/builtin.c src/interp/interp.c src/interp/intrpseq.c
 	src/interp/more.c src/interp/pvalue.c src/interp/write.c
-	src/liflines/lbrowse.c src/liflines/tandem.c:
+	src/liflines/lbrowse.c src/liflines/tandem.c
 
 	Wrap a lot of pvalue access casts into functions (eg, pvalue_to_seq).
 
@@ -126,7 +150,7 @@
 	src/gedlib/indiseq.c src/gedlib/node.c src/hdrs/interp.h
 	src/interp/builtin.c src/interp/interpi.h src/interp/pvalue.c
 	src/stdlib/list.c src/stdlib/table.c
-	*NEW src/interp/pvalalloc.c:
+	*NEW src/interp/pvalalloc.c
 
 	Move pvalue memory code into pvalalloc.c.
 	Move all pvalue assignment code into set_pvalue.
@@ -139,22 +163,22 @@
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
 	src/hdrs/cache.h src/hdrs/gedcom.h src/hdrs/interp.h
 	src/interp/builtin.c src/interp/pvalue.c src/interp/write.c
-	src/liflines/browse.c src/liflines/edit.c:
+	src/liflines/browse.c src/liflines/edit.c
 
 	Lock nodes into direct cache while pvalues point at them.
 	(Add record pointer to node, and cacheel pointer to record.)
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
-	src/interp/builtin.c src/interp/pvalue.c src/interp/write.c:
+	src/interp/builtin.c src/interp/pvalue.c src/interp/write.c
 
 	More fixing of node ref counting. Try to fix __writeindi.
 
-	* ChangeLog src/interp/write.c:
+	* ChangeLog src/interp/write.c
 
 	Add explanatory note about outstanding bug.
 
 	* ChangeLog src/gedlib/node.c src/gedlib/replace.c
-	src/hdrs/gedcom.h src/interp/write.c src/liflines/edit.c:
+	src/hdrs/gedcom.h src/interp/write.c src/liflines/edit.c
 
 	Fix __writeindi and __writefam (integrating replace.c with edit.c).
 
@@ -162,12 +186,12 @@
 	src/gedlib/Makefile.am src/gedlib/gedcomi.h src/gedlib/node.c
 	src/hdrs/gedcom.h src/hdrs/liflines.h src/interp/write.c
 	src/liflines/add.c src/liflines/edit.c
-	*NEW src/gedlib/nodeio.c:
+	*NEW src/gedlib/nodeio.c
 
 	Factored out GEDCOM I/O code from node.c into nodeio.c.
 
 	* ChangeLog src/gedlib/nodeio.c src/liflines/add.c
-	src/liflines/edit.c:
+	src/liflines/edit.c
 
 	Move gedcom output routines from edit.c to nodeio.c.
 
@@ -183,7 +207,7 @@
 	src/interp/builtin.c src/interp/functab.c src/interp/interpi.h
 	src/interp/write.c src/liflines/import.c
 	src/liflines/llinesi.h src/liflines/valgdcom.c
-	src/stdlib/strwhite.c:
+	src/stdlib/strwhite.c
 
 	Make deletenode only detach the node, not delete it.
 	Also rename it detachnode (but leave old name for reports).
@@ -199,24 +223,24 @@
 2003-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/date.c
-	src/gedlib/init.c src/hdrs/date.h src/liflines/llexec.c:
+	src/gedlib/init.c src/hdrs/date.h src/liflines/llexec.c
 
 	Cleanup some heap memory at end of program.
 
 	* ChangeLog reports/st/st_list.ll src/gedlib/init.c
 	src/gedlib/lloptions.c src/hdrs/lloptions.h src/interp/alloc.c
-	src/interp/interp.c src/stdlib/listener.c:
+	src/interp/interp.c src/stdlib/listener.c
 
 	Cleanup leak in pathinfos.
 	Cleanup leak in lloptions listeners.
 	Cleanup leak of dboptions in init_lifelines_db.
 
 	* ChangeLog src/gedlib/init.c src/gedlib/keytonod.c
-	src/hdrs/gedcom.h:
+	src/hdrs/gedcom.h
 
 	Cleanup cache memory when closing db.
 
-	* ChangeLog src/interp/builtin.c src/interp/write.c:
+	* ChangeLog src/interp/builtin.c src/interp/write.c
 
 	Standardize more argument handling in interpreter.
 

@@ -59,7 +59,7 @@
 */
 TABLE gproctab=0, gfunctab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
-struct pathinfo_s * cur_pathinfo = 0; /* program currently being parsed or run */
+PATHINFO cur_pathinfo = 0; /* program currently being parsed or run */
 FILE *Poutfp = NULL;          /* file to write program output to */
 STRING Poutstr = NULL;	      /* string to write program output to */
 INT Perrors = 0;
@@ -122,7 +122,6 @@ void
 initinterp (void)
 {
 	initrassa();
-	initset();
 	Perrors = 0;
 	rpt_cancelled = FALSE;
 	/* clear previous information */
@@ -180,10 +179,10 @@ progmessage (MSG_LEVEL level, STRING msg)
  * new_pathinfo -- Return new, filled-out pathinfo object
  *  all memory is newly heap-allocated
  *============================================*/
-static struct pathinfo_s *
+static PATHINFO
 new_pathinfo (STRING fname, STRING fullpath)
 {
-	struct pathinfo_s * pathinfo = (struct pathinfo_s *)stdalloc(sizeof(*pathinfo));
+	PATHINFO pathinfo = (PATHINFO)stdalloc(sizeof(*pathinfo));
 	memset(pathinfo, 0, sizeof(*pathinfo));
 	pathinfo->fname = strdup(fname);
 	pathinfo->fullpath = strdup(fullpath);
@@ -194,7 +193,7 @@ new_pathinfo (STRING fname, STRING fullpath)
  *  all memory is newly heap-allocated
  *============================================*/
 static void
-delete_pathinfo (struct pathinfo_s ** pathinfo)
+delete_pathinfo (PATHINFO * pathinfo)
 {
 	if (pathinfo && *pathinfo) {
 		strfree(&(*pathinfo)->fname);
@@ -222,7 +221,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	INT i;
 	INT nfiles = length_list(lifiles);
 	PNODE first, parm;
-	struct pactx_s pact;
+	struct tag_pactx pact;
 	PACTX pactx = &pact;
 	STRING rootfilepath=0;
 
@@ -240,7 +239,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			STRING fullpath = 0;
 			STRING progfile = get_list_element(lifiles, i, NULL);
 			if (find_program(progfile, 0, &fullpath)) {
-				struct pathinfo_s * pathinfo = new_pathinfo(progfile, fullpath);
+				PATHINFO pathinfo = new_pathinfo(progfile, fullpath);
 				strfree(&fullpath);
 				enqueue_list(plist, pathinfo);
 				if (i==1)
@@ -250,7 +249,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			}
 		}
 	} else {
-		struct pathinfo_s * pathinfo = 0;
+		PATHINFO pathinfo = 0;
 		STRING fname=0, fullpath=0;
 		STRING programsdir = getoptstr("LLPROGRAMS", ".");
 		if (!rptui_ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
@@ -282,7 +281,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	initinterp();
 
 	while (!is_empty_list(plist)) {
-		cur_pathinfo = (struct pathinfo_s *)dequeue_list(plist);
+		cur_pathinfo = (PATHINFO) dequeue_list(plist);
 		if (!in_table(pactx->filetab, cur_pathinfo->fullpath)) {
 			STRING str;
 			insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), 0);
@@ -386,12 +385,12 @@ interp_program_exit:
 
 	/* kill any orphaned pathinfos */
 	while (!is_empty_list(plist)) {
-		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(plist);
+		PATHINFO pathinfo = (PATHINFO)dequeue_list(plist);
 		delete_pathinfo(&pathinfo);
 	}
 	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
 	while (!is_empty_list(donelist)) {
-		struct pathinfo_s * pathinfo = (struct pathinfo_s *)dequeue_list(donelist);
+		PATHINFO pathinfo = (PATHINFO)dequeue_list(donelist);
 		delete_pathinfo(&pathinfo);
 	}
 	strfree(&rootfilepath);
@@ -1879,7 +1878,7 @@ dbgloop:
 static void
 disp_symtab (STRING title, SYMTAB stab)
 {
-	struct symtab_iter_s symtabits;
+	struct tag_symtab_iter symtabits;
 	INT n = (stab.tab ? get_table_count(stab.tab) : 0);
 	struct dbgsymtab_s sdata;
 	INT bytes = n * sizeof(STRING);
@@ -2076,7 +2075,7 @@ pa_handle_include (PACTX pactx, PNODE node)
 	STRING newfname;
 	STRING fullpath=0, localpath=0;
 	ZSTR zstr=0;
-	struct pathinfo_s * pathinfo = 0;
+	PATHINFO pathinfo = 0;
 	pactx=pactx; /* unused */
 
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */

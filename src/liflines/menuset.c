@@ -30,14 +30,14 @@ extern STRING qSttlauxbrw, qSttllstbrw;
  * local types
  *********************************************/
 
-struct CmdItem_s {
+struct tag_cmditem {
 	char c;
 	BOOLEAN direct; /* (T: command value, F: pointer) */
 	UNION value; /* command value, or pointer to CommandArray */
 };
-typedef struct CmdItem_s * CMDITEM;
+typedef struct tag_cmditem * CMDITEM;
 
-struct CmdArray_s {
+struct tag_cmdarray {
 	INT alloc; /* size allocated */
 	INT used; /* size in use */
 	CMDITEM array;

@@ -31,7 +31,7 @@
 #ifndef _WAREHOUSE_H
 #define _WAREHOUSE_H
 
-struct WAREHOUSE_S
+struct tag_warehouse
 {
 	void * data;
 	INT len; /* used length of data */

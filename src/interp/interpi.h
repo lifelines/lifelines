@@ -32,7 +32,7 @@
 #include "interp.h"
 
 /* parse global context */
-struct pactx_s {
+struct tag_pactx {
 	FILE *Pinfp;     /* file to read program from */
 	STRING Pinstr;   /* string to read program from */
 	TABLE filetab;   /* table of files called by current report (incl. itself) */
@@ -42,10 +42,10 @@ struct pactx_s {
 	INT charpos;     /* current offset on line (0-based) */
 };
 
-struct pathinfo_s {
+typedef struct tag_pathinfo {
 	STRING fname;    /* filename as user specified */
 	STRING fullpath; /* fully qualified path */
-};
+} *PATHINFO;
 
 
 PVALUE alloc_pvalue_memory(void);

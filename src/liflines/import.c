@@ -89,7 +89,7 @@ typedef struct gd_metadata_s {
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN do_import(struct import_feedback * ifeed, FILE *fp);
+static BOOLEAN do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
 static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 static BOOLEAN translate_values(NODE, VPTR);
@@ -111,7 +111,7 @@ static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
 BOOLEAN
-import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
+import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
 	STRING geddef=0;
 	BOOLEAN rtn;
@@ -131,7 +131,7 @@ import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
 static BOOLEAN
-do_import (struct import_feedback * ifeed, FILE *fp)
+do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
 	NODE node, conv;
 	XLAT ttm = 0;

@@ -80,12 +80,12 @@
  * UIWINDOWs -- Main screen, menus and popups
  *=======================================*/
 /* wrapper for WINDOW */
-typedef struct uiwindow_s {
+typedef struct tag_uiwindow {
 	CNSTRING name;       /* non-heap name (for debugging) */
 	WINDOW * win;      /* curses window */
 	WINDOW * boxwin;   /* surrounding window just for boxing */
-	struct uiwindow_s * parent; /* fixed or dynamic parent */
-	struct uiwindow_s * child;
+	struct tag_uiwindow * parent; /* fixed or dynamic parent */
+	struct tag_uiwindow * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
 	BOOLEAN dynamic;   /* TRUE means delete when finished */
 	INT rows;
@@ -120,7 +120,7 @@ enum {
         , BROWSE_UNK
 };
 
-struct menuset_s;
+struct tag_menuset;
 
 /*
   Function Prototypes, alphabetical by module
@@ -174,7 +174,7 @@ void wpos (INT, INT);
 
 
 /* show.c (curses specific) */
-extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
+extern struct tag_rfmt disp_long_rfmt, disp_shrt_rfmt;
 extern INT Scroll1;
 void display_cache_stats(void);
 void init_show_module(void);

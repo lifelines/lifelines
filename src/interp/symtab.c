@@ -89,7 +89,7 @@ remove_symtab (SYMTAB * stab)
 	{
 		STRING key=0;
 		VPTR ptr=0;
-		struct table_iter_s tabits;
+		struct tag_table_iter tabits;
 		TABLE_ITER tabit = &tabits;
 		begin_table(stab->tab, tabit);
 		while (next_table_ptr(tabit, &key, &ptr)) {

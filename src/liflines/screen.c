@@ -139,9 +139,9 @@ extern STRING qSsts_sca_ful,qSsts_sca_fra,qSsts_sca_ref,qSsts_sca_non;
 typedef struct listdisp_s
 {
 	UIWINDOW uiwin;
-	struct llrect_s rectList;
-	struct llrect_s rectDetails;
-	struct llrect_s rectMenu;
+	struct tag_llrect rectList;
+	struct tag_llrect rectDetails;
+	struct tag_llrect rectMenu;
 	INT details; /* #rows of detail info */
 	INT details_minhgt;
 	INT details_beginhgt; /* increase from 0 goes to this */
@@ -767,7 +767,7 @@ static void
 show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
 	, INT width, INT * scroll, BOOLEAN reuse)
 {
-	struct llrect_s rect;
+	struct tag_llrect rect;
 	CACHEEL fcel;
 	fcel = fam_to_cacheel(frec);
 	lock_cache(fcel);
@@ -791,7 +791,7 @@ display_indi (RECORD indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_browse_menu(screen);
-	struct llrect_s rect;
+	struct tag_llrect rect;
 	/* leave room for box all around */
 	rect.top = 1;
 	rect.bottom = lines;
@@ -840,7 +840,7 @@ display_2indi (RECORD irec1, RECORD irec2, INT mode)
 	INT lines = update_browse_menu(screen);
 	INT lines1,lines2;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
-	struct llrect_s rect;
+	struct tag_llrect rect;
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
@@ -921,7 +921,7 @@ aux_browse (RECORD rec, INT mode, BOOLEAN reuse)
 	UIWINDOW uiwin = main_win;
 	INT screen = AUX_SCREEN;
 	INT lines = update_browse_menu(screen);
-	struct llrect_s rect;
+	struct tag_llrect rect;
 	rect.top = 1;
 	rect.bottom = lines;
 	rect.left = 1;
@@ -2482,7 +2482,7 @@ manufacture a listdisp here
 			INT drow=1;
 			INT scroll=0;
 			BOOLEAN reuse=FALSE;
-			struct llrect_s rectList;
+			struct tag_llrect rectList;
 			rectList.top = drow;
 			rectList.bottom = drow + LIST_LINES-1;
 			rectList.left = 1;
@@ -2609,7 +2609,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 			/* caller gave us a detail callback, so we set up the
 			data needed & call it */
 			STRING * linestr = (STRING *)stdalloc(count * sizeof(STRING));
-			struct array_details_s dets;
+			struct tag_array_details dets;
 			for (j=0; j<count; ++j) {
 				linestr[j] = stdalloc(width);
 				linestr[j][0] = 0;
@@ -3655,7 +3655,7 @@ uicolor (UIWINDOW uiwin, LLRECT rect, char ch)
 {
 	INT i;
 	WINDOW *win = uiw_win(uiwin);
-	struct llrect_s rects;
+	struct tag_llrect rects;
 
 	if (!rect) {
 		rects.top = 0;

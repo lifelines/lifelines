@@ -52,8 +52,8 @@ extern BTREE BTR;
  * local types
  *********************************************/
 
-struct trav_parm_s {
-	struct export_feedback * efeed;
+struct tag_trav_parm {
+	struct tag_export_feedback * efeed;
 	FILE * fp;
 };
 
@@ -63,7 +63,7 @@ struct trav_parm_s {
 
 /* alphabetical */
 static BOOLEAN archive(BTREE btree, BLOCK block, void * param);
-static void copy_and_translate(FILE *fo, INT len, struct trav_parm_s * travparm, INT c, XLAT xlat);
+static void copy_and_translate(FILE *fo, INT len, struct tag_trav_parm * travparm, INT c, XLAT xlat);
 
 /*********************************************
  * local variables
@@ -87,13 +87,13 @@ static INT nindi, nfam, neven, nsour, nothr;
  * archive_in_file -- Archive database in GEDCOM file
  *=================================================*/
 BOOLEAN
-archive_in_file (struct export_feedback * efeed, FILE *fp)
+archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 {
 	char dat[30], tim[20];
 	struct tm *pt;
 	time_t curtime;
 	STRING str;
-	struct trav_parm_s travparm;
+	struct tag_trav_parm travparm;
 
 	curtime = time(NULL);
 	pt = localtime(&curtime);
@@ -133,7 +133,7 @@ archive (BTREE btree, BLOCK block, void * param)
 	char scratch[100];
 	STRING key;
 	FILE *fo;
-	struct trav_parm_s * travparm = (struct trav_parm_s *)param;
+	struct tag_trav_parm * travparm = (struct tag_trav_parm *)param;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
 	ASSERT(fo = fopen(scratch, LLREADBINARY));
@@ -155,13 +155,13 @@ archive (BTREE btree, BLOCK block, void * param)
  * copy_and_translate -- Copy record with translation
  *=================================================*/
 static void
-copy_and_translate (FILE *fo, INT len, struct trav_parm_s * travparm, INT c, XLAT xlat)
+copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, INT c, XLAT xlat)
 {
 	char in[BUFLEN];
 	char *inp;
 	int remlen, num;
 	FILE * fn = travparm->fp;
-	struct export_feedback * efeed = travparm->efeed;
+	struct tag_export_feedback * efeed = travparm->efeed;
 	
 	inp = in;		/* location for next read */
 	remlen = BUFLEN;	/* max for next read */

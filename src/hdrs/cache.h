@@ -38,8 +38,8 @@
 /*===============================
  * CACHEEL -- Cache element type.
  *=============================*/
-typedef struct c_elem *CACHEEL;
-struct c_elem {
+typedef struct tag_cacheel *CACHEEL;
+struct tag_cacheel {
 	RECORD c_record;
 	NODE c_node;	/* root node */
 	CACHEEL c_prev;	/* previous el */

@@ -44,10 +44,10 @@ Need translation chain
 */
 
 
-typedef struct trantable_s *TRANTABLE;
+typedef struct tag_trantable *TRANTABLE;
 
 /* a translation mapping, which may have a TRANTABLE, and may have iconv info */
-typedef struct xlat_s *XLAT;
+typedef struct tag_xlat *XLAT;
 
 
 

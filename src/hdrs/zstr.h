@@ -13,7 +13,7 @@
 #ifndef zstr_h_included
 #define zstr_h_included
 
-struct zstr_s;
+struct tag_zstr;
 
 ZSTR zs_new(void);
 ZSTR zs_newn(unsigned int min);

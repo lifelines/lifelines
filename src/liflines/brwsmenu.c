@@ -38,7 +38,7 @@ extern STRING qSttlauxbrw, qSttllstbrw;
 
 struct BrowseScreenInfo {
 	STRING title;
-	struct dynmenu_s dynmenu;
+	struct tag_dynmenu dynmenu;
 };
 
 /*********************************************

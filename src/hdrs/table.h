@@ -48,30 +48,30 @@ INT, or VPTR, or STRING
 */
 
 /* entry in a table */
-typedef struct etag *ENTRY;
-struct etag {
+typedef struct tag_entry *ENTRY;
+struct tag_entry {
 	STRING ekey;
 	UNION uval;
 	ENTRY enext;
 };
 
 /* table object itself */
-struct table_s {
+struct tag_table {
 	ENTRY *entries;
 	INT count; /* #entries */
 	INT refcnt; /* used by pvalues which share table pointers */
 	INT valtype; /* TB_VALTYPE enum in table.c */
 	INT maxhash;
 };
-typedef struct table_s *TABLE;
+typedef struct tag_table *TABLE;
 
 /* table iterator */
-struct table_iter_s {
+struct tag_table_iter {
 	INT index;
 	ENTRY enext;
 	TABLE table;
 };
-typedef struct table_iter_s * TABLE_ITER;
+typedef struct tag_table_iter * TABLE_ITER;
 
 
 

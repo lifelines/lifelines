@@ -51,6 +51,7 @@ int listbadkeys = 0;
 
 static void add_record_to_direct(CACHE cache, RECORD rec, STRING key);
 static void cache_get_lock_counts(CACHE ca, INT * locks, INT * semilocks);
+static void connect_cel_to_rec(CACHEEL cel, RECORD rec);
 static CACHE create_cache(STRING name, INT dirsize, INT indsize);
 static void delete_cache(CACHE * pcache);
 static void dereference(CACHEEL);
@@ -631,9 +632,23 @@ direct_to_indirect (CACHE cache)
 	}
 	remove_direct(cache, cel);
 	free_rec(crecord(cel)); /* this frees the nodes */
-	crecord(cel) = NULL;
-	cnode(cel) = NULL;
+	connect_cel_to_rec(cel, NULL);
 	first_indirect(cache, cel);
+}
+/*=====================================================
+ * connect_cel_to_rec -- Hook record to cache element holder
+ * (rec may be NULL)
+ *===================================================*/
+static void
+connect_cel_to_rec (CACHEEL cel, RECORD rec)
+{
+	if (cel) {
+		crecord(cel) = rec;
+		cnode(cel) = nztop(rec);
+	}
+	if (rec) {
+		rec->cel = cel;
+	}
 }
 /*=====================================================
  * dereference -- Dereference cel by reading its record
@@ -647,8 +662,7 @@ dereference (CACHEEL cel)
 	ASSERT(cel);
 	ASSERT(rawrec = retrieve_raw_record(ckey(cel), &len));
 	ASSERT(rec = string_to_record(rawrec, ckey(cel), len));
-	crecord(cel) = rec;
-	cnode(cel) = nztop(rec);
+	connect_cel_to_rec(cel, rec);
 	stdfree(rawrec);
 }
 /*========================================================
@@ -704,11 +718,9 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	ASSERT(rec);
 	ASSERT(csizedir(cache) < cmaxdir(cache));
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
-	rec->dbh = (DBHANDLE)cel;
 	keycopy = strsave(key);
 	insert_table_ptr(cdata(cache), keycopy, cel);
-	crecord(cel) = rec;
-	cnode(cel) = nztop(rec);
+	connect_cel_to_rec(cel, rec);
 	ckey(cel) = keycopy;
 	cclock(cel) = 0;
 	csemilock(cel) = 0;
@@ -792,7 +804,7 @@ key_typed_to_node (CACHE cache, CNSTRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
- * key_typed_to_record -- Return tree from key; add to cache if not there
+ * key_typed_to_record -- Return record from key; add to cache if not there
  * asserts if failure
  *=============================================================*/
 static RECORD
@@ -819,7 +831,7 @@ qkey_to_node (CACHE cache, CNSTRING key, STRING tag)
 	return cnode(cel);
 }
 /*===============================================================
- * qkey_typed_to_record -- Return tree from key; add to cache if not there
+ * qkey_typed_to_record -- Return record from key; add to cache if not there
  * report mode - returns NULL if failure
  *=============================================================*/
 static RECORD
@@ -1102,6 +1114,7 @@ indi_to_cacheel (RECORD indi)
 	CACHEEL cel;
 	if (!indi || !nztop(indi)) return NULL;
 	cel = key_to_indi_cacheel(rmvat(nxref(nztop(indi))));
+	ASSERT(indi->cel == cel);
 	ASSERT(cel);
 	return cel;
 }
