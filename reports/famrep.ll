@@ -1,29 +1,49 @@
 /*
- * @progname       famrep
- * @version        3.0
- * @author         Jones
+ * @progname       famrep.ll
+ * @version        6.3
+ * @author         James P. Jones (jjones@nas.nasa.gov)
  * @category       
  * @output         nroff
  * @description    
  *
- *   Family Group Sheet report program, with in-line source references.
- *
- *   famrep3
- *
- *   Code by James P. Jones, jjones@nas.nasa.gov
+ *   This report program produces a Family Group Sheet for the selected
+ *   individual, with options for generating sheets for married children
+ *   of the individual, and their children, etc.
  *
  *   This report works only with the LifeLines Genealogy program
  *
- *   version two of this report was written by James P. Jones, 1 Nov 1992
- *   version three of  this report was written by James P. Jones, 28 Mar 1993
+ *   version two:    1 Nov 1992
+ *   version three: 28 Mar 1993 bug fixes
+ *   version four:  25 Apr 1993 added sources
+ *   version five:  26 Sep 1993 added multiple indi's, bug fix
+ *   version six:    3 Oct 1993 bug fixes
  *
- *   I use:     tbl fam.out | xroff -me -tstdout | ipr -Pim7 -D"jobheader off"
- *   Can use:   tbl fam.out | xroff -me -PprinterName
- *              tbl fam.out | groff -me | your_postscript_printer
+ *   This report program produces a Family Group Sheet for the selected
+ *   individual. User is given the choice of having sheets generated for
+ *   married children of individual, and the children of the children, etc.
+ *   Sources of information are indicated with end-note style
+ *   references. The report produces 'roff output, which I suggest you
+ *   convert to postscript for the highest quality report. Following are
+ *   several examples how to process and print the report (assuming the
+ *   output file name is "fam.out":
+ *
+ *        tbl fam.out | xroff -me -tstdout | ipr -Pim7 -D"jobheader off"
+ *        tbl fam.out | xroff -me -PprinterName
+ *        tbl fam.out | groff -me | your_postscript_printer
+ *        tbl fam.out | troff -me | dpost | lp -dps
+ *
+ *   You will want to change the data in "compiler" table in main() to
+ *   reflect yourself: change the reference from me to you, your address,
+ *   phone, etc.
+ *
  */
 
 global(sourcelist)                      /* list of all sources used */
 global(sourcestr)
+global(compiler)
+global(TRUE)
+global(FALSE)
+global(ONCE)
 
 proc main ()
 {
@@ -31,58 +51,117 @@ proc main ()
     dateformat(0)
     set(TRUE, 1)
     set(FALSE, 0)
+    set(ONCE, TRUE)
     list(sourcelist)
-    getindi(indi)                       /* select individual for report */
-    set(i, nspouses(indi))
-    spouses(indi, svar, fvar, no) {     /* display spouses */
-        if (gt(i, 1)) {
-            if (gt(no, 4)) {            /* leave space for prompt */
-                print(nl())
-                print(nl())
-                print(nl())
-                print(nl())
-            }
-            print(d(no))
-            print(". ")
-            print(fullname(svar,TRUE,FALSE,50))
+
+    /* Change the compiler name, address, phone, and email to reflect you.*/
+    table(compiler)
+    insert(compiler, "name", "James Patton Jones")
+    insert(compiler, "addr", "370 Altair Way, #213  Sunnyvale, CA 94086")
+    insert(compiler, "phone", "415.571.6762")
+    insert(compiler, "email", "jjones@nas.nasa.gov")
+
+    set(indi, NULL)
+    while (eq(strcmp(name(indi), NULL), 0)) {
+        getindi(indi)                   /* select individual for report */
+        if (eq(strcmp(name(indi), NULL), 0)) {
+            print("Individual not found in database.")
             print(nl())
         }
     }
-    if (gt(i, 1)) {                     /* select a spouse */
-        getintmsg(num, "Choose which spouse for Family Report: ")
+    while (or(lt(ionly,1), gt(ionly,2))) {
+      getintmsg(ionly,"Choose (1) Individual only, (2) + Married Descendents: ")
+    }
+    if (eq(ionly, 2)) {
+        set(sonly,0)
+        while (or(lt(sonly,1), gt(sonly,2))) {
+            getintmsg(sonly,"Choose (1) Select Spouse, (2) All Spouses: ")
+        }
     }
     else {
-        set(num, 1)
+        set(sonly, 1)
+    }
+    call FGsheet(indi, ionly, sonly)
+    print("Report Done, ")
+}
+
+/* Select the individual's spouse for the Family Group Sheet.
+ */
+proc FGsheet(indi, ionly, sonly)
+{
+    if (eq(sonly, 1)) {
+        set(i, nspouses(indi))
+        spouses(indi, svar, fvar, no) { /* display spouses */
+            if (gt(i, 1)) {
+                if (gt(no, 7)) {                /* leave space for prompt */
+                    print(nl())
+                    print(nl())
+                    print(nl())
+                    print(nl())
+                }
+                print(d(no))
+                print(". ")
+                print(fullname(svar,TRUE,FALSE,50))
+                print(nl())
+            }
+        }
+        if (gt(i, 1)) {                 /* select a spouse */
+            getintmsg(num, "Choose which spouse for Family Report: ")
+        }
+        else {
+            set(num, 1)
+        }
+        if (lt(i, 1)) {
+            print(name(indi))
+            print(" has no spouse in database...")
+            print(nl())
+        }
+        else {
+            if (eq(ONCE, TRUE)) {
+                ".po 0.8i" nl()
+                ".ll 6.8i" nl()
+                ".pl +1.5i" nl()
+                ".nf" nl()
+
+                set(ONCE, FALSE)
+            }
+        }
     }
     spouses(indi, svar, fvar, no) {
-        if (eq(no, num)) {
+        if (or(and(eq(sonly,1), eq(no, num)), eq(sonly,2))) {
             if (eq(strcmp(sex(indi), "F"), 0)) {
                 set(tmp, indi)          /* Check sex of individual,*/
-                set(indi, svar)         /* if Female, replace with */
-                set(svar, tmp)          /* information on husband. */
-                set(i, nspouses(indi))  /* Easier if assume head-  */
+                set(tindi, svar)        /* if Female, replace with */
+                set(tsvar, tmp)         /* information on husband. */
+                set(i, nspouses(tindi)) /* Easier if assume head-  */
                 set(num, 1)             /* of-household is male... */
                 if (gt(i, 1)) {
-                    spouses(indi, tmps, tmpf, no) {
-                        if (eq(name(svar), name(tmps))) {
+                    spouses(tindi, tmps, tmpf, no) {
+                        if (eq(name(tsvar), name(tmps))) {
                             set(num, no)
                         }
                     }
                 }
+                call doform(tindi, tsvar, fvar, i, num)
             }
-            call doform(indi, svar, fvar, i, num)
-        }
-    }
-    if (eq(i, 0)) {
-        print("This person has no spouse in database...")
-        print(nl())
-        print("Report NOT created, ")
-        call doform(indi, 0, 0, 0, 0)
+            else {
+                call doform(indi, svar, fvar, i, num)
+            }
+            call printsources(sourcelist)
+            while (not(empty(sourcelist))) {    /* NULL out sources each time */
+                set(nil, dequeue(sourcelist))
+                set(sourcestr, NULL)
+            }
+            ".bp" nl()
 
-    }
-    else {
-        call printsources(sourcelist)
-        print("Report Done, ")
+            if (eq(ionly, 2)) {
+                children(fvar, kid, j) {
+                    if(or(ge(nspouses(kid),1), ge(nfamilies(kid),1))) {
+                        call FGsheet(kid, ionly, 2)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -90,21 +169,18 @@ proc main ()
  */
 proc doform(indi, svar, fvar, numsp, cursp)
 {
-    ".po 0.8i" nl()
-    ".ll 6.8i" nl()
-    ".pl +1.5i" nl()
-    ".nf" nl()
     ".ps 16" nl()
     ".(b C" nl()
     if (e, surname(indi)) { upper(surname(indi)) }
     "\\0FAMILY\\0GROUP\\0SHEET" nl()
     ".ps 10" nl()
-    "Compiled by: \\fIJames\\0Patton\\0Jones\\fR\\0on\\0\\fI"
+    "Compiled by: \\fI" lookup(compiler, "name") "\\fR\\0on\\0\\fI"
     stddate(gettoday())
     "\\fR" nl()
     ".vs 10" nl()
-    "\\fI619\\0West\\0Remington\\0Drive,\\0Sunnyvale,\\0CA\\094087\\fR" nl()
-    "\\fIPhone:\\0408.739.4556\\0\\0\\0E-mail:\\0jjones@nas.nasa.gov\\fR" nl()
+    "\\fI" lookup(compiler, "addr") "\\fR" nl()
+    "\\fIPhone:\\0" lookup(compiler, "phone") "\\0\\0\\0E-mail:\\0"
+    lookup(compiler, "email") "\\fR" nl()
     ".)b" nl()
     ".ps 8" nl()
     ".TS" nl()
@@ -152,7 +228,7 @@ proc doform(indi, svar, fvar, numsp, cursp)
     "+"
     if (e, place(aday)) { place(aday) } "\\fR"
     if (aday) { call dosource(aday) } nl()
-    "=" nl()
+    "_" nl()
     ".T&" nl()
     "l | l s." nl()
     "\\0Father's Name:+\\fI"
@@ -177,9 +253,10 @@ proc doform(indi, svar, fvar, numsp, cursp)
     }
     if (eq(f, 0)) { "\\fR" nl() }
     "_" nl()
-    ".T&" nl()
-    "l s s s." nl()
-    " " nl()
+    ".TE" nl()
+    ".TS" nl()
+    "tab(+) expand box;" nl()
+    "l s s." nl()
     "Wife's Full Maiden Name:\\0\\fI"
     if (e, name(svar)) { name(svar) }
     "\\fR" nl()
@@ -215,7 +292,7 @@ proc doform(indi, svar, fvar, numsp, cursp)
     "+"
     if (e, place(aday)) { place(aday) } "\\fR"
     if (aday) { call dosource(aday) } nl()
-    "=" nl()
+    "_" nl()
     ".T&" nl()
     "l | l s." nl()
     "\\0Father's Name:+\\fI"
@@ -247,9 +324,9 @@ proc doform(indi, svar, fvar, numsp, cursp)
         if (eq(haschild, 1)) {
             ".TS" nl()
             "tab(+) expand box;" nl()
-            "l | l | l | l | l." nl()
-            "Children's Full Names+Sex+Children's Data+Day Month Year+"
-            "City, Town or Place County or Province State or Country" nl()
+            "l |l| l | l | l." nl()
+            "Complete Names of All Children+Sex+Event+Date+"
+            "City, Town, County, State or Country" nl()
             "_" nl()
             set(haschild, 2)
         }
@@ -259,9 +336,9 @@ proc doform(indi, svar, fvar, numsp, cursp)
             ".bp" nl()                          /* old woman, who lived in a  */
             ".TS" nl()                       /* shoe, she had so many kids... */
             "tab(+) expand box;" nl()
-            "l | l | l | l | l." nl()
-            "Children's Full Names+Sex+Children's Data+Day Month Year+"
-            "City, Town or Place County or Province State or Country" nl()
+            "l |l| l | l | l." nl()
+            "Complete Names of All Children+Sex+Event+Date+"
+            "City, Town, County/Province, State, Country" nl()
             "_" nl()
         }
         "T{" nl()
@@ -292,9 +369,9 @@ proc doform(indi, svar, fvar, numsp, cursp)
         "+"
         if (e, place(aday)) { place(aday) } "\\fR"
         if (aday) { call dosource(aday) } nl()
-        "_" nl()
 
         families(cvar, cfvar, csvar, no) {              /* spouses */
+            "_" nl()
             "\\^+\\^+Marriage+\\fI"
             set(aday, marriage(cfvar))
             if (e, stddate(aday)) { stddate(aday) }
@@ -302,7 +379,6 @@ proc doform(indi, svar, fvar, numsp, cursp)
             if (e, name(csvar)) { name(csvar) }
             if (aday) { call dosource(aday) }
             "\\fR" nl()
-            "_" nl()
         }
         "=" nl()
     }
@@ -328,6 +404,7 @@ proc dosource(eventnode)
  */
 proc source(eventnode)
 {
+    set(sourcestr, NULL)
     traverse(eventnode, node, lev) {
        if (eq(strcmp(tag(node), "SOUR"), 0)) {
            set(sourcestr, value(node))
@@ -363,11 +440,11 @@ proc printsources(slist)
         ".(b C" nl()
         "LIST OF SOURCES REFERENCED IN THIS REPORT" nl()
         ".)b" nl()
-        nl()
         forlist(slist, item, i) {
             "(" d(i) ")  " item nl()
         }
     }
 }
 
-/* End of Report */
+/* End of Report
+ */
