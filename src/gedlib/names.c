@@ -1152,7 +1152,7 @@ typedef struct
 } TRAV_NAME_PARAM;
 /* see above */
 static BOOLEAN
-traverse_name_callback (RKEY rkey, CNSTRING data, INT len, void *param)
+traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
