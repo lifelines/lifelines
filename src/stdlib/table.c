@@ -244,13 +244,14 @@ new_entry (void)
  * new_table_entry_impl -- Insert key & value into table
  * Caller must have checked that key is not present
  * Only used for new generic values (as is obvious from signature)
+ * key is duplicated here
  *====================================*/
 static void
 new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
 {
 	INT hval = hash(tab, key);
 	ENTRY entry = new_entry();
-	entry->ekey = (STRING)key;
+	entry->ekey = strdup(key);
 	copy_generic_value(&entry->generic, generic);
 	entry->uval.i = 0;
 	entry->enext = tab->entries[hval];
@@ -611,11 +612,11 @@ remove_table (TABLE tab, INT whattofree)
 static void
 free_contents (ENTRY ent, INT whattofree)
 {
+	if (whattofree==FREEBOTH || whattofree==FREEKEY || whattofree==-2)
+		stdfree(ent->ekey);
 	if (!is_generic_null(&ent->generic)) {
 		clear_generic(&ent->generic);
 	} else {
-		if (whattofree==FREEBOTH || whattofree==FREEKEY)
-			stdfree(ent->ekey);
 		if (whattofree==FREEBOTH || whattofree==FREEVALUE) {
 			if (ent->uval.w)
 				stdfree(ent->uval.w);

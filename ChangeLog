@@ -1,3 +1,11 @@
+2005-01-23 Perry Rapp
+
+	* ChangeLog src/gedlib/date.c src/stdlib/table.c
+
+	Revise date keywordtbl to use new generic table.
+	Fix new_table_entry_impl to duplicate key (generic tables
+	duplicate all keys).
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c
