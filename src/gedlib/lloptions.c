@@ -154,7 +154,9 @@ static STRING
 numtostr (INT num)
 {
 	static char buffer[33];
-	sprintf(buffer, "%d", num);
+
+	/* We have snprintf() in arch so let's use it instead of sprintf() */
+	snprintf(buffer,33,"%d",num);
 	return buffer;
 }
 /*==========================================
