@@ -15,7 +15,7 @@ EXTRA_DIST = arch.h array.h btree.h \
 	menuitem.h metadata.h mystring.h object.h \
 	proptbls.h pvalue.h \
 	screen.h sequence.h standard.h sys_inc.h \
-	table.h translat.h uiprompts.h \
+	table.h translat.h ui.h uiprompts.h \
 	version.h vtable.h warehouse.h xlat.h zstr.h
 
 

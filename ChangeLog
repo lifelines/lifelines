@@ -1,3 +1,9 @@
+2003-09-17 Perry Rapp
+
+	* ChangeLog src/hdrs/Makefile.am
+
+	Distribute ui.h as well.
+
 2003-09-16 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.xml
 	docs/listops.jpg  docs/Makefile.am
