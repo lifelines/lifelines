@@ -4,6 +4,14 @@
 
 	Fix leak of pvalue returned to main proc.
 
+	* ChangeLog src/hdrs/version.h src/interp/symtab.c
+
+	Fix leak of assignments of nulls and ints with same value
+	in insert_symtab (self-assignment check that did not belong).
+	Bump version to 3.0.42d to differentiate from release.
+
+2005-02-08 lifelines beta 3.0.42-2 RELEASE
+
 2005-02-08 Stephen Dum
 	* ChangeLog  docs/ll-reportmanual.html  docs/ll-reportmanual.pdf 
 	  docs/ll-reportmanual.txt  docs/ll-userguide.html 

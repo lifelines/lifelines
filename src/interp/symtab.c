@@ -92,9 +92,11 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 {
 	PVALUE oldval = (PVALUE) valueof_ptr(stab->tab, iden);
 	if (oldval) {
-		if (ptype(oldval)==ptype(val) && pvalvv(oldval)==pvalvv(val)) {
-			return; /* self-assignment */
-		}
+		/* we clear the oldval even if the new one is the same,
+		because we have to release our hold on the oldval, and
+		anyway, the new one should have a reference count on its
+		object if appropriate */
+
 		/* table doesn't know how to delete pvalues, so we do it */
 		delete_pvalue(oldval);
 		delete_table_element(stab->tab, iden);
