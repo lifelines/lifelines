@@ -171,16 +171,24 @@ STRING getxxref (void)
 static void
 sortxref (INT nxrefs, INT * xrefs)
 {
+	/*
+	TO DO - call qsort instead
+	and also flag sorted file by changing file structure
+	- Perry, 2001/01/05
+	*/
 	/* they should normally already be sorted, 
 	so a bubble-sort will be O(n) to verify */
-	INT i,j, temp;
+	INT i,j, temp, ct;
 	for (i=1; i<nxrefs; i++) {
+		ct=0;
 		for (j=i+1; j<nxrefs; j++) {
 			if (xrefs[i] > xrefs[j]) {
+				ct++;
 				temp = xrefs[j];
 				xrefs[j] = xrefs[i];
 				xrefs[i] = temp;
 			}
+			if (i==1 && !ct) return; /* already sorted */
 		}
 	}
 }

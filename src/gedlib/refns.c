@@ -405,7 +405,7 @@ record_letter (STRING tag)
 /*=========================================
  * key_to_record -- Returns record with key
  *=======================================*/
-NODE key_to_record (STRING str, /* string that may be a key */
+NOD0 key_to_record (STRING str, /* string that may be a key */
                     INT let)    /* if string starts with letter it
                                    must be this */
 {
@@ -423,11 +423,11 @@ NODE key_to_record (STRING str, /* string that may be a key */
 	kbuf[i] = 0;
 	if (!isrecord(BTR, str2rkey(kbuf))) return NULL;
 	switch (let) {
-	case 'I': return key_to_indi(kbuf);
-	case 'F': return key_to_fam(kbuf);
-	case 'S': return key_to_sour(kbuf);
-	case 'E': return key_to_even(kbuf);
-	case 'X': return key_to_othr(kbuf);
+	case 'I': return key_to_indi0(kbuf);
+	case 'F': return key_to_fam0(kbuf);
+	case 'S': return key_to_sour0(kbuf);
+	case 'E': return key_to_even0(kbuf);
+	case 'X': return key_to_othr0(kbuf);
 	default:  FATAL();
 	}
 	FATAL();
@@ -442,13 +442,14 @@ refn_to_record (STRING ukey,    /* user refn key */
 {
 	STRING *keys;
 	INT num;
+	NOD0 nod0;
 
 	if (!ukey || *ukey == 0) return NULL;
 	get_refns(ukey, &num, &keys, letr);
-	if (num)
-		return key_to_record(keys[0], *keys[0]);
-	else
-		return NULL;
+	if (!num) return NULL;
+	nod0 = key_to_record(keys[0], *keys[0]);
+	if (!nod0) return NULL;
+	return nztop(nod0);
 }
 /*===============================================
  * index_by_refn - Index node tree by REFN values

@@ -61,16 +61,19 @@ struct ntag {
 #define nchild(n)   ((n)->n_child)
 #define nsibling(n) ((n)->n_sibling)
 
+struct nkeytag { char ntype; INT keynum; };
+typedef struct nkeytag NKEY;
+
 typedef struct ntag0 *NOD0;
 struct ntag0 {
 	NODE top;
-	char ntype;
-	INT keynum;
+	NKEY nkey;
 	/* metadata will be here */
 };
 #define nztop(n)    ((n)->top)
-#define nzkeynum(n) ((n)->keynum)
-#define nztype(n)   ((n)->ntype)
+#define nznkey(n)   ((n)->nkey)
+#define nzkeynum(n) ((n)->nkey.keynum)
+#define nztype(n)   ((n)->nkey.ntype)
 
 /*==============================================
  * Option type enumerations (but we use defines)
@@ -236,7 +239,7 @@ NODE key_to_indi(STRING);
 NOD0 key_to_indi0(STRING);
 NODE key_to_othr(STRING);
 NOD0 key_to_othr0(STRING);
-NODE key_to_record(STRING,INT);
+NOD0 key_to_record(STRING,INT);
 NODE key_to_sour(STRING);
 NOD0 key_to_sour0(STRING);
 NODE key_to_type(STRING key, INT reportmode);

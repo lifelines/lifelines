@@ -736,8 +736,8 @@ add_node_to_direct(CACHE cache,
 	cel = (CACHEEL) stdalloc(sizeof(*cel));
 	insert_table(cdata(cache), key = strsave(rmvat(nxref(node))), cel);
 	nod0 = (NOD0)stdalloc(sizeof(*nod0));
-	nod0->keynum = atoi(key+1);
-	nod0->ntype = key[0];
+	nod0->nkey.keynum = atoi(key+1);
+	nod0->nkey.ntype = key[0];
 	nod0->top = node;
 	cnod0(cel) = nod0;
 	cnode(cel) = node;

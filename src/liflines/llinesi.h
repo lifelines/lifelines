@@ -46,7 +46,7 @@ NODE merge_two_indis(NODE, NODE, BOOLEAN);
 NODE merge_two_fams(NODE, NODE);
 
 /* newrecs.c */
-NODE ask_for_record(STRING, INT);
+NOD0 ask_for_record(STRING, INT);
 void edit_event(NODE);
 void edit_other(NODE);
 void edit_source(NODE);

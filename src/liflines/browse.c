@@ -41,6 +41,7 @@
 
 #include "llinesi.h"
 
+NODE jumpnode; /* used by Ethel for direct navigation */
 extern STRING nochil, nopers, nofam, nosour, idsour;
 extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
@@ -408,6 +409,9 @@ browse_indi_modes (NODE *pindi1,
 			break;
 		case 'A':	/* Advanced person edit */
 			advanced_person_edit(indi);
+			break;
+		case '@':   /* GUI direct navigation */
+			indi = jumpnode;
 			break;
 		case '+':	/* Go to next indi in db */
 			{
@@ -841,6 +845,9 @@ browse_pedigree1 (NODE *pindi,
 			}
 			*pseq = seq;
 			return BROWSE_LIST;
+			break;
+		case '@':       /* GUI direct navigation */
+			indi = jumpnode;
 			break;
 		case '&':       /* toggle pedigree mode (ancestors/descendants) */
 			pedigree_toggle_mode();

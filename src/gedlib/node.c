@@ -464,8 +464,8 @@ NOD0
 string_to_nod0 (STRING str, STRING key)
 {
 	NOD0 nod0 = (NOD0)stdalloc(sizeof(*nod0));
-	nod0->keynum = atoi(key+1);
-	nod0->ntype = key[0];
+	nod0->nkey.keynum = atoi(key+1);
+	nod0->nkey.ntype = key[0];
 	if (*str == '0')
 		nod0->top = string_to_node(str);
 	else {

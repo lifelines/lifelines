@@ -137,9 +137,9 @@ void show_list (INDISEQ seq,
 		INT cur,
 		INT mark);
 /* export.c */
-BOOLEAN archive_in_file (void);
+BOOLEAN archive_in_file(void);
 /* import.c */
-BOOLEAN import_from_file (void);
+BOOLEAN import_from_file(void);
 /* in miscutls.c */
 void key_util (void);
 void who_is_he_she (void);

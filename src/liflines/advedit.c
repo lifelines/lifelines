@@ -44,10 +44,14 @@ static NODE expd;	/* expanded main record - copy */
 static void expand_tree(NODE);
 static BOOLEAN expand_traverse(NODE);
 
+/*=================================================================
+ * expand_tree --
+ *===============================================================*/
 static void
 expand_tree (NODE root0)
 {
 	NODE copy, node, sub;
+	NOD0 sub0;
 	STRING key;
 
 	root = root0;
@@ -62,7 +66,8 @@ expand_tree (NODE root0)
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
 		key = rmvat(nval(node));
-		if ((sub = key_to_record(key, *key))) {
+		if ((sub0 = key_to_record(key, *key))) {
+			sub = nztop(sub0);
 			copy = copy_nodes(sub, TRUE, FALSE);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);

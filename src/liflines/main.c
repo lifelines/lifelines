@@ -237,7 +237,6 @@ main (INT argc,
 		btreepath = strsave(btreepath);
 	} else {
 		btreepath = (unsigned char *)argv[optind];
-		/* Perry: I think this test is unnecessary */
 		if (!btreepath || *btreepath == 0) {
 			showusage = TRUE;
 			goto usage;

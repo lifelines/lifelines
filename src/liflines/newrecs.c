@@ -221,7 +221,10 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	NODE refn, node2=0, temp;
 
 /* Identify record if need be */
-	if (!node1) node1 = ask_for_record(idedt, letr);
+	if (!node1) {
+		NOD0 nod0 = ask_for_record(idedt, letr);
+		if (nod0) node1 = nztop(nod0);
+	}
 	if (!node1) {
 		message("There is no record with that key or reference.");
 		return;
@@ -280,20 +283,20 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
  * ask_for_record -- Ask user to identify record
  *  lookup by key or by refn (& handle dup refns)
  *=============================================*/
-NODE
+NOD0
 ask_for_record (STRING idstr,   /* question prompt */
                 INT letr)       /* letter to possibly prepend to key */
 {
-	NODE node;
+	NOD0 nod0;
 	STRING str = ask_for_string(idstr, "enter key or refn: ");
 	if (!str || *str == 0) return NULL;
-	node = key_to_record(str, letr);
-	if (!node) {
+	nod0 = key_to_record(str, letr);
+	if (!nod0) {
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
-		node = nztop(choose_from_indiseq(seq, FALSE, duprfn, duprfn));
+		nod0 = choose_from_indiseq(seq, FALSE, duprfn, duprfn);
 		remove_indiseq(seq, FALSE);
 	}
-	return node;
+	return nod0;
 }
