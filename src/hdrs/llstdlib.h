@@ -84,6 +84,7 @@ INT ll_toupper(INT);
 INT ll_tolower(INT);
 STRING trim(STRING, INT);
 void striptrail(STRING);
+void striplead(STRING);
 BOOLEAN allwhite(STRING);
 
 #endif /* _LL_STDLIB_H */
