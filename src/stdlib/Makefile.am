@@ -16,6 +16,8 @@ EXTRA_DIST = stdlibi.h
 # since we're not doing dependencies automagically...
 assert.o: ../hdrs/standard.h
 assert.o: ../hdrs/mystring.h
+bfs.o: ../hdrs/llstdlib.h
+bfs.o: ../hdrs/bfs.h
 double.o: ../hdrs/standard.h
 double.o: ../hdrs/mystring.h
 dirs.o: ../hdrs/standard.h ../hdrs/llstdlib.h
