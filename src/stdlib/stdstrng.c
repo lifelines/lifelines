@@ -518,3 +518,17 @@ chomp (STRING str)
 		--p;
 	}
 }
+/*=============================================+
+ * free_array_strings -- Free all strings in an array
+ *  n:   [IN]  size of array
+ *  arr: [I/O] array
+ *============================================*/
+void
+free_array_strings (INT n, STRING * arr)
+{
+	INT i;
+	for (i=0; i<n; ++i)
+	{
+		strfree(&arr[i]); /* frees & zeros pointer */
+	}
+}

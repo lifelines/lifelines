@@ -1,3 +1,22 @@
+2002-02-17 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/names.c hdrs/interp.h hdrs/llstdlib.h
+	hdrs/mystring.h hdrs/screen.h hdrs/table.h interp/Makefile.am
+	interp/alloc.c interp/builtin.c interp/date.c interp/eval.c
+	interp/heapused.c interp/interp.c interp/intrpseq.c
+	interp/more.c interp/pvalue.c interp/rassa.c interp/yacc.y
+	liflines/browse.c liflines/main.c liflines/screen.c
+	reports/exercise.ll stdlib/mystring.c stdlib/stdstrng.c
+	stdlib/table.c win32/mycurses.c win32/msvc6/llines/llines.rc
+	win32/msvc6/llines/llinesprj.dsp:
+
+	Adding functions create_pvalue_from_int etc to remove casts.
+	Workaround compiler warning in win32/mycurses.c (for long->char).
+	Revised more report functions to use shared error strings
+	(nonnod1 etc).
+	Spun off pvalmath.c & symtab.c from pvalue.c.
+	Began to build debugger for report program errors.
+
 2002-02-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS gedlib/messages.c gedlib/translat.c

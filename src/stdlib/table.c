@@ -480,3 +480,13 @@ traverse_table_param (TABLE tab,
 		}
 	}
 }
+/*=================================================
+ * get_table_count -- Return #elements
+ * Created: 2002/02/17, Perry Rapp
+ *===============================================*/
+INT
+get_table_count (TABLE tab)
+{
+	if (!tab) return 0;
+	return tab->count;
+}

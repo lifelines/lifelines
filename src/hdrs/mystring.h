@@ -24,6 +24,7 @@ int my_strncmp(const char *s1,
                 const int n,
                 const int cmp_table[]);
 void stdstring_hardfail(void);
+void vappendstrf(char ** pdest, int * len, const char * fmt, va_list args);
 
 
 extern const int my_ISO_Latin1_Finnish[];

@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.94 (2002/02/03)
+ * @version        0.95 (2002/02/17)
  * @author         Perry Rapp
  
  * @category       test
@@ -852,6 +852,10 @@ proc testDates()
 	call tdfb("2 JAN 1953", 2, 2, 0, 8, 32, 1, "1953 1 2 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 9, 32, 1, "1953/1/2 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, 1, "1953-1-2 CE", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 11, 32, 1, "195312 CE", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 12, 32, 1, "1953", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 13, 32, 1, "2/1 1953 CE", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 14, 32, 1, "2 JAN 1953", "*")
 	/* test custom date pic */
 	datepic("%d.%m.%y")
 	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, 1, "2.1.1953 CE", "*")

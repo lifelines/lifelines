@@ -84,7 +84,7 @@ PVALUE
 __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list, temp;
-	STRING str;
+	STRING str, str2;
 	INT len, sind;
 	PNODE nexp = (PNODE) iargs(node);
 	PNODE lexp = inext(nexp);
@@ -128,16 +128,18 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	temp = create_list();
 	if (str && str[0]) {
 		name_to_list(str, temp, &len, &sind);
+		/* list has string elements */
 		FORLIST(temp, el)
-			push_list(list, create_pvalue(PSTRING, (VPTR)el));
+			str2 = (STRING)el;
+			push_list(list, create_pvalue_from_string(str2));
 		ENDLIST
 	} else {
 		/* no NAME line or empty NAME line */
 		len = 0;
 		sind = 0;
 	}
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
-	insert_symtab(stab, iident(svar), PINT, (VPTR)sind);
+	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
+	insert_symtab(stab, iident(svar), create_pvalue_from_int(sind));
 	return NULL;
 }
 /*==============================================================+
@@ -148,7 +150,7 @@ PVALUE
 __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list, temp;
-	STRING str;
+	STRING str, str2;
 	INT len;
 	PNODE nexp = (PNODE) iargs(node);
 	PNODE lexp = inext(nexp);
@@ -157,7 +159,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
 
 	if (*eflg) {
-		prog_error(node, "1st arg to extractplaces must be a record line");
+		prog_error(node, nonnodx, "extractplaces", "1");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
@@ -165,7 +167,7 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg || !val || !pvalue(val)) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to extractplaces must be a list");
+		prog_error(node, nonlstx, "extractplaces", "2");
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
@@ -176,10 +178,10 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		list = create_list();
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
-		prog_error(node, "3rd arg to extractplaces must be a variable");
+		prog_error(node, nonvarx, "extractplaces", "3");
 		return NULL;
 	}
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
+	insert_symtab(stab, iident(lvar), create_pvalue_from_int(0));
 	*eflg = FALSE;
 	if (!line) return NULL;
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
@@ -188,9 +190,10 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	temp = create_list();
 	place_to_list(str, temp, &len);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (VPTR)el));
+		str2 = (STRING)el; /* place_to_list made list of strings */
+		push_list(list, create_pvalue_from_string(str2));
 	ENDLIST
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
+	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
 	return NULL;
 }
 /*==========================================================+
@@ -237,13 +240,13 @@ __extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)0);
+	insert_symtab(stab, iident(lvar), create_pvalue_from_int(0));
 	temp = create_list();
 	value_to_list(str, temp, &len, dlm);
 	FORLIST(temp, el)
-		push_list(list, create_pvalue(PSTRING, (VPTR)el));
+		push_list(list, create_pvalue_from_string((STRING)el));
 	ENDLIST
-	insert_symtab(stab, iident(lvar), PINT, (VPTR)len);
+	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return NULL;
@@ -268,8 +271,8 @@ __database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		full = (BOOLEAN) pvalue(val);
 		delete_pvalue(val);
 	}
-	return create_pvalue(PSTRING,
-	    (VPTR)(full ? readpath : lastpathname(readpath)));
+	return create_pvalue_from_string(
+	    (full ? readpath : lastpathname(readpath)));
 }
 /*===========================================+
  * __index -- Find nth occurrence of substring
@@ -627,7 +630,7 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 			break;
 		case PINT:
 		case PFLOAT:
-			snprintf(str, len, "%f", get_pvalue_float(val));
+			snprintf(str, len, "%f", pvalue_to_float(val));
 			break;
 		case PBOOL:
 			llstrncpy(str, u.w ? "True" : "False", len);
@@ -697,7 +700,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	val = NULL;
 	if (!list || length_list(list) < 1)
-		return create_pvalue(PINT, (VPTR)0);
+		return create_pvalue_from_int(0);
 	msg = NULL;
 	arg = (PNODE) inext(arg);
 	if (arg) {
@@ -728,7 +731,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		stdfree(strngs[j]);
 	stdfree(strngs);
 	delete_pvalue(val);
-	return create_pvalue(PINT, (VPTR)(i + 1));
+	return create_pvalue_from_int(i + 1);
 }
 /*================================+
  * runsystem -- Run shell command
@@ -903,9 +906,11 @@ __lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING key, rawrec;
+	STRING key;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	INT len;
+	STRING rawrec = NULL;
+	NODE node2 = NULL;
 	if (*eflg) {
 		prog_error(node, "the arg to getrecord must be a string");
 		return NULL;
@@ -918,14 +923,13 @@ __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rawrec = retrieve_raw_record(key, &len);
-		delete_pvalue(val);
-		if (rawrec == NULL) return create_pvalue(PGNODE, (VPTR)NULL);
-		val = create_pvalue(PGNODE, (VPTR)string_to_node(rawrec));
-		stdfree(rawrec);
-		return val;
+		if (rawrec)
+			node2 = string_to_node(rawrec);
 	}
 	delete_pvalue(val);
-	return create_pvalue(PGNODE, (VPTR)NULL);
+	val = create_pvalue_from_node(node2);
+	if (rawrec) stdfree(rawrec);
+	return val;
 }
 /*================================================+
  * reference -- Check if STRING is record reference
@@ -1094,7 +1098,7 @@ __version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (VPTR)get_lifelines_version(120));
+	return create_pvalue_from_string(get_lifelines_version(120));
 }
 /*========================================+
  * __pvalue -- Show a PVALUE -- Debug routine
@@ -1105,7 +1109,7 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 #ifdef DEBUG
-	show_one_pnode(node);
+	debug_show_one_pnode(node);
 	llwprintf("\npvalue: %d ",val);
 	if(val)
 		llwprintf("%d\n",ptype(val));
@@ -1114,7 +1118,7 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	show_pvalue(val);
 	llwprintf("\n");
 #endif
-	return create_pvalue(PSTRING, (VPTR)pvalue_to_string(val));
+	return create_pvalue_from_string(debug_pvalue_as_string(val));
 }
 /*============================================+
  * __program -- Returns name of current program
@@ -1126,7 +1130,7 @@ __program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	eflg=eflg; /* unused */
-	return create_pvalue(PSTRING, (VPTR)progname);
+	return create_pvalue_from_string(progname);
 }
 /*============================================+
  * __debug -- Turn on/off programming debugging

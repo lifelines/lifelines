@@ -592,14 +592,19 @@ void
 appendstrf (char ** pdest, int * len, const char * fmt, ...)
 {
 	va_list args;
+	va_start(args, fmt);
+	vappendstrf(pdest, len, fmt, args);
+	va_end(args);
+}
+void
+vappendstrf (char ** pdest, int * len, const char * fmt, va_list args)
+{
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<1) { *len=0; return; }
 
-	va_start(args, fmt);
 	vsnprintf(*pdest, *len-1, fmt, args);
 	(*pdest)[*len-1]=0;
-	va_end(args);
 
 	amount = strlen(*pdest);
 	*pdest += amount;

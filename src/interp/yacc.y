@@ -73,7 +73,7 @@ defn 	:	proc
 	|	func
 	|	IDEN '(' IDEN ')' {
 			if (eqstr("global", (STRING) $1))
-				insert_symtab(globtab, (STRING)$3, PANY, NULL);
+				insert_symtab(globtab, (STRING)$3, create_pvalue_any());
 		}/*HERE*/
 	|	IDEN '(' SCONS ')' {
 			if (eqstr("include", (STRING) $1))

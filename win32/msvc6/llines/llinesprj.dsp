@@ -357,6 +357,10 @@ SOURCE=..\..\..\gedlib\property.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\interp\pvalmath.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\interp\pvalue.c
 # End Source File
 # Begin Source File
@@ -414,6 +418,10 @@ SOURCE=..\..\..\stdlib\stdstrng.c
 # Begin Source File
 
 SOURCE=..\..\..\liflines\swap.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\interp\symtab.c
 # End Source File
 # Begin Source File
 

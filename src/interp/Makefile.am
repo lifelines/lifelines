@@ -4,8 +4,9 @@
 
 noinst_LIBRARIES = libinterp.a
 
-libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c interp.c \
-	intrpseq.c lex.c more.c pvalue.c rassa.c write.c heapused.c yacc.y
+libinterp_a_SOURCES = alloc.c builtin.c date.c eval.c functab.c heapused.c \
+	interp.c intrpseq.c lex.c more.c pvalue.c pvalmath.c rassa.c \
+	symtab.c write.c  yacc.y
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 AM_YFLAGS = -d
@@ -45,9 +46,11 @@ more.o: ../hdrs/gedcom.h ../hdrs/cache.h ../hdrs/interp.h ../hdrs/indiseq.h
 pvalue.o: ../hdrs/standard.h
 pvalue.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/cache.h
 pvalue.o: ../hdrs/interp.h
+pvalmath.o: ../hdrs/standard.h ../hdrs/interp.h
 rassa.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/table.h
 rassa.o: ../hdrs/gedcom.h ../hdrs/interp.h
 rassa.o: ../hdrs/lloptions.h
+symtab.o: ../hdrs/standard.h ../hdrs/table.h ../hdrs/interp.h
 write.o: ../hdrs/standard.h
 write.o: ../hdrs/mystring.h ../hdrs/table.h ../hdrs/gedcom.h ../hdrs/interp.h
 yacc.o: ../hdrs/standard.h

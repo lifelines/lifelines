@@ -333,6 +333,13 @@ int wprintw(WINDOW *wp, ...)
 	return(0);
 }
 
+static char
+screenchar(chtype ch)
+{
+	/* This implementation only stores chars */
+	return (char)ch;
+}
+
 int waddch(WINDOW *wp, chtype ch)
 {
 	int i, j;
@@ -352,7 +359,7 @@ int waddch(WINDOW *wp, chtype ch)
 					for(j = 0; j < wp->_maxx; j++)
 					{
 						ch = wp->_y[i+1][j];
-						wp->_y[i][j] = ch;
+						wp->_y[i][j] = screenchar(ch);
 					}
 				}
 				i = wp->_maxy-1;
@@ -364,7 +371,7 @@ int waddch(WINDOW *wp, chtype ch)
 	}
 	else
 	{
-		wp->_y[wp->_cury][wp->_curx] = ch;
+		wp->_y[wp->_cury][wp->_curx] = screenchar(ch);
 		wp->_curx++;
 		if(wp->_curx >= wp->_maxx)
 		{
@@ -379,7 +386,7 @@ int waddch(WINDOW *wp, chtype ch)
 						for(j = 0; j < wp->_maxx; j++)
 						{
 							ch = wp->_y[i+1][j];
-							wp->_y[i][j] = ch;
+							wp->_y[i][j] = screenchar(ch);
 						}
 					}
 					i = wp->_maxy-1;
@@ -470,18 +477,18 @@ int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
 	if (!br) br = ACS_LRCORNER;
 	for(i = 0; i < wp->_maxy; i++)
 	{
-		wp->_y[i][0] = ls;
-		wp->_y[i][wp->_maxx-1] = rs;
+		wp->_y[i][0] = screenchar(ls);
+		wp->_y[i][wp->_maxx-1] = screenchar(rs);
 	}
 	for(i = 0; i < wp->_maxx; i++)
 	{
-		wp->_y[0][i] = ts;
-		wp->_y[wp->_maxy-1][i] = bs;
+		wp->_y[0][i] = screenchar(ts);
+		wp->_y[wp->_maxy-1][i] = screenchar(bs);
 	}
-	wp->_y[0][0] = tl;
-	wp->_y[0][wp->_maxx-1] = tr;
-	wp->_y[wp->_maxy-1][0] = bl;
-	wp->_y[wp->_maxy-1][wp->_maxx-1] = br;
+	wp->_y[0][0] = screenchar(tl);
+	wp->_y[0][wp->_maxx-1] = screenchar(tr);
+	wp->_y[wp->_maxy-1][0] = screenchar(bl);
+	wp->_y[wp->_maxy-1][wp->_maxx-1] = screenchar(br);
 	return(0);
 }
 

@@ -105,6 +105,7 @@ BOOLEAN allwhite(STRING);
 STRING capitalize(STRING);
 INT chartype(INT);
 void chomp(STRING);
+void free_array_strings(INT n, STRING * arr);
 STRING strconcat(STRING, STRING);
 void strfree(STRING *);
 STRING strsave(CNSTRING);

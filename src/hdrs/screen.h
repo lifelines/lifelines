@@ -79,6 +79,7 @@
 /* wrapper for WINDOW */
 typedef struct uiwindow_s {
 	WINDOW * win;      /* curses window */
+	WINDOW * boxwin;   /* surrounding window just for boxing */
 	struct uiwindow_s * parent; /* fixed or dynamic parent */
 	struct uiwindow_s * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
@@ -87,6 +88,7 @@ typedef struct uiwindow_s {
 	INT cols;
 } * UIWINDOW;
 #define uiw_win(x)      (x->win)
+#define uiw_boxwin(x)   (x->boxwin)
 #define uiw_parent(x)   (x->parent)
 #define uiw_child(x)    (x->child)
 #define uiw_permsub(x)  (x->permsub)

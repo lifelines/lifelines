@@ -370,6 +370,7 @@ main (INT argc, char **argv)
 finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
+	/* strfree frees memory & nulls pointer */
 	if (dbused) strfree(&dbused);
 	if (dbrequested) strfree(&dbrequested);
 	if (btreepath) strfree(&btreepath);

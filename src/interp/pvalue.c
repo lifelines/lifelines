@@ -68,7 +68,6 @@ static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static int float_to_int(float f);
 static void free_all_pvalues(void);
 static void free_float_pvalue(PVALUE val);
-static float* get_pvalue_pfloat(PVALUE val);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void symtab_cleaner(ENTRY ent);
 static void table_pvcleaner(ENTRY ent);
@@ -458,7 +457,7 @@ copy_pvalue (PVALUE val)
 	*/
 	case PFLOAT:
 		{
-			return create_pvalue_from_float(get_pvalue_float(val));
+			return create_pvalue_from_float(pvalue_to_float(val));
 		}
 		break;
 	case PSTRING:
@@ -567,6 +566,15 @@ create_pvalue_from_indi_key (STRING key)
 	return create_pvalue_from_key_impl(key, PINDI);
 }
 /*=====================================================
+ * create_pvalue_from_cel
+ * Created: 2002/02/17, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_from_cel (CACHEEL cel)
+{
+	return create_pvalue(PINDI, cel);
+}
+/*=====================================================
  * create_pvalue_from_indi_keynum -- Return indi as pvalue
  *  helper for __firstindi etc
  *  handles i==0
@@ -668,9 +676,75 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 PVALUE
 create_pvalue_from_float (float fval)
 {
+	/* TODO: change when ptag goes to UNION */
 	float *ptr = (float *)stdalloc(sizeof(*ptr));
 	*ptr = fval;
 	return create_pvalue(PFLOAT, ptr);
+}
+/***
+ * Thin typesafe wrappers for various PVALUE types
+ */
+PVALUE
+create_pvalue_any (void)
+{
+	return create_pvalue(PANY, NULL);
+}
+PVALUE
+create_pvalue_from_bool (BOOLEAN bval)
+{
+	return create_pvalue_from_int(bval);
+}
+PVALUE
+create_pvalue_from_int (INT ival)
+{
+	return create_pvalue(PINT, (VPTR) ival);
+}
+PVALUE
+create_pvalue_from_node (NODE node)
+{
+	return create_pvalue(PGNODE, node);
+}
+PVALUE
+create_pvalue_from_set (INDISEQ seq)
+{
+	return create_pvalue(PSET, seq);
+}
+PVALUE
+create_pvalue_from_string (STRING str)
+{
+	return create_pvalue(PSTRING, str);
+}
+BOOLEAN
+pvalue_to_bool (PVALUE val)
+{
+	return (BOOLEAN)pvalue(val);
+}
+float
+pvalue_to_float (PVALUE val)
+{
+	/* TODO: change when ptag goes to UNION */
+	return *(float*)pvalue(val);
+}
+INT
+pvalue_to_int (PVALUE val)
+{
+	return (INT)pvalue(val);
+}
+/*==================================
+ * pvalue_to_pxxxx -- Access value for modification
+ * These are for convenience of math functions in pvalmath.c
+ * Created: 2002/01/09, Perry Rapp
+ *================================*/
+float*
+pvalue_to_pfloat (PVALUE val)
+{
+	/* TODO: change when ptag goes to UNION */
+	return (float*)pvalue(val);
+}
+INT*
+pvalue_to_pint (PVALUE val)
+{
+	return (INT *)&pvalue(val);
 }
 /*==================================
  * free_float_pvalue -- Delete float pvalue
@@ -682,24 +756,6 @@ free_float_pvalue (PVALUE val)
 {
 	float *ptr = (float *)pvalue(val);
 	stdfree(ptr);
-}
-/*==================================
- * get_pvalue_float -- Access float value from PFLOAT pvalue
- * Created: 2002/01/09, Perry Rapp
- *================================*/
-float
-get_pvalue_float (PVALUE val)
-{
-	return *(float*)pvalue(val);
-}
-/*==================================
- * get_pvalue_float -- Access ptr to float from PFLOAT pvalue
- * Created: 2002/01/09, Perry Rapp
- *================================*/
-float*
-get_pvalue_pfloat (PVALUE val)
-{
-	return (float*)pvalue(val);
 }
 /*==================================
  * create_pvalue_from_key_impl -- Create pvalue from any key
@@ -740,10 +796,10 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 	pvalue(val) = value;
 }
 /*==================================================
- * numeric_pvalue -- See if program value is numeric
+ * is_numeric_pvalue -- See if program value is numeric
  *================================================*/
 BOOLEAN
-numeric_pvalue (PVALUE val)
+is_numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
 	return type == PINT || type == PFLOAT;
@@ -763,7 +819,7 @@ num_conform_pvalues (PVALUE val1,
 		ptype(val1) = ptype(val2);
 	if (ptype(val2) == PANY && pvalue(val2) == NULL)
 		ptype(val2) = ptype(val1);
-	if (numeric_pvalue(val1) && numeric_pvalue(val2)) {
+	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
 		hitype = max(ptype(val1), ptype(val2));
 		if (ptype(val1) != hitype) coerce_pvalue(hitype, val1, eflg);
 		if (ptype(val2) != hitype) coerce_pvalue(hitype, val2, eflg);
@@ -775,9 +831,7 @@ num_conform_pvalues (PVALUE val1,
  * eq_conform_pvalues -- Make the types of two values conform
  *=========================================================*/
 void
-eq_conform_pvalues (PVALUE val1,
-                    PVALUE val2,
-                    BOOLEAN *eflg)
+eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	INT hitype;
 
@@ -788,12 +842,12 @@ eq_conform_pvalues (PVALUE val1,
 	if (ptype(val2) == PANY && pvalue(val2) == NULL)
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == ptype(val2)) return;
-	if (ptype(val1) == PINT && pvalue(val1) == 0 && !numeric_pvalue(val2))
+	if (ptype(val1) == PINT && pvalue(val1) == 0 && !is_numeric_pvalue(val2))
 		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PINT && pvalue(val2) == 0 && !numeric_pvalue(val1))
+	if (ptype(val2) == PINT && pvalue(val2) == 0 && !is_numeric_pvalue(val1))
 		ptype(val2) = ptype(val1);
 	if (ptype(val1) == ptype(val2)) return;
-	if (numeric_pvalue(val1) && numeric_pvalue(val2)) {
+	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
 		hitype = max(ptype(val1), ptype(val2));
 		if (ptype(val1) != hitype) coerce_pvalue(hitype, val1, eflg);
 		if (ptype(val2) != hitype) coerce_pvalue(hitype, val2, eflg);
@@ -810,22 +864,19 @@ eq_conform_pvalues (PVALUE val1,
 void
 coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 {
-	UNION u;
-
-#ifdef DEBUG
-	llwprintf("coerce_pvalue: coerce ");
-	show_pvalue(val);
-	llwprintf(" to %s\n", ptypes[type]);
-#endif
 	if (*eflg) return;
 	ASSERT(is_pvalue(val));
 
-	if (type == ptype(val)) return;
-	u.w = pvalue(val);
+	if (type == ptype(val)) return; /* no coercion needed */
 
-	/* Anything is convertible to PBOOL */
 	if (type == PBOOL) {
-		set_pvalue(val, PBOOL, (VPTR)(u.w != NULL));
+		/* Anything is convertible to PBOOL */
+		/* make new one, then transfer it bitwise to existing val */
+		BOOLEAN num = (pvalue(val) != NULL);
+		PVALUE valnew = create_pvalue_from_bool(num);
+		clear_pvalue(val);
+		memcpy(val, valnew, sizeof(*val));
+		ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
 		return;
 	}
 	/* Anything is convertible to PANY */
@@ -859,10 +910,11 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PINT:
 		if (type == PFLOAT) {
 			/* PINT is convertible to PFLOAT */
-			/* this is ugly -- make one & copy it bitwise */
-			PVALUE valnew = create_pvalue_from_float(u.i);
-			ptype(val) = ptype(valnew);
-			pvalue(val) = pvalue(valnew);
+			/* make new one, then transfer it bitwise to existing val */
+			INT num = pvalue_to_int(val);
+			PVALUE valnew = create_pvalue_from_float(num);
+			clear_pvalue(val);
+			memcpy(val, valnew, sizeof(*val));
 			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
 			return;
 		} else {
@@ -873,7 +925,13 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PFLOAT:
 		if (type == PINT) {
 			/* PFLOAT is convertible to PINT */
-			u.i = float_to_int(get_pvalue_float(val));
+			/* make new one, then transfer it bitwise to existing val */
+			INT num = float_to_int(pvalue_to_float(val));
+			PVALUE valnew = create_pvalue_from_int(num);
+			clear_pvalue(val);
+			memcpy(val, valnew, sizeof(*val));
+			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
+			return;
 		} else {
 			/* PFLOAT isn't convertible to anything else */
 			goto bad;
@@ -882,13 +940,17 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	case PBOOL:
 		if (type == PINT) {
 			/* PBOOL is convertible to PINT */
-			u.i = bool_to_int((BOOLEAN)u.w);
+			INT num = bool_to_int(pvalue_to_bool(val));
+			/* boolean values held in integer storage */
+			*pvalue_to_pint(val) = num;
+			return;
 		} else if (type == PFLOAT) {
 			/* PBOOL is convertible to PFLOAT */
-			float fval = bool_to_float((BOOLEAN)u.w);
+			float fval = bool_to_float(pvalue_to_bool(val));
 			PVALUE valnew = create_pvalue_from_float(fval);
-			ptype(val) = ptype(valnew);
-			pvalue(val) = pvalue(valnew);
+			clear_pvalue(val);
+			memcpy(val, valnew, sizeof(*val));
+			ptype(valnew)=PNONE; /* clear this so it doesn't get cleaned */
 			return;
 		} else {
 			/* PBOOL isn't convertible to anything else */
@@ -897,12 +959,9 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 		break;
 	/* Nothing else is convertible to anything else */
 	/* record types (PINDI...), PANY, PGNODE */
-	default:
-		goto bad;
 	}
-	ptype(val) = type;
-	pvalue(val) = u.w;
-	return;
+
+	/* fall through to failure */
 
 bad:
 	*eflg = TRUE;
@@ -942,6 +1001,9 @@ is_record_pvalue (PVALUE value)
 	}
 	return FALSE;
 }
+/*========================================
+ * Trivial conversions
+ *======================================*/
 static INT
 bool_to_int (BOOLEAN b)
 {
@@ -956,112 +1018,6 @@ static int
 float_to_int (float f)
 {
 	return (int)f;
-}
-/*===============================
- * add_pvalues -- Add two PVALUEs
- * modify val1 and delete val2
- *=============================*/
-void
-add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u1, u2;
-
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
-	switch (ptype(val1)) {
-	case PINT:   u1.i += u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val1) += get_pvalue_float(val2); break;
-	default: *eflg = TRUE; return;
-	}
-	delete_pvalue(val2);
-}
-/*====================================
- * sub_pvalues -- Subtract two PVALUEs
- *==================================*/
-void
-sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u1, u2;
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
-	switch (ptype(val1)) {
-	case PINT:   u1.i -= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val1) -= get_pvalue_float(val2); break;
-	default: *eflg = TRUE; return;
-	}
-	delete_pvalue(val2);
-}
-/*====================================
- * mul_pvalues -- Multiply two PVALUEs
- *==================================*/
-void
-mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u1, u2;
-
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
-	switch (ptype(val1)) {
-	case PINT:   u1.i *= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val1) *= get_pvalue_float(val2); break;
-	default: *eflg = TRUE; return;
-	}
-	delete_pvalue(val2);
-}
-/*==================================
- * div_pvalues -- Divide two PVALUEs
- *================================*/
-void
-div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u1, u2;
-
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
-	if (is_zero(val2)) {
-		*eflg = TRUE;
-		return;
-	}
-	switch (ptype(val1)) {
-	case PINT:   u1.i /= u2.i; pvalue(val1) = u1.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val1) /= get_pvalue_float(val2); break;
-	default: *eflg = TRUE; return;
-	}
-	delete_pvalue(val2);
-}
-/*===================================
- * mod_pvalues -- Modulus two PVALUEs
- *=================================*/
-void
-mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u1, u2;
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	u1.w = pvalue(val1);
-	u2.w = pvalue(val2);
-	if (is_zero(val2)) {
-		*eflg = TRUE;
-		return;
-	}
-	switch (ptype(val1)) {
-	case PINT:   u1.i %= u2.i; pvalue(val1) = u1.w; break;
-	default: *eflg = TRUE; return;
-	}
-	delete_pvalue(val2);
 }
 /*===================================================================+
  * eqv_pvalues -- See if two PVALUEs are equal (no change to PVALUEs)
@@ -1080,8 +1036,9 @@ eqv_pvalues (PVALUE val1, PVALUE val2)
 			else rel = (v1 == v2);
 			break;
 		case PFLOAT:
-			rel = get_pvalue_float(val1)==get_pvalue_float(val2);
+			rel = (pvalue_to_float(val1) == pvalue_to_float(val2));
 			break;
+		/* for everything else, just compare value pointer */
 		default:
 			rel = (pvalue(val1) == pvalue(val2));
 			break;
@@ -1106,8 +1063,9 @@ eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 		rel = eq_pstrings(val1, val2);
 		break;
 	case PFLOAT:
-		rel = get_pvalue_float(val1) == get_pvalue_float(val2);
+		rel = (pvalue_to_float(val1) == pvalue_to_float(val2));
 		break;
+		/* for everything else, just compare value pointer */
 	default:
 		rel = (pvalue(val1) == pvalue(val2));
 		break;
@@ -1117,6 +1075,7 @@ eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 }
 /*===============================================
  * eq_pstrings -- Compare two PSTRINGS
+ *  Caller is responsible for ensuring these are PSTRINGS
  *=============================================*/
 static BOOLEAN
 eq_pstrings (PVALUE val1, PVALUE val2)
@@ -1138,366 +1097,21 @@ ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
 
-#ifdef DEBUG
-	llwprintf("ne_pvalues: val1, val2, rel = ");
-	show_pvalue(val1);
-	llwprintf(", ");
-	show_pvalue(val2);
-	llwprintf(", ");
-#endif
-
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
 		rel = !eq_pstrings(val1, val2);
 		break;
 	case PFLOAT:
-		rel = get_pvalue_float(val1) != get_pvalue_float(val2);
+		rel = (pvalue_to_float(val1) != pvalue_to_float(val2));
 		break;
 	default:
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
 	}
 
-#ifdef DEBUG
-	llwprintf("%d\n", rel);
-#endif
-
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
-}
-/*================================================
- * le_pvalues -- Check <= relation between PVALUEs
- * delete val2
- *==============================================*/
-void
-le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	BOOLEAN rel;
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	switch (ptype(val1)) {
-	case PFLOAT: 
-		rel = (get_pvalue_float(val1) <= get_pvalue_float(val2)); 
-		break;
-	default: 
-		rel = ((INT) pvalue(val1) <= (INT) pvalue(val2)); 
-		break;
-	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
-	delete_pvalue(val2);
-}
-/*================================================
- * ge_pvalues -- Check >= relation between PVALUEs
- * delete val2
- *==============================================*/
-void
-ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	BOOLEAN rel;
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-
-#ifdef DEBUG
-	llwprintf("ge_pvalues: val1, val2 = ");
-	show_pvalue(val1);
-	llwprintf(", ");
-	show_pvalue(val2);
-	llwprintf("\n");
-#endif
-
-	switch (ptype(val1)) {
-	case PFLOAT: 
-		rel = (get_pvalue_float(val1) >= get_pvalue_float(val2)); 
-		break;
-	default: 
-		rel = ((INT) pvalue(val1) >= (INT) pvalue(val2));
-		break;
-	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
-	delete_pvalue(val2);
-}
-/*===============================================
- * lt_pvalues -- Check < relation between PVALUEs
- * delete val2
- *=============================================*/
-void
-lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	BOOLEAN rel;
-	if (prog_debug) {
-		llwprintf("lt_pvalues: val1 = ");
-		show_pvalue(val1);
-		llwprintf(" val2 = ");
-		show_pvalue(val2);
-		llwprintf(" eflg = %d\n", *eflg);
-	}
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (prog_debug) {
-		llwprintf("lt_pvalues: after conforming: val1 = ");
-		show_pvalue(val1);
-		llwprintf(" val2 = ");
-		show_pvalue(val2);
-		llwprintf(" eflg = %d\n", *eflg);
-	}
-	if (*eflg) return;
-	switch (ptype(val1)) {
-	case PFLOAT: 
-		rel = (get_pvalue_float(val1) < get_pvalue_float(val2)); 
-		break;
-	default: 
-		rel = ((INT) pvalue(val1) < (INT) pvalue(val2));
-		break;
-	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
-	delete_pvalue(val2);
-	if (prog_debug) {
-		llwprintf("lt_pvalues: at end: val1 = ");
-		show_pvalue(val1);
-		llwprintf("\n");
-	}
-}
-/*===============================================
- * gt_pvalues -- Check > relation between PVALUEs
- * delete val2
- *=============================================*/
-void
-gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	BOOLEAN rel;
-if (prog_debug) {
-	llwprintf("gt_pvalues: at start: val1 = ");
-	show_pvalue(val1);
-	llwprintf(" val2 = ");
-	show_pvalue(val2);
-	llwprintf(" eflg = %d\n", *eflg);
-}
-	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
-	switch (ptype(val1)) {
-	case PFLOAT: 
-		rel = (get_pvalue_float(val1) > get_pvalue_float(val2)); 
-		break;
-	default: 
-		rel = ((INT) pvalue(val1) > (INT) pvalue(val2));
-		break;
-if (prog_debug) llwprintf("rel is %d\n", rel);
-	}
-	set_pvalue(val1, PBOOL, (VPTR)rel);
-	delete_pvalue(val2);
-if (prog_debug) {
-	llwprintf("gt_pvalues: at end: val1 = ");
-	show_pvalue(val1);
-	llwprintf("\n");
-}
-}
-/*==============================
- * exp_pvalues -- Exponentiation
- * delete val2
- *============================*/
-void
-exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
-{
-	UNION u;
-	INT i, n;
-
-	if (*eflg) return;
-	coerce_pvalue(PINT, val2, eflg);
-	if (*eflg) return;
-	u.w = pvalue(val1);
-	n = (INT) pvalue(val2);
-	switch (ptype(val1)) {
-	case PINT:
-		{
-			INT xi = 1;
-			for (i = 1; i <= n; i++)
-				xi *= u.i;
-			u.i = xi;
-		}
-		break;
-	case PFLOAT:
-		{
-			float xf=1, xe = get_pvalue_float(val1);
-			float *pf = get_pvalue_pfloat(val1);
-			for (i = 1; i <= n; i++)
-				xf *= xe;
-			*pf = xf;
-			u.w = pf;
-		}
-		break;
-	default: u.i = 0;
-	}
-	set_pvalue(val1, ptype(val1), (VPTR)u.w);
-	delete_pvalue(val2);
-}
-/*==================================
- * incr_pvalue -- Increment a PVALUE
- *================================*/
-void
-incr_pvalue (PVALUE val,
-             BOOLEAN *eflg)
-{
-	UNION u;
-	if (*eflg) return;
-	u.w = pvalue(val);
-	switch (ptype(val)) {
-	case PINT:   u.i += 1;  pvalue(val) = u.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val) += 1.; break;
-	default: *eflg = TRUE; break;
-	}
-	return;
-}
-/*==================================
- * decr_pvalue -- Decrement a PVALUE
- *================================*/
-void
-decr_pvalue (PVALUE val,
-             BOOLEAN *eflg)
-{
-	UNION u;
-	if (*eflg) return;
-	u.w = pvalue(val);
-	switch (ptype(val)) {
-	case PINT:   u.i -= 1;  pvalue(val) = u.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val) -= 1.; break;
-	default: *eflg = TRUE; break;
-	}
-}
-/*============================
- * neg_pvalue -- Negate PVALUE
- *==========================*/
-void
-neg_pvalue (PVALUE val,
-            BOOLEAN *eflg)
-{
-	UNION u;
-	if (*eflg) return;
-	u.w = pvalue(val);
-	switch (ptype(val)) {
-	case PINT:   u.i = -u.i; pvalue(val) = u.w; break;
-	case PFLOAT: *get_pvalue_pfloat(val) = -get_pvalue_float(val); break;
-	default: *eflg = TRUE; return;
-	}
-	return;
-}
-/*=================================
- * is_zero -- See if PVALUE is zero
- *===============================*/
-BOOLEAN
-is_zero (PVALUE val)
-{
-	UNION u;
-	u.w = pvalue(val);
-	switch (ptype(val)) {
-	case PINT: return u.i == 0;
-	case PFLOAT: return get_pvalue_float(val) == 0.;
-	default: return TRUE;
-	}
-}
-/*======================================================
- * insert_symtab -- Update symbol table with new PVALUE
- * SYMTAB stab:  symbol table
- * STRING iden:  variable in symbol table
- * INT type:     type of new value to assign to identifier
- * VPTR value:   new value of identifier
- *====================================================*/
-void
-insert_symtab (SYMTAB stab, STRING iden, INT type, VPTR value)
-{
-	PVALUE val = (PVALUE) valueof_ptr(stab.tab, iden);
-	if (val) delete_pvalue(val);
-	insert_table_ptr(stab.tab, iden, create_pvalue(type, value));
-}
-/*======================================================
- * insert_symtab_pvalue -- Update symbol table with PVALUE
- * SYMTAB stab:  symbol table
- * STRING iden:  variable in symbol table
- * PVALUE val:   already created PVALUE
- *====================================================*/
-void
-insert_symtab_pvalue (SYMTAB stab, STRING iden, PVALUE val)
-{
-	PVALUE oldval = (PVALUE) valueof_ptr(stab.tab, iden);
-	if (oldval) delete_pvalue(oldval);
-	insert_table_ptr(stab.tab, iden, val);
-}
-/*======================================================
- * delete_symtab -- Delete a value from a symbol table
- * SYMTAB stab:  symbol table
- * STRING iden: variable in symbol table
- * Created: 2001/03/17, Perry Rapp
- *====================================================*/
-void
-delete_symtab (SYMTAB stab, STRING iden)
-{
-	PVALUE val = (PVALUE) valueof_ptr(stab.tab, iden);
-	if (val) delete_pvalue(val);
-	delete_table(stab.tab, iden);
-}
-/*======================================================
- * symtab_cleaner -- callback for clearing symbol table pvalues
- * clear out table values (PVALUEs), but don't touch keys
- * TABLE stab:  symbol table
- * Created: 2001/03/22, Perry Rapp
- *====================================================*/
-static void
-symtab_cleaner (ENTRY ent)
-{
-	PVALUE val = ent->uval.w;
-	if (val) {
-		ASSERT(is_pvalue(val));
-		delete_pvalue(val);
-		ent->uval.w = NULL;
-	}
-}
-/*========================================
- * null_symtab -- Return null symbol table 
- * Created: 2001/03/24, Perry Rapp
- *======================================*/
-SYMTAB
-null_symtab (void)
-{
-	SYMTAB stab;
-	stab.tab = NULL;
-	return stab;
-}
-/*========================================
- * remove_symtab -- Remove symbol table 
- * TABLE stab:  symbol table
- * Created: 2001/03/22, Perry Rapp
- *======================================*/
-void
-remove_symtab (SYMTAB * stab)
-{
-	if (stab->tab)
-	{
-		traverse_table(stab->tab, symtab_cleaner);
-		remove_table(stab->tab, DONTFREE);
-		stab->tab = 0; /* same as *stab=null_symtab(); */
-	}
-}
-/*======================================================
- * create_symtab -- Create a symbol table
- * Created: 2001/03/22, Perry Rapp
- *====================================================*/
-void
-create_symtab (SYMTAB * stab)
-{
-	remove_symtab(stab);
-	stab->tab = create_table();
-}
-/*======================================================
- * in_symtab -- Does symbol table have this entry ?
- * Created: 2001/03/23, Perry Rapp
- *====================================================*/
-BOOLEAN
-in_symtab (SYMTAB stab, STRING key)
-{
-	return in_table(stab.tab, key);
 }
 /*=================================================
  * show_pvalue -- DEBUG routine that shows a PVALUE
@@ -1527,7 +1141,7 @@ show_pvalue (PVALUE val)
 		llwprintf("%d>", u.i);
 		return;
 	case PFLOAT:
-		llwprintf("%f>", get_pvalue_float(val));
+		llwprintf("%f>", pvalue_to_float(val));
 		break;
 	case PSTRING:
 		llwprintf("%s>", (STRING) pvalue(val));
@@ -1544,11 +1158,11 @@ show_pvalue (PVALUE val)
 	}
 }
 /*======================================================
- * pvalue_to_string -- DEBUG routine that shows a PVALUE
+ * debug_pvalue_as_string -- DEBUG routine that shows a PVALUE
  *  returns static buffer
  *====================================================*/
 STRING
-pvalue_to_string (PVALUE val)
+debug_pvalue_as_string (PVALUE val)
 {
 	NODE node;
 	CACHEEL cel;
@@ -1573,7 +1187,7 @@ pvalue_to_string (PVALUE val)
 		snprintf(p, len, "%d>", u.i);
 		break;
 	case PFLOAT:
-		snprintf(p, len, "%f>", get_pvalue_float(val));
+		snprintf(p, len, "%f>", pvalue_to_float(val));
 		break;
 	case PSTRING:
 		snprintf(p, len, "\"%s\">", (STRING) pvalue(val));
@@ -1590,17 +1204,4 @@ pvalue_to_string (PVALUE val)
 		break;
 	}
 	return (STRING) scratch;
-}
-/*======================================================
- * symtab_valueofbool -- Convert pvalue to boolean if present
- * SYMTAB stab:     [in] symbol table
- * STRING key:      [in] key desired
- * BOOLEAN *there:  [out] whether or not key was found
- *  returns PVALUE assigned to key in symbol table, if found
- * Created: 2001/03/22, Perry Rapp
- *====================================================*/
-PVALUE
-symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
-{
-	return (PVALUE)valueofbool_ptr(stab.tab, key, there);
 }

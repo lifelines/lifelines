@@ -682,7 +682,7 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
 			llstrcatn(&p, sda, len);
 		break;
 	/* 12 (year only) was handled directly in do_format_date */
-	case 13:      /* mo/da yr */
+	case 13:      /* da/mo yr */
 		if (sda)
 			llstrcatn(&p, sda, len);
 		llstrcatn(&p, "/", len);

@@ -98,7 +98,7 @@ __heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		    (long)heapused, (long)heapfree, (long)heapcnt);
 	fflush(errfp);
 
-	return create_pvalue(PINT, (VPTR)heapfree);
+	return create_pvalue_from_int(heapfree);
 #else
 	/* Unsupported, what should we do? return error or give bogus value? */
 	node=node; /* unused */

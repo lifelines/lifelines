@@ -111,29 +111,36 @@ struct itag {
 #define ibody(i)     ((i)->i_word5)	/* body of proc, func, loops */
 #define inum(i)      ((i)->i_word4)	/* counter used by many loops */
 
-#define PNONE	    0 /* needed? - remove later if not */
-#define PANY      1 /* any value -- no type restriction - should be NULL value*/
-#define PINT      2 /* integer */
-#define PLONG     3 /* long integer */
-#define PFLOAT    4 /* floating point */
-#define PBOOL	    5 /* boolean */
-#define PSTRING   6 /* string */
-#define PGNODE	  7 /* GEDCOM node */
-#define PINDI     8 /* GEDCOM person record */
-#define PFAM      9 /* GEDCOM family record */
-#define PSOUR	   10 /* GEDCOM source record */
-#define PEVEN	   11 /* GEDCOM event record */
-#define POTHR	   12 /* GEDCOM other record */
-#define PLIST	   13 /* list */
-#define PTABLE	 14 /* table */
-#define PSET	   15 /* set */
-#define PFREED   99 /* returned to free list */
-#define PUNINT  100 /* just allocated */
+#define PNONE      0 /* needed? - remove later if not */
+#define PANY       1 /* any value -- no type restriction - should be NULL value*/
+#define PINT       2 /* integer */
+#define PLONG      3 /* long integer */
+#define PFLOAT     4 /* floating point */
+#define PBOOL      5 /* boolean */
+#define PSTRING    6 /* string */
+#define PGNODE	   7 /* GEDCOM node */
+#define PINDI      8 /* GEDCOM person record */
+#define PFAM       9 /* GEDCOM family record */
+#define PSOUR     10 /* GEDCOM source record */
+#define PEVEN     11 /* GEDCOM event record */
+#define POTHR     12 /* GEDCOM other record */
+#define PLIST     13 /* list */
+#define PTABLE    14 /* table */
+#define PSET      15 /* set */
+#define PFREED    99 /* returned to free list */
+#define PUNINT   100 /* just allocated */
 
+/*
+ * ptag should be using a UNION not a VPTR
+ * First I'm removing the zillions of casts using PVALUE->value tho
+ * so the compiler will help find any misuse
+ * Perry, 2002.02.17
+ */
 typedef struct ptag *PVALUE;
 struct ptag {
 	unsigned char type;	/* type of value */
 	VPTR value;	/* value */
+/*	UNION uval;*/
 };
 
 typedef struct symtab_s {
@@ -245,38 +252,49 @@ void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
 void create_symtab(SYMTAB * stab);
 PVALUE create_pvalue(INT, VPTR);
+PVALUE create_pvalue_any(void);
+PVALUE create_pvalue_from_bool(BOOLEAN bval);
+PVALUE create_pvalue_from_cel(CACHEEL cel);
 PVALUE create_pvalue_from_float(float fval);
+PVALUE create_pvalue_from_even_keynum(INT i);
 PVALUE create_pvalue_from_fam(NODE fam);
 PVALUE create_pvalue_from_fam_keynum(INT i);
 PVALUE create_pvalue_from_indi(NODE indi);
 PVALUE create_pvalue_from_indi_key(STRING key);
 PVALUE create_pvalue_from_indi_keynum(INT i);
-PVALUE create_pvalue_from_sour_keynum(INT i);
-PVALUE create_pvalue_from_even_keynum(INT i);
+PVALUE create_pvalue_from_int(INT ival);
+PVALUE create_pvalue_from_node(NODE node);
 PVALUE create_pvalue_from_othr_keynum(INT i);
+PVALUE create_pvalue_from_set(INDISEQ);
+PVALUE create_pvalue_from_sour_keynum(INT i);
+PVALUE create_pvalue_from_string(STRING str);
+STRING debug_pvalue_as_string(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);
 void delete_symtab(SYMTAB stab, STRING iden);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(PVALUE, PVALUE);
 CACHEEL get_cel_from_pvalue(PVALUE val);
-float get_pvalue_float(PVALUE val);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
-void insert_symtab(SYMTAB, STRING, INT, VPTR);
-void insert_symtab_pvalue(SYMTAB stab, STRING iden, PVALUE val);
+void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
+BOOLEAN is_numeric_pvalue(PVALUE);
 BOOLEAN is_pvalue(PVALUE);
 BOOLEAN is_record_pvalue(PVALUE);
 BOOLEAN is_zero(PVALUE);
 SYMTAB null_symtab(void);
 void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
-BOOLEAN numeric_pvalue(PVALUE);
 void pvalues_begin(void);
 void pvalues_end(void);
-STRING pvalue_to_string(PVALUE);
+BOOLEAN pvalue_to_bool(PVALUE);
+float pvalue_to_float(PVALUE val);
+INT pvalue_to_int(PVALUE);
+float* pvalue_to_pfloat(PVALUE);
+INT* pvalue_to_pint(PVALUE);
 void remove_symtab(SYMTAB *);
 void set_pvalue(PVALUE, INT, VPTR);
 void show_pvalue(PVALUE);
 PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
+void traverse_symtab(SYMTAB stab, VPTR param, BOOLEAN (*fnc)(STRING, PVALUE, VPTR));
 #ifndef HOGMEMORY
 void zero_pventry(ENTRY);
 #endif
@@ -320,6 +338,7 @@ PNODE children_node(PNODE, STRING, STRING, PNODE);
 PNODE continue_node(void);
 GDATEVAL create_gdateval(void);
 PNODE create_pnode(INT);
+void debug_show_one_pnode(PNODE);
 STRING do_format_date(STRING, INT, INT, INT, INT, INT, INT);
 PVALUE evaluate(PNODE, SYMTAB, BOOLEAN*);
 BOOLEAN evaluate_cond(PNODE, SYMTAB, BOOLEAN*);
@@ -362,11 +381,11 @@ INT num_params(PNODE);
 PNODE parents_node(PNODE, STRING, STRING, PNODE);
 PNODE proc_node(STRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
+void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 BOOLEAN record_to_node(PVALUE val);
 PNODE return_node(PNODE);
 BOOLEAN set_cmplx_pic(INT ecmplx, STRING pic);
 void set_date_pic(STRING pic);
-void show_one_pnode(PNODE);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);
 void shutdown_interpreter(void);

@@ -54,20 +54,23 @@
 
 /* reused report language error strings */
 STRING nonint1     = 0;
+STRING nonintx     = 0;
 STRING nonstr1     = 0;
+STRING nonstrx     = 0;
 STRING nullarg1    = 0;
 STRING nonfname1   = 0;
-STRING nonfam1     = 0;
 STRING nonnodstr1  = 0;
 STRING nonind1     = 0;
+STRING nonindx     = 0;
+STRING nonfam1     = 0;
+STRING nonrecx     = 0;
+STRING nonnod1     = 0;
+STRING nonnodx     = 0;
 STRING nonvar1     = 0;
 STRING nonvarx     = 0;
-STRING nonstrx     = 0;
-STRING nonintx     = 0;
 STRING nonboox     = 0;
+STRING nonlst1     = 0;
 STRING nonlstx     = 0;
-STRING nonindx     = 0;
-STRING nonnodx     = 0;
 STRING badargs     = 0;
 
 /*********************************************
@@ -249,7 +252,7 @@ string_node (STRING str)
 {
 	PNODE node = create_pnode(ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
-	ivaluex(node) = create_pvalue(PSTRING, (VPTR) str);
+	ivaluex(node) = create_pvalue_from_string(str);
 	return node;
 }
 /*========================================
@@ -537,7 +540,7 @@ PNODE
 icons_node (INT ival)
 {
 	PNODE node = create_pnode(IICONS);
-	ivaluex(node) = create_pvalue(PINT, (VPTR) ival);
+	ivaluex(node) = create_pvalue_from_int(ival);
 	return node;
 }
 /*===================================
@@ -663,26 +666,32 @@ void
 shutdown_interpreter (void)
 {
 	if (nonint1) stdfree(nonint1);
+	if (nonintx) stdfree(nonintx);
 	if (nonstr1) stdfree(nonstr1);
+	if (nonstrx) stdfree(nonstrx);
 	if (nullarg1) stdfree(nullarg1);
 	if (nonfname1) stdfree(nonfname1);
-	if (nonfam1) stdfree(nonfam1);
 	if (nonnodstr1) stdfree(nonnodstr1);
 	if (nonind1) stdfree(nonind1);
+	if (nonindx) stdfree(nonindx);
+	if (nonfam1) stdfree(nonfam1);
+	if (nonrecx) stdfree(nonrecx);
+	if (nonnod1) stdfree(nonnod1);
+	if (nonnodx) stdfree(nonnodx);
 	if (nonvar1) stdfree(nonvar1);
 	if (nonvarx) stdfree(nonvarx);
-	if (nonstrx) stdfree(nonstrx);
-	if (nonintx) stdfree(nonintx);
 	if (nonboox) stdfree(nonboox);
+	if (nonlst1) stdfree(nonlst1);
 	if (nonlstx) stdfree(nonlstx);
-	if (nonindx) stdfree(nonindx);
-	if (nonnodx) stdfree(nonnodx);
 	if (badargs) stdfree(badargs);
 	if (interp_locale) stdfree(interp_locale);
 }
 /*=============================
  * interp_load_lang -- Load the common
  *  error msgs for current locale
+ * These are used by many report functions.
+ * This avoids having to localize dozens of strings
+ * just like these.
  * Created: 2002/02/16, Perry Rapp
  *===========================*/
 void
@@ -704,34 +713,40 @@ interp_load_lang (void)
 #endif
 	if (nonint1) stdfree(nonint1);
 	nonint1     = strsave(_("%s: the arg must be an integer."));
+	if (nonintx) stdfree(nonintx);
+	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
 	if (nonstr1) stdfree(nonstr1);
 	nonstr1     = strsave(_("%s: the arg must be a string."));
+	if (nonstrx) stdfree(nonstrx);
+	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
 	if (nullarg1) stdfree(nullarg1);
 	nullarg1    = strsave(_("%s: null arg not permissible."));
 	if (nonfname1) stdfree(nonfname1);
 	nonfname1   = strsave(_("%s: the arg must be a filename."));
-	if (nonfam1) stdfree(nonfam1);
-	nonfam1     = strsave(_("%s: the arg must be a family."));
 	if (nonnodstr1) stdfree(nonnodstr1);
 	nonnodstr1  = strsave(_("%s: the arg must be a node or string."));
 	if (nonind1) stdfree(nonind1);
 	nonind1     = strsave(_("%s: the arg must be a person."));
+	if (nonindx) stdfree(nonindx);
+	nonindx     = strsave(_("%s: the arg #%s must be a person."));
+	if (nonfam1) stdfree(nonfam1);
+	nonfam1     = strsave(_("%s: the arg must be a family."));
+	if (nonrecx) stdfree(nonrecx);
+	nonrecx    = strsave(_("%s: the arg #%s must be a record."));
+	if (nonnod1) stdfree(nonnod1);
+	nonnod1     = strsave(_("%s: the arg must be a node."));
+	if (nonnodx) stdfree(nonnodx);
+	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
 	if (nonvar1) stdfree(nonvar1);
 	nonvar1     = strsave(_("%s: the arg must be a variable."));
 	if (nonvarx) stdfree(nonvarx);
 	nonvarx     = strsave(_("%s: the arg #%s must be a variable."));
-	if (nonstrx) stdfree(nonstrx);
-	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
-	if (nonintx) stdfree(nonintx);
-	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
 	if (nonboox) stdfree(nonboox);
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
+	if (nonlst1) stdfree(nonlst1);
+	nonlst1    = strsave(_("%s: the arg must be a list."));
 	if (nonlstx) stdfree(nonlstx);
 	nonlstx    = strsave(_("%s: the arg #%s must be a list."));
-	if (nonindx) stdfree(nonindx);
-	nonindx     = strsave(_("%s: the arg #%s must be a person."));
-	if (nonnodx) stdfree(nonnodx);
-	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
 	if (badargs) stdfree(badargs);
 	badargs     = strsave(_("%s: Bad argument(s)"));
 }
@@ -847,7 +862,7 @@ void
 show_pnode (PNODE node)
 {
 	while (node) {
-		show_one_pnode(node);
+		debug_show_one_pnode(node);
 		node = inext(node);
 	}
 }
@@ -859,16 +874,16 @@ show_pnodes (PNODE node)
 {
 
 	while (node) {
-		show_one_pnode(node);
+		debug_show_one_pnode(node);
 		node = inext(node);
 		if (node) llwprintf(",");
 	}
 }
 /*====================================================
- * show_one_pnode -- DEBUG routine that show one PNODE
+ * debug_show_one_pnode -- DEBUG routine that show one PNODE
  *==================================================*/
 void
-show_one_pnode (PNODE node)     /* node to print */
+debug_show_one_pnode (PNODE node)     /* node to print */
 {
 	UNION u;
 

@@ -68,6 +68,7 @@ struct table_s {
 typedef struct table_s *TABLE;
 
 TABLE create_table(void);
+INT get_table_count(TABLE);
 void insert_table_ptr(TABLE, STRING key, VPTR);
 void insert_table_int(TABLE, STRING key, INT);
 void insert_table_str(TABLE, STRING key, STRING);

@@ -150,7 +150,7 @@ __lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = (INDISEQ) pvalue(val);
 	len = seq ? length_indiseq(seq) : 0;
 	delete_pvalue(val);
-	return create_pvalue(PINT, (VPTR)len);
+	return create_pvalue_from_int(len);
 }
 /*====================================+
  * inset -- See if person is in INDISEQ
@@ -591,6 +591,6 @@ pvseq_create_gen_value (INT gen, INT * valtype)
 	UNION uval;
 	ASSERT(*valtype == ISVAL_PTR || *valtype == ISVAL_NUL);
 	*valtype = ISVAL_PTR;
-	uval.w = create_pvalue(PINT, (VPTR)gen);
+	uval.w = create_pvalue_from_int(gen);
 	return uval;
 }

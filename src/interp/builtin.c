@@ -49,9 +49,10 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonint1,nonstr1,nullarg1,nonfname1,nonfam1,nonnodstr1;
-extern STRING nonind1,nonvar1;
-extern STRING nonvarx,nonstrx,nonintx,nonindx,nonboox;
+extern STRING nonint1,nonintx,nonstr1,nonstrx,nullarg1,nonfname1;
+extern STRING nonnodstr1;
+extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
+extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
 extern STRING badargs;
 
 /*********************************************
@@ -100,7 +101,7 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		msg = (STRING) pvalue(mval);
 	}
 	val = ask_for_int(msg);
-	assign_iden(stab, iident(arg), create_pvalue(PINT, (PVALUE)val));
+	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
 }
@@ -132,7 +133,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		msg = (STRING) pvalue(mval);
 	}
 	val = ask_for_string(msg, "enter string: ");
-	assign_iden(stab, iident(arg), create_pvalue(PSTRING, (VPTR)val));
+	assign_iden(stab, iident(arg), create_pvalue_from_string(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
 }
@@ -222,7 +223,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = ask_for_indi_list(msg, TRUE);
 	rptlocale();
 	if (val) delete_pvalue(val);
-	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)seq));
+	assign_iden(stab, iident(arg), create_pvalue_from_set(seq));
 	return NULL;
 }
 /*==================================+
@@ -243,7 +244,7 @@ __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 
 	nchild(prnt) = chil;
-	return create_pvalue(PGNODE, (VPTR)prnt);
+	return create_pvalue_from_node(prnt);
 }
 /*====================================+
  * __name -- Find person's name
@@ -260,7 +261,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, _("1st arg to name must be a person"));
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, "");
+	if (!indi) return create_pvalue_from_string("");
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
 		if (*eflg) {
@@ -276,10 +277,10 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, _("(name) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
-	return create_pvalue(PSTRING,
-	    (VPTR)manip_name(nval(name), ttr, caps, TRUE, 68));
+	return create_pvalue_from_string(
+		manip_name(nval(name), ttr, caps, TRUE, 68));
 }
 /*==================================================+
  * __fullname -- Process person's name
@@ -329,10 +330,10 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, _("(fullname) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
-	return create_pvalue(PSTRING,
-	    (VPTR)manip_name(nval(name), ttr, caps, myreg, len));
+	return create_pvalue_from_string(
+	    manip_name(nval(name), ttr, caps, myreg, len));
 }
 /*==================================+
  * __surname -- Find person's surname using new getasurname() routine.
@@ -349,18 +350,18 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to surname must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, "");
+	if (!indi) return create_pvalue_from_string("");
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_error(node, _("(surname) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
 	str = getasurname(nval(name));
 	translate_string(ttr, str, scratch, ARRSIZE(scratch));
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*========================================+
  * __soundex -- SOUNDEX function on persons
@@ -381,9 +382,9 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			prog_error(node, _("(soundex) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
-	return create_pvalue(PSTRING, (VPTR)soundex(getsxsurname(nval(name))));
+	return create_pvalue_from_string(soundex(getsxsurname(nval(name))));
 }
 /*===========================================+
  * __strsoundex -- SOUNDEX function on strings
@@ -400,7 +401,7 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = strsave(soundex(pvalue(val)));
-	newval = create_pvalue(PSTRING, (VPTR)str);
+	newval = create_pvalue_from_string(str);
 	delete_pvalue(val);
 	return newval;
 }
@@ -419,18 +420,18 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, _("1st arg to givens must be a person"));
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, "");
+	if (!indi) return create_pvalue_from_string("");
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_error(node, _("(givens) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
 	str = givens(nval(name));
 	translate_string(ttr, str, scratch, ARRSIZE(scratch));
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*===============================+
  * __set -- Assignment operation
@@ -466,7 +467,7 @@ __husband (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, _("1st arg to husband must be a family"));
+		prog_error(node, nonfam1, "husband");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_husb(fam));
@@ -481,7 +482,7 @@ __wife (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to wife must be a family");
+		prog_error(node, nonfam1, "wife");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_wife(fam));
@@ -496,7 +497,7 @@ __firstchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, "arg to firstchild must be a family");
+		prog_error(node, nonfam1, "firstchild");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_first_chil(fam));
@@ -511,7 +512,7 @@ __lastchild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, "arg to firstchild must be a family");
+		prog_error(node, nonfam1, "lastchild");
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_last_chil(fam));
@@ -524,12 +525,14 @@ PVALUE
 __marr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to marriage must be a family");
+		prog_error(node, nonfam1, "marriage");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)MARR(fam));
+	if (fam)
+		event = MARR(fam);
+	return create_pvalue_from_node(event);
 }
 /*==========================================+
  * __birt -- Find first birth event of person
@@ -539,12 +542,14 @@ PVALUE
 __birt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to birth must be a person");
+		prog_error(node, nonind1, "birth");
 		return NULL;
 	} 
-	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)BIRT(indi));
+	if (indi)
+		event = BIRT(indi);
+	return create_pvalue_from_node(event);
 }
 /*==========================================+
  * __deat -- Find first death event of person
@@ -554,12 +559,14 @@ PVALUE
 __deat (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to death must be a person");
+		prog_error(node, nonind1, "death");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)DEAT(indi));
+	if (indi)
+		event = DEAT(indi);
+	return create_pvalue_from_node(event);
 }
 /*============================================+
  * __bapt -- Find first baptism event of person
@@ -569,12 +576,14 @@ PVALUE
 __bapt (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to baptism must be a person");
+		prog_error(node, nonind1, "baptism");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)BAPT(indi));
+	if (indi)
+		event = BAPT(indi);
+	return create_pvalue_from_node(event);
 }
 /*===========================================+
  * __buri -- Find first burial event of person
@@ -584,12 +593,14 @@ PVALUE
 __buri (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	NODE event = NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to burial must be a person");
+		prog_error(node, nonind1, "burial");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PGNODE, NULL);
-	return create_pvalue(PGNODE, (VPTR)BURI(indi));
+	if (indi)
+		event = BURI(indi);
+	return create_pvalue_from_node(event);
 }
 /*====================================+
  * __titl -- Find first title of person
@@ -599,13 +610,17 @@ PVALUE
 __titl (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
 	NODE titl, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	STRING titlstr = "";
 	if (*eflg) {
-		prog_error(node, "the arg to title must be a person");
+		prog_error(node, nonind1, "title");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, "");
-	titl = find_tag(nchild(indi), "TITL");
-	return create_pvalue(PSTRING, (VPTR)(titl ? nval(titl) : ""));
+	if (indi) {
+		titl = find_tag(nchild(indi), "TITL");
+		if (titl)
+			titlstr = nval(titl);
+	}
+	return create_pvalue_from_string(titlstr);
 }
 /*=======================================================
  * rpt_shrt_format_date -- short form of date for reports
@@ -639,6 +654,9 @@ rpt_shrt_format_plac (STRING plac)
 static void
 init_rpt_reformat (void)
 {
+	/* reformats are transforms applied to strings (date or place)
+	before they are finally output */
+
 	/* Set up long reformats */
 	memset(&rpt_long_rfmt, 0, sizeof(rpt_long_rfmt));
 	rpt_long_rfmt.rfmt_date = 0; /* use date as is */
@@ -662,7 +680,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to long must be a record line");
+		prog_error(node, nonnod1, "long");
 		return NULL;
 	}
 	even = (NODE) pvalue(val);
@@ -672,7 +690,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	init_rpt_reformat();
 
 	str = event_to_string(even, ttr, &rpt_long_rfmt);
-	return create_pvalue(PSTRING, str);
+	return create_pvalue_from_string(str);
 }
 /*=====================================+
  * __short -- Return short form of event
@@ -697,7 +715,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	init_rpt_reformat();
 
 	str = event_to_string(even, ttr, &rpt_shrt_rfmt);
-	return create_pvalue(PSTRING, str);
+	return create_pvalue_from_string(str);
 }
 /*===============================+
  * __fath -- Find father of person
@@ -707,12 +725,14 @@ PVALUE
 __fath (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	NODE fath = NULL;
 	if (*eflg) {
-		prog_error(node, "arg to father must be a person");
+		prog_error(node, nonind1, "father");
 		return NULL;
 	}
-	if (!indi) return create_pvalue_from_indi(NULL);
-	return create_pvalue_from_indi(indi_to_fath(indi));
+	if (indi)
+		fath = indi_to_fath(indi);
+	return create_pvalue_from_indi(fath);
 }
 /*===============================+
  * __moth -- Find mother of person
@@ -723,7 +743,7 @@ __moth (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to mother must be a person");
+		prog_error(node, nonind1, "mother");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -849,7 +869,7 @@ ___alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		sprintf(scratch, "XX");
 	else
 		sprintf(scratch, "%c", 'a' + i - 1);
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*================================================+
  * __ord -- Convert small integer to ordinal string
@@ -874,7 +894,7 @@ __ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		sprintf(scratch, "%dth", i);
 	else
 		sprintf(scratch, ordinals[i - 1]);
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*==================================================+
  * __card -- Convert small integer to cardinal string
@@ -899,7 +919,7 @@ __card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		sprintf(scratch, "%d", i);
 	else
 		sprintf(scratch, cardinals[i]);
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*==========================================+
  * __roman -- Convert integer to Roman numeral
@@ -925,7 +945,7 @@ __roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		sprintf(scratch, "%d", i);
 	else
 		sprintf(scratch, "%s%s", rotens[i/10], rodigits[i%10]);
-	return create_pvalue(PSTRING, (VPTR)scratch);
+	return create_pvalue_from_string(scratch);
 }
 /*================================================+
  * __nchildren -- Find number of children in family
@@ -939,8 +959,8 @@ __nchildren (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "arg to nchildren must be a family");
 		return NULL;
 	}
-	if (!fam) return create_pvalue(PINT, 0);
-	return create_pvalue(PINT, (VPTR)length_nodes(CHIL(fam)));
+	if (!fam) return create_pvalue_from_int(0);
+	return create_pvalue_from_int(length_nodes(CHIL(fam)));
 }
 /*===================================================+
  * __nfamilies -- Find number of families person is in
@@ -954,8 +974,8 @@ __nfamilies (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "arg to nfamilies must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINT, 0);
-	return create_pvalue(PINT, (VPTR)length_nodes(FAMS(indi)));
+	if (!indi) return create_pvalue_from_int(0);
+	return create_pvalue_from_int(length_nodes(FAMS(indi)));
 }
 /*===============================================+
  * __nspouses -- Find number of spouses person has
@@ -970,9 +990,9 @@ __nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "arg to nspouses must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PINT, 0);
+	if (!indi) return create_pvalue_from_int(0);
 	FORSPOUSES(indi,spouse,fam,nspouses) ENDSPOUSES
-	return create_pvalue(PINT, (VPTR)nspouses);
+	return create_pvalue_from_int(nspouses);
 }
 /*=============================+
  * __eq -- Equal operation
@@ -1145,7 +1165,7 @@ __and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			delete_pvalue(val2);
 		}
 	}
-	return create_pvalue(PBOOL, (VPTR)rc);
+	return create_pvalue_from_bool(rc);
 }
 /*================================+
  * __or -- Or operation
@@ -1170,11 +1190,11 @@ __or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				prog_error(node, "an arg to or is not boolean");
 				return NULL;
 			}
-			rc = rc || (BOOLEAN) pvalue(val2);
+			rc = rc || pvalue_to_bool(val2);
 			delete_pvalue(val2);
 		}
 	}
-	return create_pvalue(PBOOL, (VPTR)rc);
+	return create_pvalue_from_bool(rc);
 }
 /*================================+
  * __add -- Add operation
@@ -1618,7 +1638,7 @@ __pop (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	}
 	list = (LIST) pvalue(val);
 	delete_pvalue(val);
-	if (empty_list(list)) return create_pvalue(PANY, NULL);
+	if (empty_list(list)) return create_pvalue_any();
 	return (PVALUE) pop_list(list);
 }
 /*=============================================+
@@ -1638,7 +1658,7 @@ __dequeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	list = (LIST) pvalue(val);
 	delete_pvalue(val);
 	val = (PVALUE) dequeue_list(list);
-	if (!val) return create_pvalue(PANY, NULL);
+	if (!val) return create_pvalue_any();
 	return val;
 }
 /*=================================+
@@ -1672,7 +1692,7 @@ __getel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
 	if (*eflg || !val || ptype(val) != PLIST) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to getel is not a list");
+		prog_error(node, nonlstx, "getel", "1");
 		return NULL;
 	}
 	list = (LIST) pvalue(val);
@@ -1680,13 +1700,13 @@ __getel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
 	if (*eflg || !val || ptype(val) != PINT) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to getel is not an integer");
+		prog_error(node, nonintx, "getel", "2");
 		return NULL;
 	}
 	ind = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (!(val = (PVALUE) get_list_element(list, ind)))
-		return create_pvalue(PANY, 0);
+		return create_pvalue_any();
 	return copy_pvalue(val);
 }
 /*=======================================+
@@ -1840,7 +1860,7 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	} else {
 		newstr = NULL;
 	}
-	val = create_pvalue(PSTRING, (VPTR)newstr);
+	val = create_pvalue_from_string(newstr);
 	if (newstr)
 		stdfree(newstr);
 	return val;
@@ -1989,10 +2009,10 @@ __sex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to sex is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, (VPTR)str);
+	if (!indi) return create_pvalue_from_string(str);
 	if ((sex = SEX(indi)) == SEX_MALE) str = (STRING) "M";
 	else if (sex == SEX_FEMALE) str = (STRING) "F";
-	return create_pvalue(PSTRING, (VPTR)str);
+	return create_pvalue_from_string(str);
 }
 /*=================================+
  * __male -- Check if person is male
@@ -2038,12 +2058,12 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING key;
 	if (*eflg || !val || !is_record_pvalue(val)) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to key is not a GEDCOM record");
+		prog_var_error(node, stab, arg, val, nonrecx, "key", "1");
 		return NULL;
 	}
 	cel = get_cel_from_pvalue(val); /* may return NULL */
 	delete_pvalue(val);
-	if (!cel) return create_pvalue(PSTRING, "");
+	if (!cel) return create_pvalue_from_string("");
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
 		if (*eflg) {
@@ -2054,7 +2074,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 	}
 	key = (STRING) ckey(cel);
-	return create_pvalue(PSTRING, (VPTR)(strip ? key + 1 : key));
+	return create_pvalue_from_string(strip ? key + 1 : key);
 }
 /*==============================================+
  * __root -- Return root of cached record
@@ -2155,16 +2175,12 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE var = (PNODE) iargs(node);
 	*eflg = TRUE;
 	if (!iistype(var, IIDENT)) {
-		prog_error(node, nonvar1, "table");
+		prog_var_error(node, stab, var, NULL, nonvar1, "table");
 		return NULL;
 	}
 	*eflg = FALSE;
 	tab = create_table();
 	val = create_pvalue(PTABLE, (VPTR)tab);
-
-#ifdef DEBUG
-	llwprintf("__table: ");show_pvalue(val);wprintf("\n");
-#endif
 
 	assign_iden(stab, iident(var), val);
 	return NULL;
@@ -2190,7 +2206,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || (pvalue(valtab) == NULL)) {
 	        *eflg = TRUE;
 		prog_error(node, "1st arg to insert is not a table but %s",
-		           pvalue_to_string(valtab));
+		           debug_pvalue_as_string(valtab));
 		return NULL;
 	}
 	tab = (TABLE) pvalue(valtab);
@@ -2205,7 +2221,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || !val || !pvalue(val)) {
 		*eflg = TRUE;
 		prog_error(node, "2nd arg to insert is not a string but %s",
-		           pvalue_to_string(val));
+		           debug_pvalue_as_string(val));
 		return NULL;
 	}
 	str = strsave((STRING) pvalue(val));
@@ -2268,7 +2284,7 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = (STRING) pvalue(val);
 	newv = valueof_ptr(tab, str);
 	delete_pvalue(val);
-	newv = (newv ? copy_pvalue(newv) : create_pvalue(PANY, NULL));
+	newv = (newv ? copy_pvalue(newv) : create_pvalue_any());
 #if 0
 	if (prog_debug) {
 		llwprintf("lookup: new =");
@@ -2319,17 +2335,17 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str;
 	/* TRANTABLE ttr = NULL; */ /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, _("1st arg to trimname is not a person"));
+		prog_error(node, nonindx, "trimname", "1");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, "");
+	if (!indi) return create_pvalue_from_string("");
 	if (!(indi = NAME(indi)) || !nval(indi)) {
 		if (getoptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_error(node, _("(trimname) person does not have a name"));
 			return NULL;
 		}
-		return create_pvalue(PSTRING, 0);
+		return create_pvalue_from_string(0);
 	}
 	*eflg = FALSE;
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);
@@ -2353,11 +2369,11 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to date must be a record line");
+		prog_error(node, nonnod1, "date");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
-	return create_pvalue(PSTRING, (VPTR)event_to_date(line, ttr, FALSE));
+	return create_pvalue_from_string(event_to_date(line, ttr, FALSE));
 }
 /*=====================================================+
  * normalize_year -- Modify year before returning to report
@@ -2388,7 +2404,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE yvar = inext(mvar);
 	GDATEVAL gdv = 0;
 	if (*eflg) {
-		prog_error(node, "1st arg to extractdate is not a record line");
+		prog_error(node, nonnodx, "extractdate", "1");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);
@@ -2416,9 +2432,9 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	da = gdv->date1.day.val;
 	mo = gdv->date1.month.val;
 	yr = normalize_year(gdv->date1.year);
-	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
-	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
-	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
+	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
+	assign_iden(stab, iident(mvar), create_pvalue_from_int(mo));
+	assign_iden(stab, iident(yvar), create_pvalue_from_int(yr));
 	free_gdateval(gdv);
 	*eflg = FALSE;
 	return NULL;
@@ -2480,11 +2496,11 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	yr = normalize_year(gdv->date1.year);
 	yrstr = gdv->date1.year.str;
 	if (!yrstr) yrstr="";
-	assign_iden(stab, iident(modvar), create_pvalue(PINT, (VPTR)mod));
-	assign_iden(stab, iident(dvar), create_pvalue(PINT, (VPTR)da));
-	assign_iden(stab, iident(mvar), create_pvalue(PINT, (VPTR)mo));
-	assign_iden(stab, iident(yvar), create_pvalue(PINT, (VPTR)yr));
-	assign_iden(stab, iident(ystvar), create_pvalue(PSTRING, (VPTR)yrstr));
+	assign_iden(stab, iident(modvar), create_pvalue_from_int(mod));
+	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
+	assign_iden(stab, iident(mvar), create_pvalue_from_int(mo));
+	assign_iden(stab, iident(yvar), create_pvalue_from_int(yr));
+	assign_iden(stab, iident(ystvar), create_pvalue_from_string(yrstr));
 	free_gdateval(gdv);
 	*eflg = FALSE;
 	return NULL;
@@ -2748,7 +2764,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		NODE evnt;
 		coerce_pvalue(PGNODE, val, eflg);
 		if (*eflg) {
-			prog_error(node, "the arg to year is not a record line (or string)");
+			prog_error(node, nonnodstr1, "year");
 			return NULL;
 		}
 		evnt = (NODE) pvalue(val);
@@ -2785,7 +2801,7 @@ __place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #endif
 
 	if (*eflg) {
-		prog_error(node, "the arg to place is not a record line");
+		prog_error(node, nonnod1, "place");
 		return NULL;
 	}
 	evnt = (NODE) pvalue(val);
@@ -2803,7 +2819,7 @@ __tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	STRING str=NULL;
 	if (*eflg) {
-		prog_error(node, "the arg to tag is not a record line");
+		prog_error(node, nonnod1, "tag");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2822,7 +2838,7 @@ __value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to value is not a record line");
+		prog_error(node, nonnod1, "value");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2844,7 +2860,7 @@ __xref (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to xref is not a record line");
+		prog_error(node, nonnod1, "xref");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2866,7 +2882,7 @@ __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to child is not a record line");
+		prog_error(node, nonnod1, "child");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2888,7 +2904,7 @@ __parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to parent is not a record line");
+		prog_error(node, nonnod1, "parent");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2910,7 +2926,7 @@ __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to sibling is not a record line");
+		prog_error(node, nonnod1, "sibling");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2933,7 +2949,7 @@ __level (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT lev = -1;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to level is not a record line");
+		prog_error(node, nonnod1, "level");
 		return NULL;
 	}
 	ged = (NODE) pvalue(val);
@@ -2986,7 +3002,7 @@ __nl (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (VPTR)"\n");
+	return create_pvalue_from_string("\n");
 }
 /*=========================+
  * __space -- Space function
@@ -2998,7 +3014,7 @@ __space (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (VPTR)" ");
+	return create_pvalue_from_string(" ");
 }
 /*=============================+
  * __qt -- Double quote function
@@ -3010,7 +3026,7 @@ __qt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, (VPTR)"\"");
+	return create_pvalue_from_string("\"");
 }
 /*=============================+
  * __indi -- Convert key to INDI

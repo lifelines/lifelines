@@ -77,7 +77,7 @@ INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 BOOLEAN stdout_vis = FALSE;
 INT cur_screen = 0;
 UIWINDOW main_win = NULL;
-UIWINDOW stdout_win=NULL, stdout_box_win=NULL;
+UIWINDOW stdout_win=NULL;
 static UIWINDOW debug_win=NULL, debug_box_win=NULL;
 static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
 static UIWINDOW choose_from_list_win=NULL;
@@ -456,6 +456,26 @@ create_uiwindow_impl (WINDOW * win, INT rows, INT cols)
 	return uiwin;
 }
 /*==========================================
+ * create_boxed_newwin2 -- Create a window with
+ *  an auxialiary box window outside it
+ * Created: 2002/02/17, Perry Rapp
+ *========================================*/
+static UIWINDOW
+create_boxed_newwin2 (INT rows, INT cols)
+{
+	INT begy = (LINES - rows)/2;
+	INT begx = (COLS - cols)/2;
+	WINDOW * boxwin = newwin(rows, cols, begy, begx);
+	WINDOW * win=0;
+	UIWINDOW uiwin=0;
+	++begy;
+	++begx;
+	win = subwin(boxwin, rows-2, cols-2, begy, begx);
+	uiwin = create_uiwindow_impl(win, rows-2, cols-2);
+	uiw_boxwin(uiwin) = boxwin;
+	return uiwin;
+}
+/*==========================================
  * delete_uiwindow -- Delete WINDOW wrapper & contents
  * Created: 2002/01/23
  *========================================*/
@@ -518,8 +538,7 @@ void
 create_windows (void)
 {
 	INT col;
-	stdout_box_win = create_newwin2(ll_lines-4, ll_cols-4);
-	stdout_win = create_uisubwindow2(stdout_box_win, ll_lines-6, ll_cols-6);
+	stdout_win = create_boxed_newwin2(ll_lines-4, ll_cols-4);
 	scrollok(uiw_win(stdout_win), TRUE);
 	col = COLS/4;
 	debug_box_win = create_newwin(8, ll_cols-col-2, 1, col);
@@ -572,14 +591,17 @@ display_screen (INT new_screen)
 static void
 check_stdout (void)
 {
-	if (stdout_vis) {
-		llwprintf("\nStrike any key to continue.\n");
-		crmode();
-		(void) wgetch(uiw_win(stdout_win));
-		nocrmode();
-		stdout_vis = FALSE;
-		/* ok the status string was available until they struck a key */
-		clear_status();
+	if (active_uiwin == stdout_win) {
+		if (stdout_vis) {
+			llwprintf("\nStrike any key to continue.\n");
+			crmode();
+			(void) wgetch(uiw_win(stdout_win));
+			nocrmode();
+			stdout_vis = FALSE;
+			/* ok the status string was available until they struck a key */
+			clear_status();
+		}
+		deactivate_uiwin();
 	}
 }
 /*=====================================
@@ -2463,8 +2485,10 @@ llvwprintf (STRING fmt, va_list args)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
-	if (!stdout_vis)
+	if (!stdout_vis) {
 		clearw();
+		activate_uiwin(uiwin);
+	}
 	vwprintw(win, fmt, args);
 	wrefresh(win);
 	/*
@@ -2497,11 +2521,12 @@ clearw (void)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
+	WINDOW *boxwin = uiw_boxwin(uiwin);
 	werase(win);
-	draw_win_box(uiw_win(stdout_box_win));
+	draw_win_box(boxwin);
 	wmove(win, 0, 0);
 	stdout_vis = TRUE;
-	wrefresh(uiw_win(stdout_box_win));
+	wrefresh(boxwin);
 }
 /*=======================================
  * wfield -- Write field in stdout window

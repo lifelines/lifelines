@@ -985,12 +985,14 @@ id_by_key (STRING name, char ctype)
 }
 /*============================================
  * name_to_list -- Convert name to string list
+ *  name:  [IN]  GEDCOM name
+ *  list:  [I/O] list (must exist)
+ *  plen:  [OUT]  returned length
+ *  psind: [OUT]  index (rel 1) of surname in list
+ * Returns a list whose elements are strings
  *==========================================*/
 BOOLEAN
-name_to_list (STRING name,      /* GEDCOM name */
-              LIST list,        /* list (must exist) */
-              INT *plen,        /* returned length */
-              INT *psind)       /* index (rel 1) of surname in list */
+name_to_list (STRING name, LIST list, INT *plen, INT *psind)
 {
 	INT i;
 	STRING str;

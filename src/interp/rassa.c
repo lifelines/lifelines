@@ -237,7 +237,7 @@ __outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		setbuf(Poutfp, NULL);
 	}
 	*eflg = FALSE;
-	return create_pvalue(PSTRING, outfilename);
+	return create_pvalue_from_string(outfilename);
 }
 /*===============================================+
  * __pos -- Position page output to row and column
@@ -330,7 +330,7 @@ __getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 	*eflg = FALSE;
-	return create_pvalue(PINT, (VPTR)curcol);
+	return create_pvalue_from_int(curcol);
 }
 /*======================================================
  * __pageout -- Output current page and clear page buffer

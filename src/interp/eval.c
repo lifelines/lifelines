@@ -54,7 +54,7 @@ evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	if (prog_debug) {
 		llwprintf("%d: ", iline(node));
-		show_one_pnode(node);
+		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
 	if (iistype(node, IIDENT))
@@ -111,7 +111,7 @@ valueof_iden (PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg)
 		*eflg = TRUE;
 		prog_error(node, "Undeclared identifier: %s", iden);
 	}
-	return create_pvalue(PANY, NULL);
+	return create_pvalue_any();
 }
 /*================================================+
  * evaluate_cond -- Evaluate conditional expression
@@ -201,7 +201,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				prog_error(node, "In user function %s()", iname(node));
 			return INTERROR;
 		}
-		insert_symtab_pvalue(newstab, iident(parm), value);
+		insert_symtab(newstab, iident(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -266,7 +266,7 @@ assign_iden (SYMTAB stab, STRING id, PVALUE value)
 	SYMTAB tab = stab;
 	if (!in_symtab(stab, id) && in_symtab(globtab, id))
 		tab = globtab;
-	insert_symtab_pvalue(tab, id, value);
+	insert_symtab(tab, id, value);
 	return;
 }
 /*=================================================

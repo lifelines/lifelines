@@ -71,19 +71,24 @@ BOOLEAN rpt_cancelled = FALSE;
 extern BOOLEAN progrunning, progparsing;
 extern INT progerror;
 extern STRING whatrpt,idrpt;
+extern STRING nonrecx;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static void remove_tables(void);
+static void disp_symtab(SYMTAB stab);
+static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
 static void parse_file(STRING ifile, LIST plist);
 static void progmessage(MSG_LEVEL level, STRING);
+static void remove_tables(void);
+static STRING vprog_error(PNODE node, STRING fmt, va_list args);
 
 /*********************************************
  * local variables
  *********************************************/
 
+INT dbg_mode = 0;
 
 /*********************************************
  * local function definitions
@@ -109,12 +114,10 @@ void
 finishinterp (void)
 {
 	finishrassa();
-	/* give 5 seconds for user to read error messages */
-	/* is this necessary ? */
 
 	if (progerror) {
 		refresh_stdout();
-		sleep(5);
+		/* we used to sleep for 5 seconds here */
 	}
 
 }
@@ -250,7 +253,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	}
 	create_symtab(&stab);
 	for (i = 0; i < nargs; i++) {
-		insert_symtab_pvalue(stab, iident(parm), args[0]);
+		insert_symtab(stab, iident(parm), args[0]);
 		parm = inext(parm);
 	}
 
@@ -364,7 +367,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		Pnode = node;
 if (prog_debug) {
 	llwprintf("i%di: ", iline(node));
-	show_one_pnode(node);
+	debug_show_one_pnode(node);
 	llwprintf("\n");
 }
 		switch (itype(node)) {
@@ -728,8 +731,8 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 	lock_cache(fcel);
 	FORCHILDREN(fam, chil, nchil)
 		val = create_pvalue_from_indi(chil);
-		insert_symtab_pvalue(stab, ichild(node), val);
-		insert_symtab(stab, inum(node), PINT, (VPTR)nchil);
+		insert_symtab(stab, ichild(node), val);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(nchil));
 		/* val should be real person, because it came from FORCHILDREN */
 		cel = get_cel_from_pvalue(val);
 		lock_cache(cel);
@@ -765,7 +768,7 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 	INT nspouses;
 	CACHEEL icel, scel, fcel;
 	INTERPTYPE irc;
-	PVALUE sval, fval;
+	PVALUE sval, fval, nval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to spouses must be a person");
@@ -779,16 +782,17 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 	lock_cache(icel);
 	FORSPOUSES(indi, spouse, fam, nspouses)
 		sval = create_pvalue_from_indi(spouse);
-		insert_symtab_pvalue(stab, ispouse(node), sval);
+		insert_symtab(stab, ispouse(node), sval);
 		fval = create_pvalue_from_fam(fam);
-		insert_symtab_pvalue(stab, ifamily(node), fval);
+		insert_symtab(stab, ifamily(node), fval);
+		nval = create_pvalue_from_int(nspouses);
+		insert_symtab(stab, inum(node), nval);
 		/* sval should be real person, because it came from FORSPOUSES */
 		scel = get_cel_from_pvalue(sval);
 		/* fval should be real person, because it came from FORSPOUSES */
 		fcel = get_cel_from_pvalue(fval);
 		lock_cache(scel);
 		lock_cache(fcel);
-		insert_symtab(stab, inum(node), PINT, (VPTR)nspouses);
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
 		unlock_cache(fcel);
@@ -826,7 +830,7 @@ interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 	INT nfams;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
-	PVALUE fval, sval;
+	PVALUE fval, sval, nval;
 	NODE indi = (NODE) eval_indi(iloopexp(node), stab, &eflg, &icel);
 	if (eflg) {
 		prog_error(node, "1st arg to families must be a person");
@@ -840,10 +844,11 @@ interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 	lock_cache(icel);
 	FORFAMSS(indi, fam, spouse, nfams)
 		fval = create_pvalue_from_fam(fam);
-		insert_symtab_pvalue(stab, ifamily(node), fval);
+		insert_symtab(stab, ifamily(node), fval);
 		sval = create_pvalue_from_indi(spouse);
-		insert_symtab_pvalue(stab, ispouse(node), sval);
-		insert_symtab(stab, inum(node), PINT, (VPTR)nfams);
+		insert_symtab(stab, ispouse(node), sval);
+		nval = create_pvalue_from_int(nfams);
+		insert_symtab(stab, inum(node), nval);
 		/* fval should be real person, because it came from FORFAMSS */
 		fcel = get_cel_from_pvalue(fval);
 		/* sval may not be a person -- so scel may be NULL */
@@ -896,16 +901,16 @@ interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		sval = create_pvalue_from_indi(husb);
 		scel = get_cel_from_pvalue(sval);
 		if (!scel) goto dloop;
 		fval = create_pvalue_from_fam(fam);
 		fcel = get_cel_from_pvalue(fval);
-		insert_symtab_pvalue(stab, ifamily(node), fval);
-		insert_symtab(stab, iiparent(node), PINDI, (VPTR) scel);
-		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
+		insert_symtab(stab, ifamily(node), fval);
+		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -959,16 +964,16 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	if (!indi) return TRUE;
 	lock_cache(icel);
-	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		sval = create_pvalue_from_indi(wife);
 		scel = get_cel_from_pvalue(sval);
 		if (!scel) goto eloop;
 		fval = create_pvalue_from_fam(fam);
 		fcel = get_cel_from_pvalue(fval);
-		insert_symtab_pvalue(stab, ifamily(node), fval);
-		insert_symtab(stab, iiparent(node), PINDI, scel);
-		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
+		insert_symtab(stab, ifamily(node), fval);
+		insert_symtab(stab, iiparent(node), create_pvalue_from_cel(scel));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
 		lock_cache(fcel);
 		lock_cache(scel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -1021,8 +1026,8 @@ interp_parents (PNODE node, SYMTAB stab, PVALUE *pval)
 	lock_cache(icel);
 	FORFAMCS(indi, fam, husb, wife, nfams)
 		fval = create_pvalue_from_fam(fam);
-		insert_symtab_pvalue(stab, ifamily(node), fval);
-		insert_symtab(stab, inum(node), PINT, (VPTR) nfams);
+		insert_symtab(stab, ifamily(node), fval);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(nfams));
 		fcel = get_cel_from_pvalue(fval);
 		lock_cache(fcel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -1063,9 +1068,8 @@ interp_fornotes (PNODE node, SYMTAB stab, PVALUE *pval)
 	root = (NODE) pvalue(val);
 	delete_pvalue(val);
 	if (!root) return INTOKAY;
-/*HERE*/
 	FORTAGVALUES(root, "NOTE", sub, vstring)
-		insert_symtab(stab, ielement(node), PSTRING, vstring);
+		insert_symtab(stab, ielement(node), create_pvalue_from_string(vstring));
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		switch (irc) {
 		case INTCONTINUE:
@@ -1104,10 +1108,9 @@ interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 	root = (NODE) pvalue(val);
 	delete_pvalue(val);
 	if (!root) return INTOKAY;
-/*HERE*/
 	sub = nchild(root);
 	while (sub) {
-		insert_symtab(stab, ielement(node), PGNODE, sub);
+		insert_symtab(stab, ielement(node), create_pvalue_from_node(sub));
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		switch (irc) {
 		case INTCONTINUE:
@@ -1154,7 +1157,7 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE ival=NULL;
 	INT count = 0;
 	INT icount = 0;
-	insert_symtab(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	while (TRUE) {
 		count = xref_nexti(count);
 		if (!count) {
@@ -1166,8 +1169,8 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 		icount++;
 		lock_cache(icel); /* keep current indi in cache during loop body */
 		/* set loop variables */
-		insert_symtab_pvalue(stab, ielement(node), ival);
-		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, ielement(node), ival);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(icel);
@@ -1202,7 +1205,7 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE sval=NULL;
 	INT count = 0;
 	INT scount = 0;
-	insert_symtab(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	while (TRUE) {
 		count = xref_nexts(count);
 		if (!count) {
@@ -1214,8 +1217,8 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 		scount++;
 		lock_cache(scel); /* keep current source in cache during loop body */
 		/* set loop variables */
-		insert_symtab_pvalue(stab, ielement(node), sval);
-		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, ielement(node), sval);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
@@ -1248,7 +1251,7 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE eval=NULL;
 	INT count = 0;
 	INT ecount = 0;
-	insert_symtab(stab, inum(node), PINT, (VPTR)count);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 	while (TRUE) {
 		count = xref_nexte(count);
 		if (!count) {
@@ -1260,8 +1263,8 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 		ecount++;
 		lock_cache(ecel); /* keep current event in cache during loop body */
 		/* set loop variables */
-		insert_symtab_pvalue(stab, ielement(node), eval);
-		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, ielement(node), eval);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(ecel);
@@ -1294,7 +1297,7 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE xval;
 	INT count = 0;
 	INT xcount = 0;
-	insert_symtab(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	while (TRUE) {
 		count = xref_nextx(count);
 		if (!count) {
@@ -1306,8 +1309,8 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 		xcount++;
 		lock_cache(xcel); /* keep current source in cache during loop body */
 		/* set loop variables */
-		insert_symtab_pvalue(stab, ielement(node), xval);
-		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, ielement(node), xval);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(xcel);
@@ -1339,7 +1342,7 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE fval=NULL;
 	INT count = 0;
 	INT fcount = 0;
-	insert_symtab(stab, inum(node), PINT, 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	while (TRUE) {
 		count = xref_nextf(count);
 		if (!count) {
@@ -1350,8 +1353,8 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 		fcel = get_cel_from_pvalue(fval);
 		fcount++;
 		lock_cache(fcel);
-		insert_symtab_pvalue(stab, ielement(node), fval);
-		insert_symtab(stab, inum(node), PINT, (VPTR)count);
+		insert_symtab(stab, ielement(node), fval);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
 		switch (irc) {
@@ -1393,28 +1396,21 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 		return INTOKAY;
 	}
 	/* can't delete val until we're done with seq */
-	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
+	/* initialize counter */
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORINDISEQ(seq, el, ncount)
-#ifdef DEBUG
-		llwprintf("loopinterp - %s = ",ielement(node));
-		llwprintf("\n");
-#endif
 		/* put current indi in symbol table */
 		indival = create_pvalue_from_indi_key(skey(el));
-		insert_symtab_pvalue(stab, ielement(node), indival);
-#ifdef DEBUG
-		llwprintf("loopinterp - %s = ",ivalvar(node));
-		llwprintf("\n");
-#endif
+		insert_symtab(stab, ielement(node), indival);
 		/* put current indi's value in symbol table */
 		loopval = sval(el).w;
 		if (loopval)
 			loopval = copy_pvalue(loopval);
 		else
-			loopval = create_pvalue(PANY, (VPTR)NULL);
-		insert_symtab_pvalue(stab, ivalvar(node), loopval);
+			loopval = create_pvalue_any();
+		insert_symtab(stab, ivalvar(node), loopval);
 		/* put counter in symbol table */
-		insert_symtab(stab, inum(node), PINT, (VPTR) (ncount + 1));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount + 1));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -1459,12 +1455,12 @@ interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 		prog_error(node, "1st arg to forlist is in error");
 		return INTERROR;
 	}
-	insert_symtab(stab, inum(node), PINT, (VPTR) 0);
+	insert_symtab(stab, inum(node), create_pvalue_from_int(0));
 	FORLIST(list, el)
 		/* insert/update current element in symbol table */
-		insert_symtab_pvalue(stab, ielement(node), copy_pvalue(el));
+		insert_symtab(stab, ielement(node), copy_pvalue(el));
 		/* insert/update counter in symbol table */
-		insert_symtab(stab, inum(node), PINT, (VPTR) ncount++);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(ncount++));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -1545,7 +1541,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 			irc = INTERROR;
 			goto call_leave;
 		}
-		insert_symtab_pvalue(newstab, iident(parm), value);
+		insert_symtab(newstab, iident(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -1587,7 +1583,7 @@ interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 	NODE root;
 	PVALUE val = eval_and_coerce(PGNODE, iloopexp(node), stab, &eflg);
 	if (eflg) {
-		prog_error(node, "1st arg to traverse must be a record line");
+		prog_var_error(node, stab, iloopexp(node), val, nonrecx,  "traverse", "1");
 		irc = INTERROR;
 		goto traverse_leave;
 	}
@@ -1598,8 +1594,8 @@ interp_traverse (PNODE node, SYMTAB stab, PVALUE *pval)
 	}
 	stack[++lev] = snode = root;
 	while (TRUE) {
-		insert_symtab(stab, ielement(node), PGNODE, (VPTR)snode);
-		insert_symtab(stab, ilev(node), PINT, (VPTR)lev);
+		insert_symtab(stab, ielement(node), create_pvalue_from_node(snode));
+		insert_symtab(stab, ilev(node), create_pvalue_from_int(lev));
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
@@ -1632,28 +1628,123 @@ traverse_leave:
 	return irc;
 }
 /*=============================================+
+ * prog_var_error -- Report a run time program error
+ *  due to mistyping of a particular variable
+ *  node:  [IN]  current parse node
+ *  stab:  [IN]  current symbol table (lexical scope)
+ *  arg:   [IN]  if non-null, parse node of troublesome argument
+ *  val:   [IN]  if non-null, PVALUE of troublesome argument
+ *  fmt... [IN]  message
+ * See vprog_error
+ * Created: 2002/02/17, Perry Rapp
+ *============================================*/
+struct dbgsymtab_s
+{
+	STRING * locals;
+	INT count;
+	INT current;
+};
+void
+prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
+{
+	STRING choices[3];
+	STRING titl;
+	INT rtn;
+
+	va_list args;
+	va_start(args, fmt);
+	titl = vprog_error(node, fmt, args);
+	va_end(args);
+
+	/* debugger is not yet ready 2002.02.17 */
+	if (!getoptint("debugger", 0))
+		return;
+
+	if (dbg_mode != -99) {
+		char buf[64];
+		INT n = (stab.tab ? get_table_count(stab.tab) : 0);
+		snprintf(buf, sizeof(buf), _("Display locals (%d)"), n);
+		buf[sizeof(buf)-1] = 0;
+		choices[0] = strsave(buf);
+		choices[1] = strsave(_("Pop one level"));
+		choices[2] = strsave(_("Quit debugger"));
+dbgloop:
+		rtn = choose_from_array(titl, ARRSIZE(choices), choices);
+		if (rtn == 2 || rtn == -1)
+			dbg_mode = -99;
+		else if (rtn == 0) {
+			disp_symtab(stab);
+			goto dbgloop;
+		}
+		free_array_strings(ARRSIZE(choices), choices);
+	}
+}
+static void
+disp_symtab (SYMTAB stab)
+{
+	INT n = (stab.tab ? get_table_count(stab.tab) : 0);
+	struct dbgsymtab_s sdata;
+	INT bytes = n * sizeof(STRING);
+	if (!n) return;
+	memset(&sdata, 0, sizeof(sdata));
+	sdata.count = n;
+	sdata.locals = (STRING *)malloc(bytes);
+	memset(sdata.locals, 0, bytes);
+	traverse_symtab(stab, &sdata.locals, disp_symtab_cb);
+	view_array(_("Local variables"), n, sdata.locals);
+	free_array_strings(n, sdata.locals);
+}
+static BOOLEAN
+disp_symtab_cb (STRING key, PVALUE val, VPTR param)
+{
+	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
+	char line[64];
+	ASSERT(sdata->current < sdata->count);
+	snprintf(line, sizeof(line), "%s: %s", key, debug_pvalue_as_string(val));
+	line[sizeof(line)-1] = 0;
+	sdata->locals[sdata->current++] = strsave(line);
+	return TRUE; /* continue */
+}
+/*=============================================+
  * prog_error -- Report a run time program error
  *  node:   current parsed node
  *  fmt:    printf style format string
+ *  ...:    printf style varargs
+ *  See vprog_error
+ *============================================*/
+void
+prog_error (PNODE node, STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprog_error(node, fmt, args);
+	va_end(args);
+}
+/*=============================================+
+ * vprog_error -- Report a run time program error
+ *  node:        current parsed node
+ *  fmt, args:   printf style message
  *  ...:    printf style varargs
  * Prints error to the stdout-style curses window
  * and to the report log (if one was specified in config file)
  * Always includes line number of node, if available
  * Only includes file name if not same as previous error
+ * Returns static buffer with one-line description
  *============================================*/
-void
-prog_error (PNODE node, STRING fmt, ...)
+static STRING
+vprog_error (PNODE node, STRING fmt, va_list args)
 {
 	INT num;
 	STRING rptfile;
 	char msgf[320]=""; /* file msg */
-	char msg[320]; /* main msg */
+	char msglineno[60]; /* main msg */
+	static char msgbuff[600];
 	static char prevfile[MAXPATHLEN]="";
-	va_list args;
+	STRING ptr = msgbuff;
+	INT mylen = sizeof(msgbuff);
 	if (rpt_cancelled)
-		return;
+		return "Report cancelled";
 	rptfile = getoptstr("ReportLog", NULL);
-	va_start(args, fmt);
 	if (node) {
 		STRING fname = ifname(node);
 		/* only display filename if different (or first error) */
@@ -1668,19 +1759,20 @@ prog_error (PNODE node, STRING fmt, ...)
 		}
 		/* But always display the line & error */
 		if (progparsing)
-			snprintf(msg, sizeof(msg)
-				, "\nParsing Error at line %d: ", iline(node));
+			snprintf(msglineno, sizeof(msglineno)
+				, "Parsing Error at line %d: ", iline(node));
 		else
-			snprintf(msg, sizeof(msg)
-				, "\nRuntime Error at line %d: ", iline(node));
+			snprintf(msglineno, sizeof(msglineno)
+				, "Runtime Error at line %d: ", iline(node));
 	} else {
-		snprintf(msg, sizeof(msg), "\nAborting: ");
+		snprintf(msglineno, sizeof(msglineno), "Aborting: ");
 	}
+	appendstr(&ptr, &mylen, msglineno);
+	vappendstrf(&ptr, &mylen, fmt, args);
 	if (msgf[0])
 		llwprintf(msgf);
-	llwprintf(msg);
-	llvwprintf(fmt, args);
-	va_end(args);
+	llwprintf("\n");
+	llwprintf(msgbuff);
 	llwprintf(".");
 	++progerror;
 	/* if user specified a report error log (in config file) */
@@ -1694,15 +1786,14 @@ prog_error (PNODE node, STRING fmt, ...)
 			}
 			if (msgf[0])
 				fprintf(fp, msgf);
-			fprintf(fp, msg);
-			va_start(args, fmt);
-			vfprintf(fp, fmt, args);
-			va_end(args);
+			fprintf(fp, "\n");
+			fprintf(fp, msgbuff);
 			fclose(fp);
 		}
 	}
 	if ((num = getoptint("PerErrorDelay", 0)))
 		sleep(num);
+	return msgbuff;
 }
 /*=============================================+
  * handle_option -- process option specified in report
