@@ -112,6 +112,7 @@ static MenuItem f_MenuItemAddChild = { N_("a  Add child to family"), 0, CMD_ADDC
 static MenuItem f_MenuItemAddFamily = { N_("a  Add family"), 0, CMD_ADDFAMILY, 0 };
 static MenuItem f_MenuItemSwapFamilies = { N_("x  Swap two families"), 0, CMD_SWAPFAMILIES, 0 };
 static MenuItem f_MenuItemSwapChildren = { N_("x  Swap two children"), 0, CMD_SWAPCHILDREN, 0 };
+/* xgettext:no-c-format */
 static MenuItem f_MenuItemReorderChild = { N_("%c  Reorder child"), 0, CMD_REORDERCHILD, 0 };
 static MenuItem f_MenuItemSwitchTopBottom = { N_("x  Switch top/bottom"), 0, CMD_SWAPTOPBOTTOM, 0 };
 static MenuItem f_MenuItemNewPerson = { N_("n  Create new person"), 0, CMD_NEWPERSON, 0 };
@@ -180,8 +181,11 @@ static MenuItem f_MenuItemHistoryBack = { N_("^b  History/back"), 0, CMD_HISTORY
 static MenuItem f_MenuItemHistoryFwd = { N_("^f  History/fwd"), 0, CMD_HISTORY_FWD, 0 };
 static MenuItem f_MenuItemHistoryList = { N_("^l  History list"), 0, CMD_HISTORY_LIST, 0 };
 static MenuItem f_MenuItemHistoryClean = { N_("^c Clear history"), 0, CMD_HISTORY_CLEAR, 0 };
+/* xgettext:no-c-format */
 static MenuItem f_MenuItemAddSour = { N_("%s  Add source"), 0, CMD_ADD_SOUR, 0 };
+/* xgettext:no-c-format */
 static MenuItem f_MenuItemAddEven = { N_("%e  Add event"), 0, CMD_ADD_EVEN, 0 };
+/* xgettext:no-c-format */
 static MenuItem f_MenuItemAddOthr = { N_("%o  Add other"), 0, CMD_ADD_OTHR, 0 };
 
 

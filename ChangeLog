@@ -24,6 +24,12 @@
 
 	Check in more new po files from gettextize upgrade.
 
+	* ChangeLog liflines/menuitem.c po/de.po po/el.po po/it.po
+	po/sv.po:
+
+	Mark strings which look like printf specifiers but aren't, for gettext.
+	Fill in unfilled headers in po files (so msgfmt won't error out).
+
 2002-06-04  Marc Nozell  <marc@nozell.com>
 
 	* Cleaned up Rafal's xml conversion of docs/lifelines.sgml.  Also
