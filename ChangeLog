@@ -30,6 +30,11 @@
 
 	Factored out GEDCOM I/O code from node.c into nodeio.c.
 
+	* ChangeLog src/gedlib/nodeio.c src/liflines/add.c
+	src/liflines/edit.c:
+
+	Move gedcom output routines from edit.c to nodeio.c.
+
 2003-02-03 Matt Emmerton
 
 	* ChangeLog src/interp/write.c

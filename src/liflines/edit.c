@@ -46,29 +46,11 @@ extern STRING qSireditopt, qSfreditopt;
 extern STRING qSntprnt, qSgdpmod, qSgdfmod, qSronlye;
 extern STRING qSparadox;
 
-/*=====================================
- * write_indi_to_file - write node tree into GEDCOM
- * (no user interaction)
- *===================================*/
-void
-write_indi_to_file (NODE indi, CNSTRING file)
-{
-	FILE *fp;
-	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	NODE name, refn, sex, body, famc, fams;
-	
-	ASSERT(fp = fopen(file, LLWRITETEXT));
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, sex,   TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, body , TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, famc,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, fams,  TRUE, TRUE, TRUE);
-	fclose(fp);
-	join_indi(indi, name, refn, sex, body, famc, fams);
-}
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
 /*=====================================
  * edit_indi -- Edit person in database
  * (with user interaction)
@@ -156,28 +138,6 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	
 	msg_status(_(qSgdpmod), indi_to_name(indi1, 35));
 	return TRUE;
-}
-/*=====================================
- * write_fam_to_file -- write node tree into GEDCOM
- * (no user interaction)
- *===================================*/
-void
-write_fam_to_file (NODE fam, CNSTRING file)
-{
-	FILE *fp;
-	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	NODE refn, husb, wife, chil, body;
-
-	ASSERT(fp = fopen(file, LLWRITETEXT));
-	split_fam(fam, &refn, &husb, &wife, &chil, &body);
-	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, husb,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, wife,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, body,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, chil,  TRUE, TRUE, TRUE);
-	join_fam(fam, refn, husb, wife, chil, body);
-	fclose(fp);
 }
 /*====================================
  * edit_fam -- Edit family in database

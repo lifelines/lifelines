@@ -54,7 +54,6 @@ static STRING swrite_nodes(INT levl, NODE node, STRING p);
 static void write_node(INT levl, FILE *fp, XLAT ttm,
 	NODE node, BOOLEAN indent);
 
-
 /*********************************************
  * local function definitions
  * body of module
@@ -717,3 +716,49 @@ load_record_wh (RECORD rec, char * whptr, INT whlen)
 	rec->mdwh = (WAREHOUSE)stdalloc(sizeof(*(rec->mdwh)));
 	wh_assign_from_blob(rec->mdwh, whptr, whlen);
 }
+/*=====================================
+ * write_indi_to_file - write node tree into GEDCOM
+ * (no user interaction)
+ *===================================*/
+void
+write_indi_to_file (NODE indi, CNSTRING file)
+{
+	FILE *fp;
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
+	NODE name, refn, sex, body, famc, fams;
+	
+	ASSERT(fp = fopen(file, LLWRITETEXT));
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, sex,   TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, body , TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, famc,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, fams,  TRUE, TRUE, TRUE);
+	fclose(fp);
+	join_indi(indi, name, refn, sex, body, famc, fams);
+}
+/*=====================================
+ * write_fam_to_file -- write node tree into GEDCOM
+ * (no user interaction)
+ *===================================*/
+void
+write_fam_to_file (NODE fam, CNSTRING file)
+{
+	FILE *fp;
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
+	NODE refn, husb, wife, chil, body;
+
+	ASSERT(fp = fopen(file, LLWRITETEXT));
+	split_fam(fam, &refn, &husb, &wife, &chil, &body);
+	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, husb,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, wife,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, body,  TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, chil,  TRUE, TRUE, TRUE);
+	join_fam(fam, refn, husb, wife, chil, body);
+	fclose(fp);
+}
+
