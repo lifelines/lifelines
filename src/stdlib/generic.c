@@ -83,6 +83,17 @@ init_generic_string_shared (GENERIC *gen, STRING sval)
 	gen->sval = sval;
 }
 /*=================================================
+ * init_generic_vptr -- populate gen with vptr (void pointer)
+ * This routine copies vptr, which is opaque & will not be freed
+ *===============================================*/
+void
+init_generic_vptr (GENERIC *gen, VPTR vptr)
+{
+	init_generic(gen);
+	gen->selector = GENERIC_VPTR;
+	gen->vptr = vptr;
+}
+/*=================================================
  * init_generic_object -- populate gen with object
  * This routine copies object, and frees its copy at destruction
  *===============================================*/
@@ -221,12 +232,14 @@ copy_generic_value (GENERIC *gen, const GENERIC * src)
 	clear_generic(gen);
 	/* set new value */
 	switch(src->selector) {
+	case GENERIC_NULL: /* already cleared gen */ break;
 	case GENERIC_INT: set_generic_int(gen, src->ival); break;
 	case GENERIC_FLOAT: set_generic_float(gen, *src->fval); break;
 	case GENERIC_STRING: set_generic_string(gen, src->sval); break;
 	case GENERIC_STRING_SHARED: set_generic_string(gen, src->sval); break;
 	case GENERIC_VPTR: set_generic_vptr(gen, src->vptr); break;
 	case GENERIC_OBJECT: set_generic_object(gen, src->oval); break;
+	default: ASSERT(0); break;
 	}
 }
 

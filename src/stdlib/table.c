@@ -97,6 +97,7 @@ static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
+static ENTRY new_entry(void);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static void table_destructor(VTABLE *obj);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
@@ -206,13 +207,26 @@ insert_table_impl (TABLE tab, CNSTRING key, UNION uval)
 		entry->uval = uval;
 	else {
 		INT hval = hash(tab, key);
-		entry = (ENTRY) stdalloc(sizeof(*entry));
+		entry = new_entry();
 		entry->ekey = (STRING)key;
 		entry->uval = uval;
 		entry->enext = tab->entries[hval];
 		tab->entries[hval] = entry;
 		++tab->count;
 	}
+}
+/*======================================
+ * new_entry -- Make new empty ENTRY for table
+ *====================================*/
+static ENTRY
+new_entry (void)
+{
+	ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
+	entry->ekey = 0;
+	init_generic_null(&entry->generic);
+	entry->uval.w = 0;
+	entry->enext = 0;
+	return entry;
 }
 /*======================================
  * new_table_entry_impl -- Insert key & value into table
@@ -223,7 +237,7 @@ static void
 new_table_entry_impl (TABLE tab, CNSTRING key, GENERIC * generic)
 {
 	INT hval = hash(tab, key);
-	ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
+	ENTRY entry = new_entry();
 	entry->ekey = (STRING)key;
 	copy_generic_value(&entry->generic, generic);
 	entry->uval.i = 0;
@@ -247,7 +261,7 @@ replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
 		entry->uval = uval;
 	} else {
 		INT hval = hash(tab, key);
-		entry = (ENTRY) stdalloc(sizeof(*entry));
+		entry = new_entry();
 		entry->ekey = key;
 		entry->uval = uval;
 		entry->enext = tab->entries[hval];
@@ -340,6 +354,28 @@ table_insert_string (TABLE tab, CNSTRING key, CNSTRING value)
 		ASSERT(!is_generic_null(&entry->generic));
 		/* update existing value */
 		set_generic_string(&entry->generic, value);
+	}
+}
+/*======================================
+ * table_insert_ptr -- Insert key & vptr (void ptr) value into table
+ * Table copies (allocates) the key
+ *====================================*/
+void
+table_insert_ptr (TABLE tab, CNSTRING key, const VPTR value)
+{
+	ENTRY entry = fndentry(tab, key);
+	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
+	if (!entry) {
+		/* insert new entries as generics */
+		STRING newkey = strdup(key);
+		GENERIC gen;
+		init_generic_vptr(&gen, value);
+		new_table_entry_impl(tab, newkey, &gen);
+	} else {
+		/* Only new-style tables should call table_insert_string */
+		ASSERT(!is_generic_null(&entry->generic));
+		/* update existing value */
+		set_generic_vptr(&entry->generic, value);
 	}
 }
 /*======================================
@@ -735,6 +771,9 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 	BOOLEAN dupkey = whattodup&FREEBOTH || whattodup&FREEKEY;
 	BOOLEAN dupval = whattodup&FREEBOTH || whattodup&FREEVALUE;
 
+	if (dest->whattofree == -2)
+		dupkey = FALSE;
+
 	ASSERT(get_table_count(dest)==0);
 	if (get_table_count(src)==0)
 		return;
@@ -750,17 +789,35 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 			UNION uval = ent->uval;
 			STRING key = ent->ekey;
 			if (dupkey) key = strsave(key);
-			if (dupval) uval.w = strsave(uval.w);
+			if (dest->whattofree != -2 && is_generic_null(&ent->generic)) {
+				if (dupval) uval.w = strsave(uval.w);
+			}
 			if (src->maxhash == dest->maxhash) {
 				/* copy src item directly into dest (skip hashing) */
-				ENTRY entry = (ENTRY) stdalloc(sizeof(*entry));
+				ENTRY entry = new_entry();
 				entry->ekey = key;
+				copy_generic_value(&entry->generic, &ent->generic);
 				entry->uval = uval;
 				entry->enext = dest->entries[i];
 				dest->entries[i] = entry;
 			} else {
 				/* insert src item into dest */
-				insert_table_impl(dest, key, uval);
+				if (is_generic_null(&ent->generic)) {
+					if (dest->whattofree == -2) {
+						/* copying from old-style value to generics table */
+						switch(src->valtype) {
+						case TB_PTR: table_insert_ptr(dest, key, uval.w); break;
+						case TB_INT: insert_table_int(dest, key, uval.i); break;
+						case TB_STR: table_insert_string(dest, key, uval.s); break;
+						default: new_table_entry_impl(dest, key, &ent->generic); break;
+						}
+					} else {
+						/* old style direct copy */
+						insert_table_impl(dest, key, uval);
+					}
+				} else {
+					new_table_entry_impl(dest, key, &ent->generic);
+				}
 			}
 			nxt = ent->enext;
 		}
