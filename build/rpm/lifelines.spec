@@ -51,6 +51,7 @@ install -m 644 po/sv.gmo $RPM_BUILD_ROOT/usr/local/share/locale/sv/LC_MESSAGES/l
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
 install -m 644 reports/CREDIT reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/index.html reports/boc.gif reports/ll.png $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
@@ -62,7 +63,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 %defattr(-,root,root)
 %doc README ChangeLog NEWS AUTHORS LICENSE
 %doc docs/ll-reportmanual.xml docs/ll-reportmanual.html docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
-%doc docs/ll-userguide.xml docs/l-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+%doc docs/ll-userguide.xml docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
 
 /usr/local/bin/llines
 /usr/local/bin/llexec
