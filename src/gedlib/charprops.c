@@ -30,7 +30,7 @@ extern BOOLEAN opt_mychar;
  * local function prototypes
  *********************************************/
 
-static ZSTR convert_utf8(TRANTABLE uppers, CNSTRING s);
+static ZSTR convert_utf8(TRANTABLE tt, CNSTRING s);
 static ZSTR charprops_toupperz(CNSTRING s);
 static ZSTR charprops_tolowerz(CNSTRING s);
 
@@ -115,7 +115,7 @@ charprops_load_utf8 (void)
 	fclose(fp);
 
 	uppers = create_trantable(upleft, upright, upcount, "UTF-8 upper");
-	lowers = create_trantable(loleft, loright, locount, "UTF-8 upper");
+	lowers = create_trantable(loleft, loright, locount, "UTF-8 lower");
 
 	for (i=0; i<upcount; ++i)
 		stdfree(upleft[i]);
@@ -178,7 +178,7 @@ charprops_load (const char * codepage)
 
 	src[1] = 0;
 	for (ch=0; ch<256; ++ch) {
-		ZSTR zsrc, zup;
+		ZSTR zsrc, zup, zdn;
 
 		/* set default as noncased */
 		charset_info[ch].toup = ch;
@@ -204,9 +204,19 @@ charprops_load (const char * codepage)
 				charset_info[ch].toup = zs_str(zup)[0];
 			}
 		}
-		zs_free(&zsrc);
 		zs_free(&zup);
-
+		zdn = custom_translate(zs_str(zsrc), lowers);
+		/* zdn is lowercased zstr */
+		if (!eqstr(zs_str(zsrc), zs_str(zdn))) {
+			transl_xlat(ttback, zdn);
+			/* zdn is now lowercased in original codepage */
+			if (zs_len(zdn) == 1 && zs_str(zdn)[0] != ch) {
+				charset_info[ch].isup = 1;
+				charset_info[ch].tolow = zs_str(zdn)[0];
+			}
+		}
+		zs_free(&zdn);
+		zs_free(&zsrc);
 	}
 
 	/* activate new table of character properties */
@@ -244,8 +254,8 @@ charprops_tolowerz (CNSTRING s)
  * convert_utf8 -- translate string using specified trantable
  *========================================*/
 static ZSTR
-convert_utf8 (TRANTABLE uppers, CNSTRING s)
+convert_utf8 (TRANTABLE tt, CNSTRING s)
 {
-	ZSTR zstr = custom_translate(s, uppers);
+	ZSTR zstr = custom_translate(s, tt);
 	return zstr;
 }

@@ -10,6 +10,10 @@
 	Fix how describe_pvalue handles indis, add handling for all records
 	and arrays.
 
+	* ChangeLog src/gedlib/charprops.c
+
+	Fixed charprops_load to load lowercase properties.
+
 2003-12-03 Perry Rapp
 
 	* ChangeLog src/hdrs/pvalue.h src/interp/builtin.c
