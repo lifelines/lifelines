@@ -37,8 +37,8 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN traverse_block(BTREE btree, BLOCK block, RKEY lo, RKEY hi, TRAV_RECORD_FUNC, void * param);
-static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_RECORD_FUNC, void * param);
+static BOOLEAN traverse_block(BTREE btree, BLOCK block, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param);
+static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param);
 
 /*********************************************
  * local function definitions
@@ -51,8 +51,8 @@ static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_R
  *===================================================*/
 BOOLEAN
 traverse_index_blocks (BTREE btree, INDEX index, void *param
-                       , TRAV_INDEX_FUNC ifunc
-                       , TRAV_BLOCK_FUNC dfunc)
+                       , BOOLEAN (*ifunc)(BTREE, INDEX, void *param)
+                       , BOOLEAN (*dfunc)(BTREE, BLOCK, void *param))
 {
 	INDEX newdex;
 
@@ -85,7 +85,8 @@ traverse_index_blocks (BTREE btree, INDEX index, void *param
  * callback may modify the data, but it won't be updated into db
  *==================================================*/
 static BOOLEAN
-traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi, TRAV_RECORD_FUNC func, void * param)
+traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	STRING p;
 	INT i, len;
@@ -121,7 +122,8 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi, TRAV_RECORD_FUNC fun
  * callback may modify the data, but it won't be updated into db
  *==================================================*/
 static BOOLEAN
-traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_RECORD_FUNC func, void * param)
+traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi,
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	INDEX index1;
 	BLOCK block1;
@@ -170,7 +172,8 @@ traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_RECORD_FUNC fun
  * callback may modify the data, but it won't be updated into db
  *============================================*/
 void
-traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi, TRAV_RECORD_FUNC func, void * param)
+traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi,
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	INDEX index;
 	ASSERT(index = bmaster(btree));

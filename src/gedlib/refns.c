@@ -396,7 +396,6 @@ resolve_node (NODE node, BOOLEAN annotate_pointers)
 	STRING refn=0;
 
 	if (!val) return TRUE;
-
 	refn = symbolic_link(val);
 	if (refn) {
 		INT letr = record_letter(ntag(node));
@@ -637,12 +636,12 @@ index_by_refn (NODE node,
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC func;
+	BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
 	void * param;
 } TRAV_REFN_PARAM;
 /* see above */
 static BOOLEAN
-traverse_refn_callback ( TRAV_RECORD_FUNC_ARGS(rkey, data, len, param) )
+traverse_refn_callback (RKEY rkey, CNSTRING data, INT len, void *param)
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
@@ -652,14 +651,14 @@ traverse_refn_callback ( TRAV_RECORD_FUNC_ARGS(rkey, data, len, param) )
 
 	for (i=0; i<RRcount; i++)
 	{
-		if (!tparam->func(RRkeys[i], (STRING)RRrefns[i], !i, tparam->param))
+		if (!tparam->func(rkey2str(RRkeys[i]), RRrefns[i], !i, tparam->param))
 			return FALSE;
 	}
 	return TRUE;
 }
 /* see above */
 void
-traverse_refns (TRAV_RECORD_FUNC func, void *param)
+traverse_refns (BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param)
 {
 	TRAV_REFN_PARAM tparam;
 	tparam.param = param;

@@ -36,7 +36,6 @@
 
 #include "table.h"
 #include "translat.h"
-#include "btree.h" 	/* MTE: for TRAV_RECORD_FUNC declaration */
 
 #ifndef INCLUDED_UIPROMPTS_H
 #include "uiprompts.h"
@@ -451,10 +450,10 @@ BOOLEAN store_record(STRING key, STRING rec, INT len);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
 void termlocale(void);
-void traverse_db_key_recs(TRAV_RECORD_FUNC, void *param);
-void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC func, void *param);
+void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
+void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
 BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
-void traverse_refns(TRAV_RECORD_FUNC func, void *param);
+void traverse_refns(BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param);
 INT tree_strlen(INT, NODE);
 void uilocale(void);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
@@ -534,7 +533,7 @@ BOOLEAN name_to_list(CNSTRING, LIST, INT*, INT*);
 STRING name_string(STRING);
 int namecmp(STRING, STRING);
 void remove_name(STRING, STRING);
-void traverse_names(TRAV_RECORD_FUNC func, void *param);
+void traverse_names(BOOLEAN(*func)(STRING key, CNSTRING name, BOOLEAN newset, void *param), void *param);
 STRING trim_name(STRING, INT);
 
 /* node.c */

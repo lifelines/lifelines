@@ -113,8 +113,8 @@ typedef struct
 
 /* alphabetical */
 static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
-static BOOLEAN cgn_callback(TRAV_RECORD_FUNC_ARGS(key, name, newset, param));
-static BOOLEAN cgr_callback(TRAV_RECORD_FUNC_ARGS(key, refn, newset, param));
+static BOOLEAN cgn_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
+static BOOLEAN cgr_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
 static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(CNSTRING key, RECORD rec);
@@ -133,7 +133,7 @@ static BOOLEAN find_xref(CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2);
 static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
 static void free_namerefn(NAMEREFN_REC * rec);
-static BOOLEAN nodes_callback(TRAV_RECORD_FUNC_ARGS(key, rec, newset, param));
+static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
 static void printblock(BLOCK block);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
@@ -335,9 +335,8 @@ check_ghosts (void)
  * Created: 2001/01/01, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgn_callback (TRAV_RECORD_FUNC_ARGS(rkey, name, newset, param))
+cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
-	STRING key = strsave(rkey2str(rkey));
 	/* a name record which points at indi=key */
 	RECORD indi0 = qkey_to_irecord(key);
 	NODE indi = nztop(indi0);
@@ -348,7 +347,6 @@ cgn_callback (TRAV_RECORD_FUNC_ARGS(rkey, name, newset, param))
 		report_error(ERR_NONINDINAME
 			, _("Non-indi name, key=%s, name=%s")
 			, key, name);
-		free(key);
 		return 1; /* continue traversal */
 	}
 
@@ -384,7 +382,6 @@ cgn_callback (TRAV_RECORD_FUNC_ARGS(rkey, name, newset, param))
 	if (noisy)
 		report_progress("Name: %s", name);
 
-	free(key);
 	return 1; /* continue traversal */
 }
 /*============================================
@@ -393,10 +390,9 @@ cgn_callback (TRAV_RECORD_FUNC_ARGS(rkey, name, newset, param))
  * Created: 2001/01/13, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgr_callback (TRAV_RECORD_FUNC_ARGS(rkey, refn, newset, param))
+cgr_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
 {
 	/* a refn record which points at record=key */
-	STRING key = strsave(rkey2str(rkey));
 	RECORD rec = key_to_record(key);
 	NODE node = nztop(rec);
 	param = param; /* unused */
@@ -417,7 +413,6 @@ cgr_callback (TRAV_RECORD_FUNC_ARGS(rkey, refn, newset, param))
 	if (noisy)
 		report_progress("Refn: %s", refn);
 
-	free(key);
 	return 1; /* continue traversal */
 }
 /*=================================================================
@@ -524,15 +519,11 @@ check_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback (TRAV_RECORD_FUNC_ARGS(rkey, rec, newset, param))
+nodes_callback (CNSTRING key, RECORD rec, void *param)
 {
-	STRING key = strsave(rkey2str(rkey));
-        newset=newset;	/* NOTUSED */
 	param=param;	/* NOTUSED */
-
 	if (noisy)
 		report_progress("Node: %s", key);
-
 	switch (key[0]) {
 	case 'I': return todo.check_indis ? check_indi((CNSTRING)key, (RECORD)rec) : TRUE;
 	case 'F': return todo.check_fams ? check_fam((CNSTRING)key, (RECORD)rec) : TRUE;

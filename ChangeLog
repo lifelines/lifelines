@@ -1,3 +1,9 @@
+2004-10-27 Matt Emmerton
+
+	Revert changes made on 2004-10-16, *except* for the
+	change to src/btree/index.c (which just had changes
+	to comments.)
+
 2004-10-16 Matt Emmerton
 
 	* ChangeLog src/btree/index.c src/btree/traverse.c

@@ -103,19 +103,22 @@ store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
  *=================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC func;
+	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void * param);
 	void * param;
 } TRAV_PARAM;
 /* see above */
 static BOOLEAN
-trav_callback (TRAV_RECORD_FUNC_ARGS(rkey, data, len, param) )
+trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
 	TRAV_PARAM *tparam = (TRAV_PARAM *)param;
-	return tparam->func(rkey, data, len, tparam->param);
+	char key[MAXKEYWIDTH+1];
+	strcpy(key, rkey2str(rkey));
+	return tparam->func(key, data, len, tparam->param);
 }
 /* see above */
 void
-traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC func, void *param)
+traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, 
+	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void *param), void *param)
 {
 	RKEY lo1, hi1;
 	TRAV_PARAM tparam;
@@ -137,30 +140,28 @@ traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC func, void *par
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC func;
+	BOOLEAN(*func)(CNSTRING key, RECORD rec, void * param);
 	void * param;
 } TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
-trav_rec_callback (TRAV_RECORD_FUNC_ARGS (rkey, data, len, param) )
+trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 {
 	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
+	RECORD rec;
 	BOOLEAN keepgoing;
-	char key[MAXKEYWIDTH+1];
-	len=len; /* unused */
-
-	strcpy(key, rkey2str(rkey));
 	if (key[0]!='I' && key[0]!='F' && key[0]!='S' && key[0]!='E' && key[0]!='X')
 		return TRUE;
 	if (!strcmp(data, "DELE\n"))
 		return TRUE;
-
-	keepgoing = tparam->func(rkey, data, 0, tparam->param);
+	rec = string_to_record(data, key, len);
+	keepgoing = tparam->func(key, rec, tparam->param);
+	free_rec(rec);
 	return keepgoing;
 }
 /* see above */
 void
-traverse_db_key_recs (TRAV_RECORD_FUNC func, void *param)
+traverse_db_key_recs (BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param)
 {
 	TRAV_RECORD_PARAM tparam;
 	CNSTRING lo,hi;
