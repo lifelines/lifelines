@@ -20,6 +20,10 @@
 	New traversal macro FORFAMSPOUSES.
 	Fixes sf bug#1102130 (parentset doesn't include extra parents)
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Simplify indi_to_spouses to use new FORFAMSPOUSES.
+
 2005-01-13 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

@@ -1189,22 +1189,14 @@ indi_to_spouses (NODE indi)
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
 	FORFAMS(indi, fam, num)
-		FORHUSBS(fam, husb, num1)
-			if(husb != indi) {
+		FORFAMSPOUSES(fam, spouse, num1)
+			if (spouse != indi) {
 				len++;
-				key = indi_to_key(husb);
+				key = indi_to_key(spouse);
 				val = atoi(fam_to_key(fam) + 1);
 				append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 			}
-		ENDHUSBS
-		FORWIFES(fam, wife, num1)
-			if(wife != indi) {
-				len++;
-				key = indi_to_key(wife);
-				val = atoi(fam_to_key(fam) + 1);
-				append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
-			}
-		ENDWIFES
+		ENDFAMSPOUSES
 	ENDFAMS
 	if (!len) {
 		remove_indiseq(seq);
