@@ -6,7 +6,8 @@
 	interp/intrpseq.c interp/more.c interp/pvalue.c interp/rassa.c
 	liflines/Makefile.am liflines/browse.c liflines/main.c
 	liflines/screen.c liflines/show.c stdlib/double.c
-	win32/msvc6/llines/llinesprj.dsp:
+	win32/msvc6/llines/llinesprj.dsp
+	*NEW hdrs/date.h:
 
 	Moved date function declarations out of interp.h into new
 	date.h. Changed some calls to prog_error to new prog_var_error.
