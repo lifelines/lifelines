@@ -99,6 +99,15 @@ STRING nohusb = SS "This family has no male spouse/parent in the database.";
 STRING nowife = SS "This family has no female spouse/parent in the database.";
 STRING nocinf = SS "There are no children in the database for this family.";
 STRING nocofp = SS "This person has no children in the database.";
+STRING nochil = SS "No such child.";
+STRING nopers = SS "No such person.";
+STRING nofam  = SS "No such family.";
+STRING nosour = SS "No sources present.";
+STRING idsour = SS "Please choose the source to view.";
+STRING noeven = SS "No events present.";
+STRING ideven = SS "Please choose the event to view.";
+STRING noothe = SS "No others present.";
+STRING idothe = SS "Please choose the other to view.";
 
 STRING nosex  = SS "New spouse/parent has unknown sex; can't add to family.";
 STRING notopp = SS "The persons are not of opposite sex; can't make family.";

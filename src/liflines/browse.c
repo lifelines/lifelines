@@ -41,6 +41,8 @@
 
 #include "llinesi.h"
 
+extern STRING nochil, nopers, nofam, nosour, idsour;
+extern STRING nosour, idsour, noeven, ideven, noothe, idothe;
 extern STRING idsbrs, idsrmv, idfbrs, idcbrs, idcrmv, iscnew, issnew;
 extern STRING idfcop, ntprnt, nofath, nomoth, nospse, noysib, noosib;
 extern STRING noprnt, nohusb, nowife, hasbth, hasnei, nocinf, nocofp;
@@ -93,6 +95,30 @@ browse (NODE indi1)
 			code = browse_list(ALLPARMS); break;
 		}
 	}
+}
+/*================================================
+ * rkeynum_to_indi -- Convert a numeric key to an indi node
+ *  report mode - it returns NULL if failed (eg, no other indi)
+ *==============================================*/
+static NODE
+rkeynum_to_indi(int keynum)
+{
+	char keystr[33];
+	strcpy(keystr, "I");
+	itoa(keynum, keystr+1, 10);
+	return rkey_to_indi(keystr);
+}
+/*================================================
+ * rkeynum_to_fam -- Convert a numeric key to a fam node
+ *  report mode - it returns NULL if failed (eg, no other fam)
+ *==============================================*/
+static NODE
+rkeynum_to_fam(int keynum)
+{
+	char keystr[33];
+	strcpy(keystr, "F");
+	itoa(keynum, keystr+1, 10);
+	return rkey_to_fam(keystr);
 }
 /*================================================
  * browse_indi -- Handle person browse operations.
@@ -303,6 +329,24 @@ browse_indi (NODE *pindi1,
 		case 'A':	/* Advanced person edit */
 			advanced_person_edit(indi);
 			break;
+		case '+':	/* Go to next indi in db */
+			{
+				i = atoi(key_of_record(indi));
+				i = xref_nexti(i);
+				if (i)
+					indi = rkeynum_to_indi(i);
+				else message(nopers);
+				break;
+			}
+		case '-':	/* Go to prev indi in db */
+			{
+				i = atoi(key_of_record(indi));
+				i = xref_previ(i);
+				if (i)
+					indi = rkeynum_to_indi(i);
+				else message(nopers);
+				break;
+			}
 		case 'q':
 		default:
 			return BROWSE_QUIT;
@@ -512,6 +556,24 @@ browse_fam (NODE *pindi,
 		case 'x':	/* Swap two children */
 			swap_children(NULL, fam);
 			break;
+		case '+':	/* Go to next fam in db */
+			{
+				i = atoi(key_of_record(fam));
+				i = xref_nextf(i);
+				if (i)
+					fam = rkeynum_to_fam(i);
+				else message(nofam);
+				break;
+			}
+		case '-':	/* Go to prev indi in db */
+			{
+				i = atoi(key_of_record(fam));
+				i = xref_prevf(i);
+				if (i)
+					fam = rkeynum_to_fam(i);
+				else message(nofam);
+				break;
+			}
 		case 'q':
 		default:
 			return BROWSE_QUIT;
@@ -529,7 +591,7 @@ browse_pedigree (NODE *pindi,
                  INDISEQ *pseq)
 {
 	NODE node, indi = *pindi;
-	INT rc;
+	INT i, rc;
 	STRING key, name;
 	INDISEQ seq = NULL;
 	if (!indi) return BROWSE_QUIT;
@@ -576,6 +638,24 @@ browse_pedigree (NODE *pindi,
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
+		case '+':	/* Go to next indi in db */
+			{
+				i = atoi(key_of_record(indi));
+				i = xref_nexti(i);
+				if (i)
+					indi = rkeynum_to_indi(i);
+				else message(nopers);
+				break;
+			}
+		case '-':	/* Go to prev indi in db */
+			{
+				i = atoi(key_of_record(indi));
+				i = xref_previ(i);
+				if (i)
+					indi = rkeynum_to_indi(i);
+				else message(nopers);
+				break;
+			}
 		case 'q':
 		default:
 			return BROWSE_QUIT;

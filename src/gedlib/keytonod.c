@@ -50,11 +50,13 @@ INT csz_othr = 200;		/* cache size for othr */
 INT icsz_othr = 2000;		/* indirect cache size for othr */
 
 static CACHE create_cache(INT, INT);
-static NODE key_to_node(CACHE, STRING, STRING);
+static NODE key_to_node (CACHE cache, STRING key, STRING tag);
+static NODE rkey_to_node (CACHE cache, STRING key, STRING tag);
 static CACHEEL key_to_cacheel(CACHE, STRING, STRING, INT);
 static void dereference(CACHEEL);
 
 static CACHE indicache, famcache, evencache, sourcache, othrcache;
+
 static char keybuf[10][32] = { "", "", "", "", "", "", "", "", "", ""};
 static int keyidx = 0;
 
@@ -62,15 +64,42 @@ char badkeylist[100] = "";
 int listbadkeys = 0;
 
 /*=====================================
+ * key_to_type -- Convert key to specified type
+ *===================================*/
+NODE key_to_type (STRING key, STRING type, INT reportmode)
+{
+	if (eqstr(type, "INDI"))
+		return reportmode ? rkey_to_indi(key) : key_to_indi(key);
+	if (eqstr(type, "FAM"))
+		return reportmode ? rkey_to_fam(key) : key_to_fam(key);
+	if (eqstr(type, "EVEN"))
+		return reportmode ? rkey_to_even(key) : key_to_even(key);
+	if (eqstr(type, "SOUR"))
+		return reportmode ? rkey_to_sour(key) : key_to_sour(key);
+	return reportmode ? rkey_to_othr(key) : key_to_othr(key);
+}
+
+/*=====================================
  * key_to_indi -- Convert key to person
+ * (asserts if failure)
  *===================================*/
 NODE
 key_to_indi (STRING key)
 {
 	return key_to_node(indicache, key, "INDI");
 }
+/*=====================================
+ * rkey_to_indi -- Convert key to person
+ * report mode (returns NULL if failure)
+ *===================================*/
+NODE
+rkey_to_indi (STRING key)
+{
+	return rkey_to_node(indicache, key, "INDI");
+}
 /*====================================
  * key_to_fam -- Convert key to family
+ * (asserts if failure)
  *==================================*/
 NODE
 key_to_fam (STRING key)
@@ -78,28 +107,67 @@ key_to_fam (STRING key)
 	return key_to_node(famcache, key, "FAM");
 }
 /*====================================
+ * rkey_to_fam -- Convert key to family
+ * report mode (returns NULL if failure)
+ *==================================*/
+NODE
+rkey_to_fam (STRING key)
+{
+	return rkey_to_node(famcache, key, "FAM");
+}
+/*====================================
  * key_to_even -- Convert key to event
+ * (asserts if failure)
  *==================================*/
 NODE
 key_to_even (STRING key)
 {
 	return key_to_node(evencache, key, "EVEN");
 }
+/*====================================
+ * rkey_to_even -- Convert key to event
+ * report mode (returns NULL if failure)
+ *==================================*/
+NODE
+rkey_to_even (STRING key)
+{
+	return rkey_to_node(evencache, key, "EVEN");
+}
 /*=====================================
  * key_to_sour -- Convert key to source
+ * (asserts if failure)
  *===================================*/
 NODE
 key_to_sour (STRING key)
 {
 	return key_to_node(sourcache, key, "SOUR");
 }
+/*=====================================
+ * rkey_to_sour -- Convert key to source
+ * report mode (returns NULL if failure)
+ *===================================*/
+NODE
+rkey_to_sour (STRING key)
+{
+	return rkey_to_node(sourcache, key, "SOUR");
+}
 /*====================================
  * key_to_othr -- Convert key to other
+ * (asserts if failure)
  *==================================*/
 NODE
 key_to_othr (STRING key)
 {
 	return key_to_node(othrcache, key, NULL);
+}
+/*====================================
+ * rkey_to_othr -- Convert key to other
+ * report mode (returns NULL if failure)
+ *==================================*/
+NODE
+rkey_to_othr (STRING key)
+{
+	return rkey_to_node(othrcache, key, NULL);
 }
 /*=====================================================
  * key_to_indi_cacheel -- Convert key to person cacheel
@@ -411,15 +479,26 @@ key_to_cacheel (CACHE cache,
 }
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
+ * asserts if failure
  *=============================================================*/
 static NODE
-key_to_node (CACHE cache,
-             STRING key,
-             STRING tag)
+key_to_node (CACHE cache, STRING key, STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE))) return NULL;
+	return cnode(cel);
+}
+/*===============================================================
+ * rkey_to_node -- Return tree from key; add to cache if not there
+ * report mode - returns NULL if failure
+ *=============================================================*/
+static NODE
+rkey_to_node (CACHE cache, STRING key, STRING tag)
+{
+	CACHEEL cel;
+	ASSERT(cache && key);
+	if (!(cel = key_to_cacheel(cache, key, tag, TRUE))) return NULL;
 	return cnode(cel);
 }
 /*======================================

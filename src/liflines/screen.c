@@ -580,7 +580,8 @@ indi_browse (NODE indi)
 	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
 	show_person(indi, 1, PER_LINES);
 	display_screen(ONE_PER_SCREEN);
-	return interact(main_win, "efmscoygubhirdpnaxtzqACFGMSU");
+	return interact(main_win,
+		"efmscoygubhirdpnaxtzqACFGMSU+-");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -591,7 +592,8 @@ fam_browse (NODE fam)
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
 	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
-	return interact(main_win, "efmcnsardxtbzqABCFM");
+	return interact(main_win, 
+		"efmcnsardxtbzqABCFM+-");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen
@@ -627,7 +629,8 @@ ped_browse (NODE indi)
 	if (cur_screen != PED_SCREEN) paint_ped_screen();
 	show_pedigree(indi);
 	display_screen(PED_SCREEN);
-	return interact(main_win, "eifmscgbq");
+	return interact(main_win,
+		"eifmscgb+-q");
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen

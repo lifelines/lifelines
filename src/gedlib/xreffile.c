@@ -43,6 +43,8 @@ extern BTREE BTR;
  *   and other keys in file; remaining words are keys, in respective
  *   order, for the records; first in each group is next unused key;
  *   rest are keys of deleted records
+ * nixrefs==1 means there are no deleted INDI keys
+ * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
 
 static INT nixrefs;	/* num of INDI keys */
@@ -403,19 +405,19 @@ STRING
 newixref (STRING xrefp, /* key of the individual */
           BOOLEAN flag) /* use the current key */
 {
-    INT n;
-    BOOLEAN changed;
-    static unsigned char scratch[12];
-    if(flag) {
-	n = atoi(xrefp+1);
-	changed = ((nixrefs != 1) || (n >= ixrefs[0]));
-	if(nixrefs != 1) nixrefs = 1;	/* forget about deleted entries */
-	if(n >= ixrefs[0]) ixrefs[0] = n+1;	/* next available */
-	if(changed) ASSERT(writexrefs());
-	sprintf(scratch, "@%s@", xrefp);
-	return(scratch);
-    }
-    return(getixref());
+	INT n;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		n = atoi(xrefp+1);
+		changed = ((nixrefs != 1) || (n >= ixrefs[0]));
+		if(nixrefs != 1) nixrefs = 1;	/* forget about deleted entries */
+		if(n >= ixrefs[0]) ixrefs[0] = n+1;	/* next available */
+		if(changed) ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getixref());
 }
 /*================================================
  * newfxref -- Return original or next fxref value
@@ -424,19 +426,19 @@ STRING
 newfxref (STRING xrefp, /* key of the individual */
           BOOLEAN flag) /* use the current key */
 {
-    INT n;
-    BOOLEAN changed;
-    static unsigned char scratch[12];
-    if(flag) {
-	n = atoi(xrefp+1);
-	changed = ((nfxrefs != 1) || (n >= fxrefs[0]));
-	nfxrefs = 1;	/* forget about deleted entries */
-	if(n >= fxrefs[0]) fxrefs[0] = n+1;	/* next available */
-	if(changed) ASSERT(writexrefs());
-	sprintf(scratch, "@%s@", xrefp);
-	return(scratch);
-    }
-    return(getfxref());
+	INT n;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		n = atoi(xrefp+1);
+		changed = ((nfxrefs != 1) || (n >= fxrefs[0]));
+		nfxrefs = 1;	/* forget about deleted entries */
+		if(n >= fxrefs[0]) fxrefs[0] = n+1;	/* next available */
+		if(changed) ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getfxref());
 }
 /*================================================
  * newsxref -- Return original or next sxref value
@@ -445,19 +447,19 @@ STRING
 newsxref (STRING xrefp, /* key of the individual */
           BOOLEAN flag) /* use the current key */
 {
-    INT n;
-    BOOLEAN changed;
-    static unsigned char scratch[12];
-    if(flag) {
-	n = atoi(xrefp+1);
-	changed = ((nsxrefs != 1) || (n >= sxrefs[0]));
-	nsxrefs = 1;	/* forget about deleted entries */
-	if(n >= sxrefs[0]) sxrefs[0] = n+1;	/* next available */
-	if(changed) ASSERT(writexrefs());
-	sprintf(scratch, "@%s@", xrefp);
-	return(scratch);
-    }
-    return(getsxref());
+	INT n;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		n = atoi(xrefp+1);
+		changed = ((nsxrefs != 1) || (n >= sxrefs[0]));
+		nsxrefs = 1;	/* forget about deleted entries */
+		if(n >= sxrefs[0]) sxrefs[0] = n+1;	/* next available */
+		if(changed) ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getsxref());
 }
 /*================================================
  * newexref -- Return original or next exref value
@@ -466,19 +468,19 @@ STRING
 newexref (STRING xrefp, /* key of the individual */
           BOOLEAN flag) /* use the current key */
 {
-    INT n;
-    BOOLEAN changed;
-    static unsigned char scratch[12];
-    if(flag) {
-	n = atoi(xrefp+1);
-	changed = ((nexrefs != 1) || (n >= exrefs[0]));
-	nexrefs = 1;	/* forget about deleted entries */
-	if(n >= exrefs[0]) exrefs[0] = n+1;	/* next available */
-	if(changed) ASSERT(writexrefs());
-	sprintf(scratch, "@%s@", xrefp);
-	return(scratch);
-    }
-    return(getexref());
+	INT n;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		n = atoi(xrefp+1);
+		changed = ((nexrefs != 1) || (n >= exrefs[0]));
+		nexrefs = 1;	/* forget about deleted entries */
+		if(n >= exrefs[0]) exrefs[0] = n+1;	/* next available */
+		if(changed) ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getexref());
 }
 /*================================================
  * newxxref -- Return original or next xxref value
@@ -487,17 +489,112 @@ STRING
 newxxref (STRING xrefp, /* key of the individual */
           BOOLEAN flag) /* use the current key */
 {
-    INT n;
-    BOOLEAN changed;
-    static unsigned char scratch[12];
-    if(flag) {
-	n = atoi(xrefp+1);
-	changed = ((nxxrefs != 1) || (n >= xxrefs[0]));
-	nxxrefs = 1;	/* forget about deleted entries */
-	if(n >= xxrefs[0]) xxrefs[0] = n+1;	/* next available */
-	if(changed) ASSERT(writexrefs());
-	sprintf(scratch, "@%s@", xrefp);
-	return(scratch);
-    }
-    return(getxxref());
+	INT n;
+	BOOLEAN changed;
+	static unsigned char scratch[12];
+	if(flag) {
+		n = atoi(xrefp+1);
+		changed = ((nxxrefs != 1) || (n >= xxrefs[0]));
+		nxxrefs = 1;	/* forget about deleted entries */
+		if(n >= xxrefs[0]) xxrefs[0] = n+1;	/* next available */
+		if(changed) ASSERT(writexrefs());
+		sprintf(scratch, "@%s@", xrefp);
+		return(scratch);
+	}
+	return(getxxref());
+}
+/*================================================
+ * xref_isvalid_impl -- is this a valid whatever ?
+ * (internal use)
+ *==============================================*/
+static INT
+xref_isvalid_impl(INT nxrefs, INT * xrefs, INT i)
+{
+	int j;
+	if (nxrefs == xrefs[0]) return 0; /* no valids */
+	/* we should keep xrefs[] sorted! */
+	for (j=1; j< nxrefs; j++)
+		if (i == xrefs[j])
+			return 0;
+	return 1;
+}
+/*================================================
+ * xref_next -- Return next valid whatever after i (or 0)
+ *==============================================*/
+INT
+xref_next(INT nxrefs, INT * xrefs, INT i)
+{
+	if (nxrefs == xrefs[0]) return 0; /* no valids */
+	while (++i < xrefs[0])
+	{
+		if (xref_isvalid_impl(nxrefs, xrefs, i)) return i;
+	}
+	return 0;
+}
+/*================================================
+ * xref_prev -- Return prev valid whatever before i (or 0)
+ *==============================================*/
+INT
+xref_prev(INT nxrefs, INT * xrefs, INT i)
+{
+	if (nxrefs == xrefs[0]) return 0; /* no valids */
+	while (--i)
+	{
+		if (xref_isvalid_impl(nxrefs, xrefs, i)) return i;
+	}
+	return 0;
+}
+/*================================================
+ * xref_nexti -- Return next valid indi after i (or 0)
+ *==============================================*/
+INT
+xref_nexti(INT i)
+{
+	return xref_next(nixrefs, ixrefs, i);
+}
+/*================================================
+ * xref_previ -- Return prev valid indi before i (or 0)
+ *==============================================*/
+INT
+xref_previ(INT i)
+{
+	return xref_prev(nixrefs, ixrefs, i);
+}
+/*================================================
+ * xref_nextf -- Return next valid indi after i (or 0)
+ *==============================================*/
+INT xref_nextf(INT i)
+{
+	return xref_next(nfxrefs, fxrefs, i);
+}
+/*================================================
+ * xref_prevf -- Return prev valid indi before i (or 0)
+ *==============================================*/
+INT xref_prevf(INT i)
+{
+	return xref_prev(nfxrefs, fxrefs, i);
+}
+/*================================================
+ * xref_nexts -- Return next valid indi after i (or 0)
+ *==============================================*/
+INT
+xref_nexts(INT i)
+{
+	return xref_next(nsxrefs, sxrefs, i);
+}
+/*================================================
+ * xref_nexte -- Return next valid event after i (or 0)
+ *==============================================*/
+INT
+xref_nexte(INT i)
+{
+	return xref_next(nexrefs, exrefs, i);
+}
+/*================================================
+ * xref_nextx -- Return next valid other after i (or 0)
+ *==============================================*/
+INT
+xref_nextx(INT i)
+{
+	return xref_next(nxxrefs, xxrefs, i);
 }

@@ -242,6 +242,11 @@ void resolve_links(NODE);
 BOOLEAN resolve_traverse(NODE);
 BOOLEAN retrieve_file(STRING, STRING);
 STRING retrieve_record(STRING, INT*);
+NODE rkey_to_even(STRING);
+NODE rkey_to_fam(STRING);
+NODE rkey_to_indi(STRING);
+NODE rkey_to_othr(STRING);
+NODE rkey_to_sour(STRING);
 STRING rmvat(STRING);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
@@ -273,6 +278,13 @@ BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
 void write_nodes(INT, FILE*, TRANTABLE, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
+INT xref_nexti(INT);
+INT xref_previ(INT);
+INT xref_nextf(INT);
+INT xref_prevf(INT);
+INT xref_nexts(INT);
+INT xref_nexte(INT);
+INT xref_nextx(INT);
 
 #define fam_to_event indi_to_event
 

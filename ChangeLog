@@ -1,4 +1,14 @@
 2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
+	gedlib/keytonod.c gedlib/messages.c gedlib/xreffile.c
+	hdrs/gedcom.h
+	liflines/browse.c liflines/screen.c:
+	Added some next & prev functions for keys & is_valid (xreffile.c)
+	Added db sequential browsing ('+' and '-') to browse_indi,
+	browse_fam, and browse_pedigree.
+	Added supporting functions
+	rkeynum_to_indi (browse.c), rkey_to_indi etc (keytonod.c).
+
+2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
 	hdrs/gedcom.h liflines/add.c:
 	Split up functions in add.c, breaking out non-interactive
 	portions for use by the new GUI code under development.
