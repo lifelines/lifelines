@@ -116,7 +116,8 @@ add_indi_by_edit (void)
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			snprintf(msgb, sizeof(msgb)
+				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
 				write_indi_to_editfile(indi);
 				do_edit();
@@ -589,7 +590,8 @@ editfam:
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			snprintf(msgb, sizeof(msgb)
+				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
 				write_fam_to_editfile(fam2);
 				do_edit();

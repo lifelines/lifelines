@@ -70,7 +70,7 @@ extern TRANTABLE tran_tables[];
  *********************************************/
 
 /* alphabetical */
-static void restore_record(struct import_feedback * ifeed, NODE node, INT type, INT num);
+static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 static BOOLEAN translate_values(NODE, VPTR);
 
@@ -174,7 +174,7 @@ TODO: why were these here ?
 		case OTHR_REC: num = ++nothr; break;
 		default: FATAL();
 		}
-		restore_record(ifeed, conv, type, num);
+		restore_record(conv, type, num);
 		if (ifeed && ifeed->added_rec_fnc)
 			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
 		free_nodes(node);
@@ -203,7 +203,7 @@ end_import:
  * restore_record -- Restore record to database
  *===========================================*/
 static void
-restore_record (struct import_feedback * ifeed, NODE node, INT type, INT num)
+restore_record (NODE node, INT type, INT num)
 {
 	STRING old, new, str, key;
 	char scratch[10];

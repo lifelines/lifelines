@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.12\n"
-"POT-Creation-Date: 2002-06-08 04:20-0400\n"
+"POT-Creation-Date: 2002-06-08 07:19-0400\n"
 "PO-Revision-Date: 2002-06-03 19:20+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2817,25 +2817,58 @@ msgstr "Rad %d: Familjen %s har länkar till mer än en make."
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en maka."
 
-#: liflines/loadsave.c:143
+#: liflines/loadsave.c:81
+#, fuzzy
+msgid "Person"
+msgid_plural "Persons"
+msgstr[0] "person"
+msgstr[1] "person"
+
+#: liflines/loadsave.c:85
+msgid "Family"
+msgid_plural "Families"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:89
+msgid "Source"
+msgid_plural "Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:93
+#, fuzzy
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "vent"
+msgstr[1] "vent"
+
+#: liflines/loadsave.c:97
+#, fuzzy
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] "ther"
+msgstr[1] "ther"
+
+#: liflines/loadsave.c:145
 #, fuzzy
 msgid "Checking GEDCOM file for errors.\n"
 msgstr "Letar i GEDCOM-filen %s efter fel.\n"
 
-#: liflines/loadsave.c:158
+#: liflines/loadsave.c:160
 msgid "The database is read-only; loading has been canceled."
 msgstr "Databasen är skrivskyddad; laddningen har avbrutits."
 
-#: liflines/loadsave.c:164
+#: liflines/loadsave.c:166
 msgid "Adding unused keys as deleted keys..."
 msgstr "Lägger till obrukade nycklar som borttagna nycklar..."
 
-#: liflines/loadsave.c:170
+#: liflines/loadsave.c:172
 #, fuzzy, c-format
 msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
 msgstr "Databasposter (%dI, %dF, %dS, %dE, %dX)"
 
-#: liflines/loadsave.c:195
+#: liflines/loadsave.c:197
 msgid "Please enter the name of the GEDCOM file."
 msgstr "Skriv in namnet på GEDCOM-filen."
 

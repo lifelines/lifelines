@@ -14,6 +14,12 @@
 	Implement opening database from list at start.
 	Put all the m4 files into EXTRA_DIST (otherwise make fails).
 
+	* ChangeLog hdrs/standard.h liflines/add.c liflines/edit.c
+	liflines/import.c liflines/loadsave.c liflines/newrecs.c
+	po/Makevars po/de.po po/el.po po/it.po po/sv.po:
+
+	Fix plural forms (must use ngettext directly, not macro).
+
 2002-06-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/ll-userguide.xml:

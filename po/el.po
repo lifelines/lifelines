@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.10\n"
-"POT-Creation-Date: 2002-06-08 04:20-0400\n"
+"POT-Creation-Date: 2002-06-08 07:19-0400\n"
 "PO-Revision-Date: 2002-05-28 21:06-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -2783,23 +2783,53 @@ msgstr ""
 msgid "Line %d: Family %s has multiple wife links."
 msgstr ""
 
-#: liflines/loadsave.c:143
+#: liflines/loadsave.c:81
+msgid "Person"
+msgid_plural "Persons"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:85
+msgid "Family"
+msgid_plural "Families"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:89
+msgid "Source"
+msgid_plural "Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:93
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:97
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:145
 msgid "Checking GEDCOM file for errors.\n"
 msgstr ""
 
-#: liflines/loadsave.c:158
+#: liflines/loadsave.c:160
 msgid "The database is read-only; loading has been canceled."
 msgstr ""
 
-#: liflines/loadsave.c:164
+#: liflines/loadsave.c:166
 msgid "Adding unused keys as deleted keys..."
 msgstr ""
 
-#: liflines/loadsave.c:170
+#: liflines/loadsave.c:172
 #, c-format
 msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
 msgstr ""
 
-#: liflines/loadsave.c:195
+#: liflines/loadsave.c:197
 msgid "Please enter the name of the GEDCOM file."
 msgstr ""

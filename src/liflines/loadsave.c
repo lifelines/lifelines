@@ -51,9 +51,9 @@ static void import_error_invalid(STRING reason);
 static void import_readonly(void);
 static void import_validated_rec(char ctype, STRING tag, INT count);
 static void import_validating(void);
+static void import_validation_error(STRING msg);
+static void import_validation_warning(STRING msg);
 static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
-static void validation_error(STRING msg);
-static void validation_warning(STRING msg);
 
 /*********************************************
  * local variables
@@ -78,23 +78,23 @@ update_rec_count (INT pass, char ctype, STRING tag, INT count)
 
 	switch(ctype) {
 	case 'I':
-		numstr = _pl("Person", "Persons", count);
+		numstr = ngettext("Person", "Persons", count);
 		row = 1;
 		break;
 	case 'F':
-		numstr = _pl("Family", "Families", count);
+		numstr = ngettext("Family", "Families", count);
 		row = 2;
 		break;
 	case 'S':
-		numstr = _pl("Source", "Sources", count);
+		numstr = ngettext("Source", "Sources", count);
 		row = 3;
 		break;
 	case 'E':
-		numstr = _pl("Event", "Events", count);
+		numstr = ngettext("Event", "Events", count);
 		row = 4;
 		break;
 	default: 
-		numstr = _pl("Other", "Others", count);
+		numstr = ngettext("Other", "Others", count);
 		row = 5;
 		break;
 	}
@@ -126,10 +126,12 @@ clear_rec_counts (INT pass)
 static void
 import_validation_warning (STRING msg)
 {
+	wfield(7, 1, msg);
 }
 static void
 import_validation_error (STRING msg)
 {
+	wfield(6, 1, msg);
 }
 static void
 import_error_invalid (STRING reason)

@@ -185,7 +185,8 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			snprintf(msgb, sizeof(msgb)
+				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, redtopt)) {
 				write_node_to_editfile(node);
 				do_edit();
@@ -324,7 +325,8 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			snprintf(msgb, sizeof(msgb), _pl(qSbadreflink, qSbadreflinks, cnt), cnt);
+			snprintf(msgb, sizeof(msgb)
+				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, redtopt)) {
 				write_node_to_editfile(root2);
 				do_edit();
