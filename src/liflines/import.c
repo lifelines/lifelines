@@ -60,7 +60,7 @@ extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel,
   cfoldk, dbdelk, dbrdon;
 extern TRANTABLE tran_tables[];
 
-static BOOLEAN translate_values();
+static BOOLEAN translate_values(NODE);
 static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 

@@ -57,7 +57,7 @@ set_list_type (LIST list,
  *=========================*/
 void
 remove_list (LIST list,
-             int (*func)(WORD))
+             void (*func)(WORD))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;

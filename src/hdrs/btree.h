@@ -127,7 +127,7 @@ RECORD getrecord(BTREE, RKEY, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
 
 /* traverse.c */
-BOOLEAN traverse(BTREE, INDEX, BOOLEAN (*ifunc)(), BOOLEAN (*dfunc)());
+BOOLEAN traverse(BTREE, INDEX, BOOLEAN (*ifunc)(BTREE, INDEX), BOOLEAN (*dfunc)(BTREE, BLOCK));
 
 /* utils.c */
 STRING rkey2str(RKEY);

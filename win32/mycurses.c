@@ -29,6 +29,10 @@
 #include <fcntl.h>
 #include <curses.h>
 
+static void mycur_init();
+static int mycur_getc();
+
+
 /* Windows Console */
 
 static int first = TRUE;
@@ -298,6 +302,7 @@ int vwprintw(WINDOW *wp, char *fmtp, va_list ap)
 	char tmpbuf[2048]; /* help what should this be ? */
 	_vsnprintf(tmpbuf, sizeof(tmpbuf), fmtp, ap);
 	waddstr(wp, tmpbuf);
+	return(0);
 }
 
 int wprintw(WINDOW *wp, ...)
@@ -505,7 +510,7 @@ int wgetstr(WINDOW *wp, char *cp)
 
 /* Win32 Stuff */
 
-int mycur_init()
+static void mycur_init()
 {
 	COORD cStartPos;
 	DWORD dwLen;
@@ -514,16 +519,16 @@ int mycur_init()
 	  {
 	  /* set up alternate character set values */
 
-	  ACS_VLINE = 179;
-	  ACS_HLINE = 196;
-	  ACS_BTEE = 193;
-	  ACS_TTEE = 194;
-	  ACS_RTEE = 180;
-	  ACS_LTEE = 195;
-	  ACS_ULCORNER = 218;
-	  ACS_LRCORNER = 217;
-	  ACS_URCORNER = 191;
-	  ACS_LLCORNER = 192;
+	  ACS_VLINE = (CHTYPE)179;
+	  ACS_HLINE = (CHTYPE)196;
+	  ACS_BTEE = (CHTYPE)193;
+	  ACS_TTEE = (CHTYPE)194;
+	  ACS_RTEE = (CHTYPE)180;
+	  ACS_LTEE = (CHTYPE)195;
+	  ACS_ULCORNER = (CHTYPE)218;
+	  ACS_LRCORNER = (CHTYPE)217;
+	  ACS_URCORNER = (CHTYPE)191;
+	  ACS_LLCORNER = (CHTYPE)192;
 
 	  /* set up console I/O */
 	  first = FALSE;
@@ -567,7 +572,7 @@ int mycur_init()
 	  }
 }
 
-int mycur_getc()
+static int mycur_getc()
 {
 	char buf[64];
 	DWORD dwLen;

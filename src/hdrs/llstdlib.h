@@ -45,7 +45,7 @@ INT length_list(LIST);
 void make_list_empty(LIST);
 WORD pop_list(LIST);
 void push_list(LIST, WORD);
-void remove_list(LIST, int (*func)(WORD));
+void remove_list(LIST, void (*func)(WORD));
 void set_list_element(LIST, INT, WORD);
 void set_list_type(LIST, INT);
 

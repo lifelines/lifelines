@@ -251,7 +251,7 @@ BOOLEAN store_record(STRING, STRING, INT);
 NODE string_to_node(STRING);
 void striptrail(STRING);
 BOOLEAN symbolic_link(STRING);
-BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)());
+BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)(NODE));
 INT tree_strlen(INT, NODE);
 STRING trim_name(STRING, INT);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);

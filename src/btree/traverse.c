@@ -33,7 +33,7 @@
 BOOLEAN
 traverse (BTREE btree, INDEX index,
           BOOLEAN (*ifunc)(BTREE, INDEX),
-          BOOLEAN (*dfunc)(BTREE, INDEX))
+          BOOLEAN (*dfunc)(BTREE, BLOCK))
 {
 	INDEX newdex;
 	STRING bdir = bbasedir(btree);
@@ -55,6 +55,6 @@ traverse (BTREE btree, INDEX index,
 		return TRUE;
 	}
 	if (dfunc != NULL)
-		return (*dfunc)(btree, index);
+		return (*dfunc)(btree, (BLOCK)index);
 	return TRUE;
 }
