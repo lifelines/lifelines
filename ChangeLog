@@ -1,3 +1,11 @@
+2004-03-08 Perry Rapp
+
+	* ChangeLog
+	*NEW dbfuncs.h
+	*NEW dbfuncsi.h
+
+	New interface headers for database functions.
+
 2004-01-29 Perry Rapp
 
 	* ChangeLog docs/ll-userguide.xml
