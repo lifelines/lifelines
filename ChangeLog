@@ -1,3 +1,8 @@
+2001-08-12  Marc Nozell  <marc@thelahunginjeet.nozell.com>
+
+	* reports/book-latex.ll: Dennis Nicklaus provided an updated
+	book-latex.ll.  
+
 2001-08-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg btree/record.c gedlib/intrface.c

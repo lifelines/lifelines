@@ -1,7 +1,7 @@
 /*
 ** @progname       book-latex
 ** @author         Nicklaus
-** @version        2.5
+** @version        3
 ** @category       
 ** @output         LaTeX
 ** @description    
@@ -11,13 +11,8 @@
 ** SourceForge Versions:
 **
 ** $Log$
-** Revision 1.6  2001/07/11 04:16:41  dabright
-**         * reports/book-latex.ll: Added CREM (cremated) tag processing;
-** 	modified OCCU tag processing so that it can recognize date ranges
-** 	(and so avoid saying "xx is a yy and a zz and a ..."); modified
-** 	OCCU tag processing to recognize a subordinate AGNC tag indicating
-** 	employer; modified onDate to recognize date ranges (FROM dd mmm
-** 	yyyy TO dd mmm yyyy) - this still has some rough edges.
+** Revision 1.7  2001/08/12 20:53:59  nozell
+** Update by Dennis Nicklaus to his book-latex.ll
 **
 ** Revision 1.5  2000/11/28 21:39:45  nozell
 ** Add keyword tags to all reports
@@ -46,8 +41,8 @@
 **
 ** Pre-SourceForge history:
 **
+## Dennis Nicklaus (dnicklaus at yahoo.com)
 ** Version 2.5     Feb. 2000
-## Dennis Nicklaus (nicklaus@fnal.gov    or    nicklaus@writeme.com)
 **
 ** Requires LifeLines version 2.3.3 or later
 ** Requires tree.tex (for formatting)   (tex macros for tree drawing).
@@ -109,7 +104,7 @@
 	Something like this could be used:
      "This document was prepared using LifeLines v." version() " genealogical database program\n"
      "by Thomas T.~Wetmore~IV, {\\tt ttw@beltway.att.com}. The script {\\tt book-latex}\n"
-     "by Dennis Nicklaus {\\tt nicklaus@writeme.com} was used to generate the \\LaTeX\\ code.\n"
+     "by Dennis Nicklaus {\\tt dnicklaus at yahoo.com} was used to generate the \\LaTeX\\ code.\n"
 
 */
 /* WHAT DENNIS NICKLAUS DID:
@@ -276,7 +271,7 @@
 		  which tells me everything about the person and
 		  I don't want to mess things up by citing it
 		  separately 8 times for birth, death, marr,...
-     1 evnt ...	- BIRT, CHR, DEAT, BURI, CREM, MARR, DIV, DIVF, or ANUL,...
+     1 evnt ...	- BIRT, CHR, DEAT, BURI, MARR, DIV, DIVF, or ANUL,...
      2 DATE ...	- Date should be of format
 		  [ABT|BEF|AFT|BET] [day] [JAN|...|DEC] [year] [-year for BET]
      2 PLAC ...	- Comma separated list of localities appropriate for the
@@ -290,8 +285,6 @@
      2 NOTE ... - Text to be inserted in book following technical details
 		  of the event. (I use this instead of TEXT)
      3 SOUR ...	- Source for text.
-     1 OCCU ... - Description (title) of an occupation (job).
-     2 AGNC ... - Employer (produces "worked [or became] a <OCCU> with <AGNC>").
      1 TEXT ... - Text to be inserted in book about the person.
 		  I toyed with putting this before the death info,
 		  but decided I like having all the vital stuff first,
@@ -515,6 +508,21 @@
 
   New For Version 2.5.
 	Fixed a mistake in check_print_divinfo which made it not work at all.
+
+  New For Version 3.0
+	Several miscellaneous fixes.
+	Now part of lifelines sourceforge distribution. See sourceforge history.
+	Uses documentclass instead of documentstyle
+	Added ability to print a limited number of generations in
+	descendent-style books. At the terminal generation, if a person
+	is not dead, it will only print the birth year, not full date.
+	Fixed the titlepage generation.
+	Some fixes to support latest version of lifelines (or maybe its
+	just differences for lifelines under solaris):
+		Intersect() can't be used inside an if() call.
+	 	  It has to call intersect separately and use the result in a set()
+		The childnum argument of children() is now only valid
+		  within the scope of the children() loop.
 	
 */
 /* Stuff I haven't implemented:
@@ -561,6 +569,9 @@
 */
 
 
+global (maxgenprint)      /* number of generations to print full info for.*/
+global (atmax_generation) /* used so we don't print full birthdates of living
+			     individuals at the MAX-th generation */
 global (ancestormode)
 global (notes_text_mode)
 global (eventPlaceTable)
@@ -587,6 +598,8 @@ global (daysToMonthList)
 global (not_married_flag)
 global (dumpplacetable_each_gen)
 global (hadsplitnote)
+global (force_desc_chart)
+global (global_dead)	/* used at the MAX-th generation so we know if indi is dead*/
 
 proc main ()
 {
@@ -601,6 +614,7 @@ proc main ()
      list (sourceList)
 
   list (daysToMonthList)
+  setel (daysToMonthList, 0, 0)
   setel (daysToMonthList, 1, 0)
   setel (daysToMonthList, 2, 31)
   setel (daysToMonthList, 3, 59)
@@ -613,7 +627,7 @@ proc main ()
   setel (daysToMonthList, 10, 273)
   setel (daysToMonthList, 11, 304)
   setel (daysToMonthList, 12, 334)
-
+  set(force_desc_chart,0)	
 
   if (1)  {
     getintmsg (ancestormode,
@@ -634,6 +648,15 @@ proc main ()
   	set(dumpplacetable_each_gen,1)
   }
 
+    set (maxgenprint,999)
+    if (eq(0,ancestormode)){
+	  if (1)  {	
+	    getintmsg (maxgenprint,
+        	       "Max generations for descendency books")
+	  }  else  {
+	    set (maxgenprint,999)
+	  }
+    }
 
 
     getindi(indi)  /* Get the individual to start with */
@@ -645,8 +668,8 @@ proc main ()
        getindi(indi)  /* Get next */
      }
     /* Print preamble.  Feel free to change this to suit your tastes. */
-    /*"\\documentclass[twocolumn,twoside,titlepage]{book}\n"*/	/* LaTeX 2e */
-    "\\documentstyle[twocolumn,makeidx]{book}\n"
+    "\\documentclass[twocolumn,twoside,titlepage]{book}\n"	/* LaTeX 2e */
+    /*"\\documentstyle[twocolumn,makeidx]{book}\n"*/
     "\\pagestyle{myheadings}\n\n"
     "% Enable ISO 8859/1 charset" nl()
     "\\usepackage{isolatin1}" nl()
@@ -720,13 +743,24 @@ proc main ()
 
     getstrmsg(author, "Enter the author(s) of this document:")
     "\\author{" author "}\n"
-/*    "\\author{" "your name here" "}\n" */
-    /* The following line does not work with recent copies of LaTeX, so it is made a comment */
-    "%\\date{\\today\\\\ \\vfill Copyright \\copyright \\year\\ " author "\\\\}\n"
-/*     "\\date{\\today\\\\ \\vfill Copyright \\copyright \\year\\ your name\\\\your town}\n"*/
+     "\\date{\\today}\n"
     "\\maketitle\n"
 
-     "\\cleardoublepage\n"
+     "\\clearpage\n"
+     "\\onecolumn\n"
+     "\\pagestyle{empty}\n"
+     "\\mbox{ }\n"
+     "\\vfill\n"
+     "\\begin{center}\n"
+     "Copyright \\copyright \\ \\today \\  " author "\\\\" 
+     getstrmsg(copyplace, "Enter the place for the copyright notice:")
+     copyplace "\n"
+
+      "\\end{center}\n"
+      "\\clearpage\n"
+      "\\pagestyle{myheadings}\n"
+      "\\twocolumn\n"
+
      "\\setcounter{page}{1}\n"
      "\\tableofcontents"
 
@@ -746,7 +780,6 @@ proc main ()
   insert (eventNameTable, "CHR",  "was baptized")
   insert (eventNameTable, "DEAT", "died")
   insert (eventNameTable, "BURI", "was buried")
-  insert (eventNameTable, "CREM", "was cremated")
   insert (eventNameTable, "GRAD", "")/* left blank since it is done
 					as a separate case */
   insert (eventNameTable, "NATU", "was naturalized")
@@ -826,6 +859,7 @@ proc chapterproc(topguy)
 
     list(ilist)    /* List of individuals */
     list(glist)    /* List of generation for each individual */
+	    set(last_grandparents,0)
 	indiset(grandparentset)
 	indiset(hisset)
 	indiset(last_grandparentset)
@@ -878,7 +912,12 @@ proc chapterproc(topguy)
 	    set(last_grandparents,0)
 	    indiset(last_grandparentset)
 	    set(printed_brace,0)
-	
+  	    if (eq(curgen,maxgenprint)){
+	        set(atmax_generation,1)
+	    }
+	    else {
+	        set(atmax_generation,0)
+	    }
         }
 	/* decide if we have the same grandparents or not */
 	/* I try to group people  together with over/under braces
@@ -903,7 +942,9 @@ proc chapterproc(topguy)
 		   addtoset(hisset,indi,1)	
       		   set(grandparentset,parentset(parentset(hisset)))
 		   set(doit,1)
-		   forindiset(intersect(grandparentset,last_grandparentset),joe,a,b){
+		   indiset(extraSet)
+		   set(extraSet,intersect(grandparentset,last_grandparentset))
+		   forindiset(extraSet,joe,a,b){
 				 set(doit,0)
 		   }
 		   if (doit){
@@ -914,6 +955,11 @@ proc chapterproc(topguy)
   			   "\n" "$\\overbrace{\\hspace*{3in}}$" "\n\n"
 			   set(printed_brace,1) 
 			   set(just_printed_brace,1) 
+		/* also reset the place table after each set of grandchildren.
+		   This makes it repeat the whole location name the next time
+	           it sees any location. Otherwise, it can get too far from the
+		   introduction of the place for my liking. */
+			   if (dumpplacetable_each_gen){  table (eventPlaceTable) }
 		  }
 	      	  set(last_grandparentset,grandparentset)
 		  set(last_grandparents,1)
@@ -940,6 +986,13 @@ proc chapterproc(topguy)
 	
         addtoset(idex, indi, 0)
         set(out, add(out, 1))
+	/* check whether the children we are about to print are at the
+	   Max generation */
+	set(save_atmax_generation,atmax_generation)
+  	if (eq(add(curgen,1),maxgenprint)){
+	    set(atmax_generation,1)
+	}
+
         families(indi, fam, spouse, nfam) {
             "\n\n"
             if (eq(0, nchildren(fam))) {
@@ -970,7 +1023,7 @@ proc chapterproc(topguy)
                     families(child, cfam, cspou, ncf) {
                         if (ne(0, nchildren(cfam))) { set(haschild, 1) }
                    }
-                   if (haschild) {
+                   if (and(haschild,lt(curgen,maxgenprint))) {
 			if (not(lookup(stab, key(child)))){
 	                  enqueue(ilist, child)
                           enqueue(glist, add(1, curgen))
@@ -988,14 +1041,19 @@ proc chapterproc(topguy)
 			   "  Details of " pn(child,3) " family were shown earlier."
 			}
                     } else {
+			if (haschild){
+			   set(force_desc_chart,1)
+			}
                         "\n\\item "
                         call longvitals(child, 0, 1)
+ 		        set(force_desc_chart,0)
                         addtoset(idex, child, 0)
                     }
                 }
                 "\\end{childrenlist}\n"
             }
         }
+	set(atmax_generation,save_atmax_generation)
 
         if (eq (indi,topguy)){
           set (descFigureLabel, save (concat (key (indi), "-figure-desc")))
@@ -1055,6 +1113,9 @@ proc ancestor_chapterproc(topguy)
             "\n\n\\generation{" d(thisgen) "}" "{" surname(topguy) "}" "\n"
             "\n\\addcontentsline{toc}{section}{Generation " d(thisgen) "}\n"	
             set(curgen, thisgen)
+  	   /* reset the place table at each generation if asked to. */
+	   if (dumpplacetable_each_gen){  table (eventPlaceTable) }
+
 	
         }
         print(d(ahnen)) print(" ") print(name(indi)) print("\n")
@@ -1198,6 +1259,10 @@ proc shortvitals(indi)
         call texname(inode(indi), 1)
         set(b, birth(indi))
         set(d, death(indi))
+
+	set(local_dead,global_dead) /* save for restore */
+	set(global_dead,d)
+
         if (and(b, long(b))) {
 		call process_event(b) 
 	        if (and(d, long(d))) {" and " pn(indi,1) call process_event(d) }
@@ -1206,6 +1271,7 @@ proc shortvitals(indi)
 	        if (and(d, long(d))) {call process_event(d) }
 	}
 	"."
+	set(global_dead,local_dead) /* restore */
 }
 
 
@@ -1221,7 +1287,19 @@ proc shortvitals(indi)
 proc longvitals(i, name_parents, name_type)
 {
 	call resetdayplace()
+
+	set(local_dead,global_dead) /* save for restore */
+	set(global_dead,death(i))
+
         call texname(inode(i), name_type)  call print_sources(inode(i)) 
+	call getValue(inode(i),"NAME")
+	if (gotValue){
+            call print_sources(gottenNode) 
+        }
+
+	/* remember the value so it doesn't affect spousevitals */
+        set(save_force_chart,force_desc_chart)
+        set(force_desc_chart,0)
 
         set(dad, father(i))
         set(mom, mother(i))
@@ -1394,8 +1472,10 @@ proc longvitals(i, name_parents, name_type)
 				then this person (i) has already had their
 				notes/charts done as part of their spouse.
 				We don't want to print a 2nd time */
-			   if (lookup(stab, key(s))){
+			   if (not(ancestormode)){
+			     if (lookup(stab, key(s))){
 				set(inhibit_text_charts,1)
+			     }
 			   }
 			}
 			else{
@@ -1448,16 +1528,15 @@ proc longvitals(i, name_parents, name_type)
 		}
             }
                 if (or(eq(strcmp(tag(n), "BURI"), 0),
-                      or (eq(strcmp(tag(n), "CREM"), 0),
-                         or (eq(strcmp(tag(n), "CENS"), 0),
-                            or (eq(strcmp(tag(n), "CHRA"), 0),
-                               or (eq(strcmp(tag(n), "DEAT"), 0),
-                                  or (eq(strcmp(tag(n), "NATU"), 0),
-                                     or (eq(strcmp(tag(n), "RETI"), 0),
-                                        or (eq(strcmp(tag(n), "RESI"), 0),
-                                           or (eq(strcmp(tag(n), "PROB"), 0),
-                                             eq(strcmp(tag(n), "WILL"), 0)
-			)))))))))){
+                      or (eq(strcmp(tag(n), "CENS"), 0),
+                         or (eq(strcmp(tag(n), "CHRA"), 0),
+                            or (eq(strcmp(tag(n), "DEAT"), 0),
+                               or (eq(strcmp(tag(n), "NATU"), 0),
+                                  or (eq(strcmp(tag(n), "RETI"), 0),
+                                     or (eq(strcmp(tag(n), "RESI"), 0),
+                                        or (eq(strcmp(tag(n), "PROB"), 0),
+                                          eq(strcmp(tag(n), "WILL"), 0)
+			))))))))){
 			pronoun set(printedOne,0) 
                         call process_event(n)
 			if (putPeriod) {". "}
@@ -1480,7 +1559,6 @@ proc longvitals(i, name_parents, name_type)
 			pronoun set(printedOne,0) 
                         /* should also check for a RETIred node
                            and always say WAS if it exists */
-/* DAB - replace with do_occu; delete this when do_occu accepted
 			call getValue(inode(i),"RETI")
 			if (gotValue){ " was"}
 			else { call iswas(i)}
@@ -1488,8 +1566,6 @@ proc longvitals(i, name_parents, name_type)
 			call aAn(value(n)) " "
 			call valuec(n)
                         call process_event(n)
-*/
-			call do_occu(n, i)
 			if (putPeriod) {". "}
                 }
                 if (eq(strcmp(tag(n), "PROP"), 0)) {
@@ -1500,68 +1576,15 @@ proc longvitals(i, name_parents, name_type)
                 }
         }
 	if (putPeriod) {". "}
+	/* restore forcing of desc. charts */
+        set(force_desc_chart,save_force_chart)
 	if (not(inhibit_text_charts)){
 	        call getText(inode(i),0)
 		call process_book_notes (i)
 	}
+	set(global_dead,local_dead) /* restore */
 }
 
-/* isRange(d) - Indicate if a date node is a range
- * 
- * d - DATE node (could be NIL)
- *
- * Returns: 1 if <d> is of the form "[BET] date1-date2"; 0 otgherwise
- *
- */
-
-func isRange(d)
-{
-    set(r, 0)
-    if (d) {
-    	if (i, index (d, "-", 1)) { 
-    	    set(r, 1)
-    	} elsif (i, index (d, "FROM", 1)) { 
-    	    set(r, 1)
-	}
-    }
-    return(r)
-}
-
-/* do_occu(n, i) - Process an OCCU node
- * 
- * n - OCCU node
- * i - INDI containing <n>
- *
- * An OCCU node will produce text saying "<name> is/was a <occu> with <agnc> ...."
- * It is assumed that the <name> was printed before this routine was called.
- * If the person is (likely) deceased, if the OCCU node has a subordinate RETI node,
- * or if the DATE tag subordinate to the OCCU node is a range, then "was" is used in
- * the sentence; otherwise, "is" is used. The "with <agnc>" clause is added if a
- * AGNC node is subordinate to the OCCU node; it is taken to be the name of the 
- * employer.
- *
- */
-
-proc do_occu(n, i)
-{
-    /* Check for date range or RETI node and use "was" if either present. */
-    set(d, date(n))
-    call getValue(inode(i), "RETI")
-    if (or(gotValue, isRange(d))) {
-	" was"
-    } else {
-	call iswas(i)
-    }
-    " "
-    call aAn(value(n)) " "
-    call valuec(n)
-    call getValue(n, "AGNC")
-    if (gotValue) {
-        " with " gottenValue
-    }
-    call process_event(n)
-/*    if (putPeriod) {". "} */
-}
 
 /* spousevitals (spouse, fam)
    Prints out information about a marriage (fam) and about a spouse in the
@@ -1569,9 +1592,17 @@ proc do_occu(n, i)
 
 proc spousevitals (spouse, fam)
 {
+
   call texname(inode(spouse), 3)
 
-  if (spouse){ call print_sources(inode(spouse))}
+  if (spouse){
+	call print_sources(inode(spouse))
+	call getValue(inode(spouse),"NAME")
+	if (gotValue){
+            call print_sources(gottenNode) 
+        }
+  }
+
 
   if (e, marriage(fam)) {
     call process_event(e) 
@@ -1587,6 +1618,11 @@ proc spousevitals (spouse, fam)
     set(bur, burial(spouse))
     set(dad, father(spouse))
     set(mom, mother(spouse))
+
+    set(local_dead,global_dead) /* save for restore */
+    set(global_dead,dea)
+
+
     if (or(or(or(or(or(bir, chr), dea), bur), mom), dad)) {
       call printfirstname(spouse)
       namereturn
@@ -1655,7 +1691,6 @@ proc spousevitals (spouse, fam)
      }
    }
    if (gt(nfamilies(spouse),1)) {
-
 	set(beforefam,1)
         families(spouse, newfam, newspouse, n) {
 	    if(ne(newfam,fam)){
@@ -1678,7 +1713,7 @@ proc spousevitals (spouse, fam)
 			", and had "
 		 	d(nchildren(newfam))
 			if (gt(nchildren(newfam),1)){
-				" children"
+				" children "
 			}
 			else { " child"}
 			" by that marriage: "
@@ -1703,7 +1738,6 @@ proc spousevitals (spouse, fam)
 
 		/* should also check for a RETIred node
                    and always say WAS if it exists */
-/* DAB - replace with do_occu; delete this when do_occu is accepted
 		call getValue(inode(spouse),"RETI")
 		if (gotValue){ " was"}
 		else { call iswas(spouse)}
@@ -1712,12 +1746,13 @@ proc spousevitals (spouse, fam)
 		call valuec(savenode)
                 call process_event(savenode)
 		". "
-*/
-	call do_occu(savenode, spouse) ". "
       }
       call getText(inode(spouse),0)
       call process_book_notes (spouse)
     }
+
+    set(global_dead,local_dead) /* restore */
+
   } else {
     "\\noname" ".\n"
   }  
@@ -1964,6 +1999,9 @@ proc process_book_notes (indi)
       pedigreeFigureLabel "}."
     }
   }
+ if (force_desc_chart) {
+	set(haddescnote,1)
+ }
  if (eq(haddescnote,1)){
    set (descFigureLabel, save (concat (key (indi), "-figure-desc")))
    "\nA brief chart of the descendents of "
@@ -1991,7 +2029,9 @@ proc pedigreeFigure (i) {
   indiset (iSet)
   addtoset (iSet, i, 1)
   set (max, 0)
-  forindiset (ancestorset (iSet), indi, val, num) {
+  indiset (extraSet)
+  set(extraSet,ancestorset (iSet))
+  forindiset (extraSet, indi, val, num) {
     if (gt (val, max)) {
       set (max, val)
     }
@@ -2100,8 +2140,7 @@ proc vitalEvent (event, reset) {
       " " eventName
       if (or (not (strcmp (tag (event), "ADOP")), 
               or (not (strcmp (tag (event), "CHR")), 
-              or (not (strcmp (tag (event), "CREM")), 
-	          not (strcmp (tag (event), "BURI")))))) {
+	          not (strcmp (tag (event), "BURI"))))) {
 	set (previousDayNumber, dayNumber)
       } else {
 	set (previousDayNumber, 0)
@@ -2183,6 +2222,18 @@ proc ofCause (event) {
   }
 }
 proc onDate (event) {
+  if (atmax_generation) {
+    if (global_dead) {
+	set(year_only,0)
+    }
+    else {
+	set(year_only,1)
+    }
+  }
+  else {
+    set(year_only,0)	
+  }
+
   call setDayNumber (event)
   if (d, date (event)) {
    if (strcmp (d, "Not married")) {	
@@ -2193,36 +2244,7 @@ proc onDate (event) {
     elsif (eq (index (d, "Bef", 1), 1)) { "\nsome time before " }
     elsif (eq (index (d, "ABT", 1), 1)) { "\ncirca " }
     elsif (eq (index (d, "Abt", 1), 1)) { "\ncirca " }
-    elsif (eq (index (d, "FROM", 1), 1)) { 
-      set(t, index(d, "TO", 1))
-/* DAB - experimental (and not working) 
-      set(fromDateEvent, createnode("EVEN", ""))
-      set(fromDateNode, createnode("DATE", substring (d, add(1, strlen("FROM")), sub (t, 1)) ))
-      addnode(fromDateNode, fromDateEvent, 0)
-      set(toDateEvent, createnode("EVEN", ""))
-      set(toDateNode, createnode("DATE", substring (d, add (t, strlen("TO")), strlen (d)) ))
-      addnode(toDateNode, toDateEvent, 0)
-   DEBUG:
-"\n from date nodes: " traverse(fromDateEvent, xx, yy) {
-d(yy) ": " tag(xx) " " value(xx)
-}
-"\n to date nodes: " traverse(toDateEvent, xx, yy) {
-d(yy) ": " tag(xx) " " value(xx)
-}
-
-      "\nfrom " stddate(fromDateEvent)
-      " to " stddate(toDateEvent)
-      deletenode(toDateNode)
-      deletenode(toDateEvent)
-      deletenode(fromDateNode)
-      deletenode(fromDateEvent)
-   DAB - end of experimental */
-/* DAB - This way works, but doesn't necessarily produce dates in the same format as stddate */
-      "\nfrom " substring (d, add(1, strlen("FROM")), sub (t, 1)) 
-      " to " substring (d, add (t, strlen("TO")), strlen (d)) 
-/**/
-      set (event, 0)
-    } elsif (i, index (d, "-", 1)) { 
+    elsif (i, index (d, "-", 1)) { 
       "\nbetween " substring (d, 1, sub (i, 1)) 
       " and " substring (d, add (i, 1), strlen (d)) 
       set (event, 0)
@@ -2239,14 +2261,22 @@ d(yy) ": " tag(xx) " " value(xx)
       "\none week later"
       set (event, 0)
     } else {
-      extractdate (event, d, m, y)
-      if (d) { "\non " } else { "\nin " }
+      if (year_only){ "\nin " }
+      else {
+	extractdate (event, d, m, y)
+      	if (d) { "\non " } else { "\nin " }
+      }
     }
     if (event) { 
       if (and (dayNumber, eq (dayNumber, previousDayNumber))) {
 	"that day"
       } else {
-        stddate (event) 
+	if (year_only){
+		year (event) 
+	}
+	else {
+	  	stddate (event) 
+	}
       }
     }
    }
@@ -2652,6 +2682,9 @@ proc bibliographize (root) {
     call getValueCont (root, "TEXT") 
     if (gotValue) { set (b, save (concat (b, concat (" ", gottenValue)))) }
   
+    call getValueCont (root, "HIDE") 
+    if (gotValue) { set (b, save (concat (b, concat (" ", gottenValue)))) }
+  
     call getValueCont (root, "SOUR") 
     if (gotValue) { 
       set (bb, "?")
@@ -2828,7 +2861,7 @@ proc desc_chart_out(indi,depth,level)
       }
     if(lt(level,depth)){
       families(indi,fam,sp,num)
-         {
+	 {         
             call descch_prcouple(indi,fam,num)
             call descch_printfam(indi,fam,sp)
             set(level,add(level,1))
@@ -2842,8 +2875,11 @@ proc desc_chart_out(indi,depth,level)
                      "\\endsubtree " nl()
                   }
             }
-            set(level,sub(level,1))
-            if(and(ne(num,nfamilies(indi)),gt(num2,0)))
+	    set(num2,nchildren(fam))
+	    set(level,sub(level,1))
+	    set(temp1,ne(num,nfamilies(indi)))
+	    set(temp2,gt(num2,0))
+            if(and(temp1,temp2))
 /*            if(ne(num,nfamilies(indi)))*/
             {
 	       if (eq(level,1)){
@@ -2852,7 +2888,7 @@ proc desc_chart_out(indi,depth,level)
     	       }
 	       else {
                   "\\endsubtree " nl()
-                  "\\subtree " nl()
+                  "\\subtree "  nl()
     	       }
 	
             }
