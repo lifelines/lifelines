@@ -1316,12 +1316,56 @@ fam_to_event (NODE node, STRING tag, STRING head
 	return indi_to_event(node, tag, head, len, rfmt);
 }
 /*==============================================
+ * record_to_date_place -- Find event info
+ *  record:  [IN]  record to search
+ *  tag:     [IN]  desired tag (eg, "BIRT")
+ *  date:    [OUT] date found (optional)
+ *  plac:    [OUT] place found (option)
+ * Created: 2003-01-12 (Perry Rapp)
+ *============================================*/
+void
+record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac)
+{
+	NODE node;
+	for (node = record_to_first_event(record, tag)
+		; node
+		; node_to_next_event(node, tag)) {
+		event_to_date_place(node, date, plac);
+		if (date && *date && plac && *plac)
+			return;
+	}
+}
+/*==============================================
+ * record_to_first_event -- Find requested event subtree
+ *  record:  [IN]  record to search
+ *  tag:     [IN]  desired tag (eg, "BIRT")
+ * Created: 2003-01-12 (Perry Rapp)
+ *============================================*/
+NODE
+record_to_first_event (RECORD record, CNSTRING tag)
+{
+	NODE node = nztop(record);
+	if (!node) return NULL;
+	return find_tag(nchild(node), tag);
+}
+/*==============================================
+ * node_to_next_event -- Find next event after node
+ *  node:  [IN]  start search after node
+ *  tag:   [IN]  desired tag (eg, "BIRT")
+ * Created: 2003-01-12 (Perry Rapp)
+ *============================================*/
+NODE
+node_to_next_event (NODE node, CNSTRING tag)
+{
+	return find_tag(nsibling(node), tag);
+}
+/*==============================================
  * indi_to_event -- Convert event tree to string
- *  node: [IN] event subtree to search
- *  ttm:  [IN] translation table to apply to event strings
- *  tag:  [IN] desired tag (eg, "BIRT")
- *  head: [IN] header to print in output (eg, "born: ")
- *  len:  [IN] max length output desired
+ *  node: [IN]  event subtree to search
+ *  ttm:  [IN]  translation table to apply to event strings
+ *  tag:  [IN]  desired tag (eg, "BIRT")
+ *  head: [IN]  header to print in output (eg, "born: ")
+ *  len:  [IN]  max length output desired
  * Searches node substree for desired tag
  *  returns formatted string (event_to_string) if found,
  *  else NULL
@@ -1364,18 +1408,34 @@ indi_to_event (NODE node, STRING tag, STRING head
 /*===========================================
  * event_to_date_place  -- Find date & place
  *  node:  [IN]  node tree of event to describe
- *  date:  [OUT] value of first DATE line
- *  plac:  [OUT] value of first PLACE line
+ *  date:  [OUT] value of first DATE line (optional)
+ *  plac:  [OUT] value of first PLACE line (optional)
  *=========================================*/
-static void
+void
 event_to_date_place (NODE node, STRING * date, STRING * plac)
 {
-	*date = *plac = NULL;
+	INT count=0;
+	if (date) {
+		*date = NULL;
+	} else {
+		++count;
+	}
+	if (plac) {
+		*plac = NULL;
+	} else {
+		++count;
+	}
 	if (!node) return;
 	node = nchild(node);
-	while (node) {
-		if (eqstr("DATE", ntag(node)) && !*date) *date = nval(node);
-		if (eqstr("PLAC", ntag(node)) && !*plac) *plac = nval(node);
+	while (node && count<2) {
+		if (eqstr("DATE", ntag(node)) && date && !*date) {
+			*date = nval(node);
+			++count;
+		}
+		if (eqstr("PLAC", ntag(node)) && plac && !*plac) {
+			*plac = nval(node);
+			++count;
+		}
 		node = nsibling(node);
 	}
 }

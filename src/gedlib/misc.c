@@ -128,8 +128,7 @@ xrefval (char ntype, STRING str)
  * find_tag -- Search node list for specific tag
  *============================================*/
 NODE
-find_tag (NODE node,
-          STRING str)
+find_tag (NODE node, CNSTRING str)
 {
 	while (node) {
 		if (eqstr(str, ntag(node))) return node;

@@ -1,3 +1,10 @@
+2003-01-12 Perry Rapp
+
+	* ChangeLog src/gedlib/misc.c src/gedlib/node.c
+	src/hdrs/gedcom.h src/liflines/show.c:
+
+	Start new birth display code.
+
 2003-01-11 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/arch.h src/stdlib/path.c:

@@ -202,9 +202,21 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 static void
 disp_person_birth (ZSTR * zstr, RECORD irec, INT width)
 {
-	/*
-	Try BIRT, CHR, BAPM, BARM, BASM, BLES ?
-	*/
+	STRING tags[] = { "BIRT", "CHR", "BAPM", "BARM", "BASM", "BLES", 0 };
+	STRING tag;
+	STRING date=NULL, plac=NULL, tgdate=NULL, tgplac=NULL, td=NULL, tp=NULL;
+	for (tag = tags[0]; *tag; ++tag) {
+		record_to_date_place(irec, tag, &td, &tp);
+		if (!date) { 
+			date=td;
+			tgdate=tag;
+		}
+		if (!plac) {
+			plac=tp;
+			tgplac = tag;
+		}
+		if (date && plac) break;
+	}
 }
 /*===============================================
  * init_display_indi -- Initialize display person
