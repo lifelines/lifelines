@@ -38,11 +38,11 @@
 #include "liflines.h"
 #include "screen.h"
 
-static NODE indi_to_indi();
-static NODE fam_to_fam();
-static NODE even_to_even();
-static NODE sour_to_sour();
-static NODE othr_to_othr();
+static NODE indi_to_indi(NODE);
+static NODE fam_to_fam(NODE);
+static NODE even_to_even(NODE);
+static NODE sour_to_sour(NODE);
+static NODE othr_to_othr(NODE);
 
 STRING misnam = (STRING) "Missing NAME line in INDI record; record ignored.\n";
 STRING noiref = (STRING) "FAM record has no INDI references; record ignored.\n";
