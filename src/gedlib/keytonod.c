@@ -948,7 +948,7 @@ get_free_cacheel (CACHE cache)
 	/* If free list is empty, move least recently used entry to free list */
 	if (!cacfree(cache)) {
 		/* find least recently used by unlocked entry */
-		for (cel = caclastdir(cache); cel && cclock(cel); cel = cnext(cel)) {
+		for (cel = caclastdir(cache); cel && cclock(cel); cel = cprev(cel)) {
 		}
 		if (!cel) {
 			llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));

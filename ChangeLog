@@ -15,6 +15,11 @@
 	Allocate & copy RECORD pvalues, rather than (now incorrect)
 	bit-by-bit copy (in set_pvalue, just as PFLOAT & PSTRING).
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Fix broken cache traversal in get_free_cacheel (was going the
+	wrong way on the freelist).
+
 2003-11-26 Perry Rapp
 
 	* ChangeLog NEWS src/hdrs/pvalue.h src/interp/builtin.c
