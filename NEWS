@@ -5,6 +5,12 @@ http://lifelines.sourceforge.net
 New Features Added in 3.0.6
 ===========================
 
+- New data in keyfile detects database from platform of wrong alignment
+
+- New environment variable: LLNEWDBDIR
+
+- New gengedcomstrong & weak report functions
+
 - New report functions: 'lastindi' and 'lastfam'
 
 - New name scan option, with primitive wildcards (. and trailing *)
