@@ -50,7 +50,7 @@ crtindex (BTREE btree)
 	ixself(index) = btree->b_kfile.k_fkey;
 	nextfkey(btree);
 	rewind(bkfp(btree));
-	if (fwrite(&bkfile(btree), sizeof(KEYFILE), 1, bkfp(btree)) != 1)
+	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1)
 		FATAL();
 	writeindex(bbasedir(btree), index);
 	return index;
@@ -85,8 +85,14 @@ writeindex (STRING basedir, /* base directory of btree */
 	FILE *fp;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ixself(index)));
-	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) FATAL();
-	if (fwrite(index, BUFLEN, 1, fp) != 1) FATAL();
+	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) {
+		/* Needs to be revisited with double-buffering */
+		FATAL();
+	}
+	if (fwrite(index, BUFLEN, 1, fp) != 1) {
+		/* Needs to be revisited with double-buffering */
+		FATAL();
+	}
 	fclose(fp);
 }
 /*==============================================

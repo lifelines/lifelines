@@ -129,9 +129,14 @@ BOOLEAN
 newmaster (BTREE btree,  /*btree handle*/
            INDEX master)
 {
+	/*
+	Assumes our keyfile is valid
+	so it is important that we got an exclusive writer lock
+	*/
 	btree->b_kfile.k_mkey = ixself(master);
 	rewind(btree->b_kfp);
-	if (fwrite(&btree->b_kfile, sizeof(KEYFILE), 1, btree->b_kfp) != 1) {
+	if (fwrite(&btree->b_kfile, sizeof(btree->b_kfile), 1, btree->b_kfp) != 1) {
+		/* Needs to be revisited with double-buffering */
 		bterrno = BTERRKFILE;
 		return FALSE;
 	}

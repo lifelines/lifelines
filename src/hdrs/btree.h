@@ -52,17 +52,17 @@ typedef struct {
 	FKEY k_mkey;	/*current master key*/
 	FKEY k_fkey;	/*current file key*/
 	INT k_ostat;	/*current open status*/
-} KEYFILE;
+} KEYFILE1;
 
 typedef struct {
 	char name[18]; /* KF_NAME */
 	INT magic;     /* KF_MAGIC */
 	INT version;   /* KF_VER */
-} KEYFILEX;
+} KEYFILE2;
 
-#define KF_NAME "LifeLines Keyfile"
-#define KF_MAGIC 0x12345678
-#define KF_VER 1
+#define KF2_NAME "LifeLines Keyfile"
+#define KF2_MAGIC 0x12345678
+#define KF2_VER 1
 
 /*==============================================
  * INDEX -- Data structure for BTREE index files
@@ -83,7 +83,7 @@ typedef struct {
 	INDEX   b_master;	/*master index block*/
 	FKEY    b_nkey;		/*next index key*/
 	FILE   *b_kfp;		/*keyfile file pointer*/
-	KEYFILE b_kfile;	/*keyfile contents*/
+	KEYFILE1 b_kfile;	/*keyfile contents*/
 	INT     b_ncache;	/*number of indices in cache*/
 	INDEX  *b_cache;	/*index cache*/
 	BOOLEAN b_write;	/*database writeable?*/
@@ -133,7 +133,7 @@ BOOLEAN getfile(BTREE, RKEY, STRING);
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
 BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
-BOOLEAN validate_keyfilex(KEYFILEX *);
+BOOLEAN validate_keyfile2(KEYFILE2 *);
 
 /* names.c */
 
@@ -163,6 +163,7 @@ extern INT bterrno;
 #define BTERRILLEGKF  7 /* illegal keyfile */
 #define BTERRALIGNKF  8 /* wrong alignment key file */
 #define BTERRVERKF    9 /* wrong version key file */
+#define BTERREXISTS  10 /* previous database found */
 
 #define BTINDEXTYPE 1
 #define BTBLOCKTYPE 2

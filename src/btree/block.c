@@ -55,7 +55,7 @@ crtblock (BTREE btree)  /*btree handle*/
 	ixself(block) = btree->b_kfile.k_fkey;
 	nextfkey(btree);
 	rewind(bkfp(btree));
-	if (fwrite(&bkfile(btree), sizeof(KEYFILE), 1, bkfp(btree)) != 1)
+	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1)
 		FATAL();
 	return block;
 }

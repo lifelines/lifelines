@@ -341,6 +341,9 @@ show_open_error (void)
 	case BTERRVERKF:
 		llwprintf("keyfile is wrong version.");
 		break;
+	case BTERREXISTS:
+		llwprintf("Existing database found.");
+		break;
 	default:
 		llwprintf("Undefined database error -- This can't happen.");
 		break;
@@ -367,10 +370,15 @@ open_database (void)
 {
 	int c;
 	if (forceopen) {
+		/*
+		Forcefully alter reader/writer count to 0.
+		But do check keyfile2 checks first (in case it is a
+		database from a different alignment).
+		*/
 		char scratch[200];
 		FILE *fp;
-		KEYFILE kfile;
-		KEYFILEX kfilex;
+		KEYFILE1 kfile1;
+		KEYFILE2 kfile2;
 		struct stat sbuf;
 		sprintf(scratch, "%s/key", readpath);
 		if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
@@ -379,21 +387,21 @@ open_database (void)
 			return FALSE;
 		}
 		if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-		    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+		    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
 			return FALSE;
 		}
-		if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
-			if (!validate_keyfilex(&kfilex)) {
+		if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
+			if (!validate_keyfile2(&kfile2)) {
 				llwprintf("Database error -- ");
 				llwprintf("Invalid keyfile!");
 				return FALSE;
 			}
 		}
-		kfile.k_ostat = 0;
+		kfile1.k_ostat = 0;
 		rewind(fp);
-		if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
 			printf("Cannot properly write the new key file.\n");

@@ -39,35 +39,62 @@
 #include "screen.h"
 #include "btreei.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void init_keyfile1(KEYFILE1 * kfile1);
+static void init_keyfile2(KEYFILE2 * kfile2);
 static BOOLEAN initbtree (STRING basedir);
 
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
+
 /*============================================
- * init_keyfilex -- Initialize KEYFILEX structure
+ * init_keyfile1 -- Initialize KEYFILE1 structure
+ *  for new database
+ * 2001/01/24, Perry Rapp
  *==========================================*/
 static void
-init_keyfilex(KEYFILEX * kfilex)
+init_keyfile1 (KEYFILE1 * kfile1)
 {
-	strncpy(kfilex->name, KF_NAME, sizeof(kfilex->name));
-	kfilex->magic = KF_MAGIC;
-	kfilex->version = KF_VER;
+	kfile1->k_mkey = path2fkey("aa/aa");
+	kfile1->k_fkey = path2fkey("ab/ab");
+	kfile1->k_ostat = 0;
 }
 /*============================================
- * validate_keyfilex -- Is KEYFILEX structure valid ?
+ * init_keyfile2 -- Initialize KEYFILE2 structure
+ *  for new database or old database before KEYFILE2 
+ *  was added
+ * 2000/12/08, Perry Rapp
+ *==========================================*/
+static void
+init_keyfile2 (KEYFILE2 * kfile2)
+{
+	strncpy(kfile2->name, KF2_NAME, sizeof(kfile2->name));
+	kfile2->magic = KF2_MAGIC;
+	kfile2->version = KF2_VER;
+}
+/*============================================
+ * validate_keyfile2 -- Is KEYFILE2 structure valid ?
+ * 2000/12/08, Perry Rapp
  *==========================================*/
 BOOLEAN
-validate_keyfilex (KEYFILEX * kfilex)
+validate_keyfile2 (KEYFILE2 * kfile2)
 {
-	if (strcmp(kfilex->name, KF_NAME))
+	if (strcmp(kfile2->name, KF2_NAME))
 	{
 		bterrno = BTERRILLEGKF;
 		return FALSE;
 	}
-	if (kfilex->magic != KF_MAGIC)
+	if (kfile2->magic != KF2_MAGIC)
 	{
 		bterrno = BTERRALIGNKF;
 		return FALSE;
 	}
-	if (kfilex->version != KF_VER)
+	if (kfile2->version != KF2_VER)
 	{
 		bterrno = BTERRVERKF;
 		return FALSE;
@@ -86,9 +113,9 @@ openbtree (STRING dir,          /* btree base dir */
 	char scratch[200];
 	FILE *fp;
 	struct stat sbuf;
-	KEYFILE kfile;
-	KEYFILEX kfilex;
-	BOOLEAN keyed = FALSE;
+	KEYFILE1 kfile1;
+	KEYFILE2 kfile2;
+	BOOLEAN keyed2 = FALSE, keyed3 = FALSE;
 	INDEX master;
 
 /* See if base directory exists */
@@ -116,45 +143,51 @@ openbtree (STRING dir,          /* btree base dir */
 			bterrno = BTERRKFILE;
 			return NULL;
 		}
+	} else {
+		if (cflag) {
+			/* keyfile found - don't create on top of it */
+			bterrno = BTERREXISTS;
+			return NULL;
+		}
 	}
 	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 		bterrno = BTERRKFILE;
 		return NULL;
 	}
 
-/* Open and read key file */
+/* Open and read key file (KEYFILE1) */
 	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-	    fread(&kfile, sizeof(kfile), 1, fp) != 1) {
+	    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
 		return NULL;
 	}
-/* Read & validate keyfilex - if not present, we'll add it below */
-	if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
-		if (!validate_keyfilex(&kfilex))
+/* Read & validate KEYFILE2 - if not present, we'll add it below */
+	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
+		if (!validate_keyfile2(&kfile2))
 			return NULL; /* validate set bterrno */
-		keyed=TRUE;
+		keyed2=TRUE;
 	}
-	if (kfile.k_ostat < 0) {
+	if (kfile1.k_ostat < 0) {
 		bterrno = BTERRWRITER;
 		fclose(fp);
 		return NULL;
 	}
 
 /* Update key file for this new opening */
-	if (writ && (kfile.k_ostat == 0))
-		kfile.k_ostat = -1;
+	if (writ && (kfile1.k_ostat == 0))
+		kfile1.k_ostat = -1;
 	else
-		kfile.k_ostat++;
+		kfile1.k_ostat++;
 	rewind(fp);
-	if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
 		fclose(fp);
 		return NULL;
 	}
-	if (!keyed) {
-		/* add KEYFILEX structure */
-		init_keyfilex(&kfilex);
-		if (fwrite(&kfilex, sizeof(kfilex), 1, fp) != 1) {
+	if (!keyed2) {
+		/* add KEYFILE2 structure */
+		init_keyfile2(&kfile2);
+		if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
 		fclose(fp);
 		}
@@ -162,18 +195,18 @@ openbtree (STRING dir,          /* btree base dir */
 	fflush(fp);
 
 /* Get master index */
-	if (!(master = readindex(dir, kfile.k_mkey)))
+	if (!(master = readindex(dir, kfile1.k_mkey)))
 		return NULL;	/* bterrno set by getindex */
 
 /* Create new BTREE */
 	btree = (BTREE) stdalloc(sizeof *btree);
 	bbasedir(btree) = dir;
 	bmaster(btree) = master;
-	bwrite(btree) = (kfile.k_ostat == -1);
+	bwrite(btree) = (kfile1.k_ostat == -1);
 	bkfp(btree) = fp;
-	btree->b_kfile.k_mkey = kfile.k_mkey;
-	btree->b_kfile.k_fkey = kfile.k_fkey;
-	btree->b_kfile.k_ostat = kfile.k_ostat;
+	btree->b_kfile.k_mkey = kfile1.k_mkey;
+	btree->b_kfile.k_fkey = kfile1.k_fkey;
+	btree->b_kfile.k_ostat = kfile1.k_ostat;
 	initcache(btree, 20);
 	return btree;
 }
@@ -183,8 +216,8 @@ openbtree (STRING dir,          /* btree base dir */
 static BOOLEAN
 initbtree (STRING basedir)
 {
-	KEYFILE kfile;
-	KEYFILEX kfilex;
+	KEYFILE1 kfile1;
+	KEYFILE2 kfile2;
 	INDEX master;
 	BLOCK block;
 	FILE *fk, *fi, *fd;
@@ -215,12 +248,10 @@ initbtree (STRING basedir)
 	}
 
 /* Write key file */
-	kfile.k_mkey = path2fkey("aa/aa");
-	kfile.k_fkey = path2fkey("ab/ab");
-	kfile.k_ostat = 0;
-	init_keyfilex(&kfilex);
-	if (fwrite(&kfile, sizeof(kfile), 1, fk) != 1
-		|| fwrite(&kfilex, sizeof(kfilex), 1, fk) != 1) {
+	init_keyfile1(&kfile1);
+	init_keyfile2(&kfile2);
+	if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1
+		|| fwrite(&kfile2, sizeof(kfile2), 1, fk) != 1) {
 		bterrno = BTERRKFILE;
 		fclose(fk);
 		fclose(fi);
@@ -264,33 +295,38 @@ initbtree (STRING basedir)
 BOOLEAN
 closebtree (BTREE btree)
 {
-	FILE *fp;
-	KEYFILE kfile;
+	FILE *fp=0;
+	KEYFILE1 kfile1;
+	BOOLEAN ret=FALSE;
 
-	if(btree && ((fp = bkfp(btree)) != NULL)) {
-		kfile = btree->b_kfile;
-		if (kfile.k_ostat <= 0)
-			kfile.k_ostat = 0;
-		else { /* read-only, get current shared status */
+	if (btree && ((fp = bkfp(btree)) != NULL)) {
+		kfile1 = btree->b_kfile;
+		if (kfile1.k_ostat <= 0) {
+			/* it ought to be -1, for exactly one writer */
+			kfile1.k_ostat = 0;
+		} else { /* read-only, get current shared status */
 			rewind(fp);
-			if (fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+			if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 				bterrno = BTERRKFILE;
-				fclose(fp);
-				return FALSE;
+				goto exit_closebtree;
 			}
-			if (kfile.k_ostat <= 0) { /* someone has seized the DB */
-				fclose(fp);
-				return TRUE;
+			if (kfile1.k_ostat <= 0) { /* someone has seized the DB */
+				ret=TRUE;
+				goto exit_closebtree;
 			}
-			kfile.k_ostat--;
+			kfile1.k_ostat--;
 		}
 		rewind(fp);
-		if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
 			bterrno = BTERRKFILE;
-			fclose(fp);
-			return FALSE;
+			goto exit_closebtree;
 		}
-		fclose(fp);
+		ret=TRUE;
+	} else {
+		ret=TRUE;
 	}
-	return TRUE;
+exit_closebtree:
+	if (fp)
+		fclose(fp);
+	return ret;
 }
