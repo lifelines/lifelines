@@ -1,3 +1,10 @@
+2003-10-02 Perry Rapp
+	* ChangeLog  docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf
+	docs/ll-userguide.txt
+
+	Update docs for 3.0.37
+
 2003-10-03 Perry Rapp
 
 	* .cvsignore ChangeLog po/.cvsignore src/interp/.cvsignore
