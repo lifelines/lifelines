@@ -42,6 +42,7 @@
 #include "interpi.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "lloptions.h"
 
 extern STRING notone, ifone, progname;
 
@@ -593,7 +594,11 @@ __system (PNODE node,
 #ifndef WIN32
 	system("clear");
 #endif
-	system(cmd);
+	if (!lloptions.deny_system_calls) {
+		system(cmd);
+	} else {
+		/* llwprintf("Suppressing system(%s) call", cmd); */
+	}
 	touchwin(curscr);
 	wrefresh(curscr);
 	delete_pvalue(val);

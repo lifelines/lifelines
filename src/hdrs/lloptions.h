@@ -42,7 +42,7 @@
 */
 struct lloptions_s {
 	INT list_detail_lines;
-	BOOLEAN add_metadata;
+	INT add_metadata;
 	STRING email_addr;
 	/* below options not read from db options */
 	STRING lleditor;
@@ -52,6 +52,7 @@ struct lloptions_s {
 	STRING lldatabases;
 	STRING llnewdbdir;
 	STRING inputpath;
+	INT deny_system_calls; /* from within reports */
 };
 
 extern struct lloptions_s lloptions;

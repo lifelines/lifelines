@@ -14,6 +14,10 @@
 	* gedlib/keytonod.c hdrs/cache.h interp/pvalue.c:
 	Added semilocking for pvalues, to allow deeper recursion.
 
+	* gedlib/lloptions.c hdrs/lloptions.h interp/builtin.c
+	interp/interp.c interp/more.c:
+	Add DenySystemCalls option. Typecheck root() report call.
+
 2001-03-04 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc gedlib/lloptions.c hdrs/lloptions.h liflines/import.c:

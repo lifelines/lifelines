@@ -69,18 +69,19 @@ static void store_to_lloptions(void);
  *********************************************/
 
 static struct int_option_s int_options[] = {
-	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBYES },
-	{ "AddMetadata", &lloptions.add_metadata, FALSE, DBYES }
+	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBYES }
+	,{ "AddMetadata", &lloptions.add_metadata, 0, DBYES }
+	,{ "DenySystemCalls", &lloptions.deny_system_calls, 0, DBNO }
 };
 static struct str_option_s str_options[] = {
-	{ "EmailAddr", &lloptions.email_addr, "", DBYES },
-	{ "LLEDITOR", &lloptions.lleditor, "", DBNO },
-	{ "LLPROGRAMS", &lloptions.llprograms, "", DBNO },
-	{ "LLREPORTS", &lloptions.llreports, "", DBNO },
-	{ "LLARCHIVES", &lloptions.llarchives, "", DBNO },
-	{ "LLDATABASES", &lloptions.lldatabases, "", DBNO },
-	{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO },
-	{ "InputPath", &lloptions.inputpath, "", DBNO },
+	{ "EmailAddr", &lloptions.email_addr, "", DBYES }
+	,{ "LLEDITOR", &lloptions.lleditor, "", DBNO }
+	,{ "LLPROGRAMS", &lloptions.llprograms, "", DBNO }
+	,{ "LLREPORTS", &lloptions.llreports, "", DBNO }
+	,{ "LLARCHIVES", &lloptions.llarchives, "", DBNO }
+	,{ "LLDATABASES", &lloptions.lldatabases, "", DBNO }
+	,{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO }
+	,{ "InputPath", &lloptions.inputpath, "", DBNO }
 };
 
 static TABLE opttab=0;
@@ -92,12 +93,11 @@ static TABLE nodbopt=0;
  *********************************************/
 
 /*==========================================
- * read_lloptions_from_config -- Read options
- *  from global config file
- * Created: 2001/02/04, Perry Rapp
+ * init_lloptions -- Set options to default values
+ * Created: 2001/03/17, Perry Rapp
  *========================================*/
 void
-read_lloptions_from_config (void)
+init_lloptions (void)
 {
 	INT i;
 	ASSERT(!opttab && !nodbopt);
@@ -117,9 +117,18 @@ read_lloptions_from_config (void)
 		if (str_options[i].db == DBNO)
 			insert_table(nodbopt, str_options[i].name, 0);
 	}
-
+}
+/*==========================================
+ * read_lloptions_from_config -- Read options
+ *  from global config file
+ * Created: 2001/02/04, Perry Rapp
+ *========================================*/
+void
+read_lloptions_from_config (void)
+{
+	init_lloptions();
+	ASSERT(opttab && nodbopt);
 	load_config_file(environ_determine_config_file());
-
 	store_to_lloptions();
 }
 /*==========================================
@@ -142,8 +151,10 @@ read_lloptions_from_db (void)
 void
 term_lloptions (void)
 {
+	ASSERT(opttab && nodbopt);
 	remove_table(opttab, FREEVALUE);
 	remove_table(nodbopt, DONTFREE);
+	opttab = nodbopt = 0;
 }
 /*==========================================
  * numtostr -- Convert INT to STRING
@@ -205,6 +216,7 @@ read_db_options (void)
 }
 /*==========================================
  * update_opt -- update one option from db user options
+ *  used by read_db_options traversal
  * Created: 2001/02/04, Perry Rapp
  *========================================*/
 static INT

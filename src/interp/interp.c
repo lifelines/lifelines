@@ -312,6 +312,10 @@ void
 interp_main (BOOLEAN picklist)
 {
 	interp_program("main", 0, NULL, 0, NULL, NULL, picklist);
+	/*
+	TO DO: unlock all cache elements (2001/03/17, Perry)
+	in case any were left locked by report
+	*/
 }
 /*======================================
  * interpret -- Interpret statement list

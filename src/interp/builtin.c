@@ -2093,6 +2093,11 @@ __rot (PNODE node,
 		prog_error(node, "the arg to root is not a record");
 		return NULL;
 	}
+	if (!is_pvalue_cel(val)) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to root must be a record");
+		return NULL;
+	}
 	cel = (CACHEEL) pvalue(val);
 	if (cnode(cel)) {
 		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
