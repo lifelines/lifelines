@@ -1080,7 +1080,7 @@ STRING *strings;/* string list */
  *=============================================*/
 void mprintf (STRING fmt, ...)
 {
-	va_list argptr;
+	va_list args;
 	INT row;
 	wmove(main_win, row = LINES-2, 2);
 	if (cur_screen != LIST_SCREEN) {
@@ -1089,9 +1089,9 @@ void mprintf (STRING fmt, ...)
 	} else
 		mvwaddstr(main_win, row, 2, empstr);
 	wmove(main_win, row, 2);
-	va_start(argptr, fmt);
-	vsprintf(showing, fmt, argptr);
-	va_end(argptr);
+	va_start(args, fmt);
+	vsprintf(showing, fmt, args);
+	va_end(args);
 	mvwaddstr(main_win, row, 2, showing);
 	now_showing = TRUE;
 	place_cursor();
@@ -1176,10 +1176,10 @@ void place_std_msg (void)
  *===============================================*/
 void llwprintf (STRING fmt, ...)
 {
-	va_list argptr;
-	va_start(argptr, fmt);
-	wprintw(stdout_win, fmt, argptr);
-	va_end(argptr);
+	va_list args;
+	va_start(args, fmt);
+	vwprintw(stdout_win, fmt, args);
+	va_end(args);
 }
 
 #ifdef OBSOLETE
@@ -1284,13 +1284,13 @@ void place_cursor (void)
 /*=============================================
  * dbprintf -- Debug printf(fmt, arg, arg, ...)
  *===========================================*/
-void dbprintf (fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-STRING fmt;
-INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
+void dbprintf (STRING fmt, ...)
 {
+	va_list args;
 	touchwin(debug_box_win);
-	wprintw(debug_win, fmt, arg1, arg2, arg3, arg4, arg5,
-	    arg6, arg7);
+	va_start(args, fmt);
+	vwprintw(debug_win, fmt, args);
+	va_end(args);
 	wrefresh(debug_box_win);
 	sleep(2);
 	touchwin(main_win);

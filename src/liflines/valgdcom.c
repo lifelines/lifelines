@@ -759,10 +759,9 @@ STRING val;
  *================================*/
 void handle_err (STRING fmt, ...)
 {
-	va_list argptr;
+	va_list args;
 	char str[100];
 
-	va_start(argptr, fmt);
 	if (!logopen) {
 
 		unlink("err.log");
@@ -771,7 +770,9 @@ void handle_err (STRING fmt, ...)
 		logopen = TRUE;
 	}
 	fprintf(flog, "Error: ");
-	fprintf(flog, fmt, argptr);
+	va_start(args, fmt);
+	vfprintf(flog, fmt, args);
+	va_end(args);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Errors (see log file `err.log')", ++num_errors);
 	wfield(6, 1, str);
@@ -781,16 +782,17 @@ void handle_err (STRING fmt, ...)
  *===================================*/
 void handle_warn (STRING fmt, ...)
 {
-	va_list argptr;
+	va_list args;
 	char str[100];
-	va_start(argptr, fmt);
 	if (!logopen) {
 		unlink("err.log");
 		ASSERT(flog = fopen("err.log", LLWRITETEXT));
 		logopen = TRUE;
 	}
 	fprintf(flog, "Warning: ");
-	fprintf(flog, fmt, argptr);
+	va_start(args, fmt);
+	vfprintf(flog, fmt, args);
+	va_end(args);
 	fprintf(flog, "\n");
 	sprintf(str, "%6d Warnings (see log file `err.log')", ++num_warns);
 	wfield(7, 1, str);

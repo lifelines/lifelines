@@ -22,34 +22,30 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-#include <varargs.h>
+#include <stdarg.h>
 #include <stdio.h>
 
 /*===========================================================
  * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-void llwprintf (va_alist)
-va_dcl
+void llwprintf (char *fmt, ...)
 {
 	va_list args;
-	char *fmt;
-	va_start(args);
-	fmt = va_arg(args, char *);
+	va_start(args, fmt);
 	vprintf(fmt, args);
+	va_end(args);
 }
 /*===========================================================
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-void mprintf (va_alist)
-va_dcl
+void mprintf (char *fmt, ...)
 {
 	va_list args;
-	char *fmt;
-	va_start(args);
-	fmt = va_arg(args, char *);
+	va_start(args, fmt);
 	vprintf(fmt, args);
+	va_end(args);
 }
 /*======================================
  * poutput -- Print argument as a string

@@ -1,5 +1,9 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/screen.h tools/wprintf.c liflines/screen.c
+	liflines/valgdcom.c: Convert vararg functions to use ANSI
+	<stdarg.h>, and correct those functions already using it.
+
 	* hdrs/liflines.h: Remove prototypes already in "screen.h".
 	
 2000-11-05    <marc@nozell.com>

@@ -151,7 +151,7 @@ void wpos (INT, INT);
 void show_horz_line (WINDOW*, INT, INT, INT);
 void show_vert_line (WINDOW*, INT, INT, INT);
 void place_cursor (void);
-void dbprintf (STRING, INT, INT, INT, INT, INT, INT, INT);
+void dbprintf (STRING, ...);
 void do_edit (void);
 
 #endif /* _SCREEN_H */
