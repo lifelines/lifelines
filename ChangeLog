@@ -9,6 +9,11 @@
 
 	Add note in INSTALL redirecting to README.DEVELOPERS for cvs build.
 
+	* ChangeLog src/liflines/swap.c
+
+	Add ASSERT in swap_families to verify its args are FAMS nodes.
+	(rf. sf.net bug#1059724: Problem with add source/event/other commands)
+
 2005-01-01 Stephen Dum
 
         *Changelog po/fr.po reports/anniver.ll, reports/cron.ll

@@ -301,6 +301,7 @@ swap_families (RECORD irec)
 	}
 
 	ASSERT(one && two);
+	ASSERT(eqstr(ntag(one), "FAMS") && eqstr(ntag(two), "FAMS"));
 /* Swap FAMS nodes and update database */
 	str = nval(one);
 	nval(one) = nval(two);
