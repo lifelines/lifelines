@@ -597,10 +597,16 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 #define num_children(fam)  (length_nodes(CHIL(fam)))
 
 /*
-TODO: Change all FORCHILDRENx to FORCHILDREN loops
-This means changing use of NODE to RECORD
-Perry, 2002.06.24
+  Possibly all of these should lock their main argument in the cache
+  Instead of having some of the client code do it, and some not
+  Now that NODE has a pointer to its parent RECORD,
+  and RECORD has a pointer to the cacheel, it is possible 
 */
+/*
+ FORCHILDRENx takes a node as its first arg
+ FORCHILDREN takes a record as its first arg
+*/
+
 #define FORCHILDRENx(fam,child,num) \
 	{\
 	NODE __node = find_tag(nchild(fam), "CHIL");\

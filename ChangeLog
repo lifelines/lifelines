@@ -5,6 +5,10 @@
 
 	Encapsulate CACHEEL struct inside keytonode.c.
 
+	* ChangeLog src/hdrs/gedcom.h
+
+	Add comment about locking being desirable for all the macro loops.
+
 2003-10-05 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/hdrs/impfeed.h
