@@ -4676,6 +4676,25 @@ som skrivs ut.
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm>DisplayKeyTags</glossterm><glossdef>
+
+<para>
+Om satt till 1, så kommer person- och familjenycklar föregås av ett i
+respektive f när de visas på skärmen.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>AnnotatePointers</glossterm><glossdef>
+
+<para>
+Om satt till ett, så kommer en beskrivande kommentar läggas till
+pekare vid redigering av familje- eller individposter, för att hjälpa
+till att identifiera vem som hänvisas till. Dessa etiketter tas bort
+när redigeringen avslutas, och lagras inte i databasen.
+</para>
+
+</glossdef></glossentry>
+
 <glossentry><glossterm>TTPATH</glossterm><glossdef>
 
 <para>

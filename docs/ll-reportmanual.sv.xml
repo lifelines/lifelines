@@ -843,8 +843,10 @@ char_encoding("ISO-8859-1")
 	familj, deklarationen <type>spouses</type> itererar igenom de
 	makar en person haft, och deklarationen <type>families</type>
 	itererar igenom de familjer som en person är maka/make eller
-	förälder i. Dessa itereringstyper och andra typer beskrivs mer
-	i detalj längre fram under respektive datatyp.
+	förälder i. Ett antal argument till iteratorn sätts med värden
+	för varje iterering. När itereringen slutförts, har dessa
+	variabler värdet "null". Dessa itereringstyper och andra typer
+	beskrivs mer i detalj längre fram under respektive datatyp.
 
 </para>
 
@@ -946,9 +948,8 @@ Egenskapen Include
 	som inkluderas körs inte. Detta möjliggör att en modul avsedd
 	att inkluderas i andra program kan ha en main-procedur for
 	testsyften. Om flerfaldiga funktioner eller procedurer med
-	samma namn inkluderas, så är den sista som läses in den som
-	kommer att användas. För närvarande genereras inga fel eller
-	varningar för dubblerade funktions- eller procedurnamn.
+	samma namn inkluderas (förutom med namnet main), så genereras
+	ett körningsfel och programmet körs inte.
 
 </para>
 
