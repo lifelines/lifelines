@@ -2,17 +2,27 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = quickref.pdf quickref.ps lifelines.sgml llines.1
-CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt
+MANUALS =     ll-reportmanual.html ll-reportmanual.pdf \
+	     ll-reportmanual.txt \
+	     ll-userguide.html ll-userguide.pdf \
+	     ll-userguide.txt 
+# EXTRA_DIST = quickref.pdf quickref.ps lifelines.sgml llines.1 
+EXTRA_DIST = llines.1 \
+	      $(MANUALS) ll-reportmanual.xml  ll-userguide.xml 
+
+CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt \
+	     ll-reportmanual.html ll-reportmanual.pdf ll-reportmanual.txt \
+	     ll-userguide.html ll-userguide.pdf ll-userguide.txt 
 
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
+dist_pkgdata_DATA = $(MANUALS)
 
 
 # sensible values: empty, simple, fancy
 all: @DOCS_TARGET@
 
-text: lifelines.txt
+text: lifelines.txt 
 
 pdb: lifelines.pdb
 
@@ -45,4 +55,15 @@ lifelines.ps: lifelines.sgml
 
 lifelines.pdf: lifelines.ps
 	ps2pdf $^ $@
+
+%.pdf: %.xml
+	-jw -f docbook -b pdf $^
+
+%.html: %.xml
+	-jw -f docbook -b html -V nochunks $^
+
+%.txt: %.html
+	if [ -f /usr/bin/lynx ] ; then \
+	/usr/bin/lynx -force_html -dump -nolist -width=76 $^ > $@ ;\
+	fi
 
