@@ -406,7 +406,7 @@ STRING ukey;	/* user refn key */
 INT letr;	/* type of record */
 {
         STRING *keys;
-        INT num, i;
+        INT num;
 
         if (!ukey || *ukey == 0) return NULL;
         get_refns(ukey, &num, &keys, letr);
