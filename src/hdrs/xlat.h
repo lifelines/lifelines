@@ -29,5 +29,6 @@ void xl_load_all_dyntts(CNSTRING ttpath);
 void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
 void xl_release_xlat(XLAT xlat);
 void xl_set_uparam(XLAT, INT uparam);
+void xlat_shutdown(void);
 
 #endif /* xlat_h_included */

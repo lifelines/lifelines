@@ -587,6 +587,14 @@ free_dyntts (void)
 	}
 }
 /*==========================================================
+ * xlat_shutdown -- Clear and free allocated objects
+ *========================================================*/
+void
+xlat_shutdown (void)
+{
+	free_dyntts();
+}
+/*==========================================================
  * zero_dyntt -- Empty (free) contents of a dyntt
  *  NB: This does not free the dyntt memory itself
  *  b/c that is handled in the f_dyntts cache table

@@ -46,6 +46,7 @@
 #include "date.h"
 #include "mychar.h"
 #include "charprops.h"
+#include "xlat.h"
 
 /*********************************************
  * global/exported variables
@@ -355,6 +356,7 @@ close_lifelines (void)
 	term_date();
 	term_codesets();
 	strfree(&int_codeset);
+	xlat_shutdown();
 }
 /*==================================================
  * alterdb -- force open, lock, or unlock a database
