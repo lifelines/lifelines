@@ -1,9 +1,13 @@
 2003-07-08 Perry Rapp
 
-    * ChangeLog src/liflines/valgdcom.c
+	* ChangeLog src/liflines/valgdcom.c
 
 	Extend HEAD limit from 50 to 500 (to handle GEDCOM torture test).
 	PATCH#767219.
+
+	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
+
+	Bumped version for beta version 3.0.28p2.
 
 2003-07-01 Matt Emmerton
 
