@@ -43,9 +43,9 @@
 
 #include "llinesi.h"
 
-extern STRING qSidcfam, fredit, cffadd, qSidprnt, unksex, idsbln, mklast;
+extern STRING qSidcfam, fredit, cffadd, qSidprnt, unksex, qSidsbln, mklast;
 extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;
-extern STRING nosex,  hashsb, haswif, idchld, gdfadd, cfcadd, iredit;
+extern STRING nosex,  hashsb, haswif, qSidchld, gdfadd, cfcadd, iredit;
 extern STRING cfpadd, cfsadd, gdpadd, gdcadd, gdsadd, qSronlya, qSronlye;
 
 extern TRANTABLE tran_tables[];
@@ -211,12 +211,12 @@ add_child (NODE child, NODE fam)
 
 /* Identify child if caller did not */
 
-	if (!child) child = ask_for_indi_old(idchld, NOCONFIRM, DOASK1);
+	if (!child) child = ask_for_indi_old(_(qSidchld), NOCONFIRM, DOASK1);
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
 
-	if (!fam) fam = ask_for_fam(_(qSidprnt), idsbln);
+	if (!fam) fam = ask_for_fam(_(qSidprnt), _(qSidsbln));
 	if (!fam) return NULL;
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, &disp_shrt_rfmt);

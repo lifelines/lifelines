@@ -4,6 +4,12 @@
 
 	Bugfix for traverse (it was continuing to siblings at top lvl).
 
+	* ChangeLog gedlib/editmap.c gedlib/messages.c liflines/add.c
+	liflines/ask.c liflines/merge.c liflines/newrecs.c
+	liflines/screen.c liflines/show.c:
+
+	More 18n.
+
 2002-04-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.INTERNATIONAL po/de.po po/sv.po:

@@ -182,9 +182,9 @@ ZST qSspover      = N_("Too many spouses to display full list");
 ZST qSmgsfam      = N_("These persons are children in different families.");
 ZST qSmgconf      = N_("Are you sure you want to merge them?");
 
-ZST badata = SS "There is something wrong with the data.";
-ZST idchld = SS "Please identify the child.";
-ZST idsbln = SS "Please identify one of the child's siblings.";
+ZST qSbadata      = N_("There is something wrong with the data.");
+ZST qSidchld      = N_("Please identify the child.");
+ZST qSidsbln      = N_("Please identify one of the child's siblings.");
 ZST idsadd = SS "Identify spouse/parent to add to an existing family.";
 ZST idsinf = SS "Identify spouse/parent already in family, if known.";
 ZST kchild = SS "Identify child already in family.";
@@ -249,8 +249,8 @@ ZST lstbot = SS "You are at the bottom of the list.";
 ZST lsttop = SS "You are at the top of the list.";
 ZST lstnew = SS "New persons were added to the current list.";
 
-ZST badttnum    = SS "System error: illegal map code";
-ZST nosuchtt    = SS "No such translation table in this database";
+ZST qSbadttnum    = N_("System error: illegal map code");
+ZST qSnosuchtt    = N_("No such translation table in this database");
 
 /* GEDCOM file */
 ZST idgedf = SS "Please enter the name of the GEDCOM file.";
@@ -347,14 +347,14 @@ ZST qSplschs      = N_("Please choose an operation:");
 ZST qSmn_unkcmd   = N_("Not valid command");
 
 /* prompt, full list, yes list */
-ZST askynq      = N_("enter y (yes) or n (no): ");
-ZST askynyn     = N_("yYnN");
-ZST askyY       = N_("yY");
+ZST qSaskynq      = N_("enter y (yes) or n (no): ");
+ZST qSaskynyn     = N_("yYnN");
+ZST qSaskyY       = N_("yY");
 
 /* list menu */
 ZST chlist      = SS "Commands:   j Move down     k Move up    i Select     q Quit";
 ZST vwlist      = SS "Commands:   j Move down     k Move up    q Quit";
-ZST errlist     = SS "Messages:";
+ZST qSerrlist     = N_("Messages:");
 
 /* adding new xref */
 ZST defttl      = SS "Please choose from the following options:";
@@ -377,11 +377,11 @@ ZST norwandro   = SS "Cannot combine immutable (-i) or read-only (-r) with read-
 ZST nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
 ZST idrpt       = SS "Program";
 ZST iddefpath   = SS "Default path: ";
-ZST misskeys    = N_("WARNING: missing keys");
-ZST badkeyptr   = N_("WARNING: invalid pointer");
-ZST whtfname    = SS "enter file name";
-ZST whtfnameext = SS "enter file name (*%s)";
-ZST nosuchrec   = N_("There is no record with that key or reference.");
+ZST qSmisskeys    = N_("WARNING: missing keys");
+ZST qSbadkeyptr   = N_("WARNING: invalid pointer");
+ZST qSwhtfname    = N_("enter file name");
+ZST qSwhtfnameext = N_("enter file name (*%s)");
+ZST qSnosuchrec   = N_("There is no record with that key or reference.");
 
 /* translation table errors */
 ZST baddec      = SS "Bad decimal number format.";
@@ -391,44 +391,44 @@ ZST noorig      = SS "No original string on line.";
 ZST badesc      = SS "Bad escape format.";
 
 /* many menus */
-ZST mn_quit     = N_("q  Return to main menu");
-ZST mn_ret      = N_("q  Return to previous menu");
-ZST mn_exit     = N_("q  Quit program");
+ZST qSmn_quit     = N_("q  Return to main menu");
+ZST qSmn_ret      = N_("q  Return to previous menu");
+ZST qSmn_exit     = N_("q  Quit program");
 
 /* &&begin main menu (70 chars after spaces) */
-ZST mn_mmbrws   = N_("b  Browse the persons in the database");
-ZST mn_mmsear   = N_("s  Search database");
-ZST mn_mmadd    = N_("a  Add information to the database");
-ZST mn_mmdel    = N_("d  Delete information from the database");
-ZST mn_mmrpt    = N_("r  Generate report by entering report name");
-ZST mn_mmprpt   = N_("p  Pick a report from list and run");
-ZST mn_mmcset   = N_("c  Character set options");
-ZST mn_mmtt     = N_("t  Modify character translation tables");
-ZST mn_mmut     = N_("u  Miscellaneous utilities");
-ZST mn_mmex     = N_("x  Handle source, event and other records");
+ZST qSmn_mmbrws   = N_("b  Browse the persons in the database");
+ZST qSmn_mmsear   = N_("s  Search database");
+ZST qSmn_mmadd    = N_("a  Add information to the database");
+ZST qSmn_mmdel    = N_("d  Delete information from the database");
+ZST qSmn_mmrpt    = N_("r  Generate report by entering report name");
+ZST qSmn_mmprpt   = N_("p  Pick a report from list and run");
+ZST qSmn_mmcset   = N_("c  Character set options");
+ZST qSmn_mmtt     = N_("t  Modify character translation tables");
+ZST qSmn_mmut     = N_("u  Miscellaneous utilities");
+ZST qSmn_mmex     = N_("x  Handle source, event and other records");
 
 /* &&end main menu, begin utility menu */
-ZST mn_uttl     = N_("What utility do you want to perform?");
-ZST mn_utsave   = N_("s  Save the database in a GEDCOM file");
-ZST mn_utread   = N_("r  Read in data from a GEDCOM file");
-ZST mn_utkey    = N_("k  Find a person's key value");
-ZST mn_utkpers  = N_("i  Identify a person from key value");
-ZST mn_utdbstat = N_("d  Show database statistics");
-ZST mn_utmemsta = N_("m  Show memory statistics");
-ZST mn_utplaces = N_("e  Edit the place abbreviation file");
-ZST mn_utusropt = N_("o  Edit the user options file");
+ZST qSmn_uttl     = N_("What utility do you want to perform?");
+ZST qSmn_utsave   = N_("s  Save the database in a GEDCOM file");
+ZST qSmn_utread   = N_("r  Read in data from a GEDCOM file");
+ZST qSmn_utkey    = N_("k  Find a person's key value");
+ZST qSmn_utkpers  = N_("i  Identify a person from key value");
+ZST qSmn_utdbstat = N_("d  Show database statistics");
+ZST qSmn_utmemsta = N_("m  Show memory statistics");
+ZST qSmn_utplaces = N_("e  Edit the place abbreviation file");
+ZST qSmn_utusropt = N_("o  Edit the user options file");
 
 /* &&end utility menu, begin extra menu */
-ZST mn_xttl     = N_("What activity do you want to perform?");
-ZST mn_xxbsour  = N_("s  Browse source records");
-ZST mn_xxbeven  = N_("e  Browse event records");
-ZST mn_xxbothr  = N_("x  Browse other records");
-ZST mn_xxasour  = N_("1  Add a source record to the database");
-ZST mn_xxesour  = N_("2  Edit source record from the database");
-ZST mn_xxaeven  = N_("3  Add an event record to the database");
-ZST mn_xxeeven  = N_("4  Edit event record from the database");
-ZST mn_xxaothr  = N_("5  Add an other record to the database");
-ZST mn_xxeothr  = N_("6  Edit other record from the database");
+ZST qSmn_xttl     = N_("What activity do you want to perform?");
+ZST qSmn_xxbsour  = N_("s  Browse source records");
+ZST qSmn_xxbeven  = N_("e  Browse event records");
+ZST qSmn_xxbothr  = N_("x  Browse other records");
+ZST qSmn_xxasour  = N_("1  Add a source record to the database");
+ZST qSmn_xxesour  = N_("2  Edit source record from the database");
+ZST qSmn_xxaeven  = N_("3  Add an event record to the database");
+ZST qSmn_xxeeven  = N_("4  Edit event record from the database");
+ZST qSmn_xxaothr  = N_("5  Add an other record to the database");
+ZST qSmn_xxeothr  = N_("6  Edit other record from the database");
 
 /* end extra menu, begin character set menu */
 ZST mn_csttl    = SS "Character set menu";
@@ -447,51 +447,51 @@ ZST mn_csrpttl  = SS "Report character set menu";
 ZST mn_csrptcs  = SS "Report code set: ";
 
 /* &&begin translation table menu */
-ZST mn_tt_ttl   = N_("Translation Tables");
-ZST mn_tt_edit  = N_("e  edit individual tables (in db)");
-ZST mn_tt_load  = N_("l  load a table from a file (into db)");
-ZST mn_tt_save  = N_("s  save a table to a file (from db)");
-ZST mn_tt_exp   = N_("x  export all tables (from db to files)");
-ZST mn_tt_imp   = N_("i  import all tables (from files into db)");
-ZST mn_tt_dir   = N_("export/import directory:");
+ZST qSmn_tt_ttl   = N_("Translation Tables");
+ZST qSmn_tt_edit  = N_("e  edit individual tables (in db)");
+ZST qSmn_tt_load  = N_("l  load a table from a file (into db)");
+ZST qSmn_tt_save  = N_("s  save a table to a file (from db)");
+ZST qSmn_tt_exp   = N_("x  export all tables (from db to files)");
+ZST qSmn_tt_imp   = N_("i  import all tables (from files into db)");
+ZST qSmn_tt_dir   = N_("export/import directory:");
 
 /* menus for translation tables */
-ZST mn_edttttl  = N_("Which character mapping do you want to edit?");
-ZST mn_svttttl  = N_("Which character mapping do you want to save?");
+ZST qSmn_edttttl  = N_("Which character mapping do you want to edit?");
+ZST qSmn_svttttl  = N_("Which character mapping do you want to save?");
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
-ZST mn_tt_edin  = N_("e  Editor to Internal mapping ");
-ZST mn_tt_ined  = N_("m  Internal to Editor mapping ");
-ZST mn_tt_gdin  = N_("i  GEDCOM to Internal mapping ");
-ZST mn_tt_ingd  = N_("x  Internal to GEDCOM mapping ");
-ZST mn_tt_dsin  = N_("g  Display to Internal mapping");
-ZST mn_tt_inds  = N_("d  Internal to Display mapping");
-ZST mn_tt_inrp  = N_("r  Internal to Report mapping ");
+ZST qSmn_tt_edin  = N_("e  Editor to Internal mapping ");
+ZST qSmn_tt_ined  = N_("m  Internal to Editor mapping ");
+ZST qSmn_tt_gdin  = N_("i  GEDCOM to Internal mapping ");
+ZST qSmn_tt_ingd  = N_("x  Internal to GEDCOM mapping ");
+ZST qSmn_tt_dsin  = N_("g  Display to Internal mapping");
+ZST qSmn_tt_inds  = N_("d  Internal to Display mapping");
+ZST qSmn_tt_inrp  = N_("r  Internal to Report mapping ");
 /* not yet implemented choices */
-ZST mn_notimpl  = SS "Not implemented yet";
+ZST qSmn_notimpl  = N_("Not implemented yet");
 
 /* &&begin add menu */
-ZST mn_add_ttl  = N_("What do you want to add?");
-ZST mn_add_indi = N_("p  Person - add new person to the database");
-ZST mn_add_fam  = N_("f  Family - create family record from one or two spouses");
-ZST mn_add_chil = N_("c  Child - add a child to an existing family");
-ZST mn_add_spou = N_("s  Spouse - add a spouse to an existing family");
+ZST qSmn_add_ttl  = N_("What do you want to add?");
+ZST qSmn_add_indi = N_("p  Person - add new person to the database");
+ZST qSmn_add_fam  = N_("f  Family - create family record from one or two spouses");
+ZST qSmn_add_chil = N_("c  Child - add a child to an existing family");
+ZST qSmn_add_spou = N_("s  Spouse - add a spouse to an existing family");
 
 /* &&end add menu, begin delete menu */
-ZST mn_del_ttl  = N_("What do you want to remove?");
-ZST mn_del_chil = N_("c  Child - remove a child from his/her family");
-ZST mn_del_spou = N_("s  Spouse - remove a spouse from a family");
-ZST mn_del_indi = N_("i  Individual - remove a person completely");
-ZST mn_del_fam  = N_("f  Family - remove a family completely");
+ZST qSmn_del_ttl  = N_("What do you want to remove?");
+ZST qSmn_del_chil = N_("c  Child - remove a child from his/her family");
+ZST qSmn_del_spou = N_("s  Spouse - remove a spouse from a family");
+ZST qSmn_del_indi = N_("i  Individual - remove a person completely");
+ZST qSmn_del_fam  = N_("f  Family - remove a family completely");
 
 /* &&end delete menu, begin scan menu */
-ZST mn_sca_ttl  = N_("What scan type?");
-ZST mn_sca_nmfu = N_("f  Full name scan");
-ZST mn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");
-ZST mn_sca_refn = N_("r  Refn scan");
-ZST sts_sca_ful = N_("Performing full name scan");
-ZST sts_sca_fra = N_("Performing name fragment scan");
-ZST sts_sca_ref = N_("Performing refn scan");
-ZST sts_sca_non = N_("No records found in scan");
+ZST qSmn_sca_ttl  = N_("What scan type?");
+ZST qSmn_sca_nmfu = N_("f  Full name scan");
+ZST qSmn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");
+ZST qSmn_sca_refn = N_("r  Refn scan");
+ZST qSsts_sca_ful = N_("Performing full name scan");
+ZST qSsts_sca_fra = N_("Performing name fragment scan");
+ZST qSsts_sca_ref = N_("Performing refn scan");
+ZST qSsts_sca_non = N_("No records found in scan");
 
 /* &&complex date strings (A=abbrev, B=full)*/
 ZST qSdatea_abtA  = N_("abt %1");

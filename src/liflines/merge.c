@@ -44,7 +44,7 @@
 
 extern BOOLEAN traditional;
 extern STRING iredit, qScfpmrg, nopmrg, noqmrg, noxmrg, nofmrg;
-extern STRING dhusb,  dwife,  qScffmrg, fredit, badata, qSronlym;
+extern STRING dhusb,  dwife,  qScffmrg, fredit, qSbadata, qSronlym;
 extern STRING qSmgsfam,qSmgconf;
 
 static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
@@ -472,7 +472,7 @@ merge_two_fams (NODE fam1,
 			break;
 		}
 		if (!valid_fam_old(fam4, &msg, fam3)) {
-			if (ask_yes_or_no_msg(badata, iredit)) {
+			if (ask_yes_or_no_msg(_(qSbadata), iredit)) {
 				do_edit();
 				continue;
 			}

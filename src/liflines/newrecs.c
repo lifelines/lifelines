@@ -50,7 +50,7 @@ extern STRING qScfradd, qScfeadd, qScfxadd, rredit, eredit, xredit;
 extern STRING qScfrupt, qScfeupt, qScfxupt, gdrmod, gdemod, gdxmod;
 extern STRING idredt, ideedt, idxedt, duprfn, qSronlya, qSronlye;
 extern STRING qSnofopn, qSidkyrfn;
-extern STRING qSdefsour,qSdefeven,qSdefothr,nosuchrec;
+extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
 
 /*********************************************
  * local function prototypes
@@ -260,7 +260,7 @@ edit_record (NODE node1, STRING idedt, INT letr, STRING redt
 		node1 = nztop(ask_for_record(idedt, letr));
 	}
 	if (!node1) {
-		message(nosuchrec);
+		message(_(qSnosuchrec));
 		return;
 	}
 	refn = REFN(node1);

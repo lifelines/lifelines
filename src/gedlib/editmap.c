@@ -17,7 +17,7 @@
 
 
 extern STRING map_keys[];
-extern STRING cmperr,aredit,qSronlye,dataerr,badttnum;
+extern STRING cmperr,aredit,qSronlye,dataerr,qSbadttnum;
 extern STRING sepch;
 
 /*==============================================
@@ -28,7 +28,7 @@ BOOLEAN
 edit_mapping (INT ttnum)
 {
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(badttnum);
+		msg_error(_(qSbadttnum));
 		return FALSE;
 	}
 	if (readonly) {

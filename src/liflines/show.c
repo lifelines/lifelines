@@ -61,7 +61,7 @@ extern INT LIST_LINES;		/* person info display lines above list */
 extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
-extern STRING misskeys;
+extern STRING qSmisskeys;
 extern STRING dspl_indi,dspl_fath,dspl_moth,dspl_spouse,dspl_child;
 extern STRING dspa_resi,dspa_div;
 extern STRING dspa_mar,dspa_bir,dspa_chr,dspa_dea,dspa_bur,dspa_chbr;
@@ -311,7 +311,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, LLRECT rect
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		char buf[132];
-		snprintf(buf, sizeof(buf), "%s: %.40s", _(misskeys), badkeylist);
+		snprintf(buf, sizeof(buf), "%s: %.40s", _(qSmisskeys), badkeylist);
 		message(buf);
 	}
 }
