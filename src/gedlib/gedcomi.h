@@ -1,3 +1,6 @@
+/* gedcomi.h */
+/* functions internal to the gedcom subdirectory */
+
 #ifndef _GEDCOM_PRIV_H
 #define _GEDCOM_PRIV_H
 

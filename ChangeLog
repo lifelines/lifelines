@@ -36,6 +36,11 @@
 
 	Convert "destroy_list2(list, NULL)" calls to "destroy_list(list)".
 
+	* ChangeLog src/btree/btreei.h src/gedlib/gedcomi.h
+	src/hdrs/btree.h
+
+	Move some btree internal calls to btreei.h.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -1,3 +1,6 @@
+/* btreei.h */
+/* functions internal to the btree subdirectory */
+
 #ifndef _BTREE_PRIV_H
 #define _BTREE_PRIV_H
 
@@ -9,6 +12,9 @@ void addkey(BTREE, FKEY, RKEY, FKEY);
 /* block.c */
 BLOCK crtblock(BTREE);
 BLOCK allocblock(void);
+
+/* btree.c */
+RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 
 /* index.c */
 INDEX crtindex(BTREE);

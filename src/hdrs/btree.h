@@ -171,7 +171,6 @@ INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 BOOLEAN bt_addrecord(BTREE, RKEY, RAWRECORD, INT);
 RAWRECORD bt_getrecord(BTREE, const RKEY *, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
-RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 INT cmpkeys(const RKEY * rk1, const RKEY * rk2);
 
 /* traverse.c */
