@@ -78,15 +78,15 @@ proc include(person,hops,keypath,path,pathend)
                 set(found,1)
                 list(plist)
                 list(hlist)
-                insert(mark,save(pkey),save(concat(path,pathend)))
-                insert(keys,save(pkey),save(concat(concat(keypath,"@"),pkey)))
+                insert(mark,pkey,concat(path,pathend))
+                insert(keys,pkey,concat(concat(keypath,"@"),pkey))
             }
         }
         else {
-            enqueue(plist,save(pkey))
+            enqueue(plist,pkey)
             enqueue(hlist,hops)
-            insert(mark,save(pkey),save(concat(path,pathend)))
-            insert(keys,save(pkey),save(concat(concat(keypath,"@"),pkey)))
+            insert(mark,pkey,concat(path,pathend))
+            insert(keys,pkey,concat(concat(keypath,"@"),pkey))
         }
     }
 }
@@ -98,21 +98,21 @@ proc get_token(input) {
     Set global parameter untoken to the rest of the string after first token.
 */
 /* strip leading @s */
-    set(untoken,save(input))
+    set(untoken,input)
     set(first_delim,index(untoken,"@",1))
     while (eq(first_delim,1)) {
-        set(untoken,save(substring(untoken,2,strlen(untoken))))
+        set(untoken,substring(untoken,2,strlen(untoken)))
         set(first_delim,index(untoken,"@",1))
     }
 /* get token and untoken */
     if (not(first_delim)) {
-        set(token,save(untoken))
-        set(untoken,save(""))
+        set(token,untoken)
+        set(untoken,"")
     }
     else {
-        set(token,save(substring(untoken,1,sub(first_delim,1))))
-        set(untoken,save(
-            substring(untoken,add(first_delim,1),strlen(untoken))))
+        set(token,substring(untoken,1,sub(first_delim,1)))
+        set(untoken,
+            substring(untoken,add(first_delim,1),strlen(untoken)))
     }
 }
 
@@ -168,7 +168,7 @@ proc main ()
 
     getindimsg(from_person,
         "Enter person to compute relation from:")
-    set(from_key,save(key(from_person)))
+    set(from_key,key(from_person))
     set(hopcount,0)
     set(prev_hopcount,neg(1))
     set(found,0)
@@ -181,7 +181,7 @@ proc main ()
     if (eq(mode,1)) {
         getindimsg(to_person,
             "Enter one person to compute relation to:")
-        set(to_key,save(key(to_person)))
+        set(to_key,key(to_person))
         if (strcmp(from_key,to_key)) {
             insert(mark,to_key,"is not related to")
         }
@@ -223,17 +223,17 @@ proc main ()
     }
     if (eq(mode,1)) {
         from_key " " name(indi(from_key))
-        call parse_relation(save(lookup(mark,to_key)),lookup(keys,to_key))
+        call parse_relation(lookup(mark,to_key),lookup(keys,to_key))
         to_key   " " name(indi(to_key)) "\n"
     }
     if (eq(mode,2)) {
         set(want_another,1)
         while (want_another) {
             getindimsg(to_person,"Enter person to compute relation to:")
-            set(to_key,save(key(to_person)))
+            set(to_key,key(to_person))
             from_key " " name(indi(from_key))
             if (path,lookup(mark,to_key)) {
-                call parse_relation(save(path),lookup(keys,to_key))
+                call parse_relation(path,lookup(keys,to_key))
             }
             else { " is not related to " }
             to_key  " "  name(to_person) "\n"
@@ -244,9 +244,9 @@ proc main ()
     if (eq(mode,3)) {
         from_key " " name(indi(from_key)) " --->\n"
         forindi(to_person,num) {
-            set(to_key,save(key(to_person)))
+            set(to_key,key(to_person))
             if (path,lookup(mark,to_key)) {
-                call parse_relation(save(path),lookup(keys,to_key))
+                call parse_relation(path,lookup(keys,to_key))
                 to_key " " name(to_person) "\n"
             }
         }
