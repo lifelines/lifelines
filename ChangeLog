@@ -1,4 +1,4 @@
-2002-07-30 Perry Rapp <puddle@users.sourceforge.net>
+2002-07-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog po/LINGUAS
 	NEW: po/fr.po:
@@ -12,6 +12,11 @@
 	* ChangeLog gedlib/keytonod.c liflines/error.c tools/dbverify.c:
 
 	Add missing key info messages to crash log.
+
+	*  ChangeLog build/msvc6/dbverify/dbVerify.rc gedlib/keytonod.c
+	hdrs/standard.h liflines/error.c stdlib/lldate.c:
+
+	Clean up error messages for missing keys in crash log.
 
 2002-07-27 Perry Rapp <puddle@users.sourceforge.net>
 

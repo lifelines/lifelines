@@ -675,7 +675,8 @@ add_to_direct (CACHE cache, STRING key, INT reportmode)
 		{
 			j = keyidx + i;
 			if(j >= 10) j -= 10;
-			crashlog(" %s", (char *)keybuf[j]);
+			if (keybuf[j][0])
+				crashlog(" %s", (char *)keybuf[j]);
 		}
 		crashlog("\n");
 		/* deliberately fall through to let ASSERT(rec) fail */

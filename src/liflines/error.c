@@ -88,7 +88,7 @@ crashlog (STRING fmt, ...)
 	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
-	if (f_crashfile[0]) {
+	if (f_crashfile[0] && !allwhite(buffer)) {
 		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
 		if (fp) {
 			LLDATE creation;

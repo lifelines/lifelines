@@ -200,12 +200,14 @@ struct WAREHOUSE_S;
 typedef struct WAREHOUSE_S *WAREHOUSE;
 
 /*
- 15 bytes 0-terminated YYYYMMDDHHMMSS, GMT
+ short format ISO style time string:
+ 16 bytes 0-terminated YYYYMMDDHHMMSS ending with Z (GMT)
    0 filled DD,HH, and MM
-   because ansi hasn't solved the date problem
+ (21 bytes in case we support the longer style later:
+     YYYY-MM-DDTHH:MM:SSZ)
 */
 typedef struct lldate_s {
-	char datestr[15];
+	char datestr[21];
 } LLDATE;
 
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
