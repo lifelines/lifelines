@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -48,9 +48,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -69,11 +70,11 @@ YACC = @YACC@
 bin_PROGRAMS = llines
 
 # what goes into lines?
-lines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c export.c import.c 	lbrowse.c main.c merge.c miscutls.c newrecs.c remove.c show.c 	screen.c swap.c tandem.c valgdcom.c
+llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c export.c import.c 	lbrowse.c main.c merge.c miscutls.c newrecs.c remove.c show.c 	screen.c swap.c tandem.c valgdcom.c
 
 
 # extra stuff for lines
-lines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a 	../stdlib/libstdlib.a ../btree/libbtree.a
+llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a 	../stdlib/libstdlib.a ../btree/libbtree.a
 
 
 INCLUDES = -I$(srcdir)/../hdrs
@@ -87,12 +88,12 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-lines_OBJECTS =  add.o advedit.o ask.o browse.o delete.o edit.o export.o \
-import.o lbrowse.o main.o merge.o miscutls.o newrecs.o remove.o show.o \
-screen.o swap.o tandem.o valgdcom.o
-lines_DEPENDENCIES =  ../interp/libinterp.a ../gedlib/libgedcom.a \
+llines_OBJECTS =  add.o advedit.o ask.o browse.o delete.o edit.o \
+export.o import.o lbrowse.o main.o merge.o miscutls.o newrecs.o \
+remove.o show.o screen.o swap.o tandem.o valgdcom.o
+llines_DEPENDENCIES =  ../interp/libinterp.a ../gedlib/libgedcom.a \
 ../stdlib/libstdlib.a ../btree/libbtree.a
-lines_LDFLAGS = 
+llines_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -109,8 +110,8 @@ DEP_FILES =  .deps/add.P .deps/advedit.P .deps/ask.P .deps/browse.P \
 .deps/lbrowse.P .deps/main.P .deps/merge.P .deps/miscutls.P \
 .deps/newrecs.P .deps/remove.P .deps/screen.P .deps/show.P .deps/swap.P \
 .deps/tandem.P .deps/valgdcom.P
-SOURCES = $(lines_SOURCES)
-OBJECTS = $(lines_OBJECTS)
+SOURCES = $(llines_SOURCES)
+OBJECTS = $(llines_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -137,8 +138,8 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	    echo "  $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	     $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	  else :; fi; \
 	done
 
@@ -164,9 +165,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-llines: $(lines_OBJECTS) $(lines_DEPENDENCIES)
+llines: $(llines_OBJECTS) $(llines_DEPENDENCIES)
 	@rm -f llines
-	$(LINK) $(lines_LDFLAGS) $(lines_OBJECTS) $(lines_LDADD) $(LIBS)
+	$(LINK) $(llines_LDFLAGS) $(llines_OBJECTS) $(llines_LDADD) $(LIBS)
 
 tags: TAGS
 
@@ -210,7 +211,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -271,7 +272,7 @@ uninstall: uninstall-am
 all-am: Makefile $(PROGRAMS)
 all-redirect: all-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
 	$(mkinstalldirs)  $(DESTDIR)$(bindir)
 

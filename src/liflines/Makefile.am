@@ -1,15 +1,15 @@
 
 
 # what are we going to build?
-bin_PROGRAMS = lines
+bin_PROGRAMS = llines
 
 # what goes into lines?
-lines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c export.c import.c \
+llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c export.c import.c \
 	lbrowse.c main.c merge.c miscutls.c newrecs.c remove.c show.c \
 	screen.c swap.c tandem.c valgdcom.c
 
 # extra stuff for lines
-lines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
+llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../stdlib/libstdlib.a ../btree/libbtree.a
 
 INCLUDES=-I$(srcdir)/../hdrs
