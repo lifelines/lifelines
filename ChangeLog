@@ -1,5 +1,7 @@
 2000-12-17 Perry Rapp <prapp@users.sourceforge.net>
 
+	* ChangeLog liflines/browse.c liflines/llinesi.h
+	liflines/pedigree.c liflines/show.c liflines/tandem.c:
 	Revised some function definitions as per prevailing style.
 	Renamed scroll variables to reduce confusion.
 	Reset scroll every time entering a new person/family.
