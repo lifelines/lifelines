@@ -632,6 +632,7 @@ ped_browse (NODE indi)
 	return interact(main_win,
 		"eifmscgb+-q");
 }
+#ifdef UNUSED
 /*=======================================
  * aux_browse -- Handle aux_browse screen
  *=====================================*/
@@ -643,6 +644,7 @@ aux_browse (NODE node)
 	display_screen(AUX_SCREEN);
 	return interact(main_win, "eq");
 }
+#endif
 /*=========================================
  * list_browse -- Handle list_browse screen
  *=======================================*/
@@ -1175,6 +1177,7 @@ vmprintf (STRING fmt, va_list args)
 }
 /*===============================================
  * mprintf_error -- Call as mprintf_error(fmt, ...)
+ * tell the user something went wrong
  *=============================================*/
 void
 mprintf_error (STRING fmt, ...)
@@ -1185,7 +1188,7 @@ mprintf_error (STRING fmt, ...)
 	va_end(args);
 }
 /*===============================================
- * mprintf_info -- Call as mprintf_error(fmt, ...)
+ * mprintf_info -- Call as mprintf_info(fmt, ...)
  * usually displaying results of user's action
  *=============================================*/
 void
@@ -1197,7 +1200,7 @@ mprintf_info (STRING fmt, ...)
 	va_end(args);
 }
 /*===============================================
- * mprintf_status -- Call as mprintf_error(fmt, ...)
+ * mprintf_status -- Call as mprintf_status(fmt, ...)
  * transient status during import/export, eg, counting nodes
  *=============================================*/
 void
@@ -1208,7 +1211,6 @@ mprintf_status (STRING fmt, ...)
 	vmprintf(fmt, args);
 	va_end(args);
 }
-
 #ifdef OBSOLETE
 /*===============================================
  * Other: mprintf -- Call as mprintf(fmt, arg, arg, ...)

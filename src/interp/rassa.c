@@ -53,13 +53,10 @@ static unsigned char linebuffer[1024];
 static INT linebuflen = 0;
 static STRING bufptr = linebuffer;
 
-static void adjust_cols(STRING);
+static STRING outfilename;
+extern STRING norpt, whtout;
 
-STRING outfilename;
-STRING noreport = (STRING) "No report was generated.";
-STRING whtout = (STRING) "What is the name of the output file?";
-
-static void adjust_cols (STRING str);
+static void adjust_cols (STRING);
 
 /*======================================+
  * initrassa -- Initialize program output
@@ -195,7 +192,7 @@ __outfile (PNODE node,
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
-			message(noreport);
+			message(norpt);
 			return NULL;
 		}
 		setbuf(Poutfp, NULL);
@@ -317,7 +314,7 @@ __pageout (PNODE node,
 	if (!Poutfp) {
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename, llreports, NULL);
 		if (!Poutfp)  {
-			message(noreport);
+			message(norpt);
 			return NULL;
 		}
 		setbuf(Poutfp, NULL);
@@ -350,7 +347,7 @@ poutput (STRING str)
 	if (!Poutfp) {
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name, llreports, NULL);
 		if (!Poutfp)  {
-			message(noreport);
+			message(norpt);
 			return;
 		}
 		setbuf(Poutfp, NULL);

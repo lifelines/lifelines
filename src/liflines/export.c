@@ -42,8 +42,8 @@ extern STRING btreepath, llarchives;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
 
-TRANTABLE tran_gedout;
-char *mabbv[] = {
+static TRANTABLE tran_gedout;
+static char *mabbv[] = {
 	"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
 };

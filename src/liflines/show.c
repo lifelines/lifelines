@@ -578,6 +578,7 @@ show_list (INDISEQ seq,
 		row++;
 	}
 }
+#if UNUSED
 /*========================================================
  * show_aux_display -- Show source, event or other record
  *======================================================*/
@@ -608,6 +609,7 @@ show_aux_display (NODE node,
 	}
 #endif
 }
+#endif
 #if UNUSED
 /*=========================================
  * show_sour_display -- Show source display

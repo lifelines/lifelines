@@ -226,3 +226,6 @@ STRING dbrdon = SS "The database is read-only; loading has been canceled.";
 
 STRING extrpt = SS "<Choose outside this list>";
 STRING qrpt   = SS "What is the name of the program?";
+
+STRING norpt =  SS "No report was generated.";
+STRING whtout = SS "What is the name of the output file?";
