@@ -51,6 +51,21 @@ enum TB_VALTYPE
 		, TB_NULL /* placeholder for newly created tables */
 	};
 
+/*
+2005-01-17
+ Perry is in process of converting table to use generics instead of unions
+ So right now entry has both generic and union.
+ The rule is that if the generic is non-null, it holds the value.
+ Otherwise the value is in the union.
+ Table types (TB_VALTYPE, a table-level property) are only relevant to
+ unions -- generics have their own type info.
+ NB: generic object pointers can only be used with objects that correctly
+ implement destructors -- I'm not sure if we have any such yet; I've not
+ tested them well. That is, I've not tested objects containing other
+ objects, because that is not yet possible. Once a table can contain an
+ object such as a list, we have object hierarchies and need destructors
+ to all work correctly.
+*/
 struct tag_entry {
 	STRING ekey;
 	GENERIC generic; /* holds generic null value if uval in use */
