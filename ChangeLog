@@ -1,9 +1,15 @@
-2001-04-15    <Marc.Nozell@compaq.com>
-
-	* tools/btedit.c: Fix btedit build.
+2001-04-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog NEWS interp/interp.c interp/pvalue.c:
 	Fixes for pvalue problems.
+
+	* interp/builtin.c:
+	Added comment for outstanding problem with __name
+	(it returns NULL PSTRING values).
+
+2001-04-15    <Marc.Nozell@compaq.com>
+
+	* tools/btedit.c: Fix btedit build.
 
 2001-04-14 Perry Rapp <puddle@users.sourceforge.net>
 

@@ -235,6 +235,10 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to name must be a person");
 		return NULL;
 	}
+	/*
+	This is not so good - __upper etc can't handle
+	PSTRINGs with NULL values - 2001/04/15, Perry Rapp
+	*/
 	if (!indi) return create_pvalue(PSTRING, NULL);
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
