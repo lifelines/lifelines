@@ -82,6 +82,12 @@
 
 	dbverify: Add shell for fixing family pointers.
 
+	* ChangeLog src/gedlib/spltjoin.c src/hdrs/gedcom.h
+	src/tools/dbverify.c
+
+	dbverify: Implement code to fix family pointers.
+	New function normalize_fam.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

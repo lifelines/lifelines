@@ -140,6 +140,7 @@ static void process_fam(RECORD rec);
 static void process_indi(RECORD rec);
 static void process_record(RECORD rec);
 static void report_error(INT err, STRING fmt, ...);
+static void report_fix(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
 static void report_results(void);
 static void validate_errs(void);
@@ -157,7 +158,6 @@ enum {
 	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
 	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
 	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
-	, ERR_FIXEDMISSINGSPOUSE, ERR_FIXEDMISSINGCHILD
 };
 
 static struct errinfo errs[] = {
@@ -186,9 +186,6 @@ static struct errinfo errs[] = {
 	, { ERR_EMPTYFAM, 0, 0, N_("Empty family") }
 	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
 	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
-	, { ERR_FIXEDMISSINGSPOUSE, 0, 0, N_("Fixed missing spouse") }
-	, { ERR_FIXEDMISSINGCHILD, 0, 0, N_("Fixed missing child") }
-	
 };
 static struct work todo;
 static LIST tofix=0;
@@ -243,13 +240,28 @@ print_usage (void)
 }
 /*========================================
  * report_error -- report some error found
- * Created: 2001/01/01, Perry Rapp
+ *  increment error count
  *======================================*/
 static void
 report_error (INT err, STRING fmt, ...)
 {
 	va_list args;
-	errs[err].err_count++;
+	++errs[err].err_count;
+	va_start(args, fmt);
+	printf("! ");
+	vprintf(fmt, args);
+	printf("\n");
+	va_end(args);
+}
+/*========================================
+ * report_fix -- report an error fixed
+ *  increment fixed count
+ *======================================*/
+static void
+report_fix (INT err, STRING fmt, ...)
+{
+	va_list args;
+	++errs[err].fix_count;
 	va_start(args, fmt);
 	printf("! ");
 	vprintf(fmt, args);
@@ -672,7 +684,7 @@ process_indi (RECORD rec)
 					needfix=TRUE;
 				} else {
 					if (fix_bad_pointer(key, rec, node1)) {
-						report_error(ERR_FIXEDMISSINGCHILD, _("Fixed missing child (%s) in family (%s)"), key, famkey);
+						report_fix(ERR_MISSINGCHILD, _("Fixed missing child (%s) in family (%s)"), key, famkey);
 						altered=TRUE;
 					}
 				}
@@ -696,7 +708,7 @@ process_indi (RECORD rec)
 					needfix=TRUE;
 				} else {
 					if (fix_bad_pointer(key, rec, node1)) {
-						report_error(ERR_FIXEDMISSINGSPOUSE, _("Fixed missing spouse (%s) in family (%s)"), key, famkey);
+						report_fix(ERR_MISSINGSPOUSE, _("Fixed missing spouse (%s) in family (%s)"), key, famkey);
 						altered=TRUE;
 					}
 				}
@@ -779,9 +791,19 @@ process_fam (RECORD rec)
 		NODE husb = qkey_to_indi(husbkey);
 		members++;
 		if (!husb) {
-			report_error(ERR_BADHUSBREF
-				, _("Bad HUSB reference (%s) in family %s")
-				, husbkey, key);
+			if (todo.pass == 1) {
+				report_error(ERR_BADHUSBREF
+					, _("Bad HUSB reference (%s) in family %s")
+					, husbkey, key);
+				needfix=TRUE;
+			} else {
+				if (fix_bad_pointer(key, rec, node1)) {
+					report_fix(ERR_BADHUSBREF
+						, _("Fixed Bad HUSB reference (%s) in family %s")
+						, husbkey, key);
+					altered=TRUE;
+				}
+			}
 		} else {
 			/* look for family (key) in husb */
 			if (!find_xref(key, husb, "FAMS", NULL)) {
@@ -839,10 +861,10 @@ process_fam (RECORD rec)
 	if (altered) {
 		/* must normalize, as some lineage references may have been 
 		altered to non-lineage tags to fix broken pointers */
-		/* normalize_fam(fam1); */
+		normalize_fam(fam1);
 
 		/* write to database */
-/*		replace_indi(indi0, indi1); */
+		replace_fam(fam0, fam1);
 
 	} else if (needfix) {
 		enqueue_list(tofix, strsave(key));

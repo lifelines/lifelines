@@ -380,6 +380,7 @@ BOOLEAN node_to_nkey(NODE node, NKEY * nkey);
 NODE node_to_node(NODE, INT*);
 RECORD node_to_record(NODE node);
 STRING node_to_tag(NODE node, STRING tag, INT len);
+void normalize_fam(NODE fam);
 void normalize_irec(RECORD irec);
 void normalize_indi(NODE indi);
 INT num_evens(void);

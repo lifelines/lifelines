@@ -365,5 +365,18 @@ normalize_indi (NODE indi)
 	NODE name, refn, sex, body, famc, fams;
 	
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	ASSERT(eqstr(ntag(indi), "INDI"));
 	join_indi(indi, name, refn, sex, body, famc, fams);
+}
+/*==================================================
+ * normalize_fam -- ensure nodes are in lifelines order
+ *================================================*/
+void
+normalize_fam (NODE fam)
+{
+	NODE fref, husb, wife, chil, rest;
+
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	ASSERT(eqstr(ntag(fam), "FAM"));
+	join_fam(fam, fref, husb, wife, chil, rest);
 }
