@@ -1,3 +1,11 @@
+2002-04-28 Perry Rapp <puddle@users.sourceforge.net>
+
+	* config.h
+	*NEW libintlvc6.dsp libintlvc6.dsw
+	*DELETED msvc6lib.dsp msvc6lib.dsw:
+
+	Updated project files for libintl under MSVC, and added use of iconv.
+
 2002-04-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/editmap.c gedlib/editvtab.c gedlib/gstrings.c
