@@ -6,6 +6,9 @@
 	Fixed a couple bugs, and revised menuchoose to handle nonstring
 	list choice items. Tested & commented in dupseq.
 
+	* ChangeLog interp/intrpseq.c:
+	Fix some more report indiseq commands to accept NULL seqs.
+
 2001-04-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c liflines/browse.c:

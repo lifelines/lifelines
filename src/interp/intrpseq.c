@@ -344,14 +344,15 @@ __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to intersect must be a set.");
 		return NULL;
 	}
-	ASSERT(op1 = (INDISEQ) pvalue(val));
+	/* NULL indiseqs are possible, because of getindiset */
+	op1 = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to intersect must be a set.");
 		return NULL;
 	}
-	ASSERT(op2 = (INDISEQ) pvalue(val));
+	op2 = (INDISEQ) pvalue(val);
 	set_pvalue(val, PSET, op2 = intersect_indiseq(op1, op2));
 /*	push_list(keysets, op2);*/
 	return val;
@@ -370,14 +371,15 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to difference must be a set.");
 		return NULL;
 	}
-	ASSERT(op1 = (INDISEQ) pvalue(val));
+	/* NULL indiseqs are possible, because of getindiset */
+	op1 = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to difference must be a set.");
 		return NULL;
 	}
-	ASSERT(op2 = (INDISEQ) pvalue(val));
+	op2 = (INDISEQ) pvalue(val);
 	set_pvalue(val, PSET, op2 = difference_indiseq(op1, op2));
 /*	push_list(keysets, op2);*/
 	return val;
@@ -395,7 +397,8 @@ __parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to parentset must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = (INDISEQ) pvalue(val));
+	/* NULL indiseqs are possible, because of getindiset */
+	seq = (INDISEQ) pvalue(val);
 	seq = parent_indiseq(seq);
 	set_pvalue(val, PSET, seq);
 	return val;
