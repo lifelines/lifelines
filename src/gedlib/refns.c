@@ -156,7 +156,7 @@ getrefnrec (STRING refn)
 /* Convert refn to key and read refn record */
 	RRkey = refn2rkey(refn);
 	if (RRrec) stdfree(RRrec);
-	p = RRrec = getrecord(BTR, &RRkey, &RRsize);
+	p = RRrec = bt_getrecord(BTR, &RRkey, &RRsize);
 	if (!RRrec) {
 		RRcount = 0;
 		if (RRmax == 0) {
@@ -255,7 +255,7 @@ add_refn (STRING refn,  /* record's user refn key */
 		p += strlen(RRrefns[i]) + 1;
 		len += strlen(RRrefns[i]) + 1;
 	}
-	addrecord(BTR, RRkey, rec, len);
+	bt_addrecord(BTR, RRkey, rec, len);
 	stdfree(rec);
 	return TRUE;
 }
@@ -308,7 +308,7 @@ remove_refn (STRING refn,       /* record's refn */
 		p += strlen(RRrefns[i]) + 1;
 		len += strlen(RRrefns[i]) + 1;
 	}
-	addrecord(BTR, RRkey, rec, len);
+	bt_addrecord(BTR, RRkey, rec, len);
 	stdfree(rec);
 	return TRUE;
 }

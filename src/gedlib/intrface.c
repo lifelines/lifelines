@@ -43,7 +43,7 @@ STRING
 retrieve_raw_record (CNSTRING key, INT *plen)
 {
 	RKEY rkey = str2rkey(key);
-	return getrecord(BTR, &rkey, plen);
+	return bt_getrecord(BTR, &rkey, plen);
 }
 /*=========================================
  * store_record -- Store record in database
@@ -54,7 +54,7 @@ retrieve_raw_record (CNSTRING key, INT *plen)
 BOOLEAN
 store_record (STRING key, STRING rec, INT len)
 {
-	return addrecord (BTR, str2rkey(key), rec, len);
+	return bt_addrecord (BTR, str2rkey(key), rec, len);
 }
 /*=========================================
  * retrieve_to_file -- Retrieve record to file

@@ -175,7 +175,7 @@ across database reloads
 */
 	rkey_cpy(rkey, &NRkey);
 	strfree(&NRrec);
-	p = NRrec = getrecord(BTR, rkey, &NRsize);
+	p = NRrec = bt_getrecord(BTR, rkey, &NRsize);
 	if (!NRrec) {
 		NRcount = 0;
 		if (NRmax == 0) {
@@ -435,7 +435,7 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 		p += strlen(NRnames[i]) + 1;
 		len += strlen(NRnames[i]) + 1;
 	}
-	addrecord(BTR, NRkey, rec, len);
+	bt_addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
 
 	/* NRnames[NRcount] doesn't point into record */
@@ -526,7 +526,7 @@ remove_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 		p += strlen(NRnames[i]) + 1;
 		len += strlen(NRnames[i]) + 1;
 	}
-	addrecord(BTR, NRkey, rec, len);
+	bt_addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
 }
 /*=========================================================

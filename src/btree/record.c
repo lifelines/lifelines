@@ -84,14 +84,14 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 }
 
 /*=================================
- * addrecord -- Add record to BTREE
+ * bt_addrecord -- Add record to BTREE
  *  btree:  [in] btree to add record to
  *  rkey:   [in] key of record (eg, "     I67")
  *  record: [in] record data to add
  *  len:    [in] record length
  *===============================*/
 BOOLEAN
-addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
+bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 {
 	INDEX index;
 	BLOCK old, newb, xtra;
@@ -397,14 +397,14 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 	return rawrec;
 }
 /*===================================
- * getrecord -- Get record from BTREE
+ * bt_getrecord -- Get record from BTREE
  * (ignore deleted records)
  *  btree: [in]  database pointer
  *  rkey:  [in]  key to data (eg, "    I313")
  *  plen:  [out] length of returned data
  *=================================*/
 RAWRECORD
-getrecord (BTREE btree, const RKEY * rkey, INT *plen)
+bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 {
 	INDEX index;
 	SHORT i, n, lo, hi;

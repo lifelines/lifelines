@@ -93,7 +93,7 @@ addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC tran
 	if (fstat(fileno(fp), &buf) != 0) goto end;
 	if (buf.st_size == 0) {
 		/* why do we add a record here, esp. when filesize=0? */
-		addrecord(btree, rkey, mem, 0);
+		bt_addrecord(btree, rkey, mem, 0);
 		result = TRUE;
 		goto end;
 	}
@@ -116,7 +116,7 @@ addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC tran
 		mem1 = mem2;
 		siz = strlen(mem);
 	}
-	addrecord(btree, rkey, mem, siz);
+	bt_addrecord(btree, rkey, mem, siz);
 	result = TRUE;
 end:
 	if (mem) stdfree(mem1);
@@ -167,7 +167,7 @@ write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 	FILE *fp;
 	INT len;
 	INT siz;
-	RAWRECORD record = getrecord(btree, &rkey, &len);
+	RAWRECORD record = bt_getrecord(btree, &rkey, &len);
 	if (record == NULL)
 		return RECORD_NOT_FOUND;
 	if (translfnc) {

@@ -46,7 +46,7 @@
 static void trace_outv(STRING fmt, va_list args);
 
 
-extern BOOLEAN traceprogram, explicitvars;
+extern BOOLEAN explicitvars;
 
 /*=============================+
  * evaluate -- Generic evaluator

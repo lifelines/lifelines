@@ -168,8 +168,8 @@ INDEX readindex(STRING basedir, FKEY ikey, BOOLEAN robust);
 /* names.c */
 
 /* record.c */
-BOOLEAN addrecord(BTREE, RKEY, RAWRECORD, INT);
-RAWRECORD getrecord(BTREE, const RKEY *, INT*);
+BOOLEAN bt_addrecord(BTREE, RKEY, RAWRECORD, INT);
+RAWRECORD bt_getrecord(BTREE, const RKEY *, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
 RAWRECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 INT cmpkeys(BTREE btree, const RKEY * rk1, const RKEY * rk2);
