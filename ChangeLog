@@ -1,5 +1,8 @@
 2000-11-09  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/interp.c: Give user time to read error messages when
+	program fails.
+	
 	* liflines/screen.c: Make sure to flush output to make it visible
 	on errors.
 	

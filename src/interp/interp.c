@@ -30,6 +30,7 @@
  *   3.0.3 - 22 Sep 95
  *===========================================================*/
 
+#include "sys_inc.h"
 #include "standard.h"
 #include "table.h"
 #include "translat.h"
@@ -1450,4 +1451,5 @@ prog_error (PNODE node,
 	llvwprintf(fmt, args);
 	va_end(args);
 	llwprintf(".\n");
+	sleep(5);
 }
