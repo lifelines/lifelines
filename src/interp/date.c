@@ -33,50 +33,50 @@
 
 #include <sys/types.h>
 #include <time.h>
+#include <string.h>
 #include "standard.h"
 #include "table.h"
+#include "interp.h"
 
 #define MONTH_TOK 1
 #define CHAR_TOK  2
 #define WORD_TOK  3
 #define ICONS_TOK 4
 
-static STRING format_day();
-static STRING format_month();
-static STRING format_year();
-static set_date_string();
-static INT get_date_tok();
-static init_monthtbl();
-
-#ifndef WIN32
-STRING strcpy();
-#endif
+static void format_ymd(STRING, STRING, STRING, INT, INT, STRING*);
+static void format_mod(INT, STRING*);
+static STRING format_day(INT, INT);
+static STRING format_month(INT, INT);
+static STRING format_year(INT, INT);
+static void set_date_string(STRING);
+static INT get_date_tok(INT*, STRING*);
+static void init_monthtbl(void);
 
 struct {
 	char *sl, *su, *ll, *lu;
 } monthstrs[19] = {
-	"Jan", "JAN", "January", "JANUARY",
-	"Feb", "FEB", "February", "FEBRUARY",
-	"Mar", "MAR", "March", "MARCH",
-	"Apr", "APR", "April", "APRIL",
-	"May", "MAY", "May", "MAY",
-	"Jun", "JUN", "June", "JUNE",
-	"Jul", "JUL", "July", "JULY",
-	"Aug", "AUG", "August", "AUGUST",
-	"Sep", "SEP", "September", "SEPTEMBER",
-	"Oct", "OCT", "October", "OCTOBER",
-	"Nov", "NOV", "November", "NOVEMBER",
-	"Dec", "DEC", "December", "DECEMBER",
+	{ "Jan", "JAN", "January", "JANUARY" },
+	{ "Feb", "FEB", "February", "FEBRUARY" },
+	{ "Mar", "MAR", "March", "MARCH" },
+	{ "Apr", "APR", "April", "APRIL" },
+	{ "May", "MAY", "May", "MAY" },
+	{ "Jun", "JUN", "June", "JUNE" },
+	{ "Jul", "JUL", "July", "JULY" },
+	{ "Aug", "AUG", "August", "AUGUST" },
+	{ "Sep", "SEP", "September", "SEPTEMBER" },
+	{ "Oct", "OCT", "October", "OCTOBER" },
+	{ "Nov", "NOV", "November", "NOVEMBER" },
+	{ "Dec", "DEC", "December", "DECEMBER" },
 
 	/* date modifiers appended to the month table */
 
-	"abt", "ABT", "about", "ABOUT",     /*  1 */
-	"bef", "BEF", "before", "BEFORE",   /*  2 */
-	"aft", "AFT", "after", "AFTER",     /*  3 */
-	"bet", "BET", "between", "BETWEEN", /*  4 - range */
-	"and", "AND", "and", "AND",         /*  5 */
-	"from", "FROM", "from", "FROM",     /*  6 - range */
-	"to", "TO", "to", "TO",             /*  7 */
+	{ "abt", "ABT", "about", "ABOUT" },     /*  1 */
+	{ "bef", "BEF", "before", "BEFORE" },   /*  2 */
+	{ "aft", "AFT", "after", "AFTER" },     /*  3 */
+	{ "bet", "BET", "between", "BETWEEN" }, /*  4 - range */
+	{ "and", "AND", "and", "AND" },         /*  5 */
+	{ "from", "FROM", "from", "FROM" },     /*  6 - range */
+	{ "to", "TO", "to", "TO" },             /*  7 */
 };
 
 static STRING sstr = NULL;
@@ -119,7 +119,7 @@ BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
 	STRING p = scratch;
 	if (!str) return NULL;
 	extract_date(str, &mod, &da, &mo, &yr, &syr);
-	if (sda = format_day(da, dfmt)) sda = strcpy(daystr, sda);
+	if ((sda = format_day(da, dfmt))) sda = strcpy(daystr, sda);
 	smo = format_month(mo, mfmt);
 	if (!cmplx) syr = format_year(yr, yfmt);
 	else format_mod(mod%100, &p);
@@ -128,7 +128,7 @@ BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
 		*p++ = ' ';
 		format_mod(mod%100 + 1, &p);
 		extract_date(NULL, &mod, &da, &mo, &yr, &syr);
-		if (sda = format_day(da, dfmt)) sda = strcpy(daystr, sda);
+		if ((sda = format_day(da, dfmt))) sda = strcpy(daystr, sda);
 		smo = format_month(mo, mfmt);
 		format_ymd(syr, smo, sda, sfmt, mod, &p);
 	}
@@ -138,8 +138,9 @@ BOOLEAN cmplx;      /* if TRUE, then treat string as complex, including
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
  *=================================================*/
-format_ymd (syr, smo, sda, sfmt, mod, output)
+static void format_ymd (syr, smo, sda, sfmt, mod, output)
 STRING syr, smo, sda, *output;
+INT mod;
 INT sfmt;	/* format code */
 {
 	STRING p = *output;
@@ -351,12 +352,12 @@ INT sfmt;	/* format code */
 	}
 	*output = p;
         return;
-
 }
+
 /*=====================================
  * format_mod -- Format date modifier
  *===================================*/
-format_mod (mod, pp)
+static void format_mod (mod, pp)
 INT mod;
 STRING *pp;
 {
@@ -405,7 +406,7 @@ INT mfmt;	/* format code */
 	STRING p;
 	if (mo < 0 || mo > 12 || mfmt < 0 || mfmt > 6) return NULL;
 	if (mfmt <= 2)  {
-		if (p = format_day(mo, mfmt)) return strcpy(scratch, p);
+		if ((p = format_day(mo, mfmt))) return strcpy(scratch, p);
 		return NULL;
 	}
 	if (mo == 0) return (STRING) "   ";
@@ -415,6 +416,7 @@ INT mfmt;	/* format code */
 	case 5: return (STRING) monthstrs[mo-1].lu;
 	case 6: return (STRING) monthstrs[mo-1].ll;
 	}
+	return NULL;
 }
 /*=========================================
  * format_year -- Formats year part of date
@@ -425,7 +427,9 @@ INT yfmt;
 {
 	static unsigned char scratch[50];
 	if (yr <= 0)  return NULL;
-	sprintf(scratch, "%d", yr);
+	switch (yfmt) {
+	default: sprintf(scratch, "%d", yr);
+	}
 	return scratch;
 }
 /*=====================================================
@@ -441,7 +445,7 @@ INT *pmod, *pda, *pmo, *pyr;
 	*pyrstr = "";
 	*pmod = *pda = *pmo = *pyr = 0;
 	if (str) set_date_string(str);
-	while (tok = get_date_tok(&ival, &sval)) {
+	while ((tok = get_date_tok(&ival, &sval))) {
 		switch (tok) {
 		case MONTH_TOK:
 			if (*pmo == 0) *pmo = ival;
@@ -477,7 +481,7 @@ INT *pmod, *pda, *pmo, *pyr;
 /*===============================================
  * set_date_string -- Init date extraction string
  *=============================================*/
-static set_date_string (str)
+static void set_date_string (str)
 STRING str;
 {
 	sstr = str;
@@ -503,7 +507,7 @@ STRING *psval;
 		*--p = 0;
 		sstr--;
 		*psval = scratch;
-		if ((i = valueof(monthtbl, upper(scratch))) > 0 && i <= 12) {
+		if ((i = (INT)valueof(monthtbl, upper(scratch))) > 0 && i <= 12) {
 			*pival = i;
 			return MONTH_TOK;
 		}
@@ -536,17 +540,17 @@ STRING *psval;
 /*=========================================
  * init_monthtbl -- Init month string table
  *=======================================*/
-static init_monthtbl ()
+static void init_monthtbl (void)
 {
 	INT i, j;
 	monthtbl = create_table();
 	for (i = 0; i < 19; i++) {
 		j = i + 1;
-		insert_table(monthtbl, monthstrs[i].su, j);
-		insert_table(monthtbl, monthstrs[i].lu, j);
+		insert_table(monthtbl, monthstrs[i].su, (WORD)j);
+		insert_table(monthtbl, monthstrs[i].lu, (WORD)j);
 	}
-	insert_table(monthtbl, "EST", -1);  /* ignored after date, else "ABT"*/
-	insert_table(monthtbl, "BC", -99);
+	insert_table(monthtbl, "EST", (WORD)-1);  /* ignored after date */
+	insert_table(monthtbl, "BC", (WORD)-99);
 }
 /*=============================
  * get_date -- Get today's date
