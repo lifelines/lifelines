@@ -94,6 +94,7 @@ static void check_indiseq_valtype(INDISEQ seq, INT valtype);
 
 /*===============================================
  * create_indiseq_ival -- Create sequence of INTs
+ * Created: 2001/01/07, Perry Rapp
  *=============================================*/
 INDISEQ
 create_indiseq_ival (void)
@@ -103,6 +104,7 @@ create_indiseq_ival (void)
 /*===================================================
  * create_indiseq_null -- Create sequence of not yet
  *  determined type of objects
+ * Created: 2001/01/07, Perry Rapp
  *=================================================*/
 INDISEQ
 create_indiseq_null (void)
@@ -111,6 +113,7 @@ create_indiseq_null (void)
 }
 /*===================================================
  * create_indiseq_pval -- Create sequence of pointers
+ * Created: 2001/01/07, Perry Rapp
  *=================================================*/
 INDISEQ
 create_indiseq_pval (void)
@@ -119,6 +122,7 @@ create_indiseq_pval (void)
 }
 /*==================================================
  * create_indiseq_sval -- Create sequence of STRINGs
+ * Created: 2001/01/07, Perry Rapp
  *================================================*/
 INDISEQ
 create_indiseq_sval (void)
@@ -180,6 +184,7 @@ copy_indiseq (INDISEQ seq)
 /*==================================================
  * check_indiseq_valtype -- Check that value type
  *  is as expected or null (in which case, convert)
+ * Created: 2001/01/07, Perry Rapp
  *================================================*/
 static void
 check_indiseq_valtype (INDISEQ seq, INT valtype)
@@ -193,6 +198,7 @@ check_indiseq_valtype (INDISEQ seq, INT valtype)
 /*==================================================
  * append_indiseq_ival -- Append element to sequence
  *  with INT value
+ * Created: 2001/01/05, Perry Rapp
  *================================================*/
 void
 append_indiseq_ival (INDISEQ seq,    /* sequence */
@@ -210,6 +216,7 @@ append_indiseq_ival (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_pval -- Append element to sequence
  *  with pointer value
+ * Created: 2001/01/07, Perry Rapp
  *================================================*/
 void
 append_indiseq_pval (INDISEQ seq,    /* sequence */
@@ -227,6 +234,7 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_sval -- Append element to sequence
  *  with STRING value
+ * Created: 2001/01/05, Perry Rapp
  *================================================*/
 void
 append_indiseq_sval (INDISEQ seq,    /* sequence */
@@ -244,6 +252,7 @@ append_indiseq_sval (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_null -- Append element to sequence
  *  without value
+ * Created: 2001/01/07, Perry Rapp
  *================================================*/
 void
 append_indiseq_null (INDISEQ seq,    /* sequence */
@@ -406,6 +415,7 @@ element_indiseq (INDISEQ seq,    /* sequence */
 }
 /*================================================
  * elementval_indiseq -- Return element & value from sequence
+ * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 BOOLEAN
 element_indiseq_ival (INDISEQ seq,    /* sequence */
@@ -446,6 +456,7 @@ key_compare (SORTEL el1, SORTEL el2)
 /*===========================================
  * canonkey_order -- Canonical order of a type
  *  letter (I,F,S,E,X)
+ * Created: 2001/01/06, Perry Rapp
  *=========================================*/
 static INT
 canonkey_order (char c)
@@ -461,6 +472,7 @@ canonkey_order (char c)
 /*================================
  * canonkey_compare -- Compare two keys
  * in canonical key order (I,F,S,E,X)
+ * Created: 2001/01/06, Perry Rapp
  *==============================*/
 static INT
 canonkey_compare (SORTEL el1, SORTEL el2)
@@ -512,6 +524,7 @@ keysort_indiseq (INDISEQ seq)
 /*=============================================
  * canonkeysort_indiseq -- Sort sequence by key
  *  in key canonical order (I,F,S,E,X)
+ * Created: 2001/01/06, Perry Rapp
  *===========================================*/
 void
 canonkeysort_indiseq (INDISEQ seq)
@@ -653,6 +666,7 @@ unique_indiseq (INDISEQ seq)
 /*================================================
  * get_combined_valtype -- What valtype should the
  *  new, combined seq be ?
+ * Created: 2001/01/07, Perry Rapp
  *==============================================*/
 static INT
 get_combined_valtype (INDISEQ one, INDISEQ two)
@@ -1463,6 +1477,7 @@ str_to_indiseq (STRING name)
 /*=======================================================
  * append_all_tags -- append all tags of specified type
  *  to indiseq (optionally recursive
+ * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 static void
 append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
@@ -1495,6 +1510,7 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 /*=======================================================
  * node_to_sources -- Create sequence of all sources
  *  inside a node record (at any level)
+ * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 INDISEQ
 node_to_sources (NODE node)
@@ -1531,6 +1547,7 @@ node_to_notes (NODE node)
 }
 /*=======================================================
  * get_all_sour -- Create sequence of all sources
+ * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 INDISEQ
 get_all_sour (void)
@@ -1549,6 +1566,7 @@ get_all_sour (void)
 }		
 /*=======================================================
  * get_all_even -- Create sequence of all event records
+ * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 INDISEQ
 get_all_even (void)
@@ -1567,6 +1585,7 @@ get_all_even (void)
 }		
 /*=======================================================
  * get_all_othe -- Create sequence of all other records
+ * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 INDISEQ
 get_all_othe (void)
@@ -1585,6 +1604,7 @@ get_all_othe (void)
 }		
 /*=======================================================
  * indiseq_is_valtype_ival -- Is this full of ivals ?
+ * Created: 2001/01/21, Perry Rapp
  *=====================================================*/
 BOOLEAN
 indiseq_is_valtype_ival (INDISEQ seq)
@@ -1593,6 +1613,7 @@ indiseq_is_valtype_ival (INDISEQ seq)
 }
 /*=======================================================
  * indiseq_is_valtype_null -- Is this full of null values ?
+ * Created: 2001/01/21, Perry Rapp
  *=====================================================*/
 BOOLEAN
 indiseq_is_valtype_null (INDISEQ seq)
@@ -1601,6 +1622,7 @@ indiseq_is_valtype_null (INDISEQ seq)
 }
 /*=======================================================
  * get_indiseq_ival -- Get ival from an indiseq element
+ * Created: 2001/01/21, Perry Rapp
  *=====================================================*/
 INT
 get_indiseq_ival (INDISEQ seq, INT i)

@@ -230,6 +230,7 @@ STRING lstbot = SS "You are at the bottom of the list.";
 STRING lsttop = SS "You are at the top of the list.";
 STRING lstnew = SS "New persons were added to the current list.";
 
+/* GEDCOM file */
 STRING idgedf = SS "Please enter the name of the GEDCOM file.";
 STRING gdcker = SS "Checking GEDCOM file %s for errors.\n";
 STRING gdnadd = SS "Because of errors the GEDCOM file was not loaded.\n";
@@ -246,33 +247,44 @@ STRING qrpt   = SS "What is the name of the program?";
 STRING norpt =  SS "No report was generated.";
 STRING whtout = SS "What is the name of the output file?";
 
-STRING mtitle = (STRING) "LifeLines %s - Genealogical DB and Programming System";
-STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
-STRING plschs = (STRING) "Please choose an operation:";
 
 /* node.c errors */
-STRING fileof = (STRING) "The file is as positioned at EOF.";
-STRING reremp = (STRING) "Line %d: This line is empty; EOF?";
-STRING rerlng = (STRING) "Line %d: This line is too long.";
-STRING rernlv = (STRING) "Line %d: This line has no level number.";
-STRING rerinc = (STRING) "Line %d: This line is incomplete.";
-STRING rerbln = (STRING) "Line %d: This line has a bad link.";
-STRING rernwt = (STRING) "Line %d: This line needs white space before tag.";
-STRING rerilv = (STRING) "Line %d: This line has an illegal level.";
-STRING rerwlv = (STRING) "The record begins at wrong level.";
-STRING nonnum = (STRING) "At least one argument to %s is not numeric";
+STRING fileof      = SS "The file is as positioned at EOF.";
+STRING reremp      = SS "Line %d: This line is empty; EOF?";
+STRING rerlng      = SS "Line %d: This line is too long.";
+STRING rernlv      = SS "Line %d: This line has no level number.";
+STRING rerinc      = SS "Line %d: This line is incomplete.";
+STRING rerbln      = SS "Line %d: This line has a bad link.";
+STRING rernwt      = SS "Line %d: This line needs white space before tag.";
+STRING rerilv      = SS "Line %d: This line has an illegal level.";
+STRING rerwlv      = SS "The record begins at wrong level.";
+STRING nonnum      = SS "At least one argument to %s is not numeric";
 
-/* menuitem.c */
-STRING mn_ambig    = (STRING) "Conflicting command string: %s";
-STRING mn_titindi  = (STRING) "LifeLines -- Person Browse Screen (* toggles menu)";
-STRING mn_titfam   = (STRING) "LifeLines -- Family Browse Screen (* toggles menu)";
-STRING mn_titaux   = (STRING) "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
-STRING mn_unkcmd   = (STRING) "Not valid command";
-STRING mn_titmain  = (STRING) "LifeLines -- Main Menu";
-STRING mn_tit2indi = (STRING) "LifeLines -- Two Person Browse Screen (* toggles menu)";
-STRING mn_tit2fam  = (STRING) "LifeLines -- Two Family Browse Screen (* toggles menu)";
+/* display abbreviations */
+STRING dsp_mar     = SS "m. ";
+STRING dsp_bir     = SS "b. ";
+STRING dsp_chr     = SS "bap. ";
+STRING dsp_dea     = SS "d. ";
+STRING dsp_bur     = SS "bur. ";
+
+/* menus */
+STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";
+STRING cright      = SS "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
+STRING plschs      = SS "Please choose an operation:";
+STRING mn_ambig    = SS "Conflicting command string: %s";
+STRING mn_titindi  = SS "LifeLines -- Person Browse Screen (* toggles menu)";
+STRING mn_titfam   = SS "LifeLines -- Family Browse Screen (* toggles menu)";
+STRING mn_titaux   = SS "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
+STRING mn_unkcmd   = SS "Not valid command";
+STRING mn_titmain  = SS "LifeLines -- Main Menu";
+STRING mn_tit2indi = SS "LifeLines -- Two Person Browse Screen (* toggles menu)";
+STRING mn_tit2fam  = SS "LifeLines -- Two Family Browse Screen (* toggles menu)";
 
 /* prompt, full list, yes list */
-STRING askynq      = (STRING) "enter y (yes) or n (no): ";
-STRING askynyn     = (STRING) "yYnN";
-STRING askyny      = (STRING) "yY";
+STRING askynq      = SS "enter y (yes) or n (no): ";
+STRING askynyn     = SS "yYnN";
+STRING askyny      = SS "yY";
+
+/* misc */
+STRING unksps      = SS "Spouse unknown";
+

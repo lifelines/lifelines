@@ -67,6 +67,7 @@
 /* instance where a STRING is dereferenced and the contents acted */
 /* upon directly to determine if there are sign problems */
 typedef char *STRING;
+typedef const char *CNSTRING;
 
 #ifndef BOOLEAN
 #	define BOOLEAN int

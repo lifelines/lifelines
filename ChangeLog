@@ -1,3 +1,16 @@
+2001-02-17 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/gstrings.c gedlib/indiseq.c gedlib/messages.c
+	gedlib/names.c gedlib/translat.c hdrs/standard.h
+	hdrs/translat.h liflines/main.c stdlib/mystring.c:
+	Added translation to other_to_list_string (translate_catn).
+	Added new function translate_catn.
+	Fixed add_char to not write past end of buffer.
+	More function (comment) annotation.
+	Moved some strings from gstrings.c into messages.c.
+	Added typedef CNSTRING for const char *.
+	Alphabetized translat.h.
+
 2001-02-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c

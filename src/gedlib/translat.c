@@ -141,23 +141,44 @@ remove_xnodes (XNODE node)
 	stdfree(node);
 }
 /*===================================================
+ * translate_catn -- Translate & concatenate string
+ *
+ * tt:    translation table to use
+ * pdest: address of destination (will be advanced)
+ * src:   source string
+ * len:   address of space left in destination (will be decremented)
+ *=================================================*/
+void
+translate_catn (TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len)
+{
+	INT added;
+	if (*len > 1)
+		translate_string(tt, src, *pdest, *len);
+	else
+		(*pdest)[0] = 0; /* to be safe */
+	added = strlen(*pdest);
+	*len -= added;
+	*pdest += added;
+}
+/*===================================================
  * translate_string -- Translate string via TRANTABLE
  *=================================================*/
-BOOLEAN
+void
 translate_string (TRANTABLE tt, /* tran table */
-                  STRING in,    /* in string */
+                  CNSTRING in,    /* in string */
                   STRING out,   /* out string */
                   INT max)      /* max len of out string */
 {
-	STRING p, q, r;
+	CNSTRING p, q;
+	STRING r;
 	STRING add;
 	INT n, l, depth, nxtch;
 	XNODE node, chnode;
 	*out = 0;
-	if (!in) return TRUE;
+	if (!in) return;
 	if (!tt) {
 		strcpy(out, in);
-		return TRUE;
+		return;
 	}
 	p = q = in;
 	r = out;
@@ -206,12 +227,11 @@ translate_string (TRANTABLE tt, /* tran table */
 		}
 	}
 	add_char(out, &l, max, 0);
-	return TRUE;
+	return;
 }
 /*==========================================================
  * translate_write -- Translate and output lines in a buffer
  *========================================================*/
-
 BOOLEAN
 translate_write(TRANTABLE tt,   /* tran table */
                 STRING in,      /* in string */
@@ -259,7 +279,6 @@ translate_write(TRANTABLE tt,   /* tran table */
 	*lenp = 0;
 	return(TRUE);
 }
-
 /*======================================
  * add_char -- Add char to output string
  *====================================*/
@@ -270,7 +289,7 @@ add_char (STRING buf,
           INT achar)
 {
 	if (*plen >= max - 1)
-		buf[*plen] = 0;
+		buf[max] = 0;
 	else
 		buf[(*plen)++] = achar;
 }

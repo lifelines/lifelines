@@ -180,6 +180,12 @@ main (INT argc,
 # ifdef FINNISHOPTION
 		case 'F':	/* Finnish sorting order [toggle] */
 			opt_finnish = !opt_finnish;
+			/*
+			TO DO - need to mark Finnish databases, as 
+			name records are not interoperable, because of
+			different soundex encoding
+			2001/02/17, Perry Rapp
+			*/
 			break;
 # endif
 #endif

@@ -35,10 +35,26 @@
 #include "translat.h"
 #include "gedcom.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
+extern STRING dsp_mar,dsp_bir,dsp_chr,dsp_dea,dsp_bur;
+extern STRING unksps;
+
+/*********************************************
+ * local variables
+ *********************************************/
+
 static INT nchil = 0, maxchil = 0;
 static STRING *chstrings = NULL, *chkeys = NULL;
 
 static BOOLEAN displaykeys=TRUE;
+
+/*********************************************
+ * local function definitions
+ * body of module
+ *********************************************/
 
 /*===================================================================
  * get_child_strings -- Return children strings; each string has name
@@ -96,14 +112,14 @@ indi_to_list_string (NODE indi,
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, ttd, len));
 	} else
-		name = (STRING) "Spouse unknown";
+		name = unksps;
 	sprintf(p, "%s", name);
 	p += strlen(p);
-	if (fam)  evt = fam_to_event(fam, ttd, "MARR", "m. ", len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", "b. ", len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "CHR", "bap. ", len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", "d. ", len, TRUE);
-	if (!evt) evt = indi_to_event(indi, ttd, "BURI", "bur. ", len, TRUE);
+	if (fam)  evt = fam_to_event(fam, ttd, "MARR", dsp_mar, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "BIRT", dsp_bir, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "CHR", dsp_chr, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "DEAT", dsp_dea, len, TRUE);
+	if (!evt) evt = indi_to_event(indi, ttd, "BURI", dsp_bur, len, TRUE);
 	if (evt) {
 		sprintf(p, ", %s", evt);
 		p += strlen(p);
@@ -136,6 +152,7 @@ indi_to_list_string (NODE indi,
 }
 /*================================================
  * sour_to_list_string -- Return menu list string.
+ * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 STRING
 sour_to_list_string(NODE sour, INT len, STRING delim)
@@ -169,6 +186,7 @@ sour_to_list_string(NODE sour, INT len, STRING delim)
 }
 /*================================================
  * other_to_list_string -- Return menu list string.
+ * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 STRING
 other_to_list_string(NODE node, INT len, STRING delim)
@@ -183,7 +201,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	llstrcatn(&p, "(X", &mylen);
 	llstrcatn(&p, rmvat(nxref(node))+1, &mylen);
 	llstrcatn(&p, ") (", &mylen);
-	llstrcatn(&p, ntag(node), &mylen);
+	translate_catn(ttd, &p, ntag(node), &mylen);
 	llstrcatn(&p, ") ", &mylen);
 	name = node_to_tag(node, "REFN", ttd, len);
 	if (name)
@@ -195,6 +213,8 @@ other_to_list_string(NODE node, INT len, STRING delim)
  *  a top-level node of any type
  * Caller may specify either node or key (& leave other NULL)
  *  returns heap-alloc'd string
+ * Caller must specify either node or key (or both)
+ * Created: 2001/02/12, Perry Rapp
  *=========================================*/
 STRING
 generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
@@ -232,6 +252,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim)
 }
 /*=======================================================
  * set_displaykeys -- Enable/disable keys in list strings
+ * Created: 2001/01/01, Perry Rapp
  *=====================================================*/
 void
 set_displaykeys (BOOLEAN keyflag)

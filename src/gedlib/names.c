@@ -47,7 +47,7 @@ extern BTREE BTR;
  * local function prototypes
  *********************************************/
 
-static INT codeof(int);
+static INT sxcodeof(int);
 static BOOLEAN exactmatch(STRING, STRING);
 static STRING parts_to_name(STRING*);
 static void name_to_parts(STRING, STRING*);
@@ -306,7 +306,7 @@ soundex (STRING name)   /* surname */
 	i = 1;
 	old = 0;
 	while ((c = *p++) && i < 4) {
-		if ((j = codeof(c)) == 0) continue;
+		if ((j = sxcodeof(c)) == 0) continue;
 		*q++ = j;
 		i++;
 	}
@@ -318,52 +318,52 @@ soundex (STRING name)   /* surname */
 	return scratch;
 }
 /*========================================
- * codeof -- Return letter's SOUNDEX code.
+ * sxcodeof -- Return letter's SOUNDEX code.
  *======================================*/
 static INT
-codeof (int letter)
+sxcodeof (int letter)
 {
 	int new = 0;
 
-    if(opt_finnish) {
+	if(opt_finnish) {
 	/* Finnish Language */
-	switch (letter) {
-	case 'B': case 'P': case 'F': case 'V': case 'W':
-		new = '1'; break;
-	case 'C': case 'S': case 'K': case 'G': case '\337':
-	case 'J': case 'Q': case 'X': case 'Z': case '\307':
-		new = '2'; break;
-	case 'D': case 'T': case '\320': case '\336':
-		new = '3'; break;
-	case 'L':
-		new = '4'; break;
-	case 'M': case 'N': case '\321':
-		new = '5'; break;
-	case 'R':
-		new = '6'; break;
-	default:	/* new stays zero */
-		break;
+		switch (letter) {
+		case 'B': case 'P': case 'F': case 'V': case 'W':
+			new = '1'; break;
+		case 'C': case 'S': case 'K': case 'G': case '\337':
+		case 'J': case 'Q': case 'X': case 'Z': case '\307':
+			new = '2'; break;
+		case 'D': case 'T': case '\320': case '\336':
+			new = '3'; break;
+		case 'L':
+			new = '4'; break;
+		case 'M': case 'N': case '\321':
+			new = '5'; break;
+		case 'R':
+			new = '6'; break;
+		default:	/* new stays zero */
+			break;
+		}
+	} else {
+		/* English Language (Default) */
+		switch (letter) {
+		case 'B': case 'P': case 'F': case 'V':
+			new = '1'; break;
+		case 'C': case 'S': case 'K': case 'G':
+		case 'J': case 'Q': case 'X': case 'Z':
+			new = '2'; break;
+		case 'D': case 'T':
+			new = '3'; break;
+		case 'L':
+			new = '4'; break;
+		case 'M': case 'N':
+			new = '5'; break;
+		case 'R':
+			new = '6'; break;
+		default:	/* new stays zero */
+			break;
+		}
 	}
-    } else {
-	/* English Language (Default) */
-	switch (letter) {
-	case 'B': case 'P': case 'F': case 'V':
-		new = '1'; break;
-	case 'C': case 'S': case 'K': case 'G':
-	case 'J': case 'Q': case 'X': case 'Z':
-		new = '2'; break;
-	case 'D': case 'T':
-		new = '3'; break;
-	case 'L':
-		new = '4'; break;
-	case 'M': case 'N':
-		new = '5'; break;
-	case 'R':
-		new = '6'; break;
-	default:	/* new stays zero */
-		break;
-	}
-    }
   
 	if (new == 0) {
 		old = 0;

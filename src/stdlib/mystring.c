@@ -538,7 +538,7 @@ int main()
  * Created: 2000/11/29, Perry Rapp
  *================================*/
 void
-llstrcatn(char ** pdest, const char * src, int * len)
+llstrcatn (char ** pdest, const char * src, int * len)
 {
 	char * dest = *pdest;
 	if (!(*len)) return;

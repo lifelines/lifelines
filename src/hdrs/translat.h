@@ -32,6 +32,8 @@
 
 #include "standard.h"
 
+/* Types */
+
 typedef struct xnode *XNODE;
 struct xnode {
 	XNODE parent;	/* parent node */
@@ -46,18 +48,23 @@ typedef struct {
 	XNODE start[256];
 } *TRANTABLE;
 
-TRANTABLE create_trantable(STRING*, STRING*, INT);
-void remove_trantable(TRANTABLE);
-TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
-BOOLEAN translate_string(TRANTABLE, STRING, STRING, INT);
-BOOLEAN translate_write(TRANTABLE, STRING, INT*, FILE*, BOOLEAN);
-
-void remove_xnodes(XNODE);
-void add_char(STRING, INT*, INT, INT);
-void add_string(STRING, INT*, INT, STRING);
-void show_xnodes(INT, XNODE);
-void show_xnode(XNODE);
+/* Variables */
 
 extern TRANTABLE tran_tables[];
+
+/* Functions */
+
+void add_char(STRING, INT*, INT, INT);
+void add_string(STRING, INT*, INT, STRING);
+TRANTABLE create_trantable(STRING*, STRING*, INT);
+TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
+void remove_trantable(TRANTABLE);
+void remove_xnodes(XNODE);
+void show_xnode(XNODE);
+void show_xnodes(INT, XNODE);
+void translate_catn(TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len);
+void translate_string(TRANTABLE, CNSTRING in, STRING out, INT max);
+BOOLEAN translate_write(TRANTABLE, STRING, INT*, FILE*, BOOLEAN);
+
 
 #endif /* _TRANSLAT_H */
