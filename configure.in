@@ -24,7 +24,16 @@ AC_PROG_RANLIB
 AC_PROG_INSTALL
 
 echo Looking for libraries
-AC_CHECK_LIB(curses, main)
+AC_CHECK_LIB(ncurses, tparm)
+
+dnl if [ ! $ac_cv_lib_curses_main = "yes" ]
+if test "$ac_cv_lib_curses_main" = "yes"; then
+   echo Using ncurses
+else
+   echo Looking for curses
+   AC_CHECK_LIB(curses, main)
+fi
+
 dnl AC_CHECK_LIB(gdbm, gdbm_open)
 dnl AC_CHECK_LIB(nsl, inet_ntoa)
 dnl AC_CHECK_LIB(socket, getpeername)
