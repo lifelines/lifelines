@@ -1,3 +1,10 @@
+2003-01-13 Perry Rapp
+
+	* ChangeLog
+	*NEW tt/UTF-8__asciitex.tt:
+
+	Begin translation table for tex.
+
 2003-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/misc.c src/gedlib/node.c
