@@ -183,6 +183,8 @@ static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
 static void edit_tt_menu(void);
+static void edit_user_options(void);
+static void edit_place_table(void);
 static void end_action(void);
 static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
 static INT handle_list_cmds(listdisp * ld, INT code);
@@ -224,7 +226,6 @@ static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static void uierase(UIWINDOW uiwin);
 static INT update_menu(INT screen);
-static void user_options(void);
 
 /*********************************************
  * local variables
@@ -1580,7 +1581,7 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT in
 	llstrcatn(&ptr, menuit, &mylen);
 
 	if (ttm) {
-		TRANTABLE tt = get_trantable_from_tranmapping(ttm);
+		TRANTABLE tt = get_dbtrantable_from_tranmapping(ttm);
 		if (tt) {
 			if (tt->name[0]) {
 				llstrcatn(&ptr, "  :  ", &mylen);
@@ -1918,7 +1919,7 @@ load_tt_action (void)
 	}
 
 	/* Ask whence to load it */
-	ttimportdir = getoptstr("LLTTREF", ".");
+	ttimportdir = getoptstr("TTDIR", ".");
 	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
@@ -1948,7 +1949,7 @@ save_tt_action (void)
 		msg_error(_(qSbadttnum));
 		return;
 	}
-	if (!get_trantable(ttnum)) {
+	if (!get_dbtrantable(ttnum)) {
 		msg_error(_(qSnosuchtt));
 		return;
 	}
@@ -2024,8 +2025,12 @@ invoke_utils_menu (void)
 	case 'i': who_is_he_she(); break;
 	case 'd': show_database_stats(); break;
 	case 'm': display_cache_stats(); break;
-	case 'e': edit_valtab("VPLAC", &placabbvs, ':', _(qSabverr), 0); break;
-	case 'o': user_options(); break;
+	case 'e': edit_place_table(); break;
+	case 'o': edit_user_options(); break;
+		/*
+		we could add edit_global_config pretty easily, but the difficulty is
+		that we don't know what to do about codeset with it :( [2002.06.18, Perry]
+		*/
 	case 'q': break;
 	}
 	end_action();
@@ -2084,15 +2089,23 @@ uopt_validate (TABLE tab)
 	return 0;
 }
 /*===============================
- * user_options -- Edit user options
+ * edit_place_table -- 
+ *=============================*/
+static void
+edit_place_table (void)
+{
+	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0);
+}
+/*===============================
+ * edit_user_options -- 
  * Created: 2001/08/02 (Perry Rapp)
  *=============================*/
 static void
-user_options (void)
+edit_user_options (void)
 {
 	TABLE uopts = create_table();
 	get_db_options(uopts);
-	if (edit_valtab("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
+	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
 		set_db_options(uopts);
 	remove_table(uopts, FREEBOTH);
 }

@@ -51,6 +51,7 @@
 TABLE tagtable=NULL;		/* table for tag strings */
 TABLE placabbvs=NULL;	/* table for place abbrevs */
 BTREE BTR=NULL;	/* database */
+static char svconfigfile[MAXPATHLEN]="";
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 
@@ -79,6 +80,7 @@ static void update_db_options(void);
 
 static int rdr_count = 0;
 static void (*f_dbnotify)(STRING db, BOOLEAN opening) = 0;
+static BOOLEAN suppress_reload=FALSE;
 
 /*********************************************
  * local & exported function definitions
@@ -99,6 +101,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	/* request notification when options change */
 	register_notify(update_useropts);
+	suppress_reload = TRUE;
 
 	f_dbnotify = notify;
 
@@ -109,9 +112,14 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	if (!configfile || !configfile[0])
 		configfile = environ_determine_config_file();
-	
-	if (!load_global_options(configfile, pmsg))
+
+	llstrncpy(svconfigfile, configfile, sizeof(svconfigfile));
+
+	if (!load_global_options(svconfigfile, pmsg)) {
+		suppress_reload = FALSE;
+		update_useropts();
 		return FALSE;
+	}
 
 	init_win32_gettext_shim();
 	init_win32_iconv_shim();
@@ -162,6 +170,8 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	set_usersort(custom_sort);
+	suppress_reload = FALSE;
+	update_useropts();
 	return TRUE;
 }
 /*=================================
@@ -229,7 +239,6 @@ init_lifelines_db (void)
 	set_db_options(dbopts);
 	init_caches();
 	init_browse_lists();
-	load_db_char_mapping();
 	if (!openxref(readonly))
 		return FALSE;
 	return TRUE;
@@ -482,6 +491,7 @@ create_database (STRING dbrequested, STRING dbused)
 void
 describe_dberror (INT dberr, STRING buffer, INT buflen)
 {
+	buffer[0]=0;
 	if (dberr != BTERR_WRITER)
 		llstrncpy(buffer, _("Database error: -- "), buflen);
 
@@ -562,9 +572,13 @@ is_codeset_utf8 (STRING codename)
 void
 update_useropts (void)
 {
+	if (suppress_reload)
+		return;
 	update_db_options(); /* deal with db-specific options */
 	uilocale(); /* in case user changed locale */
-	load_global_char_mapping(); /* in case user changed codesets */
+	/* if we were clever, we'd remember the codesets, so we'd know if we need
+	to reload mappings -- Perry, 2002.02.18 */
+	load_char_mappings(); /* in case user changed codesets */
 }
 /*==================================================
  * update_db_options -- 
@@ -651,6 +665,8 @@ getdbdesc (STRING path)
 	if (f_dbnotify)
 		(*f_dbnotify)(path, TRUE);
 
+	suppress_reload = TRUE; /* do not reload options */
+
 	strcpy(desc, "");
 	btr = openbtree(path, cflag, writ, immut);
 	if (btr) {
@@ -671,6 +687,7 @@ getdbdesc (STRING path)
 	close_lldb();
 	readonly = FALSE;
 	BTR = 0;
+	suppress_reload = FALSE;
 	return desc[0] ? strdup(desc) : 0;
 }
 /*====================================================
@@ -683,4 +700,20 @@ release_dblist (LIST dblist)
 		make_list_empty(dblist);
 		remove_list(dblist, 0);
 	}
+}
+/*====================================================
+ * init_get_config_file -- return pointer to configfile
+ *==================================================*/
+CNSTRING
+init_get_config_file (void)
+{
+	return svconfigfile;
+}
+/*====================================================
+ * is_db_open -- 
+ *==================================================*/
+BOOLEAN
+is_db_open (void)
+{
+	return BTR!=0;
 }

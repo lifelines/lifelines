@@ -191,8 +191,8 @@ delete_notification_list_if_needed (void)
 	}
 }
 /*=================================
- * init_lifelines_options -- Initialize LifeLines
- *  before db opened
+ * load_global_options -- 
+ *  Load internal table of global options from caller-specified config file
  * STRING * pmsg: heap-alloc'd error string if fails
  *===============================*/
 BOOLEAN
@@ -211,12 +211,12 @@ load_global_options (STRING configfile, STRING * pmsg)
  * Created: 2002/06/16, Perry Rapp
  *===============================*/
 void
-set_db_options (TABLE dbopts)
+set_db_options (TABLE opts)
 {
-	ASSERT(dbopts);
+	ASSERT(opts);
 	free_optable(&f_db);
 	f_db = create_table();
-	copy_table(dbopts, f_db, FREEBOTH);
+	copy_table(opts, f_db, FREEBOTH);
 	send_notifications();
 }
 /*=================================
@@ -224,11 +224,35 @@ set_db_options (TABLE dbopts)
  * Created: 2002/06/16, Perry Rapp
  *===============================*/
 void
-get_db_options (TABLE dbopts)
+get_db_options (TABLE opts)
 {
 	if (!f_db)
 		f_db = create_table();
-	copy_table(f_db, dbopts, FREEBOTH);
+	copy_table(f_db, opts, FREEBOTH);
+}
+/*=================================
+ * set_global_options -- Store db options from caller
+ * Created: 2002/06/18, Perry Rapp
+ *===============================*/
+void
+set_global_options (TABLE opts)
+{
+	ASSERT(opts);
+	free_optable(&f_global);
+	f_global = create_table();
+	copy_table(opts, f_global, FREEBOTH);
+	send_notifications();
+}
+/*=================================
+ * get_global_options -- Copy db options to caller's table
+ * Created: 2002/06/18, Perry Rapp
+ *===============================*/
+void
+get_global_options (TABLE opts)
+{
+	if (!f_global)
+		f_global = create_table();
+	copy_table(f_global, opts, FREEBOTH);
 }
 /*==========================================
  * free_optable -- free a table if it exists

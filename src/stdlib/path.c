@@ -159,7 +159,7 @@ concat_path (CNSTRING dir, CNSTRING file)
 				llstrcatn(&ptr, file, &len);
 			} else {
 				/* file doesn't start in sep */
-				llstrcatn(&ptr, "/", &len);
+				llstrcatn(&ptr, LLSTRDIRSEPARATOR, &len);
 				llstrcatn(&ptr, file, &len);
 			}
 		}

@@ -91,7 +91,7 @@ store_file (STRING key, STRING file)
  * Created: 2001/07/04 (Perry Rapp)
  *===================================*/
 BOOLEAN
-store_text_file_to_db (STRING key, STRING file, TRANSLFNC transfnc)
+store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
 {
 	return addtextfile(BTR, str2rkey(key), file, transfnc);
 }

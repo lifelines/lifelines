@@ -56,10 +56,12 @@ typedef struct {
 /* a translation mapping, which may have a TRANTABLE, and may have iconv info */
 typedef struct tranmapping_s {
 	/* All members either NULL or heap-alloc'd */
-	TRANTABLE trantbl;
+	TRANTABLE dbtrantbl; /* mappings embedded in active db */
 	STRING iconv_src;
 	STRING iconv_dest;
+	LIST global_trans; /* list of global mappings */
 	BOOLEAN after; /* do custom transtable after iconv ? */
+	BOOLEAN translit; /* do iconv transliteration ? */
 } *TRANMAPPING;
 
 /* forward declaration - real declaration in bfs.h */
@@ -75,11 +77,10 @@ void add_string(STRING, INT*, INT, STRING);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN custom_sort(char *str1, char *str2, INT * rtn);
 TRANMAPPING get_tranmapping(INT ttnum);
-TRANTABLE get_trantable(INT ttnum);
-TRANTABLE get_trantable_from_tranmapping(TRANMAPPING ttm);
+TRANTABLE get_dbtrantable(INT ttnum);
+TRANTABLE get_dbtrantable_from_tranmapping(TRANMAPPING ttm);
 void remove_trantable(TRANTABLE);
-void remove_xnodes(XNODE);
-void set_trantable(INT ttnum, TRANTABLE tt);
+void set_dbtrantable(INT ttnum, TRANTABLE tt);
 void translate_catn(TRANMAPPING ttm, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(TRANMAPPING, CNSTRING in, STRING out, INT max);
 struct Buffer_s * translate_string_to_buf(TRANMAPPING ttm, CNSTRING in);

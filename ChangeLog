@@ -1,3 +1,15 @@
+2002-06-19 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/file.c gedlib/charmaps.c gedlib/editmap.c
+	gedlib/editvtab.c gedlib/gedcomi.h gedlib/init.c
+	gedlib/intrface.c gedlib/lloptions.c gedlib/translat.c
+	hdrs/btree.h hdrs/gedcom.h hdrs/lloptions.h hdrs/translat.h
+	liflines/main.c liflines/screen.c stdlib/mystring.c
+	stdlib/path.c:
+
+	Implement list of global user translation tables.
+	Implement iconv transliteration in INDS direction.
+
 2002-06-18 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog build build/gnu build/msvc6 build/rpm

@@ -73,7 +73,6 @@ extern INT csz_othr, icsz_othr;
 extern INT winx, winy;
 
 extern int opterr;
-extern BTREE BTR;
 
 /*********************************************
  * required global variables

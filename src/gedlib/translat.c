@@ -66,9 +66,11 @@ static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
 static bfptr custom_translate(TRANTABLE tt, bfptr bfsIn);
 static STRING get_current_locale(INT category);
+static bfptr global_translate(LIST gtlist, bfptr bfsIn);
 static bfptr iconv_trans(TRANMAPPING ttm, bfptr bfsIn);
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
+static void remove_xnodes(XNODE);
 static STRING setmsgs(STRING localename);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
@@ -178,7 +180,7 @@ remove_trantable (TRANTABLE tt)
 /*====================================
  * remove_xnodes -- Remove xnodes tree
  *==================================*/
-void
+static void
 remove_xnodes (XNODE node)
 {
 	if (!node) return;
@@ -275,36 +277,40 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 bfptr
 translate_string_to_buf (TRANMAPPING ttm, CNSTRING in)
 {
-	TRANTABLE tt = get_trantable_from_tranmapping(ttm);
+	TRANTABLE ttdb = get_dbtrantable_from_tranmapping(ttm);
 	bfptr bfs = bfNew((int)(strlen(in)*1.3+2));
 	bfCpy(bfs, in);
 	if (!in || !ttm) {
 		return bfs;
 	}
-	if (tt && !ttm->after) {
-		/* custom translation before iconv */
-		bfptr bf2 = custom_translate(tt, bfs);
-		bfDelete(bfs);
-		bfs = bf2;
+	if (!ttm->after) {
+		if (ttdb) {
+			/* custom translation before iconv */
+			bfs = custom_translate(ttdb, bfs);
+		}
+		if (ttm->global_trans) {
+			bfs = global_translate(ttm->global_trans, bfs);
+		}
 	}
 	if (ttm->iconv_src && ttm->iconv_src[0] 
 		&& ttm->iconv_dest && ttm->iconv_dest[0]) {
-		bfptr bf2 = iconv_trans(ttm, bfs);
-		bfDelete(bfs);
-		bfs = bf2;
+		bfs = iconv_trans(ttm, bfs);
 	}
-	if (tt && ttm->after) {
-		/* custom translation after iconv */
-		bfptr bf2 = custom_translate(tt, bfs);
-		bfDelete(bfs);
-		bfs = bf2;
+	if (ttm->after) {
+		if (ttm->global_trans) {
+			bfs = global_translate(ttm->global_trans, bfs);
+		}
+		if (ttdb) {
+			/* custom translation after iconv */
+			bfs = custom_translate(ttdb, bfs);
+		}
 	}
 	return bfs;
 }
 /*===================================================
  * custom_translate -- Translate string via custom translation table
  *  tt:    [IN]  custom translation table
- *  bfsIn: [IN]  string to be translated
+ *  bfsIn: [IN]  string to be translated & destroyed
  * returns translated string
  *=================================================*/
 static bfptr
@@ -322,33 +328,44 @@ custom_translate (TRANTABLE tt, bfptr bfsIn)
 			bfCatChar(bfsOut, *p++);
 		}
 	}
+	bfDelete(bfsIn);
 	return bfsOut;
 }
 /*===================================================
  * iconv_trans -- Translate string via iconv
  *  ttm:  [IN]   transmapping
- *  in:   [IN]   string to translate
+ *  in:   [IN]   string to translate (& delete)
  *  bfs:  [I/O]  output buffer
  * Only called if HAVE_ICONV
  *=================================================*/
 static bfptr
 iconv_trans (TRANMAPPING ttm, bfptr bfsIn)
 {
-	bfptr bfsOut = bfNew(bfsIn->size);
 #ifdef HAVE_ICONV
-	/* TODO: Will have to modify this to use with iconv DLL */
-	iconv_t ict = iconv_open(ttm->iconv_dest, ttm->iconv_src);
+	char temp[60];
+	STRING dest=ttm->iconv_dest;
+	bfptr bfsOut = bfNew(bfsIn->size);
+	iconv_t ict = 0;
 	const char * inptr = bfsIn->str;
 	char * outptr=bfStr(bfsOut);
 	size_t inleft=bfLen(bfsIn);
 	size_t outleft=bfsOut->size-1;
 	size_t cvted=0;
 
+	if (ttm->translit) {
+		llstrncpy(temp, ttm->iconv_dest, sizeof(temp));
+		llstrapp(temp, sizeof(temp), "//TRANSLIT");
+		dest = temp;
+	} else {
+	}
+	ict = iconv_open(dest, ttm->iconv_src);
+
 	if (ict == (iconv_t)-1) {
 		/* if invalid translation, clear it to avoid trying again */
 		strfree(&ttm->iconv_src);
 		strfree(&ttm->iconv_dest);
 		bfCpy(bfsOut, bfsIn->str);
+		bfDelete(bfsIn);
 		return bfsOut;
 	}
 cvting:
@@ -366,11 +383,27 @@ cvting:
 	}
 	*outptr=0; /* iconv doesn't zero terminate */
 	iconv_close(ict);
+	bfDelete(bfsIn);
+	return bfsOut;
 #else
 	ttm=ttm; /* unused */
-	bfCpy(bfsOut, bfsIn->str);
+	return bfsIn;
 #endif /* HAVE_ICONV */
-	return bfsOut;
+}
+/*===================================================
+ * global_translate -- Apply list of user global transforms
+ *=================================================*/
+static bfptr
+global_translate (LIST gtlist, bfptr bfs)
+{
+	TRANTABLE ttx=0;
+	FORLIST(gtlist, tbel)
+		ttx = tbel;
+		ASSERT(ttx);
+		bfs = custom_translate(ttx, bfs);
+		ttx = 0;
+	ENDLIST
+	return bfs;
 }
 /*===================================================
  * translate_string -- Translate string via TRANMAPPING
@@ -549,8 +582,8 @@ show_xnode (XNODE node)
 BOOLEAN
 custom_sort (char *str1, char *str2, INT * rtn)
 {
-	TRANTABLE tts = get_trantable(MSORT);
-	TRANTABLE ttc = get_trantable(MCHAR);
+	TRANTABLE tts = get_dbtrantable(MSORT);
+	TRANTABLE ttc = get_dbtrantable(MCHAR);
 	CNSTRING rep1, rep2;
 	STRING ptr1=str1, ptr2=str2;
 	INT len1, len2;

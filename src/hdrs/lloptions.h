@@ -45,16 +45,19 @@ typedef struct table_s *TABLE;
 typedef void (*options_notify_fnc)(void);
 
 /* initialization & termination */
+void get_db_options(TABLE opts); /* free with FREEBOTH */
+void get_global_options(TABLE opts); /* free with FREEBOTH */
 BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
 void register_notify(options_notify_fnc fncptr);
-void unregister_notify(options_notify_fnc fncptr);
-void term_lloptions(void);
-void get_db_options(TABLE dbopts); /* free with FREEBOTH */
-void set_db_options(TABLE dbopts);
+void set_db_options(TABLE opts);
+void set_global_options(TABLE opts);
 void setoptstr_fallback(STRING optname, STRING newval);
+void term_lloptions(void);
+void unregister_notify(options_notify_fnc fncptr);
 
 
 /* use */
+/* TODO: fix const-correctness */
 STRING getoptstr(STRING optname, STRING defval);
 INT getoptint(STRING optname, INT defval);
 STRING getoptstr_dbonly(STRING optname, STRING defval);

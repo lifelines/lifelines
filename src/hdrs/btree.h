@@ -151,7 +151,7 @@ typedef struct {
 
 /* file.c */
 BOOLEAN addfile(BTREE, RKEY, STRING file);
-BOOLEAN addtextfile(BTREE, RKEY, STRING file, TRANSLFNC);
+BOOLEAN addtextfile(BTREE, RKEY, CNSTRING file, TRANSLFNC);
 RECORD_STATUS write_record_to_file(BTREE btree, RKEY rkey, STRING file);
 RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file, TRANSLFNC);
 

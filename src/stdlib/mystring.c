@@ -682,6 +682,7 @@ llstrapp (char *dest, size_t limit, const char *src)
 {
 	size_t len = strlen(dest);
 	size_t n = limit-len;
+	ASSERT(n >= 0);
 	if (n < 2) /* must fit trailing zero */
 		return dest;
 

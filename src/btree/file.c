@@ -38,7 +38,7 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN addfile_impl(BTREE btree, RKEY rkey, STRING file
+static BOOLEAN addfile_impl(BTREE btree, RKEY rkey, CNSTRING file
 	, STRING mode, TRANSLFNC translfnc);
 static RECORD_STATUS write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 	, TRANSLFNC translfnc, STRING mode);
@@ -70,7 +70,7 @@ addfile (BTREE btree, RKEY rkey, STRING file)
  * internally records are kept with just \n, so db is portable
  *=======================================*/
 BOOLEAN
-addtextfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translfnc)
+addtextfile (BTREE btree, RKEY rkey, CNSTRING file, TRANSLFNC translfnc)
 {
 	return addfile_impl(btree, rkey, file, LLREADTEXT, translfnc);
 }
@@ -81,7 +81,7 @@ addtextfile (BTREE btree, RKEY rkey, STRING file, TRANSLFNC translfnc)
  *  file:   [in] file with new record
  *=======================================*/
 static BOOLEAN
-addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode, TRANSLFNC translfnc)
+addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC translfnc)
 {
 	FILE *fp = NULL;
 	STRING mem = 0;

@@ -39,7 +39,7 @@ edit_mapping (INT ttnum)
 
 	unlink(editfile);
 
-	if (get_trantable(ttnum)) {
+	if (get_dbtrantable(ttnum)) {
 		if (!save_tt_to_file(ttnum, editfile)) {
 			msg_error(_(qSdataerr));
 			return FALSE;
@@ -84,17 +84,18 @@ save_tt_to_file (INT ttnum, STRING filename)
  * Created: 2001/12/26, Perry Rapp
  *============================================*/
 BOOLEAN
-load_new_tt (STRING filepath, INT ttnum)
+load_new_tt (CNSTRING filepath, INT ttnum)
 {
 	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 	TRANTABLE tt=0;
-	if (!init_map_from_file(filepath, ttnum, &tt)) {
+	CNSTRING mapname = get_map_name(ttnum);
+	if (!init_map_from_file(filepath, mapname, &tt)) {
 		if (tt)
 			remove_trantable(tt);
 		return FALSE;
 	}
 	/* change from old one to new one */
-	set_trantable(ttnum, tt);
+	set_dbtrantable(ttnum, tt);
 	/* store new one in permanent record in database */
 	store_text_file_to_db(map_keys[ttnum], filepath, transfnc);
 	return TRUE;

@@ -42,21 +42,52 @@ extern STRING qSaredit,qSdataerr,qSsepch;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
+static BOOLEAN edit_valtab_impl(TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab));
 
 /*==============================================
- * edit_valtab -- Edit value table from database
+ * edit_valtab_from_db -- Edit value table from database
  *  key:       [IN]  db key where record to edit is stored
  *  ptab:      [I/O] hash table for key/value strings
  *  sep:       [IN]  separator char between key & value on each line
  *  ermsg:     [IN]  error message to print in retry prompt if parse fails
- *  validator: [IN]  caller specified validation
+ *  validator: [IN]  caller specified validation (optional)
  * Looks up key in db, gets record, puts it in temp file
  * and allows user to interactively edit it.
  * key/value pairs are separated by \n, and their is a
  * single character (the sep arg) between each key & value.
  *============================================*/
 BOOLEAN
-edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
+edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
+{
+	TABLE tmptab = NULL;
+	TRANMAPPING ttmi = get_tranmapping(MEDIN);
+	endwin();
+
+	unlink(editfile);
+
+	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
+		msg_error(_(qSdataerr));
+		return FALSE;
+	}
+	if (!edit_valtab_impl(ptab, sep, ermsg, validator))
+		return FALSE;
+	store_text_file_to_db(key, editfile, trans_edin);
+	return TRUE;
+}
+/*==============================================
+ * edit_valtab_impl -- Edit value table from database
+ *  key:       [IN]  db key where record to edit is stored (optional)
+ *  ptab:      [I/O] hash table for key/value strings
+ *  sep:       [IN]  separator char between key & value on each line
+ *  ermsg:     [IN]  error message to print in retry prompt if parse fails
+ *  validator: [IN]  caller specified validation (optional)
+ * Looks up key in db, gets record, puts it in temp file
+ * and allows user to interactively edit it.
+ * key/value pairs are separated by \n, and their is a
+ * single character (the sep arg) between each key & value.
+ *============================================*/
+static BOOLEAN
+edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
 {
 	TABLE tmptab = NULL;
 	STRING msg;
@@ -67,12 +98,6 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	endwin();
 
-	unlink(editfile);
-
-	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
-		msg_error(_(qSdataerr));
-		return FALSE;
-	}
 	do_edit();
 	while (TRUE) {
 		tmptab = create_table();
@@ -80,7 +105,6 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)
 			if (!validator || !(ptr = (*validator)(tmptab))) {
 				if (*ptab) remove_table(*ptab, DONTFREE);
 				*ptab = tmptab;
-				store_text_file_to_db(key, editfile, trans_edin);
 				return TRUE;
 			}
 		} else {

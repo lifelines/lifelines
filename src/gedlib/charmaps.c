@@ -42,8 +42,6 @@
  * global/exported variables
  *********************************************/
 
-struct tranmapping_s tran_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
-static charmaps_inited=0;
 
 char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
@@ -67,17 +65,24 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
  *********************************************/
 
 /* alphabetical */
+static void check_for_user_charmaps(STRING basename, TRANMAPPING ttm, CNSTRING mapname);
 static void init_charmaps_if_needed(void);
 static BOOLEAN init_map_from_rec(INT, TRANTABLE*);
-static BOOLEAN init_map_from_str(STRING, INT, TRANTABLE*);
-static void maperror(INT index, INT entry, INT line, STRING errmsg);
+static BOOLEAN init_map_from_str(STRING, CNSTRING mapname, TRANTABLE*);
+static void load_custom_db_mappings(void);
+static void load_global_char_mapping(void);
+static void load_user_charmap(CNSTRING ttpath, CNSTRING mapname, TRANMAPPING ttm);
+static void maperror(CNSTRING mapname, INT entry, INT line, STRING errmsg);
 static void set_zone_conversion(STRING optname, INT toint, INT fromint);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static char *map_names[] = {
+/* custom translation tables embedded in the database */
+static struct tranmapping_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
+static INT charmaps_inited=0;
+static CNSTRING map_names[] = {
 	"Editor to Internal"
 	,"Internal to Editor"
 	,"GEDCOM to Internal"
@@ -105,38 +110,122 @@ static void
 init_charmaps_if_needed (void)
 {
 	/* Check that all tables have all entries */
-	ASSERT(NUM_TT_MAPS == ARRSIZE(tran_maps));
+	ASSERT(NUM_TT_MAPS == ARRSIZE(trans_maps));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_names));
 	ASSERT(NUM_TT_MAPS == ARRSIZE(map_keys));
 
-	memset(&tran_maps, 0, sizeof(tran_maps));
+	memset(&trans_maps, 0, sizeof(trans_maps));
 }
 /*========================================
- * load_global_char_mapping -- load char mapping info
- *  that is independent of the database
+ * clear_char_mappings -- empty & free all data
  *======================================*/
-void
-load_global_char_mapping (void)
+static void
+clear_char_mappings (void)
 {
 	INT indx=-1;
 
-	init_charmaps_if_needed();
-
-	/* clear all translations */
 	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		TRANMAPPING ttm = &tran_maps[indx];
+		TRANMAPPING ttm = &trans_maps[indx];
+		TRANTABLE *ptt = &ttm->dbtrantbl;
+		TRANTABLE ttx = 0;
+		remove_trantable(*ptt);
+		*ptt = 0;
 		strfree(&ttm->iconv_src);
 		strfree(&ttm->iconv_dest);
+		ttm->after = -1;
+		/* TODO: revisit this */
+		/* For the moment, we only transliterate going to display */
+		ttm->translit = (indx == MINDS);
+		if (ttm->global_trans) {
+			FORLIST(ttm->global_trans, tbel)
+				ttx = tbel;
+				ASSERT(ttx);
+				remove_trantable(ttx);
+				ttx = 0;
+			ENDLIST
+		}
 	}
+}
+/*========================================
+ * load_global_char_mapping -- load char mapping info
+ *  from global configuration
+ * NB: This depends on internal codeset, which depends on
+ * active database.
+ *======================================*/
+static void
+load_global_char_mapping (void)
+{
+	INT indx=-1;
 
 	/* no translations without internal codeset */
 	if (!int_codeset || !int_codeset[0])
 		return;
 
+
+	/* set iconv conversions as applicable */
 	set_zone_conversion("GuiCodeset", MDSIN, MINDS);
 	set_zone_conversion("EditorCodeset", MEDIN, MINED);
 	set_zone_conversion("GedcomCodeset", MGDIN, MINGD);
 	set_zone_conversion("ReportCodeset", -1, MINRP);
+
+	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
+		TRANMAPPING ttm = &trans_maps[indx];
+		if (ttm->after >= 0) {
+			char name[80];
+			CNSTRING keyname = map_keys[indx];
+			/* eg, TT.MDSIN.UTF-8 */
+			llstrncpy(name, "TT.", sizeof(name));
+			llstrapp(name, sizeof(name), keyname);
+			llstrapp(name, sizeof(name), ".");
+			llstrapp(name, sizeof(name), int_codeset);
+			llstrapp(name, sizeof(name), ".");
+			check_for_user_charmaps(name, ttm, map_names[indx]);
+		}
+	}
+}
+/*========================================
+ * check_for_user_charmaps -- Load any translation tables
+ *  specified by user in global config file
+ *  name:  [IN]  eg, "TT.MDSIN.UTF-8."
+ *  ttm:   [I/O] mapping data in which to add
+ *======================================*/
+static void
+check_for_user_charmaps (STRING basename, TRANMAPPING ttm, CNSTRING mapname)
+{
+	char name[120];
+	CNSTRING ttname=0;
+	INT i=1;
+	CNSTRING ttdir = getoptstr("TTDIR", ".");
+	if (!ttdir || !ttdir[0])
+		return;
+	for (i=1; TRUE; ++i) {
+		char ttpath[MAXPATHLEN];
+		llstrncpy(name, basename, sizeof(name));
+		llstrappf(name, sizeof(name), "%d", i);
+		ttname = getoptstr(name, "");
+		if (!ttname || !ttname[0])
+			break;
+		/* user wishes to load translation table named ttname */
+		llstrncpy(ttpath, concat_path(ttdir, ttname), sizeof(ttpath));
+		load_user_charmap(ttpath, mapname, ttm);
+	}
+}
+/*========================================
+ * load_user_charmap -- Add an external user-specified
+ *  custom translation table to the list
+ *======================================*/
+static void
+load_user_charmap (CNSTRING ttpath, CNSTRING mapname, TRANMAPPING ttm)
+{
+	TRANTABLE tt=0;
+	if (init_map_from_file(ttpath, mapname, &tt) && tt) {
+		if (!ttm->global_trans)
+			ttm->global_trans = create_list();
+		enqueue_list(ttm->global_trans, tt);
+	} else {
+		if (tt)
+			remove_trantable(tt);
+	}
 }
 /*========================================
  * set_zone_conversion -- Set conversions for one zone
@@ -148,56 +237,71 @@ static void
 set_zone_conversion (STRING optname, INT toint, INT fromint)
 {
 	STRING extcs = getoptstr(optname, "");
+	if (toint >= 0)
+		trans_maps[toint].after = TRUE;
+	if (fromint >= 0)
+		trans_maps[fromint].after = FALSE;
 	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
 		return;
 	if (toint >= 0) {
-		tran_maps[toint].iconv_src = strdup(extcs);
-		tran_maps[toint].iconv_dest = strdup(int_codeset);
-		tran_maps[toint].after = TRUE;
+		trans_maps[toint].iconv_src = strdup(extcs);
+		trans_maps[toint].iconv_dest = strdup(int_codeset);
 	}
 	if (fromint >= 0) {
-		tran_maps[fromint].iconv_src = strdup(int_codeset);
-		tran_maps[fromint].iconv_dest = strdup(extcs);
-		tran_maps[toint].after = FALSE;
+		trans_maps[fromint].iconv_src = strdup(int_codeset);
+		trans_maps[fromint].iconv_dest = strdup(extcs);
 	}
 }
 /*========================================
- * load_db_char_mapping -- load db specific part of char mapping
- *  This is the optional translation tables stored in the database
+ * load_char_mappings -- Reload all mappings
+ *  (custom translation tables & iconv mappings)
  *======================================*/
 void
-load_db_char_mapping (void)
+load_char_mappings (void)
 {
-	INT indx=-1;
+	/* TODO: make a clear_all_mappings for external call at shutdown */
 
 	init_charmaps_if_needed();
-
-	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		TRANMAPPING ttm = &tran_maps[indx];
-		TRANTABLE * tt = &ttm->trantbl;
-		if (!init_map_from_rec(indx, tt)) {
-			msg_error("Error initializing %s map.\n"
-				, map_names[indx]);
-		}
-	}
+	clear_char_mappings();
+	load_custom_db_mappings();
 	load_global_char_mapping();
 }
 /*========================================
- * get_trantable -- Access into the custom translation tables
+ * load_custom_db_mappings -- Reload mappings embedded in
+ *  current database
  *======================================*/
-TRANTABLE
-get_trantable (INT ttnum)
+static void
+load_custom_db_mappings (void)
 {
-	return get_tranmapping(ttnum)->trantbl;
+	INT indx=-1;
+	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
+		TRANMAPPING ttm = &trans_maps[indx];
+		TRANTABLE *tt = &ttm->dbtrantbl;
+		remove_trantable(*tt);
+		*tt = 0;
+		if (is_db_open()) {
+			if (!init_map_from_rec(indx, tt)) {
+				msg_error(_("Error initializing %s map.\n"), map_names[indx]);
+			}
+		}
+	}
 }
 /*========================================
- * get_trantable_from_tranmapping -- Access into custom
+ * get_dbtrantable -- Access into the custom translation tables
+ *======================================*/
+TRANTABLE
+get_dbtrantable (INT ttnum)
+{
+	return get_tranmapping(ttnum)->dbtrantbl;
+}
+/*========================================
+ * get_dbtrantable_from_tranmapping -- Access into custom
  *  translation table of a tranmapping
  *======================================*/
 TRANTABLE
-get_trantable_from_tranmapping (TRANMAPPING ttm)
+get_dbtrantable_from_tranmapping (TRANMAPPING ttm)
 {
-	return ttm ? ttm->trantbl : 0;
+	return ttm ? ttm->dbtrantbl : 0;
 }
 /*========================================
  * get_tranmapping -- Access to a translation mapping
@@ -205,19 +309,19 @@ get_trantable_from_tranmapping (TRANMAPPING ttm)
 TRANMAPPING
 get_tranmapping (INT ttnum)
 {
-	ASSERT(ttnum>=0 && ttnum<ARRSIZE(tran_maps));
-	return &tran_maps[ttnum];
+	ASSERT(ttnum>=0 && ttnum<ARRSIZE(trans_maps));
+	return &trans_maps[ttnum];
 }
 /*========================================
- * set_trantable -- Assign a new custom translation table
+ * set_dbtrantable -- Assign a new custom translation table
  *======================================*/
 void
-set_trantable (INT ttnum, TRANTABLE tt)
+set_dbtrantable (INT ttnum, TRANTABLE tt)
 {
-	ASSERT(ttnum>=0 && ttnum<ARRSIZE(tran_maps));
-	if (tran_maps[ttnum].trantbl)
-		remove_trantable(tran_maps[ttnum].trantbl);
-	tran_maps[ttnum].trantbl = tt;
+	ASSERT(ttnum>=0 && ttnum<ARRSIZE(trans_maps));
+	if (trans_maps[ttnum].dbtrantbl)
+		remove_trantable(trans_maps[ttnum].dbtrantbl);
+	trans_maps[ttnum].dbtrantbl = tt;
 }
 /*===================================================
  * init_map_from_rec -- Init single translation table
@@ -236,7 +340,7 @@ init_map_from_rec (INT indx, TRANTABLE * ptt)
 	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(map_keys[indx], &len)))
 		return TRUE;
-	ok = init_map_from_str(rawrec, indx, ptt);
+	ok = init_map_from_str(rawrec, map_names[indx], ptt);
 	stdfree(rawrec);
 	return ok;
 }
@@ -249,7 +353,7 @@ init_map_from_rec (INT indx, TRANTABLE * ptt)
  * But if file is empty, *ptt=0 and returns TRUE.
  *==================================================*/
 BOOLEAN
-init_map_from_file (STRING file, INT indx, TRANTABLE * ptt)
+init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt)
 {
 	FILE *fp;
 	struct stat buf;
@@ -271,7 +375,7 @@ init_map_from_file (STRING file, INT indx, TRANTABLE * ptt)
 	/* may not read full buffer on Windows due to CR/LF translation */
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
-	ok = init_map_from_str(mem, indx, ptt);
+	ok = init_map_from_str(mem, mapname, ptt);
 	stdfree(mem);
 	return ok;
 }
@@ -289,7 +393,7 @@ init_map_from_file (STRING file, INT indx, TRANTABLE * ptt)
  * May return NULL
  *================================================*/
 static BOOLEAN
-init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
+init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt)
 {
 	INT i, n, maxn, entry=1, line=1, newc;
 	INT sep = (uchar)'\t'; /* default separator */
@@ -382,7 +486,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, entry, line, _(qSbaddec));
+					maperror(mapname, entry, line, _(qSbaddec));
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -391,20 +495,20 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, entry, line, _(qSbadhex));
+					maperror(mapname, entry, line, _(qSbadhex));
 					goto fail;
 				}
 			} else if ((c == '\n') || (c == '\r'))   {
-				maperror(indx, entry, line, _(qSnorplc));
+				maperror(mapname, entry, line, _(qSnorplc));
 				goto fail;
 			} else if (c == 0) {
-				maperror(indx, entry, line, _(qSnorplc));
+				maperror(mapname, entry, line, _(qSnorplc));
 				goto fail;
 			} else if (c == '\\') {
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, entry, line, _(qSbadesc));
+					maperror(mapname, entry, line, _(qSbadesc));
 					goto fail;
 				}
 				*p++ = c;
@@ -415,7 +519,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 		}
 		*p = 0;
 		if (!scratch[0]) {
-				maperror(indx, entry, line, _(qSnoorig));
+				maperror(mapname, entry, line, _(qSnoorig));
 				goto fail;
 		}
 		lefts[n] = strsave(scratch);
@@ -428,7 +532,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 3;
 				} else {
-					maperror(indx, entry, line, _(qSbaddec));
+					maperror(mapname, entry, line, _(qSbaddec));
 					goto fail;
 				}
 			} else if (c == '$') {
@@ -437,7 +541,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 					*p++ = newc;
 					str += 2;
 				} else {
-					maperror(indx, entry, line, _(qSbadhex));
+					maperror(mapname, entry, line, _(qSbadhex));
 					goto fail;
 				}
 			} else if (c == '\n') {
@@ -451,7 +555,7 @@ init_map_from_str (STRING str, INT indx, TRANTABLE * ptt)
 				c = *str++;
 				if (c == '\t' || c == 0 || c == '\n'
 				    || c == '\r') {
-					maperror(indx, entry, line, _(qSbadesc));
+					maperror(mapname, entry, line, _(qSbadesc));
 					goto fail;
 				}
 				if (c == 't') c='\t'; /* "\t" -> tab */
@@ -536,8 +640,14 @@ hexvalue (INT c)
  *  line:   [in] raw line number in file, 1-based
  *  errmsg:  [in] error message
  *==================================================*/
-void
-maperror (INT indx, INT entry, INT line, STRING errmsg)
+static void
+maperror (CNSTRING mapname, INT entry, INT line, STRING errmsg)
 {
-	llwprintf(_(qSmaperr), map_names[indx], line, entry, errmsg);
+	llwprintf(_(qSmaperr), mapname, line, entry, errmsg);
+}
+CNSTRING
+get_map_name (INT ttnum)
+{
+	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
+	return map_names[ttnum];
 }
