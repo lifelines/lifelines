@@ -52,7 +52,7 @@ BOOLEAN add_metadata = FALSE;
  *********************************************/
 
 extern STRING fileof, reremp, rerlng, rernlv, rerinc;
-extern STRING rerbln, rernwt, rerilv, rerwlv;
+extern STRING rerbln, rernwt, rerilv, rerwlv, unsupuni;
 
 /*********************************************
  * local types
@@ -506,6 +506,10 @@ file_to_node (STRING fname, TRANTABLE tt, STRING *pmsg, BOOLEAN *pemp)
 	if (!(fp = fopen(fname, LLREADTEXT))) {
 		sprintf(scratch, "Could not open file %s",  fname);
 		*pmsg = scratch;
+		return NULL;
+	}
+	if (!check_file_for_unicode(fp)) {
+		*pmsg = unsupuni;
 		return NULL;
 	}
 	node = first_fp_to_node(fp, TRUE, tt, pmsg, pemp);

@@ -129,11 +129,11 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 		p += strlen(p);
 	}
 	if (indi && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(indi));
+		sprintf(p, " (%s)", key_of_record(indi, ttd));
 		p += strlen(p);
 	}
 	if (fam && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(fam));
+		sprintf(p, " (%s)", key_of_record(fam, ttd));
 		p += strlen(p);
 	}
 	if(indi) {
@@ -297,8 +297,11 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	name = node_to_tag(node, "REFN", ttd, mylen);
 	if (name)
 		llstrcatn(&p, name, &mylen);
-	if (nval(node))
-		llstrcatn(&p, nval(node), &mylen);
+	if (nval(node)) {
+		char scratch[MAXGEDNAMELEN+1];
+		translate_string(ttd, nval(node), scratch, sizeof(scratch)-1);
+		llstrcatn(&p, scratch, &mylen);
+	}
 	/* append any CONC/CONT nodes that fit */
 	child = nchild(node);
 	while (mylen>5 && child) {

@@ -262,6 +262,7 @@ STRING whatrpt     = SS "What is the name of the program?";
 STRING norpt       = SS "No report was generated.";
 STRING whtout      = SS "What is the name of the output file?";
 STRING opt2long    = SS "Malformed configuration file: line too long.";
+STRING unsupuni    = SS "Unsupported Unicode format (only UTF-8 is supported).";
 
 /* new records */
 STRING defsour     = SS "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";

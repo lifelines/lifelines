@@ -23,6 +23,17 @@
 	Added new report functions: titlecase, complexformat, complexpic,
 	datepic. Added date tests for new functionality to exercise.ll.
 
+	* ChangeLog gedlib/gstrings.c gedlib/keytonod.c
+	gedlib/messages.c gedlib/node.c hdrs/gedcom.h hdrs/llstdlib.h
+	liflines/import.c liflines/show.c reports/exercise.ll
+	stdlib/path.c:
+
+	Added check for Unicode marker at top of gedcom file (that M$ uses),
+	so we can accept M$ UTF-8 by skipping over marker.
+	Bugfix: Fixed key_of_record to translate, for refns following name.
+	Bugfix: Fixed other_to_list_string to translate values of others.
+	Added titlecase tests to exercise.ll.
+
 2001-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/messages.c hdrs/interp.h

@@ -300,7 +300,7 @@ BOOLEAN iso_list(NODE, NODE);
 BOOLEAN iso_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
 void join_fam(NODE, NODE, NODE, NODE, NODE, NODE);
 void join_indi(NODE, NODE, NODE, NODE, NODE, NODE, NODE);
-STRING key_of_record(NODE);
+STRING key_of_record(NODE, TRANTABLE tt);
 RECORD key_possible_to_record(STRING, INT let);
 NODE key_to_even(STRING);
 RECORD key_to_even0(STRING);

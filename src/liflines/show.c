@@ -198,7 +198,7 @@ init_display_indi (NODE pers, INT width)
 	    t = indi_to_title(pers, ttd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
 	}
-	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers));
+	sprintf(Spers+strlen(Spers), "(%s)", key_of_record(pers, ttd));
 
 	s = sh_indi_to_event_long(pers, ttd, "BIRT", dspl_bir, (width-3));
 	if (!s) s = sh_indi_to_event_long(pers, ttd, "CHR", dspl_chr, (width-3));
@@ -356,9 +356,9 @@ init_display_fam (NODE fam, INT width)
 	ASSERT(fam);
 	husb = fam_to_husb(fam);
 	wife = fam_to_wife(fam);
-	fk = key_of_record(fam);
+	fk = key_of_record(fam, ttd);
 	if (husb) {
-		ik = key_of_record(husb);
+		ik = key_of_record(husb, ttd);
 		len = liwidth - (10 + strlen(dspl_fath) + strlen(ik) + strlen(fk));
 		s = indi_to_name(husb, ttd, len);
 		snprintf(Shusb, liwidth, "%s: %s (%s) (%s)", dspl_fath, s, ik, fk);
@@ -376,7 +376,7 @@ init_display_fam (NODE fam, INT width)
 	else snprintf(Shdeat, liwidth, "  %s", dspl_dea);
 
 	if (wife) {
-		ik = key_of_record(wife);
+		ik = key_of_record(wife, ttd);
 		len = width - (7 + strlen(dspl_moth) + strlen(ik));
 		s = indi_to_name(wife, ttd, len);
 		snprintf(Swife, liwidth, "%s: %s (%s)", dspl_moth, s, ik);
@@ -593,7 +593,7 @@ indi_to_ped_fix (NODE indi, INT len)
 	if (!devt) devt = event_to_date(BURI(indi), ttd, TRUE);
 	if (!devt) devt = (STRING) "";
 	if (keyflag) {
-	    	key = key_of_record(indi);
+		key = key_of_record(indi, ttd);
 		sprintf(tmp1, " [%s-%s] (%s)", bevt, devt, key);
 	}
 	else
@@ -780,7 +780,7 @@ person_display (NODE indi, NODE fam, INT len)
 		strcpy(p, scratch2);
 		p += strlen(p);
 	}
-	sprintf(p, " (%s)", key_of_record(indi));
+	sprintf(p, " (%s)", key_of_record(indi, ttd));
 	return scratch1;
 }
 
@@ -819,7 +819,7 @@ show_list (INDISEQ seq,
 		strcpy(scratch, name);
 		p = scratch + strlen(scratch);
 		*p++ = ' ';
-		sprintf(p, "(%s)", key_of_record(indi));
+		sprintf(p, "(%s)", key_of_record(indi, ttd));
 		/*sprintf(p, "(%s)", &key[1]);*/
 		mvwaddstr(win, row, 4, scratch);
 		row++;

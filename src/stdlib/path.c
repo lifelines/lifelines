@@ -298,3 +298,35 @@ compress_path (STRING path, INT len)
 	}
 	return buf;
 }
+/*========================================================================
+ * check_file_for_unicode -- Check for MS-style headers for UTF-8 or
+ * 16-bit unicode. Return FALSE if 16-bit unicode.
+ * Advance past UTF-8 header & return TRUE.
+ * return TRUE if none found.
+ * Created: 2001/12/30 (Perry Rapp)
+ *======================================================================*/
+BOOLEAN
+check_file_for_unicode (FILE * fp)
+{
+	INT c1 = (uchar)fgetc(fp);
+	if (c1 == 0xEF) {
+		INT c2 = (uchar)fgetc(fp);
+		if (c2 == 0xBB) {
+			INT c3 = (uchar)fgetc(fp);
+			if (c3 == 0xBF) {
+				/* consume UTF-8 header & return ok */
+				return TRUE;
+			}
+			ungetc(c3, fp);
+		}
+		/* any other header starting with EF we reject */
+		/* TODO: This is a bit broader than needed, but this routine
+		is actually only used to check gedcom files, and they have to
+		start with a level# in any case */
+		ungetc(c2, fp);
+		ungetc(c1, fp);
+		return FALSE;
+	}
+	ungetc(c1, fp);
+	return TRUE;
+}

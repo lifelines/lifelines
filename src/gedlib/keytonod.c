@@ -1047,14 +1047,23 @@ node_to_cacheel (NODE node)
 }
 /*==============================================
  * key_of_record -- Return display key of record
+ *  returns static buffer
  *============================================*/
 STRING
-key_of_record (NODE node)
+key_of_record (NODE node, TRANTABLE tt)
 {
+	static char buffer[128];
 	NODE refn;
 	ASSERT(node);
 	refn = REFN(node);
-	if (refn && nval(refn)) return nval(refn);
+	if (refn && nval(refn)) {
+		if (tt) {
+			translate_string(tt, nval(refn), buffer, sizeof(buffer));
+			return buffer;
+		} else {
+			return nval(refn);
+		}
+	}
 	return rmvat(nxref(node)) + 1;
 }
 /*==============================================

@@ -62,7 +62,7 @@ extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
 extern STRING idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel;
-extern STRING cfoldk, dbdelk, dbrdon;
+extern STRING cfoldk, dbdelk, dbrdon, unsupuni;
 extern TRANTABLE tran_tables[];
 
 /*********************************************
@@ -106,6 +106,9 @@ import_from_file (void)
 	srcdir = getoptstr("InputPath", ".");
 	fp = ask_for_input_file(LLREADTEXT, idgedf, &fname, srcdir, ".ged");
 	if (!fp) return FALSE;
+	if (!check_file_for_unicode(fp)) {
+		msg_error(unsupuni);
+	}
 	llwprintf(gdcker, fname);
 	if (!validate_gedcom(fp)) {
 		fclose(fp);
