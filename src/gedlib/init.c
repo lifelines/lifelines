@@ -47,17 +47,56 @@ STRING llarchives, llreports, llprograms;
 char *getenv();
 
 /*=================================
+ * figure_tempfile -- calculate temporary file (fully qualified path)
+ *===============================*/
+static STRING
+figure_tempfile()
+{
+	STRING e;
+	char unix_tempfile[] = "/tmp/lltmpXXXXXX";
+	char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
+
+#ifdef WIN32
+	/* windows has per-user temporary directory, depending on version */
+	e = (STRING)getenv("TEMP");
+	if (!e || *e == 0) e = (STRING)getenv("TMP");
+	if (!e || *e == 0) e = "\\temp";
+	strcpy(win32_tempfile, e);
+	strcat(win32_tempfile, "\\lltmpXXXXXX");
+	return mktemp(win32_tempfile);
+#else
+	return mktemp(unix_tempfile));;
+#endif
+}
+
+/*=================================
+ * figure_editor -- calculate editor program to use
+ *===============================*/
+static STRING
+figure_editor()
+{
+	STRING e;
+
+	e = (STRING) getenv("LLEDITOR");
+	if (!e || *e == 0) e = (STRING) getenv("ED");
+	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
+#ifdef WIN32
+	/* win32 fallback is notepad */
+	if (!e || *e == 0) e = (STRING) "notepad.exe";
+#else
+	/* unix fallback is vi */
+	if (!e || *e == 0) e = (STRING) "vi";
+#endif
+	return e;
+}
+
+/*=================================
  * init_lifelines -- Open LifeLines
  *===============================*/
 void
 init_lifelines (void)
 {
 	STRING e, emsg;
-#ifdef WIN32
-	char tempfile[] = "\\temp\\lltmpXXXXXX";
-#else
-	char tempfile[] = "/tmp/lltmpXXXXXX";
-#endif
 
 	tagtable = create_table();
 	placabbvs = create_table();
@@ -67,11 +106,8 @@ init_lifelines (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	e = (STRING) getenv("LLEDITOR");
-	if (!e || *e == 0) e = (STRING) getenv("ED");
-	if (!e || *e == 0) e = (STRING) getenv("EDITOR");
-	if (!e || *e == 0) e = (STRING) "vi";
-	editfile = strsave(mktemp(tempfile));
+	e = figure_editor();
+	editfile = strsave(figure_tempfile());
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
 	sprintf(editstr, "%s %s", e, editfile);
 	llprograms = (STRING) getenv("LLPROGRAMS");
