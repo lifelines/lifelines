@@ -757,6 +757,8 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue_from_indi_keynum(xref_firsti());
 }
@@ -809,6 +811,8 @@ __previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue_from_indi_keynum(xref_lasti());
 }
@@ -819,6 +823,8 @@ __lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue_from_fam_keynum(xref_firstf());
 }
@@ -871,6 +877,8 @@ __prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue_from_fam_keynum(xref_lastf());
 }
@@ -1071,6 +1079,8 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (VPTR)get_lifelines_version(120));
 }
@@ -1101,6 +1111,9 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
+	eflg=eflg; /* unused */
 	return create_pvalue(PSTRING, (VPTR)progname);
 }
 /*============================================+

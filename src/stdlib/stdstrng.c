@@ -173,13 +173,13 @@ isnumeric (STRING str)
 STRING
 lower (STRING str)
 {
-	static unsigned char scratch[MAXLINELEN+1];
-	STRING p = (STRING)scratch;
+	static char scratch[MAXLINELEN+1];
+	STRING p = scratch;
 	INT c, i=0;
 	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_tolower(c);
 	*p = '\0';
-	return (STRING)scratch;
+	return scratch;
 }
 /*======================================
  * upper -- Convert string to upper case
@@ -188,13 +188,13 @@ lower (STRING str)
 STRING
 upper (STRING str)
 {
-	static unsigned char scratch[MAXLINELEN+1];
-	STRING p = (STRING)scratch;
+	static char scratch[MAXLINELEN+1];
+	STRING p = scratch;
 	INT c, i=0;
 	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
-	return (STRING)scratch;
+	return scratch;
 }
 /*================================
  * capitalize -- Capitalize string
@@ -217,7 +217,7 @@ titlecase (STRING str)
 {
 	/* % sequences aren't a problem, as % isn't lower */
 	STRING p = lower(str), buf=p;
-	if (!p[0]) p;
+	if (!p[0]) return p;
 	while (1) {
 		/* capitalize first letter of word */
 		*p = ll_toupper((uchar)*p);
@@ -268,13 +268,13 @@ ll_tolower (INT c)
 STRING
 trim (STRING str, INT len)
 {
-	static unsigned char scratch[MAXLINELEN+1];
+	static char scratch[MAXLINELEN+1];
 	if (!str || strlen(str) > MAXLINELEN) return NULL;
 	if (len < 0) len = 0;
 	if (len > MAXLINELEN) len = MAXLINELEN;
-	strcpy((char*)scratch, str);
+	strcpy(scratch, str);
 	scratch[len] = '\0';
-	return (STRING)scratch;
+	return scratch;
 }
 /*=========================================
  * striptrail -- Strip trailing white space
@@ -479,5 +479,18 @@ sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
 			*b=0;
 			return FALSE;
 		}
+	}
+}
+/*============================================
+ * chomp -- remove any trailing carriage return/linefeed
+ * Created: 2002/01/03 (Perry Rapp)
+ *==========================================*/
+void
+chomp (STRING str)
+{
+	STRING p = str + strlen(str) - 1;
+	while (p>=str && (*p=='\r' || *p=='\n')) {
+		*p=0;
+		--p;
 	}
 }

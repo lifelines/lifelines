@@ -66,7 +66,6 @@ extern STRING whatrpt,idrpt;
 
 static void remove_tables(void);
 static void parse_file(STRING ifile, LIST plist);
-static void printkey(STRING key, char type, INT keynum);
 static void progmessage(MSG_LEVEL level, STRING);
 
 /*********************************************
@@ -1123,6 +1122,7 @@ hleave:
 /*========================================+
  * printkey -- Make key from keynum
  *=======================================*/
+#ifdef UNUSED_CODE
 static void
 printkey (STRING key, char type, INT keynum)
 {
@@ -1130,6 +1130,7 @@ printkey (STRING key, char type, INT keynum)
 		keynum=0;
 	sprintf(key, "%c%d", type, keynum);
 }
+#endif
 /*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}

@@ -323,6 +323,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 	/* a name record which points at indi=key */
 	RECORD indi0 = qkey_to_indi0(key);
 	NODE indi = nztop(indi0);
+	param=param; /* unused */
 
 	/* bail out immediately if not INDI */
 	if (key[0] != 'I') {
@@ -375,6 +376,7 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 	/* a refn record which points at record=key */
 	RECORD rec = key_to_record(key, TRUE);
 	NODE node = nztop(rec);
+	param = param; /* unused */
 
 	if (newset) {
 		finish_and_delete_refnset();
@@ -498,6 +500,7 @@ check_nodes (void)
 static BOOLEAN
 nodes_callback (STRING key, RECORD rec, void *param)
 {
+	param=param; /* unused */
 	if (noisy)
 		report_progress("Node: %s", key);
 	switch (key[0]) {
@@ -522,7 +525,6 @@ check_indi (STRING key, RECORD rec)
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
 	NODE node1;
 	CACHEEL icel1;
-	INT keynum = atoi(&key[1]);
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
 	}
@@ -588,7 +590,6 @@ check_fam (STRING key, RECORD rec)
 	NODE fam1, fref1, husb1, wife1, chil1, rest1;
 	NODE node1;
 	CACHEEL fcel1;
-	INT keynum = atoi(&key[1]);
 	INT members = 0;
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPFAM, "Duplicate family for %s", key);
@@ -665,7 +666,6 @@ static BOOLEAN
 check_sour (STRING key, RECORD rec)
 {
 	static char prevkey[9];
-	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPSOUR, "Duplicate source for %s", key);
 	}
@@ -682,7 +682,6 @@ static BOOLEAN
 check_even (STRING key, RECORD rec)
 {
 	static char prevkey[9];
-	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPEVEN, "Duplicate event for %s", key);
 	}
@@ -699,7 +698,6 @@ static BOOLEAN
 check_othe (STRING key, RECORD rec)
 {
 	static char prevkey[9];
-	INT keynum = atoi(&key[1]);
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPOTHE, "Duplicate record for %s", key);
 	}
@@ -755,7 +753,7 @@ check_node (STRING n0key, NODE node, INT level)
 	/* ignore lineage links - they are checked elsewhere */
 	if (level==1) {
 		INT i;
-		for (i=0; i<(INT)ARRSIZE(lineage_tags); i++) {
+		for (i=0; i<ARRSIZE(lineage_tags); i++) {
 			if (eqstr(ntag(node), lineage_tags[i])) {
 				lineage=TRUE;
 				break;
@@ -812,7 +810,7 @@ static void
 validate_errs (void)
 {
 	INT i;
-	for (i=0; i<(INT)(sizeof(errs)/sizeof(errs[0])); i++) {
+	for (i=0; i<ARRSIZE(errs); i++) {
 		if (errs[i].err != i) {
 			fprintf(stderr, "Invalid errs array[%d] in dbverify - fix program\n", i);
 			FATAL();
@@ -924,7 +922,7 @@ static void
 report_results (void)
 {
 	INT i, ct=0;
-	for (i=0; i<(INT)(sizeof(errs)/sizeof(errs[0])); i++) {
+	for (i=0; i<ARRSIZE(errs); i++) {
 		if (errs[i].err_count || errs[i].fix_count) {
 			ct++;
 			printf("%s: %d errors, %d fixed\n", 

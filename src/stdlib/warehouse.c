@@ -199,6 +199,7 @@ replace_block_var (WAREHOUSE wh, INT blockid, INT position, void * data, INT len
 	/* ptr is correct position of new block in original warehouse */
 	STRING ptr = whptr + wbent[position].offset;
 	INT newsize, delta, i;
+	blockid=blockid; /* unused */
 
 	ASSERT(wbent[position].blocktype == BT_VAR);
 
@@ -255,6 +256,7 @@ replace_block_int (WAREHOUSE wh, INT blockid, INT position, INT val)
 	WH_HDR * hdr = (WH_HDR *)wh->data;
 	char * whptr = (char *)hdr;
 	WB_ENTRY * wbent = (WB_ENTRY *)(whptr+hdr->list);
+	blockid=blockid; /* unused */
 
 	wbent[position].offset = val;
 }

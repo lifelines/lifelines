@@ -54,7 +54,7 @@ INT curcol = 1, currow = 1;
 INT outputmode = BUFFERED;
 
 static STRING pagebuffer = NULL;
-static unsigned char linebuffer[1024];
+static char linebuffer[1024];
 static INT linebuflen = 0;
 static STRING bufptr = linebuffer;
 
@@ -130,6 +130,8 @@ __pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	outputmode = BUFFERED;
 	linebuflen = 0;
 	bufptr = linebuffer;
@@ -188,6 +190,8 @@ PVALUE
 __outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING rptdir = getoptstr("LLREPORTS", ".");
+	node=node; /* unused */
+	stab=stab; /* unused */
 	if (!Poutfp) {
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename
 			, rptdir, NULL);
@@ -289,6 +293,8 @@ __col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue(PINT, (VPTR)curcol);
 }
@@ -302,6 +308,8 @@ __pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	char scratch[MAXCOLS+2];
 	STRING p;
 	INT row, i;
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {

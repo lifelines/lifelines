@@ -29,6 +29,7 @@
 #include "sys_inc.h"
 #include "mystring.h"
 
+
 extern int opt_finnish;	/* use standard strcmp, strncmp if this is FALSE */
 
 typedef struct {
@@ -410,42 +411,47 @@ my_chrcmp (const int s1,
 
 
 int
-my_strcmp (const unsigned char *s1,
-           const unsigned char *s2,
+my_strcmp (const char *s1,
+           const char *s2,
            const int cmp_table[])
 {
   int i;
+  const unsigned char *p1 = (const unsigned char *)s1;
+  const unsigned char *p2 = (const unsigned char *)s2;
 
   if(!opt_finnish) return(strcmp(s1,s2));
 
-  for (i=0; s1[i] && s2[i]; i++) {
+  for (i=0; p1[i] && p2[i]; i++) {
 #if 0
-    fprintf (stdout, "%d %c %c %d\n", i, s1[i], s2[i],
-             (cmp_table[s1[i]] != cmp_table[s2[i]]));
+    fprintf (stdout, "%d %c %c %d\n", i, p1[i], p2[i],
+             (cmp_table[p1[i]] != cmp_table[p2[i]]));
 #endif
-    if (cmp_table[s1[i]] != cmp_table[s2[i]]) {
+    if (cmp_table[p1[i]] != cmp_table[p2[i]]) {
       break;
     }
   }
-  return (cmp_table[s1[i]] - cmp_table[s2[i]]);
+  return (cmp_table[p1[i]] - cmp_table[p2[i]]);
 }
 
 int
-my_strncmp (const unsigned char *s1,
-            const unsigned char *s2,
+my_strncmp (const char *s1,
+            const char *s2,
             const int n,
             const int cmp_table[])
 {
   int i;
+  const unsigned char *p1 = (const unsigned char *)s1;
+  const unsigned char *p2 = (const unsigned char *)s2;
 
   if(!opt_finnish) return(strncmp(s1,s2,n));
 
-  for (i=0; i<n && s1[i] && s2[i]; i++) {
-    if (cmp_table[s1[i]] != cmp_table[s2[i]]) {
+  for (i=0; i<n && p1[i] && p2[i]; i++) {
+    if (cmp_table[p1[i]] != cmp_table[p2[i]]) {
       break;
     }
   }
-  return ((i == n) ? 0 : (cmp_table[s1[i]] - cmp_table[s2[i]]));
+  if (i == n) return 0;
+  return cmp_table[p1[i]] - cmp_table[p2[i]];
 }
 
 

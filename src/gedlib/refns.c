@@ -381,6 +381,7 @@ resolve_traverse (NODE node, VPTR param)
 	STRING refn, val = nval(node);
 	INT letr;
 	NODE refr;
+	param=param; /* unused */
 
 	if (!val) return TRUE;
 	if (symbolic_link(val)) {
@@ -499,6 +500,7 @@ traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
+	len=len; /* unused */
 
 	parserefnrec(rkey, data);
 

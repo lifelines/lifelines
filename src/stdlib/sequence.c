@@ -35,7 +35,6 @@
 #include "sequence.h"
 
 static BOOLEAN fndel (SEQUENCE, ELEMENT, INT *);
-static BOOLEAN sfndel (SEQUENCE, ELEMENT, INT *);
 
 INT seqerr = NONE;
 /*==========================
@@ -274,6 +273,7 @@ fndel (SEQUENCE seq,   /* sequence */
 /*===========================================================
  * sfndel -- Search sorted sequence for key - return location
  *=========================================================*/
+#ifdef UNUSED_CODE
 static BOOLEAN
 sfndel (SEQUENCE seq,   /* sequence */
         ELEMENT key,    /* search key */
@@ -296,6 +296,7 @@ sfndel (SEQUENCE seq,   /* sequence */
 	}
 	return FALSE;
 }
+#endif
 /*===============================================
  * joinseq -- Join two sequences - first modified
  *=============================================*/

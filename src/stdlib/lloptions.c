@@ -116,7 +116,6 @@ load_config_file (STRING file, STRING * pmsg)
 	FILE * fp = 0;
 	STRING ptr, val;
 	STRING oldval=NULL;
-	INT len;
 	BOOLEAN there, failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	fp = fopen(file, LLREADTEXT);
@@ -131,6 +130,7 @@ load_config_file (STRING file, STRING * pmsg)
 			/* bail out if line too long */
 			break;
 		}
+		chomp(buffer); /* trim any trailing CR or LF */
 		/* find =, which separates key from value */
 		for (ptr = buffer; *ptr && *ptr!='='; ptr++)
 			;
@@ -159,14 +159,6 @@ load_config_file (STRING file, STRING * pmsg)
 		else
 			copy_process(valbuf, ptr);
 		val = valbuf;
-		len = strlen(val);
-		if (len>0 && val[len-1]=='\n') {
-			val[len-1] = 0;
-			/* cygwin appends both \n & \r apparently */
-			if (len>1 && val[len-2]=='\r') {
-				val[len-2] = 0;
-			}
-		}
 		insert_table_str(opttab, strsave(buffer), strsave(val));
 	}
 	failed = !feof(fp);

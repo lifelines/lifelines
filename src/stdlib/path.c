@@ -258,9 +258,9 @@ fopenpath (STRING name,
 STRING
 lastpathname (STRING path)
 {
-	static unsigned char scratch[MAXLINELEN+1];
+	static char scratch[MAXLINELEN+1];
 	INT len, c;
-	STRING p = (STRING)scratch, q;
+	STRING p = scratch, q;
 	if (ISNULL(path)) return NULL;
 	len = strlen(path);
 	strcpy(p, path);
@@ -286,7 +286,8 @@ compress_path (STRING path, INT len)
 {
 	static char buf[120];
 	INT pathlen = strlen(path);
-	if (len > sizeof(buf)-1) len=sizeof(buf)-1;
+	if (len > (INT)sizeof(buf)-1)
+		len = (INT)sizeof(buf)-1;
 	/* TODO: be nice to expand "."  */
 	if (pathlen > len) {
 		STRING dotdotdot = "...";
@@ -330,3 +331,4 @@ check_file_for_unicode (FILE * fp)
 	ungetc(c1, fp);
 	return TRUE;
 }
+

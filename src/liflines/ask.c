@@ -146,8 +146,12 @@ expand_special_chars (STRING fname, STRING buffer, INT buflen)
 			return 1;
 		}
 	}
-	return 0;
+#else
+	fname=fname; /* unused */
+	buffer=buffer; /* unused */
+	buflen=buflen; /* unused */
 #endif
+	return 0;
 }
 /*======================================
  * ask_for_file_worker -- Ask for and open file
@@ -166,7 +170,7 @@ ask_for_file_worker (STRING mode,
 	STRING fname;
 	char fnamebuf[512];
 	int elen, flen;
-	unsigned char pathtemp[MAXPATHLEN];
+	char pathtemp[MAXPATHLEN];
 
 	make_fname_prompt(fnamebuf, sizeof(fnamebuf), ext);
 

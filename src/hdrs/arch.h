@@ -101,4 +101,15 @@ int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 #endif
 #endif
 
+
+/* *****************************************************************
+ * ACS_MAP stuff -- TODO: can this be moved into configure.in ?
+ * 2002/01/03 (Perry Rapp)
+ * ***************************************************************** */
+
+#if !defined(BSD) && !defined(__CYGWIN__)
+#define HAVE_ACS_MAP
+#endif
+
+
 #endif /* ARCH_H */

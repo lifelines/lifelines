@@ -104,6 +104,7 @@ void ll_abort(int);
 BOOLEAN allwhite(STRING);
 STRING capitalize(STRING);
 INT chartype(INT);
+void chomp(STRING);
 STRING strconcat(STRING, STRING);
 void strfree(STRING *);
 STRING strsave(CNSTRING);

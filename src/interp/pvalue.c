@@ -58,8 +58,10 @@ typedef struct pv_block *PV_BLOCK;
 /* alphabetical */
 static CACHEEL access_cel_from_pvalue(PVALUE val);
 static void clear_pv_indiseq(INDISEQ seq);
+static void clear_pvalue(PVALUE val);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
+static PVALUE create_pvalue_from_node_impl(NODE node, INT ptype);
 static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static void free_all_pvalues(void);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
@@ -80,7 +82,9 @@ static INT live_pvalues = 0;
 static PV_BLOCK block_list = 0;
 static BOOLEAN reports_time = FALSE;
 static BOOLEAN cleaning_time = FALSE;
+#ifdef DEBUG_REPORT_MEMORY_DETAIL
 static BOOLEAN alloclog_save = FALSE;
+#endif
 #ifdef DEBUG_PVALUES
 static INT debugging_pvalues = TRUE;
 #else
@@ -143,7 +147,7 @@ alloc_pvalue_memory (void)
 		new_block->next = block_list;
 		block_list = new_block;
 		/* add all pvalues in new block to free list */
-		for (i=0; i<BLOCK_VALUES; i++) {
+		for (i=0; i<(INT)BLOCK_VALUES; i++) {
 			PVALUE val1 = &new_block->values[i];
 			val1->type = PFREED;
 			val1->value = free_list;
@@ -239,7 +243,7 @@ static void
 free_all_pvalues (void)
 {
 	PV_BLOCK block;
-	int leaked = live_pvalues;
+	/* live_pvalues is the # leaked */
 	while ((block = block_list)) {
 		PV_BLOCK next = block->next;
 		/*
@@ -250,7 +254,7 @@ free_all_pvalues (void)
 		free_list = 0;
 		if (live_pvalues) {
 			INT i;
-			for (i=0; i<BLOCK_VALUES; i++) {
+			for (i=0; i<(INT)BLOCK_VALUES; i++) {
 				PVALUE val1=&block->values[i];
 				if (val1->type != PFREED) {
 					/* leaked */
@@ -297,7 +301,7 @@ create_pvalue (INT type, VPTR value)
  * clear_pvalue -- Empty contents of pvalue
  * Created: 2001/01/20, Perry Rapp
  *======================================*/
-void
+static void
 clear_pvalue (PVALUE val)
 {
 	if (cleaning_time) {
@@ -608,7 +612,7 @@ create_pvalue_from_othr_keynum (INT i)
  *  handles NULL
  * Created: 2001/03/20, Perry Rapp
  *===================================================*/
-PVALUE
+static PVALUE
 create_pvalue_from_node_impl (NODE node, INT ptype)
 {
 	CACHEEL cel = node ? node_to_cacheel(node) : NULL;

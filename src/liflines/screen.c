@@ -46,12 +46,11 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "interp.h"
-#include "screen.h"
 #include "liflines.h"
 #include "arch.h"
+#include "screen.h"
 #include "menuitem.h"
 #include "lloptions.h"
-#include "screen.h"
 
 #include "llinesi.h"
 
@@ -171,8 +170,9 @@ static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
 #ifdef HAVE_SETLOCALE
 static void choose_sort(STRING optname);
 #endif
-static INT choose_tt(UIWINDOW wparent, STRING prompt);
+static INT choose_tt(STRING prompt);
 static UIWINDOW choose_win(INT desiredhgt, INT *actualhgt);
+static void clear_hseg(WINDOW *win, INT row, INT x1, INT x2);
 static void clear_msgs(void);
 static void clearw(void);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
@@ -185,7 +185,7 @@ static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT co
 static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
-static void edit_tt_menu(UIWINDOW wparent);
+static void edit_tt_menu(void);
 static void end_action(void);
 static void export_tts(void);
 static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
@@ -193,11 +193,11 @@ static INT handle_list_cmds(listdisp * ld, INT code);
 static void import_tts(void);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static NODE invoke_add_menu(void);
-static void invoke_cset_menu(UIWINDOW wparent);
+static void invoke_cset_menu(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
-static void invoke_trans_menu(UIWINDOW wparent);
+static void invoke_trans_menu(void);
 static void invoke_utils_menu(void);
 static void load_tt_action(UIWINDOW wparent);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
@@ -217,9 +217,9 @@ static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
-static void rpt_cset_menu(UIWINDOW wparent);
+static void rpt_cset_menu(void);
 static void run_report(BOOLEAN picklist);
-static void save_tt_action(UIWINDOW wparent);
+static void save_tt_action(void);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static void show_record(UIWINDOW uiwin, STRING key, INT mode, INT row, INT hgt
 	, INT width, INT * scroll, BOOLEAN reuse);
@@ -265,6 +265,22 @@ static BOOLEAN msg_flag = FALSE; /* need to show msg list */
 static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
+
+#ifdef HAVE_ACS_MAP
+static char acsttee = ACS_TTEE;
+static char acsvline = ACS_VLINE;
+static char acsbtee = ACS_BTEE;
+static char acsltee = ACS_LTEE;
+static char acshline = ACS_HLINE;
+static char acsrtee = ACS_RTEE;
+#else
+static char acsttee = '+';
+static char acsvline = '|';
+static char acsbtee = '+';
+static char acsltee = '+';
+static char acshline = '-';
+static char acsrtee = '+';
+#endif
 
 /*********************************************
  * local & exported function definitions
@@ -396,9 +412,7 @@ paint_list_screen (void)
 	show_horz_line(uiwin, LIST_LINES+1, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	show_vert_line(uiwin, LIST_LINES+1, 52, 15);
-#if !defined(BSD) && !defined(__CYGWIN__)
-	mvwaddch(win, LIST_LINES+1, 52, ACS_TTEE);
-#endif
+	mvwaddch(win, LIST_LINES+1, 52, acsttee);
 	mvwaddstr(win, LIST_LINES+2, 54, "Choose an operation:");
 	row = LIST_LINES+3; col = 55;
 	mvwaddstr(win, row++, col, "j  Move down list");
@@ -537,6 +551,8 @@ static void
 check_stdout (void)
 {
 	if (stdout_vis) {
+		WINDOW * win = uiw_win(stdout_win);
+		touchwin(win);
 		llwprintf("\nStrike any key to continue.\n");
 		crmode();
 		(void) wgetch(uiw_win(stdout_win));
@@ -592,8 +608,8 @@ main_menu (void)
 		break;
 	case 'p': run_report(TRUE); break;
 	case 'r': run_report(FALSE); break;
-	case 'c': invoke_cset_menu(main_win); break;
-	case 't': edit_tt_menu(main_win); break;
+	case 'c': invoke_cset_menu(); break;
+	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
 	case 'x': 
 		c = invoke_extra_menu();
@@ -845,6 +861,7 @@ list_browse (INDISEQ seq,
              INT mark,
              NODE * pindi)
 {
+	pindi=pindi; /* unused */
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
@@ -857,6 +874,7 @@ list_browse (INDISEQ seq,
 STRING
 ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir)
 {
+	basedir=basedir; /* unused */
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt);
 }
@@ -1356,8 +1374,8 @@ disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
 	WINDOW * win = uiw_win(uiwin);
 	int menulen = strlen(menuit);
 	int buflen = sizeof(buff)-menulen;
-	mvwaddstr(win, row, 4, menuit);
-	mvwaddstr(win, row, 4+menulen, get_codeset_desc(codeset, buff, buflen));
+	mvwaddstr(win, row, col, menuit);
+	mvwaddstr(win, row, col+menulen, get_codeset_desc(codeset, buff, buflen));
 }
 /*==============================
  * disp_locale -- Display locale description
@@ -1370,8 +1388,8 @@ disp_locale (UIWINDOW uiwin, INT row, INT col, STRING menuit)
 	WINDOW * win = uiw_win(uiwin);
 	int menulen = strlen(menuit);
 	int buflen = sizeof(buff)-menulen;
-	mvwaddstr(win, row, 4, menuit);
-	mvwaddstr(win, row, 4+menulen, get_sort_desc(buff, buflen));
+	mvwaddstr(win, row, col, menuit);
+	mvwaddstr(win, row, col+menulen, get_sort_desc(buff, buflen));
 }
 /*==============================
  * disp_trans_table_choice -- Display line in
@@ -1526,7 +1544,7 @@ invoke_del_menu (void)
  * invoke_cset_menu -- Handle character set menu
  *====================================*/
 static void
-invoke_cset_menu (UIWINDOW wparent)
+invoke_cset_menu (void)
 {
 	INT code=0;
 	UIWINDOW uiwin=0;
@@ -1561,8 +1579,8 @@ invoke_cset_menu (UIWINDOW wparent)
 		case 'l': edit_mapping(MLCAS); break;
 		case 'u': edit_mapping(MUCAS); break;
 		case 'p': edit_mapping(MPREF); break;
-		case 'r': rpt_cset_menu(uiwin); break;
-		case 't': invoke_trans_menu(uiwin); break;
+		case 'r': rpt_cset_menu(); break;
+		case 't': invoke_trans_menu(); break;
 		case 'q': done=TRUE; break;
 		}
 	}
@@ -1572,7 +1590,7 @@ invoke_cset_menu (UIWINDOW wparent)
  * rpt_cset_menu -- Handle report character set menu
  *====================================*/
 static void
-rpt_cset_menu (UIWINDOW wparent)
+rpt_cset_menu (void)
 {
 	INT code;
 	UIWINDOW uiwin=0;
@@ -1608,11 +1626,10 @@ rpt_cset_menu (UIWINDOW wparent)
  * invoke_trans_menu -- menu for translation tables
  *====================================*/
 static void
-invoke_trans_menu (UIWINDOW wparent)
+invoke_trans_menu (void)
 {
 	INT code;
 	UIWINDOW uiwin=0;
-	WINDOW *win=0;
 	BOOLEAN done=FALSE;
 
 	if (!trans_menu_win) {
@@ -1629,9 +1646,9 @@ invoke_trans_menu (UIWINDOW wparent)
 
 		begin_action();
 		switch (code) {
-		case 'e': edit_tt_menu(uiwin); break;
+		case 'e': edit_tt_menu(); break;
 		case 'l': load_tt_action(uiwin); break;
-		case 's': save_tt_action(uiwin); break;
+		case 's': save_tt_action(); break;
 		case 'x': export_tts(); break;
 		case 'i': import_tts(); break;
 		case 'q': done=TRUE; break;
@@ -1644,10 +1661,10 @@ invoke_trans_menu (UIWINDOW wparent)
  * edit_tt_menu -- menu for "Edit translation table"
  *====================================*/
 static void
-edit_tt_menu (UIWINDOW wparent)
+edit_tt_menu (void)
 {
 	INT ttnum;
-	while ((ttnum = choose_tt(wparent, mn_edttttl)) != -1) {
+	while ((ttnum = choose_tt( mn_edttttl)) != -1) {
 		edit_mapping(ttnum);
 		stdout_vis = FALSE; /* don't need to see errors after done */
 	}
@@ -1669,7 +1686,7 @@ load_tt_action (UIWINDOW wparent)
 	}
 
 	/* Ask which table */
-	ttnum = choose_tt(wparent, mn_svttttl);
+	ttnum = choose_tt(mn_svttttl);
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
 		msg_error(badttnum);
@@ -1693,7 +1710,7 @@ load_tt_action (UIWINDOW wparent)
  * to a file
  *====================================*/
 static void
-save_tt_action (UIWINDOW wparent)
+save_tt_action (void)
 {
 	FILE * fp;
 	STRING fname=0;
@@ -1701,7 +1718,7 @@ save_tt_action (UIWINDOW wparent)
 	STRING ttexportdir;
 	
 	/* Ask which table */
-	ttnum = choose_tt(wparent, mn_svttttl);
+	ttnum = choose_tt(mn_svttttl);
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
 		msg_error(badttnum);
@@ -1745,7 +1762,7 @@ export_tts (void)
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
 static INT
-choose_tt (UIWINDOW wparent, STRING prompt)
+choose_tt (STRING prompt)
 {
 	INT code;
 	UIWINDOW uiwin = tt_menu_win;
@@ -1997,7 +2014,7 @@ shw_list (INDISEQ seq, listdisp * ld)
 		}
 	}
 }
-static STRING empstr = (STRING) "                                                 ";
+static STRING empstr49 = (STRING) "                                                 ";
 /*==========================================
  * show_big_list - Show name list in list screen
  *========================================*/
@@ -2028,7 +2045,7 @@ and listdisp is local to screen.c right now, so browse_list can't have one
 	INT viewlines = 13;
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
-		mvwaddstr(win, i, 1, empstr);
+		mvwaddstr(win, i, 1, empstr49);
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
@@ -2099,7 +2116,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 	INT overflag=FALSE;
 	char buffer[120];
 	INT width = uiw_cols(ld->uiwin);
-	if (width > sizeof(buffer)-1)
+	if (width > (INT)sizeof(buffer)-1)
 		width = sizeof(buffer)-1;
 	/* clear current lines */
 	lines = ld->rows + (ld->details ? ld->details+2 : 0);
@@ -2302,15 +2319,8 @@ place_std_msg (void)
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING str = message_string();
-	INT row;
-	wmove(win, row = ll_lines-2, 2);
-	if (cur_screen != LIST_SCREEN) {
-		wclrtoeol(win);
-#if !defined(BSD) && !defined(__CYGWIN__)
-		mvwaddch(win, row, ll_cols-1, ACS_VLINE);
-#endif
-	} else
-		mvwaddstr(win, row, 2, empstr);
+	INT row = ll_lines-2;
+	clear_hseg(win, row, 2, ll_cols-2);
 	mvwaddstr(win, row, 2, str);
 	wrefresh(win); /* ensure message is displayed */
 	place_cursor();
@@ -2393,14 +2403,12 @@ wpos (INT row, INT col)
 void
 show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
-#if !defined(BSD) && !defined(__CYGWIN__)
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row, col, ACS_LTEE);
+	mvwaddch(win, row, col, acsltee);
 	for (i = 0; i < len-2; i++)
-		waddch(win, ACS_HLINE);
-	waddch(win, ACS_RTEE);
-#endif
+		waddch(win, acshline);
+	waddch(win, acsrtee);
 }
 /*=====================================
  * show_vert_line -- Draw vertical line
@@ -2408,14 +2416,12 @@ show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 void
 show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
-#if !defined(BSD) && !defined(__CYGWIN__)
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
-	mvwaddch(win, row++, col, ACS_TTEE);
+	mvwaddch(win, row++, col, acsttee);
 	for (i = 0; i < len-2; i++)
-		mvwaddch(win, row++, col, ACS_VLINE);
-	mvwaddch(win, row, col, ACS_BTEE);
-#endif
+		mvwaddch(win, row++, col, acsvline);
+	mvwaddch(win, row, col, acsbtee);
 }
 /*=============================================
  * place_cursor -- Move to idle cursor location
@@ -2698,6 +2704,17 @@ vmprintf (STRING fmt, va_list args)
 	display_status(showing);
 }
 #endif
+/*=====================
+ * clear_hseg -- clear part of a row
+ * Created: 2002/01/03
+ *====================*/
+static void
+clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
+{
+	INT i;
+	for (i=x1; i<=x2; ++i)
+		mvwaddstr(win, row, i, " ");
+}
 /*===============================================
  * display_status -- put string in status line
  * We don't touch the status_transitory flag
@@ -2717,14 +2734,8 @@ display_status (STRING text)
 		strcat(status_showing, "...");
 	}
 	/* then display it */
-	wmove(win, row = ll_lines-2, 2);
-	if (cur_screen != LIST_SCREEN) {
-		wclrtoeol(win);
-#if !defined(BSD) && !defined(__CYGWIN__)
-		mvwaddch(win, row, ll_cols-1, ACS_VLINE);
-#endif
-	} else
-		mvwaddstr(win, row, 2, empstr);
+	row = ll_lines-2;
+	clear_hseg(win, row, 2, ll_cols-2);
 	wmove(win, row, 2);
 	mvwaddstr(win, row, 2, status_showing);
 	place_cursor();

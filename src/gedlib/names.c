@@ -1058,6 +1058,7 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
+	len=len; /* unused */
 
 	parsenamerec(rkey, data);
 

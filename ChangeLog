@@ -1,3 +1,26 @@
+2002-01-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c gedlib/names.c gedlib/node.c
+	gedlib/property.c gedlib/refns.c gedlib/translat.c hdrs/arch.h
+	hdrs/interp.h hdrs/llstdlib/h hdrs/mystring.h hdrs/standard.h
+	interp/alloc.c interp/builtin.c interp/date.c
+	interp/heapused.c interp/interp.c interp/lex.c interp/more.c
+	interp/pvalue.c interp/rassa.c liflines/ask.c
+	liflines/askprogram.c liflines/import.c liflines/lbrowse.c
+	liflines/screen.c liflines/show.c stdlib/environ.c
+	stdlib/lloptions.c stdlib/mystring.c stdlib/path.c
+	stdlib/sequence.c stdlib/stdstrng.c stdlib/warehouse.c
+	tools/dbverify.c:
+
+	Cleanup some gcc warnings (& a couple very obscure bug possibilities
+	with signed chars).
+	Change BSD & CYGWIN conditional defs in screen.c to be
+	based on HAVE_ACS_MAP, and set it in arch.h. 
+	Improve behavior if not HAVE_ACS_MAP (use ascii graphics).
+	Fix is_valid_month for French & Hebrew (13 months).
+	Added chomp function to use after fgets.
+	Fix extractdate to handle NULL input.
+
 2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c
@@ -9,7 +32,7 @@
 
 	* ChangeLog stdlib\lloptions.c:
 
-	Bugfix for cygwin fgets in lloptions (leaves both \n & \r in fgets).
+	Modify lloptions to handle \n\r (can happen on cygwin).
 
 2002-01-01 Perry Rapp <puddle@users.sourceforge.net>
 

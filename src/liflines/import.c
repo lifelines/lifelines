@@ -275,6 +275,7 @@ static BOOLEAN
 translate_values (NODE node, VPTR param)
 {
 	STRING new;
+	param=param; /* unused */
 	if (!pointer_value(nval(node))) return TRUE;
 	new = translate_key(rmvat(nval(node)));
 	stdfree(nval(node));

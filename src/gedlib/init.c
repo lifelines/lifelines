@@ -88,7 +88,7 @@ init_lifelines_global (STRING * pmsg)
 		return FALSE;
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
-	for (i=0; i<(INT)ARRSIZE(dirvars); ++i) {
+	for (i=0; i<ARRSIZE(dirvars); ++i) {
 		if (!getoptstr(dirvars[i], NULL)) {
 			STRING str = getenv(dirvars[i]);
 			if (str)

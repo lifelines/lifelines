@@ -676,6 +676,7 @@ string_to_record (STRING str, STRING key, INT len)
 {
 	RECORD rec = 0;
 	NODE node = 0;
+	len=len; /* unused */
 
 	/* create it now, & release it at bottom if we fail */
 	rec = alloc_new_record();

@@ -15,11 +15,11 @@ int my_isupper (const int c);
 int my_tolower (const int c);
 int my_toupper (const int c);
 
-int my_strcmp  (const unsigned char *s1,
-                const unsigned char *s2,
+int my_strcmp  (const char *s1,
+                const char *s2,
                 const int cmp_table[]);
-int my_strncmp (const unsigned char *s1,
-                const unsigned char *s2,
+int my_strncmp (const char *s1,
+                const char *s2,
                 const int n,
                 const int cmp_table[]);
 
@@ -31,11 +31,9 @@ extern const int my_ISO_Latin1_Finnish[];
 #define MY_SORT_TABLE my_ISO_Latin1_Finnish
 
 #define MY_STRCMP(s1,s2) \
-	my_strcmp((const unsigned char *)(s1), \
-		  (const unsigned char *)(s2),MY_SORT_TABLE)
+	my_strcmp((s1), (s2), MY_SORT_TABLE)
 #define MY_STRNCMP(s1,s2,n) \
-	my_strncmp((const unsigned char *)(s1), \
-		   (const unsigned char *)(s2),(n),MY_SORT_TABLE)
+	my_strncmp((s1), (s2), (n), MY_SORT_TABLE)
 
 void llstrcatn(char ** pdest, const char * src, int * len);
 char *llstrncpy(char *dest, const char *src, size_t n);

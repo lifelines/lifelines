@@ -184,18 +184,15 @@ create_pnode (INT type)
 }
 /*========================================
  * clear_pnode -- Empty contents of pvalue
- * I don't know if anything in the node needs to
- *  be freed, Perry
  * Created: 2001/01/20, Perry Rapp
  *======================================*/
 static void
 clear_pnode (PNODE node)
 {
+	node=node; /* unused */
 	/*
-	Is there anything needing handling here?
-
-	Don't touch any pvalues, because the block cleaner
-	freed them all!
+	just points to string inside record, which is
+	in the cache, so nothing to free here.
 	*/
 }
 /*==================================
@@ -219,7 +216,7 @@ string_node (STRING str)
 {
 	PNODE node = create_pnode(ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
-	ivalue(node) = create_pvalue(PSTRING, (VPTR) str);
+	ivaluex(node) = create_pvalue(PSTRING, (VPTR) str);
 	return node;
 }
 /*========================================
@@ -507,7 +504,7 @@ PNODE
 icons_node (INT ival)
 {
 	PNODE node = create_pnode(IICONS);
-	ivalue(node) = create_pvalue(PINT, (VPTR) ival);
+	ivaluex(node) = create_pvalue(PINT, (VPTR) ival);
 	return node;
 }
 /*===================================
@@ -519,7 +516,7 @@ fcons_node (FLOAT fval)
 	PNODE node = create_pnode(IFCONS);
 	UNION u;
 	u.f = fval;
-	ivalue(node) = create_pvalue(PFLOAT, u.w);
+	ivaluex(node) = create_pvalue(PFLOAT, u.w);
 	return node;
 }
 /*===================================

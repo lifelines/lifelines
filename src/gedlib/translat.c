@@ -555,7 +555,7 @@ get_codeset_desc (INT codeset, STRING buffer, INT max)
 	char * ptr = buffer;
 	INT mylen = max;
 	INT index=0, i;
-	for (i=0; i<(INT)ARRSIZE(codesets); ++i) {
+	for (i=0; i<ARRSIZE(codesets); ++i) {
 		if (codeset == codesets[i].code) {
 			index = i;
 			break;
@@ -570,11 +570,13 @@ get_codeset_desc (INT codeset, STRING buffer, INT max)
  *  index is from list returned by get_codesets
  * Created: 2001/08/02 (Perry Rapp)
  *=================================================*/
+#ifdef UNUSED_CODE
 INT
 get_codeset (INT index)
 {
 	return ARRSIZE(codesets);
 }
+#endif
 /*===================================================
  * get_codeset_names -- Get list of codesets
  * returns list of static items (do not free items)
@@ -585,7 +587,7 @@ get_codesets (void)
 {
 	LIST list = create_list();
 	INT i;
-	for (i=0; i<(INT)ARRSIZE(codesets); ++i)
+	for (i=0; i<ARRSIZE(codesets); ++i)
 		push_list(list, codesets[i].name);
 	return list;
 }

@@ -745,7 +745,7 @@ person_display (NODE indi, NODE fam, INT len)
 	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
-	if (len > (INT)ARRSIZE(scratch1)-1)
+	if (len > ARRSIZE(scratch1)-1)
 		len = ARRSIZE(scratch1)-1;
 
 	/* keywidth for key, 2 for comma space, and split between name & events */

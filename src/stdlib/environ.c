@@ -83,7 +83,8 @@ environ_determine_editor (INT program)
 		if (ISNULL(e)) e = (STRING) "vi";
 	}
 #else
-	/* unix fallback is vi */
+	program=program; /* unused */
+	/* unix fallback is vi for all programs */
 	if (ISNULL(e)) e = (STRING) "vi";
 #endif
 	return e;

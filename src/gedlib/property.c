@@ -45,13 +45,13 @@ get_user_email (void)
   STRING retval = NULL;
 
 #if defined(HAVE_GETPWUID)
-  static unsigned char username[256];
+  static char username[256];
   char hostname[256];
   struct passwd *pwent = getpwuid(getuid());
   if (NULL != pwent &&
       (int)sizeof(hostname) > gethostname(hostname, sizeof(hostname)))
     {
-      snprintf((char*)username, sizeof(username), "%s@%s",
+      snprintf(username, sizeof(username), "%s@%s",
 	       pwent->pw_name, hostname);
       username[sizeof(username)-1] = '\0';
       retval = (STRING) username;

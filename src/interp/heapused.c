@@ -73,6 +73,8 @@ __heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	long heapcnt;
 	int repcnt;
 	static FILE *errfp = NULL;
+	node=node; /* unused */
+	stab=stab; /* unused */
 
 	if(errfp == NULL) errfp = fopen("pbm.err", "wt");
 
@@ -99,6 +101,8 @@ __heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue(PINT, (VPTR)heapfree);
 #else
 	/* Unsupported, what should we do? return error or give bogus value? */
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = TRUE;
 	return NULL;
 #endif

@@ -142,6 +142,7 @@ parse_program(STRING directory,
   while (NULL != fgets(str, sizeof(str), fp))
     {
       STRING p;
+      chomp(str); /* trim trailing CR or LF */
       for (i=0; i<ARRSIZE(f_tags); ++i)
         {
           CNSTRING tag = f_tags[i];

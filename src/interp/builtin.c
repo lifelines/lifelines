@@ -228,6 +228,9 @@ __gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
 	NODE chil = create_node(NULL, "DATE", get_todays_date(), prnt);
+	node=node; /* unused */
+	stab=stab; /* unused */
+	eflg=eflg; /* unused */
 
 #ifdef DEBUG
 	llwprintf("__gettoday: called\n");
@@ -328,7 +331,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
-	static uchar scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "the arg to surname must be a person");
@@ -392,7 +395,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
-	static uchar scratch[MAXGEDNAMELEN+1];
+	static char scratch[MAXGEDNAMELEN+1];
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "1st arg to givens must be a person");
@@ -404,7 +407,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	str = givens(nval(name)); /* static buffer, but create_pvalue will copy */
+	str = givens(nval(name));
 	translate_string(ttr, str, scratch, ARRSIZE(scratch));
 	return create_pvalue(PSTRING, (VPTR)scratch);
 }
@@ -655,7 +658,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
-	/* RFMT rfmt = NULL; /* /* currently no reformatting for reports */
+	/* RFMT rfmt = NULL; */ /* currently no reformatting for reports */
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	STRING str;
 	if (*eflg) {
@@ -2905,6 +2908,8 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nl (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (VPTR)"\n");
 }
@@ -2915,6 +2920,8 @@ __nl (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __space (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (VPTR)" ");
 }
@@ -2925,6 +2932,8 @@ __space (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __qt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	node=node; /* unused */
+	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (VPTR)"\"");
 }
@@ -2936,7 +2945,7 @@ PVALUE
 __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str;
-	unsigned char scratch[200], *p, *q = scratch;
+	char scratch[200], *p, *q = scratch;
 	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -2944,7 +2953,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	p = str = (STRING) pvalue(val);
-	while ((c = *p++) && chartype(c) != DIGIT)
+	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 		;
 	if (c == 0) {
 		delete_pvalue(val);
@@ -2952,7 +2961,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	*q++ = 'I';
 	*q++ = c;
-	while (chartype(c = *p++) == DIGIT)
+	while (chartype(c = (uchar)*p++) == DIGIT)
 		*q++ = c;
 	*q = 0;
 	delete_pvalue(val);
@@ -2977,7 +2986,7 @@ PVALUE
 __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str, rawrec;
-	unsigned char scratch[200], *p, *q = scratch;
+	char scratch[200], *p, *q = scratch;
 	INT c, len;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -2985,7 +2994,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	p = str = (STRING) pvalue(val);
-	while ((c = *p++) && chartype(c) != DIGIT)
+	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
 		;
 	if (c == 0) {
 		delete_pvalue(val);
@@ -2993,7 +3002,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	*q++ = 'F';
 	*q++ = c;
-	while (chartype(c = *p++) == DIGIT)
+	while (chartype(c = (uchar)*p++) == DIGIT)
 		*q++ = c;
 	*q = 0;
 	delete_pvalue(val);

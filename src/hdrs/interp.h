@@ -90,6 +90,7 @@ struct itag {
 #define ifname(i)    ((i)->i_file)	/* program name - all nodes */
 
 #define ivalue(i)    ((PVALUE)((i)->i_word1)) /* constant values */
+#define ivaluex(i)   ((i)->i_word1)     /* constant values, for setting */
 #define iident(i)    ((i)->i_word1)	/* ident nodes */
 #define iargs(i)     ((i)->i_word2)	/* param and arg lists */
 #define icond(i)     ((i)->i_word1)	/* cond expr in if & while */

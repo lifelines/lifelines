@@ -61,6 +61,8 @@ browse_list (NODE *pindi1,
 	STRING key, name, newname, lname="";
 	NODE indi;
 	INDISEQ seq, newseq;
+	pfam1=pfam1; /* unused */
+	pfam2=pfam2; /* unused */
 
 	current_seq = NULL;
 	if (!pseq || !(seq = *pseq) || (len = length_indiseq(seq)) <= 0)

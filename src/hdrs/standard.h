@@ -189,7 +189,7 @@ typedef struct ltag {
 	ONLY use this for true arrays & locally sized strings.
 	NEVER use this for pointers!
 */
-#define ARRSIZE(qq) (sizeof(qq)/sizeof(qq[0]))
+#define ARRSIZE(qq) ((INT)(sizeof(qq)/sizeof(qq[0])))
 
 struct WAREHOUSE_S;
 typedef struct WAREHOUSE_S *WAREHOUSE;
