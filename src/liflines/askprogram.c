@@ -118,13 +118,13 @@ parse_program(STRING directory,
   char str[MAXLINELEN];
   int i;
 
-  sprintf(filepath, "%s/%s", directory, filename);
+  snprintf(filepath, sizeof(filepath), "%s/%s", directory, filename);
 
   if (NULL == (fp = fopen(filepath, "r")))
     return NULL;
 
   info = calloc(1, sizeof(*info));
-  info->filename = strdup(filepath);
+  info->filename = strsave(filepath);
   for (i=0; i<ARRSIZE(info->tags); ++i)
     info->tags[i] = "";
 
@@ -145,7 +145,7 @@ parse_program(STRING directory,
                 ++s;
               remove_trailing_space(s);
               if (s[0])
-                info->tags[i] = strdup(s);
+                info->tags[i] = strsave(s);
               break;
             }
         }
@@ -157,7 +157,7 @@ parse_program(STRING directory,
 
   /* ensure we always have a program name */
   if (!info->tags[P_PROGNAME][0]) 
-    info->tags[P_PROGNAME] = strdup(filename);
+    info->tags[P_PROGNAME] = strsave(filename);
 
   return info;
 }
@@ -308,7 +308,7 @@ make_program_list(PROGRAM_INFO head,
   i = 0;
   if (leader)
     {
-      newlist[i++] = strdup(leader);
+      newlist[i++] = strsave(leader);
     }
   while (NULL != cur)
     {
@@ -322,7 +322,7 @@ make_program_list(PROGRAM_INFO head,
         version = "V?.?";
       snprintf(buf, sizeof(buf), "%s (%s) [%s]"
         , program, version, output);
-      newlist[i] = strdup(buf);
+      newlist[i] = strsave(buf);
       i++;
       cur = cur->next;
     }

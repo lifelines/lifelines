@@ -112,7 +112,7 @@ BOOLEAN
 init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 {
 	STRING tag, val, q;
-	STRING strsrc = strdup(str);
+	STRING strsrc = strsave(str);
 	STRING p = strsrc;
 	INT c;
 	static char errmsg[80];

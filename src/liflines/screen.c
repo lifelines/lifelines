@@ -1153,7 +1153,7 @@ choose_from_list (STRING ttl, LIST list)
 	FORLIST(list, el)
 		choice = (STRING)el;
 		ASSERT(choice);
-		array[i] = strdup(choice);
+		array[i] = strsave(choice);
 		++i;
 	ENDLIST
 

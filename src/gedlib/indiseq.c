@@ -718,7 +718,7 @@ update_locale (INDISEQ seq)
 	if (!ILocale(seq) || !eqstr(ILocale(seq), locstr)) {
 		if (ILocale(seq))
 			stdfree(ILocale(seq));
-		ILocale(seq) = strdup(locstr);
+		ILocale(seq) = strsave(locstr);
 	}
 #endif
 }

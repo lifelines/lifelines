@@ -437,7 +437,7 @@ static MenuItem * f_MenuListPersons[] =
 /*============================
  * setup_menu - initialize runtime memory
  *  structures for one menu
- * Title is strdup'd
+ * Title is strsaved
  * Created: 2001/01/28, Perry Rapp
  *==========================*/
 static void
@@ -449,7 +449,7 @@ setup_menu (ScreenInfo * sinfo, STRING Title, INT MenuRows, INT MenuCols
 
 	if (sinfo->Title)
 		stdfree(sinfo->Title);
-	sinfo->Title = strdup(Title);
+	sinfo->Title = strsave(Title);
 	sinfo->MenuRows = MenuRows;
 	sinfo->MenuCols = MenuCols;
 	sinfo->MenuSize = Size;
@@ -478,7 +478,7 @@ add_menu_item (STRING Title, CMDARRAY cmds, MenuItem * mitem)
 	llstrncpy(display, _(mitem->Display), ARRSIZE(display));
 	if (mitem->LocalizedDisplay)
 		strfree(&mitem->LocalizedDisplay);
-	mitem->LocalizedDisplay = strdup(display);
+	mitem->LocalizedDisplay = strsave(display);
 	if (mitem->Command == CMD_CHILD_DIRECT0) {
 		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
 		for (i=1; i<=9; i++) {
@@ -658,7 +658,7 @@ menuitem_initialize (INT cols)
 	for (i=1; i<=MAX_SCREEN; i++)
 	{
 		memset(&g_ScreenInfo[i], 0, sizeof(g_ScreenInfo[i]));
-		g_ScreenInfo[i].Title = strdup(_("Missing title"));
+		g_ScreenInfo[i].Title = strsave(_("Missing title"));
 		g_ScreenInfo[i].MenuRows = 0;
 		g_ScreenInfo[i].MenuCols = cols;
 		g_ScreenInfo[i].MenuSize = 0;

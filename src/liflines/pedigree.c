@@ -243,7 +243,7 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
 		if (!len) {
 			/* done */
 			if (current[0]) {
-				enqueue_list(list, strdup(current));
+				enqueue_list(list, strsave(current));
 			}
 			stdfree(current);
 			return;
@@ -255,7 +255,7 @@ append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
 		ptr += (curptr - temp);
 		if (!curlen) {
 			/* filled up an item */
-			enqueue_list(list, strdup(current));
+			enqueue_list(list, strsave(current));
 			current[0] = 0;
 			curptr = current;
 			curlen = width;
@@ -351,14 +351,14 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 			/* ptr & mylen still point after leader */
 			llstrcatn(&ptr, el, &mylen);
 			/* put original line */
-			tn1->str = strdup(line);
+			tn1->str = strsave(line);
 			/* now build leader we will keep reusing */
 			for (i=0; i<leader; i++)
 				line[i] = '.';
 			line[leader-1] = ' ';
 		} else {
 			llstrcatn(&ptr, el, &mylen);
-			tn1->str = strdup(line);
+			tn1->str = strsave(line);
 		}
 		/* now we keep resetting ptr & mylen to after blank leader */
 		/* so we keep reusing that leader we built in line earlier */
@@ -375,7 +375,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	if (is_empty_list(list)) {
 		tn1 = alloc_displaynode();
 		tn = tn1;
-		tn1->str = strdup(line);
+		tn1->str = strsave(line);
 		tn1->firstchild = 0;
 		tn1->nextsib = 0;
 		tn0 = tn1;

@@ -1387,7 +1387,7 @@ load_nkey_list (STRING key, struct hist * histp)
 		histp->list[temp].keynum = keynum;
 		/* We could sanity check these */
 		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
-		histp->list[temp].key = strdup(key);
+		histp->list[temp].key = strsave(key);
 		++temp;
 	}
 	count = temp;

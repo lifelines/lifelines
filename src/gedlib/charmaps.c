@@ -244,12 +244,12 @@ set_zone_conversion (STRING optname, INT toint, INT fromint)
 	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
 		return;
 	if (toint >= 0) {
-		trans_maps[toint].iconv_src = strdup(extcs);
-		trans_maps[toint].iconv_dest = strdup(int_codeset);
+		trans_maps[toint].iconv_src = strsave(extcs);
+		trans_maps[toint].iconv_dest = strsave(int_codeset);
 	}
 	if (fromint >= 0) {
-		trans_maps[fromint].iconv_src = strdup(int_codeset);
-		trans_maps[fromint].iconv_dest = strdup(extcs);
+		trans_maps[fromint].iconv_src = strsave(int_codeset);
+		trans_maps[fromint].iconv_dest = strsave(extcs);
 	}
 }
 /*========================================

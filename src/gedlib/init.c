@@ -594,7 +594,7 @@ update_db_options (void)
 
 	strfree(&int_codeset);
 	if ((str = valueof_str(opttab, "codeset")) != 0)
-		int_codeset = strdup(str);
+		int_codeset = strsave(str);
 	int_utf8 = is_codeset_utf8(int_codeset);
 	
 	remove_table(opttab, FREEBOTH);
@@ -690,7 +690,7 @@ getdbdesc (STRING path)
 	readonly = FALSE;
 	BTR = 0;
 	suppress_reload = FALSE;
-	return desc[0] ? strdup(desc) : 0;
+	return desc[0] ? strsave(desc) : 0;
 }
 /*====================================================
  * release_dblist -- free a dblist (caller is done with it)

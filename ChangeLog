@@ -8,6 +8,14 @@
 
 	Bugfix for strsave(0) creating new database.
 
+	* ChangeLog gedlib/charmaps.c gedlib/gedcom.c gedlib/indiseq.c
+	gedlib/init.c gedlib/valtable.c interp/date.c
+	liflines/askprogram.c liflines/browse.c liflines/main.c
+	liflines/menuitem.c liflines/pedigree.c liflines/screen.c:
+
+	Change all strdup calls to strsave (which has ASSERT).
+	Allow exit from choose all databases prompt.
+
 2002-06-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/nodeutls.c liflines/newrecs.c:

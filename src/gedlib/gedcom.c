@@ -231,7 +231,7 @@ node_to_nkey (NODE node, NKEY * nkey)
 		*nkey = nkey_zero();
 		return FALSE;
 	}
-	nkey->key = strdup(node_to_key(node));
+	nkey->key = strsave(node_to_key(node));
 	nkey->ntype = nkey->key[0];
 	sscanf(&nkey->key[1], "%d", &nkey->keynum);
 	return TRUE;
@@ -260,7 +260,7 @@ nkey_load_key (NKEY * nkey)
 	if (nkey->key)
 		return;
 	sprintf(key, "%c%d", nkey->ntype, nkey->keynum);
-	nkey->key = strdup(key);
+	nkey->key = strsave(key);
 }
 /*==================================================
  * nkey_eq -- compare two NKEYs
@@ -279,7 +279,7 @@ void
 nkey_copy (NKEY * src, NKEY * dest)
 {
 	nkey_clear(dest);
-	dest->key = src->key ? strdup(src->key) : NULL;
+	dest->key = src->key ? strsave(src->key) : NULL;
 	dest->keynum = src->keynum;
 	dest->ntype = src->ntype;
 }

@@ -320,6 +320,7 @@ prompt_for_db:
 		if (!dbrequested || !dbrequested[0]) {
 			dbrequested = NULL;
 			llwprintf(_(qSiddbse));
+			alldone = 0;
 			goto finish;
 		}
 		dbrequested = strsave(dbrequested);

@@ -948,7 +948,7 @@ extract_date (STRING str)
 	/* now analyze what numbers we got */
 	analyze_numbers(gdv, pdate, &nums);
 	clear_numbers(&nums);
-	gdv->text = strdup(str);
+	gdv->text = strsave(str);
 	return gdv;
 }
 /*===============================================
@@ -1399,7 +1399,7 @@ get_date_tok (struct dnum_s *pdnum)
 				*--p = 0;
 				pdnum->val = i;
 				pdnum->val2 = i + delta;
-				pdnum->str = strdup(scratch);
+				pdnum->str = strsave(scratch);
 				if (is_valid_day(NULL, *pdnum))
 					return ICONS_TOK;
 				else
@@ -1416,7 +1416,7 @@ get_date_tok (struct dnum_s *pdnum)
 			p[1] = 0;
 			pdnum->val = i;
 			pdnum->val2 = i+9;
-			pdnum->str = strdup(scratch);
+			pdnum->str = strsave(scratch);
 			if (is_valid_day(NULL, *pdnum))
 				return ICONS_TOK;
 			else
@@ -1465,21 +1465,21 @@ init_keywordtbl (void)
 static void
 load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 {
-	STRING loc_abbrev = strdup(abbrev);
-	STRING loc_full = strdup(full);
+	STRING loc_abbrev = strsave(abbrev);
+	STRING loc_full = strsave(full);
 	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
 	/* 0=ABT (cmplx=3) */
-	cmplx_pics[ecmplx][0] = strdup(upper(loc_abbrev));
+	cmplx_pics[ecmplx][0] = strsave(upper(loc_abbrev));
 	/* 1=Abt (cmplx=4) */
-	cmplx_pics[ecmplx][1] = strdup(titlecase(loc_abbrev));
+	cmplx_pics[ecmplx][1] = strsave(titlecase(loc_abbrev));
 	/* 2=ABOUT (cmplx=5) */
-	cmplx_pics[ecmplx][2] = strdup(upper(loc_full));
+	cmplx_pics[ecmplx][2] = strsave(upper(loc_full));
 	/* 3=About (cmplx=6) */
-	cmplx_pics[ecmplx][3] = strdup(titlecase(loc_full));
+	cmplx_pics[ecmplx][3] = strsave(titlecase(loc_full));
 	/* 4=abt (cmplx=7) */
-	cmplx_pics[ecmplx][4] = strdup(lower(loc_abbrev));
+	cmplx_pics[ecmplx][4] = strsave(lower(loc_abbrev));
 	/* 5=about (cmplx=8) */
-	cmplx_pics[ecmplx][5] = strdup(lower(loc_full));
+	cmplx_pics[ecmplx][5] = strsave(lower(loc_full));
 	stdfree(loc_abbrev);
 	stdfree(loc_full);
 
@@ -1497,18 +1497,18 @@ static void
 load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 {
 	/* 0-5 codes as in load_cmplx_pic(...) above */
-	STRING locx_abbrev = strdup(abbrev);
-	STRING loc_full = strdup(full);
+	STRING locx_abbrev = strsave(abbrev);
+	STRING loc_full = strsave(full);
 	STRING loc_abbrev = locx_abbrev;
 	/* special handling for **may, to differentiate from may */
 	if (loc_abbrev[0]=='*' && loc_abbrev[1]=='*')
 		loc_abbrev += 2;
-	monarr[monum][0] = strdup(upper(loc_abbrev));
-	monarr[monum][1] = strdup(titlecase(loc_abbrev));
-	monarr[monum][2] = strdup(upper(loc_full));
-	monarr[monum][3] = strdup(titlecase(loc_full));
-	monarr[monum][4] = strdup(lower(loc_abbrev));
-	monarr[monum][5] = strdup(lower(loc_full));
+	monarr[monum][0] = strsave(upper(loc_abbrev));
+	monarr[monum][1] = strsave(titlecase(loc_abbrev));
+	monarr[monum][2] = strsave(upper(loc_full));
+	monarr[monum][3] = strsave(titlecase(loc_full));
+	monarr[monum][4] = strsave(lower(loc_abbrev));
+	monarr[monum][5] = strsave(lower(loc_full));
 	stdfree(locx_abbrev);
 	stdfree(loc_full);
 }
@@ -1559,10 +1559,10 @@ load_lang (void)
 			calendar_pics[i] = 0;
 		}
 	}
-	calendar_pics[GDV_JULIAN] = strdup(_(qScaljul));
-	calendar_pics[GDV_HEBREW] = strdup(_(qScalheb));
-	calendar_pics[GDV_FRENCH] = strdup(_(qScalfr));
-	calendar_pics[GDV_ROMAN] = strdup(_(qScalrom));
+	calendar_pics[GDV_JULIAN] = strsave(_(qScaljul));
+	calendar_pics[GDV_HEBREW] = strsave(_(qScalheb));
+	calendar_pics[GDV_FRENCH] = strsave(_(qScalfr));
+	calendar_pics[GDV_ROMAN] = strsave(_(qScalrom));
 	/* not all slots in calendar_pics are used */
 
 	/* clear Gregorian/Julian month names */
@@ -1753,7 +1753,7 @@ set_cmplx_pic (INT ecmplx, STRING pic)
 		cmplx_custom[ecmplx] = 0;
 	}
 	if (pic && pic[0])
-		cmplx_custom[ecmplx] = strdup(pic);
+		cmplx_custom[ecmplx] = strsave(pic);
 	return TRUE;
 }
 /*=============================
@@ -1770,7 +1770,7 @@ set_date_pic (STRING pic)
 	}
 	if (pic && pic[0]) {
 		STRING p;
-		date_pic = strdup(pic);
+		date_pic = strsave(pic);
 		/* convert %y %m %d format to %1 %2 %3 */
 		for (p = date_pic; *p; ++p) {
 			if (p[0]=='%') {
