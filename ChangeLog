@@ -1,3 +1,9 @@
+2003-02-26 Perry Rapp
+
+	* ChangeLog po/sv.po
+
+	Updated Swedish message catalog.
+
 2003-02-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/interp.h
