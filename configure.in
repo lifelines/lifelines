@@ -23,6 +23,14 @@ AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 
+dnl Add warning flags when using The GNU C Compiler
+if test "${ac_cv_prog_gcc}" = "yes"; then
+  CFLAGS="${CFLAGS} -W -Wall"
+
+  dnl Add debugging as well
+  CFLAGS="${CFLAGS} -g"
+fi
+
 echo Looking for libraries
 echo Looking for ncurses
 AC_CHECK_LIB(ncurses, tparm)

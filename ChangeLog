@@ -1,5 +1,8 @@
 2000-11-02 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* configure.in: Add '-g -W -Wall' to CFLAGS when compiling using
+	GNU C.  This generates a lot of new warnings.
+
 	* interp/functab.c: Let the compiler calculate the size of array
 	builtins[].
 
