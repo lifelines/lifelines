@@ -1,9 +1,10 @@
 2005-01-01 Stephen Dum
 
         *Changelog po/fr.po reports/anniver.ll, reports/cron.ll
+	src/interp/builtin.c
 	
 	Fix options call in cron.ll and anniver.ll and check in new fr.po
-	from Patrick Texier
+	from Patrick Texier.  fixed test so that it always returns a value.
 
 2005-01-01 Perry Rapp
 

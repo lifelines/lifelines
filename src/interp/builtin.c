@@ -3645,15 +3645,15 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 
 	if (eqstr(arg1str,"r")) {
-	        if (access(arg2str,R_OK))
+	        if (access(arg2str,R_OK)==0) 
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"w")) {
-	        if (access(arg2str,W_OK))
+	        if (access(arg2str,W_OK)==0)
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"x")) {
-	        if (access(arg2str,X_OK))
+	        if (access(arg2str,X_OK)==0)
 			val = create_pvalue_from_bool(TRUE);
 
 	} else if (eqstr(arg1str,"e")) {
@@ -3680,6 +3680,8 @@ __test (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 
 end_test:
+	if (val == NULL)
+	    val = create_pvalue_from_bool(FALSE);
 	if (arg1val) delete_pvalue(arg1val);
 	if (arg2val) delete_pvalue(arg2val);
 	return val;
