@@ -726,6 +726,7 @@ qkey_to_nod0 (CACHE cache, STRING key, STRING tag)
 /*======================================
  * load_cacheel -- Load CACHEEL into direct cache
  *  if needed & valid
+ * (ie, this handles null input, or input already in cache)
  * Created: 2001/03/24, Perry Rapp
  *====================================*/
 void

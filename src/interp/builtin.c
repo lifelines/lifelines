@@ -1933,7 +1933,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to key is not a GEDCOM record");
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = get_cel_from_pvalue(val); /* may return NULL */
 	delete_pvalue(val);
 	if (!cel) return create_pvalue(PSTRING, "");
 	if (inext(arg)) {
@@ -1969,7 +1969,12 @@ __rot (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to root must be a record");
 		return NULL;
 	}
-	cel = get_cel_from_pvalue(val);
+	cel = get_cel_from_pvalue(val); /* may be NULL */
+	if (!cel) {
+		*eflg = TRUE;
+		prog_error(node, "the arg to root must be a record");
+		return NULL;
+	}
 	if (cnode(cel)) {
 		set_pvalue(val, PGNODE, (VPTR)cnode(cel));
 		return val;

@@ -714,6 +714,7 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 		val = create_pvalue_from_indi(chil);
 		insert_symtab_pvalue(stab, ichild(node), val);
 		insert_symtab(stab, inum(node), PINT, (VPTR)nchil);
+		/* val should be real person, because it came from FORCHILDREN */
 		cel = get_cel_from_pvalue(val);
 		lock_cache(cel);
 		irc = interpret((PNODE) ibody(node), stab, pval);
@@ -765,7 +766,9 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 		insert_symtab_pvalue(stab, ispouse(node), sval);
 		fval = create_pvalue_from_fam(fam);
 		insert_symtab_pvalue(stab, ifamily(node), fval);
+		/* sval should be real person, because it came from FORSPOUSES */
 		scel = get_cel_from_pvalue(sval);
+		/* fval should be real person, because it came from FORSPOUSES */
 		fcel = get_cel_from_pvalue(fval);
 		lock_cache(scel);
 		lock_cache(fcel);
@@ -825,7 +828,9 @@ interp_families (PNODE node, SYMTAB stab, PVALUE *pval)
 		sval = create_pvalue_from_indi(spouse);
 		insert_symtab_pvalue(stab, ispouse(node), sval);
 		insert_symtab(stab, inum(node), PINT, (VPTR)nfams);
+		/* fval should be real person, because it came from FORFAMSS */
 		fcel = get_cel_from_pvalue(fval);
+		/* sval may not be a person -- so scel may be NULL */
 		scel = get_cel_from_pvalue(sval);
 		lock_cache(fcel);
 		if (scel) lock_cache(scel);

@@ -499,24 +499,26 @@ copy_pvalue (PVALUE val)
 /*==================================
  * get_cel_from_pvalue -- Extract record from pvalue
  *  and load into direct
+ * Might return NULL
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 CACHEEL
 get_cel_from_pvalue (PVALUE val)
 {
-	CACHEEL cel = access_cel_from_pvalue(val);
-	load_cacheel(cel);
+	CACHEEL cel = access_cel_from_pvalue(val); /* may be NULL */
+	load_cacheel(cel); /* handles null cel ok */
 	return cel;
 }
 /*==================================
  * access_cel_from_pvalue -- Extract record from pvalue
  *  doesn't load into direct
+ * Might return NULL
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 static CACHEEL
 access_cel_from_pvalue (PVALUE val)
 {
-	CACHEEL cel = pvalue(val);
+	CACHEEL cel = pvalue(val); /* may be NULL */
 	ASSERT(is_record_pvalue(val));
 	return cel;
 }
