@@ -173,6 +173,7 @@ free_node (NODE node)
 {
 	if (nxref(node)) stdfree(nxref(node));
 	if (nval(node)) stdfree(nval(node));
+	if (ntag(node)) stdfree(ntag(node));
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
 	

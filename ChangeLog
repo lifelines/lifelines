@@ -1,3 +1,9 @@
+2003-02-02 Matt Emmerton
+
+	* ChangeLog src/gedlib/node.c
+
+	Fix memory leak in free_node().
+
 2003-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/date.c
