@@ -16,6 +16,10 @@
 
 	Add zstr.* to Makefiles.
 
+	* ChangeLog src/hdrs/zstr.h:
+
+	Remove duplicate typedef to make gcc happy.
+
 2002-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/translat.c src/hdrs/translat.h:

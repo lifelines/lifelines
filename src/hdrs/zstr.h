@@ -2,7 +2,6 @@
 #define zstr_h_included
 
 struct zstr_s;
-typedef struct zstr_s * ZSTR;
 
 ZSTR zs_new(void);
 ZSTR zs_newn(unsigned int min);
