@@ -1,3 +1,13 @@
+2003-02-01 Steve Dum
+        * ChangeLog src/gedlib/node.c src/liflines/llexec.c 
+	src/btree/opnbtree.c
+
+	fixed some memory leaks
+
+	*src/interp/interp.c
+
+	clean up message output
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/hdrs/interp.h src/interp/builtin.c
