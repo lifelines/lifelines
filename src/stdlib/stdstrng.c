@@ -370,6 +370,7 @@ utf8len (char ch)
 static BOOLEAN
 printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
 {
+	if (!arglen) return TRUE;
 	if (arglen > max) {
 		/* can't fit it all */
 		llstrncpy(*b, arg, max+1); 
@@ -398,7 +399,7 @@ sprintpic1 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
 	CNSTRING p=pic;
-	INT arg1len = strlen(arg1); /* precompute */
+	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
@@ -428,8 +429,8 @@ sprintpic2 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
 {
 	STRING b = buffer, bmax = &buffer[len-1];
 	CNSTRING p=pic;
-	INT arg1len = strlen(arg1); /* precompute */
-	INT arg2len = strlen(arg2);
+	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
+	INT arg2len = arg2 ? strlen(arg2) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
@@ -464,15 +465,15 @@ sprintpic3 (STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
 {
 	STRING b = buffer, bmax = &buffer[len-1];
 	CNSTRING p=pic;
-	INT arg1len = strlen(arg1); /* precompute */
-	INT arg2len = strlen(arg2);
-	INT arg3len = strlen(arg3);
+	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
+	INT arg2len = arg2 ? strlen(arg2) : 0;
+	INT arg3len = arg3 ? strlen(arg3) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
 				return FALSE;
 			p += 2;
-		} else if (p[0]=='%' && p[1]=='2') {
+		} else if (p[0]=='%' && p[1]=='2' && arg2len) {
 			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
 				return FALSE;
 			p += 2;
