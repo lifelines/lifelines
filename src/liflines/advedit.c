@@ -76,7 +76,7 @@ expand_tree (NODE root0)
 #endif
 		key = rmvat(nval(node));
 		if ((sub = nztop(key_possible_to_record(key, *key)))) {
-			copy = copy_nodes(sub, TRUE, FALSE);
+			copy = copy_node_subtree(sub);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);
 			nchild(node)   = nchild(copy);

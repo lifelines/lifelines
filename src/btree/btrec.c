@@ -352,7 +352,7 @@ filecopy (FILE* fpsrc, INT len, FILE* fpdest)
  *  plen:  [out] length of returned data
  *================================*/
 RAWRECORD
-readrec(BTREE btree, BLOCK block, INT i, INT *plen)
+readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 {
 	char scratch[MAXPATHLEN];
 	FILE *fr;

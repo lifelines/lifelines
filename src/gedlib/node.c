@@ -897,6 +897,14 @@ copy_node (NODE node)
 	return create_node(nxref(node), ntag(node), nval(node), NULL);
 }
 /*========================
+ * copy_node_subtree -- Copy tree
+ *======================*/
+NODE
+copy_node_subtree (NODE node)
+{
+	return copy_nodes(node, TRUE, FALSE);
+}
+/*========================
  * copy_nodes -- Copy tree
  *======================*/
 NODE

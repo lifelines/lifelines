@@ -194,7 +194,7 @@ __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 
 	/* make a copy, so we can delete it */
-	indi2 = copy_nodes(indi2, TRUE, FALSE);
+	indi2 = copy_node_subtree(indi2);
 
 	/* get existing record */
 	rawrec = retrieve_raw_record(rmvat(nxref(indi2)), &len);
@@ -250,7 +250,7 @@ __writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg) return NULL;
 
 	/* make a copy, so we can delete it */
-	fam2 = copy_nodes(fam2, TRUE, FALSE);
+	fam2 = copy_node_subtree(fam2);
 
 	/* get existing record */
 	rawrec = retrieve_raw_record(rmvat(nxref(fam2)), &len);

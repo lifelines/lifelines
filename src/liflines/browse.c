@@ -106,7 +106,6 @@ static RECORD history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
-static void normalize_indi(RECORD irec);
 static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
 static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
@@ -1950,22 +1949,9 @@ autoadd_xref (RECORD rec, NODE newnode)
 		nsibling(prev) = xref;
 	}
 
-	normalize_indi(rec);
+	normalize_irec(rec);
 	
 	unknown_node_to_dbase(node);
-}
-/*==================================================
- * normalize_indi -- ensure nodes are in lifelines order
- * Created: 2005/01/02, Perry Rapp
- *================================================*/
-static void
-normalize_indi (RECORD irec)
-{
-	NODE indi=nztop(irec);
-	NODE name, refn, sex, body, famc, fams;
-	
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	join_indi(indi, name, refn, sex, body, famc, fams);
 }
 /*==================================================
  * get_vhist_len -- how many records currently in visit history list ?

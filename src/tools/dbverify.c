@@ -86,15 +86,12 @@ struct work {
 	INT find_ghosts;
 	INT fix_ghosts;
 	INT check_indis;
-	INT fix_indis;
 	INT check_fams;
-	INT fix_fams;
 	INT check_sours;
-	INT fix_sours;
 	INT check_evens;
-	INT fix_evens;
 	INT check_othes;
-	INT fix_othes;
+	INT fix_alter_pointers;
+	INT pass; /* =1 is checking, =2 is fixing */
 };
 /*=======================================
  * NAMEREFN_REC -- holds one name or refn
@@ -115,6 +112,7 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
 static BOOLEAN cgn_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+static void check_and_fix_records(void);
 static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(CNSTRING key, RECORD rec);
@@ -132,10 +130,13 @@ static BOOLEAN check_othe(CNSTRING key, RECORD rec);
 static BOOLEAN find_xref(CNSTRING key, NODE node, CNSTRING tag1, CNSTRING tag2);
 static void finish_and_delete_nameset(void);
 static void finish_and_delete_refnset(void);
+static void fix_nodes(void);
 static void free_namerefn(NAMEREFN_REC * rec);
+static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
 static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
 static void printblock(BLOCK block);
 static void print_usage(void);
+static void process_indi(RECORD rec);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
 static void report_results(void);
@@ -154,6 +155,7 @@ enum {
 	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
 	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
 	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
+	, ERR_FIXEDMISSINGSPOUSE, ERR_FIXEDMISSINGCHILD
 };
 
 static struct errinfo errs[] = {
@@ -182,9 +184,12 @@ static struct errinfo errs[] = {
 	, { ERR_EMPTYFAM, 0, 0, N_("Empty family") }
 	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
 	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
+	, { ERR_FIXEDMISSINGSPOUSE, 0, 0, N_("Fixed missing spouse") }
+	, { ERR_FIXEDMISSINGCHILD, 0, 0, N_("Fixed missing child") }
+	
 };
 static struct work todo;
-static LIST tofix;
+static LIST tofix=0;
 /* sequence of NAMEs or REFNs in the same block */
 static INDISEQ soundexseq=0;
 static BOOLEAN noisy=FALSE;
@@ -225,6 +230,7 @@ print_usage (void)
 		"\t-G = Check for & fix ghosts (names/refns)\n"
 		"\t-i = Check individuals\n"
 		"\t-f = Check families\n"
+		"\t-P2 = Change tags of bad pointers\n"
 		"\t-s = Check sours\n"
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
@@ -493,9 +499,8 @@ finish_and_delete_refnset (void)
 	destroy_table(table);
 }
 /*=================================
- * check_nodes -- Process all nodes
- *  checking and/or fixing as requested
- * Created: 2001/01/14, Perry Rapp
+ * check_nodes -- Check all nodes in database
+ * (as selected in struct work)
  *================================*/
 static void
 check_nodes (void)
@@ -517,6 +522,36 @@ check_nodes (void)
 	remove_indiseq(seq_sours);
 	remove_indiseq(seq_evens);
 	remove_indiseq(seq_othes);
+}
+/*=================================
+ * check_and_fix_records -- 
+ *================================*/
+static void
+check_and_fix_records (void)
+{
+	tofix = create_list();
+	todo.pass = 1;
+	check_nodes();
+	todo.pass = 2;
+	fix_nodes();
+	remove_list(tofix, NULL);
+}
+/*=================================
+ * fix_nodes -- Fix all nodes on fix list
+ *  (uses list from check_nodes)
+ *================================*/
+static void
+fix_nodes (void)
+{
+	if (!tofix) return;
+	while (!is_empty_list(tofix)) {
+		STRING key = dequeue_list(tofix);
+		RECORD rec = key_to_record(key);
+		strfree(&key);
+		lock_record_in_cache(rec);
+		process_indi(rec);
+		unlock_record_from_cache(rec);
+	}
 }
 /*=============================================
  * nodes_callback -- callback for node traversal
@@ -548,61 +583,125 @@ static BOOLEAN
 check_indi (CNSTRING key, RECORD rec)
 {
 	static char prevkey[MAXKEYWIDTH+1];
-	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
-	NODE node1;
-	CACHEEL icel1;
+	CACHEEL icel1=0;
+	RECORD recx=0;
+
 	if (eqstr(key, prevkey)) {
 		report_error(ERR_DUPINDI, _("Duplicate individual for %s"), key);
 	}
 	icel1 = indi_to_cacheel(rec);
 	lock_cache(icel1);
-	indi1 = nztop(rec);
+
+	recx = get_record_for_cel(icel1);
+	ASSERT(todo.pass == 1);
+	process_indi(recx);
+
+	unlock_cache(icel1);
+	check_pointers(key, rec);
+	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
+	release_record(recx);
+	return TRUE;
+}
+
+/*=====================================
+ * process_indi -- process indi record
+ *  checking in pass 1, fixing in pass 2
+ *===================================*/
+static void
+process_indi (RECORD rec)
+{
+	NODE indi0, indi1;
+	NODE name1, refn1, sex1, body1, famc1, fams1;
+	NODE node1;
+	BOOLEAN altered=FALSE;
+	BOOLEAN needfix=FALSE;
+	CNSTRING key = nzkey(rec);
+
+	indi0 = nztop(rec);
+	if (todo.pass==1) {
+		indi1 = indi0;
+	} else {
+		indi1 = copy_node_subtree(indi0);
+	}
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	/* check names */
-	for (node1 = name1; node1; node1 = nsibling(node1)) {
-		STRING name=nval(node1);
-		if (!valid_name(name)) {
-			report_error(ERR_BADNAME, _("Bad name for individual %s: %s"), key, name);
-		} else {
-		/* TO DO: verify that name is in db */
+
+	if (todo.pass == 1) {
+		/* check names */
+		for (node1 = name1; node1; node1 = nsibling(node1)) {
+			STRING name=nval(node1);
+			if (!valid_name(name)) {
+				report_error(ERR_BADNAME, _("Bad name for individual %s: %s"), key, name);
+			} else {
+			/* TO DO: verify that name is in db */
+			}
+		}
+		/* check refns */
+		for (node1 = refn1; node1; node1 = nsibling(node1)) {
+			/* STRING refn=nval(node1); */
+			/* TO DO: verify that refn is in db */
 		}
 	}
-	/* check refns */
-	for (node1 = refn1; node1; node1 = nsibling(node1)) {
-		/* STRING refn=nval(node1); */
-		/* TO DO: verify that refn is in db */
-	}
+
 	/* check parents */
 	for (node1 = famc1; node1; node1 = nsibling(node1)) {
 		STRING famkey=rmvat(nval(node1));
 		NODE fam2 = qkey_to_fam(famkey);
 		if (!fam2) {
-			report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
+			if (todo.pass == 1) {
+				report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
+			}
 		} else {
 			/* look for indi1 (key) in fam2's children */
 			if (!find_xref(key, fam2, "CHIL", NULL)) {
-				report_error(ERR_MISSINGCHILD, _("Missing child (%s) in family (%s)"), key, famkey);
+				if (todo.pass == 1) {
+					report_error(ERR_MISSINGCHILD, _("Missing child (%s) in family (%s)"), key, famkey);
+					needfix=TRUE;
+				} else {
+					if (fix_bad_pointer(key, rec, node1)) {
+						report_error(ERR_FIXEDMISSINGCHILD, _("Fixed missing child (%s) in family (%s)"), key, famkey);
+						altered=TRUE;
+					}
+				}
 			}
 		}
 	}
+	
 	/* check spouses */
 	for (node1 = fams1; node1; node1 = nsibling(node1)) {
 		STRING famkey=rmvat(nval(node1));
 		NODE fam2 = qkey_to_fam(famkey);
 		if (!fam2) {
-			report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
+			if (todo.pass == 1) {
+				report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
+			}
 		} else {
 			/* look for indi1 (key) in fam2's spouses */
 			if (!find_xref(key, fam2, "HUSB", "WIFE")) {
-				report_error(ERR_MISSINGSPOUSE, _("Missing spouse (%s) in family (%s)"), key, famkey);
+				if (todo.pass == 1) {
+					report_error(ERR_MISSINGSPOUSE, _("Missing spouse (%s) in family (%s)"), key, famkey);
+					needfix=TRUE;
+				} else {
+					if (fix_bad_pointer(key, rec, node1)) {
+						report_error(ERR_FIXEDMISSINGSPOUSE, _("Fixed missing spouse (%s) in family (%s)"), key, famkey);
+						altered=TRUE;
+					}
+				}
 			}
 		}
 	}
+
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-	unlock_cache(icel1);
-	check_pointers(key, rec);
-	append_indiseq_null(seq_indis, strsave(key), NULL, TRUE, TRUE);
-	return TRUE;
+	if (altered) {
+		/* must normalize, as some lineage references may have been 
+		altered to non-lineage tags to fix broken pointers */
+		normalize_indi(indi1);
+
+		/* write to database */
+		replace_indi(indi0, indi1);
+
+	} else if (needfix) {
+		enqueue_list(tofix, strsave(key));
+	}
 }
 /*=====================================
  * check_fam -- process fam record
@@ -819,6 +918,20 @@ check_node (CNSTRING n0key, NODE node, INT level)
 		check_node(n0key, nsibling(node), level);
 }
 /*===================================
+ * fix_bad_pointer -- Fix bad pointer if requested
+ *=================================*/
+static BOOLEAN
+fix_bad_pointer (CNSTRING key, RECORD rec, NODE node)
+{
+	if (todo.fix_alter_pointers) {
+		STRING oldtag = ntag(node);
+		stdfree(oldtag);
+		ntag(node) = strsave("_badptr");
+		return TRUE;
+	}
+	return FALSE;
+}
+/*===================================
  * check_set -- Validate set of nodes
  * Created: 2001/01/14, Perry Rapp
  *=================================*/
@@ -1016,7 +1129,7 @@ main (int argc,
 	}
 	flags = argv[1];
 	dbname = argv[2];
-	for (ptr=&flags[1]; *ptr; ptr++) {
+	for (ptr=&flags[1]; *ptr; ++ptr) {
 		switch(*ptr) {
 		case 'L': todo.check_dbstructure=TRUE; break;
 		case 'g': todo.find_ghosts=TRUE; break;
@@ -1028,6 +1141,14 @@ main (int argc,
 		case 'x': todo.check_othes=TRUE; break;
 		case 'n': noisy=TRUE; break;
 		case 'a': allchecks=TRUE; break;
+		case 'P':
+			{
+				switch(ptr[1]) {
+				case '2': todo.fix_alter_pointers=TRUE; ++ptr; break;
+				default: print_usage(); goto done;
+				}
+			}
+			break;
 		default: print_usage(); goto done;
 		}
 	}
@@ -1065,35 +1186,29 @@ main (int argc,
 	}
 	printf("Checking %s\n", dbname);
 
-	if (todo.find_ghosts || todo.fix_ghosts)
-		check_ghosts();
-
-	/* this simplifies later logic */
-	if (todo.fix_indis) todo.check_indis=TRUE;
-	if (todo.fix_fams) todo.check_fams=TRUE;
-	if (todo.fix_sours) todo.check_sours=TRUE;
-	if (todo.fix_evens) todo.check_evens=TRUE;
-	if (todo.fix_othes) todo.check_othes=TRUE;
-
-	/* all fixes - if any new ones, have to update this */
+	/* all checks - if any new ones, have to update this */
 	if (allchecks) {
 		todo.check_indis=todo.check_fams=todo.check_sours=TRUE;
 		todo.check_evens=todo.check_othes=TRUE;
 		todo.find_ghosts=TRUE;
 	}
 
-	if (!(bwrite(BTR))) {
-		todo.fix_indis = todo.fix_fams = todo.fix_sours = FALSE;
-		todo.fix_evens = todo.fix_othes = FALSE;
-	}
+	if (todo.find_ghosts || todo.fix_ghosts)
+		check_ghosts();
 
+
+	if (!(bwrite(BTR))) {
+		todo.fix_alter_pointers = FALSE;
+		todo.fix_ghosts = FALSE;
+	}
 
 	if (todo.check_indis
 		|| todo.check_fams
 		|| todo.check_sours
 		|| todo.check_evens
-		|| todo.check_othes)
-		check_nodes();
+		|| todo.check_othes) {
+		check_and_fix_records();
+	}
 
 	report_results();
 

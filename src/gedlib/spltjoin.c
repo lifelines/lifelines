@@ -346,3 +346,24 @@ join_othr (NODE root, NODE refn, NODE rest)
 			node = nsibling(node);
 	}
 }
+/*==================================================
+ * normalize_indi -- ensure nodes are in lifelines order
+ *================================================*/
+void
+normalize_irec (RECORD irec)
+{
+	NODE indi=nztop(irec);
+	if (indi)
+		normalize_indi(indi);
+}
+/*==================================================
+ * normalize_indi -- ensure nodes are in lifelines order
+ *================================================*/
+void
+normalize_indi (NODE indi)
+{
+	NODE name, refn, sex, body, famc, fams;
+	
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	join_indi(indi, name, refn, sex, body, famc, fams);
+}

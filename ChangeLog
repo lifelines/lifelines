@@ -64,6 +64,16 @@
 
 	Add "CHIL" to lineage_tags in dbverify.
 
+	* ChangeLog src/btree/btrec.c src/gedlib/gstrings.c
+	src/gedlib/node.c src/gedlib/spltjoin.c src/hdrs/gedcom.h
+	src/interp/write.c src/liflines/advedit.c src/liflines/browse.c
+	src/tools/dbverify.c
+
+	dbverify: Remove unused fix_xxx members of struct work.
+	dbverify: Implement fix/alter for missing spouse & children.
+	Move normalize_indi from private browse.c to public spltjoin.c.
+	Fix fam_to_list_string to not crash on bad HUSB.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

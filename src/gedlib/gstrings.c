@@ -260,22 +260,26 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	llstrcatn(&p, " ", &mylen);
 	llstrcatn(&p, counts, &mylen);
 	if (husbands) {
-		llstrcatn(&p, delim, &mylen);
-		if (wives)
-			templen = (mylen-4)/2;
-		else
-			templen = mylen;
-		node = key_to_indi(rmvat(nval(husb)));
-		llstrcatn(&p, indi_to_name(node, templen), &mylen);
-		if (wives)
-			llstrcatn(&p, " m. ", &mylen);
+		node = qkey_to_indi(rmvat(nval(husb)));
+		if (node) {
+			llstrcatn(&p, delim, &mylen);
+			if (wives)
+				templen = (mylen-4)/2;
+			else
+				templen = mylen;
+			llstrcatn(&p, indi_to_name(node, templen), &mylen);
+			if (wives)
+				llstrcatn(&p, " m. ", &mylen);
+		}
 	}
 	if (wives) {
-		if (!husbands)
-			templen = mylen;
-		/* othewise we set templen above */
-		node = key_to_indi(rmvat(nval(wife)));
-		llstrcatn(&p, indi_to_name(node, templen), &mylen);
+		node = qkey_to_indi(rmvat(nval(wife)));
+		if (node) {
+			if (!templen)
+				templen = mylen;
+			/* othewise we set templen above */
+			llstrcatn(&p, indi_to_name(node, templen), &mylen);
+		}
 	}
 	join_fam(fam, refn, husb, wife, chil, rest);
 	/* TO DO - print a husband and a wife out */
