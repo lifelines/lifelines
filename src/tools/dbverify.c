@@ -97,29 +97,30 @@ typedef struct
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
+static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
+static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
+static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
+static BOOLEAN check_even(STRING key, NOD0 nod0);
+static BOOLEAN check_fam(STRING key, NOD0 nod0);
+static void check_ghosts(void);
+static BOOLEAN check_indi(STRING key, NOD0 nod0);
+static void check_node(STRING key, NODE node, INT level);
+static void check_nodes(void);
+static void check_pointers(STRING key, NOD0 nod0);
+static void check_set(INDISEQ seq, char ctype);
+static BOOLEAN check_sour(STRING key, NOD0 nod0);
+static BOOLEAN check_othe(STRING key, NOD0 nod0);
+static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
+static void finish_and_delete_nameset(INDISEQ seq);
+static void finish_and_delete_refnset(INDISEQ seq);
+static void free_namerefn(NAMEREFN_REC * rec);
+static BOOLEAN nodes_callback(STRING key, NOD0 nod0, void *param);
 static void print_usage(void);
 static void report_error(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
-static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
-static void free_namerefn(NAMEREFN_REC * rec);
-static void check_ghosts(void);
-static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
-static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
-static void finish_and_delete_nameset(INDISEQ seq);
-static void finish_and_delete_refnset(INDISEQ seq);
-static void check_nodes(void);
-static BOOLEAN nodes_callback(STRING key, NOD0 nod0, void *param);
-static void check_set(INDISEQ seq, char ctype);
-static BOOLEAN check_indi(STRING key, NOD0 nod0);
-static BOOLEAN check_fam(STRING key, NOD0 nod0);
-static BOOLEAN check_sour(STRING key, NOD0 nod0);
-static BOOLEAN check_even(STRING key, NOD0 nod0);
-static BOOLEAN check_othe(STRING key, NOD0 nod0);
-static void check_pointers(STRING key, NOD0 nod0);
-static void check_node(STRING key, NODE node, INT level);
-static BOOLEAN find_xref(STRING key, NODE node, STRING tag1, STRING tag2);
-static void validate_errs(void);
 static void report_results(void);
+static void validate_errs(void);
 
 /*********************************************
  * local variables

@@ -5,6 +5,9 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- NULL PSTRINGs (eg, from getindi(), or father()) could crash string
+  functions
+
 - fornodes wasn't handling nodes with no children correctly
 
 - was double-deleting strings for filenames named in include statements

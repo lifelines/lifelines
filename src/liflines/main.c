@@ -112,17 +112,17 @@ BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
-STRING btreepath;		/* database path given by user */
-STRING readpath;		/* database path used to open */
+STRING btreepath = NULL;		/* database path given by user */
+STRING readpath = NULL;		/* database path used to open */
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static void show_open_error(void);
+static void show_open_error(INT dberr);
 static BOOLEAN trytocreate(STRING);
 static void platform_init(void);
-static int open_database(void);
+static int open_database(STRING dbpath, STRING dbactual);
 
 /*********************************************
  * local function definitions
@@ -140,6 +140,8 @@ main (INT argc,
 	extern int optind;
 	char * msg;
 	int c,code=1;
+	STRING dbpath=NULL; /* database (path) requested */
+	STRING dbactual=NULL; /* database (path) found */
 
 #ifdef OS_LOCALE
 	setlocale(LC_ALL, "");
@@ -232,8 +234,10 @@ main (INT argc,
 	platform_init();
 	noecho();
 	set_displaykeys(keyflag);
+	/* initialize curses interface */
 	if (!init_screen())
 		goto finish;
+	/* initialize non-db dependent options (environment stuff) */
 	if (!init_lifelines_global(&msg)) {
 		llwprintf("%s", msg);
 		goto finish;
@@ -252,24 +256,31 @@ main (INT argc,
 
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
-		btreepath = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
-		if (ISNULL(btreepath)) {
+		/* ask_for_lldb returns static buffer, we save it below */
+		dbpath = ask_for_lldb(idldir, "enter path: ", lloptions.lldatabases);
+		if (ISNULL(dbpath)) {
 			llwprintf(iddbse);
 			goto finish;
 		}
-		btreepath = strsave(btreepath);
 	} else {
-		btreepath = (unsigned char *)argv[optind];
+		dbpath = (unsigned char *)argv[optind];
 		if (ISNULL(btreepath)) {
 			showusage = TRUE;
 			goto usage;
 		}
 	}
+	/* we will own the memory in dbpath */
+	dbpath = strsave(dbpath);
+
+	
+	/* search for database */
+	// TO DO dbpath = find_database(btreepath); 
+	/* search for file in lifelines path */
+	dbactual = filepath(dbpath, "r", lloptions.lldatabases, NULL);
+	if (!dbactual) dbactual = dbpath;
 
 	/* Open Database */
-	readpath = filepath(btreepath, "r", lloptions.lldatabases, NULL);
-	if (!readpath) readpath = btreepath;
-	if (!open_database()) goto finish;
+	if (!open_database(dbpath, dbactual)) goto finish;
 
 	/* Start Program */
 	init_lifelines_db();
@@ -314,48 +325,14 @@ trytocreate (STRING path)
 	return TRUE;
 }
 /*===================================================
- * show_open_error -- Describe database opening error
+ * show_open_error -- Display database opening error
  *=================================================*/
 static void
-show_open_error (void)
+show_open_error (INT dberr)
 {
-	if (bterrno != BTERRWRITER)
-		llwprintf("Database error -- ");
-	switch (bterrno) {
-	case BTERRNOBTRE:
-		llwprintf("requested database does not exist.");
-		break;
-	case BTERRINDEX:
-		llwprintf("could not open, read or write an index file.");
-		break;
-	case BTERRKFILE:
-		llwprintf("could not open, read or write the key file.");
-		break;
-	case BTERRBLOCK:
-		llwprintf("could not open, read or write a block file.");
-		break;
-	case BTERRLNGDIR:
-		llwprintf("name of database is too long.");
-		break;
-	case BTERRWRITER:
-		llwprintf("The database is already open for writing.");
-		break;
-	case BTERRILLEGKF:
-		llwprintf("keyfile is corrupt.");
-		break;
-	case BTERRALIGNKF:
-		llwprintf("keyfile is wrong alignment.");
-		break;
-	case BTERRVERKF:
-		llwprintf("keyfile is wrong version.");
-		break;
-	case BTERREXISTS:
-		llwprintf("Existing database found.");
-		break;
-	default:
-		llwprintf("Undefined database error -- This can't happen.");
-		break;
-	}
+	char buffer[256];
+	describe_dberror(dberr, buffer, ARRSIZE(buffer));
+	llwprintf(buffer);
 	sleep(5);
 }
 /*==================================================
@@ -385,12 +362,17 @@ is_unadorned_directory (STRING path)
 	return TRUE;
 }
 /*==================================================
- * open_database -- open database
+ * open_database_impl -- open database
+ * dbpath: database to report
+ * dbactual: actual database path (may be relative also)
+ * If the llwprintfs were moved out of here, this could
+ * be reused by non-curses versions
  *================================================*/
-static int
-open_database (void)
+static BOOLEAN
+open_database_impl (void)
 {
 	int c;
+
 	if (forceopen) {
 		/*
 		Forcefully alter reader/writer count to 0.
@@ -431,22 +413,27 @@ open_database (void)
 	 		return FALSE;
 		}
 		fclose(fp);
+		/* okay, cleared reader/writer count
+		now fall through to normal opening code */
 	}
 	if (!(BTR = openbtree(readpath, FALSE, !readonly))) {
 		switch (bterrno) {
-		case BTERRNOBTRE:
-		case BTERRKFILE:	{/*NEW*/
+		case BTERR_NODB:
+		case BTERR_NOKEY:	{
+				/* error was only that db doesn't exist */
+				/* unspecified new db is put in llnewdbdir */
 				if (!selftest && is_unadorned_directory(btreepath)) {
 					readpath = strsave(concat_path(lloptions.llnewdbdir, btreepath));
 				}
+				/* see if we can make a new db */
 				if(!trytocreate(readpath)) {
-					show_open_error();
+					show_open_error(bterrno);
 					return FALSE;
 				}
 			}
 			break;
 		default:
-			show_open_error();
+			show_open_error(bterrno);
 			return FALSE;
 		}
 	}
@@ -465,5 +452,28 @@ open_database (void)
 		return FALSE;
 	}
 	return TRUE;
+}
+/*==================================================
+ * open_database -- open database
+ * dbpath: database to report
+ * dbactual: actual database path (may be relative also)
+ *================================================*/
+static BOOLEAN
+open_database (STRING dbpath, STRING dbactual)
+{
+	BOOLEAN rtn;
+
+	/* tentatively copy paths */
+	btreepath=strsave(dbpath);
+	readpath=strsave(dbactual);
+
+	rtn = open_database_impl();
+	if (!rtn) {
+		/* open failed so clean up */
+		close_lifelines();
+		strfree(&btreepath);
+		strfree(&readpath);
+	}
+	return rtn;
 }
 

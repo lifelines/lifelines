@@ -224,6 +224,7 @@ name_hi (void)
 }
 /*======================================================
  * getsurname_impl -- Implement getsurname & getasurname
+ *  returns static buffer
  *====================================================*/
 static STRING
 getsurname_impl (STRING name, INT strict)
@@ -249,6 +250,7 @@ getsurname_impl (STRING name, INT strict)
 }
 /*=============================
  * getsurname -- Return surname
+ *  returns static buffer
  *===========================*/
 STRING
 getsurname (STRING name)        /* GEDCOM name */
@@ -260,6 +262,7 @@ getsurname (STRING name)        /* GEDCOM name */
  * there is no surname. This is used by the report builtin
  * function "surname". The original routine getsurname()
  * is used for soundex purposes.
+ *  returns static buffer
  *===========================*/
 STRING
 getasurname (STRING name)   /* GEDCOM name */
@@ -287,7 +290,7 @@ getfinitial (STRING name)       /* GEDCOM name */
 /*==================================================================
  * soundex -- Return SOUNDEX code of name; any case; return Z999 for
  *   problem names
- * returns static buffer
+ * returns static buffer (or constant string)
  *================================================================*/
 STRING
 soundex (STRING name)   /* surname */
@@ -677,6 +680,7 @@ cmpsqueeze (STRING in,
 }
 /*=====================================
  * givens -- Return given names of name
+ *  returns static buffer
  *===================================*/
 STRING
 givens (STRING name)

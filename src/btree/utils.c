@@ -135,7 +135,7 @@ newmaster (BTREE btree,  /*btree handle*/
 	rewind(btree->b_kfp);
 	if (fwrite(&btree->b_kfile, sizeof(btree->b_kfile), 1, btree->b_kfp) != 1) {
 		/* Needs to be revisited with double-buffering */
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		return FALSE;
 	}
 	btree->b_master = master;

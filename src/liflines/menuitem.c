@@ -138,6 +138,7 @@ static MenuItem f_MenuItemScrollDownBoth = { ")) Scroll both down", "))", CMD_SC
 static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#", CMD_TOGGLE_CHILDNUMS };
 static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", "!g", CMD_MODE_GEDCOM };
 static MenuItem f_MenuItemModeGedcomX = { "!x GEDCOMX mode", "!x", CMD_MODE_GEDCOMX };
+static MenuItem f_MenuItemModeGedcomT = { "!t GEDCOMT mode", "!t", CMD_MODE_GEDCOMT };
 static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", "!a", CMD_MODE_ANCESTORS };
 static MenuItem f_MenuItemModeDescendants = { "!d Descendants mode", "!d", CMD_MODE_DESCENDANTS };
 static MenuItem f_MenuItemModeNormal = { "!n Normal mode", "!n", CMD_MODE_NORMAL };
@@ -212,6 +213,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemDigits,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemModeGedcomT,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModePedigree,
 	&f_MenuItemModeAncestors,
@@ -261,6 +263,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemDigits,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemModeGedcomT,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModeCycle,
 	&f_MenuItemAdvanced,
@@ -302,6 +305,7 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemModeGedcomT,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModePedigree,
 	&f_MenuItemModeAncestors,
@@ -340,6 +344,7 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemSwitchTopBottom,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemModeGedcomT,
 	&f_MenuItemModeNormal,
 	&f_MenuItemModeCycle,
 	&f_MenuItemEnlargeMenu,
@@ -356,6 +361,7 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemModeGedcom,
 	&f_MenuItemModeGedcomX,
+	&f_MenuItemModeGedcomT,
 	&f_MenuItemNotes,
 	&f_MenuItemPointers,
 	&f_MenuItemNext,

@@ -84,6 +84,7 @@ void set_signals(void);
 
 /* stdstrng.c */
 STRING strsave(STRING);
+void strfree(STRING *);
 STRING strconcat(STRING, STRING);
 INT chartype(INT);
 BOOLEAN iswhite(INT);

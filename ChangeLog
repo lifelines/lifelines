@@ -1,3 +1,21 @@
+2001-04-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog NEWS btree/index.c btree/opnbtree.c btree/utils.c
+	gedlib/init.c gedlib/names.c gedlib/xreffile.c hdrs/btree.h
+	hdrs/llstdlib.h hdrs/menuitem.h hdrs/screen.h interp/alloc.c
+	interp/builtin.c interp/pvalue.c liflines/browse.c
+	liflines/llinesi.h liflines/main.c liflines/menuitem.c
+	liflines/pedigree.c liflines/screen.c liflines/show.c
+	liflines/tandem.c stdlib/path.c stdlib/stdstrng.c
+	tools/dbverify.c:
+	Modified display routines to reuse display strings when convenient.
+	Added gedcomt mode (wrap text & concatenate CONC records).
+	Moved some code from main.c into opnbtree.c.
+	Modified create_pvalue, set_pvalue, coerce_pvalue to 
+	make PSTRINGs with "" instead of NULL.
+	Modified ne_pvalues so NULL & "" PSTRINGs compare equal.
+	Added comments in some places.
+
 2001-04-16 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* Makefile.am: The ANNOUNCEMENT file is removed. Track change in

@@ -91,7 +91,7 @@ extern BOOLEAN alldone, progrunning;
 extern STRING empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
-extern STRING mn_unkcmd, ronlya;
+extern STRING mn_unkcmd, ronlya, ronlyr;
 extern STRING askynq, askynyn, askyny;
 
 /*********************************************
@@ -105,8 +105,8 @@ static void del_menu(void);
 static INT extra_menu(void);
 static void init_all_windows(void);
 static INT update_menu(INT screen);
-static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt);
-static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width);
+static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
+static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse);
 static NOD0 scan_menu(void);
 static void trans_menu(void);
 static void utils_menu(void);
@@ -468,24 +468,32 @@ main_menu (void)
 	case 'b': browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-		NOD0 nod0 = scan_menu();
-		if (nod0)
-			browse(nztop(nod0), BROWSE_UNK);
+			NOD0 nod0 = scan_menu();
+			if (nod0)
+				browse(nztop(nod0), BROWSE_UNK);
 		}
 		break;
 	case 'a': 
 		{
-		NODE node;
-		if (readonly) {
-			message(ronlya);
-			break;
-		}
-		node = add_menu();
-		if (node)
-			browse(node, BROWSE_UNK);
+			NODE node;
+			if (readonly) {
+				message(ronlya);
+				break;
+			}
+			node = add_menu();
+			if (node)
+				browse(node, BROWSE_UNK);
 		}
 		break;
-	case 'd': del_menu(); break;
+	case 'd':
+		{
+			if (readonly) {
+				message(ronlyr);
+				break;
+			}
+			del_menu();
+		}
+		break;
 	case 'p': interp_main(TRUE); break;
 	case 'r': interp_main(FALSE); break;
 	case 't': trans_menu(); break;
@@ -514,43 +522,56 @@ update_menu (INT screen)
 }
 /*=========================================
  * show_indi_mode -- Show indi according to mode
+ * [in] indi:  whom to display
+ * [in] mode:  how to display
+ * [in] row:   starting row to use
+ * [in] hgt:   how many rows allowed
+ * [in] reuse: flag to save recalculating display strings
  *=======================================*/
 static void
-show_indi_mode (NODE indi, INT mode, INT row, INT hgt)
+show_indi_mode (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
 {
 	if (mode=='g')
-		show_gedcom_main(indi, GDVW_NORMAL, row, hgt);
+		show_gedcom_main(indi, GDVW_NORMAL, row, hgt, reuse);
 	else if (mode=='x')
-		show_gedcom_main(indi, GDVW_EXPANDED, row, hgt);
+		show_gedcom_main(indi, GDVW_EXPANDED, row, hgt, reuse);
+	else if (mode=='t')
+		show_gedcom_main(indi, GDVW_TEXT, row, hgt, reuse);
 	else if (mode=='a')
-		show_ancestors(indi, row, hgt);
+		show_ancestors(indi, row, hgt, reuse);
 	else if (mode=='d')
-		show_descendants(indi, row, hgt);
+		show_descendants(indi, row, hgt, reuse);
 	else
-		show_person_main(indi, row, hgt);
+		show_person_main(indi, row, hgt, reuse);
 }
 /*=========================================
  * show_fam_mode -- Show indi according to mode
+ * [in] fam:  whom to display
+ * [in] mode:  how to display
+ * [in] row:   starting row to use
+ * [in] hgt:   how many rows allowed
+ * [in] width: how many columns allowed
+ * [in] reuse: flag to save recalculating display strings
  *=======================================*/
 static void
-show_fam_mode (NODE fam, INT mode, INT row, INT hgt, INT width)
+show_fam_mode (NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse)
 {
 	if (mode=='g')
-		show_gedcom_main(fam, GDVW_NORMAL, row, hgt);
+		show_gedcom_main(fam, GDVW_NORMAL, row, hgt, reuse);
 	else if (mode=='x')
-		show_gedcom_main(fam, GDVW_EXPANDED, row, hgt);
+		show_gedcom_main(fam, GDVW_EXPANDED, row, hgt, reuse);
 	else
-		show_long_family(fam, row, hgt, width);
+		show_long_family(fam, row, hgt, width, reuse);
 }
 /*=========================================
  * indi_browse -- Handle indi_browse screen
  *=======================================*/
 INT
-indi_browse (NODE indi, INT mode)
+indi_browse (NODE indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_menu(screen);
-	show_indi_mode(indi, mode, 1, lines);
+	show_indi_mode(indi, mode, 1, lines, reuse);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -558,12 +579,12 @@ indi_browse (NODE indi, INT mode)
  * fam_browse -- Handle fam_browse screen
  *=====================================*/
 INT
-fam_browse (NODE fam, INT mode)
+fam_browse (NODE fam, INT mode, BOOLEAN reuse)
 {
 	INT width = MAINWIN_WIDTH;
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_menu(screen);
-	show_fam_mode(fam, mode, 1, lines, width);
+	show_fam_mode(fam, mode, 1, lines, width, reuse);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -585,14 +606,15 @@ twoindi_browse (NODE indi1, NODE indi2, INT mode)
 	INT screen = TWO_PER_SCREEN;
 	INT lines = update_menu(screen);
 	INT lines1,lines2;
+	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_indi_mode(indi1, mode, 1, lines1);
+	show_indi_mode(indi1, mode, 1, lines1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_indi_mode(indi2, mode, lines1+2, lines2);
+	show_indi_mode(indi2, mode, lines1+2, lines2, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -608,14 +630,15 @@ twofam_browse (NODE fam1, NODE fam2, INT mode)
 	INT screen = TWO_FAM_SCREEN;
 	INT lines = update_menu(screen);
 	INT lines1,lines2;
+	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_fam_mode(fam1, mode, 1, lines1, width);
+	show_fam_mode(fam1, mode, 1, lines1, width, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_fam_mode(fam2, mode, lines1+2, lines2, width);
+	show_fam_mode(fam2, mode, lines1+2, lines2, width, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -626,11 +649,11 @@ twofam_browse (NODE fam1, NODE fam2, INT mode)
  * Implemented: 2001/01/27, Perry Rapp
  *=====================================*/
 INT
-aux_browse (NODE node, INT mode)
+aux_browse (NODE node, INT mode, BOOLEAN reuse)
 {
 	INT screen = AUX_SCREEN;
 	INT lines = update_menu(screen);
-	show_aux_display(node, mode, lines);
+	show_aux_display(node, mode, lines, reuse);
 	display_screen(screen);
 	return interact(main_win, NULL, screen);
 }
@@ -654,14 +677,17 @@ list_browse (INDISEQ seq,
 }
 /*======================================
  * ask_for_lldb -- Ask user for lifelines database directory
+ *  returns static buffer
  *====================================*/
-STRING ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir)
+STRING
+ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir)
 {
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt);
 }
 /*======================================
  * ask_for_output_filename -- Ask user for filename to which to write
+ *  returns static buffer
  *====================================*/
 STRING
 ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
@@ -670,6 +696,7 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt)
 }
 /*======================================
  * ask_for_input_filename -- Ask user for filename from which to read
+ *  returns static buffer
  *====================================*/
 STRING
 ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
@@ -678,6 +705,7 @@ ask_for_input_filename (STRING ttl, STRING path, STRING prmpt)
 }
 /*======================================
  * ask_for_string -- Ask user for string
+ *  returns static buffer
  *====================================*/
 STRING
 ask_for_string (STRING ttl,
@@ -1124,6 +1152,7 @@ interact (WINDOW *win, STRING str, INT screen)
 }
 /*============================================
  * get_answer -- Have user respond with string
+ *  returns static buffer
  *==========================================*/
 STRING
 get_answer (WINDOW *win,
@@ -1281,6 +1310,7 @@ shw_list (WINDOW *win,
           INT *scroll)
 {
 	INT i, j, row, nrows, len, numdet;
+	BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
 	/* TO DO - how big can we make buffer ?
 	ie, how wide can print element be ? */
 	char buffer[60];
@@ -1307,7 +1337,7 @@ shw_list (WINDOW *win,
 		if (key[0]=='I') {
 			NODE indi = key_to_indi(key);
 			mvwaddstr(win, numdet+1, 2, "---");
-			show_person(win, indi, 2, numdet-1, LISTWIN_WIDTH, scroll);
+			show_person(win, indi, 2, numdet-1, LISTWIN_WIDTH, scroll, reuse);
 		}
 	}
 }

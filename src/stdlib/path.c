@@ -89,17 +89,17 @@ path_match (STRING path1, STRING path2)
 static void
 test_concat_path (void)
 {
-	STRING readpath;
-	readpath = concat_path("hey", "jude");
-	readpath = concat_path("hey", "/jude");
-	readpath = concat_path("hey/", "jude");
-	readpath = concat_path("hey/", "/jude");
-	readpath = concat_path("hey", "jude");
-	readpath = concat_path("hey", "\\jude");
-	readpath = concat_path("hey/", "jude");
-	readpath = concat_path("hey\\", "\\jude");
-	readpath = concat_path(NULL, "\\jude");
-	readpath = concat_path("hey", NULL);
+	STRING testpath;
+	testpath = concat_path("hey", "jude");
+	testpath = concat_path("hey", "/jude");
+	testpath = concat_path("hey/", "jude");
+	testpath = concat_path("hey/", "/jude");
+	testpath = concat_path("hey", "jude");
+	testpath = concat_path("hey", "\\jude");
+	testpath = concat_path("hey/", "jude");
+	testpath = concat_path("hey\\", "\\jude");
+	testpath = concat_path(NULL, "\\jude");
+	testpath = concat_path("hey", NULL);
 }
 #endif
 /*=============================================

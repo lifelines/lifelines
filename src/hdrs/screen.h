@@ -98,7 +98,7 @@ extern WINDOW *scan_menu_win;
 extern WINDOW *utils_menu_win;
 
 /* Function Prototype */
-INT aux_browse(NODE, INT mode);
+INT aux_browse(NODE, INT mode, BOOLEAN reuse);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
 STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
@@ -110,9 +110,9 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
 void do_edit(void);
-INT fam_browse(NODE, INT mode);
+INT fam_browse(NODE, INT mode, BOOLEAN reuse);
 STRING get_answer (WINDOW*, STRING);
-INT indi_browse(NODE, INT mode);
+INT indi_browse(NODE, INT mode, BOOLEAN reuse);
 int init_screen(void);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
 void llvwprintf(STRING fmt, va_list args);

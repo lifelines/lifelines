@@ -46,23 +46,32 @@
  * local types
  *********************************************/
 
-struct treenode_s
+/* tree built for display */
+struct displaynode_s
 {
-	struct treenode_s * firstchild;
-	struct treenode_s * nextsib;
-	int keynum;
+	struct displaynode_s * firstchild;
+	struct displaynode_s * nextsib;
+	int keynum; /* used by anc/desc trees */
+	STRING str; /* used by extended gedcom node trees */
 };
-typedef struct treenode_s *treenode;
+typedef struct displaynode_s *DISPNODE;
 typedef STRING (*LINEPRINT_FNC)(INT width, void * param);
+/* parameters for anc/desc trees */
 typedef struct indi_print_param_s
 {
 	INT keynum;
 } *INDI_PRINT_PARAM;
+/* parameters for gedcom node traversal */
 typedef struct node_print_param_s
 {
 	NODE node;
 	INT gdvw;
 } *NODE_PRINT_PARAM;
+/* parameters for gedcom text expanded node traversal */
+typedef struct node_text_print_param_s
+{
+	DISPNODE tn;
+} *NODE_TEXT_PRINT_PARAM;
 
 /*********************************************
  * local enums & defines
@@ -76,17 +85,23 @@ typedef struct node_print_param_s
  *********************************************/
 
 /* alphabetical */
-static treenode add_children(NODE indi, INT gen, INT maxgen, INT * count);
-static treenode add_parents(NODE indi, INT gen, INT maxgen, INT * count);
-static treenode alloc_treenode(void);
+static DISPNODE add_children(NODE indi, INT gen, INT maxgen, INT * count);
+static DISPNODE add_parents(NODE indi, INT gen, INT maxgen, INT * count);
+static DISPNODE alloc_displaynode(void);
+static void append_to_text_list(LIST list, STRING text, INT width, BOOLEAN newline);
 static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
-static void free_tree(treenode root);
-static void free_treenode(treenode tn);
+static void draw_gedcom_text(NODE node, INT row, INT hgt, BOOLEAN reuse);
+static void free_displaynode(DISPNODE tn);
+static void free_dispnode_tree(DISPNODE tn);
+static void free_entire_tree(void);
 static STRING indi_lineprint(INT width, void * param);
+static STRING node_lineprint(INT width, void * param);
 static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
-static void trav_pre_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
+static STRING tn_lineprint(INT width, void * param);
+static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow, INT gdvw);
-static void trav_bin_in_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
+static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
+static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void SetScrollMax(INT row, INT hgt);
 
 /*********************************************
@@ -97,6 +112,7 @@ static int Gens = 4;
 static int Ancestors_mode = 1;
 static int Scrollp = 0;
 static int ScrollMax = 0;
+static DISPNODE Root = 0;
 
 /*********************************************
  * local function definitions
@@ -104,35 +120,46 @@ static int ScrollMax = 0;
  *********************************************/
 
 /*=================================================
- * alloc_treenode -- get new treenode
+ * alloc_displaynode -- get new displaynode
  *  In preparation for using a block allocator
  * Created: 2001/04/14, Perry Rapp
  *===============================================*/
-static treenode
-alloc_treenode (void)
+static DISPNODE
+alloc_displaynode (void)
 {
-	treenode tn = (treenode)malloc(sizeof(*tn));
+	DISPNODE tn = (DISPNODE)malloc(sizeof(*tn));
+	tn->firstchild = NULL;
+	tn->nextsib = NULL;
+	tn->keynum = 0;
+	tn->str = NULL;
 	return tn;
 }
 /*========================================
- * free_treenode -- return treenode to free-list
- * (see alloc_treenode comments)
+ * free_displaynode -- return displaynode to free-list
+ * (see alloc_displaynode comments)
  * Created: 2001/04/04, Perry Rapp
  *======================================*/
 static void
-free_treenode (treenode tn)
+free_displaynode (DISPNODE tn)
 {
+	tn->firstchild = NULL;
+	tn->nextsib = NULL;
+	tn->keynum = -1;
+	if (tn->str) {
+		free(tn->str);
+		tn->str = NULL;
+	}
 	free(tn);
 }
 /*=================================================
  * add_children -- add children to tree recursively
  * Created: 2000/12/07, Perry Rapp
  *===============================================*/
-static treenode
+static DISPNODE
 add_children (NODE indi, INT gen, INT maxgen, INT * count)
 {
-	treenode tn = alloc_treenode();
-	treenode tn0, tn1;
+	DISPNODE tn = alloc_displaynode();
+	DISPNODE tn0, tn1;
 	int i;
 
 	tn->keynum = indi_to_keynum(indi);
@@ -150,12 +177,211 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 				element_indiseq(childseq, i, &childkey, &childname);
 				child = key_to_indi(childkey);
 				tn1 = add_children(child, gen+1, maxgen, count);
+				/* link new displaynode into tree we're building */
 				if (tn0)
 					tn0 = tn0->nextsib = tn1;
-				else
+				else /* first child - first time thru loop */
 					tn0 = tn->firstchild = tn1;
 			}
 			remove_indiseq(childseq);
+		}
+	}
+	return tn;
+}
+/*===========================
+ * text_to_list -- Split text into list of lines
+ *  each no more than width
+ * Created: 2001/04/15, Perry Rapp
+ *=========================*/
+LIST
+text_to_list (STRING text, INT width)
+{
+	LIST list = create_list();
+	append_to_text_list(list, text, width, TRUE);
+	return list;
+}
+/*=================================================
+ * append_to_text_list - add onto fixed width string list
+ *  newline: flag to not append to last element of list
+ *  we build each line in current, and add it to list as done
+ *  ptr points to the undone part of text
+ *  curptr points to the end (insertion point) of current
+ * NB: We also build list from last to first, so client can use
+ *  FORLIST traversal (which is backwards)
+ *  TO DO: Break at whitespace
+ * Created: 2001/04/15, Perry Rapp
+ *=================================================*/
+static void
+append_to_text_list (LIST list, STRING text, INT width, BOOLEAN newline)
+{
+	STRING ptr = text;
+	STRING temp, current, curptr;
+	INT len, curlen;
+	if (!text || !text[0])
+		return;
+	/* pull off last line into temp, to append to */
+	if (newline) {
+		temp = NULL;
+	} else {
+		temp = pop_list(list);
+		if (temp && (INT)strlen(temp) >= width) {
+			enqueue_list(list, temp);
+			temp = NULL;
+		}
+	}
+	current=malloc((width+1)*sizeof(char));
+	current[0] = 0;
+	curptr = current;
+	curlen = width;
+	if (temp) {
+		llstrcatn(&curptr, temp, &curlen);
+	}
+	while (1) {
+		len = strlen(ptr);
+		if (!len) {
+			/* done */
+			if (current[0]) {
+				enqueue_list(list, strdup(current));
+			}
+			free(current);
+			return;
+		}
+		if (len > curlen)
+			len = curlen;
+		temp = curptr;
+		llstrcatn(&curptr, ptr, &curlen);
+		ptr += (curptr - temp);
+		if (!curlen) {
+			/* filled up an item */
+			enqueue_list(list, strdup(current));
+			current[0] = 0;
+			curptr = current;
+			curlen = width;
+		}
+	}
+}
+/*=================================================
+ * add_dnodes -- add dnodes to dnode tree
+ *  recursively, traversing NODE tree & building corresponding
+ *  dnode tree
+ * if a line overflows, give it succeeding sibling dnodes
+ * also, check for subordinate CONT & CONC dnodes to be assimilated
+ * Created: 2001/04/15, Perry Rapp
+ *===============================================*/
+static DISPNODE
+add_dnodes (NODE node, INT gen, INT maxgen, INT * count)
+{
+	DISPNODE tn;
+	DISPNODE tn0, tn1, tn2;
+	NODE child, anode;
+	INT width = ll_cols-2 - gen*6;
+	static char line[120];
+	STRING ptr=line;
+	INT leader;
+	LIST list=NULL;
+	INT mylen=sizeof(line), mylenorig;
+	if (mylen>width)
+		mylen = width;
+	mylenorig = mylen;
+
+	if (nxref(node)) {
+		llstrcatn(&ptr, nxref(node), &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+	}
+	if (ntag(node)) {
+		llstrcatn(&ptr, ntag(node), &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+	}
+	leader = ptr-line;
+	width -= leader;
+	if (width < 10) {
+		/* insufficient space */
+		return NULL;
+	}
+
+	list = text_to_list("", width);
+	if (nval(node))
+		append_to_text_list(list, nval(node), width, FALSE); 
+	set_list_type(list, LISTDOFREE);
+
+	/* anode is first child */
+	anode = nchild(node);
+	/* check for text continuation nodes to assimilate */
+	if (nchild(node)) {
+		for ( ; anode && !nchild(anode); anode = nsibling(anode)) {
+			if (eqstr(ntag(anode), "CONC")) {
+				append_to_text_list(list, " ", width, FALSE);
+				append_to_text_list(list, nval(anode), width, FALSE);
+			} else if (eqstr(ntag(anode), "CONT")) {
+				append_to_text_list(list, nval(anode), width, TRUE);
+			} else {
+				break;
+			}
+		}
+	}
+	/* anode is now first non-assimilated child */
+	/*
+	now add all list elements to tree as siblings
+	first one will be tn, which we return as our result
+	tn0 refers to previous one, for the nsibling links
+	*/
+	tn = tn0 = 0;
+	FORLIST(list, el)
+		tn1 = alloc_displaynode();
+		if (!tn) {
+			INT i;
+			tn = tn1;
+			/* ptr & mylen still point after leader */
+			llstrcatn(&ptr, el, &mylen);
+			tn1->str = strdup(line);
+			for (i=0; i<leader; i++)
+				line[i] = '.';
+			line[leader-1] = ' ';
+		} else {
+			llstrcatn(&ptr, el, &mylen);
+			tn1->str = strdup(line);
+		}
+		/* now we keep resetting ptr & mylen to after blank leader */
+		ptr=line+leader;
+		mylen=mylenorig-leader;
+		tn1->firstchild = 0;
+		tn1->nextsib = 0;
+		if (tn0)
+			tn0->nextsib = tn1;
+		tn0 = tn1;
+		(*count)++;
+	ENDLIST
+	/* special handling for empty list, which didn't get its leader */
+	if (empty_list(list)) {
+		tn1 = alloc_displaynode();
+		tn = tn1;
+		tn1->str = strdup(line);
+		tn1->firstchild = 0;
+		tn1->nextsib = 0;
+		tn0 = tn1;
+		(*count)++;
+	}
+	make_list_empty(list);
+	remove_list(list, NULL);
+
+	if (gen < maxgen) {
+		/* our children hang off of tn2, which is last node of our
+		sibling tree; tn0 is previously added child */
+		tn2 = tn1;
+		tn0 = 0;
+		/* anode was last unassimilated child */
+		for (child = anode; child; child = nsibling(child)) {
+			tn1 = add_dnodes(child, gen+1, maxgen, count);
+			if (!tn1)
+				continue; /* child was skipped */
+			/* link new displaynode into tree we're building */
+			if (tn0)
+				tn0 = tn0->nextsib = tn1;
+			else /* first child - first time thru loop */
+				tn0 = tn2->firstchild = tn1;
+			/* child displaynode might have (overflow or assimilated) siblings */
+			while (tn0->nextsib)
+				tn0 = tn0->nextsib;
 		}
 	}
 	return tn;
@@ -180,10 +406,10 @@ count_nodes (NODE node, INT gen, INT maxgen, INT * count)
  * add_parents -- add parents to tree recursively
  * Created: 2000/12/07, Perry Rapp
  *=============================================*/
-static treenode
+static DISPNODE
 add_parents (NODE indi, INT gen, INT maxgen, INT * count)
 {
-	treenode tn = (treenode)malloc(sizeof(*tn));
+	DISPNODE tn = alloc_displaynode();
 	tn->keynum = indi_to_keynum(indi);
 	tn->firstchild = 0;
 	tn->nextsib = 0;
@@ -265,12 +491,12 @@ node_lineprint (INT width, void * param)
 	NODE node=npp->node;
 	if (mylen>width)
 		mylen=width;
-	if (ntag(node)) {
-		llstrcatn(&ptr, ntag(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
-	}
 	if (nxref(node)) {
 		llstrcatn(&ptr, nxref(node), &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+	}
+	if (ntag(node)) {
+		llstrcatn(&ptr, ntag(node), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 	}
 	if (nval(node)) {
@@ -288,20 +514,51 @@ node_lineprint (INT width, void * param)
 	return line;
 }
 /*=================================
- * trav_pre_print_tn -- traverse treenode tree,
+ * tn_lineprint -- print a displaynode line
+ *  this simply uses the string buffer of the displaynode
+ * Created: 2001/04/15, Perry Rapp
+ *===============================*/
+static STRING
+tn_lineprint (INT width, void * param)
+{
+	NODE_TEXT_PRINT_PARAM ntpp = (NODE_TEXT_PRINT_PARAM)param;
+	return ntpp->tn->str;
+}
+/*=================================
+ * trav_pre_print_tn -- traverse displaynode tree,
  *  printing indis in preorder
  * Created: 2000/12/07, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_tn (treenode tn, INT * row, INT gen, 
+trav_pre_print_tn (DISPNODE tn, INT * row, INT gen, 
 	INT minrow, INT maxrow)
 {
-	treenode n0;
+	DISPNODE n0;
 	struct indi_print_param_s ipp;
 	ipp.keynum = tn->keynum;
+	/* all display printing passes thru generic print_to_screen,
+	which handles scrolling */
 	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
 		trav_pre_print_tn(n0, row, gen+1, minrow, maxrow);
+}
+/*=================================
+ * trav_pre_print_tn_str -- traverse displaynode str tree,
+ *  printing displaynode buffers in preorder
+ * Created: 2001/04/15, Perry Rapp
+ *===============================*/
+static void
+trav_pre_print_tn_str (DISPNODE tn, INT * row, INT gen, 
+	INT minrow, INT maxrow)
+{
+	DISPNODE n0;
+	struct node_text_print_param_s ntpp;
+	ntpp.tn = tn;
+	/* all display printing passes thru generic print_to_screen,
+	which handles scrolling */
+	print_to_screen(gen, row, &tn_lineprint, &ntpp, minrow, maxrow);
+	for (n0=tn->firstchild; n0; n0=n0->nextsib)
+		trav_pre_print_tn_str(n0, row, gen+1, minrow, maxrow);
 }
 /*=================================
  * trav_pre_print_nd -- traverse node tree,
@@ -316,6 +573,8 @@ trav_pre_print_nd (NODE node, INT * row, INT gen,
 	struct node_print_param_s npp;
 	npp.node = node;
 	npp.gdvw = gdvw;
+	/* all display printing passes thru generic print_to_screen,
+	which handles scrolling */
 	print_to_screen(gen, row, &node_lineprint, &npp, minrow, maxrow);
 	for (child=nchild(node); child; child=nsibling(child))
 		trav_pre_print_nd(child, row, gen+1, minrow, maxrow, gdvw);
@@ -326,7 +585,7 @@ trav_pre_print_nd (NODE node, INT * row, INT gen,
  * Created: 2000/12/07, Perry Rapp
  *=========================================*/
 static void
-trav_bin_in_print_tn (treenode tn, INT * row, INT gen,
+trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen,
 	INT minrow, INT maxrow)
 {
 	struct indi_print_param_s ipp;
@@ -334,6 +593,8 @@ trav_bin_in_print_tn (treenode tn, INT * row, INT gen,
 	if (tn->firstchild)
 		trav_bin_in_print_tn(tn->firstchild, row, gen+1,
 			minrow, maxrow);
+	/* all display printing passes thru generic print_to_screen,
+	which handles scrolling */
 	print_to_screen(gen, row, &indi_lineprint, &ipp, minrow, maxrow);
 	if (tn->firstchild && tn->firstchild->nextsib)
 		trav_bin_in_print_tn(tn->firstchild->nextsib, row, gen+1,
@@ -353,61 +614,85 @@ SetScrollMax (INT row, INT hgt)
 }
 /*=========================================================
  * draw_descendants -- build descendant tree & print it out
+ *  Build a displaynode tree then print it out in
+ *  preorder traversal
  * Created: 2000/12/07, Perry Rapp
- *  refer optimization note in show_ancestors
  *=======================================================*/
 void
-pedigree_draw_descendants (NODE indi, INT row, INT hgt)
+pedigree_draw_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
-	treenode root;
-	int count, gen;
-	count=0;
-	root = add_children(indi, 1, Gens, &count);
-	SetScrollMax(count, hgt);
-	/* inorder traversal */
-	gen=0;
-	trav_pre_print_tn(root, &row, gen, row, row+hgt-1);
-	free_tree(root);
+	int gen=0;
+	/* build displaynode tree */
+	if (!reuse) {
+		INT count=0;
+		free_entire_tree();
+		Root = add_children(indi, gen, Gens, &count);
+		SetScrollMax(count, hgt);
+	}
+	/* preorder traversal */
+	trav_pre_print_tn(Root, &row, gen, row, row+hgt-1);
 }
 /*=========================================================
  * pedigree_draw_gedcom -- print out gedcom node tree
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt)
+pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 {
-	INT count, gen;
+	INT count, gen=0;
+	if (gdvw == GDVW_TEXT) {
+		draw_gedcom_text(node, row, hgt, reuse);
+		return;
+	}
 	count=0;
-	count_nodes(node, 1, Gens, &count);
+	count_nodes(node, gen, Gens, &count);
 	SetScrollMax(count, hgt);
 	/* preorder traversal */
-	gen=0;
 	trav_pre_print_nd(node, &row, gen, row, row+hgt-1, gdvw);
+}
+/*=========================================================
+ * draw_gedcom_text -- print out gedcom node tree in text wrapped view
+ *  This builds a displaynode tree then displays it with a
+ *  preorder traversal
+ * Created: 2001/04/15, Perry Rapp
+ *=======================================================*/
+static void
+draw_gedcom_text (NODE node, INT row, INT hgt, BOOLEAN reuse)
+{
+	int gen=0;
+	DISPNODE tn;
+	if (!reuse) {
+		INT count=0;
+		INT skip=0;
+		free_entire_tree();
+		Root = add_dnodes(node, gen, Gens, &count);
+		SetScrollMax(count, hgt);
+	}
+	/* preorder traversal */
+	/* root may have siblings due to overflow/assimilation */
+	for (tn=Root ; tn; tn = tn->nextsib) {
+		trav_pre_print_tn_str(tn, &row, gen, row, row+hgt-1);
+	}
 }
 /*=====================================================
  * show_ancestors -- build ancestor tree & print it out
+ *  Build a displaynode tree then print it out in
+ *  inorder traversal
  * Created: 2000/12/07, Perry Rapp
- *  Possible optimization (courtesy Petter Reinholdtsen):
- *  Call add_parents traversal twice - first time just
- *  count, then alloc one big block, then traverse again
- *  filling it in - one malloc instead of N mallocs
- *  Easiest way is add a flag to add_parents so use same
- *  traversal code both times
- * Another optimization would be to use a custom allocator
- *  (like PVALUES, NODES, etc)
  *===================================================*/
 void
-pedigree_draw_ancestors (NODE indi, INT row, INT hgt)
+pedigree_draw_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
-	treenode root;
-	int count, gen;
-	count=0;
-	root = add_parents(indi, 1, Gens, &count);
-	SetScrollMax(count, hgt);
+	int gen=0;
+	/* build displaynode tree */
+	if (!reuse) {
+		INT count=0;
+		free_entire_tree();
+		Root = add_parents(indi, gen, Gens, &count);
+		SetScrollMax(count, hgt);
+	}
 	/* inorder traversal */
-	gen=0;
-	trav_bin_in_print_tn(root, &row, gen, row, row+hgt-1);
-	free_tree(root);
+	trav_bin_in_print_tn(Root, &row, gen, row, row+hgt-1);
 }
 /*===========================================
  * pedigree_toggle_mode -- toggle between 
@@ -456,17 +741,34 @@ pedigree_reset_scroll (void)
 	Scrollp=0;
 }
 /*===============================================================
- * free_tree -- free a treenode tree
+ * free_dispnode_tree -- free a displaynode tree
  * Created: 2000/02/01, Perry Rapp
  *=============================================================*/
 static void
-free_tree (treenode root)
+free_dispnode_tree (DISPNODE tn)
 {
-	treenode child=root->firstchild;
-	treenode sib=root->nextsib;
-	free_treenode(root);
+	DISPNODE child, sib;
+	ASSERT(tn);
+	/* must get my links before I kill myself */
+	child=tn->firstchild;
+	sib=tn->nextsib;
+	free_displaynode(tn);
 	if (child)
-		free_tree(child);
+		free_dispnode_tree(child);
 	if (sib)
-		free_tree(sib);
+		free_dispnode_tree(sib);
+}
+/*===============================================================
+ * free_entire_tree -- free a displaynode tree
+ *  Root may have siblings because of overflow/assimilation
+ * Created: 2000/04/15, Perry Rapp
+ *=============================================================*/
+static void
+free_entire_tree (void)
+{
+	if (Root) {
+		/* free_dispnode_tree frees both children & siblings */
+		free_dispnode_tree(Root);
+		Root = 0;
+	}
 }

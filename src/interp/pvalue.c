@@ -59,6 +59,7 @@ static CACHEEL access_cel_from_pvalue(PVALUE val);
 static void clear_pv_indiseq(INDISEQ seq);
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(STRING key, INT ptype);
+static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2);
 static void free_all_pvalues(void);
 static BOOLEAN is_pvalue_or_freed(PVALUE pval);
 static void symtab_cleaner(ENTRY ent);
@@ -272,8 +273,11 @@ create_pvalue (INT type, VPTR value)
 	if (type == PNONE) return NULL;
 	val = alloc_pvalue_memory();
 	if (type == PSTRING) {
-		if (value)
-			value = (VPTR) strsave((STRING) value);
+		if (!value) {
+			/* string functions don't handle NULL */
+			value = "";
+		}
+		value = (VPTR) strsave((STRING) value);
 	}
 	ptype(val) = type;
 	pvalue(val) = value;
@@ -309,11 +313,15 @@ clear_pvalue (PVALUE val)
 	*/
 	/*
 	PANY is a null value
-	I think PGNODEs point into cache memory (2001/04/15, Perry Rapp)
+	PGNODEs point into cache memory
 	*/
 	/* nodes from cache handled below switch - PINDI, PFAM, PSOUR, PEVEN, POTHR */
 	case PSTRING:
-		if (pvalue(val)) stdfree((STRING) pvalue(val));
+		{
+			if (pvalue(val)) {
+				stdfree((STRING) pvalue(val));
+			}
+		}
 		return;
 	case PLIST:
 		{
@@ -444,22 +452,17 @@ copy_pvalue (PVALUE val)
 		break;
 	case PANY:
 		{
-			/* ? I don't know what these are
-			2001/01/20, Perry
-			*/
-			int debug=1;
+			/* unassigned values, should be NULL - Perry Rapp, 2001/04/21 */
+			ASSERT(pvalue(val) == NULL);
 		}
 		break;
 	case PGNODE:
 		{
-			/*
-			I've not figured out how memory for these works
-			2001/01/20, Perry Rapp
-			*/
-			int debug=1;
+			/* pointers into cache elements */
 		}
 		break;
-	/* nodes from caches handled below switch (q.v.) */
+	/* nodes from caches handled below switch (q.v.), inside
+	the is_record_pvalue code */
 	case PLIST:
 		{
 			LIST list = (LIST) pvalue(val);
@@ -651,9 +654,19 @@ set_pvalue (PVALUE val,
 	show_pvalue(val);
 	llwprintf(" new type=%d new value = %d\n", type, value);
 #endif
+	if (type == PSTRING && ptype(val) == PSTRING 
+		&& value == pvalue(val)) {
+		/* string self-assignment */
+		if (!value) pvalue(val) = "";
+		return;
+	}
 	clear_pvalue(val);
 	ptype(val) = type;
-	if (type == PSTRING && value) value = (VPTR) strsave((STRING) value);
+	if (type == PSTRING) {
+		if (!value) /* string functions don't handle NULL */
+			value = "";
+		value = (VPTR) strsave((STRING) value);
+	}
 	pvalue(val) = value;
 }
 /*==================================================
@@ -753,8 +766,13 @@ coerce_pvalue (INT type,       /* type to convert to */
 		return;
 	}
 /* NEW - 7/31/95 */
+	/* PANY or PINT with NULL (0) value is convertible to any scalar */
 	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
-		if(type == PSET || type == PTABLE || type == PLIST) goto bad;
+		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
+		if (type == PSTRING) {
+			/* string functions don't handle NULL */
+			pvalue(val) = strsave("");
+		}
 		ptype(val) = type;
 		return;
 	}
@@ -1010,19 +1028,13 @@ eq_pvalues (PVALUE val1,
             BOOLEAN *eflg)
 {
 	BOOLEAN rel;
-	STRING v1, v2;
 
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
-		v1 = pvalue(val1);
-		v2 = pvalue(val2);
-		if(v1 && v2)
-			rel = eqstr(v1, v2);
-		else
-			rel = (v1 == v2);
+		rel = eq_pstrings(val1, val2);
 		break;
 	default:
 		rel = (pvalue(val1) == pvalue(val2));
@@ -1030,6 +1042,17 @@ eq_pvalues (PVALUE val1,
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
+}
+/*===============================================
+ * eq_pstrings -- Compare two PSTRINGS
+ *=============================================*/
+static BOOLEAN
+eq_pstrings (PVALUE val1, PVALUE val2)
+{
+	STRING str1 = pvalue(val1), str2 = pvalue(val2);
+	if (!str1) str1 = "";
+	if (!str2) str2 = "";
+	return eqstr(str1, str2);
 }
 /*===============================================
  * ne_pvalues -- See if two PVALUEs are not equal
@@ -1040,7 +1063,6 @@ ne_pvalues (PVALUE val1,
             BOOLEAN *eflg)
 {
 	BOOLEAN rel;
-	STRING v1, v2;
 
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
@@ -1056,10 +1078,7 @@ ne_pvalues (PVALUE val1,
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PSTRING:
-		v1 = pvalue(val1);
-		v2 = pvalue(val2);
-		if(v1 && v2) rel = nestr(v1, v2);
-		else rel = (v1 != v2);
+		rel = !eq_pstrings(val1, val2);
 		break;
 	default:
 		rel = (pvalue(val1) != pvalue(val2));
@@ -1495,4 +1514,3 @@ symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 {
 	return valueofbool(stab.tab, key, there);
 }
-

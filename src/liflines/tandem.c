@@ -68,7 +68,7 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 	NODE node, indi1 = *pindi1, indi2 = *pindi2;
 	STRING key, name;
 	INDISEQ seq;
-	INT c, rc;
+	INT c, rc, reuse;
 	static INT mode = 'n';
 
 	if (!indi1 || !indi2) return BROWSE_QUIT;
@@ -87,10 +87,13 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 		nkey1p = indi_to_keynum(indi1);
 		nkey2p = indi_to_keynum(indi2);
 		modep = mode;
-		if (!handle_menu_cmds(c)
-			&& !handle_indi_mode_cmds(c, &mode)
-			&& !handle_tandem_scroll_cmds(c))
-			switch (c)
+		if (handle_menu_cmds(c, &reuse))
+			continue;
+		if (handle_indi_mode_cmds(c, &mode))
+			continue;
+		if (handle_tandem_scroll_cmds(c))
+			continue;
+		switch (c)
 		{
 		case CMD_EDIT: 	/* edit top person */
 			indi1 = edit_indi(indi1);
@@ -163,7 +166,7 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 {
 	INT nkey1p, nkey2p, modep;
 	NODE node, fam1 = *pfam1, fam2 = *pfam2;
-	INT c;
+	INT c, reuse;
 	static INT mode = 'n';
 
 	ASSERT(fam1 && fam2);
@@ -182,10 +185,13 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 		nkey1p = fam_to_keynum(fam1);
 		nkey2p = fam_to_keynum(fam2);
 		modep = mode;
-		if (!handle_menu_cmds(c)
-			&& !handle_fam_mode_cmds(c, &mode)
-			&& !handle_tandem_scroll_cmds(c))
-			switch (c)
+		if (handle_menu_cmds(c, &reuse))
+			continue;
+		if (handle_fam_mode_cmds(c, &mode))
+			continue;
+		if (handle_tandem_scroll_cmds(c))
+			continue;
+		switch (c)
 		{
 		case CMD_EDIT:	/* edit top fam */
 			fam1 = edit_family(fam1);

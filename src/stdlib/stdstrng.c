@@ -42,6 +42,18 @@ strsave (STRING str)
 {
 	return strcpy(stdalloc(strlen(str) + 1), str);
 }
+/*===============================
+ * strfree -- Free & clear a STRING by ref
+ *  (STRING may be NULL)
+ *=============================*/
+void
+strfree (STRING * str)
+{
+	if (*str) {
+		stdfree(*str);
+		*str = NULL;
+	}
+}
 /*==================================
  * strconcat -- Catenate two strings
  *================================*/
@@ -69,25 +81,22 @@ chartype (INT c)
 #ifndef OS_NOCTYPE
 	if ( isspace(c) )
 		return WHITE;
-	if (opt_finnish) 
-	    {
-	    if( my_isalpha(c) ) return LETTER;
-	    }
+	if (opt_finnish) {
+		if( my_isalpha(c) ) return LETTER;
+	}
 	else if ( isalpha(c) ) return LETTER;
 	if ( isdigit(c) ) return DIGIT;
 	return c;
 #else
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
 		return WHITE;
-	if (opt_finnish) 
-	    {
-	    if( my_isalpha(c) ) return LETTER;
-	    }
-	else
-	    {
-	    if (c >= 'a' && c <= 'z') return LETTER;
-	    if (c >= 'A' && c <= 'Z') return LETTER;
-	    }
+	if (opt_finnish) {
+		if( my_isalpha(c) ) return LETTER;
+	}
+	else {
+		if (c >= 'a' && c <= 'z') return LETTER;
+		if (c >= 'A' && c <= 'Z') return LETTER;
+	}
 	if (c >= '0' && c <= '9') return DIGIT;
 	return c;
 #endif
@@ -111,7 +120,7 @@ iswhite (INT c)
 BOOLEAN
 isletter (INT c)
 {
-    	if(opt_finnish) return(my_isalpha(c));
+	if(opt_finnish) return(my_isalpha(c));
 #ifndef OS_NOCTYPE
 	return( isalpha(c) );
 #else
@@ -139,6 +148,7 @@ isnumeric (STRING str)
 }
 /*======================================
  * lower -- Convert string to lower case
+ *  returns static buffer
  *====================================*/
 STRING
 lower (STRING str)
@@ -153,6 +163,7 @@ lower (STRING str)
 }
 /*======================================
  * upper -- Convert string to upper case
+ *  returns static buffer
  *====================================*/
 STRING
 upper (STRING str)
@@ -196,7 +207,7 @@ ll_toupper (INT c)
 INT
 ll_tolower (INT c)
 {
-        if(opt_finnish) return(my_toupper(c));
+	if(opt_finnish) return(my_toupper(c));
 #ifndef OS_NOCTYPE
 	if(isupper(c)) return( tolower(c) );
 	return(c);
@@ -207,6 +218,7 @@ ll_tolower (INT c)
 }
 /*================================
  * trim -- Trim string if too long
+ *  returns static buffer (or NULL)
  *==============================*/
 STRING
 trim (STRING str, INT len)
@@ -225,9 +237,9 @@ trim (STRING str, INT len)
 void
 striptrail (STRING p)
 {
-        unsigned char *q = p + strlen(p) - 1;
-        while (iswhite(*q) && q >= p)
-                *q-- = '\0';
+	unsigned char *q = p + strlen(p) - 1;
+	while (iswhite(*q) && q >= p)
+		*q-- = '\0';
 }
 /*=======================================
  * striplead -- Strip leading white space
@@ -237,13 +249,13 @@ striplead (STRING p)
 {
 	unsigned char *e = p + strlen(p) - 1;
 	unsigned char *b = p;
-        unsigned char *q = p;
+	unsigned char *q = p;
 
-        while (iswhite(*q) && q <= e)
-                q++;
+	while (iswhite(*q) && q <= e)
+		q++;
 
-        while (b <= e)
-            *b++ = *q++;
+	while (b <= e)
+		*b++ = *q++;
 	*b++ = '\0';
 }
 /*=========================================
@@ -252,7 +264,7 @@ striplead (STRING p)
 BOOLEAN
 allwhite (STRING p)
 {
-        while (*p)
-                if (!iswhite(*p++)) return FALSE;
-        return TRUE;
+	while (*p)
+	if (!iswhite(*p++)) return FALSE;
+	return TRUE;
 }

@@ -235,11 +235,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to name must be a person");
 		return NULL;
 	}
-	/*
-	This is not so good - __upper etc can't handle
-	PSTRINGs with NULL values - 2001/04/15, Perry Rapp
-	*/
-	if (!indi) return create_pvalue(PSTRING, NULL);
+	if (!indi) return create_pvalue(PSTRING, "");
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
 		if (*eflg) {
@@ -320,7 +316,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "the arg to surname must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, NULL);
+	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(name = NAME(indi)) || !nval(name)) {
 		*eflg = TRUE;
 		prog_error(node, "person does not have a name");
@@ -355,7 +351,7 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE new, val = evaluate(iargs(node), stab, eflg);
+	PVALUE newval, val = evaluate(iargs(node), stab, eflg);
 	STRING str;
 	if (*eflg || !val || ptype(val) != PSTRING) {
 		*eflg = TRUE;
@@ -363,9 +359,9 @@ __strsoundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = strsave(soundex(pvalue(val)));
-	new = create_pvalue(PSTRING, (VPTR)str);
+	newval = create_pvalue(PSTRING, (VPTR)str);
 	delete_pvalue(val);
-	return new;
+	return newval;
 }
 /*===============================+
  * __givens -- Find given names
@@ -375,17 +371,19 @@ PVALUE
 __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "1st arg to givens must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, NULL);
+	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(name = NAME(indi)) || !nval(name)) {
 		*eflg = TRUE;
 		prog_error(node, "person does not have a name");
 		return NULL;
 	}
-	return create_pvalue(PSTRING, (VPTR)givens(nval(name)));
+	str = givens(nval(name)); /* static buffer, but create_pvalue will copy */
+	return create_pvalue(PSTRING, (VPTR)str);
 }
 /*===============================+
  * __set -- Assignment operation
@@ -558,9 +556,9 @@ __titl (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 		prog_error(node, "the arg to title must be a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, NULL);
+	if (!indi) return create_pvalue(PSTRING, "");
 	titl = find_tag(nchild(indi), "TITL");
-	return create_pvalue(PSTRING, (VPTR)(titl ? nval(titl) : NULL));
+	return create_pvalue(PSTRING, (VPTR)(titl ? nval(titl) : ""));
 }
 /*===================================+
  * __long -- Return long form of event
@@ -1695,43 +1693,43 @@ __strlen (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        INT len = 0, i, nstrs = 0;
-        STRING hold[32];
-        STRING p, new, str;
+	PNODE arg = (PNODE) iargs(node);
+	INT len = 0, i, nstrs = 0;
+	STRING hold[32];
+	STRING p, new, str;
 	PVALUE val;
 
-        while (arg) {
-                val = eval_and_coerce(PSTRING, arg, stab, eflg);
-                if (*eflg) {
+	while (arg) {
+		val = eval_and_coerce(PSTRING, arg, stab, eflg);
+		if (*eflg) {
 			prog_error(node, "an arg to concat is not a string");
 			return NULL;
 		}
 		if ((str = (STRING) pvalue(val))) {
-                        len += strlen(str);
+			len += strlen(str);
 
 #ifdef DEBUG
 	llwprintf("concat: str: ``%s'' ", str);
 #endif
 
-                        hold[nstrs++] = strsave(str);
-                } else
-                        hold[nstrs++] = NULL;
-                arg = inext(arg);
+			hold[nstrs++] = strsave(str);
+		} else
+			hold[nstrs++] = NULL;
+		arg = inext(arg);
 		delete_pvalue(val);
-        }
-        p = new = (STRING) stdalloc(len + 1);
-        for (i = 0; i < nstrs; i++) {
-                str = hold[i];
-                if (str) {
-                        strcpy(p, str);
-                        p += strlen(p);
-                        stdfree(str);
-                }
-        }
+	}
+	p = new = (STRING) stdalloc(len + 1);
+	for (i = 0; i < nstrs; i++) {
+		str = hold[i];
+		if (str) {
+			strcpy(p, str);
+			p += strlen(p);
+			stdfree(str);
+		}
+	}
 	val = create_pvalue(PSTRING, (VPTR)new);
 	stdfree(new);
-        return val;
+	return val;
 }
 /*=======================================+
  * __lower -- Convert string to lower case
@@ -1741,11 +1739,13 @@ PVALUE
 __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "the arg to lower must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (VPTR)lower(pvalue(val)));
+	str = lower(pvalue(val));
+	set_pvalue(val, PSTRING, str);
 	return val;
 }
 /*=======================================+
@@ -1756,11 +1756,13 @@ PVALUE
 __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "the arg to upper must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (VPTR)upper(pvalue(val)));
+	str = upper(pvalue(val));
+	set_pvalue(val, PSTRING, str);
 	return val;
 }
 /*=====================================+
@@ -1771,11 +1773,13 @@ PVALUE
 __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	STRING str;
 	if (*eflg) {
 		prog_error(node, "the arg to capitalize must be a string");
 		return NULL;
 	}
-	set_pvalue(val, PSTRING, (VPTR)capitalize(pvalue(val)));
+	str = capitalize(pvalue(val));
+	set_pvalue(val, PSTRING, str);
 	return val;
 }
 /*================================+
@@ -1899,7 +1903,7 @@ __key (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	cel = get_cel_from_pvalue(val);
 	delete_pvalue(val);
-	if (!cel) return create_pvalue(PSTRING, NULL);
+	if (!cel) return create_pvalue(PSTRING, "");
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
 		if (*eflg) {
@@ -2157,7 +2161,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to trimname is not a person");
 		return NULL;
 	}
-	if (!indi) return create_pvalue(PSTRING, NULL);
+	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(indi = NAME(indi)) || !nval(indi)) {
 		*eflg = TRUE;
 		prog_error(node, "1st art to trimname is in error");

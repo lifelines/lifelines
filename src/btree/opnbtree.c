@@ -86,17 +86,17 @@ validate_keyfile2 (KEYFILE2 * kfile2)
 {
 	if (strcmp(kfile2->name, KF2_NAME))
 	{
-		bterrno = BTERRILLEGKF;
+		bterrno = BTERR_ILLEGKF;
 		return FALSE;
 	}
 	if (kfile2->magic != KF2_MAGIC)
 	{
-		bterrno = BTERRALIGNKF;
+		bterrno = BTERR_ALIGNKF;
 		return FALSE;
 	}
 	if (kfile2->version != KF2_VER)
 	{
-		bterrno = BTERRVERKF;
+		bterrno = BTERR_VERKF;
 		return FALSE;
 	}
 	return TRUE;
@@ -118,47 +118,67 @@ openbtree (STRING dir,          /* btree base dir */
 	BOOLEAN keyed2 = FALSE;
 	INDEX master;
 
-/* See if base directory exists */
+	/* we only allow 150 characters in base directory name */
 	bterrno = 0;
 	if (strlen(dir) > 150) {
-		bterrno = BTERRLNGDIR;
+		bterrno = BTERR_LNGDIR;
 		return NULL;
 	}
-	if (access(dir, 0)) {
-		sprintf(scratch, "%s/", dir);
-		if (!cflag || !mkalldirs(scratch)) {
-			bterrno = BTERRNOBTRE;
+	/* See if base directory exists */
+	if (stat(dir, &sbuf)) {
+		/* db directory not found */
+		if (!cflag) {
+			bterrno = BTERR_NODB;
 			return NULL;
 		}
+		/* create flag set, so try to create it & stat again */
+		sprintf(scratch, "%s/", dir);
+		if (!mkalldirs(scratch) || stat(dir, &sbuf)) {
+			bterrno = BTERR_DBCREATEFAILED;
+			return NULL;
+		}
+	} else if (!S_ISDIR(sbuf.st_mode)) {
+		/* found but not directory */
+		bterrno = BTERR_DBBLOCKEDBYFILE;
+		return NULL;
 	}
-	if (stat(dir, &sbuf) || !S_ISDIR(sbuf.st_mode)) {
-		bterrno = BTERRNOBTRE;
+	/* db dir was found, or created & then found */
+	if (access(dir, 0)) {
+		bterrno = BTERR_DBACCESS;
 		return NULL;
 	}
 
 /* See if key file exists */
 	sprintf(scratch, "%s/key", dir);
 	if (stat(scratch, &sbuf)) {
-		if (!cflag || !initbtree(dir)) {
-			bterrno = BTERRKFILE;
+		/* no keyfile */
+		if (!cflag) {
+			bterrno = BTERR_NOKEY;
+			return NULL;
+		}
+		/* create flag set, so try to create it & stat again */
+		if (!initbtree(dir) || stat(scratch, &sbuf)) {
+			/* initbtree actually set bterrno, but we ignore it */
+			bterrno = BTERR_DBCREATEFAILED;
 			return NULL;
 		}
 	} else {
 		if (cflag) {
 			/* keyfile found - don't create on top of it */
-			bterrno = BTERREXISTS;
+			bterrno = BTERR_EXISTS;
 			return NULL;
 		}
 	}
-	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		bterrno = BTERRKFILE;
+	if (!S_ISREG(sbuf.st_mode)) {
+		/* keyfile is a directory! */
+		bterrno = BTERR_KFILE;
 		return NULL;
 	}
 
 /* Open and read key file (KEYFILE1) */
 	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
 	    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		return NULL;
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
@@ -168,7 +188,7 @@ openbtree (STRING dir,          /* btree base dir */
 		keyed2=TRUE;
 	}
 	if (kfile1.k_ostat < 0) {
-		bterrno = BTERRWRITER;
+		bterrno = BTERR_WRITER;
 		fclose(fp);
 		return NULL;
 	}
@@ -180,7 +200,7 @@ openbtree (STRING dir,          /* btree base dir */
 		kfile1.k_ostat++;
 	rewind(fp);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		fclose(fp);
 		return NULL;
 	}
@@ -188,7 +208,7 @@ openbtree (STRING dir,          /* btree base dir */
 		/* add KEYFILE2 structure */
 		init_keyfile2(&kfile2);
 		if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		fclose(fp);
 		}
 	}
@@ -226,14 +246,14 @@ initbtree (STRING basedir)
 /* Open file for writing keyfile */
 	sprintf(scratch, "%s/key", basedir);
 	if ((fk = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		return FALSE;
 	}
 
 /* Open file for writing master index */
 	sprintf(scratch, "%s/aa/aa", basedir);
 	if (!mkalldirs(scratch) || (fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERRINDEX;
+		bterrno = BTERR_INDEX;
 		fclose(fk);
 		return FALSE;
 	}
@@ -241,7 +261,7 @@ initbtree (STRING basedir)
 /* Open file for writing first data block */
 	sprintf(scratch, "%s/ab/aa", basedir);
 	if (!mkalldirs(scratch) || (fd = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERRBLOCK;
+		bterrno = BTERR_BLOCK;
 		fclose(fk);
 		fclose(fi);
 		return FALSE;
@@ -252,7 +272,7 @@ initbtree (STRING basedir)
 	init_keyfile2(&kfile2);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1
 		|| fwrite(&kfile2, sizeof(kfile2), 1, fk) != 1) {
-		bterrno = BTERRKFILE;
+		bterrno = BTERR_KFILE;
 		fclose(fk);
 		fclose(fi);
 		fclose(fd);
@@ -268,7 +288,7 @@ initbtree (STRING basedir)
 	master->ix_nkeys = 0;
 	master->ix_fkeys[0] = path2fkey("ab/aa");
 	if (fwrite(master, BUFLEN, 1, fi) != 1) {
-		bterrno = BTERRINDEX;
+		bterrno = BTERR_INDEX;
 		fclose(fi);
 		fclose(fd);
 		return FALSE;
@@ -282,7 +302,7 @@ initbtree (STRING basedir)
 	ixparent(block) = 0;
 	block->ix_nkeys = 0;
 	if (fwrite(block, BUFLEN, 1, fd) != 1) {
-		bterrno = BTERRBLOCK;
+		bterrno = BTERR_BLOCK;
 		fclose(fd);
 		return FALSE;
 	}
@@ -307,7 +327,7 @@ closebtree (BTREE btree)
 		} else { /* read-only, get current shared status */
 			rewind(fp);
 			if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-				bterrno = BTERRKFILE;
+				bterrno = BTERR_KFILE;
 				goto exit_closebtree;
 			}
 			if (kfile1.k_ostat <= 0) { /* someone has seized the DB */
@@ -318,7 +338,7 @@ closebtree (BTREE btree)
 		}
 		rewind(fp);
 		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-			bterrno = BTERRKFILE;
+			bterrno = BTERR_KFILE;
 			goto exit_closebtree;
 		}
 		ret=TRUE;
@@ -329,4 +349,69 @@ exit_closebtree:
 	if (fp)
 		fclose(fp);
 	return ret;
+}
+/*===================================================
+ * describe_dberror -- Describe database opening error
+ * dberr: [in] error whose description is sought
+ * buffer: [out] buffer for description
+ * buflen: [in]  size of buffer
+ *=================================================*/
+void
+describe_dberror (INT dberr, STRING buffer, INT buflen)
+{
+	STRING ptr = buffer;
+	STRING msg;
+	INT mylen = buflen;
+
+	if (dberr != BTERR_WRITER)
+		llstrcatn(&ptr, "Database error -- ", &mylen);
+
+	switch (dberr) {
+	case BTERR_NODB:
+		msg = "requested database does not exist.";
+		break;
+	case BTERR_DBBLOCKEDBYFILE:
+		msg = "db directory is file, not directory.";
+		break;
+	case BTERR_DBCREATEFAILED:
+		msg = "creation of new database failed.";
+		break;
+	case BTERR_DBACCESS:
+		msg = "error accessing database directory.";
+		break;
+	case BTERR_NOKEY:
+		msg = "no keyfile (directory does not appear to be a database.";
+		break;
+	case BTERR_INDEX:
+		msg = "could not open, read or write an index file.";
+		break;
+	case BTERR_KFILE:
+		msg = "could not open, read or write the key file.";
+		break;
+	case BTERR_BLOCK:
+		msg = "could not open, read or write a block file.";
+		break;
+	case BTERR_LNGDIR:
+		msg = "name of database is too long.";
+		break;
+	case BTERR_WRITER:
+		msg = "The database is already open for writing.";
+		break;
+	case BTERR_ILLEGKF:
+		msg = "keyfile is corrupt.";
+		break;
+	case BTERR_ALIGNKF:
+		msg = "keyfile is wrong alignment.";
+		break;
+	case BTERR_VERKF:
+		msg = "keyfile is wrong version.";
+		break;
+	case BTERR_EXISTS:
+		msg = "Existing database found.";
+		break;
+	default:
+		msg = "Undefined database error -- This can't happen.";
+		break;
+	}
+	llstrcatn(&ptr, msg, &mylen);
 }

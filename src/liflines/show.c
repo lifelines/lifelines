@@ -67,12 +67,13 @@ typedef char *LINESTRING;
  * local function prototypes
  *********************************************/
 
-static STRING person_display(NODE, NODE, INT);
+/* alphabetical */
 static void add_child_line(INT, NODE, INT width);
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
-static void show_gedcom(WINDOW *w, NODE node, INT gdvw, INT row, INT hgt);
+static STRING person_display(NODE, NODE, INT);
+static void show_gedcom(WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
 static void wipe_window(WINDOW * w, INT row, INT hgt);
 
 /*********************************************
@@ -116,6 +117,8 @@ init_show_module ()
 }
 /*===============================================
  * init_display_indi -- Initialize display person
+ *  Fill in all the local buffers for normal person
+ *  display mode (Spers, Sbirt, etc)
  *=============================================*/
 static void
 init_display_indi (NODE pers, INT width)
@@ -185,14 +188,17 @@ init_display_indi (NODE pers, INT width)
 }
 /*==============================
  * show_person -- Display person
+ * [in] win:    which curses window (usually MAIN_WIN)
+ * [in] pers:   whom to display
+ * [in] row:    starting row to draw upon
+ * [in] hgt:    how many rows to use
+ * [in] width:  how many columns to use
+ * [in] scroll: how many rows to skip over at top
+ * [in] reuse:  flag to avoid recomputing display strings
  *============================*/
 void
-show_person (WINDOW * win,
-            NODE pers, /* person */
-            INT row,   /* start row */
-            INT hgt,   /* avail rows */
-            INT width, /* avail cols */
-            INT *scroll)
+show_person (WINDOW * win, NODE pers, INT row, INT hgt
+	, INT width, INT *scroll, BOOLEAN reuse)
 {
 	INT i;
 	INT localrow;
@@ -200,7 +206,8 @@ show_person (WINDOW * win,
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
 	if (!hgt) return;
-	init_display_indi(pers, width);
+	if (!reuse)
+		init_display_indi(pers, width);
 	for (i = 0; i < hgt; i++) {
 		wmove(win, row+i, 1);
 		wclrtoeol(win);
@@ -242,14 +249,15 @@ show_person (WINDOW * win,
 /*====================================
  * show_person_main -- Display person
  *
- * NODE pers: [in] person
- * INT row:   [in] start row
- * INT hgt:   [in] avail rows
+ * [in] pers:  person
+ * [in] row:   start row
+ * [in] hgt:   avail rows
+ * [in] reuse: flag to save recalculating display strings
  *==================================*/
 void
-show_person_main (NODE pers, INT row, INT hgt)
+show_person_main (NODE pers, INT row, INT hgt, BOOLEAN reuse)
 {
-	show_person(main_win, pers, row, hgt, MAINWIN_WIDTH, &Scroll1);
+	show_person(main_win, pers, row, hgt, MAINWIN_WIDTH, &Scroll1, reuse);
 }
 /*=============================================
  * add_spouse_line -- Add spouse line to others
@@ -341,9 +349,14 @@ init_display_fam (NODE fam, INT width)
 }
 /*===================================
  * show_long_family -- Display family
+ * [in] fam:  whom to display
+ * [in] row:   starting row to use
+ * [in] hgt:   how many rows allowed
+ * [in] width: how many columns allowed
+ * [in] reuse: flag to save recalculating display strings
  *=================================*/
 void
-show_long_family (NODE fam, INT row, INT hgt, INT width)
+show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
 {
 	INT i;
 	INT localrow;
@@ -351,7 +364,8 @@ show_long_family (NODE fam, INT row, INT hgt, INT width)
 	char buf[132];
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
-	init_display_fam(fam, width);
+	if (!reuse)
+		init_display_fam(fam, width);
 	for (i = 0; i < hgt; i++) {
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
@@ -442,20 +456,20 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_ancestors (NODE indi, INT row, INT hgt)
+show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
 	wipe_window(main_win, row, hgt);
-	pedigree_draw_ancestors(indi, row, hgt);
+	pedigree_draw_ancestors(indi, row, hgt, reuse);
 }
 /*================================================
  * show_descendants -- Show pedigree/descendants
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_descendants (NODE indi, INT row, INT hgt)
+show_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 {
 	wipe_window(main_win, row, hgt);
-	pedigree_draw_descendants(indi, row, hgt);
+	pedigree_draw_descendants(indi, row, hgt, reuse);
 }
 /*================================================
  * wipe_window -- Clear window
@@ -479,10 +493,10 @@ wipe_window (WINDOW * w, INT row, INT hgt)
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 static void
-show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt)
+show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 {
 	wipe_window(w, row, hgt);
-	pedigree_draw_gedcom(node, gdvw, row, hgt);
+	pedigree_draw_gedcom(node, gdvw, row, hgt, reuse);
 }
 /*================================================
  * show_gedcom_main -- Show node in gedcom format
@@ -490,9 +504,9 @@ show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt)
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_gedcom_main (NODE node, INT gdvw, INT row, INT hgt)
+show_gedcom_main (NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 {
-	show_gedcom(main_win, node, gdvw, row, hgt);
+	show_gedcom(main_win, node, gdvw, row, hgt, reuse);
 }
 /*================================================
  * switch_scrolls -- Interchange scroll1 & scroll2
@@ -617,7 +631,7 @@ show_list (INDISEQ seq,
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			mvwaddch(win, row, 3, '>');
-			show_person_main(indi, 1, LIST_LINES);
+			show_person_main(indi, 1, LIST_LINES, FALSE);
 		}
 		name = manip_name(name, ttd, TRUE, TRUE, 40);
 		strcpy(scratch, name);
@@ -633,12 +647,14 @@ show_list (INDISEQ seq,
  * show_aux_display -- Show source, event or other record
  *======================================================*/
 void
-show_aux_display (NODE node, INT mode, INT hgt)
+show_aux_display (NODE node, INT mode, INT hgt, BOOLEAN reuse)
 {
 	if (mode == 'g')
-		show_gedcom_main(node, GDVW_NORMAL, 1, hgt);
+		show_gedcom_main(node, GDVW_NORMAL, 1, hgt, reuse);
+	else if (mode == 't')
+		show_gedcom_main(node, GDVW_TEXT, 1, hgt, reuse);
 	else
-		show_gedcom_main(node, GDVW_EXPANDED, 1, hgt);
+		show_gedcom_main(node, GDVW_EXPANDED, 1, hgt, reuse);
 }
 /*===============================================
  * show_scroll - vertically scroll person display

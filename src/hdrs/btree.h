@@ -132,6 +132,7 @@ RECORD_STATUS write_record_to_file(BTREE btree, RKEY rkey, STRING file);
 
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
+void describe_dberror(INT dberr, STRING buffer, INT buflen);
 BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
@@ -154,16 +155,24 @@ STRING fkey2path(FKEY);
 
 extern INT bterrno;
 
-#define BTERRNOBTRE   1 /*problem with database */
-#define BTERRKFILE    2	/*problem with the key file*/
-#define BTERRINDEX    3 /*problem with an index file*/
-#define BTERRBLOCK    4 /*problem with a data block file*/
-#define BTERRLNGDIR   5	/*base directory name too long*/
-#define BTERRWRITER   6 /*can't open database because writer has it*/
-#define BTERRILLEGKF  7 /* illegal keyfile */
-#define BTERRALIGNKF  8 /* wrong alignment key file */
-#define BTERRVERKF    9 /* wrong version key file */
-#define BTERREXISTS  10 /* previous database found */
+enum {
+  BTERR_NODB=8            /* no db directory */
+, BTERR_DBBLOCKEDBYFILE   /* db directory is file, not directory */
+, BTERR_DBCREATEFAILED    /* failed to create db directory */
+, BTERR_DBACCESS          /* access error to db directory */
+, BTERR_NOKEY             /* no keyfile */
+, BTERR_KFILE              /*problem with the key file*/
+, BTERR_INDEX             /*problem with an index file*/
+, BTERR_BLOCK              /*problem with a data block file*/
+, BTERR_LNGDIR             /*base directory name too long*/
+, BTERR_WRITER             /*can't open database because writer has it*/
+, BTERR_ILLEGKF            /* illegal keyfile */
+, BTERR_ALIGNKF            /* wrong alignment key file */
+, BTERR_VERKF              /* wrong version key file */
+, BTERR_EXISTS            /* previous database found (create was specified) */
+
+};
+
 
 #define BTINDEXTYPE 1
 #define BTBLOCKTYPE 2

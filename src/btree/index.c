@@ -67,7 +67,7 @@ readindex (STRING basedir,  /* basedir of btree */
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ikey));
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
-		bterrno = BTERRINDEX;
+		bterrno = BTERR_INDEX;
 		return NULL;
 	}
 	index = (INDEX) stdalloc(BUFLEN);

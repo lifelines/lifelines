@@ -98,9 +98,9 @@ static INT browse_fam(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq, INT indimode);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
-static INT display_aux(NODE node, INT mode);
-static INT display_fam(NODE fam, INT fammode);
-static INT display_indi(NODE indi, INT mode);
+static INT display_aux(NODE node, INT mode, BOOLEAN reuse);
+static INT display_fam(NODE fam, INT fammode, BOOLEAN reuse);
+static INT display_indi(NODE indi, INT mode, BOOLEAN reuse);
 static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
@@ -285,13 +285,13 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
  * display_indi -- Show indi in current mode
  *========================================*/
 static INT
-display_indi (NODE indi, INT mode)
+display_indi (NODE indi, INT mode, BOOLEAN reuse)
 {
 	CACHEEL icel;
 	INT c;
 	icel = indi_to_cacheel(indi);
 	lock_cache(icel);
-	c = indi_browse(indi, mode);
+	c = indi_browse(indi, mode, reuse);
 	unlock_cache(icel);
 	return c;
 }
@@ -326,6 +326,7 @@ browse_indi_modes (NODE *pindi1,
 {
 	STRING key, name, addstrings[2];
 	INT i, c, rc;
+	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, indimodep;
 	NODE node, save = NULL, indi = *pindi1;
 	NODE node2;
@@ -345,14 +346,15 @@ browse_indi_modes (NODE *pindi1,
 			show_reset_scroll();
 		}
 		history_record(indi);
-		c = display_indi(indi, indimode);
+		c = display_indi(indi, indimode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
+		reuse = FALSE; /* don't reuse display unless specifically set */
 		if (c != CMD_NEWFAMILY) save = NULL;
-		if (handle_menu_cmds(c))
+		if (handle_menu_cmds(c, &reuse))
 			continue;
-		if (handle_scroll_cmds(c))
+		if (handle_scroll_cmds(c, &reuse))
 			continue;
 		if (handle_indi_mode_cmds(c, &indimode))
 			continue;
@@ -616,13 +618,13 @@ browse_indi_modes (NODE *pindi1,
  * Created: 2001/01/27, Perry Rapp
  *========================================*/
 static INT
-display_aux (NODE node, INT mode)
+display_aux (NODE node, INT mode, BOOLEAN reuse)
 {
 	CACHEEL cel;
 	INT c;
 	cel = node_to_cacheel(node);
 	lock_cache(cel);
-	c = aux_browse(node, mode);
+	c = aux_browse(node, mode, reuse);
 	unlock_cache(cel);
 	return c;
 }
@@ -638,6 +640,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	STRING key = rmvat(nxref(node));
 	char ntype = key[0];
 	INT i, c;
+	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, auxmode, auxmodep;
 	NODE node2;
 	auxmode = 'x';
@@ -653,13 +656,14 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			show_reset_scroll();
 		}
 		history_record(node);
-		c = display_aux(node, auxmode);
+		c = display_aux(node, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, node);
 		auxmodep = auxmode;
-		if (handle_menu_cmds(c))
+		reuse = FALSE; /* don't reuse display unless specifically set */
+		if (handle_menu_cmds(c, &reuse))
 			continue;
-		if (handle_scroll_cmds(c))
+		if (handle_scroll_cmds(c, &reuse))
 			continue;
 		if (handle_aux_mode_cmds(c, &auxmode))
 			continue;
@@ -834,13 +838,13 @@ pick_add_child_to_fam (NODE fam, NODE save)
  * display_fam -- Show family in current mode
  *=========================================*/
 static INT
-display_fam (NODE fam, INT mode)
+display_fam (NODE fam, INT mode, BOOLEAN reuse)
 {
 	CACHEEL icel;
 	INT c=0;
 	icel = fam_to_cacheel(fam);
 	lock_cache(icel);
-	c = fam_browse(fam, mode);
+	c = fam_browse(fam, mode, reuse);
 	unlock_cache(icel);
 	return c;
 }
@@ -872,6 +876,7 @@ browse_fam (NODE *pindi1,
             INDISEQ *pseq)
 {
 	INT i, c, rc;
+	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	static INT fammode='n';
 	INT nkeyp, fammodep;
 	NODE save = NULL, fam = *pfam1, node;
@@ -891,15 +896,16 @@ browse_fam (NODE *pindi1,
 			show_reset_scroll();
 		}
 		history_record(fam);
-		c = display_fam(fam, fammode);
+		c = display_fam(fam, fammode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
+		reuse = FALSE; /* don't reuse display unless specifically set */
 		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
 			save = NULL;
-		if (handle_menu_cmds(c))
+		if (handle_menu_cmds(c, &reuse))
 			continue;
-		if (handle_scroll_cmds(c))
+		if (handle_scroll_cmds(c, &reuse))
 			continue;
 		if (handle_fam_mode_cmds(c, &fammode))
 			continue;
@@ -1090,14 +1096,18 @@ browse_fam (NODE *pindi1,
  * Created: 2001/01/31, Perry Rapp
  *====================================================*/
 BOOLEAN
-handle_menu_cmds (INT c)
+handle_menu_cmds (INT c, BOOLEAN * reuse)
 {
+	BOOLEAN old = *reuse;
+	/* if a menu command, then we CAN reuse the previous display strings */
+	*reuse = TRUE;
 	switch(c) {
 		case CMD_MENU_GROW: adjust_menu_height(+1); return TRUE;
 		case CMD_MENU_SHRINK: adjust_menu_height(-1); return TRUE;
 		case CMD_MENU_MORE: cycle_menu(); return TRUE;
 		case CMD_MENU_TOGGLE: toggle_menu(); return TRUE;
 	}
+	*reuse = old;
 	return FALSE;
 }
 /*======================================================
@@ -1105,12 +1115,16 @@ handle_menu_cmds (INT c)
  * Created: 2001/02/01, Perry Rapp
  *====================================================*/
 BOOLEAN
-handle_scroll_cmds (INT c)
+handle_scroll_cmds (INT c, BOOLEAN * reuse)
 {
+	BOOLEAN old = *reuse;
+	/* if a menu command, then we CAN reuse the previous display strings */
+	*reuse = TRUE;
 	switch(c) {
 		case CMD_SCROLL_UP: show_scroll(-1); return TRUE;
 		case CMD_SCROLL_DOWN: show_scroll(+1); return TRUE;
 	}
+	*reuse = old;
 	return FALSE;
 }
 /*======================================================
@@ -1123,6 +1137,7 @@ handle_indi_mode_cmds (INT c, INT * mode)
 	switch(c) {
 		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
 		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
 		case CMD_MODE_PEDIGREE:
 			*mode = (*mode=='a')?'d':'a';
 			return TRUE;
@@ -1135,7 +1150,8 @@ handle_indi_mode_cmds (INT c, INT * mode)
 			case 'a': *mode = 'd'; break;
 			case 'd': *mode = 'g'; break;
 			case 'g': *mode = 'x'; break;
-			case 'x': *mode = 'n'; break;
+			case 'x': *mode = 't'; break;
+			case 't': *mode = 'n'; break;
 			}
 			return TRUE;
 	}
@@ -1151,12 +1167,14 @@ handle_fam_mode_cmds (INT c, INT * mode)
 	switch(c) {
 		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
 		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
 		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'n': *mode = 'g'; break;
 			case 'g': *mode = 'x'; break;
-			case 'x': *mode = 'n'; break;
+			case 'x': *mode = 't'; break;
+			case 't': *mode = 'n'; break;
 			}
 			return TRUE;
 	}
@@ -1172,10 +1190,12 @@ handle_aux_mode_cmds (INT c, INT * mode)
 	switch(c) {
 		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
 		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'g': *mode = 'x'; break;
-			case 'x': *mode = 'g'; break;
+			case 'x': *mode = 't'; break;
+			case 't': *mode = 'g'; break;
 			}
 			return TRUE;
 	}

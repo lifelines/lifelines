@@ -131,6 +131,7 @@ openxref (void)
 }
 /*==============================
  * closexref -- Close xrefs file
+ *  (Safe to call if not open)
  *============================*/
 void
 closexref (void)

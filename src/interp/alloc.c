@@ -207,11 +207,14 @@ delete_pnode (PNODE node)
 }
 /*==================================
  * string_node -- Create string node
+ *  This is called from lex.c, and str points to
+ *  a static buffer
  *================================*/
 PNODE
 string_node (STRING str)
 {
 	PNODE node = create_pnode(ISCONS);
+	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
 	ivalue(node) = create_pvalue(PSTRING, (VPTR) str);
 	return node;
 }

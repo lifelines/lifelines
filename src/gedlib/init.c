@@ -48,7 +48,8 @@ TABLE tagtable;		/* table for tag strings */
 TABLE placabbvs;	/* table for place abbrevs */
 TABLE useropts;		/* table for user options */
 BTREE BTR = NULL;	/* database */
-STRING editstr, editfile;
+STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
+STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 
 /*********************************************
  * external/imported variables
@@ -170,11 +171,23 @@ get_lifelines_version (INT maxlen)
 }
 /*===================================
  * close_lifelines -- Close LifeLines
+ *  Safe to call even if not opened
  *=================================*/
 void
 close_lifelines (void)
 {
 	closexref();
 	unlink(editfile);
-	if(BTR) closebtree(BTR);
+	if(BTR) {
+		closebtree(BTR);
+		BTR=NULL;
+	}
+	if (editfile) {
+		stdfree(editfile);
+		editfile=NULL;
+	}
+	if (editstr) {
+		stdfree(editstr);
+		editstr=NULL;
+	}
 }
