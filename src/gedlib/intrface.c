@@ -111,7 +111,7 @@ static BOOLEAN
 trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
 	TRAV_PARAM *tparam = (TRAV_PARAM *)param;
-	char key[9];
+	char key[MAXKEYWIDTH+1];
 	strcpy(key, rkey2str(rkey));
 	return tparam->func(key, data, len, tparam->param);
 }

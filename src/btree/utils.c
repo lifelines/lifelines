@@ -42,7 +42,7 @@ INT bterrno = 0;
 STRING
 rkey2str (RKEY rkey)
 {
-	static char rbuf[9];
+	static char rbuf[RKEYLEN+1];
 	SHORT i;
 	for (i = 0; i < 8; i++)
 		rbuf[i] = rkey.r_rkey[i];

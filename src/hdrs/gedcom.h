@@ -44,7 +44,11 @@
 #define NAMESEP '/'
 #define MAXGEDNAMELEN 512
 /* keys run up to 9,999,999, eg I9999999 */
+/* These are GEDCOM identifier numbers, eg, for @I510@,
+ the key is 510 */
+/* btree databases use this as part of the database key */
 #define MAXKEYWIDTH 8
+#define MAXKEYNUMBER 9999999
 
 #define OKAY  1
 #define ERROR 0
@@ -89,7 +93,7 @@ struct tag_node {
 #define nrefcnt(n)  ((n)->n_refcnt)
 enum { ND_TEMP=1 };
 
-struct tag_nkey { char ntype; INT keynum; STRING key; };
+struct tag_nkey { char ntype; INT keynum; char key[MAXKEYWIDTH+1]; };
 typedef struct tag_nkey NKEY;
 
 /*=====================================

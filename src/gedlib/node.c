@@ -237,7 +237,7 @@ alloc_new_record (void)
 	rec = (RECORD)stdalloc(sizeof(*rec));
 	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
-	rec->nkey.key = "";
+	strcpy(rec->nkey.key, "");
 	rec->nkey.keynum = 0;
 	rec->nkey.ntype = 0;
 	return rec;
@@ -261,7 +261,7 @@ static void
 assign_record (RECORD rec, char ntype, INT keynum)
 {
 	char xref[12];
-	char key[9];
+	char key[MAXKEYWIDTH+1];
 	NODE node;
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
@@ -269,7 +269,7 @@ assign_record (RECORD rec, char ntype, INT keynum)
 		if (nxref(node)) stdfree(nxref(node));
 		nxref(node) = strsave(xref);
 	}
-	rec->nkey.key = strsave(key);
+	strcpy(rec->nkey.key, key);
 	rec->nkey.keynum = keynum;
 	rec->nkey.ntype = ntype;
 }
@@ -342,8 +342,7 @@ free_rec (RECORD rec)
 {
 	if (rec->top)
 		free_nodes(rec->top);
-	if (rec->nkey.key[0])
-		stdfree(rec->nkey.key);
+	strcpy(rec->nkey.key, "");
 	stdfree(rec);
 }
 /*=====================================

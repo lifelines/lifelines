@@ -7,6 +7,14 @@
 
 	Add TTPATH.debug (optional config variable) code.
 
+
+	* ChangeLog src/btree/utils.c src/gedlib/gedcom.c
+	src/gedlib/intrface.c src/gedlib/node.c src/hdrs/btree.h
+	src/hdrs/gedcom.h src/liflines/browse.c src/tools/dbverify.c
+
+	Changed many occurrences of 9 to MAXKEYWIDTH+1.
+	Changed NKEY to hold string buffer directly, instead of pointer.
+
 2003-11-17 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/xlat.c

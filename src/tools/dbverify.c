@@ -542,7 +542,7 @@ nodes_callback (CNSTRING key, RECORD rec, void *param)
 static BOOLEAN
 check_indi (CNSTRING key, RECORD rec)
 {
-	static char prevkey[9];
+	static char prevkey[MAXKEYWIDTH+1];
 	NODE indi1, name1, refn1, sex1, body1, famc1, fams1;
 	NODE node1;
 	CACHEEL icel1;
@@ -607,7 +607,7 @@ check_indi (CNSTRING key, RECORD rec)
 static BOOLEAN
 check_fam (CNSTRING key, RECORD rec)
 {
-	static char prevkey[9];
+	static char prevkey[MAXKEYWIDTH+1];
 	NODE fam1, fref1, husb1, wife1, chil1, rest1;
 	NODE node1;
 	CACHEEL fcel1;
@@ -698,7 +698,7 @@ check_fam (CNSTRING key, RECORD rec)
 static BOOLEAN
 check_sour (CNSTRING key, RECORD rec)
 {
-	static char prevkey[9];
+	static char prevkey[MAXKEYWIDTH+1];
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPSOUR, _("Duplicate source for %s"), key);
 	}
@@ -714,7 +714,7 @@ check_sour (CNSTRING key, RECORD rec)
 static BOOLEAN
 check_even (CNSTRING key, RECORD rec)
 {
-	static char prevkey[9];
+	static char prevkey[MAXKEYWIDTH+1];
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPEVEN, _("Duplicate event for %s"), key);
 	}
@@ -730,7 +730,7 @@ check_even (CNSTRING key, RECORD rec)
 static BOOLEAN
 check_othe (CNSTRING key, RECORD rec)
 {
-	static char prevkey[9];
+	static char prevkey[MAXKEYWIDTH+1];
 	if (!strcmp(key, prevkey)) {
 		report_error(ERR_DUPOTHE, _("Duplicate record for %s"), key);
 	}

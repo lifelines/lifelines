@@ -1410,16 +1410,17 @@ load_nkey_list (STRING key, struct hist * histp)
 	count = temp;
 	if (count > histp->size) count = histp->size;
 	for (i=0,temp=0; i<count; ++i) {
-		char key[12];
+		char key[MAXKEYWIDTH+1];
 		char ntype = *ptr++;
 		INT keynum = *ptr++;
 		if (!ntype || !keynum)
 			continue;
+		if (keynum<1 || keynum>MAXKEYNUMBER)
+			continue;
+		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
+		strcpy(histp->list[temp].key, key);
 		histp->list[temp].ntype = ntype;
 		histp->list[temp].keynum = keynum;
-		/* We could sanity check these */
-		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
-		histp->list[temp].key = strsave(key);
 		++temp;
 	}
 	count = temp;
