@@ -1,5 +1,9 @@
 2003-09-14 Jens Arvidsson
 
+	* ChangeLog po/sv.po
+
+	Error corrections in 3.0.32 Swedish message catalog.
+	
 	* ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml
 	po/sv.po
 
