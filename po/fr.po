@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-11 21:20-0500\n"
+"POT-Creation-Date: 2005-02-13 17:40-0500\n"
 "PO-Revision-Date: 2004-01-14 15:05+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -2501,137 +2501,137 @@ msgstr " (dbint tt: %s)"
 msgid "This person record does not have a name line."
 msgstr "Cet enregistrement individuel ne possède pas de ligne nom."
 
-#: src/interp/alloc.c:691
+#: src/interp/alloc.c:776
 #, c-format
 msgid "Error: file \"%s\": line %d: "
 msgstr "Erreur : fichier \"%s\" : line %d :"
 
-#: src/interp/alloc.c:794
+#: src/interp/alloc.c:880
 #, c-format
 msgid "%s: the arg must be an integer."
 msgstr "%s : l'arg. doit être un entier."
 
-#: src/interp/alloc.c:795
+#: src/interp/alloc.c:881
 #, c-format
 msgid "%s: the arg #%s must be an integer."
 msgstr "%s : l'arg. #%s doit être un entier."
 
-#: src/interp/alloc.c:796
+#: src/interp/alloc.c:882
 #, c-format
 msgid "%s: the arg #%s must be a float."
 msgstr "%s : l'arg. #%s doit être un décimal."
 
-#: src/interp/alloc.c:797
+#: src/interp/alloc.c:883
 #, c-format
 msgid "%s: the arg must be a string."
 msgstr "%s : l'arg. doit être une chaîne."
 
-#: src/interp/alloc.c:798
+#: src/interp/alloc.c:884
 #, c-format
 msgid "%s: the arg #%s must be a string."
 msgstr "%s : l'arg. #%s doit être une chaîne."
 
-#: src/interp/alloc.c:799
+#: src/interp/alloc.c:885
 #, c-format
 msgid "%s: null arg not permissible."
 msgstr "%s : l'arg. null est interdit."
 
-#: src/interp/alloc.c:800
+#: src/interp/alloc.c:886
 #, c-format
 msgid "%s: the arg must be a filename."
 msgstr "%s : l'arg. doit être un nom de fichier."
 
-#: src/interp/alloc.c:801
+#: src/interp/alloc.c:887
 #, c-format
 msgid "%s: the arg must be a node or string."
 msgstr "%s : l'arg. doit être un noeud ou une chaîne."
 
-#: src/interp/alloc.c:802
+#: src/interp/alloc.c:888
 #, c-format
 msgid "%s: the arg must be a person."
 msgstr "%s : l'arg. doit être une personne"
 
-#: src/interp/alloc.c:803
+#: src/interp/alloc.c:889
 #, c-format
 msgid "%s: the arg #%s must be a person."
 msgstr "%s : l'arg. #%s doit être une personne."
 
-#: src/interp/alloc.c:804
+#: src/interp/alloc.c:890
 #, c-format
 msgid "%s: the arg must be a family."
 msgstr "%s : l'arg. doit être une famille."
 
-#: src/interp/alloc.c:805
+#: src/interp/alloc.c:891
 #, c-format
 msgid "%s: the arg #%s must be a family."
 msgstr "%s : l'arg. #%s doit être une famille."
 
-#: src/interp/alloc.c:806
+#: src/interp/alloc.c:892
 #, c-format
 msgid "%s: the arg #%s must be a record."
 msgstr "%s : l'arg. #%s doit être un enregistrement."
 
-#: src/interp/alloc.c:807
+#: src/interp/alloc.c:893
 #, c-format
 msgid "%s: the arg must be a node."
 msgstr "%s : l'arg. doit être un noeud."
 
-#: src/interp/alloc.c:808
+#: src/interp/alloc.c:894
 #, c-format
 msgid "%s: the arg #%s must be a node."
 msgstr "%s : l'arg. #%s doit être un noeud."
 
-#: src/interp/alloc.c:809
+#: src/interp/alloc.c:895
 #, c-format
 msgid "%s: the arg must be a variable."
 msgstr "%s : l'arg. doit être une variable."
 
-#: src/interp/alloc.c:810
+#: src/interp/alloc.c:896
 #, c-format
 msgid "%s: the arg #%s must be a variable."
 msgstr "%s : l'arg. #%s doit être une variable."
 
-#: src/interp/alloc.c:811
+#: src/interp/alloc.c:897
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
 msgstr "%s : l'arg. #%s doit être un booléen."
 
-#: src/interp/alloc.c:812
+#: src/interp/alloc.c:898
 #, c-format
 msgid "%s: the arg must be a list."
 msgstr "%s : l'arg. doit être une liste."
 
-#: src/interp/alloc.c:813
+#: src/interp/alloc.c:899
 #, c-format
 msgid "%s: the arg #%s must be a list."
 msgstr "%s : l'arg. #%s doit être une liste."
 
-#: src/interp/alloc.c:814
+#: src/interp/alloc.c:900
 #, c-format
 msgid "%s: the arg #%s must be a table."
 msgstr "%s : l'arg. #%s doit être une table."
 
-#: src/interp/alloc.c:815
+#: src/interp/alloc.c:901
 #, fuzzy, c-format
 msgid "%s: the arg must be a set."
 msgstr "%s : l'arg. doit être une liste."
 
-#: src/interp/alloc.c:816
+#: src/interp/alloc.c:902
 #, fuzzy, c-format
 msgid "%s: the arg #%s must be a set."
 msgstr "%s : l'arg. #%s doit être une liste."
 
-#: src/interp/alloc.c:817
+#: src/interp/alloc.c:903
 #, c-format
 msgid "%s: Bad arguments"
 msgstr "%s : Mauvais arguments"
 
-#: src/interp/alloc.c:818
+#: src/interp/alloc.c:904
 #, c-format
 msgid "%s: the arg had a major error."
 msgstr "%s : l'arg a une erreur majeure."
 
-#: src/interp/alloc.c:819
+#: src/interp/alloc.c:905
 #, c-format
 msgid "%s: the arg #%s had a major error."
 msgstr "%s : l'arg #%s a une erreur majeure."
@@ -2875,24 +2875,24 @@ msgstr "La proc. %s doit être appelée avec %d paramètres et non %d."
 msgid "is running..."
 msgstr "s'exécute..."
 
-#: src/interp/interp.c:418
+#: src/interp/interp.c:417
 msgid "was run successfully.\n"
 msgstr "s'est correctement exécuté.\n"
 
-#: src/interp/interp.c:422
+#: src/interp/interp.c:421
 msgid "was cancelled.\n"
 msgstr "a été interrompu.\n"
 
-#: src/interp/interp.c:424
+#: src/interp/interp.c:423
 msgid "was not run because of errors.\n"
 msgstr "a été imterrompu à cause d'erreurs.\n"
 
-#: src/interp/interp.c:514
+#: src/interp/interp.c:513
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Erreur : fichier <%s> non trouvé : %s\n"
 
-#: src/interp/interp.c:546
+#: src/interp/interp.c:545
 #, c-format
 msgid ""
 "\n"
@@ -2901,88 +2901,88 @@ msgstr ""
 "\n"
 "Durée du rapport %s (durée ui %s)\n"
 
-#: src/interp/interp.c:618
+#: src/interp/interp.c:617
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifieur : %s doit être une chaîne\n"
 
-#: src/interp/interp.c:1727
+#: src/interp/interp.c:1726
 #, c-format
 msgid "Undefined proc: %s"
 msgstr "Proc. non définie : %s"
 
-#: src/interp/interp.c:1729
+#: src/interp/interp.c:1728
 #, c-format
 msgid "Ambiguous call to proc: %s"
 msgstr "Appel ambigu à la proc. : %s "
 
-#: src/interp/interp.c:1873
+#: src/interp/interp.c:1872
 msgid "Enter d for debugger, q to quit"
 msgstr "Entrez d pour déboguer, q pour quitter"
 
-#: src/interp/interp.c:1883
+#: src/interp/interp.c:1882
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Afficher locals (%d)"
 
-#: src/interp/interp.c:1886
+#: src/interp/interp.c:1885
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Afficher globals (%d)"
 
-#: src/interp/interp.c:1888
+#: src/interp/interp.c:1887
 msgid "Pop one level"
 msgstr "Descendre d'un niveau"
 
-#: src/interp/interp.c:1889
+#: src/interp/interp.c:1888
 msgid "Quit debugger"
 msgstr "Quitter le deboggueur"
 
-#: src/interp/interp.c:1892
+#: src/interp/interp.c:1891
 msgid "Report debugger"
 msgstr "Deboggueur de rapports"
 
-#: src/interp/interp.c:1896
+#: src/interp/interp.c:1895
 msgid "Local variables"
 msgstr "Variables locales"
 
-#: src/interp/interp.c:1900
+#: src/interp/interp.c:1899
 msgid "Global variables"
 msgstr "Variables globales"
 
-#: src/interp/interp.c:1992
+#: src/interp/interp.c:1991
 msgid "Report cancelled"
 msgstr "Rapport interrompu"
 
-#: src/interp/interp.c:2000
+#: src/interp/interp.c:1999
 msgid "Report file: "
 msgstr "Fichier rapport : "
 
-#: src/interp/interp.c:2009
+#: src/interp/interp.c:2008
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Erreur d'interprétation en ligne %d :"
 
-#: src/interp/interp.c:2011
+#: src/interp/interp.c:2010
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Erreur d'exécution à la ligne %d : "
 
-#: src/interp/interp.c:2014
+#: src/interp/interp.c:2013
 msgid "Aborting: "
 msgstr "Interruption :"
 
-#: src/interp/interp.c:2173
+#: src/interp/interp.c:2172
 #, c-format
 msgid "Duplicate proc %s (lines %d and %d) in report: %s"
 msgstr "Proc. %s en double (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2203
+#: src/interp/interp.c:2202
 #, c-format
 msgid "Duplicate func %s (lines %d and %d) in report: %s"
 msgstr "Fonct. en  double %s (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2266
+#: src/interp/interp.c:2265
 msgid "This report requires a newer program to run\n"
 msgstr "Ce rapport nécessite un programme plus récent pour fonctionner\n"
 
@@ -3494,7 +3494,7 @@ msgstr "ERREUR FATALE"
 msgid "  in file <%s> at line %d\n"
 msgstr "  dans le fichier <%s> à la ligne %d\n"
 
-#: src/liflines/error.c:91
+#: src/liflines/error.c:90
 msgid "ASSERT failure"
 msgstr "ASSERT échec"
 

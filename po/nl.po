@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-11 21:20-0500\n"
+"POT-Creation-Date: 2005-02-13 17:40-0500\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -2531,137 +2531,137 @@ msgstr ""
 msgid "This person record does not have a name line."
 msgstr "Deze persoonsopgave heeft geen naamregel"
 
-#: src/interp/alloc.c:691
+#: src/interp/alloc.c:776
 #, c-format
 msgid "Error: file \"%s\": line %d: "
 msgstr "Fout: bestand \"%s\": regel %d: "
 
-#: src/interp/alloc.c:794
+#: src/interp/alloc.c:880
 #, c-format
 msgid "%s: the arg must be an integer."
 msgstr "%s: het arg moet een geheel getal zijn."
 
-#: src/interp/alloc.c:795
+#: src/interp/alloc.c:881
 #, c-format
 msgid "%s: the arg #%s must be an integer."
 msgstr "%s: het arg #%s moet een geheel getal zijn."
 
-#: src/interp/alloc.c:796
+#: src/interp/alloc.c:882
 #, c-format
 msgid "%s: the arg #%s must be a float."
 msgstr "%s: het arg #%s moet een reëel getal zijn."
 
-#: src/interp/alloc.c:797
+#: src/interp/alloc.c:883
 #, c-format
 msgid "%s: the arg must be a string."
 msgstr "%s: het arg moet een tekenreeks zijn."
 
-#: src/interp/alloc.c:798
+#: src/interp/alloc.c:884
 #, c-format
 msgid "%s: the arg #%s must be a string."
 msgstr "%s: het arg #%s moet een tekenreeks zijn."
 
-#: src/interp/alloc.c:799
+#: src/interp/alloc.c:885
 #, c-format
 msgid "%s: null arg not permissible."
 msgstr "%s: leeg arg is niet toegelaten."
 
-#: src/interp/alloc.c:800
+#: src/interp/alloc.c:886
 #, c-format
 msgid "%s: the arg must be a filename."
 msgstr "%s: het arg moet een bestandsnaam zijn."
 
-#: src/interp/alloc.c:801
+#: src/interp/alloc.c:887
 #, c-format
 msgid "%s: the arg must be a node or string."
 msgstr "%s: het arg moet een node of tekenreeks zijn."
 
-#: src/interp/alloc.c:802
+#: src/interp/alloc.c:888
 #, c-format
 msgid "%s: the arg must be a person."
 msgstr "%s: het arg moet een persoon zijn."
 
-#: src/interp/alloc.c:803
+#: src/interp/alloc.c:889
 #, c-format
 msgid "%s: the arg #%s must be a person."
 msgstr "%s: het arg #%s moet een persoon zijn."
 
-#: src/interp/alloc.c:804
+#: src/interp/alloc.c:890
 #, c-format
 msgid "%s: the arg must be a family."
 msgstr "%s: het arg moet een familie zijn."
 
-#: src/interp/alloc.c:805
+#: src/interp/alloc.c:891
 #, c-format
 msgid "%s: the arg #%s must be a family."
 msgstr "%s: het arg #%s moet een familie zijn."
 
-#: src/interp/alloc.c:806
+#: src/interp/alloc.c:892
 #, c-format
 msgid "%s: the arg #%s must be a record."
 msgstr "%s: het arg #%s moet een opgave zijn."
 
-#: src/interp/alloc.c:807
+#: src/interp/alloc.c:893
 #, c-format
 msgid "%s: the arg must be a node."
 msgstr "%s: het arg moet een node zijn."
 
-#: src/interp/alloc.c:808
+#: src/interp/alloc.c:894
 #, c-format
 msgid "%s: the arg #%s must be a node."
 msgstr "%s: het arg #%s moet een node zijn."
 
-#: src/interp/alloc.c:809
+#: src/interp/alloc.c:895
 #, c-format
 msgid "%s: the arg must be a variable."
 msgstr "%s: het arg moet een variabele zijn."
 
-#: src/interp/alloc.c:810
+#: src/interp/alloc.c:896
 #, c-format
 msgid "%s: the arg #%s must be a variable."
 msgstr "%s: het arg #%s moet een variabele zijn."
 
-#: src/interp/alloc.c:811
+#: src/interp/alloc.c:897
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
 msgstr "%s: het arg #%s moet een booleaan zijn."
 
-#: src/interp/alloc.c:812
+#: src/interp/alloc.c:898
 #, c-format
 msgid "%s: the arg must be a list."
 msgstr "%s: het arg moet een lijst zijn."
 
-#: src/interp/alloc.c:813
+#: src/interp/alloc.c:899
 #, c-format
 msgid "%s: the arg #%s must be a list."
 msgstr "%s: het arg #%s moet een lijst zijn."
 
-#: src/interp/alloc.c:814
+#: src/interp/alloc.c:900
 #, c-format
 msgid "%s: the arg #%s must be a table."
 msgstr "%s: het arg #%s moet een tabel zijn."
 
-#: src/interp/alloc.c:815
+#: src/interp/alloc.c:901
 #, fuzzy, c-format
 msgid "%s: the arg must be a set."
 msgstr "%s: het arg moet een lijst zijn."
 
-#: src/interp/alloc.c:816
+#: src/interp/alloc.c:902
 #, fuzzy, c-format
 msgid "%s: the arg #%s must be a set."
 msgstr "%s: het arg #%s moet een lijst zijn."
 
-#: src/interp/alloc.c:817
+#: src/interp/alloc.c:903
 #, c-format
 msgid "%s: Bad arguments"
 msgstr "%s: Slechte argumenten"
 
-#: src/interp/alloc.c:818
+#: src/interp/alloc.c:904
 #, c-format
 msgid "%s: the arg had a major error."
 msgstr "%s: het arg gaf een grote fout."
 
-#: src/interp/alloc.c:819
+#: src/interp/alloc.c:905
 #, c-format
 msgid "%s: the arg #%s had a major error."
 msgstr "%s: het arg #%s gaf een grote fout."
@@ -2905,112 +2905,112 @@ msgstr "Proc %s moet worden opgeroepen met %d (niet %d) parameters."
 msgid "is running..."
 msgstr "is bezig met uitvoeren..."
 
-#: src/interp/interp.c:418
+#: src/interp/interp.c:417
 msgid "was run successfully.\n"
 msgstr "is succesvol uitgevoerd.\n"
 
-#: src/interp/interp.c:422
+#: src/interp/interp.c:421
 msgid "was cancelled.\n"
 msgstr "is geannuleerd.\n"
 
-#: src/interp/interp.c:424
+#: src/interp/interp.c:423
 msgid "was not run because of errors.\n"
 msgstr "is niet uitgevoerd wegens fouten.\n"
 
-#: src/interp/interp.c:514
+#: src/interp/interp.c:513
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Fout: bestand <%s> niet gevonden: %s\n"
 
-#: src/interp/interp.c:546
+#: src/interp/interp.c:545
 #, c-format
 msgid ""
 "\n"
 "Report duration %s (ui duration %s)\n"
 msgstr ""
 
-#: src/interp/interp.c:618
+#: src/interp/interp.c:617
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "variabele-naam: %s moet een tekenreeks zijn\n"
 
-#: src/interp/interp.c:1727
+#: src/interp/interp.c:1726
 #, c-format
 msgid "Undefined proc: %s"
 msgstr "Niet-gedefinieerde proc: %s"
 
-#: src/interp/interp.c:1729
+#: src/interp/interp.c:1728
 #, c-format
 msgid "Ambiguous call to proc: %s"
 msgstr "Dubbelzinnige oproep voor proc: %s"
 
-#: src/interp/interp.c:1873
+#: src/interp/interp.c:1872
 msgid "Enter d for debugger, q to quit"
 msgstr "Voer d in voor debugger, q om af te sluiten"
 
-#: src/interp/interp.c:1883
+#: src/interp/interp.c:1882
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Lokale weergeven (%d)"
 
-#: src/interp/interp.c:1886
+#: src/interp/interp.c:1885
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Globale weergeven (%d)"
 
-#: src/interp/interp.c:1888
+#: src/interp/interp.c:1887
 msgid "Pop one level"
 msgstr ""
 
-#: src/interp/interp.c:1889
+#: src/interp/interp.c:1888
 msgid "Quit debugger"
 msgstr "Debugger afsluiten"
 
-#: src/interp/interp.c:1892
+#: src/interp/interp.c:1891
 msgid "Report debugger"
 msgstr "Debugger rapporteren"
 
-#: src/interp/interp.c:1896
+#: src/interp/interp.c:1895
 msgid "Local variables"
 msgstr "Lokale variabelen"
 
-#: src/interp/interp.c:1900
+#: src/interp/interp.c:1899
 msgid "Global variables"
 msgstr "Globale variabelen"
 
-#: src/interp/interp.c:1992
+#: src/interp/interp.c:1991
 msgid "Report cancelled"
 msgstr "Melding geannuleerd"
 
-#: src/interp/interp.c:2000
+#: src/interp/interp.c:1999
 msgid "Report file: "
 msgstr "Bestand melden: "
 
-#: src/interp/interp.c:2009
+#: src/interp/interp.c:2008
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Ontleedfout op regel %d: "
 
-#: src/interp/interp.c:2011
+#: src/interp/interp.c:2010
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Uitvoertijdfout op regel %d: "
 
-#: src/interp/interp.c:2014
+#: src/interp/interp.c:2013
 msgid "Aborting: "
 msgstr "Bezig met afbreken: "
 
-#: src/interp/interp.c:2173
+#: src/interp/interp.c:2172
 #, c-format
 msgid "Duplicate proc %s (lines %d and %d) in report: %s"
 msgstr "Kopiëer proc %s (regels %d en %d) in melding: %s"
 
-#: src/interp/interp.c:2203
+#: src/interp/interp.c:2202
 #, c-format
 msgid "Duplicate func %s (lines %d and %d) in report: %s"
 msgstr "Kopiëer func %s (regels %d en %d) in melding: %s"
 
-#: src/interp/interp.c:2266
+#: src/interp/interp.c:2265
 msgid "This report requires a newer program to run\n"
 msgstr ""
 "Deze melding heeft een nieuwer programma nodig om te worden uitgevoerd\n"
@@ -3526,7 +3526,7 @@ msgstr "FATALE FOUT"
 msgid "  in file <%s> at line %d\n"
 msgstr "  in bestand <%s> op regel %d\n"
 
-#: src/liflines/error.c:91
+#: src/liflines/error.c:90
 msgid "ASSERT failure"
 msgstr ""
 

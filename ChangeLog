@@ -1,3 +1,12 @@
+2005-02-13 lifelines beta 3.0.44 RELEASE
+
+2005-02-13 Perry Rapp
+
+	* ChangeLog po/da.po po/de.po po/el.po po/fr.po po/it.po
+	po/nl.po po/pl.po po/sv.po
+
+	lifelines beta 3.0.44 release
+
 2005-02-13 Stephen Dum
        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
        docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 
