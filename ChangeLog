@@ -17,6 +17,10 @@
 	Renamed format_and_choose_???? to choose_from_indiseq.
 	More combining code in xreffile.c.
 
+	* hdrs/interp.h hdrs/liflines.h interp/interp.c
+	liflines/askprogram.c liflines/screen.c:
+	Split report menu choice into two, for backward compatibility.
+
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* configure.in: New option --with-profiling to generate runtime
