@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.10\n"
-"POT-Creation-Date: 2002-09-22 17:44-0400\n"
+"POT-Creation-Date: 2002-09-22 18:51-0400\n"
 "PO-Revision-Date: 2002-05-28 21:06-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"

@@ -8,6 +8,12 @@
 
 	Update for new paths.
 
+	* ChangeLog configure.in build/msvc6/llines/llines.rc 
+ 	build/rpm/lifelines.spec po/de.po po/el.po po/fr.po po/it.po 
+ 	po/sv.po src/hdrs/version.h:
+
+	Releasing 3.0.18.
+
 2002-09-22 Perry Rapp
 
 	* ChangeLog configure.in po/POTFILES.in po/de.po po/el.po
