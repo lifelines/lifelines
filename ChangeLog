@@ -1,3 +1,22 @@
+2001-11-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/export.c
+
+	Revised export headers (moved TIME to level 2,
+	added GEDC & children).
+
+2001-11-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	Moved ui code from liflines/remove.c into liflines/delete.c,
+	and then moved non-ui remove.c to gedlib/.
+	Created feedback.h for ui functions called outside of lifelines/,
+	instead of them including screen.h.
+	Included feedback.h from screen.h.
+	Included screen.h from screen.c.
+	Added shutdown_ui function to stop curses (combining exit points
+	of main & fatal & signal handler).
+	Moved cleanup_lloptions to close_lifelines.
+
 2001-11-03  Marc Nozell  <marc@nozell.com>
 
 	* configure.in, hdrs/version.h, lifelines.spec: bump version to 3.0.7.

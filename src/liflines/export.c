@@ -64,6 +64,7 @@ BOOLEAN
 archive_in_file (void)
 {
 	char dat[30], tim[20];
+	char vers[16];
 	struct tm *pt;
 	time_t curtime;
 	STRING fname;
@@ -80,7 +81,9 @@ archive_in_file (void)
 	    1900 + pt->tm_year);
 	sprintf(tim, "%d:%.2d", pt->tm_hour, pt->tm_min);
 	fprintf(fn, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n", get_lifelines_version(80));
-	fprintf(fn, "1 DATE %s\n1 TIME %s\n", dat, tim);
+	fprintf(fn, "1 DATE %s\n2 TIME %s\n", dat, tim);
+	strcpy(vers, "5.5");
+	fprintf(fn, "1 GEDC\n2 VERS %s\n2 FORM LINEAGE_LINKED\n", vers);
 	tran_gedout = tran_tables[MINGD];
 	nindi = nfam = neven = nsour = nothr = 0;
 	llwprintf("Saving database in `%s' in file `%s'.", btreepath, fname);
