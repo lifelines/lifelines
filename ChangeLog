@@ -1,3 +1,10 @@
+2003-02-01 Perry Rapp
+
+	* ChangeLog src/hdrs/interp.h src/interp/builtin.c
+	src/interp/rassa.c:
+
+	Make program interpreter stop with error if output file cannot be opened.
+
 2003-01-31 Steve Dum
        * reports/Makefile.am reports/gen_index
 

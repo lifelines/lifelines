@@ -625,7 +625,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE argvar = (PNODE) iargs(node);
+	PNODE argvar = iargs(node);
 	PNODE argexpr = inext(argvar);
 	PVALUE val;
 	if (!iistype(argvar, IIDENT)) {

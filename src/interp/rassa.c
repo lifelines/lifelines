@@ -51,7 +51,8 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonintx;
+extern STRING nonintx,nonstrx;
+extern STRING nonboox;
 
 /*********************************************
  * local enums & defines
@@ -68,6 +69,7 @@ extern STRING nonintx;
 /* alphabetical */
 static void adjust_cols(STRING);
 static BOOLEAN request_file(BOOLEAN *eflg);
+static BOOLEAN set_output_file(STRING outfilename, BOOLEAN append);
 
 /*********************************************
  * local variables
@@ -174,34 +176,39 @@ __linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	PNODE arg = iargs(node);
 	BOOLEAN aflag;
 	STRING name;
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to newfile must be a string.");
+		prog_var_error(node, stab, arg, val, nonstrx, "newfile", "1");
 		return NULL;
 	}
 	name = pvalue_to_string(val);
-	if (!name || *name == 0) {
+	if (!name[0]) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to newfile must be a string.");
+		prog_var_error(node, stab, arg, val, "1st arg to newfile must be a nonempty string.");
 		return NULL;
 	}
 	if (outfilename)
 		stdfree(outfilename);
 	outfilename = strsave(name);
 	delete_pvalue(val);
-	val = eval_and_coerce(PBOOL, inext((PNODE) iargs(node)), stab, eflg);
+	val = eval_and_coerce(PBOOL, arg=inext(arg), stab, eflg);
 	if (*eflg) {
+		prog_var_error(node, stab, arg, val, nonboox, "1");
 		prog_error(node, "2nd arg to newfile must be boolean.");
 		return NULL;
 	}
 	aflag = pvalue_to_bool(val);
 	delete_pvalue(val);
-	set_output_file(outfilename, aflag);
+	if (!set_output_file(outfilename, aflag)) {
+		*eflg = TRUE;
+		prog_error(node, "Failed to open output file: %s", outfilename);
+	}
 	return NULL;
 }
-BOOLEAN
+static BOOLEAN
 set_output_file (STRING outfname, BOOLEAN append)
 {
 	STRING modestr = append ? LLAPPENDTEXT:LLWRITETEXT;

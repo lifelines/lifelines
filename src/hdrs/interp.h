@@ -298,7 +298,7 @@ void initrassa(void);
 void interp_program_list(STRING, INT, VPTR*, LIST, STRING, BOOLEAN picklist);
 void finishinterp(void);
 void finishrassa(void);
-BOOLEAN set_output_file(STRING outfilename, BOOLEAN append);
+
 
 INTERPTYPE interpret(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_children(PNODE, SYMTAB, PVALUE*);
