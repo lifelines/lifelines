@@ -103,9 +103,8 @@ browse (NODE indi1)
 static NODE
 rkeynum_to_indi(int keynum)
 {
-	char keystr[33];
-	strcpy(keystr, "I");
-	itoa(keynum, keystr+1, 10);
+	char keystr[100];
+	sprintf(keystr,"I%d",keynum);
 	return rkey_to_indi(keystr);
 }
 /*================================================
@@ -115,9 +114,8 @@ rkeynum_to_indi(int keynum)
 static NODE
 rkeynum_to_fam(int keynum)
 {
-	char keystr[33];
-	strcpy(keystr, "F");
-	itoa(keynum, keystr+1, 10);
+	char keystr[100];
+	sprintf(keystr,"F%d",keynum);
 	return rkey_to_fam(keystr);
 }
 /*================================================
