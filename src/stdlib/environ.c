@@ -52,7 +52,8 @@ environ_determine_tempfile (void)
 	if (ISNULL(e)) e = (STRING)getenv("TMP");
 	if (ISNULL(e)) e = "\\temp"; /* fallback is \temp */
 	strcpy(win32_tempfile, e);
-	strcat(win32_tempfile, "\\lltmpXXXXXX");
+/* limit to 8.3 for edit.com, in case someone uses it */
+	strcat(win32_tempfile, "\\lltXXXXX");
 	mktemp(win32_tempfile);
 	strcat(win32_tempfile, "."); /* so notepad doesn't add .txt */
 	return win32_tempfile;

@@ -767,10 +767,12 @@ trim_name (STRING name,
 }
 /*============================================================
  * name_to_parts -- Convert GEDCOM name to parts; keep slashes
+ * name:  [in] name from database (after translation perhaps)
+ * parts: [out] array of pointers to parts, zero-terminated 
+ *              & stored in local static buffer
  *==========================================================*/
 static void
-name_to_parts (STRING name,     /* GEDCOM name */
-               STRING *parts)
+name_to_parts (STRING name, STRING *parts)
 {
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
@@ -780,19 +782,19 @@ name_to_parts (STRING name,     /* GEDCOM name */
 		parts[i] = NULL;
 	i = 0;
 	while (TRUE) {
-		while (iswhite(c = *name++))
+		while (iswhite(c = (unsigned char)*name++))
 			;
 		if (c == 0) return;
 		ASSERT(i < MAXPARTS);
 		parts[i++] = p;
 		*p++ = c;
 		if (c == NAMESEP) {
-			while ((c = *p++ = *name++) && c != NAMESEP)
+			while ((c = *p++ = (unsigned char)*name++) && c != NAMESEP)
 				;
 			if (c == 0) return;
 			*p++ = 0;
 		} else {
-			while ((c = *name++) && !iswhite(c) && c != NAMESEP)
+			while ((c = (unsigned char)*name++) && !iswhite(c) && c != NAMESEP)
 				*p++ = c;
 			*p++ = 0;
 			if (c == 0) return;

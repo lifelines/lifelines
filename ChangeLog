@@ -1,3 +1,9 @@
+2001-07-08 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/names.c stdlib/environ.c:
+	Changed temp file to be 8.3 under windows, and fixed name_to_parts
+	to avoid sign extension because STRING may be signed chars.
+
 2001-07-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog:
