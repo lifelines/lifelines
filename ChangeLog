@@ -50,6 +50,14 @@
 
 	Convert name_to_list to return new list (simplifying cleanup).
 
+	* ChangeLog src/gedlib/names.c src/hdrs/gedcom.h
+	src/liflines/screen.c
+
+	Remove obsoleted function free_name_list.
+	Cleanup destruction of msg_list.
+	Remove obsoleted function free_string_list.
+	Remove obsoleted function free_string_el.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

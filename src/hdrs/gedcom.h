@@ -511,8 +511,6 @@ INT xrefval(char ntype, STRING str);
 
 /* names.c */
 void add_name(CNSTRING name, CNSTRING key);
-void free_name_list(LIST list);
-void free_string_list(LIST list);
 LIST find_indis_by_name(CNSTRING name);
 CNSTRING getasurname(CNSTRING);
 CNSTRING getsxsurname(CNSTRING);

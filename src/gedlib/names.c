@@ -1116,31 +1116,6 @@ name_to_list (CNSTRING name, INT *plen, INT *psind)
 	return list;
 }
 /*====================================================
- * free_string_el -- free alloc'd string element of list
- *==================================================*/
-static void
-free_string_el(VPTR w)
-{
-	stdfree((STRING)w);
-}
-/*====================================================
- * free_name_list -- Free list created by name_to_list
- *==================================================*/
-void
-free_name_list (LIST list)
-{
-	/* name list is just string list */
-	free_string_list(list);
-}
-/*====================================================
- * free_string_list -- free list of alloc'd strings
- *==================================================*/
-void
-free_string_list(LIST list)
-{
-	destroy_list2(list, free_string_el);
-}
-/*====================================================
  * traverse_names -- traverse names in db
  *  delegates to traverse_db_rec_rkeys
  *   passing callback function: traverse_name_callback

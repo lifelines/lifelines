@@ -3345,7 +3345,7 @@ static void
 append_to_msg_list (STRING msg)
 {
 		if (!msg_list)
-			msg_list = create_list();
+			msg_list = create_list2(LISTDOFREE);
 		enqueue_list(msg_list, strsave(msg));
 }
 /*=========================================
@@ -3388,7 +3388,7 @@ static void
 clear_msgs (void)
 {
 	if (msg_list) {
-		free_string_list(msg_list);
+		destroy_list(msg_list);
 		msg_list = 0;
 	}
 	msg_flag = FALSE;
