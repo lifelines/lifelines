@@ -976,6 +976,33 @@ get_free_cacheel (CACHE cache)
 
 	return cel;
 }
+#ifdef UNUSED
+/* Code to clear all the cel pointers in a node tree */
+/* experimental, Perry, 2004-09-05 */
+/* TODO: remove when proven unneeded */
+static void set_all_nodetree_to_cel(NODE node, CACHEEL cel)
+{
+	BOOLEAN travdone = FALSE;
+	/* Now set all nodes in tree to point to cache record */
+	while (!travdone) {
+		node->n_cel = cel;
+		/* go to bottom of tree */
+		while (nchild(node)) {
+			node = nchild(node);
+			node->n_cel = cel;
+		}
+		/* find next node in traversal/ascent */
+		while (!nsibling(node)) {
+			if (!nparent(node)) {
+				travdone=TRUE;
+				break;
+			}
+			node = nparent(node);
+		}
+		node = nsibling(node);
+	}
+}
+#endif
 /*=======================================================
  * put_node_in_cache -- Low-level work of loading node into cacheel supplied
  *=====================================================*/
@@ -1042,6 +1069,18 @@ remove_from_cache (CACHE cache, STRING key)
 	ASSERT(!cclock(cel)); /* not supposed to remove locked elements */
 	ASSERT(cnode(cel));
 	remove_direct(cache, cel);
+#ifdef UNUSED
+/* code to clear out stale data in the nodetree & cel */
+/* experimental, Perry, 2004-09-05, part of investigating cache bug */
+/* TODO: delete if not needed */
+{
+	NODE node = cnode(cel);
+	if (node)
+		set_all_nodetree_to_cel(node, 0);
+	cnode(cel) = 0;
+}
+#endif
+
 	celnext = cacfree(cache);
 	cnext(cel) = celnext;
 	if (celnext)
@@ -1260,19 +1299,33 @@ static BOOLEAN
 is_record_loaded (RECORD rec)
 {
 	INT len=0;
-	STRING xref=0;
+	STRING xref=0, temp=0;
 
+		/* does the record have a nodetree ? */
 	if (!rec || !rec->rec_cel || !rec->rec_cel->c_node)
 		return FALSE;
 
-	xref = nxref(rec->rec_cel->c_node);
+		/* Now, is it the correct nodetree ? */
 
+	temp = rec->rec_nkey.key; /* eg, "I50" */
+
+	xref = nxref(rec->rec_cel->c_node); /* eg, "@I50@" */
 	ASSERT(xref[0] == '@');
-	len = strlen(xref);
-	ASSERT(xref[len-1] == '@');
-	if (!eqstrn(rec->rec_nkey.key, &xref[1], len-2))
-		return FALSE;
-	return TRUE;
+
+	/* now xref="@I50@" and temp="I50" */
+	++xref;
+
+	/* now xref="I50@" and temp="I50" */
+
+	while (1) {
+			/* distinguish I50@ vs I50 from I50@ vs I500 */
+		if (*xref == '@') return (*temp == 0);
+			/* distinguish I50@ vs I50 from I500@ vs I50 */
+		if (*temp == 0) return (*xref == '@');
+		if (*xref != *temp) return FALSE;
+		++xref;
+		++temp;
+	}
 }
 /*==============================================
  * nztop -- Return first NODE of a RECORD

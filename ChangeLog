@@ -1,3 +1,10 @@
+2004-09-06 Perry Rapp
+
+	* ChangeLog gedlib/keytonod.c
+
+	Fix cache bug (false match in is_record_loaded for @I50@
+	vs I500). sf bug#1015745.
+
 2004-09-02 Robert Simms
 	* ChangeLog, reports/book-latex.ll
 	Enhanced book-latex.ll to filter text to render harmless those
