@@ -4,6 +4,10 @@
 
 	Fix leak of record in create_pvalue_from_cel.
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Fix leak of record in key_to_type.
+
 2005-02-08 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c

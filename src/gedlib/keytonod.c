@@ -295,7 +295,10 @@ keynum_to_record (char ntype, int keynum)
 NODE
 key_to_type (CNSTRING key, INT reportmode)
 {
-	return nztop(key_to_record_impl(key, reportmode));
+	RECORD rec = key_to_record_impl(key, reportmode);
+	NODE node = nztop(rec);
+	release_record(rec); /* avoiding leaking reference */
+	return node;
 }
 /*=====================================
  * qkey_to_type -- Convert key to node
