@@ -429,6 +429,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ICHILDREN:
 			switch (irc = interp_children(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -439,6 +440,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ISPOUSES:
 			switch (irc = interp_spouses(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -449,6 +451,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IFAMILIES:
 			switch (irc = interp_families(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -459,6 +462,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IFATHS:
 			switch (irc = interp_fathers(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -469,6 +473,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IMOTHS:
 			switch (irc = interp_mothers(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -479,6 +484,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IFAMCS:
 			switch (irc = interp_parents(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -489,6 +495,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ISET:
 			switch (irc = interp_indisetloop(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -499,6 +506,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IINDI:
 			switch (irc = interp_forindi(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -509,6 +517,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IFAM:
 			switch (irc = interp_forfam(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -519,6 +528,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ISOUR:
 			switch (irc = interp_forsour(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -529,6 +539,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IEVEN:
 			switch (irc = interp_foreven(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -539,6 +550,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IOTHR:
 			switch (irc = interp_forothr(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -549,6 +561,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ILIST:
 			switch (irc = interp_forlist(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -559,6 +572,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INOTES:
 			switch (irc = interp_fornotes(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -569,6 +583,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INODES:
 			switch (irc = interp_fornodes(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -579,6 +594,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case ITRAV:
 			switch (irc = interp_traverse(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -599,6 +615,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IWHILE:
 			switch (irc = interp_while(node, stab, pval)) {
 			case INTOKAY:
+			case INTBREAK:
 				break;
 			case INTERROR:
 				goto interp_fail;
@@ -679,9 +696,6 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto aloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto aleave;
 		default:
 			goto aleave;
 		}
@@ -737,9 +751,6 @@ interp_spouses (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto bloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto bleave;
 		default:
 			goto bleave;
 		}
@@ -858,10 +869,6 @@ interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTOKAY:
 			irc = INTOKAY;
 			goto dloop;
-		case INTBREAK:
-			unlock_cache(icel);
-			irc = INTOKAY;
-			goto dleave;
 		default:
 			goto dleave;
 		}
@@ -920,10 +927,6 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto eloop;
-		case INTBREAK:
-			unlock_cache(icel);
-			irc = INTOKAY;
-			goto eleave;
 		default:
 			goto eleave;
 		}
@@ -973,9 +976,6 @@ interp_parents (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto floop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto fleave;
 		default:
 			goto fleave;
 		}
@@ -1012,9 +1012,6 @@ interp_fornotes (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto gloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto gleave;
 		default:
 			goto gleave;
 		}
@@ -1054,9 +1051,6 @@ interp_fornodes (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTOKAY:
 			sub = nsibling(sub);
 			goto hloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto hleave;
 		default:
 			goto hleave;
 		}
@@ -1115,9 +1109,6 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto ileave;
 		default:
 			goto ileave;
 		}
@@ -1163,9 +1154,6 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto sourleave;
 		default:
 			goto sourleave;
 		}
@@ -1209,9 +1197,6 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto evenleave;
 		default:
 			goto evenleave;
 		}
@@ -1255,9 +1240,6 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto othrleave;
 		default:
 			goto othrleave;
 		}
@@ -1298,9 +1280,6 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto mleave;
 		default:
 			goto mleave;
 		}
@@ -1352,9 +1331,6 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto hloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto hleave;
 		default:
 			goto hleave;
 		}
@@ -1402,9 +1378,6 @@ interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			goto iloop;
-		case INTBREAK:
-			irc = INTOKAY;
-			goto ileave;
 		default:
 			goto ileave;
 		}
@@ -1447,8 +1420,6 @@ interp_while (PNODE node, SYMTAB stab, PVALUE *pval)
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
-		case INTBREAK:
-			return INTOKAY;
 		default:
 			return irc;
 		}

@@ -9,6 +9,10 @@
 
 	More i18n in interpreter.
 
+	* ChangeLog interp/interp.c:
+
+	Bugfix -- break was terminating entire proc enclosing families loop.
+
 2002-05-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in arch/Makefile.am:
