@@ -607,8 +607,10 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	/* PANY or PINT with NULL (0) value is convertible to any scalar (1995.07.31) */
 	if ((ptype(val) == PANY || ptype(val) == PINT) && pvalue(val) == NULL) {
 		if (type == PSET || type == PTABLE || type == PLIST) goto bad;
-		ptype(val) = type;
-		return;
+		if (type != PFLOAT) {
+			ptype(val) = type;
+			return;
+		}
 	}
 
 	/* Any record is convertible to PGNODE (2002.02.16) */

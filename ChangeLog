@@ -1,3 +1,10 @@
+2003-06-08 Steve Dum
+
+       * ChangeLog src/interp/pvalue.c
+
+       modify set_pvalue() to return float(0) when converting a int
+       pvalue of 0 to float.
+
 2003-06-03 Matt Emmerton
 
 	* ChangeLog src/hdrs/interp.h src/hdrs/standard.h
