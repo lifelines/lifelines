@@ -8,6 +8,10 @@
 
 	New structure LLDATABASE to wrap db connection.
 
+	* ChangeLog src/gedlib/lldatabase.c
+
+	Add comment about memory leak.
+
 2003-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c

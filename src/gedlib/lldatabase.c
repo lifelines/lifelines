@@ -169,6 +169,9 @@ void lldb_close (LLDATABASE lldb)
 		lldb->btree = 0;
 		BTR = 0;
 	}
+	if (lldb->errorlist) {
+		/* TODO: free list */
+	}
 	dbnotify_close();
 	transl_free_predefined_xlats(); /* clear any active legacy translation tables */
 	strfree(&readpath_file);
