@@ -31,6 +31,13 @@
 	project (which I broke back on 2005-01-25).
 
 
+	* ChangeLog INSTALL configure.in build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml po/da.po po/de.po po/el.po po/fr.po
+	po/it.po po/nl.po po/pl.po po/sv.po
+
+	Prepare 3.0.41 release.
+
 2005-01-30 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c

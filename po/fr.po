@@ -6,17 +6,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.40\n"
-"POT-Creation-Date: 2005-01-12 20:37-0500\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-31 00:30-0500\n"
 "PO-Revision-Date: 2004-01-14 15:05+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: src/gedlib/charmaps.c:766
+#: src/gedlib/charmaps.c:767
 msgid "<unnamed>"
 msgstr "<non nommé>"
 
@@ -54,90 +54,92 @@ msgstr "%da%03dj"
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Ligne NAME manquante dans enr. INDI ; enr. ignoré.\n"
 
-#: src/gedlib/init.c:570
+#: src/gedlib/init.c:572
 msgid "Database error: -- "
 msgstr "Erreur base : -- "
 
-#: src/gedlib/init.c:574
+#: src/gedlib/init.c:576
 msgid "requested database does not exist."
 msgstr "base demandée inexistante."
 
-#: src/gedlib/init.c:577
+#: src/gedlib/init.c:579
 msgid "db directory is file, not directory."
 msgstr "répertoire de base est un fichier, pas un répertoire."
 
-#: src/gedlib/init.c:580
+#: src/gedlib/init.c:582
 msgid "creation of new database failed."
 msgstr "échec de la création d'une nouvelle base"
 
-#: src/gedlib/init.c:583
+#: src/gedlib/init.c:585
 msgid "error accessing database directory."
 msgstr "erreur d'accès au répertoire de la base"
 
-#: src/gedlib/init.c:586
+#: src/gedlib/init.c:588
 msgid "no keyfile (directory does not appear to be a database)."
 msgstr "pas de fichier clé (le répertoire ne semble pas être une base)."
 
-#: src/gedlib/init.c:589
+#: src/gedlib/init.c:591
 msgid "could not open, read or write an index file."
 msgstr "impossible d'ouvrir, lire ou écrire un fichier d'index."
 
-#: src/gedlib/init.c:592
+#: src/gedlib/init.c:594
 msgid "could not open, read or write the key file."
 msgstr "impossible d'ouvrir, lire ou écrire un fichier de clés."
 
-#: src/gedlib/init.c:595
+#: src/gedlib/init.c:597
 msgid "could not open, read or write the key file (to alter database)."
 msgstr ""
 "impossible d'ouvrir, lire ou écrire le fichier de clés (pour modifier la "
 "base)"
 
-#: src/gedlib/init.c:598
+#: src/gedlib/init.c:600
 msgid "could not open, read or write a block file."
 msgstr "impossible d'ouvrir, lire ou écrire un fichier 'bloc'."
 
-#: src/gedlib/init.c:601
+#: src/gedlib/init.c:603
 msgid "name of database is too long."
 msgstr "nom de base trop long."
 
-#: src/gedlib/init.c:604
+#: src/gedlib/init.c:606
 msgid "The database is already open for writing."
 msgstr "La base est déjà ouverte en écriture."
 
-#: src/gedlib/init.c:607
+#: src/gedlib/init.c:609
 msgid "The database is locked (no readwrite access)."
 msgstr "La base est bloquée (pas d'accès en lecture/écriture)."
 
-#: src/gedlib/init.c:610
+#: src/gedlib/init.c:612
 msgid "The database is unlocked."
 msgstr "La base n'est pas bloquée."
 
-#: src/gedlib/init.c:613
+#: src/gedlib/init.c:615
 msgid "keyfile is corrupt."
 msgstr "le fichier de clés est corrompu."
 
-#: src/gedlib/init.c:616
+#: src/gedlib/init.c:618
 msgid "keyfile is wrong alignment."
 msgstr "le fichier de clés a un mauvais alignement."
 
-#: src/gedlib/init.c:619
+#: src/gedlib/init.c:621
 msgid "keyfile is wrong version."
 msgstr "le fichier de clés n'a pas la bonne version."
 
-#: src/gedlib/init.c:622
+#: src/gedlib/init.c:624
 msgid "Existing database found."
 msgstr "Base existante trouvée."
 
-#: src/gedlib/init.c:626
-#, c-format
-msgid "The database is already opened for read access by %d users.\n"
+#: src/gedlib/init.c:628
+#, fuzzy, c-format
+msgid ""
+"The database is already opened for read access by %d users.\n"
+"  "
 msgstr "La base est déjà ouverte en lecture par %d utilisateurs.\n"
 
-#: src/gedlib/init.c:630
+#: src/gedlib/init.c:632
 msgid "Invalid properties set for new database"
 msgstr "Ensemble de propriétés invalide pour la nouvelle base"
 
-#: src/gedlib/init.c:633
+#: src/gedlib/init.c:635
 msgid "Undefined database error -- fix program."
 msgstr "Erreur de base indéfinie -- vérifiez le programme."
 
@@ -2387,7 +2389,7 @@ msgstr "comp"
 msgid "jour_complementairs"
 msgstr "jour complémentaire"
 
-#: src/gedlib/node.c:682
+#: src/gedlib/node.c:591
 msgid "NO NAME"
 msgstr "NON DÉNOMMÉ"
 
@@ -2487,127 +2489,137 @@ msgstr " (dbint tt: %s)"
 msgid "This person record does not have a name line."
 msgstr "Cet enregistrement individuel ne possède pas de ligne nom."
 
-#: src/interp/alloc.c:673
+#: src/interp/alloc.c:675
 #, c-format
 msgid "Error: file \"%s\": line %d: "
 msgstr "Erreur : fichier \"%s\" : line %d :"
 
-#: src/interp/alloc.c:774
+#: src/interp/alloc.c:778
 #, c-format
 msgid "%s: the arg must be an integer."
 msgstr "%s : l'arg. doit être un entier."
 
-#: src/interp/alloc.c:775
+#: src/interp/alloc.c:779
 #, c-format
 msgid "%s: the arg #%s must be an integer."
 msgstr "%s : l'arg. #%s doit être un entier."
 
-#: src/interp/alloc.c:776
+#: src/interp/alloc.c:780
 #, c-format
 msgid "%s: the arg #%s must be a float."
 msgstr "%s : l'arg. #%s doit être un décimal."
 
-#: src/interp/alloc.c:777
+#: src/interp/alloc.c:781
 #, c-format
 msgid "%s: the arg must be a string."
 msgstr "%s : l'arg. doit être une chaîne."
 
-#: src/interp/alloc.c:778
+#: src/interp/alloc.c:782
 #, c-format
 msgid "%s: the arg #%s must be a string."
 msgstr "%s : l'arg. #%s doit être une chaîne."
 
-#: src/interp/alloc.c:779
+#: src/interp/alloc.c:783
 #, c-format
 msgid "%s: null arg not permissible."
 msgstr "%s : l'arg. null est interdit."
 
-#: src/interp/alloc.c:780
+#: src/interp/alloc.c:784
 #, c-format
 msgid "%s: the arg must be a filename."
 msgstr "%s : l'arg. doit être un nom de fichier."
 
-#: src/interp/alloc.c:781
+#: src/interp/alloc.c:785
 #, c-format
 msgid "%s: the arg must be a node or string."
 msgstr "%s : l'arg. doit être un noeud ou une chaîne."
 
-#: src/interp/alloc.c:782
+#: src/interp/alloc.c:786
 #, c-format
 msgid "%s: the arg must be a person."
 msgstr "%s : l'arg. doit être une personne"
 
-#: src/interp/alloc.c:783
+#: src/interp/alloc.c:787
 #, c-format
 msgid "%s: the arg #%s must be a person."
 msgstr "%s : l'arg. #%s doit être une personne."
 
-#: src/interp/alloc.c:784
+#: src/interp/alloc.c:788
 #, c-format
 msgid "%s: the arg must be a family."
 msgstr "%s : l'arg. doit être une famille."
 
-#: src/interp/alloc.c:785
+#: src/interp/alloc.c:789
 #, c-format
 msgid "%s: the arg #%s must be a family."
 msgstr "%s : l'arg. #%s doit être une famille."
 
-#: src/interp/alloc.c:786
+#: src/interp/alloc.c:790
 #, c-format
 msgid "%s: the arg #%s must be a record."
 msgstr "%s : l'arg. #%s doit être un enregistrement."
 
-#: src/interp/alloc.c:787
+#: src/interp/alloc.c:791
 #, c-format
 msgid "%s: the arg must be a node."
 msgstr "%s : l'arg. doit être un noeud."
 
-#: src/interp/alloc.c:788
+#: src/interp/alloc.c:792
 #, c-format
 msgid "%s: the arg #%s must be a node."
 msgstr "%s : l'arg. #%s doit être un noeud."
 
-#: src/interp/alloc.c:789
+#: src/interp/alloc.c:793
 #, c-format
 msgid "%s: the arg must be a variable."
 msgstr "%s : l'arg. doit être une variable."
 
-#: src/interp/alloc.c:790
+#: src/interp/alloc.c:794
 #, c-format
 msgid "%s: the arg #%s must be a variable."
 msgstr "%s : l'arg. #%s doit être une variable."
 
-#: src/interp/alloc.c:791
+#: src/interp/alloc.c:795
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
 msgstr "%s : l'arg. #%s doit être un booléen."
 
-#: src/interp/alloc.c:792
+#: src/interp/alloc.c:796
 #, c-format
 msgid "%s: the arg must be a list."
 msgstr "%s : l'arg. doit être une liste."
 
-#: src/interp/alloc.c:793
+#: src/interp/alloc.c:797
 #, c-format
 msgid "%s: the arg #%s must be a list."
 msgstr "%s : l'arg. #%s doit être une liste."
 
-#: src/interp/alloc.c:794
+#: src/interp/alloc.c:798
 #, c-format
 msgid "%s: the arg #%s must be a table."
 msgstr "%s : l'arg. #%s doit être une table."
 
-#: src/interp/alloc.c:795
+#: src/interp/alloc.c:799
+#, fuzzy, c-format
+msgid "%s: the arg must be a set."
+msgstr "%s : l'arg. doit être une liste."
+
+#: src/interp/alloc.c:800
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a set."
+msgstr "%s : l'arg. #%s doit être une liste."
+
+#: src/interp/alloc.c:801
 #, c-format
 msgid "%s: Bad arguments"
 msgstr "%s : Mauvais arguments"
 
-#: src/interp/alloc.c:796
+#: src/interp/alloc.c:802
 #, c-format
 msgid "%s: the arg had a major error."
 msgstr "%s : l'arg a une erreur majeure."
 
-#: src/interp/alloc.c:797
+#: src/interp/alloc.c:803
 #, c-format
 msgid "%s: the arg #%s had a major error."
 msgstr "%s : l'arg #%s a une erreur majeure."
@@ -2847,20 +2859,20 @@ msgstr "s'exécute..."
 msgid "was run successfully.\n"
 msgstr "s'est correctement exécuté.\n"
 
-#: src/interp/interp.c:372
+#: src/interp/interp.c:373
 msgid "was cancelled.\n"
 msgstr "a été interrompu.\n"
 
-#: src/interp/interp.c:374
+#: src/interp/interp.c:375
 msgid "was not run because of errors.\n"
 msgstr "a été imterrompu à cause d'erreurs.\n"
 
-#: src/interp/interp.c:513
+#: src/interp/interp.c:516
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Erreur : fichier <%s> non trouvé : %s\n"
 
-#: src/interp/interp.c:545
+#: src/interp/interp.c:548
 #, c-format
 msgid ""
 "\n"
@@ -2869,116 +2881,116 @@ msgstr ""
 "\n"
 "Durée du rapport %s (durée ui %s)\n"
 
-#: src/interp/interp.c:617
+#: src/interp/interp.c:620
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifieur : %s doit être une chaîne\n"
 
-#: src/interp/interp.c:1706
+#: src/interp/interp.c:1709
 #, c-format
 msgid "Undefined proc: %s"
 msgstr "Proc. non définie : %s"
 
-#: src/interp/interp.c:1708
+#: src/interp/interp.c:1711
 #, c-format
 msgid "Ambiguous call to proc: %s"
 msgstr "Appel ambigu à la proc. : %s "
 
-#: src/interp/interp.c:1850
+#: src/interp/interp.c:1855
 msgid "Enter d for debugger, q to quit"
 msgstr "Entrez d pour déboguer, q pour quitter"
 
-#: src/interp/interp.c:1860
+#: src/interp/interp.c:1865
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Afficher locals (%d)"
 
-#: src/interp/interp.c:1863
+#: src/interp/interp.c:1868
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Afficher globals (%d)"
 
-#: src/interp/interp.c:1865
+#: src/interp/interp.c:1870
 msgid "Pop one level"
 msgstr "Descendre d'un niveau"
 
-#: src/interp/interp.c:1866
+#: src/interp/interp.c:1871
 msgid "Quit debugger"
 msgstr "Quitter le deboggueur"
 
-#: src/interp/interp.c:1869
+#: src/interp/interp.c:1874
 msgid "Report debugger"
 msgstr "Deboggueur de rapports"
 
-#: src/interp/interp.c:1873
+#: src/interp/interp.c:1878
 msgid "Local variables"
 msgstr "Variables locales"
 
-#: src/interp/interp.c:1877
+#: src/interp/interp.c:1882
 msgid "Global variables"
 msgstr "Variables globales"
 
-#: src/interp/interp.c:1967
+#: src/interp/interp.c:1974
 msgid "Report cancelled"
 msgstr "Rapport interrompu"
 
-#: src/interp/interp.c:1975
+#: src/interp/interp.c:1982
 msgid "Report file: "
 msgstr "Fichier rapport : "
 
-#: src/interp/interp.c:1984
+#: src/interp/interp.c:1991
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Erreur d'interprétation en ligne %d :"
 
-#: src/interp/interp.c:1986
+#: src/interp/interp.c:1993
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Erreur d'exécution à la ligne %d : "
 
-#: src/interp/interp.c:1989
+#: src/interp/interp.c:1996
 msgid "Aborting: "
 msgstr "Interruption :"
 
-#: src/interp/interp.c:2147
+#: src/interp/interp.c:2154
 #, c-format
 msgid "Duplicate proc %s (lines %d and %d) in report: %s"
 msgstr "Proc. %s en double (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2175
+#: src/interp/interp.c:2182
 #, c-format
 msgid "Duplicate func %s (lines %d and %d) in report: %s"
 msgstr "Fonct. en  double %s (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2236
+#: src/interp/interp.c:2243
 msgid "This report requires a newer program to run\n"
 msgstr "Ce rapport nécessite un programme plus récent pour fonctionner\n"
 
-#: src/interp/more.c:658
+#: src/interp/more.c:656
 msgid "Please choose from the following list."
 msgstr "Choisissez dans la liste suivante."
 
-#: src/interp/more.c:695
+#: src/interp/more.c:693
 msgid "Illegal type found in list in menuchoose"
 msgstr "Type invalide trouvé dans la liste de choix de menu"
 
-#: src/interp/more.c:986
+#: src/interp/more.c:987
 msgid "the arg to lock must be a person or family"
 msgstr "l'arg. à bloquer doit être une personne ou famille"
 
-#: src/interp/more.c:1009
+#: src/interp/more.c:1010
 msgid "the arg to unlock must be a person or family"
 msgstr "l'arg. à débloquer doit être une personne ou famille"
 
-#: src/interp/more.c:1226
+#: src/interp/more.c:1230
 msgid "First argument to (r)sort must be list or array"
 msgstr "Le premier argument de (r)sort doit être une liste ou un tableau"
 
-#: src/interp/more.c:1239 src/interp/more.c:1250
+#: src/interp/more.c:1243 src/interp/more.c:1254
 msgid "Arguments to (r)sort must be of same size"
 msgstr "Les arguments de (r)sort doivent être de même taille"
 
-#: src/interp/more.c:1259
+#: src/interp/more.c:1263
 msgid "Second argument to (r)sort must be list or array"
 msgstr "Le second argument de (r)sort doit être une liste ou un tableau"
 
@@ -3562,48 +3574,48 @@ msgstr "Durée de l'importation %s (durée iu %s)\n"
 msgid "The database was not saved."
 msgstr "La base n'a pas été enregistrée."
 
-#: src/liflines/main.c:353
+#: src/liflines/main.c:357
 msgid "Choose database to open"
 msgstr "Sélectionnez la base à ouvrir"
 
-#: src/liflines/main.c:361
+#: src/liflines/main.c:365
 msgid "No databases found in database path"
 msgstr "Pas de base trouvée dans le chemin d'accès"
 
-#: src/liflines/main.c:388
+#: src/liflines/main.c:392
 msgid "Warning: database codeset unspecified"
 msgstr "Avertisement : base sans jeu de caractères spécifié"
 
-#: src/liflines/main.c:390
+#: src/liflines/main.c:394
 msgid "Warning: not all conversions available"
 msgstr "Avertissement : toutes les conversions ne sont pas disponibles"
 
-#: src/liflines/menuset.c:154
+#: src/liflines/menuset.c:155
 #, c-format
 msgid "Menu (%s) choice sequence too long: %s"
 msgstr "Séquence de choix de menu (%s) trop longue : %s"
 
-#: src/liflines/menuset.c:158
+#: src/liflines/menuset.c:159
 #, c-format
 msgid "Menu (%s) item lacked choice sequence: %s"
 msgstr "Entrée de menu (%s) invalide avec choix : %s"
 
-#: src/liflines/menuset.c:241 src/liflines/menuset.c:253
+#: src/liflines/menuset.c:242 src/liflines/menuset.c:254
 #, c-format
 msgid "In menu: %s"
 msgstr "Dans le menu : %s"
 
-#: src/liflines/menuset.c:243
+#: src/liflines/menuset.c:244
 #, c-format
 msgid "Duplicate hotkey for item: %s"
 msgstr "Raccourci en double pour entrée : %s"
 
-#: src/liflines/menuset.c:246
+#: src/liflines/menuset.c:247
 #, c-format
 msgid "Clash  with longer hotkey in item: %s"
 msgstr "Collision avec raccourci plus long dans : %s"
 
-#: src/liflines/menuset.c:254
+#: src/liflines/menuset.c:255
 #, c-format
 msgid "Clash with shorter hotkey in item: %s"
 msgstr "Clash avec raccourci plus court pour entrée : %s"
@@ -4208,180 +4220,180 @@ msgstr "Nom fantôme : %s -> %s"
 msgid "Orphaned refn: %s"
 msgstr "Refn orpheline : %s"
 
-#: src/tools/dbverify.c:446
+#: src/tools/dbverify.c:448
 #, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr "Nom en double pour %s (%s)"
 
-#: src/tools/dbverify.c:479
+#: src/tools/dbverify.c:483
 #, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr "Refn en double pour %s (%s)"
 
-#: src/tools/dbverify.c:550
+#: src/tools/dbverify.c:554
 #, c-format
 msgid "Duplicate individual for %s"
 msgstr "Individu en double pour %s"
 
-#: src/tools/dbverify.c:560
+#: src/tools/dbverify.c:564
 #, c-format
 msgid "Bad name for individual %s: %s"
 msgstr "Mauvais nom pour l'individu %s : %s"
 
-#: src/tools/dbverify.c:575 src/tools/dbverify.c:588
+#: src/tools/dbverify.c:579 src/tools/dbverify.c:592
 #, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr "Mauvais référence familiale (%s) individu %s"
 
-#: src/tools/dbverify.c:579
+#: src/tools/dbverify.c:583
 #, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr "Enfant manquant (%s) dans la famille (%s)"
 
-#: src/tools/dbverify.c:592
+#: src/tools/dbverify.c:596
 #, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr "Conjoint manquant (%s) dans la famille (%s)"
 
-#: src/tools/dbverify.c:616
+#: src/tools/dbverify.c:620
 #, c-format
 msgid "Duplicate family for %s"
 msgstr "Famille en double pour %s"
 
-#: src/tools/dbverify.c:634
+#: src/tools/dbverify.c:638
 #, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr "Mauvaise référence mari (%s) dans la famille %s"
 
-#: src/tools/dbverify.c:640
+#: src/tools/dbverify.c:644
 #, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr "Impropre HUSB (%s) dans la famille (%s)"
 
-#: src/tools/dbverify.c:652
+#: src/tools/dbverify.c:656
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr "Mauvaise référence femme (%s) dans la famille %s"
 
-#: src/tools/dbverify.c:658
+#: src/tools/dbverify.c:662
 #, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr "Impropre WIFE (%s) dans la famille (%s)"
 
-#: src/tools/dbverify.c:670
+#: src/tools/dbverify.c:674
 #, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr "Mauvaise référence enfant (%s) dans la famille %s"
 
-#: src/tools/dbverify.c:676
+#: src/tools/dbverify.c:680
 #, c-format
 msgid "Improper child (%s) in family (%s)"
 msgstr "Impropre enfant (%s) dans la famille (%s)"
 
-#: src/tools/dbverify.c:684
+#: src/tools/dbverify.c:688
 #, c-format
 msgid "Empty family (%s)"
 msgstr "Famille vide (%s)"
 
-#: src/tools/dbverify.c:686
+#: src/tools/dbverify.c:690
 #, c-format
 msgid "Single person family (%s)"
 msgstr "Famille avec personne unique (%s)"
 
-#: src/tools/dbverify.c:703
+#: src/tools/dbverify.c:707
 #, c-format
 msgid "Duplicate source for %s"
 msgstr "Source en double pour %s"
 
-#: src/tools/dbverify.c:719
+#: src/tools/dbverify.c:723
 #, c-format
 msgid "Duplicate event for %s"
 msgstr "Événement en double pour %s"
 
-#: src/tools/dbverify.c:735
+#: src/tools/dbverify.c:739
 #, c-format
 msgid "Duplicate record for %s"
 msgstr "Enregistrement en double pour %s"
 
-#: src/tools/dbverify.c:806
+#: src/tools/dbverify.c:810
 #, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr "Mauvais pointer (dans %s) : %s"
 
-#: src/tools/dbverify.c:829
+#: src/tools/dbverify.c:833
 #, c-format
 msgid "Missing undeleted record %c%d"
 msgstr "Enregistrement non effacé manquant %c%d"
 
-#: src/tools/dbverify.c:838
+#: src/tools/dbverify.c:842
 #, c-format
 msgid "Delete set contains valid record %s"
 msgstr "L'ensemble détruit contient des enregistrements valides %s"
 
-#: src/tools/dbverify.c:857
+#: src/tools/dbverify.c:861
 #, c-format
 msgid "Master fkey misaligned (%d != %d)\n"
 msgstr "Fclé principale mal alignée (%d != %d)\n"
 
-#: src/tools/dbverify.c:879
+#: src/tools/dbverify.c:883
 #, c-format
 msgid "Error loading index at key %d\n"
 msgstr "Erreur de lecture de l'index à la clé %d\n"
 
-#: src/tools/dbverify.c:923
+#: src/tools/dbverify.c:927
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "1ere clé du bloc avant la limite parent\n"
 
-#: src/tools/dbverify.c:931
+#: src/tools/dbverify.c:935
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Dernière clé du bloc après la limité parent\n"
 
-#: src/tools/dbverify.c:939
+#: src/tools/dbverify.c:943
 #, c-format
 msgid "Key %d not below next key\n"
 msgstr "La clé %d n'est pas avant la clé suivante\n"
 
-#: src/tools/dbverify.c:955 src/tools/dbverify.c:957
+#: src/tools/dbverify.c:959 src/tools/dbverify.c:961
 msgid "data block"
 msgstr "bloc de données"
 
-#: src/tools/dbverify.c:958
+#: src/tools/dbverify.c:962
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr "%s cle=%d, fichier=%s"
 
-#: src/tools/dbverify.c:971
+#: src/tools/dbverify.c:975
 #, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr ""
 "Tableaux d'erreurs invalides [%d] dans dbverify - programme à corriger\n"
 
-#: src/tools/dbverify.c:1115
+#: src/tools/dbverify.c:1119
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d erreur"
 msgstr[1] "%d erreurs"
 
-#: src/tools/dbverify.c:1119
+#: src/tools/dbverify.c:1123
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d corrigé"
 msgstr[1] "%d corrigés"
 
-#: src/tools/dbverify.c:1126
+#: src/tools/dbverify.c:1130
 msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
-#: src/tools/dbverify.c:1137
+#: src/tools/dbverify.c:1141
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1146
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "Dans le fichier <%s> à la ligne %d"
