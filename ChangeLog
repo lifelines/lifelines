@@ -13,6 +13,10 @@
 
 	Free index cache blocks in freecache.
 
+	* ChangeLog src/stdlib/table.c
+
+	Fix key and string value leaks in table_insert_string.
+
 2005-01-23 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/stdlib/table.c

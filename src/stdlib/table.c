@@ -312,6 +312,7 @@ insert_table_int (TABLE tab, CNSTRING key, INT ival)
 		GENERIC gen;
 		init_generic_int(&gen, ival);
 		new_table_entry_impl(tab, key, &gen);
+		clear_generic(&gen);
 		return;
 	} else if (!is_generic_null(&entry->generic)) {
 		/* if its already a generic, update the generic */
@@ -358,10 +359,10 @@ table_insert_string (TABLE tab, CNSTRING key, CNSTRING value)
 	ASSERT(tab->whattofree == -2 && tab->valtype == TB_GENERIC);
 	if (!entry) {
 		/* insert new entries as generics */
-		STRING newkey = strdup(key);
 		GENERIC gen;
 		init_generic_string(&gen, value);
-		new_table_entry_impl(tab, newkey, &gen);
+		new_table_entry_impl(tab, key, &gen);
+		clear_generic(&gen);
 	} else {
 		/* Only new-style tables should call table_insert_string */
 		ASSERT(!is_generic_null(&entry->generic));
@@ -384,6 +385,7 @@ table_insert_ptr (TABLE tab, CNSTRING key, const VPTR value)
 		GENERIC gen;
 		init_generic_vptr(&gen, value);
 		new_table_entry_impl(tab, newkey, &gen);
+		clear_generic(&gen);
 	} else {
 		/* Only new-style tables should call table_insert_string */
 		ASSERT(!is_generic_null(&entry->generic));
