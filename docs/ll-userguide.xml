@@ -3408,26 +3408,26 @@ CODESET CONVERSION
 
 <para>
 
-     There are two ways to amend codeset conversion. The first method is by changing
-     configuration variables. For example, if you wish to generate an HTML report
-     of all your data, which includes names in Russian (in Cyrillic letters), for your
-     cousin, and you know that your cousin's computer has no font for Cyrillic letters,
-     you might wish to temporarily adjust your report output codeset so that you will
-     get interpolated ASCII letters for the Russian letters. You could do this by
-     temporarily altering the configuration variable ReportCodesetOut to be "ASCII" 
-     (actually, if any of your data has characters in it that are reserved in HTML, 
-     such as the less than sign, or the ampersand, you would probaby want "ASCII//HTML").
+     There are two ways to amend codeset conversion. The first method is by
+     changing configuration variables. For example, if you wish to generate an
+     HTML report of all your data, which includes names in Russian (in Cyrillic
+     letters), for your cousin, and you know that your cousin's computer has no
+     font for Cyrillic letters, you might wish to temporarily adjust your
+     report output codeset so that you will get interpolated ASCII letters for
+     the Russian letters. You could do this by temporarily altering the
+     configuration variable ReportCodesetOut to be "ASCII" (actually, if any of
+     your data has characters in it that are reserved in HTML, such as the less
+     than sign, or the ampersand, you would probaby want "ASCII//HTML").
 
 </para>
 
 <para>
 
-     The second way to change codeset conversion, and the only way in lifelines 3.0.6,
-     is to edit the embedded character translation tables, in which you actually specify
-     the letters you want converted, letter by letter, and how you want them converted.
-     This method, unlike the first, even works in databases with no specified internal
-     codeset.
-</para>
+     The second way to change codeset conversion, and the only way in lifelines
+     3.0.6, is to edit the embedded character translation tables, in which you
+     actually specify the letters you want converted, letter by letter, and how
+     you want them converted.  This method, unlike the first, even works in
+     databases with no specified internal codeset.  </para>
 
 <para>
 
@@ -3451,15 +3451,9 @@ Which character mapping do you want to edit?
 
 <para>
 
-<application>LifeLines</application> has little built-in knowledge of 
-character codes. If you use 7-bit <acronym>ASCII</acronym> characters you 
-will not encounter problems. However, many European and other languages 
-require additional characters, and
-there are many 8-bit and other schemes for encoding those characters. 
-<application>LifeLines</application> knows about none of
-them. However, <application>LifeLines</application> provides a number of 
-character translation features you can use to manage
-character translation.
+     <application>LifeLines</application> can do codeset conversion in changing
+     text from one form to another, and lifelines supports five different
+     forms.
 
 </para>
 
@@ -3467,8 +3461,6 @@ character translation.
 
 <para>
 
-<application>LifeLines</application> provides facilities for mapping between characters whenever a data record changes form.
-<application>LifeLines</application> supports four forms:
 </para>
 <glosslist>
 <glossentry><glossterm>internal</glossterm><glossdef>
@@ -3500,15 +3492,39 @@ for records being displayed
 for records written to output file
 </para>
 </glossdef></glossentry>
+
+<glossentry><glossterm>GEDCOM</glossterm><glossdef>
+
+<para>
+for records read in from or written out to GEDCOM
+</para>
+</glossdef></glossentry>
 </glosslist>
 
 
 <para>
 
-When converting text from one form to another <application>LifeLines</application> normally does not convert characters codes.
-You may, however, override this default behavior by creating translation tables that <application>LifeLines</application> will
-use when converting between forms. There are six translation tables you may define. The following
-table shows the six tables and describes when they are applied:
+     When converting text from one form to another
+     <application>LifeLines</application> normally uses iconv conversion, and
+     codesets specified in configuration variables. This may be augmented by
+     codeset translation or extension using the text conversion (*.tt) files in
+     the tt subdirectory. For example, there is a file "UTF-8__html.tt" which
+     provides conversion to HTML (i.e., escaping HTML special codes, such as
+     less than).  If your system lacks iconv, or you need more specialized
+     conversion than provided with iconv, you may either write a text
+     conversion file (a tt file), or you may edit one of the in-database
+     translation tables.
+ 
+</para>
+<para>
+
+     There in-database translation tables convert between forms (as listed
+     above). Every translation table converts either to the internal form, or
+     from the internal form. That is, the internal form is used as an
+     intermediate step in all operations. There are six supported translation
+     tables.  The following table shows the six tables and describes when they
+     are applied:
+     
 </para>
 
 <glosslist>
@@ -3614,12 +3630,84 @@ represents the \ character
 
 <para>
 
-The character translation feature is not fully tested, and not all translations are currently
-implemented.
+     It is possible, and desirable, to provide a short name for
+     the translation table, using the "##!name: " command. An 
+     example would be
 
 </para>
 
+<programlisting>
+##!name: UTF-8 to latex
+</programlisting>
 
+<para>
+
+     Naming the translation table is desirable because these 
+     names are displayed, at least in part and if they fit, on
+     the translation table menu.
+
+</para>
+
+<para>
+
+     It is possible to format the file using a character other than
+     tab as the separator between source and destination code. To do
+     requires using the "##!sep" command. Those exact six characters
+     must begin the line, and then the next character is the new
+     separator for all following lines. For clarity, this should only
+     occur once, and near the top of the file before any actual
+     translation lines, and a fairly clear separator should be used
+     (e.g., the equal sign "=").
+
+</para>
+
+<para>
+
+     Any line which is blank, or which begins with two hash marks (##), is
+     ignored. Therefore, comments begin with two hash marks.
+
+</para>
+
+<para>
+
+     For advanced users, it is possible to mix different types of 
+     conversion, for example iconv conversion and also translation
+     table conversion, in the same form step. For example, it is possible
+     to convert internal database text (internal form) first via the
+     "internal to GEDCOM" in-database translation table, and then via
+     the iconv conversion from configured internal codeset to configured
+     GEDCOM codeset. In-database translation tables are always applied
+     in the internal codeset, so when converting to the internal form,
+     they are applied after iconv and/or tt conversions, and when
+     converting from internal form, they are applied first.
+
+</para>
+
+<para>
+
+     An example of adding a mixin in-database translation table might
+     be to escape certain characters which are control characters
+     to an output computer language, e.g., latex. One could create an
+     "Internal to Report" mapping in UTF-8 (if the database is internally
+     UTF-8) to escape any characters that may occur in place names or
+     textual descriptions and inadvertently cause grief in latex
+     processing.
+
+</para>
+
+<para>
+
+     However, in this case, one could also write a tt file to achieve
+     the same results, and be shared across databases, by naming it, eg,
+     UTF-8__latex.tt. The double underscore ("__") signifies that this
+     is a conversion to be applied to text which is in UTF-8, and to 
+     trigger lifelinesn to use this, one must specify a report codeset
+     such as "UTF-8//latex" (if UTF-8 output is desired, but with the
+     latex conversion first applied), or "ISO-8859-1//latex" (if 
+     ISO-8859-1 output is desired, but with the latex conversion first
+     applied).
+
+</para>
 
 </sect1>
 
