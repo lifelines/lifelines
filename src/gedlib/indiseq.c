@@ -176,11 +176,13 @@ remove_indiseq (INDISEQ seq)
 {
 	SORTEL *d = IData(seq);
 	INT i, n = ISize(seq);
+	/* remove each element's heap memory */
 	for (i = 0; i < n; i++, d++) {
 		stdfree(skey(*d));
 		if (snam(*d)) stdfree(snam(*d));
 		default_delete_value(sval(*d), IValtype(seq));
 		if (sprn(*d)) stdfree(sprn(*d));
+		stdfree(*d);
 	}
 	stdfree(IData(seq));
 	stdfree(seq);

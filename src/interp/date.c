@@ -133,8 +133,7 @@ format_date (STRING str, INT dfmt, INT mfmt,
 		smo = format_month(mo, mfmt);
 		format_ymd(syr, smo, sda, sfmt, mod, &p);
 	}
-        return scratch;
-
+	return scratch;
 }
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
