@@ -50,7 +50,6 @@ extern STRING mtitle;
  * required global variables
  *********************************************/
 
-BOOLEAN alloclog  = FALSE;	/* alloc/free debugging */
 BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 STRING btreepath = NULL;	/* normally defined in liflines/main.c */
 STRING readpath = NULL;		/* normally defined in liflines/main.c */
@@ -863,6 +862,10 @@ main (int argc,
 		default: print_usage(); return (1); 
 		}
 	}
+
+	/* Turn off Memory Debugging */
+	alloclog  = FALSE;
+
 	if (!init_lifelines_global(&msg)) {
 		printf("%s\n", msg);
 		return (1);

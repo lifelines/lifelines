@@ -1,5 +1,11 @@
 2001-09-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
+        * ChangeLog tools/dbverify.c
+        main() in dbverify.c now initializes the global variable alloclog
+	instead of defining and initializing a local one.
+
+2001-09-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
         * ChangeLog liflines/main.c stdlib/memalloc.c:
         Moved global variable 'alloclog' from liflines/main.c to
 	stdlib/memalloc.c
