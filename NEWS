@@ -2,9 +2,15 @@ LifeLines Source Release, Version 3.?
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.?
+============================
+- Two-stage tt conversion via UTF-8
+
 Bug fixes in 3.?
 ============================
 - Fix nspouses
+- Fix display of TTPATH in u/c
+- Fix uppercasing of non-ASCII in non-UTF-8 case
 
 Bug fixes in 3.0.37
 ============================
