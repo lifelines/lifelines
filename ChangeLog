@@ -12,6 +12,10 @@
 
 	Remove unused llstrncat.
 
+	* ChangeLog src/interp/builtin.c
+
+	Fix buggy f() report function (sf bug#704336: f() report function crashes.)
+
 2003-03-13 Stephen Dum
 
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.xml

@@ -1014,15 +1014,15 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	char scratch[20];
 	char format[10];
-	UNION u;
 	INT prec = 2;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	float fval;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonflox, "f", "1");
 		return NULL;
 	}
-	u.w = pvalue(val);
+	fval = pvalue_to_float(val);
 	arg = inext(arg);
 	if (arg) {
 		val = eval_and_coerce(PINT, arg, stab, eflg);
@@ -1036,7 +1036,7 @@ __f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	sprintf(format, "%%.%df", prec);
 
-	sprintf(scratch, format, u.f);
+	sprintf(scratch, format, fval);
 	set_pvalue_string(val, scratch);
 	return val;
 }
