@@ -9,7 +9,7 @@ EXTRA_DIST = arch.h array.h btree.h \
 	cache.h charprops.h codesets.h cscurses.h \
 	date.h dbfuncs.h dbfuncsi.h \
 	feedback.h fpattern.h \
-	gedcheck.h gedcom.h gengedc.h \
+	gedcheck.h gedcom.h generic.h gengedc.h \
 	icvt.h impfeed.h indiseq.h \
 	isolangs.h interp.h \
 	langinfz.h liflines.h list.h llnls.h lloptions.h llstdlib.h \
