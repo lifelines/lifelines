@@ -4,6 +4,10 @@
 
 	Fix for fatal (zstring) bug in date.c.
 
+	* ChangeLog reports/st/st_date.ll src/gedlib/date.c:
+
+	Fix bug in date parser (misparsing BC, BCE if no month).
+
 2003-01-19 Perry Rapp
 
 	* ChangeLog src/hdrs/interp.h src/interp/alloc.c

@@ -1,5 +1,5 @@
 /*
- * @version        1.0
+ * @version        1.1 (2003-01-22)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -33,6 +33,9 @@ proc testDates()
 	call tdparse("8/14/33", 33, 8, 14)
 	call tdparse("9/22/1", 1, 9, 22)
 	call tdparse("14 OCT 3 B.C.", 3, 10, 14)
+	call tdparse("14 OCT 3 BC", 3, 10, 14)
+	call tdparse("OCT 3 BC", 3, 10, 0)
+	call tdparse("3 BC", 3, 0, 0)
 	call tdparse("9/22/1", 1, 9, 22)
 	call tdparse("AFT 3 SEP 1630", 1630, 9, 3)
 	call tdparse("FROM 30 SEP 1630 TO 1700", 1630, 9, 30)

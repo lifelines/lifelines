@@ -215,13 +215,13 @@ static struct gedcom_keywords_s gedkeys[] = {
 	/* parentheses are handled by lexical tokenizer */
 	,{ "B.C.", 1000+GD_BC }
 /* Some liberal (non-GEDCOM) entries */
-	,{ "BC", GD_BC }
-	,{ "B.C.E.", GD_BC }
-	,{ "BCE", GD_BC }
-	,{ "A.D.", GD_AD }
-	,{ "AD", GD_AD }
-	,{ "C.E.", GD_AD }
-	,{ "CE", GD_AD }
+	,{ "BC", 1000+GD_BC }
+	,{ "B.C.E.", 1000+GD_BC }
+	,{ "BCE", 1000+GD_BC }
+	,{ "A.D.", 1000+GD_AD }
+	,{ "AD", 1000+GD_AD }
+	,{ "C.E.", 1000+GD_AD }
+	,{ "CE", 1000+GD_AD }
 /* Some liberal (non-GEDCOM) but English-biased entries */
 	,{ "JANUARY", 1 }
 	,{ "FEBRUARY", 2 }
