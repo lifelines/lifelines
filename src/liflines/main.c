@@ -278,6 +278,7 @@ main (INT argc,
  */
 
 finish:
+	term_screen();
 	if (code) /* if error, give user a second to read it */
 		sleep(1);
 	/* Terminate Curses UI */

@@ -416,11 +416,11 @@ show_short_family (NODE fam, INT row, INT hgt, INT width)
  * Complete rewrite: 2000/12/03, Perry Rapp
  *==============================================*/
 void
-show_pedigree (NODE indi)
+show_pedigree (NODE indi, INT hgt)
 {
 	WINDOW *w = main_win;
 	int i;
-	for (i = 1; i <= PED_LINES; i++) {
+	for (i = 1; i <= hgt; i++) {
 		wmove(w, i, 1);
 		wclrtoeol(w);
 #ifndef BSD
@@ -428,7 +428,7 @@ show_pedigree (NODE indi)
 #endif
 	}
 
-	pedigree_draw_person(indi, 9);
+	pedigree_draw_person(indi, hgt);
 }
 /*================================================
  * show_gedcom -- Show node in gedcom format

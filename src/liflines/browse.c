@@ -38,6 +38,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "menuitem.h"
 
 #include "llinesi.h"
 
@@ -75,6 +76,7 @@ static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static BOOLEAN handle_menu_commands(INT c);
+static BOOLEAN handle_menu_commands_old(INT c);
 static NODE goto_indi_child(NODE indi, int childno);
 static NODE goto_fam_child(NODE fam, int childno);
 static INT display_indi(NODE indi, INT mode);
@@ -232,29 +234,29 @@ browse_indi_modes (NODE *pindi1,
 		if (!handle_menu_commands(c))
 			switch (c)
 		{
-		case 'e':	/* Edit this person */
+		case CMD_EDIT:	/* Edit this person */
 			node = edit_indi(indi);
 			if (node)
 				indi = node;
 			break;
-		case 'g': 	/* Browse to person's family */
+		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((*pfam1 = choose_family(indi, ntprnt, 
 				idfbrs, TRUE)))
 				return BROWSE_FAM;
 			break;
-		case 'G':
+		case CMD_2FAM:
 			if ((*pfam1 = choose_family(indi, ntprnt,
 				id1fbr, TRUE)))
 			  if ((*pfam2 = choose_family(indi, ntprnt,
 				id2fbr, TRUE)))
 				return BROWSE_2FAM;
 			break;
-		case 'f': 	/* Browse to person's father */
+		case CMD_FATHER: 	/* Browse to person's father */
 			node = choose_father(indi, NULL, nofath,
 			    idhbrs, NOASK1);
 			if (node) indi = node;
 			break;
-		case 'F':	/* Tandem Browse to person's fathers */
+		case CMD_TANDEM_FATHERS:	/* Tandem Browse to person's fathers */
 			node = choose_father(indi, NULL, nofath,
 			    id1hbr, NOASK1);
 			if (node) {
@@ -267,12 +269,12 @@ browse_indi_modes (NODE *pindi1,
 			  }
 			}
 			break;
-		case 'm':	/* Browse to person's mother */
+		case CMD_MOTHER:	/* Browse to person's mother */
 			node = choose_mother(indi, NULL, nomoth,
 			    idwbrs, NOASK1);
 			if (node) indi = node;
 			break;
-		case 'M':	/* Tandem Browse to person's mothers */
+		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to person's mothers */
 			node = choose_mother(indi, NULL, nomoth,
 			    id1wbr, NOASK1);
 			if (node) {
@@ -285,15 +287,15 @@ browse_indi_modes (NODE *pindi1,
 			  }
 			}
 			break;
-		case 'z':	/* Zip browse another person */
+		case CMD_BROWSE_ZIP:	/* Zip browse another person */
 			node = ask_for_indi(idpnxt, NOCONFIRM, NOASK1);
 			if (node) indi = node;
 			break;
-		case 's':	/* Browse to person's spouse */
+		case CMD_SPOUSE:	/* Browse to person's spouse */
 			node = choose_spouse(indi, nospse, idsbrs);
 			if (node) indi = node;
 			break;
-		case 'S':	/* browse to tandem spouses */
+		case CMD_TANDEM_SPOUSES:	/* browse to tandem spouses */
 			node = choose_spouse(indi, nospse, id1sbr);
 			if (node) {
 			  node2 = choose_spouse(indi, nospse, id2sbr);
@@ -304,43 +306,43 @@ browse_indi_modes (NODE *pindi1,
 			  }
 			}
 			break;
-		case 'c':	/* Browse to person's child */
+		case CMD_CHILDREN:	/* Browse to person's child */
 			node = choose_child(indi, NULL, nocofp,
 			    idcbrs, NOASK1);
 			if (node) indi = node;
 			break;
-		case '(':       /* scroll details/pedigree up */
+		case CMD_SCROLL_UP:       /* scroll details/pedigree up */
 			show_scroll(-1);
 			break;
-		case ')':       /* scroll details/pedigree down */
+		case CMD_SCROLL_DOWN:       /* scroll details/pedigree down */
 			show_scroll(+1);
 			break;
-		case '&':       /* toggle pedigree mode (ancestors/descendants) */
+		case CMD_TOGGLE_PEDTYPE:       /* toggle pedigree mode (ancestors/descendants) */
 			pedigree_toggle_mode();
 			break;
-		case '[':       /* decrease pedigree depth */
+		case CMD_DEPTH_DOWN:       /* decrease pedigree depth */
 			pedigree_increase_generations(-1);
 			break;
-		case ']':       /* increase pedigree depth */
+		case CMD_DEPTH_UP:      /* increase pedigree depth */
 			pedigree_increase_generations(+1);
 			break;
-		case '#':       /* toggle children numbers */
+		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();
 			break;
-		case '1':	/* Go to children by number */
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-			node = goto_indi_child(indi, c-'0');
+		case CMD_CHILD_DIRECT0+1:	/* Go to children by number */
+		case CMD_CHILD_DIRECT0+2:
+		case CMD_CHILD_DIRECT0+3:
+		case CMD_CHILD_DIRECT0+4:
+		case CMD_CHILD_DIRECT0+5:
+		case CMD_CHILD_DIRECT0+6:
+		case CMD_CHILD_DIRECT0+7:
+		case CMD_CHILD_DIRECT0+8:
+		case CMD_CHILD_DIRECT0+9:
+			node = goto_indi_child(indi, c-CMD_CHILD_DIRECT0);
 			if (node) indi = node;
 			else message(nochil);
 			break;
-		case 'C':	/* browse to tandem children */
+		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			node = choose_child(indi, NULL, nocofp,
 			    id1cbr, NOASK1);
 			if (node) {
@@ -353,38 +355,38 @@ browse_indi_modes (NODE *pindi1,
 			  }
 			}
 			break;
-		case 'p':	/* Switch to pedigree mode */
+		case CMD_PEDIGREE:	/* Switch to pedigree mode */
 			*pindi1 = indi;
 			return BROWSE_PED;
-		case '!': /* Switch to gedcom mode */
+		case CMD_GEDCOM_MODE: /* Switch to gedcom mode */
 			gedcom_mode = !gedcom_mode;
 			indimodep = 0; /* force redraw */
 			break;
-		case 'o':	/* Browse to older sib */
+		case CMD_UPSIB:	/* Browse to older sib */
 			if (!(node = indi_to_prev_sib(indi)))
 				message(noosib);
 			else
 				 indi = node;
 			break;
-		case 'y':	/* Browse to younger sib */
+		case CMD_DOWNSIB:	/* Browse to younger sib */
 			if (!(node = indi_to_next_sib(indi)))
 				message(noysib);
 			else 
 				 indi = node;
 			break;
-		case 'u':	/* Browse to parents' family */
+		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((*pfam1 = choose_family(indi, noprnt,
 				idfbrs, FALSE)))
 				return BROWSE_FAM;
 			break;
-		case 'U':	/* tandem browse to two parents families*/
+		case CMD_2PAR:	/* tandem browse to two parents families*/
 			if ((*pfam1 = choose_family(indi, noprnt,
 				id1fbr, FALSE)))
 			  if ((*pfam2 = choose_family(indi, noprnt,
 				id2fbr, FALSE)))
 				return BROWSE_2FAM;
 			break;
-		case 'b': 	/* Browse new list of persons */
+		case CMD_BROWSE: 	/* Browse new list of persons */
 			seq = ask_for_indiseq(idplst, &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
@@ -397,12 +399,12 @@ browse_indi_modes (NODE *pindi1,
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
-		case 'n':	/* Add new person */
+		case CMD_NEWPERSON:	/* Add new person */
 			if (!(node = add_indi_by_edit())) break;
 			save = indi;
 			indi = node;
 			break;
-		case 'a':	/* Add family for current person */
+		case CMD_NEWFAMILY:	/* Add family for current person */
 			if (readonly) {
 				message(ronlya);
 				break;
@@ -428,7 +430,7 @@ browse_indi_modes (NODE *pindi1,
 			if (!node) break;
 			*pfam1 = node;
 			return BROWSE_FAM;
-		case 't':	/* Switch to tandem browsing */
+		case CMD_TANDEM:	/* Switch to tandem browsing */
 			node = ask_for_indi(idp2br, NOCONFIRM, NOASK1);
 			if (node) {
 				*pindi1 = indi;
@@ -436,34 +438,31 @@ browse_indi_modes (NODE *pindi1,
 				return BROWSE_TAND;
 			}
 			break;
-		case 'x': 	/* Swap families of current person */
+		case CMD_SWAPFAMILIES: 	/* Swap families of current person */
 			swap_families(indi);
 			break;
-		case 'h':	/* Add person as spouse */
+		case CMD_ADDASSPOUSE:	/* Add person as spouse */
 			add_spouse(indi, NULL, TRUE);
 			break;
-		case 'i':
-			if (indimode=='i') {
-				/* Add person as child */
-				add_child(indi, NULL);
-			} else {
-				/* Switch to person browse mode */
-				indimode='i';
-			}
+		case CMD_ADDASCHILD:    /* Add person as child */
+			add_child(indi, NULL);
 			break;
-		case 'r':	/* Remove person as spouse */
+		case CMD_PERSON:   /* switch to person browse */
+			indimode='i';
+			break;
+		case CMD_REMOVEASSPOUSE:	/* Remove person as spouse */
 			choose_and_remove_spouse(indi, NULL, FALSE);
 			break;
-		case 'd':	/* Remove person as child */
+		case CMD_REMOVEASCHILD:	/* Remove person as child */
 			choose_and_remove_child(indi, NULL, FALSE);
 			break;
-		case 'A':	/* Advanced person edit */
+		case CMD_ADVANCED:	/* Advanced person edit */
 			advanced_person_edit(indi);
 			break;
-		case '@':   /* GUI direct navigation */
+		case CMD_JUMP_HOOK:   /* GUI direct navigation */
 			indi = jumpnode;
 			break;
-		case '+':	/* Go to next indi in db */
+		case CMD_NEXT:	/* Go to next indi in db */
 			{
 				i = xref_nexti(nkeyp);
 				if (i)
@@ -471,7 +470,7 @@ browse_indi_modes (NODE *pindi1,
 				else message(nopers);
 				break;
 			}
-		case '-':	/* Go to prev indi in db */
+		case CMD_PREV:	/* Go to prev indi in db */
 			{
 				i = xref_previ(nkeyp);
 				if (i)
@@ -479,21 +478,12 @@ browse_indi_modes (NODE *pindi1,
 				else message(nopers);
 				break;
 			}
-		case '$':	/* Browse to sources */
+		case CMD_SOURCES:	/* Browse to sources */
 			node = choose_source(indi, nosour, idsour);
 			if (node)
 				browse_source_node(node);
 			break;
-		case '<':
-			adjust_menu_height(+1);
-			break;
-		case '>':
-			adjust_menu_height(-1);
-			break;
-		case '?':
-			cycle_menu();
-			break;
-		case 'q':
+		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;
 		}
@@ -700,7 +690,7 @@ browse_fam (NODE *pindi,
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
 		if (c != 'a' && c != 's') save = NULL;
-		if (!handle_menu_commands(c))
+		if (!handle_menu_commands_old(c))
 			switch (c) 
 		{
 		case 'A':	/* Advanced family edit */
@@ -945,6 +935,21 @@ browse_fam (NODE *pindi,
  *====================================================*/
 static BOOLEAN
 handle_menu_commands (INT c)
+{
+	switch(c) {
+		case CMD_MENU_GROW: adjust_menu_height(+1); return TRUE;
+		case CMD_MENU_SHRINK: adjust_menu_height(-1); return TRUE;
+		case CMD_MENU_MORE: cycle_menu(); return TRUE;
+		case CMD_MENU_TOGGLE: toggle_menu(); return TRUE;
+	}
+	return FALSE;
+}
+/*======================================================
+ * handle_menu_commands_old -- Handle menuing commands
+ * Created: 2001/01/31, Perry Rapp
+ *====================================================*/
+static BOOLEAN
+handle_menu_commands_old (INT c)
 {
 	switch(c) {
 		case '<': adjust_menu_height(+1); return TRUE;

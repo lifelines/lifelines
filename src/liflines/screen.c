@@ -87,7 +87,7 @@ static void shw_list(WINDOW *win, INDISEQ seq, INT len0, INT top, INT cur, INT *
 static void place_std_msg (void);
 static void clearw (void);
 static void place_cursor (void);
-static INT interact (WINDOW *win, STRING str);
+static INT interact(WINDOW *win, STRING str, INT screen);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
 static void vmprintf (STRING fmt, va_list args);
 static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
@@ -195,6 +195,16 @@ init_screen (void)
 	init_all_windows();
 	menuitem_initialize();
 	return 1; /* succeed */
+}
+/*============================
+ * term_screen -- Terminate screens
+ * Created: 2001/02/01, Perry Rapp
+ *  complement of init_screen
+ *==========================*/
+void
+term_screen (void)
+{
+	menuitem_terminate();
 }
 /*=======================================
  * paint_main_screen -- Paint main screen
@@ -542,7 +552,7 @@ main_menu (void)
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
 	display_screen(MAIN_SCREEN);
 	/* place_std_msg(); */ /*POSS*/
-	c = interact(main_win, "bsadprtuxq");
+	c = interact(main_win, "bsadprtuxq", -1);
 	place_std_msg();
 	wrefresh(main_win);
 	switch (c) {
@@ -563,10 +573,9 @@ main_menu (void)
  * Created: 2001/01/27, Perry Rapp
  *=======================================*/
 static INT
-indi_interact (void)
+indi_interact (INT screen)
 {
-	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-<>*?!");
+	return interact(main_win, NULL, screen);
 }
 /*=========================================
  * indi_browse -- Handle indi_browse screen
@@ -580,8 +589,7 @@ indi_browse (NODE indi)
 	menu_dirty = FALSE;
 	show_person_main1(indi, 1, lines);
 	display_screen(ONE_PER_SCREEN);
-/*	return interact_screen(main_win, ONE_PER_SCREEN); */
-	return indi_interact();
+	return indi_interact(ONE_PER_SCREEN);
 }
 /*=========================================
  * indi_ged_browse -- Handle indi_browse screen
@@ -596,7 +604,7 @@ indi_ged_browse (NODE indi)
 	menu_dirty = FALSE;
 	show_gedcom(indi, lines);
 	display_screen(ONE_PER_SCREEN);
-	return indi_interact();
+	return indi_interact(ONE_PER_SCREEN);
 }
 /*=========================================
  * fam_interact -- call interact for indi
@@ -606,7 +614,7 @@ static INT
 fam_interact (void)
 {
 	return interact(main_win, 
-		"efmcnsardxtbzqABCFM()$#123456789+-<>*?!");
+		"efmcnsardxtbzqABCFM()$#123456789+-<>*?!", -1);
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -643,7 +651,7 @@ tandem_browse (NODE indi1, NODE indi2)
 	show_person_main1(indi1, 1, TANDEM_LINES);
 	show_person_main2(indi2, TANDEM_LINES+2, TANDEM_LINES);
 	display_screen(TWO_PER_SCREEN);
-	return interact(main_win, "etfmscbdajxq");
+	return interact(main_win, "etfmscbdajxq", -1);
 }
 /*=============================================
  * twofam_browse -- Handle twofam_browse screen
@@ -656,7 +664,7 @@ twofam_browse (NODE fam1, NODE fam2)
 	show_short_family(fam1, 1, TANDEM_LINES, width);
 	show_short_family(fam2, TANDEM_LINES+2, TANDEM_LINES, width);
 	display_screen(TWO_FAM_SCREEN);
-	return interact(main_win, "etbfmxjq");
+	return interact(main_win, "etbfmxjq", -1);
 }
 /*=======================================
  * ped_browse -- Handle ped_browse screen
@@ -664,11 +672,13 @@ twofam_browse (NODE fam1, NODE fam2)
 INT
 ped_browse (NODE indi)
 {
-	if (cur_screen != PED_SCREEN) paint_ped_screen();
-	show_pedigree(indi);
-	display_screen(PED_SCREEN);
-	return interact(main_win,
-		"eifmscoygb&()[]$123456789+-q");
+	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
+	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
+		paint_one_per_screen();
+	menu_dirty = FALSE;
+	show_pedigree(indi, lines);
+	display_screen(ONE_PER_SCREEN);
+	return indi_interact(ONE_PER_SCREEN);
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen
@@ -680,7 +690,7 @@ aux_browse (NODE node)
 	if (cur_screen != AUX_SCREEN) paint_aux_screen();
 	show_aux_display(node);
 	display_screen(AUX_SCREEN);
-	return interact(main_win, "e()+-q");
+	return interact(main_win, "e()+-q", -1);
 }
 /*=========================================
  * list_browse -- Handle list_browse screen
@@ -698,7 +708,7 @@ list_browse (INDISEQ seq,
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
-	return interact(main_win, "jkeimdtbanxq");
+	return interact(main_win, "jkeimdtbanxq", -1);
 }
 /*======================================
  * ask_for_lldb -- Ask user for lifelines database directory
@@ -783,7 +793,7 @@ ask_for_char (STRING ttl,
 	mvwaddstr(win, 1, 2, ttl);
 	mvwaddstr(win, 2, 2, prmpt);
 	wrefresh(win);
-	return interact(win, ptrn);
+	return interact(win, ptrn, -1);
 }
 /*===========================================
  * ask_for_char_msg -- Ask user for character
@@ -802,7 +812,7 @@ ask_for_char_msg (STRING msg,
 	mvwaddstr(win, 2, 2, ttl);
 	mvwaddstr(win, 3, 2, prmpt);
 	wrefresh(win);
-	rv = interact(win, ptrn);
+	rv = interact(win, ptrn, -1);
 	return rv;
 }
 /*============================================
@@ -886,7 +896,7 @@ resize_win:
 		shw_list(win, seq, len, top, cur, &scroll);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (interact(win, "jkiq()[]")) {
+		switch (interact(win, "jkiq()[]", -1)) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -973,7 +983,7 @@ scan_menu (void)
 		touchwin(scan_menu_win);
 		wmove(scan_menu_win, 1, 27);
 		wrefresh(scan_menu_win);
-		code = interact(scan_menu_win, "fnrq");
+		code = interact(scan_menu_win, "fnrq", -1);
 		touchwin(main_win);
 		wrefresh(main_win);
 		switch (code) {
@@ -1018,7 +1028,7 @@ add_menu (void)
 	touchwin(add_menu_win);
 	wmove(add_menu_win, 1, 27);
 	wrefresh(add_menu_win);
-	code = interact(add_menu_win, "pfcsq");
+	code = interact(add_menu_win, "pfcsq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
@@ -1042,7 +1052,7 @@ del_menu (void)
 	touchwin(del_menu_win);
 	wmove(del_menu_win, 1, 30);
 	wrefresh(del_menu_win);
-	code = interact(del_menu_win, "csifq");
+	code = interact(del_menu_win, "csifq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
@@ -1063,7 +1073,7 @@ trans_menu (void)
 	touchwin(trans_menu_win);
 	wmove(trans_menu_win, 1, 47);
 	wrefresh(trans_menu_win);
-	code = interact(trans_menu_win, "emixdrq");
+	code = interact(trans_menu_win, "emixdrq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
@@ -1086,7 +1096,7 @@ utils_menu (void)
 	touchwin(utils_menu_win);
 	wmove(utils_menu_win, 1, 39);
 	wrefresh(utils_menu_win);
-	code = interact(utils_menu_win, "srkidmeoq");
+	code = interact(utils_menu_win, "srkidmeoq", -1);
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
@@ -1112,7 +1122,7 @@ extra_menu (void)
 		touchwin(extra_menu_win);
 		wmove(extra_menu_win, 1, 39);
 		wrefresh(extra_menu_win);
-		code = interact(extra_menu_win, "sex123456q");
+		code = interact(extra_menu_win, "sex123456q", -1);
 		touchwin(main_win);
 		wrefresh(main_win);
 		switch (code) {
@@ -1132,11 +1142,13 @@ extra_menu (void)
 /*===============================
  * interact -- Interact with user
  *=============================*/
-INT
-interact (WINDOW *win,
-          STRING str)
+static INT
+interact (WINDOW *win, STRING str, INT screen)
 {
-	INT c, i, n = strlen(str);
+	char buffer[4]; /* 3 char cmds max */
+	INT offset=0;
+	INT cmdnum;
+	INT c, i, n = str ? strlen(str) : 0;
 	while (TRUE) {
 		crmode();
 		c = wgetch(win);
@@ -1145,8 +1157,31 @@ interact (WINDOW *win,
 		now_showing = FALSE;
 		if (!progrunning)
 			place_std_msg();
-		for (i = 0; i < n; i++) {
-			if (c == str[i]) return c;
+		if (str) { /* traditional */
+			for (i = 0; i < n; i++) {
+				if (c == str[i]) return c;
+			}
+		} else { /* new menus */
+			if (offset < sizeof(buffer)-1) {
+				buffer[offset] = c;
+				buffer[offset+1] = 0;
+				offset++;
+			} else {
+				buffer[0] = c;
+				buffer[1] = 0;
+				offset = 1;
+			}
+			cmdnum = menuitem_check_cmd(screen, buffer);
+			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
+				return cmdnum;
+			if (cmdnum != CMD_PARTIAL && offset > 1) {
+				cmdnum = menuitem_check_cmd(screen, &buffer[offset-1]);
+				if (cmdnum != CMD_NONE)
+					return cmdnum;
+				offset = 1;
+			}
+			if (cmdnum != CMD_PARTIAL)
+				offset = 0;
 		}
 	}
 }
@@ -1219,7 +1254,7 @@ indiseq_interact (WINDOW *win,
 		shw_list(win, seq, len, top, cur, &scroll);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (interact(win, "jkiq")) {
+		switch (interact(win, "jkiq", -1)) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -1265,7 +1300,7 @@ indiseq_list_interact (WINDOW *win,
 		shw_list(win, seq, len0, top, cur, &scroll);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (interact(win, "jkdiq")) {
+		switch (interact(win, "jkdiq", -1)) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
@@ -1376,7 +1411,7 @@ list_interact(WINDOW *win,    /* interaction window */
 		mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
 		shw_list_of_strings(win, strings, len, top, cur);
 		wrefresh(win);
-		switch (interact(win, "jkiq")) {
+		switch (interact(win, "jkiq", -1)) {
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;

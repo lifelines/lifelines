@@ -56,6 +56,9 @@ typedef struct MenuItemOption_struct {
 MenuItem g_MenuItemOther, g_MenuItemQuit, g_MenuItemOptions;
 MenuItem f_MenuItemSyncMoves;
 
+typedef struct CmdItem_s * CMDITEM;
+typedef struct CmdArray_s * CMDARRAY;
+
 /* each screen has a lot of menu information */
 typedef struct ScreenInfo_struct {
 	STRING Title;    /* string at bottom of screen */
@@ -63,30 +66,44 @@ typedef struct ScreenInfo_struct {
 	INT MenuCols;    /* columns in this menu (3 for big, 1 for list) */
 	INT MenuSize;    /* total #items in this menu */
 	INT MenuPage;    /* which page of menu currently displayed */
-	char Commands[50]; /* valid commands */
-	char ExtCommands[50]; /* valid extended commands (after *) */
-	char OptionCommands[50]; /* valid option commands (after $) */
+	CMDARRAY Commands;
 	MenuItem ** Menu;  /* array of pointers to items */
 	MenuItemOption ** MenuOptions;
-	} ScreenInfo;
+} ScreenInfo;
 
 ScreenInfo f_ScreenInfo[MAX_SCREEN];
 
 
-void menuitem_initialize();
-
 enum { 
-  CMD_QUIT, CMD_MORE, CMD_OPTIONS
-  , CMD_EDIT, CMD_PERSON, CMD_FATHER
-  , CMD_MOTHER, CMD_SPOUSE, CMD_CHILDREN, CMD_UPSIB, CMD_DOWNSIB
-  , CMD_FAMILY, CMD_2FAM, CMD_PARENTS, CMD_2PAR, CMD_BROWSE
-  , CMD_TOP, CMD_BOTTOM, CMD_ADDASSPOUSE, CMD_ADDASCHILD
-  , CMD_ADDSPOUSE, CMD_ADDCHILD, CMD_ADDFAMILY, CMD_PEDIGREE
-  , CMD_SWAPFAMILIES, CMD_SWAPCHILDREN, CMD_SWAPTOPBOTTOM
-  , CMD_NEWPERSON, CMD_NEWFAMILY, CMD_TANDEM
-  , CMD_REMOVEASSPOUSE, CMD_REMOVEASCHILD, CMD_REMOVESPOUSE, CMD_REMOVECHILD
-  , CMD_SOURCES
-  , CMD_SHOWSOURCES, CMD_HIDESOURCES
+	CMD_NONE /* unrecognized */
+	, CMD_PARTIAL /* part of a multichar sequence */
+	, CMD_QUIT, CMD_MENU_MORE, CMD_MENU_TOGGLE
+	, CMD_MENU_GROW, CMD_MENU_SHRINK
+	, CMD_EDIT, CMD_PERSON, CMD_FATHER
+	, CMD_MOTHER, CMD_SPOUSE, CMD_CHILDREN, CMD_UPSIB, CMD_DOWNSIB
+	, CMD_FAMILY, CMD_2FAM, CMD_PARENTS, CMD_2PAR, CMD_BROWSE
+	, CMD_TOP, CMD_BOTTOM, CMD_ADDASSPOUSE, CMD_ADDASCHILD
+	, CMD_ADDSPOUSE, CMD_ADDCHILD, CMD_ADDFAMILY, CMD_PEDIGREE
+	, CMD_SWAPFAMILIES, CMD_SWAPCHILDREN, CMD_SWAPTOPBOTTOM
+	, CMD_NEWPERSON, CMD_NEWFAMILY, CMD_TANDEM
+	, CMD_REMOVEASSPOUSE, CMD_REMOVEASCHILD, CMD_REMOVESPOUSE, CMD_REMOVECHILD
+	, CMD_SOURCES
+	, CMD_SHOWSOURCES, CMD_HIDESOURCES
+	, CMD_SCROLL_UP, CMD_SCROLL_DOWN, CMD_DEPTH_UP, CMD_DEPTH_DOWN
+	, CMD_NEXT, CMD_PREV, CMD_BROWSE_ZIP
+	, CMD_ADVANCED, CMD_GEDCOM_MODE
+	, CMD_TANDEM_CHILDREN, CMD_TANDEM_FATHERS, CMD_TANDEM_MOTHERS
+	, CMD_TANDEM_SPOUSES
+	, CMD_TOGGLE_CHILDNUMS, CMD_TOGGLE_PEDTYPE
+	, CMD_BROWSE_INDI
+	/* reserve range for direct to children */
+	, CMD_CHILD_DIRECT0, CMD_CHILD_DIRECT9=CMD_CHILD_DIRECT0+9
+	, CMD_JUMP_HOOK
 };
+
+void menuitem_initialize();
+void menuitem_terminate(void);
+INT menuitem_check_cmd(INT screen, STRING cmd);
+
 
 #endif /* _MENUITEM_H */
