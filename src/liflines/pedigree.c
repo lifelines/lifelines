@@ -101,7 +101,7 @@ static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA can
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, CANVASDATA canvas, INT gdvw);
 static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
 static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
-static void SetScrollMax(INT count, CANVASDATA canvas);
+static void SetScrollMax(CANVASDATA canvas, INT count);
 
 /*********************************************
  * local variables
@@ -109,7 +109,6 @@ static void SetScrollMax(INT count, CANVASDATA canvas);
 
 static int Gens = 4;
 static int Ancestors_mode = 1;
-static int Scrollp = 0;
 static int ScrollMax = 0;
 static DISPNODE Root = 0;
 
@@ -444,20 +443,23 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc
 	int mylen = sizeof(buffer);
 	INT width = canvas->maxcol;
 	NODE indi = 0;
+	INT drow = *row - canvas->scroll; /* effective display row */
 	int i, overflow=0;
 	if (mylen > width-2)
 		mylen = width-2;
-	if (*row-Scrollp>=canvas->minrow && *row-Scrollp<=canvas->maxrow) {
-		if (*row-Scrollp==canvas->minrow && Scrollp>0)
+	if (drow >= canvas->minrow && drow <= canvas->maxrow) {
+		/* in range to display */
+		/* check if it is a top or bottom row & there is more beyond */
+		if (drow == canvas->minrow && canvas->scroll>0)
 			overflow=1;
-		if (*row-Scrollp==canvas->maxrow && Scrollp<ScrollMax)
+		if (drow == canvas->maxrow && canvas->scroll<ScrollMax)
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
 			llstrcatn(&ptr, " ", &mylen);
 		line = (*fnc)(mylen, lpf_param);
 		llstrcatn(&ptr, line, &mylen);
-		(*canvas->line)(canvas, *row-Scrollp, 1, buffer, overflow);
+		(*canvas->line)(canvas, drow, 1, buffer, overflow);
 	}
 	(*row)++;
 }
@@ -605,15 +607,19 @@ trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen, CANVASDATA canvas)
 /*======================================================
  * SetScrollMax -- compute max allowable scroll based on
  *  number of rows in this pedigree tree
+ *  canvas:  [IN,OUT]  canvas data given by client
+ *            This routine truncates the canvas->scroll member.
+ *  count:   [IN]  # of items being displayed
  * Created: 2000/12/07, Perry Rapp
  *====================================================*/
 static void
-SetScrollMax (INT count, CANVASDATA canvas)
+SetScrollMax (CANVASDATA canvas, INT count)
 {
 	INT hgt = canvas->maxrow - canvas->minrow + 1;
-	ScrollMax = count - hgt;
-	if (ScrollMax<0)
-		ScrollMax=0;
+	INT max = count - hgt;
+	if (max<0) max=0;
+	if (canvas->scroll > max) canvas->scroll = max;
+	if (canvas->scroll < 0) canvas->scroll = 0;
 }
 /*=========================================================
  * draw_descendants -- build descendant tree & print it out
@@ -631,7 +637,7 @@ pedigree_draw_descendants (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 		INT count=0;
 		free_entire_tree();
 		Root = add_children(indi, gen, Gens, &count);
-		SetScrollMax(count, canvas);
+		SetScrollMax(canvas, count);
 	}
 	/* preorder traversal */
 	trav_pre_print_tn(Root, &row, gen, canvas);
@@ -649,7 +655,7 @@ pedigree_draw_gedcom (NODE node, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 		return;
 	}
 	count_nodes(node, gen, Gens, &count);
-		SetScrollMax(count, canvas);
+		SetScrollMax(canvas, count);
 	/* preorder traversal */
 	trav_pre_print_nd(node, &row, gen, canvas, gdvw);
 }
@@ -670,7 +676,7 @@ draw_gedcom_text (NODE node, CANVASDATA canvas, BOOLEAN reuse)
 		INT skip=0;
 		free_entire_tree();
 		Root = add_dnodes(node, gen, Gens, &count, canvas);
-		SetScrollMax(count, canvas); 
+		SetScrollMax(canvas, count); 
 	}
 	/* preorder traversal */
 	/* root may have siblings due to overflow/assimilation */
@@ -694,7 +700,7 @@ pedigree_draw_ancestors (NODE indi, CANVASDATA canvas, BOOLEAN reuse)
 		INT count=0;
 		free_entire_tree();
 		Root = add_parents(indi, gen, Gens, &count);
-		SetScrollMax(count, canvas);
+		SetScrollMax(canvas, count);
 	}
 	/* inorder traversal */
 	trav_bin_in_print_tn(Root, &row, gen, canvas);
@@ -722,28 +728,6 @@ pedigree_increase_generations (INT delta)
 		Gens = GENS_MAX;
 	else if (Gens < GENS_MIN)
 		Gens = GENS_MIN;
-}
-/*===========================================================
- * pedigree_scroll -- scroll up/down rows of pedigree display
- * Created: 2000/12/07, Perry Rapp
- *=========================================================*/
-void
-pedigree_scroll (INT delta)
-{
-	Scrollp += delta;
-	if (Scrollp < 0)
-		Scrollp = 0;
-	else if (Scrollp > ScrollMax)
-		Scrollp = ScrollMax;
-}
-/*===============================================================
- * pedigree_reset_scroll -- clear scroll when entering a new indi
- * Created: 2000/12/07, Perry Rapp
- *=============================================================*/
-void
-pedigree_reset_scroll (void)
-{
-	Scrollp=0;
 }
 /*===============================================================
  * free_dispnode_tree -- free a displaynode tree

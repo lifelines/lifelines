@@ -1,3 +1,11 @@
+2001-11-12 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/llinesi.h liflines/pedigree.c
+	liflines/show.c liflines/tandem.c:
+
+	Fix tandem scroll bugs, and tandem pedigree depth adj. was
+	left out.
+
 2001-11-12 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog interp/pvalue.c interp/rassa.c interp/write.c

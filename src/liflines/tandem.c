@@ -154,6 +154,12 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			*pseq = seq;
 			return BROWSE_LIST;
 			break;
+		case CMD_DEPTH_DOWN:       /* decrease pedigree depth */
+			pedigree_increase_generations(-1);
+			break;
+		case CMD_DEPTH_UP:      /* increase pedigree depth */
+			pedigree_increase_generations(+1);
+			break;
 		case CMD_QUIT:
 		default:
 			return BROWSE_QUIT;

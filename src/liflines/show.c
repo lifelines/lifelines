@@ -497,6 +497,7 @@ show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
 	canvas.maxcol = ll_cols;
+	canvas.scroll = Scroll1;
 	canvas.param = (void *)main_win;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
@@ -515,6 +516,7 @@ show_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
 	canvas.maxcol = ll_cols;
+	canvas.scroll = Scroll1;
 	canvas.param = (void *)main_win;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
@@ -550,6 +552,7 @@ show_gedcom (WINDOW *w, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
 	canvas.maxcol = ll_cols;
+	canvas.scroll = Scroll1;
 	canvas.param = (void *)w;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
@@ -838,7 +841,6 @@ show_scroll (INT delta)
 	Scroll1 += delta;
 	if (Scroll1 < 0)
 		Scroll1 = 0;
-	pedigree_scroll(delta);
 }
 /*===================================
  * show_scroll2 - scroll lower window
@@ -859,7 +861,6 @@ show_reset_scroll (void)
 {
 	Scroll1 = 0;
 	Scroll2 = 0;
-	pedigree_reset_scroll();
 }
 /*=====================================
  * pedigree_line - callback from pedigree code

@@ -74,20 +74,19 @@ NODE add_source(void);
 	/* gedcom view mode */
 enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	/* data for output canvas */
+	/* NB: pedigree will adjust scroll if out of limits */
 	struct canvasdata_s;
 		/* callback to output a line */
 	typedef void (*PEDLINE)(struct canvasdata_s * canvas, INT x, INT y
 		, STRING string, INT overflow);
 		/* collection of data needed by pedigree */
 	typedef struct canvasdata_s { INT minrow; INT maxrow; INT maxcol;
-		void * param; PEDLINE line; } *CANVASDATA;
+		INT scroll; void * param; PEDLINE line; } *CANVASDATA;
 	/* functions */
 void pedigree_draw_ancestors(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_draw_descendants(NODE indi, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_draw_gedcom(NODE node, INT gdvw, CANVASDATA canvasdata, BOOLEAN reuse);
 void pedigree_increase_generations(INT delta);
-void pedigree_reset_scroll(void);
-void pedigree_scroll(INT delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
