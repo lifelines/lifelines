@@ -44,9 +44,10 @@
  *   V1.02					  10-Nov-2000
  *   Updated URLs
  * 
- *  $Header$
- * 
  *  $Log$
+ *  Revision 1.4  2000/11/27 20:48:15  nozell
+ *  Header is to verbose, use just Log
+ *
  *  Revision 1.3  2000/11/27 20:46:26  nozell
  *  Typo in CVS header
  *
