@@ -1882,7 +1882,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
-	zs_setf(zstr, "TTPATH: %s", getoptstr("TTPATH", ""));
+	zs_setf(zstr, "TTPATH: %s", getoptstr("TTPATH", "."));
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	display_list(_("Codeset information"), list);
