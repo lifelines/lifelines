@@ -298,6 +298,7 @@ PVALUE evaluate_ufunc(PNODE, SYMTAB, BOOLEAN*);
 PVALUE eval_and_coerce(INT, PNODE, SYMTAB, BOOLEAN*);
 NODE eval_indi(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
+PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 void extract_date(STRING, INT*, INT*, INT*, INT*, STRING*);
 PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PNODE, STRING, STRING, STRING, PNODE);

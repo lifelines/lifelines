@@ -51,7 +51,7 @@ extern INT listbadkeys;
 extern char badkeylist[];
 
 extern STRING ntchld,ntprnt,idfbrs,entnam,unknam,notone,ifone;
-extern STRING nofopn,idbrws;
+extern STRING nofopn,idbrws,whtfname,whtfnameext;
 
 /*********************************************
  * local function prototypes
@@ -167,14 +167,8 @@ ask_for_file_worker (STRING mode,
 	char fnamebuf[512];
 	int elen, flen;
 	unsigned char pathtemp[MAXPATHLEN];
-	
-	if (ISNULL(ext)) {
-	  ext = NULL;	/* a null extension is the same as no extension */
-	  strcpy(fnamebuf, "enter file name: ");
-	}
-	else {
-	  sprintf(fnamebuf, "enter file name (*%s)", ext);
-	}
+
+	make_fname_prompt(fnamebuf, sizeof(fnamebuf), ext);
 
 	if (direction==INPUT)
 		fname = ask_for_input_filename(ttl, path, fnamebuf);
@@ -222,6 +216,22 @@ ask_for_file_worker (STRING mode,
 		return NULL;
 	}
 	return fp;
+}
+/*======================================
+ * make_fname_prompt -- Create prompt line
+ *  for filename, depending on extension
+ * Created: 2001/12/24, Perry Rapp
+ *====================================*/
+void
+make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
+{
+	if (ISNULL(ext)) {
+		ext = NULL;	/* a null extension is the same as no extension */
+		snprintf(fnamebuf, len, "%s: ", whtfname);
+	}
+	else {
+		snprintf(fnamebuf, len, whtfnameext, ext);
+	}
 }
 /*======================================
  * ask_for_input_file -- Ask for and open file for input

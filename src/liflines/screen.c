@@ -106,8 +106,8 @@ UIWINDOW extra_menu_win=NULL;
  *********************************************/
 
 extern BOOLEAN alldone, progrunning;
-extern STRING empstr, empstr71, empstr120, readpath;
-extern STRING abverr, uoperr;
+extern STRING empstr,empstr71,empstr120,readpath,ronlye,dataerr;
+extern STRING abverr,uoperr,badttnum,nosuchtt,outtt;
 extern STRING mtitle,cright,plschs;
 extern STRING mn_unkcmd,ronlya,ronlyr;
 extern STRING askynq,askynyn,askyny;
@@ -1629,9 +1629,9 @@ invoke_trans_menu (UIWINDOW wparent)
 static void
 edit_tt_menu (UIWINDOW wparent)
 {
-	INT tt;
-	while ((tt = choose_tt(wparent, mn_edttttl)) != -1) {
-		edit_mapping(tt);
+	INT ttnum;
+	while ((ttnum = choose_tt(wparent, mn_edttttl)) != -1) {
+		edit_mapping(ttnum);
 	}
 }
 /*======================================
@@ -1640,6 +1640,10 @@ edit_tt_menu (UIWINDOW wparent)
 static void
 load_tt_menu (UIWINDOW wparent)
 {
+	if (readonly) {
+		message(ronlye);
+		return;
+	}
 	message(mn_notimpl);
 }
 /*======================================
@@ -1648,9 +1652,33 @@ load_tt_menu (UIWINDOW wparent)
 static void
 save_tt_menu (UIWINDOW wparent)
 {
-	INT tt = choose_tt(wparent, mn_svttttl);
-	if (tt == -1) return;
-	message(mn_notimpl);
+	char fnamebuf[512];
+	STRING fname;
+	INT ttnum;
+	STRING ttexportdir;
+	
+	/* Ask which table */
+	ttnum = choose_tt(wparent, mn_svttttl);
+	if (ttnum == -1) return;
+	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
+		msg_error(badttnum);
+		return;
+	}
+	if (!tran_tables[ttnum]) {
+		msg_error(nosuchtt);
+		return;
+	}
+	/* Ask where to save it */
+	ttexportdir = getoptstr("LLTTEXPORT", ".");
+	make_fname_prompt(fnamebuf, sizeof(fnamebuf), ".ll");
+	fname = ask_for_output_filename(outtt, ttexportdir, fnamebuf);
+	if (ISNULL(fname)) return;
+
+	/* Save it */
+	if (!save_tt_to_file(ttnum, fname)) {
+		msg_error(dataerr);
+		return;
+	}
 }
 /*======================================
  * import_tts -- import translation tables

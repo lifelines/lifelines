@@ -271,13 +271,28 @@ assign_iden (SYMTAB stab, STRING id, PVALUE value)
 }
 /*=================================================
  * eval_and_coerce -- Generic evaluator and coercer
- * INT type:      desired pvalue type
- * PNODE node:    node to coerce
- * SYMTAB stab:   symbol table
- * BOOLEAN *eflg: error flag
+ *  type:  [IN]  desired pvalue type
+ *  node:  [IN]  node to coerce
+ *  stab:  [IN]  symbol table
+ *  eflg:  [OUT] error flag
  *===============================================*/
 PVALUE
 eval_and_coerce (INT type, PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PVALUE val = eval_without_coerce(node, stab, eflg);
+	if (*eflg) return NULL;
+	coerce_pvalue(type, val, eflg);
+	return val;
+}
+/*=================================================
+ * eval_without_coerce -- Generic evaluator
+ *  node:  [IN]  node to coerce
+ *  stab:  [IN]  symbol table
+ *  eflg:  [OUT] error flag
+ * Created: 2001/12/24, Perry Rapp
+ *===============================================*/
+PVALUE
+eval_without_coerce (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val;
 	if (*eflg) return NULL;
@@ -290,6 +305,5 @@ eval_and_coerce (INT type, PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return NULL;
 	}
-	coerce_pvalue(type, val, eflg);
 	return val;
 }

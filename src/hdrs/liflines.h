@@ -22,6 +22,7 @@ STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
 RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
+void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 
 /* screen.c types */
 /* data used in choose_from_array_x */

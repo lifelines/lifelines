@@ -49,7 +49,8 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonnum;
+extern STRING nonint1,nonstr1,nonvarx,nonstrx,nullarg1,nonfname1,nonfam1;
+extern STRING nonnodstr1;
 
 /*********************************************
  * local variables
@@ -2072,7 +2073,7 @@ __fnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "the arg to fnode is not a family");
+		prog_error(node, nonfam1, "fnode");
 		return NULL;
 	}
 	if (!fam) return create_pvalue(PGNODE, NULL);
@@ -2354,23 +2355,23 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE ystvar = inext(yvar);
 	*eflg = TRUE;
 	if (!iistype(modvar, IIDENT)) {
-		prog_error(node, "1st arg to extractdatestr must be a variable");
+		prog_error(node, nonvarx, "extractdatestr", 1);
 		return NULL;
 	}
 	if (!iistype(dvar, IIDENT)) {
-		prog_error(node, "2nd arg to extractdatestr must be a variable");
+		prog_error(node, nonvarx, "extractdatestr", 2);
 		return NULL;
 	}
 	if (!iistype(mvar, IIDENT)) {
-		prog_error(node, "3rd arg to extractdatestr must be a variable");
+		prog_error(node, nonvarx, "extractdatestr", 3);
 		return NULL;
 	}
 	if (!iistype(yvar, IIDENT)) {
-		prog_error(node, "4th arg to extractdatestr must be a variable");
+		prog_error(node, nonvarx, "extractdatestr", 4);
 		return NULL;
 	}
 	if (!iistype(ystvar, IIDENT)) {
-		prog_error(node, "5th arg to extractdatestr must be a variable");
+		prog_error(node, nonvarx, "extractdatestr", 5);
 		return NULL;
 	}
 	if ((date = inext(ystvar))) {
@@ -2378,7 +2379,7 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		if (*eflg) return NULL;
 		if (ptype(val) != PSTRING) {
 			*eflg = TRUE;
-			prog_error(node, "6th arg to extractdatestr must be a string");
+			prog_error(node, nonstrx, "extractdatestr", 6);
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -2396,22 +2397,31 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=================================================+
  * __stddate -- Return standard date format of event
  *   usage: stddate(EVENT) -> STRING
+ *      or  stddate(STRING) -> STRING
  *================================================*/
 static INT daycode = 0;
 static INT monthcode = 3;
+static INT yearcode = 0;
 static INT datecode = 0;
 PVALUE
 __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE evnt;
-	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
-	if (*eflg) {
-		prog_error(node, "the arg to stddate is not a record line");
-		return NULL;
+	STRING str=0;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	if (ptype(val) == PSTRING) {
+		str = (STRING) pvalue(val);
+	} else {
+		NODE evnt;
+		coerce_pvalue(PGNODE, val, eflg);
+		if (*eflg) {
+			prog_error(node, nonnodstr1, "stddate");
+			return NULL;
+		}
+		evnt = (NODE) pvalue(val);
+		str = event_to_date(evnt, NULL, FALSE);
 	}
-	evnt = (NODE) pvalue(val);
-	set_pvalue(val, PSTRING, do_format_date(event_to_date(evnt, NULL, FALSE),
-	    daycode, monthcode, 1, datecode, FALSE));
+	set_pvalue(val, PSTRING, do_format_date(str,
+	    daycode, monthcode, yearcode, datecode, FALSE));
 	return val;
 }
 /*========================================================================+
@@ -2429,7 +2439,7 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	evnt = (NODE) pvalue(val);
 	set_pvalue(val, PSTRING, do_format_date(event_to_date(evnt, NULL, FALSE),
-	    daycode, monthcode, 1, datecode, TRUE));
+	    daycode, monthcode, yearcode, datecode, TRUE));
 	return val;
 }
 /*===============================================+
@@ -2443,7 +2453,7 @@ __dayformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT value;
 	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to dayformat is not an integer");
+		prog_error(node, nonint1, "dayformat");
 		return NULL;
 	}
 	value = (INT) pvalue(val);
@@ -2464,7 +2474,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT value;
 	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to monthformat is not an integer");
+		prog_error(node, nonint1, "monthformat");
 		return NULL;
 	}
 	value = (INT) pvalue(val);
@@ -2472,6 +2482,27 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (value < 0) value = 0;
 	if (value > 6) value = 6;
 	monthcode = value;
+	return NULL;
+}
+/*===============================================+
+ * __yearformat -- Set month format standard date
+ *   usage: yearformat(INT) -> NULL
+ * Created: 2001/12/24, Perry Rapp
+ *==============================================*/
+PVALUE
+__yearformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	INT value;
+	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonint1, "yearformat");
+		return NULL;
+	}
+	value = (INT) pvalue(val);
+	delete_pvalue(val);
+	if (value < 0) value = 0;
+	yearcode = value;
 	return NULL;
 }
 /*=================================================+
@@ -2485,7 +2516,7 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT value;
 	PVALUE val =  eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to dateformat is not an integer");
+		prog_error(node, nonint1, "dateformat");
 		return NULL;
 	}
 	value = (INT) pvalue(val);
@@ -2572,7 +2603,7 @@ __value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to value is NULL");
+		prog_error(node, nullarg1, "value");
 		return NULL;
 	}
 	set_pvalue(val, PSTRING, (VPTR)nval(ged));
@@ -2594,7 +2625,7 @@ __xref (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to xref is NULL");
+		prog_error(node, nullarg1, "xref");
 		return NULL;
 	}
 	set_pvalue(val, PSTRING, (VPTR)nxref(ged));
@@ -2616,7 +2647,7 @@ __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to child is NULL");
+		prog_error(node, nullarg1, "child");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nchild(ged));
@@ -2638,7 +2669,7 @@ __parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to parent is NULL");
+		prog_error(node, nullarg1, "parent");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nparent(ged));
@@ -2660,7 +2691,7 @@ __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ged = (NODE) pvalue(val);
 	if (!ged) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to sibling is NULL");
+		prog_error(node, nullarg1, "sibling");
 		return NULL;
 	}
 	set_pvalue(val, PGNODE, (VPTR)nsibling(ged));
@@ -2701,14 +2732,14 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	char buffer[1024];
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	if (*eflg)  {
-		prog_error(node, "the arg to copyfile is not a string");
+		prog_error(node, nonstr1, "copyfile");
 		return NULL;
 	}
 	fname = (STRING) pvalue(val);
 	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
 		, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to copyfile is not a file name");
+		prog_error(node, nonfname1, "copyfile");
 		return NULL;
 	}
 	delete_pvalue(val);
@@ -2762,7 +2793,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to indi is not a string");
+		prog_error(node, nonstr1, "indi");
 		return NULL;
 	}
 	p = str = (STRING) pvalue(val);
@@ -2803,7 +2834,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT c, len;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to fam is not a string");
+		prog_error(node, nonstr1, "fam");
 		return NULL;
 	}
 	p = str = (STRING) pvalue(val);
@@ -2820,6 +2851,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (strlen(scratch) == 1) return NULL;
+	/* TODO - use gedlib layer code as in __indi above */
 	rawrec = retrieve_raw_record(scratch, &len);
 	if (rawrec && len > 6)
 		val = create_pvalue(PFAM, (VPTR)key_to_fam_cacheel(scratch));

@@ -238,6 +238,9 @@ STRING lstbot = SS "You are at the bottom of the list.";
 STRING lsttop = SS "You are at the top of the list.";
 STRING lstnew = SS "New persons were added to the current list.";
 
+STRING badttnum    = SS "System error: illegal map code";
+STRING nosuchtt    = SS "No such translation table in this database";
+
 /* GEDCOM file */
 STRING idgedf = SS "Please enter the name of the GEDCOM file.";
 STRING gdcker = SS "Checking GEDCOM file %s for errors.\n";
@@ -250,6 +253,7 @@ STRING dbdelk = SS "Adding unused keys as deleted keys...";
 STRING dbrdon = SS "The database is read-only; loading has been canceled.";
 STRING outarc = SS "Enter name of output archive file.";
 STRING outfin = SS "Database `%s' has been saved in `%s'.";
+STRING outtt  = SS "Enter name of output translation table file";
 
 STRING extrpt      = SS "<Choose outside this list>";
 STRING whatrpt     = SS "What is the name of the program?";
@@ -273,7 +277,16 @@ STRING rerbln      = SS "Line %d: This line has a bad link.";
 STRING rernwt      = SS "Line %d: This line needs white space before tag.";
 STRING rerilv      = SS "Line %d: This line has an illegal level.";
 STRING rerwlv      = SS "The record begins at wrong level.";
-STRING nonnum      = SS "At least one argument to %s is not numeric";
+
+/* report language errors */
+STRING nonint1     = SS "In %s the arg must be an integer.";
+STRING nonstr1     = SS "In %s the arg must be a string.";
+STRING nonvarx     = SS "In %s the arg #%d must be a variable.";
+STRING nonstrx     = SS "In %s the arg #%d must be a string.";
+STRING nullarg1    = SS "The arg to %s is null (not permissible).";
+STRING nonfname1   = SS "In %s the arg must be a filename.";
+STRING nonfam1     = SS "In %s the arg must be a family.";
+STRING nonnodstr1  = SS "In %s the arg must be a node or string.";
 
 /* browse display stuff */
 STRING dspl_indi   = SS "person";
@@ -366,6 +379,8 @@ STRING nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
 STRING idrpt       = SS "Program";
 STRING iddefpath   = SS "Default path: ";
 STRING misskeys    = SS "WARNING: missing keys";
+STRING whtfname    = SS "enter file name";
+STRING whtfnameext = SS "enter file name (*%s)";
 
 /* translation table errors */
 STRING baddec      = SS "Bad decimal number format.";

@@ -218,6 +218,7 @@ extern PVALUE __writefam(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __writeindi(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __xref(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __year(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __yearformat(PNODE, SYMTAB, BOOLEAN *);
 
 #endif /* _INTERP_PRIV_H */
 

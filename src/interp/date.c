@@ -84,32 +84,25 @@ static TABLE monthtbl = NULL;
 /*==========================================
  * do_format_date -- Do general date formatting
  * str - raw string containing a date
- * dfmt - day format:  0 - num, space
- *                     1 - num, lead 0
- *                     2 - num, as is
- * mfmt -  month format:0 - num, space
- *                      1 - num, lead 0
- *                      2 - num, as is
- *                      3 - eg, MAR
- *                      4 - eg, Mar
- *                      5 - eg, MARCH
- *                      6 - eg, March
- * yfmt - year format: none yet
- * sfmt - date format: 0 - da mo yr
- *                     1 - mo da, yr
- *                     2 - mo/da/yr
- *                     3 - da/mo/yr
- *                     4 - mo-da-yr
- *                     5 - da-mo-yr
- *                     6 - modayr
- *                     7 - damoyr
- *                     8 - yr mo da
- *                     9 - yr/mo/da
- *                     10- yr-mo-da
- *                     11- yrmoda
- *                     12- yr   (year only, old short form)
- *                     13- dd/mo yr
- *                     14- as in GEDCOM (truncated to 50 chars)
+ *  dfmt; [IN]  day format code (see format_day function below)
+ *  mfmt: [IN]  month format code (see format_month function below)
+ *  yfmt: [IN]  year format code (see format_year function below)
+ *  sfmt: [IN]  combining code
+ *                 0 - da mo yr
+ *                 1 - mo da, yr
+ *                 2 - mo/da/yr
+ *                 3 - da/mo/yr
+ *                 4 - mo-da-yr
+ *                 5 - da-mo-yr
+ *                 6 - modayr
+ *                 7 - damoyr
+ *                 8 - yr mo da
+ *                 9 - yr/mo/da
+ *                 10- yr-mo-da
+ *                 11- yrmoda
+ *                 12- yr   (year only, old short form)
+ *                 13- dd/mo yr
+ *                 14- as in GEDCOM (truncated to 50 chars)
  * cmplx - 0 is year only, 1 is complex, including
  *         date modifiers, ranges, and/or double-dating
  * Returns static buffer
@@ -322,16 +315,20 @@ format_mod (INT mod,
 }
 /*=======================================
  * format_day -- Formats day part of date
+ *  day:  [IN]  numeric day (0 for unknown)
+ *  dfmt: [IN]     0 - num, space
+ *                 1 - num, lead 0
+ *                 2 - num, as is
  *=====================================*/
 static STRING
-format_day (INT da,         /* day - 0 for unknown */
-            INT dfmt)       /* format code */
+format_day (INT da, INT dfmt)
 {
 	static unsigned char scratch[3];
 	STRING p;
 	if (da < 0 || da > 99 || dfmt < 0 || dfmt > 2) return NULL;
 	strcpy(scratch, "  ");
 	if (da >= 10) {
+		/* dfmt irrelevant with 2-digit days */
 		scratch[0] = da/10 + '0';
 		scratch[1] = da%10 + '0';
 		return scratch;
@@ -341,19 +338,26 @@ format_day (INT da,         /* day - 0 for unknown */
 		if (dfmt == 2) return NULL;
 		return scratch;
 	}
-	if (dfmt == 0)  p++;
-	else if (dfmt == 1)  *p++ = '0';
+	if (dfmt == 0)  p++; /* leading space */
+	else if (dfmt == 1)  *p++ = '0'; /* leading 0 */
 	*p++ = da + '0';
 	*p = 0;
 	return scratch;
 }
 /*===========================================
  * format_month -- Formats month part of date
+ *  mo:    [IN]  numeric month (0 for unknown)
+ *  mfmt:  [IN]    0 - num, space
+ *                 1 - num, lead 0
+ *                 2 - num, as is
+ *                 3 - eg, MAR
+ *                 4 - eg, Mar
+ *                 5 - eg, MARCH
+ *                 6 - eg, March
  *  returns static buffer
  *=========================================*/
 static STRING
-format_month (INT mo,         /* month - 0 for unknown */
-              INT mfmt)       /* format code */
+format_month (INT mo, INT mfmt)
 {
 	static char scratch[3];
 	STRING p;
@@ -373,15 +377,27 @@ format_month (INT mo,         /* month - 0 for unknown */
 }
 /*=========================================
  * format_year -- Formats year part of date
+ *  yr:   [IN]  numeric year (0 for unknown)
+ *  yfmt: [IN]     0 - positive years only, no leading, no AD/BC
+ *                 1 - bare year number, no leading, no AD/BC
+ *
+ *  TODO: Add support for BC formats
+ *  returns static buffer
  *=======================================*/
 static STRING
-format_year (INT yr,
-             INT yfmt)
+format_year (INT yr, INT yfmt)
 {
-	static unsigned char scratch[50];
+	static char scratch[50];
 	if (yr <= 0)  return NULL;
 	switch (yfmt) {
-	default: sprintf(scratch, "%d", yr);
+	case 1:
+		sprintf(scratch, "%d", yr);
+		break;
+	case 0:
+	default:
+		if (yr <= 0) return NULL;
+		sprintf(scratch, "%d", yr);
+		break;
 	}
 	return scratch;
 }

@@ -236,6 +236,7 @@ BUILTINS builtins[] = {
 	{"writeindi",	1,	1,	__writeindi},
 	{"xref",		1,	1,	__xref},
 	{"year",		1,	1,	__year},
+	{"yearformat",	1,	1,	__yearformat},
 };
 
 INT nobuiltins = ARRSIZE(builtins);

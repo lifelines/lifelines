@@ -17,20 +17,21 @@
 
 
 extern STRING map_keys[];
-extern STRING cmperr,aredit,ronlye,dataerr,sepch;
+extern STRING cmperr,aredit,ronlye,dataerr,badttnum;
+extern STRING sepch;
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
  *  code: [in] which translation table (see defn of map_keys)
  *============================================*/
 BOOLEAN
-edit_mapping (INT code)
+edit_mapping (INT ttnum)
 {
 	TRANTABLE tt;
 	BOOLEAN err;
 
-	if (code < 0 || code >= NUM_TT_MAPS) {
-		msg_error("System error: illegal map code");
+	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
+		msg_error(badttnum);
 		return FALSE;
 	}
 	if (readonly) {
@@ -41,11 +42,8 @@ edit_mapping (INT code)
 
 	unlink(editfile);
 
-	if (tran_tables[code]) {
-		INT rtn;
-		TRANSLFNC translfnc = NULL; /* Must not translate the translation table! */
-		rtn = retrieve_to_textfile(map_keys[code], editfile, translfnc);
-		if (rtn == RECORD_ERROR) {
+	if (tran_tables[ttnum]) {
+		if (!save_tt_to_file(ttnum, editfile)) {
 			msg_error(dataerr);
 			return FALSE;
 		}
@@ -55,13 +53,13 @@ edit_mapping (INT code)
 		char buffer[128], temp[64];
 		STRING ptr=buffer;
 		INT mylen = sizeof(buffer);
-		tt = init_map_from_file(editfile, code, &err);
+		tt = init_map_from_file(editfile, ttnum, &err);
 		if (!err) {
 			TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
-			if (tran_tables[code])
-				remove_trantable(tran_tables[code]);
-			tran_tables[code] = tt;
-			store_text_file_to_db(map_keys[code], editfile, transfnc);
+			if (tran_tables[ttnum])
+				remove_trantable(tran_tables[ttnum]);
+			tran_tables[ttnum] = tt;
+			store_text_file_to_db(map_keys[ttnum], editfile, transfnc);
 			return TRUE;
 		}
 		ptr[0] = 0;
@@ -77,4 +75,19 @@ edit_mapping (INT code)
 		}
 		remove_trantable(tt);
 	}
+}
+/*==============================================
+ * save_tt_to_file -- Save one translation table
+ *  to external file
+ * returns TRUE if successful
+ * Created: 2001/12/24, Perry Rapp
+ *============================================*/
+BOOLEAN
+save_tt_to_file (INT ttnum, STRING filename)
+{
+	INT rtn;
+	TRANSLFNC translfnc = NULL; /* Must not translate the translation table! */
+	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
+	rtn = retrieve_to_textfile(map_keys[ttnum], filename, translfnc);
+	return (rtn != RECORD_ERROR);
 }

@@ -10,6 +10,19 @@
 	Moved remaining English strings in show.c into messages.c.
 	Appended div. info to marriage line in family vitals.
 
+	* ChangeLog gedlib/editmap.c gedlib/messages.c hdrs/feedback.h
+	hdrs/gedcom.h hdrs/interp.h hdrs/liflines.h hdrs/llstdlib.h
+	hdrs/screen.h interp/builtin.c interp/date.c interp/eval.c
+	interp/functab.c interp/interpi.h liflines/ask.c
+	liflines/screen.c reports/exercise.ll:
+
+	Moved some English strings from builtin.c to messages.c.
+	Added yearformat=1 which displays negative years. (But
+	doesn't work because parser doesn't handle years before 100).
+	Modified __stddate to work on strings as well as nodes.
+	Added date testing section to exercise.ll.
+	Added __yearformat function.
+
 2001-12-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/feedback.h

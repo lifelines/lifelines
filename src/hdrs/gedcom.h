@@ -395,6 +395,7 @@ STRING retrieve_raw_record(STRING, INT*);
 STRING rmvat(STRING);
 STRING rmvbrackets(STRING str);
 void rptlocale(void);
+BOOLEAN save_tt_to_file(INT ttnum, STRING filename);
 void set_displaykeys(BOOLEAN);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
