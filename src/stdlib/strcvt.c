@@ -66,7 +66,7 @@ makewide (const char *str)
 		CNSTRING dest = get_wchar_codeset_name();
 		zstr = zs_new();
 		/* dest = "wchar_t" doesn't work--Perry, 2002-11-20 */
-		if (!iconv_trans(int_codeset, dest, str, zstr, "?")) {
+		if (!iconv_trans(int_codeset, dest, str, zstr, '?')) {
 			zs_free(&zstr);
 		}
 	}
@@ -81,7 +81,7 @@ makeznarrow (ZSTR zwstr)
 {
 	ZSTR zout=zs_new();
 	CNSTRING src = get_wchar_codeset_name();
-	if (!iconv_trans(src, int_codeset, zs_str(zwstr), zout, "?"))
+	if (!iconv_trans(src, int_codeset, zs_str(zwstr), zout, '?'))
 		zs_free(&zout);
 	return zout;
 }

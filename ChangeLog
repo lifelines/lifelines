@@ -11,6 +11,11 @@
 	Change temp file on Win32 to end in .txt extension (so SaveAs UTF-8
 	works in notepad).
 
+	* ChangeLog src/gedlib/xlat.c src/hdrs/icvt.h src/stdlib/icvt.c
+	src/stdlib/strcvt.c
+
+	Bugfix for illegal character handling in iconv wrapper for Win32.
+
 2003-04-20 Perry Rapp
 
 	* ChangeLog win32/mycurses.c

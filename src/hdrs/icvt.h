@@ -13,7 +13,7 @@
 #ifndef ICVT_H_INCLUDED
 #define ICVT_H_INCLUDED 1
 
-BOOLEAN iconv_trans(CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, CNSTRING illegal);
+BOOLEAN iconv_trans(CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal);
 BOOLEAN iconv_can_trans(CNSTRING src, CNSTRING dest);
 void init_win32_iconv_shim(CNSTRING dllpath);
 

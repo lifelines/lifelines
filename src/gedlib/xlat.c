@@ -345,7 +345,7 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
 		if (xstep->iconv_src) {
 			/* an iconv step */
 			ZSTR ztemp=zs_new();
-			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(zstr), ztemp, "?")) {
+			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(zstr), ztemp, '?')) {
 				cvtd=TRUE;
 				zs_move(zstr, &ztemp);
 			} else {

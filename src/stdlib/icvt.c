@@ -56,7 +56,7 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
  * Only called if HAVE_ICONV
  *=================================================*/
 BOOLEAN
-iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, CNSTRING illegal)
+iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 {
 #ifdef HAVE_ICONV
 	iconv_t ict;
@@ -137,7 +137,6 @@ cvting:
 			/* unconvertible input character */
 			/* append placeholder & skip over */
 			size_t wid = 1;
-			CNSTRING placeholder = illegal ? illegal : "%";
 			if (eqstr(src, "UTF-8")) {
 				wid = utf8len(*inptr);
 			}
@@ -145,13 +144,31 @@ cvting:
 				wid = inleft;
 			inptr += wid;
 			inleft -= wid;
-			zs_apps(zout, placeholder);
+			/* Following code is only correct for UCS-2LE, UCS-4LE */
+			if (chwidth == 2)
+			{
+				unsigned short * u = (unsigned short *)outptr;
+				*u = illegal;
+				outptr += sizeof(u);
+			}
+			else if (chwidth == 4)
+			{
+				unsigned int * u = (unsigned int *)outptr;
+				*u = illegal;
+				outptr += sizeof(u);
+			}
+			else
+			{
+				*outptr++ = illegal;
+			}
+			zs_set_len(zout, outptr-zs_str(zout));
 		}
 		/* update output variables */
 		/* (may have reallocated, plus need to point to end */
 		outptr = zs_str(zout)+zs_len(zout);
 		outleft = zs_allocsize(zout)-zs_len(zout)-4;
-		goto cvting;
+		if (inleft)
+			goto cvting;
 	}
 
 icvt_terminate_and_exit:
