@@ -118,7 +118,8 @@ Non-Source Code Directories
 
 ./docs/
 
-    Versions of the quick reference guide
+    Documentation in various formats, including old quickref, and 
+    the new users guide and report manual (and developers guide).
 
 ./reports/
 

@@ -4,6 +4,10 @@
 
 	Move curses check to own function, ifndef out for cygwin.
 
+	* ChangeLog README.LAYOUT
+
+	Update description of docs subdirectory.
+
 2005-01-05 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c
