@@ -5,6 +5,11 @@
 	Bump version to 3.0.39i to differentiate interim
 	tarballs from released version.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Clarify use of environment in properties (and list
+	environment variables alphabetically).
+
 2005-01-11 Matt Emmerton
 
 	* ChangeLog reports/Makefile.am

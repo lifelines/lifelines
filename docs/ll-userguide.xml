@@ -4797,9 +4797,10 @@ values found when reading in the configuration files.
 <glossentry><glossterm>environment table</glossterm><glossdef>
 
 <para>
-Finally, <application>LifeLines</application> looks in the environment table.  This table contains the
-values found in the environment variables, LLPROGRAMS, LLREPORTS,
-LLARCHIVES, LLDATABASES, LLNEWDBDIR, and LLEDITOR.
+Finally, <application>LifeLines</application> looks in the environment table.  Only a handful of properties
+may be set from the environment, namely 
+LLARCHIVES, LLCONFIGFILE, LLDATABASES, LLEDITOR, 
+LLNEWDBDIR, LLPROGRAMS, and LLREPORTS.
 </para>
 </glossdef></glossentry>
 </glosslist>
