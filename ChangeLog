@@ -2,12 +2,17 @@
 
 	* ChangeLog build/msvc6/llines/llines.rc src/stdlib/icvt.c
 
-	Fix icvt.c to terminate wide in the 0-length input case.
-	Adjust windows version for 3.0.27p2.
+	Fix icvt.c to terminate wide in the 0-length input case
+	(re: bug#721239). Adjust windows version for 3.0.27p2.
 
 	* ChangeLog docs/ll-reportmanual.xml
 
-	Document that Union, intersect, and difference modify their arguments.
+	Document that Union, intersect, and difference modify their arguments
+	(re: bug#719757).
+
+	* ChangeLog src/liflines/tandem.c
+
+	Fix tandem mode to not default to quit (bug#717421).
 
 2003-04-14 Stephen Dum
         * ChangeLog src/hdrs/standard.h docs/ll-reportmanual.txt

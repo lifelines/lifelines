@@ -177,7 +177,6 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			pedigree_increase_generations(+1);
 			break;
 		case CMD_QUIT:
-		default:
 			return BROWSE_QUIT;
 		}
 	}
@@ -274,7 +273,6 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			show_childnumbers();
 			break;
 		case CMD_QUIT:	/* Return to main menu */
-		default:
 			return BROWSE_QUIT;
 		}
 	}
