@@ -1,3 +1,10 @@
+2004-01-05 Matt Emmerton
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Remove obsolete closing statement from report docs (section
+	on modifying database; it is now in fact possible).
+
 2004-01-04 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c
