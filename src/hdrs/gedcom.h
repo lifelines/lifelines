@@ -270,6 +270,7 @@ INT val_to_sex(NODE);
 BOOLEAN value_to_list(STRING, LIST, INT*, STRING);
 STRING value_to_xref(STRING);
 BOOLEAN writexrefs(void);
+void write_nodes(INT, FILE*, TRANTABLE, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
 
 #define fam_to_event indi_to_event
 
