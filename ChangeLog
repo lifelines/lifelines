@@ -4,6 +4,10 @@
 
 	Fix leak of zstring if iconv translation step fails.
 
+	* ChangeLog src/gedlib/xlat.c:
+
+	Fix bug creating iconv step of xlat.
+
 2003-02-17 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c:

@@ -233,7 +233,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	if (eqstr(zs_str(zsrc), zs_str(zdest))) {
 		/* main conversion is identity */
 	} else if (iconv_can_trans(zs_str(zsrc), zs_str(zdest))) {
-		XLSTEP xstep = create_iconv_step(src, dest);
+		XLSTEP xstep = create_iconv_step(zs_str(zsrc), zs_str(zdest));
 		enqueue_list(xlat->steps, xstep);
 	} else {
 		DYNTT dyntt = get_conversion_dyntt(zs_str(zsrc), zs_str(zdest));
