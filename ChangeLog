@@ -27,6 +27,9 @@
 
 	* stdlib/signals.c: fix __fatal/ll_abort bug.
 
+	* gedlib/xreffile.c liflines/import.c liflines/valgdcom.c
+	Implement DELETESETs in xreffile.c and sort down instead of up.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
