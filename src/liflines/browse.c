@@ -295,8 +295,9 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	}
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
-	if (i == 0) rec = add_family(NULL, NULL, current);
-	else if (save) {
+	if (i == 0) {
+		rec = add_family_by_edit(NULL, NULL, current, &disp_long_rfmt);
+	} else if (save) {
 		char scratch[100];
 		STRING name = indi_to_name(nztop(save), 55);
 		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
@@ -305,11 +306,11 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 			llstrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
-			rec = add_family(current, save, NULL);
+			rec = add_family_by_edit(current, save, NULL, &disp_long_rfmt);
 		else
-			rec = add_family(current, NULL, NULL);
+			rec = add_family_by_edit(current, NULL, NULL, &disp_long_rfmt);
 	} else
-		rec = add_family(current, NULL, NULL);
+		rec = add_family_by_edit(current, NULL, NULL, &disp_long_rfmt);
 	return rec;
 }
 /*====================================================

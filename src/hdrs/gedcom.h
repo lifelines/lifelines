@@ -559,7 +559,7 @@ NODE next_node_it_ptr(NODE_ITER nodeit);
 STRING node_to_string(NODE);
 NODE string_to_node(STRING);
 void write_indi_to_file_for_edit(NODE indi, CNSTRING file, RFMT rfmt);
-void write_fam_to_file(NODE fam, CNSTRING file);
+void write_fam_to_file_for_edit(NODE fam, CNSTRING file, RFMT rfmt);
 void write_nodes(INT, FILE*, XLAT, NODE, BOOLEAN, BOOLEAN, BOOLEAN);
 
 /* refns.c */

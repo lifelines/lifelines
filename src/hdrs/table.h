@@ -88,7 +88,6 @@ STRING valueofbool_str(TABLE tab, CNSTRING key, BOOLEAN *there);
 /* table iteration */
 TABLE_ITER begin_table_iter(TABLE tab);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
-BOOLEAN next_table(TABLE_ITER tabit);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
 void end_table_iter(TABLE_ITER * ptabit);
 

@@ -22,7 +22,7 @@ typedef struct tag_import_feedback *IMPORT_FEEDBACK;
 struct tag_export_feedback;
 
 /* add.c */
-RECORD add_family(RECORD spouse1, RECORD spouse2, RECORD child);
+RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt);
 RECORD add_indi_by_edit(RFMT rfmt);
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);

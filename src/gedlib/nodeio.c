@@ -38,6 +38,7 @@ extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupunix, qSunsupuniv;
  * local function prototypes, alphabetical
  *********************************************/
 
+/* alphabetical */
 static BOOLEAN buffer_to_line(STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
@@ -46,6 +47,8 @@ static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref,
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
+static BOOLEAN write_bom(void);
+static void write_fam_to_file(NODE fam, CNSTRING file, BOOLEAN bom);
 static void write_indi_to_file(NODE indi, CNSTRING file, BOOLEAN bom);
 static void write_node(INT levl, FILE *fp, XLAT ttm,
 	NODE node, BOOLEAN indent);
@@ -663,6 +666,19 @@ write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
 	join_indi(indi, name, refn, sex, body, famc, fams);
 }
 /*=====================================
+ * write_bom - whether to write Unicode BOM
+ * (byte order marker)
+ *===================================*/
+static BOOLEAN
+write_bom (void)
+{
+#ifdef WIN32
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}
+/*=====================================
  * write_indi_to_file_for_edit - write node tree into GEDCOM
  *  file to be edited
  * (no user interaction)
@@ -670,22 +686,30 @@ write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
 void
 write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
 {
-	BOOLEAN bom =
-#ifdef WIN32
-	TRUE;
-#else
-	FALSE;
-#endif
+	BOOLEAN bom = write_bom();
 	annotate_with_supplemental(indi, rfmt);
 	write_indi_to_file(indi, file, bom);
 	resolve_refn_links(indi);
 }
 /*=====================================
- * write_fam_to_file -- write node tree into GEDCOM
+ * write_indi_to_file_for_edit - write node tree into GEDCOM
+ *  file to be edited
  * (no user interaction)
  *===================================*/
 void
-write_fam_to_file (NODE fam, CNSTRING file)
+write_fam_to_file_for_edit (NODE fam, CNSTRING file, RFMT rfmt)
+{
+	BOOLEAN bom = write_bom();
+	annotate_with_supplemental(fam, rfmt);
+	write_fam_to_file(fam, file, bom);
+	resolve_refn_links(fam);
+}
+/*=====================================
+ * write_fam_to_file -- write node tree into GEDCOM
+ * (no user interaction)
+ *===================================*/
+static void
+write_fam_to_file (NODE fam, CNSTRING file, BOOLEAN bom)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);

@@ -1757,7 +1757,7 @@ invoke_add_menu (void)
 	case 'p':
 		rec = add_indi_by_edit(&disp_long_rfmt);
 		break;
-	case 'f': add_family(NULL, NULL, NULL); break;
+	case 'f': add_family_by_edit(NULL, NULL, NULL, &disp_long_rfmt); break;
 	case 'c': my_prompt_add_child(NULL, NULL); break;
 	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;

@@ -163,9 +163,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 	fam1 = nztop(frec1);
 
 /* Prepare file for user to edit */
-	annotate_with_supplemental(fam1, rfmt);
-	write_fam_to_file(fam1, editfile);
-	resolve_refn_links(fam1);
+	write_fam_to_file_for_edit(fam1, editfile, rfmt);
 
 /* Have user edit record */
 	do_edit();
@@ -206,7 +204,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-				write_fam_to_file(fam2, editfile);
+				write_fam_to_file_for_edit(fam2, editfile, rfmt);
 				do_edit();
 				continue;
 			}

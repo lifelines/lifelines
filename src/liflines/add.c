@@ -50,6 +50,12 @@ extern STRING qSidsadd, qSidsinf, qSkchild, qSiscinf, qSnotopp, qSidsps1, qSidsp
 extern STRING qSnosex,  qShashsb, qShaswif, qSidchld, qSgdfadd, qScfcadd, qSiredit;
 extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronlye;
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static void add_new_indi_to_db(RECORD indi0);
+static void add_new_fam_to_db(NODE fam2, NODE spouse1, NODE spouse2, NODE child);
 
 /*==========================================================
  * get_unresolved_ref_error -- get string for unresolved reference(s)
@@ -142,17 +148,20 @@ add_indi_by_edit (RFMT rfmt)
 		if (indi0) delref_record(indi0);
 		return NULL;
 	}
-	add_new_indi(indi0);
+	
+	/* add the new record to the database */
+	add_new_indi_to_db(indi0);
+
 	msg_status(_(qSgdpadd), indi_to_name(nztop(indi0), 35));
 	return indi0;
 }
 /*==========================================================
- * add_new_indi -- Add newly created person to database
+ * add_new_indi_to_db -- Add newly created person to database
  * (no user interaction)
  * creates record & adds to cache
  *========================================================*/
-void
-add_new_indi (RECORD indi0)
+static void
+add_new_indi_to_db (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
 	CNSTRING key=0;
@@ -490,20 +499,19 @@ add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
 	}
 }
 /*=========================================
- * add_family -- Add new family to database
+ * add_family_by_edit -- Add new family to database
  * (with user interaction)
  *=======================================*/
 RECORD
-add_family (RECORD sprec1, RECORD sprec2, RECORD chrec)
+add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 {
 	INT sex1 = 0;
 	INT sex2 = 0;
 	NODE spouse1, spouse2, child;
-	NODE fam1, fam2=0, refn, husb, wife, chil, body;
-	NODE node;
+	NODE fam1, fam2=0, husb, wife, chil;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	STRING xref, msg, key, str;
+	STRING msg, key, str;
 	BOOLEAN emp;
 	FILE *fp;
 
@@ -618,7 +626,7 @@ editfam:
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-				write_fam_to_file(fam2, editfile);
+				write_fam_to_file_for_edit(fam2, editfile, rfmt);
 				do_edit();
 				continue;
 			}
@@ -633,7 +641,29 @@ editfam:
 		free_nodes(fam2);
 		return NULL;
 	}
-	nxref(fam2) = strsave(xref = getfxref());
+
+	/* Add the new record to the database */
+	add_new_fam_to_db(fam2, spouse1, spouse2, child);
+
+	message(_(qSgdfadd));
+
+	key = rmvat(nxref(fam2));
+	return key_to_record(key);
+}
+/*==========================================================
+ * add_new_fam_to_db -- Add newly created family to database
+ * (no user interaction)
+ * creates record & adds to cache
+ *========================================================*/
+static void
+add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
+{
+	NODE refn, husb, wife, chil, body;
+	NODE node;
+	STRING key=0;
+	STRING xref = getfxref();
+
+	nxref(fam2) = strsave(xref);
 
 /* Modify spouse/s and/or child */
 
@@ -654,8 +684,6 @@ editfam:
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
-	message(_(qSgdfadd));
-	return key_to_record(key);
 }
 #ifdef ETHEL
 /*=========================================

@@ -32,6 +32,18 @@
 
 	Create lists with refcount of 1.
 
+	* ChangeLog src/gedlib/nodeio.c src/gedlib/refns.c
+	src/hdrs/gedcom.h src/hdrs/liflines.h src/hdrs/table.h
+	src/liflines/add.c src/liflines/browse.c
+	src/liflines/edit.c src/liflines/llinesi.h
+	src/liflines/screen.c src/liflines/tandem.c
+
+	New function write_fam_to_file_for_edit (gains BOM handling).
+	Split add_family into add_family_by_edit and local add_new_fam_to_db.
+	Renamed add_new_indi to add_new_indi_to_db & made local.
+	Prevent obscure crash by locking record during 
+	annotate_with_supplemental.
+
 2005-02-01 Perry Rapp
 
 	* ChangeLog src/stdlib/table.c

@@ -154,7 +154,8 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			current2 = tmp;
 			break;
 		case CMD_ADDFAMILY: 	/* make two persons parents in family */
-			if ((tmp = add_family(current1, current2, NULL)) != 0) {
+			tmp = add_family_by_edit(current1, current2, NULL, &disp_long_rfmt);
+			if (tmp) {
 				*prec1 = tmp;
 				return BROWSE_FAM;
 			}

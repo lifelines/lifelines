@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "lloptions.h"
 #include "zstr.h"
+#include "cache.h"
 
 /*********************************************
  * external/imported variables
@@ -372,17 +373,24 @@ INT
 resolve_refn_links (NODE node)
 {
 	INT unresolved = 0;
-	struct tag_node_iter nodeit;
-	NODE child=0;
 	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
+	NODE child=0;
+	CACHEEL cel = node ? node->n_cel: 0;
+	struct tag_node_iter nodeit;
 
 	if (!node) return 0;
 
+	if (cel) lock_cache(cel); /* ensure node doesn't fall out of cache */
+
+	/* resolve all descendant nodes */
 	begin_node_it(node, &nodeit);
 	while ((child = next_node_it_ptr(&nodeit)) != NULL) {
 		if (!resolve_node(child, annotate_pointers))
 			++unresolved;
 	}
+
+	if (cel) unlock_cache(cel);
+
 	return unresolved;
 }
 /*=======================================================
@@ -462,11 +470,18 @@ annotate_with_supplemental (NODE node, RFMT rfmt)
 	BOOLEAN expand_refns = (getoptint("ExpandRefnsDuringEdit", 0) > 0);
 	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
 	NODE child=0;
+	CACHEEL cel = node->n_cel;
 	struct tag_node_iter nodeit;
+
+	if (cel) lock_cache(cel); /* ensure node doesn't fall out of cache */
+
+	/* annotate all descendant nodes */
 	begin_node_it(node, &nodeit);
 	while ((child = next_node_it_ptr(&nodeit)) != NULL) {
 		annotate_node(child, expand_refns, annotate_pointers, rfmt);
 	}
+
+	if (cel) unlock_cache(cel);
 }
 /*=======================================================
  * annotate_node -- Alter a node by
