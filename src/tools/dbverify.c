@@ -30,7 +30,6 @@
  *   see any duplicates
  *===============================================================*/
 
-#include <stdarg.h>
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "gedcom.h"
@@ -39,6 +38,11 @@
 #include "lloptions.h"
 #include "cache.h"
 #include "arch.h"
+
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 
 /*********************************************

@@ -9,7 +9,11 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+
+#ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /* we truncate screen to no larger than this */
 #define CUR_MAXLINES 80

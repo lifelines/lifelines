@@ -33,7 +33,11 @@
 
 #include <sys/types.h>
 #include <stdio.h>
+
+#ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /*
  * Implemented using vsprintf(), and ignoring the size restriction.

@@ -18,7 +18,11 @@
 
 #include <sys/types.h>
 #include <stdio.h>
+
+#ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 #if defined(HAVE__VSNPRINTF)
 int

@@ -30,7 +30,6 @@
  *   3.0.3 - 22 Sep 95
  *===========================================================*/
 
-#include <stdarg.h>
 #include <time.h>
 #include "llstdlib.h"
 #include "table.h"
@@ -46,6 +45,11 @@
 #include "parse.h"
 #include "zstr.h"
 #include "icvt.h"
+
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /*********************************************
  * global/exported variables

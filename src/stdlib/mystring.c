@@ -27,9 +27,12 @@
 */
 
 #include "llstdlib.h"
-#include <stdarg.h>
 #include "mystring.h"
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 
 

@@ -28,11 +28,15 @@
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
 
-#include <stdarg.h>
 #include "llstdlib.h"
 #include "liflines.h"
 #include "feedback.h"
 #include "arch.h"
+
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 static char f_crashfile[MAXPATHLEN]="";
 static char f_currentdb[MAXPATHLEN]="";

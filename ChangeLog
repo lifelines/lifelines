@@ -26,6 +26,14 @@
 
 	Released 3.0.27p1 (and cvs tagged it).
 
+	* ChangeLog src/arch/snprintf.c src/arch/vsnprintf.c
+	src/gedlib/node.c src/hdrs/llstdlib.h src/hdrs/win32/curses.h
+	src/interp/interp.c src/liflines/error.c
+	src/liflines/valgdcom.c src/stdlib/mystring.c
+	src/tools/dbverify.c src/tools/wprintf.c
+
+	Ensuring that stdarg is included everywhere va_list appears.
+
 2003-04-13 Perry Rapp
 
 	* ChangeLog src/btree/record.c src/gedlib/names.c

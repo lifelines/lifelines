@@ -34,6 +34,10 @@
  */
 #include "standard.h"
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /* Current internal codeset (the same as that of the loaded database). */
 extern BOOLEAN uu8;         /* flag set if int_codeset is UTF-8 */

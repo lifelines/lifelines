@@ -22,12 +22,16 @@
    SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-#include <stdarg.h>
 #include <stdio.h>
 #include "llstdlib.h"
 #include "feedback.h"
 #include "gedcom.h"
 #include "interp.h"
+
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /*=============================================================
  * Implement all the required feedback functions as simple

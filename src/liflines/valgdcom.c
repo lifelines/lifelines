@@ -33,7 +33,6 @@
  *===========================================================*/
 
 #include "sys_inc.h"
-#include <stdarg.h>
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -45,6 +44,11 @@
 #include "lloptions.h"
 #include "zstr.h"
 #include "codesets.h"
+
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 extern STRING qSmisixr, qSmisfxr;
 extern STRING qSmulper, qSmulfam;
