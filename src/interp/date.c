@@ -1497,15 +1497,19 @@ static void
 load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 {
 	/* 0-5 codes as in load_cmplx_pic(...) above */
-	STRING loc_abbrev = strdup(_(abbrev));
+	STRING locx_abbrev = strdup(_(abbrev));
 	STRING loc_full = strdup(_(full));
+	STRING loc_abbrev = locx_abbrev;
+	/* special handling for **may, to differentiate from may */
+	if (loc_abbrev[0]=='*' && loc_abbrev[1]=='*')
+		loc_abbrev += 2;
 	monarr[monum][0] = strdup(upper(loc_abbrev));
 	monarr[monum][1] = strdup(titlecase(loc_abbrev));
 	monarr[monum][2] = strdup(upper(loc_full));
 	monarr[monum][3] = strdup(titlecase(loc_full));
 	monarr[monum][4] = strdup(lower(loc_abbrev));
 	monarr[monum][5] = strdup(lower(loc_full));
-	stdfree(loc_abbrev);
+	stdfree(locx_abbrev);
 	stdfree(loc_full);
 }
 /*=============================

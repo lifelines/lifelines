@@ -1460,13 +1460,13 @@ draw_tt_win (STRING prompt)
 	draw_win_box(win);
 	row = 1;
 	mvwaddstr(win, row++, 2, prompt);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_edin, MEDIN);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_ined, MINED);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_gdin, MGDIN);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_ingd, MINGD);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_dsin, MDSIN);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inds, MINDS);
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inrp, MINRP);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_edin), MEDIN);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_ined), MINED);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_gdin), MGDIN);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_ingd), MINGD);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_dsin), MDSIN);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_inds), MINDS);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_inrp), MINRP);
 	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*==============================
@@ -1751,7 +1751,7 @@ invoke_trans_menu (void)
 		stdout_vis=FALSE;
 		repaint_trans_menu(uiwin);
 		reactivate_uiwin(uiwin);
-		wmove(uiw_win(uiwin), 1, strlen(mn_tt_ttl)+3);
+		wmove(uiw_win(uiwin), 1, strlen(_(mn_tt_ttl))+3);
 		code = interact(uiwin, "elsxiq", -1);
 
 		begin_action();
@@ -1774,7 +1774,7 @@ static void
 edit_tt_menu (void)
 {
 	INT ttnum;
-	while ((ttnum = choose_tt( mn_edttttl)) != -1) {
+	while ((ttnum = choose_tt(_(mn_edttttl))) != -1) {
 		edit_mapping(ttnum);
 		stdout_vis = FALSE; /* don't need to see errors after done */
 	}
@@ -1796,7 +1796,7 @@ load_tt_action (void)
 	}
 
 	/* Ask which table */
-	ttnum = choose_tt(mn_svttttl);
+	ttnum = choose_tt(_(mn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
 		msg_error(badttnum);
@@ -1828,7 +1828,7 @@ save_tt_action (void)
 	STRING ttexportdir;
 	
 	/* Ask which table */
-	ttnum = choose_tt(mn_svttttl);
+	ttnum = choose_tt(_(mn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
 		msg_error(badttnum);
@@ -3150,7 +3150,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
 #ifdef HAVE_SETLOCALE
 	mvwaddstr(win, row++, 4, csnrloc);
 #endif
-	disp_trans_table_choice(uiwin, row++, 4, mn_tt_inrp, MINRP);
+	disp_trans_table_choice(uiwin, row++, 4, _(mn_tt_inrp), MINRP);
 	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
@@ -3163,7 +3163,7 @@ repaint_tt_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	mvwaddstr(win, row++, 2, mn_tt_ttl);
+	mvwaddstr(win, row++, 2, _(mn_tt_ttl));
 /*TO DO*/
 }
 #endif
@@ -3182,14 +3182,14 @@ repaint_trans_menu (UIWINDOW uiwin)
 	werase(win);
 	draw_win_box(win);
 	row = 1;
-	mvwaddstr(win, row++, 2, mn_tt_ttl);
-	mvwaddstr(win, row++, 4, mn_tt_edit);
-	mvwaddstr(win, row++, 4, mn_tt_load);
-	mvwaddstr(win, row++, 4, mn_tt_save);
-	mvwaddstr(win, row++, 4, mn_tt_exp);
-	mvwaddstr(win, row++, 4, mn_tt_imp);
+	mvwaddstr(win, row++, 2, _(mn_tt_ttl));
+	mvwaddstr(win, row++, 4, _(mn_tt_edit));
+	mvwaddstr(win, row++, 4, _(mn_tt_load));
+	mvwaddstr(win, row++, 4, _(mn_tt_save));
+	mvwaddstr(win, row++, 4, _(mn_tt_exp));
+	mvwaddstr(win, row++, 4, _(mn_tt_imp));
 	ptr[0] = 0;
-/*	llstrcatn(&ptr, mn_tt_dir, &mylen); */
+/*	llstrcatn(&ptr, _(mn_tt_dir), &mylen); */
 /*	llstrcatn(&ptr, lloptions.llttexport, &mylen); */
 	mvwaddstr(win, row++, 4, line);
 	mvwaddstr(win, row++, 4, _(mn_ret));

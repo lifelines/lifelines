@@ -1,3 +1,10 @@
+2002-02-25 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c interp/date.c liflines/screen.c
+	po/sv.po:
+
+	i18n short form of may, translation tables. Updated Swedish po.
+
 2002-02-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/screen.c:

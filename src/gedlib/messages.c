@@ -375,7 +375,7 @@ STRING mn_quit     = N_("q  Return to main menu");
 STRING mn_ret      = N_("q  Return to previous menu");
 STRING mn_exit     = N_("q  Quit program");
 
-/* main menu */
+/* &&begin main menu (70 chars after spaces) */
 STRING mn_mmbrws   = N_("b  Browse the persons in the database");
 STRING mn_mmsear   = N_("s  Search database");
 STRING mn_mmadd    = N_("a  Add information to the database");
@@ -387,7 +387,7 @@ STRING mn_mmtt     = N_("t  Modify character translation tables");
 STRING mn_mmut     = N_("u  Miscellaneous utilities");
 STRING mn_mmex     = N_("x  Handle source, event and other records");
 
-/* utility menu */
+/* &&end main menu, begin utility menu */
 STRING mn_uttl     = N_("What utility do you want to perform?");
 STRING mn_utsave   = N_("s  Save the database in a GEDCOM file");
 STRING mn_utread   = N_("r  Read in data from a GEDCOM file");
@@ -397,7 +397,8 @@ STRING mn_utdbstat = N_("d  Show database statistics");
 STRING mn_utmemsta = N_("m  Show memory statistics");
 STRING mn_utplaces = N_("e  Edit the place abbreviation file");
 STRING mn_utusropt = N_("o  Edit the user options file");
-/* extra menu */
+
+/* &&end utility menu, begin extra menu */
 STRING mn_xttl     = N_("What activity do you want to perform?");
 STRING mn_xxbsour  = N_("s  Browse source records");
 STRING mn_xxbeven  = N_("e  Browse event records");
@@ -408,12 +409,14 @@ STRING mn_xxaeven  = N_("3  Add an event record to the database");
 STRING mn_xxeeven  = N_("4  Edit event record from the database");
 STRING mn_xxaothr  = N_("5  Add an other record to the database");
 STRING mn_xxeothr  = N_("6  Edit other record from the database");
-/* character set menu  (these looks best if choices padded to same length)*/
+
+/* end extra menu, begin character set menu */
 STRING mn_csttl    = SS "Character set menu";
 STRING mn_cstt     = SS "t  Edit translation tables";
 STRING mn_csrpt    = SS "r  Report character set setup";
 STRING mn_csintcs  = SS "Internal code set: ";
 STRING mn_csdsploc = SS "Display locale: ";
+ /* The following 5 choices look best if padded to same length (70 chars after spaces) */
 STRING mn_cstsort  = SS "s  Edit custom sort table        ";
 STRING mn_cspref   = SS "p  Edit custom sort prefix table ";
 STRING mn_cschar   = SS "c  Edit custom codepage mapping  ";
@@ -422,40 +425,45 @@ STRING mn_csucas   = SS "u  Edit custom upper case mapping";
 /* menu for report character set issues */
 STRING mn_csrpttl  = SS "Report character set menu";
 STRING mn_csrptcs  = SS "Report code set: ";
-/* menu for translation tables */
-STRING mn_tt_ttl   = SS "Translation Tables";
-STRING mn_tt_edit  = SS "e  edit individual tables (in db)";
-STRING mn_tt_load  = SS "l  load a table from a file (into db)";
-STRING mn_tt_save  = SS "s  save a table to a file (from db)";
-STRING mn_tt_exp   = SS "x  export all tables (from db to files)";
-STRING mn_tt_imp   = SS "i  import all tables (from files into db)";
-STRING mn_tt_dir   = SS "export/import directory:";
+
+/* &&begin translation table menu */
+STRING mn_tt_ttl   = N_("Translation Tables");
+STRING mn_tt_edit  = N_("e  edit individual tables (in db)");
+STRING mn_tt_load  = N_("l  load a table from a file (into db)");
+STRING mn_tt_save  = N_("s  save a table to a file (from db)");
+STRING mn_tt_exp   = N_("x  export all tables (from db to files)");
+STRING mn_tt_imp   = N_("i  import all tables (from files into db)");
+STRING mn_tt_dir   = N_("export/import directory:");
+
 /* menus for translation tables */
-STRING mn_edttttl  = SS "Which character mapping do you want to edit?";
-STRING mn_svttttl  = SS "Which character mapping do you want to save?";
+STRING mn_edttttl  = N_("Which character mapping do you want to edit?");
+STRING mn_svttttl  = N_("Which character mapping do you want to save?");
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
-STRING mn_tt_edin   = SS "e  Editor to Internal mapping ";
-STRING mn_tt_ined   = SS "m  Internal to Editor mapping ";
-STRING mn_tt_gdin   = SS "i  GEDCOM to Internal mapping ";
-STRING mn_tt_ingd   = SS "x  Internal to GEDCOM mapping ";
-STRING mn_tt_dsin   = SS "g  Display to Internal mapping";
-STRING mn_tt_inds   = SS "d  Internal to Display mapping";
-STRING mn_tt_inrp   = SS "r  Internal to Report mapping ";
+STRING mn_tt_edin  = N_("e  Editor to Internal mapping ");
+STRING mn_tt_ined  = N_("m  Internal to Editor mapping ");
+STRING mn_tt_gdin  = N_("i  GEDCOM to Internal mapping ");
+STRING mn_tt_ingd  = N_("x  Internal to GEDCOM mapping ");
+STRING mn_tt_dsin  = N_("g  Display to Internal mapping");
+STRING mn_tt_inds  = N_("d  Internal to Display mapping");
+STRING mn_tt_inrp  = N_("r  Internal to Report mapping ");
 /* not yet implemented choices */
 STRING mn_notimpl  = SS "Not implemented yet";
-/* add menu */
+
+/* &&begin add menu */
 STRING mn_add_ttl  = N_("What do you want to add?");
 STRING mn_add_indi = N_("p  Person - add new person to the database");
 STRING mn_add_fam  = N_("f  Family - create family record from one or two spouses");
 STRING mn_add_chil = N_("c  Child - add a child to an existing family");
 STRING mn_add_spou = N_("s  Spouse - add a spouse to an existing family");
-/* delete menu */
+
+/* &&end add menu, begin delete menu */
 STRING mn_del_ttl  = N_("What do you want to remove?");
 STRING mn_del_chil = N_("c  Child - remove a child from his/her family");
 STRING mn_del_spou = N_("s  Spouse - remove a spouse from a family");
 STRING mn_del_indi = N_("i  Individual - remove a person completely");
 STRING mn_del_fam  = N_("f  Family - remove a family completely");
-/* scan menu */
+
+/* &&end delete menu, begin scan menu */
 STRING mn_sca_ttl  = N_("What scan type?");
 STRING mn_sca_nmfu = N_("f  Full name scan");
 STRING mn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");
@@ -464,7 +472,8 @@ STRING sts_sca_ful = N_("Performing full name scan");
 STRING sts_sca_fra = N_("Performing name fragment scan");
 STRING sts_sca_ref = N_("Performing refn scan");
 STRING sts_sca_non = N_("No records found in scan");
-/* complex date strings (A=abbrev, B=full)*/
+
+/* &&complex date strings (A=abbrev, B=full)*/
 STRING datea_abtA  = N_("abt %1");
 STRING datea_abtB  = N_("about %1");
 STRING datea_estA  = N_("est %1");
@@ -483,7 +492,7 @@ STRING dater_aftA  = N_("aft %1");
 STRING dater_aftB  = N_("after %1");
 STRING dater_betA  = N_("bet %1 and %2");
 STRING dater_betB  = N_("between %1 and %2");
-	/* origin/era trailers */
+	/* &&origin/era trailers */
 STRING datetrl_bcA = SS "B.C.";
 STRING datetrl_bcB = SS "BC";
 STRING datetrl_bcC = SS "B.C.E.";
@@ -492,12 +501,12 @@ STRING datetrl_adA = SS "A.D.";
 STRING datetrl_adB = SS "AD";
 STRING datetrl_adC = SS "C.E.";
 STRING datetrl_adD = SS "CE";
-	/* calendar pics */
+	/* &&calendar pics */
 STRING caljul      = SS "%1J";
 STRING calheb      = SS "%1 HEB";
 STRING calfr       = SS "%1 FR";
 STRING calrom      = SS "%1 AUC";
-	/* Gregorian/Julian months */
+	/* &&Gregorian/Julian months */
 STRING mon_gj1A    = N_("jan");
 STRING mon_gj1B    = N_("january");
 STRING mon_gj2A    = N_("feb");
@@ -506,7 +515,8 @@ STRING mon_gj3A    = N_("mar");
 STRING mon_gj3B    = N_("march");
 STRING mon_gj4A    = N_("apr");
 STRING mon_gj4B    = N_("april");
-STRING mon_gj5A    = N_("may");
+/* Put short form for may (don't use **) */
+STRING mon_gj5A    = N_("**may");
 STRING mon_gj5B    = N_("may");
 STRING mon_gj6A    = N_("jun");
 STRING mon_gj6B    = N_("june");
@@ -522,7 +532,7 @@ STRING mon_gj11A   = N_("nov");
 STRING mon_gj11B   = N_("november");
 STRING mon_gj12A   = N_("dec");
 STRING mon_gj12B   = N_("december");
-	/* Hebrew months */
+	/* &&Hebrew months */
 STRING mon_heb1A   = N_("tsh");
 STRING mon_heb1B   = N_("tishri");
 STRING mon_heb2A   = N_("csh");
@@ -549,7 +559,7 @@ STRING mon_heb12A  = N_("aav");
 STRING mon_heb12B  = N_("av");
 STRING mon_heb13A  = N_("ell");
 STRING mon_heb13B  = N_("elul");
-	/* French Republic months */
+	/* &&French Republic months */
 STRING mon_fr1A    = N_("vend");
 STRING mon_fr1B    = N_("vendemiaire");
 STRING mon_fr2A    = N_("brum");
