@@ -259,7 +259,6 @@ STRING mintt  = SS "Enter name of translation table file to read";
 STRING extrpt      = SS "<Choose outside this list>";
 STRING whatrpt     = SS "What is the name of the program?";
 
-STRING norpt       = SS "No report was generated.";
 STRING whtout      = SS "What is the name of the output file?";
 STRING opt2long    = SS "Malformed configuration file: line too long.";
 STRING unsupuni    = SS "Unsupported Unicode format (only UTF-8 is supported).";

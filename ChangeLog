@@ -1,3 +1,12 @@
+2002-01-18 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c interp/interp.c interp/rassa.c
+	stdlib/lloptions.c stdlib/path.c:
+
+	Fix bug in copy_process. Make interpreter report cancel or file
+	error in output file, and not do traceback. Allow trailing
+	slash in LLDATABASES paths.
+
 2002-01-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/valtable.c interp/lex.c liflines/screen.c:

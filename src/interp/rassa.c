@@ -59,9 +59,11 @@ static INT linebuflen = 0;
 static STRING bufptr = linebuffer;
 
 static STRING outfilename;
-extern STRING norpt, whtout;
+extern STRING whtout;
+extern INT rpt_cancelled;
 
-static void adjust_cols (STRING);
+static void adjust_cols(STRING);
+static BOOLEAN request_file(BOOLEAN *eflg);
 
 /*======================================+
  * initrassa -- Initialize program output
@@ -159,6 +161,8 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "1st arg to newfile must be a string.");
 		return NULL;
 	}
+	if (outfilename)
+		stdfree(outfilename);
 	outfilename = strsave(name);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, inext((PNODE) iargs(node)), stab, eflg);
@@ -172,7 +176,7 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 BOOLEAN
-set_output_file (STRING outfilename, BOOLEAN append)
+set_output_file (STRING outfname, BOOLEAN append)
 {
 	STRING modestr = append ? LLAPPENDTEXT:LLWRITETEXT;
 	STRING rptdir;
@@ -182,11 +186,40 @@ set_output_file (STRING outfilename, BOOLEAN append)
 		Poutfp = NULL;
 	}
 	rptdir = getoptstr("LLREPORTS", ".");
-	Poutfp = fopenpath(outfilename, modestr, rptdir, NULL, NULL);
+	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, NULL);
 	if (!Poutfp) {
-		msg_error("Could not open file %s", outfilename);
+		msg_error("Could not open file %s", outfname);
 		return FALSE;
 	}
+	return TRUE;
+}
+/*====================================+
+ * request_file -- Prompt user for file name
+ *  returns open file pointer, or NULL if error
+ *  handles error message
+ * Created: 2002/01/18
+ *===================================*/
+static BOOLEAN
+request_file (BOOLEAN *eflg)
+{
+	STRING rptdir = getoptstr("LLREPORTS", ".");
+	STRING fname=0;
+	Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &fname
+		, rptdir, NULL);
+	if (!Poutfp || !fname || !fname[0])  {
+		if (fname)
+			prog_error(0, "Report stopping due to error opening output file");
+		else
+			prog_error(0, "Report stopping due to lack of output file");
+		/* set error flag to stop interpreter */
+		*eflg = TRUE;
+		/* set cancel flag to suppress traceback */
+		rpt_cancelled = TRUE;
+		return FALSE;
+	}
+	if (outfilename)
+		stdfree(outfilename);
+	outfilename = strsave(fname);
 	return TRUE;
 }
 /*====================================+
@@ -196,17 +229,11 @@ set_output_file (STRING outfilename, BOOLEAN append)
 PVALUE
 __outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING rptdir = getoptstr("LLREPORTS", ".");
 	node=node; /* unused */
 	stab=stab; /* unused */
 	if (!Poutfp) {
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename
-			, rptdir, NULL);
-		if (!Poutfp)  {
-			*eflg = TRUE;
-			message(norpt);
+		if (!request_file(eflg))
 			return NULL;
-		}
 		setbuf(Poutfp, NULL);
 	}
 	*eflg = FALSE;
@@ -320,14 +347,8 @@ __pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
-		STRING rptdir = getoptstr("LLREPORTS", ".");
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
-			rptdir, NULL);
-		if (!Poutfp)  {
-			*eflg = TRUE;
-			message(norpt);
+		if (!request_file(eflg))
 			return NULL;
-		}
 		setbuf(Poutfp, NULL);
 	}
 	*eflg = FALSE;
@@ -352,7 +373,7 @@ __pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 void
 poutput (STRING str, BOOLEAN *eflg)
 {
-	STRING p, name;
+	STRING p;
 	static struct Buffer_s bfdata, *bfs = &bfdata; /* static init to all zeros is ok */
 	INT c, len;
 	TRANTABLE ttr = tran_tables[MINRP];
@@ -362,16 +383,9 @@ poutput (STRING str, BOOLEAN *eflg)
 	str = bfStr(bfs);
 	if ((len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
-		STRING rptdir = getoptstr("LLREPORTS", ".");
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name,
-			rptdir, NULL);
-		if (!Poutfp)  {
-			*eflg = TRUE;
-			message(norpt);
+		if (!request_file(eflg))
 			goto exit_poutput;
-		}
 		setbuf(Poutfp, NULL);
-		outfilename = strsave(name);
 	}
 	switch (outputmode) {
 	case UNBUFFERED:

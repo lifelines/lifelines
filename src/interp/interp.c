@@ -51,6 +51,18 @@
 STRING Pfname = NULL;	/* file to read program from */
 TABLE filetab=0, proctab=0, functab=0;
 SYMTAB globtab; /* assume all zero is null SYMTAB */
+STRING progname = NULL;    /* starting program name */
+FILE *Pinfp  = NULL;       /* file to read program from */
+FILE *Poutfp = NULL;       /* file to write program output to */
+STRING Pinstr = NULL;      /* string to read program from */
+STRING Poutstr = NULL;	  /* string to write program output to */
+INT Plineno = 1;
+INT Perrors = 0;
+LIST Plist;                /* list of program files still to read */
+PNODE Pnode = NULL;        /* node being interpreted */
+BOOLEAN explicitvars = FALSE; /* all vars must be declared */
+STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
+BOOLEAN rpt_cancelled = FALSE;
 
 /*********************************************
  * external/imported variables
@@ -72,18 +84,6 @@ static void progmessage(MSG_LEVEL level, STRING);
  * local variables
  *********************************************/
 
-STRING progname = NULL;	/* starting program name */
-FILE *Pinfp  = NULL;	/* file to read program from */
-FILE *Poutfp = NULL;	/* file to write program output to */
-STRING Pinstr = NULL;	/* string to read program from */
-STRING Poutstr = NULL;	/* string to write program output to */
-INT Plineno = 1;
-INT Perrors = 0;
-LIST Plist;		/* list of program files still to read */
-PNODE Pnode = NULL;	/* node being interpreted */
-BOOLEAN explicitvars = FALSE; /* all vars must be declared */
-
-STRING ierror = (STRING) "Error: file \"%s\": line %d: ";
 
 /*********************************************
  * local function definitions
@@ -100,6 +100,7 @@ initinterp (void)
 	initrassa();
 	initset();
 	Perrors = 0;
+	rpt_cancelled = FALSE;
 }
 /*==================================+
  * finishinterp -- Finish interpreter
@@ -265,7 +266,10 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 		progmessage(MSG_INFO, "was run successfully.");
 		break;
 	default:
-		progmessage(MSG_STATUS, "was not run because of errors.");
+		if (rpt_cancelled)
+			progmessage(MSG_STATUS, "was cancelled.");
+		else
+			progmessage(MSG_STATUS, "was not run because of errors.");
 		break;
 	}
 
@@ -1633,15 +1637,26 @@ void
 prog_error (PNODE node, STRING fmt, ...)
 {
 	INT num;
-	STRING rptfile = getoptstr("ReportLog", NULL);
+	STRING rptfile;
+	char msg[320];
 	va_list args;
+	if (rpt_cancelled)
+		return;
+	rptfile = getoptstr("ReportLog", NULL);
 	va_start(args, fmt);
-	llwprintf(progparsing ? "\nParsing " : "\nRuntime ");
-	if (node)
-		llwprintf("Error in \"%s\" at line %d: "
-			, ifname(node), iline(node));
-	else
-		llwprintf("Error: ");
+	if (node) {
+		if (progparsing)
+			snprintf(msg, sizeof(msg)
+				, "\nParsing Error in \"%s\" at line %d: "
+				, ifname(node), iline(node));
+		else
+			snprintf(msg, sizeof(msg)
+				, "\nRuntime Error in \"%s\" at line %d: "
+				, ifname(node), iline(node));
+	} else {
+		snprintf(msg, sizeof(msg), "\nAborting: ");
+	}
+	llwprintf(msg);
 	llvwprintf(fmt, args);
 	va_end(args);
 	llwprintf(".\n");
@@ -1654,12 +1669,7 @@ prog_error (PNODE node, STRING fmt, ...)
 				get_current_lldate(&creation);
 				fprintf(fp, "\nReport Errors: %s", creation.datestr);
 			}
-			fprintf(fp, progparsing ? "\nParsing " : "\nRuntime ");
-			if (node)
-				fprintf(fp, "Error %d in \"%s\" at line %d: "
-					, progerror, ifname(node), iline(node));
-			else
-				fprintf(fp, "Error: ");
+			fprintf(fp, msg);
 			va_start(args, fmt);
 			vfprintf(fp, fmt, args);
 			va_end(args);
