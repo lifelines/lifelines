@@ -6,6 +6,16 @@
 
 	Add low-level key checking option to dbverify.
 
+	* ChangeLog NEWS README.MAINTAINERS configure.in
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml
+	src/hdrs/version.h src/tools/dbverify.c
+
+	Fix format mistake & remove some unused variables in dbverify.
+	Minor editing of developer docs xml.
+	Bump version to 3.0.30 for beta.
+
 2003-09-04 Matt Emmerton
 
 	* ChangeLog src/arch/wcslen.c src/gedlib/init.c src/gedlib/locales.c
@@ -51,13 +61,13 @@
 
 	* ChangeLog docs/sv/ll-reportmanual.sv.xml po/sv.po
 	
-	 Error corrections in Swedish message catalog and report manual.
+	Error corrections in Swedish message catalog and report manual.
 
 2003-08-17  Jens Arvidsson
 
 	* ChangeLog po/sv.po
 	
-	 Update of Swedish translation for 3.0.29.
+	Update of Swedish translation for 3.0.29.
 
 2003-08-16 Perry Rapp
 

@@ -114,12 +114,12 @@ typedef struct
 static NAMEREFN_REC * alloc_namerefn(STRING namerefn, STRING key, INT err);
 static BOOLEAN cgn_callback(STRING key, STRING name, BOOLEAN newset, void *param);
 static BOOLEAN cgr_callback(STRING key, STRING refn, BOOLEAN newset, void *param);
-static BOOLEAN check_block(BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi);
+static BOOLEAN check_block(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(STRING key, RECORD rec);
 static BOOLEAN check_fam(STRING key, RECORD rec);
 static void check_ghosts(void);
-static BOOLEAN check_keys(BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi);
+static BOOLEAN check_keys(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_index(BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi);
 static BOOLEAN check_indi(STRING key, RECORD rec);
 static void check_node(STRING key, NODE node, INT level);
@@ -869,7 +869,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 {
 	INT n = nkeys(index);
 	INT i;
-	if (!check_keys(btr, (BLOCK)index, fkeytab, lo, hi))
+	if (!check_keys(btr, (BLOCK)index, lo, hi))
 		return FALSE;
 	for (i = 0; i <= n; i++) {
 		INDEX newix = readindex(bbasedir(btr), fkeys(index, i), TRUE);
@@ -884,9 +884,9 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		if (ixtype(newix) == BTINDEXTYPE)
 			check_index(btr, newix, fkeytab, lox, hix);
 		else
-			check_block(btr, (BLOCK)newix, fkeytab, lox, hix);
+			check_block(btr, (BLOCK)newix, lox, hix);
 	}
-	/* TODO: check subindices */
+	/* TODO: use fkeytab */
 	return TRUE;
 }
 /*=========================================
@@ -894,10 +894,10 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static BOOLEAN
-check_block (BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi)
+check_block (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
 {
 	INT n = nkeys(block);
-	if (!check_keys(btr, block, fkeytab, lo, hi))
+	if (!check_keys(btr, block, lo, hi))
 		return FALSE;
 	return TRUE;
 }
@@ -906,7 +906,7 @@ check_block (BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static BOOLEAN
-check_keys (BTREE btr, BLOCK block, TABLE fkeytab, RKEY * lo, RKEY * hi)
+check_keys (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
 {
 	INT n = nkeys(block);
 	INT i = 0;
@@ -955,7 +955,7 @@ printblock (BTREE btr, BLOCK block)
 	STRING tname = _("data block");
 	if (ixtype(block) == BTINDEXTYPE)
 		tname = _("data block");
-	printf(_("%s fkey=%s, file=%s"), tname, fkey, fkey2path(fkey));
+	printf(_("%s fkey=%d, file=%s"), tname, fkey, fkey2path(fkey));
 }
 /*=========================================
  * validate_errs -- Validate the errs array

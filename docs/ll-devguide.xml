@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.28'>]>
+[<!ENTITY llversion '3.0.30'>]>
 
 <!--
 Outline for developer's guide to lifelines code.
@@ -510,14 +510,21 @@ standard.h).
 <sect2>
 <title>string UTF-8 functions</title>
 <para>
-    TODO: (utf8len, find_prev_char)
+    These are the low-level functions used to do UTF-8 mechanics.
+    These should only be called when in a database with internal
+    codeset of UTF-8.
 </para>
 </sect2>
 
 <sect2>
 <title>printpic functions</title>
 <para>
-    TODO: (sprintpic0,1,2,3)
+    These are simple printf style functions, except they only handle
+    string format, and they do handle reordering the inputs. These 
+    are used for strings that are internationalized, so that words
+    or numbers (passed in string format) may be reordered in other
+    languages. Instead of %s escapes, these handle %1, %2, and %3
+    escapes.
 </para>
 
 </sect2>
@@ -701,7 +708,7 @@ We are assuming you are checking out the sources from CVS.
 <para>
 If you are not a member of the 
 <application>LifeLines</application>
-development project, you can check check out sources anonymously.
+development project, you can check out sources anonymously.
 In the following assume that CVS stands for
 <programlisting>
 cvs -d:pserver:anonymous@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
@@ -792,7 +799,13 @@ the autoconf, automake and gettext macros into aclocal.m4.
 
 <para>
 autoheader: This generates acconfig.h.
+</para>
+
+<para>
 automake: This generates Makefile.in files from Makefile.am files.
+</para>
+
+<para>
 autoconf: This generates configure from configure.in (or configure.ac).
 </para>
 
@@ -884,10 +897,10 @@ mkdir ~/rpmbuild/SRPMS
 mkdir ~/rpmbuild/RPMS
 mkdir ~/rpmbuild/BUILD
 mkdir ~/rpmbuild/tmp
-mkdir ~/rpmbuild/lifelines-3.0.28
-cp bld/lifelines-3.0.28.tar.gz ~/rpmbuild/lifelines-3.0.28
-cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.28
-cd ~/rpmbuild/lifeines-3.0.28
+mkdir ~/rpmbuild/lifelines-3.0.30
+cp bld/lifelines-3.0.30.tar.gz ~/rpmbuild/lifelines-3.030.
+cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.30
+cd ~/rpmbuild/lifeines-3.0.30
 rpmbuild -ba lifelines.spec
 </programlisting>
 The mkdir commands only need to be executed if needed.
@@ -895,7 +908,7 @@ If everything goes ok, this will generate a source and binary rpm.
 </para>
 </sect1>
 <sect1>
-<title>Makeing a release</title>
+<title>Making a release</title>
 <para>
 To release a new version, edit the version number in
 <programlisting>
@@ -910,7 +923,7 @@ Add an entry mentioning the new version in the
 <programlisting>
   ChangeLog
 </programlisting>
-Tag the cvs source via
+Tag the cvs source via (for example, for version 3.0.25)
 <programlisting>
   cvs tag v3_0_25
 </programlisting>
@@ -920,7 +933,12 @@ Finally, Send an announcement to the LINES-L mailing list
 <sect1>
 <title>Putting a release on sourceforge</title>
 <para>
-TODO:
+(Not all developers have the power to create or edit a file release
+on sourceforge, only Project Administrators and File Release Technicians.)
+<para>
+The instructions at
+http://sourceforge.net/docman/display_doc.php?docid=6445&group_id=1
+are the ones that Perry followed to make many of the releases.
 </para>
 </sect1>
 

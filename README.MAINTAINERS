@@ -9,7 +9,7 @@ To release a new version, edit the version number in
 Add an entry mentioning the new version in the
   ChangeLog
 
-Tag the cvs source via
+Tag the cvs source via (for example, for version 3.0.25)
   cvs tag v3_0_25
 
 Send an announcement to the LINES-L mailing list
