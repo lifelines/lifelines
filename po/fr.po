@@ -199,7 +199,6 @@ msgid "Undefined database error -- fix program."
 msgstr "Erreur de base indéfinie -- verifiez le programme."
 
 #: src/gedlib/messages.c:45
->>>>>>> 1.5
 msgid "You must identify a database."
 msgstr "Vous devez sélectionner une base"
 
@@ -3473,201 +3472,108 @@ msgstr "Locales non disponibles."
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (Support de Langage National) disponible."
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1783
-=======
 #: src/liflines/screen.c:1787
->>>>>>> 1.5
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (Support de Langage National) indisponible."
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1788
-=======
 #: src/liflines/screen.c:1793
->>>>>>> 1.5
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (conversion de code de page) disponible."
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1790
-=======
 #: src/liflines/screen.c:1795
->>>>>>> 1.5
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (conversion de code de page) indisponible."
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1792
-=======
 #: src/liflines/screen.c:1797
->>>>>>> 1.5
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Collate locale au démarrage : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1796
-=======
 #: src/liflines/screen.c:1801
->>>>>>> 1.5
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Message locale au démarrage : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1800
-=======
 #: src/liflines/screen.c:1805
->>>>>>> 1.5
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Collate locale courant : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1804
-=======
 #: src/liflines/screen.c:1809
->>>>>>> 1.5
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Messages locale courant : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1808
-=======
 #: src/liflines/screen.c:1813
->>>>>>> 1.5
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "jeu de car. GUI : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1812
-=======
 #: src/liflines/screen.c:1817
->>>>>>> 1.5
 #, c-format
 msgid "Editor codeset: %s"
 msgstr "jeu de car. éditeur : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1816
-=======
 #: src/liflines/screen.c:1821
->>>>>>> 1.5
 #, c-format
 msgid "Report codeset: %s"
 msgstr "jeu de car. éditions : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1820
-=======
 #: src/liflines/screen.c:1825
->>>>>>> 1.5
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "jeu de car. GEDCOM : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1836
-=======
 #: src/liflines/screen.c:1841
->>>>>>> 1.5
 msgid "Codeset information"
 msgstr "Information de code de page :"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1853
-=======
 #: src/liflines/screen.c:1858
->>>>>>> 1.5
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll gettext : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1857
-=======
 #: src/liflines/screen.c:1862
->>>>>>> 1.5
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version dll gettext : %s "
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1862
-=======
 #: src/liflines/screen.c:1867
->>>>>>> 1.5
 msgid "gettext dll had no version"
 msgstr "dll gettext sans version"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1867
-=======
 #: src/liflines/screen.c:1872
->>>>>>> 1.5
 msgid "no gettext dll found"
 msgstr "dll gettext non trouvée"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1877
-=======
 #: src/liflines/screen.c:1882
->>>>>>> 1.5
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll iconv : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1881
-=======
 #: src/liflines/screen.c:1886
->>>>>>> 1.5
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version dll iconv : %s"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1886
-=======
 #: src/liflines/screen.c:1891
->>>>>>> 1.5
 msgid "iconv dll had no version"
 msgstr "dll iconv sans version"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:1891
-=======
 #: src/liflines/screen.c:1896
->>>>>>> 1.5
 msgid "no iconv dll found"
 msgstr "dll iconv non trouvée"
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:2140
-=======
 #: src/liflines/screen.c:2145
->>>>>>> 1.5
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
-<<<<<<< fr.po
-#: src/liflines/screen.c:2957
-#, c-format
-msgid "(pg %d/%d)"
-msgstr ""
-
-#: src/liflines/valgdcom.c:83
-=======
 #: src/liflines/screen.c:2962
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
 #: src/liflines/valgdcom.c:83
->>>>>>> 1.5
 #, c-format
 msgid "Line %d: This %s line is missing a value field."
 msgstr "Ligne %d : Cette %s ligne n'a pas de champ valeur."

@@ -3546,19 +3546,11 @@ msgstr ""
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
-<<<<<<< de.po
-#: src/liflines/screen.c:2957
-#, c-format
-msgid "(pg %d/%d)"
-msgstr ""
-
-=======
 #: src/liflines/screen.c:2962
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
->>>>>>> 1.22
 #: src/liflines/valgdcom.c:83
 #, c-format
 msgid "Line %d: This %s line is missing a value field."
