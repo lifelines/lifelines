@@ -4,6 +4,7 @@ http://lifelines.sourceforge.net
 
 Bug fixes in 3.0.43
 ============================
+ - Fixed some memory leaks
  - ASSERT failures browsing from family to indi
 
 New features added in 3.0.42

@@ -23,6 +23,10 @@
 
 	Bump versions for 3.0.43.
 
+	* ChangeLog NEWS
+
+	Record memory leak fixes in NEWS.
+
 2005-02-10 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
