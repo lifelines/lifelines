@@ -127,8 +127,6 @@ extern BOOLEAN alloclog;
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 
-extern char *malloc();
-
 #define WHITE  ' '
 #define LETTER 'a'
 #define DIGIT  '0'
