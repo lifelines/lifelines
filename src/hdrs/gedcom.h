@@ -170,6 +170,7 @@ NODE indi_to_moth(NODE);
 STRING indi_to_name(NODE, TRANTABLE, INT);
 NODE indi_to_next_sib(NODE);
 NODE indi_to_prev_sib(NODE);
+STRING indi_to_title(NODE, TRANTABLE, INT);
 void initxref(void);
 void init_browse_lists(void);
 void init_caches(void);
