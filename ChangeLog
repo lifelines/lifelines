@@ -1,3 +1,9 @@
+2003-06-14 Perry Rapp
+
+	* ChangeLog src/gedlib/names.c
+
+	Fix by Peter Fales for piecematch bug introduced by UTF-8 code.
+
 2003-06-13 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c

@@ -560,8 +560,9 @@ piecematch (STRING part, STRING comp)
 			if (fi_chrcmp(*part, *comp++) == 0)
 				++part;
 		} else {
-			if (next_char32(&part, uu8) == next_char32(&comp, uu8))
-				++part;
+			STRING savepart = part;
+			if (next_char32(&part, uu8) != next_char32(&comp, uu8))
+				part=savepart;
 		}
 	}
 	return *part == 0;
