@@ -16,6 +16,15 @@
 
 	Update documentation.
 
+	* ChangeLog
+	NEW: build/msvc6/llexec/config.h
+	NEW: build/msvc6/llexec/llexec.dsp
+	NEW: build/msvc6/llexec/llexec.dsw
+	NEW: build/msvc6/llexec/llexec.rc
+	NEW: build/msvc6/llexec/resource.h:
+
+	Add MSVC6 build stuff for llexec.
+
 2002-10-05 Perry Rapp
 
 	* ChangeLog src/interp/interp.c:
