@@ -25,6 +25,8 @@
 	More NODE->NODE0s. Fix bubble-sort in xreffile to be 
 	O(n) when sorted.
 
+	* stdlib/signals.c: fix __fatal/ll_abort bug.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/init.c hdrs/llstdlib.h stdlib/environ.c tools/btedit.c:
