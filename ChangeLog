@@ -13,6 +13,10 @@
 
 	More fixing of node ref counting. Try to fix __writeindi.
 
+	* ChangeLog src/interp/write.c:
+
+	Add explanatory note about outstanding bug.
+
 2003-02-03 Matt Emmerton
 
 	* ChangeLog src/interp/write.c

@@ -190,15 +190,18 @@ __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	ASSERT(indi1 = string_to_node(rawrec));
-	/*
-	TODO: 2003-02-04
-	indi2 is the cache'd indi, and the xref is getting deleted here
-	I don't know what is wrong -- Perry
-	*/
 	if (!replace_indi(indi1, indi2, &msg)) {
 		*eflg = TRUE;
 		prog_error(node, _("writeindi failed: %s"), msg ? msg : _("Unknown error"));
 	}
+/*
+TODO:
+ indi2 is dead now
+ but cache still points to it
+ replace_indi stored indi1, but didn't fix the cache element pointing at indi2
+ 2003-02-04 Perry
+ Need to review how regular edit works, because it doesn't have this bug!
+*/
 	strfree(&rawrec);
 	return NULL;
 }
