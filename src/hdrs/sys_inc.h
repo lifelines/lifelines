@@ -2,6 +2,8 @@
 /* Includes system header files based on platform and compiler */
 
 /* COMMON INCLUDES */
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,16 +22,12 @@
 
 /* WIN32 - MSVC INCLUDES */
 #ifdef _MSC_VER
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <direct.h>
 #endif
 
 #else
 
 /* UNIX INCLUDES */
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 
 #endif
