@@ -1368,8 +1368,9 @@ get_print_el (INDISEQ seq, INT i)
 void
 print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 {
-	STRING str;
+	STRING str, ptr=buf;
 	BOOLEAN alloc=FALSE;
+	buf[0]='\0';
 	str = sprn(IData(seq)[i]);
 	if (!str) {
 		/*
@@ -1384,7 +1385,7 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
 		str = get_print_el(seq, i);
 		alloc=TRUE;
 	}
-	llstrcatn(&buf, str, &len);
+	llstrcatn(&ptr, str, &len);
 	if (alloc)
 		free(str);
 }
