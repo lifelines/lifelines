@@ -89,7 +89,7 @@ file_to_line (FILE *fp,
 /*==============================================
  * string_to_line -- Get GEDCOM line from string
  *
- * STRING *ps:    [I/O] string ptr - advanced to next
+ * STRING *ps:    [I/O] string ptr - advanced to next (& 0 inserted)
  * INT *plev:     [OUT] level ptr
  * STRING *pxref: [OUT] cross-ref ptr
  * STRING *ptag:  [OUT] tag ptr

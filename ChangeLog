@@ -8,7 +8,14 @@
 
 	Include errno.h for use of errno.
 
+	* ChangeLog src/btree/traverse.c src/gedlib/gstrings.c
+	src/gedlib/intrface.c src/gedlib/nodeio.c src/hdrs/btree.h
+	src/hdrs/gedcom.h
+
+	const fixes and fix include for DisplayKeyTags option.
+
 2003-09-25 Robert Simms
+
 	* .linesrc ChangeLog lines.cfg
 	src/gedlib/gstrings.c src/liflines/screen.c src/liflines/show.c
 
@@ -23,6 +30,7 @@
 	Fix bug in filepath causing extra append of extension.
 
 2003-09-21 Jens Arvidsson
+
 	* ChangeLog docs/ll-reportmanual.sv.xml
 
 	Updated translation of report manual.
@@ -47,6 +55,7 @@
 	Add new option AnnotatePointers to NEWS.
 
 2003-09-18 Stephen Dum
+
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-reportmanual.xml
 
@@ -70,6 +79,7 @@
 	Distribute ui.h as well.
 
 2003-09-16 Stephen Dum
+
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.xml
 	docs/listops.jpg  docs/Makefile.am
 
@@ -7604,3 +7614,23 @@ FOLLOWING ARE APPROXIMATED DATES, from before Open Source version
 
 1993-06-24  Thomas T. Wetmore IV
   Version 2.3.4
+
+1993-01-28  Thomas T. Wetmore IV
+  Version 2.3.3
+  Added getindiset, requeue, alpha, key, newfile, outfile, extractnames,
+  extractplaces. getindi, getindimsg, getfam modified to return FALSE if
+  user cancels entry. LLARCHIVES added.
+
+1992-10-06  Thomas T. Wetmore IV
+ Version 2.1.11
+ (Added getstr, getstrmsg, change from BAPT to CHR)
+
+1992-09-30  Thomas T. Wetmore IV
+ Version 2.1.10
+
+1992-09  Thomas T. Wetmore IV
+ Version 2.1.9
+ Version 2.1.8
+ Version 2.1.7
+ Version 2.1.6
+

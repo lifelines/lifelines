@@ -37,8 +37,8 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN traverse_block(BTREE btree, BLOCK block, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param);
-static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param);
+static BOOLEAN traverse_block(BTREE btree, BLOCK block, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param);
+static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param);
 
 /*********************************************
  * local function definitions
@@ -83,10 +83,11 @@ traverse_index_blocks (BTREE btree, INDEX index, void *param
  *  (which means unspecified)
  * NB: This covers all records, including DELE records.
  * this calls getindex, so it uses the index cache
+ * callback may modify the data, but it won't be updated into db
  *==================================================*/
 static BOOLEAN
 traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
-	BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	STRING p;
 	INT i, len;
@@ -119,10 +120,11 @@ traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
 /*====================================================
  * traverse_index -- traverse subtree whilst under key
  *  either lo or hi can have 0 as its first character
+ * callback may modify the data, but it won't be updated into db
  *==================================================*/
 static BOOLEAN
 traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi,
-	BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	INDEX index1;
 	BLOCK block1;
@@ -168,10 +170,11 @@ traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi,
  *  using rkeys
  *  either lo or hi can have 0 as its first character
  * NB: This covers all records, including DELE records.
+ * callback may modify the data, but it won't be updated into db
  *============================================*/
 void
 traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi, 
-	BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+	BOOLEAN(*func)(RKEY, STRING data, INT len, void *), void * param)
 {
 	INDEX index;
 	ASSERT(index = bmaster(btree));

@@ -34,6 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "lloptions.h"
 
 /*********************************************
  * external/imported variables
@@ -129,7 +130,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 		p += strlen(p);
 	}
 	if (appkey && indi && displaykeys) {
-		if(getoptint("DisplayKeyTags", 0) > 0) {
+		if (getoptint("DisplayKeyTags", 0) > 0) {
 			sprintf(p, " (i%s)", key_of_record(indi));
 		} else {
 			sprintf(p, " (%s)", key_of_record(indi));
@@ -137,7 +138,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 		p += strlen(p);
 	}
 	if (appkey && fam && displaykeys) {
-		if(getoptint("DisplayKeyTags", 0) > 0) {
+		if (getoptint("DisplayKeyTags", 0) > 0) {
 			sprintf(p, " (f%s)", key_of_record(fam));
 		} else {
 			sprintf(p, " (%s)", key_of_record(fam));

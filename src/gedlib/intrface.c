@@ -118,7 +118,7 @@ trav_callback (RKEY rkey, STRING data, INT len, void * param)
 /* see above */
 void
 traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, 
-	BOOLEAN(*func)(CNSTRING key, STRING, INT len, void *param), void *param)
+	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void *param), void *param)
 {
 	RKEY lo1, hi1;
 	TRAV_PARAM tparam;

@@ -444,7 +444,7 @@ RECORD string_to_record(STRING str, CNSTRING key, INT len);
 BOOLEAN symbolic_link(CNSTRING);
 void termlocale(void);
 void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
-void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING, INT, void *param), void * param);
+void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
 BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
 void traverse_refns(BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param);
 INT tree_strlen(INT, NODE);

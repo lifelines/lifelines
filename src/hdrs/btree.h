@@ -175,7 +175,7 @@ INT cmpkeys(BTREE btree, const RKEY * rk1, const RKEY * rk2);
 
 /* traverse.c */
 BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));
-void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *param), void *param);
+void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *param), void *param);
 
 /* utils.c */
 STRING rkey2str(RKEY);
