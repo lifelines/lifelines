@@ -1,3 +1,9 @@
+2003-01-07 Perry Rapp
+
+	*
+
+	Mark win32 llines resource for 3.0.24b5 beta.
+
 2003-01-05 Perry Rapp
 
 	* ABOUT-NLS ChangeLog configure.in build/Makefile.am
