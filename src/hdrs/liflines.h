@@ -1,4 +1,16 @@
 
+#ifndef _STANDARD_H
+#include "standard.h"
+#endif
+
+#ifndef _GEDCOM_H
+#include "gedcom.h"
+#endif
+
+#ifndef _INDISEQ_H
+#include "indiseq.h"
+#endif
+
 /* Function Prototypes */
 
 STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
@@ -23,3 +35,12 @@ NODE remove_dupes(NODE, NODE);
 NODE merge_two_indis(NODE, NODE, BOOLEAN);
 NODE merge_two_fams(NODE, NODE);
 
+void message(STRING);
+void llwprintf(STRING, ...);
+void mprintf(STRING, ...);
+void poutput(STRING);
+void do_edit(void);
+BOOLEAN ask_yes_or_no(STRING);
+BOOLEAN ask_yes_or_no_msg(STRING, STRING);
+
+BOOLEAN pointer_value(STRING);
