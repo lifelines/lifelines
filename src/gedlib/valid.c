@@ -196,7 +196,7 @@ valid_name (STRING name)
 	if (!name) return FALSE;
 	if (pointer_value(name)) return FALSE;
 	while ((c = *name++)) {
-		if (c == '/') n++;
+		if (c == NAMESEP) n++;
 	}
 	return n <= 2;
 }

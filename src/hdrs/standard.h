@@ -163,4 +163,11 @@ typedef struct ltag {
 
 #define ISNULL(k)	(!k || *k == 0)
 
+
+struct WAREHOUSE_S;
+typedef struct WAREHOUSE_S *WAREHOUSE;
+
+/* path.c */
+BOOLEAN is_dir_sep(char c);
+
 #endif

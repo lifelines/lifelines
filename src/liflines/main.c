@@ -363,6 +363,20 @@ platform_init (void)
 #endif
 }
 /*==================================================
+ * is_unadorned_directory -- is it a bare directory name,
+ *  with no subdirectories ?
+ * Created: 2001/01/24, Perry Rapp
+ *================================================*/
+static BOOLEAN
+is_unadorned_directory (STRING path)
+{
+	for ( ; *path; path++) {
+		if (is_dir_sep(*path))
+			return FALSE;
+	}
+	return TRUE;
+}
+/*==================================================
  * open_database -- open database
  *================================================*/
 static int
@@ -414,7 +428,7 @@ open_database (void)
 		switch (bterrno) {
 		case BTERRNOBTRE:
 		case BTERRKFILE:	{/*NEW*/
-				if (!selftest) {
+				if (!selftest && is_unadorned_directory(btreepath)) {
 					STRING llnewdbdir = environ_determine_newdbdir();
 					readpath = strsave(concat_path(llnewdbdir, btreepath));
 				}

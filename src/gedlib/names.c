@@ -234,15 +234,15 @@ getsurname_impl (STRING name, INT strict)
 	STRING p, surname;
 	if (++dex > 2) dex = 0;
 	p = surname = buffer[dex];
-	while ((c = *name++) && c != '/')
+	while ((c = *name++) && c != NAMESEP)
 		;
 	if (c == 0) return (STRING) "____";
 	while (iswhite(c = *name++))
 		;
-	if (c == 0 || c == '/') return (STRING) "____";
+	if (c == 0 || c == NAMESEP) return (STRING) "____";
 	if (strict && !isletter(c)) return (STRING) "____";
 	*p++ = c;
-	while ((c = *name++) && c != '/')
+	while ((c = *name++) && c != NAMESEP)
 		*p++ = c;
 	*p = 0;
 	return surname;
@@ -278,8 +278,8 @@ getfinitial (STRING name)       /* GEDCOM name */
 			;
 		if (isletter(c)) return ll_toupper(c);
 		if (c == 0) return '$';
-		if (c != '/') return '$';
-		while ((c = *name++) && c != '/')
+		if (c != NAMESEP) return '$';
+		while ((c = *name++) && c != NAMESEP)
 			;
 		if (c == 0) return '$';
 	}
@@ -552,7 +552,7 @@ squeeze (STRING in,     /* string of words */
 	}
 	while (TRUE) {
 		*out++ = ll_toupper(c);
-		while ((c = *in++) && c != '/' && chartype(c) != WHITE) {
+		while ((c = *in++) && c != NAMESEP && chartype(c) != WHITE) {
 			if (chartype(c) == LETTER) *out++ = ll_toupper(c);
 		}
 		if (c == 0) {
@@ -665,7 +665,7 @@ cmpsqueeze (STRING in,
 	while ((in = nextpiece(in))) {
 		while (TRUE) {
 			c = *in++;
-			if (iswhite(c) || c == '/' || c == 0) {
+			if (iswhite(c) || c == NAMESEP || c == 0) {
 				*out++ = 0;
 				--in;
 				break;
@@ -691,7 +691,7 @@ givens (STRING name)
 				*out = 0;
 				return scratch;
 			}
-			if (iswhite(c) || c == '/') {
+			if (iswhite(c) || c == NAMESEP) {
 				*out++ = ' ';
 				--name;
 				break;
@@ -714,8 +714,8 @@ nextpiece (STRING in)
 		while (iswhite(c = *in++))
 			;
 		if (c == 0) return NULL;
-		if (c != '/') return --in;
-		while ((c = *in++) && c != '/')
+		if (c != NAMESEP) return --in;
+		while ((c = *in++) && c != NAMESEP)
 			;
 		if (c == 0) return NULL;
 	}
@@ -736,7 +736,7 @@ trim_name (STRING name,
 	if ((INT)strlen(name) <= len + 2) return name;
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) break;
-		if (*parts[i] == '/') sdex = i;
+		if (*parts[i] == NAMESEP) sdex = i;
 	}
 	nparts = i;
 	/* WARNING: this will cause a program termination if there
@@ -782,17 +782,17 @@ name_to_parts (STRING name,     /* GEDCOM name */
 		ASSERT(i < MAXPARTS);
 		parts[i++] = p;
 		*p++ = c;
-		if (c == '/') {
-			while ((c = *p++ = *name++) && c != '/')
+		if (c == NAMESEP) {
+			while ((c = *p++ = *name++) && c != NAMESEP)
 				;
 			if (c == 0) return;
 			*p++ = 0;
 		} else {
-			while ((c = *name++) && !iswhite(c) && c != '/')
+			while ((c = *name++) && !iswhite(c) && c != NAMESEP)
 				*p++ = c;
 			*p++ = 0;
 			if (c == 0) return;
-			if (c == '/') name--;
+			if (c == NAMESEP) name--;
 		}
 	}
 }
@@ -826,10 +826,10 @@ upsurname (STRING name)
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c;
-	while ((c = *p++ = *name++) && c != '/')
+	while ((c = *p++ = *name++) && c != NAMESEP)
 		;
 	if (c == 0) return scratch;
-	while ((c = *name++) && c != '/')
+	while ((c = *name++) && c != NAMESEP)
 		*p++ = ll_toupper(c);
 	*p++ = c;
 	if (c == 0) return scratch;
@@ -866,7 +866,7 @@ name_string (STRING name)
 	STRING p = scratch;
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
-		if (*name != '/') *p++ = *name;
+		if (*name != NAMESEP) *p++ = *name;
 		name++;
 	}
 	*p-- = 0;
@@ -950,10 +950,10 @@ name_to_list (STRING name,      /* GEDCOM name */
 	name_to_parts(name, parts);
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) break;
-		if (*parts[i] == '/') {
+		if (*parts[i] == NAMESEP) {
 			*psind = i + 1;
 			str = strsave(parts[i] + 1);
-			if (str[strlen(str) - 1] == '/')
+			if (str[strlen(str) - 1] == NAMESEP)
 				str[strlen(str) - 1] = 0;
 		} else
 			str = strsave(parts[i]);

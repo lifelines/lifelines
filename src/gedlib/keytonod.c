@@ -463,7 +463,7 @@ dereference (CACHEEL cel)
 	NOD0 nod0;
 	ASSERT(cel);
 	ASSERT(rec = retrieve_record(ckey(cel), &len));
-	ASSERT(nod0 = string_to_nod0(rec, ckey(cel)));
+	ASSERT(nod0 = string_to_nod0(rec, ckey(cel), len));
 	cnod0(cel) = nod0;
 	cnode(cel) = nod0->top;
 	stdfree(rec);
@@ -491,7 +491,7 @@ add_to_direct (CACHE cache,
 	ASSERT(cache && key);
 	nod0 = NULL;
 	if ((record = retrieve_record(key, &len))) 
-		nod0 = string_to_nod0(record, key);
+		nod0 = string_to_nod0(record, key, len);
 	if(nod0 == NULL)
 	{
 		if(listbadkeys) {

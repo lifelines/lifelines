@@ -36,6 +36,7 @@
 #include "table.h"
 #include "translat.h"
 
+#define NAMESEP '/'
 #define MAXGEDNAMELEN 512
 
 #define OKAY  1
@@ -68,7 +69,7 @@ typedef struct ntag0 *NOD0;
 struct ntag0 {
 	NODE top;
 	NKEY nkey;
-	/* metadata will be here */
+	WAREHOUSE mdwh; /* metadata */
 };
 NODE nztop(NOD0); /* function so it can handle NULL input */
 #define nznkey(n)   ((n)->nkey)
@@ -164,6 +165,7 @@ NODE copy_node(NODE);
 NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
 NODE create_node(STRING, STRING, STRING, NODE);
 void del_in_dbase (STRING key);
+void delete_metarec(STRING key);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab(STRING, TABLE*, INT, STRING);
 BOOLEAN equal_tree(NODE, NODE);
@@ -330,7 +332,7 @@ void split_fam(NODE, NODE*, NODE*, NODE*, NODE*, NODE*);
 void split_indi(NODE, NODE*, NODE*, NODE*, NODE*, NODE*, NODE*);
 BOOLEAN store_file(STRING, STRING);
 BOOLEAN store_record(STRING, STRING, INT);
-NOD0 string_to_nod0(STRING, STRING key);
+NOD0 string_to_nod0(STRING str, STRING key, INT len);
 NODE string_to_node(STRING);
 BOOLEAN symbolic_link(STRING);
 void traverse_db_key_nod0s (BOOLEAN(*func)(STRING key, NOD0, void *param), void *param);

@@ -1,3 +1,15 @@
+2001-01-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	ChangeLog btree/utils.c gedlib/intrface.c gedlib/keytonod.c
+	gedlib/names.c gedlib/node.c gedlib/valid.c hdrs/gedcom.h
+	hdrs/standard.h liflines/main.c stdlib/path.c stdlib/signals.c
+	NEW hdrs/warehouse.h stdlib/warehouse.c:
+	Directory separator bugfixes.
+	LLNEWDBDIR bugfix (from Ethel bug on creating new db).
+	New NAMESEP macro (to differentiate it from directory sep).
+	Checked-in current warehouse code.
+	Back out accidentally checked-in code disabling signals.
+
 2001-01-24 John Chandler <jchbn@cuvmb.columbia.edu>
 	* hdrs/gedcom.h, gedlib/gengedc.c, gedlib/name.c, gedlib/node.c,
 	  gedlib/refns.c:
@@ -20,7 +32,8 @@
 	btree/block.c btree/index.c btree/opnbtree.c btree/utils.c
 	hdrs/btree.h liflines/main.c:
 	Changed keyfile types to 1 & 2.
-	Check for overwriting existing database.
+	Check for overwriting existing database
+	(from Ethel permission bug on NTFS).
 
 	liflines/screen.c: (Matthew made small changes.)
 

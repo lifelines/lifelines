@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "liflines.h"
 #include "screen.h"
+#include "warehouse.h"
 
 INT lineno = 0;
 
@@ -152,12 +153,30 @@ create_node (STRING xref,
 	return node;
 }
 /*===================================
- * free_nod0 -- Free a nod0 structure
+ * alloc_nod0 -- nod0 allocator
+ *=================================*/
+NOD0
+alloc_nod0 (STRING key)
+{
+	NOD0 nod0;
+	nod0 = (NOD0)stdalloc(sizeof(*nod0));
+	nod0->nkey.keynum = atoi(key+1);
+	nod0->nkey.ntype = key[0];
+	/* these must be filled in by caller */
+	nod0->top = 0;
+	nod0->mdwh = 0;
+	return nod0;
+}
+/*===================================
+ * free_nod0 -- nod0 deallocator
  *=================================*/
 void
 free_nod0 (NOD0 nod0)
 {
-	free_nodes(nod0->top);
+	if (nod0->top)
+		free_nodes(nod0->top);
+	if (nod0->mdwh)
+		stdfree(nod0->mdwh);
 	stdfree(nod0);
 }
 /*=====================================
@@ -457,37 +476,62 @@ next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
 	ateof = *peof = TRUE;
 	return root;
 }
-/*========================================
- * string_to_nod0 -- Read nod0 from string
- *======================================*/
+/*============================================
+ * string_to_nod0 -- Read nod0 from data block
+ *  This is the layout for metadata nodes:
+ *   Q___      (four bytes, but only first char used)
+ *   0016      (offset to 0 INDI... line)
+ *   whhdr     (warehouse header)
+ *   whdata    (warehouse data)
+ *   0 INDI    (traditional node data)
+ *  This is the layout for traditional nodes:
+ *   0 INDI    (or 0 FAM or 0 SOUR etc)
+ *==========================================*/
 NOD0
-string_to_nod0 (STRING str, STRING key)
+string_to_nod0 (STRING str, STRING key, INT len)
 {
 	NOD0 nod0 = 0;
 	NODE node = 0;
-	if (*str == '0')
+
+	/* create it now, & release it at bottom if we fail */
+	nod0 = alloc_nod0(key);
+	/* we must fill in the top & mdwh fields */
+
+	if (*str == '0') /* traditional node, no metadata */
 		node = string_to_node(str);
 	else if (*str == 'Q') {
 		/*
-		not implemented
-		read offset to metadata (warehouse)
-		read node
-		must change all external calls from string_to_node
-		to string_to_nod0
+		first four bytes just used for the Q flag
+		second four bytes contain node_offset from str
+		NB: UNTESTED because it isn't yet being written
+		Perry, 2001/01/15
 		*/
-		ASSERT(0);
+		INT * ptr = (INT *)str;
+		INT node_offset = ptr[1]; /* in characters */
+		char * whptr = (char *)&ptr[2];
+		char * node_ptr = str + node_offset;
+		INT whlen = node_offset - 8;
+		ASSERT(0); /* not yet being written */
+		nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+		wh_assign_from_blob(nod0->mdwh, whptr, whlen);
+		node = string_to_node(node_ptr);
 	} else {
 		if (!strcmp(str, "DELE\n")) {
+			/* should have been filtered out in getrecord */
 			ASSERT(0); /* deleted record */
 		} else {
 			ASSERT(0); /* corrupt record */
 		}
 	}
 	if (node) {
-		nod0 = (NOD0)stdalloc(sizeof(*nod0));
-		nod0->nkey.keynum = atoi(key+1);
-		nod0->nkey.ntype = key[0];
 		nod0->top = node;
+		if (!nod0->mdwh) {
+			nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+			wh_allocate(nod0->mdwh);
+		}
+	} else { /* node==0, we failed, clean up */
+		free_nod0(nod0);
+		nod0 = 0;
 	}
 	return nod0;
 }
@@ -708,6 +752,14 @@ node_strlen (INT levl,       /* level */
 void
 indi_to_dbase (NODE node)
 {
+	/*
+	To start storing metadata, we need the NOD0 here
+	If we were using NOD0 everywhere, we'd pass it in here
+	We could look it up in the cache, but it might not be there
+	(new records)
+	(and this applies to fam_to_dbase, sour_to_dbase, etc)
+	Perry, 2001/01/15
+	*/
 	node_to_dbase(node, "INDI");
 }
 /*=========================================

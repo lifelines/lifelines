@@ -63,9 +63,9 @@ is_dir_sep (char c)
 static BOOLEAN
 is_absolute_path (STRING dir)
 {
-	if (*dir == LLCHRDIRSEPARATOR || *dir == '.') return TRUE;
+	if (is_dir_sep(*dir) || *dir == '.') return TRUE;
 #ifdef WIN32
-	if ((*dir == '/') || (*dir && dir[1] == ':' && isalpha(*dir))) return TRUE;
+	if (is_dir_sep(*dir) || (*dir && dir[1] == ':' && isalpha(*dir))) return TRUE;
 #endif
 	return FALSE;
 }
