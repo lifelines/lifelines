@@ -2986,8 +2986,8 @@ output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 	row = bottom-2;
 	col = 3+(MenuCols-1)*(colwidth+1);
 	if (!OnePageFlag)
-		mvwaddstr_lim(win, row, col, g_MenuItemOther.Display, colwidth);
-	mvwaddstr_lim(win, ++row, col, g_MenuItemQuit.Display, colwidth);
+		mvwaddstr_lim(win, row, col, g_MenuItemOther.LocalizedDisplay, colwidth);
+	mvwaddstr_lim(win, ++row, col, g_MenuItemQuit.LocalizedDisplay, colwidth);
 }
 /*==================================================================
  * toggle_menu() - toggle display of menu at bottom of screen

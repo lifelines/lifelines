@@ -1,3 +1,10 @@
+2002-10-20 Perry Rapp
+
+	* ChangeLog po/sv.po src/liflines/screen.c:
+
+	Update to Swedish translation (sv.po).
+	Fix for ? & q browse menu items not being translated.
+
 2002-10-19 Perry Rapp
 
 	* ChangeLog NEWS build/msvc6/llexec/llexec.rc
