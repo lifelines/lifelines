@@ -6,6 +6,15 @@
 
 	Move tag_list inside list.c, and implement vtable for list.
 
+	* ChangeLog src/hdrs/pvalue.h src/interp/builtin.c
+	src/interp/pvalue.c
+
+	New encapsulating wrappers create_pvalue_from_list, 
+	create_pvalue_from_table, and set_pvalue_seq.
+	Renamed create_pvalue_from_set to create_pvalue_from_seq.
+	Reordered pvalue type blocks into order of types in pvalue.h
+	(int,float,bool,string,node,indi,...).
+
 2005-01-14 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS

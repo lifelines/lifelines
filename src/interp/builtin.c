@@ -242,7 +242,7 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (seq)
 		namesort_indiseq(seq); /* in case uilocale != rptlocale */
 	delete_pvalue(val);
-	assign_iden(stab, iident(arg), create_pvalue_from_set(seq));
+	assign_iden(stab, iident(arg), create_pvalue_from_seq(seq));
 	return NULL;
 }
 /*==================================+
@@ -702,7 +702,7 @@ __dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		enqueue_list(newlist, copy_pvalue(newval));
 	}
 	/* assign new list */
-	newval = create_pvalue(PLIST, newlist);
+	newval = create_pvalue_from_list(newlist);
 	return newval;
 }
 /*=========================================+
@@ -1905,7 +1905,7 @@ __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	*eflg = FALSE;
 	newlist = create_list();
-	newval = create_pvalue(PLIST, newlist);
+	newval = create_pvalue_from_list(newlist);
 	assign_iden(stab, iident(arg), newval);
 	return NULL;
 }
@@ -2607,7 +2607,7 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	newtab = create_table(FREEKEY);
-	newval = create_pvalue(PTABLE, newtab);
+	newval = create_pvalue_from_table(newtab);
 
 	assign_iden(stab, iident(var), newval);
 	return NULL;

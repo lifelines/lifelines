@@ -969,22 +969,28 @@ create_pvalue_any (void)
 	return create_pvalue(PANY, NULL);
 }
 /*==================================
- * PBOOL: pvalue containing a boolean
+ * PINT: pvalue containing an int
  *================================*/
 PVALUE
-create_pvalue_from_bool (BOOLEAN bval)
+create_pvalue_from_int (INT ival)
 {
-	return create_pvalue_from_int(bval);
+	return create_pvalue(PINT, (VPTR) ival);
 }
 void
-set_pvalue_bool (PVALUE val, BOOLEAN bnum)
+set_pvalue_int (PVALUE val, INT inum)
 {
-	set_pvalue(val, PBOOL, (VPTR)bnum);
+	set_pvalue(val, PINT, (VPTR)inum);
 }
-BOOLEAN
-pvalue_to_bool (PVALUE val)
+INT
+pvalue_to_int (PVALUE val)
 {
-	return (BOOLEAN)pvalvv(val);
+	return (INT)pvalvv(val);
+}
+INT*
+pvalue_to_pint (PVALUE val)
+{
+	/* convenience for math */
+	return (INT *)&pvalvv(val);
 }
 /*==================================
  * PFLOAT: pvalue containing a float
@@ -1015,6 +1021,42 @@ pvalue_to_pfloat (PVALUE val)
 	return (float*)pvalvv(val);
 }
 /*==================================
+ * PBOOL: pvalue containing a boolean
+ *================================*/
+PVALUE
+create_pvalue_from_bool (BOOLEAN bval)
+{
+	return create_pvalue_from_int(bval);
+}
+void
+set_pvalue_bool (PVALUE val, BOOLEAN bnum)
+{
+	set_pvalue(val, PBOOL, (VPTR)bnum);
+}
+BOOLEAN
+pvalue_to_bool (PVALUE val)
+{
+	return (BOOLEAN)pvalvv(val);
+}
+/*==================================
+ * PSTRING: pvalue containing a string
+ *================================*/
+PVALUE
+create_pvalue_from_string (CNSTRING str)
+{
+	return create_pvalue(PSTRING, (VPTR)str);
+}
+void
+set_pvalue_string (PVALUE val, CNSTRING str)
+{
+	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
+}
+STRING
+pvalue_to_string (PVALUE val)
+{
+	return (STRING)pvalvv(val);
+}
+/*==================================
  * PGNODE: pvalue containing a GEDCOM node
  *================================*/
 PVALUE
@@ -1031,46 +1073,6 @@ NODE
 pvalue_to_node (PVALUE val)
 {
 	return (NODE)pvalvv(val);
-}
-/*==================================
- * PINT: pvalue containing an int
- *================================*/
-PVALUE
-create_pvalue_from_int (INT ival)
-{
-	return create_pvalue(PINT, (VPTR) ival);
-}
-void
-set_pvalue_int (PVALUE val, INT inum)
-{
-	set_pvalue(val, PINT, (VPTR)inum);
-}
-INT
-pvalue_to_int (PVALUE val)
-{
-	return (INT)pvalvv(val);
-}
-INT*
-pvalue_to_pint (PVALUE val)
-{
-	/* convenience for math */
-	return (INT *)&pvalvv(val);
-}
-/*==================================
- * ARRAY: pvalue containing an array
- *================================*/
-ARRAY
-pvalue_to_array (PVALUE val)
-{
-	return (ARRAY)pvalvv(val);
-}
-/*==================================
- * LIST: pvalue containing a list
- *================================*/
-LIST
-pvalue_to_list (PVALUE val)
-{
-	return (LIST)pvalvv(val);
 }
 /*==================================
  * record pvalues (PINDI, PFAM, ...)
@@ -1092,10 +1094,36 @@ pvalue_to_cel (PVALUE val)
 	return cel;
 }
 /*==================================
+ * LIST: pvalue containing a list
+ *================================*/
+PVALUE
+create_pvalue_from_list (LIST list)
+{
+	return create_pvalue(PLIST, list);
+}
+LIST
+pvalue_to_list (PVALUE val)
+{
+	return (LIST)pvalvv(val);
+}
+/*==================================
+ * TABLE: pvalue containing a table
+ *================================*/
+PVALUE
+create_pvalue_from_table (TABLE tab)
+{
+	return create_pvalue(PTABLE, tab);
+}
+TABLE
+pvalue_to_table (PVALUE val)
+{
+	return (TABLE)pvalvv(val);
+}
+/*==================================
  * PSET: pvalue containing a set (INDISEQ)
  *================================*/
 PVALUE
-create_pvalue_from_set (INDISEQ seq)
+create_pvalue_from_seq (INDISEQ seq)
 {
 	return create_pvalue(PSET, seq);
 }
@@ -1105,27 +1133,12 @@ pvalue_to_seq (PVALUE val)
 	return (INDISEQ)pvalvv(val);
 }
 /*==================================
- * PSTRING: pvalue containing a string
+ * ARRAY: pvalue containing an array
  *================================*/
-PVALUE
-create_pvalue_from_string (CNSTRING str)
+ARRAY
+pvalue_to_array (PVALUE val)
 {
-	return create_pvalue(PSTRING, (VPTR)str);
-}
-void
-set_pvalue_string (PVALUE val, CNSTRING str)
-{
-	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
-}
-STRING
-pvalue_to_string (PVALUE val)
-{
-	return (STRING)pvalvv(val);
-}
-TABLE
-pvalue_to_table (PVALUE val)
-{
-	return (TABLE)pvalvv(val);
+	return (ARRAY)pvalvv(val);
 }
 /*========================================
  * init_pvalue_vtable -- set vtable (for allocator in pvalalloc.c)
