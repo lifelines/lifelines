@@ -11,6 +11,10 @@
 	Add more info to utility codeset list.
 	List DbNewProps in config files.
 
+	* ChangeLog liflines/screen.c:
+
+	Suppress ^ and $ markers if list not off-screen.
+
 2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in:

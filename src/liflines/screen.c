@@ -2352,6 +2352,7 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 	INT i, j, row;
 	INT offset=4;
 	char buffer[160];
+	BOOLEAN scrollable = (rows < ld->listlen);
 	/* for short lists, use leading numbers */
 	if (ld->listlen < 10) {
 		sprintf(buffer, "%d: ", ld->listlen);
@@ -2369,9 +2370,9 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 		row = ld->rectList.top + j;
 		clear_hseg(win, row, ld->rectList.left, ld->rectList.right);
 		if (i<ld->listlen) {
-			if (i == 0)
+			if (i == 0 && scrollable)
 				mvwaddch(win, row, ld->rectList.left, '^');
-			if (i == ld->listlen-1)
+			if (i == ld->listlen-1 && scrollable)
 				mvwaddch(win, row, ld->rectList.left, '$');
 			if (i == ld->cur) mvwaddch(win, row, ld->rectList.left+3, '>');
 			if (ld->listlen < 10) {
@@ -2415,6 +2416,7 @@ manufacture a listdisp here
 	TRANMAPPING ttmd = get_tranmapping(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
+	BOOLEAN scrollable = (viewlines < len);
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
 		mvwaddstr(win, i, 1, empstr49);
@@ -2422,8 +2424,8 @@ manufacture a listdisp here
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
 		indi = key_to_indi(key);
-		if (i == 0) mvwaddch(win, row, 1, '^');
-		if (i == len-1) mvwaddch(win, row, 1, '$');
+		if (i == 0 && scrollable) mvwaddch(win, row, 1, '^');
+		if (i == len-1 && scrollable) mvwaddch(win, row, 1, '$');
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			INT drow=1;
