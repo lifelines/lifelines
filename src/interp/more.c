@@ -888,6 +888,7 @@ __getrecord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	key = pvalue_to_string(val);
 	if (*key == '@') key = rmvat(key);
+	if (!key) key=""; /* rmvat can return null */
 	if (*key == 'I' || *key == 'F' || *key == 'S' ||
 	    *key == 'E' || *key == 'X') {
 		rawrec = retrieve_raw_record(key, &len);

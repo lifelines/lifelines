@@ -1,3 +1,9 @@
+2005-01-01 Perry Rapp
+
+	* ChangeLog src/interp/more.c
+
+	Bugfix to prevent crash in dereference with bad report pointer.
+
 2004-12-31 Perry Rapp
 
 	* ChangeLog src/hdrs/win32/curses.h
