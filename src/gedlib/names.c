@@ -51,7 +51,9 @@ extern BTREE BTR;
 
 static void add_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
 static void cmpsqueeze(CNSTRING, STRING);
+static BOOLEAN dupcheck(TABLE tab, CNSTRING str);
 static BOOLEAN exactmatch(CNSTRING, CNSTRING);
+static void find_indis_worker(CNSTRING name, uchar finitial, CNSTRING sdex, TABLE donetab, LIST list);
 static void flush_name_cache();
 static INT getfinitial(CNSTRING);
 static void getnamerec(const RKEY * rkey);
@@ -106,10 +108,6 @@ static STRING upsurname(STRING);
  * When a name record is used to match a search name, the internal
  *   structures are modified to remove all entries that don't match
  *   the name; in addition, other global data structures are used
- *-------------------------------------------------------------------
- *   STRING *LMkeys  - keys (strings) of all INDI records that match
- *   INT     LMcount - number of entries in modified record arrays
- *   INT     LMmax   - max allocation size of LMkeys array
  *=================================================================*/
 
 static RKEY    NRkey;
@@ -121,9 +119,6 @@ static RKEY   *NRkeys;
 static CNSTRING *NRnames;
 static INT     NRmax = 0;
 
-static STRING *LMkeys = NULL;
-static INT     LMcount = 0;
-static INT     LMmax = 0;
 
 /*********************************************
  * local function definitions
@@ -189,6 +184,7 @@ across database reloads
 			NRoffs = (INT *) stdalloc(10*sizeof(INT));
 			NRnames = (STRING *) stdalloc(10*sizeof(STRING));
 		}
+		return;
 	}
 	parsenamerec(rkey, p);
 }
@@ -371,22 +367,22 @@ add_name (STRING name, STRING key)
 	RKEY rkeyname;
 	char finitial = getfinitial(name);
 	STRING surname = strsave(getsxsurname(name));
-	TABLE tab = create_table(FREEKEY);
+	TABLE donetab = create_table(FREEKEY);
 	STRING rkeystr=0;
 
 	for (i=0; i<soundex_count(); ++i) 	{
 		CNSTRING sdex = soundex_get(i, surname);
 		soundex2rkey(finitial, sdex, &rkeyname);
+		/* rkeyname is where names with this soundex/finitial are stored */
 		/* check if we've already done this entry */
 		rkeystr = strsave(rkey2str(rkeyname));
-		if (valueof_str(tab, rkeystr)) {
+		if (dupcheck(donetab, rkeystr)) {
 			strfree(&rkeystr);
 			continue;
 		}
-		insert_table_str(tab, rkeystr, "");
 		add_namekey(&rkeyname, name, &rkeyid);
 	}
-	destroy_table(tab);
+	destroy_table(donetab);
 
 	strfree(&surname);
 }
@@ -457,23 +453,22 @@ remove_name (STRING name, STRING key)
 	RKEY rkeyname;
 	char finitial = getfinitial(name);
 	STRING surname = strsave(getsxsurname(name));
-	TABLE tab = create_table(FREEKEY);
+	TABLE donetab = create_table(FREEKEY);
 	STRING rkeystr=0;
-
 
 	for (i=0; i<soundex_count(); ++i) 	{
 		CNSTRING sdex = soundex_get(i, surname);
 		soundex2rkey(finitial, sdex, &rkeyname);
+		/* rkeyname is where names with this soundex/finitial are stored */
 		/* check if we've already done this entry */
 		rkeystr = strsave(rkey2str(rkeyname));
-		if (valueof_str(tab, rkeystr)) {
+		if (dupcheck(donetab, rkeystr)) {
 			strfree(&rkeystr);
 			continue;
 		}
-		insert_table_str(tab, rkeystr, "");
 		remove_namekey(&rkeyname, name, &rkeyid);
 	}
-	destroy_table(tab);
+	destroy_table(donetab);
 
 	strfree(&surname);
 }
@@ -624,50 +619,83 @@ squeeze (CNSTRING in, STRING out)
 	}
 }
 /*====================================================
- * get_names -- Find all persons who match name or key
+ * find_indis_by_name -- Find all persons who match name or key
  *  name:  [in] name of person desired
- *  pnum:  [out] number of matches
- *  pkeys: [out] keys matched (0...*pnum-1)
+ * returns list of strings of keys found
  *==================================================*/
-void
-get_names (STRING name, INT *pnum, STRING **pkeys)
+LIST
+find_indis_by_name (CNSTRING name)
 {
-	INT i, n;
+	INT i;
 	RECORD rec;
-	static char kbuf[MAXGEDNAMELEN];
-	static STRING kaddr;
-	RKEY rkeyname;
+	uchar finitial = getfinitial(name);
+	STRING surname = strsave(getsxsurname(name));
+	TABLE donetab = create_table(FREEKEY);
+	LIST list = create_list2(LISTDOFREE);
+	STRING rkeystr=0;
 
-   /* See if user is asking for person by key instead of name */
+	/* See if user is asking for person by key instead of name */
 	if ((rec = id_by_key(name, 'I'))) {
 		STRING key = rmvat(nxref(nztop(rec)));
-		llstrncpy(kbuf, key, sizeof(kbuf), uu8);
-		kaddr = kbuf;
-		*pkeys = &kaddr;
-		*pnum = 1;
+		enqueue_list(list, strsave(key));
+		return list;
+	}
+
+	for (i=0; i<soundex_count(); ++i) 	{
+		CNSTRING sdex = soundex_get(i, surname);
+		if (name[0] == '*') {
+			INT c;
+			INT lastchar = 255;
+			/* do all letters from a thru end of letters */
+			/* a-1 is placeholder for doing @ (for names starting with non-ASCII letters */
+			for (c = 'a'-1; c <= lastchar; c++) {
+				if (c == 'a'-1) {
+					finitial = '$';
+				} else {
+					finitial = ll_toupper(c);
+					if (!isletter(finitial))
+						continue;
+				}
+				find_indis_worker(name, finitial, sdex, donetab, list);
+			}
+		} else {
+			find_indis_worker(name, finitial, sdex, donetab, list);
+		}
+	}
+	destroy_table(donetab);
+	strfree(&surname);
+	return list;
+}
+/*====================================================
+ * find_indis_worker -- Find all persons who match name (in one name record)
+ *  name:     [IN]  name of person desired
+ *  rkeyname: [IN]  check this record of names
+ *  list:     [I/O] list to which to append people
+ * returns list of strings of keys found
+ *==================================================*/
+static void
+find_indis_worker (CNSTRING name, uchar finitial, CNSTRING sdex, TABLE donetab, LIST list)
+{
+	INT i, n;
+	RKEY rkeyname;
+	CNSTRING rkeystr;
+
+	soundex2rkey(finitial, sdex, &rkeyname);
+	/* rkeyname is where names with this soundex/finitial are stored */
+	/* check if we've already done this entry */
+	rkeystr = rkey2str(rkeyname);
+	if (dupcheck(donetab, rkeystr)) {
 		return;
 	}
-
-   /* Clean up allocated memory from last call */
-	if (LMcount) {
-		for (i = 0; i < LMcount; i++)
-			stdfree(LMkeys[i]);
-	}
-
-
-   /* Load up static name buffers; return if no match */
-	LMcount = 0;
-
-	/* Convert name to key and read name record */
-	name2rkey(name, &rkeyname);
+	
+	/* load names from record specified (by rkeyname) */
 	getnamerec(&rkeyname);
 	if (!NRcount) {
-		*pnum = 0;
 		return;
 	}
 
-   /* Compare user's name against all names in name record; the name
-      record data structures are modified */
+	/* Compare user's name against all names in name record; the name
+	record data structures are modified */
 	n = 0;
 	for (i = 0; i < NRcount; i++) {
 		if (exactmatch(name, NRnames[i])) {
@@ -678,15 +706,22 @@ get_names (STRING name, INT *pnum, STRING **pkeys)
 			n++;
 		}
 	}
-	*pnum = NRcount = n;
-	if (NRcount > LMmax) {
-		if (LMmax) stdfree(LMkeys);
-		LMkeys = (STRING *) stdalloc(NRcount*sizeof(STRING));
-		LMmax = NRcount;
+	NRcount = n;
+	for (i = 0; i < NRcount; i++) {
+		enqueue_list(list, strsave(rkey2str(NRkeys[i])));
 	}
-	for (i = 0; i < NRcount; i++)
-		LMkeys[i] = strsave(rkey2str(NRkeys[i]));
-	*pkeys = LMkeys;
+}
+/*====================================================
+ * dupcheck -- Return true if string already present
+ *  else add it will add a dup of key & null value & return false
+ *==================================================*/
+static BOOLEAN
+dupcheck (TABLE tab, CNSTRING str)
+{
+	if (valueof_str(tab, str))
+		return TRUE;
+	insert_table_str(tab, strsave(str), 0);
+	return FALSE;
 }
 /*====================================
  * namecmp -- Compare two GEDCOM names
@@ -988,9 +1023,9 @@ name_surfirst (STRING name)
  * returns record found, or NULL
  *==============================*/
 RECORD
-id_by_key (STRING name, char ctype)
+id_by_key (CNSTRING name, char ctype)
 {
-	STRING p = name; /* unsigned for chartype */
+	CNSTRING p = name; /* unsigned for chartype */
 	static char kbuf[MAXGEDNAMELEN];
 	INT i = 0, c;
 	while ((c = (uchar)*p++) && chartype(c) == WHITE)

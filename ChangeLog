@@ -7,6 +7,12 @@
 
 	New create_list2 to specify what to free whilst creating list.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/indiseq.c
+	src/gedlib/names.c src/hdrs/gedcom.h
+
+	Rewrite soundex handling in names for multiple soundexes.
+	Fix wildcard soundex handling for non-ASCII.
+
 2003-09-14 Perry Rapp
 
 	* src/gedlib/intrface.c src/hdrs/icvt.h src/hdrs/table.h

@@ -1553,57 +1553,29 @@ spouse_indiseq (INDISEQ seq)
 INDISEQ
 name_to_indiseq (STRING name)
 {
-	STRING *keys;
-	INT i, num, c, lastchar;
 	INDISEQ seq = NULL;
-	BOOLEAN made = FALSE;
-	char scratch[MAXLINELEN+1];
+	LIST list=0;
 	if (!name || *name == 0) return NULL;
-	if (*name != '*') {
-		get_names(name, &num, &keys);
-		if (num == 0) return NULL;
+
+	list = find_indis_by_name(name);
+	ASSERT(list);
+	if (length_list(list)) {
+		struct tag_list_iter listit;
+		VPTR ptr=0;
+		/* add all entries from list to sequence */
 		seq = create_indiseq_null();
-		for (i = 0; i < num; i++)
-			append_indiseq_null(seq, strsave(keys[i]), NULL, FALSE, TRUE);
+		begin_list(list, &listit);
+		while (next_list_ptr(&listit, &ptr)) {
+			CNSTRING key = (CNSTRING)ptr;
+			/* skip dupe check, because we do unique_indiseq below */
+			append_indiseq_null(seq, strsave(key), NULL, TRUE, TRUE);
+		}
 		namesort_indiseq(seq);
-		return seq;
+		/* may have duplicates from multiple soundexes or wildcard searches */
+		unique_indiseq(seq);
 	}
-	sprintf(scratch, "a/%s/", getasurname(name));
-	lastchar = 'z';
-	if(opt_finnish) lastchar = 255;
-	/* start with '@' to include non-ASCII letters */
-	for (c = 'a'-1; c <= lastchar; c++) {
-		if(opt_finnish && !lat1_islower(c)) continue;
-		scratch[0] = c;
-		get_names(scratch, &num, &keys);
-		if (num == 0) continue;
-		if (!made) {
-			seq = create_indiseq_null();
-			made = TRUE;
-		}
-		for (i = 0; i < num; i++) {
-			append_indiseq_null(seq, strsave(keys[i]), NULL, TRUE, TRUE);
-		}
-	}
-	scratch[0] = '$';
-	get_names(scratch, &num, &keys);
-	if (num) {
-		if (!made) {
-			seq = create_indiseq_null();
-			made = TRUE;
-		}
-		for (i = 0; i < num; i++) {
-			append_indiseq_null(seq, strsave(keys[i]), NULL, TRUE, TRUE);
-		}
-	}
-	if (seq) {
-		 /* The following call to unique_indiseq was added as
-		    part of the Finnish language patches. Is it
-		    applicable to all?
-		  */
-		 unique_indiseq(seq);
-		 namesort_indiseq(seq);
-	}
+	make_list_empty(list);
+	remove_list(list, 0);
 	return seq;
 }
 /*===========================================

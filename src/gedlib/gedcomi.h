@@ -6,7 +6,7 @@ void custom_translate(ZSTR zstr, TRANTABLE tt);
 BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*, ZSTR zerr);
 
 /* names.c */
-RECORD id_by_key(STRING name, char ctype);
+RECORD id_by_key(CNSTRING name, char ctype);
 
 /* node.c */
 RECORD alloc_new_record(void);

@@ -515,7 +515,7 @@ INT xrefval(char ntype, STRING str);
 void add_name(STRING, STRING);
 void free_name_list(LIST list);
 void free_string_list(LIST list);
-void get_names(STRING name, INT *pnum, STRING **pkeys);
+LIST find_indis_by_name(CNSTRING name);
 CNSTRING getasurname(CNSTRING);
 CNSTRING getsxsurname(CNSTRING);
 CNSTRING givens(CNSTRING);
