@@ -38,6 +38,7 @@
 #include "btree.h"
 #include "indiseq.h"
 #include "lloptions.h"
+#include "cache.h"
 
 /*********************************************
  * external variables (no header)
