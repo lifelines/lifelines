@@ -7,6 +7,7 @@
 	NEW: autotools/.cvsignore
 	NEW: msvc6/.cvsignore
 	NEW: rpm/.cvsignore 
+	NEW: win32/.cvsignore
 
 2002-06-28 Perry Rapp <puddle@users.sourceforge.net>
 
