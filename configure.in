@@ -11,6 +11,9 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE(lifelines, 3.0.10)
 AM_CONFIG_HEADER(config.h)
 
+dnl Set of available languages (gettext) (zu is just a preliminary test)
+ALL_LINGUAS="it"
+
 AC_PREFIX_DEFAULT($HOME)
 
 AC_SUBST(PACKAGE)
@@ -23,6 +26,9 @@ AC_PROG_CC
 AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
+
+dnl Internationalization (gettext)
+AM_GNU_GETTEXT
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
@@ -157,5 +163,6 @@ AC_OUTPUT(Makefile \
         docs/Makefile \
         reports/Makefile
         win32/Makefile \
-        win32/msvc6/Makefile)
+        win32/msvc6/Makefile \
+        intl/Makefile po/Makefile.in)
 

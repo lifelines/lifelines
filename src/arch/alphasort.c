@@ -27,9 +27,6 @@
  * alphasort.c -- if alphasort() is missing, make a replacement
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #ifdef HAVE_DIRENT_H
 #include <dirent.h>

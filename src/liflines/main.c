@@ -32,9 +32,6 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 #include "sys_inc.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
@@ -162,6 +159,10 @@ main (INT argc, char **argv)
 
 #ifdef HAVE_SETLOCALE
 	deflocale_coll = strsave(setlocale(LC_COLLATE, NULL));
+#endif
+#if ENABLE_NLS
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
 #endif
 
 	/* Parse Command-Line Arguments */

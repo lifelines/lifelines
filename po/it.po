@@ -1,0 +1,487 @@
+# Perry's test locale (qq)
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Perry Rapp <puddle@users.lifelines.sf.net>, 2002.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-02-22 23:51-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. normal menu items
+#: liflines/menuitem.c:86
+msgid "e  Edit the person"
+msgstr "e  Edit qq person"
+
+#: liflines/menuitem.c:87
+msgid "e  Edit the family"
+msgstr ""
+
+#: liflines/menuitem.c:88
+msgid "e  Edit record"
+msgstr ""
+
+#: liflines/menuitem.c:89
+msgid "e  Edit top person"
+msgstr ""
+
+#: liflines/menuitem.c:90
+msgid "f  Browse to father"
+msgstr ""
+
+#: liflines/menuitem.c:91
+msgid "f  Browse top father"
+msgstr ""
+
+#: liflines/menuitem.c:92
+msgid "m  Browse to mother"
+msgstr ""
+
+#: liflines/menuitem.c:93
+msgid "m  Browse top mother"
+msgstr ""
+
+#: liflines/menuitem.c:94
+msgid "s  Browse to spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:95
+msgid "s  Browse top spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:96
+msgid "c  Browse to children"
+msgstr ""
+
+#: liflines/menuitem.c:97
+msgid "c  Browse top children"
+msgstr ""
+
+#: liflines/menuitem.c:98
+msgid "o  Browse to older sib"
+msgstr ""
+
+#: liflines/menuitem.c:99
+msgid "y  Browse to younger sib"
+msgstr ""
+
+#: liflines/menuitem.c:100
+msgid "g  Browse to family"
+msgstr ""
+
+#: liflines/menuitem.c:101
+msgid "u  Browse to parents"
+msgstr ""
+
+#: liflines/menuitem.c:102
+msgid "b  Browse to persons"
+msgstr ""
+
+#: liflines/menuitem.c:103
+msgid "t  Browse to top"
+msgstr ""
+
+#: liflines/menuitem.c:104
+msgid "b  Browse to bottom"
+msgstr ""
+
+#: liflines/menuitem.c:105
+msgid "h  Add as spouse"
+msgstr ""
+
+#: liflines/menuitem.c:106
+msgid "i  Add as child"
+msgstr ""
+
+#: liflines/menuitem.c:107
+msgid "s  Add spouse to family"
+msgstr ""
+
+#: liflines/menuitem.c:108
+msgid "a  Add child to family"
+msgstr ""
+
+#: liflines/menuitem.c:109
+msgid "a  Add family"
+msgstr ""
+
+#: liflines/menuitem.c:110
+msgid "x  Swap two families"
+msgstr ""
+
+#: liflines/menuitem.c:111
+msgid "x  Swap two children"
+msgstr ""
+
+#: liflines/menuitem.c:112
+#, c-format
+msgid "%c  Reorder child"
+msgstr ""
+
+#: liflines/menuitem.c:113
+msgid "x  Switch top/bottom"
+msgstr ""
+
+#: liflines/menuitem.c:114
+msgid "n  Create new person"
+msgstr ""
+
+#: liflines/menuitem.c:115
+msgid "a  Create new family"
+msgstr ""
+
+#: liflines/menuitem.c:116
+msgid "tt Enter tandem mode"
+msgstr ""
+
+#: liflines/menuitem.c:117
+msgid "tt Enter family tandem"
+msgstr ""
+
+#: liflines/menuitem.c:118
+msgid "zi Browse to indi"
+msgstr ""
+
+#: liflines/menuitem.c:119
+msgid "zz Browse to any"
+msgstr ""
+
+#: liflines/menuitem.c:120
+msgid "r  Remove as spouse"
+msgstr ""
+
+#: liflines/menuitem.c:121
+msgid "d  Remove as child"
+msgstr ""
+
+#: liflines/menuitem.c:122
+msgid "r  Remove spouse from"
+msgstr ""
+
+#: liflines/menuitem.c:123
+msgid "d  Remove child from"
+msgstr ""
+
+#: liflines/menuitem.c:124
+msgid "(  Scroll up"
+msgstr ""
+
+#: liflines/menuitem.c:125
+msgid ")  Scroll down"
+msgstr ""
+
+#: liflines/menuitem.c:126
+msgid "]  Increase tree depth"
+msgstr ""
+
+#: liflines/menuitem.c:127
+msgid "[  Decrease tree depth"
+msgstr ""
+
+#: liflines/menuitem.c:128
+msgid "(t Scroll top up"
+msgstr ""
+
+#: liflines/menuitem.c:129
+msgid ")t Scroll top down"
+msgstr ""
+
+#: liflines/menuitem.c:130
+msgid "(b Scroll bottom up"
+msgstr ""
+
+#: liflines/menuitem.c:131
+msgid ")b Scroll bottom down"
+msgstr ""
+
+#: liflines/menuitem.c:132
+msgid "(( Scroll both up"
+msgstr ""
+
+#: liflines/menuitem.c:133
+msgid ")) Scroll both down"
+msgstr ""
+
+#: liflines/menuitem.c:134
+msgid "#  Toggle childnos"
+msgstr ""
+
+#: liflines/menuitem.c:135
+msgid "!g GEDCOM mode"
+msgstr ""
+
+#: liflines/menuitem.c:136
+msgid "!x GEDCOMX mode"
+msgstr ""
+
+#: liflines/menuitem.c:137
+msgid "!t GEDCOMT mode"
+msgstr ""
+
+#: liflines/menuitem.c:138
+msgid "!a Ancestors mode"
+msgstr ""
+
+#: liflines/menuitem.c:139
+msgid "!d Descendants mode"
+msgstr ""
+
+#: liflines/menuitem.c:140
+msgid "!n Normal mode"
+msgstr ""
+
+#: liflines/menuitem.c:141
+msgid "p  Pedigree mode"
+msgstr ""
+
+#: liflines/menuitem.c:142
+msgid "!! Cycle mode"
+msgstr ""
+
+#. Note - CMD_CHILD_DIRECT0 has special handling, & is always wired to 123456789
+#: liflines/menuitem.c:144
+msgid "(1-9)  Browse to child"
+msgstr ""
+
+#: liflines/menuitem.c:145
+msgid "y  Turn on sync"
+msgstr ""
+
+#: liflines/menuitem.c:146
+msgid "A  Advanced view"
+msgstr ""
+
+#: liflines/menuitem.c:147
+msgid "tc Tandem to children"
+msgstr ""
+
+#: liflines/menuitem.c:148
+msgid "tf Tandem to father/s"
+msgstr ""
+
+#: liflines/menuitem.c:149
+msgid "tg Tandem to family/s"
+msgstr ""
+
+#: liflines/menuitem.c:150
+msgid "f  Browse to fathers"
+msgstr ""
+
+#: liflines/menuitem.c:151
+msgid "m  Browse to mothers"
+msgstr ""
+
+#: liflines/menuitem.c:152
+msgid "tm Tandem to mother/s"
+msgstr ""
+
+#: liflines/menuitem.c:153
+msgid "ts Tandem to spouse/s"
+msgstr ""
+
+#: liflines/menuitem.c:154
+msgid "tu Tandem to parents"
+msgstr ""
+
+#: liflines/menuitem.c:155
+msgid "<  Enlarge menu area"
+msgstr ""
+
+#: liflines/menuitem.c:156
+msgid ">  Shrink menu area"
+msgstr ""
+
+#: liflines/menuitem.c:157
+msgid "M> More menu cols"
+msgstr ""
+
+#: liflines/menuitem.c:158
+msgid "M< Less menu cols"
+msgstr ""
+
+#: liflines/menuitem.c:159
+msgid "+  Next in db"
+msgstr ""
+
+#: liflines/menuitem.c:160
+msgid "-  Prev in db"
+msgstr ""
+
+#: liflines/menuitem.c:161
+msgid "d  Copy top to bottom"
+msgstr ""
+
+#: liflines/menuitem.c:162
+msgid "j  Merge bottom to top"
+msgstr ""
+
+#: liflines/menuitem.c:163
+msgid "j  Move down list"
+msgstr ""
+
+#: liflines/menuitem.c:164
+msgid "k  Move up list"
+msgstr ""
+
+#: liflines/menuitem.c:165
+msgid "e  Edit this person"
+msgstr ""
+
+#: liflines/menuitem.c:166
+msgid "i  Browse this person"
+msgstr ""
+
+#: liflines/menuitem.c:167
+msgid "m  Mark this person"
+msgstr ""
+
+#: liflines/menuitem.c:168
+msgid "d  Delete from list"
+msgstr ""
+
+#: liflines/menuitem.c:169
+msgid "n  Name this list"
+msgstr ""
+
+#: liflines/menuitem.c:170
+msgid "b  Browse new persons"
+msgstr ""
+
+#: liflines/menuitem.c:171
+msgid "a  Add to this list"
+msgstr ""
+
+#: liflines/menuitem.c:172
+msgid "x  Swap mark/current"
+msgstr ""
+
+#: liflines/menuitem.c:173
+msgid "$s  List sources"
+msgstr ""
+
+#: liflines/menuitem.c:174
+msgid "$n  List notes"
+msgstr ""
+
+#: liflines/menuitem.c:175
+msgid "$$  List references"
+msgstr ""
+
+#: liflines/menuitem.c:176
+msgid "^b  History/back"
+msgstr ""
+
+#: liflines/menuitem.c:177
+msgid "^f  History/fwd"
+msgstr ""
+
+#: liflines/menuitem.c:178
+msgid "^l  History list"
+msgstr ""
+
+#: liflines/menuitem.c:179
+msgid "^c Clear history"
+msgstr ""
+
+#: liflines/menuitem.c:180
+#, c-format
+msgid "%s  Add source"
+msgstr ""
+
+#: liflines/menuitem.c:181
+#, c-format
+msgid "%e  Add event"
+msgstr ""
+
+#: liflines/menuitem.c:182
+#, c-format
+msgid "%o  Add other"
+msgstr ""
+
+#: liflines/menuitem.c:185
+msgid "B  Browse new family"
+msgstr ""
+
+#: liflines/menuitem.c:502
+#, c-format
+msgid "Menu choice sequence too long: %s"
+msgstr ""
+
+#: liflines/menuitem.c:506
+#, c-format
+msgid "Menu item lacked choice sequence: %s"
+msgstr ""
+
+#: liflines/menuitem.c:586 liflines/menuitem.c:591
+#, c-format
+msgid "Conflicting command string: %s"
+msgstr ""
+
+#: liflines/menuitem.c:637
+msgid "Missing title"
+msgstr ""
+
+#: liflines/menuitem.c:647
+msgid "LifeLines -- Person Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:656
+msgid "LifeLines -- Family Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:665
+msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:674
+msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:683
+msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/menuitem.c:693
+msgid "LifeLines -- List Browse Screen (* toggles menu)"
+msgstr ""
+
+#: liflines/screen.c:291
+# c-format
+msgid "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
+msgstr "Il testy\n"
+
+#: liflines/screen.c:304
+#, c-format
+msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
+msgstr ""
+
+#: liflines/screen.c:1442
+msgid "Enter locale name"
+msgstr ""
+
+#: liflines/screen.c:1443
+msgid "Locale: "
+msgstr ""
+
+#: liflines/screen.c:1451
+#, c-format
+msgid "Valid locale: %1"
+msgstr ""
+
+#: liflines/screen.c:1456
+msgid "Invalid locale, try again"
+msgstr ""
+
+#: liflines/screen.c:3128 liflines/screen.c:3156
+msgid "L  Test locale names"
+msgstr ""
+
+#: liflines/screen.c:3158
+msgid "Report locale: "
+msgstr ""

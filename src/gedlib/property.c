@@ -3,10 +3,6 @@
  *   Created: 2001/01 by Petter Reinholdtsen
  *==============================================================*/
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "standard.h"
 #include "gedcom.h"
 #include "lloptions.h"

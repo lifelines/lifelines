@@ -31,9 +31,6 @@
 /* modified 2000-01-26 J.F.Chandler */
 /* modified 2000-08-21 J.F.Chandler */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif

@@ -1,3 +1,17 @@
+2002-02-23 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog Makefile.am configure.in arch/alphasort.c
+	arch/scandir.c gedlib/indiseq.c gedlib/property.c
+	gedlib/translat.c hdrs/menuitem.h hdrs/standard.h
+	liflines/Makefile.am liflines/main.c liflines/menuitem.c
+	liflines/screen.c tools/Makefile.am
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
+	*NEW: intl/* intl/hdr/libintl.h po/* win32/libintl/*:
+
+	Implemented gettext-0.10.40 (new intl/ & po/).
+	Added win32/msvc6/libintl project. Added it.po as test
+	file (not real data).
+
 2002-02-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/indiseq.c hdrs/interp.h interp/interp.c

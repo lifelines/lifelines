@@ -27,9 +27,6 @@
  * scandir.c -- if scandir() is missing, make a replacement
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #ifndef HAVE_SCANDIR
 

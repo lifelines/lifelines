@@ -32,9 +32,6 @@
  *   3.0.2 - 25 Mar 95    3.0.3 - 17 Jan 96
  *===========================================================*/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
@@ -288,7 +285,7 @@ init_screen (BOOLEAN graphical)
 		ll_cols = winx;
 		if (ll_cols > COLS || ll_lines > LINES) {
 			endwin();
-			fprintf(stderr, "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n",
+			fprintf(stderr, _("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"),
 				ll_cols, ll_lines, COLS, LINES);
 			return 0; /* fail */
 		}
@@ -301,7 +298,7 @@ init_screen (BOOLEAN graphical)
 	/* check that terminal meet minimum requirements */
 	if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
 		endwin();
-		fprintf(stderr, "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n",
+		fprintf(stderr, _("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"),
 			ll_cols, ll_lines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
@@ -378,10 +375,10 @@ repaint_main_menu (UIWINDOW uiwin)
 	row = 5;
 	/* TODO: internationalize this -- but deal with menu letters somehow */
 	mvwaddstr(win, row++, 2, plschs);
-	mvwaddstr(win, row++, 4, "b  Browse the persons in the database");
-	mvwaddstr(win, row++, 4, "s  Search database");
-	mvwaddstr(win, row++, 4, "a  Add information to the database");
-	mvwaddstr(win, row++, 4, "d  Delete information from the database");
+	mvwaddstr(win, row++, 4, _("b  Browse the persons in the database"));
+	mvwaddstr(win, row++, 4, _("s  Search database"));
+	mvwaddstr(win, row++, 4, _("a  Add information to the database"));
+	mvwaddstr(win, row++, 4, _("d  Delete information from the database"));
 	mvwaddstr(win, row++, 4, mn_mmprpt);
 	mvwaddstr(win, row++, 4, mn_mmrpt);
 	mvwaddstr(win, row++, 4, mn_mmcset);
@@ -2695,7 +2692,7 @@ output_menu (UIWINDOW uiwin, INT screen, INT bottom, INT width)
 	/* now display all the menu items we can fit on this page */
 	while (1)
 	{
-		mvwaddstr_lim(win, row, col, Menu[Item++]->Display, colwidth);
+		mvwaddstr_lim(win, row, col, Menu[Item++]->LocalizedDisplay, colwidth);
 		if (Item == MenuSize)
 			break;
 		row++;

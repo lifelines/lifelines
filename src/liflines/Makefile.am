@@ -15,9 +15,16 @@ llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
-	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a
+	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
+	@INTLLIBS@
 
-INCLUDES=-I$(srcdir)/../hdrs
+# Have to explicitly include .. after we put DEFS line in below for gettext
+INCLUDES=-I.. -I$(srcdir)/../hdrs
+
+# Stuff for gettext (copied from gnu hello-1.3.35)
+localedir = $(datadir)/locale
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+# End stuff for gettext
 
 EXTRA_DIST = llinesi.h
 

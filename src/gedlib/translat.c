@@ -29,9 +29,6 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif

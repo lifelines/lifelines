@@ -59,6 +59,7 @@ typedef struct MenuItem_s {
 	STRING Display;
 	STRING Choices;
 	INT Command;
+	STRING LocalizedDisplay;
 } MenuItem;
 /*
 Note: MenuItem.Choices could be dropped, and the

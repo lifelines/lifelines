@@ -468,6 +468,9 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 	/* now we translate the display string, because it was initialized in static
 	array at top of this file */
 	llstrncpy(display, _(mitem->Display), ARRSIZE(display));
+	if (mitem->LocalizedDisplay)
+		strfree(&mitem->LocalizedDisplay);
+	mitem->LocalizedDisplay = strdup(display);
 	if (mitem->Command == CMD_CHILD_DIRECT0) {
 		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
 		for (i=1; i<=9; i++) {
