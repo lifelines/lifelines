@@ -1,4 +1,7 @@
 2004-07-20 Stephen Dum
+        * ChangeLog reports/famrep.ll
+	Fix Tracker Id 609265 - Apply Perry's fix
+2004-07-20 Stephen Dum
         * ChangeLog docs/ll-userguide.xml docs/ll-userguide.html
 	docs/ll-userguide.pdf docs/ll-userguide.txt docs/ll-reportmanual.html
 	docs/ll-reportmanual.pdf docs/ll-reportmanual.txt

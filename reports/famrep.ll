@@ -32,10 +32,13 @@
  *        tbl fam.out | groff -me | your_postscript_printer
  *        tbl fam.out | troff -me | dpost | lp -dps
  *
- *   You will want to change the data in "compiler" table in main() to
- *   reflect yourself: change the reference from me to you, your address,
- *   phone, etc.
- *
+ *   The data in "compiler" table in main() is initialized with property's
+ *   obtained from the lifelines config file (~/.linesrc on unix else 
+ *   lines.cfg) with values from
+ *   user.name
+ *   user.email 
+ *   user.addr 
+ *   user.phone 
  */
 
 global(sourcelist)                      /* list of all sources used */
@@ -54,12 +57,11 @@ proc main ()
     set(ONCE, TRUE)
     list(sourcelist)
 
-    /* Change the compiler name, address, phone, and email to reflect you.*/
     table(compiler)
-    insert(compiler, "name", "James Patton Jones")
-    insert(compiler, "addr", "370 Altair Way, #213  Sunnyvale, CA 94086")
-    insert(compiler, "phone", "415.571.6762")
-    insert(compiler, "email", "jjones@nas.nasa.gov")
+    insert(compiler, "name", getproperty("user.name"))
+    insert(compiler, "addr", getproperty("user.addr"))
+    insert(compiler, "phone", getproperty("user.phone"))
+    insert(compiler, "email", getproperty("user.email"))
 
     set(indi, NULL)
     while (eq(strcmp(name(indi), NULL), 0)) {
@@ -420,14 +422,15 @@ proc sourcenum()
 {
     set(found,0)
     forlist(sourcelist, item, i) {
+	set(numsources,i)
         if (eq(strcmp(item, sourcestr), 0)) {   /* if source in list */
-            " \\s7(" d(i) ")\\s8"                 /* print out source index */
+            " \\s7(" d(i) ")\\s8"               /* print out source index */
             set(found, 1)
         }
     }
     if (not(eq(found, 1))) {
         push(sourcelist, sourcestr)             /* otherwise add it to list */
-        " \\s7(" d(add(i,1)) ")\\s8"            /* and print source index */
+        " \\s7(" d(add(numsources,i,1)) ")\\s8" /* and print source index */
     }
 }
 
