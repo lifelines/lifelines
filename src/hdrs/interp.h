@@ -145,7 +145,7 @@ typedef struct {
 	char *ft_name;
 	INT ft_nparms_min;
 	INT ft_nparms_max;
-	WORD (*ft_eval)();
+	PVALUE (*ft_eval)(PNODE, TABLE, BOOLEAN *);
 } BUILTINS;
 
 extern BUILTINS builtins[];
@@ -314,6 +314,6 @@ PNODE while_node(PNODE, PNODE);
 int yylex(void);
 int yyparse(void);
 
-#endif /* _INTERP_H */
-
 void poutput(STRING);
+
+#endif /* _INTERP_H */

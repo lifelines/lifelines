@@ -1,5 +1,9 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/interp.h hdrs/interpi.h interp/functab.c: Correct function
+	table prototypes and add new internal header file.  Keep all
+	prototypes inside the #ifdefs.
+
 	* btree/addkey.c btree/block.c btree/file.c btree/index.c
 	btree/opnbtree.c btree/record.c btree/traverse.c btree/utils.c
 	hdrs/btree.h hdrs/standard.h stdlib/assert.c stdlib/double.c
