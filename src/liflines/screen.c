@@ -481,7 +481,7 @@ create_windows (void)
 /*=====================================
  * init_all_windows -- Init all windows
  *===================================*/
-void
+static void
 init_all_windows (void)
 {
 	WINDOW *win = add_menu_win;
@@ -799,6 +799,8 @@ choose_one_from_indiseq (STRING ttl,
 	INT rv, len;
 	ASSERT(seq);
 	len = length_indiseq(seq);
+	if (len<50)
+		preprint_indiseq(seq);
 	win = choose_win(len);
 	werase(win);
 	BOX(win, 0, 0);
@@ -825,6 +827,8 @@ choose_list_from_indiseq (STRING ttl,
 	INT len;
 	ASSERT(seq);
 	len = length_indiseq(seq);
+	if (len<50)
+		preprint_indiseq(seq);
 	win = choose_win(len);
 	werase(win);
 	BOX(win, 0, 0);
@@ -1139,14 +1143,17 @@ shw_list (WINDOW *win,
           INT top,
           INT cur)
 {
-	INT i, j, row = 2, len = length_indiseq(seq);
+	INT i, j, row = 2, len;
+	char buffer[60];
+	len = length_indiseq(seq);
 	j = len0 > VIEWABLE ? VIEWABLE : len0;
 	for (i = 0; i < j; i++)
 		mvwaddstr(win, row++, 1, empstr71);
 	row = 2;
 	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
 		if (i == cur) mvwaddch(win, row, 3, '>');
-		mvwaddstr(win, row, 4, sprn(IData(seq)[i]));
+		print_indiseq_element(seq, i, buffer, sizeof(buffer));
+		mvwaddstr(win, row, 4, buffer);
 		row++;
 	}
 }

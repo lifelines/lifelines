@@ -77,6 +77,7 @@ ns_callback (STRING skey, STRING name, void *param)
 		if (pattern_match(patt, piece)) {
 			/* if we pass in name, append_indiseq won't check for dups */
 			append_indiseq(seq, skey, NULL, 0, FALSE, FALSE);
+			break;
 			}
 	ENDLIST
 	free_name_list(list);
@@ -120,7 +121,7 @@ name_scan (void)
 	traverse_names(ns_callback, &patt);
 
 	if (length_indiseq(seq)) {
-		indi = format_and_choose_indi(seq, TRUE, scanrs, scanrs);
+		indi = choose_from_indiseq(seq, TRUE, scanrs, scanrs);
 	}
 	remove_indiseq(seq, FALSE);
 	return indi;

@@ -50,8 +50,8 @@ typedef struct stag {
 #define skey(s) ((s)->s_key)
 #define snam(s) ((s)->s_nam)
 #define sval(s) ((s)->s_val)
-#define spri(s) ((s)->s_pri)
 #define sprn(s) ((s)->s_prn)
+#define spri(s) ((s)->s_pri)
 
 /*=================================================
  * INDISEQ -- Data type for an entire indi sequence
@@ -61,12 +61,14 @@ typedef struct  {
 	INT is_max;	/* max length before increment */
 	INT is_flags;	/* attribute flags */
 	SORTEL *is_data;	/*  actual list of items */
+	INT is_prntype; /* for special cases (spouseseq & famseq) */
 } *INDISEQ;
 
 #define ISize(s)  ((s)->is_size)
 #define IMax(s)   ((s)->is_max)
 #define IFlags(s) ((s)->is_flags)
 #define IData(s)  ((s)->is_data)
+#define IPrntype(s)  ((s)->is_prntype)
 
 #define KEYSORT   (1<<0)	/* Values of attribute flags */
 #define NAMESORT  (1<<1)
@@ -89,20 +91,17 @@ BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
+BOOLEAN elementval_indiseq(INDISEQ, INT, STRING*, INT *, STRING*);
 INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
 INDISEQ find_named_seq(STRING);
-void format_famseq(INDISEQ);
-void format_indiseq(INDISEQ);
-void format_spouseseq(INDISEQ);
 void gen_gedcom(INDISEQ);
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
 INDISEQ get_all_sour(void);
 INT getpivot(INT, INT);
 BOOLEAN in_indiseq(INDISEQ, STRING);
-BOOLEAN indiseq_elementval(INDISEQ, INT, STRING*, INT *, STRING*);
 INDISEQ indi_to_children(NODE);
 INDISEQ indi_to_families(NODE, BOOLEAN);
 INDISEQ indi_to_fathers(NODE);
@@ -119,6 +118,8 @@ INDISEQ node_to_sources(NODE);
 INDISEQ parent_indiseq(INDISEQ);
 INT partition(INT, INT, SORTEL);
 void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
+void preprint_indiseq(INDISEQ);
+void print_indiseq_element(INDISEQ seq, INT i, STRING buf, INT len);
 INDISEQ refn_to_indiseq(STRING, INT letr, INT sort);
 void remove_browse_list(STRING, INDISEQ);
 void remove_indiseq(INDISEQ,BOOLEAN);
@@ -130,8 +131,8 @@ void unique_indiseq(INDISEQ);
 INDISEQ union_indiseq(INDISEQ, INDISEQ);
 void update_browse_list(STRING, INDISEQ);
 void valuesort_indiseq(INDISEQ, BOOLEAN*);
-void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);
+void write_nonlink_indi(NODE);
 
 
 

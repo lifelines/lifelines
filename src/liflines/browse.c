@@ -884,7 +884,7 @@ NODE choose_any_source (void)
 		message(nosour);
 		return 0;
 	}
-	node = format_and_choose_generic(seq, TRUE, idsour, idsour);
+	node = choose_from_indiseq(seq, TRUE, idsour, idsour);
 	remove_indiseq(seq, FALSE);
 	return node;
 }
@@ -909,7 +909,7 @@ void browse_events (void)
 		message(noeven);
 		return;
 	}
-	node = format_and_choose_generic(seq, TRUE, ideven, ideven);
+	node = choose_from_indiseq(seq, TRUE, ideven, ideven);
 	remove_indiseq(seq, FALSE);
 	if (node)
 		edit_event(node);
@@ -926,7 +926,7 @@ void browse_others (void)
 		message(noothe);
 		return;
 	}
-	node = format_and_choose_generic(seq, TRUE, idothe, idothe);
+	node = choose_from_indiseq(seq, TRUE, idothe, idothe);
 	remove_indiseq(seq, FALSE);
 	if (node)
 		edit_other(node);

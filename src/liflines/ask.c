@@ -160,9 +160,9 @@ ask_for_file_worker (STRING mode,
 	else
 		fname = ask_for_output_filename(ttl, path, fnamebuf);
 
-	if (ISNULL(fname)) return NULL;
-
 	if (pfname) *pfname = fname;
+
+	if (ISNULL(fname)) return NULL;
 
 	if(ext) {
 	    elen = strlen(ext);
@@ -172,18 +172,18 @@ ask_for_file_worker (STRING mode,
 	}
 
 	if (ISNULL(path)) {
-	    	fp = NULL;
+		fp = NULL;
 		if(ext) {
 		  sprintf(fnamebuf, "%s%s", fname, ext);
 		  fp = fopen(fnamebuf, mode);
 		  if(fp && pfname) *pfname = strsave(fnamebuf);
 		} else {
-                  fp = fopen(fname, mode);
-		  if(fp && pfname) *pfname = fname;
-                }
-                if (fp == NULL) {
-	 	  mprintf_error(nofopn, fname);
-		  return NULL;
+			fp = fopen(fname, mode);
+			if(fp && pfname) *pfname = fname;
+		}
+		if (fp == NULL) {
+			mprintf_error(nofopn, fname);
+			return NULL;
 		}
 		return fp;
 	}
@@ -259,7 +259,7 @@ ask_for_indi_once (STRING ttl,
 	NODE indi;
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	indi = format_and_choose_indi(seq, ask1, ifone, notone);
+	indi = choose_from_indiseq(seq, ask1, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
@@ -290,7 +290,6 @@ ask_for_indi_list_once (STRING ttl,
 {
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	format_indiseq(seq);
 	seq = choose_list_from_indiseq(notone, seq);
 	*prc = seq ? RC_SELECT : RC_NOSELECT;
 	return seq;
@@ -337,71 +336,21 @@ choose_one_from_indiseq_if_needed (INDISEQ seq,
 		return choose_one_from_indiseq(titl1, seq);
 	return 0;
 }
-/*===============================================================
- * format_and_choose_indi -- Format sequence and have user choose
- *   person from it
- *=============================================================*/
-NODE
-format_and_choose_indi (INDISEQ seq,    /* sequence */
-                        BOOLEAN ask1,   /* choose if len one? */
-                        STRING titl1,   /* title if len = one */
-                        STRING titln)   /* title if len > one */
-{
-	INT i = 0;
-	format_indiseq(seq);
-	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
-	if (i == -1) return NULL;
-	return key_to_indi(skey(IData(seq)[i]));
-}
-/*===============================================================
- * format_and_choose_fam -- Format sequence and have user choose
- *   family from it
- *=============================================================*/
-NODE
-format_and_choose_fam (INDISEQ seq,    /* sequence */
-                       BOOLEAN ask1,   /* choose if len one? */
-                       STRING titl1,   /* title if len = one */
-                       STRING titln)   /* title if len > one */
-{
-	INT i = 0;
-	format_famseq(seq);
-	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
-	if (i == -1) return NULL;
-	return key_to_fam(skey(IData(seq)[i]));
-}
-/*===============================================================
- * format_and_choose_spouse -- Format sequence and have user choose
- *   spouse from it
- *=============================================================*/
-NODE
-format_and_choose_spouse (INDISEQ seq,    /* sequence */
-                          BOOLEAN ask1,   /* choose if len one? */
-                          STRING titl1,   /* title if len = one */
-                          STRING titln)   /* title if len > one */
-{
-	INT i = 0;
-	format_spouseseq(seq);
-	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
-	if (i == -1) return NULL;
-	return key_to_indi(skey(IData(seq)[i]));
-}
-/*===============================================================
- * format_and_choose_generic -- Format sequence and have user choose
+/*============================================================
+ * choose_from_indiseq -- Format sequence and have user choose
  *   from it (any type)
- * This is more complicated because it
- *  handles bad pointers - if we had more stringing input verification
- *  we wouldn't need this
- *=============================================================*/
+ * This handles bad pointers, which can get into the data
+ *  several ways.
+ *==========================================================*/
 NODE
-format_and_choose_generic (INDISEQ seq,    /* sequence */
-                           BOOLEAN ask1,   /* choose if len one? */
-                           STRING titl1,   /* title if len = one */
-                           STRING titln)   /* title if len > one */
+choose_from_indiseq (INDISEQ seq,    /* sequence */
+                     BOOLEAN ask1,   /* choose if len one? */
+                     STRING titl1,   /* title if len = one */
+                     STRING titln)   /* title if len > one */
 {
 	INT i = 0;
 	NODE node=0;
 	STRING skey;
-	format_indiseq(seq);
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	listbadkeys=1;

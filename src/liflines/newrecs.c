@@ -281,7 +281,7 @@ ask_for_record (STRING idstr,   /* question prompt */
 		INDISEQ seq;
 		seq = refn_to_indiseq(str, letr, KEYSORT);
 		if (!seq) return NULL;
-		node = format_and_choose_generic(seq, FALSE, duprfn, duprfn);
+		node = choose_from_indiseq(seq, FALSE, duprfn, duprfn);
 		remove_indiseq(seq, FALSE);
 	}
 	return node;

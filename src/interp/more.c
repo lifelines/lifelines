@@ -394,7 +394,7 @@ __chooseindi (PNODE node,
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
-	indi = format_and_choose_indi(seq, TRUE, ifone, notone);
+	indi = choose_from_indiseq(seq, TRUE, ifone, notone);
 	if (!indi) return NULL;
 	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
 }
@@ -408,7 +408,7 @@ __choosesubset (PNODE node,
                 BOOLEAN * eflg)
 {
 	STRING msg;
-	INDISEQ new, seq;
+	INDISEQ newseq, seq;
 	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to choosesubset is not a set of persons");
@@ -417,11 +417,10 @@ __choosesubset (PNODE node,
 	seq = (INDISEQ) pvalue(val);
 	delete_pvalue(val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
-	new = copy_indiseq(seq);
-	format_indiseq(new);
-	msg = (length_indiseq(new) > 1) ? notone : ifone;
-	new = (INDISEQ) choose_list_from_indiseq(msg, new);
-	return create_pvalue(PSET, (WORD)new);
+	newseq = copy_indiseq(seq);
+	msg = (length_indiseq(newseq) > 1) ? notone : ifone;
+	newseq = (INDISEQ) choose_list_from_indiseq(msg, newseq);
+	return create_pvalue(PSET, (WORD)newseq);
 }
 /*=========================================================+
  * choosechild -- Have user choose child of person or family
@@ -452,7 +451,7 @@ __choosechild (PNODE node,
 		seq = indi_to_children(indi);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (WORD)NULL);
-		indi = format_and_choose_indi(seq, TRUE, ifone, notone);
+		indi = choose_from_indiseq(seq, TRUE, ifone, notone);
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -461,7 +460,7 @@ __choosechild (PNODE node,
 		seq = fam_to_children(fam);
 		if (!seq || length_indiseq(seq) < 1)
 			return create_pvalue(PINDI, (WORD)NULL);
-		indi = format_and_choose_indi(seq, TRUE, ifone, notone);
+		indi = choose_from_indiseq(seq, TRUE, ifone, notone);
 		remove_indiseq(seq, FALSE);
 		if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 		return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -488,7 +487,7 @@ __choosespouse (PNODE node,
 	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PINDI, (WORD)NULL);
-	indi = format_and_choose_spouse(seq, TRUE, ifone, notone);
+	indi = choose_from_indiseq(seq, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	if (!indi) return create_pvalue(PINDI, (WORD)NULL);
 	return create_pvalue(PINDI, (WORD)indi_to_cacheel(indi));
@@ -511,7 +510,7 @@ __choosefam (PNODE node,
 	seq = indi_to_families(indi, TRUE);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue(PFAM, (WORD)NULL);
-	fam = format_and_choose_fam(seq, TRUE, ifone, notone);
+	fam = choose_from_indiseq(seq, TRUE, ifone, notone);
 	remove_indiseq(seq, FALSE);
 	if (!fam) return create_pvalue(PFAM, (WORD)NULL);
 	return create_pvalue(PFAM, (WORD)fam_to_cacheel(fam));

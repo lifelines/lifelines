@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * xreffile.c -- Handle the xref file
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
@@ -107,75 +106,46 @@ closexref (void)
 	}
 	xrefopen = FALSE;
 }
-/*====================================
- * getixref -- Return next ixref value
- *==================================*/
+/*=========================================
+ * getxref -- Return new keynum for type
+ *  from deleted list if available, or else
+ *  a new highnumber
+ *  generic for all 5 types
+ *=======================================*/
 STRING
-getixref (void)
+getxref (char ctype, INT *nxrefs, INT *xrefs)
 {
 	INT n;
 	static unsigned char scratch[12];
-	ASSERT(xrefopen && nixrefs >= 1);
-	n = (nixrefs == 1) ? ixrefs[0]++ : ixrefs[--nixrefs];
+	ASSERT(xrefopen && *nxrefs >= 1);
+	n = (*nxrefs == 1) ? xrefs[0]++ : xrefs[--(*nxrefs)];
 	ASSERT(writexrefs());
-	sprintf(scratch, "@I%d@", n);
+	sprintf(scratch, "@%c%d@", ctype, n);
 	return scratch;
 }
-/*====================================
- * getfxref -- Return next fxref value
- *==================================*/
-STRING
-getfxref (void)
+/*===================================================
+ * get?xref -- Wrappers for each type to getxref (qv)
+ *  5 symmetric versions
+ *=================================================*/
+STRING getixref (void)
 {
-	INT n;
-	static unsigned char scratch[12];
-	ASSERT(xrefopen && nfxrefs >= 1);
-	n = (nfxrefs == 1) ? fxrefs[0]++ : fxrefs[--nfxrefs];
-	ASSERT(writexrefs());
-	sprintf(scratch, "@F%d@", n);
-	return scratch;
+	return getxref('I', &nixrefs, ixrefs);
 }
-/*====================================
- * getexref -- Return next exref value
- *==================================*/
-STRING
-getexref (void)
+STRING getfxref (void)
 {
-	INT n;
-	static unsigned char scratch[12];
-	ASSERT(xrefopen && nexrefs >= 1);
-	n = (nexrefs == 1) ? exrefs[0]++ : exrefs[--nexrefs];
-	ASSERT(writexrefs());
-	sprintf(scratch, "@E%d@", n);
-	return scratch;
+	return getxref('F', &nfxrefs, fxrefs);
 }
-/*====================================
- * getsxref -- Return next sxref value
- *==================================*/
-STRING
-getsxref (void)
+STRING getexref (void)
 {
-	INT n;
-	static unsigned char scratch[12];
-	ASSERT(xrefopen && nsxrefs >= 1);
-	n = (nsxrefs == 1) ? sxrefs[0]++ : sxrefs[--nsxrefs];
-	ASSERT(writexrefs());
-	sprintf(scratch, "@S%d@", n);
-	return scratch;
+	return getxref('E', &nexrefs, exrefs);
 }
-/*====================================
- * getxxref -- Return next xxref value
- *==================================*/
-STRING
-getxxref (void)
+STRING getsxref (void)
 {
-	INT n;
-	static unsigned char scratch[12];
-	ASSERT(xrefopen && nxxrefs >= 1);
-	n = (nxxrefs == 1) ? xxrefs[0]++ : xxrefs[--nxxrefs];
-	ASSERT(writexrefs());
-	sprintf(scratch, "@X%d@", n);
-	return scratch;
+	return getxref('S', &nsxrefs, sxrefs);
+}
+STRING getxxref (void)
+{
+	return getxref('X', &nxxrefs, xxrefs);
 }
 /*======================================
  * sortxref -- Sort xrefs after reading
@@ -259,9 +229,10 @@ writexrefs (void)
 	fflush(xreffp);
 	return TRUE;
 }
-/*============================================
+/*=====================================
  * addxref -- Add deleted key to xrefs.
- *==========================================*/
+ *  generic for all types
+ *===================================*/
 void
 addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
 {
@@ -289,163 +260,92 @@ addxref (INT key, INT *nxrefs, INT maxxrefs, INT *xrefs, void (*growfnc)(void))
 	(*nxrefs)++;
 	ASSERT(writexrefs());
 }
-/*============================================
- * addixref -- Add deleted INDI key to ixrefs.
- *==========================================*/
-void
-addixref (INT key)
+/*===================================================
+ * add?xref -- Wrappers for each type to addxref (qv)
+ *  5 symmetric versions
+ *=================================================*/
+void addixref (INT key)
 {
 	addxref(key, &nixrefs, maxixrefs, ixrefs, &growixrefs);
 }
-/*===========================================
- * addfxref -- Add deleted FAM key to fxrefs.
- *=========================================*/
-void
-addfxref (INT key)
+void addfxref (INT key)
 {
 	addxref(key, &nfxrefs, maxfxrefs, fxrefs, &growfxrefs);
 }
-/*============================================
- * addexref -- Add deleted EVEN key to exrefs.
- *==========================================*/
-void
-addexref (INT key)
+void addexref (INT key)
 {
 	addxref(key, &nexrefs, maxexrefs, exrefs, &growexrefs);
 }
-/*============================================
- * addsxref -- Add deleted SOUR key to sxrefs.
- *==========================================*/
-void
-addsxref (INT key)
+void addsxref (INT key)
 {
 	addxref(key, &nsxrefs, maxsxrefs, sxrefs, &growsxrefs);
 }
-/*=============================================
- * addfxref -- Add other deleted key to xxrefs.
- *===========================================*/
-void
-addxxref (INT key)
+void addxxref (INT key)
 {
 	addxref(key, &nxxrefs, maxxxrefs, xxrefs, &growxxrefs);
 }
-/*============================================
- * growixrefs -- Grow memory for ixrefs array.
- *==========================================*/
-void
-growixrefs (void)
+/*==========================================
+ * growxrefs -- Grow memory for xrefs array.
+ *  generic for all types
+ *========================================*/
+static void
+growxrefs (INT nxrefs, INT *maxxrefs, INT **xrefs)
 {
-	INT i, m = maxixrefs, *newp;
-	maxixrefs = nixrefs + 10;
-	newp = (INT *) stdalloc(maxixrefs*sizeof(INT));
+	INT i, m = *maxxrefs, *newp;
+	*maxxrefs = nixrefs + 10;
+	newp = (INT *) stdalloc((*maxxrefs)*sizeof(INT));
 	if (m) {
-		for (i = 0; i < nixrefs; i++)
-			newp[i] = ixrefs[i];
-		stdfree(ixrefs);
+		for (i = 0; i < nxrefs; i++)
+			newp[i] = (*xrefs)[i];
+		stdfree(*xrefs);
 	}
-	ixrefs = newp;
+	(*xrefs) = newp;
 }
-/*============================================
- * growfxrefs -- Grow memory for fxrefs array.
- *==========================================*/
-void
-growfxrefs (void)
+/*======================================================
+ * grow?xrefs -- Wrappers for each type to growxrefs (qv)
+ *  5 symmetric versions
+ *=====================================================*/
+void growixrefs (void)
 {
-	INT i, m = maxfxrefs, *newp;
-	maxfxrefs = nfxrefs + 10;
-	newp = (INT *) stdalloc(maxfxrefs*sizeof(INT));
-	if (m) {
-		for (i = 0; i < nfxrefs; i++)
-			newp[i] = fxrefs[i];
-		stdfree(fxrefs);
-	}
-	fxrefs = newp;
+	growxrefs(nixrefs, &maxixrefs, &ixrefs);
 }
-/*============================================
- * growexrefs -- Grow memory for exrefs array.
- *==========================================*/
-void
-growexrefs (void)
+void growfxrefs (void)
 {
-	INT i, m = maxexrefs, *newp;
-	maxexrefs = nexrefs + 10;
-	newp = (INT *) stdalloc(maxexrefs*sizeof(INT));
-	if (m) {
-		for (i = 0; i < nexrefs; i++)
-			newp[i] = exrefs[i];
-		stdfree(exrefs);
-	}
-	exrefs = newp;
+	growxrefs(nfxrefs, &maxfxrefs, &fxrefs);
 }
-/*============================================
- * growsxrefs -- Grow memory for sxrefs array.
- *==========================================*/
-void
-growsxrefs (void)
+void growexrefs (void)
 {
-	INT i, m = maxsxrefs, *newp;
-	maxsxrefs = nsxrefs + 10;
-	newp = (INT *) stdalloc(maxsxrefs*sizeof(INT));
-	if (m) {
-		for (i = 0; i < nsxrefs; i++)
-			newp[i] = sxrefs[i];
-		stdfree(sxrefs);
-	}
-	sxrefs = newp;
+	growxrefs(nexrefs, &maxexrefs, &exrefs);
 }
-/*============================================
- * growxxrefs -- Grow memory for xxrefs array.
- *==========================================*/
-void
-growxxrefs (void)
+void growsxrefs (void)
 {
-	INT i, m = maxxxrefs, *newp;
-	maxxxrefs = nxxrefs + 10;
-	newp = (INT *) stdalloc(maxxxrefs*sizeof(INT));
-	if (m) {
-		for (i = 0; i < nxxrefs; i++)
-			newp[i] = xxrefs[i];
-		stdfree(xxrefs);
-	}
-	xxrefs = newp;
+	growxrefs(nsxrefs, &maxsxrefs, &sxrefs);
 }
-/*===================================================
- * num_indis -- Return number of persons in database.
- *=================================================*/
-INT
-num_indis (void)
+void growxxrefs (void)
+{
+	growxrefs(nxxrefs, &maxxxrefs, &xxrefs);
+}
+/*==========================================================
+ * num_????s -- Return number of type of things in database.
+ *  5 symmetric versions
+ *========================================================*/
+INT num_indis (void)
 {
 	return ixrefs[0] - nixrefs;
 }
-/*===================================================
- * num_fams -- Return number of families in database.
- *=================================================*/
-INT
-num_fams (void)
+INT num_fams (void)
 {
 	return fxrefs[0] - nfxrefs;
 }
-/*==================================================
- * num_evens -- Return number of events in database.
- *================================================*/
-INT
-num_evens (void)
+INT num_evens (void)
 {
 	return exrefs[0] - nexrefs;
 }
-/*===================================================
- * num_sours -- Return number of sources in database.
- *=================================================*/
-INT
-num_sours (void)
+INT num_sours (void)
 {
 	return sxrefs[0] - nsxrefs;
 }
-/*=========================================================
- * num_othrs -- Return number of other records in database.
- *=======================================================*/
-INT
-num_othrs (void)
+INT num_othrs (void)
 {
 	return xxrefs[0] - nxxrefs;
 }
@@ -556,6 +456,7 @@ newxxref (STRING xrefp, /* key of the individual */
 }
 /*================================================
  * xref_isvalid_impl -- is this a valid whatever ?
+ *  generic for all 5 types
  * (internal use)
  *==============================================*/
 static INT
@@ -569,9 +470,11 @@ xref_isvalid_impl(INT nxrefs, INT * xrefs, INT i)
 			return 0;
 	return 1;
 }
-/*================================================
- * xref_next -- Return next valid whatever after i (or 0)
- *==============================================*/
+/*====================================================
+ * xref_next -- Return next valid of some type after i
+ *  returns 0 if none found
+ *  generic for all 5 types
+ *==================================================*/
 static INT
 xref_next(INT nxrefs, INT * xrefs, INT i)
 {
@@ -582,9 +485,11 @@ xref_next(INT nxrefs, INT * xrefs, INT i)
 	}
 	return 0;
 }
-/*================================================
- * xref_prev -- Return prev valid whatever before i (or 0)
- *==============================================*/
+/*=====================================================
+ * xref_prev -- Return prev valid of some type before i
+ *  returns 0 if none found
+ *  generic for all 5 types
+ *===================================================*/
 static INT
 xref_prev(INT nxrefs, INT * xrefs, INT i)
 {
@@ -595,90 +500,103 @@ xref_prev(INT nxrefs, INT * xrefs, INT i)
 	}
 	return 0;
 }
-/*================================================
- * xref_nexti -- Return next valid indi after i (or 0)
- *==============================================*/
-INT
-xref_nexti(INT i)
+/*===============================================
+ * xref_next? -- Return next valid indi/? after i
+ *  returns 0 if none found
+ *  5 symmetric versions
+ *=============================================*/
+INT xref_nexti (INT i) 
 {
-	return xref_next(nixrefs, ixrefs, i);
+	return xref_next(nixrefs, ixrefs, i); 
 }
-/*================================================
- * xref_previ -- Return prev valid indi before i (or 0)
- *==============================================*/
-INT
-xref_previ(INT i)
-{
-	return xref_prev(nixrefs, ixrefs, i);
-}
-/*================================================
- * xref_nextf -- Return next valid indi after i (or 0)
- *==============================================*/
-INT xref_nextf(INT i)
+INT xref_nextf (INT i)
 {
 	return xref_next(nfxrefs, fxrefs, i);
 }
-/*================================================
- * xref_prevf -- Return prev valid indi before i (or 0)
- *==============================================*/
-INT
-xref_prevf (INT i)
-{
-	return xref_prev(nfxrefs, fxrefs, i);
-}
-/*================================================
- * xref_nexts -- Return next valid indi after i (or 0)
- *==============================================*/
-INT
-xref_nexts (INT i)
-{
-	return xref_next(nsxrefs, sxrefs, i);
-}
-/*================================================
- * xref_nexte -- Return next valid event after i (or 0)
- *==============================================*/
-INT
-xref_nexte (INT i)
+INT xref_nexte (INT i)
 {
 	return xref_next(nexrefs, exrefs, i);
 }
-/*================================================
- * xref_nextx -- Return next valid other after i (or 0)
- *==============================================*/
-INT
-xref_nextx (INT i)
+INT xref_nexts (INT i)
+{
+	return xref_next(nsxrefs, sxrefs, i);
+}
+INT xref_nextx (INT i)
 {
 	return xref_next(nxxrefs, xxrefs, i);
 }
-/*==============================================
- * xref_firsti -- Return first valid indi (or 0)
- *============================================*/
-INT
-xref_firsti (void)
+/*================================================
+ * xref_prev? -- Return prev valid indi/? before i
+ *  returns 0 if none found
+ *  5 symmetric versions
+ *==============================================*/
+INT xref_previ(INT i)
+{
+	return xref_prev(nixrefs, ixrefs, i);
+}
+INT xref_prevf (INT i)
+{
+	return xref_prev(nfxrefs, fxrefs, i);
+}
+INT xref_preve (INT i)
+{
+	return xref_prev(nexrefs, exrefs, i);
+}
+INT xref_prevs (INT i)
+{
+	return xref_prev(nsxrefs, sxrefs, i);
+}
+INT xref_prevx (INT i)
+{
+	return xref_prev(nxxrefs, xxrefs, i);
+}
+/*=========================================
+ * xref_first? -- Return first valid indi/?
+ *  returns 0 if none found
+ *  5 symmetric versions
+ *=======================================*/
+INT xref_firsti (void)
 {
 	return xref_nexti(0);
 }
-/*==============================================
- * xref_lasti -- Return last valid indi (or 0)
- *============================================*/
-INT
-xref_lasti (void)
-{
-	return xref_previ(ixrefs[0]);
-}
-/*==============================================
- * xref_firstf -- Return first valid indi (or 0)
- *============================================*/
-INT
-xref_firstf (void)
+INT xref_firstf (void)
 {
 	return xref_nextf(0);
 }
-/*==============================================
- * xref_lastf -- Return last valid indi (or 0)
- *============================================*/
-INT
-xref_lastf (void)
+INT xref_firste (void)
+{
+	return xref_nexte(0);
+}
+INT xref_firsts (void)
+{
+	return xref_nexts(0);
+}
+INT xref_firstx (void)
+{
+	return xref_nextx(0);
+}
+/*=======================================
+ * xref_last? -- Return last valid indi/?
+ *  returns 0 if none found
+ *  5 symmetric versions
+ *=====================================*/
+INT xref_lasti (void)
+{
+	return xref_previ(ixrefs[0]);
+}
+INT xref_lastf (void)
 {
 	return xref_prevf(fxrefs[0]);
+}
+INT xref_laste (void)
+{
+	return xref_prevf(exrefs[0]);
+}
+INT xref_lasts (void)
+{
+	return xref_prevf(sxrefs[0]);
+}
+INT xref_lastx (void)
+{
+	return xref_prevf(xxrefs[0]);
 }

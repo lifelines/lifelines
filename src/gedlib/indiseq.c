@@ -54,6 +54,14 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 
 #define key_to_name(k)  nval(NAME(key_to_indi(k)))
 
+/*====================
+ * indiseq print types
+ *==================*/
+#define ISPRN_NORMALSEQ 0
+#define ISPRN_FAMSEQ 1
+#define ISPRN_SPOUSESEQ 2
+
+
 /*==================================
  * create_indiseq -- Create sequence
  *================================*/
@@ -65,6 +73,7 @@ create_indiseq (void)
 	IMax(seq) = 20;
 	IData(seq) = (SORTEL *) stdalloc(20*sizeof(SORTEL));
 	IFlags(seq) = 0;
+	IPrntype(seq) = ISPRN_NORMALSEQ;
 	return seq;
 }
 /*==================================
@@ -243,10 +252,10 @@ element_indiseq (INDISEQ seq,    /* sequence */
 	return TRUE;
 }
 /*================================================
- * indiseq_elementval -- Return element & value from sequence
+ * elementval_indiseq -- Return element & value from sequence
  *==============================================*/
 BOOLEAN
-indiseq_elementval (INDISEQ seq,    /* sequence */
+elementval_indiseq (INDISEQ seq,    /* sequence */
                     INT index,      /* index */
                     STRING *pkey,   /* returned key */
                     INT *pval,      /* returned val */
@@ -680,6 +689,8 @@ indi_to_children (NODE indi)
 }
 /*=======================================================
  * indi_to_spouses -- Create sequence of person's spouses
+ *  values will be family keynums
+ *  (this is the ISPRN_SPOUSESEQ style)
  *=====================================================*/
 INDISEQ
 indi_to_spouses (NODE indi)
@@ -689,6 +700,7 @@ indi_to_spouses (NODE indi)
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq();
+	IPrntype(seq) = ISPRN_SPOUSESEQ;
 	FORFAMSS(indi, fam, spouse, num)
 #if 0
 		if (spouse) {
@@ -716,9 +728,11 @@ indi_to_spouses (NODE indi)
 		ENDWIFES
 #endif
 	ENDFAMSS
-	if (len) return seq;
-	remove_indiseq(seq, FALSE);
-	return NULL;
+	if (!len) {
+		remove_indiseq(seq, FALSE);
+		seq=NULL;
+	}
+	return seq;
 }
 /*=======================================================
  * indi_to_fathers -- Create sequence of person's fathers
@@ -766,6 +780,8 @@ indi_to_mothers (NODE indi)
 }
 /*=========================================================
  * indi_to_families -- Create sequence of person's families
+ *  values will be spouse keynums
+ *  (this is the ISPRN_FAMSEQ style)
  *=======================================================*/
 INDISEQ
 indi_to_families (NODE indi,      /* person */
@@ -776,6 +792,7 @@ indi_to_families (NODE indi,      /* person */
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq();
+	IPrntype(seq) = ISPRN_FAMSEQ;
 	if (fams) {
 		FORFAMSS(indi, fam, spouse, num)
 			key = fam_to_key(fam);
@@ -1247,87 +1264,138 @@ name_to_indiseq (STRING name)
 	}
 	return seq;
 }
-/*==================================================
- * format_indiseq -- Format print lines of sequence.
- * This actually handles generic types
- *================================================*/
-void
-format_indiseq (INDISEQ seq)
+/*===========================================
+ * generic_print_el -- Format a print line of
+ *  sequence of indis
+ *=========================================*/
+static STRING
+generic_print_el (INDISEQ seq, INT i)
 {
-	int fmt;
-	FORINDISEQ(seq, el, num)
-		fmt=0;
-		switch (skey(el)[0])
+	STRING key, name, str;
+	INT fmt;
+	element_indiseq(seq, i, &key, &name);
+
+	switch (key[0])
+	{
+	case 'I':
 		{
-		case 'I':
+			NODE indi = key_to_indi(key);
+			str = indi_to_list_string(indi, NULL, 68);
+			fmt=1;
+		}
+		break;
+	case 'S':
+		{
+			NODE sour = rkey_to_sour(key);
+			if (sour)
 			{
-				NODE indi = key_to_indi(skey(el));
-				sprn(el) = indi_to_list_string(indi, NULL, 68);
+				str = sour_to_list_string(sour, 68, ", ");
 				fmt=1;
 			}
-			break;
-		case 'S':
-			{
-				NODE sour = rkey_to_sour(skey(el));
-				if (sour)
-				{
-					sprn(el) = sour_to_list_string(sour, 68, ", ");
-					fmt=1;
-				}
-			}
-			break;
-		case 'E':
-			/* TO DO - any expected structure for events ? */
-			break;
-		case 'X':
-			{
-				NODE node = key_to_type(skey(el), TRUE);
-				if (node)
-				{
-					sprn(el) = generic_to_list_string(node, 68, ", ");
-					fmt=1;
-				}
-			}
-			/* TO DO - prefix tag name */
-			break;
 		}
-		if (!fmt)
-			sprn(el) = strsave(skey(el));
-	ENDINDISEQ
+		break;
+	case 'E':
+		/* TO DO - any expected structure for events ? */
+		break;
+	case 'X':
+		{
+			NODE node = key_to_type(key, TRUE);
+			if (node)
+			{
+				str = generic_to_list_string(node, 68, ", ");
+				fmt=1;
+			}
+		}
+		break;
+	}
+	if (!fmt)
+		str = strsave(key);
+	return str;
 }
-/*==================================================
- * format_spouseseq -- Format print lines of sequence.
+/*=============================================
+ * spouseseq_print_el -- Format a print line of
+ *  sequence of spouses
  * assume values are family keys
- *================================================*/
-void
-format_spouseseq (INDISEQ seq)
+ *===========================================*/
+static STRING
+spouseseq_print_el (INDISEQ seq, INT i)
 {
 	NODE indi, fam;
-	char scratch[20];
-	FORINDISEQ(seq, el, num)
-		indi = key_to_indi(skey(el));
-		sprintf(scratch, "F%d", (INT)sval(el));
-		fam = key_to_fam(scratch);
-		sprn(el) = indi_to_list_string(indi, fam, 68);
-	ENDINDISEQ
+	STRING key, name, str;
+	INT val;
+	elementval_indiseq(seq, i, &key, &val, &name);
+	indi = key_to_indi(key);
+	fam = keynum_to_fam(val);
+	str = indi_to_list_string(indi, fam, 68);
+	return str;
 }
-/*==================================================
- * format_famseq -- Format print lines of sequence of families
+/*==========================================
+ * famseq_print_el -- Format a print line of
+ *  sequence of families
  * assume values are spouse keys
- *================================================*/
-void
-format_famseq (INDISEQ seq)
+ *========================================*/
+static STRING
+famseq_print_el (INDISEQ seq, INT i)
 {
 	NODE fam, spouse;
-	char scratch[20];
+	STRING key, name, str;
+	INT val;
+	elementval_indiseq(seq, i, &key, &val, &name);
+	fam = key_to_fam(key);
+	spouse = ( val ? keynum_to_indi(val) : NULL);
+	str = indi_to_list_string(spouse, fam, 68);
+	return str;
+}
+/*================================================
+ * get_print_el -- Get appropriate format line for
+ *  one element of an indiseq
+ *==============================================*/
+STRING
+get_print_el (INDISEQ seq, INT i)
+{
+	STRING str;
+	switch(IPrntype(seq)) {
+	case ISPRN_FAMSEQ: str = famseq_print_el(seq, i); break;
+	case ISPRN_SPOUSESEQ: str = spouseseq_print_el(seq, i); break;
+	default: str = generic_print_el(seq, i); break;
+	}
+	return str;
+}
+/*================================================
+ * print_indiseq_element -- Format a print line of
+ *  an indiseq (any type)
+ *==============================================*/
+void
+print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len)
+{
+	STRING str;
+	BOOLEAN alloc=FALSE;
+	str = sprn(IData(seq)[i]);
+	if (!str) {
+		/*
+		 If not precomputed, make print string on-the-fly .
+		 This is used for long seqs, when we don't want to keep
+		 all these strings in memory all the time.
+		/*
+		 Note: The print_el functions return a strsave'd string.
+		 It would be more efficient not to strsave. This requires
+		 changing indi_to_list_string, etc.
+		*/
+		str = get_print_el(seq, i);
+		alloc=TRUE;
+	}
+	llstrcatn(&buf, str, &len);
+	if (alloc)
+		free(str);
+}
+/*=====================================================
+ * preprint_indiseq -- Preformat print lines of indiseq
+ *===================================================*/
+void
+preprint_indiseq (INDISEQ seq)
+{
 	FORINDISEQ(seq, el, num)
-		fam = key_to_fam(skey(el));
-		if (sval(el)) {
-			sprintf(scratch, "I%d", (INT)sval(el));
-			spouse = key_to_indi(scratch);
-		} else
-			spouse = NULL;
-		sprn(el) = indi_to_list_string(spouse, fam, 68);
+		sprn(el) = get_print_el(seq, num);
 	ENDINDISEQ
 }
 /*==============================================================
