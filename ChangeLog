@@ -5,6 +5,11 @@
 
 	More converting make_list_empty/remove_list2 to remove_list.
 
+	* ChangeLog src/interp/interp.c src/stdlib/list.c
+
+	Convert gproctab & gfunctab to generic table, and delete
+	freelistentry which is thereby unused.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

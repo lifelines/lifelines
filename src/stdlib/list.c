@@ -600,8 +600,7 @@ list_destructor (VTABLE *obj)
 {
 	LIST list = (LIST)obj;
 	ASSERT((*obj) == &vtable_for_list);
-	make_list_empty(list);
-	remove_list2(list, 0);
+	remove_list(list);
 }
 /*=================================================
  * addref_list -- increment reference count of list

@@ -282,9 +282,9 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	/* Parse each file in the list -- don't reparse any file */
 	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
-	gproctab = create_table_old();
+	gproctab = create_table();
 	globtab = create_symtab();
-	gfunctab = create_table_old();
+	gfunctab = create_table();
 	initinterp();
 
 	while (!is_empty_list(plist)) {
@@ -430,31 +430,17 @@ wipe_pactx (PACTX pactx)
 	memset(pactx, 0, sizeof(*pactx));
 }
 /*===========================================+
- * freelistentry -- Clear list in entry in table
- * This is used as a callback with traverse_table
- * Created: 2002/11/30 (Perry Rapp)
- *==========================================*/
-static void
-freelistentry (CNSTRING key, UNION uval)
-{
-	LIST list = (LIST)uval.w;
-	key=key; /* unused */
-	make_list_empty(list); /* leaking list ? */
-}
-/*===========================================+
  * remove_tables -- Remove interpreter's tables
  *==========================================*/
 static void
 remove_tables (PACTX pactx)
 {
 	pactx=pactx; /* unused */
-	traverse_table(gproctab, &freelistentry);
-	remove_table(gproctab, FREEBOTH); /* values are empty lists */
+	destroy_table(gproctab);
 	gproctab=NULL;
 	remove_symtab(globtab);
 	globtab = NULL;
-	traverse_table(gfunctab, &freelistentry);
-	remove_table(gfunctab, FREEBOTH); /* values are PNODES */
+	destroy_table(gfunctab);
 	gfunctab=NULL;
 }
 /*======================================+
@@ -1695,7 +1681,7 @@ get_proc_node (CNSTRING procname, TABLE loctab, TABLE gtab, INT * count)
 	PNODE proc = valueof_ptr(loctab, procname);
 	if (proc) return proc;
 	/* now look for global proc, and must be unique */
-	list = valueof_ptr(gtab, procname);
+	list = valueof_obj(gtab, procname);
 	if (!list) {
 		*count = 0;
 		return NULL;
@@ -2176,12 +2162,14 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	table_insert_ptr(rptinfo->proctab, procname, procnode);
 
 	/* add to global proc table */
-	list = (LIST)valueof_ptr(gproctab, procname);
+	list = (LIST)valueof_obj(gproctab, procname);
 	if (!list) {
 		list = create_list2(LISTNOFREE);
-		insert_table_ptr(gproctab, procname, list);
+		table_insert_object(gproctab, procname, list);
+		release_list(list, NULL); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
+	/* procname belongs to procnode now */
 }
 /*=============================================+
  * pa_handle_func -- func declaration (parse time)
@@ -2191,8 +2179,8 @@ void
 pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 {
 	RPTINFO rptinfo = get_rptinfo(pactx->fullpath);
-	PNODE procnode;
-	LIST list;
+	PNODE procnode=0;
+	LIST list=0;
 
 	/* check for local duplicates, else add to local proc table */
 	procnode = (PNODE)valueof_ptr(rptinfo->functab, procname);
@@ -2204,12 +2192,14 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	table_insert_ptr(rptinfo->functab, procname, procnode);
 
 	/* add to global proc table */
-	list = (LIST)valueof_ptr(gfunctab, procname);
+	list = (LIST)valueof_obj(gfunctab, procname);
 	if (!list) {
 		list = create_list2(LISTNOFREE);
-		insert_table_ptr(gfunctab, procname, list);
+		table_insert_object(gfunctab, procname, list);
+		release_list(list, NULL); /* now table owns list */
 	}
 	enqueue_list(list, procnode);
+	/* procname belongs to procnode now */
 }
 /*=============================================+
  * parse_error -- handle bison parse error
