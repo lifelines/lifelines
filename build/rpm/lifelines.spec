@@ -71,12 +71,12 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Mon Nov 11 2002 Perry Rapp
+- Add da.po
+- (post lifelines-3.0.21)
 * Mon Oct 07 2002 Perry Rapp
 - Add new binary llexec
 * Sun Sep 29 2002 Perry Rapp
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
 - (lifelines-3.0.19-1)
-* Mon Nov 11 2002 Perry Rapp
-- Add da.po
-- (post lifelines-3.0.21)
