@@ -1,3 +1,13 @@
+2002-07-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog build/msvc6/btedit/btedit.rc
+	build/msvc6/btedit/bteditCmd.dsp
+	build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llines/llines.rc stdlib/llstrcmp.c tools/btedit.c:
+
+	Fix builds.
+
 2002-07-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog arch/vsnprintf.c build/msvc6/llines/config.h

@@ -104,38 +104,6 @@ main (int argc,
 	btree = 0;
 	return TRUE;
 }
-
-/*=========================================================
- * __allocate -- Allocate memory - called by stdalloc macro
- *  len:  [in] number of bytes to allocate
- *  file: [in] not used
- *  line: [in] not used
- *========================================================*/
-void *
-__allocate (int len, STRING file, int line)
-{
-	char *p;
-	if ((p = malloc(len)) == NULL) {
-		char msg[48];
-		snprintf(msg, sizeof(msg), "malloc(%d) failed", len);
-		__fatal(file, line, msg);
-	}
-	return p;
-}
-
-/*=======================================================
- * __deallocate - Return memory - called by stdfree macro
- *  ptr:  [in] memory being returned
- *  file: [in] not used
- *  line: [in] not used
- *=====================================================*/
-void
-__deallocate (void *ptr, STRING file, int line)
-{
-	file=file; /* unused */
-	line=line; /* unused */
-	free(ptr);
-}
 /*=============================
  * __fatal -- Fatal error routine
  *  handles null or empty details input

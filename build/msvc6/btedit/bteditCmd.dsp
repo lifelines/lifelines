@@ -91,6 +91,10 @@ SOURCE=..\..\..\btree\addkey.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\bfs.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\btree\block.c
 # End Source File
 # Begin Source File
@@ -123,6 +127,10 @@ SOURCE=..\..\..\stdlib\llstrcmp.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\memalloc.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\stdlib\mystring.c
 # End Source File
 # Begin Source File
@@ -143,6 +151,18 @@ SOURCE=..\..\..\stdlib\stdstrng.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\stralloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strapp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strutf8.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\btree\utils.c
 # End Source File
 # Begin Source File
@@ -151,7 +171,7 @@ SOURCE=..\..\..\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\w32systm.c
+SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
 

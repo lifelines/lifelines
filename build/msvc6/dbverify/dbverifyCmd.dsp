@@ -92,6 +92,10 @@ SOURCE=..\..\..\btree\addkey.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\appendstr.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\stdlib\bfs.c
 # End Source File
 # Begin Source File
@@ -105,6 +109,10 @@ SOURCE=..\..\..\gedlib\brwslist.c
 # Begin Source File
 
 SOURCE=..\..\..\gedlib\charmaps.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\gedlib\date.c
 # End Source File
 # Begin Source File
 
@@ -152,7 +160,11 @@ SOURCE=..\..\..\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\iconvshim.c
+SOURCE=..\..\..\win32\iconvshim.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\icvt.c
 # End Source File
 # Begin Source File
 
@@ -168,7 +180,7 @@ SOURCE=..\..\..\gedlib\init.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\intlshim.c
+SOURCE=..\..\..\win32\intlshim.c
 # End Source File
 # Begin Source File
 
@@ -193,6 +205,10 @@ SOURCE=..\..\..\gedlib\lloptions.c
 # Begin Source File
 
 SOURCE=..\..\..\stdlib\llstrcmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\gedlib\locales.c
 # End Source File
 # Begin Source File
 
@@ -268,7 +284,31 @@ SOURCE=..\..\..\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\stdlib\sprintpic.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\stdlib\stdstrng.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\stralloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strapp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strcvt.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strutf8.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\stdlib\strwhite.c
 # End Source File
 # Begin Source File
 

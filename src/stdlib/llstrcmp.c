@@ -133,9 +133,9 @@ widecmp (char *str1, char *str2, INT *rtn)
 		*rtn = wcscoll((const wchar_t *)bfs1->str, (const wchar_t *)bfs2->str);
 		success = TRUE;
 	}
+failwidecmp:
 #endif
 
-failwidecmp:
 	if (bfs1)
 		bfDelete(bfs1);
 	if (bfs2)
