@@ -1,4 +1,4 @@
-LifeLines Source Release, Version 3.0.9post
+LifeLines Source Release, Version 3.0.29
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
@@ -133,9 +133,11 @@ Please see the following page about LifeLines on Mac OS X:
 (which is also available via the Apple downloads site and Stepwise.)
 This page offers both precompiled binaries and instructions for
 compilation.
-NB: Because the gnu tests for platform don't recognize Darwin,
-configure requires an argument, eg "./configure ppc". There is no
-specific code needed for Darwin; this is just to avoid the macros
-getting angry at the unknown output from "uname -a".
+NB: Because the gnu tests for platform didn't recognize Darwin,
+on older versions, perhaps before 10.2.x, it was necessary to pass
+an argument to configure, eg,
+   ./configure ppc
+There is no specific code needed for Darwin; this is just to avoid
+the macros getting angry at the unknown output from "uname -a".
 
 

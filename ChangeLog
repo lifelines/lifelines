@@ -1,3 +1,10 @@
+2003-09-02 Perry Rapp
+
+	* ChangeLog INSTALL
+
+	Note that ppc argument to configure on Mac OS is only needed
+	with older versions.
+
 2003-08-29 Perry Rapp
 
 	* ChangeLog src/stdlib/strcvt.c
