@@ -1,5 +1,5 @@
 LifeLines installation for Windows
-  Edited: 2002/06/18 by Perry Rapp
+  Edited: 2002/06/27 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -26,6 +26,8 @@ Unzip the translation files under the program directory
 4a)
 Edit lines.cfg and adjust your codepages as appropriate
 (Edit the entries GuiCodeset, EditorCodeset, ReportCodeset, and GedcomCodset)
+For U.S. Windows, the GuiCodeset should be CP437, and the Editor Codeset,
+if you're using notepad.exe (the default), should be CP1252.
 
 4b)
 Enable the UTF-8 setting in your lines.cfg
