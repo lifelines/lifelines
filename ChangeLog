@@ -1,3 +1,10 @@
+2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c
+	interp/lex.c stdlib/path.c stdlib/stdstrng.c tools/dbverify.c
+
+	Add in some casts to eliminate compiler warnings.
+
 2002-01-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib\lloptions.c:

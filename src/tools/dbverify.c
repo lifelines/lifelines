@@ -755,7 +755,7 @@ check_node (STRING n0key, NODE node, INT level)
 	/* ignore lineage links - they are checked elsewhere */
 	if (level==1) {
 		INT i;
-		for (i=0; i<ARRSIZE(lineage_tags); i++) {
+		for (i=0; i<(INT)ARRSIZE(lineage_tags); i++) {
 			if (eqstr(ntag(node), lineage_tags[i])) {
 				lineage=TRUE;
 				break;
@@ -812,7 +812,7 @@ static void
 validate_errs (void)
 {
 	INT i;
-	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {
+	for (i=0; i<(INT)(sizeof(errs)/sizeof(errs[0])); i++) {
 		if (errs[i].err != i) {
 			fprintf(stderr, "Invalid errs array[%d] in dbverify - fix program\n", i);
 			FATAL();
@@ -924,7 +924,7 @@ static void
 report_results (void)
 {
 	INT i, ct=0;
-	for (i=0; i<sizeof(errs)/sizeof(errs[0]); i++) {
+	for (i=0; i<(INT)(sizeof(errs)/sizeof(errs[0])); i++) {
 		if (errs[i].err_count || errs[i].fix_count) {
 			ct++;
 			printf("%s: %d errors, %d fixed\n", 

@@ -112,7 +112,7 @@ alloc_pnode_memory (void)
 		INT i;
 		new_block->next = block_list;
 		block_list = new_block;
-		for (i=0; i<BLOCK_NODES; i++) {
+		for (i=0; i<(INT)BLOCK_NODES; i++) {
 			PNODE node1 = &new_block->nodes[i];
 			itype(node1) = IFREED;
 			inext(node1) = free_list;
@@ -152,7 +152,7 @@ free_all_pnodes (void)
 		free_list = 0;
 		if (live_pnodes) {
 			INT i;
-			for (i=0; i<BLOCK_NODES; i++) {
+			for (i=0; i<(INT)BLOCK_NODES; i++) {
 				PNODE node1=&block->nodes[i];
 				if (itype(node1) != IFREED) {
 					/* leaked */

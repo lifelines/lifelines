@@ -97,7 +97,7 @@ lowyylex (void)
 	extern FLOAT Yfval;
 	extern YYSTYPE yylval;
 	static unsigned char tokbuf[200];	/* token buffer */
-	STRING p = tokbuf;
+	STRING p = (STRING)tokbuf;
 	while (TRUE) {
 		while ((t = chartype(c = inchar())) == WHITE)
 			;
@@ -117,7 +117,7 @@ lowyylex (void)
 		}
 	}
 	if (t == LETTER) {
-		p = tokbuf;
+		p = (STRING)tokbuf;
 		while (t == LETTER || t == DIGIT || c == '_') {
 			*p++ = c;
 			t = chartype(c = inchar());
@@ -127,8 +127,8 @@ lowyylex (void)
 #ifdef DEBUG
 		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
 #endif
-		if (reserved(tokbuf, &retval))  return retval;
-		yylval = (PNODE) strsave(tokbuf);
+		if (reserved((STRING)tokbuf, &retval))  return retval;
+		yylval = (PNODE) strsave((STRING)tokbuf);
 		return IDEN;
 	}
 	if (t == '-' || t == DIGIT || t == '.') {
@@ -182,13 +182,13 @@ lowyylex (void)
 		return FCONS;
 	}
 	if (c == '"') {
-		p = tokbuf;
+		p = (STRING)tokbuf;
 		while (TRUE) {
 			while ((c = inchar()) != EOF && c != '"' && c != '\\')
 				*p++ = c;
 			if (c == 0 || c == '"') {
 				*p = 0;
-				yylval = string_node(tokbuf);
+				yylval = string_node((STRING)tokbuf);
 				return SCONS;
 			}
 			switch (c = inchar()) {
@@ -202,7 +202,7 @@ lowyylex (void)
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				yylval = string_node(tokbuf);
+				yylval = string_node((STRING)tokbuf);
 				return SCONS;
 			default:
 				*p++ = c; break;

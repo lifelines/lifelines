@@ -260,7 +260,7 @@ lastpathname (STRING path)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	INT len, c;
-	STRING p = scratch, q;
+	STRING p = (STRING)scratch, q;
 	if (ISNULL(path)) return NULL;
 	len = strlen(path);
 	strcpy(p, path);

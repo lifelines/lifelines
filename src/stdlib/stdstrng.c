@@ -174,12 +174,12 @@ STRING
 lower (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
-	STRING p = scratch;
+	STRING p = (STRING)scratch;
 	INT c, i=0;
 	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_tolower(c);
 	*p = '\0';
-	return scratch;
+	return (STRING)scratch;
 }
 /*======================================
  * upper -- Convert string to upper case
@@ -189,12 +189,12 @@ STRING
 upper (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
-	STRING p = scratch;
+	STRING p = (STRING)scratch;
 	INT c, i=0;
 	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
-	return scratch;
+	return (STRING)scratch;
 }
 /*================================
  * capitalize -- Capitalize string
@@ -272,9 +272,9 @@ trim (STRING str, INT len)
 	if (!str || strlen(str) > MAXLINELEN) return NULL;
 	if (len < 0) len = 0;
 	if (len > MAXLINELEN) len = MAXLINELEN;
-	strcpy(scratch, str);
+	strcpy((char*)scratch, str);
 	scratch[len] = '\0';
-	return scratch;
+	return (STRING)scratch;
 }
 /*=========================================
  * striptrail -- Strip trailing white space

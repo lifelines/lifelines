@@ -94,8 +94,8 @@ static BOOLEAN is_date_delim(char c);
 static BOOLEAN is_valid_day(struct gdate_s * pdate, INT day);
 static BOOLEAN is_valid_month(struct gdate_s * pdate, INT month);
 static void load_lang(void);
-static mark_freeform(GDATEVAL gdv);
-static mark_invalid(GDATEVAL gdv);
+static void mark_freeform(GDATEVAL gdv);
+static void mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
 static void set_year(struct gdate_s * pdate, INT yr);
 
@@ -413,7 +413,7 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 static void
 format_cal (INT cal, CNSTRING src, STRING output, INT len)
 {
-	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
+	ASSERT(cal>=0 && cal<(INT)ARRSIZE(calendar_pics));
 	if (calendar_pics[cal]) {
 		sprintpic1(output, len, calendar_pics[cal], src);
 	} else {
@@ -769,7 +769,7 @@ format_month (INT cal, INT mo, INT mfmt)
 	}
 	if (mo == 0) return (STRING) "   ";
 	casing = mfmt-3;
-	ASSERT(casing>=0 && casing<ARRSIZE(months_gj[0]));
+	ASSERT(casing>=0 && casing<(INT)ARRSIZE(months_gj[0]));
 	switch (cal) {
 	case GDV_HEBREW: parr = months_heb; break;
 	case GDV_FRENCH: parr = months_fr; break;
@@ -826,7 +826,7 @@ format_year (INT yr, INT yfmt)
  * mark_invalid -- Set a gdate_val to invalid
  *  gdv:  [I/O]  date_val we are building
  *===================================================*/
-static
+static void
 mark_invalid (GDATEVAL gdv)
 {
 	gdv->valid = -1;
@@ -835,7 +835,7 @@ mark_invalid (GDATEVAL gdv)
  * mark_freeform -- Set a gdate_val to freeform (unless invalid)
  *  gdv:  [I/O]  date_val we are building
  *===================================================*/
-static
+static void
 mark_freeform (GDATEVAL gdv)
 {
 	if (gdv->valid > 0)
@@ -1235,7 +1235,7 @@ static INT
 get_date_tok (INT *pival, STRING *psval)
 {
 	static unsigned char scratch[30];
-	STRING p = scratch;
+	STRING p = (STRING)scratch;
 	INT c;
 	if (!sstr) return 0;
 	*psval = NULL;
@@ -1255,7 +1255,7 @@ get_date_tok (INT *pival, STRING *psval)
 			*p = 0;
 		}
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upper(scratch), 0);
+		i = valueof_int(keywordtbl, upper((STRING)scratch), 0);
 		if (i >= 2001 && i < 2000 + GDV_CALENDARS_IX) {
 			*pival = i - 2000;
 			return CALENDAR_TOK;
@@ -1271,12 +1271,12 @@ get_date_tok (INT *pival, STRING *psval)
 		} while (sstr[0] && sstr[0]!=')' && !iswhite((uchar)sstr[0]));
 		*p = 0;
 		/* look it up in our big table of GEDCOM keywords */
-		i = valueof_int(keywordtbl, upper(scratch), 0);
+		i = valueof_int(keywordtbl, upper((STRING)scratch), 0);
 		if (!i) {
 			/* unrecognized word */
 			return CHAR_TOK;
 		}
-		if ((i = valueof_int(keywordtbl, upper(scratch), 0)) > 0 && i <= 999) {
+		if ((i = valueof_int(keywordtbl, upper((STRING)scratch), 0)) > 0 && i <= 999) {
 			*pival = i % 100;
 			/* TODO: we need to use the fact that calendar is i/100 */
 			return MONTH_TOK;
@@ -1323,7 +1323,7 @@ get_date_tok (INT *pival, STRING *psval)
 		}
 		*pival = i;
 		if (j != -99999) {
-			*psval = scratch;
+			*psval = (STRING)scratch;
 			return YEAR_TOK;
 		}
 		return ICONS_TOK;
@@ -1345,7 +1345,7 @@ init_keywordtbl (void)
 	INT i, j;
 	keywordtbl = create_table();
 	/* Load GEDCOM keywords & values into keyword table */
-	for (i=0; i<ARRSIZE(gedkeys); ++i) {
+	for (i=0; i<(INT)ARRSIZE(gedkeys); ++i) {
 		j = gedkeys[i].value;
 		insert_table_int(keywordtbl, gedkeys[i].keyword, j);
 	}
@@ -1436,7 +1436,7 @@ load_lang (void)
 	}
 
 	/* clear calendar pics */
-	for (i=0; i<ARRSIZE(calendar_pics); ++i) {
+	for (i=0; i<(INT)ARRSIZE(calendar_pics); ++i) {
 		if (calendar_pics[i]) {
 			stdfree(calendar_pics[i]);
 			calendar_pics[i] = 0;
@@ -1449,8 +1449,8 @@ load_lang (void)
 	/* not all slots in calendar_pics are used */
 
 	/* clear Gregorian/Julian month names */
-	for (i=0; i<ARRSIZE(months_gj); ++i) {
-		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_gj); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_gj[0]); ++j) {
 			if (months_gj[i][j]) {
 				stdfree(months_gj[i][j]);
 				months_gj[i][j] = 0;
@@ -1471,15 +1471,15 @@ load_lang (void)
 	load_one_month(10, months_gj, mon_gj11A, mon_gj11B);
 	load_one_month(11, months_gj, mon_gj12A, mon_gj12B);
 	/* test that all were loaded */	
-	for (i=0; i<ARRSIZE(months_gj); ++i) {
-		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_gj); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_gj[0]); ++j) {
 			ASSERT(months_gj[i][j]);
 		}
 	}
 
 	/* clear Hebrew month names */
-	for (i=0; i<ARRSIZE(months_heb); ++i) {
-		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_heb); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_heb[0]); ++j) {
 			if (months_heb[i][j]) {
 				stdfree(months_heb[i][j]);
 				months_heb[i][j] = 0;
@@ -1501,15 +1501,15 @@ load_lang (void)
 	load_one_month(11, months_heb, mon_heb12A, mon_heb12B);
 	load_one_month(12, months_heb, mon_heb13A, mon_heb13B);
 	/* test that all were loaded */	
-	for (i=0; i<ARRSIZE(months_heb); ++i) {
-		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_heb); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_heb[0]); ++j) {
 			ASSERT(months_heb[i][j]);
 		}
 	}
 
 	/* clear French Republic month names */
-	for (i=0; i<ARRSIZE(months_fr); ++i) {
-		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_fr); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_fr[0]); ++j) {
 			if (months_fr[i][j]) {
 				stdfree(months_fr[i][j]);
 				months_fr[i][j] = 0;
@@ -1531,8 +1531,8 @@ load_lang (void)
 	load_one_month(11, months_fr, mon_fr12A, mon_fr12B);
 	load_one_month(12, months_fr, mon_fr13A, mon_fr13B);
 	/* test that all were loaded */	
-	for (i=0; i<ARRSIZE(months_fr); ++i) {
-		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
+	for (i=0; i<(INT)ARRSIZE(months_fr); ++i) {
+		for (j=0; j<(INT)ARRSIZE(months_fr[0]); ++j) {
 			ASSERT(months_fr[i][j]);
 		}
 	}
@@ -1545,12 +1545,12 @@ get_todays_date (void)
 {
 	struct tm *pt;
 	time_t curtime;
-	static unsigned char dat[20];
+	static char dat[20];
 	curtime = time(NULL);
 	pt = localtime(&curtime);
 	sprintf(dat, "%d %s %d", pt->tm_mday, months_gj[3][pt->tm_mon],
 	    1900 + pt->tm_year);
-	return dat;
+	return (STRING)dat;
 }
 /*=============================
  * gdateval_isdual -- Does gdateval contain
