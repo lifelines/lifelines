@@ -264,7 +264,7 @@ void
 free_optable (TABLE * ptab)
 {
 	if (*ptab) {
-		destroy_table(*ptab);
+		release_table(*ptab);
 		*ptab = 0;
 	}
 }

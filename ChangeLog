@@ -1,3 +1,9 @@
+2005-02-24 Perry Rapp
+
+    * ChangeLog src/gedlib/lloptions.c
+
+    Release option tables instead of destroying them.
+
 2005-02-22 Perry Rapp
 
     * ChangeLog src/stdlib/table.c
