@@ -51,7 +51,7 @@ static STRING Lp;	/* pointer into program string */
 
 
 static INT inchar(PACTX pactx);
-static int lowyylex(PACTX pactx, YYLTYPE *llocp, YYSTYPE * lvalp);
+static int lowyylex(PACTX pactx, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
 static void unreadchar(PACTX pactx, INT c);
 static int lextok(PACTX pactx, YYSTYPE * lvalp, INT c, INT t);
@@ -75,9 +75,9 @@ initlex (struct parseinfo *pinfo, int mode)
  *  yaccparm: [IN]  pointer to data passed by interp.c to bison's yyparse 
  *=================================================*/
 int
-yylex (YYSTYPE * lvalp, YYLTYPE *llocp, void * pactx)
+yylex (YYSTYPE * lvalp, void * pactx)
 {
-	INT lex = lowyylex(pactx, llocp, lvalp);
+	INT lex = lowyylex(pactx, lvalp);
 
 #ifdef DEBUG
 	if (isascii(lex))
@@ -100,10 +100,9 @@ is_iden_char (INT c, INT t)
  * lowyylex -- Lexer function
  *=========================*/
 static int
-lowyylex (PACTX pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
+lowyylex (PACTX pactx, YYSTYPE * lvalp)
 {
 	INT c=0, t=0;
-	/* TODO: set location in lvalp */
 
 	/* skip over whitespace or comments up to start of token */
 	while (TRUE) {
@@ -125,12 +124,8 @@ lowyylex (PACTX pactx, YYLTYPE *llocp, YYSTYPE * lvalp)
 			if (c == EOF) return 0;
 		}
 	}
-	llocp->first_line = pactx->lineno;
-	llocp->first_column = pactx->charpos;
 	/* now read token */
 	c = lextok(pactx, lvalp, c, t);
-	llocp->last_line = pactx->lineno;
-	llocp->last_column = pactx->charpos;
 	return c;
 }
 /*===========================

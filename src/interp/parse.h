@@ -17,30 +17,18 @@
 /* semantic value type used by bison parser -- needs to hold any pointer */
 #define YYSTYPE void *
 
-/* must use these fields for the default bison location rule */
-/* otherwise must override YYLLOC_DEFAULT */
-typedef struct yyltype
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-} yyltype;
-
-# define YYLTYPE yyltype
-
 /* data to be tunnelled through parser to lexical analyzer */
 #define YYPARSE_PARAM pactx
 #define YYLEX_PARAM pactx
 
 /* lexical analyzer function (provided by lifelines code in lex.c */
-int yylex(YYSTYPE * lvalp, YYLTYPE *llocp, void * parm);
+int yylex(YYSTYPE * lvalp, void * parm);
 
 /* parser entry point (for bison parser generated from yacc.y */
 int yyparse(void * YYPARSE_PARM);
 
 /* function to report parse errors */
-void parse_error(PACTX pactx, YYLTYPE *ploc, STRING str);
+void parse_error(PACTX pactx, STRING str);
 
 
 #endif /* parse_h_included */

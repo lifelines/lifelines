@@ -5,6 +5,10 @@
 
 	Fix typo in yacc.y (yyloc -> yylloc).
 
+	* interp/interp.c interp/lex.c interp/parse.h interp/yacc.y:
+
+	Remove token location code (bison 1.28 & 1.35 have different yyllocs).
+
 2002-07-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog build/msvc6/llines/llines.rc hdrs/interp.h

@@ -2033,7 +2033,7 @@ pa_handle_require (PACTX pactx, PNODE node)
  *  node:  [IN]  current parse node
  *=============================================*/
 void
-parse_error (PACTX pactx, YYLTYPE *ploc, STRING str)
+parse_error (PACTX pactx, STRING str)
 {
 	/* TO DO - how to pass current pnode ? */
 	prog_error(NULL, "Syntax Error (%s): %s: line %d, char %d\n"
