@@ -52,6 +52,15 @@ New Features Added in 3.0.6
 - New browse source/event/nodes in gedcom mode
   (from extra menu, or from '$' cross-reference to sources)
 
+- New tool dbverify to check a database for many types of corruption
+
+
+Bug fixes in 3.0.6
+==================
+
+- Merge code would produce ghost REFNs & NAMEs if they were edited
+
+- Ctrl-C from open database prompt would fail
 
 
 New Features in 3.0.4
