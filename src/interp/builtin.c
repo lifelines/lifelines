@@ -2790,7 +2790,7 @@ __copyfile (PNODE node,
             TABLE stab,
             BOOLEAN *eflg)
 {
-	FILE *cfp, *fopenpath();
+	FILE *cfp;
 	STRING fname;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	char buffer[1024];
