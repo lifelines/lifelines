@@ -41,6 +41,7 @@
  * local types
  *********************************************/
 
+/* block of pvalues - see comments in alloc_pvalue_memory() */
 struct pv_block
 {
 	struct pv_block * next;
@@ -136,10 +137,12 @@ alloc_pvalue_memory (void)
 	truly heap-alloc'd pvalues, used outside of reports.
 	*/
 	if (!free_list) {
+		/* no pvalues available, make a new block */
 		PV_BLOCK new_block = stdalloc(sizeof(*new_block));
 		INT i;
 		new_block->next = block_list;
 		block_list = new_block;
+		/* add all pvalues in new block to free list */
 		for (i=0; i<BLOCK_VALUES; i++) {
 			PVALUE val1 = &new_block->values[i];
 			val1->type = PFREED;
@@ -149,11 +152,13 @@ alloc_pvalue_memory (void)
 				debug_check();
 		}
 	}
+	/* pull pvalue off of free list */
 	val = free_list;
 	free_list = free_list->value;
 	if (debugging_pvalues)
 		debug_check();
 	live_pvalues++;
+	/* set type to uninitialized - caller ought to set type */
 	ptype(val) = PUNINT;
 	pvalue(val) = 0;
 	return val;
@@ -166,6 +171,7 @@ alloc_pvalue_memory (void)
 static void
 free_pvalue_memory (PVALUE val)
 {
+	/* see alloc_pvalue_memory for discussion of this ASSERT */
 	ASSERT(reports_time);
 	if (ptype(val)==PFREED) {
 		/*
@@ -176,7 +182,6 @@ free_pvalue_memory (PVALUE val)
 		ASSERT(cleaning_time);
 		return;
 	}
-	/* see alloc_pvalue_memory for discussion of this ASSERT */
 	/* put on free list */
 	val->type = PFREED;
 	val->value = free_list;

@@ -109,24 +109,24 @@ struct itag {
 #define ibody(i)     ((i)->i_word5)	/* body of proc, func, loops */
 #define inum(i)      ((i)->i_word4)	/* counter used by many loops */
 
-#define PNONE	0	/* needed? - remove later if not */
-#define PANY    1	/* any value -- no type restriction */
-#define PINT    2	/* integer */
-#define PLONG   3	/* long integer */
-#define PFLOAT  4	/* floating point */
-#define PBOOL	5	/* boolean */
-#define PSTRING 6	/* string */
-#define PGNODE	7	/* GEDCOM node */
-#define PINDI	8	/* GEDCOM person record */
-#define PFAM	9	/* GEDCOM family record */
-#define PSOUR	10	/* GEDCOM source record */
-#define PEVEN	11	/* GEDCOM event record */
-#define POTHR	12	/* GEDCOM other record */
-#define PLIST	13	/* list */
-#define PTABLE	14	/* table */
-#define PSET	15	/* set */
-#define PFREED 99 /* returned to free list */
-#define PUNINT 100 /* just allocated */
+#define PNONE	    0 /* needed? - remove later if not */
+#define PANY      1 /* any value -- no type restriction */
+#define PINT      2 /* integer */
+#define PLONG     3 /* long integer */
+#define PFLOAT    4 /* floating point */
+#define PBOOL	    5 /* boolean */
+#define PSTRING   6 /* string */
+#define PGNODE	  7 /* GEDCOM node */
+#define PINDI     8 /* GEDCOM person record */
+#define PFAM      9 /* GEDCOM family record */
+#define PSOUR	   10 /* GEDCOM source record */
+#define PEVEN	   11 /* GEDCOM event record */
+#define POTHR	   12 /* GEDCOM other record */
+#define PLIST	   13 /* list */
+#define PTABLE	 14 /* table */
+#define PSET	   15 /* set */
+#define PFREED   99 /* returned to free list */
+#define PUNINT  100 /* just allocated */
 
 typedef struct ptag *PVALUE;
 struct ptag {

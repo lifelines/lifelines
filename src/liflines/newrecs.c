@@ -47,7 +47,7 @@
 extern BTREE BTR;
 extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
-extern STRING idredt, ideedt, idxedt, duprfn;
+extern STRING idredt, ideedt, idxedt, duprfn, ronlya, ronlye;
 
 /*********************************************
  * local function prototypes
@@ -81,7 +81,12 @@ SS xstr = (STRING) "0 XXXX\n1 REFN";
 NODE
 add_source (void)
 {
-	STRING str = (STRING) valueof(useropts, "SOURREC");
+	STRING str;
+	if (readonly) {
+		message(ronlya);
+		return NULL;
+	}
+	str = (STRING) valueof(useropts, "SOURREC");
 	if (!str) str = rstr;
 	return add_record(str, rredit, 'S', cfradd);
 }
@@ -91,7 +96,12 @@ add_source (void)
 NODE
 add_event (void)
 {
-	STRING str = (STRING) valueof(useropts, "EVENREC");
+	STRING str;
+	if (readonly) {
+		message(ronlya);
+		return NULL;
+	}
+	str = (STRING) valueof(useropts, "EVENREC");
 	if (!str) str = estr;
 	return add_record(str, eredit, 'E', cfeadd);
 }
@@ -101,7 +111,12 @@ add_event (void)
 NODE
 add_other (void)
 {
-	STRING str = (STRING) valueof(useropts, "OTHRREC");
+	STRING str;
+	if (readonly) {
+		message(ronlya);
+		return NULL;
+	}
+	str = (STRING) valueof(useropts, "OTHRREC");
 	if (!str) str = xstr;
 	return add_record(str, xredit, 'X', cfxadd);
 
@@ -255,6 +270,14 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 /* Have user edit record */
 	write_node_to_editfile(node1);
 	do_edit();
+	if (readonly) {
+		node2 = file_to_node(editfile, tti, &msg, &emp);
+		if (!equal_tree(node1, node2))
+			message(ronlye);
+		free_nodes(node2);
+		return;
+	}
+
 	while (TRUE) {
 		node2 = file_to_node(editfile, tti, &msg, &emp);
 		if (!node2) {

@@ -75,16 +75,19 @@ typedef struct node_print_param_s
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static treenode add_children(NODE indi, INT gen, INT maxgen, INT * count);
-static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
 static treenode add_parents(NODE indi, INT gen, INT maxgen, INT * count);
-static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
+static treenode alloc_treenode(void);
+static void count_nodes(NODE node, INT gen, INT maxgen, INT * count);
+static void free_tree(treenode root);
+static void free_treenode(treenode tn);
 static STRING indi_lineprint(INT width, void * param);
+static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *param, INT minrow, INT maxrow);
 static void trav_pre_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT minrow, INT maxrow, INT gdvw);
 static void trav_bin_in_print_tn(treenode tn, INT * row, INT gen, INT minrow, INT maxrow);
 static void SetScrollMax(INT row, INT hgt);
-static void free_tree (treenode root);
 
 /*********************************************
  * local variables
@@ -101,13 +104,34 @@ static int ScrollMax = 0;
  *********************************************/
 
 /*=================================================
+ * alloc_treenode -- get new treenode
+ *  In preparation for using a block allocator
+ * Created: 2001/04/14, Perry Rapp
+ *===============================================*/
+static treenode
+alloc_treenode (void)
+{
+	treenode tn = (treenode)malloc(sizeof(*tn));
+	return tn;
+}
+/*========================================
+ * free_treenode -- return treenode to free-list
+ * (see alloc_treenode comments)
+ * Created: 2001/04/04, Perry Rapp
+ *======================================*/
+static void
+free_treenode (treenode tn)
+{
+	free(tn);
+}
+/*=================================================
  * add_children -- add children to tree recursively
  * Created: 2000/12/07, Perry Rapp
  *===============================================*/
 static treenode
 add_children (NODE indi, INT gen, INT maxgen, INT * count)
 {
-	treenode tn = (treenode)malloc(sizeof(*tn));
+	treenode tn = alloc_treenode();
 	treenode tn0, tn1;
 	int i;
 
@@ -192,8 +216,8 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc,
 	NODE indi = 0;
 	int i, overflow=0;
 	WINDOW *w = main_win;
-	if (mylen > width-5)
-		mylen = width-5;
+	if (mylen > width-2)
+		mylen = width-2;
 	if (*row-Scrollp>=minrow && *row-Scrollp<=maxrow) {
 		if (*row-Scrollp==minrow && Scrollp>0)
 			overflow=1;
@@ -356,7 +380,7 @@ pedigree_draw_gedcom (NODE node, INT gdvw, INT row, INT hgt)
 	count=0;
 	count_nodes(node, 1, Gens, &count);
 	SetScrollMax(count, hgt);
-	/* inorder traversal */
+	/* preorder traversal */
 	gen=0;
 	trav_pre_print_nd(node, &row, gen, row, row+hgt-1, gdvw);
 }
@@ -440,7 +464,7 @@ free_tree (treenode root)
 {
 	treenode child=root->firstchild;
 	treenode sib=root->nextsib;
-	free(root);
+	free_treenode(root);
 	if (child)
 		free_tree(child);
 	if (sib)

@@ -5,6 +5,9 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- added readonly message when adding/editing S/E/X records
+   (instead of ASSERT coredump)
+
 - generic_to_list_string didn't handle NULL keys because of bug
 
 - menuchoose would crash if non-string list item

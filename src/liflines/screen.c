@@ -91,7 +91,7 @@ extern BOOLEAN alldone, progrunning;
 extern STRING empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
-extern STRING mn_unkcmd;
+extern STRING mn_unkcmd, ronlya;
 extern STRING askynq, askynyn, askyny;
 
 /*********************************************
@@ -475,7 +475,12 @@ main_menu (void)
 		break;
 	case 'a': 
 		{
-		NODE node = add_menu();
+		NODE node;
+		if (readonly) {
+			message(ronlya);
+			break;
+		}
+		node = add_menu();
 		if (node)
 			browse(node, BROWSE_UNK);
 		}
