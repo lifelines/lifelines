@@ -1,6 +1,8 @@
 /******************************************************************************
 * fpattern.h
 *	Functions for matching filename patterns to filenames.
+*	Warning!! lifelines uses this for name matching not filename matching
+*	So comparisons are case insensitive always
 *
 * Usage
 *	Filename patterns are composed of regular (printable) characters which

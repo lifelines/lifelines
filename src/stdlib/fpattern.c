@@ -137,11 +137,15 @@ static const char	copyright[] =
 
 /* Local function macros */
 
-#if UNIX
-#define lowercase(c)	(c)
-#else /*DOS*/
+/* Warning,  while this code was originally filename search code
+ * which was case insensitive on DOS and case Sensitive on UNIX
+ * its being used for name searching and should behave the same everywhere
+ */
+/* #if UNIX */
+/* #define lowercase(c)	(c) */
+/* #else */ /*DOS*/ 
 #define lowercase(c)	tolower(c)
-#endif
+/* #endif */
 
 
 /*-----------------------------------------------------------------------------

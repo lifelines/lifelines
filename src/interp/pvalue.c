@@ -779,6 +779,15 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		case PBOOL:
 			rel = (pvalue_to_bool(val1) == pvalue_to_bool(val2));
 			break;
+		case PINDI: case PFAM: case PSOUR: case PEVEN: case POTHR:
+		{
+		    RECORD rec1,rec2;
+		    rec1 = pvalue_to_rec(val1);
+		    rec2 = pvalue_to_rec(val2);
+		    if (rec1 && rec2) rel = eqstrn(nzkey(rec1),nzkey(rec2),MAXKEYWIDTH+1);
+		    else rel = (rec1  == rec2);
+		    break;
+		 }
 		/* for everything else, just compare value pointer */
 		default:
 			rel = (pvalvv(val1) == pvalvv(val2));

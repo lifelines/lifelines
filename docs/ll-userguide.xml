@@ -3067,19 +3067,197 @@ Leave the pedigree browsing mode and return to the main menu.
 </para>
 
 
-
 </sect1>
-
 
 
 <sect1>
 
 
+<title>
+SEARCH MENU
+</title>
+
+<para>
+If you choose Search database from the main menu, <application>LifeLines</application> displays the search menu:
+<screen>
+How would you like to find a record?
+  v Review visit history (12 records)
+  c Review change history (3 records)
+  f Full database scan
+  q Return to previous menu
+</screen>
+The first two items will depend on your previous activity.  If you have
+browsed to individuals or family records in the database,
+the first item will appear similar to what's shown above,
+if you haven't it will just contain a note that the visit history is empty.
+The second item will appear similar to what's shown above if you
+have changed individual records in this session 
+with <application>LifeLines</application>, otherwise it will contain
+a note that the change history is empty.
+</para>
+<para>
+Selecting a non-empty visit history or change history will bring up a list
+of individuals (or families) that are in the history, allowing you to
+browse to that individual or family. 
+</para>
+<para>
+If you choose Full database scan off the search menu, 
+<application>LifeLines</application> displays the fullscan menu.
+<screen>
+What scan type?
+  f  Full name scan
+  n  Name fragment (whitespace-delimited) scan
+  r  Refn scan
+  q  Return to previous menu
+</screen>
+The first two items on this menu allow you to search all the NAME
+records in the current database.
+If you choose Full name scan you are prompted for a 
+search pattern and then <application>LifeLines</application> searches for all 
+the individual NAME records whose value matches the pattern supplied.
+If you choose the Name fragment scan, you will be prompted for a 
+search pattern and then <application>LifeLines</application> will search for
+whitespace delimited words within individual NAME records that match the
+pattern supplied.
+</para>
+<sect2>
+<title>
+Search Patterns
+</title>
+<para>
+The pattern supplied to the search commands is used to match against
+the names in the database.  The following characters have special meaning
+when used in a pattern:
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>?</entry>
+<entry>Matches any single character</entry>
+</row>
+
+<row>
+<entry>*</entry>
+<entry>
+Matches zero or more occurrences of any character
+</entry>
+</row>
+
+<row>
+<entry>SUB</entry>
+<entry>
+a control Z (^Z) is similar to '*', this matches zero
+or more occurences of any characters other than '.'.
+(of course you probably can't type this on unix)
+</entry>
+</row>
+
+<row>
+<entry>[ab]</entry>
+<entry>
+A set of characters enclosed in square brackets
+matches the single characters listed between the
+brackets.  If the dash '-' character is to be included,
+it must immediately follow the opening bracket '['.
+If the closing bracket ']' character is to be included,
+it must be preceded by a quote '`'.
+</entry>
+</row>
+
+<row>
+<entry>[a-z]</entry>
+<entry>
+Matches a single character in the range 'a' to 'z'.
+Ranges and sets may be combined within the same set of
+brackets.
+</entry>
+</row>
+
+
+<row>
+<entry>!R</entry>
+<entry>
+Matches a single character not in the range 'R'.
+If range 'R' includes the dash '-' character, the dash
+must immediately follow the '!'.
+</entry>
+</row>
+
+<row>
+<entry>!</entry>
+<entry>
+Makes the following pattern match
+any string except those what it would normally match.
+</entry>
+</row>
+
+<row>
+<entry>QUOTE</entry>
+<entry>
+(On DOS this is `, on UNIX it is \)
+Makes the next character a regular (nonspecial)
+character.
+Note that to match the quote character itself, it must
+be quoted.
+Note that this character must be escaped if used within
+string constants ("\\").
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</para>
+<para>
+Upper and lower case alphabetic characters are considered identical,
+i.e., 'a' and 'A' match each other.
+(What constitutes a lowercase letter depends on the current locale
+settings.)
+</para>
+<para>
+Spaces and control characters (other than control z) are treated as normal 
+characters,
+</para>
+
+<para>
+As an example, consider the following NAME record:
+<programlisting>
+1 NAME <userinput>John /Smith/</userinput>
+</programlisting>
+When doing a full name search, the value searched is the complete gedcom name 
+value including the slashes used to delimit the surname.
+in order to have a match, the search pattern
+must match the slashes.  Thus
+
+<programlisting>
+*smith
+</programlisting>
+will not match this name, whereas
+<programlisting>
+*smith/
+</programlisting>
+will match.
+</para>
+
+<para>
+When doing a name fragment search, the slashes are removed from the surname
+before trying to match the name, thus
+<programlisting>
+smith
+smi*
+joh*
+*hn
+</programlisting>
+will all match this NAME record.
+</para>
+
+</sect2>
+</sect1>
+
+<sect1>
 
 <title>
-
 ADD OPERATION
-
 </title>
 
 

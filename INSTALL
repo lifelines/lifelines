@@ -5,6 +5,7 @@ http://lifelines.sourceforge.net
 ********************************
 Contents:
 1. General (UNIX) installation
+ 1a) Dependencies
 2. Platform specific notes
  2a) Microsoft Windows
  2b) cygwin
@@ -64,6 +65,26 @@ html, pdf, and text formats, so it is not necessary to have
 these tools installed. It is simply beneficial to ensure that
 they are absolutely up-to-date.
 
+******************************
+1a) Dependencies
+******************************
+lifelines has a number of dependencies and they vary depending on
+how you build lifelines. (Avoid gcc version 2.7.2.1)
+1. General dependencies
+   ncurses
+2. Building from CVS
+   automake
+   autoconf
+3. Document Generation - see above about docs.
+   Regeneration of the docs requires tools to convert from xml to html, pdf,
+   and text.  Currently the tools being used are 
+   docbook
+   docbook-utils
+   lynx
+4. Multiple Language support - processed files are checked into cvs, but
+   to rebuild the language files:
+   gettext
+   iconv
 
 **************************
 2. Platform specific notes
