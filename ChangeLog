@@ -1,9 +1,9 @@
 2003-04-05 Stephen Dum
-      * ChnageLog, .linesrc, lines.cfg
+      * ChangeLog, .linesrc, lines.cfg
       Correct OTHRREC reference to OTHR, merge some comments from lines.cfg
       into .linesrc, so two files are more consistent.
 
-2003-03-25 Perry Rapp
+2003-03-25 Stephen Dum
        * ChangeLog reports/anniver.ll reports/cron.ll src/interp/interp.c
        reports/Makefile.am reports/gen_index
 
@@ -55,7 +55,6 @@
 	ASSERT if infinite index loop found in getrecord.
 
 2003-03-15 Perry Rapp
-
 
 	* ChangeLog src/hdrs/interp.h src/interp/interp.c
 	src/liflines/llexec.c src/liflines/main.c
