@@ -283,9 +283,15 @@ make_program_list(struct program_info *head,
   while (NULL != cur)
     {
       unsigned char buf[MAXLINELEN];
+#if defined( WIN32) && defined(_MSC_VER)
+      _snprintf(buf, sizeof(buf), "%s (%s)",
+              NULL != cur->progname    ? cur->progname       : cur->filename,
+              NULL != cur->output      ? cur->output      : (STRING)"[?]");
+#else
       snprintf(buf, sizeof(buf), "%s (%s)",
               NULL != cur->progname    ? cur->progname       : cur->filename,
               NULL != cur->output      ? cur->output      : (STRING)"[?]");
+#endif
       newlist[i] = strdup(buf);
       i++;
       cur = cur->next;
