@@ -1,9 +1,18 @@
+2000-12-23 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/init.c liflines/browse.c liflines/pedigree.c
+	liflines/screen.c:
+	Fixed to compile on MSVC/Windows
+	 (which lacks PATH_MAX and doesn't handle #ifdef 0).
+
+	* ChangeLog: Fixed my email address.
+
 2000-12-21    <marc@nozell.com>
 
 	* liflines/browse.c, liflines/pedigree.c, gedlib/choose.c,
 	hdrs/gedcom.h: Cleanup compiler warning.
 
-2000-12-17 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-17 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/browse.c liflines/llinesi.h
 	liflines/pedigree.c liflines/show.c liflines/tandem.c:
@@ -18,7 +27,7 @@
 	* gedlib/keytonod.c: (Mistaken change & backed it out -
 	accidentally checked in cache size reduction to 20 for testing.)
 
-2000-12-12 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/messages.c liflines/scan.c stdlib/stdstrng.c:
 	Revised name scan to do simple wildcards (. and
@@ -36,7 +45,7 @@
 	* liflines/scan.c: Fix broken build.  strcmpi (Windows) vs
 	strcasecmp (Posix)
 
-2000-12-10 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/record.c btree/traverse.c gedlib/intrface.c
 	gedlib/messages.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
@@ -47,19 +56,19 @@
 	a pattern - only exact match against any word of name
 	for now).
 
-2000-12-09 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/node.c hdrs/gedcom.h liflines/screen.c:
 	rename num_spouses to num_spouses_of_indi
 	include arch from screen.c (because it calls sleep)
 
-2000-12-07 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/gedcom.h liflines/browse.c liflines/llinesi.h:
 	Moved init_show_module declaration,
 	and added '$' (xref sources) to browse_pedigree.
 
-2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-06 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/opnbtree.c gedlib/init.c hdrs/btree.h
 	liflines/main.c liflines/pedigree.c liflines/show.c
@@ -87,7 +96,7 @@
 	* liflines/Makefile.am: Fix build.  Still dies when browsing to a
 	person.
  
-2000-12-06 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-06 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/gedcom.h liflines/Makefile.am liflines/browse.c
 	liflines/llinesi.h liflines/screen.c liflines/show.c:
@@ -106,7 +115,7 @@
 
 	Added more text to annotation of source tree in README.DEVELOPERS.
 
-2000-12-05 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/misc.c gedlib/refns.c hdrs/gedcom.h:
 	Fixed bug resolving REFNs. I introduced this when
@@ -114,7 +123,7 @@
 	it was also used for REFN references. I added a new
 	rmvbrackets to resolve this.
 
-2000-12-03 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-03 Perry Rapp <puddle@users.sourceforge.net>
 
 	* hdrs/win32/curses.h interp/pvalue.c liflines/main.c
 	liflines/screen.c win32/mycurses.c:
@@ -122,14 +131,14 @@
 	Modified screen.c & show.c & main.c to allow user chosen width
 	(new -u argument).
 
-2000-12-02 Perry Rapp <prapp@users.sourceforge.net>
+2000-12-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/spltjoin.c hdrs/gedcom.h liflines/edit.c:
 	Split writing node to file into separate functions
 	in edit indi & fam. Removed spurious join_fam in
 	read-only fam case (which crashed it).
 
-2000-11-30 Perry Rapp <prapp@users.sourceforge.net>
+2000-11-30 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/refns.c: Changed some indents that didn't
 	conform to surrounding style.
@@ -145,7 +154,7 @@
 
 	* reports/alive.ll: Fix typo.
 
-2000-11-29 Perry Rapp <prapp@users.sourceforge.net>
+2000-11-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/choose.c gedlib/gstrings.c gedlib/indiseq.c
 	gedlib/keytonod.c gedlib/node.c
@@ -158,7 +167,7 @@
 	Added $ cross-reference to sources.
 	(New functions include node_to_sources, browse_sources.)
 
-2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
+2000-11-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/gstrings.c: Fixed some space indents
 
@@ -170,7 +179,7 @@
 	format_and_choose_spouseseq. Dropped now obsolete fams & marr
 	arguments from all.
 
-2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
+2000-11-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/misc.c
 	hdrs/gedcom.h hdrs/liflines.h
