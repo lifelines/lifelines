@@ -66,7 +66,7 @@ STRING key;
 /*=============================
  * create_table -- Create table
  *===========================*/
-TABLE create_table ()
+TABLE create_table (void)
 {
 	TABLE tab = (TABLE) stdalloc(MAXHASH*sizeof(ENTRY));
 	INT i;
