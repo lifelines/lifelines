@@ -320,7 +320,9 @@ parse_file (STRING ifile,
 void
 interp_main (BOOLEAN picklist)
 {
+	rptlocale();
 	interp_program("main", 0, NULL, 0, NULL, NULL, picklist);
+	uilocale();
 	/*
 	TO DO: unlock all cache elements (2001/03/17, Perry)
 	in case any were left locked by report

@@ -951,8 +951,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
  * copies values from original seq using copyval
  *=======================================================*/
 INDISEQ
-difference_indiseq (INDISEQ one,
-                    INDISEQ two)
+difference_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;

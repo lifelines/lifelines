@@ -151,6 +151,7 @@ extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 extern TABLE useropts;		/* table for user options */
 extern BOOLEAN add_metadata;
+extern INT int_codeset; /* numeric coding of internal code set, ref get_codset_desc */
 
 
 
@@ -357,6 +358,7 @@ RECORD_STATUS retrieve_to_textfile(STRING key, STRING file, TRANSLFNC);
 STRING retrieve_record(STRING, INT*);
 STRING rmvat(STRING);
 STRING rmvbrackets (STRING str);
+void rptlocale(void);
 void set_displaykeys(BOOLEAN);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
@@ -381,9 +383,11 @@ BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
 void traverse_refns(BOOLEAN(*func)(STRING key, STRING refn, BOOLEAN newset, void *param), void *param);
 INT tree_strlen(INT, NODE);
 STRING trim_name(STRING, INT);
+void uilocale(void);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
 NODE unique_nodes(NODE, BOOLEAN);
 void unknown_node_to_dbase(NODE node);
+void update_useropts(void);
 BOOLEAN valid_indi(NODE, STRING*, NODE);
 BOOLEAN valid_fam(NODE, STRING*, NODE);
 BOOLEAN valid_name(STRING);

@@ -42,6 +42,7 @@
 #include "liflines.h"
 #include "screen.h"
 #include "lloptions.h"
+#include "bfs.h"
 
 #include "interpi.h"
 
@@ -333,15 +334,21 @@ void
 poutput (STRING str, BOOLEAN *eflg)
 {
 	STRING p, name;
+	static struct Buffer_s bfdata, *bfs = &bfdata; /* static init to all zeros is ok */
 	INT c, len;
-	if (!str || *str == 0 || (len = strlen(str)) <= 0) return;
+	TRANTABLE ttr = tran_tables[MINRP];
+	if (!str || (len = strlen(str)) <= 0) return;
+	bfCpy(bfs, "");
+	translate_string_to_buf(ttr, str, bfs);
+	str = bfStr(bfs);
+	if ((len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name,
 			lloptions.llreports, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(norpt);
-			return;
+			goto exit_poutput;
 		}
 		setbuf(Poutfp, NULL);
 		outfilename = strsave(name);
@@ -350,7 +357,7 @@ poutput (STRING str, BOOLEAN *eflg)
 	case UNBUFFERED:
 		fwrite(str, len, 1, Poutfp);
 		adjust_cols(str);
-		return;
+		goto exit_poutput;
 	case BUFFERED:
 		if (len >= 1024) {
 			fwrite(linebuffer, linebuflen, 1, Poutfp);
@@ -358,7 +365,7 @@ poutput (STRING str, BOOLEAN *eflg)
 			linebuflen = 0;
 			bufptr = linebuffer;
 			adjust_cols(str);
-			return;
+			goto exit_poutput;
 		}
 		if (len + linebuflen >= 1024) {
 			fwrite(linebuffer, linebuflen, 1, Poutfp);
@@ -373,7 +380,7 @@ poutput (STRING str, BOOLEAN *eflg)
 				curcol++;
 		}
 		--bufptr;
-		return;
+		goto exit_poutput;
 	case PAGEMODE:
 		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
 		while ((c = *str++)) {
@@ -387,10 +394,12 @@ poutput (STRING str, BOOLEAN *eflg)
 				curcol++;
 			}
 		}
-		return;
+		goto exit_poutput;
 	default:
 		FATAL();
 	}
+exit_poutput:
+	return; /* no longer need unified output */
 }
 /*==================================================+
  * adjust_cols -- Adjust column after printing string

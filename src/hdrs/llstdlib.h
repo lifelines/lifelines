@@ -90,21 +90,22 @@ STRING lastpathname(STRING);
 void set_signals(void);
 
 /* stdstrng.c */
-STRING strsave(STRING);
-void strfree(STRING *);
-STRING strconcat(STRING, STRING);
+BOOLEAN allwhite(STRING);
+STRING capitalize(STRING);
 INT chartype(INT);
-BOOLEAN iswhite(INT);
+STRING strconcat(STRING, STRING);
+void strfree(STRING *);
+STRING strsave(STRING);
 BOOLEAN isletter(INT);
 BOOLEAN isnumeric(STRING);
-STRING lower(STRING);
-STRING upper(STRING);
-STRING capitalize(STRING);
+BOOLEAN iswhite(INT);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
-STRING trim(STRING, INT);
-void striptrail(STRING);
+STRING lower(STRING);
 void striplead(STRING);
-BOOLEAN allwhite(STRING);
+void striptrail(STRING);
+STRING trim(STRING, INT);
+STRING upper(STRING);
+INT utf8len(char ch);
 
 #endif /* _LL_STDLIB_H */

@@ -313,25 +313,43 @@ STRING mn_mmcset   = SS "c  Character set options";
 /* character set menu  (these looks best if choices padded to same length)*/
 STRING mn_csttl    = SS "Character set menu";
 STRING mn_cstt     = SS "t  Edit translation tables";
-STRING mn_csdsort  = SS "Current locale: ";
-STRING mn_csnewloc = SS "L  Select locale";
+STRING mn_csrpt    = SS "r  Report character set setup";
+STRING mn_csintcs  = SS "Internal code set: ";
+STRING mn_csdsploc = SS "Display locale: ";
+STRING mn_csndloc  = SS "L  Select display locale";
 STRING mn_cstsort  = SS "s  Edit custom sort table        ";
 STRING mn_cspref   = SS "p  Edit custom sort prefix table ";
 STRING mn_cschar   = SS "c  Edit custom codepage mapping  ";
 STRING mn_cslcas   = SS "l  Edit custom lower case mapping";
 STRING mn_csucas   = SS "u  Edit custom upper case mapping";
 STRING idsortttl   = SS "Enter valid locale name (C for non-lingual sort)";
-STRING idsortdsp   = SS "Locale: ";
-/* translation table menu (these looks best if choices padded to same length)*/
-STRING mn_ttttl    = SS "Which character mapping do you want to edit?";
-STRING mn_ttedin   = SS "e  Editor to Internal mapping ";
-STRING mn_ttined   = SS "m  Internal to Editor mapping ";
-STRING mn_ttgdin   = SS "i  GEDCOM to Internal mapping ";
-STRING mn_ttingd   = SS "x  Internal to GEDCOM mapping ";
-STRING mn_ttdsin   = SS "g  Display to Internal mapping";
-STRING mn_ttinds   = SS "d  Internal to Display mapping";
-STRING mn_ttinrp   = SS "r  Internal to Report mapping ";
+STRING idloc       = SS "Locale: ";
+/* menu for report character set issues */
+STRING mn_csrpttl  = SS "Report character set menu";
+STRING mn_csrptcs  = SS "Report code set: ";
+STRING mn_csrptloc = SS "Report locale: ";
+STRING mn_csnrloc  = SS "L  Select report locale";
+/* menu for translation tables */
+STRING mn_ttttl    = SS "Translation Tables";
+STRING mn_ttedit   = SS "e  edit individual tables (in db)";
+STRING mn_ttload   = SS "l  load a table from a file (into db)";
+STRING mn_ttsave   = SS "s  save a table to a file (from db)";
+STRING mn_ttexport = SS "x  export all tables (from db to files)";
+STRING mn_ttimport = SS "i  import all tables (from files into db)";
+STRING mn_ttexpdir = SS "export/import directory:";
+/* menu for edit translation table (these looks best if choices padded to same length)*/
+STRING mn_edttttl  = SS "Which character mapping do you want to edit?";
+/* strings for choosing translation table (these looks best if choices padded to same length)*/
+STRING mn_ttedin = SS "e  Editor to Internal mapping ";
+STRING mn_ttined = SS "m  Internal to Editor mapping ";
+STRING mn_ttgdin = SS "i  GEDCOM to Internal mapping ";
+STRING mn_ttingd = SS "x  Internal to GEDCOM mapping ";
+STRING mn_ttdsin = SS "g  Display to Internal mapping";
+STRING mn_ttinds = SS "d  Internal to Display mapping";
+STRING mn_ttinrp = SS "r  Internal to Report mapping ";
 /* utility menu */
 STRING mn_uttl     = SS "What utility do you want to perform?";
 /* extra menu */
 STRING mn_xttl     = SS "What activity do you want to perform?";
+/* not yet implemented choices */
+STRING mn_notimpl  = SS "Not implemented yet";

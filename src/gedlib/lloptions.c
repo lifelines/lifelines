@@ -42,7 +42,6 @@
  *********************************************/
 
 struct lloptions_s lloptions;
-STRING sortlocale = 0;
 
 /*********************************************
  * local types
@@ -71,8 +70,11 @@ static void store_to_lloptions(void);
  * local variables
  *********************************************/
 
+/* numeric user options */
 static struct int_option_s int_options[] = {
-	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBYES }
+	{ "ListDetailLines", &lloptions.list_detail_lines, 0, DBNO }
+		/* add_metadata needs to be moved to dboptions somewhere
+		then DBYES/DBNO can be removed entirely */
 	,{ "AddMetadata", &lloptions.add_metadata, 0, DBYES }
 	,{ "DenySystemCalls", &lloptions.deny_system_calls, 0, DBNO }
 	,{ "PerErrorDelay", &lloptions.per_error_delay, 0, DBNO }
@@ -83,15 +85,18 @@ static struct int_option_s int_options[] = {
 	,{ "CustomizeLongYfmt", &lloptions.date_long_yfmt, 0, DBNO }
 	,{ "CustomizeLongSfmt", &lloptions.date_long_sfmt, 0, DBNO }
 };
+/* string user options */
 static struct str_option_s str_options[] = {
-	{ "EmailAddr", &lloptions.email_addr, "", DBYES }
-	,{ "SortLocale", &sortlocale, "", DBYES }
+	{ "UiLocale", &lloptions.uilocale, "C", DBNO }
+	,{ "ReportLocale", &lloptions.rptlocale, "C", DBNO }
 	,{ "LLEDITOR", &lloptions.lleditor, "", DBNO }
 	,{ "LLPROGRAMS", &lloptions.llprograms, "", DBNO }
 	,{ "LLREPORTS", &lloptions.llreports, "", DBNO }
 	,{ "LLARCHIVES", &lloptions.llarchives, "", DBNO }
 	,{ "LLDATABASES", &lloptions.lldatabases, "", DBNO }
 	,{ "LLNEWDBDIR", &lloptions.llnewdbdir, "", DBNO }
+	,{ "LLTTREF", &lloptions.llttref, "", DBNO }
+	,{ "LLTTEXPORT", &lloptions.llttexport, "", DBNO }
 	,{ "InputPath", &lloptions.inputpath, "", DBNO }
 	,{ "ReportLog", &lloptions.reportlog, "", DBNO }
 };
@@ -297,10 +302,6 @@ store_to_lloptions (void)
 		STRING str = valueof_str(opttab, str_options[i].name);
 		*str_options[i].value = strsave(str);
 	}
-#ifdef OS_LOCALE
-	if (sortlocale[0])
-		setlocale(LC_COLLATE, sortlocale);
-#endif
 }
 /*==========================================
  * cleanup_lloptions -- deallocate structures

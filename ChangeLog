@@ -1,10 +1,19 @@
-2007-07-31 Perry Rapp <puddle@users.sourceforge.net>
+2001-08-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg btree/record.c gedlib/intrface.c
+	gedlib/lloptions.c gedlib/messages.c gedlib/names.c
+	gedlib/refns.c hdrs/lloptions.h liflines/screen.c:
+	Removed some unneeded casts. Modifications to charset menus.
+	Moved IN-RPT translation from name functions to poutput.
+	Fixed substring & trim_name for UTF-8. Split locale into GUI & report. 
+
+2001-07-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/file.c btree/index.c btree/record.c
 	btree/traverse.c hdrs/btree.h hdrs/lloptions.h:
 	Changed typedef RECORD to RAWRECORD. Misc additional header documentation.
 
-2007-07-29 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	Deleted redundant ARRAYSIZE macro (same as ARRSIZE).
 	Bugfix in bfs.c BufCatNum (but unused function at present).

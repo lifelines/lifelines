@@ -56,7 +56,7 @@ static void movefiles(STRING, STRING);
  *  len:    [in] record length
  *===============================*/
 BOOLEAN
-addrecord (BTREE btree, RKEY rkey, RAWRECORD record, INT len)
+addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 {
 	INDEX index;
 	BLOCK old, newb, xtra;
@@ -66,7 +66,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD record, INT len)
 	INT off = 0;
 	FILE *fo, *fn1, *fn2;
 	char scratch0[MAXPATHLEN], scratch1[MAXPATHLEN], scratch2[MAXPATHLEN];
-	char *p = record;
+	char *p = rec;
 
 /* search for data block that does/should hold record */
 	ASSERT(bwrite(btree));
@@ -180,7 +180,7 @@ addrecord (BTREE btree, RKEY rkey, RAWRECORD record, INT len)
 	}
 
 /* write new record to temp file */
-	p = record;
+	p = rec;
 	while (len >= BUFLEN) {
 		ASSERT(fwrite(p, BUFLEN, 1, fn1) == 1);
 		len -= BUFLEN;
@@ -215,7 +215,7 @@ splitting:
 	putheader(btree, newb);
 	for (i = j = 0; j < n/2; j++) {
 		if (j == lo) {
-			p = record;
+			p = rec;
 			while (len >= BUFLEN) {
 				ASSERT(fwrite(p, BUFLEN, 1, fn1) == 1);
 				len -= BUFLEN;
@@ -250,7 +250,7 @@ splitting:
 /* write second half of records to second temp file */
 	for (j = n/2; j <= n; j++) {
 		if (j == lo) {
-			p = record;
+			p = rec;
 			while (len >= BUFLEN) {
 				ASSERT(fwrite(p, BUFLEN, 1, fn2) == 1);
 				len -= BUFLEN;
@@ -294,6 +294,8 @@ filecopy (FILE* fpsrc, STRING fnamesrc, INT len, FILE* fpdest, STRING fnamedest)
 	INT blklen;
 	while (len) {
 		/* copy BUFLEN at a time til the last little bit */
+		/* assumes full buffer copy each time, so only appropriate
+		for binary file copies (because of \r\n translation on Win32) */
 		blklen = (len > BUFLEN) ? BUFLEN : len;
 		ASSERT(fread(buffer, blklen, 1, fpsrc) == 1);
 		ASSERT(fwrite(buffer, blklen, 1, fpdest) == 1);

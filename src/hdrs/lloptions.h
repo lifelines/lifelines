@@ -52,6 +52,8 @@ struct lloptions_s {
 	STRING llarchives;
 	STRING lldatabases;
 	STRING llnewdbdir; /* location for new unqualified databases */
+	STRING llttref; /* location for reference translation tables */
+	STRING llttexport; /* location for export & import of translation tables to/from db */
 	STRING inputpath; /* prefix for unqualified utility/read paths */
 	INT deny_system_calls; /* from within reports */
 	STRING reportlog; /* report errors appended to this if non-blank */
@@ -62,14 +64,16 @@ struct lloptions_s {
 	INT date_long_mfmt;
 	INT date_long_yfmt;
 	INT date_long_sfmt;
+	STRING uilocale; /* locale used for GUI */
+	STRING rptlocale; /* locale used in reports */
 };
 
 extern struct lloptions_s lloptions;
 
+void changeoptstr(STRING * str, STRING newval);
+void cleanup_lloptions(void);
 void read_lloptions_from_config(void);
 void read_lloptions_from_db(void);
-void changeoptstr(STRING * str, STRING newval);
 void term_lloptions(void);
-void cleanup_lloptions(void);
 
 #endif /* _OPTIONS_H */

@@ -283,3 +283,24 @@ allwhite (STRING p)
 	if (!iswhite(*p++)) return FALSE;
 	return TRUE;
 }
+/*==============================
+ * utf8len -- Length of a utf-8 character
+ *  ch: [in] starting byte
+ * Created: 2001/08/02 (Perry Rapp)
+ *============================*/
+INT
+utf8len (char ch)
+{
+	/* test short cases first, as probably much more common */
+	if (!(ch & 0x80 && ch & 0x40))
+		return 1;
+	if (!(ch & 0x20))
+		return 2;
+	if (!(ch & 0x10))
+		return 3;
+	if (!(ch & 0x08))
+		return 4;
+	if (!(ch & 0x04))
+		return 5;
+	return 6;
+}

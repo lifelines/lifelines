@@ -56,12 +56,13 @@ extern STRING notone, ifone, progname;
  *********************************************/
 
 /* alphabetical */
+static STRING allocsubbytes(STRING s, INT start, INT len);
+static STRING allocsubstring(STRING s, INT i, INT j);
 static void compute_pi(STRING pi, STRING sub);
 static INT ll_index(STRING str, STRING sub, INT num);
 static INT kmp_search(STRING pi, STRING str, STRING sub, INT num);
 static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
-static STRING rightjustify (STRING str, INT len);
-static STRING allocsubstring (STRING s, INT i, INT j);
+static STRING rightjustify(STRING str, INT len);
 
 /*********************************************
  * local variables
@@ -406,20 +407,59 @@ compute_pi (STRING pi, STRING sub)
 static STRING
 allocsubstring (STRING s, INT i, INT j)
 {
-	STRING substr;
-	INT start=i-1; /* start is 0-based, validated below */
-	INT len=j+1-i; /* len does not include terminating NULL, validated below */
-	/* NULL if NULL or empty string or non-positive length */
-	if (!s || !s[0] || len<1)
+	INT startch=i-1; /* startch is 0-based, validated below */
+	INT numch=j+1-i; /* #characters to copy */
+	INT maxlen = s ? strlen(s) : 0;
+	/* NULL if NULL or empty string or nonpositive range */
+	if (!s || !s[0] || numch<1)
 		return NULL;
-	/* validate start & len */
-	if (start<0)
-		start=0;
-	if (len>(INT)strlen(s))
-		len=strlen(s);
-	substr = stdalloc(len+1);
-	strncpy(substr, &s[start], len);
-	substr[len] = 0;
+	/* validate startch */
+	if (startch<0)
+		startch=0;
+	if (int_codeset == 8) {
+		/* utf-8 */
+		INT start=0, num=0; /* byte units */
+		STRING ptr = s;
+		while (startch) {
+			start += utf8len(ptr[start]);
+			if (start >= maxlen)
+				return NULL;
+			--startch;
+		}
+		ptr = s + start;
+		while (numch) {
+			num += utf8len(ptr[0]);
+			if (start+num>maxlen) {
+				num=maxlen-start;
+				break;
+			}
+			ptr += num;
+			--numch;
+		}
+		return allocsubbytes(s, start, num);
+	} else {
+		/* 1 byte codeset */
+		if (startch + numch > maxlen)
+			numch=maxlen-startch;
+		return allocsubbytes(s, startch, numch);
+	}
+}
+/*==============================
+ * allocsubbytes -- Return subbytestring
+ *  assumes valid inputs
+ *  returns alloc'd memory
+ * start is 0-based start byte, len is # bytes
+ * strictly at the byte level
+ * client is responsible for codeset
+ * Created: 2001/08/02 (Perry Rapp)
+ *============================*/
+static STRING
+allocsubbytes (STRING s, INT start, INT num)
+{
+	STRING substr;
+	substr = stdalloc(num+1);
+	strncpy(substr, &s[start], num);
+	substr[num] = 0;
 	return substr;
 }
 /*===============================================

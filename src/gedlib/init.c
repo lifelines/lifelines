@@ -51,6 +51,7 @@ TABLE useropts=NULL;		/* table for user options */
 BTREE BTR=NULL;	/* database */
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
+INT int_codeset=0; /* internal codeset */
 
 /*********************************************
  * external/imported variables
@@ -145,6 +146,7 @@ init_lifelines_db (void)
 	useropts = create_table();
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", useropts, '=', &emsg);
+	update_useropts();
 	init_caches();
 	init_browse_lists();
 	init_mapping();
@@ -419,4 +421,20 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 		break;
 	}
 	llstrcatn(&ptr, msg, &mylen);
+}
+/*===================================================
+ * update_useropts -- Set any global variables
+ * dependent on user options
+ *=================================================*/
+void
+update_useropts (void)
+{
+	STRING str;
+	int_codeset=0;
+	if ((str = valueof_str(useropts, "codeset"))!=NULL) {
+		if (eqstr("1", str))
+			int_codeset=1;
+		else if (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str))
+			int_codeset=8;
+	}
 }

@@ -164,7 +164,7 @@ getnamerec (STRING name)
 /* Convert name to key and read name record */
 	NRkey = name2rkey(name);
 	if (NRrec) stdfree(NRrec);
-	p = NRrec = (STRING) getrecord(BTR, NRkey, &NRsize);
+	p = NRrec = getrecord(BTR, NRkey, &NRsize);
 	if (!NRrec) {
 		NRcount = 0;
 		if (NRmax == 0) {
@@ -746,8 +746,7 @@ nextpiece (STRING in)
  *=================================================================*/
 #define MAXPARTS 100
 STRING
-trim_name (STRING name,
-           INT len)
+trim_name (STRING name, INT len)
 {
 	STRING parts[MAXPARTS];
 	INT i, sdex = -1, nparts;
@@ -759,14 +758,19 @@ trim_name (STRING name,
 		if (*parts[i] == NAMESEP) sdex = i;
 	}
 	nparts = i;
-	/* WARNING: this will cause a program termination if there
-	 * is no surname delimited by "/" 
-	 * ASSERT(sdex != -1);
-	 */
-	if(sdex == -1) sdex = nparts;
+	if (sdex == -1) sdex = nparts; /* can't assume a surname was found */
 	for (i = sdex-1; i >= 0; --i) {
-		/* Assumes 8-bit character code ! 2001/07/14 */
-		*(parts[i] + 1) = 0;
+		/* chop to initial */
+		if (int_codeset == 8) {
+			INT wid = utf8len(parts[i][0]);
+			if (wid>1) {
+				INT len = strlen(parts[i]);
+				if (wid > len) wid = len;
+			}
+			parts[i][wid] = 0;
+		} else {
+			parts[i][1] = 0;
+		}
 		name = parts_to_name(parts);
 		if ((INT)strlen(name) <= len + 2) return name;
 	}
@@ -943,7 +947,7 @@ id_by_key (STRING name, STRING **pkeys)
 	kbuf[i] = 0;
 	kaddr = kbuf;
 	*pkeys = &kaddr;
-	if (!(rec = (STRING) getrecord(BTR, str2rkey(kbuf), &len)))
+	if (!(rec = getrecord(BTR, str2rkey(kbuf), &len)))
 		return NULL;
 	if (!(indi = string_to_node(rec))) {
 		stdfree(rec);

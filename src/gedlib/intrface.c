@@ -35,12 +35,13 @@ extern BTREE BTR;
 
 /*=================================================
  * retrieve_record -- Retrieve record from database
+ *  key:  [in] key of desired record (eg, "    I543")
+ *  plen: [out] length of record returned
  *===============================================*/
 STRING
-retrieve_record (STRING key,
-                 INT *plen)
+retrieve_record (STRING key, INT *plen)
 {
-	return (STRING) getrecord(BTR, str2rkey(key), plen);
+	return getrecord(BTR, str2rkey(key), plen);
 }
 /*=========================================
  * store_record -- Store record in database

@@ -97,13 +97,14 @@ addfile_impl (BTREE btree, RKEY rkey, STRING file, STRING mode, TRANSLFNC transl
 		result = TRUE;
 		goto end;
 	}
-	if ((mem = (STRING) stdalloc(buf.st_size)) == NULL) goto end;
+	if ((mem = stdalloc(buf.st_size+1)) == NULL) goto end;
 	/* WARNING: with WIN32 reading in TEXT mode, fewer characters
 	 * will be read than expected because of conversion of
 	 * \r\n to \n
 	 */
 	siz = fread(mem, 1, buf.st_size, fp);
 	if (ferror(fp)) goto end;
+	mem[siz]=0;
 	if (translfnc) {
 		STRING mem2 = (*translfnc)(mem, siz);
 		stdfree(mem);

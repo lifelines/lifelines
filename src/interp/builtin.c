@@ -115,7 +115,7 @@ __getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = (STRING) pvalue(mval);
 	}
-	val = (STRING) ask_for_string(msg, "enter string: ");
+	val = ask_for_string(msg, "enter string: ");
 	assign_iden(stab, iident(arg), create_pvalue(PSTRING, (VPTR)val));
 	if (mval) delete_pvalue(mval);
 	return NULL;
@@ -144,7 +144,9 @@ __getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		msg = (STRING) pvalue(val);
 	}
 	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
+	uilocale();
 	key = ask_for_indi_key(msg, NOCONFIRM, DOASK1);
+	rptlocale();
 	if (key) {
 		assign_iden(stab, iident(arg)
 			, create_pvalue_from_indi_key(key));
@@ -167,8 +169,10 @@ __getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	assign_iden(stab, iident(arg), NULL);
+	uilocale();
 	fam = ask_for_fam("Enter a spouse from family.",
 	    "Enter a sibling from family.");
+	rptlocale();
 	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
 	return NULL;
 }
@@ -198,7 +202,9 @@ __getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		msg = (STRING) pvalue(val);
 	}
-	seq = (INDISEQ) ask_for_indi_list(msg, TRUE);
+	uilocale();
+	seq = ask_for_indi_list(msg, TRUE);
+	rptlocale();
 	if (val) delete_pvalue(val);
 	assign_iden(stab, iident(arg), create_pvalue(PSET, (VPTR)seq));
 	return NULL;
@@ -230,7 +236,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
 	BOOLEAN caps = TRUE;
 	PVALUE val;
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "1st arg to name must be a person");
 		return NULL;
@@ -266,9 +272,8 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN caps;
 	BOOLEAN myreg;
 	INT len;
-	TRANTABLE ttr;
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 
-	ttr = tran_tables[MINRP];
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
@@ -314,7 +319,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
 	static uchar scratch[MAXGEDNAMELEN+1];
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "the arg to surname must be a person");
 		return NULL;
@@ -378,7 +383,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	STRING str;
 	static uchar scratch[MAXGEDNAMELEN+1];
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "1st arg to givens must be a person");
 		return NULL;
@@ -578,7 +583,7 @@ __long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
 	RFMT rfmt = NULL; /* currently no reformatting for reports */
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "the arg to long must be a record line");
 		return NULL;
@@ -597,7 +602,7 @@ __short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	NODE even;
 	RFMT rfmt = NULL; /* currently no reformatting for reports */
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "the arg to short must be a record line");
 		return NULL;
@@ -2185,8 +2190,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	NODE indi = eval_indi(arg, stab, eflg, (CACHEEL *) NULL);
 	STRING str;
-	static uchar scratch[MAXGEDNAMELEN+1];
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
 		prog_error(node, "1st arg to trimname is not a person");
 		return NULL;
@@ -2205,7 +2209,6 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = (INT) pvalue(val);
 	str = name_string(trim_name(nval(indi), len));
-	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
 	set_pvalue(val, PSTRING, (VPTR)str);
 	return val;
 }
@@ -2217,7 +2220,7 @@ PVALUE
 __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	TRANTABLE ttr = tran_tables[MINRP];
+	TRANTABLE ttr = NULL; /* do not translate until output time */
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to date must be a record line");

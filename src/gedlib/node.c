@@ -1130,9 +1130,7 @@ indi_to_next_sib (NODE indi)
  * indi_to_name -- Return name of person
  *====================================*/
 STRING
-indi_to_name (NODE node,
-              TRANTABLE tt,
-              INT len)
+indi_to_name (NODE node, TRANTABLE tt, INT len)
 {
 	if (!node) return (STRING) "NO NAME";
 	if (!(node = find_tag(nchild(node), "NAME"))) return (STRING) "NO NAME";
