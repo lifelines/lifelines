@@ -1,3 +1,9 @@
+2003-08-27 Perry Rapp
+
+	* .linesrc ChangeLog lines.cfg
+
+	Add example of UppercaseSurnames config option to config file.
+
 2003-08-26 Jens Arvidsson
 
 	* ChangeLog docs/ll-userguide.xml docs/ll-reportmanual.xml
