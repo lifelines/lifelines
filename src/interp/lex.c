@@ -119,7 +119,7 @@ lowyylex (void)
 	}
 	if (t == LETTER) {
 		p = tokbuf;
-		while (t == LETTER || t == DIGIT || c == '_') {
+		while (t==LETTER || t==DIGIT || c=='_' || c=='.') {
 			*p++ = c;
 			t = chartype(c = inchar());
 		}
@@ -279,7 +279,7 @@ inchar (void)
 	   if (Lexmode == FILEMODE)
 		c = getc(Pinfp);
 	   else
-		c = *Lp++;
+		c = (uchar)*Lp++;
 #ifdef SKIPCTRLZ
  	   } while(c == 26);		/* skip CTRL-Z */
 #endif
