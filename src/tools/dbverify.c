@@ -459,7 +459,7 @@ finish_and_delete_nameset (void)
 	char prevkey[8];
 	CNSTRING name="";
 	CNSTRING skey="";
-	TABLE table = create_table();
+	TABLE table = create_table_int();
 	prevkey[0]=0;
 	calc_indiseq_names(soundexseq);
 	keysort_indiseq(soundexseq);
@@ -474,7 +474,7 @@ finish_and_delete_nameset (void)
 		if (!eqstr(skey, prevkey)) {
 			/* new person, start over */
 			destroy_table(table);
-			table = create_table();
+			table = create_table_int();
 		}
 		if (in_table(table, name)) {
 			report_error(ERR_DUPNAME, _("Duplicate name for %s (%s)")
@@ -500,7 +500,7 @@ finish_and_delete_refnset (void)
 	char prevkey[8];
 	CNSTRING refn="";
 	CNSTRING skey="";
-	TABLE table = create_table();
+	TABLE table = create_table_int();
 	prevkey[0]=0;
 	canonkeysort_indiseq(soundexseq);
 	FORINDISEQ(soundexseq, el, num)
@@ -509,7 +509,7 @@ finish_and_delete_refnset (void)
 		if (!eqstr(skey, prevkey)) {
 			/* new person, start over */
 			destroy_table(table);
-			table = create_table();
+			table = create_table_int();
 		}
 		if (in_table(table, refn)) {
 			report_error(ERR_DUPREFN, _("Duplicate refn for %s (%s)")
@@ -1100,7 +1100,7 @@ static BOOLEAN
 check_btree (BTREE btr)
 {
 	/* keep track of which files we've visited */
-	TABLE fkeytab = create_table();
+	TABLE fkeytab = create_table_int();
 	/* check that master index has its fkey correct */
 	INDEX index = bmaster(BTR);
 	INT mk1 = bkfile(btr).k_mkey;

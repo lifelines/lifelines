@@ -172,6 +172,10 @@ SOURCE=..\..\..\src\gedlib\gstrings.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\hashtab.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\win32\iconvshim.c
 # End Source File
 # Begin Source File
@@ -481,6 +485,10 @@ SOURCE=..\..\..\src\hdrs\generic.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\gengedc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\hashtab.h
 # End Source File
 # Begin Source File
 

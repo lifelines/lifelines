@@ -37,6 +37,11 @@
 	Add typedef for key & value types to rbtree, and reformat
 	function declarations lifelines-style.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	src/tools/dbverify.c
+
+	Fix compilation & MSVC6 linking of dbverify.
+
 2005-02-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c
