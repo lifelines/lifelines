@@ -97,102 +97,102 @@ HREF="#AEN351"
 ></DT
 ><DT
 ><A
-HREF="#AEN360"
+HREF="#AEN361"
 >ENTERING THE FIRST PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN404"
+HREF="#AEN405"
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN462"
+HREF="#AEN463"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
 ><A
-HREF="#AEN473"
+HREF="#AEN474"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN499"
+HREF="#AEN500"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN514"
+HREF="#AEN515"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN517"
+HREF="#AEN518"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN686"
+HREF="#AEN687"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN774"
+HREF="#AEN775"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN884"
+HREF="#AEN885"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN971"
+HREF="#AEN972"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1079"
+HREF="#AEN1080"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1142"
+HREF="#AEN1143"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1149"
+HREF="#AEN1150"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1159"
+HREF="#AEN1160"
 >CODESET CONVERSION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1254"
+HREF="#AEN1255"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1352"
+HREF="#AEN1353"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1517"
+HREF="#AEN1518"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1526"
+HREF="#AEN1527"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1575"
+HREF="#AEN1576"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2088,7 +2088,7 @@ NAME="AEN351"
      First, you may leave it entirely unspecified. This will give the 
      traditional lifelines behavior. This is really only suitable if either
      (a), you only use English (ASCII) data, or (b), you work in an 
-     environment that all uses the same 8-bit codeset (eg, a GNU/Linux box
+     environment which entirely uses the same 8-bit codeset (eg, a GNU/Linux box
      which is all ISO-8859-15), and you only run lifelines in English.
      If you use any non-English data on MS-Windows, this is not likely to 
      be suitable, because the lifelines screens run in the console, but 
@@ -2123,6 +2123,15 @@ NAME="AEN351"
 </P
 ><P
 >&#13;
+     To actually specify a codeset, enter it via the u(tility) o(ptions) page (which is
+     documented below). From the main menu, in the English version, press u to reach
+     the utility page, and then o to edit the user options. To set a codeset of, e.g.,
+     ISO-8859-1, enter this string on its own line, without the surrounding quotes:
+     "codeset=ISO-8859-1". Or, to specify the use of UTF-8, "codeset=UTF-8".
+
+</P
+><P
+>&#13;
      Further information about codeset conversion is found in the later chapter of
      that name (for example, information about producing reports which make use of
      HTML entity names for non-ASCII characters).
@@ -2134,7 +2143,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN360"
+NAME="AEN361"
 ></A
 >ENTERING THE FIRST PERSON</H2
 ><P
@@ -2169,7 +2178,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN367"
+NAME="AEN368"
 ></A
 ><P
 ><B
@@ -2267,7 +2276,7 @@ CLASS="option"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN380"
+NAME="AEN381"
 ></A
 ><P
 ><B
@@ -2422,7 +2431,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN404"
+NAME="AEN405"
 ></A
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</H2
 ><P
@@ -2689,7 +2698,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN462"
+NAME="AEN463"
 ></A
 >BASICS OF BROWSING</H2
 ><P
@@ -2759,7 +2768,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN473"
+NAME="AEN474"
 ></A
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
 ><P
@@ -2817,7 +2826,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN481"
+NAME="AEN482"
 ></A
 ><P
 ><B
@@ -2847,7 +2856,7 @@ t/wtmr/iv<br>
 <DIV
 CLASS="example"
 ><A
-NAME="AEN485"
+NAME="AEN486"
 ></A
 ><P
 ><B
@@ -2943,7 +2952,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN499"
+NAME="AEN500"
 ></A
 >ZIP IDENTIFYING A NEW PERSON</H2
 ><P
@@ -3052,7 +3061,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN514"
+NAME="AEN515"
 ></A
 >BROWSE DISPLAY BASICS</H2
 ><P
@@ -3070,7 +3079,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN517"
+NAME="AEN518"
 ></A
 >PERSON BROWSE SCREEN</H2
 ><P
@@ -3682,7 +3691,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN686"
+NAME="AEN687"
 ></A
 >LIST BROWSE SCREEN</H2
 ><P
@@ -4012,7 +4021,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN774"
+NAME="AEN775"
 ></A
 >FAMILY BROWSE SCREEN</H2
 ><P
@@ -4423,7 +4432,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN884"
+NAME="AEN885"
 ></A
 >TANDEM PERSON BROWSE MODE</H2
 ><P
@@ -4734,7 +4743,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN971"
+NAME="AEN972"
 ></A
 >TANDEM FAMILY BROWSE MODE</H2
 ><P
@@ -5094,7 +5103,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1079"
+NAME="AEN1080"
 ></A
 >PEDIGREE BROWSE MODE</H2
 ><P
@@ -5325,7 +5334,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1142"
+NAME="AEN1143"
 ></A
 >ADD OPERATION</H2
 ><P
@@ -5372,7 +5381,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1149"
+NAME="AEN1150"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5436,7 +5445,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1159"
+NAME="AEN1160"
 ></A
 >CODESET CONVERSION</H2
 ><P
@@ -5778,7 +5787,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1254"
+NAME="AEN1255"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -6019,7 +6028,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1319"
+NAME="AEN1320"
 ></A
 ><P
 ><B
@@ -6119,7 +6128,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1336"
+NAME="AEN1337"
 ></A
 ><P
 ><B
@@ -6147,7 +6156,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1339"
+NAME="AEN1340"
 ></A
 ><P
 ><B
@@ -6166,7 +6175,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1342"
+NAME="AEN1343"
 ></A
 ><P
 ><B
@@ -6207,7 +6216,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1352"
+NAME="AEN1353"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -6466,7 +6475,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1397"
+NAME="AEN1398"
 ></A
 ><P
 ><B
@@ -7187,7 +7196,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1517"
+NAME="AEN1518"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7261,7 +7270,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1526"
+NAME="AEN1527"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7348,7 +7357,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1541"
+NAME="AEN1542"
 ></A
 ><P
 ><B
@@ -7471,7 +7480,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1559"
+NAME="AEN1560"
 ></A
 ><P
 ><B
@@ -7582,7 +7591,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1575"
+NAME="AEN1576"
 ></A
 >System and User Properties</H2
 ><P
