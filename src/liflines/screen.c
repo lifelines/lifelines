@@ -1042,11 +1042,10 @@ STRING *strings;/* string list */
 		}
 	}
 }
-#ifdef WIN32
 /*===============================================
- * WIN32: mprintf -- Call as mprintf(fmt, ...)
+ * mprintf -- Call as mprintf(fmt, ...)
  *=============================================*/
-mprintf (STRING fmt, ...)
+void mprintf (STRING fmt, ...)
 {
 	va_list argptr;
 	INT row;
@@ -1065,7 +1064,7 @@ mprintf (STRING fmt, ...)
 	place_cursor();
 	wrefresh(main_win);
 }
-#else
+#ifdef OBSOLETE
 /*===============================================
  * Other: mprintf -- Call as mprintf(fmt, arg, arg, ...)
  *=============================================*/
@@ -1092,7 +1091,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 /*=======================================
  * message -- Simple interface to mprintf
  *=====================================*/
-message (s)
+void message (s)
 char *s;
 {
 	mprintf("%s", s);
