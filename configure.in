@@ -76,10 +76,11 @@ then
 	       docs_dirs=""
 
 	fi
+else
+	docs_dirs=""
 fi
 
 AC_SUBST(docs_dirs)
-
 
 # Compile with profiling, to find bottlenecks
 AC_ARG_WITH(profiling,
