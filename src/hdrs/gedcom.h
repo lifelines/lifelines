@@ -142,6 +142,7 @@ STRING get_cache_stats(void);
 STRING get_property(STRING opt);
 NOD0 choose_any_source(void);
 NODE choose_child(NODE, NODE, STRING, STRING, BOOLEAN);
+void choose_and_delete_family(void);
 NODE choose_father(NODE, NODE, STRING, STRING, BOOLEAN);
 NODE choose_family(NODE, STRING, STRING, BOOLEAN);
 NODE choose_mother(NODE, NODE, STRING, STRING, BOOLEAN);
@@ -261,7 +262,7 @@ STRING newsxref(STRING, BOOLEAN);
 STRING newxxref(STRING, BOOLEAN);
 void new_name_browse_list(STRING, STRING);
 NODE next_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
-INT nod0_to_keynum(NODE nod, char ntype);
+INT node_to_keynum(NODE nod, char ntype);
 void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
 NODE node_to_node(NODE, INT*);
@@ -398,9 +399,9 @@ INT xrefval(STRING str, char ntype);
  * indi_to_keynum, fam_to_keynum, etc - 
  *  return keynum of node, eg, 21
  *===========================================*/
-#define indi_to_keynum(indi) (nod0_to_keynum(indi, 'I'))
-#define fam_to_keynum(fam)  (nod0_to_keynum(fam, 'F'))
-#define sour_to_keynum(sour) (nod0_to_keynum(sour, 'S'))
+#define indi_to_keynum(indi) (node_to_keynum(indi, 'I'))
+#define fam_to_keynum(fam)  (node_to_keynum(fam, 'F'))
+#define sour_to_keynum(sour) (node_to_keynum(sour, 'S'))
 
 /*=============================================
  * num_families - count spouses of indi

@@ -96,11 +96,11 @@ rmvbrackets (STRING str)
 	return rmvat_char(str, '<', '>');
 }
 /*=============================================
- * nod0_to_keynum -- key # of a 0 level node
+ * node_to_keynum -- key # of a 0 level node
  * returns 0 for failure
  *===========================================*/
 INT
-nod0_to_keynum(NODE nod, char ntype)
+node_to_keynum(NODE nod, char ntype)
 {
 	if (!nod) return 0;
 	return xrefval(nxref(nod), ntype);

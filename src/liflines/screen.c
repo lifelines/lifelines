@@ -459,7 +459,7 @@ create_windows (void)
 
  	main_win = NEWWIN(ll_lines, ll_cols);
 	add_menu_win = NEWWIN(8, 66);
-	del_menu_win = NEWWIN(7, 66);
+	del_menu_win = NEWWIN(8, 66);
 	scan_menu_win = NEWWIN(7,66);
 	trans_menu_win = NEWWIN(10,66);
 	utils_menu_win = NEWWIN(12, 66);
@@ -504,6 +504,7 @@ init_all_windows (void)
 	    "c  Child - remove a child from his/her family");
 	mvwaddstr(win, row++, 4, "s  Spouse - remove a spouse from a family");
 	mvwaddstr(win, row++, 4, "i  Individual - remove a person completely");
+	mvwaddstr(win, row++, 4, "f  Family - remove a family completely");
 	mvwaddstr(win, row++, 4, "q  Quit - return to the previous menu");
 
 	win = scan_menu_win;
@@ -915,13 +916,14 @@ del_menu (void)
 	touchwin(del_menu_win);
 	wmove(del_menu_win, 1, 30);
 	wrefresh(del_menu_win);
-	code = interact(del_menu_win, "csiq");
+	code = interact(del_menu_win, "csifq");
 	touchwin(main_win);
 	wrefresh(main_win);
 	switch (code) {
-	case 'c': remove_child(NULL, NULL, FALSE); break;
-	case 's': remove_spouse(NULL, NULL, FALSE); break;
+	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
+	case 's': choose_and_remove_spouse(NULL, NULL, FALSE); break;
 	case 'i': delete_indi(NULL, TRUE); break;
+	case 'f': choose_and_delete_family(); break;
 	case 'q': break;
 	}
 }

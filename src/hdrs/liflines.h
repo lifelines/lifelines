@@ -13,6 +13,7 @@ typedef INT CONFIRMQ;
 #define NOCONFIRM 0
 
 NODE ask_for_fam(STRING, STRING);
+NODE ask_for_fam_by_key(STRING fttl, STRING pttl, STRING sttl);
 FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
 FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
 STRING ask_for_indi_key(STRING, CONFIRMQ, BOOLEAN);

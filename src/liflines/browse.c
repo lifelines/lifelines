@@ -402,10 +402,10 @@ browse_indi_modes (NODE *pindi1,
 			}
 			break;
 		case 'r':	/* Remove person as spouse */
-			remove_spouse(indi, NULL, FALSE);
+			choose_and_remove_spouse(indi, NULL, FALSE);
 			break;
 		case 'd':	/* Remove person as child */
-			remove_child(indi, NULL, FALSE);
+			choose_and_remove_child(indi, NULL, FALSE);
 			break;
 		case 'A':	/* Advanced person edit */
 			advanced_person_edit(indi);
@@ -610,7 +610,7 @@ browse_fam (NODE *pindi,
 			}
 			*pindi = choose_child(NULL, fam, nocinf,
 			    idcrmv, TRUE);
-			if (*pindi) remove_child(*pindi, NULL, TRUE);
+			if (*pindi) choose_and_remove_child(*pindi, NULL, TRUE);
 			break;
 		case 's':	/* Add spouse to family */
 			if (readonly) {
@@ -668,7 +668,7 @@ browse_fam (NODE *pindi,
 			join_fam(fam, fref, husb, wife, chil, rest);
 			i = choose_from_list(idsrmv, i, spstrings);
 			if (i == -1) break;
-			remove_spouse(spnodes[i], fam, TRUE);
+			choose_and_remove_spouse(spnodes[i], fam, TRUE);
 			break;
 		case 'n':	/* Add person to database */
 			save = add_indi_by_edit();

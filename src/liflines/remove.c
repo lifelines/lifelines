@@ -44,16 +44,14 @@ extern STRING okcrmv, ntsinf, ntcinf, cfsrmv, oksrmv, ronlye, idcrmf;
 
 static INT num_fam_xrefs(NODE);
 
-/*=========================================
- * remove_child -- Remove child from family
- *=======================================*/
+/*===========================================
+ * choose_and_remove_child -- Remove child
+ *  from family (choosing either not provided)
+ *  nolast: don't remove last member of family?
+ *=========================================*/
 BOOLEAN
-remove_child (NODE indi,
-              NODE fam,
-              BOOLEAN nolast)   /* don't remove last in family? */
+choose_and_remove_child (NODE indi, NODE fam, BOOLEAN nolast)
 {
-	NODE node, last;
-
 	if (readonly) {
 		message(ronlye);
 		return FALSE;
@@ -76,9 +74,25 @@ remove_child (NODE indi,
 	}
 	if (!ask_yes_or_no(cfcrmv)) return TRUE;
 
+	if (!remove_child(indi, fam)) {
+		message(ntcinf);
+		return FALSE;
+	}
+
+	message(okcrmv);
+	return TRUE;
+}
+/*=========================================
+ * remove_child -- Remove child from family
+ *  silent function
+ *=======================================*/
+BOOLEAN
+remove_child (NODE indi, NODE fam)
+{
+	NODE node, last;
+
 /* Make sure child is in family and remove his/her CHIL line */
 	if (!(node = find_node(fam, "CHIL", nxref(indi), &last))) {
-		message(ntcinf);
 		return FALSE;
 	}
 	if (last)
@@ -99,21 +113,16 @@ remove_child (NODE indi,
 		delete_fam(fam);
 	else
 		fam_to_dbase(fam);
-	message(okcrmv);
 	return TRUE;
 }
 /*===========================================
- * remove_spouse -- Remove spouse from family
+ * choose_and_remove_spouse -- Remove spouse 
+ *  from family (choosing either not provided)
+ *  nolast: don't remove last member of family?
  *=========================================*/
 BOOLEAN
-remove_spouse (NODE indi,
-               NODE fam,
-               BOOLEAN nolast)  /* don't remove last member of family? */
+choose_and_remove_spouse (NODE indi, NODE fam, BOOLEAN nolast)
 {
-	NODE node, last;
-	INT sex;
-	STRING stag;
-
 	if (readonly) {
 		message(ronlye);
 		return FALSE;
@@ -126,8 +135,6 @@ remove_spouse (NODE indi,
 		message(ntprnt);
 		return FALSE;
 	}
-	sex = SEX(indi);
-	ASSERT(sex == SEX_MALE || sex == SEX_FEMALE);
 
 /* Identify family to remove spouse from */
 	if (!fam) fam = choose_family(indi, "e", idsrmf, TRUE);
@@ -138,12 +145,31 @@ remove_spouse (NODE indi,
 	}
 	if (!ask_yes_or_no(cfsrmv)) return FALSE;
 
-/* Make sure spouse is in family and remove his/her HUSB/WIFE line */
-	stag = (STRING) ((sex == SEX_MALE) ? "HUSB" : "WIFE");
-	if (!(node = find_node(fam, stag, nxref(indi), &last))) {
+	if (!remove_spouse(indi, fam)) {
 		message(ntsinf);
 		return FALSE;
 	}
+	message(oksrmv);
+	return TRUE;
+}
+/*===========================================
+ * remove_spouse -- Remove spouse from family
+ *  both arguments required
+ *  silent function
+ *=========================================*/
+BOOLEAN
+remove_spouse (NODE indi, NODE fam)
+{
+	NODE node, last;
+	INT sex;
+	STRING stag;
+
+	sex = SEX(indi);
+	ASSERT(sex == SEX_MALE || sex == SEX_FEMALE);
+/* Make sure spouse is in family and remove his/her HUSB/WIFE line */
+	stag = (STRING) ((sex == SEX_MALE) ? "HUSB" : "WIFE");
+	if (!(node = find_node(fam, stag, nxref(indi), &last)))
+		return FALSE;
 	if (last)
 		nsibling(last) = nsibling(node);
 	else
@@ -162,7 +188,6 @@ remove_spouse (NODE indi,
 		delete_fam(fam);
 	else
 		fam_to_dbase(fam);
-	message(oksrmv);
 	return TRUE;
 }
 /*=======================================================

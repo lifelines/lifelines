@@ -41,8 +41,70 @@
 
 #include "llinesi.h"
 
-extern STRING idpdel, cfpdel, haslnk;
+extern STRING idpdel, cfpdel, cffdel, haslnk;
+extern STRING idfrmv, idfrsp, idfrch;
 
+/*=====================================================
+ * choose_and_delete_family -- Choose & delete a family
+ *  (remove all members, and delete F record)
+ *===================================================*/
+void
+choose_and_delete_family (void)
+{
+	NODE fam, node, indi;
+	INDISEQ spseq, chseq;
+	STRING tag, key;
+	char confirm[512], members[64];
+	STRING cfptr=confirm;
+	INT cflen=sizeof(confirm);
+
+	fam = ask_for_fam_by_key(idfrmv, idfrsp, idfrch);
+	if (!fam)
+		return;
+
+	/* get list of spouses & children */
+	spseq = create_indiseq_null(); /* spouses */
+	chseq = create_indiseq_null(); /* children */
+	for (node=nchild(fam); node; node = nsibling(node)) {
+		tag = ntag(node);
+		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {
+			key = strsave(rmvat(nval(node)));
+			append_indiseq_null(spseq, key, NULL, TRUE, TRUE);
+		} else if (eqstr("CHIL", tag)) {
+			key = strsave(rmvat(nval(node)));
+			append_indiseq_null(chseq, key, NULL, TRUE, TRUE);
+		}
+	}
+
+	/* build confirm string */
+	sprintf(members, " (%s: %d spouse(s), %d child(ren))", 
+		fam_to_key(fam), ISize(spseq), ISize(chseq));
+	llstrcatn(&cfptr, cffdel, &cflen);
+	llstrcatn(&cfptr, members, &cflen);
+
+	if (ask_yes_or_no(confirm)) {
+
+		if (ISize(spseq)+ISize(chseq) == 0) {
+			/* handle empty family */
+			delete_fam(fam);
+		}
+		else {
+			/* the last remove command will delete the family */
+			FORINDISEQ(spseq, el, num)
+				indi = key_to_indi(skey(el));
+				remove_spouse(indi, fam);
+			ENDINDISEQ
+
+			FORINDISEQ(chseq, el, num)
+				indi = key_to_indi(skey(el));
+				remove_child(indi, fam);
+			ENDINDISEQ
+		}
+	}
+	
+	remove_indiseq(spseq, FALSE);
+	remove_indiseq(chseq, FALSE);
+}
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them

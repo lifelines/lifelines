@@ -51,6 +51,17 @@ extern STRING nofopn;
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
 static NODE ask_for_indi_once(STRING, BOOLEAN, INT*);
 
+/*=====================================================
+ * ask_for_fam_by_key -- Ask user to identify family by
+ *  key (or REFN)
+ *  (if they enter nothing, it will fall thru to ask_for_fam)
+ *========================================================*/
+NODE
+ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
+{
+	NOD0 fam = ask_for_record(fttl, 'F');
+	return fam ? nztop(fam) : ask_for_fam(pttl, sttl);
+}
 /*===========================================
  * ask_for_fam -- Ask user to identify family
  *=========================================*/

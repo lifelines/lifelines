@@ -62,8 +62,10 @@ void pedigree_scroll(INT delta);
 void pedigree_toggle_mode(void);
 
 /* remove.c */
-BOOLEAN remove_child(NODE, NODE, BOOLEAN);
-BOOLEAN remove_spouse(NODE, NODE, BOOLEAN);
+BOOLEAN choose_and_remove_child(NODE indi, NODE fam, BOOLEAN nolast);
+BOOLEAN choose_and_remove_spouse(NODE indi, NODE fam, BOOLEAN nolast);
+BOOLEAN remove_child(NODE indi, NODE fam);
+BOOLEAN remove_spouse (NODE indi, NODE fam);
 
 /* scan.c */
 NOD0 full_name_scan(void);
