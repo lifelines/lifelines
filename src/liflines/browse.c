@@ -81,7 +81,7 @@ extern STRING badhistcnt,badhistcnt2,badhistlen;
 
 /* alphabetical */
 static NODE add_new_rec_maybe_ref(NODE node, char ntype);
-static void ask_clear_history(void);
+static void ask_clear_history(struct hist * histp);
 static void autoadd_xref(NODE node, NODE newnode);
 static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
@@ -93,39 +93,48 @@ static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq, INT indimode);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT display_aux(NODE node, INT mode, BOOLEAN reuse);
+static INT get_hist_count(struct hist * histp);
 static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
 static INT handle_history_cmds(INT c, NODE * pindi1);
-static NODE history_back(void);
-static NODE history_list(void);
-static void history_record(NODE node);
-static NODE history_fwd(void);
+static NODE history_back(struct hist * histp);
+static NODE history_list(struct hist * histp);
+static void history_record(NODE node, struct hist * histp);
+static NODE history_fwd(struct hist * histp);
+static void init_hist(struct hist * histp, INT size);
 static void load_hist_lists(void);
-static void load_nkey_list(STRING key, NKEY * nkarr, INT max, INT * count);
+static void load_nkey_list(STRING key, struct hist * phist);
 static void pick_add_child_to_fam(NODE fam, NODE save);
 static void pick_add_spouse_to_family(NODE fam, NODE save);
 static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
 static void pick_remove_spouse_from_family(NODE fam);
 static void save_hist_lists(void);
-static void save_nkey_list(STRING key, NKEY * nkarr, INT start, INT past_end, INT size);
+static void save_nkey_list(STRING key, struct hist * histp);
+
 /*********************************************
  * local variables
  *********************************************/
 
 /*
-	The history list is a circular buffer in vhist_list.
-	vhist_start points at the earliest entry, and 
-	vhist_past_end points just past the latest entry.
-	If vhist_start==vhist_past_end the the buffer is full.
-	(If vhist_start==-1, then there are no entries.)
+	A history structure is a circular buffer holding
+	a list. start is the earliest entry, and the 
+	past_end points just beyond the latest entry.
+	If start==past_end the the buffer is full.
+	(If start==-1, then there are no entries.)
+	list is a dynamically allocated array, with #entries==size.
+	-1 <= start < size
+	0 <= past_end < size
 	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
-	-1 <= vhist_start < vhist_size
-	0 <= vhist_past_end < vhist_size
 */
-static INT vhist_start=-1, vhist_past_end=0;
-static NKEY * vhist_list=0;
-static INT vhist_size=0;
+struct hist {
+	INT start;
+	INT past_end;
+	INT size;
+	NKEY * list;
+};
+static struct hist vhist;
+
 
 /*********************************************
  * local function definitions
@@ -322,7 +331,7 @@ browse_indi_modes (NODE *pindi1,
 			|| indimode != indimodep) {
 			show_reset_scroll();
 		}
-		history_record(indi);
+		history_record(indi, &vhist);
 			/* display & get input, preserving INDI in cache */
 		display_indi(indi, indimode, reuse);
 		c = interact_indi();
@@ -652,7 +661,7 @@ browse_aux (NODE *pindi1, NODE *pindi2, NODE *pfam1,
 			|| auxmode != auxmodep) {
 			show_reset_scroll();
 		}
-		history_record(aux);
+		history_record(aux, &vhist);
 		c = display_aux(aux, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = node_to_keynum(ntype, aux);
@@ -883,7 +892,7 @@ browse_fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2
 			|| fammode != fammodep) {
 			show_reset_scroll();
 		}
-		history_record(fam);
+		history_record(fam, &vhist);
 		display_fam(fam, fammode, reuse);
 		c = interact_fam();
 		/* last keynum & mode, so can tell if changed */
@@ -1290,21 +1299,12 @@ static void
 load_hist_lists (void)
 {
 	/* V for visit history, planning to also have a change history */
-	INT len=0;
-	vhist_size = getoptint("HistorySize", 20);
-	if (vhist_size<0 || vhist_size > 9999)
-		vhist_size=20;
-	vhist_list = (NKEY *)stdalloc(vhist_size * sizeof(vhist_list[0]));
-	memset(vhist_list, 0, vhist_size * sizeof(vhist_list[0]));
+	INT count = getoptint("HistorySize", 20);
+	if (count<0 || count > 9999)
+		count = 20;
+	init_hist(&vhist, count);
 	if (getoptint("SaveHistory", 0))
-		load_nkey_list("VHIST", vhist_list, vhist_size, &len);
-	if (len>=1) {
-		vhist_start=0;
-		vhist_past_end=len+1 % vhist_size;
-	} else {
-		vhist_start=-1;
-		vhist_past_end=0;
-	}
+		load_nkey_list("VHIST", &vhist);
 }
 /*==================================================
  * save_hist_lists -- Save history into database
@@ -1314,26 +1314,39 @@ static void
 save_hist_lists (void)
 {
 	if (!getoptint("SaveHistory", 0)) return;
-	save_nkey_list("VHIST", vhist_list, vhist_start, vhist_past_end, vhist_size);
+	save_nkey_list("VHIST", &vhist);
+}
+/*==================================================
+ * init_hist -- create & initialize a history list
+ * Created: 2001/12/23, Perry Rapp
+ *=================================================*/
+static void
+init_hist (struct hist * histp, INT count)
+{
+	INT size = count * sizeof(histp->list[0]);
+	memset(histp, 0, sizeof(*histp));
+	histp->size = count;
+	histp->list = (NKEY *)stdalloc(size);
+	memset(histp->list, 0, size);
+	histp->start = -1;
+	histp->past_end = 0;
 }
 /*==================================================
  * load_nkey_list -- Load node list from record into NKEY array
  *  key:   [IN]  key used to store list in database
- *  nkarr  [IN]  array of NKEYS (allocated by caller)
- *  max    [IN]  size of array
- *  count  [OUT] #keys loaded
+ *  histp: [IN]  history list to save
  * Fills in ndarray with data from database.
  * Created: 2001/12/23, Perry Rapp
  * TODO: should be moved to gedlib
  *================================================*/
 static void
-load_nkey_list (STRING key, NKEY * nkarr, INT max, INT * count)
+load_nkey_list (STRING key, struct hist * histp)
 {
 	STRING rawrec;
 	INT * ptr;
-	INT len, i, temp;
+	INT count, len, i, temp;
 
-	*count = 0;
+	count = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return;
 	if (len < 8 || (len % 8) != 0)
@@ -1354,15 +1367,20 @@ load_nkey_list (STRING key, NKEY * nkarr, INT max, INT * count)
 		/* length should be 8 bytes per record + 8 byte header */
 		msg_error(badhistlen);
 	}
-	*count = temp;
-	for (i=0; i<*count; ++i) {
+	count = temp;
+	if (count > histp->size) count = histp->size;
+	for (i=0; i<count; ++i) {
 		char key[12];
-		nkarr[i].ntype = *ptr++;
-		nkarr[i].keynum = *ptr++;
+		histp->list[i].ntype = *ptr++;
+		histp->list[i].keynum = *ptr++;
 		/* We could sanity check these */
-		snprintf(key, sizeof(key), "%c%d", nkarr[i].ntype, nkarr[i].keynum);
-		nkarr[i].key = strdup(key);
+		snprintf(key, sizeof(key), "%c%d", histp->list[i].ntype
+			, histp->list[i].keynum);
+		histp->list[i].key = strdup(key);
 	}
+	/* we don't get here unless count>=1 */
+	histp->start = 0;
+	histp->past_end = (count+1) % histp->size;
 
 end:
 	stdfree(rawrec);
@@ -1372,33 +1390,30 @@ end:
  * Created: 2001/12/23, Perry Rapp
  *================================================*/
 static INT
-get_hist_count (INT start, INT past_end, INT size)
+get_hist_count (struct hist * histp)
 {
-	if (!size || start==-1)
+	if (!histp->size || histp->start==-1)
 		return 0;
-	else if (past_end > start)
-		return  past_end - start;
+	else if (histp->past_end > histp->start)
+		return histp->past_end - histp->start;
 	else
-		return size - start + past_end;
+		return histp->size - histp->start + histp->past_end;
 }
 /*==================================================
  * save_nkey_list -- Save nkey list from circular array
  *  key:     [IN]  key used to store list in database
- *  nkarr    [IN]  array of NKEYS (allocated by caller)
- *  start    [IN]  first element in circle
- *  past_end [IN]  just past last element in circle
- *  size     [IN]  actual size of array
+ *  hist:    [IN]  history list to save
  * Created: 2001/12/23, Perry Rapp
  * TODO: should be moved to gedlib
  *================================================*/
 static void
-save_nkey_list (STRING key, NKEY * nkarr, INT start, INT past_end, INT size)
+save_nkey_list (STRING key, struct hist * histp)
 {
 	FILE * fp=0;
 	INT next, prev, count, temp;
 	size_t rtn;
 
-	count = get_hist_count(start, past_end, size);
+	count = get_hist_count(histp);
 
 	unlink(editfile);
 
@@ -1410,16 +1425,16 @@ save_nkey_list (STRING key, NKEY * nkarr, INT start, INT past_end, INT size)
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 
 	prev = -1;
-	next = start;
+	next = histp->start;
 	while (1) {
 		/* write type & number, 4 bytes each */
-		temp = vhist_list[next].ntype;
+		temp = histp->list[next].ntype;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
-		temp = vhist_list[next].keynum;
+		temp = histp->list[next].keynum;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
 		prev = next;
-		next = (next+1) % vhist_size;
-		if (next == vhist_past_end)
+		next = (next+1) % histp->size;
+		if (next == histp->past_end)
 			break; /* finished them all */
 	}
 	fclose(fp);
@@ -1431,54 +1446,66 @@ save_nkey_list (STRING key, NKEY * nkarr, INT start, INT past_end, INT size)
  * Created: 2001/03?, Perry Rapp
  *================================================*/
 static void
-history_record (NODE node)
+history_record (NODE node, struct hist * histp)
 {
 	NKEY nkey = nkey_zero();
-	INT last;
-	if (!vhist_size) return;
-	if (vhist_start==-1) {
-		vhist_start=vhist_past_end;
-		node_to_nkey(node, &vhist_list[vhist_start]);
-		vhist_past_end = (vhist_start+1) % vhist_size;
+	INT prev, next, i;
+	INT count = get_hist_count(histp);
+	INT protect = getoptint("HistoryBounceSuppress", 0);
+	if (!histp->size) return;
+	if (histp->start==-1) {
+		histp->start = histp->past_end;
+		node_to_nkey(node, &histp->list[histp->start]);
+		histp->past_end = (histp->start+1) % histp->size;
 		return;
 	}
 	/*
 	copy new node into nkey variable so we can check
-	if this is the same as our most recent (vhist_list[last])
+	if this is the same as our most recent (histp->list[last])
 	*/
 	node_to_nkey(node, &nkey);
-	last = (vhist_past_end-1) % vhist_size;
-	if (nkey_eq(&nkey, &vhist_list[last]))
-		return;
+	if (protect<1 || protect>99)
+		protect=1;
+	if (protect>count)
+		protect=count;
+	/* traverse from most recent back (bounce suppression) */
+	prev = -1;
+	next = (histp->past_end-1) % histp->size;
+	for (i=0; i<protect; ++i) {
+		if (nkey_eq(&nkey, &histp->list[next]))
+			return;
+		prev = next;
+		next = (next-1) % histp->size;
+	}
 	/* it is a new one so add it to circular list */
-	nkey_copy(&nkey, &vhist_list[vhist_past_end]);
-	if (vhist_start == vhist_past_end) {
+	nkey_copy(&nkey, &histp->list[histp->past_end]);
+	if (histp->start == histp->past_end) {
 		/* full buffer & we just overwrote the oldest */
-		vhist_start = (vhist_start+1) % vhist_size;
+		histp->start = (histp->start+1) % histp->size;
 	}
 	/* advance pointer to account for what we just added */
-	vhist_past_end = (vhist_past_end+1) % vhist_size;
+	histp->past_end = (histp->past_end+1) % histp->size;
 }
 /*==================================================
  * history_back -- return prev NODE in history, if exists
  * Created: 2001/03?, Perry Rapp
  *================================================*/
 static NODE
-history_back (void)
+history_back (struct hist * histp)
 {
 	INT last;
 	NODE node;
-	if (!vhist_size || vhist_start==-1)
+	if (!histp->size || histp->start==-1)
 		return NULL;
-	/* back up from vhist_past_end to current item */
-	last = (vhist_past_end-1) % vhist_size;
-	while (last != vhist_start) {
+	/* back up from histp->past_end to current item */
+	last = (histp->past_end-1) % histp->size;
+	while (last != histp->start) {
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
-		last = (last-1) % vhist_size;
-		nkey_to_node(&vhist_list[last], &node);
+		last = (last-1) % histp->size;
+		nkey_to_node(&histp->list[last], &node);
 		if (node) {
-			vhist_past_end = (last+1) % vhist_size;
+			histp->past_end = (last+1) % histp->size;
 			return node;
 		}
 	}
@@ -1489,14 +1516,14 @@ history_back (void)
  * Created: 2001/03?, Perry Rapp
  *================================================*/
 static NODE
-history_fwd (void)
+history_fwd (struct hist * histp)
 {
 	INT next;
 	NODE node;
-	if (!vhist_size || vhist_past_end == vhist_start)
+	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
-	next = vhist_past_end;
-	nkey_to_node(&vhist_list[next], &node);
+	next = histp->past_end;
+	nkey_to_node(&histp->list[next], &node);
 	return node;
 }
 /*==================================================
@@ -1506,28 +1533,28 @@ history_fwd (void)
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
 static NODE
-history_list (void)
+history_list (struct hist * histp)
 {
 	INDISEQ seq;
 	NODE node;
 	INT next, prev;
-	if (!vhist_size || vhist_start==-1) {
+	if (!histp->size || histp->start==-1) {
 		message(nohist);
 		return NULL;
 	}
 	/* add all items of history to seq */
 	seq = create_indiseq_null();
 	prev = -1;
-	next = vhist_start;
+	next = histp->start;
 	while (1) {
-		nkey_to_node(&vhist_list[next], &node);
+		nkey_to_node(&histp->list[next], &node);
 		if (node) {
 			STRING key = node_to_key(node);
 			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		}
 		prev = next;
-		next = (next+1) % vhist_size;
-		if (next == vhist_past_end)
+		next = (next+1) % histp->size;
+		if (next == histp->past_end)
 			break; /* finished them all */
 	}
 	node = nztop(choose_from_indiseq(seq, DOASK1, idhist, idhist));
@@ -1540,19 +1567,19 @@ history_list (void)
  * Created: 2001/12/23, Perry Rapp
  *================================================*/
 static void
-ask_clear_history (void)
+ask_clear_history (struct hist * histp)
 {
 	char buffer[120];
 	INT count;
 
-	if (!vhist_size || vhist_start==-1) {
+	if (!histp->size || histp->start==-1) {
 		message(nohist);
 		return;
 	}
-	count = get_hist_count(vhist_start, vhist_past_end, vhist_size);
+	count = get_hist_count(histp);
 	sprintf(buffer, histclr, count);
 	if (ask_yes_or_no(buffer))
-		vhist_start = -1;
+		histp->start = -1;
 }
 /*==================================================
  * handle_history_cmds -- handle the history commands
@@ -1566,7 +1593,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 {
 	NODE node;
 	if (c == CMD_HISTORY_BACK) {
-		node = history_back();
+		node = history_back(&vhist);
 		if (node) {
 			*pindi1 = node;
 			return -1; /* handled, change pages */
@@ -1575,7 +1602,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_HISTORY_FWD) {
-		node = history_fwd();
+		node = history_fwd(&vhist);
 		if (node) {
 			*pindi1 = node;
 			return -1; /* handled, change pages */
@@ -1584,7 +1611,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_HISTORY_LIST) {
-		node = history_list();
+		node = history_list(&vhist);
 		if (node) {
 			*pindi1 = node;
 			return -1; /* handled, change pages */
@@ -1592,7 +1619,7 @@ handle_history_cmds (INT c, NODE * pindi1)
 		return 1;
 	}
 	if (c == CMD_HISTORY_CLEAR) {
-		ask_clear_history();
+		ask_clear_history(&vhist);
 		return 1;
 	}
 	return 0; /* unhandled */

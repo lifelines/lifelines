@@ -37,19 +37,20 @@
 #LLTTEXPORT=/home/user/LifeLines/ttdb
 
 # Refuse to execute system calls from report programs (default allowed)
-# DenySystemCalls=1
+#DenySystemCalls=1
 
 # Log file for report errors (default none)
-# ReportLog=/home/user/LifeLines/reporterrs.log
+#ReportLog=/home/user/LifeLines/reporterrs.log
 
 # Log file for crashes (default none)
-# CrashLog=/home/user/LifeLines/crashes.log
+#CrashLog=/home/user/LifeLines/crashes.log
 
 # Delay (secs) between each report error on screen (default 0)
-# PerErrorDelay=4
+#PerErrorDelay=4
+# Default is 0
 
 # Print more detailed call stack for each report error
-# FullReportCallStack=1
+#FullReportCallStack=1
 
 # dayfmt,monthfmt,yearfmt,datefmt,complexfmt
 # see programmers reference for stddate for these
@@ -108,8 +109,18 @@
 
 # Set the visit history size (# of entries remembered in visit history)
 #HistorySize=20
+# Valid values are 0 through 9999.
 # This sample line is the same as the default if none is given.
 
 # Enable persistent history (remember in database between uses).
 #SaveHistory=1
-# Default is history starts from nothing every use.
+# Valid values are 0 (don't save) and 1 (do save).
+# Default is 0.
+
+# Keep traversal back & forth between records off the history list.
+#HistoryBounceSuppress=5
+# This would prevent a record from being added to the history list if
+# it is already present within the last 5 entries.
+# Valid values are 0 through 99.
+# Default is 1.
+# 

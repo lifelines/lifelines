@@ -1,3 +1,11 @@
+2001-12-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg hdrs/feedback.h hdrs/llstdlib.h
+	hdrs/screen.h liflines/browse.c liflines/screen.c:
+
+	Put history variables into hist structure. Added
+	bounce suppression.
+
 2001-12-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/feedback.h
