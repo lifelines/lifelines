@@ -4,6 +4,11 @@
 
 	Update to Swedish message catalog.
 
+	* ChangeLog src/interp/pvalue.c
+
+	Disable dolock_node_in_cache (as it is causing cache overflow
+	for at least one user).
+
 2003-03-06 Steve Dum
 
 	* ChangeLog docs/Makefile.am

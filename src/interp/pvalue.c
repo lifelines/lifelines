@@ -205,6 +205,9 @@ dosemilock_record_in_cache (RECORD rec, BOOLEAN lock)
 void
 dolock_node_in_cache (NODE node, BOOLEAN lock)
 {
+#if NOT_WORKING_ON_LARGE_DATA_SETS
+/* This leads to cache overflow, so there is something
+wrong here - Perry, 2003-03-07 */
 	if (node) {
 		RECORD rec = node->n_rec;
 		if (rec) {
@@ -217,6 +220,7 @@ dolock_node_in_cache (NODE node, BOOLEAN lock)
 			}
 		}
 	}
+#endif /* NOT_WORKING_ON_LARGE_DATA_SETS */
 }
 /*========================================
  * clear_pvalue -- Empty contents of pvalue
