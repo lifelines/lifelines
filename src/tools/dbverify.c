@@ -559,7 +559,7 @@ check_and_fix_records (void)
 	check_nodes();
 	todo.pass = 2;
 	fix_nodes();
-	remove_empty_list(&tofix);
+	remove_empty_list(tofix);
 }
 /*=================================
  * fix_nodes -- Fix all nodes on fix list
@@ -1100,7 +1100,7 @@ static BOOLEAN
 check_btree (BTREE btr)
 {
 	/* keep track of which files we've visited */
-	TABLE fkeytab = create_table_old2(FREEKEY);
+	TABLE fkeytab = create_table();
 	/* check that master index has its fkey correct */
 	INDEX index = bmaster(BTR);
 	INT mk1 = bkfile(btr).k_mkey;
@@ -1109,7 +1109,7 @@ check_btree (BTREE btr)
 		return FALSE;
 	}
 	check_index(btr, index, fkeytab, NULL, NULL);
-	remove_table(fkeytab, FREEKEY);
+	destroy_table(fkeytab);
 	return TRUE;
 }
 /*=========================================
@@ -1124,8 +1124,19 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 	if (!check_keys((BLOCK)index, lo, hi))
 		return FALSE;
 	for (i = 0; i <= n; i++) {
-		INDEX newix = readindex(btr, fkeys(index, i), TRUE);
+		INDEX newix=0;
+		char scratch[200];
+		FKEY fkey = fkeys(index, i);
 		RKEY *lox, *hix;
+
+		get_index_file(scratch, btr, fkey);
+		if (in_table(fkeytab, scratch)) {
+			printf(_("Cycle in indexes, file %s found again!\n"), scratch);
+			return FALSE;
+		} else {
+			insert_table_int(fkeytab, scratch, 1);
+		}
+		newix = readindex(btr, fkey, TRUE);
 		if (!newix) {
 			printf(_("Error loading index at key %d\n"), i);
 			printblock((BLOCK)index);
@@ -1133,10 +1144,13 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		/* figure upper & lower bounds of what keys should be in the child */
 		lox = (i==0 ? lo : &rkeys(index, i));
 		hix = (i==n ? hi : &rkeys(index, i+1));
-		if (ixtype(newix) == BTINDEXTYPE)
-			check_index(btr, newix, fkeytab, lox, hix);
-		else
-			check_block((BLOCK)newix, lox, hix);
+		if (ixtype(newix) == BTINDEXTYPE) {
+			if (!check_index(btr, newix, fkeytab, lox, hix))
+				return FALSE;
+		} else {
+			if (!check_block((BLOCK)newix, lox, hix))
+				return FALSE;
+		}
 	}
 	/* TODO: use fkeytab */
 	return TRUE;

@@ -10,6 +10,12 @@
 	Convert gproctab & gfunctab to generic table, and delete
 	freelistentry which is thereby unused.
 
+	* ChangeLog src/btree/index.c src/hdrs/btree.h
+	src/tools/dbverify.c
+
+	dbverify: Convert (unused) fkeytab to generic table.
+	Implement checking for cycle in btree index files.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -59,10 +59,21 @@ crtindex (BTREE btree)
 	return index;
 }
 /*=================================
+ * get_index_file - Read index from file
+ *  path:    [OUT] path for this index file
+ *  btr:     [IN]  database btree
+ *  ikey:    [IN]  index file key (number which indicates a file)
+ *===============================*/
+void
+get_index_file (STRING path, BTREE btr, FKEY ikey)
+{
+	sprintf(path, "%s/%s", bbasedir(btr), fkey2path(ikey));
+}
+/*=================================
  * readindex - Read index from file
- *  btr:     [in] btree structure
- *  ikey:    [in] index file key (number which indicates a file)
- *  robust:  [in] flag to tell this function to return (not abort) on errors
+ *  btr:     [IN] btree structure
+ *  ikey:    [IN] index file key (number which indicates a file)
+ *  robust:  [IN] flag to tell this function to return (not abort) on errors
  * this is below the level of the index cache
  *===============================*/
 INDEX
@@ -71,7 +82,7 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	FILE *fp=NULL;
 	INDEX index=NULL;
 	char scratch[200];
-	sprintf(scratch, "%s/%s", bbasedir(btr), fkey2path(ikey));
+	get_index_file(scratch, btr, ikey);
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
 		if (robust) {
 			bterrno = BTERR_INDEX;
@@ -95,15 +106,15 @@ readindex_end:
 }
 /*=================================
  * writeindex - Write index to file
- *  btr:      [in]  btree structure
- *  index:    [in]  index block
+ *  btr:      [IN]  btree structure
+ *  index:    [IN]  index block
  *===============================*/
 void
 writeindex (BTREE btr, INDEX index)
 {
 	FILE *fp;
 	char scratch[200];
-	sprintf(scratch, "%s/%s", bbasedir(btr), fkey2path(ixself(index)));
+	get_index_file(scratch, btr, ixself(index));
 	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		/* Needs to be revisited with double-buffering */
 		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));

@@ -162,6 +162,7 @@ BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
 BOOLEAN validate_keyfile2(KEYFILE2 *);
 
 /* index.c */
+void get_index_file(STRING path, BTREE btr, FKEY ikey);
 INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 
 /* names.c */
