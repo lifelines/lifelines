@@ -33,6 +33,41 @@
 #include "standard.h"
 #include "llstdlib.h"
 
+/*================================================
+ * IS_PATH_SEP -- Is directory separator character
+ *  handle WIN32 characters
+ *==============================================*/
+#ifdef WIN32
+#define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR || (qq) == '/')
+#else
+#define IS_PATH_SEP(qq) ((qq) == LLCHRPATHSEPARATOR)
+#endif
+/*===============================================
+ * is_absolute_path -- Begins with directory info
+ *  handle WIN32 characters
+ *=============================================*/
+static BOOLEAN
+is_absolute_path (STRING dir)
+{
+	if (*dir == LLCHRDIRSEPARATOR || *dir == '.') return TRUE;
+#ifdef WIN32
+	if ((*dir == '/') || (*dir && dir[1] == ':' && isalpha(*dir))) return TRUE;
+#endif
+	return FALSE;
+}
+/*=================================
+ * path_match -- paths are the same
+ *  handle WIN32 filename case insensitivity
+ *===============================*/
+static BOOLEAN
+path_match (STRING path1, STRING path2)
+{
+#ifdef WIN32
+	return !stricmp(path1, path2);
+#else
+	return !strcmp(path1, path2);
+#endif
+}
 /*===========================================
  * filepath -- Find file in sequence of paths
  *=========================================*/
@@ -45,39 +80,30 @@ filepath (STRING name,
 	unsigned char buf1[MAXLINELEN], buf2[MAXLINELEN];
 	STRING p, q;
 	INT c;
-	int nlen, elen;
+	INT nlen, elen, dirs;
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return name;
-	if (*name == LLCHRDIRSEPARATOR || *name == '.') return name;
-#ifdef WIN32
-	if ((*name == '/') || ((name[1] == ':') && isalpha(*name))) return name;
-#endif
+	if (is_absolute_path(name)) return name;
 	nlen = strlen(name);
 	if(ext && *ext) {
-	    elen = strlen(ext);
-	    if((elen > nlen)
-#ifdef WIN32
-		&& (stricmp(name+nlen-elen, ext) == 0)
-#else
-		&& (strcmp(name+nlen-elen, ext) == 0)
-#endif
-		) {
+		elen = strlen(ext);
+		if((elen > nlen) && path_match(name+nlen-elen, ext)) {
 		/*  name has an explicit extension the same as this one */
-		ext = NULL;
-		elen = 0;
-	    }
+			ext = NULL;
+			elen = 0;
+		}
 	}
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
 	p = buf1;
+	dirs = 1; /* count dirs in path */
 	while ((c = *p)) {
-		if (c == LLCHRPATHSEPARATOR
-#ifdef WIN32
-	    	    || c == '/'
-#endif
-			) *p = 0;
+		if (IS_PATH_SEP(c)) {
+			*p = 0;
+			dirs++;
+		}
 		p++;
 	}
 	*(++p) = 0;
