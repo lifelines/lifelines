@@ -1,3 +1,9 @@
+2001-04-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/indiseq.c:
+	New function dupseq (but not implemented correctly).
+	Revised union_indiseq & difference_indiseq for NULL inputs.
+
 2001-04-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c gedlib/xreffile.c hdrs/indiseq.h

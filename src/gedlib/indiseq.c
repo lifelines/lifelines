@@ -78,6 +78,7 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
  * local function prototypes
  *********************************************/
 
+/* alphabetical */
 static void append_all_tags(INDISEQ, NODE, STRING tagname, BOOLEAN recurse, BOOLEAN nonptrs);
 static void append_indiseq_impl(INDISEQ seq, STRING key, 
 	STRING name, UNION val, BOOLEAN sure, BOOLEAN alloc);
@@ -88,6 +89,7 @@ static UNION copyval(INDISEQ seq, UNION uval);
 static INDISEQ create_indiseq_impl(INT valtype, INDISEQ_VALUE_VTABLE vtable);
 static void delete_el(INDISEQ seq, SORTEL el);
 static void deleteval(INDISEQ seq, UNION uval);
+static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len);
 static INT key_compare(SORTEL, SORTEL);
 static INT name_compare(SORTEL, SORTEL);
@@ -776,6 +778,32 @@ get_combined_valtype (INDISEQ one, INDISEQ two)
 	}
 }
 /*===============================================
+ * dupseq -- Return a duplicate of input sequence
+ * TO DO - 2001/04/09, Perry
+ *=============================================*/
+static INDISEQ
+dupseq (INDISEQ seq)
+{
+	if (!seq)
+		return NULL;
+	/* 2001/04/09, Perry - not tested - not even compiled
+	INDISEQ newseq;
+	STRING key;
+	UNION uval;
+	SORTEL *u = IData(one);
+	newseq = create_indiseq_impl(valtype, IValvtbl(seq));
+// loop thru & copy every element
+	for (i=0; i<length_indiseq(seq); i++) {
+			key = strsave(skey(u[i]));
+			uval = copyval(seq, sval(u[i]));
+			append_indiseq_impl(newseq, key, NULL, uval,
+			    TRUE, TRUE);
+	}
+	return newseq;
+	*/
+	return NULL;
+}
+/*===============================================
  * union_indiseq -- Create union of two sequences
  * TO DO - this does not handle NULL arguments correctly 2001/04/08, Perry
  *=============================================*/
@@ -788,7 +816,11 @@ union_indiseq (INDISEQ one, INDISEQ two)
 	SORTEL *u, *v;
 	INT valtype;
 	UNION uval;
-	if (!one || !two) return NULL;
+	if (!one && !two) return NULL;
+	if (!one)
+		return dupseq(two);
+	if (!two)
+		return dupseq(one);
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
 	if (!(IFlags(two) & KEYSORT)) keysort_indiseq(two);
@@ -894,7 +926,10 @@ difference_indiseq (INDISEQ one,
 	INDISEQ three;
 	SORTEL *u, *v;
 	INT valtype;
-	if (!one || !two) return NULL;
+	if (!one)
+		return NULL;
+	if (!two)
+		return dupseq(one);
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
 	if (!(IFlags(two) & KEYSORT)) keysort_indiseq(two);
