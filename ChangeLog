@@ -6,6 +6,10 @@
 	and shift was wrong direction, so this utterly failed 
 	at 65th insert.
 
+	* ChangeLog src/interp/interp.c
+
+	Avoid ASSERTs for missing records in forindi, forfam, etc loops.
+
 2005-02-04 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h

@@ -1334,6 +1334,10 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		ival = create_pvalue_from_indi_keynum(count);
 		icel = pvalue_to_cel(ival);
+		if (!icel) { /* apparently missing record */
+			delete_pvalue(ival);
+			continue;
+		}
 		icount++;
 		lock_cache(icel); /* keep current indi in cache during loop body */
 		/* set loop variables */
@@ -1379,6 +1383,10 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		sval = create_pvalue_from_sour_keynum(count);
 		scel = pvalue_to_cel(sval);
+		if (!scel) { /* apparently missing record */
+			delete_pvalue(sval);
+			continue;
+		}
 		scount++;
 		lock_cache(scel); /* keep current source in cache during loop body */
 		/* set loop variables */
@@ -1422,6 +1430,10 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		eval = create_pvalue_from_even_keynum(count);
 		ecel = pvalue_to_cel(eval);
+		if (!ecel) { /* apparently missing record */
+			delete_pvalue(eval);
+			continue;
+		}
 		ecount++;
 		lock_cache(ecel); /* keep current event in cache during loop body */
 		/* set loop variables */
@@ -1465,6 +1477,10 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		xval = create_pvalue_from_othr_keynum(count);
 		xcel = pvalue_to_cel(xval);
+		if (!xcel) { /* apparently missing record */
+			delete_pvalue(xval);
+			continue;
+		}
 		xcount++;
 		lock_cache(xcel); /* keep current source in cache during loop body */
 		/* set loop variables */
@@ -1507,6 +1523,10 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		fval = create_pvalue_from_fam_keynum(count);
 		fcel = pvalue_to_cel(fval);
+		if (!fcel) { /* apparently missing record */
+			delete_pvalue(fval);
+			continue;
+		}
 		fcount++;
 		lock_cache(fcel);
 		insert_symtab(stab, ielement(node), fval);
