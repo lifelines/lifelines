@@ -96,13 +96,13 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
 	    arg3 = inext(arg2);
-	PVALUE val= eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val2=0;
 	if (*eflg) {
 		prog_error(node, "1st arg to addtoset is not a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
 		prog_error(node, "2nd arg to addtoset must be a person.");
@@ -115,12 +115,15 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	val = evaluate(arg3, stab, eflg);
+	val2 = evaluate(arg3, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "3rd arg to addtoset is in error.");
 		return NULL;
 	}
-	append_indiseq_pval(seq, key, NULL, val, FALSE, TRUE);
+	append_indiseq_pval(seq, key, NULL, val2, FALSE, TRUE);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, addtoset(ancestorset(i),j) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*======================================+
@@ -153,13 +156,13 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING key;
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
-	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
-	if (*eflg ||!val || !(seq = pvalue_to_seq(val))) {
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE valr=0;
+	if (*eflg ||!val1 || !(seq = pvalue_to_seq(val1))) {
 		*eflg = TRUE;
 		prog_error(node, "1st arg to inset must be a set.");
 		return NULL;
 	}
-	delete_pvalue(val);
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
 		prog_error(node, "2nd arg to inset must be a person.");
@@ -171,7 +174,11 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "major error in inset.");
 		return NULL;
 	}
-	return create_pvalue(PBOOL, (VPTR) in_indiseq(seq, key));
+	valr = create_pvalue(PBOOL, (VPTR) in_indiseq(seq, key));
+	/* delay to last minute lest it is a temp owning seq,
+	eg, inset(ancestorset(i),j) */
+	delete_pvalue(val1);
+	return valr;
 }
 /*===========================================+
  * deletefromset -- Remove person from INDISEQ
@@ -186,13 +193,13 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
 	    arg3 = inext(arg2);
-	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val3=0;
 	if (*eflg) {
 		prog_error(node, "1st arg to deletefromset must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
 		prog_error(node, "2nd arg to deletefromset must be a person.");
@@ -205,16 +212,19 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	val = eval_and_coerce(PBOOL, arg3, stab, eflg);
+	val3 = eval_and_coerce(PBOOL, arg3, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "3rd arg to deletefromset must be boolean.");
 		return NULL;
 	}
-	all = pvalue_to_bool(val);
-	delete_pvalue(val);
+	all = pvalue_to_bool(val3);
+	delete_pvalue(val3);
 	do {
 		rc = delete_indiseq(seq, key, NULL, 0);
 	} while (rc && all);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, deletefromset(ancestorset(i),j) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*================================+
@@ -225,14 +235,16 @@ PVALUE
 __namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to namesort must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	namesort_indiseq(seq);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, namesort(ancestorset(i) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*==============================+
@@ -243,14 +255,16 @@ PVALUE
 __keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to namesort must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	keysort_indiseq(seq);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, keysort(ancestorset(i) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*===================================
@@ -261,18 +275,20 @@ PVALUE
 __valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to valuesort must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	valuesort_indiseq(seq,eflg);
 	if (*eflg) {
 		prog_error(node, "missing or incorrect value for sort");
 		return NULL;
 	}
+	/* delay to last minute lest it is a temp owning seq,
+	eg, valuesort(ancestorset(i) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*=========================================+
@@ -283,14 +299,16 @@ PVALUE
 __uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to uniqueset must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	unique_indiseq(seq);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, uniqueset(ancestorset(i) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*=====================================+
@@ -302,23 +320,26 @@ __union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
-	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val2=0;
 	if (*eflg) {
 		prog_error(node, "1st arg to union must be a set.");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
-	op1 = pvalue_to_seq(val);
-	delete_pvalue(val);
-	val = eval_and_coerce(PSET, arg2, stab, eflg);
+	op1 = pvalue_to_seq(val1);
+	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to union must be a set.");
 		return NULL;
 	}
-	op2 = pvalue_to_seq(val);
+	op2 = pvalue_to_seq(val2);
 	op2 = union_indiseq(op1, op2);
-	set_pvalue(val, PSET, op2);
-	return val;
+	set_pvalue(val1, PSET, op2);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, intersect(ancestorset(i),ancestorset(j)) */
+	delete_pvalue(val2);
+	return val1;
 }
 /*================================================+
  * intersect -- Create intersection of two INDISEQs
@@ -329,22 +350,25 @@ __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
-	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val2=0;
 	if (*eflg) {
 		prog_error(node, "1st arg to intersect must be a set.");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
-	op1 = pvalue_to_seq(val);
-	delete_pvalue(val);
-	val = eval_and_coerce(PSET, arg2, stab, eflg);
+	op1 = pvalue_to_seq(val1);
+	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to intersect must be a set.");
 		return NULL;
 	}
-	op2 = pvalue_to_seq(val);
-	set_pvalue(val, PSET, op2 = intersect_indiseq(op1, op2));
-	return val;
+	op2 = pvalue_to_seq(val2);
+	set_pvalue(val1, PSET, op2 = intersect_indiseq(op1, op2));
+	/* delay to last minute lest it is a temp owning seq,
+	eg, intersect(ancestorset(i),ancestorset(j)) */
+	delete_pvalue(val2);
+	return val1;
 }
 /*===============================================+
  * difference -- Create difference of two INDISEQs
@@ -356,20 +380,23 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2, op1;
 	PVALUE val = eval_and_coerce(PSET, arg1, stab, eflg);
+	PVALUE val2;
 	if (*eflg) {
 		prog_error(node, "1st arg to difference must be a set.");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
 	op1 = pvalue_to_seq(val);
-	delete_pvalue(val);
-	val = eval_and_coerce(PSET, arg2, stab, eflg);
+	val2 = eval_and_coerce(PSET, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to difference must be a set.");
 		return NULL;
 	}
-	op2 = pvalue_to_seq(val);
+	op2 = pvalue_to_seq(val2);
 	set_pvalue(val, PSET, op2 = difference_indiseq(op1, op2));
+	/* delay to last minute lest it is a temp owning seq,
+	eg, difference(ancestorset(i),ancestorset(j)) */
+	delete_pvalue(val2);
 	return val;
 }
 /*=========================================+
@@ -486,14 +513,16 @@ PVALUE
 __gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to gengedcom must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	gen_gedcom(seq, GENGEDCOM_ORIGINAL, eflg);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, gengedcom(ancestorset(i)) */
+	delete_pvalue(val1);
 	return NULL;
 }
 
@@ -505,14 +534,16 @@ __gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to gengedcomweak must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	gen_gedcom(seq, GENGEDCOM_WEAK_DUMP, eflg);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, gengedcom(ancestorset(i)) */
+	delete_pvalue(val1);
 	return NULL;
 }
 
@@ -524,14 +555,16 @@ PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE __gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to gengedcomstrong must be a set.");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
-	delete_pvalue(val);
+	ASSERT(seq = pvalue_to_seq(val1));
 	gen_gedcom(seq, GENGEDCOM_STRONG_DUMP, eflg);
+	/* delay to last minute lest it is a temp owning seq,
+	eg, gengedcom(ancestorset(i)) */
+	delete_pvalue(val1);
 	return NULL;
 }
 /*=====================================+

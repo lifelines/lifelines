@@ -24,6 +24,10 @@
 	Add translator instructions for localizing translation table menu keys.
 	Remove some code obsoleted by earlier changes today.
 
+	* ChangeLog src/interp/intrpseq.c
+
+	Bugfix for set functions deleting temporary values too early.
+
 2003-09-10 Jens Arvidsson
 
 	* ChangeLog po/sv.po
