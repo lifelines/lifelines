@@ -78,13 +78,33 @@ such as
 to tell you that you are viewing the first page of 
 three pages of menu choices for the current screen.
 
- - Perry Rapp, 2001/03/31
+6) 
+If you wish to change the colors in the console window
+(the "dos" window), here is how. (This is actually not
+part of LifeLines, but is general DOS on Windows trivia).
+Run the program.
+Left-click in the upper-left corner (the system menu,
+which is probably a little red box with LL in it).
+You should get a popup menu, with Move, Size, Minimize,
+Maximize, (a horizontal bar), Close, Edit, Properties.
+Click on Properties.
+You should get a tabbed dialog - click on the color tab.
+Set the upper two radio button choices - foreground
+& background color - and when you hit Ok, it should ask
+you if this is a change for this window only (ie, only
+this time you're running it), or if it is a permanent
+change for this shortcut (ie, you'll see the new colors
+every time from now on). Choose permanent - you can
+always change them later the same way.
+
+
+ - Perry Rapp, 2001/05/22
 
 
 References:
 
 LifeLines on the web:
-  http://lifelines.sourceforge.net/
+  http://lifelines.sf.net/
 
 Perry via email:
   puddle@users.sourceforge.net
