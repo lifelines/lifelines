@@ -237,6 +237,7 @@ main_browse (RECORD rec1, INT code)
 }
 /*================================================
  * goto_indi_child - jump to child by number
+ * returns addref'd record
  *==============================================*/
 static RECORD
 goto_indi_child (RECORD irec, int childno)
@@ -253,24 +254,33 @@ goto_indi_child (RECORD irec, int childno)
 				akeynum = nzkeynum(chil);
 		ENDCHILDREN
 	ENDFAMS
-	if (akeynum)
+	if (akeynum) {
 		answer = keynum_to_irecord(akeynum);
+		addref_record(answer);
+	}
 	return answer;
 }
 /*================================================
  * goto_fam_child - jump to child by number
+ * returns addref'd record
  *==============================================*/
 static RECORD
-goto_fam_child(RECORD frec, int childno)
+goto_fam_child (RECORD frec, int childno)
 {
 	INT num, i = 0;
 	RECORD answer = 0;
+	INT akeynum=0;
 	NODE fam = nztop(frec);
 	if (!frec) return NULL;
 	FORCHILDREN(fam, chil, num)
 		i++;
-		if (i == childno) answer = chil;
+		if (i == childno) 
+			akeynum = nzkeynum(chil);
 	ENDCHILDREN
+	if (akeynum) {
+		answer = keynum_to_frecord(akeynum);
+		addref_record(answer);
+	}
 	return answer;
 }
 /*===============================================
