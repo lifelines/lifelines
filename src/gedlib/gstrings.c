@@ -32,8 +32,8 @@
 
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 static INT nchil = 0, maxchil = 0;
 static STRING *chstrings = NULL, *chkeys = NULL;

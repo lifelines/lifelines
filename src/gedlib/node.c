@@ -32,8 +32,8 @@
 
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 INT lineno = 0;
 
@@ -629,7 +629,7 @@ NODE node;	/* node */
 /*==========================================
  * indi_to_dbase -- Store person in database
  *========================================*/
-indi_to_dbase (node)
+void indi_to_dbase (node)
 NODE node;
 {
 	node_to_dbase(node, "INDI");
@@ -637,7 +637,7 @@ NODE node;
 /*=========================================
  * fam_to_dbase -- Store family in database
  *=======================================*/
-fam_to_dbase (node)
+void fam_to_dbase (node)
 NODE node;
 {
 	node_to_dbase(node, "FAM");
@@ -645,7 +645,7 @@ NODE node;
 /*=========================================
  * even_to_dbase -- Store event in database
  *=======================================*/
-even_to_dbase (node)
+void even_to_dbase (node)
 NODE node;
 {
 	node_to_dbase(node, "EVEN");
@@ -653,7 +653,7 @@ NODE node;
 /*==========================================
  * sour_to_dbase -- Store source in database
  *========================================*/
-sour_to_dbase (node)
+void sour_to_dbase (node)
 NODE node;
 {
 	node_to_dbase(node, "SOUR");
@@ -661,7 +661,7 @@ NODE node;
 /*================================================
  * othr_to_dbase -- Store other record in database
  *==============================================*/
-othr_to_dbase (node)
+void othr_to_dbase (node)
 NODE node;
 {
 	node_to_dbase(node, NULL);
@@ -669,7 +669,7 @@ NODE node;
 /*===============================================
  * node_to_dbase -- Store GEDCOM tree in database
  *=============================================*/
-node_to_dbase (node, tag)
+void node_to_dbase (node, tag)
 NODE node;
 STRING tag;
 {

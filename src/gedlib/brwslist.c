@@ -28,6 +28,9 @@
  *============================================================*/
 
 #include "standard.h"
+#include "table.h"
+#include "translat.h"
+#include "gedcom.h"
 #include "indiseq.h"
 
 LIST browse_lists;

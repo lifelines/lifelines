@@ -34,6 +34,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
 #include "interp.h"
 
 #define NUM_SIGNALS 21

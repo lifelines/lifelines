@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 
 /*=====================================================
@@ -117,7 +118,9 @@ STRING *pmsg;	/* error message */
 			}
 		}
 		*(q - 1) = 0;
-/*llwprintf("val, tag = %s %s\n", val, tag);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("val, tag = %s %s\n", val, tag);
+#endif
 		insert_table(tab, strsave(tag), strsave(val));
 		if (c == 0) break;
 	}

@@ -8,8 +8,8 @@
 #include <sys/stat.h>
 #include "standard.h"
 #include "table.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 #define NOMAPS 6
 

@@ -31,6 +31,7 @@
 #include "standard.h"
 #include "table.h"
 #include "btree.h"
+#include "translat.h"
 #include "gedcom.h"
 
 static RKEY refn2rkey();

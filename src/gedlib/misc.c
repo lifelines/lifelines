@@ -32,6 +32,7 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 
 /*========================================
@@ -115,7 +116,9 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	if (len == 0) return NULL;
-/*llwprintf("full_value: len = %d\n", len);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("full_value: len = %d\n", len);
+#endif
 	str = p = (STRING) stdalloc(len + 1);
 	if (q = nval(node)) {
 		sprintf(p, "%s\n", q);
@@ -131,6 +134,8 @@ NODE node;
 		cont = nsibling(cont);
 	}
 	*(p - 1) = 0;
-/*llwprintf("full_value: str = %s\n", str);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("full_value: str = %s\n", str);
+#endif
 	return str;
 }

@@ -30,6 +30,7 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "sequence.h"
 #include "gedcheck.h"

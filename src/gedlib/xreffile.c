@@ -32,6 +32,7 @@
 #include "standard.h"
 #include "btree.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 
 extern BTREE BTR;

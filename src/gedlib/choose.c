@@ -29,8 +29,10 @@
 
 #include "standard.h"
 #include "table.h"
-#include "indiseq.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "indiseq.h"
+#include "liflines.h"
 
 /*=================================================
  * choose_child -- Choose child of person or family

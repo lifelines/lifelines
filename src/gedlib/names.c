@@ -32,8 +32,8 @@
 #include "standard.h"
 #include "table.h"
 #include "btree.h"
-#include "gedcom.h"
 #include "translat.h"
+#include "gedcom.h"
 
 extern BOOLEAN opt_finnish;
 extern BTREE BTR;

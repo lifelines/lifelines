@@ -32,6 +32,7 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 #include "cache.h"
 
@@ -317,7 +318,9 @@ INT reportmode;	/* if True, then return NULL rather than aborting
 	NODE node;
 	int i, j;
 
-/*llwprintf("add_to_direct: key == %s\n", key);/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("add_to_direct: key == %s\n", key);
+#endif
 	ASSERT(cache && key);
 	node = NULL;
 	if(record = retrieve_record(key, &len))
@@ -384,8 +387,9 @@ INT reportmode;
 			indirect_to_first(cache, cel);
 		}
 		if (tag) {
-/*llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag,
-ntag(cnode(cel)));/*DEBUG*/
+#ifdef DEBUG
+			llwprintf("BEFORE ASSERT: tag, ntag(cnode(cel)) = %s, %s\n", tag, ntag(cnode(cel)));
+#endif
 			ASSERT(eqstr(tag, ntag(cnode(cel))));
 		}
 		return cel;
@@ -435,7 +439,7 @@ CACHEEL cel;
 /*================================
  * cache_stats -- Show cache stats
  *==============================*/
-cache_stats ()
+void cache_stats (void)
 {
 	CACHE c = indicache;
 	CACHE f = famcache;
@@ -450,7 +454,7 @@ cache_stats ()
 /*============================================
  * indi_to_cache -- Add person to person cache
  *==========================================*/
-indi_to_cache (node)
+void indi_to_cache (node)
 NODE node;
 {
 	node_to_cache(indicache, node);
@@ -458,7 +462,7 @@ NODE node;
 /*===========================================
  * fam_to_cache -- Add family to family cache
  *=========================================*/
-fam_to_cache (node)
+void fam_to_cache (node)
 NODE node;
 {
 	node_to_cache(famcache, node);
@@ -466,7 +470,7 @@ NODE node;
 /*==========================================
  * even_to_cache -- Add event to event cache
  *========================================*/
-even_to_cache (node)
+void even_to_cache (node)
 NODE node;
 {
 	node_to_cache(evencache, node);
@@ -474,7 +478,7 @@ NODE node;
 /*============================================
  * sour_to_cache -- Add source to source cache
  *==========================================*/
-sour_to_cache (node)
+void sour_to_cache (node)
 NODE node;
 {
 	node_to_cache(sourcache, node);
@@ -482,7 +486,7 @@ NODE node;
 /*===========================================
  * othr_to_cache -- Add other record to cache
  *=========================================*/
-othr_to_cache (node)
+void othr_to_cache (node)
 NODE node;
 {
 	node_to_cache(othrcache, node);
@@ -490,7 +494,7 @@ NODE node;
 /*========================================
  * node_to_cache -- Add node tree to cache
  *======================================*/
-node_to_cache (cache, node)
+void node_to_cache (cache, node)
 CACHE cache;
 NODE node;
 {
@@ -585,7 +589,9 @@ NODE indi;
 {
         CACHEEL cel;
         if (!indi) return NULL;
-/*llwprintf("indi_to_cacheel: %s\n", nxref(indi));/*DEBUG*/
+#ifdef DEBUG
+	llwprintf("indi_to_cacheel: %s\n", nxref(indi));
+#endif
         cel = key_to_indi_cacheel(rmvat(nxref(indi)));
         ASSERT(cel);
         return cel;

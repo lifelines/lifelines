@@ -33,7 +33,9 @@
 
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
 #include "indiseq.h"
 #include "interp.h"
 

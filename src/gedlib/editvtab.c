@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include "standard.h"
 #include "table.h"
+#include "translat.h"
 #include "gedcom.h"
 
 extern STRING aredit;
