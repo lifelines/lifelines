@@ -210,6 +210,7 @@ unload_dll (void)
 		return;
 	memset(&f_gettext_fncs, 0, sizeof(f_gettext_fncs));
 	FreeLibrary(f_hinstDll);
+	f_hinstDll = 0;
 }
 
 static FARPROC

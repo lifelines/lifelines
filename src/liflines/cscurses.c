@@ -41,8 +41,18 @@ disp_to_int (ZSTR * pzstr)
 		transl_xlat(xlat, pzstr); /* ignore failure */
 }
 /*============================
+ * mvcuwaddstr -- convert to GUI codeset & output to screen
+ * Created: 2002/12/13 (Perry Rapp)
+ *==========================*/
+int
+mvccuwaddstr (UIWINDOW uiw, int y, int x, char *cp)
+{
+	return mvccwaddnstr(uiw_win(uiw), y, x, cp, uiw_cols(uiw));
+}
+/*============================
  * mvcwaddstr -- convert to GUI codeset & call mvwaddstr
  * Created: 2002/12/03 (Perry Rapp)
+ * TODO: Convert all calls of this to call mvccuwaddstr (or mvccwaddnstr) !
  *==========================*/
 int
 mvccwaddstr (WINDOW *wp, int y, int x, char *cp)
@@ -51,6 +61,27 @@ mvccwaddstr (WINDOW *wp, int y, int x, char *cp)
 	int rtn;
 	int_to_disp(&zstr);
 	rtn = mvwaddstr(wp, y, x, zs_str(zstr));
+	zs_free(&zstr);
+	return rtn;
+}
+/*============================
+ * mvcwaddnstr -- convert to GUI codeset & call mvwaddstr with length limit
+ * Created: 2002/12/13 (Perry Rapp)
+  *==========================*/
+int
+mvccwaddnstr (WINDOW *wp, int y, int x, char *cp, int n)
+{
+	ZSTR zstr = zs_news(cp);
+	int rtn;
+	int_to_disp(&zstr);
+	/* TODO: We ought to be calling the function for display width,
+	which I can't remember at the moment -- see Marcus Kuhn's Unicode FAQ */
+	if (zs_len(zstr) < (unsigned)n) {
+		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
+	} else {
+		/* TODO: Need to account for UTF-8 truncation in case output cs is UTF-8 :( */
+		rtn = mvwaddnstr(wp, y, x, zs_str(zstr), n);
+	}
 	zs_free(&zstr);
 	return rtn;
 }

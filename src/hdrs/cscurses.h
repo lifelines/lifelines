@@ -12,6 +12,9 @@
 
 void disp_to_int(ZSTR * pzstr);
 void int_to_disp(ZSTR * pzstr);
+
+int mvccuwaddstr(UIWINDOW uiw, int y, int x, char *cp);
+int mvccwaddnstr(WINDOW *wp, int y, int x, char *cp, int n);
 int mvccwaddstr(WINDOW *wp, int y, int x, char *cp);
 int mvccwprintw(WINDOW *wp, int y, int x, ...);
 int vccprintf(char *fmt, va_list args);

@@ -30,39 +30,48 @@ extern STRING qSsepch;
  *  code: [in] which translation table (see defn of map_keys)
  *============================================*/
 BOOLEAN
-edit_mapping (INT ttnum)
+edit_mapping (INT trnum)
 {
-	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
+	BOOLEAN rtn=FALSE;
+	ZSTR zstr=0;
+	if (trnum < 0 || trnum >= NUM_TT_MAPS) {
 		msg_error(_(qSbadttnum));
 		return FALSE;
 	}
 	if (readonly) {
 		msg_error(_(qSronlye));
-		return FALSE;
+		rtn = FALSE;
+		goto end_edit_mapping;
 	}
 	endwin();
 
 	unlink(editfile);
 
-	if (get_dbtrantable(ttnum)) {
-		if (!save_tt_to_file(ttnum, editfile)) {
+	if (transl_get_legacy_tt(trnum)) {
+		if (!save_tt_to_file(trnum, editfile)) {
 			msg_error(_(qSdataerr));
 			return FALSE;
 		}
 	}
 	do_edit();
 	while (TRUE) {
-		char buffer[128];
-		if (load_new_tt(editfile, ttnum))
-			return TRUE;
-		llstrsetf(buffer, sizeof(buffer), uu8, "%s ", _(qScmperr));
-		llstrappf(buffer, sizeof(buffer), uu8, _(qSsepch), "<tab>"); /* (separator is %s) */
-		if (ask_yes_or_no_msg(buffer, _(qSaredit)))
+		if (load_new_tt(editfile, trnum)) {
+			rtn = TRUE;
+			goto end_edit_mapping;
+		}
+		zs_apps(&zstr,_(qScmperr));
+		zs_appc(&zstr, ' ');
+		zs_appf(&zstr, _(qSsepch), "<tab>"); /* (separator is %s) */
+		if (ask_yes_or_no_msg(zs_str(zstr), _(qSaredit)))
 			do_edit();
 		else {
-			return FALSE;
+			rtn = FALSE;
+			goto end_edit_mapping;
 		}
 	}
+end_edit_mapping:
+	zs_free(&zstr);
+	return rtn;
 }
 /*==============================================
  * save_tt_to_file -- Save one translation table
@@ -87,11 +96,11 @@ save_tt_to_file (INT ttnum, STRING filename)
  * Created: 2001/12/26, Perry Rapp
  *============================================*/
 BOOLEAN
-load_new_tt (CNSTRING filepath, INT ttnum)
+load_new_tt (CNSTRING filepath, INT trnum)
 {
 	TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
 	TRANTABLE tt=0;
-	CNSTRING mapname = get_map_name(ttnum);
+	CNSTRING mapname = get_map_name(trnum);
 	ZSTR zerr=0;
 	if (!init_map_from_file(filepath, mapname, &tt, &zerr)) {
 		llwprintf(zs_str(zerr));
@@ -101,8 +110,8 @@ load_new_tt (CNSTRING filepath, INT ttnum)
 		return FALSE;
 	}
 	/* change from old one to new one */
-	set_dbtrantable(ttnum, tt);
+	transl_set_legacy_tt(trnum, tt);
 	/* store new one in permanent record in database */
-	store_text_file_to_db(map_keys[ttnum], filepath, transfnc);
+	store_text_file_to_db(map_keys[trnum], filepath, transfnc);
 	return TRUE;
 }

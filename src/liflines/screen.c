@@ -524,7 +524,7 @@ create_windows (void)
 	MAINWIN_WIDTH = ll_cols;
 	LISTWIN_WIDTH = ll_cols-7;
  	main_win = create_newwin2(ll_lines, MAINWIN_WIDTH);
-	tt_menu_win = create_newwin2(11,66);
+	tt_menu_win = create_newwin2(12,66);
 	ask_win = create_newwin2(4, 73);
 	ask_msg_win = create_newwin2(5, 73);
 	choose_from_list_win = create_newwin2(15, 73);
@@ -1000,8 +1000,8 @@ ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 	BOOLEAN rtn;
 	uierase(uiwin);
 	draw_win_box(win);
-	mvccwaddstr(win, 1, 1, ttl);
-	mvccwaddstr(win, 2, 1, prmpt);
+	mvccuwaddstr(uiwin, 1, 1, ttl);
+	mvccuwaddstr(uiwin, 2, 1, prmpt);
 	activate_uiwin(uiwin);
 	rtn = get_answer(uiwin, 2, strlen(prmpt) + 2, buffer, buflen);
 	deactivate_uiwin_and_touch_all();
@@ -1548,6 +1548,7 @@ draw_tt_win (STRING prompt)
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_dsin), MDSIN);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inds), MINDS);
 	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MINRP);
+	disp_trans_table_choice(uiwin, row++, 4, _(qSmn_tt_inrp), MRPIN);
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
 /*==============================
@@ -1556,35 +1557,18 @@ draw_tt_win (STRING prompt)
  * Created: 2001/07/20
  *============================*/
 static void
-disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
+disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT trnum)
 {
-	XLAT ttm = get_tranmapping(indx);
-	char line[120];
-	WINDOW * win = uiw_win(uiwin);
-	INT mylen = sizeof(line);
-	STRING ptr = line;
-
-	ptr[0] = 0;
-	llstrcatn(&ptr, menuit, &mylen);
-
-	if (ttm) {
-		TRANTABLE tt = get_dbtrantable_from_tranmapping(ttm);
-		if (tt) {
-			ZSTR zstr = get_trantable_desc(tt);
-			llstrcatn(&ptr, "  :  ", &mylen);
-			llstrcatn(&ptr, zs_str(zstr), &mylen);
-			zs_free(&zstr);
-		} else if (ttm->iconv_src && ttm->iconv_dest) {
-			llstrcatn(&ptr, " (iconv)", &mylen);
-			/* TODO: better description here, once these work */
-		} else {
-			llstrcatn(&ptr, "     (None)", &mylen);
-		}
+	XLAT xlat = transl_get_predefined_xlat(trnum);
+	ZSTR zstr = transl_get_predefined_name(trnum);
+	zs_apps(&zstr, " : ");
+	if (xlat) {
+		zs_appz(&zstr, transl_get_description(xlat));
+	} else {
+		zs_sets(&zstr, _("No conversion"));
 	}
-	else {
-		llstrcatn(&ptr, "     (None)", &mylen);
-	}
-	mvccwaddstr(win, row, col, line);
+	mvccuwaddstr(uiwin, row, col, zs_str(zstr));
+	zs_free(&zstr);
 }
 /*==============================
  * invoke_fullscan_menu -- Handle fullscan menu
@@ -1755,7 +1739,6 @@ invoke_cset_display (void)
 {
 	LIST list = create_list();
 	ZSTR zstr=zs_newn(80);
-	INT i;
 
 	set_list_type(list, LISTDOFREE);
 
@@ -1842,15 +1825,6 @@ invoke_cset_display (void)
 
 	zs_setf(&zstr, "TTDIR: %s", getoptstr("TTDIR", ""));
 	enqueue_list(list, strsave(zs_str(zstr)));
-
-	for (i=0; i<NUM_TT_MAPS; ++i) {
-		XLAT ttm = get_tranmapping(i);
-		if (!ttm->global_trans)
-			continue;
-		zs_setf(&zstr, "%s: %d global tts"
-			, get_map_name(i), length_list(ttm->global_trans));
-		enqueue_list(list, strsave(zs_str(zstr)));
-	}
 
 	display_list(_("Codeset information"), list);
 	make_list_empty(list);
@@ -2018,7 +1992,7 @@ save_tt_action (void)
 		msg_error(_(qSbadttnum));
 		return;
 	}
-	if (!get_dbtrantable(ttnum)) {
+	if (!transl_get_legacy_tt(ttnum)) {
 		msg_error(_(qSnosuchtt));
 		return;
 	}
@@ -2449,7 +2423,7 @@ manufacture a listdisp here
 	STRING key, name;
 	NODE indi;
 	char scratch[200];
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	INT mode = 'n';
 	INT viewlines = 13;
 	BOOLEAN scrollable = (viewlines < len);

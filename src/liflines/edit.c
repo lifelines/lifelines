@@ -54,7 +54,7 @@ void
 write_indi_to_editfile(NODE indi)
 {
 	FILE *fp;
-	XLAT ttmo = get_tranmapping(MINED);
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE name, refn, sex, body, famc, fams;
 	
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
@@ -81,8 +81,8 @@ edit_indi (RECORD irec1)  /* may be NULL */
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	BOOLEAN emp;
 	STRING msg, key;
-	XLAT ttmi = get_tranmapping(MEDIN);
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
 		return FALSE;
@@ -198,7 +198,7 @@ void
 write_fam_to_editfile(NODE fam)
 {
 	FILE *fp;
-	XLAT ttmo = get_tranmapping(MINED);
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE refn, husb, wife, chil, body;
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
@@ -222,7 +222,7 @@ edit_family (RECORD frec1) /* may be NULL */
 	NODE fam1=0, fam2=0, husb, wife, chil, body, refn1, refn2, refnn, refn1n;
 	RECORD irec=0;
 	NODE node, fam0;
-	XLAT ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING msg, key;
 	BOOLEAN emp;
 

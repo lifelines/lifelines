@@ -101,7 +101,7 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 	STRING msg;
 	static char fullerr[78]; /* TODO -- fix static usage */
 	STRING ptr;
-	XLAT ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	endwin();
 
 	do_edit();
@@ -142,7 +142,7 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 static STRING
 trans_edin (STRING input, INT len)
 {
-	XLAT ttmi = get_tranmapping(MEDIN);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	ZSTR zstr = translate_string_to_zstring(ttmi, input);
 	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */
@@ -159,7 +159,7 @@ trans_edin (STRING input, INT len)
 static STRING
 trans_ined (STRING input, INT len)
 {
-	XLAT ttmo = get_tranmapping(MINED);
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	ZSTR zstr = translate_string_to_zstring(ttmo, input);
 	STRING str = strdup(zs_str(zstr));
 	len=len; /* unused */

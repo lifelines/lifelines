@@ -76,8 +76,8 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	NODE this, that, prev, next, node, head;
 	NODE fam12;
 	NODE name24, refn24;
-	XLAT ttmi = get_tranmapping(MEDIN);
-	XLAT ttmo = get_tranmapping(MINED);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
 	INT sx2;
 	STRING msg, key;
@@ -409,8 +409,8 @@ merge_two_fams (NODE fam1,
 	NODE fref1, fref2;
 	NODE fam3, husb3, wife3, chil3, rest3, fref3;
 	NODE fam4=0, husb4, wife4, chil4, rest4, fref4;
-	XLAT ttmi = get_tranmapping(MEDIN);
-	XLAT ttmo = get_tranmapping(MINED);
+	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
 	STRING msg;
 	BOOLEAN emp;

@@ -114,7 +114,7 @@ archive_in_file (struct export_feedback * efeed, FILE *fp)
 	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
 	fprintf(fp, "%s\n", str);
 	/* finished header */
-	xlat_gedout = get_tranmapping(MINGD);
+	xlat_gedout = transl_get_predefined_xlat(MINGD);
 	nindi = nfam = neven = nsour = nothr = 0;
 	memset(&travparm, 0, sizeof(travparm));
 	travparm.efeed = efeed;

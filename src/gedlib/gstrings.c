@@ -108,7 +108,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt)
 {
 	char scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	int hasparents;
 	int hasfamily;
 	if (len>(INT)sizeof(scratch))
@@ -164,7 +164,7 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT xlat = get_tranmapping(MINDS);
+	XLAT xlat = transl_get_predefined_xlat(MINDS);
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -198,7 +198,7 @@ even_to_list_string (NODE even, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -230,7 +230,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	char counts[32];
 	INT husbands=0, wives=0, children=0;
 	INT templen=0;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	NODE refn, husb, wife, chil, rest, node;
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
@@ -285,7 +285,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	NODE child;
 	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))

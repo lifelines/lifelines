@@ -178,7 +178,7 @@ init_display_indi (NODE pers, INT width)
 	STRING s,t;
 	NODE fth;
 	NODE mth;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	CACHEEL icel;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
@@ -352,7 +352,7 @@ init_display_fam (NODE fam, INT width)
 	NODE wife;
 	STRING s, ik, fk;
 	INT len, nch, nm, wtemp;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	STRING mother = _(qSdspl_moth);
 	STRING father = _(qSdspl_fath);
 	ASSERT(fam);
@@ -562,7 +562,7 @@ indi_to_ped_fix (NODE indi, INT len)
 	STRING bevt, devt, name, key;
 	static char scratch[100];
 	char tmp1[100];
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 /*	return person_display(indi, 0, len); */
 
@@ -722,7 +722,7 @@ person_display (NODE indi, NODE fam, INT len)
 	static char scratch1[120];
 	static char scratch2[100];
 	STRING p;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */

@@ -170,7 +170,7 @@ ll_tolower (INT c)
  *  This is just eqstr extended to handle empty or null strings
  *=============================*/
 BOOLEAN
-eqstr_ex (STRING s1, STRING s2)
+eqstr_ex (CNSTRING s1, CNSTRING s2)
 {
 	if (!s1 || !s1[0]) {
 		if (!s2 || !s2[0])

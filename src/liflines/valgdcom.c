@@ -123,7 +123,7 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 	INT lev, rc, curlev = 0;
 	INT nindi, nfam, nsour, neven, nothr;
 	ELMNT el;
-	XLAT xlat = get_tranmapping(MGDIN);
+	XLAT xlat = transl_get_predefined_xlat(MGDIN);
 	STRING xref, tag, val, msg;
 
 	nindi = nfam = nsour = neven = nothr = 0;

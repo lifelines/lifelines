@@ -261,7 +261,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	STRING ptr=output;
 	INT leader;
 	LIST list=NULL;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	INT mylen=sizeof(output), mylenorig;
 	if (mylen>width)
 		mylen = width;
@@ -497,7 +497,7 @@ node_lineprint (INT width, void * param)
 	INT mylen=sizeof(line);
 	NODE_PRINT_PARAM npp = (NODE_PRINT_PARAM)param;
 	NODE node=npp->node;
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	if (mylen>width)
 		mylen=width;

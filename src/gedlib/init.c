@@ -147,8 +147,9 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	/* read available translation tables */
 	transl_load_all_tts();
-	/* set up translations (for first time, will do it again after loading database */
-	transl_load_xlats(FALSE);
+	/* set up translations (for first time, will do it again after 
+	loading config table, and then again after loading database */
+	transl_load_xlats();
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
@@ -260,7 +261,7 @@ init_lifelines_db (void)
 	set_gettext_codeset(int_codeset);
 #endif /* ENABLE_NLS */
 
-	transl_load_xlats(TRUE);
+	transl_load_xlats();
 
 	return TRUE;
 }
@@ -307,7 +308,10 @@ close_lldb (void)
 {
 	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05
 	remove_table(tagtable, FREE_KEY); values are same as keys
+	tagtable = 0;
 	remove_table(placabbvs, ??)
+	placabbvs = 0;
+	free_caches ??
 	*/
 	closexref();
 	if (BTR) {
@@ -316,6 +320,7 @@ close_lldb (void)
 	}
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, FALSE);
+	transl_free_predefined_xlats(); /* clear any active legacy translation tables */
 }
 /*==================================================
  * alterdb -- force open, lock, or unlock a database
@@ -606,9 +611,7 @@ update_useropts (VPTR uparm)
 	uilocale(); /* in case user changed locale */
 	/* in case user changed any codesets */
 	init_codesets();
-	transl_load_xlats(FALSE);
-	/* old system charmaps */
-	load_char_mappings(); /* in case user changed codesets */
+	transl_load_xlats();
 
 	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
 }
@@ -628,7 +631,7 @@ update_db_options (void)
 			strfree(&int_codeset);
 			int_codeset = strsave(str);
 			uu8 = is_codeset_utf8(int_codeset);
-			transl_load_xlats(TRUE);
+			transl_load_xlats();
 		}
 	}
 	

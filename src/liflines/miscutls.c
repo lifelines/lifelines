@@ -48,7 +48,7 @@ extern STRING qSdbrecstats,qSdbrecords;
 void
 key_util (void)
 {
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	RECORD indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, NOASK1);
 	if (!indi) return;
 	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), ttmd, 70));
@@ -63,7 +63,7 @@ who_is_he_she (void)
 	NODE indi;
 	INT len;
 	char nkey[100];
-	XLAT ttmd = get_tranmapping(MINDS);
+	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	char key[20];
 
 	if (!ask_for_string(_("Please enter person's internal key value."),

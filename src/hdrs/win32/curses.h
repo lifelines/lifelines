@@ -59,6 +59,7 @@ int has_key(int ch);
 WINDOW  *initscr();
 int keypad(WINDOW *wp, int bf);
 int mvwaddch(WINDOW *wp, int y, int x, chtype ch);
+int mvwaddnstr(WINDOW *wp, int y, int x, char *cp, int n);
 int mvwaddstr(WINDOW *wp, int y, int x, char *cp);
 int mvwgetnstr(WINDOW *wp, int y, int x, char *cp, int n);
 int mvwgetstr(WINDOW *wp, int y, int x, char *cp);
@@ -73,6 +74,7 @@ WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);
 int touchwin(WINDOW *wp);
 int vwprintw(WINDOW *wp, char *fmt, va_list ap);
 int waddch(WINDOW *wp, chtype ch);
+int waddnstr(WINDOW *wp, const char *cp, int n);
 int waddstr(WINDOW *wp, const char *cp);
 int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
 	, chtype tl, chtype tr, chtype bl, chtype br);

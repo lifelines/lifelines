@@ -1,3 +1,26 @@
+2002-12-13 Perry Rapp
+
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/codesets.c
+	src/gedlib/editmap.c src/gedlib/editvtab.c
+	src/gedlib/gstrings.c src/gedlib/indiseq.c src/gedlib/init.c
+	src/gedlib/translat.c src/gedlib/xlat.c src/hdrs/cscurses.h
+	src/hdrs/llstdlib.h src/hdrs/translat.h src/hdrs/xlat.h
+	src/hdrs/win32/curses.h src/interp/rassa.c src/liflines/add.c
+	src/liflines/browse.c src/liflines/cscurses.c
+	src/liflines/edit.c src/liflines/export.c
+	src/liflines/import.c src/liflines/merge.c
+	src/liflines/miscutls.c src/liflines/newrecs.c
+	src/liflines/pedigree.c src/liflines/screen.c
+	src/liflines/show.c src/liflines/valgdcom.c
+	src/stdlib/stdstrng.c win32/intlshim.c win32/mycurses.c:
+
+	Finished rewrite of translation tables.
+	Prepare to start width-limiting curses output functions.
+	Tracked down win32 codeset conversion bug to sf.net/projects/gettext version
+	not linking to MSVCRT.DLL, so not getting E2BIG back from iconv.dll. Fixed in
+	sf.net/projects/gettext. Symptom was French locale string in u/c menu not getting
+	codeset conversion.
+
 2002-12-10 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/translat.c

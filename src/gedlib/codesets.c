@@ -114,8 +114,7 @@ init_codesets (void)
 		e = defval;
 #endif
 	}
-	strfree(&gui_codeset_out);
-	gui_codeset_out = strsave(e);
+	strupdate(&gui_codeset_out, e);
 
 /* GuiCodesetIn */
 	e = getoptstr("GuiCodesetIn", "");
@@ -131,8 +130,7 @@ init_codesets (void)
 		e = defval;
 #endif
 	}
-	strfree(&gui_codeset_in);
-	gui_codeset_in = strsave(e);
+	strupdate(&gui_codeset_in, e);
 
 	/* remaining codesets are all straightforward */
 	set_codeset_pair("GedcomCodeset", defval, &gedcom_codeset_out, &gedcom_codeset_in);

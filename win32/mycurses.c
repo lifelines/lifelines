@@ -453,10 +453,28 @@ int waddstr(WINDOW *wp, const char *cp)
 	return(0);
 }
 
+int waddnstr(WINDOW *wp, const char *cp, int n)
+{
+	while(n && *cp)
+	{
+		waddch(wp, *cp);
+		cp++;
+		--n;
+	}
+	return(0);
+}
+
 int mvwaddstr(WINDOW *wp, int y, int x, char *cp)
 {
 	wmove(wp, y, x);
 	waddstr(wp, cp);
+	return(0);
+}
+
+int mvwaddnstr(WINDOW *wp, int y, int x, char *cp, int n)
+{
+	wmove(wp, y, x);
+	waddnstr(wp, cp, n);
 	return(0);
 }
 

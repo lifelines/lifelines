@@ -74,13 +74,10 @@ struct trantable_s {
 
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
-static void init_charmaps_if_needed(void);
 static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR * pzerr);
 static void load_custom_db_mappings(void);
-static void load_global_char_mapping(void);
 static void maperror(CNSTRING errmsg);
 static void remove_xnodes(XNODE);
-static void set_zone_conversion(STRING optname, INT toint, INT fromint);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
 static XNODE step_xnode(XNODE, INT);
@@ -89,9 +86,6 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
 /*********************************************
  * local variables
  *********************************************/
-
-/* custom translation tables embedded in the database */
-static struct xlat_s trans_maps[NUM_TT_MAPS]; /* init'd by init_charmaps */
 
 /*********************************************
  * local & exported function definitions
@@ -249,174 +243,6 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 		return 0;
 	}
 	return 0;
-}
-/*========================================
- * init_charmaps_if_needed -- one time initialization
- *======================================*/
-static void
-init_charmaps_if_needed (void)
-{
-	/* Check that all tables have all entries */
-	ASSERT(NUM_TT_MAPS == ARRSIZE(trans_maps));
-	ASSERT(NUM_TT_MAPS == ARRSIZE(map_keys));
-
-	memset(&trans_maps, 0, sizeof(trans_maps));
-}
-/*========================================
- * clear_char_mappings -- empty & free all data
- *======================================*/
-static void
-clear_char_mappings (void)
-{
-	INT indx=-1;
-
-	for (indx = 0; indx < NUM_TT_MAPS; ++indx) {
-		XLAT ttm = &trans_maps[indx];
-		TRANTABLE *ptt = &ttm->dbtrantbl;
-		remove_trantable(*ptt);
-		*ptt = 0;
-		strfree(&ttm->iconv_src);
-		strfree(&ttm->iconv_dest);
-		ttm->after = -1;
-		if (ttm->global_trans) {
-			TRANTABLE ttx = 0;
-			FORLIST(ttm->global_trans, tbel)
-				ttx = tbel;
-				ASSERT(ttx);
-				remove_trantable(ttx);
-				ttx = 0;
-			ENDLIST
-			remove_list(ttm->global_trans, 0);
-			ttm->global_trans = 0;
-		}
-	}
-}
-/*========================================
- * load_global_char_mapping -- load char mapping info
- *  from global configuration
- * NB: This depends on internal codeset, which depends on
- * active database.
- *======================================*/
-static void
-load_global_char_mapping (void)
-{
-	/* old translationt table system */
-	/* TODO: can we delete this now that new system is in ? */
-
-	/* no translations without internal codeset */
-	if (!int_codeset || !int_codeset[0])
-		return;
-
-
-	/* set iconv conversions as applicable */
-	set_zone_conversion("GuiCodeset", MDSIN, MINDS);
-	set_zone_conversion("EditorCodeset", MEDIN, MINED);
-	set_zone_conversion("GedcomCodeset", MGDIN, MINGD);
-	set_zone_conversion("ReportCodeset", -1, MINRP);
-
-}
-/*========================================
- * set_zone_conversion -- Set conversions for one zone
- *  based on user codeset option (if found)
- * zones are GUI, Editor, GEDCOM, and report
- * but we rely on caller to know the zones
- *======================================*/
-static void
-set_zone_conversion (STRING optname, INT toint, INT fromint)
-{
-	STRING extcs = getoptstr(optname, "");
-	STRING extcs_opt=0, suffix=0;
-	if (toint >= 0)
-		trans_maps[toint].after = TRUE;
-	if (fromint >= 0)
-		trans_maps[fromint].after = FALSE;
-	if (!extcs || !extcs[0] || !int_codeset || !int_codeset[0])
-		return;
-	if (toint >= 0) {
-		trans_maps[toint].iconv_src = strsave(extcs);
-		trans_maps[toint].iconv_dest = strsave(int_codeset);
-	}
-	/* append any requested options, eg //TRANSLIT */
-	extcs_opt = strconcat(optname, "Output");
-	suffix = getoptstr(extcs_opt, "");
-	extcs = strconcat(extcs, suffix); /* now extcs is heap-alloc'd */
-	if (fromint >= 0) {
-		trans_maps[fromint].iconv_src = strsave(int_codeset);
-		trans_maps[fromint].iconv_dest = strsave(extcs);
-	}
-	strfree(&extcs);
-	strfree(&extcs_opt);
-}
-/*========================================
- * load_char_mappings -- Reload all mappings
- *  (custom translation tables & iconv mappings)
- *======================================*/
-void
-load_char_mappings (void)
-{
-	/* TODO: make a clear_all_mappings for external call at shutdown */
-
-	init_charmaps_if_needed();
-	clear_char_mappings();
-	load_custom_db_mappings();
-	load_global_char_mapping();
-}
-/*========================================
- * load_custom_db_mappings -- Reload mappings embedded in
- *  current database
- *======================================*/
-static void
-load_custom_db_mappings (void)
-{
-	INT indx=-1;
-	for (indx = 0; indx < NUM_TT_MAPS; indx++) {
-		XLAT ttm = &trans_maps[indx];
-		TRANTABLE *ptt = &ttm->dbtrantbl;
-		remove_trantable(*ptt);
-		*ptt = 0;
-		if (is_db_open()) {
-			if (!init_map_from_rec(map_keys[indx], indx, ptt)) {
-				msg_error(_("Error initializing %s map.\n"), map_names[indx]);
-			}
-		}
-	}
-}
-/*========================================
- * get_dbtrantable -- Access into the custom translation tables
- *======================================*/
-TRANTABLE
-get_dbtrantable (INT ttnum)
-{
-	return get_tranmapping(ttnum)->dbtrantbl;
-}
-/*========================================
- * get_dbtrantable_from_tranmapping -- Access into custom
- *  translation table of a tranmapping
- *======================================*/
-TRANTABLE
-get_dbtrantable_from_tranmapping (XLAT ttm)
-{
-	return ttm ? ttm->dbtrantbl : 0;
-}
-/*========================================
- * get_tranmapping -- Access to a translation mapping
- *======================================*/
-XLAT
-get_tranmapping (INT ttnum)
-{
-	ASSERT(ttnum>=0 && ttnum<ARRSIZE(trans_maps));
-	return &trans_maps[ttnum];
-}
-/*========================================
- * set_dbtrantable -- Assign a new custom translation table
- *======================================*/
-void
-set_dbtrantable (INT ttnum, TRANTABLE tt)
-{
-	ASSERT(ttnum>=0 && ttnum<ARRSIZE(trans_maps));
-	if (trans_maps[ttnum].dbtrantbl)
-		remove_trantable(trans_maps[ttnum].dbtrantbl);
-	trans_maps[ttnum].dbtrantbl = tt;
 }
 /*===================================================
  * init_map_from_rec -- Init single translation table
@@ -836,8 +662,8 @@ custom_translate (ZSTR * pzstr, TRANTABLE tt)
 BOOLEAN
 custom_sort (char *str1, char *str2, INT * rtn)
 {
-	TRANTABLE tts = get_dbtrantable(MSORT);
-	TRANTABLE ttc = get_dbtrantable(MCHAR);
+	TRANTABLE tts = transl_get_legacy_tt(MSORT);
+	TRANTABLE ttc = transl_get_legacy_tt(MCHAR);
 	CNSTRING rep1, rep2;
 	STRING ptr1=str1, ptr2=str2;
 	INT len1, len2;
@@ -919,4 +745,17 @@ get_trantable_desc (TRANTABLE tt)
 	sprintf(buffer, " [%d]", tt->total);
 	zs_apps(&zstr, buffer);
 	return zstr;
+}
+/*===================================================
+ * tt_get_name -- Return name of translation table
+ *  or "unnamed"
+ * Created: 2002/12/13 (Perry Rapp)
+ *=================================================*/
+CNSTRING
+tt_get_name (TRANTABLE tt)
+{
+	CNSTRING name = tt->name;
+	if (!name || !name[0])
+		name = _("<unnamed>");
+	return name;
 }

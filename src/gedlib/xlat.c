@@ -24,19 +24,28 @@
  * local types
  *********************************************/
 
-/* translation table, entry in tt list */
-struct tt_s {
+/* This will go into translat.c when new system is working */
+struct xlat_s {
+	/* All members either NULL or heap-alloc'd */
+	STRING name;
+	STRING src;
+	STRING dest;
+	LIST steps;
+	BOOLEAN adhoc;
+};
+/* dynamically loadable translation table, entry in dyntt list */
+typedef struct dyntt_s {
 	STRING path;
 	TRANTABLE tt; /* when loaded */
 	BOOLEAN loadfailure;
-};
+} *DYNTT;
 
 /* step of a translation, either iconv_src or trantble is NULL */
-struct xlat_step_s {
+typedef struct xlat_step_s {
 	STRING iconv_src;
 	STRING iconv_dest;
-	struct tt_s * ptt;
-};
+	DYNTT dyntt;
+} *XLSTEP;
 
 
 /*********************************************
@@ -44,24 +53,28 @@ struct xlat_step_s {
  *********************************************/
 
 /* alphabetical */
+static void add_dyntt_step(XLAT xlat, DYNTT dyntt);
 static INT check_tt_name(CNSTRING filename, ZSTR * pzsrc, ZSTR * pzdest);
-static struct xlat_step_s * create_iconv_step(CNSTRING src, CNSTRING dest);
-static struct xlat_step_s * create_tt_step(struct tt_s *ptt);
+static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
+static XLSTEP create_dyntt_step(DYNTT dyntt);
+static XLAT create_null_xlat(void);
 static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
-static void free_tts(void);
+static DYNTT create_dyntt(TRANTABLE tt, STRING path);
+static void free_dyntts(void);
 static void free_xlat(XLAT xlat);
-static struct tt_s * get_conversion_tt(CNSTRING src, CNSTRING dest);
-static struct tt_s * get_subcoding_tt(CNSTRING codeset, CNSTRING subcoding);
-static void load_tt_if_needed(struct tt_s *ptt);
-static void load_ttlist_from_dir(STRING dir);
+static DYNTT get_conversion_dyntt(CNSTRING src, CNSTRING dest);
+static DYNTT get_subcoding_dyntt(CNSTRING codeset, CNSTRING subcoding);
+static void load_dyntt_if_needed(DYNTT dyntt);
+static void load_dynttlist_from_dir(STRING dir);
 static int select_tts(const struct dirent *entry);
+static void zero_dyntt(DYNTT dyntt);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static LIST f_xlats=0;
-static TABLE f_tts=0;
+static LIST f_xlats=0; /* cache of conversions */
+static TABLE f_dyntts=0; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
 
 /*********************************************
@@ -75,21 +88,32 @@ static char f_ttext[] = ".tt";
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 static XLAT
-create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
+create_null_xlat (void)
 {
 	/* create & initialize new xlat */
 	XLAT xlat = (XLAT)malloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
 	xlat->steps = create_list();
 	set_list_type(xlat->steps, LISTDOFREE);
-	xlat->src = strsave(src);
-	xlat->dest = strsave(dest);
-	xlat->adhoc = adhoc;
-	/* add xlat to cache */
 	if (!f_xlats) {
 		f_xlats = create_list();
 	}
 	enqueue_list(f_xlats, xlat);
+	return xlat;
+}
+/*==========================================================
+ * create_xlat -- Create a new translation
+ * (also adds to cache)
+ * Created: 2002/11/25 (Perry Rapp)
+ *========================================================*/
+static XLAT
+create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
+{
+	/* create & initialize new xlat */
+	XLAT xlat = create_null_xlat();
+	xlat->src = strsave(src);
+	xlat->dest = strsave(dest);
+	xlat->adhoc = adhoc;
 	return xlat;
 }
 /*==========================================================
@@ -99,13 +123,13 @@ create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 static void
 free_xlat (XLAT xlat)
 {
-	struct xlat_step_s * xstep=0;
+	XLSTEP xstep=0;
 	/* free each step */
 	FORLIST(xlat->steps, el)
-		xstep = (struct xlat_step_s *)el;
+		xstep = (XLSTEP)el;
 		strfree(&xstep->iconv_src);
 		strfree(&xstep->iconv_dest);
-		xstep->ptt = 0;
+		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
 	make_list_empty(xlat->steps);
 	remove_list(xlat->steps, 0);
@@ -114,28 +138,41 @@ free_xlat (XLAT xlat)
  * create_iconv_step -- Create an iconv step of a translation chain
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
-static struct xlat_step_s *
+static XLSTEP
 create_iconv_step (CNSTRING src, CNSTRING dest)
 {
-	struct xlat_step_s *xstep;
-	xstep = (struct xlat_step_s * )malloc(sizeof(*xstep));
+	XLSTEP xstep;
+	xstep = (XLSTEP )malloc(sizeof(*xstep));
 	memset(xstep, 0, sizeof(*xstep));
 	xstep->iconv_dest = strsave(dest);
 	xstep->iconv_src = strsave(src);
 	return xstep;
 }
 /*==========================================================
- * create_tt_step -- Create a tt step of a translation chain
+ * create_dyntt_step -- Create a tt step of a translation chain
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
-static struct xlat_step_s *
-create_tt_step (struct tt_s *ptt)
+static XLSTEP
+create_dyntt_step (DYNTT dyntt)
 {
-	struct xlat_step_s *xstep;
-	xstep = (struct xlat_step_s * )malloc(sizeof(*xstep));
+	XLSTEP xstep;
+	xstep = (XLSTEP )malloc(sizeof(*xstep));
 	memset(xstep, 0, sizeof(*xstep));
-	xstep->ptt = ptt;
+	xstep->dyntt = dyntt;
 	return xstep;
+}
+/*==========================================================
+ * create_dyntt -- Create record for dynamcially loading TRANTABLE
+ * Created: 2002/12/10 (Perry Rapp)
+ *========================================================*/
+static DYNTT
+create_dyntt (TRANTABLE tt, STRING path)
+{
+	DYNTT dyntt = (DYNTT)malloc(sizeof(*dyntt));
+	memset(dyntt, 0, sizeof(*dyntt));
+	dyntt->tt = tt;
+	dyntt->path = strsave(path);
+	return dyntt;
 }
 /*==========================================================
  * xl_get_xlat -- Find translation between specified codesets
@@ -148,19 +185,18 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	XLAT xlat=0;
 	ZSTR zsrc=0, zdest=0;
 	LIST srcsubs=0, destsubs=0;
-	struct tt_s * ptt=0;
-	struct xlat_step_s * xstep=0;
 	STRING subcoding=0;
 	
-	if (!src || !src[0] || !dest || !dest[0])
-		return 0;
+	if (!src || !src[0] || !dest || !dest[0]) {
+		return create_null_xlat();
+	}
 
 	/* first check existing cache */
 	if (f_xlats) {
 		XLAT xlattemp;
 		FORLIST(f_xlats, el)
 			xlattemp = (XLAT)el;
-			if (eqstr(xlattemp->src, src) && eqstr(xlattemp->dest, dest)) {
+			if (eqstr_ex(xlattemp->src, src) && eqstr_ex(xlattemp->dest, dest)) {
 				return xlattemp;
 			}
 		ENDLIST
@@ -178,96 +214,104 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	xl_parse_codeset(src, &zsrc, &srcsubs);
 	xl_parse_codeset(dest, &zdest, &destsubs);
 
+	/* in source codeset, do subcodings requested by destination */
+	/* eg, if going from UTF-8 to GUI, transliterations done in UTF-8 first */
 	if (destsubs) {
 		FORLIST(destsubs, el)
 			subcoding = (STRING)el;
-			ptt = get_subcoding_tt(zs_str(zsrc), subcoding);
-			if (ptt) {
-				load_tt_if_needed(ptt);
-				if (!ptt->loadfailure) {
-					xstep = create_tt_step(ptt);
-					enqueue_list(xlat->steps, xstep);
-				}
-			}
+			add_dyntt_step(xlat
+				, get_subcoding_dyntt(zs_str(zsrc), subcoding));
 		ENDLIST
 	}
 
+	/* do main codeset conversion, prefering iconv if available */
 	if (iconv_can_trans(zs_str(zsrc), zs_str(zdest))) {
-		xstep = create_iconv_step(src, dest);
+		XLSTEP xstep = create_iconv_step(src, dest);
 		enqueue_list(xlat->steps, xstep);
 	} else {
-		ptt = get_conversion_tt(zs_str(zsrc), zs_str(zdest));
-		if (ptt) {
-			load_tt_if_needed(ptt);
-			if (!ptt->loadfailure) {
-				xstep = create_tt_step(ptt);
-				enqueue_list(xlat->steps, xstep);
-			}
-		}
+		add_dyntt_step(xlat
+			, get_conversion_dyntt(zs_str(zsrc), zs_str(zdest)));
 	}
 
+	/* in destination codeset, do subcodings requested by source */
+	/* eg, if going from GUI into UTF-8, transliterations undone in UTF-8 last */
 	if (srcsubs) {
 		FORLIST(srcsubs, el)
 			subcoding = (STRING)el;
-			ptt = get_subcoding_tt(zs_str(zdest), subcoding);
-			if (ptt) {
-				load_tt_if_needed(ptt);
-				if (!ptt->loadfailure) {
-					xstep = create_tt_step(ptt);
-					enqueue_list(xlat->steps, xstep);
-				}
-			}
+			add_dyntt_step(xlat
+				, get_subcoding_dyntt(zs_str(zdest), subcoding));
 		ENDLIST
 	}
 
-	/*
-	TODO: 2002-11-25
-	check table of conversions in ttdir
-	*/
 	return xlat;
 }
 /*==========================================================
- * get_conversion_tt -- get tt entry for code conversion, if in tt list
+ * xl_get_null_xlat -- Get placeholder translation
+ *  (These are used for special purposes like custom sort table)
+ * Created: 2002/12/13 (Perry Rapp)
+ *========================================================*/
+XLAT
+xl_get_null_xlat (void)
+{
+	return create_null_xlat();
+}
+/*==========================================================
+ * add_dyntt_step -- Add dynamic translation table step
+ *  to end of translation chain (xlat)
+ * Created: 2002/12/10 (Perry Rapp)
+ *========================================================*/
+static void
+add_dyntt_step (XLAT xlat, DYNTT dyntt)
+{
+	if (!dyntt) return;
+	load_dyntt_if_needed(dyntt);
+	if (!dyntt->loadfailure) {
+		XLSTEP xstep = create_dyntt_step(dyntt);
+		enqueue_list(xlat->steps, xstep);
+	}
+}
+/*==========================================================
+ * get_conversion_dyntt -- get dyntt entry for code conversion, if in dyntt list
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
-static struct tt_s *
-get_conversion_tt (CNSTRING src, CNSTRING dest)
+static DYNTT
+get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 {
-	struct tt_s * ptt;
+	DYNTT dyntt;
 	ZSTR zttname = zs_news(src);
 	zs_appc(&zttname, '_');
 	zs_apps(&zttname, dest);
-	ptt = (struct tt_s *)valueof_ptr(f_tts, zs_str(zttname));
+	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
 	zs_free(&zttname);
-	return ptt;
+	return dyntt;
 }
 /*==========================================================
- * get_subcoding_tt -- get tt entry for subcoding, if in tt list
+ * get_subcoding_dyntt -- get dyntt entry for subcoding, if in dyntt list
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
-static struct tt_s *
-get_subcoding_tt (CNSTRING codeset, CNSTRING subcoding)
+static DYNTT
+get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
 {
-	struct tt_s * ptt;
+	DYNTT dyntt;
 	ZSTR zttname = zs_news(codeset);
 	zs_apps(&zttname, "__");
 	zs_apps(&zttname, subcoding);
-	ptt = (struct tt_s *)valueof_ptr(f_tts, zs_str(zttname));
+	dyntt = (DYNTT)valueof_ptr(f_dyntts, zs_str(zttname));
 	zs_free(&zttname);
-	return ptt;
+	return dyntt;
 }
 /*==========================================================
- * load_tt_if_needed -- load tt from disk (unless already loaded)
+ * load_dyntt_if_needed -- load dyntt from disk (unless already loaded)
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
 static void
-load_tt_if_needed (struct tt_s *ptt)
+load_dyntt_if_needed (DYNTT dyntt)
 {
 	ZSTR zerr=0;
-	if (ptt->tt || ptt->loadfailure)
+	if (dyntt->tt || dyntt->loadfailure)
 		return;
-	if (!init_map_from_file(ptt->path, ptt->path, &ptt->tt, &zerr)) {
-		ptt->loadfailure = TRUE;
+	if (!init_map_from_file(dyntt->path, dyntt->path, &dyntt->tt, &zerr)) {
+		dyntt->loadfailure = TRUE;
 	}
 }
 /*==========================================================
@@ -278,11 +322,11 @@ BOOLEAN
 xl_do_xlat (XLAT xlat, ZSTR * pzstr)
 {
 	BOOLEAN cvtd=FALSE;
-	struct xlat_step_s * xstep=0;
+	XLSTEP xstep=0;
 	if (!xlat || !xlat->steps) return cvtd;
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
-		xstep = (struct xlat_step_s *)el;
+		xstep = (XLSTEP)el;
 		if (xstep->iconv_src) {
 			/* an iconv step */
 			ZSTR ztemp=0;
@@ -293,9 +337,10 @@ xl_do_xlat (XLAT xlat, ZSTR * pzstr)
 			} else {
 				/* iconv failed, anything to do ? */
 			}
-		} else if (xstep->ptt) {
+		} else if (xstep->dyntt) {
 			/* a custom translation table step */
-			custom_translate(pzstr, xstep->ptt->tt);
+			if (xstep->dyntt->tt)
+				custom_translate(pzstr, xstep->dyntt->tt);
 		}
 	ENDLIST
 	return cvtd;
@@ -306,30 +351,30 @@ xl_do_xlat (XLAT xlat, ZSTR * pzstr)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 void
-xl_load_all_tts (CNSTRING ttpath)
+xl_load_all_dyntts (CNSTRING ttpath)
 {
 	STRING dirs,p;
-	free_tts();
+	free_dyntts();
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_tts = create_table();
+	f_dyntts = create_table();
 	dirs = (STRING)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
 	/* now process each directory */
 	for (p=dirs; *p; p+=strlen(p)+1) {
-		load_ttlist_from_dir(p);
+		load_dynttlist_from_dir(p);
 	}
 	strfree(&dirs);
 
 }
 /*==========================================================
- * load_ttlist_from_dir -- Get list of all translation tables in 
+ * load_dynttlist_from_dir -- Get list of all translation tables in 
  *  specified directory
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 static void
-load_ttlist_from_dir (STRING dir)
+load_dynttlist_from_dir (STRING dir)
 {
 	struct dirent **programs;
 	INT n = scandir(dir, &programs, select_tts, alphasort);
@@ -346,11 +391,12 @@ load_ttlist_from_dir (STRING dir)
 			UTF-8__HTML (type 2; subcoding)
 		*/
 		if (ntype==1 || ntype==2) {
-			if (!valueof_ptr(f_tts, zs_str(zfile))) {
-				struct tt_s *ptt = (struct tt_s *)malloc(sizeof(*ptt));
-				memset(ptt, 0, sizeof(*ptt));
-				ptt->path = concat_path_alloc(dir, ttfile);
-				insert_table_ptr(f_tts, strsave(zs_str(zfile)), ptt);
+			if (!valueof_ptr(f_dyntts, zs_str(zfile))) {
+				TRANTABLE tt=0; /* will be loaded when needed */
+				STRING path = concat_path_alloc(dir, ttfile);
+				DYNTT dyntt = create_dyntt(tt, path);
+				strfree(&path);
+				insert_table_ptr(f_dyntts, strsave(zs_str(zfile)), dyntt);
 			}
 		}
 		zs_free(&zfile);
@@ -450,7 +496,7 @@ xl_free_adhoc_xlats (void)
 void
 xl_free_xlats (void)
 {
-    XLAT xlattemp;
+	XLAT xlattemp;
 	if (!f_xlats)
 		return;
 	FORLIST(f_xlats, el)
@@ -462,28 +508,39 @@ xl_free_xlats (void)
 	f_xlats = 0;
 }
 /*==========================================================
- * free_tts -- Free table of translation tables
+ * free_dyntts -- Free table of dynamic translation tables
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 static void
-free_tts (void)
+free_dyntts (void)
 {
-	if (f_tts) {
+	if (f_dyntts) {
 		struct table_iter_s tabit;
-		if (begin_table(f_tts, &tabit)) {
+		xl_free_xlats(); /* xlats point into f_dyntts */
+		if (begin_table(f_dyntts, &tabit)) {
 			VPTR ptr;
 			STRING key;
 			while (next_table_ptr(&tabit, &key, &ptr)) {
-				struct tt_s * ptt = (struct tt_s *)ptr;
-				strfree(&ptt->path);
-				remove_trantable(ptt->tt);
-				ptt->tt = 0;
+				DYNTT dyntt = (DYNTT)ptr;
+				zero_dyntt((DYNTT)ptr);
 			}
 		}
-		remove_table(f_tts, FREEBOTH);
-		f_tts = 0;
-		xl_free_xlats();
+		remove_table(f_dyntts, FREEBOTH);
+		f_dyntts = 0;
 	}
+}
+/*==========================================================
+ * zero_dyntt -- Empty (free) contents of a dyntt
+ *  NB: This does not free the dyntt memory itself
+ *  b/c that is handled in the f_dyntts cache table
+ * Created: 2002/12/13 (Perry Rapp)
+ *========================================================*/
+static void
+zero_dyntt (DYNTT dyntt)
+{
+	strfree(&dyntt->path);
+	remove_trantable(dyntt->tt);
+	dyntt->tt = 0;
 }
 /*==========================================================
  * xl_parse_codeset -- Parse out subcode suffixes of a codeset
@@ -523,4 +580,54 @@ xl_parse_codeset (CNSTRING codeset, ZSTR * zcsname, LIST * subcodes)
 			p = p+1; /* so we jump over both slashes */
 		}
 	}
+}
+/*==========================================================
+ * xl_set_name -- Store English name in xlat
+ *  This is just for debugging convenience
+ * Created: 2002/12/10 (Perry Rapp)
+ *========================================================*/
+void
+xl_set_name (XLAT xlat, CNSTRING name)
+{
+	strupdate(&xlat->name, name);
+}
+/*==========================================================
+ * xlat_get_description -- Fetch description of a translation
+ *  eg, "3 steps with iconv(UTF-8, CP1252)"
+ * Created: 2002/12/13 (Perry Rapp)
+ *========================================================*/
+ZSTR
+xlat_get_description (XLAT xlat)
+{
+	INT count=0, iconv_count=0;
+	ZSTR zrtn=0;  /* final string to return */
+	ZSTR zstr=0; /* string with details of iconv conversions */
+	char stepcount[32];
+	XLSTEP xstep=0;
+	if (!xlat || !xlat->steps) return zs_news(_("(no conversion)"));
+	/* simply cycle through & perform each step */
+	FORLIST(xlat->steps, el)
+		xstep = (XLSTEP)el;
+		++count;
+		if (xstep->iconv_src) {
+			/* an iconv step */
+			if (zs_len(zstr)) zs_apps(&zstr, ", ");
+			zs_apps(&zstr, "iconv(");
+			zs_apps(&zstr, xstep->iconv_src);
+			zs_apps(&zstr, ",");
+			zs_apps(&zstr, xstep->iconv_dest);
+			zs_apps(&zstr, ")");
+		} else if (xstep->dyntt) {
+			if (zs_len(zstr)) zs_apps(&zstr, ", ");
+			zs_apps(&zstr, "tt(");
+			zs_apps(&zstr, tt_get_name(xstep->dyntt->tt));
+			zs_apps(&zstr, ")");
+		}
+	ENDLIST
+	snprintf(stepcount, sizeof(stepcount), _pl("%d step", "%d steps", count), count);
+	zs_sets(&zrtn, stepcount);
+	zs_apps(&zrtn, ": ");
+	zs_appz(&zrtn, zstr);
+	zs_free(&zstr);
+	return zrtn;
 }

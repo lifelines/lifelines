@@ -133,7 +133,7 @@ ZSTR zprintpic3(CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3);
 
 /* stdstrng.c */
 INT chartype(INT);
-BOOLEAN eqstr_ex(STRING s1, STRING s2);
+BOOLEAN eqstr_ex(CNSTRING s1, CNSTRING s2);
 BOOLEAN isasciiletter(INT c);
 BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);
