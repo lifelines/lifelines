@@ -1,3 +1,11 @@
+2002-10-07 Perry Rapp
+
+	* ChangeLog src/hdrs/liflines.h src/interp/builtin.c
+	src/interp/more.c src/liflines/ask.c src/liflines/browse.c
+	src/liflines/llexec.c:
+
+	Fix llexec.c to compile, and implement ask_for_int, ask_for_string, and ask_for_dbname.
+
 2002-10-06 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

@@ -106,7 +106,10 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!msg)
 		msg = _("Enter integer for program");
-	val = ask_for_int(msg);
+	if (!ask_for_int(msg, &val)) {
+		*eflg = TRUE;
+		return NULL;
+	}
 	assign_iden(stab, iident(arg), create_pvalue_from_int(val));
 	if (mval) delete_pvalue(mval);
 	return NULL;

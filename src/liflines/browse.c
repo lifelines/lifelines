@@ -944,8 +944,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			advanced_family_edit(nztop(current));
 			break;
 		case CMD_BROWSE_FAM:
-			i = ask_for_int(_(qSidfamk));
-			if(i > 0) {
+			if (ask_for_int(_(qSidfamk), &i) && (i>0)) {
 				if ((tmp = qkeynum_to_frecord(i)))
 					current = tmp;
 				else message(_(qSnofam));

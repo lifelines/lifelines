@@ -605,6 +605,7 @@ call_system_cmd (STRING cmd)
 #endif
 	system(cmd);
 }
+extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
 FILE *
 ask_for_program (STRING mode,
                  STRING ttl,
@@ -628,18 +629,49 @@ ask_for_output_file (STRING mode,
 	/* TODO: Do we want to steal the existing one, but reimplement underneath ? */
 	return NULL;
 }
-/* TODO: some UI stuff that needs to be implemented */
-INT
-ask_for_int (STRING ttl)
+BOOLEAN
+ask_for_int (STRING ttl, INT * prtn)
 {
-	/* TODO */
-	return 0;
+	INT ival, c, neg;
+	char buffer[MAXPATHLEN];
+	while (TRUE) {
+		STRING p = buffer;
+		if (!ask_for_string(ttl, _(qSaskint), buffer, sizeof(buffer)))
+			return FALSE;
+		neg = 1;
+		while (iswhite(*p++))
+			;
+		--p;
+		if (*p == '-') {
+			neg = -1;
+			p++;
+			while (iswhite(*p++))
+				;
+			--p;
+		}
+		if (chartype(*p) == DIGIT) {
+			ival = *p++ - '0';
+			while (chartype(c = *p++) == DIGIT)
+				ival = ival*10 + c - '0';
+			--p;
+			while (iswhite(*p++))
+				;
+			--p;
+			if (*p == 0) {
+				*prtn = ival*neg;
+				return TRUE;
+			}
+		}
+	}
 }
 BOOLEAN
 ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 {
-	/* TODO */
-	return FALSE;
+	printf(ttl); printf("\n");
+	printf(prmpt);
+	fgets(buffer, buflen, stdin);
+	chomp(buffer);
+	return strlen(buffer)>0;
 }
 STRING
 ask_for_indi_key (STRING ttl,
@@ -670,10 +702,51 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 	but calls thru to something curses-specific */
 	return NULL;
 }
+/* send string to output, & terminate line */
+static void
+outputln (const char * txt)
+{
+	printf(txt);
+	printf("\n");
+}
+/* send string to output */
+static void
+output (const char * txt)
+{
+	printf(txt);
+}
+static INT
+interact (STRING ptrn)
+{
+	char buffer[2];
+	STRING t;
+	while (1) {
+		fgets(buffer, sizeof(buffer), stdin);
+		for (t=ptrn; *t; ++t) {
+			if (buffer[0]==*t)
+				return buffer[0];
+		}
+		printf("Invalid option: choose one of %s\n", ptrn);
+	}
+}
+static INT
+ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
+{
+	INT rv;
+	outputln(msg);
+	outputln(ttl);
+	output(prmpt);
+	rv = interact(ptrn);
+	return rv;
+}
 BOOLEAN
 ask_yes_or_no_msg (STRING msg, STRING ttl)
 {
-	/* TODO */
+	STRING ptr;
+	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
+	for (ptr = _(qSaskyY); *ptr; ptr++) {
+		if (c == *ptr) return TRUE;
+	}
 	return FALSE;
 }
 INT
@@ -699,8 +772,7 @@ choose_from_list (STRING ttl, LIST list)
 BOOLEAN
 ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
 {
-	/* TODO */
-	return FALSE;
+	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
 INT
 choose_list_from_indiseq (STRING ttl, INDISEQ seq)

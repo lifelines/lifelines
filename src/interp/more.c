@@ -51,7 +51,8 @@
  *********************************************/
 
 extern STRING qSnotone, qSifone, progname;
-extern STRING nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
+extern STRING nonint1,nonintx,nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
+extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 
 /*********************************************
  * local function prototypes
@@ -786,7 +787,7 @@ __nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, indi, nonind1, "nextindi");
+		prog_var_error(node, stab, arg, NULL, nonind1, "nextindi");
 		return NULL;
 	}
 	if (!indi)
@@ -808,7 +809,7 @@ __previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, indi, nonind1, "previndi");
+		prog_var_error(node, stab, arg, NULL, nonind1, "previndi");
 		return NULL;
 	}
 	if (!indi)
@@ -854,7 +855,7 @@ __nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, indi, nonfam1, "nextfam");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "nextfam");
 		return NULL;
 	}
 	if (!fam)
@@ -876,7 +877,7 @@ __prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, indi, nonfam1, "prevfam");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "prevfam");
 		return NULL;
 	}
 	if (!fam)
@@ -1055,7 +1056,7 @@ __savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonrec1, "savenode");
+		prog_var_error(node, stab, arg, val, nonnod1, "savenode");
 		return NULL;
 	}
 	line = (NODE) pvalue(val);

@@ -111,15 +111,15 @@ ask_for_fam (STRING pttl, STRING sttl)
  * titl: [IN]  prompt title
  * TODO: change to BOOLEAN return for failure
  *=========================================*/
-INT
-ask_for_int (STRING ttl)
+BOOLEAN
+ask_for_int (STRING ttl, INT * prtn)
 {
 	INT ival, c, neg;
 	char buffer[MAXPATHLEN];
 	while (TRUE) {
 		STRING p = buffer;
 		if (!ask_for_string(ttl, _(qSaskint), buffer, sizeof(buffer)))
-			continue; /* TODO: provide failure handling */
+			return FALSE;
 		neg = 1;
 		while (iswhite(*p++))
 			;
@@ -139,7 +139,10 @@ ask_for_int (STRING ttl)
 			while (iswhite(*p++))
 				;
 			--p;
-			if (*p == 0) return ival*neg;
+			if (*p == 0) {
+				*prtn = ival*neg;
+				return TRUE;
+			}
 		}
 	}
 }
