@@ -35,6 +35,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "gedcomi.h"
+#include "mystring.h" /* fi_chrcmp */
 
 /*********************************************
  * external/imported variables
@@ -545,13 +546,15 @@ BOOLEAN
 piecematch (STRING part,
             STRING comp)
 {
-	if(opt_finnish) {
-	  if(fi_chrcmp(*part++, *comp++) != 0) return FALSE;
+	/* TODO: This must be fixed for Unicode 2003-04-12, Perry */
+	/* Why is Finnish using case-insensitive, but regular using case-sensitive ? */
+	if (opt_finnish) {
+		if (fi_chrcmp(*part++, *comp++) != 0) return FALSE;
 	} else {
-	  if (*part++ != *comp++) return FALSE;
+		if (*part++ != *comp++) return FALSE;
 	}
 	while (*part && *comp) {
-		if(opt_finnish) {
+		if (opt_finnish) {
 			if (fi_chrcmp(*part, *comp++) == 0) part++;
 		} else {
 			if (*part == *comp++) part++;

@@ -15,6 +15,11 @@
 #include "llstdlib.h"
 #include "arch.h" /* vsnprintf */
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
+
 
 /*==================================
  * llstrapp -- llstrncat except limit includes existing string

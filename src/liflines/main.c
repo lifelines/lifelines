@@ -273,10 +273,10 @@ main (INT argc, char **argv)
 prompt_for_db:
 
 	/* catch any fault, so we can close database */
-	if (debugmode)
-		stdstring_hardfail();
-	else
+	if (!debugmode)
 		set_signals();
+	else /* developer wants to drive without seatbelt! */
+		stdstring_hardfail();
 
 	/* Initialize Curses UI */
 	if (!init_curses_ui())

@@ -13,6 +13,11 @@
 #include "arch.h" /* vsnprintf */
 #include "zstr.h"
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
+
 static void dbgchk(ZSTR);
 static unsigned int safelen(const char *txt);
 static void zalloc(ZSTR zstr, unsigned int newmax);

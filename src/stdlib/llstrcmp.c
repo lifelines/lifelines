@@ -27,6 +27,7 @@
 #endif
 #include "zstr.h"
 #include "stdlibi.h"
+#include "mystring.h" /* MY_STRCMP */
 
 extern int opt_finnish;
 

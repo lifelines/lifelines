@@ -1,9 +1,17 @@
 2003-04-13 Perry Rapp
 
-	*
+	* ChangeLog src/btree/record.c src/gedlib/names.c
 
 	Move string for missing names, and & soundex-specific code, up from
 	getsurname_impl to its callers.
+
+	* ChangeLog src/gedlib/indiseq.c src/gedlib/names.c
+	src/hdrs/llstdlib.h src/hdrs/mystring.h src/hdrs/standard.h
+	src/liflines/main.c src/stdlib/llstrcmp.c
+	src/stdlib/mystring.c src/stdlib/stdstrng.c
+	src/stdlib/strapp.c src/stdlib/strset.c src/stdlib/zstr.c
+
+	Reduce including of mystring.h. Minor refactoring of ll_toupper.
 
 2003-04-11 Stephen Dum
       * ChangeLog docs/ll-reportmanual.xml

@@ -39,6 +39,11 @@
  *********************************************/
 extern BOOLEAN opt_finnish;
 
+/*********************************************
+ * local variables
+ *********************************************/
+
+static int hardfail = 0; /* developer mode to help find bad sign-extensions */
 
 /*********************************************
  * local & exported function definitions
@@ -120,9 +125,9 @@ islinebreak (INT c)
 BOOLEAN
 isletter (INT c)
 {
-	if (opt_finnish) return (lat1_isalpha(c));
+	if (opt_finnish) return lat1_isalpha(c);
 #ifndef OS_NOCTYPE
-	return (isalpha(c));
+	return isalpha(c);
 #else
 	return isasciiletter(c);
 #endif
@@ -141,13 +146,14 @@ isasciiletter (INT c)
 INT
 ll_toupper (INT c)
 {
-	if(opt_finnish) return(lat1_toupper(c));
+	if (opt_finnish) return lat1_toupper(c);
 #ifndef OS_NOCTYPE
-	if(islower(c)) return( toupper(c) );
+	/* use run-time library */
+	if (islower(c)) return toupper(c);
 	return c;
 #else
-	if (c < 'a' || c > 'z') return c;
-	return c + 'A' - 'a';
+	/* use our simple ASCII English function */
+	return asc_toupper(c);
 #endif
 }
 /*==========================================
@@ -156,13 +162,14 @@ ll_toupper (INT c)
 INT
 ll_tolower (INT c)
 {
-	if(opt_finnish) return(lat1_tolower(c));
+	if (opt_finnish) return lat1_tolower(c);
 #ifndef OS_NOCTYPE
-	if(isupper(c)) return( tolower(c) );
-	return(c);
+	/* use run-time library */
+	if (isupper(c)) return tolower(c);
+	return c;
 #else
-	if (c < 'A' || c > 'Z') return c;
-	return c + 'a' - 'A';
+	/* use our simple ASCII English function */
+	return asc_tolower(c);
 #endif
 }
 /*===============================
@@ -261,5 +268,34 @@ INT
 ll_atoi (STRING str, INT defval)
 {
 	return str ? atoi(str) : defval;
+}
+/*==========================================================
+ * stdstring_hardfail -- Set programmer debugging mode
+ *  to coredump if any wrong characters passed to character
+ *  classification routines
+ * Created: 2002/01/24 (Perry Rapp)
+ *========================================================*/
+void
+stdstring_hardfail (void)
+{
+	hardfail = 1;
+}
+/*====================================================
+ * make8char -- coerce input to 8-bit character range
+ * This is to catch any errors passing signed characters
+ *  as signed integers (which gets them sign-extended to the
+ *  negative two billion range!)
+ * Created: 2002/01/24 (Perry Rapp)
+ *==================================================*/
+int
+make8char (int c)
+{
+	if (c<0 || c>255) {
+		if (hardfail) {
+			ASSERT(0);
+		}
+		c = 0;
+	}
+	return c;
 }
 

@@ -14,6 +14,10 @@
 #include "llstdlib.h"
 #include "arch.h" /* vsnprintf */
 
+#ifndef INCLUDED_STDARG_H
+#include <stdarg.h>
+#define INCLUDED_STDARG_H
+#endif
 
 /*==================================
  * llstrset -- llstrncpy adopted to strset/strapp API

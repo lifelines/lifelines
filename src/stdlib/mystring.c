@@ -31,12 +31,10 @@
 #include "mystring.h"
 
 
-static int safechar(int c);
+
 
 extern int opt_finnish;	/* use standard strcmp, strncmp if this is FALSE */
 
-/* developer mode to help find bad sign-extensions */
-static int hardfail = 0;
 
 
 typedef struct {
@@ -354,10 +352,6 @@ const int my_ISO_Latin1_Finnish[] = {
     };
 
 
-/* Is Latin 1 char? */
-#define islat1(c) (0 <= (c) && (c) <= 255)
-
-
 /*====================================
  * lat1_isalpha -- Is a character alphabetic ?
  * Assumes Latin1 character set
@@ -365,8 +359,8 @@ const int my_ISO_Latin1_Finnish[] = {
 int
 lat1_isalpha (const int c1)
 {
-  int c = safechar(c1);
-  return (islat1(c) && (ISO_Latin1[c].isup || ISO_Latin1[c].islow));
+	int c = make8char(c1);
+	return ISO_Latin1[c].isup || ISO_Latin1[c].islow;
 }
 /*====================================
  * lat1_iscntrl -- Is a character in control character range ?
@@ -375,8 +369,8 @@ lat1_isalpha (const int c1)
 int
 lat1_iscntrl (const int c1)
 {
-  int c = safechar(c1);
-  return (islat1(c) && ISO_Latin1[c].iscntrl);
+	int c = make8char(c1);
+	return ISO_Latin1[c].iscntrl;
 }
 /*====================================
  * lat1_islower -- Is a character lowercase ?
@@ -385,8 +379,8 @@ lat1_iscntrl (const int c1)
 int
 lat1_islower (const int c1)
 {
-  int c = safechar(c1);
-  return (islat1(c) && ISO_Latin1[c].islow);
+	int c = make8char(c1);
+	return ISO_Latin1[c].islow;
 }
 /*====================================
  * lat1_isprint -- Is a character printable ?
@@ -395,8 +389,8 @@ lat1_islower (const int c1)
 int
 lat1_isprint (const int c1)
 {
-  int c = safechar(c1);
-  return (islat1(c) && !ISO_Latin1[c].iscntrl);
+	int c = make8char(c1);
+	return !ISO_Latin1[c].iscntrl;
 }
 /*====================================
  * lat1_isupper -- Is a character lowercase ?
@@ -405,8 +399,8 @@ lat1_isprint (const int c1)
 int
 lat1_isupper (const int c1)
 {
-  int c = safechar(c1);
-  return (islat1(c) && ISO_Latin1[c].isup);
+	int c = make8char(c1);
+	return ISO_Latin1[c].isup;
 }
 /*====================================
  * lat1_tolower -- Return lowercase version (or input)
@@ -415,9 +409,8 @@ lat1_isupper (const int c1)
 int
 lat1_tolower (const int c1)
 {
-  int c = safechar(c1);
-  if (islat1(c)) return (ISO_Latin1[c].tolow);
-  return c;
+	int c = make8char(c1);
+	return ISO_Latin1[c].tolow;
 }
 /*====================================
  * lat1_toupper -- Return uppercase version (or input)
@@ -429,12 +422,35 @@ lat1_toupper (const int c1)
   /* BUG: ß is not converted to SS. */
   /* Note that ÿ does not have an   */
   /* uppercase form in ISO Latin 1. */
-  int c = safechar(c1);
-  if (islat1(c)) return (ISO_Latin1[c].toup);
-  return c;
+	int c = make8char(c1);
+	return ISO_Latin1[c].toup;
 }
-
-
+/*====================================
+ * asc_tolower -- Return lowercase version (or input)
+ * Lowercases only ASCII English letters
+ * (Used for traditional soundex)
+ *==================================*/
+int
+asc_tolower (const int c)
+{
+	if (c >= 'A' && c <= 'Z')
+		return c - 'A' + 'a';
+	else
+		return c;
+}
+/*====================================
+ * asc_toupper -- Return uppercase version (or input)
+ * Lowercases only ASCII English letters
+ * (Used for traditional soundex)
+ *==================================*/
+int
+asc_toupper (const int c)
+{
+	if (c >= 'a' && c <= 'z')
+		return c + 'A' - 'a';
+	else
+		return c;
+}
 /*====================================
  * fi_chrcmp -- Compare two characters, Finnish case-insensitive
  * Assumes Latin1 character set
@@ -442,14 +458,9 @@ lat1_toupper (const int c1)
 int
 fi_chrcmp (const int sa1, const int sa2)
 {
-  int s1 = safechar(sa1);
-  int s2 = safechar(sa2);
-  if (islat1(s1) && islat1(s2)) {
-    return (my_ISO_Latin1_Finnish[s1] - my_ISO_Latin1_Finnish[s2]);
-  }
-  else {
-    return (s1 - s2);
-  }
+	int s1 = make8char(sa1);
+	int s2 = make8char(sa2);
+	return (my_ISO_Latin1_Finnish[s1] - my_ISO_Latin1_Finnish[s2]);
 }
 
 
@@ -579,26 +590,3 @@ int main()
   return 0;
 }
 #endif
-/*==========================================================
- * stdstring_hardfail -- Set programmer debugging mode
- *  to coredump if any wrong characters passed to character
- *  classification routines
- * Created: 2002/01/24 (Perry Rapp)
- *========================================================*/
-void
-stdstring_hardfail (void)
-{
-	hardfail = 1;
-}
-/*====================================================
- * safechar -- fix any bad sign-extended characters
- * Created: 2002/01/24 (Perry Rapp)
- *==================================================*/
-static int
-safechar (int c)
-{
-	if (hardfail) {
-		ASSERT(c>0);
-	}
-	return (int)(unsigned char)(c);
-}

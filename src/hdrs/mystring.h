@@ -12,6 +12,8 @@
 #endif
 
 
+int asc_tolower(const int c);
+int asc_toupper(const int c);
 int fi_chrcmp(const int s1, const int s2);
 int lat1_isalpha(const int c);
 int lat1_iscntrl(const int c);
@@ -25,8 +27,6 @@ int my_strncmp(const char *s1,
                 const char *s2,
                 const int n,
                 const int cmp_table[]);
-void stdstring_hardfail(void);
-
 
 extern const int my_ISO_Latin1_Finnish[];
 
