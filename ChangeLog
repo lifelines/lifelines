@@ -22,6 +22,12 @@
 	(this is firing, although I don't know why, but records
 	should be able to handle pointing at wrong cel; nztop handles it).
 
+	* ChangeLog src/gedlib/keytonod.c src/liflines/error.c
+	src/stdlib/signals.c
+
+	Change assert logic so abort is called without shutting down db,
+	if user wants crash dump.
+
 2005-02-12 lifelines beta 3.0.43 RELEASE
 
 2005-02-12 Perry Rapp

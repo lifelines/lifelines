@@ -86,10 +86,12 @@ __fatal (STRING file, int line, CNSTRING details)
 	llwprintf(_("  in file <%s> at line %d\n"), file, line);
 	if (f_currentdb[0])
 		llwprintf("%s: %s\n", _("Current database"), f_currentdb);
+	/* offer crash dump before closing database */
+	ll_abort(_("ASSERT failure"));
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
-	ll_abort(_("ASSERT failure"));
 	failing=FALSE;
+	exit(1);
 }
 /*===============================
  * __crashlog -- Details preceding a fatal error

@@ -1440,5 +1440,7 @@ cel_remove_record (CACHEEL cel, RECORD rec)
 	ASSERT(rec);
 	if (crecord(cel) == rec) {
 		crecord(cel) = 0;
+	} else {
+		ASSERT(0);
 	}
 }

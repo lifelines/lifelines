@@ -163,9 +163,11 @@ on_signals (int sig)
 	zstr = zprintpic2(_(qSsignal), signum, signame); 
 	ll_abort(zs_str(zstr));
 	zs_free(&zstr);
+	exit(1);
 }
 /*================================
- * ll_abort -- print msg & stop
+ * ll_abort -- print msg & stop if caller wants to abort
+ * else return (& caller should exit)
  *  caller translated msg
  *===============================*/
 void
@@ -184,8 +186,6 @@ ll_abort (STRING sigdesc)
 	putchar(ch);
 	if (is_yes(ch))
 		abort();
-	else
-		exit(1);
 }
 /*==================================================
  * is_yes -- is this an abbreviated yes answer ?
