@@ -25,7 +25,7 @@ RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 
 /* screen.c */
 INT choose_from_array(STRING, INT, STRING*);
-INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
+INT choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void view_array(STRING ttl, INT no, STRING *pstrngs);
 

@@ -28,9 +28,10 @@
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
 
+#include <stdarg.h>
 #include "standard.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "arch.h"
 #include "llstdlib.h"
 

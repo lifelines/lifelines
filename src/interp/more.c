@@ -502,7 +502,10 @@ __choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	newseq = copy_indiseq(seq);
 	msg = (length_indiseq(newseq) > 1) ? notone : ifone;
-	newseq = (INDISEQ) choose_list_from_indiseq(msg, newseq);
+	if (-1 == choose_list_from_indiseq(msg, newseq)) {
+		remove_indiseq(newseq);
+		newseq = NULL;
+	}
 	return create_pvalue(PSET, (VPTR)newseq);
 }
 /*=========================================================+

@@ -88,54 +88,70 @@
 typedef struct uiwindow_s {
 	WINDOW * win;      /* curses window */
 	struct uiwindow_s * parent; /* fixed or dynamic parent */
+	struct uiwindow_s * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
-} UIWINDOW;
+} * UIWINDOW;
 #define uiw_win(x)      (x->win)
 #define uiw_parent(x)   (x->parent)
+#define uiw_child(x)    (x->child)
 #define uiw_permsub(x)  (x->permsub)
 
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
 extern INT cur_screen;
-extern UIWINDOW *stdout_win;
-extern UIWINDOW *main_win;
-extern UIWINDOW *ask_win;
-extern UIWINDOW *ask_msg_win;
-extern UIWINDOW *choose_from_list_win;
-extern UIWINDOW *start_menu_win;
-extern UIWINDOW *add_menu_win;
-extern UIWINDOW *del_menu_win;
-extern UIWINDOW *scan_menu_win;
-extern UIWINDOW *utils_menu_win;
+extern UIWINDOW stdout_win;
+extern UIWINDOW main_win;
+extern UIWINDOW ask_win;
+extern UIWINDOW ask_msg_win;
+extern UIWINDOW choose_from_list_win;
+extern UIWINDOW start_menu_win;
+extern UIWINDOW add_menu_win;
+extern UIWINDOW del_menu_win;
+extern UIWINDOW scan_menu_win;
+extern UIWINDOW utils_menu_win;
 
 /* Function Prototype */
-INT aux_browse(NODE, INT mode, BOOLEAN reuse);
+/* screen.c */
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
-STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
 STRING ask_for_db_filename(STRING, STRING, STRING);
-STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
-STRING get_answer (UIWINDOW*, STRING);
+STRING get_answer (UIWINDOW, STRING);
 int init_screen(void);
-INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
-void llvwprintf(STRING fmt, va_list args);
 void main_menu(void);
 STRING message_string (void);
 void paint_main_screen(void);
-void paint_screen(INT screen);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
-void show_horz_line(UIWINDOW*, INT, INT, INT);
-void show_vert_line(UIWINDOW*, INT, INT, INT);
-void shw_array_of_strings(UIWINDOW*, STRING*, INT, INT, INT);
+void repaint_footer_menu(INT screen);
+void show_horz_line(UIWINDOW, INT, INT, INT);
+void show_indi(UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
+	, int width, INT * scroll, BOOLEAN reuse);
+void show_indi_main(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
+void show_indi_vitals(UIWINDOW uiwin, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
+void show_vert_line(UIWINDOW, INT, INT, INT);
+void shw_array_of_strings(UIWINDOW, STRING*, INT, INT, INT);
 void term_screen(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);
 void wfield(INT, INT, STRING);
 void wpos (INT, INT);
+
+/* show.c (curses specific) */
+void show_ancestors (UIWINDOW uiwin, NODE indi, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse);
+void show_aux(UIWINDOW uiwin, NODE, INT mode, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse);
+void show_descendants(UIWINDOW uiwin, NODE indi, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse);
+void show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
+	, INT width, INT *scroll, BOOLEAN reuse);
+void show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse);
+extern INT Scroll1;
+
 
 #ifndef _FEEDBACK_H
 #include "feedback.h"

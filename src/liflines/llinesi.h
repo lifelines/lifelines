@@ -95,6 +95,7 @@ RECORD refn_scan(void);
 
 /* screen.c */
 void adjust_menu_height(INT delta);
+INT aux_browse(NODE, INT mode, BOOLEAN reuse);
 void cycle_menu(void);
 void display_2fam(NODE fam1, NODE fam2, INT mode);
 void display_2indi(NODE indi1, NODE indi2, INT mode);
@@ -104,22 +105,15 @@ INT interact_2fam(void);
 INT interact_2indi(void);
 INT interact_fam(void);
 INT interact_indi(void);
+INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
 void lock_status_msg(BOOLEAN lock);
 void toggle_menu(void);
 
 /* show.c */
 extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
 void display_cache_stats(void);
-void show_aux_display(NODE, INT mode, INT hgt, BOOLEAN reuse);
-void show_ancestors(NODE indi, INT row, INT hgt, BOOLEAN reuse);
 void show_childnumbers(void);
-void show_descendants(NODE indi, INT row, INT hgt, BOOLEAN reuse);
-void show_gedcom_main(NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
 void show_list(INDISEQ, INT, INT, INT);
-void show_long_family(NODE, INT row, INT hgt, INT width, BOOLEAN reuse);
-	/* we pass a UIWINDOW * here as void * to avoid pulling curses into this */
-void show_person(void * win, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
-void show_person_main(NODE, INT row, INT hgt, BOOLEAN reuse);
 void show_reset_scroll(void);
 void show_sour_display(NODE, INT, INT);
 void show_scroll(INT delta);

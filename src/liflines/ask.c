@@ -39,7 +39,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 #include "llinesi.h"
 
@@ -333,8 +333,13 @@ ask_for_indi_list_once (STRING ttl,
                         INT *prc)
 {
 	INDISEQ seq = ask_for_indiseq(ttl, prc);
+	INT rv;
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
-	seq = choose_list_from_indiseq(notone, seq);
+	rv = choose_list_from_indiseq(notone, seq);
+	if (rv == -1) {
+		remove_indiseq(seq);
+		seq = NULL;
+	}
 	*prc = seq ? RC_SELECT : RC_NOSELECT;
 	return seq;
 }

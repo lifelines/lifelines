@@ -82,16 +82,16 @@ INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 BOOLEAN stdout_vis = FALSE;
 INT cur_screen = 0;
-UIWINDOW *main_win = NULL;
-UIWINDOW *stdout_win=NULL, *stdout_box_win=NULL;
-UIWINDOW *debug_win=NULL, *debug_box_win=NULL;
-UIWINDOW *ask_win=NULL, *ask_msg_win=NULL;
-UIWINDOW *choose_from_list_win=NULL;
-UIWINDOW *add_menu_win=NULL, *del_menu_win=NULL;
-UIWINDOW *scan_menu_win=NULL, *cset_menu_win=NULL, *rpt_cset_menu_win=NULL;
-UIWINDOW *utils_menu_win=NULL, *tt_menu_win=NULL;
-UIWINDOW *trans_menu_win=NULL;
-UIWINDOW *extra_menu_win=NULL;
+UIWINDOW main_win = NULL;
+UIWINDOW stdout_win=NULL, stdout_box_win=NULL;
+UIWINDOW debug_win=NULL, debug_box_win=NULL;
+UIWINDOW ask_win=NULL, ask_msg_win=NULL;
+UIWINDOW choose_from_list_win=NULL;
+UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
+UIWINDOW scan_menu_win=NULL, cset_menu_win=NULL, rpt_cset_menu_win=NULL;
+UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
+UIWINDOW trans_menu_win=NULL;
+UIWINDOW extra_menu_win=NULL;
 
 /*********************************************
  * external/imported variables
@@ -128,64 +128,83 @@ extern STRING mn_tt_edin,mn_tt_ined,mn_tt_gdin,mn_tt_ingd;
 extern STRING mn_tt_dsin,mn_tt_inds,mn_tt_inrp;
 
 /*********************************************
+ * local types
+ *********************************************/
+
+/* Data for list choice display */
+typedef struct listdisp_s
+{
+	UIWINDOW uiwin;
+	INT height; /* window height */
+	INT rows; /* #items showing on screen */
+	INT cur; /* current item selected, 0-based */
+	INT listlen; /* #items total */
+	INT top; /* current item at top of display, 0-based */
+	INT details; /* #rows of detail info */
+	INT scroll; /* scroll offset in detail area */
+} listdisp;
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static void activate_uiwin(UIWINDOW * uiwin);
-static INT array_interact(UIWINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
+static void activate_uiwin(UIWINDOW uiwin);
+static INT array_interact(UIWINDOW win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
 static void begin_action(void);
 static INT calculate_screen_lines(INT screen);
+static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting);
 #ifdef HAVE_SETLOCALE
 static void choose_sort(STRING optname);
 #endif
-static INT choose_tt(UIWINDOW *wparent, STRING prompt);
-static UIWINDOW *choose_win(INT desiredlen, INT *actuallen);
+static INT choose_tt(UIWINDOW wparent, STRING prompt);
+static UIWINDOW choose_win(INT desiredhgt, INT *actualhgt);
 static void clear_msgs(void);
 static void clearw(void);
 static void create_windows(void);
 static void deactivate_uiwin(void);
-static void disp_codeset(UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT codeset);
-static void disp_locale(UIWINDOW * uiwin, INT row, INT col, STRING menuit);
-static void disp_trans_table_choice(UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT indx);
+static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
+static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit);
+static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx);
 static void display_status(STRING text);
-static void edit_tt_menu(UIWINDOW *wparent);
+static void edit_tt_menu(UIWINDOW wparent);
 static void end_action(void);
 static void export_tts(void);
+static INT handle_list_cmds(listdisp * ld, INT code);
 static void import_tts(void);
-static INT indiseq_interact(UIWINDOW *uiwin, STRING ttl, INDISEQ seq);
-static INDISEQ indiseq_list_interact(UIWINDOW *uiwin, STRING ttl, INDISEQ seq);
-static INT interact(UIWINDOW *uiwin, STRING str, INT screen);
+static INT indiseq_interact(UIWINDOW uiwin, STRING ttl, INDISEQ seq);
+static INDISEQ indiseq_list_interact(UIWINDOW uiwin, STRING ttl, INDISEQ seq);
+static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static NODE invoke_add_menu(void);
-static void invoke_cset_menu(UIWINDOW *wparent);
+static void invoke_cset_menu(UIWINDOW wparent);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
-static void invoke_trans_menu(UIWINDOW *wparent);
+static void invoke_trans_menu(UIWINDOW wparent);
 static void invoke_utils_menu(void);
-static void load_tt_menu(UIWINDOW *wparent);
+static void load_tt_menu(UIWINDOW wparent);
 static void msg_impl(STRING fmt, va_list args, INT level);
-static void output_menu(UIWINDOW *uiwin, INT screen);
+static void output_menu(UIWINDOW uiwin, INT screen);
 void place_cursor(void);
 static void place_std_msg(void);
 static void refresh_main(void);
-static void repaint_add_menu(UIWINDOW * uiwin);
-static void repaint_delete_menu(UIWINDOW * uiwin);
-static void repaint_scan_menu(UIWINDOW * uiwin);
-static void repaint_cset_menu(UIWINDOW * uiwin);
-static void repaint_rpc_menu(UIWINDOW * uiwin);
-static void repaint_tt_menu(UIWINDOW * uiwin);
-static void repaint_trans_menu(UIWINDOW * uiwin);
-static void repaint_utils_menu(UIWINDOW * uiwin);
-static void repaint_extra_menu(UIWINDOW * uiwin);
-static void rpt_cset_menu(UIWINDOW *wparent);
+static void repaint_add_menu(UIWINDOW uiwin);
+static void repaint_delete_menu(UIWINDOW uiwin);
+static void repaint_scan_menu(UIWINDOW uiwin);
+static void repaint_cset_menu(UIWINDOW uiwin);
+static void repaint_rpc_menu(UIWINDOW uiwin);
+static void repaint_tt_menu(UIWINDOW uiwin);
+static void repaint_trans_menu(UIWINDOW uiwin);
+static void repaint_utils_menu(UIWINDOW uiwin);
+static void repaint_extra_menu(UIWINDOW uiwin);
+static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
-static void save_tt_menu(UIWINDOW *wparent);
-static void show_indi_mode(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
-static void show_fam_mode(NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse);
-static void show_tandem_line(UIWINDOW * win, INT row);
-static void shw_list(UIWINDOW *uiwin, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll);
+static void save_tt_menu(UIWINDOW wparent);
+static void show_tandem_line(UIWINDOW uiwin, INT row);
+static void shw_list(INDISEQ seq, listdisp * ld);
+static void switch_to_uiwin(UIWINDOW uiwin);
+static void touch_all(void);
 static INT update_menu(INT screen);
 static void user_options(void);
 static void vmprintf(STRING fmt, va_list args);
@@ -221,7 +240,7 @@ static LIST msg_list = 0;
 static BOOLEAN msg_flag = FALSE; /* need to show msg list */
 static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN suppress_std_msg = FALSE; /* to hold status message */
-static UIWINDOW * active_uiwin = 0;
+static UIWINDOW active_uiwin = 0;
 
 /*********************************************
  * local & exported function definitions
@@ -293,7 +312,7 @@ term_screen (void)
  * repaint_main_menu --
  *=====================================*/
 void
-repaint_main_menu (UIWINDOW * uiwin)
+repaint_main_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
@@ -325,13 +344,14 @@ repaint_main_menu (UIWINDOW * uiwin)
 	mvwaddstr(win, row++, 4, "q  Quit");
 }
 /*================================================
- * paint_screen -- Paint a screen using new menu code
+ * repaint_footer_menu -- Paint footer menu for 
+ *  whichever screen requested.
  * Created: 2001/02/01, Perry Rapp
  *==============================================*/
 void
-paint_screen (INT screen)
+repaint_footer_menu (INT screen)
 {
-	UIWINDOW *uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
 	BOX(win, 0, 0);
@@ -346,7 +366,7 @@ paint_screen (INT screen)
 void
 paint_list_screen (void)
 {
-	UIWINDOW *uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row, col;
 	werase(win);
@@ -376,10 +396,10 @@ paint_list_screen (void)
  * create_uiwindow_impl -- Create our WINDOW wrapper
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-static UIWINDOW *
+static UIWINDOW
 create_uiwindow_impl (WINDOW * win)
 {
-	UIWINDOW * uiwin = (UIWINDOW *)stdalloc(sizeof(*uiwin));
+	UIWINDOW uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
 	memset(uiwin, 0, sizeof(*uiwin));
 	uiw_win(uiwin) = win;
 	return uiwin;
@@ -388,7 +408,7 @@ create_uiwindow_impl (WINDOW * win)
  * create_newwin -- Create our WINDOW wrapper
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-static UIWINDOW *
+static UIWINDOW
 create_newwin (INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
@@ -398,7 +418,7 @@ create_newwin (INT rows, INT cols, INT begy, INT begx)
  * create_newwin2 -- Create our WINDOW wrapper
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-static UIWINDOW *
+static UIWINDOW
 create_newwin2 (INT rows, INT cols)
 {
 	WINDOW * win = NEWWIN(rows, cols);
@@ -409,11 +429,11 @@ create_newwin2 (INT rows, INT cols)
  *  for a true (& permanent) subwindow
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-UIWINDOW *
-create_uisubwindow (UIWINDOW * parent, INT rows, INT cols, INT begy, INT begx)
+UIWINDOW
+create_uisubwindow (UIWINDOW parent, INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
-	UIWINDOW * uiwin = create_uiwindow_impl(win);
+	UIWINDOW uiwin = create_uiwindow_impl(win);
 	uiw_parent(uiwin) = parent;
 	uiw_permsub(uiwin) = TRUE;
 	return uiwin;
@@ -423,8 +443,8 @@ create_uisubwindow (UIWINDOW * parent, INT rows, INT cols, INT begy, INT begx)
  *  for a true (& permanent) subwindow
  * Created: 2001/11/24, Perry Rapp
  *========================================*/
-UIWINDOW *
-create_uisubwindow2 (UIWINDOW * uiparent, INT rows, INT cols)
+UIWINDOW
+create_uisubwindow2 (UIWINDOW uiparent, INT rows, INT cols)
 {
 	INT begy = (LINES - rows)/2;
 	INT begx = (COLS - cols)/2;
@@ -463,12 +483,18 @@ create_windows (void)
 	BOX(uiw_win(debug_box_win), 0, 0);
 }
 /*=================================
- * display_screen -- Display screen
+ * display_screen -- 
+ * There are six screens that all use
+ * the main_win. MAIN_SCREEN is the
+ * intro/main menu. The other 6 are all
+ * browse screens.
+ * cur_screen tells which is active.
  *===============================*/
 void
 display_screen (INT new_screen)
 {
-	WINDOW * win = uiw_win(main_win);
+	UIWINDOW uiwin = main_win;
+	WINDOW * win = uiw_win(uiwin);
 	cur_screen = new_screen;
 	if (stdout_vis) {
 		llwprintf("\nStrike any key to continue.\n");
@@ -482,8 +508,7 @@ display_screen (INT new_screen)
 	else
 		mvwaddstr(win, ll_lines-2, 2, showing);
 	place_cursor();
-	touchwin(win);
-	wrefresh(win);
+	switch_to_uiwin(uiwin);
 }
 /*=====================================
  * main_menu -- Handle main_menu screen
@@ -492,7 +517,7 @@ void
 main_menu (void)
 {
 	INT c;
-	UIWINDOW * uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
@@ -571,40 +596,54 @@ update_menu (INT screen)
 {
 	INT lines = calculate_screen_lines(screen);
 	if (menu_dirty || (cur_screen != screen))
-		paint_screen(screen);
+		repaint_footer_menu(screen);
 	menu_dirty = FALSE;
 	return lines;
 }
 /*=========================================
- * show_indi_mode -- Show indi according to mode
- * [in] indi:  whom to display
- * [in] mode:  how to display
- * [in] row:   starting row to use
- * [in] hgt:   how many rows allowed
- * [in] reuse: flag to save recalculating display strings
+ * show_indi_main -- Shortcut to show_indi for
+ *  using on main (full width) screen
+ * See show_indi.
  *=======================================*/
-static void
-show_indi_mode (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
+void
+show_indi_main (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
+{
+	show_indi(main_win, indi, mode, row, hgt, MAINWIN_WIDTH, &Scroll1, reuse);
+}
+/*=========================================
+ * show_indi -- Show indi according to mode
+ *  uiwin:  [IN]  where to display
+ *  indi:   [IN]  whom to display
+ *  mode:   [IN]  how to display (eg, traditional, gedcom, ...)
+ *  row:    [IN]  starting row to use
+ *  hgt:    [IN]  how many rows allowed
+ *  width:  [IN]  how many cols allowed
+ *  scroll: [I/O] how far down display is scrolled
+ *  reuse:  [IN]  flag to save recalculating display strings
+ *=======================================*/
+void
+show_indi (UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	CACHEEL icel;
 	icel = indi_to_cacheel_old(indi);
 	lock_cache(icel);
 	if (mode=='g')
-		show_gedcom_main(indi, GDVW_NORMAL, row, hgt, reuse);
+		show_gedcom(uiwin, indi, GDVW_NORMAL, row, hgt, width, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom_main(indi, GDVW_EXPANDED, row, hgt, reuse);
+		show_gedcom(uiwin, indi, GDVW_EXPANDED, row, hgt, width, scroll, reuse);
 	else if (mode=='t')
-		show_gedcom_main(indi, GDVW_TEXT, row, hgt, reuse);
+		show_gedcom(uiwin, indi, GDVW_TEXT, row, hgt, width, scroll, reuse);
 	else if (mode=='a')
-		show_ancestors(indi, row, hgt, reuse);
+		show_ancestors(uiwin, indi, row, hgt, width, scroll, reuse);
 	else if (mode=='d')
-		show_descendants(indi, row, hgt, reuse);
+		show_descendants(uiwin, indi, row, hgt, width, scroll, reuse);
 	else
-		show_person_main(indi, row, hgt, reuse);
+		show_indi_vitals(uiwin, indi, row, hgt, width, scroll, reuse);
 	unlock_cache(icel);
 }
 /*=========================================
- * show_fam_mode -- Show indi according to mode
+ * show_fam -- Show family
  * [in] fam:  whom to display
  * [in] mode:  how to display
  * [in] row:   starting row to use
@@ -612,18 +651,19 @@ show_indi_mode (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
  * [in] width: how many columns allowed
  * [in] reuse: flag to save recalculating display strings
  *=======================================*/
-static void
-show_fam_mode (NODE fam, INT mode, INT row, INT hgt, INT width, BOOLEAN reuse)
+void
+show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	CACHEEL fcel;
 	fcel = fam_to_cacheel(fam);
 	lock_cache(fcel);
 	if (mode=='g')
-		show_gedcom_main(fam, GDVW_NORMAL, row, hgt, reuse);
+		show_gedcom(uiwin, fam, GDVW_NORMAL, row, hgt, width, scroll, reuse);
 	else if (mode=='x')
-		show_gedcom_main(fam, GDVW_EXPANDED, row, hgt, reuse);
+		show_gedcom(uiwin, fam, GDVW_EXPANDED, row, hgt, width, scroll, reuse);
 	else
-		show_long_family(fam, row, hgt, width, reuse);
+		show_fam_vitals(uiwin, fam, row, hgt, width, scroll, reuse);
 	unlock_cache(fcel);
 }
 /*=========================================
@@ -634,7 +674,7 @@ display_indi (NODE indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines = update_menu(screen);
-	show_indi_mode(indi, mode, 1, lines, reuse);
+	show_indi_main(indi, mode, 1, lines, reuse);
 	display_screen(screen);
 }
 /*=========================================
@@ -655,7 +695,7 @@ display_fam (NODE fam, INT mode, BOOLEAN reuse)
 	INT width = MAINWIN_WIDTH;
 	INT screen = ONE_FAM_SCREEN;
 	INT lines = update_menu(screen);
-	show_fam_mode(fam, mode, 1, lines, width, reuse);
+	show_fam(main_win, fam, mode, 1, lines, width, &Scroll1, reuse);
 	display_screen(screen);
 }
 /*=========================================
@@ -681,10 +721,10 @@ display_2indi (NODE indi1, NODE indi2, INT mode)
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_indi_mode(indi1, mode, 1, lines1, reuse);
+	show_indi_main(indi1, mode, 1, lines1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_indi_mode(indi2, mode, lines1+2, lines2, reuse);
+	show_indi_main(indi2, mode, lines1+2, lines2, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -703,7 +743,7 @@ interact_2indi (void)
  * PR 1999/03
  *==================================*/
 static void
-show_tandem_line (UIWINDOW * win, INT row)
+show_tandem_line (UIWINDOW win, INT row)
 {
 	show_horz_line(win, row, 0, ll_cols);
 }
@@ -713,6 +753,7 @@ show_tandem_line (UIWINDOW * win, INT row)
 void
 display_2fam (NODE fam1, NODE fam2, INT mode)
 {
+	UIWINDOW uiwin = main_win;
 	INT width=MAINWIN_WIDTH;
 	INT screen = TWO_FAM_SCREEN;
 	INT lines = update_menu(screen);
@@ -722,10 +763,10 @@ display_2fam (NODE fam1, NODE fam2, INT mode)
 	lines2 = lines/2;
 	lines1 = lines - lines2;
 
-	show_fam_mode(fam1, mode, 1, lines1, width, reuse);
+	show_fam(uiwin, fam1, mode, 1, lines1, width, &Scroll1, reuse);
 	show_tandem_line(main_win, lines1+1);
 	switch_scrolls();
-	show_fam_mode(fam2, mode, lines1+2, lines2, width, reuse);
+	show_fam(uiwin, fam2, mode, lines1+2, lines2, width, &Scroll1, reuse);
 	switch_scrolls();
 
 	display_screen(screen);
@@ -741,16 +782,20 @@ interact_2fam (void)
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen
+ * This is used for browsing S, E, or X records.
  * Implemented: 2001/01/27, Perry Rapp
  *=====================================*/
 INT
 aux_browse (NODE node, INT mode, BOOLEAN reuse)
 {
+	UIWINDOW uiwin = main_win;
+	INT width=MAINWIN_WIDTH;
 	INT screen = AUX_SCREEN;
 	INT lines = update_menu(screen);
-	show_aux_display(node, mode, lines, reuse);
+	INT row=1;
+	show_aux(uiwin, node, mode, row, lines, width,  &Scroll1, reuse);
 	display_screen(screen);
-	return interact(main_win, NULL, screen);
+	return interact(uiwin, NULL, screen);
 }
 /*=========================================
  * list_browse -- Handle list_browse screen
@@ -821,7 +866,7 @@ refresh_main (void)
 STRING
 ask_for_string (STRING ttl, STRING prmpt)
 {
-	UIWINDOW *uiwin = ask_win;
+	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING rv, p;
 	werase(win);
@@ -872,7 +917,7 @@ ask_for_char (STRING ttl,
               STRING prmpt,
               STRING ptrn)
 {
-	UIWINDOW *uiwin = ask_win;
+	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
 	BOX(win, 0, 0);
@@ -890,7 +935,7 @@ ask_for_char_msg (STRING msg,
                   STRING prmpt,
                   STRING ptrn)
 {
-	UIWINDOW *uiwin = ask_msg_win;
+	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT rv;
 	werase(win);
@@ -937,7 +982,8 @@ view_array (STRING ttl, INT no, STRING *pstrngs)
 static INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting)
 {
-	UIWINDOW *uiwin = choose_win(no, NULL);
+	INT hgt=no+6;
+	UIWINDOW uiwin = choose_win(hgt, NULL);
 	WINDOW *win = uiw_win(uiwin);
 	INT rv;
 	werase(win);
@@ -947,144 +993,220 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting)
 	refresh_main();
 	return rv;
 }
-
 /*=============================================================
- * choose_one_from_indiseq -- User chooses person from sequence
- * Resize rewrite: c. 2000/12, Perry Rapp
+ * handle_list_cmds -- Process choices from list display
+ *  This handles moving up & down, adjusting size of detail,
+ *  and scrolling detail.
+ * Returns -1 if resized window, 1 if handled, 0 if unhandled.
+ * Created: 2001/12/01 (Perry Rapp)
+ *===========================================================*/
+static INT
+handle_list_cmds (listdisp * ld, INT code)
+{
+	switch(code) {
+	case 'j': /* next item */
+		if (ld->cur < ld->listlen - 1) {
+			ld->cur++;
+			if (ld->cur >= ld->top + ld->rows)
+				ld->top = ld->cur + 1 - ld->rows;
+		}
+		return 1; /* handled */
+	case 'k': /* previous item */
+		if (ld->cur > 0) {
+			ld->cur--;
+			if (ld->cur < ld->top)
+				ld->top = ld->cur;
+		}
+		return 1; /* handled */
+	case '(': /* scroll detail area up */
+		if (ld->scroll)
+			ld->scroll--;
+		return 1; /* handled */
+	case ')': /* scroll detail area down */
+		if (ld->scroll<2)
+			ld->scroll++;
+		return 1; /* handled */
+	case '[': /* shrink detail area */
+		if (ld->details) {
+			ld->details--;
+			ld->rows++;
+			return -1; /* handled & needs resize */
+		}
+		return 1; /* handled (nothing) */
+	case ']': /* enlarge detail area */
+		if (!ld->details) {
+			ld->details = 4;
+			ld->rows -= 4;
+			return -1; /* handled & needs resize */
+		}
+		else if (ld->details < 11) {
+			ld->details++;
+			ld->rows--;
+			return -1; /* handled & needs resize */
+		}
+		return 1; /* handled (nothing) */
+	}
+	return 0; /* unhandled */
+}
+/*=============================================================
+ * activate_list_uiwin --
+ *  Choose list uiwin & activate
+ *  listdisp:  [I/O]  client must fill this in
+ *    This routine sets the uiwin, height, rows members
+ * Created: 2001/12/01, Perry Rapp
+ *===========================================================*/
+static void
+activate_list_uiwin (listdisp * ld)
+{
+	INT asklen, askhgt, waste;
+	/* 
+	figure out size of window needed, get closest match from choose_win 
+	we want rows for items and for details, +2 lines (above/below) if details
+	we want 5 rows overhead (top line & title, bottom line then menu then line
+	*/
+	asklen = ld->listlen;
+	if (ld->details)
+		asklen += ld->details+2;
+	askhgt = asklen+5;
+	ld->uiwin = choose_win(askhgt,  &ld->height);
+	ld->rows = ld->height - 5;
+	if (ld->details)
+		ld->rows -= ld->details+2;
+	activate_uiwin(ld->uiwin);
+	/* ensure cur is on-screen */
+	/* (growing detail area can push current off-screen) */
+	if (ld->cur < ld->top)
+		ld->top = ld->cur;
+	else if (ld->cur >= ld->top + ld->rows)
+		ld->top = ld->cur + 1 - ld->rows;
+	/* don't waste space by scrolling end up */
+	waste = ld->top + ld->rows - ld->listlen;
+	if (waste>0 && ld->top) {
+		ld->top -= waste;
+		if (ld->top < 0)
+			ld->top = 0;
+	}
+}
+/*=============================================================
+ * choose_one_from_indiseq -- 
+ * Choose a single person from indiseq
+ * Returns index of selected item (or -1 if user quit)
  *===========================================================*/
 INT
 choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 {
-	UIWINDOW *uiwin=0;
+	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
+}
+/*=============================================================
+ * choose_one_or_list_from_indiseq -- 
+ * Implements the two choose_xxx_from_indiseq
+ *  ttl:   [IN]  title/caption for choice list
+ *  seq:   [IN]  list from which to choose
+ *  multi: [IN]  if true, selecting a sublist
+ * returns index of selected (or -1 for quit)
+ * Rewritten to allow dynamic resizing (so user can
+ *  resize detail area, ie, the [] functions), 2000/12, Perry Rapp
+ *===========================================================*/
+static INT
+choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
+{
 	WINDOW *win=0;
-	INT rv, len, actlen, minlen, asklen;
-	INT top, cur, row, done;
-	INT scroll;
+	INT row, done;
 	char fulltitle[128];
 	char buffer[31];
 	char * ptr;
 	INT titlen;
 	INT elemwidth=68; /* TO DO - how wide can this be ? */
+	listdisp ld;
+	STRING menu, choices;
+
 	ASSERT(seq);
-	len = length_indiseq(seq);
-	if (len<50)
+	if (length_indiseq(seq)<50)
 		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
-		
-	scroll=0;
-	minlen = 4; /* TO DO: what should this be ? */
-	top = cur = 0;
-resize_win:
-	asklen = len+cur_list_detail_lines;
-	if (asklen < minlen)
-		asklen = minlen;
-	uiwin = choose_win(asklen, &actlen);
-	win = uiw_win(uiwin);
-	/* check in case we pushed current offscreen */
-	touchwin(uiw_win(main_win));
-	wrefresh(uiw_win(main_win));
 	
-	if (cur-scroll>actlen-1-cur_list_detail_lines)
-		cur=actlen-1-cur_list_detail_lines+scroll;
+	memset(&ld, 0, sizeof(ld));
+	ld.listlen = length_indiseq(seq);
+
+	/* TO DO: need to deal with new commands, and move text into messages.c */
+	if (multi) {
+		menu = "Commands:  j Move down   k Move up  d Delete   i Select   q Quit";
+		choices = "jkiq()[]";
+	} else {
+		menu = "Commands:   j Move down     k Move up    i Select     q Quit";
+		choices = "jkdiq()[]";
+	}
+
+resize_win: /* we come back here if we resize the window */
+	activate_list_uiwin(&ld);
+	win = uiw_win(ld.uiwin);
 	werase(win);
 	BOX(win, 0, 0);
-	wrefresh(win);
-	len = length_indiseq(seq);
-	werase(win);
-	BOX(win, 0, 0);
-	row = len + cur_list_detail_lines + 2;
-	if (row > VIEWABLE + 2)
-		row = VIEWABLE + 2;
-	show_horz_line(uiwin, row++, 0, 73);
-	mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
+	row = ld.height-3;
+	show_horz_line(ld.uiwin, row++, 0, 73);
+	mvwaddstr(win, row, 2, menu);
 	done = FALSE;
 	while (!done) {
+		INT code=0, ret=0;
 		fulltitle[0] = 0;
 		titlen = LISTWIN_WIDTH-1;
 		if (titlen > sizeof(fulltitle))
 			titlen = sizeof(fulltitle);
 		ptr = fulltitle;
 		llstrcatn(&ptr, ttl, &titlen);
-		sprintf(buffer, " (%d/%d)", cur+1, len);
+		sprintf(buffer, " (%d/%d)", ld.cur+1, ld.listlen);
 		llstrcatn(&ptr, buffer, &titlen);
 		mvwaddstr(win, 1, 1, fulltitle);
-		shw_list(uiwin, seq, len, top, cur, &scroll);
+		shw_list(seq, &ld);
 		wmove(win, row, 11);
 		wrefresh(win);
-		switch (interact(uiwin, "jkiq()[]", -1)) {
-		case 'j':
-			if (cur >= len - 1) break;
-			cur++;
-			if (cur >= top + VIEWABLE - cur_list_detail_lines)
-				top++;
-			break;
-		case 'k':
-			if (cur <= 0) break;
-			cur--;
-			if (cur + 1 == top) top--;
-			break;
-		case 'i':
-			done=TRUE;
-			break;
-		case '(':
-			if (scroll)
-				scroll--;
-			break;
-		case ')':
-			if (scroll<2)
-				scroll++;
-			break;
-		case '[':
-			if (cur_list_detail_lines) {
-				cur_list_detail_lines--;
-				goto resize_win;
+		code = interact(ld.uiwin, choices, -1);
+		ret = handle_list_cmds(&ld, code);
+		if (ret == -1) {
+			deactivate_uiwin(); /* we're going to repick window & activate */
+			goto resize_win;
+		}
+		if (ret == 0) { /* not handled yet */
+			switch (code) {
+			case 'd':
+				if (!multi)
+					break;
+				delete_indiseq(seq, NULL, NULL, ld.cur);
+				if (!(ld.listlen = length_indiseq(seq))) {
+					done=TRUE;
+					ld.cur = -1;
+				}
+				if (ld.cur == ld.listlen) ld.cur--;
+				if (ld.cur < ld.top) ld.top = ld.cur;
+				break;
+			case 'i':
+				done=TRUE;
+				/* ld.cur points to currently selected */
+				break;
+			case 'q':
+			default:
+				done=TRUE;
+				ld.cur = -1; /* ld.cur == -1 as flag for cancelled */
+				break;
 			}
-			break;
-		case ']':
-			if (cur_list_detail_lines < 8) {
-				cur_list_detail_lines++;
-				goto resize_win;
-			}
-			break;
-		case 'q':
-		default:
-			done=TRUE;
-			cur = -1;
-			break;
 		}
 	}
-	rv = cur;
+	deactivate_uiwin();
 	
-	refresh_main();
-
-	return rv;
+	return ld.cur;
 }
 /*==========================================================
  * choose_list_from_indiseq -- User chooses subsequence from
  *   person sequence
  * returns input sequence, but may have deleted elements
  * called by both reports & interactive use
- *  ttl:  [in] title/caption for choice list
- *  seq:  [in] list from which to choose
+ *  ttl:  [IN]  title/caption for choice list
+ *  seq:  [I/O] list from which to choose (user may delete items)
+ * returns index of where user choose select (or -1 if quit)
  *========================================================*/
-INDISEQ
+INT
 choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 {
-	UIWINDOW *uiwin=0;
-	WINDOW *win=0;
-	INT len;
-	INT elemwidth=68; /* TO DO - how wide can this be ? */
-	ASSERT(seq);
-	len = length_indiseq(seq);
-	if (len<50)
-		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
-	uiwin = choose_win(len+cur_list_detail_lines, NULL);
-	win = uiw_win(uiwin);
-	werase(win);
-	BOX(win, 0, 0);
-	wrefresh(win);
-	seq = indiseq_list_interact(uiwin, ttl, seq);
-	refresh_main();
-	return seq;
+	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
 }
 #ifdef HAVE_SETLOCALE
 /*======================================
@@ -1113,7 +1235,7 @@ choose_sort (STRING optname)
 static void
 draw_tt_win (STRING prompt)
 {
-	UIWINDOW *uiwin = tt_menu_win;
+	UIWINDOW uiwin = tt_menu_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 0;
 	werase(win);
@@ -1135,7 +1257,7 @@ draw_tt_win (STRING prompt)
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
 static void
-disp_codeset (UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT codeset)
+disp_codeset (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset)
 {
 	char buff[60];
 	WINDOW * win = uiw_win(uiwin);
@@ -1149,7 +1271,7 @@ disp_codeset (UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT codeset)
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
 static void
-disp_locale (UIWINDOW * uiwin, INT row, INT col, STRING menuit)
+disp_locale (UIWINDOW uiwin, INT row, INT col, STRING menuit)
 {
 	char buff[60];
 	WINDOW * win = uiw_win(uiwin);
@@ -1164,7 +1286,7 @@ disp_locale (UIWINDOW * uiwin, INT row, INT col, STRING menuit)
  * Created: 2001/07/20 (Perry Rapp)
  *============================*/
 static void
-disp_trans_table_choice (UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT indx)
+disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, STRING menuit, INT indx)
 {
 	TRANTABLE tt = tran_tables[indx];
 	char line[120];
@@ -1196,7 +1318,7 @@ disp_trans_table_choice (UIWINDOW * uiwin, INT row, INT col, STRING menuit, INT 
 RECORD
 invoke_scan_menu (void)
 {
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 	RECORD rec=0;
 	INT code=0;
@@ -1245,7 +1367,7 @@ invoke_scan_menu (void)
 static NODE
 invoke_add_menu (void)
 {
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	NODE node=NULL;
 	INT code;
@@ -1281,7 +1403,7 @@ void
 invoke_del_menu (void)
 {
 	INT code;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	if (!del_menu_win) {
 		del_menu_win = create_newwin2(8, 66);
@@ -1308,10 +1430,10 @@ invoke_del_menu (void)
  * invoke_cset_menu -- Handle character set menu
  *====================================*/
 static void
-invoke_cset_menu (UIWINDOW * wparent)
+invoke_cset_menu (UIWINDOW wparent)
 {
 	INT code=0;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 	BOOLEAN done=FALSE;
 
@@ -1354,10 +1476,10 @@ invoke_cset_menu (UIWINDOW * wparent)
  * rpt_cset_menu -- Handle report character set menu
  *====================================*/
 static void
-rpt_cset_menu (UIWINDOW * wparent)
+rpt_cset_menu (UIWINDOW wparent)
 {
 	INT code;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 	BOOLEAN done=FALSE;
 
@@ -1390,10 +1512,10 @@ rpt_cset_menu (UIWINDOW * wparent)
  * invoke_trans_menu -- menu for translation tables
  *====================================*/
 static void
-invoke_trans_menu (UIWINDOW *wparent)
+invoke_trans_menu (UIWINDOW wparent)
 {
 	INT code;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 	BOOLEAN done=FALSE;
 
@@ -1426,7 +1548,7 @@ invoke_trans_menu (UIWINDOW *wparent)
  * edit_tt_menu -- menu for "Edit translation table"
  *====================================*/
 static void
-edit_tt_menu (UIWINDOW *wparent)
+edit_tt_menu (UIWINDOW wparent)
 {
 	INT tt;
 	while ((tt = choose_tt(wparent, mn_edttttl)) != -1) {
@@ -1437,7 +1559,7 @@ edit_tt_menu (UIWINDOW *wparent)
  * load_tt_menu -- menu for "Load translation table"
  *====================================*/
 static void
-load_tt_menu (UIWINDOW * wparent)
+load_tt_menu (UIWINDOW wparent)
 {
 	message(mn_notimpl);
 }
@@ -1445,7 +1567,7 @@ load_tt_menu (UIWINDOW * wparent)
  * save_tt_menu -- menu for "Save translation table"
  *====================================*/
 static void
-save_tt_menu (UIWINDOW *wparent)
+save_tt_menu (UIWINDOW wparent)
 {
 	message(mn_notimpl);
 }
@@ -1469,10 +1591,10 @@ export_tts (void)
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
 static INT
-choose_tt (UIWINDOW *wparent, STRING prompt)
+choose_tt (UIWINDOW wparent, STRING prompt)
 {
 	INT code;
-	UIWINDOW *uiwin = tt_menu_win;
+	UIWINDOW uiwin = tt_menu_win;
 	WINDOW *win = uiw_win(uiwin);
 	while (1) {
 		stdout_vis=FALSE;
@@ -1503,7 +1625,7 @@ static void
 invoke_utils_menu (void)
 {
 	INT code;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 
 	if (!utils_menu_win) {
@@ -1540,7 +1662,7 @@ static INT
 invoke_extra_menu (void)
 {
 	INT code;
-	UIWINDOW *uiwin=0;
+	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 
 	if (!extra_menu_win) {
@@ -1585,7 +1707,7 @@ user_options (void)
  * interact -- Interact with user
  *=============================*/
 static INT
-interact (UIWINDOW *uiwin, STRING str, INT screen)
+interact (UIWINDOW uiwin, STRING str, INT screen)
 {
 	char buffer[4]; /* 3 char cmds max */
 	INT offset=0;
@@ -1630,7 +1752,7 @@ interact (UIWINDOW *uiwin, STRING str, INT screen)
  *  returns static buffer 100 length
  *==========================================*/
 STRING
-get_answer (UIWINDOW *uiwin, STRING prmpt)
+get_answer (UIWINDOW uiwin, STRING prmpt)
 {
 	static uchar lcl[100];
 	WINDOW *win = uiw_win(uiwin);
@@ -1647,8 +1769,9 @@ get_answer (UIWINDOW *uiwin, STRING prmpt)
 }
 /*===========================================================
  * win_list_init -- Create list of windows of increasing size
+ *  from 6 up to VIEWABLE+6
  *=========================================================*/
-static UIWINDOW *list_wins[MAXVIEWABLE];
+static UIWINDOW list_wins[MAXVIEWABLE];
 void
 win_list_init (void)
 {
@@ -1659,155 +1782,78 @@ win_list_init (void)
 }
 /*=========================================
  * choose_win -- Choose window to hold list
+ *  desiredhgt:  [IN]  would like window to hold this many lines
+ *  actualhgt:   [OUT] actual heigth of returned window
+ *  list_wins[0] is hgt==6
+ *  list_wins[VIEWABLE-1] is hgt==VIEWABLE+5
  *=======================================*/
-static UIWINDOW *
-choose_win (INT desiredlen, INT *actuallen)
+static UIWINDOW
+choose_win (INT desiredhgt, INT *actualhgt)
 {
-	UIWINDOW *win = list_wins[VIEWABLE-1];
-	INT retlen;
-	retlen = VIEWABLE;
-	if (desiredlen <= VIEWABLE) {
-		win = list_wins[desiredlen-1];
-		retlen = desiredlen;
-	}
-	if (actuallen)
-		*actuallen = retlen;
-	return win;
-}
-/*=====================================================
- * indiseq_interact -- Interact with user over sequence
- *===================================================*/
-static INT
-indiseq_interact (UIWINDOW *uiwin, STRING ttl, INDISEQ seq)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT top, cur, len, row;
-	INT scroll=0;
-	top = cur = 0;
-	len = length_indiseq(seq);
-	werase(win);
-	BOX(win, 0, 0);
-	mvwaddstr(win, 1, 1, ttl);
-	row = len > VIEWABLE ? VIEWABLE + 2 : len + 2;
-	show_horz_line(uiwin, row++, 0, 73);
-	mvwaddstr(win, row, 2, "Commands:   j Move down     k Move up    i Select     q Quit");
-	while (TRUE) {
-		shw_list(uiwin, seq, len, top, cur, &scroll);
-		wmove(win, row, 11);
-		wrefresh(win);
-		switch (interact(uiwin, "jkiq", -1)) {
-		case 'j':
-			if (cur >= len - 1) break;
-			cur++;
-			if (cur >= top + VIEWABLE) top++;
-			break;
-		case 'k':
-			if (cur <= 0) break;
-			cur--;
-			if (cur + 1 == top) top--;
-			break;
-		case 'i':
-			return cur;
-		case 'q':
-		default:
-			return -1;
-		}
-	}
-}
-
-/*=====================================================
- * indiseq_list_interact --
- *===================================================*/
-INDISEQ
-indiseq_list_interact (UIWINDOW *uiwin, STRING ttl, INDISEQ seq)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT top, cur, len, len0, row;
-	INT scroll;
-
-	top = cur = 0;
-	len = len0 = length_indiseq(seq);
-	scroll = 0;
-	werase(win);
-	BOX(win, 0, 0);
-	mvwaddstr(win, 1, 1, ttl);
-	row = len0 + cur_list_detail_lines + 2;
-	if (row > VIEWABLE + 2)
-		row = VIEWABLE + 2;
-	show_horz_line(uiwin, row++, 0, 73);
-	mvwaddstr(win, row, 2, "Commands:  j Move down   k Move up  d Delete   i Select   q Quit");
-	while (TRUE) {
-		shw_list(uiwin, seq, len0, top, cur, &scroll);
-		wmove(win, row, 11);
-		wrefresh(win);
-		switch (interact(uiwin, "jkdiq", -1)) {
-		case 'j':
-			if (cur >= len - 1) break;
-			cur++;
-			if (cur >= top + VIEWABLE - cur_list_detail_lines)
-				top++;
-			break;
-		case 'k':
-			if (cur <= 0) break;
-			cur--;
-			if (cur + 1 == top) top--;
-			break;
-		case 'd':
-			delete_indiseq(seq, NULL, NULL, cur);
-			if (--len == 0) {
-				remove_indiseq(seq);
-				return NULL;
-			}
-			if (cur == len) cur--;
-			if (cur < top) top = cur;
-			break;
-		case 'i':
-			return seq;
-		case 'q':
-		default:
-			return NULL;
-		}
-	}
+	UIWINDOW uiwin=0;
+	INT hgt = desiredhgt;
+	if (hgt<6)
+		hgt = 6;
+	else if (hgt>VIEWABLE+5)
+		hgt = VIEWABLE+5;
+	uiwin = list_wins[hgt-6];
+	if (actualhgt)
+		*actualhgt = hgt;
+	return uiwin;
 }
 /*=====================================================
  * shw_list -- Show string list in list interact window
- *  len0 is original length of list (items may have
- *  been deleted)
  * Detail lines rewrite: c. 2000/12, Perry Rapp
  *===================================================*/
 void
-shw_list (UIWINDOW *uiwin, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll)
+shw_list (INDISEQ seq, listdisp * ld)
 {
-	WINDOW *win = uiw_win(uiwin);
-	INT i, j, row, nrows, len, numdet;
-	BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
+	WINDOW *win = uiw_win(ld->uiwin);
+	INT i, j, row, lines;
+	INT mode = 'n';
+	INT width = LISTWIN_WIDTH;
 	/* TO DO - how big can we make buffer ?
 	ie, how wide can print element be ? */
 	char buffer[60];
-	len = length_indiseq(seq);
-	numdet = cur_list_detail_lines;
-	nrows = numdet + len0;
-	if (nrows>VIEWABLE)
-		nrows=VIEWABLE;
-	for (j=0; j<nrows; j++) {
-		row=2+j;
+	ASSERT(ld->listlen == length_indiseq(seq));
+	/* clear current lines */
+	lines = ld->rows + (ld->details ? ld->details+2 : 0);
+	for (i=0; i<lines; ++i) {
+		row = i+2;
 		mvwaddstr(win, row, 1, empstr71);
-		if (j>=numdet) {
-			i=j-numdet+top;
-			if (i<len) {
-				if (i == cur) mvwaddch(win, row, 3, '>');
-				print_indiseq_element(seq, i, buffer, sizeof(buffer), &disp_shrt_rfmt);
-				mvwaddstr(win, row, 4, buffer);
-			}
-		}
 	}
-	if (numdet) {
+	row=2;
+	if (ld->details) {
 		STRING key, name;
-		element_indiseq(seq, cur, &key, &name);
+		BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
+		mvwaddstr(win, row++, 2, "--- CURRENT SELECTION ---");
+		element_indiseq(seq, ld->cur, &key, &name);
 		if (key[0]=='I') {
 			NODE indi = key_to_indi(key);
-			mvwaddstr(win, numdet+1, 2, "---");
-			show_person((void *)uiwin, indi, 2, numdet-1, LISTWIN_WIDTH, scroll, reuse);
+			if (indi)
+				show_indi(ld->uiwin, indi, mode, 3, ld->details
+					, width, &ld->scroll, reuse);
+		} else if (key[0]=='F') {
+			NODE fam = key_to_fam(key);
+			if (fam)
+				show_fam(ld->uiwin, fam, mode, 3, ld->details
+					, width, &ld->scroll, reuse);
+		} else {
+			/* could be S,E,X -- show_aux handles all of these */
+			NODE aux = qkey_to_type(key);
+			if (aux)
+				show_aux(ld->uiwin, aux, mode, 3, ld->details
+					, width, &ld->scroll, reuse);
+		}
+		row = 3+ld->details;
+		mvwaddstr(win, row++, 2, "--- LIST ---");
+	}
+	for (j=0; j<ld->rows; j++) {
+		i = ld->top + j;
+		if (i<ld->listlen) {
+			if (i == ld->cur) mvwaddch(win, row, 3, '>');
+			print_indiseq_element(seq, i, buffer, sizeof(buffer), &disp_shrt_rfmt);
+			mvwaddstr(win, row++, 4, buffer);
 		}
 	}
 }
@@ -1820,7 +1866,7 @@ shw_list (UIWINDOW *uiwin, INDISEQ seq, INT len0, INT top, INT cur, INT *scroll)
  *  cur:     [IN]  currently selected item
  *==============================================================*/
 void
-shw_array_of_strings (UIWINDOW *uiwin, STRING *strings, INT len, INT top, INT cur)
+shw_array_of_strings (UIWINDOW uiwin, STRING *strings, INT len, INT top, INT cur)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row = len > VIEWABLE ? VIEWABLE + 1 : len + 1;
@@ -1852,7 +1898,7 @@ shw_array_of_strings (UIWINDOW *uiwin, STRING *strings, INT len, INT top, INT cu
  *  selectable: [IN]  FALSE for view-only
  *============================================*/
 INT
-array_interact (UIWINDOW *uiwin, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
+array_interact (UIWINDOW uiwin, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT top = 0, cur = 0, row;
@@ -1916,7 +1962,7 @@ message_string (void)
 void
 place_std_msg (void)
 {
-	UIWINDOW *uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING str = message_string();
 	INT row;
@@ -1935,7 +1981,7 @@ place_std_msg (void)
 void
 llvwprintf (STRING fmt, va_list args)
 {
-	UIWINDOW *uiwin = stdout_win;
+	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	if (!stdout_vis)
 		clearw();
@@ -1962,7 +2008,7 @@ llwprintf (STRING fmt, ...)
 void
 clearw (void)
 {
-	UIWINDOW *uiwin = stdout_win;
+	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	werase(win);
 	BOX(uiw_win(stdout_box_win), 0, 0);
@@ -1976,7 +2022,7 @@ clearw (void)
 void
 wfield (INT row, INT col, STRING str)
 {
-	UIWINDOW *uiwin = stdout_win;
+	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	if (!stdout_vis) clearw();
 	mvwaddstr(win, row, col, str);
@@ -1988,7 +2034,7 @@ wfield (INT row, INT col, STRING str)
 void
 wpos (INT row, INT col)
 {
-	UIWINDOW *uiwin = stdout_win;
+	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	wmove(win, row, col);
 }
@@ -1996,7 +2042,7 @@ wpos (INT row, INT col)
  * show_horz_line -- Draw horizontal line
  *=====================================*/
 void
-show_horz_line (UIWINDOW *uiwin, INT row, INT col, INT len)
+show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT i;
@@ -2009,7 +2055,7 @@ show_horz_line (UIWINDOW *uiwin, INT row, INT col, INT len)
  * show_vert_line -- Draw vertical line
  *===================================*/
 void
-show_vert_line (UIWINDOW *uiwin, INT row, INT col, INT len)
+show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
 {
 #ifndef BSD
 	WINDOW *win = uiw_win(uiwin);
@@ -2085,8 +2131,9 @@ do_edit (void)
  *================================================================*/
 #ifdef BSD
 static void
-bsd_mvwgetstr (UIWINDOW *win, INT row, INT col, STRING str, INT len)
+bsd_mvwgetstr (UIWINDOW uiwin, INT row, INT col, STRING str, INT len)
 {
+	WINDOW * win = uiwin_win(uiwin);
 	STRING p = str;
 	INT c, ers = erasechar();
 	wmove(win, row, col);
@@ -2113,7 +2160,7 @@ bsd_mvwgetstr (UIWINDOW *win, INT row, INT col, STRING str, INT len)
  * for 3 column full width menus
  *==============================================*/
 static void
-output_menu (UIWINDOW *uiwin, INT screen)
+output_menu (UIWINDOW uiwin, INT screen)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
@@ -2258,7 +2305,7 @@ vmprintf (STRING fmt, va_list args)
 static void
 display_status (STRING text)
 {
-	UIWINDOW *uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
 	wmove(win, row = ll_lines-2, 2);
@@ -2414,7 +2461,7 @@ lock_status_msg (BOOLEAN lock)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_add_menu (UIWINDOW * uiwin)
+repaint_add_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2431,7 +2478,7 @@ repaint_add_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_delete_menu (UIWINDOW * uiwin)
+repaint_delete_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2448,7 +2495,7 @@ repaint_delete_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_scan_menu (UIWINDOW * uiwin)
+repaint_scan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2464,7 +2511,7 @@ repaint_scan_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_cset_menu (UIWINDOW * uiwin)
+repaint_cset_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2492,7 +2539,7 @@ repaint_cset_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_rpc_menu (UIWINDOW * uiwin)
+repaint_rpc_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2511,7 +2558,7 @@ repaint_rpc_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_tt_menu (UIWINDOW * uiwin)
+repaint_tt_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2523,7 +2570,7 @@ repaint_tt_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_trans_menu (UIWINDOW * uiwin)
+repaint_trans_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2550,7 +2597,7 @@ repaint_trans_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_utils_menu (UIWINDOW * uiwin)
+repaint_utils_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2571,7 +2618,7 @@ repaint_utils_menu (UIWINDOW * uiwin)
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
 static void
-repaint_extra_menu (UIWINDOW * uiwin)
+repaint_extra_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
@@ -2590,17 +2637,22 @@ repaint_extra_menu (UIWINDOW * uiwin)
 }
 /*============================
  * activate_uiwin -- 
+ *  push new uiwindow on top of current one
  * Created: 2001/11/24, Perry Rapp
  *==========================*/
 static void
-activate_uiwin (UIWINDOW * uiwin)
+activate_uiwin (UIWINDOW uiwin)
 {
 	WINDOW * win = uiw_win(uiwin);
-	/* hook current as parent */
+	ASSERT(uiwin && win && !uiw_parent(uiwin));
+	/* link into parent/child chain */
 	uiw_parent(uiwin) = active_uiwin;
-	/* refresh current (in case it was obscured by stdout */
-	if (active_uiwin)
+	if (active_uiwin) {
+		ASSERT(!uiw_child(active_uiwin));
+		uiw_child(active_uiwin) = uiwin;
+		/* refresh current (in case it was obscured by stdout */
 		wrefresh(uiw_win(active_uiwin));
+	}
 	/* switch to new & refresh */
 	active_uiwin = uiwin;
 	touchwin(win);
@@ -2614,10 +2666,70 @@ activate_uiwin (UIWINDOW * uiwin)
 static void
 deactivate_uiwin (void)
 {
+	UIWINDOW uiw = active_uiwin;
 	active_uiwin = uiw_parent(active_uiwin);
+	uiw_parent(uiw)=0;
 	if (active_uiwin) {
-		WINDOW * win = uiw_win(active_uiwin);
-		touchwin(win);
-		wrefresh(win);
+		touch_all();
+		ASSERT(uiw_child(active_uiwin)==uiw);
+		uiw_child(active_uiwin)=0;
 	}
+}
+/*============================
+ * touch_ancestors -- Touch current window & all
+ *  ancestors (but in order starting with most
+ *  remote ancestor window)
+ * Created: 2001/12/01, Perry Rapp
+ *==========================*/
+static void
+touch_all (void)
+{
+	UIWINDOW uiwin=active_uiwin, *uiwparent=0;
+	ASSERT(uiwin);
+	/* climb to highest window ancestor */
+	while (uiw_parent(uiwin)) {
+		uiwin = uiw_parent(uiwin);
+	}
+	/* walk down touching */
+	while (uiwin) {
+		touchwin(uiw_win(uiwin));
+		wrefresh(uiw_win(uiwin));
+		uiwin = uiw_child(uiwin);
+	}
+}
+/*============================
+ * switch_to_uiwin -- 
+ *  switch away from currently active uiwin
+ *  to new uiwin
+ *  currently active uiwin (if any) must be solo
+ *  new uiwin must be solo
+ * Created: 2001/11/24, Perry Rapp
+ *==========================*/
+static void
+switch_to_uiwin (UIWINDOW uiwin)
+{
+	WINDOW * win = uiw_win(uiwin);
+	if (uiwin != active_uiwin) {
+		ASSERT(uiwin && win && !uiw_parent(uiwin) && !uiw_child(uiwin));
+		/* link into parent/child chain */
+		uiw_parent(uiwin) = active_uiwin;
+		if (active_uiwin) {
+			/* current active window must be solo, no parent or child */
+			ASSERT(!uiw_child(active_uiwin) && !uiw_parent(active_uiwin));
+		}
+		/* switch to new & refresh */
+		active_uiwin = uiwin;
+	}
+	touchwin(win);
+	wrefresh(win);
+}
+/*============================
+ * refresh_stdout -- 
+ *  bring stdout to front
+ * Created: 2001/11/24, Perry Rapp
+ *==========================*/
+void
+refresh_stdout (void)
+{
+	wrefresh(uiw_win(stdout_win));
 }

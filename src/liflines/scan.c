@@ -33,7 +33,7 @@
 #include "table.h"
 #include "indiseq.h"
 #include "interp.h"
-#include "screen.h"
+#include "feedback.h"
 #include "liflines.h"
 #include "fpattern.h"
 

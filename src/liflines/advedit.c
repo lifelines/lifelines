@@ -34,7 +34,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 
 #include "llinesi.h"
 

@@ -40,7 +40,7 @@
 #include <locale.h>
 #endif
 #include "llstdlib.h"
-#include "screen.h"
+#include "screen.h" /* calling initscr, noecho, ... */
 #include "btree.h"
 #include "table.h"
 #include "translat.h"

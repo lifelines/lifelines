@@ -40,6 +40,12 @@ void msg_status(STRING fmt, ...);
 #define message(str) msg_error(str)
 	/* report to stdout style output (uses embedded carriage returns */
 void llwprintf(STRING fmt, ...);
+void llvwprintf(STRING fmt, va_list args);
+
+/* called by ask.c */
+STRING ask_for_input_filename (STRING ttl, STRING path, STRING prmpt);
+STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
+
 
 /* called by signal handler before invoking exit() */
 void shutdown_ui(BOOLEAN pause);
@@ -52,5 +58,8 @@ void do_edit(void);
 /* msg boxes */
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);
 STRING ask_for_string(STRING, STRING);
+
+/* called by interp when finished */
+void refresh_stdout(void);
 
 #endif /* _FEEDBACK_H */

@@ -17,7 +17,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "arch.h"
 #include "lloptions.h"
 

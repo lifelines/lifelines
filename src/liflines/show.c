@@ -49,6 +49,7 @@
 
 struct rfmt_s disp_long_rfmt; /* reformatting used for display long forms */
 struct rfmt_s disp_shrt_rfmt; /* reformatting used for display short forms */
+INT Scroll1=0;
 
 /*********************************************
  * external/imported variables
@@ -92,15 +93,14 @@ static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
-static void put_out_line(UIWINDOW * uiwin, INT x, INT y, STRING string, INT width, INT flag);
+static void put_out_line(UIWINDOW uiwin, INT x, INT y, STRING string, INT width, INT flag);
 static STRING sh_fam_to_event_shrt(NODE node, TRANTABLE tt, STRING tag, STRING head
 	, INT len);
 static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
 	, STRING head, INT len);
 static STRING sh_indi_to_event_shrt(NODE node, TRANTABLE tt, STRING tag
 	, STRING head, INT len);
-static void show_gedcom(UIWINDOW *uiwin, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
-static void wipe_window(UIWINDOW *uiwin, INT row, INT hgt);
+static void wipe_window(UIWINDOW uiwin, INT row, INT hgt);
 
 /*********************************************
  * local variables
@@ -110,7 +110,6 @@ static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
 static INT Solen = 0;
-static INT Scroll1 = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
 
@@ -219,25 +218,25 @@ init_display_indi (NODE pers, INT width)
 	unlock_cache(icel);
 }
 /*==============================
- * show_person -- Display person
- *  winptr: [in] which curses window (usually MAIN_WIN)
- *  pers:   [in] whom to display
- *  row:    [in] starting row to draw upon
- *  hgt:    [in] how many rows to use
- *  width:  [in] how many columns to use
- *  scroll: [in] how many rows to skip over at top
- *  reuse:  [in] flag to avoid recomputing display strings
+ * show_indi_vitals -- Display person using
+ * the traditional LifeLines vitals format.
+ *  uiwin:  [IN] which curses window (usually MAIN_WIN)
+ *  pers:   [IN] whom to display
+ *  row:    [IN] starting row to draw upon
+ *  hgt:    [IN] how many rows to use
+ *  width:  [IN] how many columns to use
+ *  scroll: [IN] how many rows to skip over at top
+ *  reuse:  [IN] flag to avoid recomputing display strings
  * Caller sets reuse flag if it knows that this is the same
  * person displayed last.
  *============================*/
 void
-show_person (void * winptr, NODE pers, INT row, INT hgt
+show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 	, INT width, INT *scroll, BOOLEAN reuse)
 {
 	INT i;
 	INT localrow;
 	INT overflow;
-	UIWINDOW * uiwin = (UIWINDOW *)winptr;
 	WINDOW * win = uiw_win(uiwin);
 
 	badkeylist[0] = '\0';
@@ -282,19 +281,6 @@ show_person (void * winptr, NODE pers, INT row, INT hgt
 		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
 		message(buf);
 	}
-}
-/*====================================
- * show_person_main -- Display person
- *
- * [in] pers:  person
- * [in] row:   start row
- * [in] hgt:   avail rows
- * [in] reuse: flag to save recalculating display strings
- *==================================*/
-void
-show_person_main (NODE pers, INT row, INT hgt, BOOLEAN reuse)
-{
-	show_person(main_win, pers, row, hgt, MAINWIN_WIDTH, &Scroll1, reuse);
 }
 /*=============================================
  * add_spouse_line -- Add spouse line to others
@@ -385,7 +371,7 @@ init_display_fam (NODE fam, INT width)
 	ENDCHILDREN
 }
 /*===================================
- * show_long_family -- Display family
+ * show_fam_vitals -- Display family
  * [in] fam:  whom to display
  * [in] row:   starting row to use
  * [in] hgt:   how many rows allowed
@@ -393,13 +379,13 @@ init_display_fam (NODE fam, INT width)
  * [in] reuse: flag to save recalculating display strings
  *=================================*/
 void
-show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
+show_fam_vitals (UIWINDOW uiwin, NODE fam, INT row, INT hgt
+	, INT width, INT *scroll, BOOLEAN reuse)
 {
 	INT i;
 	INT localrow;
 	INT overflow;
 	char buf[132];
-	UIWINDOW * uiwin = main_win;
 	WINDOW * win = uiw_win(uiwin);
 
 	badkeylist[0] = '\0';
@@ -413,13 +399,13 @@ show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
 		mvwaddch(win, row+i, width-1, ACS_VLINE);
 #endif
 	}
-	if (Scroll1) {
-		if (Scroll1 > Solen + 7 - hgt)
-			Scroll1 = Solen + 7 - hgt;
-		if (Scroll1 < 0)
-			Scroll1 = 0;
+	if (*scroll) {
+		if (*scroll > Solen + 7 - hgt)
+			*scroll = Solen + 7 - hgt;
+		if (*scroll < 0)
+			*scroll = 0;
 	}
-	localrow = row - Scroll1;
+	localrow = row - *scroll;
 	mvwaddstr(win, row+0, 1, Shusb);
 	if (hgt==1) return;
 	mvwaddstr(win, row+1, 1, Shbirt);
@@ -433,10 +419,10 @@ show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
 	mvwaddstr(win, row+5, 1, Swdeat);
 	if (hgt==6) return;
 	mvwaddstr(win, row+6, 1, Smarr);
-	for (i = Scroll1; i < Solen && i < hgt-7+Scroll1; i++)
+	for (i = *scroll; i < Solen && i < hgt-7+*scroll; i++)
 	{
-		overflow = ((i+1 == hgt-7+Scroll1)&&(i+1 != Solen));
-		if (Scroll1 && (i == Scroll1))
+		overflow = ((i+1 == hgt-7+*scroll)&&(i+1 != Solen));
+		if (*scroll && (i == *scroll))
 			overflow = 1;
 		put_out_line(uiwin, localrow+7+i, 1, Sothers[i]+1, width, overflow);
 	}
@@ -451,47 +437,49 @@ show_long_family (NODE fam, INT row, INT hgt, INT width, BOOLEAN reuse)
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_ancestors (NODE indi, INT row, INT hgt, BOOLEAN reuse)
+show_ancestors (UIWINDOW uiwin, NODE indi, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	struct canvasdata_s canvas;
 		/* shape of canvas upon which to draw pedigree */
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
 	canvas.maxcol = ll_cols;
-	canvas.scroll = Scroll1;
-	canvas.param = (void *)main_win;
+	canvas.scroll = *scroll;
+	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
 	pedigree_draw_ancestors(indi, &canvas, reuse);
-	Scroll1 = canvas.scroll;
+	*scroll = canvas.scroll;
 }
 /*================================================
  * show_descendants -- Show pedigree/descendants
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_descendants (NODE indi, INT row, INT hgt, BOOLEAN reuse)
+show_descendants (UIWINDOW uiwin, NODE indi, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	struct canvasdata_s canvas;
 		/* shape of canvas upon which to draw pedigree */
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
 	canvas.maxcol = ll_cols;
-	canvas.scroll = Scroll1;
-	canvas.param = (void *)main_win;
+	canvas.scroll = *scroll;
+	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
 	wipe_window(main_win, row, hgt);
 	pedigree_draw_descendants(indi, &canvas, reuse);
-	Scroll1 = canvas.scroll;
+	*scroll = canvas.scroll;
 }
 /*================================================
  * wipe_window -- Clear window
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 static void
-wipe_window (UIWINDOW * uiwin, INT row, INT hgt)
+wipe_window (UIWINDOW uiwin, INT row, INT hgt)
 {
 	INT i;
 	WINDOW * win = uiw_win(uiwin);
@@ -504,35 +492,25 @@ wipe_window (UIWINDOW * uiwin, INT row, INT hgt)
 	}
 }
 /*================================================
- * show_gedcom -- Clear window & didsplay node in 
- *  gedcom format
+ * show_gedcom -- Display record in raw gedcom format
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
-static void
-show_gedcom (UIWINDOW *uiwin, NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
+void
+show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, INT row, INT hgt
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	struct canvasdata_s canvas;
 		/* shape of canvas upon which to draw pedigree */
 	canvas.minrow = row;
 	canvas.maxrow = row + hgt - 1;
-	canvas.maxcol = ll_cols;
-	canvas.scroll = Scroll1;
+	canvas.maxcol = width;
+	canvas.scroll = *scroll;
 	canvas.param = (void *)uiwin;
 	canvas.line = pedigree_line;
 		/* clear & draw pedigree */
 	wipe_window(uiwin, row, hgt);
 	pedigree_draw_gedcom(node, gdvw, &canvas, reuse);
-	Scroll1 = canvas.scroll;
-}
-/*================================================
- * show_gedcom_main -- Show node in gedcom format
- *  in window main_win
- * Created: 2001/02/04, Perry Rapp
- *==============================================*/
-void
-show_gedcom_main (NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse)
-{
-	show_gedcom(main_win, node, gdvw, row, hgt, reuse);
+	*scroll = canvas.scroll;
 }
 /*================================================
  * switch_scrolls -- Interchange scroll1 & scroll2
@@ -765,31 +743,32 @@ static STRING empstr = (STRING) "                                               
 /*==========================================
  * show_list - Show name list in list screen
  *========================================*/
-#define VIEWABLE 13
 void
 show_list (INDISEQ seq,
            INT top,
            INT cur,
            INT mark)
 {
-	UIWINDOW *uiwin = main_win;
+	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row, len = length_indiseq(seq);
 	STRING key, name;
 	NODE indi;
 	char scratch[200], *p;
 	TRANTABLE ttd = tran_tables[MINDS];
-
-	for (i = LIST_LINES+2; i < LIST_LINES+2+VIEWABLE; i++)
+	INT mode = 'n';
+	INT viewlines = 13;
+	
+	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
 		mvwaddstr(win, i, 1, empstr);
 	row = LIST_LINES+2;
-	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
+	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
 		indi = key_to_indi(key);
 		if (i == mark) mvwaddch(win, row, 2, 'x');
 		if (i == cur) {
 			mvwaddch(win, row, 3, '>');
-			show_person_main(indi, 1, LIST_LINES, FALSE);
+			show_indi_main(indi, mode, 1, LIST_LINES, FALSE);
 		}
 		name = manip_name(name, ttd, TRUE, TRUE, 40);
 		strcpy(scratch, name);
@@ -802,17 +781,18 @@ show_list (INDISEQ seq,
 	}
 }
 /*========================================================
- * show_aux_display -- Show source, event or other record
+ * show_aux -- Show source, event or other record
  *======================================================*/
 void
-show_aux_display (NODE node, INT mode, INT hgt, BOOLEAN reuse)
+show_aux (UIWINDOW uiwin, NODE node, INT mode, INT row, INT hgt 
+	, INT width, INT * scroll, BOOLEAN reuse)
 {
 	if (mode == 'g')
-		show_gedcom_main(node, GDVW_NORMAL, 1, hgt, reuse);
+		show_gedcom(uiwin, node, GDVW_NORMAL, row, hgt, width, scroll, reuse);
 	else if (mode == 't')
-		show_gedcom_main(node, GDVW_TEXT, 1, hgt, reuse);
+		show_gedcom(uiwin, node, GDVW_TEXT, row, hgt, width, scroll, reuse);
 	else
-		show_gedcom_main(node, GDVW_EXPANDED, 1, hgt, reuse);
+		show_gedcom(uiwin, node, GDVW_EXPANDED, row, hgt, width, scroll, reuse);
 }
 /*===============================================
  * show_scroll - vertically scroll person display
@@ -851,14 +831,14 @@ show_reset_scroll (void)
 static void
 pedigree_line (CANVASDATA canvas, INT x, INT y, STRING string, INT overflow)
 {
-	put_out_line((UIWINDOW *)canvas->param, x, y, string, canvas->maxcol, overflow);
+	put_out_line((UIWINDOW)canvas->param, x, y, string, canvas->maxcol, overflow);
 }
 /*=====================================
  * put_out_line - move string to screen
  * but also append + at end if requested
  *====================================*/
 static void
-put_out_line (UIWINDOW * uiwin, INT x, INT y, STRING string, INT width, INT flag)
+put_out_line (UIWINDOW uiwin, INT x, INT y, STRING string, INT width, INT flag)
 {
 	WINDOW * win = uiw_win(uiwin);
 	if (!flag)

@@ -36,7 +36,7 @@
 #include "gedcom.h"
 #include "sequence.h"
 #include "gedcheck.h"
-#include "screen.h"
+#include "screen.h" /* use wfield & wpos */
 #include "liflines.h"
 #include "lloptions.h"
 

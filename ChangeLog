@@ -1,5 +1,25 @@
 2001-11-26 Perry Rapp <puddle@users.sourceforge.net>
 
+	* ChangeLog hdrs/feedback.h hdrs/liflines.h hdrs/screen.h
+	interp/interp.c interp/more.c liflines/add.c
+	liflines/advedit.c liflines/ask.c liflines/askprogram.c
+	liflines/browse.c liflines/delete.c liflines/edit.c
+	liflines/error.c liflines/export.c liflines/import.c
+	liflines/lbrowse.c liflines/llinesi.h liflines/main.c
+	liflines/menuitem.c liflines/miscutls.c liflines/newrecs.c
+	liflines/scan.c liflines/screen.c liflines/show.c
+	liflines/valgdcom.c:
+
+	Combined choose_one_from_indiseq &  choose_list_from_indiseq.
+	Extended list detail display to handle F,S,E,X records.
+	Changed UIWINDOW to a pointer. Fixed BSD bug.
+	Changed include "screen.h" to "feedback.h" in many files.
+	Made show_indi, show_fam, and show_aux the 3 major entry points
+	for displaying records. Modified some show routines to handle
+	variable windows & width arguments.
+
+2001-11-26 Perry Rapp <puddle@users.sourceforge.net>
+
 	* ChangeLog gedlib/charmaps.c gedlib/gengedc.c gedlib/gstrings.c
 	gedlib/names.c hdrs/gedcom.h hdrs/interp.h hdrs/screen.h
 	hdrs/translat.h interp/alloc.c interp/interp.c

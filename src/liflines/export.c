@@ -36,7 +36,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
-#include "screen.h"
+#include "screen.h" /* calling wfield */
 #include "lloptions.h"
 
 #include "llinesi.h"

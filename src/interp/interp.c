@@ -30,6 +30,7 @@
  *   3.0.3 - 22 Sep 95
  *===========================================================*/
 
+#include <stdarg.h>
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
@@ -39,7 +40,7 @@
 #include "interp.h"
 #include "indiseq.h"
 #include "liflines.h"
-#include "screen.h"
+#include "feedback.h"
 #include "arch.h"
 #include "lloptions.h"
 
@@ -111,7 +112,7 @@ finishinterp (void)
 	/* is this necessary ? */
 
 	if (progerror) {
-		wrefresh(uiw_win(stdout_win));
+		refresh_stdout();
 		sleep(5);
 	}
 

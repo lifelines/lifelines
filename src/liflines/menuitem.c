@@ -30,7 +30,7 @@
  *==============================================================*/
 
 #include "llstdlib.h"
-#include "screen.h"
+#include "screen.h" /* need the screen names, & MAX_SCREEN */
 #include "menuitem.h"
 
 /*********************************************
