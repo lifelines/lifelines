@@ -1,6 +1,6 @@
 /*
  * @progname       st_db.li
- * @version        1.24 [of 2005-01-23]
+ * @version        1.25 [of 2005-01-25]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -247,6 +247,11 @@ proc exerciseIndi(indi)
 	{
 		addtoset(iset,spouse,num)
 		"family: " key(fam) nl()
+		children(fam, chil, chilnum)
+		{
+			addtoset(iset, chil, chilnum)
+			"child: " key(chil) nl()
+		}
 	}
 	addtoset(iset,nextindi(indi),"next")
 	addtoset(iset,previndi(indi),"prev")

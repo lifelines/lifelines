@@ -33,6 +33,10 @@
 
 	Fix goto_indi_child not to use deleted record.
 
+	* ChangeLog reports/st/st_db.li
+
+	Add children loop to st_db.li.
+
 2005-01-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/node.c
