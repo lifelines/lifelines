@@ -57,7 +57,9 @@ environ_determine_tempfile (void)
 	strcat(win32_tempfile, "."); /* so notepad doesn't add .txt */
 	return win32_tempfile;
 #else
-	static char unix_tempfile[] = "/tmp/lltmpXXXXXX";
+	static char template[] = "/tmp/lltmpXXXXXX";
+	static char unix_tempfile[sizeof(template)];
+	strcpy(unix_tempfile, template);
 	return mktemp(unix_tempfile);
 #endif
 }

@@ -5,6 +5,10 @@
 
 	Fixing build system for relocated source files.
 
+	* ChangeLog src/stdlib/environ.c:
+
+	Bugfix (mktemp failed on subsequent dbs) (sf#603804).
+
 2002-09-21 Perry Rapp
 
 	* Makefile.am configure.in build/msvc6/llines/llinesprj.dsp
