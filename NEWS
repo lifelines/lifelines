@@ -1,10 +1,17 @@
-LifeLines Source Release, Version 3.0.38
+LifeLines Source Release, Version 3.0.39
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.39
+============================
+- New report function test(mode, file)
 
 Bug fixes in 3.0.39
 ============================
 - Cache bug causes people to be confused intermittently (sf#1015745)
+- Add source/event/other could lead to corruption (sf#1059724)
+- Importing GED file with keys with leading zeros (eg, I01) led to crash (sf#1094199)
+- A bad xref (eg, "@I23") would cause report engine to crash (sf#1093628)
 
 New features added in 3.0.38
 ============================

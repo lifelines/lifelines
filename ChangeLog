@@ -9,6 +9,10 @@
 
 	Change docs/ll-reportmanual.pdf to binary file type in cvs
 
+	* ChangeLog NEWS
+
+	Record recent bug fixes and feature in NEWS file.
+
 2005-01-01 Perry Rapp
 
 	* ChangeLog src/hdrs/arch.h src/interp/builtin.c
