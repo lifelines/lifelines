@@ -42,7 +42,8 @@ __fatal (STRING file,
          int line)
 {
 	llwprintf("FATAL: %s: line %d\n", file, line);
-	final_cleanup();
+	close_lifelines();
+	endwin();
 	ll_abort(-1);
 }
 /*============================
