@@ -129,11 +129,19 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 		p += strlen(p);
 	}
 	if (appkey && indi && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(indi));
+		if(getoptint("DisplayKeyTags", 0) > 0) {
+			sprintf(p, " (I%s)", key_of_record(indi));
+		} else {
+			sprintf(p, " (%s)", key_of_record(indi));
+		}
 		p += strlen(p);
 	}
 	if (appkey && fam && displaykeys) {
-		sprintf(p, " (%s)", key_of_record(fam));
+		if(getoptint("DisplayKeyTags", 0) > 0) {
+			sprintf(p, " (F%s)", key_of_record(fam));
+		} else {
+			sprintf(p, " (%s)", key_of_record(fam));
+		}
 		p += strlen(p);
 	}
 	if(indi) {

@@ -1,3 +1,11 @@
+2003-09-25 Robert Simms
+	* .linesrc ChangeLog lines.cfg
+	src/gedlib/gstrings.c src/liflines/screen.c src/liflines/show.c
+
+	Implemented DisplayKeyTags option to prepend I or F to
+	individual and family keys shown on-screen.
+
+
 2003-09-24 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/path.c

@@ -214,7 +214,11 @@ disp_person_name (ZSTR zstr, STRING prefix, RECORD irec, INT width)
 	}
 /* TODO: add more names if room */
 /* TODO: first implement new function namelist to get us all names */
-	zs_appf(zstr, "(%s)", zs_str(zkey));
+	if(getoptint("DisplayKeyTags", 0) > 0) {
+		zs_appf(zstr, "(I%s)", zs_str(zkey));
+	} else {
+		zs_appf(zstr, "(%s)", zs_str(zkey));
+	}
 	zs_free(&zkey);
 }
 /*===============================================
@@ -459,7 +463,11 @@ init_display_fam (RECORD frec, INT width)
 		if (husbstatus == -1)
 			zs_apps(Shusb, "??");
 	}
-	zs_appf(Shusb, " (%s)", zs_str(famkey));
+	if(getoptint("DisplayKeyTags", 0) > 0) {
+		zs_appf(Shusb, " (F%s)", zs_str(famkey));
+	} else {
+		zs_appf(Shusb, " (%s)", zs_str(famkey));
+	}
 	zs_free(&famkey);
 
 	disp_person_birthdeath(Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
@@ -656,7 +664,11 @@ indi_to_ped_fix (NODE indi, INT len)
 	if (!devt) devt = (STRING) "";
 	if (keyflag) {
 		key = key_of_record(indi);
-		sprintf(tmp1, " [%s-%s] (%s)", bevt, devt, key);
+		if(getoptint("DisplayKeyTags", 0) > 0) {
+			sprintf(tmp1, " [%s-%s] (I%s)", bevt, devt, key);
+		} else {
+			sprintf(tmp1, " [%s-%s] (%s)", bevt, devt, key);
+		}
 	}
 	else
 		sprintf(tmp1, " (%s-%s)", bevt, devt);
@@ -839,7 +851,11 @@ person_display (NODE indi, NODE fam, INT len)
 		strcpy(p, scratch2);
 		p += strlen(p);
 	}
-	sprintf(p, " (%s)", key_of_record(indi));
+	if(getoptint("DisplayKeyTags", 0) > 0) {
+		sprintf(p, " (I%s)", key_of_record(indi));
+	} else {
+		sprintf(p, " (%s)", key_of_record(indi));
+	}
 	return scratch1;
 }
 /*========================================================

@@ -2512,7 +2512,11 @@ manufacture a listdisp here
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
-		llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
+		if(getoptint("DisplayKeyTags", 0) > 0) {
+			llstrappf(scratch, sizeof(scratch), uu8, "(I%s)", key_of_record(indi));
+		} else {
+			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
+		}
 		mvccwaddstr(win, row, 4, scratch);
 		row++;
 	}
