@@ -39,7 +39,7 @@
 INT lineno = 0;
 
 static BOOLEAN buffer_to_line(STRING, INT*, STRING*, STRING*, STRING*, STRING*);
-#ifdef 0
+#ifdef UNUSED_CODE
 static BOOLEAN all_digits (STRING);
 #endif
 

@@ -397,6 +397,8 @@ INT let;	/* if string starts with letter it must be this */
 	case 'X': return key_to_othr(kbuf);
 	default:  FATAL();
 	}
+	FATAL();
+	return NULL;
 }
 /*================================================
  * refn_to_record - Get record from user reference
