@@ -29,7 +29,7 @@ the program.
 
 /* customization globals - modify values in set_static_html_globals below */
 char_encoding("ASCII")
-options(explicitvars)
+options("explicitvars")
 global(base_filename)	/* where to store the results */
 global(background)	/* path of background image relative to final html
 			 * location, or "" */
