@@ -38,8 +38,24 @@
 #ifndef _MENUITEM_H
 #define _MENUITEM_H
 
-/* each menu item has display text and selection character(s) */
-typedef struct MenuItem_struct {
+#define MAIN_SCREEN        1
+#define ONE_PER_SCREEN     2
+#define ONE_FAM_SCREEN     3
+#define TWO_PER_SCREEN     4
+#define TWO_FAM_SCREEN     5
+#define LIST_SCREEN        7
+#define AUX_SCREEN         8
+/* must be at bottom of list */
+#define MAX_SCREEN         8
+
+
+/*
+  Each menu item has display text and selection character(s)
+  If Choices is 0 (as it is for all as of 2002.01), then the
+  first characters of Display up to whitespace are used for the
+  choice characters, eg, "f  Browse to fathers"
+*/
+typedef struct MenuItem_s {
 	STRING Display;
 	STRING Choices;
 	INT Command;

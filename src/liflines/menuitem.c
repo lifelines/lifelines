@@ -30,7 +30,7 @@
  *==============================================================*/
 
 #include "llstdlib.h"
-#include "screen.h" /* need the screen names, & MAX_SCREEN */
+#include "feedback.h"
 #include "menuitem.h"
 
 /*********************************************
@@ -38,7 +38,7 @@
  *********************************************/
 
 extern STRING mn_ambig,mn_longcho,mn_nocho;
-extern STRING mn_titindi,mn_titfam,mn_titaux,mn_titmain;
+extern STRING mn_titindi,mn_titfam,mn_titaux;
 extern STRING mn_tit2indi, mn_tit2fam;
 
 /*********************************************
@@ -61,30 +61,30 @@ struct CmdArray_s {
  * local function prototypes
  *********************************************/
 
-static void setup_menu(INT screen, STRING Title, INT MenuRows
-	, INT MenuCols ,INT Size, MenuItem ** Menu);
+/* alphabetical */
+static void add_menu_item(CMDARRAY cmds, MenuItem * mitem);
 static CMDARRAY create_cmd_array(INT alloc);
-static void grow_cmd_array(CMDARRAY cmds);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
 static BOOLEAN find_cmd(CMDARRAY cmds, char c, INT * pos);
+static void free_cmds(CMDARRAY cmds);
 static void get_menu_choice(STRING display, STRING choice, INT max);
+static void grow_cmd_array(CMDARRAY cmds);
 static void insert_cmd(CMDARRAY cmds, STRING str, INT cmdnum
 	, STRING display);
-static void free_cmds(CMDARRAY cmds);
 static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
+static void setup_menu(ScreenInfo * sinfo, STRING Title, INT MenuRows
+	, INT MenuCols ,INT Size, MenuItem ** Menu);
 
 /*********************************************
  * local variables
  *********************************************/
 
-ScreenInfo g_ScreenInfo[MAX_SCREEN];
+ScreenInfo g_ScreenInfo[MAX_SCREEN+1];
 
-/*
-Note - these are hardcoded as "?" and "q" in menuitem_check_cmd
- - 2001/02/11, Perry Rapp
-*/
-MenuItem g_MenuItemOther = { "?  Other menu choices", "?", CMD_MENU_MORE };
-MenuItem g_MenuItemQuit = { "q  Return to main menu", "q", CMD_QUIT };
+/* These are not listed as part of the menus below, because these are
+added on-the-fly to every menu page displayed */
+MenuItem g_MenuItemOther = { "?  Other menu choices", 0, CMD_MENU_MORE };
+MenuItem g_MenuItemQuit = { "q  Return to main menu", 0, CMD_QUIT };
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { "e  Edit the person", 0, CMD_EDIT };
@@ -92,103 +92,106 @@ static MenuItem f_MenuItemEditFamily = { "e  Edit the family", 0, CMD_EDIT };
 static MenuItem f_MenuItemEdit = { "e  Edit record", "e", CMD_EDIT };
 static MenuItem f_MenuItemEditTop = { "e  Edit top person", 0, CMD_EDIT };
 static MenuItem f_MenuItemFather = { "f  Browse to father", 0, CMD_FATHER };
-static MenuItem f_MenuItemFatherTop = { "f  Browse top father", "f", CMD_FATHER };
-static MenuItem f_MenuItemMother = { "m  Browse to mother", "m", CMD_MOTHER };
-static MenuItem f_MenuItemMotherTop = { "m  Browse top mother", "m", CMD_MOTHER };
-static MenuItem f_MenuItemSpouse = { "s  Browse to spouse/s", "s", CMD_SPOUSE };
-static MenuItem f_MenuItemSpouseTop = { "s  Browse top spouse/s", "s", CMD_SPOUSE };
-static MenuItem f_MenuItemChildren = { "c  Browse to children", "c", CMD_CHILDREN };
-static MenuItem f_MenuItemChildrenTop = { "c  Browse top children", "c", CMD_CHILDREN };
-static MenuItem f_MenuItemOlderSib = { "o  Browse to older sib", "o", CMD_UPSIB };
-static MenuItem f_MenuItemYoungerSib = { "y  Browse to younger sib", "y", CMD_DOWNSIB };
-static MenuItem f_MenuItemFamily = { "g  Browse to family", "g", CMD_FAMILY };
-static MenuItem f_MenuItemParents = { "u  Browse to parents", "u", CMD_PARENTS };
-static MenuItem f_MenuItemBrowse = { "b  Browse to persons", "b", CMD_BROWSE };
-static MenuItem f_MenuItemBrowseTop = { "t  Browse to top", "t", CMD_TOP };
-static MenuItem f_MenuItemBrowseBottom = { "b  Browse to bottom", "b", CMD_BOTTOM };
-static MenuItem f_MenuItemAddAsSpouse = { "h  Add as spouse", "h", CMD_ADDASSPOUSE };
-static MenuItem f_MenuItemAddAsChild = { "i  Add as child", "i", CMD_ADDASCHILD };
-static MenuItem f_MenuItemAddSpouse = { "s  Add spouse to family", "s", CMD_ADDSPOUSE };
-static MenuItem f_MenuItemAddChild = { "a  Add child to family", "a", CMD_ADDCHILD };
-static MenuItem f_MenuItemAddFamily = { "a  Add family", "a", CMD_ADDFAMILY };
-static MenuItem f_MenuItemSwapFamilies = { "x  Swap two families", "x", CMD_SWAPFAMILIES };
-static MenuItem f_MenuItemSwapChildren = { "x  Swap two children", "x", CMD_SWAPCHILDREN };
-static MenuItem f_MenuItemReorderChild = { "%c  Reorder child", "%c", CMD_REORDERCHILD };
-static MenuItem f_MenuItemSwitchTopBottom = { "x  Switch top/bottom", "x", CMD_SWAPTOPBOTTOM };
-static MenuItem f_MenuItemNewPerson = { "n  Create new person", "n", CMD_NEWPERSON };
-static MenuItem f_MenuItemNewFamily = { "a  Create new family", "a", CMD_NEWFAMILY };
-static MenuItem f_MenuItemTandem = { "tt Enter tandem mode", "tt", CMD_TANDEM };
-static MenuItem f_MenuItemTandemFamily = { "tt Enter family tandem", "tt", CMD_TANDEM };
-static MenuItem f_MenuItemZipIndi = { "zi Browse to indi", "zi", CMD_BROWSE_ZIP_INDI };
-static MenuItem f_MenuItemZipBrowse = { "zz Browse to any", "zz", CMD_BROWSE_ZIP_ANY };
-static MenuItem f_MenuItemRemoveAsSpouse = { "r  Remove as spouse", "r", CMD_REMOVEASSPOUSE };
-static MenuItem f_MenuItemRemoveAsChild = { "d  Remove as child", "d", CMD_REMOVEASCHILD };
-static MenuItem f_MenuItemRemoveSpouseFrom = { "r  Remove spouse from", "r", CMD_REMOVESPOUSE };
-static MenuItem f_MenuItemRemoveChildFrom = { "d  Remove child from", "d" , CMD_REMOVECHILD };
-static MenuItem f_MenuItemScrollUp = { "(  Scroll up", "(", CMD_SCROLL_UP };
-static MenuItem f_MenuItemScrollDown = { ")  Scroll down", ")", CMD_SCROLL_DOWN };
-static MenuItem f_MenuItemDepthUp = { "]  Increase tree depth", "]", CMD_DEPTH_UP };
-static MenuItem f_MenuItemDepthDown = { "[  Decrease tree depth", "[", CMD_DEPTH_DOWN };
-static MenuItem f_MenuItemScrollUpTop = { "(t Scroll top up", "(t", CMD_SCROLL_TOP_UP };
-static MenuItem f_MenuItemScrollDownTop = { ")t Scroll top down", ")t", CMD_SCROLL_TOP_DOWN };
-static MenuItem f_MenuItemScrollUpBottom = { "(b Scroll bottom up", "(b", CMD_SCROLL_BOTTOM_UP };
-static MenuItem f_MenuItemScrollDownBottom = { ")b Scroll bottom down", ")b", CMD_SCROLL_BOTTOM_DOWN };
-static MenuItem f_MenuItemScrollUpBoth = { "(( Scroll both up", "((", CMD_SCROLL_BOTH_UP };
-static MenuItem f_MenuItemScrollDownBoth = { ")) Scroll both down", "))", CMD_SCROLL_BOTH_DOWN };
-static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", "#", CMD_TOGGLE_CHILDNUMS };
-static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", "!g", CMD_MODE_GEDCOM };
-static MenuItem f_MenuItemModeGedcomX = { "!x GEDCOMX mode", "!x", CMD_MODE_GEDCOMX };
-static MenuItem f_MenuItemModeGedcomT = { "!t GEDCOMT mode", "!t", CMD_MODE_GEDCOMT };
-static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", "!a", CMD_MODE_ANCESTORS };
-static MenuItem f_MenuItemModeDescendants = { "!d Descendants mode", "!d", CMD_MODE_DESCENDANTS };
-static MenuItem f_MenuItemModeNormal = { "!n Normal mode", "!n", CMD_MODE_NORMAL };
-static MenuItem f_MenuItemModePedigree = { "p  Pedigree mode", "p", CMD_MODE_PEDIGREE };
-static MenuItem f_MenuItemModeCycle = { "!! Cycle mode", "!!", CMD_MODE_CYCLE };
-/* Note - f_MenuItemDigits has special handling, and must be 123456789 */
-static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", "123456789", CMD_CHILD_DIRECT0 };
-MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", "y", CMD_NONE };
-static MenuItem f_MenuItemAdvanced = { "A  Advanced view", "A", CMD_ADVANCED };
-static MenuItem f_MenuItemTandemChildren = { "tc Tandem to children", "tc", CMD_TANDEM_CHILDREN };
-static MenuItem f_MenuItemTandemFathers = { "tf Tandem to father/s", "tf", CMD_TANDEM_FATHERS };
-static MenuItem f_MenuItemTandemFamilies = { "tg Tandem to family/s", "tg", CMD_TANDEM_FAMILIES };
-static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", "f", CMD_BOTH_FATHERS };
-static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", "m", CMD_BOTH_MOTHERS };
-static MenuItem f_MenuItemTandemMothers = { "tm Tandem to mother/s", "tm", CMD_TANDEM_MOTHERS };
-static MenuItem f_MenuItemTandemSpouses = { "ts Tandem to spouse/s", "ts", CMD_TANDEM_SPOUSES };
-static MenuItem f_MenuItemTandemParents = { "tu Tandem to parents", "tu", CMD_TANDEM_PARENTS };
-static MenuItem f_MenuItemEnlargeMenu = { "<  Enlarge menu area", "<", CMD_MENU_GROW };
-static MenuItem f_MenuItemShrinkMenu = { ">  Shrink menu area", ">", CMD_MENU_SHRINK };
-static MenuItem f_MenuItemMoreCols = { "M> More menu cols", "M>", CMD_MENU_MORECOLS };
-static MenuItem f_MenuItemLessCols = { "M< Less menu cols", "M<", CMD_MENU_LESSCOLS };
-static MenuItem f_MenuItemNext = { "+  Next in db", "+", CMD_NEXT };
-static MenuItem f_MenuItemPrev = { "-  Prev in db", "-", CMD_PREV };
-static MenuItem f_MenuItemCopyTopToBottom = { "d  Copy top to bottom", "d", CMD_COPY_TOP_TO_BOTTOM };
-static MenuItem f_MenuItemMergeBottomToTop = { "j  Merge bottom to top", "j", CMD_MERGE_BOTTOM_TO_TOP};
-static MenuItem f_MenuItemMoveDownList = { "j  Move down list", "j", CMD_NONE };
-static MenuItem f_MenuItemMoveUpList = { "k  Move up list", "k", CMD_NONE };
-static MenuItem f_MenuItemEditThis = { "e  Edit this person", "e", CMD_NONE };
-static MenuItem f_MenuItemBrowseThis = { "i  Browse this person", "i", CMD_BROWSE_INDI };
-static MenuItem f_MenuItemMarkThis = { "m  Mark this person", "m", CMD_NONE };
-static MenuItem f_MenuItemDeleteFromList = { "d  Delete from list", "d", CMD_NONE };
-static MenuItem f_MenuItemNameList = { "n  Name this list", "n", CMD_NONE };
-static MenuItem f_MenuItemBrowseNewPersons = { "b  Browse new persons", "b", CMD_NONE };
-static MenuItem f_MenuItemAddToList = { "a  Add to this list", "a", CMD_NONE };
-static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", "x", CMD_NONE };
-static MenuItem f_MenuItemSources = { "$s  List sources", "$s", CMD_SOURCES };
-static MenuItem f_MenuItemNotes = { "$n  List notes", "$n", CMD_NOTES };
-static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS };
-static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
-static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
-static MenuItem f_MenuItemHistoryList = { "^l  History list", "^l", CMD_HISTORY_LIST };
-static MenuItem f_MenuItemHistoryClean = { "^c Clear history", "^c", CMD_HISTORY_CLEAR };
-static MenuItem f_MenuItemAddSour = { "%s  Add source", "%s", CMD_ADD_SOUR };
-static MenuItem f_MenuItemAddEven = { "%e  Add event", "%e", CMD_ADD_EVEN };
-static MenuItem f_MenuItemAddOthr = { "%o  Add other", "%o", CMD_ADD_OTHR };
+static MenuItem f_MenuItemFatherTop = { "f  Browse top father", 0, CMD_FATHER };
+static MenuItem f_MenuItemMother = { "m  Browse to mother", 0, CMD_MOTHER };
+static MenuItem f_MenuItemMotherTop = { "m  Browse top mother", 0, CMD_MOTHER };
+static MenuItem f_MenuItemSpouse = { "s  Browse to spouse/s", 0, CMD_SPOUSE };
+static MenuItem f_MenuItemSpouseTop = { "s  Browse top spouse/s", 0, CMD_SPOUSE };
+static MenuItem f_MenuItemChildren = { "c  Browse to children", 0, CMD_CHILDREN };
+static MenuItem f_MenuItemChildrenTop = { "c  Browse top children", 0, CMD_CHILDREN };
+static MenuItem f_MenuItemOlderSib = { "o  Browse to older sib", 0, CMD_UPSIB };
+static MenuItem f_MenuItemYoungerSib = { "y  Browse to younger sib", 0, CMD_DOWNSIB };
+static MenuItem f_MenuItemFamily = { "g  Browse to family", 0, CMD_FAMILY };
+static MenuItem f_MenuItemParents = { "u  Browse to parents", 0, CMD_PARENTS };
+static MenuItem f_MenuItemBrowse = { "b  Browse to persons", 0, CMD_BROWSE };
+static MenuItem f_MenuItemBrowseTop = { "t  Browse to top", 0, CMD_TOP };
+static MenuItem f_MenuItemBrowseBottom = { "b  Browse to bottom", 0, CMD_BOTTOM };
+static MenuItem f_MenuItemAddAsSpouse = { "h  Add as spouse", 0, CMD_ADDASSPOUSE };
+static MenuItem f_MenuItemAddAsChild = { "i  Add as child", 0, CMD_ADDASCHILD };
+static MenuItem f_MenuItemAddSpouse = { "s  Add spouse to family", 0, CMD_ADDSPOUSE };
+static MenuItem f_MenuItemAddChild = { "a  Add child to family", 0, CMD_ADDCHILD };
+static MenuItem f_MenuItemAddFamily = { "a  Add family", 0, CMD_ADDFAMILY };
+static MenuItem f_MenuItemSwapFamilies = { "x  Swap two families", 0, CMD_SWAPFAMILIES };
+static MenuItem f_MenuItemSwapChildren = { "x  Swap two children", 0, CMD_SWAPCHILDREN };
+static MenuItem f_MenuItemReorderChild = { "%c  Reorder child", 0, CMD_REORDERCHILD };
+static MenuItem f_MenuItemSwitchTopBottom = { "x  Switch top/bottom", 0, CMD_SWAPTOPBOTTOM };
+static MenuItem f_MenuItemNewPerson = { "n  Create new person", 0, CMD_NEWPERSON };
+static MenuItem f_MenuItemNewFamily = { "a  Create new family", 0, CMD_NEWFAMILY };
+static MenuItem f_MenuItemTandem = { "tt Enter tandem mode", 0, CMD_TANDEM };
+static MenuItem f_MenuItemTandemFamily = { "tt Enter family tandem", 0, CMD_TANDEM };
+static MenuItem f_MenuItemZipIndi = { "zi Browse to indi", 0, CMD_BROWSE_ZIP_INDI };
+static MenuItem f_MenuItemZipBrowse = { "zz Browse to any", 0, CMD_BROWSE_ZIP_ANY };
+static MenuItem f_MenuItemRemoveAsSpouse = { "r  Remove as spouse", 0, CMD_REMOVEASSPOUSE };
+static MenuItem f_MenuItemRemoveAsChild = { "d  Remove as child", 0, CMD_REMOVEASCHILD };
+static MenuItem f_MenuItemRemoveSpouseFrom = { "r  Remove spouse from", 0, CMD_REMOVESPOUSE };
+static MenuItem f_MenuItemRemoveChildFrom = { "d  Remove child from", 0 , CMD_REMOVECHILD };
+static MenuItem f_MenuItemScrollUp = { "(  Scroll up", 0, CMD_SCROLL_UP };
+static MenuItem f_MenuItemScrollDown = { ")  Scroll down", 0, CMD_SCROLL_DOWN };
+static MenuItem f_MenuItemDepthUp = { "]  Increase tree depth", 0, CMD_DEPTH_UP };
+static MenuItem f_MenuItemDepthDown = { "[  Decrease tree depth", 0, CMD_DEPTH_DOWN };
+static MenuItem f_MenuItemScrollUpTop = { "(t Scroll top up", 0, CMD_SCROLL_TOP_UP };
+static MenuItem f_MenuItemScrollDownTop = { ")t Scroll top down", 0, CMD_SCROLL_TOP_DOWN };
+static MenuItem f_MenuItemScrollUpBottom = { "(b Scroll bottom up", 0, CMD_SCROLL_BOTTOM_UP };
+static MenuItem f_MenuItemScrollDownBottom = { ")b Scroll bottom down", 0, CMD_SCROLL_BOTTOM_DOWN };
+static MenuItem f_MenuItemScrollUpBoth = { "(( Scroll both up", 0, CMD_SCROLL_BOTH_UP };
+static MenuItem f_MenuItemScrollDownBoth = { ")) Scroll both down", 0, CMD_SCROLL_BOTH_DOWN };
+static MenuItem f_MenuItemToggleChildNos = { "#  Toggle childnos", 0, CMD_TOGGLE_CHILDNUMS };
+static MenuItem f_MenuItemModeGedcom = { "!g GEDCOM mode", 0, CMD_MODE_GEDCOM };
+static MenuItem f_MenuItemModeGedcomX = { "!x GEDCOMX mode", 0, CMD_MODE_GEDCOMX };
+static MenuItem f_MenuItemModeGedcomT = { "!t GEDCOMT mode", 0, CMD_MODE_GEDCOMT };
+static MenuItem f_MenuItemModeAncestors = { "!a Ancestors mode", 0, CMD_MODE_ANCESTORS };
+static MenuItem f_MenuItemModeDescendants = { "!d Descendants mode", 0, CMD_MODE_DESCENDANTS };
+static MenuItem f_MenuItemModeNormal = { "!n Normal mode", 0, CMD_MODE_NORMAL };
+static MenuItem f_MenuItemModePedigree = { "p  Pedigree mode", 0, CMD_MODE_PEDIGREE };
+static MenuItem f_MenuItemModeCycle = { "!! Cycle mode", 0, CMD_MODE_CYCLE };
+/* Note - CMD_CHILD_DIRECT0 has special handling, & is always wired to 123456789 */
+static MenuItem f_MenuItemDigits = { "(1-9)  Browse to child", 0, CMD_CHILD_DIRECT0 };
+MenuItem f_MenuItemSyncMoves = { "y  Turn on sync", 0, CMD_NONE };
+static MenuItem f_MenuItemAdvanced = { "A  Advanced view", 0, CMD_ADVANCED };
+static MenuItem f_MenuItemTandemChildren = { "tc Tandem to children", 0, CMD_TANDEM_CHILDREN };
+static MenuItem f_MenuItemTandemFathers = { "tf Tandem to father/s", 0, CMD_TANDEM_FATHERS };
+static MenuItem f_MenuItemTandemFamilies = { "tg Tandem to family/s", 0, CMD_TANDEM_FAMILIES };
+static MenuItem f_MenuItemBothFathers = { "f  Browse to fathers", 0, CMD_BOTH_FATHERS };
+static MenuItem f_MenuItemBothMothers = { "m  Browse to mothers", 0, CMD_BOTH_MOTHERS };
+static MenuItem f_MenuItemTandemMothers = { "tm Tandem to mother/s", 0, CMD_TANDEM_MOTHERS };
+static MenuItem f_MenuItemTandemSpouses = { "ts Tandem to spouse/s", 0, CMD_TANDEM_SPOUSES };
+static MenuItem f_MenuItemTandemParents = { "tu Tandem to parents", 0, CMD_TANDEM_PARENTS };
+static MenuItem f_MenuItemEnlargeMenu = { "<  Enlarge menu area", 0, CMD_MENU_GROW };
+static MenuItem f_MenuItemShrinkMenu = { ">  Shrink menu area", 0, CMD_MENU_SHRINK };
+static MenuItem f_MenuItemMoreCols = { "M> More menu cols", 0, CMD_MENU_MORECOLS };
+static MenuItem f_MenuItemLessCols = { "M< Less menu cols", 0, CMD_MENU_LESSCOLS };
+static MenuItem f_MenuItemNext = { "+  Next in db", 0, CMD_NEXT };
+static MenuItem f_MenuItemPrev = { "-  Prev in db", 0, CMD_PREV };
+static MenuItem f_MenuItemCopyTopToBottom = { "d  Copy top to bottom", 0, CMD_COPY_TOP_TO_BOTTOM };
+static MenuItem f_MenuItemMergeBottomToTop = { "j  Merge bottom to top", 0, CMD_MERGE_BOTTOM_TO_TOP};
+static MenuItem f_MenuItemMoveDownList = { "j  Move down list", 0, CMD_NONE };
+static MenuItem f_MenuItemMoveUpList = { "k  Move up list", 0, CMD_NONE };
+static MenuItem f_MenuItemEditThis = { "e  Edit this person", 0, CMD_NONE };
+static MenuItem f_MenuItemBrowseThis = { "i  Browse this person", 0, CMD_BROWSE_INDI };
+static MenuItem f_MenuItemMarkThis = { "m  Mark this person", 0, CMD_NONE };
+static MenuItem f_MenuItemDeleteFromList = { "d  Delete from list", 0, CMD_NONE };
+static MenuItem f_MenuItemNameList = { "n  Name this list", 0, CMD_NONE };
+static MenuItem f_MenuItemBrowseNewPersons = { "b  Browse new persons", 0, CMD_NONE };
+static MenuItem f_MenuItemAddToList = { "a  Add to this list", 0, CMD_NONE };
+static MenuItem f_MenuItemSwapMarkCurrent = { "x  Swap mark/current", 0, CMD_NONE };
+static MenuItem f_MenuItemSources = { "$s  List sources", 0, CMD_SOURCES };
+static MenuItem f_MenuItemNotes = { "$n  List notes", 0, CMD_NOTES };
+static MenuItem f_MenuItemPointers = { "$$  List references", 0, CMD_POINTERS };
+static MenuItem f_MenuItemHistoryBack = { "^b  History/back", 0, CMD_HISTORY_BACK };
+static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", 0, CMD_HISTORY_FWD };
+static MenuItem f_MenuItemHistoryList = { "^l  History list", 0, CMD_HISTORY_LIST };
+static MenuItem f_MenuItemHistoryClean = { "^c Clear history", 0, CMD_HISTORY_CLEAR };
+static MenuItem f_MenuItemAddSour = { "%s  Add source", 0, CMD_ADD_SOUR };
+static MenuItem f_MenuItemAddEven = { "%e  Add event", 0, CMD_ADD_EVEN };
+static MenuItem f_MenuItemAddOthr = { "%o  Add other", 0, CMD_ADD_OTHR };
 
 
-static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", "B", CMD_BROWSE_FAM };
+static MenuItem f_MenuItemBrowseFamily = { "B  Browse new family", 0, CMD_BROWSE_FAM };
 
 
+/* Actual menus initializations
+ NB: All menus include g_MenuItemOther & g_MenuItemQuit, and they are not listed
+*/
 
 static MenuItem * f_MenuPerson[] =
 {
@@ -431,41 +434,52 @@ static MenuItem * f_MenuListPersons[] =
 /*============================
  * setup_menu - initialize runtime memory
  *  structures for one menu
- * Created: 1999/03, Perry Rapp
- * Joined repository: 2001/01/28, Perry Rapp
+ * Created: 2001/01/28, Perry Rapp
  *==========================*/
 static void
-setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
+setup_menu (ScreenInfo * sinfo, STRING Title, INT MenuRows, INT MenuCols
 	, INT Size, MenuItem ** Menu)
 {
-	INT i, j;
+	INT i;
 	CMDARRAY cmds = create_cmd_array(32);
-	/* STRING defaults = "q?"; */
 
-	g_ScreenInfo[screen].Title = Title;
-	g_ScreenInfo[screen].MenuRows = MenuRows;
-	g_ScreenInfo[screen].MenuCols = MenuCols;
-	g_ScreenInfo[screen].MenuSize = Size;
+	sinfo->Title = Title;
+	sinfo->MenuRows = MenuRows;
+	sinfo->MenuCols = MenuCols;
+	sinfo->MenuSize = Size;
 	/* MenuPage set by caller */
-	g_ScreenInfo[screen].Menu = Menu;
-	g_ScreenInfo[screen].Commands = cmds;
-	for (i=0; i<Size; i++) {
-		if (Menu[i]->Command == CMD_CHILD_DIRECT0) {
-			/* CMD_CHILD_DIRECT0 is always hooked up to digits */
-			for (j=1; j<=9; j++) {
-				char choice[2];
-				sprintf(choice, "%d", j);
-				insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+j, Menu[i]->Display);
-			}
-		} else {
-			char choice[9];
-			if (Menu[i]->Choices)
-				strcpy(choice, Menu[i]->Choices);
-			else
-				get_menu_choice(Menu[i]->Display, choice, sizeof(choice));
-			/* add to nested menu arrays (stored by choice keys */
-			insert_cmd(cmds, choice, Menu[i]->Command, Menu[i]->Display);
+	sinfo->Menu = Menu;
+	sinfo->Commands = cmds;
+	for (i=0; i<Size; i++)
+		add_menu_item(cmds, Menu[i]);
+	add_menu_item(cmds, &g_MenuItemOther);
+	add_menu_item(cmds, &g_MenuItemQuit);
+}
+/*============================
+ * add_menu_item - add cmd for menu to cmdarray
+ *  cmds:  [I/O] cmdarray (tree used for command recognition)
+ *  mitem: [IN]  new menu item to add to cmds
+ * Created: 2002/01/24
+ *==========================*/
+static void
+add_menu_item (CMDARRAY cmds, MenuItem * mitem)
+{
+	INT i;
+	if (mitem->Command == CMD_CHILD_DIRECT0) {
+		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
+		for (i=1; i<=9; i++) {
+			char choice[2];
+			sprintf(choice, "%d", i);
+			insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+i, mitem->Display);
 		}
+	} else {
+		char choice[9];
+		if (mitem->Choices)
+			strcpy(choice, mitem->Choices);
+		else
+			get_menu_choice(mitem->Display, choice, sizeof(choice));
+		/* add to nested menu arrays (stored by choice keys */
+		insert_cmd(cmds, choice, mitem->Command, mitem->Display);
 	}
 }
 /*============================
@@ -613,9 +627,10 @@ menuitem_initialize (INT cols)
 	INT MenuRows, MenuCols=cols, MenuSize;
 	MenuItem ** Menu;
 	INT ItemSize;
+	ScreenInfo * sinfo=0;
 
 	ItemSize = sizeof(f_MenuPerson[0]);
-	for (i=1; i<MAX_SCREEN; i++)
+	for (i=1; i<=MAX_SCREEN; i++)
 	{
 		g_ScreenInfo[i].Title = "Invalid";
 		g_ScreenInfo[i].MenuRows = 0;
@@ -625,57 +640,61 @@ menuitem_initialize (INT cols)
 		g_ScreenInfo[i].Menu = NULL;
 	}
 
-	scr = MAIN_SCREEN;
-	g_ScreenInfo[scr].Title = mn_titmain;
-
 	scr = ONE_PER_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
 	Title = mn_titindi;
 	MenuRows = 8;
 	MenuSize = sizeof(f_MenuPerson)/ItemSize-1;
 	Menu = f_MenuPerson;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = ONE_FAM_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
 	Title = mn_titfam;
 	MenuRows = 6;
 	MenuSize = sizeof(f_MenuFamily)/ItemSize-1;
 	Menu = f_MenuFamily;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = TWO_PER_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
 	Title = mn_tit2indi;
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
 	Menu = f_Menu2Person;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	scr = TWO_FAM_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
 	Title = mn_tit2fam;
 	MenuRows = 5;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
 	Menu = f_Menu2Family;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
+
+	scr = AUX_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
+	Title = mn_titaux;
+	MenuRows = 4;
+	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
+	Menu = f_MenuAux;
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
+	sinfo = &g_ScreenInfo[scr];
 	Title = (STRING)"LifeLines -- List Browse Screen";
 	MenuRows = 13;
 	MenuCols = 1;
 	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;
 	Menu = f_MenuListPersons;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
+	setup_menu(sinfo, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 	MenuCols = cols;
 
-	scr = AUX_SCREEN;
-	Title = mn_titaux;
-	MenuRows = 4;
-	MenuSize = sizeof(f_MenuAux)/ItemSize-1;
-	Menu = f_MenuAux;
-	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu);
 
 
-	for (i=1; i<MAX_SCREEN; i++)
+	for (i=1; i<=MAX_SCREEN; i++)
 		g_ScreenInfo[i].MenuPage = 0;
 }
 /*============================
@@ -686,7 +705,7 @@ void
 menuitem_terminate (void)
 {
 	INT i;
-	for (i=1; i<MAX_SCREEN; i++) {
+	for (i=1; i<=MAX_SCREEN; i++) {
 		if (g_ScreenInfo[i].Commands) {
 			free_cmds(g_ScreenInfo[i].Commands);
 			g_ScreenInfo[i].Commands=0;
@@ -718,8 +737,6 @@ INT
 menuitem_check_cmd (INT screen, STRING str)
 {
 	CMDARRAY cmds = g_ScreenInfo[screen].Commands;
-	if (*str == 'q') return CMD_QUIT;
-	if (*str == '?') return CMD_MENU_MORE;
 	if (*str == '*') return CMD_MENU_TOGGLE;
 	return menuitem_find_cmd(cmds, str);
 }

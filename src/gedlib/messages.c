@@ -350,7 +350,6 @@ STRING mn_titindi  = SS "LifeLines -- Person Browse Screen (* toggles menu)";
 STRING mn_titfam   = SS "LifeLines -- Family Browse Screen (* toggles menu)";
 STRING mn_titaux   = SS "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
 STRING mn_unkcmd   = SS "Not valid command";
-STRING mn_titmain  = SS "LifeLines -- Main Menu";
 STRING mn_tit2indi = SS "LifeLines -- Two Person Browse Screen (* toggles menu)";
 STRING mn_tit2fam  = SS "LifeLines -- Two Family Browse Screen (* toggles menu)";
 

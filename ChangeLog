@@ -1,3 +1,13 @@
+2002-01-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c hdrs/menuitem.h hdrs/screen.h
+	liflines/menuitem.c liflines/screen.c:
+
+	Removed choice letters in menuitems (they are all in display
+	strings). Removed hardcoded "q" & "?" treatment. Moved screen
+	defines to menuitem.h & removed screen.h from menuitem.c.
+	Bugfix: delete the dynamically created curses popup list window.
+
 2002-01-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib/stdstrng.c:
