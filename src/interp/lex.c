@@ -32,6 +32,11 @@
 
 #define YYSTYPE PNODE
 
+#ifdef __OpenBSD__
+#define _XOPEN_SOURCE
+#define _POSIX_SOURCE
+#endif
+
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
