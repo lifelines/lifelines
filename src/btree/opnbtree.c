@@ -42,6 +42,7 @@
 #endif
 #include "standard.h"
 #include "btree.h"
+#include "liflines.h"
 
 /*============================================
  * openbtree -- Alloc and init BTREE structure

@@ -35,6 +35,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "liflines.h"
 
 /* WARNING: this file has not been updated for new evaluate() function
  * which returns PVALUES.
