@@ -1,1631 +1,481 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<HTML
-><HEAD
-><TITLE
->&#13;
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>
+
 LifeLines Developer Documentation
-</TITLE
-><META
-NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
-><BODY
-CLASS="book"
-BGCOLOR="#FFFFFF"
-TEXT="#000000"
-LINK="#0000FF"
-VLINK="#840084"
-ALINK="#0000FF"
-><DIV
-CLASS="BOOK"
-><A
-NAME="docbook"
-></A
-><DIV
-CLASS="TITLEPAGE"
-><H1
-CLASS="title"
-><A
-NAME="AEN2"
-></A
-><TT
-CLASS="application"
->LifeLines</TT
-> Developer Documentation</H1
-><H2
-CLASS="subtitle"
-><TT
-CLASS="application"
->LifeLines</TT
-> Version 3.0.28</H2
-><H3
-CLASS="author"
-><A
-NAME="AEN6"
-></A
->Perry Rapp </H3
-><HR></DIV
-><DIV
-CLASS="TOC"
-><DL
-><DT
-><B
->Table of Contents</B
-></DT
-><DT
-><A
-HREF="#AEN11"
->Introduction to Lifelines Developers Manual</A
-></DT
-><DT
-><A
-HREF="#AEN15"
->btree module</A
-></DT
-><DT
-><A
-HREF="#AEN39"
->stdlib module</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN43"
->String Functions</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN46"
->String copy and concatenation</A
-></DT
-><DT
-><A
-HREF="#AEN69"
->String append (llstrapp)</A
-></DT
-><DT
-><A
-HREF="#AEN113"
->String append (appendstr)</A
-></DT
-><DT
-><A
-HREF="#AEN117"
->char functions</A
-></DT
-><DT
-><A
-HREF="#AEN121"
->string allocation functions</A
-></DT
-><DT
-><A
-HREF="#AEN124"
->string conversion functions</A
-></DT
-><DT
-><A
-HREF="#AEN127"
->string equality functions</A
-></DT
-><DT
-><A
-HREF="#AEN130"
->string comparison functions</A
-></DT
-><DT
-><A
-HREF="#AEN133"
->string whitespace functions</A
-></DT
-><DT
-><A
-HREF="#AEN136"
->string UTF-8 functions</A
-></DT
-><DT
-><A
-HREF="#AEN139"
->printpic functions</A
-></DT
-></DL
-></DD
-></DL
-></DD
-><DT
-><A
-HREF="#AEN142"
->gedlib module</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN146"
->names</A
-></DT
-><DT
-><A
-HREF="#AEN149"
->refns</A
-></DT
-><DT
-><A
-HREF="#AEN152"
->xreffile</A
-></DT
-><DT
-><A
-HREF="#AEN155"
->messages</A
-></DT
-><DT
-><A
-HREF="#AEN159"
->translation tables (charmaps.c &#38; translat.c)</A
-></DT
-><DT
-><A
-HREF="#AEN162"
->indiseq</A
-></DT
-><DT
-><A
-HREF="#AEN165"
->brwslist</A
-></DT
-></DL
-></DD
-><DT
-><A
-HREF="#AEN168"
->interp module</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN175"
->pvalues</A
-></DT
-><DT
-><A
-HREF="#AEN178"
->symtab</A
-></DT
-><DT
-><A
-HREF="#AEN181"
->date</A
-></DT
-></DL
-></DD
-><DT
-><A
-HREF="#AEN186"
->liflines module</A
-></DT
-><DT
-><A
-HREF="#AEN189"
->autotools build system</A
-></DT
-><DT
-><A
-HREF="#AEN192"
->Building <TT
-CLASS="application"
->LifeLines</TT
-></A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN197"
->Checking the CVS source out</A
-></DT
-><DT
-><A
-HREF="#AEN209"
->automake and autoconf</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN216"
->Which does what:</A
-></DT
-></DL
-></DD
-><DT
-><A
-HREF="#AEN224"
->Building the code on Unix/Linux</A
-></DT
-><DT
-><A
-HREF="#AEN231"
->Generating the source tarball</A
-></DT
-><DT
-><A
-HREF="#AEN237"
->Generating the rpm package</A
-></DT
-><DT
-><A
-HREF="#AEN245"
->Makeing a release</A
-></DT
-><DT
-><A
-HREF="#AEN251"
->Putting a release on sourceforge</A
-></DT
-></DL
-></DD
-></DL
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN11"
-></A
->
+</title><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="docbook"></a>
+
+<span class="application">LifeLines</span> Developer Documentation
+</h1></div><div><h2 class="subtitle"><span class="application">LifeLines</span> Version 3.0.43</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Perry</span> <span class="surname">Rapp </span></h3></div></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#id4693901">1. 
 
 Introduction to Lifelines Developers Manual
 
-</H1
-><P
->&#13;
-     <TT
-CLASS="application"
->LifeLines</TT
-> source code is divided into
+</a></span></dt><dt><span class="chapter"><a href="#id4691847">2. btree module</a></span></dt><dt><span class="chapter"><a href="#id4693921">3. stdlib module</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id4693937">String Functions</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id4693949">String copy and concatenation</a></span></dt><dt><span class="sect2"><a href="#id4691717">String append (llstrapp)</a></span></dt><dt><span class="sect2"><a href="#id4692126">String append (appendstr)</a></span></dt><dt><span class="sect2"><a href="#id4692147">char functions</a></span></dt><dt><span class="sect2"><a href="#id4692167">string allocation functions</a></span></dt><dt><span class="sect2"><a href="#id4692178">string conversion functions</a></span></dt><dt><span class="sect2"><a href="#id4692190">string equality functions</a></span></dt><dt><span class="sect2"><a href="#id4692201">string comparison functions</a></span></dt><dt><span class="sect2"><a href="#id4692211">string whitespace functions</a></span></dt><dt><span class="sect2"><a href="#id4692222">string UTF-8 functions</a></span></dt><dt><span class="sect2"><a href="#id4692235">printpic functions</a></span></dt></dl></dd><dt><span class="sect1"><a href="#id4692252">List Module</a></span></dt><dt><span class="sect1"><a href="#id4692268">Table Module</a></span></dt><dt><span class="sect1"><a href="#id4692282">Balanced Binary Tree (rbtree) Module</a></span></dt></dl></dd><dt><span class="chapter"><a href="#id4692296">4. gedlib module</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id4692312">names</a></span></dt><dt><span class="sect1"><a href="#id4692324">refns</a></span></dt><dt><span class="sect1"><a href="#id4692335">xreffile</a></span></dt><dt><span class="sect1"><a href="#id4692350">messages</a></span></dt><dt><span class="sect1"><a href="#id4692370">translation tables (charmaps.c and translat.c)</a></span></dt><dt><span class="sect1"><a href="#id4692391">indiseq</a></span></dt><dt><span class="sect1"><a href="#id4692402">brwslist</a></span></dt></dl></dd><dt><span class="chapter"><a href="#id4692415">5. interp module</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id4692459">pvalues</a></span></dt><dt><span class="sect1"><a href="#id4692470">symtab</a></span></dt><dt><span class="sect1"><a href="#id4692482">date</a></span></dt></dl></dd><dt><span class="chapter"><a href="#id4692513">6. liflines module</a></span></dt><dt><span class="chapter"><a href="#id4692523">7. autotools build system</a></span></dt><dt><span class="chapter"><a href="#id4692534">8. Building <span class="application">LifeLines</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="#id4692559">Checking the CVS source out</a></span></dt><dt><span class="sect1"><a href="#id4692635">automake and autoconf</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id4692674">Which does what:</a></span></dt></dl></dd><dt><span class="sect1"><a href="#id4692719">Building the code on Unix/Linux</a></span></dt><dt><span class="sect1"><a href="#id4692760">Generating the source tarball</a></span></dt><dt><span class="sect1"><a href="#id4692790">Generating the rpm package</a></span></dt><dt><span class="sect1"><a href="#id4692850">Making a release</a></span></dt><dt><span class="sect1"><a href="#id4692884">Putting a release on sourceforge</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4693901"></a>Chapter 1. 
+
+Introduction to Lifelines Developers Manual
+
+</h2></div></div></div><p>
+
+     <span class="application">LifeLines</span> source code is divided into
 	 several functional subdirectories, which will be discussed 
 	 individually below. They are chained together by an autotools
 	 build system, which creates executables in both the liflines
 	 and tools subdirectories.
 
-</P
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN15"
-></A
->btree module</H1
-><P
->&#13;  The btree subdirectory contains the implementation for a btree
+</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4691847"></a>Chapter 2. btree module</h2></div></div></div><p>
+  The btree subdirectory contains the implementation for a btree
   database, using fixed length 8 letter keys (RKEY).
-</P
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->nodes. </B
-></B
->
+</p><p><b>nodes. </b>
   Each node in the btree is a separate file on disk (named, eg, "aa"),
   and the first 4096 (BUFLEN macro) bytes are the node header.
-</P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;
+</p><p><b>
+
   index nodes
 
-    . </B
-></B
->
+    . </b>
 
   These are the interior index nodes of the btree; they contain pointers
   to subordinate index or block nodes. The program performs binary
   searches through index nodes to find a particular key.
 
-    </P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;
+    </p><p><b>
+
   block nodes
 
-    . </B
-></B
->
+    . </b>
 
-  These contain the actual data (keys &#38; their associated records).
+  These contain the actual data (keys and their associated records).
 
-    </P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;
+    </p><p><b>
+
   keyfile
 
-    . </B
-></B
->
+    . </b>
 
   One special file on the disk, the keyfile, contains some meta information
   and a pointer to the root of the btree (the master key). When the root
   changes (splits), the master key in the keyfile is updated accordingly.
 
-    </P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;
+    </p><p><b>
+
   traverse
 
-    . </B
-></B
->
+    . </b>
 
   There is a traversal function implemented at the btree level, which uses
   a callback.
 
-    </P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;
+    </p><p><b>
+
   bterrno
 
-    . </B
-></B
->
+    . </b>
 
   There is a global integer error variable, bterrno, which is set by this
   module upon most failure conditions.
 
-    </P
-></DIV
-><DIV
-CLASS="formalpara"
-><P
-><B
-><B
->&#13;  FUTURE DIRECTIONS
-    . </B
-></B
->
+    </p><p><b>
+  FUTURE DIRECTIONS
+    . </b>
 
   bterrno must be removed for multi-threading. Traversal is more elegantly
   done via iterator style repeated calls in, instead of callback.
 
-    </P
-></DIV
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN39"
-></A
->stdlib module</H1
-><P
->&#13;The stdlib directory contains various utility functions not specifically
-related to <TT
-CLASS="application"
->LifeLines</TT
->, GEDCOM, or even genealogy.
-</P
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN43"
-></A
->String Functions</H2
-><P
->&#13;There has built up, over time, quite an assortment of string functions,
+    </p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4693921"></a>Chapter 3. stdlib module</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id4693937">String Functions</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id4693949">String copy and concatenation</a></span></dt><dt><span class="sect2"><a href="#id4691717">String append (llstrapp)</a></span></dt><dt><span class="sect2"><a href="#id4692126">String append (appendstr)</a></span></dt><dt><span class="sect2"><a href="#id4692147">char functions</a></span></dt><dt><span class="sect2"><a href="#id4692167">string allocation functions</a></span></dt><dt><span class="sect2"><a href="#id4692178">string conversion functions</a></span></dt><dt><span class="sect2"><a href="#id4692190">string equality functions</a></span></dt><dt><span class="sect2"><a href="#id4692201">string comparison functions</a></span></dt><dt><span class="sect2"><a href="#id4692211">string whitespace functions</a></span></dt><dt><span class="sect2"><a href="#id4692222">string UTF-8 functions</a></span></dt><dt><span class="sect2"><a href="#id4692235">printpic functions</a></span></dt></dl></dd><dt><span class="sect1"><a href="#id4692252">List Module</a></span></dt><dt><span class="sect1"><a href="#id4692268">Table Module</a></span></dt><dt><span class="sect1"><a href="#id4692282">Balanced Binary Tree (rbtree) Module</a></span></dt></dl></div><p>
+The stdlib directory contains various utility functions not specifically
+related to <span class="application">LifeLines</span>, GEDCOM, or even genealogy.
+</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4693937"></a>String Functions</h2></div></div></div><p>
+There has built up, over time, quite an assortment of string functions,
 split currently between mystring.c and stdstrng.c (and a few macros in
 standard.h).
-</P
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN46"
-></A
->String copy and concatenation</H3
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN48"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrncpy</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t n</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN58"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrncat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t n</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-><P
->&#13;    These are simple wrappers around the C RTL (run time library) functions.
+</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4693949"></a>String copy and concatenation</h3></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrncpy</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t n</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">size_t n</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t n</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var>,
+<var class="pdparam">size_t n</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+<var class="pdparam">va_list args</var>;</td></tr></table></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrncat</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t n</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">size_t n</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t n</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var>,
+<var class="pdparam">size_t n</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+<var class="pdparam">va_list args</var>;</td></tr></table></div><p>
+    These are simple wrappers around the C RTL (run time library) functions.
     The ANSI versions do not zero-terminate on overflow, which is greatly
     inconvenient, os the wrapper versions do so. Also, the wrapper versions
     are UTF-8 aware (they backtrack on overflow, to avoid leaving part of
     a UTF-8 multibyte sequence at the end).
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN69"
-></A
->String append (llstrapp)</H3
-><P
->&#13;<DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN72"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrapps</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * src</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
->
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4691717"></a>String append (llstrapp)</h3></div></div></div><p>
+</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrapps</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * src</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">size_t limit</var>,
+<var class="pdparam">int utf8</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * src</var>,
+<var class="pdparam">size_t limit</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * src</var>;</td></tr></table></div><p>
 
-<DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN81"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappc</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->char ch</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
->
+</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrappc</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t limit</var><var class="pdparam">char ch</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">size_t limit</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">size_t limit</var><var class="pdparam">char ch</var>,
+<var class="pdparam">size_t limit</var>,
+<var class="pdparam">char ch</var>;</td></tr></table></div><p>
 
-<DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN89"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappc</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
->
+</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrappc</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">int limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">int limit</var>,
+<var class="pdparam">int utf8</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">int limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var>,
+<var class="pdparam">int limit</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>;</td></tr></table></div><p>
 
-<DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN98"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappv</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
->
-</P
-><P
->&#13;    This family of functions is one (thin) layer higher than llstrncpy,
+</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" style="padding-bottom: 1em"><tr><td><code class="funcdef">char *<b class="fsfunc">llstrappv</b>(</code></td><td><var class="pdparam">char *dest</var><var class="pdparam">int limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var><code>)</code>;</td><td> </td></tr></table><table border="0" summary="Function argument synopsis" cellspacing="0" cellpadding="0"><tr><td><var class="pdparam">char *dest</var>,
+<var class="pdparam">int limit</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+ </td><td><var class="pdparam">char *dest</var><var class="pdparam">int limit</var><var class="pdparam">int utf8</var><var class="pdparam">const char * fmt</var><var class="pdparam">va_list args</var>,
+<var class="pdparam">int limit</var>,
+<var class="pdparam">int utf8</var>,
+<var class="pdparam">const char * fmt</var>,
+<var class="pdparam">va_list args</var>;</td></tr></table></div><p>
+</p><p>
+    This family of functions is one (thin) layer higher than llstrncpy,
     providing an interface wherein the caller specified the buffer's start
     and entire size. That is,
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;      llstrncat(buffer, " more stuff", sizeof(buffer)-strlen(buffer));
-    </PRE
-></TD
-></TR
-></TABLE
->
+    </p><pre class="programlisting">
+      llstrncat(buffer, " more stuff", sizeof(buffer)-strlen(buffer));
+    </pre><p>
     may be replaced by
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;      llstrapp(buffer, sizeof(buffer), " more stuff");
-    </PRE
-></TD
-></TR
-></TABLE
->
+    </p><pre class="programlisting">
+      llstrapp(buffer, sizeof(buffer), " more stuff");
+    </pre><p>
     There are also varargs versions, so that
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;      snprintf(buffer+strlen(buffer), sizeof(buffer)-strlen(buffer), ...
-    </PRE
-></TD
-></TR
-></TABLE
->
+    </p><pre class="programlisting">
+      snprintf(buffer+strlen(buffer), sizeof(buffer)-strlen(buffer), ...
+    </pre><p>
     may be replaced by
-    <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;      llstrappf(buffer, sizeof(buffer), ...
-    </PRE
-></TD
-></TR
-></TABLE
->
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN113"
-></A
->String append (appendstr)</H3
-><P
->&#13;    This is a family of functions similar in purpose to the strapp 
+    </p><pre class="programlisting">
+      llstrappf(buffer, sizeof(buffer), ...
+    </pre><p>
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692126"></a>String append (appendstr)</h3></div></div></div><p>
+    This is a family of functions similar in purpose to the strapp 
     family, but which uses an additional level of indirection, advancing
     pointers and decrementing counts. 
-</P
-><P
->&#13;      * NOTE: FUTURE DIRECTIONS
+</p><p>
+      * NOTE: FUTURE DIRECTIONS
       I put these in, and I would like to take them out, as I find them
       less intuitive than the strapp family, and more bug-prone. They are
       slightly faster, but I don't think it is worth it. -Perry. 
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN117"
-></A
->char functions</H3
-><P
->&#13;    There are character classification functions, which have handling
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692147"></a>char functions</h3></div></div></div><p>
+    There are character classification functions, which have handling
     particular to Latin-1 and to Finnish (if the Finnish compilation option
     was set). 
-</P
-><P
->&#13;      * NOTE: FUTURE DIRECTIONS
+</p><p>
+      * NOTE: FUTURE DIRECTIONS
       It would be very nice to see wchar-based functions, which handle
       unicode, replace these, and then we might be able to jettison the
-      Latin-1 &#38; Finnish specific character code.
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN121"
-></A
->string allocation functions</H3
-><P
->&#13;    TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN124"
-></A
->string conversion functions</H3
-><P
->&#13;    TODO: (isnumeric, lower, upper, capitalize, titlecase)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN127"
-></A
->string equality functions</H3
-><P
->&#13;    TODO: (eqstr, eqstr_ex, nestr, cmpstr)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN130"
-></A
->string comparison functions</H3
-><P
->&#13;    TODO: (cmpstrloc)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN133"
-></A
->string whitespace functions</H3
-><P
->&#13;    TODO: (trim, striptrail, striplead, allwhite, chomp)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN136"
-></A
->string UTF-8 functions</H3
-><P
->&#13;    TODO: (utf8len, find_prev_char)
-</P
-></DIV
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN139"
-></A
->printpic functions</H3
-><P
->&#13;    TODO: (sprintpic0,1,2,3)
-</P
-></DIV
-></DIV
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN142"
-></A
->gedlib module</H1
-><P
->&#13;This directory is a collection of routines for GEDCOM and for its use in
-a <TT
-CLASS="application"
->LifeLines</TT
-> btree database.
-</P
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN146"
-></A
->names</H2
-><P
->&#13;  This module implements indexing names.
+      Latin-1 and Finnish specific character code.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692167"></a>string allocation functions</h3></div></div></div><p>
+    TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692178"></a>string conversion functions</h3></div></div></div><p>
+    TODO: (isnumeric, lower, upper, capitalize, titlecase)
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692190"></a>string equality functions</h3></div></div></div><p>
+    TODO: (eqstr, eqstr_ex, nestr, cmpstr)
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692201"></a>string comparison functions</h3></div></div></div><p>
+    TODO: (cmpstrloc)
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692211"></a>string whitespace functions</h3></div></div></div><p>
+    TODO: (trim, striptrail, striplead, allwhite, chomp)
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692222"></a>string UTF-8 functions</h3></div></div></div><p>
+    These are the low-level functions used to do UTF-8 mechanics.
+    These should only be called when in a database with internal
+    codeset of UTF-8.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692235"></a>printpic functions</h3></div></div></div><p>
+    These are simple printf style functions, except they only handle
+    string format, and they do handle reordering the inputs. These 
+    are used for strings that are internationalized, so that words
+    or numbers (passed in string format) may be reordered in other
+    languages. Instead of %s escapes, these handle %1, %2, and %3
+    escapes.
+</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692252"></a>List Module</h2></div></div></div><p>
+list.c and list.h implement a simple, doubly-linked list type, which
+takes void pointers (VPTR) as elements. The list manages its own nodes
+and memory (struct tag_list and struct tag_lnode), but the for the
+elements, it only frees them if the caller so instructs it (using
+list type LISTDOFREE), and of course this only works if they are
+stdalloc/stdfree heap blocks.
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692268"></a>Table Module</h2></div></div></div><p>
+table.c and table.h implement a fixed size hash tree (with linear buckets).
+As of 2005-01, Perry has been changing the implementation of the table
+type, so it is currently in flux.
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692282"></a>Balanced Binary Tree (rbtree) Module</h2></div></div></div><p>
+rbtree.c and rbtree.h implement a generic red/black balanced binary tree.
+These are not currently used by lifelines, but are planned as a replacement
+for the current fixed-size hash table in table.c.
+</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4692296"></a>Chapter 4. gedlib module</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id4692312">names</a></span></dt><dt><span class="sect1"><a href="#id4692324">refns</a></span></dt><dt><span class="sect1"><a href="#id4692335">xreffile</a></span></dt><dt><span class="sect1"><a href="#id4692350">messages</a></span></dt><dt><span class="sect1"><a href="#id4692370">translation tables (charmaps.c and translat.c)</a></span></dt><dt><span class="sect1"><a href="#id4692391">indiseq</a></span></dt><dt><span class="sect1"><a href="#id4692402">brwslist</a></span></dt></dl></div><p>
+This directory is a collection of routines for GEDCOM and for its use in
+a <span class="application">LifeLines</span> btree database.
+</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692312"></a>names</h2></div></div></div><p>
+  This module implements indexing names.
   TODO: Explain soundex indexing.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN149"
-></A
->refns</H2
-><P
->&#13;  This module implements indexing references (REFNs).
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692324"></a>refns</h2></div></div></div><p>
+  This module implements indexing references (REFNs).
   TOD: Explain two character index.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN152"
-></A
->xreffile</H2
-><P
->&#13;  This module stores lists of deleted record numbers for each type.
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692335"></a>xreffile</h2></div></div></div><p>
+  This module stores lists of deleted record numbers for each type.
   When a record is deleted, its number is added to the appropriate
   deleted list in xreffile. When a record is added, first the
   appropriate deleted list in xreffile is checked for a free record
   number.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN155"
-></A
->messages</H2
-><P
->&#13;  Traditionally all translatable strings have been stored in this file.
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692350"></a>messages</h2></div></div></div><p>
+  Traditionally all translatable strings have been stored in this file.
   This is not necessary with the current gettext scheme, but it would
   perhaps be helpful if a resource based scheme were adapted in the
   future.
-</P
-><P
->&#13;    * FUTURE DIRECTIONS
+</p><p>
+    * FUTURE DIRECTIONS
     When/If GUI versions are incorporated into the same codebase, how to
     handle translate strings shared and not shared between versions needs
     to be worked out.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN159"
-></A
->translation tables (charmaps.c &#38; translat.c)</H2
-><P
->&#13;  The implementation of codeset translation is stored here (not to be 
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692370"></a>translation tables (charmaps.c and translat.c)</h2></div></div></div><p>
+  The implementation of codeset translation is stored here (not to be 
   confused with language translation for the user interface, called
   localization, and not associated with these files). Both custom
   translation tables and delegation to the iconv codeset conversion 
   library are done here.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN162"
-></A
->indiseq</H2
-><P
->&#13;  The indiseq type is implemented here, a list of records (which no longer
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692391"></a>indiseq</h2></div></div></div><p>
+  The indiseq type is implemented here, a list of records (which no longer
   need all be persons).
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN165"
-></A
->brwslist</H2
-><P
->&#13;  Named browse lists are implemented here (temporary record lists named by
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692402"></a>brwslist</h2></div></div></div><p>
+  Named browse lists are implemented here (temporary record lists named by
   user during this session).
-</P
-></DIV
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN168"
-></A
->interp module</H1
-><P
->&#13;The <TT
-CLASS="application"
->LifeLines</TT
-> reporting language parser and interpreter are stored here.
+</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4692415"></a>Chapter 5. interp module</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id4692459">pvalues</a></span></dt><dt><span class="sect1"><a href="#id4692470">symtab</a></span></dt><dt><span class="sect1"><a href="#id4692482">date</a></span></dt></dl></div><p>
+The <span class="application">LifeLines</span> reporting language parser and interpreter are stored here.
 A custom lexical analyzer is in lex.c, and a yacc parser generator is
 in yacc.y. 
-</P
-><P
->&#13;The main interpreter is called with a list of files to parse, and some
+</p><p>
+The main interpreter is called with a list of files to parse, and some
 options. In actuality, I don't think more than one file is ever passed
 to the main entry point. If no file is passed, the routine will prompt
 (and here is where the user may choose a report from a list). But a
 report may be passed in, if one was specified with commandline argument
 to llines or llexec.
-</P
-><P
->&#13;The report file is parsed, and as it is parsed, any included reports 
+</p><p>
+The report file is parsed, and as it is parsed, any included reports 
 are added to the list to be parsed (unless already on the list,
 so circular references are not a problem).
-</P
-><P
->&#13;require statements are handled at parse time. The handler puts the
+</p><p>
+require statements are handled at parse time. The handler puts the
 requested version into the file property table (stored inside the
 pointer in the filetab entry for the file; filetab entries are
 indexed by full path of report). Later, just after parse completes
 for that file (in the main parsing loop in the main interpreter 
 function), require conditions are tested in check_rpt_requires(...).
-</P
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN175"
-></A
->pvalues</H2
-><P
->&#13;  All variable values in report language interpretation are stored in a
+</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692459"></a>pvalues</h2></div></div></div><p>
+  All variable values in report language interpretation are stored in a
   union type called pvalue.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN178"
-></A
->symtab</H2
-><P
->&#13;  Symbol tables are a thin wrapper around the table type provided by
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692470"></a>symtab</h2></div></div></div><p>
+  Symbol tables are a thin wrapper around the table type provided by
   stdlib, specialized to hold pvalues.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN181"
-></A
->date</H2
-><P
->&#13;  A fairly complete GEDCOM date parser is also located here. It actually
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692482"></a>date</h2></div></div></div><p>
+  A fairly complete GEDCOM date parser is also located here. It actually
   includes both a date parser, and a date formatter (which generates the
-  thousands of possible <TT
-CLASS="application"
->LifeLines</TT
-> date formats).
-</P
-><P
->&#13;    * FUTURE DIRECTIONS
+  thousands of possible <span class="application">LifeLines</span> date formats).
+</p><p>
+    * FUTURE DIRECTIONS
     If a date type were added to the report language, it would be possible
     to distinguish fully-parsed dates in the report language (so invalid or
-    illegal dates could be flagged &#38; handled separately in a report). The
+    illegal dates could be flagged and handled separately in a report). The
     date module already implements a date type internally, and it is
-    exposed to the rest of the program (gdate &#38; gdate_val, which correspond
+    exposed to the rest of the program (gdate and gdate_val, which correspond
     to GEDCOM date types), but not to the report language.
-</P
-></DIV
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN186"
-></A
->liflines module</H1
-><P
->&#13;TODO:
-</P
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN189"
-></A
->autotools build system</H1
-><P
->&#13;todo
-</P
-></DIV
-><DIV
-CLASS="chapter"
-><HR><H1
-><A
-NAME="AEN192"
-></A
->Building <TT
-CLASS="application"
->LifeLines</TT
-></H1
-><P
->&#13;This chapter gives an overview of one way you can build 
-<TT
-CLASS="application"
->LifeLines</TT
->.  It is not intended to be
+</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4692513"></a>Chapter 6. liflines module</h2></div></div></div><p>
+TODO:
+</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4692523"></a>Chapter 7. autotools build system</h2></div></div></div><p>
+todo
+</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id4692534"></a>Chapter 8. Building <span class="application">LifeLines</span></h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id4692559">Checking the CVS source out</a></span></dt><dt><span class="sect1"><a href="#id4692635">automake and autoconf</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id4692674">Which does what:</a></span></dt></dl></dd><dt><span class="sect1"><a href="#id4692719">Building the code on Unix/Linux</a></span></dt><dt><span class="sect1"><a href="#id4692760">Generating the source tarball</a></span></dt><dt><span class="sect1"><a href="#id4692790">Generating the rpm package</a></span></dt><dt><span class="sect1"><a href="#id4692850">Making a release</a></span></dt><dt><span class="sect1"><a href="#id4692884">Putting a release on sourceforge</a></span></dt></dl></div><p>
+This chapter gives an overview of one way you can build 
+<span class="application">LifeLines</span>.  It is not intended to be
 a comprehensive list of all techniques, but rather enough to get you started.
 This section does not assume you are downloading the source tarball
 and building it, Those instructions are in the file INSTALL.
 We are assuming you are checking out the sources from CVS.
-</P
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN197"
-></A
->Checking the CVS source out</H2
-><P
->&#13;If you are not a member of the 
-<TT
-CLASS="application"
->LifeLines</TT
->
-development project, you can check check out sources anonymously.
+</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692559"></a>Checking the CVS source out</h2></div></div></div><p>
+If you are not a member of the 
+<span class="application">LifeLines</span>
+development project, you can check out sources anonymously.
 In the following assume that CVS stands for
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;cvs -d:pserver:anonymous@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
-</PRE
-></TD
-></TR
-></TABLE
->
+</p><pre class="programlisting">
+cvs -d:pserver:anonymous@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
+</pre><p>
 If you are a project developer, you will be checking the files out under your 
 user_id.  so CVS will stand for
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;cvs -d:ext:user_id@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
-</PRE
-></TD
-></TR
-></TABLE
->
+</p><pre class="programlisting">
+cvs -d:ext:user_id@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
+</pre><p>
 You will also need to export CVS_RSH
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;CVS_RSH=ssh
+</p><pre class="programlisting">
+CVS_RSH=ssh
 export CVS_RSH
-</PRE
-></TD
-></TR
-></TABLE
->
+</pre><p>
 The first time you check out sources into a build area:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;CVS login anonymous
+</p><pre class="programlisting">
+CVS login anonymous
 CVS checkout lifelines
-</PRE
-></TD
-></TR
-></TABLE
->
+</pre><p>
 When prompted for a password for anonymous, simply press the Enter key.
-</P
-><P
->&#13;Once you have checked out the sources, cvs hides information in the CVS
+</p><p>
+Once you have checked out the sources, cvs hides information in the CVS
 sub directories about how you accessed sourceforge so the -d option
 isn't needed to be typed in.  After the first checkout, if you want to 
 update your sources, you can just type:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;cvs update lifelines
-</PRE
-></TD
-></TR
-></TABLE
->
-</P
-><P
->&#13;The cvs login command stashes information in .cvspass for remote repository
+</p><pre class="programlisting">
+cvs update lifelines
+</pre><p>
+</p><p>
+The cvs login command stashes information in .cvspass for remote repository
 access.  If this is the only remote cvs archive you access, you may be able
 to skip the cvs login command on future access attempts.  If you work on 
 multiple projects you can logout when you are finished with
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;cvs logout
-</PRE
-></TD
-></TR
-></TABLE
->
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN209"
-></A
->automake and autoconf</H2
-><P
->&#13;Many of the files you're used to editing by hand are automatically
-generated by automake &#38;/or autoconf.  These include any file named
+</p><pre class="programlisting">
+cvs logout
+</pre><p>
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692635"></a>automake and autoconf</h2></div></div></div><p>
+Many of the files you're used to editing by hand are automatically
+generated by automake and/or autoconf.  These include any file named
 Makefile, Makefile.in, config.h, config.h.in, or configure.
-</P
-><P
->&#13;The proper files to modify by hand are configure.in (if there's something
+</p><p>
+The proper files to modify by hand are configure.in (if there's something
 new you need to determine about the host system at configuration time)
 and Makefile.am (if source files are added or removed, targets added,
 or dependencies changed).
-</P
-><P
->&#13;As long as you have autoconf and automake installed on your system, the
+</p><p>
+As long as you have autoconf and automake installed on your system, the
 Makefiles generated will be able to regenerate any file dependent on a
 Makefile.am or configure.in.  To regenerate the build system explicitly
 run the script autogen.sh:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13; sh autogen.sh
-</PRE
-></TD
-></TR
-></TABLE
->
-</P
-><P
->&#13;autogen *must* be run after freshly checking a copy of the
+</p><pre class="programlisting">
+ sh autogen.sh
+</pre><p>
+</p><p>
+autogen *must* be run after freshly checking a copy of the
 project out of CVS -- the files generated automatically are no longer
 included in the CVS repository.
-</P
-><DIV
-CLASS="sect2"
-><HR><H3
-CLASS="sect2"
-><A
-NAME="AEN216"
-></A
->Which does what:</H3
-><P
->&#13;At development (or package creation) time:
-</P
-><P
->&#13;aclocal: This generates aclocal.m4 from acinclude.m4.
-</P
-><P
->&#13;Please run 'aclocal -I build/autotools -I build/autotools' in order to get all 
+</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id4692674"></a>Which does what:</h3></div></div></div><p>
+At development (or package creation) time:
+</p><p>
+aclocal: This generates aclocal.m4 from acinclude.m4.
+</p><p>
+Please run 'aclocal -I build/autotools -I build/autotools' in order to get all 
 the autoconf, automake and gettext macros into aclocal.m4.
 [ The autogen.sh script has been updated to do this. ]
-</P
-><P
->&#13;autoheader: This generates acconfig.h.
+</p><p>
+autoheader: This generates acconfig.h.
+</p><p>
 automake: This generates Makefile.in files from Makefile.am files.
+</p><p>
 autoconf: This generates configure from configure.in (or configure.ac).
-</P
-><P
->&#13;On remote machine compiling a source distribution package:
-</P
-><P
->&#13;configure will generate config.h and Makefile files from Makefile.in files.
-</P
-></DIV
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN224"
-></A
->Building the code on Unix/Linux</H2
-><P
->&#13;There are lots of dependencies required to build
-<TT
-CLASS="application"
->LifeLines</TT
->.
+</p><p>
+On remote machine compiling a source distribution package:
+</p><p>
+configure will generate config.h and Makefile files from Makefile.in files.
+</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692719"></a>Building the code on Unix/Linux</h2></div></div></div><p>
+There are lots of dependencies required to build
+<span class="application">LifeLines</span>.
 Of course you need a C Compiler and make, but also a number of other tools
 like autoconf, automake, byacc and flex. 
 One way to build the code is to make a subdirectory, lets say called bld
 in your lifelines directory, (where the toplevel Makefile.am is located)
 and then build all the code there.  This keeps the objects and executables
 out of the source directories.  This is the process shown here.
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;sh autogen.sh
+</p><pre class="programlisting">
+sh autogen.sh
 mkdir bld
 cd bld
 ../configure
 make
-</PRE
-></TD
-></TR
-></TABLE
->
-</P
-><P
->&#13;This should build 
-<TT
-CLASS="application"
->LifeLines</TT
->
+</pre><p>
+</p><p>
+This should build 
+<span class="application">LifeLines</span>
 and leave the results in subdirectories of the the directory bld.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN231"
-></A
->Generating the source tarball</H2
-><P
->&#13;If you have build the code as described above, you can generate the
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692760"></a>Generating the source tarball</h2></div></div></div><p>
+If you have build the code as described above, you can generate the
 source tarball as follows;
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;cd bld
+</p><pre class="programlisting">
+cd bld
 make dist
-</PRE
-></TD
-></TR
-></TABLE
->
-</P
-><P
->&#13;While this is a source tarball it does contain a number of generated
+</pre><p>
+</p><p>
+While this is a source tarball it does contain a number of generated
 files that make it easier to generate 
-<TT
-CLASS="application"
->LifeLines</TT
->
+<span class="application">LifeLines</span>
 from the source tarball.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN237"
-></A
->Generating the rpm package</H2
-><P
->&#13;The specification file to build a rpm for redhat linux is included in the
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692790"></a>Generating the rpm package</h2></div></div></div><p>
+The specification file to build a rpm for redhat linux is included in the
 cvs repository.  These notes show how you can use this to build the
 source and binary rpm for redhat linux.
-</P
-><P
->&#13;These instructions use techniques described by Mike Harris in a note
+</p><p>
+These instructions use techniques described by Mike Harris in a note
 entitled "Building RPM packages as a non-root user."  These were found
 at http://www.rpm.org/hintskinks/buildtree.  At that url was also a 
 tarball that included the files README( the note), .rpmrc and .rpmmacros.
 The later two files are installed in your home directory.  These do alter
 the default behavior of rpm for you and are not required to build the rpm,
 however, these instructions will fail.
-</P
-><P
->&#13;Make sure there is a line of the form
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;%packager     Joe Blow  &#60;joe@blow.com&#62;
-</PRE
-></TD
-></TR
-></TABLE
->
+</p><p>
+Make sure there is a line of the form
+</p><pre class="programlisting">
+%packager     Joe Blow  &lt;joe@blow.com&gt;
+</pre><p>
 In your ~/.rpmmacros file.  It is used to put the name and email address
 of the individual generating the rpm package into the file.  Be sure to
 use your name and email address.  If there is a "Packager:" entry in the
 lifelines.spec file, make sure it is correct, as it overrides the value
 in your .rpmmacros file.
-</P
-><P
->&#13;From the lifelines directory (where the toplevel Makefile.am and the bld
+</p><p>
+From the lifelines directory (where the toplevel Makefile.am and the bld
 directory are, execute the following commands (with appropriate version
 numbers of course)
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;mkdir ~/rpmbuild
+</p><pre class="programlisting">
+mkdir ~/rpmbuild
 mkdir ~/rpmbuild/SRPMS
 mkdir ~/rpmbuild/RPMS
 mkdir ~/rpmbuild/BUILD
 mkdir ~/rpmbuild/tmp
-mkdir ~/rpmbuild/lifelines-3.0.28
-cp bld/lifelines-3.0.28.tar.gz ~/rpmbuild/lifelines-3.0.28
-cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.28
-cd ~/rpmbuild/lifeines-3.0.28
+mkdir ~/rpmbuild/lifelines-3.0.22
+cp bld/lifelines-3.0.22.tar.gz ~/rpmbuild/lifelines-3.0.22.
+cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.22
+cd ~/rpmbuild/lifeines-3.0.22
 rpmbuild -ba lifelines.spec
-</PRE
-></TD
-></TR
-></TABLE
->
+</pre><p>
 The mkdir commands only need to be executed if needed.
 If everything goes ok, this will generate a source and binary rpm.
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN245"
-></A
->Makeing a release</H2
-><P
->&#13;To release a new version, edit the version number in
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;  NEWS
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692850"></a>Making a release</h2></div></div></div><p>
+To release a new version, edit the version number in
+</p><pre class="programlisting">
+  NEWS
   configure.in
   build/rpm/lifelines.spec
   src/hdrs/version.h
   build/msvc6/llines/llines.rc
   docs/ll-*.xml
-</PRE
-></TD
-></TR
-></TABLE
->
+</pre><p>
 Add an entry mentioning the new version in the
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;  ChangeLog
-</PRE
-></TD
-></TR
-></TABLE
->
-Tag the cvs source via
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;  cvs tag v3_0_25
-</PRE
-></TD
-></TR
-></TABLE
->
+</p><pre class="programlisting">
+  ChangeLog
+</pre><p>
+Tag the cvs source via (for example, for version 3.0.25)
+</p><pre class="programlisting">
+  cvs tag v3_0_25
+</pre><p>
 Finally, Send an announcement to the LINES-L mailing list
-</P
-></DIV
-><DIV
-CLASS="sect1"
-><HR><H2
-CLASS="sect1"
-><A
-NAME="AEN251"
-></A
->Putting a release on sourceforge</H2
-><P
->&#13;TODO:
-</P
-></DIV
-></DIV
-></DIV
-></BODY
-></HTML
->
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4692884"></a>Putting a release on sourceforge</h2></div></div></div><p>
+(Not all developers have the power to create or edit a file release
+on sourceforge, only Project Administrators and File Release Technicians.)
+</p><p>
+The instructions at
+http://sourceforge.net/docman/display_doc.php?docid=6445&amp;group_id=1
+are the ones that Perry followed to make many of the releases.
+</p></div></div></div></body></html>

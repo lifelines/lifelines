@@ -4,6 +4,10 @@
 
 	Fixes to ll-devguide.xml (from saxon 8.3b).
 
+	* ChangeLog docs/ll-devguide.html
+
+	New version (xsltproc, docbook-1.33) of ll-devguide.
+
 2005-02-12 lifelines beta 3.0.43 RELEASE
 
 2005-02-12 Perry Rapp
