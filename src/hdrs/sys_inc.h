@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #ifdef WIN32
 
@@ -19,7 +20,7 @@
 
 /* WIN32 - MSVC INCLUDES */
 #ifdef _MSC_VER
-#include <dirent.h>
+#include <direct.h>
 #endif
 
 #else
