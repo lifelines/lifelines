@@ -23,7 +23,6 @@ struct callback_info { CALLBACK_FNC fnc; VPTR uparm; };
 /*********************************************
  * local function prototypes
  *********************************************/
-static void remove_callback_info (VPTR vptr);
 
 /*********************************************
  * local function definitions
@@ -31,29 +30,19 @@ static void remove_callback_info (VPTR vptr);
  *********************************************/
 
 /*===============================================
- * add_listener -- add new listener onto list (no dup check)
+ * add_listener -- add new listener to collection (no dup check)
  *=============================================*/
 void
 add_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 {
 	struct callback_info * info = 
-		(struct callback_info *)malloc(sizeof(*info));
+		(struct callback_info *)stdalloc(sizeof(*info));
+	memset(info, 0, sizeof(*info));
 	info->fnc = fncptr;
 	info->uparm = uparm;
 	if (!*notifiees)
-		*notifiees = create_list();
+		*notifiees = create_list2(LISTDOFREE);
 	enqueue_list(*notifiees, (VPTR)info);
-}
-/*===============================================
- * remove_callback_info -- Delete contents of one slot of f_listeners
- * Created: 2003-02-02 (Perry Rapp)
- *=============================================*/
-static void
-remove_callback_info (VPTR vptr)
-{
-	struct callback_info * info = (struct callback_info *)vptr;
-	ASSERT(info);
-	free(info);
 }
 /*===============================================
  * remove_listeners -- Empty & remove list
@@ -62,7 +51,7 @@ void
 remove_listeners (LIST * notifiees)
 {
 	if (*notifiees) {
-		destroy_list2(*notifiees, remove_callback_info);
+		destroy_list(*notifiees);
 		*notifiees = 0;
 	}
 }
@@ -79,13 +68,13 @@ delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 	if (!*notifiees || is_empty_list(*notifiees))
 		return;
 	lold = *notifiees;
-	*notifiees = create_list();
+	*notifiees = create_list2(LISTDOFREE);
 	while (!is_empty_list(lold)) {
 		struct callback_info * info = (struct callback_info *)pop_list(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {
 			found = TRUE;
 			info->fnc = NULL;
-			free(info);
+			stdfree(info);
 		} else {
 			enqueue_list(*notifiees, (VPTR)info);
 		}

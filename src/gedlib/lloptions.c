@@ -49,7 +49,7 @@ static TABLE f_db=0; /* option values in current database (user/options) */
 static TABLE f_global=0; /* option values from lines config file */
 static TABLE f_predef=0; /* predefined variables during config file processing */
 static TABLE f_fallback=0; /* lowest priority option values */
-static LIST f_notifications=0;
+static LIST f_notifications=0; /* collection of callbacks for option table changes
 
 /*********************************************
  * local function definitions

@@ -62,8 +62,8 @@ static BOOLEAN customized_msgs = FALSE;
 static STRING  current_coll = NULL; /* most recent */
 static STRING  current_msgs = NULL; /* most recent */
 static STRING  rptlocalestr = NULL; /* if set by report program */
-static LIST f_uicodeset_callbacks = NULL; /* list of callbacks for UI codeset changes */
-static LIST f_uilang_callbacks = NULL; /* list of callbacks for UI language changes */
+static LIST f_uicodeset_callbacks = NULL; /* collection of callbacks for UI codeset changes */
+static LIST f_uilang_callbacks = NULL; /* collection of callbacks for UI language changes */
 
 
 

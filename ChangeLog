@@ -58,6 +58,11 @@
 	Remove obsoleted function free_string_list.
 	Remove obsoleted function free_string_el.
 
+	* ChangeLog src/gedlib/lloptions.c src/gedlib/locales.c
+	src/hdrs/llstdlib.h src/stdlib/listener.c
+
+	Alter notifier lists to use create_list2 instead of remove_list2.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
