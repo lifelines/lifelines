@@ -322,6 +322,15 @@ INDISEQ *pseq;
 		case 'A':	/* Advanced family edit */
 			advanced_family_edit(fam);
 			break;
+		case 'B':
+			i = ask_for_int("Enter Family Number to Browse to");
+			if(i > 0) {
+			    sprintf(scratch, "F%d", i);
+			    if(node = key_to_fam(scratch)) {
+				fam = node;
+			    }
+			}
+			break;
 		case 'e':	/* Edit family's record */
 			fam = edit_family(fam);
 			break;

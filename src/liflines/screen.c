@@ -62,6 +62,9 @@ BOOLEAN stdout_vis = FALSE;
 
 INDISEQ indiseq_list_interact();
 
+INT ll_lines = LINESREQ; /* update to be number of lines in screen */
+INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
+
 INT cur_screen = 0;
 
 WINDOW *main_win = NULL;
@@ -98,6 +101,10 @@ init_screen ()
 		fprintf(stderr, "Your terminal display is too small for LifeLines.");
 		exit(1);
 	}
+
+	ll_lines = LINES;	/* use all available lines */
+	ll_cols = COLSREQ;	/* only use this many columns ??? */
+
 	extralines = LINES - LINESREQ;
 	if(extralines > 0) {
 	    TANDEM_LINES += (extralines / 2);
@@ -518,7 +525,7 @@ NODE fam;
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
 	show_long_family(fam, 1, FAM_LINES);
 	display_screen(ONE_FAM_SCREEN);
-	return interact(main_win, "efmcnsardxtbzqACFM");
+	return interact(main_win, "efmcnsardxtbzqABCFM");
 }
 /*=============================================
  * tandem_browse -- Handle tandem_browse screen

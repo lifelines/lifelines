@@ -79,6 +79,8 @@
 /*=========================================
  * WINDOWs -- Main screen, menus and popups
  *=======================================*/
+extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
+extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
 extern INT cur_screen;
 extern WINDOW *stdout_win;
 extern WINDOW *main_win;

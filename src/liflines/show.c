@@ -263,7 +263,7 @@ INT row, hgt;
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, COLS-1, ACS_VLINE);
+		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
 	mvwaddstr(main_win, row+0, 1, Shusb);
@@ -299,7 +299,7 @@ INT hgt;
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, COLS-1, ACS_VLINE);
+		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
 	mvwaddstr(main_win, row+0, 1, Shusb);
@@ -382,7 +382,7 @@ NODE indi;
 		wmove(w, i, 1);
 		wclrtoeol(w);
 #ifndef BSD
-		mvwaddch(w, i, COLS-1, ACS_VLINE);
+		mvwaddch(w, i, ll_cols-1, ACS_VLINE);
 #endif
 	}
 	if(PED_LINES < 31) {
