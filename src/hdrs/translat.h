@@ -49,6 +49,12 @@ void remove_trantable(TRANTABLE);
 TRANTABLE init_map_from_str(STRING, INT, BOOLEAN*);
 BOOLEAN translate_string(TRANTABLE, STRING, STRING, INT);
 
+void remove_xnodes(XNODE);
+void add_char(STRING, INT*, INT, INT);
+void add_string(STRING, INT*, INT, STRING);
+void show_xnodes(INT, XNODE);
+void show_xnode(XNODE);
+
 extern TRANTABLE tran_tables[];
 
 #endif /* _TRANSLAT_H */

@@ -38,7 +38,8 @@
 
 INT lineno = 0;
 
-static BOOLEAN buffer_to_line();
+static BOOLEAN buffer_to_line(STRING, INT*, STRING*, STRING*, STRING*, STRING*);
+static BOOLEAN all_digits (STRING);
 
 STRING fileof = (STRING) "The file is as positioned at EOF.";
 STRING reremp = (STRING) "Line %d: This line is empty; EOF?";

@@ -309,7 +309,7 @@ INT letr;
  * resolve_links -- Resolve and check all links in node tree
  *========================================================*/
 static BOOLEAN unresolved;
-resolve_links (node)
+void resolve_links (node)
 NODE node;
 {
 	BOOLEAN resolve_traverse();

@@ -30,6 +30,7 @@
 
 #include "standard.h"
 #include "translat.h"
+#include "liflines.h"
 
 #ifdef max
 #	undef max
@@ -61,7 +62,7 @@ INT n;		/* num pairs */
 		if (tt->start[c] == NULL)
 			tt->start[c] = create_xnode(NULL, c, NULL);
 		node = tt->start[c];
-		while (c = (unsigned char) *left++) {
+		while ((c = (unsigned char) *left++)) {
 			node = step_xnode(node, c);
 		}
 		node->count = strlen(right);
@@ -129,7 +130,7 @@ TRANTABLE tt;
 /*====================================
  * remove_xnodes -- Remove xnodes tree
  *==================================*/
-remove_xnodes (node)
+void remove_xnodes (node)
 XNODE node;
 {
 	if (!node) return;
@@ -183,7 +184,7 @@ INT max;	/* max len of out string */
 			}
 /* Output replacement string */
 			while (TRUE) {
-				if (add = node->replace) {
+				if ((add = node->replace)) {
 					add_string(out, &l, max, add);
 					p = q = q + 1;
 					n = strlen(p);
@@ -260,7 +261,7 @@ BOOLEAN last;	/* translate remainder of buffer even if no '\n' */
 /*======================================
  * add_char -- Add char to output string
  *====================================*/
-add_char (buf, plen, max, achar)
+void add_char (buf, plen, max, achar)
 STRING buf;
 INT *plen, max;
 INT achar;
@@ -273,7 +274,7 @@ INT achar;
 /*==========================================
  * add_string -- Add string to output string
  *========================================*/
-add_string (buf, plen, max, str)
+void add_string (buf, plen, max, str)
 STRING buf;
 INT *plen, max;
 STRING str;
@@ -310,7 +311,7 @@ TRANTABLE tt;
 /*===============================================
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/
-show_xnodes (indent, node)
+void show_xnodes (indent, node)
 INT indent;
 XNODE node;
 {
@@ -323,9 +324,9 @@ XNODE node;
 	show_xnodes(indent,   node->sibling);
 }
 /*================================================
- * show_xnodes -- DEBUG routine that shows 1 XNODE
+ * show_xnode -- DEBUG routine that shows 1 XNODE
  *==============================================*/
-show_xnode (node)
+void show_xnode (node)
 XNODE node;
 {
 	llwprintf("%d(%c)", node->achar, node->achar);
