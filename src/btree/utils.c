@@ -90,7 +90,7 @@ fkey2path (FKEY fkey)
 	SHORT lo = fkey & 0xffff;
 	path[0] = hi/26 + 'a';
 	path[1] = hi%26 + 'a';
-	path[2] = '/';
+	path[2] = LLCHRDIRSEPARATOR;
 	path[3] = lo/26 + 'a';
 	path[4] = lo%26 + 'a';
 	path[5] = 0;

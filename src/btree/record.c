@@ -357,11 +357,13 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 	RAWRECORD rawrec;
 	INT len;
 
-	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
+	snprintf(scratch, sizeof(scratch)
+		, "%s%c%s"
+		, bbasedir(btree), LLCHRDIRSEPARATOR, fkey2path(ixself(block)));
 	if (!(fr = fopen(scratch, LLREADBINARY))) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Failed to open blockfile (rkey=%s): %s"
-			, rkey2str(rkeys(block, i)), scratch);
+		sprintf(msg, _("Failed (errno=%d) to open blockfile (rkey=%s): %s")
+			, errno, rkey2str(rkeys(block, i)), scratch);
 		FATAL2(msg);
 	}
 	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) {

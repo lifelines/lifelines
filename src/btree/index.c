@@ -68,14 +68,14 @@ crtindex (BTREE btree)
 INDEX
 readindex (STRING basedir, FKEY ikey, BOOLEAN robust)
 {
-	FILE *fp;
-	INDEX index;
+	FILE *fp=NULL;
+	INDEX index=NULL;
 	char scratch[200];
 	sprintf(scratch, "%s/%s", basedir, fkey2path(ikey));
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
 		if (robust) {
 			bterrno = BTERR_INDEX;
-			return NULL;
+			goto readindex_end;
 		}
 		sprintf(scratch, "Missing index file: %s", fkey2path(ikey));
 		FATAL2(scratch);
@@ -84,12 +84,13 @@ readindex (STRING basedir, FKEY ikey, BOOLEAN robust)
 	if (fread(index, BUFLEN, 1, fp) != 1) {
 		if (robust) {
 			bterrno = BTERR_INDEX;
-			return NULL;
+			goto readindex_end;
 		}
 		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
 		FATAL2(scratch);
 	}
-	fclose(fp);
+	if (fp) fclose(fp);
+readindex_end:
 	return index;
 }
 /*=================================

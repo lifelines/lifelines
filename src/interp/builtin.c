@@ -3222,7 +3222,7 @@ __level (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	FILE *cfp;
+	FILE *cfp=NULL;
 	STRING fname;
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -3230,22 +3230,23 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	if (*eflg)  {
 		prog_error(node, nonstr1, "copyfile");
-		return NULL;
+		goto copyfile_end;
 	}
 	fname = pvalue_to_string(val);
 	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
 		, (STRING)NULL, uu8, (STRING *)NULL))) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nonfname1, "copyfile");
-		return NULL;
+		goto copyfile_end;
 	}
 	delete_pvalue(val);
 	while (fgets(buffer, sizeof(buffer), cfp)) {
 		poutput(buffer, eflg);
 		if (*eflg)
-			return NULL;
+			goto copyfile_end;
 	}
-	fclose(cfp);
+copyfile_end:
+	if (cfp) fclose(cfp);
 	return NULL;
 }
 /*========================+

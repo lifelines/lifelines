@@ -17,6 +17,13 @@
 
 	Free some leaked uiwindows.
 
+	* ChangeLog src/btree/index.c src/btree/record.c
+	src/btree/utils.c src/gedlib/keytonod.c src/hdrs/standard.h
+	src/interp/builtin.c src/stdlib/lldate.c:
+
+	Close some filehandles under error conditions.
+	More legible dates in logs.
+
 2003-02-10 Perry Rapp
 
 	* ChangeLog src/hdrs/version.h:

@@ -166,10 +166,8 @@ typedef struct WAREHOUSE_S *WAREHOUSE;
 
 /*
  short format ISO style time string:
- 16 bytes 0-terminated YYYYMMDDHHMMSS ending with Z (GMT)
+ 20 bytes 0-terminated YYYY-MM-DD-HH:MM:SS ending with Z (GMT)
    0 filled DD,HH, and MM
- (21 bytes in case we support the longer style later:
-     YYYY-MM-DDTHH:MM:SSZ)
 */
 typedef struct lldate_s {
 	char datestr[21];

@@ -847,7 +847,11 @@ load_cacheel (CACHEEL cel)
 	case 'S': cache = sourcache; break;
 	case 'E': cache = evencache; break;
 	case 'X': cache = othrcache; break;
-	default: ASSERT(0); break;
+	default: {
+		crashlog("Bad cacheel key: <%s>", ckey(cel) ? ckey(cel) : "<0>");
+		ASSERT(0);
+		break;
+		}
 	}
 	indirect_to_first(cache, cel);
 }
@@ -1007,7 +1011,10 @@ record_to_cache (CACHE cache, RECORD rec)
 	ASSERT(top);
 	if (nestr(cname(cache), "OTHR")) {
 		/* only INDI records in INDI cache, etc */
-		ASSERT(eqstr(cname(cache), ntag(top)));
+		if (!eqstr(cname(cache), ntag(top))) {
+			crashlog(_("Bad cache entry <%s> != <%s>"), cname(cache), ntag(top));
+			ASSERT(0);
+		}
 	}
 	key = node_to_key(top);
 	ASSERT(key);
