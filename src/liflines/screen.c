@@ -250,14 +250,16 @@ static BOOLEAN status_transitory = FALSE;
 
 
 /* total screen lines used */
-INT LINESTOTAL = LINESREQ;
+static INT LINESTOTAL = LINESREQ;
 /* number of lines for various menus */
 static INT EMPTY_MENU = -1; /* save one horizontal line */
-/* the following values are increased if ll_lines > LINESREQ */
-int TANDEM_LINES = 6;     /* number of lines of tandem info */
-int LIST_LINES = 6;       /* number of lines of person info in list */
-int AUX_LINES = 15;       /* number of lines in aux window */
-int POPUP_LINES = 17;     /* max lines in popup list */
+/* the following values are default (larger screens get more) */
+static int TANDEM_LINES_DEF = 6;     /* number of lines of tandem info */
+static int LIST_LINES_DEF = 6;       /* number of lines of person info in list */
+static int AUX_LINES_DEF = 15;       /* number of lines in aux window */
+static int POPUP_LINES_DEF = 17;     /* max lines in popup list */
+/* working values */
+static int TANDEM_LINES=0, LIST_LINES=0, AUX_LINES=0, POPUP_LINES=0;
 
 int winx=0, winy=0; /* user specified window size */
 
@@ -309,11 +311,18 @@ init_screen (BOOLEAN graphical)
 
 	extralines = ll_lines - LINESREQ;
 	LINESTOTAL = ll_lines;
+
+	/* initialize browse window heights to default */
+	TANDEM_LINES = TANDEM_LINES_DEF;
+	AUX_LINES = AUX_LINES_DEF;
+	LIST_LINES = LIST_LINES_DEF;
+	POPUP_LINES = POPUP_LINES_DEF;
+	/* increase for larger screens */
 	if(extralines > 0) {
-		TANDEM_LINES += (extralines / 2);
-		AUX_LINES += extralines;
-		LIST_LINES += extralines;
-		POPUP_LINES += extralines;
+		TANDEM_LINES = TANDEM_LINES_DEF + (extralines / 2);
+		AUX_LINES = AUX_LINES_DEF + extralines;
+		LIST_LINES = LIST_LINES_DEF + extralines;
+		POPUP_LINES = POPUP_LINES_DEF + extralines;
 	}
 	create_windows();
 	brwsmenu_initialize(ll_lines, ll_cols);
