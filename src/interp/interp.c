@@ -283,16 +283,17 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		cur_pathinfo = (struct pathinfo_s *)dequeue_list(plist);
 		if (!in_table(pactx->filetab, cur_pathinfo->fullpath)) {
 			STRING str;
-			insert_table_ptr(pactx->filetab, cur_pathinfo->fullpath, 0);
+			insert_table_ptr(pactx->filetab, strsave(cur_pathinfo->fullpath), 0);
 			Plist = plist;
 			parse_file(pactx, cur_pathinfo->fname, cur_pathinfo->fullpath);
 			if ((str = check_rpt_requires(pactx, cur_pathinfo->fullpath)) != 0) {
 				progmessage(MSG_ERROR, str);
 				goto interp_program_exit;
 			}
-		} else {
-			/* can't delete pathinfo, because pnodes use those strings */
 			enqueue_list(donelist, cur_pathinfo);
+		} else {
+			/* skip references to files we've already parsed */
+			delete_pathinfo(&cur_pathinfo);
 		}
 		cur_pathinfo = 0;
 	}
@@ -409,10 +410,7 @@ init_pactx (PACTX pactx)
 static void
 wipe_pactx (PACTX pactx)
 {
-/* we can't free the keys in filetab, because the
-parser put those pointers into pvalues for files
-named in include statements */
-	remove_table(pactx->filetab, DONTFREE);
+	remove_table(pactx->filetab, FREEBOTH);
 	pactx->filetab=NULL;
 	memset(pactx, 0, sizeof(*pactx));
 }

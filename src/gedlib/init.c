@@ -260,6 +260,7 @@ init_lifelines_db (void)
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
 	set_db_options(dbopts);
+	free_optable(&dbopts);
 	init_caches();
 	init_browse_lists();
 	if (!openxref(readonly))

@@ -24,6 +24,7 @@ typedef struct table_s *TABLE;
 #endif
 
 /* initialization & termination */
+void free_optable(TABLE * ptab);
 void get_db_options(TABLE opts); /* free with FREEBOTH */
 void get_global_options(TABLE opts); /* free with FREEBOTH */
 BOOLEAN load_global_options(STRING configfile, STRING * pmsg);
@@ -36,7 +37,7 @@ void term_lloptions(void);
 void unregister_notify(CALLBACK_FNC fncptr);
 
 
-/* use */
+/* routine use */
 /* TODO: fix const-correctness */
 STRING getoptstr(CNSTRING optname, STRING defval);
 INT getoptint(CNSTRING optname, INT defval);

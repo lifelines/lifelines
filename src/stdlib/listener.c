@@ -21,6 +21,11 @@
 struct callback_info { CALLBACK_FNC fnc; VPTR uparm; };
 
 /*********************************************
+ * local function prototypes
+ *********************************************/
+static void remove_callback_info (VPTR vptr);
+
+/*********************************************
  * local function definitions
  * body of module
  *********************************************/
@@ -40,14 +45,24 @@ add_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 	enqueue_list(*notifiees, (VPTR)info);
 }
 /*===============================================
+ * remove_callback_info -- Delete contents of one slot of f_listeners
+ * Created: 2003-02-02 (Perry Rapp)
+ *=============================================*/
+static void
+remove_callback_info (VPTR vptr)
+{
+	struct callback_info * info = (struct callback_info *)vptr;
+	ASSERT(info);
+	free(info);
+}
+/*===============================================
  * remove_listeners -- Empty & remove list
  *=============================================*/
 void
 remove_listeners (LIST * notifiees)
 {
 	if (*notifiees) {
-		make_list_empty(*notifiees);
-		remove_list(*notifiees, 0);
+		remove_list(*notifiees, remove_callback_info);
 		*notifiees = 0;
 	}
 }

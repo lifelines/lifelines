@@ -1,5 +1,5 @@
 /*
- * @version        1.03 (2002-12-29)
+ * @version        1.04 (2002-12-29)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -145,7 +145,18 @@ proc testLists()
 		call reportfail("empty (getel & setel) FAILED")
 	}
 	else { incr(testok) }
+	enqueue(li, "harry")
+	enqueue(li, 3)
+	call testFreeList(li)
 
-    call reportSubsection("list tests")
+	call reportSubsection("list tests")
 }
 
+proc testFreeList(li)
+{
+	free(li)
+	if (ne(li, 0)) {
+		call reportfail("empty (getel & setel) FAILED")
+	}
+	else { incr(testok) }
+}

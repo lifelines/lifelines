@@ -33,7 +33,6 @@ extern STRING qSopt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static void expand_variables(STRING valbuf, INT max);
-static void free_optable(TABLE * ptab);
 static BOOLEAN load_config_file(STRING file, STRING * pmsg);
 static void send_notifications(void);
 
@@ -264,7 +263,7 @@ get_global_options (TABLE opts)
 /*==========================================
  * free_optable -- free a table if it exists
  *========================================*/
-static void
+void
 free_optable (TABLE * ptab)
 {
 	if (*ptab) {

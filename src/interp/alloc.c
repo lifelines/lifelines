@@ -1075,7 +1075,7 @@ get_rptinfo (CNSTRING fullpath)
 		rptinfo->functab = create_table();
 		rptinfo->proctab = create_table();
 		rptinfo->codeset = strsave(report_codeset_in);
-		insert_table_ptr(f_rptinfos, fullpath, rptinfo);
+		insert_table_ptr(f_rptinfos, strsave(fullpath), rptinfo);
 	}
 	return rptinfo;
 }

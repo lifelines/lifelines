@@ -5,6 +5,14 @@
 
 	Cleanup some heap memory at end of program.
 
+	* ChangeLog reports/st/st_list.ll src/gedlib/init.c
+	src/gedlib/lloptions.c src/hdrs/lloptions.h src/interp/alloc.c
+	src/interp/interp.c src/stdlib/listener.c:
+
+	Cleanup leak in pathinfos.
+	Cleanup leak in lloptions listeners.
+	Cleanup leak of dboptions in init_lifelines_db.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c
