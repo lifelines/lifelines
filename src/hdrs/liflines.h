@@ -32,9 +32,6 @@ NODE format_and_choose_spouse(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_fam(INDISEQ, BOOLEAN, STRING, STRING);
 NODE format_and_choose_generic(INDISEQ, BOOLEAN, STRING, STRING);
 
-/* from main.c */
-void final_cleanup(void);
-
 /* from valgdcom.c */
 BOOLEAN pointer_value(STRING);
 
