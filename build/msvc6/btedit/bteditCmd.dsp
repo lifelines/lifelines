@@ -127,6 +127,14 @@ SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\mychar_funcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\mychar_tables.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\mystring.c
 # End Source File
 # Begin Source File
@@ -164,6 +172,10 @@ SOURCE=..\..\..\src\btree\utils.c
 # Begin Source File
 
 SOURCE=..\..\..\src\arch\vsnprintf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\vtable.c
 # End Source File
 # Begin Source File
 
@@ -223,6 +235,10 @@ SOURCE=..\..\..\src\hdrs\msvc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\mychar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
@@ -232,6 +248,10 @@ SOURCE=.\resource.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\standard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\stdlibi.h
 # End Source File
 # Begin Source File
 
@@ -248,6 +268,10 @@ SOURCE=..\..\..\src\hdrs\translat.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\uiprompts.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\vtable.h
 # End Source File
 # Begin Source File
 
