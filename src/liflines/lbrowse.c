@@ -101,6 +101,11 @@ browse_list (NODE *pindi1,
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;
+		case CMD_KY_HOME:
+			top = cur = 0;
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
+			break;
 		case 'k':	/* Move up line */
 		case CMD_KY_UP:
 			if (cur <= 0) {
@@ -124,6 +129,14 @@ browse_list (NODE *pindi1,
 				cur -= top;
 				top -= top;
 			}
+			element_indiseq(seq, cur, &key, &name);
+			indi = key_to_indi(key);
+			break;
+		case CMD_KY_END:
+			top = len - VIEWABLE;
+			if (top < 0)
+				top = 0;
+			cur = len-1;
 			element_indiseq(seq, cur, &key, &name);
 			indi = key_to_indi(key);
 			break;

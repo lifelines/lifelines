@@ -145,6 +145,7 @@ enum {
 	, CMD_ADD_SOUR, CMD_ADD_EVEN, CMD_ADD_OTHR
 	/* for hardware keys */
 	, CMD_KY_UP=500, CMD_KY_DN, CMD_KY_PGUP, CMD_KY_PGDN
+	, CMD_KY_HOME, CMD_KY_END
 };
 
 void menuitem_initialize(INT cols);

@@ -2000,17 +2000,22 @@ user_options (void)
  * translate_hdware_key -- 
  *  translate curses keycode into menuitem.h constant
  *=============================*/
+struct hdkeycvt { int key; int cmd; };
 static INT
 translate_hdware_key (INT c)
 {
-FILE * fp=fopen("junk.txt", "a");
-fprintf(fp, "%d: %c\n", c, c);
-fclose(fp);
-	switch(c) {
-	case KEY_UP: return CMD_KY_UP;
-	case KEY_DOWN: return CMD_KY_DN;
-	case KEY_NPAGE: return CMD_KY_PGDN;
-	case KEY_PPAGE: return CMD_KY_PGUP;
+	static struct hdkeycvt hdkey[] = {
+		{ KEY_UP, CMD_KY_UP }
+		, { KEY_DOWN, CMD_KY_DN }
+		, { KEY_NPAGE, CMD_KY_PGDN }
+		, { KEY_PPAGE, CMD_KY_PGUP }
+		, { KEY_HOME, CMD_KY_HOME }
+		, { KEY_END, CMD_KY_END }
+	};
+	int i;
+	for (i=0; i<sizeof(hdkey)/sizeof(hdkey[0]); ++i) {
+		if (c == hdkey[i].key)
+			return hdkey[i].cmd;
 	}
 	return CMD_NONE;
 }

@@ -59,6 +59,7 @@ static FILE *errfp = NULL;
 /* Curses data */
 
 static int echoing = TRUE;
+static int keypading = FALSE;
 
 static chtype myacsmap[256] = {
 	'*', '*', '*', '*', '*', '*', '*', '*',
@@ -207,6 +208,12 @@ int echo()
 int noecho()
 {
 	echoing = FALSE;
+	return(0);
+}
+
+int keypad(WINDOW *win, int bf)
+{
+	keypading = !!bf;
 	return(0);
 }
 
@@ -511,7 +518,7 @@ int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
 int wgetch(WINDOW *wp)
 {
 	COORD cCursor;
-	char ch;
+	int ch;
 
 	cCursor.X = wp->_curx + wp->_begx;
 	cCursor.Y = wp->_cury + wp->_begy;
@@ -530,6 +537,11 @@ int wgetch(WINDOW *wp)
 		}
 	}
 	return(ch);
+}
+
+int has_key(int ch)
+{
+	return (ch>=KEY_MIN && ch<=KEY_MAX);
 }
 
 int wgetstr(WINDOW *wp, char *cp)
@@ -674,18 +686,38 @@ static void mycur_init(int fullscreen)
 	}
 }
 
+struct keycvt { int win; int curs; };
+
 static int mycur_getc()
 {
-	char buf[64];
-	DWORD dwLen;
-	int ch;
+	static struct keycvt keymap[] = {
+		{ VK_DOWN, KEY_DOWN }
+		, { VK_UP, KEY_UP }
+		, { VK_NEXT, KEY_NPAGE }
+		, { VK_PRIOR, KEY_PPAGE }
+		, { VK_HOME, KEY_HOME }
+		, { VK_END, KEY_END }
+	};
+	if(hStdin == INVALID_HANDLE_VALUE)
+		return getchar();
 
-	if(hStdin != INVALID_HANDLE_VALUE)
+	while (1)
 	{
-		if(ReadConsole(hStdin, (LPVOID)buf, (DWORD)1, &dwLen, (LPVOID)NULL))
-			ch = buf[0];
-		else ch = EOF;
+		INPUT_RECORD inrec;
+		int nrecs=0, ch, i;
+		FlushConsoleInputBuffer(hStdin);
+		if (!ReadConsoleInput(hStdin, &inrec, 1, &nrecs))
+			return EOF;
+		if (inrec.EventType != KEY_EVENT)
+			continue;
+		if (!inrec.Event.KeyEvent.bKeyDown)
+			continue;
+		if ((ch = inrec.Event.KeyEvent.uChar.AsciiChar) > 0)
+			return ch;
+		for (i=0; i<sizeof(keymap)/sizeof(keymap[0]); ++i)
+		{
+			if (inrec.Event.KeyEvent.wVirtualKeyCode == keymap[i].win)
+				return keymap[i].curs;
+		}
 	}
-	else ch = getchar();
-	return(ch);
 }
