@@ -886,7 +886,7 @@ prompt_add_child_check_save (NODE fam, NODE save)
 		if (!ask_yes_or_no(scratch))
 			save = NULL;
 	}
-	my_prompt_add_child(NULL, fam);
+	my_prompt_add_child(save, fam);
 }
 /*===============================================
  * my_prompt_add_child -- call prompt_add_child with our reformatting info

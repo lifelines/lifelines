@@ -18,6 +18,10 @@
 
 	Remove unused variables.
 
+	* ChangeLog src/liflines/browse.c:
+
+	Fix add child asking twice bug.
+
 2002-12-16 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c:
