@@ -42,9 +42,10 @@
  * external/imported variables
  *********************************************/
 
-extern STRING datep_from,datep_to,datep_frto;
-extern STRING dater_bef,dater_aft,dater_betan;
-extern STRING datea_abt,datea_est,datea_cal;
+extern STRING datea_abt1,datea_abt2,datea_est1,datea_est2,datea_cal1;
+extern STRING datea_cal2,datep_from1,datep_from2,datep_to1,datep_to2;
+extern STRING datep_frto1,datep_frto2,dater_bef1,dater_bef2,dater_aft1;
+extern STRING dater_aft2,dater_bet1,dater_bet2;
 extern STRING datetrl_bc1,datetrl_bc2,datetrl_bc3,datetrl_bc4;
 extern STRING datetrl_ad1,datetrl_ad2,datetrl_ad3,datetrl_ad4;
 
@@ -56,8 +57,8 @@ extern STRING datetrl_ad1,datetrl_ad2,datetrl_ad3,datetrl_ad4;
 static void analyze_numbers(GDATEVAL, struct gdate_s *, struct nums_s *);
 static void analyze_word(GDATEVAL gdv, struct gdate_s * pdate
 	, struct nums_s * nums, INT ival, BOOLEAN * newdate);
-static void format_complex(GDATEVAL gdv, STRING output, INT len, STRING ymd2
-	, STRING ymd3);
+static void format_complex(GDATEVAL gdv, STRING output, INT len, INT cmplx
+	, STRING ymd2, STRING ymd3);
 static void format_day(INT da, INT dfmt, STRING output);
 static STRING format_month(INT, INT);
 static void format_origin(struct gdate_s * pdate, CNSTRING ymd, INT ofmt
@@ -69,6 +70,7 @@ static void init_keywordtbl(void);
 static BOOLEAN is_date_delim(char c);
 static BOOLEAN is_valid_day(struct gdate_s * pdate, INT day);
 static BOOLEAN is_valid_month(struct gdate_s * pdate, INT month);
+static void load_lang(void);
 static mark_freeform(GDATEVAL gdv);
 static mark_invalid(GDATEVAL gdv);
 static void set_date_string(STRING);
@@ -78,9 +80,29 @@ static void set_year(struct gdate_s * pdate, INT yr);
  * local types & variables
  *********************************************/
 
+/* token types, used in parsing */
 enum { MONTH_TOK=1, CHAR_TOK, WORD_TOK, ICONS_TOK, CALENDAR_TOK, YEAR_TOK };
+/* GEDCOM keywords */
 enum { GD_ABT=1, GD_EST, GD_CAL, GD_BEF, GD_AFT, GD_BET, GD_AND, GD_FROM, GD_TO, GD_END1 };
 enum { GD_BC=GD_END1, GD_AD, GD_END2 };
+
+/* complex picture strings */
+enum { ECMPLX_ABT, ECMPLX_EST, ECMPLX_CAL, ECMPLX_BEF, ECMPLX_AFT
+	, ECMPLX_BET_AND, ECMPLX_FROM, ECMPLX_TO, ECMPLX_FROM_TO
+	, ECMPLX_END };
+
+/* custom picture strings for complex dates (0 means use default).
+   These change when language changes.
+   These should be stdalloc'd (unless 0). */
+static STRING cmplx_custom[ECMPLX_END];
+/* generated picture strings for complex dates
+   eg, "BEFORE", "Before", "before", "BEF" 
+   These change when language changes.
+   These are stdalloc'd. */
+static STRING cmplx_pics[ECMPLX_END][6];
+
+/* custom picture string for ymd date format */
+static STRING date_pic;
 
 struct dateword_s {
 	char *sl, *su, *ll, *lu;
@@ -180,27 +202,6 @@ static struct dateword_s months_heb[] = {
 	internationalize the gregorian/julian ones */
 };
 
-
-/* English representation of GEDCOM date modifiers */
-/* We need to internationalize this */
-#ifdef NOT_USED_CURRENTLY
-static struct dateword_s modifiers[] = {
-	{ "abt", "ABT", "about", "ABOUT" }      /* 1 */
-	,{ "est", "EST", "estimated", "ESTIMATED" }      /* 1 */
-	,{ "cal", "CAL", "calculated", "CALCULATED" }      /* 1 */
-	,{ "bef", "BEF", "before", "BEFORE" }   /* 2 */
-	,{ "aft", "AFT", "after", "AFTER" }     /* 3 */
-	,{ "bet", "BET", "between", "BETWEEN" } /* 4 - potential range */
-	,{ "and", "AND", "and", "AND" }         /* 5 */
-	,{ "from", "FROM", "from", "FROM" }     /* 6 - potential range */
-	,{ "to", "TO", "to", "TO" }             /* 7 */
-};
-#endif
-
-/* TODO: "B.C." is GEDCOM, but the rest are English, so
-figure out what to do about internationalizing this */
-
-
 /* used in parsing dates -- 1st, 2nd, & 3rd numbers found */
 struct nums_s { INT num1; INT num2; INT num3; };
 
@@ -276,7 +277,7 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 		} else {
 			ymd3[0] = 0;
 		}
-		format_complex(gdv, complete, sizeof(complete), ymd2, ymd3);
+		format_complex(gdv, complete, sizeof(complete), cmplx, ymd2, ymd3);
 		free_gdateval(gdv);
 		return complete;
 	}
@@ -346,29 +347,62 @@ format_origin (struct gdate_s * pdate, CNSTRING ymd, INT ofmt, STRING output
 
 }
 /*===================================================
+ * get_cmplx_pic -- Get appropriate picture string
+ *  examples:
+ *   get_cmplx_pic(ECMPLX_BET_AND, 0) == "BET %1 AND %2"
+ *   get_cmplx_pic(ECMPLX_BET_AND, 3) == "Between %1 And %2"
+ *  (this checks for user-specified custom picture strings also)
+ * Created: 2001/12/28 (Perry Rapp)
+ *=================================================*/
+static STRING
+get_cmplx_pic (INT ecmplx, INT cmplxnum)
+{
+	/* load_lang already generated all the pictures */
+	ASSERT(ecmplx>=0 && ecmplx<ECMPLX_END);
+	ASSERT(cmplxnum>=0 && cmplxnum<6);
+	if (cmplx_custom[ecmplx])
+		return cmplx_custom[ecmplx];
+	return cmplx_pics[ecmplx][cmplxnum];
+}
+/*===================================================
  * format_complex -- Format date string with modifiers
- *  gdv:    [IN]   actual date_val
- *  output: [IN]   whither to write string
- *  len:    [IN]   size of output
- *  ymd2:   [IN]   formatted date1
- *  ymd3:   [IN]   formatted date2 (only used for dual dates)
- *                  (ie, full period or full range)
+ *  gdv:    [IN]  actual date_val
+ *  output: [I/O] whither to write string
+ *  len:    [IN]  size of output
+ *  cmplx:  [IN]  cmplx format code 
+ *                 1=about (same as 8)
+ *                 3=ABT
+ *                 4=Abt
+ *                 5=ABOUT
+ *                 6=About
+ *                 7=abt
+ *                 8=about
+ *  ymd2:   [IN]  formatted date1
+ *  ymd3:   [IN]  formatted date2 (only used for dual dates)
+ *                 (ie, full period or full range)
  * Created: 2001/12/28 (Perry Rapp)
  *=================================================*/
 static void
-format_complex (GDATEVAL gdv, STRING output, INT len, STRING ymd2, STRING ymd3)
+format_complex (GDATEVAL gdv, STRING output, INT len, INT cmplx
+	, STRING ymd2, STRING ymd3)
 {
+	STRING pic;
+	INT cmplxnum=cmplx-3; /* map cmplx to 0-5 */
+	if (cmplxnum<0 || cmplxnum>5) cmplxnum=5;
 	switch (gdv->type) {
 	case GDV_PERIOD:
 		switch (gdv->subtype) {
 		case GDVP_FROM:
-			snprintf(output, len, datep_from, ymd2);
+			pic = get_cmplx_pic(ECMPLX_FROM, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVP_TO:
-			snprintf(output, len, datep_to, ymd2);
+			pic = get_cmplx_pic(ECMPLX_TO, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVP_FROM_TO:
-			snprintf(output, len, datep_frto, ymd2, ymd3);
+			pic = get_cmplx_pic(ECMPLX_FROM_TO, cmplxnum);
+			sprintpic2(output, len, pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -378,14 +412,17 @@ format_complex (GDATEVAL gdv, STRING output, INT len, STRING ymd2, STRING ymd3)
 	case GDV_RANGE:
 		switch (gdv->subtype) {
 		case GDVR_BEF:
-			snprintf(output, len, dater_bef, ymd2);
+			pic = get_cmplx_pic(ECMPLX_BEF, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVR_AFT:
-		case GDVR_BET:
-			snprintf(output, len, dater_aft, ymd2);
+		case GDVR_BET: /* BET with no AND is treated as AFT */
+			pic = get_cmplx_pic(ECMPLX_AFT, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVR_BET_AND:
-			snprintf(output, len, dater_betan, ymd2, ymd3);
+			pic = get_cmplx_pic(ECMPLX_BET_AND, cmplxnum);
+			sprintpic2(output, len, pic, ymd2, ymd3);
 			break;
 		default:
 			FATAL(); /* invalid period subtype */
@@ -395,13 +432,16 @@ format_complex (GDATEVAL gdv, STRING output, INT len, STRING ymd2, STRING ymd3)
 	case GDV_APPROX:
 		switch (gdv->subtype) {
 		case GDVA_ABT:
-			snprintf(output, len, datea_abt, ymd2);
+			pic = get_cmplx_pic(ECMPLX_ABT, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVA_EST:
-			snprintf(output, len, datea_est, ymd2);
+			pic = get_cmplx_pic(ECMPLX_EST, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		case GDVA_CAL:
-			snprintf(output, len, datea_cal, ymd2);
+			pic = get_cmplx_pic(ECMPLX_CAL, cmplxnum);
+			sprintpic1(output, len, pic, ymd2);
 			break;
 		}
 		break;
@@ -435,6 +475,7 @@ format_complex (GDATEVAL gdv, STRING output, INT len, STRING ymd2, STRING ymd3)
  *  mod:    [IN]   modifier code (in bottom of monthstrs array)
  *  output: [I/O]  output string (is advanced)
  *  len:    [I/O]  length remaining in output string buffer (is decremented)
+ * This routine applies the custom date pic if present (date_pic)
  *=================================================*/
 static void
 format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
@@ -442,6 +483,10 @@ format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt
 {
 	STRING p = *output;
 
+	if (date_pic) {
+		sprintpic3(*output, *len, date_pic, syr, smo, sda);
+		return;
+	}
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
@@ -1073,8 +1118,11 @@ static void
 set_date_string (STRING str)
 {
 	sstr = str;
-	if (!keywordtbl)
+	if (!keywordtbl) {
 		init_keywordtbl();
+		load_lang();
+	} else if (0) /* language changed */
+		load_lang();
 }
 /*==================================================
  * get_date_tok -- Return next date extraction token
@@ -1184,6 +1232,68 @@ init_keywordtbl (void)
 
 }
 /*=============================
+ * load_one_cmplx_pic -- Generate case variations
+ *  of one complex picture string.
+ * Created: 2001/12/30 (Perry Rapp)
+ *===========================*/
+static void
+load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
+{
+	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
+	/* 0=ABT (cmplx=3) */
+	cmplx_pics[ecmplx][0] = strdup(upper(abbrev));
+	/* 1=Abt (cmplx=4) */
+	cmplx_pics[ecmplx][1] = strdup(titlecase(abbrev));
+	/* 2=ABOUT (cmplx=5) */
+	cmplx_pics[ecmplx][2] = strdup(upper(full));
+	/* 3=About (cmplx=6) */
+	cmplx_pics[ecmplx][3] = strdup(titlecase(full));
+	/* 4=abt (cmplx=7) */
+	cmplx_pics[ecmplx][4] = strdup(lower(abbrev));
+	/* 5=about (cmplx=8) */
+	cmplx_pics[ecmplx][5] = strdup(lower(full));
+
+}
+/*=============================
+ * load_lang -- Load generated picture strings
+ *  based on current language
+ * This has to be really done after i18n.
+ * Created: 2001/12/30 (Perry Rapp)
+ *===========================*/
+static void
+load_lang (void)
+{
+	INT i,j;
+	/* TODO: if we have language-specific cmplx_custom, deal with
+	that here */
+
+	/* clear existing ones */
+	for (i=0; i<ECMPLX_END; ++i) {
+		for (j=0; j<6; ++j) {
+			if (cmplx_pics[i][j]) {
+				stdfree(cmplx_pics[i][j]);
+				cmplx_pics[i][j] = 0;
+			}
+		}
+	}
+
+	load_one_cmplx_pic(ECMPLX_ABT, datea_abt1, datea_abt2);
+	load_one_cmplx_pic(ECMPLX_EST, datea_est1, datea_est2);
+	load_one_cmplx_pic(ECMPLX_CAL, datea_cal1, datea_cal2);
+	load_one_cmplx_pic(ECMPLX_FROM, datep_from1, datep_from2);
+	load_one_cmplx_pic(ECMPLX_TO, datep_to1, datep_to2);
+	load_one_cmplx_pic(ECMPLX_FROM_TO, datep_frto1, datep_frto2);
+	load_one_cmplx_pic(ECMPLX_BEF, dater_bef1, dater_bef2);
+	load_one_cmplx_pic(ECMPLX_AFT, dater_aft1, dater_aft2);
+	load_one_cmplx_pic(ECMPLX_BET_AND, dater_bet1, dater_bet2);
+	
+	for (i=0; i<ECMPLX_END; ++i) {
+		for (j=0; j<6; ++j) {
+			ASSERT(cmplx_pics[i][j]);
+		}
+	}
+}
+/*=============================
  * get_todays_date -- Get today's date
  *===========================*/
 STRING
@@ -1248,4 +1358,51 @@ is_date_delim (char c)
 	if (c=='/' || c=='-' || c=='.')
 		return TRUE;
 	return FALSE;
+}
+/*=============================
+ * set_cmplx_pic -- Set a custom complex date picture
+ *  NULL or empty string will clear any existing custom pic
+ * returns FALSE if invalid argument.
+ * Created: 2001/12/30 (Perry Rapp)
+ *===========================*/
+BOOLEAN
+set_cmplx_pic (INT ecmplx, STRING pic)
+{
+	if (ecmplx<0 || ecmplx>=ECMPLX_END)
+		return FALSE;
+	if (cmplx_custom[ecmplx]) {
+		stdfree(cmplx_custom[ecmplx]);
+		cmplx_custom[ecmplx] = 0;
+	}
+	if (pic && pic[0])
+		cmplx_custom[ecmplx] = strdup(pic);
+	return TRUE;
+}
+/*=============================
+ * set_date_pic -- Set a custom ymd date picture
+ *  NULL or empty string will clear any existing custom pic
+ * Created: 2001/12/30 (Perry Rapp)
+ *===========================*/
+void
+set_date_pic (STRING pic)
+{
+	if (date_pic) {
+		stdfree(date_pic);
+		date_pic = 0;
+	}
+	if (pic && pic[0]) {
+		STRING p;
+		date_pic = strdup(pic);
+		/* convert %y %m %d format to %1 %2 %3 */
+		for (p = date_pic; *p; ++p) {
+			if (p[0]=='%') {
+				if (p[1]=='y')
+					p[1]='1';
+				else if (p[1]=='m')
+					p[1]='2';
+				else if (p[1]=='d')
+					p[1]='3';
+			}
+		}
+	}
 }

@@ -359,6 +359,8 @@ PNODE parents_node(PNODE, STRING, STRING, PNODE);
 PNODE proc_node(STRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 PNODE return_node(PNODE);
+BOOLEAN set_cmplx_pic(INT ecmplx, STRING pic);
+void set_date_pic(STRING pic);
 void show_one_pnode(PNODE);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);

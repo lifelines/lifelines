@@ -564,7 +564,7 @@ llstrcatn (char ** pdest, const char * src, int * len)
 char *
 llstrncpy (char *dest, const char *src, size_t n)
 {
-	strncpy(dest, src, n);
+	strncpy(dest, src, n-1);
 	dest[n-1] = 0;
 	return dest;
 }

@@ -49,8 +49,9 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonint1,nonstr1,nonvarx,nonstrx,nullarg1,nonfname1,nonfam1;
-extern STRING nonnodstr1;
+extern STRING nonint1,nonstr1,nullarg1,nonfname1,nonfam1,nonnodstr1;
+extern STRING nonvarx,nonstrx,nonintx,nonindx,nonboox;
+extern STRING badargs;
 
 /*********************************************
  * local variables
@@ -285,26 +286,26 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to fullname must be a person");
+		prog_error(node, nonindx, "fullname", 1);
 		return NULL;
 	}
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to fullname must be boolean");
+		prog_error(node, nonboox, "fullname", 2);
 		return NULL;
 	}
 	caps = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "3rd arg to fullname must be boolean");
+		prog_error(node, nonboox, "fullname", 3);
 		return NULL;
 	}
 	myreg = (BOOLEAN) pvalue(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "4th arg to fullname must be integer");
+		prog_error(node, nonintx, "fullname", 4);
 		return NULL;
 	}
 	len = (INT) pvalue(val);
@@ -418,7 +419,7 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to set must be a variable");
+		prog_error(node, nonvarx, "set", 1);
 		return NULL;
 	}
 	val = evaluate(expr, stab, eflg);
@@ -1825,7 +1826,7 @@ __lower (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to lower must be a string");
+		prog_error(node, nonstr1, "lower");
 		return NULL;
 	}
 	str = pvalue(val);
@@ -1844,7 +1845,7 @@ __upper (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to upper must be a string");
+		prog_error(node, nonstr1, "upper");
 		return NULL;
 	}
 	str = pvalue(val);
@@ -1863,12 +1864,32 @@ __capitalize (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	STRING str;
 	if (*eflg) {
-		prog_error(node, "the arg to capitalize must be a string");
+		prog_error(node, nonstr1, "capitalize");
 		return NULL;
 	}
 	str = pvalue(val);
 	if (str)
 		str = capitalize(str);
+	set_pvalue(val, PSTRING, str);
+	return val;
+}
+/*=====================================+
+ * __titlcase -- Titlecase string
+ *   usage: capitalize(STRING) -> STRING
+ * Created: 2001/12/30 (Perry Rapp)
+ *====================================*/
+PVALUE
+__titlcase (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	STRING str;
+	if (*eflg) {
+		prog_error(node, nonstr1, "titlecase");
+		return NULL;
+	}
+	str = pvalue(val);
+	if (str)
+		str = titlecase(str);
 	set_pvalue(val, PSTRING, str);
 	return val;
 }
@@ -2420,6 +2441,7 @@ static INT monthcode = 3;
 static INT yearcode = 0;
 static INT datecode = 0;
 static INT origincode = 0;
+static INT cmplxcode = 1;
 PVALUE
 __stddate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
@@ -2464,11 +2486,11 @@ __complexdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(evnt, NULL, FALSE);
 	}
 	set_pvalue(val, PSTRING, do_format_date(str,
-	    daycode, monthcode, yearcode, datecode, origincode, TRUE));
+	    daycode, monthcode, yearcode, datecode, origincode, cmplxcode));
 	return val;
 }
 /*===============================================+
- * __dayformat -- Set day format for standard date
+ * __dayformat -- Set day format
  *   usage: dayformat(INT) -> NULL
  *==============================================*/
 PVALUE
@@ -2489,7 +2511,7 @@ __dayformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===============================================+
- * __monthformat -- Set month format standard date
+ * __monthformat -- Set month format
  *   usage: monthformat(INT) -> NULL
  *==============================================*/
 PVALUE
@@ -2510,7 +2532,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===============================================+
- * __yearformat -- Set month format standard date
+ * __yearformat -- Set month format
  *   usage: yearformat(INT) -> NULL
  * Created: 2001/12/24, Perry Rapp
  *==============================================*/
@@ -2531,7 +2553,7 @@ __yearformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*=================================================+
- * __dateformat -- Set date format for standard date
+ * __dateformat -- Set date format
  *   usage: dateformat(INT) -> NULL
  *================================================*/
 PVALUE
@@ -2552,7 +2574,7 @@ __dateformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===============================================+
- * __originformat -- Set format for AD/BC trailer for standard date
+ * __originformat -- Set format for AD/BC trailer
  *   usage: originformat(INT) -> NULL
  * Created: 2001/12/28, Perry Rapp
  *==============================================*/
@@ -2570,6 +2592,84 @@ __originformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	if (value < 0) value = 0;
 	origincode = value;
+	return NULL;
+}
+/*===============================================+
+ * __complexformat -- Set complex format
+ *   usage: complexformat(INT) -> NULL
+ * Created: 2001/12/24, Perry Rapp
+ *==============================================*/
+PVALUE
+__complexformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	INT value;
+	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonint1, "complexformat");
+		return NULL;
+	}
+	value = (INT) pvalue(val);
+	delete_pvalue(val);
+	if (value < 0) value = 0;
+	cmplxcode = value;
+	return NULL;
+}
+/*===============================================+
+ * __datepic -- Set custom ymd date picture string
+ *   usage: datepic(STRING) -> NULL
+ * Created: 2001/12/30, Perry Rapp
+ *==============================================*/
+PVALUE
+__datepic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	STRING str;
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonstrx, "complexpic", 1);
+		return NULL;
+	}
+	str = (STRING) pvalue(val);
+	set_date_pic(str);
+	delete_pvalue(val);
+	return NULL;
+}
+/*===============================================+
+ * __complexpic -- Set custom picture string for
+ *  a complex date
+ *   usage: complexpic(INT, STRING) -> NULL
+ * Created: 2001/12/30, Perry Rapp
+ * TODO: We could add a 3rd argument giving language specifier
+ *  when we are localizing
+ *==============================================*/
+PVALUE
+__complexpic (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	INT ecmplx;
+	STRING str;
+	BOOLEAN ok;
+	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonintx, "complexpic", 1);
+		return NULL;
+	}
+	ecmplx = (INT) pvalue(val);
+	delete_pvalue(val);
+	val = eval_and_coerce(PSTRING, arg = inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonstrx, "complexpic", 2);
+		return NULL;
+	}
+	str = (STRING) pvalue(val);
+	ok = set_cmplx_pic(ecmplx, str);
+	delete_pvalue(val);
+	if (!ok) {
+		*eflg = TRUE;
+		prog_error(node, badargs, "complexpic");
+		return NULL;
+	}
 	return NULL;
 }
 /*==============================+

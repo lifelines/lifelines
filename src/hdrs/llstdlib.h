@@ -112,8 +112,13 @@ BOOLEAN iswhite(INT);
 INT ll_toupper(INT);
 INT ll_tolower(INT);
 STRING lower(STRING);
+BOOLEAN sprintpic1(STRING buffer, INT len, STRING pic, STRING arg1);
+BOOLEAN sprintpic2(STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2);
+BOOLEAN sprintpic3(STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2
+	, STRING arg3);
 void striplead(STRING);
 void striptrail(STRING);
+STRING titlecase(STRING);
 STRING trim(STRING, INT);
 STRING upper(STRING);
 INT utf8len(char ch);

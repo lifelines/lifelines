@@ -41,6 +41,9 @@
 /*
  * The entries of builtins MUST be in alphabetic order (because an
  * alphabetic binary sort is performed directly on this list).
+ *
+ * interp/alloc.c/verify_builtins() checks them and calls
+ * FATAL() if they are not in sorted order.
  */
 BUILTINS builtins[] = {
 	{"add",             2,	32,	__add},
@@ -64,6 +67,8 @@ BUILTINS builtins[] = {
 	{"choosesubset",    1,	1,	__choosesubset},
 	{"col",             1,	1,	__col},
 	{"complexdate",	    1,	1,	__complexdate},
+	{"complexformat",   1,	1,	__complexformat},
+	{"complexpic",      2,	2,	__complexpic },
 	{"concat",          1,	32,	__concat},
 	{"copyfile",        1,	1,	__copyfile},
 	{"createnode",      2,	2,	__createnode},
@@ -71,6 +76,7 @@ BUILTINS builtins[] = {
 	{"database",        0,	1,	__database},
 	{"date",            1,	1,	__date},
 	{"dateformat",      1,	1,	__dateformat},
+	{"datepic",         1,	1,	__datepic },
 	{"dayformat",       1,	1,	__dayformat},
 	{"death",           1,	1,	__deat},
 	{"debug",           1,	1,	__debug},
@@ -223,6 +229,7 @@ BUILTINS builtins[] = {
 	{"table",           1,	1,	__table},
 	{"tag",             1,	1,	__tag},
 	{"title",           1,	1,	__titl},
+	{"titlecase",       1,	1,	__titlcase},
 	{"trim",            2,	2,	__trim},
 	{"trimname",        2,	2,	__trimname},
 	{"union",           2,	2,	__union},

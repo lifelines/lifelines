@@ -33,7 +33,22 @@
 #include "llstdlib.h"
 #include "mystring.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
 extern BOOLEAN opt_finnish;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static BOOLEAN printpic_arg(STRING *b, INT max, CNSTRING arg, INT arglen);
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*===============================
  * strsave -- Save copy of string
@@ -183,6 +198,7 @@ upper (STRING str)
 }
 /*================================
  * capitalize -- Capitalize string
+ *  returns static buffer (borrowed from lower)
  *==============================*/
 STRING
 capitalize (STRING str)
@@ -190,6 +206,30 @@ capitalize (STRING str)
 	STRING p = lower(str);
 	*p = ll_toupper((uchar)*p);
 	return p;
+}
+/*================================
+ * titlecase -- Titlecase string
+ * Created: 2001/12/30 (Perry Rapp)
+ *  returns static buffer (borrowed from lower)
+ *==============================*/
+STRING
+titlecase (STRING str)
+{
+	/* % sequences aren't a problem, as % isn't lower */
+	STRING p = lower(str), buf=p;
+	if (!p[0]) p;
+	while (1) {
+		/* capitalize first letter of word */
+		*p = ll_toupper((uchar)*p);
+		/* skip to end of word */
+		while (*p && !iswhite((uchar)*p))
+			++p;
+		if (!*p) return buf;
+		/* skip to start of next word */
+		while (*p && iswhite((uchar)*p))
+			++p;
+		if (!*p) return buf;
+	}
 }
 /*==========================================
  * ll_toupper -- Convert letter to uppercase
@@ -303,4 +343,140 @@ utf8len (char ch)
 	if (!(ch & 0x04))
 		return 5;
 	return 6;
+}
+/*==============================
+ * printpic_arg -- Print an arg to a string
+ *  This is the heart of sprintpic, here so we
+ *  can use it in all sprintpic's.
+ *  b:      [I/O] pointer to output buffer
+ *  max:    [IN]  space left in output buffer
+ *  arg:    [IN]  arg to insert
+ *  arglen: [IN]  (precomputed) length of arg
+ * returns FALSE if can't fit entire arg.
+ * Created: 2001/12/30 (Perry Rapp)
+ *============================*/
+static BOOLEAN
+printpic_arg (STRING *b, INT max, CNSTRING arg, INT arglen)
+{
+	if (arglen > max) {
+		/* can't fit it all */
+		llstrncpy(*b, arg, max+1); 
+		b[max] = 0;
+		return FALSE;
+	} else {
+		/* it fits */
+		strcpy(*b, arg);
+		*b += arglen;
+		return TRUE;
+	}
+}
+/*==============================
+ * sprintpic1 -- Print using a picture string
+ *  with one argument, eg "From %1"
+ *  buffer:  [I/O] output buffer
+ *  len:     [IN]  size of output buffer
+ *  pic:     [IN]  picture string
+ *  arg1:    [IN]  argument (for %1)
+ * (Multiple occurrences of %1 are allowed.)
+ * returns FALSE if it couldn't fit whole thing.
+ * Created: 2001/12/30 (Perry Rapp)
+ *============================*/
+BOOLEAN
+sprintpic1 (STRING buffer, INT len, STRING pic, STRING arg1)
+{
+	STRING b = buffer, bmax = &buffer[len-1];
+	STRING p=pic;
+	INT arg1len = strlen(arg1); /* precompute */
+	while (1) {
+		if (p[0]=='%' && p[1]=='1') {
+			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+				return FALSE;
+			p += 2;
+		} else {
+			*b++ = *p++;
+		}
+		if (!p[0]) { /* ran out of input */
+			*b=0;
+			return TRUE;
+		}
+		if (b == bmax) { /* ran out of output room */
+			*b=0;
+			return FALSE;
+		}
+	}
+}
+/*==============================
+ * sprintpic2 -- Print using a picture string
+ *  with two arguments, eg "From %1 To %s"
+ * See sprintpic1 for argument explanation.
+ * Created: 2001/12/30 (Perry Rapp)
+ *============================*/
+BOOLEAN
+sprintpic2 (STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2)
+{
+	STRING b = buffer, bmax = &buffer[len-1];
+	STRING p=pic;
+	INT arg1len = strlen(arg1); /* precompute */
+	INT arg2len = strlen(arg2);
+	while (1) {
+		if (p[0]=='%' && p[1]=='1') {
+			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+				return FALSE;
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='2') {
+			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
+				return FALSE;
+			p += 2;
+		} else {
+			*b++ = *p++;
+		}
+		if (!p[0]) { /* ran out of input */
+			*b=0;
+			return TRUE;
+		}
+		if (b == bmax) { /* ran out of output room */
+			*b=0;
+			return FALSE;
+		}
+	}
+}
+/*==============================
+ * sprintpic3 -- Print using a picture string
+ *  with three arguments, eg "%1/%2/%3"
+ * See sprintpic1 for argument explanation.
+ * Created: 2001/12/30 (Perry Rapp)
+ *============================*/
+BOOLEAN
+sprintpic3 (STRING buffer, INT len, STRING pic, STRING arg1, STRING arg2, STRING arg3)
+{
+	STRING b = buffer, bmax = &buffer[len-1];
+	STRING p=pic;
+	INT arg1len = strlen(arg1); /* precompute */
+	INT arg2len = strlen(arg2);
+	INT arg3len = strlen(arg3);
+	while (1) {
+		if (p[0]=='%' && p[1]=='1') {
+			if (!printpic_arg(&b, bmax-b, arg1, arg1len))
+				return FALSE;
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='2') {
+			if (!printpic_arg(&b, bmax-b, arg2, arg2len))
+				return FALSE;
+			p += 2;
+		} else if (p[0]=='%' && p[1]=='3') {
+			if (!printpic_arg(&b, bmax-b, arg3, arg3len))
+				return FALSE;
+			p += 2;
+		} else {
+			*b++ = *p++;
+		}
+		if (!p[0]) { /* ran out of input */
+			*b=0;
+			return TRUE;
+		}
+		if (b == bmax) { /* ran out of output room */
+			*b=0;
+			return FALSE;
+		}
+	}
 }

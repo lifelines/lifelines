@@ -284,10 +284,14 @@ STRING nonint1     = SS "In %s the arg must be an integer.";
 STRING nonstr1     = SS "In %s the arg must be a string.";
 STRING nonvarx     = SS "In %s the arg #%d must be a variable.";
 STRING nonstrx     = SS "In %s the arg #%d must be a string.";
+STRING nonintx     = SS "In %s the arg #%d must be an integer.";
+STRING nonboox     = SS "In %s the arg #%d must be a boolean.";
+STRING nonindx     = SS "In %s the arg #%d must be a person.";
 STRING nullarg1    = SS "The arg to %s is null (not permissible).";
 STRING nonfname1   = SS "In %s the arg must be a filename.";
 STRING nonfam1     = SS "In %s the arg must be a family.";
 STRING nonnodstr1  = SS "In %s the arg must be a node or string.";
+STRING badargs     = SS "Bad argument(s) to %s";
 
 /* browse display stuff */
 STRING dspl_indi   = SS "person";
@@ -480,16 +484,25 @@ STRING sts_sca_ful = SS "Performing full name scan";
 STRING sts_sca_fra = SS "Performing name fragment scan";
 STRING sts_sca_ref = SS "Performing refn scan";
 STRING sts_sca_non = SS "No records found in scan";
-/* date strings */
-STRING datep_from  = SS "from %s";
-STRING datep_to    = SS "to %s";
-STRING datep_frto  = SS "from %s to %s";
-STRING dater_bef   = SS "before %s";
-STRING dater_aft   = SS "after %s";
-STRING dater_betan = SS "between %s and %s";
-STRING datea_abt   = SS "about %s";
-STRING datea_est   = SS "estimated %s";
-STRING datea_cal   = SS "calculated %s";
+/* complex date strings (1=abbrev, 2=full)*/
+STRING datea_abt1  = SS "abt %1";
+STRING datea_abt2  = SS "about %1";
+STRING datea_est1  = SS "est %1";
+STRING datea_est2  = SS "estimated %1";
+STRING datea_cal1  = SS "cal %1";
+STRING datea_cal2  = SS "calculated %1";
+STRING datep_from1 = SS "fr %1";
+STRING datep_from2 = SS "from %1";
+STRING datep_to1   = SS "to %1";
+STRING datep_to2   = SS "to %1";
+STRING datep_frto1 = SS "fr %1 to %2";
+STRING datep_frto2 = SS "from %1 to %2";
+STRING dater_bef1  = SS "bef %1";
+STRING dater_bef2  = SS "before %1";
+STRING dater_aft1  = SS "aft %1";
+STRING dater_aft2  = SS "after %1";
+STRING dater_bet1  = SS "bet %1 and %2";
+STRING dater_bet2  = SS "between %1 and %2";
 	/* use empty strings for nonexistent ones in language */
 STRING datetrl_bc1 = SS "B.C.";
 STRING datetrl_bc2 = SS "BC";

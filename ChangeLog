@@ -14,6 +14,15 @@
 	not loading correctly.
 	Updates to doc files for use on MS-Windows: talk about using UTF-8.
 
+	* ChangeLog gedlib/messages.c hdrs/interp.h hdrs/llstdlib.h
+	interp/builtin.c interp/date.c interp/functab.c
+	interp/interpi.h stdlib/mystring.c stdlib/stdstrng.c:
+
+	Implemented cmplx values 3-8 (ABT,Abt,ABOUT,About,abt,about).
+	Implemented complex & date picture strings.
+	Added new report functions: titlecase, complexformat, complexpic,
+	datepic. Added date tests for new functionality to exercise.ll.
+
 2001-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/messages.c hdrs/interp.h
