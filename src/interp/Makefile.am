@@ -11,8 +11,6 @@ INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 AM_YFLAGS = -d
 
 EXTRA_DIST = yacc.h
-# pvalue.c will expose a gcc compiler bug if -O2 is used. -marc
-CFLAGS = -g -W -Wall -g
 
 lex.o: yacc.h
 

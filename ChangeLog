@@ -1,3 +1,9 @@
+2000-12-31 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* interp/Makefile.am: Remove special CFLAGS setting, as using -O2
+	on pvalue.c no longer trigger compiler bug.  Tested using gcc
+	2.95.
+	
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* liflines/screen.c: Removed some unnecessary local prototypes.
