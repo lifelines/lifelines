@@ -42,12 +42,14 @@
 #include "screen.h"
 #include "liflines.h"
 #include "arch.h"
+#include "menuitem.h"
 
 #include "llinesi.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
 #define MAXVIEWABLE 30
+#define OVERHEAD_MENU 5
 INT LISTWIN_WIDTH=0;
 INT MAINWIN_WIDTH=0;
 static INT list_detail_lines = 0;
@@ -67,6 +69,10 @@ extern STRING abverr, uoperr;
 extern STRING mtitle, cright, plschs;
 BOOLEAN stdout_vis = FALSE;
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
 static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);
 static void add_menu (void);
 static void create_windows (void);
@@ -84,13 +90,16 @@ static void place_cursor (void);
 static INT interact (WINDOW *win, STRING str);
 static INT list_interact(WINDOW *win, STRING ttl, INT len, STRING *strings);
 static void vmprintf (STRING fmt, va_list args);
-
 static INT indiseq_interact (WINDOW *win, STRING ttl, INDISEQ seq);
 static WINDOW *choose_win(INT desiredlen, INT *actuallen);
+static void output_menu(WINDOW *win, INT screen);
+static INT calculate_screen_lines(INT screen);
 
 INT ll_lines = LINESREQ; /* update to be number of lines in screen */
 INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
 
+static INT menu_enabled = 1;
+static INT menu_dirty = 0;
 INT cur_screen = 0;
 
 WINDOW *main_win = NULL;
@@ -105,6 +114,11 @@ WINDOW *extra_menu_win;
 
 INT BAND;
 
+/* total screen lines used */
+INT LINESTOTAL = LINESREQ;
+/* number of lines for various menus */
+static INT EMPTY_MENU = -1; /* save one horizontal line */
+static INT EMPTY_LINES;
 /* the following values are increased if ll_lines > LINESREQ */
 int TANDEM_LINES = 6;		/* number of lines of tandem info */
 int PER_LINES = 11;		/* number of lines of person info */
@@ -121,9 +135,6 @@ static BOOLEAN now_showing = FALSE;
 
 /* forward refs */
 void win_list_init(void);
-
-/* import.c */
-BOOLEAN import_from_file(void);
 
 /* in miscutls.c */
 void key_util(void);
@@ -167,6 +178,8 @@ init_screen (void)
 	}
 
 	extralines = ll_lines - LINESREQ;
+	LINESTOTAL = ll_lines;
+	EMPTY_LINES = LINESTOTAL - OVERHEAD_MENU - EMPTY_MENU;
 	if(extralines > 0) {
 	    TANDEM_LINES += (extralines / 2);
 	    PER_LINES += extralines;
@@ -180,6 +193,7 @@ init_screen (void)
 	BAND = 25;	/* width of columns of menu (3) */
 	create_windows();
 	init_all_windows();
+	menuitem_initialize();
 	return 1; /* succeed */
 }
 /*=======================================
@@ -221,6 +235,15 @@ void
 paint_one_per_screen (void)
 {
 	WINDOW *win = main_win;
+	werase(win);
+	BOX(win, 0, 0);
+	show_horz_line(win, LINESTOTAL-3,  0, COLSREQ);
+	if (!menu_enabled)
+		return;
+	output_menu(win, ONE_PER_SCREEN);
+
+	/*
+	WINDOW *win = main_win;
 	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
@@ -254,6 +277,7 @@ paint_one_per_screen (void)
 	mvwaddstr(win, row++, col, "t  Enter tandem mode");
 	mvwaddstr(win, row++, col, "z  Browse to person");
 	mvwaddstr(win, row++, col, "q  Return to main menu");
+	*/
 }
 /*================================================
  * paint_one_fam_screen -- Paint one family screen
@@ -598,7 +622,7 @@ static INT
 indi_interact (void)
 {
 	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-!");
+		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-<>?!");
 }
 /*=========================================
  * indi_browse -- Handle indi_browse screen
@@ -606,9 +630,13 @@ indi_interact (void)
 INT
 indi_browse (NODE indi)
 {
-	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
-	show_person_main1(indi, 1, PER_LINES);
+	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
+	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
+		paint_one_per_screen();
+	menu_dirty = 0;
+	show_person_main1(indi, 1, lines);
 	display_screen(ONE_PER_SCREEN);
+//	return interact_screen(main_win, ONE_PER_SCREEN);
 	return indi_interact();
 }
 /*=========================================
@@ -1222,7 +1250,7 @@ choose_win (INT desiredlen, INT *actuallen)
 /*=====================================================
  * indiseq_interact -- Interact with user over sequence
  *===================================================*/
-INT
+static INT
 indiseq_interact (WINDOW *win,
                   STRING ttl,
                   INDISEQ seq)
@@ -1647,6 +1675,7 @@ show_vert_line (WINDOW *win,
 void
 place_cursor (void)
 {
+	/* TO DO - integrate menuitem version! */
 	INT row, col = 30;
 	switch (cur_screen) {
 	case MAIN_SCREEN:    row = 5;        break;
@@ -1722,3 +1751,123 @@ bsd_mvwgetstr (WINDOW *win,
 	nocrmode();
 }
 #endif
+/*================================================
+ * output_menu -- print menu array to screen
+ * for 3 column full width menus
+ *==============================================*/
+static void
+output_menu (WINDOW *win, INT screen)
+{
+	INT row;
+	INT icol=0;
+	INT col=3;
+	INT MenuRows = f_ScreenInfo[screen].MenuRows;
+	INT MenuSize = f_ScreenInfo[screen].MenuSize;
+	INT Item = 0;
+	INT page, pageitems;
+	char prompt[128];
+	MenuItem ** Menu = f_ScreenInfo[screen].Menu;
+	INT OnePageFlag = 0;
+	page = f_ScreenInfo[screen].MenuPage;
+	pageitems = (MenuRows-1)*3-2;
+	if (MenuSize < pageitems+1) /* don't need '?' if they fit */
+	{
+		OnePageFlag = 1;
+		page =0;
+	}
+	Item = page * pageitems;
+	if (Item >= MenuSize)
+		Item = ((MenuSize-1)/pageitems)*pageitems;
+	icol = 0;
+	col = 3;
+	row = LINESTOTAL-MenuRows-OVERHEAD_MENU+1;
+	show_horz_line(win, row++, 0, COLSREQ);
+	sprintf(prompt, "%s            (pg %d/%d)", 
+		plschs, page+1, MenuSize/pageitems+1);
+	mvwaddstr(win, row++, 2, prompt);
+	while (1)
+	{
+		mvwaddstr(win, row, col, Menu[Item++]->Display);
+		if (Item == MenuSize)
+			break;
+		row++;
+		if (icol<2 && row==LINESTOTAL-3)
+		{
+			icol++;
+			col += BAND;
+			row = LINESTOTAL-MenuRows-2;
+			continue;
+		}
+		if (icol==2 && row==LINESTOTAL-5)
+			break;
+	}
+	row = LINESTOTAL-5; col = 3+BAND*2;
+	if (!OnePageFlag)
+		mvwaddstr(win, row, col, g_MenuItemOther.Display);
+	mvwaddstr(win, ++row, col, g_MenuItemQuit.Display);
+}
+/*==================================================================
+ * toggle_menu() - toggle display of menu
+ * Created: 1999/02, Perry Rapp
+ * Joined repository: 2001/01/28, Perry Rapp
+ *================================================================*/
+void
+toggle_menu (void)
+{
+	menu_enabled = !menu_enabled;
+	menu_dirty = 1;
+}
+/*==================================================================
+ * cycle_menu() - show other menu choices
+ * Created: 1999/03, Perry Rapp
+ * Joined repository: 2001/01/28, Perry Rapp
+ *================================================================*/
+void
+cycle_menu (void)
+{
+	INT MenuSize = f_ScreenInfo[cur_screen].MenuSize;
+	INT MenuRows = f_ScreenInfo[cur_screen].MenuRows;
+	INT cols = f_ScreenInfo[cur_screen].MenuCols;
+	INT pageitems = (MenuRows-1)*cols-2;
+	if (pageitems+1 == MenuSize)
+		return; /* only one page */
+	f_ScreenInfo[cur_screen].MenuPage++;
+	if (f_ScreenInfo[cur_screen].MenuPage > (MenuSize-1)/pageitems)
+		f_ScreenInfo[cur_screen].MenuPage = 0;
+        menu_dirty = 1;
+}
+/*==================================================================
+ * adjust_menu_height() - Change height of menu on person screen
+ * Created: 1999/03, Perry Rapp
+ * Joined repository: 2001/01/28, Perry Rapp
+ *================================================================*/
+void
+adjust_menu_height (INT delta)
+{
+	INT min=4, max=10;
+	if (f_ScreenInfo[cur_screen].MenuCols == 1)
+	{
+		min = 5;
+		max = 14;
+	}
+	f_ScreenInfo[cur_screen].MenuRows += delta;
+	if (f_ScreenInfo[cur_screen].MenuRows<min)
+		f_ScreenInfo[cur_screen].MenuRows=min;
+	else if (f_ScreenInfo[cur_screen].MenuRows>max)
+		f_ScreenInfo[cur_screen].MenuRows=max;
+	menu_dirty = 1;
+}
+/*=========================================
+ * calculate_screen_lines -- How many lines above menu?
+ * Created: 1999/03, Perry Rapp
+ * Joined repository: 2001/01/28, Perry Rapp
+ *=======================================*/
+static INT
+calculate_screen_lines (INT screen)
+{
+	INT menu = f_ScreenInfo[screen].MenuRows;
+	INT lines;
+	if (!menu_enabled) menu = EMPTY_MENU;
+	lines = LINESTOTAL-OVERHEAD_MENU-menu;
+	return lines;
+}

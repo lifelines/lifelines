@@ -73,6 +73,11 @@ NOD0 full_name_scan(void);
 NOD0 name_fragment_scan(void);
 NOD0 refn_scan(void);
 
+/* screen.c */
+void adjust_menu_height(INT delta);
+void cycle_menu(void);
+void toggle_menu(void);
+
 /* show.c */
 void display_cache_stats(void);
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);

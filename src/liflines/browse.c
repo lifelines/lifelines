@@ -476,6 +476,15 @@ browse_indi_modes (NODE *pindi1,
 			if (node)
 				browse_source_node(node);
 			break;
+		case '<':
+			adjust_menu_height(+1);
+			break;
+		case '>':
+			adjust_menu_height(-1);
+			break;
+		case '?':
+			cycle_menu();
+			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
@@ -598,6 +607,15 @@ browse_aux (NODE node)
 			break;
 		case ')':       /* scroll details/pedigree down */
 			show_scroll(+1);
+			break;
+		case '<':
+			adjust_menu_height(+1);
+			break;
+		case '>':
+			adjust_menu_height(-1);
+			break;
+		case '?':
+			cycle_menu();
 			break;
 		case 'q':
 		default:
@@ -904,6 +922,15 @@ browse_fam (NODE *pindi,
 		case '!': /* Switch to gedcom mode */
 			gedcom_mode = !gedcom_mode;
 			fammodep = 0; /* force redraw */
+			break;
+		case '<':
+			adjust_menu_height(+1);
+			break;
+		case '>':
+			adjust_menu_height(-1);
+			break;
+		case '?':
+			cycle_menu();
 			break;
 		case 'q':
 		default:

@@ -45,14 +45,16 @@
 #       define FALSE ((BOOLEAN)0)
 #endif
 
-#define MAIN_SCREEN    1
-#define ONE_PER_SCREEN 2
-#define ONE_FAM_SCREEN 3
-#define TWO_PER_SCREEN 4
-#define TWO_FAM_SCREEN 5
-#define PED_SCREEN     6
-#define LIST_SCREEN    7
-#define AUX_SCREEN     8
+#define MAIN_SCREEN        1
+#define ONE_PER_SCREEN     2
+#define ONE_FAM_SCREEN     3
+#define TWO_PER_SCREEN     4
+#define TWO_FAM_SCREEN     5
+#define PED_SCREEN         6
+#define LIST_SCREEN        7
+#define AUX_SCREEN         8
+/* must be at bottom of list */
+#define MAX_SCREEN        10
 
 #ifndef ACS_TTEE
 #	define ACS_TTEE '+'
