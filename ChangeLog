@@ -1,3 +1,5 @@
+2005-02-12 lifelines beta 3.0.43 RELEASE
+
 2005-02-12 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c
@@ -30,6 +32,11 @@
 	* ChangeLog docs/ll-devguide.xml
 
 	Additions to devguide, in the stdlib section.
+
+	* ChangeLog po/da.po po/de.po po/el.po po/fr.po po/it.po
+	po/nl.po po/pl.po po/sv.po
+
+	Rebuild message catalogs for 3.0.42 release.
 
 2005-02-10 Perry Rapp
 

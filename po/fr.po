@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-07 22:43-0500\n"
+"POT-Creation-Date: 2005-02-11 21:20-0500\n"
 "PO-Revision-Date: 2004-01-14 15:05+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -2389,16 +2389,16 @@ msgstr "comp"
 msgid "jour_complementairs"
 msgstr "jour complémentaire"
 
-#: src/gedlib/node.c:603
+#: src/gedlib/node.c:610
 msgid "NO NAME"
 msgstr "NON DÉNOMMÉ"
 
-#: src/gedlib/node.c:1160
+#: src/gedlib/node.c:1167
 #, c-format
 msgid "Node memory leaks:"
 msgstr ""
 
-#: src/gedlib/node.c:1163
+#: src/gedlib/node.c:1170
 #, c-format
 msgid "%d item leaked"
 msgid_plural "%d items leaked"
@@ -2501,137 +2501,137 @@ msgstr " (dbint tt: %s)"
 msgid "This person record does not have a name line."
 msgstr "Cet enregistrement individuel ne possède pas de ligne nom."
 
-#: src/interp/alloc.c:692
+#: src/interp/alloc.c:691
 #, c-format
 msgid "Error: file \"%s\": line %d: "
 msgstr "Erreur : fichier \"%s\" : line %d :"
 
-#: src/interp/alloc.c:795
+#: src/interp/alloc.c:794
 #, c-format
 msgid "%s: the arg must be an integer."
 msgstr "%s : l'arg. doit être un entier."
 
-#: src/interp/alloc.c:796
+#: src/interp/alloc.c:795
 #, c-format
 msgid "%s: the arg #%s must be an integer."
 msgstr "%s : l'arg. #%s doit être un entier."
 
-#: src/interp/alloc.c:797
+#: src/interp/alloc.c:796
 #, c-format
 msgid "%s: the arg #%s must be a float."
 msgstr "%s : l'arg. #%s doit être un décimal."
 
-#: src/interp/alloc.c:798
+#: src/interp/alloc.c:797
 #, c-format
 msgid "%s: the arg must be a string."
 msgstr "%s : l'arg. doit être une chaîne."
 
-#: src/interp/alloc.c:799
+#: src/interp/alloc.c:798
 #, c-format
 msgid "%s: the arg #%s must be a string."
 msgstr "%s : l'arg. #%s doit être une chaîne."
 
-#: src/interp/alloc.c:800
+#: src/interp/alloc.c:799
 #, c-format
 msgid "%s: null arg not permissible."
 msgstr "%s : l'arg. null est interdit."
 
-#: src/interp/alloc.c:801
+#: src/interp/alloc.c:800
 #, c-format
 msgid "%s: the arg must be a filename."
 msgstr "%s : l'arg. doit être un nom de fichier."
 
-#: src/interp/alloc.c:802
+#: src/interp/alloc.c:801
 #, c-format
 msgid "%s: the arg must be a node or string."
 msgstr "%s : l'arg. doit être un noeud ou une chaîne."
 
-#: src/interp/alloc.c:803
+#: src/interp/alloc.c:802
 #, c-format
 msgid "%s: the arg must be a person."
 msgstr "%s : l'arg. doit être une personne"
 
-#: src/interp/alloc.c:804
+#: src/interp/alloc.c:803
 #, c-format
 msgid "%s: the arg #%s must be a person."
 msgstr "%s : l'arg. #%s doit être une personne."
 
-#: src/interp/alloc.c:805
+#: src/interp/alloc.c:804
 #, c-format
 msgid "%s: the arg must be a family."
 msgstr "%s : l'arg. doit être une famille."
 
-#: src/interp/alloc.c:806
+#: src/interp/alloc.c:805
 #, c-format
 msgid "%s: the arg #%s must be a family."
 msgstr "%s : l'arg. #%s doit être une famille."
 
-#: src/interp/alloc.c:807
+#: src/interp/alloc.c:806
 #, c-format
 msgid "%s: the arg #%s must be a record."
 msgstr "%s : l'arg. #%s doit être un enregistrement."
 
-#: src/interp/alloc.c:808
+#: src/interp/alloc.c:807
 #, c-format
 msgid "%s: the arg must be a node."
 msgstr "%s : l'arg. doit être un noeud."
 
-#: src/interp/alloc.c:809
+#: src/interp/alloc.c:808
 #, c-format
 msgid "%s: the arg #%s must be a node."
 msgstr "%s : l'arg. #%s doit être un noeud."
 
-#: src/interp/alloc.c:810
+#: src/interp/alloc.c:809
 #, c-format
 msgid "%s: the arg must be a variable."
 msgstr "%s : l'arg. doit être une variable."
 
-#: src/interp/alloc.c:811
+#: src/interp/alloc.c:810
 #, c-format
 msgid "%s: the arg #%s must be a variable."
 msgstr "%s : l'arg. #%s doit être une variable."
 
-#: src/interp/alloc.c:812
+#: src/interp/alloc.c:811
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
 msgstr "%s : l'arg. #%s doit être un booléen."
 
-#: src/interp/alloc.c:813
+#: src/interp/alloc.c:812
 #, c-format
 msgid "%s: the arg must be a list."
 msgstr "%s : l'arg. doit être une liste."
 
-#: src/interp/alloc.c:814
+#: src/interp/alloc.c:813
 #, c-format
 msgid "%s: the arg #%s must be a list."
 msgstr "%s : l'arg. #%s doit être une liste."
 
-#: src/interp/alloc.c:815
+#: src/interp/alloc.c:814
 #, c-format
 msgid "%s: the arg #%s must be a table."
 msgstr "%s : l'arg. #%s doit être une table."
 
-#: src/interp/alloc.c:816
+#: src/interp/alloc.c:815
 #, fuzzy, c-format
 msgid "%s: the arg must be a set."
 msgstr "%s : l'arg. doit être une liste."
 
-#: src/interp/alloc.c:817
+#: src/interp/alloc.c:816
 #, fuzzy, c-format
 msgid "%s: the arg #%s must be a set."
 msgstr "%s : l'arg. #%s doit être une liste."
 
-#: src/interp/alloc.c:818
+#: src/interp/alloc.c:817
 #, c-format
 msgid "%s: Bad arguments"
 msgstr "%s : Mauvais arguments"
 
-#: src/interp/alloc.c:819
+#: src/interp/alloc.c:818
 #, c-format
 msgid "%s: the arg had a major error."
 msgstr "%s : l'arg a une erreur majeure."
 
-#: src/interp/alloc.c:820
+#: src/interp/alloc.c:819
 #, c-format
 msgid "%s: the arg #%s had a major error."
 msgstr "%s : l'arg #%s a une erreur majeure."
@@ -2875,24 +2875,24 @@ msgstr "La proc. %s doit être appelée avec %d paramètres et non %d."
 msgid "is running..."
 msgstr "s'exécute..."
 
-#: src/interp/interp.c:367
+#: src/interp/interp.c:418
 msgid "was run successfully.\n"
 msgstr "s'est correctement exécuté.\n"
 
-#: src/interp/interp.c:372
+#: src/interp/interp.c:422
 msgid "was cancelled.\n"
 msgstr "a été interrompu.\n"
 
-#: src/interp/interp.c:374
+#: src/interp/interp.c:424
 msgid "was not run because of errors.\n"
 msgstr "a été imterrompu à cause d'erreurs.\n"
 
-#: src/interp/interp.c:500
+#: src/interp/interp.c:514
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Erreur : fichier <%s> non trouvé : %s\n"
 
-#: src/interp/interp.c:532
+#: src/interp/interp.c:546
 #, c-format
 msgid ""
 "\n"
@@ -2901,88 +2901,88 @@ msgstr ""
 "\n"
 "Durée du rapport %s (durée ui %s)\n"
 
-#: src/interp/interp.c:604
+#: src/interp/interp.c:618
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifieur : %s doit être une chaîne\n"
 
-#: src/interp/interp.c:1713
+#: src/interp/interp.c:1727
 #, c-format
 msgid "Undefined proc: %s"
 msgstr "Proc. non définie : %s"
 
-#: src/interp/interp.c:1715
+#: src/interp/interp.c:1729
 #, c-format
 msgid "Ambiguous call to proc: %s"
 msgstr "Appel ambigu à la proc. : %s "
 
-#: src/interp/interp.c:1859
+#: src/interp/interp.c:1873
 msgid "Enter d for debugger, q to quit"
 msgstr "Entrez d pour déboguer, q pour quitter"
 
-#: src/interp/interp.c:1869
+#: src/interp/interp.c:1883
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Afficher locals (%d)"
 
-#: src/interp/interp.c:1872
+#: src/interp/interp.c:1886
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Afficher globals (%d)"
 
-#: src/interp/interp.c:1874
+#: src/interp/interp.c:1888
 msgid "Pop one level"
 msgstr "Descendre d'un niveau"
 
-#: src/interp/interp.c:1875
+#: src/interp/interp.c:1889
 msgid "Quit debugger"
 msgstr "Quitter le deboggueur"
 
-#: src/interp/interp.c:1878
+#: src/interp/interp.c:1892
 msgid "Report debugger"
 msgstr "Deboggueur de rapports"
 
-#: src/interp/interp.c:1882
+#: src/interp/interp.c:1896
 msgid "Local variables"
 msgstr "Variables locales"
 
-#: src/interp/interp.c:1886
+#: src/interp/interp.c:1900
 msgid "Global variables"
 msgstr "Variables globales"
 
-#: src/interp/interp.c:1978
+#: src/interp/interp.c:1992
 msgid "Report cancelled"
 msgstr "Rapport interrompu"
 
-#: src/interp/interp.c:1986
+#: src/interp/interp.c:2000
 msgid "Report file: "
 msgstr "Fichier rapport : "
 
-#: src/interp/interp.c:1995
+#: src/interp/interp.c:2009
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Erreur d'interprétation en ligne %d :"
 
-#: src/interp/interp.c:1997
+#: src/interp/interp.c:2011
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Erreur d'exécution à la ligne %d : "
 
-#: src/interp/interp.c:2000
+#: src/interp/interp.c:2014
 msgid "Aborting: "
 msgstr "Interruption :"
 
-#: src/interp/interp.c:2159
+#: src/interp/interp.c:2173
 #, c-format
 msgid "Duplicate proc %s (lines %d and %d) in report: %s"
 msgstr "Proc. %s en double (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2189
+#: src/interp/interp.c:2203
 #, c-format
 msgid "Duplicate func %s (lines %d and %d) in report: %s"
 msgstr "Fonct. en  double %s (lignes %d et %d) dans le rapport : %s"
 
-#: src/interp/interp.c:2252
+#: src/interp/interp.c:2266
 msgid "This report requires a newer program to run\n"
 msgstr "Ce rapport nécessite un programme plus récent pour fonctionner\n"
 
@@ -3918,7 +3918,7 @@ msgstr "(+) "
 msgid "crem"
 msgstr "crém"
 
-#: src/liflines/show.c:1007
+#: src/liflines/show.c:1009
 #, c-format
 msgid "Cached: I:%s; F:%s"
 msgstr "En cache : I:%s; F:%s"
