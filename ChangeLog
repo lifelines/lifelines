@@ -1,7 +1,8 @@
 2000-11-11 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* reports/book-latex.ll: Bugfix.  Include index even when there
-	is no bibliography.
+	is no bibliography.  Use ISO 8859/1 charset in LaTeX.  Add meta-
+	information in header.
 
 2000-11-10 David Bright <dabright@users.sourceforge.net>
 

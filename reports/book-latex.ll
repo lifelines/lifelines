@@ -1,10 +1,16 @@
 /*
-** book-latex
+** @progname book-latex
+** @output   LaTeX
+** @author   Dennis Nicklaus (nicklaus@fnal.gov or nicklaus@writeme.com)
+**
 ** $Id$
 ** 
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.4  2000/11/11 07:52:06  pere
+** Use ISO 8859/1 charset in LaTeX.  Add meta-information in header.
+**
 ** Revision 1.3  2000/11/11 07:46:47  pere
 ** Include index even when there is no bibliography.
 **
@@ -625,6 +631,8 @@ proc main ()
     /*"\\documentclass[twocolumn,twoside,titlepage]{book}\n"*/	/* LaTeX 2e */
     "\\documentstyle[twocolumn,makeidx]{book}\n"
     "\\pagestyle{myheadings}\n\n"
+    "% Enable ISO 8859/1 charset" nl()
+    "\\usepackage{isolatin1}" nl()
     "% Shrink the margins to use more of the page.\n"
     "% This is taken from fullpage.sty, which is on some systems.\n"
     "\\topmargin 0pt\n"
