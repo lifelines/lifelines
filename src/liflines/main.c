@@ -621,7 +621,19 @@ main_db_notify (STRING db, BOOLEAN opening)
 static BOOLEAN
 init_curses_ui (void)
 {
-        WINDOW *win = initscr();
+        WINDOW *win;
+
+	if (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 4)
+	{
+          printf("Curses 5.4 detected.\n");
+          printf("There are known problems with this version of ncurses\n");
+          printf("that prevents LifeLines from running.  The LL developers\n");
+          printf("are working on a solution. For status updates and/or\n");
+          printf("assistance, please email lifelines-dev@sourceforge.net.\n");
+          return FALSE;
+	} 
+
+	win = initscr();
         if (!win) return FALSE;
         noecho();
         keypad(win, 1);
