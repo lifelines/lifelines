@@ -5,6 +5,10 @@
 
 	Add file with new has_key (trivial placeholder) implementation.
 
+	* ChangeLog src/hdrs/arch.h:
+
+	Add arch.h declaration for has_key if replaced.
+
 2003-01-02 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h:
