@@ -1,3 +1,9 @@
+2003-07-23 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Fix cursor display for main fixed menu screens (from psfales).
+
 2003-07-22 Perry Rapp
 
 	* ChangeLog src/liflines/screen.c

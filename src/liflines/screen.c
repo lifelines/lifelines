@@ -207,7 +207,7 @@ static RECORD invoke_search_menu(void);
 static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
-static void place_cursor_old(void);
+static void place_cursor_main(void);
 static void place_cursor_new(UIWINDOW uiwin);
 static void place_std_msg(void);
 static void refresh_main(void);
@@ -567,7 +567,7 @@ display_screen (INT new_screen)
 		place_std_msg();
 	else
 		mvccwaddstr(win, ll_lines-2, 2, status_showing);
-	place_cursor_old();
+	place_cursor_main();
 	switch_to_uiwin(uiwin);
 }
 /*=====================================
@@ -2775,7 +2775,7 @@ place_std_msg (void)
 		touch_all(TRUE);
 	else
 		wrefresh(win); 
-	place_cursor_old();
+	place_cursor_main();
 }
 /*==================================+
  * rpt_print -- Implement report language print function
@@ -2897,20 +2897,23 @@ place_cursor_new (UIWINDOW uiwin)
 	wmove(uiw_win(uiwin), uiw_cury(uiwin), uiw_curx(uiwin));
 }
 /*=============================================
- * place_cursor_old -- Move to idle cursor location
+ * place_cursor_main -- Move to idle cursor location
+ * for use with main menu screens
  *===========================================*/
 static void
-place_cursor_old (void)
+place_cursor_main (void)
 {
-	/* TO DO - integrate menuitem version! */
+	DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 	INT row, col = 30;
+
 	switch (cur_screen) {
 	case MAIN_SCREEN:    row = 5;        break;
-	case ONE_PER_SCREEN: row = ll_lines-11; break;
-	case ONE_FAM_SCREEN: row = ll_lines-9;  break;
-	case AUX_SCREEN:     row = AUX_LINES+2;       break;
-	case TWO_PER_SCREEN: row = 2*TANDEM_LINES+3;       break;
-	case TWO_FAM_SCREEN: row = 2*TANDEM_LINES+3;       break;
+	case ONE_PER_SCREEN:
+	case ONE_FAM_SCREEN:
+	case AUX_SCREEN:
+	case TWO_PER_SCREEN:
+	case TWO_FAM_SCREEN:
+		row = dynmenu->top - 1; break;
 	case LIST_SCREEN:    row = LIST_LINES+2; col = 75; break;
 	default:             row = 1; col = 1; break;
 	}
@@ -3148,7 +3151,7 @@ display_status (STRING text)
 	clear_hseg(win, row, 2, ll_cols-2);
 	wmove(win, row, 2);
 	mvccwaddstr(win, row, 2, status_showing);
-	place_cursor_old();
+	place_cursor_main();
 	wrefresh(win);
 }
 /*=========================================
