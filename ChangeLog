@@ -1,3 +1,14 @@
+2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog configure.in build/msvc6/Makefile.am
+
+	DELETED: win32/msvc6/llines win32/msvc6/libintl
+	DELETED: win32/msvc6/dbverify win32/msvc6/btedit
+	DELETED: win32/msvc6/Makefile.am win32/msvc6
+
+	Remove obsolete win32/msvc6 directories.
+	Update automake/autoconf to use new directories.
+
 2002-06-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/choose.c gedlib/gedcom.c gedlib/gstrings.c

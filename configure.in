@@ -12,8 +12,8 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE(lifelines, 3.0.16p1)
 AM_CONFIG_HEADER(config.h)
 
-AC_SUBST(PACKAGE)
-AC_SUBST(VERSION)
+AC_SUBST(PACKAGE) dnl Not needed anymore, replaced by AM_INIT_AUTOMAKE
+AC_SUBST(VERSION) dnl Not needed anymore, replaced by AM_INIT_AUTOMAKE
 
 dnl AC_CONFIG_SUBDIRS(btree gedlib interp stdlib)
 
@@ -28,6 +28,7 @@ dnl Do we need AM_ICONV ? (Perry, 2002.06.14)
 
 dnl Internationalization (gettext)
 AM_GNU_GETTEXT
+AM_ICONV dnl should use this
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
@@ -170,6 +171,6 @@ AC_OUTPUT(Makefile  m4/Makefile \
         docs/Makefile \
         reports/Makefile
         win32/Makefile \
-        win32/msvc6/Makefile \
+		build/msvc6/Makefile \
         intl/Makefile po/Makefile.in)
 
