@@ -232,6 +232,7 @@ main (INT argc,
 		char scratch[200];
 		FILE *fp;
 		KEYFILE kfile;
+		KEYFILEX kfilex;
 		struct stat sbuf;
 		sprintf(scratch, "%s/key", readpath);
 		if (stat(scratch, &sbuf) || !sbuf.st_mode&S_IFREG) {
@@ -244,6 +245,13 @@ main (INT argc,
 			llwprintf("Database error -- ");
 			llwprintf("could not open, read or write the key file.");
 			exit_it(1);
+		}
+		if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
+			if (!validate_keyfilex(&kfilex)) {
+				llwprintf("Database error -- ");
+				llwprintf("Invalid keyfile!");
+				exit_it(1);
+			}
 		}
 		kfile.k_ostat = 0;
 		rewind(fp);
@@ -285,7 +293,6 @@ main (INT argc,
 		exit_it(1);
 	}
 	init_lifelines();
-	init_show_module();
 	while (!alldone)
 		main_menu();
 	close_lifelines();
@@ -346,6 +353,15 @@ show_open_error (void)
 		break;
 	case BTERRWRITER:
 		llwprintf("The database is already open for writing.");
+		break;
+	case BTERRILLEGKF:
+		llwprintf("keyfile is corrupt.");
+		break;
+	case BTERRALIGNKF:
+		llwprintf("keyfile is wrong alignment.");
+		break;
+	case BTERRVERKF:
+		llwprintf("keyfile is wrong version.");
 		break;
 	default:
 		llwprintf("Undefined database error -- This can't happen.");

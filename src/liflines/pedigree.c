@@ -26,8 +26,11 @@
 */
 
 #include "llstdlib.h"
+#include "liflines.h"
 #include "screen.h"
 #include "mystring.h"
+
+#include "llinesi.h"
 
 struct treenode_s
 {
@@ -50,7 +53,7 @@ static int ScrollMax = 0;
  * add_children -- add children to tree recursively
  *================================================*/
 static treenode
-add_children (NODE indi, int gen, int maxgen)
+add_children (NODE indi, int gen, int maxgen, int * count)
 {
 	treenode tn = (treenode)malloc(sizeof(*tn));
 	treenode tn0, tn1;
@@ -59,6 +62,7 @@ add_children (NODE indi, int gen, int maxgen)
 	tn->keynum = indi_to_keynum(indi);
 	tn->firstchild = 0;
 	tn->nextsib = 0;
+	(*count)++;
 
 	if (gen < maxgen) {
 		INDISEQ childseq = indi_to_children(indi);
@@ -69,7 +73,7 @@ add_children (NODE indi, int gen, int maxgen)
 				STRING childkey, childname;
 				element_indiseq(childseq, i, &childkey, &childname);
 				child = key_to_indi(childkey);
-				tn1 = add_children(child, gen+1, maxgen);
+				tn1 = add_children(child, gen+1, maxgen, count);
 				if (tn0)
 					tn0 = tn0->nextsib = tn1;
 				else
@@ -84,21 +88,22 @@ add_children (NODE indi, int gen, int maxgen)
  * add_parents -- add parents to tree recursively
  *================================================*/
 static treenode
-add_parents (NODE indi, int gen, int maxgen)
+add_parents (NODE indi, int gen, int maxgen, int * count)
 {
 	NODE f=0, m=0;
 	treenode tn = (treenode)malloc(sizeof(*tn));
 	tn->keynum = indi_to_keynum(indi);
 	tn->firstchild = 0;
 	tn->nextsib = 0;
+	(*count)++;
 	if (gen<maxgen) {
 		tn->firstchild = 
-			add_parents(indi_to_fath(indi), gen+1, maxgen);
+			add_parents(indi_to_fath(indi), gen+1, maxgen, count);
 		/* reload indi in case lost from cache */
 		if (tn->keynum)
 			indi=keynum_to_indi(tn->keynum);
 		tn->firstchild->nextsib = 
-			add_parents(indi_to_moth(indi), gen+1, maxgen);
+			add_parents(indi_to_moth(indi), gen+1, maxgen, count);
 	}
 	return tn;
 }
@@ -111,18 +116,22 @@ print_to_buffer (int keynum, int gen, int * row)
 	char buffer[140], *ptr=buffer;
 	int mylen = sizeof(buffer);
 	NODE indi = 0;
-	int i;
+	int i, overflow=0;
 	WINDOW *w = main_win;
 	if (mylen > ll_cols-5)
 		mylen = ll_cols-5;
 	if (*row>Scroll && *row-Scroll<=ll_lines-10) {
+		if (*row==Scroll+1 && Scroll>0)
+			overflow=1;
+		if (*row-Scroll==ll_lines-10 && Scroll<ScrollMax)
+			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*6; i++)
 			llstrcatn(&ptr, " ", &mylen);
 		if (keynum)
 			indi = keynum_to_indi(keynum);
 		llstrcatn(&ptr, indi_to_ped_fix(indi, mylen), &mylen);
-		mvwaddstr(w, *row-Scroll, 2, buffer);
+		put_out_line(w, *row-Scroll, 2, buffer, overflow);
 	}
 	(*row)++;
 }
@@ -133,8 +142,6 @@ print_to_buffer (int keynum, int gen, int * row)
 static void
 trav_pre_print (treenode tn, int * row, int gen)
 {
-	char buffer[60], *ptr=buffer;
-	int mylen = sizeof(buffer);
 	treenode n0;
 	print_to_buffer(tn->keynum, gen, row);
 	for (n0=tn->firstchild; n0; n0=n0->nextsib)
@@ -160,7 +167,7 @@ trav_bin_in_print (treenode tn, int * row, int gen)
 static void
 SetScrollMax (int row)
 {
-	ScrollMax = row-(ll_lines-9);
+	ScrollMax = row-(ll_lines-10);
 	if (ScrollMax<0)
 		ScrollMax=0;
 }
@@ -170,12 +177,15 @@ SetScrollMax (int row)
 static void
 show_descendants (NODE indi)
 {
-	treenode root = add_children(indi, 1, Gens);
-	int row=1;
-	int gen=0;
+	treenode root;
+	int count, row, gen;
+	count=0;
+	root = add_children(indi, 1, Gens, &count);
+	SetScrollMax(count);
 	/* inorder traversal */
+	row=1;
+	gen=0;
 	trav_pre_print(root, &row, gen);
-	SetScrollMax(row);
 }
 /*==================================================
  * show_ancestors -- build ancestor tree & print it out
@@ -183,12 +193,15 @@ show_descendants (NODE indi)
 static void
 show_ancestors (NODE indi)
 {
-	treenode root = add_parents(indi, 1, Gens);
-	int row=1;
-	int gen=0;
+	treenode root;
+	int count, row, gen;
+	count=0;
+	root = add_parents(indi, 1, Gens, &count);
+	SetScrollMax(count);
 	/* inorder traversal */
+	row=0;
+	gen=0;
 	trav_bin_in_print(root, &row, gen);
-	SetScrollMax(row);
 }
 /*==================================================
  * pedigree_show -- display ancestors or

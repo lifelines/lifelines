@@ -531,7 +531,13 @@ int main()
 }
 #endif
 
-void llstrcatn(char ** pdest, const char * src, int * len)
+/*==================================
+ * llstrcatn -- Copy source string to destination
+ *  advancing destination pointer, and decreasing length
+ *  (nothing copied after len goes to zero)
+ *================================*/
+void
+llstrcatn(char ** pdest, const char * src, int * len)
 {
 	char * dest = *pdest;
 	if (!(*len)) return;
@@ -545,8 +551,8 @@ void llstrcatn(char ** pdest, const char * src, int * len)
 			break;
 		}
 		*dest = *src;
-		(*len)--;
 		if (!src[0]) break;
+		(*len)--;
 		dest++, src++;
 	}
 	*pdest = dest;

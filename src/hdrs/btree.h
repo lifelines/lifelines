@@ -53,6 +53,17 @@ typedef struct {
 	FKEY k_fkey;	/*current file key*/
 	INT k_ostat;	/*current open status*/
 } KEYFILE;
+
+typedef struct {
+	char name[18]; /* KF_NAME */
+	INT magic;     /* KF_MAGIC */
+	INT version;   /* KF_VER */
+} KEYFILEX;
+
+#define KF_NAME "LifeLines Keyfile"
+#define KF_MAGIC 0x12345678
+#define KF_VER 1
+
 /*==============================================
  * INDEX -- Data structure for BTREE index files
  *============================================*/
@@ -120,8 +131,9 @@ BOOLEAN addfile(BTREE, RKEY, STRING);
 BOOLEAN getfile(BTREE, RKEY, STRING);
 
 /* opnbtree.c */
-BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN closebtree(BTREE);
+BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
+BOOLEAN validate_keyfilex(KEYFILEX *);
 
 /* record.c */
 BOOLEAN addrecord(BTREE, RKEY, RECORD, INT);
@@ -144,6 +156,9 @@ extern INT bterrno;
 #define BTERRBLOCK    4 /*problem with a data block file*/
 #define BTERRLNGDIR   5	/*base directory name too long*/
 #define BTERRWRITER   6 /*can't open database because writer has it*/
+#define BTERRILLEGKF  7 /* illegal keyfile */
+#define BTERRALIGNKF  8 /* wrong alignment key file */
+#define BTERRVERKF    9 /* wrong version key file */
 
 #define BTINDEXTYPE 1
 #define BTBLOCKTYPE 2

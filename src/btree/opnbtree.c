@@ -41,6 +41,39 @@
 static BOOLEAN initbtree (STRING basedir);
 
 /*============================================
+ * init_keyfilex -- Initialize KEYFILEX structure
+ *==========================================*/
+static void
+init_keyfilex(KEYFILEX * kfilex)
+{
+	strncpy(kfilex->name, KF_NAME, sizeof(kfilex->name));
+	kfilex->magic = KF_MAGIC;
+	kfilex->version = KF_VER;
+}
+/*============================================
+ * validate_keyfilex -- Is KEYFILEX structure valid ?
+ *==========================================*/
+BOOLEAN
+validate_keyfilex (KEYFILEX * kfilex)
+{
+	if (strcmp(kfilex->name, KF_NAME))
+	{
+		bterrno = BTERRILLEGKF;
+		return FALSE;
+	}
+	if (kfilex->magic != KF_MAGIC)
+	{
+		bterrno = BTERRALIGNKF;
+		return FALSE;
+	}
+	if (kfilex->version != KF_VER)
+	{
+		bterrno = BTERRVERKF;
+		return FALSE;
+	}
+	return TRUE;
+}
+/*============================================
  * openbtree -- Alloc and init BTREE structure
  *==========================================*/
 BTREE
@@ -53,6 +86,8 @@ openbtree (STRING dir,          /* btree base dir */
 	FILE *fp;
 	struct stat sbuf;
 	KEYFILE kfile;
+	KEYFILEX kfilex;
+	BOOLEAN keyed = FALSE;
 	INDEX master;
 
 /* See if base directory exists */
@@ -88,9 +123,15 @@ openbtree (STRING dir,          /* btree base dir */
 
 /* Open and read key file */
 	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-	    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+	    fread(&kfile, sizeof(kfile), 1, fp) != 1) {
 		bterrno = BTERRKFILE;
 		return NULL;
+	}
+/* Read & validate keyfilex - if not present, we'll add it below */
+	if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
+		if (!validate_keyfilex(&kfilex))
+			return NULL; /* validate set bterrno */
+		keyed=TRUE;
 	}
 	if (kfile.k_ostat < 0) {
 		bterrno = BTERRWRITER;
@@ -108,6 +149,14 @@ openbtree (STRING dir,          /* btree base dir */
 		bterrno = BTERRKFILE;
 		fclose(fp);
 		return NULL;
+	}
+	if (!keyed) {
+		/* add KEYFILEX structure */
+		init_keyfilex(&kfilex);
+		if (fwrite(&kfilex, sizeof(kfilex), 1, fp) != 1) {
+		bterrno = BTERRKFILE;
+		fclose(fp);
+		}
 	}
 	fflush(fp);
 
@@ -134,6 +183,7 @@ static BOOLEAN
 initbtree (STRING basedir)
 {
 	KEYFILE kfile;
+	KEYFILEX kfilex;
 	INDEX master;
 	BLOCK block;
 	FILE *fk, *fi, *fd;
@@ -167,7 +217,9 @@ initbtree (STRING basedir)
 	kfile.k_mkey = path2fkey("aa/aa");
 	kfile.k_fkey = path2fkey("ab/ab");
 	kfile.k_ostat = 0;
-	if (fwrite(&kfile, sizeof(KEYFILE), 1, fk) != 1) {
+	init_keyfilex(&kfilex);
+	if (fwrite(&kfile, sizeof(kfile), 1, fk) != 1
+		|| fwrite(&kfilex, sizeof(kfilex), 1, fk) != 1) {
 		bterrno = BTERRKFILE;
 		fclose(fk);
 		fclose(fi);

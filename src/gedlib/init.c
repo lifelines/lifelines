@@ -48,11 +48,6 @@ STRING llarchives, llreports, llprograms;
 char *getenv();
 
 
-#if WIN32
-char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
-#else
-char unix_tempfile[] = "/tmp/lltmpXXXXXX";
-#endif
 
 /*=================================
  * figure_tempfile -- calculate temporary file (fully qualified path)
@@ -60,11 +55,14 @@ char unix_tempfile[] = "/tmp/lltmpXXXXXX";
 static STRING
 figure_tempfile()
 {
-
+	static char unix_tempfile[] = "/tmp/lltmpXXXXXX";
 
 #ifdef WIN32
-
 	STRING e;
+	static char win32_tempfile[1024]; /* TO DO - this should be MAX_PATH if stdlib or whatever was included */
+#endif
+
+#ifdef WIN32
 
 	/* windows has per-user temporary directory, depending on version */
 	e = (STRING)getenv("TEMP");
@@ -126,6 +124,7 @@ init_lifelines (void)
 	llarchives = (STRING) getenv("LLARCHIVES");
 	if (!llarchives || *llarchives == 0) llarchives = (STRING) ".";
 	openxref();
+	init_show_module();
 }
 /*===================================
  * close_lifelines -- Close LifeLines
