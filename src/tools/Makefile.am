@@ -21,7 +21,7 @@ btedit: $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
 	$(LINK) $(btedit_LDFLAGS) $(btedit_OBJECTS) $(btedit_LDADD)
 
 dbverify: $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
-	@rm -f btedit
+	@rm -f dbverify
 	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
 INCLUDES=-I$(srcdir)/../hdrs
