@@ -413,6 +413,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_2FAM;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_FATHER: 	/* Browse to person's father */
@@ -431,6 +432,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to person's mother */
@@ -449,6 +451,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
@@ -478,6 +481,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
@@ -522,6 +526,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_PEDIGREE:	/* Switch to pedigree mode */
@@ -560,6 +565,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					rtn = BROWSE_2FAM;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
@@ -724,17 +730,22 @@ display_aux (RECORD rec, INT mode, BOOLEAN reuse)
 static INT
 browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
-	RECORD current;
+	RECORD current=0;
 	INT i, c;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp=0, auxmode=0, auxmodep=0;
 	char ntype=0, ntypep=0;
 	RECORD tmp=0;
 	char c2;
+	INT rtn=0; /* return code */
 
 	ASSERT(prec1 && *prec1);
 	ASSERT(!*prec2 && !*pseq);
-	current = *prec1;
+
+	/* move working record into current */
+	setrecord(&current, prec1);
+	setrecord(prec1, 0);
+	setrecord(prec2, 0);
 
 
 	auxmode = 'x';
@@ -788,54 +799,71 @@ reprocess_aux_cmd:
 					c = CMD_EDIT;
 					goto reprocess_aux_cmd; /* forward to edit */
 				} else {
-					*prec1 = tmp;
-					return BROWSE_UNK;
+					setrecord(prec1, &tmp);
+					rtn = BROWSE_UNK;
+					goto exitbrowse;
 				}
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
 			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0) {
-				*prec1 = tmp;
-				return BROWSE_UNK;
+				setrecord(prec1, &tmp);
+				rtn = BROWSE_UNK;
+				goto exitbrowse;
 			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
 			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
-				*prec1 = tmp;
-				return BROWSE_UNK;
+				setrecord(prec1, &tmp);
+				rtn = BROWSE_UNK;
+				goto exitbrowse;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
 			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
-				current = tmp;
+				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
 			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
-				*prec1 = tmp;
-				return BROWSE_UNK;
+				setrecord(prec1, &tmp);
+				rtn = BROWSE_UNK;
+				goto exitbrowse;
 			}
 			break;
 		case CMD_NEXT:	/* Go to next in db */
 			{
 				i = xref_next(ntype, nkeyp);
-				if (i)
-					current = keynum_to_record(ntype, i);
-				else message(_(qSnorec));
+				if (i) {
+					tmp = keynum_to_record(ntype, i);
+					setrecord(&current, &tmp);
+				} else {
+					message(_(qSnorec));
+				}
 				break;
 			}
 		case CMD_PREV:	/* Go to prev in db */
 			{
 				i = xref_prev(ntype, nkeyp);
-				if (i)
-					current = keynum_to_record(ntype, i);
-				else message(_(qSnorec));
+				if (i) {
+					tmp = keynum_to_record(ntype, i);
+					setrecord(&current, &tmp);
+				} else {
+					message(_(qSnorec));
+				}
 				break;
 			}
 		case CMD_QUIT:
-			return BROWSE_QUIT;
+			rtn = BROWSE_QUIT;
+			goto exitbrowse;
 		}
 	}
+exitbrowse:
+	if (current) {
+		delref_record(current);
+		current = 0;
+	}
+	return rtn;
 }
 /*================================================
  * browse_indi -- Handle person browse operations.
@@ -1065,6 +1093,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
@@ -1085,6 +1114,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
@@ -1105,6 +1135,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 					rtn = BROWSE_TAND;
 					goto exitbrowse;
 				}
+				setrecord(&tmp, 0);
 			}
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */

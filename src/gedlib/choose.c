@@ -125,6 +125,7 @@ choose_note (RECORD current, STRING msg0, STRING msgn)
  *  presumably top level, node
  *  always asks
  * Created: 2001/02/24, Perry Rapp
+ * Returns addref'd record
  *======================================*/
 RECORD
 choose_pointer (RECORD current, STRING msg0, STRING msgn)
