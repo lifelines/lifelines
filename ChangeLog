@@ -5,6 +5,10 @@
 	Fix icvt.c to terminate wide in the 0-length input case.
 	Adjust windows version for 3.0.27p2.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Document that Union, intersect, and difference modify their arguments.
+
 2003-04-14 Stephen Dum
         * ChangeLog src/hdrs/standard.h docs/ll-reportmanual.txt
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
