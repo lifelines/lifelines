@@ -346,7 +346,7 @@ prompt_for_db:
 					_("Choose database to open")
 					, dbdesclist);
 				if (i >= 0) {
-					dbrequested = strsave(get_list_element(dblist, i+1));
+					dbrequested = strsave(get_list_element(dblist, i+1, NULL));
 				}
 				release_dblist(dblist);
 				release_dblist(dbdesclist);

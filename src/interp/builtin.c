@@ -62,6 +62,7 @@ extern STRING badargs,qSaskstr,qSchoostrttl;
  * local function prototypes
  *********************************************/
 
+static VPTR create_list_value_pvalue(LIST list);
 static INT normalize_year(struct dnum_s yr);
 static ZSTR decode(STRING str, INT * offset);
 
@@ -1875,6 +1876,18 @@ __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	set_pvalue(val, PBOOL, (VPTR)bEmpty);
 	return val;
 }
+/*===================================
+ * create_list_value_pvalue -- 
+ *  Create filler element
+ *  Used when accessing list as an array
+ *  Created: 2002/12/29 (Perry Rapp)
+ *=================================*/
+static VPTR
+create_list_value_pvalue (LIST list)
+{
+	list=list; /* unused */
+	return create_pvalue_any();
+}
 /*==================================+
  * __getel -- Get nth value from list
  *   usage: getel(LIST, INT) -> ANY
@@ -1901,7 +1914,7 @@ __getel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ind = pvalue_to_int(val);
 	delete_pvalue(val);
-	if (!(val = (PVALUE) get_list_element(list, ind)))
+	if (!(val = (PVALUE) get_list_element(list, ind, &create_list_value_pvalue)))
 		return create_pvalue_any();
 	return copy_pvalue(val);
 }
@@ -1936,9 +1949,9 @@ __setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, "3rd arg to setel is in error");
 		return NULL;
 	}
-	old = (PVALUE) get_list_element(list, ind);
+	old = (PVALUE) get_list_element(list, ind, &create_list_value_pvalue);
 	if(old) delete_pvalue(old);
-	set_list_element(list, ind, val);
+	set_list_element(list, ind, val, &create_list_value_pvalue);
 	return NULL;
 }
 /*===============================+

@@ -1961,6 +1961,8 @@ get_indiseq_ival (INDISEQ seq, INT i)
 }
 /*=======================================================
  * set_indiseq_value_funcs -- Set the value vtable for an INDISEQ
+ * This is to allow the report layer to register its functions to 
+ * create, compare, or delete values (so it can work with pvalues)
  * Created: 2001/03/25, Perry Rapp
  *=====================================================*/
 void

@@ -1,3 +1,12 @@
+2002-12-29 Perry Rapp
+
+	* ChangeLog reports/st/st_list.ll src/gedlib/indiseq.c
+	src/gedlib/names.c src/gedlib/place.c src/hdrs/interp.h
+	src/hdrs/list.h src/interp/builtin.c src/interp/interp.c
+	src/liflines/main.c src/stdlib/list.c:
+
+	Fix setel for reports. Add setel test to st_list.ll.
+
 2002-12-28 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml:

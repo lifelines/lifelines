@@ -19,8 +19,7 @@
  *********************************************/
 
 /* alphabetical */
-static LNODE nth_in_list_from_head(LIST list, INT index1b);
-static LNODE nth_in_list_from_tail(LIST list, INT index1b);
+static LNODE nth_in_list_from_tail(LIST list, INT index1b, LIST_CREATE_VALUE createfnc4);
 static void validate_list(LIST list);
 
 
@@ -245,33 +244,11 @@ pop_list_tail (LIST list)
 	return el;
 }
 /*=================================================
- * nth_in_list_from_head -- Find nth node in list, relative 1
- *  start at head & count towards tail
- *===============================================*/
-static LNODE
-nth_in_list_from_head (LIST list, INT index1b)
-{
-	INT i = 1;
-	LNODE node = NULL;
-	if (!list) return NULL;
-	node = lhead(list);
-	while (i < index1b && node) {
-		i++;
-		node = lnext(node);
-	}
-	validate_list(list);
-	if (i == index1b && node) return node;
-	while (i++ <= index1b)
-		back_list(list, NULL);
-	validate_list(list);
-	return ltail(list);
-}
-/*=================================================
  * nth_in_list_from_tail -- Find nth node in list, relative 1
  *  start at tail & count towards head
  *===============================================*/
 static LNODE
-nth_in_list_from_tail (LIST list, INT index1b)
+nth_in_list_from_tail (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 {
 	INT i = 1;
 	LNODE node = NULL;
@@ -283,8 +260,10 @@ nth_in_list_from_tail (LIST list, INT index1b)
 	}
 	validate_list(list);
 	if (i == index1b && node) return node;
-	while (i++ <= index1b)
-		enqueue_list(list, NULL);
+	while (i++ <= index1b) {
+		VPTR newv = createfnc ? (*createfnc)(list) : NULL;
+		enqueue_list(list, newv);
+	}
 	validate_list(list);
 	return lhead(list);
 }
@@ -292,11 +271,11 @@ nth_in_list_from_tail (LIST list, INT index1b)
  * set_list_element - Set element using array access
  *================================================*/
 void
-set_list_element (LIST list, INT index1b, VPTR val)
+set_list_element (LIST list, INT index1b, VPTR val, LIST_CREATE_VALUE createfnc)
 {
 	LNODE node = NULL;
 	if (!list) return;
-	node = nth_in_list_from_tail(list, index1b);
+	node = nth_in_list_from_tail(list, index1b, createfnc);
 	if (!node) return;
 	lelement(node) = val;
 	validate_list(list);
@@ -305,11 +284,11 @@ set_list_element (LIST list, INT index1b, VPTR val)
  * get_list_element - Retrieve element using array access
  *=====================================================*/
 VPTR
-get_list_element (LIST list, INT index1b)
+get_list_element (LIST list, INT index1b, LIST_CREATE_VALUE createfnc)
 {
 	LNODE node = NULL;
 	if (!list) return 0;
-	node = nth_in_list_from_tail(list, index1b);
+	node = nth_in_list_from_tail(list, index1b, createfnc);
 	if (!node) return 0;
 	return lelement(node);
 }

@@ -230,7 +230,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	if (nfiles > 0) {
 		for (i = 1; i < nfiles+1; i++) {
 			STRING fullpath = 0;
-			STRING progfile = get_list_element(lifiles, i);
+			STRING progfile = get_list_element(lifiles, i, NULL);
 			if (find_program(progfile, 0, &fullpath)) {
 				struct pathinfo_s * pathinfo = new_pathinfo(progfile, fullpath);
 				strfree(&fullpath);

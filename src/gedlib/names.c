@@ -1018,7 +1018,7 @@ name_to_list (STRING name, LIST list, INT *plen, INT *psind)
 				str[strlen(str) - 1] = 0;
 		} else
 			str = strsave(parts[i]);
-		set_list_element(list, i + 1, str);
+		set_list_element(list, i + 1, str, NULL);
 	}
 	*plen = i;
 	return TRUE;

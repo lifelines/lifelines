@@ -85,7 +85,7 @@ value_to_list (STRING str, LIST list, INT *plen, STRING dlm)
 		q = p + strlen(p) - 1;
 		while (q > p && chartype(*q) == WHITE)
 			*q-- = 0;
-		set_list_element(list, i, strsave(p));
+		set_list_element(list, i, strsave(p), NULL);
 		p = n;
 	}
 	*plen = j;

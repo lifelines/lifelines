@@ -1,5 +1,5 @@
 /*
- * @version        1.02 (2002-12-19)
+ * @version        1.03 (2002-12-29)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -106,11 +106,6 @@ proc testLists()
 	set(te2,0)
 	set(te3,0)
 	set(te4,0)
-/*
-2002-12-19, this gives a runtime error b/c el#3 is NULL
-and therefore fails an is_pvalue test
-TODO: Decide how to fix this
-*/
 	forlist(li, te, n) {
 		set(te1, te2)
  		set(te2, te3)
