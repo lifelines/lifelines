@@ -102,6 +102,7 @@ ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 	INT len, ind;
 	STRING piece;
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
+	newset=newset; /* unused */
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
@@ -131,6 +132,7 @@ rs_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 {
 	SCAN_PATTERN * patt = (SCAN_PATTERN *)param;
 	ASSERT(patt->scantype == REFNSCAN);
+	newset=newset; /* unused */
 
 	if (pattern_match(patt, refn)) {
 		/* if we pass in name, append_indiseq won't check for dups */

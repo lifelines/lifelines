@@ -595,7 +595,7 @@ static STRING
 rpt_shrt_format_date (STRING date)
 {
 	/* TO DO - customizing options */
-	static unsigned char buffer[MAXLINELEN+1];
+	/*static unsigned char buffer[MAXLINELEN+1];*/
 	if (!date) return NULL;
 	return shorten_date(date);
 }

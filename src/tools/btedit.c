@@ -113,7 +113,11 @@ void *
 __allocate (int len, STRING file, int line)
 {
 	char *p;
-	if ((p = malloc(len)) == NULL)  FATAL();
+	if ((p = malloc(len)) == NULL) {
+		char msg[48];
+		snprintf(msg, sizeof(msg), "malloc(%d) failed", len);
+		__fatal(file, line, msg);
+	}
 	return p;
 }
 
@@ -126,10 +130,12 @@ __allocate (int len, STRING file, int line)
 void
 __deallocate (void *ptr, STRING file, int line)
 {
+	file=file; /* unused */
+	line=line; /* unused */
 	free(ptr);
 }
 /*=============================
- * fatal -- Fatal error routine
+ * __fatal -- Fatal error routine
  *  handles null or empty details input
  *===========================*/
 void

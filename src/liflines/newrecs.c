@@ -250,6 +250,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	BOOLEAN emp;
 	NODE refn, node2=0, temp;
 	STRING str;
+	tag=tag; /* unused */ /* TODO: what is this ? 2002/01/04 Perry */
 
 /* Identify record if need be */
 	if (!node1) {

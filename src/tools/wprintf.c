@@ -75,5 +75,6 @@ msg_status (char *fmt, ...)
 void
 poutput (char *str, BOOLEAN *eflg)
 {
+	eflg=eflg; /* unused */
 	printf("%s", str);
 }

@@ -43,6 +43,11 @@
 	(defines alreaday present in screen.h). Add hack to make work with
 	cygwin (because we aren't linking correctly to its ncurses).
 
+	* ChangeLog interp/builtin.c interp/intrpseq.c liflines/newrecs.c
+	liflines/scan.c tools/btedit.c tools/wprintf.c:
+
+	More compiler warning cleanup.
+
 2002-01-3 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/property.c interp/alloc.c interp/date.c

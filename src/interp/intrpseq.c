@@ -422,16 +422,6 @@ __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*	push_list(keysets, seq);*/
 	return val;
 }
-/*===================================================+
- * copy_value_pvalue -- Callback for copy values
- *  in pvalue indiseqs
- *==================================================*/
-static VPTR
-copy_value_pvalue (VPTR pvalue)
-{
-	/* would incr if reference-counting */
-	return pvalue;
-}
 /*==============================================+
  * siblingset -- Create sibling set of an INDISEQ
  *   siblingset(SET) -> SET
