@@ -37,10 +37,14 @@
 /*********************************************
  * required global variables
  *********************************************/
-STRING readpath_file = NULL;	/* normally defined in liflines/main.c */
-STRING readpath = NULL;		/* normally defined in liflines/main.c */
-BOOLEAN uu8=0;                  /* normally defined in gedlib/codesets.c */
+/* defined in liflines/main.c */
+STRING readpath_file = NULL;
+STRING readpath = NULL;
 int opt_finnish = 0;
+/* defined in gedlib/codesets.c */
+BOOLEAN uu8=0;            /* flag if internal codeset is UTF-8 */
+STRING int_codeset=0;     /* internal codeset */
+
 
 /*********************************************
  * local function definitions

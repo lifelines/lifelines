@@ -10,6 +10,10 @@
 	Implement codeset detection & conversion when loading GEDCOM
 	files.
 
+	* ChangeLog src/tools/btedit.c:
+
+	Fix so btedit links successfully (under gcc).
+
 2002-12-14 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c:
