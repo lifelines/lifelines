@@ -317,14 +317,30 @@ readrec(BTREE btree, BLOCK block, INT i, INT *plen)
 			, rkey2str(rkeys(block, i)), scratch);
 		FATAL2(msg);
 	}
-	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) FATAL();
+	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) {
+		char msg[sizeof(scratch)+64];
+		sprintf(msg, "Seek to offset (%d) failed for blockfile (rkey=%s)"
+			, offs(block,i), rkey2str(rkeys(block, i)));
+		FATAL2(msg);
+	}
 	if ((len = lens(block, i)) == 0) {
 		*plen = 0;
 		fclose(fr);
 		return NULL;
 	}
+	if (len < 0) {
+		char msg[sizeof(scratch)+64];
+		sprintf(msg, "Bad len (%d) for blockfile (rkey=%s)"
+			, len, rkey2str(rkeys(block, i)));
+		FATAL2(msg);
+	}
 	record = (RECORD) stdalloc(len + 1);
-	ASSERT(fread(record, len, 1, fr) == 1);
+	if (!(fread(record, len, 1, fr) == 1)) {
+		char msg[sizeof(scratch)+64];
+		sprintf(msg, "Read for %d bytes failed for blockfile (rkey=%s)"
+			, len, rkey2str(rkeys(block, i)));
+		FATAL2(msg);
+	}
 	fclose(fr);
 	record[len] = 0;
 	*plen = len;
