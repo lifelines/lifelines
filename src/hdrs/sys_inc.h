@@ -27,6 +27,7 @@
 #ifdef _MSC_VER
 #include <direct.h>
 #include <fcntl.h> /* _O_BINARY */
+#include "msvc.h" /* pragmas to suppress warnings */
 #endif
 
 #else

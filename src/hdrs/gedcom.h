@@ -265,7 +265,6 @@ void othr_to_cache(NODE);
 void othr_to_dbase(NODE);
 BOOLEAN piecematch(STRING, STRING);
 BOOLEAN place_to_list(STRING, LIST, INT*);
-BOOLEAN readxrefs(void);
 INT record_letter(STRING);
 NODE refn_to_record(STRING, INT);
 void remove_indi_cache(STRING);
