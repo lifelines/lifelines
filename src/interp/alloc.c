@@ -303,6 +303,14 @@ clear_pnode (PNODE node)
 			ivalvar(node) = 0;
 		}
 	}
+	if (node->i_flags & PN_IIDENT_HSTR) {
+		STRING str = iident(node);
+		if (str) {
+			stdfree(str);
+			iident(node) = 0;
+		}
+	}
+
 }
 /*==================================
  * delete_pnode -- Create PNODE node
@@ -652,6 +660,7 @@ iden_node (PACTX pactx, STRING iden)
 {
 	PNODE node = create_pnode(pactx, IIDENT);
 	iident(node) = (VPTR) iden;
+	node->i_flags = PN_IIDENT_HSTR;
 	return node;
 }
 /*==================================

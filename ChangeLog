@@ -34,6 +34,10 @@
 
 	Added memory leak fixes to NEWS.
 
+	* ChangeLog src/interp/alloc.c src/interp/interpi.h
+
+	Fix IDEN leak in iden_node.
+
 2005-02-13 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 

@@ -158,6 +158,7 @@ enum {
 	, PN_IELEMENT_HPTR = 0x40 /* ielement is a heap string */
 	, PN_IPARENT_HPTR = 0x80 /* iiparent is a heap string */
 	, PN_IVALVAR_HPTR = 0x100 /* ivalvar is a heap string */
+	, PN_IIDENT_HSTR = 0x200 /* iident is a heap string */
 };
 
 #define itype(i)     ((i)->i_type)  /* node type - all nodes */
