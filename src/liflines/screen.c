@@ -1909,7 +1909,7 @@ get_answer (UIWINDOW uiwin, INT row, INT col)
 #ifdef HAVE_LIBNCURSES
 	mvwgetnstr(win, row, col, lcl, len);
 #else
-    move(row, col);
+    wmove(win, row, col);
 	wgetnstr(win, lcl, len);
 #endif
 	noecho();
