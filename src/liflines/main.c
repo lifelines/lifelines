@@ -36,6 +36,9 @@
 #include "btree.h"
 #include "table.h"
 #include "gedcom.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
@@ -50,7 +53,7 @@ BOOLEAN cursesio  = TRUE;	/* use curses i/o */
 BOOLEAN alldone   = FALSE;	/* completion flag */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
-STRING version = (STRING) "3.0.2";
+STRING version = (STRING) VERSION;
 STRING betaversion = (STRING) "-10.16";
 extern int opterr;
 extern BTREE BTR;

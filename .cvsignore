@@ -1,0 +1,11 @@
+.deps
+Makefile
+config.cache
+config.h
+config.log
+config.status
+configure.scan
+depends.mk
+lifelines-*.tar.gz
+stamp-h
+stamp-h.in

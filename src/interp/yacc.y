@@ -32,16 +32,15 @@
 #include "table.h"
 #include "gedcom.h"
 #include "interp.h"
-#undef FORLIST
 
 extern TABLE proctab, functab;
 static INTERP this, prev;
 extern LIST Plist;
 %}
 
-%token  PROC FUNC IDEN LITERAL CHILDREN SPOUSES IF ELSE ELSIF
+%token  PROC FUNC_TOK IDEN LITERAL CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
-%token  TRAVERSE FORNODES FORLIST FORFAM
+%token  TRAVERSE FORNODES FORLIST_TOK FORFAM
 %token  BREAK CONTINUE RETURN
 
 %%
@@ -66,7 +65,7 @@ proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
 			insert_table(proctab, $2, proc_node($2, $4, $7));
 		}
 
-func	:	FUNC IDEN '(' idenso ')' '{' tmplts '}' {
+func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
 			insert_table(functab, $2, fdef_node($2, $4, $7));
 		}
 	;
@@ -112,7 +111,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			$$ = forindiset_node($4, $6, $8, $10, $13);
 			((INTERP)$$)->i_line = (INT) $2;
 		}
-	|	FORLIST m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
+	|	FORLIST_TOK m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			$$ = forlist_node($4, $6, $8, $11);
 			((INTERP)$$)->i_line = (INT) $2;

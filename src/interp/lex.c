@@ -32,8 +32,7 @@
 #include "table.h"
 #include "gedcom.h"
 #include "interp.h"
-#undef FORLIST
-#include "y.tab.h"
+#include "yacc.h"
 
 extern FILE *Pinfp;	/* file that holds program */
 extern STRING Pinstr;	/* string that holds program */
@@ -159,10 +158,10 @@ static struct {
 	"forfam",	FORFAM,
 	"forindiset",	FORINDISET,
 	"forindi",	FORINDI,
-	"forlist",	FORLIST,
+	"forlist",	FORLIST_TOK,
 	"fornodes",	FORNODES,
 	"fornotes",	FORNOTES,
-	"func",		FUNC,
+	"func",		FUNC_TOK,
 	"if",		IF,
 	"proc",		PROC,
 	"return",	RETURN,
