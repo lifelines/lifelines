@@ -20,6 +20,8 @@
 
 /* WIN32 - MSVC INCLUDES */
 #ifdef _MSC_VER
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <direct.h>
 #endif
 
