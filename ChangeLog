@@ -26,6 +26,10 @@
 	gettextized to 0.11.5. Added ../../intl to all source includes
 	(to get generated libintl.h for systems lacking it).
 
+	* ChangeLog src/hdrs/version.h:
+
+	Bump version to 3.0.24b5 for beta release.
+
 2003-01-04 Matt Emmerton
 
 	* ChangeLog src/arch/Makefile.am
