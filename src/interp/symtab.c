@@ -90,18 +90,15 @@ LIST live_symtabs=0; /* list of symbol tables, to check for leaks */
 void
 insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 {
-	/* pvalue is in table as vptr, so table can't free it */
 	PVALUE oldval = (PVALUE) valueof_ptr(stab->tab, iden);
-	/*
-	2005-02-06, Perry, there is a report pvalue leak here
-	If oldval exists, reference counted values in val get bumped
-	But if not, they don't
-	I tried the simple fix of changing the handling to not ever
-	bump them here, but that leads to heap corruption, so apparently
-	some caller(s) depend on them getting bumped here :(
-	*/
 	if (oldval) {
-		set_pvalue_to_pvalue(oldval, val);
+		if (ptype(oldval)==ptype(val) && pvalvv(oldval)==pvalvv(val)) {
+			return; /* self-assignment */
+		}
+		/* table doesn't know how to delete pvalues, so we do it */
+		delete_pvalue(oldval);
+		delete_table_element(stab->tab, iden);
+		table_insert_ptr(stab->tab, iden, val);
 	} else {
 		table_insert_ptr(stab->tab, iden, val);
 	}

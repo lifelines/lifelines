@@ -1,3 +1,10 @@
+2005-02-07 Perry Rapp
+
+	* ChangeLog lines.cfg src/interp/pvalue.c src/interp/symtab.c
+
+	Fix leak of pvalues of existing variables in insert_symtab.
+
+
 2005-02-06 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c
