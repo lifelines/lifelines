@@ -277,10 +277,13 @@ assign_record (RECORD rec, char ntype, INT keynum)
 {
 	char xref[12];
 	char key[9];
+        NODE node;
 	sprintf(key, "%c%d", ntype, keynum);
 	sprintf(xref, "@%s@", key);
-	if (nztop(rec))
-		nxref(nztop(rec)) = strsave(xref);
+	if ((node = nztop(rec))) {
+		if (nxref(node)) stdfree(nxref(node));
+		nxref(node) = strsave(xref);
+	}
 	rec->nkey.key = strsave(key);
 	rec->nkey.keynum = keynum;
 	rec->nkey.ntype = ntype;
