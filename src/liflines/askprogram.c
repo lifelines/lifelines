@@ -419,11 +419,15 @@ ask_for_program (STRING mode,
       choice = choose_from_list(ttl, len, list);
       if (choice == -1)
         {
+          free_program_list(head, list, len);
           message("Cancelled.");
           return NULL;
         }
       if (choice == 0)
-        goto AskForString;
+        {
+          free_program_list(head, list, len);
+          goto AskForString;
+        }
 		choice--;
       fp = get_choice(head, choice, pfname);
       /* note that fp may be null now */

@@ -195,6 +195,7 @@ main (int argc,
 	INT findGhosts=FALSE, fixGhosts=FALSE;
 
 #ifdef WIN32
+	/* TO DO - research if this is necessary */
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
 #endif
 

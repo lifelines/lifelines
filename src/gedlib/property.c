@@ -4,7 +4,10 @@
 
 #include "standard.h"
 #include "gedcom.h"
+
+#if HAVE_PWD_H
 #include <pwd.h>
+#endif
 
 /*=====================================================
  * get_user_fullname -- Extract current users full name
@@ -19,6 +22,8 @@ get_user_fullname(void)
   struct passwd *pwent = getpwuid(getuid());
   if (NULL != pwent && NULL != pwent->pw_gecos)
     retval = (STRING) pwent->pw_gecos; /* XXX Is it safe to pass this on? */
+#elif defined(WIN32)
+  return "unimplemented";
 #else
 # error "port me"
 #endif
@@ -45,6 +50,8 @@ get_user_email(void)
       username[sizeof(username)-1] = '\0';
       retval = (STRING) username;
     }
+#elif WIN32
+  return "unimplementable";
 #else
 # error "port me"
 #endif
