@@ -624,7 +624,7 @@ save_original_locales (void)
 		/* 1729 is the gettext code when there wasn't any LC_MESSAGES */
 		deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
 	}
-#endif LC_MESSAGES
+#endif /* LC_MESSAGES */
 #endif /* HAVE_SETLOCALE */
 	/* fallback to the environment (see setmsgs) */
 	if (!deflocale_msgs)

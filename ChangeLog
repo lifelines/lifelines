@@ -13,6 +13,14 @@
 	Revising string functions for UTF-8.
 	Fix fatal bug in list code.
 
+	* ChangeLog NEWS configure.in lifelines.spec gedlib/messages.c
+	gedlib/node.c gedlib/translat.c hdrs/version.h
+	liflines/import.c po/de.po po/el.po po/it.po po/sv.po
+	win32/msvc6/llines/llines.rc:
+
+	Fix fatal bug preventing import ("unsupported multibyte encoding...");
+	Bumped to 3.0.16 for release.
+
 2002-06-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/translat.c:

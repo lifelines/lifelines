@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.14
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.16
+===================
+
+- A fatal crash was triggered if last item was popped off a list in a report.
+
 New features added in 3.0.15
 ============================
 
@@ -10,7 +15,7 @@ New features added in 3.0.15
 - Prompt after edit if unresolved references
 
 Bug fixes in 3.0.15
-==================
+===================
 
 - Import was validing but not importing from UTF-8 files with UTF-8 BOM.
 

@@ -62,7 +62,7 @@ extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
 extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
-extern STRING qScfoldk, qSunsupuni;
+extern STRING qScfoldk, qSunsupuniv;
 
 /*********************************************
  * local function prototypes
@@ -101,10 +101,11 @@ import_from_gedcom_file (struct import_feedback * ifeed, FILE *fp)
 	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
 	BOOLEAN succeeded=FALSE;
+	STRING unistr=0;
 
 /* Open and validate GEDCOM file */
-	if (!check_file_for_unicode(fp)) {
-		msg_error(_(qSunsupuni));
+	if ((unistr=check_file_for_unicode(fp)) && !eqstr(unistr, "UTF-8")) {
+		msg_error(_(qSunsupuniv), unistr);
 		goto end_import;
 	}
 	/* validate */

@@ -51,7 +51,7 @@ BOOLEAN add_metadata = FALSE;
  *********************************************/
 
 extern STRING qSfileof, qSreremp, qSrerlng, qSrernlv, qSrerinc;
-extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupuni;
+extern STRING qSrerbln, qSrernwt, qSrerilv, qSrerwlv, qSunsupunix, qSunsupuniv;
 
 /*********************************************
  * local types
@@ -535,8 +535,10 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, TRANMAPPING ttm,
 {
 	STRING unitype = check_file_for_unicode(fp);
 	if (unitype && !eqstr(unitype, "UTF-8")) {
-		/* TODO: ought to pass unitype string to caller, but haven't a buffer */
-		*pmsg = _(qSunsupuni);
+		char msg[120];
+		snprintf(msg, sizeof(msg), _(qSunsupuniv), unitype);
+		/* TODO: need to pass msg up to caller somehow */
+		*pmsg = _(qSunsupunix);
 		return NULL;
 	}
 	return do_first_fp_to_node(fp, list, ttm, pmsg, peof);

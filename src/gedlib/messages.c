@@ -294,7 +294,8 @@ ZST qSwhatrpt     = N_("What is the name of the program?");
 
 ZST qSwhtout      = N_("What is the name of the output file?");
 ZST qSopt2long    = N_("Malformed configuration file: line too long.");
-ZST qSunsupuni    = N_("Unsupported file encoding (no multibyte encodings except UTF-8).");
+ZST qSunsupunix   = N_("Unsupported file encoding (no multibyte encodings except UTF-8).");
+ZST qSunsupuniv    = N_("Unsupported file encoding: %s.");
 
 /* misc prompts */
 ZST qSchoostrttl  = N_("Enter string for program");
