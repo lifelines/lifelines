@@ -1127,12 +1127,11 @@ list_interact(WINDOW *win,    /* interaction window */
 	}
 }
 /*===============================================
- * mprintf -- Call as mprintf(fmt, ...)
+ * vmprintf -- send error, info, or status message out
  *=============================================*/
 void
-mprintf (STRING fmt, ...)
+vmprintf (STRING fmt, va_list args)
 {
-	va_list args;
 	INT row;
 	wmove(main_win, row = LINES-2, 2);
 	if (cur_screen != LIST_SCREEN) {
@@ -1141,14 +1140,48 @@ mprintf (STRING fmt, ...)
 	} else
 		mvwaddstr(main_win, row, 2, empstr);
 	wmove(main_win, row, 2);
-	va_start(args, fmt);
 	vsprintf(showing, fmt, args);
-	va_end(args);
 	mvwaddstr(main_win, row, 2, showing);
 	now_showing = TRUE;
 	place_cursor();
 	wrefresh(main_win);
 }
+/*===============================================
+ * mprintf_error -- Call as mprintf_error(fmt, ...)
+ *=============================================*/
+void
+mprintf_error (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vmprintf(fmt, args);
+	va_end(args);
+}
+/*===============================================
+ * mprintf_info -- Call as mprintf_error(fmt, ...)
+ * usually displaying results of user's action
+ *=============================================*/
+void
+mprintf_info (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vmprintf(fmt, args);
+	va_end(args);
+}
+/*===============================================
+ * mprintf_status -- Call as mprintf_error(fmt, ...)
+ * transient status during import/export, eg, counting nodes
+ *=============================================*/
+void
+mprintf_status (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vmprintf(fmt, args);
+	va_end(args);
+}
+
 #ifdef OBSOLETE
 /*===============================================
  * Other: mprintf -- Call as mprintf(fmt, arg, arg, ...)
@@ -1179,7 +1212,7 @@ INT arg1, arg2, arg3, arg4, arg5, arg6, arg7;
 void
 message (STRING s)
 {
-	mprintf("%s", s);
+	mprintf_info("%s", s);
 }
 /*===================================================
  * message_string -- Return background message string

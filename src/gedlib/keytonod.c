@@ -453,7 +453,7 @@ cache_stats (void)
 	for (cel = cfirstdir(c); cel; cel = cnext(cel)) {
 		if (cclock(cel)) n++;
 	}
-	mprintf("Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
+	mprintf_info("Cache contents -- I: %dD  %dI  %dL;  F: %dD  %dI",
 	    csizedir(c), csizeind(c), n, csizedir(f), csizeind(f));
 }
 /*============================================

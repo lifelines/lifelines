@@ -264,7 +264,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 	nchild(node2) = temp;
 	(*todbase)(node1);
 	free_nodes(node2);
-	mprintf(gdmsg);
+	mprintf_info(gdmsg);
 }
 /*==============================================
  * ask_for_record -- Ask user to identify record

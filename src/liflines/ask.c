@@ -167,14 +167,14 @@ ask_for_file (STRING mode,
 		  if(fp && pfname) *pfname = strsave(fnamebuf);
 		}
 		if((fp == NULL) && ((fp = fopen(fname, mode)) == NULL)) {
-			mprintf(nofopn, fname);
+			mprintf_error(nofopn, fname);
 			return NULL;
 		}
 		return fp;
 	}
 	if (!(fp = fopenpath(fname, mode, path, ext, pfname))) {
 	    	if(pfname && (*pfname == NULL)) *pfname = fname;
-		mprintf(nofopn, fname);
+		mprintf_error(nofopn, fname);
 		return NULL;
 	}
 	return fp;

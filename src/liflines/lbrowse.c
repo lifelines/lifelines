@@ -180,7 +180,7 @@ browse_list (NODE *pindi1,
 			else {
 				newname = strsave(newname);
 				add_browse_list (newname, copy_indiseq(seq));
-				mprintf(lstnam, newname);
+				mprintf_info(lstnam, newname);
 			}
 			break;
 		case 'x':	/* Swap current with marked */

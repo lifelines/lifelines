@@ -1,8 +1,20 @@
+2000-11-18 Perry Rapp <puddle@users.sourceforge.net>
+	Changed mprintf to mprintf_error, mprintf_info, mprintf_status.
+	gedlib/editmap.c gedlib/keytonod.c hdrs/screen.h
+	interp/interp.c interp/rassa.c liflines/add.c
+	liflines/ask.c liflines/edit.c liflines/export.c
+	liflines/import.c liflines/lbrowse.c liflines/main.c
+	liflines/miscutils.c liflines/newrecs.c liflines/screen.c
+
+2000-11-16 Perry Rapp <puddle@users.sourceforge.net>
+	Fixed a couple typos, and annotated the ghost names bug
+	(in liflines/merge.c). 
+
 2000-11-16  Marc Nozell  <marc@nozell.com>
 
 	* gedlib/init.c: fix syntax error
 
-2000-11-15	Perry Rapp <puddle@users.sourceforge.net>
+2000-11-15  Perry Rapp <puddle@users.sourceforge.net>
 	* btree/traverse.c gedlib/editvtab.c hdrs/btree.h hdrs/gedcom.h
 	hdrs/llstdlib.h hdrs/screen.h interp/more.c interp/yacc.y
 	liflines/import.c stdlib/double.c win32/mycurses.c: Stricter

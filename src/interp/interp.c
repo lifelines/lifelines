@@ -182,7 +182,7 @@ interp_program (STRING proc,    /* proc to call */
    /* Open output file if name is provided */
 
 	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
-		mprintf("Error: file \"%s\" could not be created.\n", ofile);
+		mprintf_error("Error: file \"%s\" could not be created.\n", ofile);
 		remove_tables();
 		return;
 	}
@@ -192,7 +192,7 @@ interp_program (STRING proc,    /* proc to call */
 
 	parm = (PNODE) iargs(first);
 	if (nargs != num_params(parm)) {
-		mprintf("Proc %s must be called with %d (not %d) parameters.",
+		mprintf_error("Proc %s must be called with %d (not %d) parameters.",
 			proc, num_params(parm), nargs);
 		remove_tables();
 		return;

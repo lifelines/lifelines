@@ -286,7 +286,7 @@ trytocreate (STRING path)
 	if (!ask_yes_or_no_msg(nodbse, crdbse)) return FALSE;
 
 	if (!(BTR = openbtree(path, TRUE, !readonly))) {
-		mprintf(nocrdb, path);
+		mprintf_error(nocrdb, path);
 		return FALSE;
 	}
 	initxref();

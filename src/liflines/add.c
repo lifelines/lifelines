@@ -129,7 +129,7 @@ add_unlinked_indi (NODE indi)
 	resolve_links(indi);
 	indi_to_dbase(indi);
 	indi_to_cache(indi);
-	mprintf(gdpadd, indi_to_name(indi, ttd, 35));
+	mprintf_status(gdpadd, indi_to_name(indi, ttd, 35));
 	return indi;
 }
 /*================================================================
@@ -238,7 +238,7 @@ add_child (NODE child,
 	resolve_links(fam);
 	fam_to_dbase(fam);
 	indi_to_dbase(child);
-	mprintf(gdcadd, indi_to_name(child, ttd, 35));
+	mprintf_status(gdcadd, indi_to_name(child, ttd, 35));
 	return fam;
 }
 /*===================================
@@ -336,7 +336,7 @@ add_spouse (NODE spouse,
 	resolve_links(fam);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-	mprintf(gdsadd, indi_to_name(spouse, ttd, 35));
+	mprintf_status(gdsadd, indi_to_name(spouse, ttd, 35));
 	return TRUE;
 }
 /*=========================================

@@ -159,7 +159,7 @@ import_from_file (void)
 	    addmissingkeys(OTHR_REC);
 	}
 	wpos(15, 0);
-	mprintf("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
+	mprintf_info("Added (%dP, %dF, %dS, %dE, %dX) records from file `%s'.",
 	    nindi, nfam, nsour, neven, nothr, fname);
 
 	/* At some point, the input file should be closed! - JFC */
@@ -236,7 +236,7 @@ translate_key (STRING key)    /* key does not have surrounding @ chars */
 		FATAL();
 	}
 	/* NOTREACHED */
-        return NULL;
+	return NULL;
 }
 /*============================================================
  * translate_values -- Traverse function to translate pointers

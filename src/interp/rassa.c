@@ -177,7 +177,7 @@ __newfile (PNODE node,
 	}
 	if (!(Poutfp = fopenpath(outfilename,
 			 aflag?LLAPPENDTEXT:LLWRITETEXT, llreports, NULL, (STRING *)NULL))) {
-		mprintf("Could not open file %s", outfilename);
+		mprintf_error("Could not open file %s", outfilename);
 		return NULL;
 	}
 	return NULL;

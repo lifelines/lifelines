@@ -29,7 +29,7 @@ edit_mapping (INT code) /* map code */
 	BOOLEAN err;
 
 	if (code < 0 || code >= NOMAPS) {
-		mprintf("System error: illegal map code");
+		mprintf_error("System error: illegal map code");
 		return FALSE;
 	}
 	if (readonly) {
