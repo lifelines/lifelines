@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" 
-[<!ENTITY llversion '3.0.7'>]> 
+[<!ENTITY llversion '3.0.25'>]> 
 
 
 <book id="docbook"> 
@@ -20,7 +20,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.7">    
+	<!entity llversion	"3.0.25">    
 ]>	
 	
 <book id="docbook"> 
@@ -693,21 +693,56 @@ resumes with the first item after the call.
 
 <para> 
 
-The report language also includes the following statement types:<synopsis>include(string)</synopsis><synopsis>global(varb) 
-</synopsis><synopsis>set(varb, expr) 
-</synopsis><synopsis>continue() 
-</synopsis><synopsis>break() 
-</synopsis><synopsis>return([expr])</synopsis> 
+The following report language statements are commonly encountered only near the top of a report:
+<synopsis>char_encoding(string)</synopsis>
+<synopsis>require(string)</synopsis>
+<synopsis>option(string)</synopsis>
+<synopsis>include(string)</synopsis>
+<synopsis>global(varb)</synopsis>
+
+</para>
+
+
+
+<para>
+
+The <type>char_encoding</type> statement specifies what character encoding scheme is used by the report, so that the
+report processor can correctly interpret bytes not in ASCII (e.g., accented letters). An example specifying a character
+encoding common in Western Europe:
+
+
+<programlisting>
+char_encoding("ISO-8859-1")
+</programlisting>
+
+The <type>option</type> statement allows the report writer to specify options. The only option currently available is
+"explicitvars", which causes any use of variables not previously declared or set to be reported as a parsing error. The
+<type>require</type> statement allows the report writer to specify that this report needs a version of the report
+interpreter no older than that specified.
+The <type>include</type> statement includes the contents of another file into the current file; its <parameter>string</parameter> expression is 
+the name of another <application>LifeLines</application> program file. It is described in more detail below. The <type>global</type> statement 
+must be used outside the scope of any <type>procedure</type> or <type>function</type>; it declares a <parameter>variable</parameter> to have global scope. 
+
+</para>
+
+
+
+<para>
+
+The report language also includes the following statements, which mimic some common programming languages:
+
+<synopsis>set(varb, expr)</synopsis>
+<synopsis>continue()</synopsis>
+<synopsis>break()</synopsis>
+<synopsis>return([expr])</synopsis> 
 
 </para> 
 
 
 
-<para> 
 
-The <type>include</type> statement includes the contents of another file into the current file; its <parameter>string</parameter> expression is 
-the name of another <application>LifeLines</application> program file. It is described in more detail below. The <type>global</type> statement 
-must be used outside the scope of any <type>procedure</type> or <type>function</type>; it declares a <parameter>variable</parameter> to have global scope. 
+<para>
+
 The <type>set</type> statement is the assignment statement; the <parameter>expression</parameter> is evaluated, and its value is assigned 
 to the <parameter>variable</parameter>. The <type>continue</type> statement jumps to the bottom of the current loop, but does not leave the 
 loop. The <type>break</type> statement breaks out of the most closely nested loop. The <type>return</type> statement returns from 
@@ -866,6 +901,14 @@ boolean (0 represents false; anything else represents true)
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm><type>FLOAT</type></glossterm><glossdef> 
+
+<para> 
+
+floating point number (may be used anywhere an INT may be used)
+
+</para> 
+
 </glossdef></glossentry><glossentry><glossterm><type>STRING</type></glossterm><glossdef> 
 
 <para> 
@@ -878,7 +921,7 @@ text string
 
 <para> 
 
-arbitrary length list of any values 
+arbitrary length list of any values (reference)
 
 </para> 
 
@@ -886,7 +929,7 @@ arbitrary length list of any values
 
 <para> 
 
-keyed look-up table 
+keyed look-up table (reference)
 
 </para> 
 
@@ -894,7 +937,7 @@ keyed look-up table
 
 <para> 
 
-person; reference to a <acronym>GEDCOM</acronym> INDI record 
+person; reference to a <acronym>GEDCOM</acronym> INDI record (reference)
 
 </para> 
 
@@ -902,7 +945,7 @@ person; reference to a <acronym>GEDCOM</acronym> INDI record
 
 <para> 
 
-family; reference to a <acronym>GEDCOM</acronym> FAM record 
+family; reference to a <acronym>GEDCOM</acronym> FAM record (reference)
 
 </para> 
 
@@ -910,7 +953,7 @@ family; reference to a <acronym>GEDCOM</acronym> FAM record
 
 <para> 
 
-arbitrary length set of persons 
+arbitrary length set of persons (reference)
 
 </para> 
 
@@ -918,7 +961,7 @@ arbitrary length set of persons
 
 <para> 
 
-<acronym>GEDCOM</acronym> node; reference to a line in a <acronym>GEDCOM</acronym> tree/record 
+<acronym>GEDCOM</acronym> node; reference to a line in a <acronym>GEDCOM</acronym> tree/record (reference)
 
 </para> 
 
@@ -926,7 +969,7 @@ arbitrary length set of persons
 
 <para> 
 
-event; reference to substructure of nodes in a <acronym>GEDCOM</acronym> record 
+event; reference to substructure of nodes in a <acronym>GEDCOM</acronym> record (reference)
 
 </para> 
 
@@ -942,14 +985,26 @@ type with no values
 
 <para> 
 
-In the summaries of <type>built-in functions</type> below, each function is shown with its <type>argument</type> types and its 
-<type>return</type> type. The types are from the preceding list. Sometimes an <type>argument</type> to a <type>built-in function</type> must be 
-a <type>variable</type>; when this is so its type is given as <varname>XXX_V</varname>, where <symbol>XXX</symbol> is one of the types above. The 
-<type>built-ins</type> do not check the types of their <type>arguments</type>. <type>Variables</type> can hold values of any type, though at 
-any one time they will hold values of only one type. Note that <type>EVENT</type> is a subtype of <type>NODE</type>, and 
-<type>BOOL</type> is a subtype of <type>INT</type>. Built-ins with type <type>VOID</type> actually return <returnvalue>null</returnvalue> (zero) values. 
+In the summaries of <type>built-in functions</type> below, each function is shown with its <type>argument</type> types
+and its <type>return</type> type.  The types are from the preceding list. Sometimes an <type>argument</type> to a
+<type>built-in function</type> must be a <type>variable</type>; when this is so its type is given as
+<varname>XXX_V</varname>, where <symbol>XXX</symbol> is one of the types above. The <type>built-ins</type> do not check
+the types of their <type>arguments</type>. <type>Variables</type> can hold values of any type, though at any one time
+they will hold values of only one type. Note that <type>EVENT</type> is a subtype of <type>NODE</type>, and
+<type>BOOL</type> is a subtype of <type>INT</type>. Built-ins with type <type>VOID</type> actually return
+<returnvalue>null</returnvalue> (zero) values. 
 
 </para> 
+
+<para>
+
+Reference types (denoted above in parentheses) obey "pointer semantics", which is to say that assigning one to another
+variable results in both variables pointing at the same data (no copy is made). Therefore, if you pass a string to a
+function which changes the string, the caller does not see the change, because a string is not a reference type. On the
+other hand, if you pass a table to a function which alters the table, the caller does see the change, because a table is
+a reference type.
+
+</para>
 
 
 
@@ -1950,6 +2005,25 @@ variable that counts the families starting at one.
 </sect1> 
 
 
+<sect1> 
+
+
+
+<title> 
+
+Other types of records
+
+</title> 
+
+<para> 
+
+There are not currently report language functions to access and iterate the other types of records (source, events,
+notes, etc) in a database.
+
+</para>
+
+</sect1>
+
 
 <sect1> 
 
@@ -2033,6 +2107,22 @@ array element selection
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>sort</function></funcdef><paramdef><parameter>LIST</parameter><parameter>LISt</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+sort list elements
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>rsort</function></funcdef><paramdef><parameter>LIST</parameter><parameter>LISt</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+reverse sort list elements
+
+</para> 
+
 </glossdef></glossentry><glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef> 
 
 <para> 
@@ -2045,8 +2135,9 @@ loop through all elements of list
 
 <para> 
 
-<application>LifeLines</application> provides general purpose lists that can be accessed as queues, stacks or arrays. A list must be 
-declared with the <function>list</function> function before it can be used. 
+<application>LifeLines</application> provides general purpose lists that can be accessed as queues, stacks or arrays. A
+list must be declared with the <function>list</function> function before it can be used. Redeclaring an existing
+variable with the <function>list</function> clears it and restores it to being an empty list.
 
 
 </para> 
@@ -2055,8 +2146,9 @@ declared with the <function>list</function> function before it can be used.
 
 <para> 
 
-A list can have any number of elements. <function>Empty</function> returns <returnvalue>true</returnvalue> if the list has no elements and <returnvalue>false</returnvalue> 
-otherwise. <function>Length</function> returns the length of the list. The only parameter to both is a list. 
+A list can have any number of elements. <function>Empty</function> returns <returnvalue>true</returnvalue> if the list
+has no elements and <returnvalue>false</returnvalue> otherwise. <function>Length</function> returns the length of the
+list. The only parameter to both is a list. 
 
 
 </para> 
@@ -2065,10 +2157,11 @@ otherwise. <function>Length</function> returns the length of the list. The only 
 
 <para> 
 
-<function>Enqueue</function>, <function>dequeue</function> and <function>requeue</function> provide queue access to a list. <function>Enqueue</function> adds an element to the back of a 
-queue, <function>dequeue</function> removes and returns the element from the front of a queue, and <function>requeue</function> adds an element 
-to the front of a queue. The first parameter to all three is a list, and the second parameter to <function>enqueue</function> 
-and <function>requeue</function> is the value to be added to the queue and can be any value. 
+<function>Enqueue</function>, <function>dequeue</function> and <function>requeue</function> provide queue access to a
+list.  <function>Enqueue</function> adds an element to the back of a queue, <function>dequeue</function> removes and
+returns the element from the front of a queue, and <function>requeue</function> adds an element to the front of a queue.
+The first parameter to all three is a list, and the second parameter to <function>enqueue</function> and
+<function>requeue</function> is the value to be added to the queue and can be any value. 
 
 
 </para> 
@@ -2077,9 +2170,10 @@ and <function>requeue</function> is the value to be added to the queue and can b
 
 <para> 
 
-<function>Push</function> and <function>pop</function> provide stack access to a list. <function>Push</function> pushes an element on the stack, and <function>pop</function> removes 
-and returns the most recently pushed element from the stack. The first parameter to both is a list, and 
-the second parameter to <function>push</function> is the value to be pushed on the stack and can be of any type. 
+<function>Push</function> and <function>pop</function> provide stack access to a list. <function>Push</function> pushes
+an element on the stack, and <function>pop</function> removes and returns the most recently pushed element from the
+stack. The first parameter to both is a list, and the second parameter to <function>push</function> is the value to be
+pushed on the stack and can be of any type. 
 
 
 </para> 
@@ -2088,23 +2182,32 @@ the second parameter to <function>push</function> is the value to be pushed on t
 
 <para> 
 
-<function>Setel</function> and <function>getel</function> provide array access to a list. <function>Setel</function> sets a value of an array element, and <function>getel</function> 
-returns the value of an array element. The first parameter to both is a list; the second parameter to both 
-is an integer index into the array; and the third parameter to <function>setel</function> is the value to assign to the array 
-element and can be of any type. Array elements are indexed starting at one. Unassigned elements are 
-assumed to be <returnvalue>null</returnvalue> (<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the largest index value that 
-is used. 
+<function>Setel</function> and <function>getel</function> provide array access to a list. <function>Setel</function>
+sets a value of an array element, and <function>getel</function> returns the value of an array element. The first
+parameter to both is a list; the second parameter to both is an integer index into the array; and the third parameter to
+<function>setel</function> is the value to assign to the array element and can be of any type. Array elements are
+indexed starting at one. Unassigned elements are assumed to be <returnvalue>null</returnvalue>
+(<returnvalue>0</returnvalue>). Arrays automatically grow in size to accommodate the largest index value that is used.
+Passing 0 references the last element at the other end from 1, and -1 the one before it, etc.
 
 
 </para> 
 
 
 
+<para>
+
+<function>sort</function> and <function>rsort</function> sort a list, using the elements of the second array to
+determine the new order. Both lists are reordered, so essentially both are sorted using the sort order of the second
+argument. (If only one argument is given, it is sorted on its own elements.) rsort sorts in order reverse of sort.
+
+</para>
+
 <para> 
 
-<command>Forlist</command> is an iterator that loops through the element in a list. Its first parameter is a <type>LIST</type> expression; 
-its second parameter is a variable that iterates through the list elements; and its third parameter is an 
-integer counter variable that counts the list elements starting at one. 
+<command>Forlist</command> is an iterator that loops through the element in a list. Its first parameter is a
+<type>LIST</type> expression; its second parameter is a variable that iterates through the list elements; and its third
+parameter is an integer counter variable that counts the list elements starting at one. 
 
 </para> 
 
@@ -2162,10 +2265,9 @@ function before it can be used.
 
 <para> 
 
-<function>Insert</function> adds an object and its key to a table. Its first parameter is a table; the second parameter is the 
-object's key; and the third parameter is the object itself. The key must be a string and the object can be 
-any value. If there already is an object in the table with that key, the old object is replaced with the 
-new. 
+<function>Insert</function> adds an object and its key to a table. Its first parameter is a table; the second parameter
+is the object's key; and the third parameter is the object itself. The key must be a string and the object can be any
+value. If there already is an object in the table with that key, the old object is replaced with the new. 
 
 
 </para> 
@@ -2174,9 +2276,9 @@ new.
 
 <para> 
 
-<function>Lookup</function> retrieves an object from a table. Its first parameter is a table, and the second parameter is the 
-object's key. The function returns the object with that key from the table; if there is no such object, <returnvalue>null</returnvalue> 
-is returned. 
+<function>Lookup</function> retrieves an object from a table. Its first parameter is a table, and the second parameter
+is the object's key. The function returns the object with that key from the table; if there is no such object,
+<returnvalue>null</returnvalue> is returned. 
 
 </para> 
 
@@ -3226,10 +3328,9 @@ a new string.
 
 <para> 
 
-<function>Save</function> creates a copy of the argument string and returns it. This function is required because built-in 
-functions that return strings use the buffer return method; if a string is to be used repeatedly or long after 
-it is returned from a function, it should first be saved by using the <function>save</function> function. <function>Strsave</function> is the same 
-function as <function>save</function>. With version 3.0.6 or later, this should be unnecessary. 
+<function>Save</function> is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
+from becoming stale; this is not currently necessary (and this function no longer does anything). 
+ <function>Strsave</function> is the same function as <function>save</function>. 
 
 
 </para> 
@@ -3876,13 +3977,29 @@ add a node to a GEDCOM tree
 
 </para> 
 
-</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>deletenode</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>detachnode</function></funcdef><paramdef><parameter>NODE</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
 
 <para> 
 
 delete a node from a GEDCOM tree 
 
 </para> 
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>writeindi</function></funcdef><paramdef><parameter>INDI</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+write a person back to the database
+
+</para>
+
+</glossdef></glossentry><glossentry><glossterm><funcsynopsis><funcprototype><funcdef>VOID <function>writefam</function></funcdef><paramdef><parameter>FAM</parameter></paramdef></funcprototype></funcsynopsis></glossterm><glossdef> 
+
+<para> 
+
+write a family back to the database
+
+</para>
 
 </glossdef></glossentry></glosslist> 
 
@@ -3897,11 +4014,14 @@ These functions allow you to modify an internal <acronym>GEDCOM</acronym> node t
 
 <para> 
 
-<function>Createnode</function> creates a <acronym>GEDCOM</acronym> node; the two arguments are tag and value strings, respectively; the 
-value string can be <returnvalue>null</returnvalue>. <function>Addnode</function> adds a node to a node tree. The first argument is the new node; the 
-second is the node in the tree that becomes the parent of the new node; the third is the node in the tree 
-that becomes the previous sibling of the new node; this argument is <returnvalue>null</returnvalue> if the new node is to become 
-the first child of the parent. <function>Deletenode</function> removes a node from a node tree. 
+<function>Createnode</function> creates a <acronym>GEDCOM</acronym> node; the two arguments are tag and value strings,
+respectively; the value string can be <returnvalue>null</returnvalue>. <function>Addnode</function> adds a node to a
+node tree. The first argument is the new node; the second is the node in the tree that becomes the parent of the new
+node; the third is the node in the tree that becomes the previous sibling of the new node; this argument is
+<returnvalue>null</returnvalue> if the new node is to become the first child of the parent.
+<function>Detachnode</function> removes a node from a node tree. <function>writeindi</function> writes an individual
+record back to the database, and <function>writefam</function> writes a family record back to the database, allowing the
+report to make permanent changes to the database.
 
 
 </para> 
@@ -3910,9 +4030,9 @@ the first child of the parent. <function>Deletenode</function> removes a node fr
 
 <para> 
 
-These functions change the internal form of a node tree; they <emphasis>do not</emphasis> modify original records in the 
-database. These functions may be changed or extended in the future to allow database changes. Note: 
-<function>deletenode</function> has a memory leak. 
+The node functions only change data in memory; there is no effect on the database until and unless
+<function>writeindi</function> or <function>writeindi</function> are called. These functions may be changed or extended
+in the future to allow database changes. 
 
 </para> 
 

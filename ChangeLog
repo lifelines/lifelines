@@ -15,6 +15,11 @@
 	Improve random access to lists. Implement negative offsets
 	(to access elements from other end).
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Documented sort & rsort, FLOAT type, negative offsets
+	to getel, writeindi and writefam.
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
