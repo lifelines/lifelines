@@ -1,5 +1,9 @@
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/screen.h hdrs/standard.h: Make sure TRUE and FALSE
+	constants are of type BOOLEAN.  This removed some warnings when
+	running lclint.
+
 	* docs/lifelines.sgml: Add option 'p' to the main menu screenshot.
 
 2001-01-01 Perry Rapp <puddle@users.sourceforge.net>

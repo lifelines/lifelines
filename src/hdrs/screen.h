@@ -34,16 +34,15 @@
 #include "gedcom.h"
 #include "indiseq.h"
 
-#undef TRUE
-#undef FALSE
-
 #include <curses.h>
 
 #include <stdarg.h>
 
 #ifndef TRUE
-#	define TRUE 1
-#	define FALSE 0
+#       define TRUE ((BOOLEAN)1)
+#endif
+#ifndef FALSE
+#       define FALSE ((BOOLEAN)0)
 #endif
 
 #define MAIN_SCREEN    1
