@@ -39,6 +39,12 @@
 	Fix __namesort, __keysort, __valuesort to use prog_var_error.
 	New error message nonset1. Add dt_db.li calls to set sort functions.
 
+	* ChangeLog src/hdrs/generic.h src/hdrs/table.h
+	src/stdlib/generic.c src/stdlib/rbtree.c src/stdlib/stack.c
+	src/stdlib/stack.h
+
+	Cosmetic & cleanup for compiler warnings.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

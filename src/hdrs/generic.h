@@ -68,7 +68,7 @@ BOOLEAN is_generic_int(GENERIC *gen);
 BOOLEAN is_generic_float(GENERIC *gen);
 BOOLEAN is_generic_string(GENERIC *gen); /* includes shared strings */
 BOOLEAN is_generic_vptr(GENERIC *gen);
-/* 
+ 
 /* Retrieve value */
 INT get_generic_int(GENERIC *gen);
 FLOAT get_generic_float(GENERIC *gen);

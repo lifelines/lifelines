@@ -52,11 +52,13 @@ void StackInitModule(void (*AssertFunc)(int assertion, const char* error),
 
 
 
-int StackNotEmpty(STKSTACK theStack) {
+int StackNotEmpty(STKSTACK theStack)
+{
   return( theStack ? (int) theStack->top : 0);
 }
 
-STKSTACK StackJoin(STKSTACK stack1, STKSTACK stack2) {
+STKSTACK StackJoin(STKSTACK stack1, STKSTACK stack2)
+{
 	if (!stack1->tail) {
 		free(stack1);
 		return(stack2);
@@ -68,7 +70,8 @@ STKSTACK StackJoin(STKSTACK stack1, STKSTACK stack2) {
 	}
 }
 
-STKSTACK StackCreate() {
+STKSTACK StackCreate(void)
+{
 	STKSTACK newStack;
 
 	newStack=(STKSTACK) SafeMalloc(sizeof(*newStack));
@@ -77,7 +80,8 @@ STKSTACK StackCreate() {
 }
 
 
-void StackPush(STKSTACK theStack, DATA_TYPE newInfoPointer) {
+void StackPush(STKSTACK theStack, DATA_TYPE newInfoPointer)
+{
 	STKNODE newNode=0;
 
 	newNode=(STKNODE) SafeMalloc(sizeof(*newNode));
@@ -95,7 +99,8 @@ void StackPush(STKSTACK theStack, DATA_TYPE newInfoPointer) {
   
 }
 
-DATA_TYPE StackPop(STKSTACK theStack) {
+DATA_TYPE StackPop(STKSTACK theStack)
+{
 	DATA_TYPE popInfo;
 	STKNODE oldNode=0;
 
@@ -111,7 +116,8 @@ DATA_TYPE StackPop(STKSTACK theStack) {
 	return(popInfo);
 }
 
-void StackDestroy(STKSTACK theStack,void DestFunc(void * a)) {
+void StackDestroy(STKSTACK theStack,void DestFunc(void * a))
+{
 	STKNODE x=theStack->top;
 	STKNODE y=0;
 

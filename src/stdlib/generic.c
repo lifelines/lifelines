@@ -103,7 +103,7 @@ init_generic_object (GENERIC *gen, VPTR oval)
 	OBJECT obj = (OBJECT)oval;
 	init_generic(gen);
 	gen->selector = GENERIC_OBJECT;
-	gen->oval = oval;
+	gen->oval = obj;
 }
 /*=================================================
  * set_generic_null -- populate gen with null generic
@@ -286,6 +286,8 @@ void
 clear_generic (GENERIC *gen)
 {
 	switch(gen->selector) {
+	case GENERIC_NULL: break;
+	case GENERIC_INT: break;
 	case GENERIC_FLOAT:
 		stdfree(gen->fval);
 		gen->fval = 0;
@@ -293,6 +295,8 @@ clear_generic (GENERIC *gen)
 		stdfree(gen->sval);
 		gen->sval = 0;
 		break;
+	case GENERIC_STRING_SHARED: break;
+	case GENERIC_VPTR: break;
 	case GENERIC_OBJECT:
 		delete_obj(gen->oval);
 		break;

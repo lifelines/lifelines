@@ -36,7 +36,8 @@ void StackInitModule(void (*AssertFunc)(int assertion, const char* error),
 /*  These functions are all very straightforward and self-commenting so */
 /*  I didn't think additional comments would be useful */
 STKSTACK StackJoin(STKSTACK stack1, STKSTACK stack2);
-STKSTACK StackCreate();
+STKSTACK StackCreate(void);
+void StackDestroy(STKSTACK theStack,void DestFunc(void * a));
 void StackPush(STKSTACK theStack, DATA_TYPE newInfoPointer);
 DATA_TYPE StackPop(STKSTACK theStack);
 int StackNotEmpty(STKSTACK);
