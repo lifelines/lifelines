@@ -1,3 +1,9 @@
+2001-12-27 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog liflines/browse.c liflines/pedigree.c:
+
+	Fixed !t (extended text mode) to use translation table.
+
 2001-12-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog lines.cfg gedlib/charmaps.c gedlib/editmap.c

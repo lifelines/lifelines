@@ -275,14 +275,18 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	DISPNODE tn0, tn1, tn2;
 	NODE child, anode;
 	INT width = canvas->maxcol-2 - gen*6;
-	static char line[120];
-	STRING ptr=line;
+	static char line[120], output[120]; /* must be same size */
+	STRING ptr=output;
 	INT leader;
 	LIST list=NULL;
-	INT mylen=sizeof(line), mylenorig;
+	TRANTABLE ttd = tran_tables[MINDS];
+	INT mylen=sizeof(output), mylenorig;
 	if (mylen>width)
 		mylen = width;
 	mylenorig = mylen;
+
+	/* kind of tricky -- we build the xref & tag into output
+	and then translate it back into line */
 
 	if (nxref(node)) {
 		llstrcatn(&ptr, nxref(node), &mylen);
@@ -292,16 +296,24 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 		llstrcatn(&ptr, ntag(node), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 	}
-	leader = ptr-line;
+	leader = ptr-output;
 	width -= leader;
 	if (width < 10) {
 		/* insufficient space */
 		return NULL;
 	}
 
+	/* translate the xref & tag into line */
+	translate_string(ttd, output, line, sizeof(line)-1);
+	ptr = line + strlen(line);
+	mylen = sizeof(line) - strlen(line);
+	/* now output is available as scratch */
+
 	list = text_to_list("", width);
-	if (nval(node))
-		append_to_text_list(list, nval(node), width, FALSE); 
+	if (nval(node)) {
+		translate_string(ttd, nval(node), output, sizeof(output)-1);
+		append_to_text_list(list, output, width, FALSE); 
+	}
 	set_list_type(list, LISTDOFREE);
 
 	/* anode is first child */
@@ -309,14 +321,17 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	/* check for text continuation nodes to assimilate */
 	if (nchild(node)) {
 		for ( ; anode && !nchild(anode); anode = nsibling(anode)) {
+			BOOLEAN newline=FALSE;
 			if (eqstr(ntag(anode), "CONC")) {
 				append_to_text_list(list, " ", width, FALSE);
-				append_to_text_list(list, nval(anode), width, FALSE);
+				newline = FALSE;
 			} else if (eqstr(ntag(anode), "CONT")) {
-				append_to_text_list(list, nval(anode), width, TRUE);
+				newline = TRUE;
 			} else {
 				break;
 			}
+			translate_string(ttd, nval(anode), output, sizeof(output)-1);
+			append_to_text_list(list, output, width, newline); 
 		}
 	}
 	/* anode is now first non-assimilated child */
@@ -333,7 +348,9 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 			tn = tn1;
 			/* ptr & mylen still point after leader */
 			llstrcatn(&ptr, el, &mylen);
+			/* put original line */
 			tn1->str = strdup(line);
+			/* now build leader we will keep reusing */
 			for (i=0; i<leader; i++)
 				line[i] = '.';
 			line[leader-1] = ' ';
@@ -342,6 +359,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 			tn1->str = strdup(line);
 		}
 		/* now we keep resetting ptr & mylen to after blank leader */
+		/* so we keep reusing that leader we built in line earlier */
 		ptr=line+leader;
 		mylen=mylenorig-leader;
 		tn1->firstchild = 0;
