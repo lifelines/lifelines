@@ -4,7 +4,7 @@
 	gedlib/charmaps.c intl/ChangeLog intl/Makefile.in intl/VERSION
 	intl/bindtextdom.c intl/config.charset intl/dcgettext.c
 	intl/dcigettext.c intl/dcngettext.c intl/dgettext.c
-	intl/dngettext.c intl/explodename.c intl/finddomain.c
+	intl/dngettext.c
 	intl/gettext.c intl/gettextP.h intl/hash-string.h
 	intl/intl-compat.c intl/l10nflist.c intl/libgnuintl.h
 	intl/loadinfo.h intl/loadmsgcat.c intl/localcharset.c
