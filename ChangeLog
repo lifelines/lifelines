@@ -11,6 +11,9 @@
 	liflines/menuitem.c liflines/swap.c:
 	Add "reorder child" menu item to family browse.
 
+	* ChangeLog gedlib/editmap.c liflines/pedigree.c liflines/show.c:
+	Bugfix (NOMAPS was still 6 not 7, so couldn't edit internal-to-report).
+
 2007-07-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/editvtab.c gedlib/indiseq.c

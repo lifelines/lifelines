@@ -464,6 +464,7 @@ print_to_screen (INT gen, INT * row, LINEPRINT_FNC fnc,
  *  in an ancestral or descendant tree
  * returns static buffer
  * Created: 2001/01/27, Perry Rapp
+ * Does internal-to-display translation
  *===============================*/
 static STRING
 indi_lineprint (INT width, void * param)
@@ -485,11 +486,13 @@ indi_lineprint (INT width, void * param)
 static STRING
 node_lineprint (INT width, void * param)
 {
-	static char line[120];
+	static char line[120], output[120];
 	STRING ptr=line;
 	INT mylen=sizeof(line);
 	NODE_PRINT_PARAM npp = (NODE_PRINT_PARAM)param;
 	NODE node=npp->node;
+	TRANTABLE ttd = tran_tables[MINDS];
+
 	if (mylen>width)
 		mylen=width;
 	if (nxref(node)) {
@@ -512,7 +515,8 @@ node_lineprint (INT width, void * param)
 			llstrcatn(&ptr, str, &mylen);
 		}
 	}
-	return line;
+	translate_string(ttd, line, output, sizeof(output)/sizeof(output[0])-1);
+	return output;
 }
 /*=================================
  * tn_lineprint -- print a displaynode line

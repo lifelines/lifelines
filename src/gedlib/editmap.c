@@ -15,7 +15,7 @@
 #include "screen.h"
 #include "gedcomi.h"
 
-#define NOMAPS 6
+#define NOMAPS 7
 
 extern STRING map_keys[];
 extern STRING cmperr, aredit, ronlye, dataerr;

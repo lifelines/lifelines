@@ -549,10 +549,12 @@ switch_scrolls (void)
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
  * returns static buffer
+ *  indi: [in] person to display
+ *  len:  [in] max width
+ * Does internal-to-display translation
  *=============================================================*/
 STRING
-indi_to_ped_fix (NODE indi,
-                 INT len)
+indi_to_ped_fix (NODE indi, INT len)
 {
 	STRING bevt, devt, name, key;
 	static unsigned char scratch[100];
