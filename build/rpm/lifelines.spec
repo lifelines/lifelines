@@ -53,8 +53,9 @@ install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
 install -m 644 reports/CREDIT reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
-install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
+install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
 install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
+install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 
 
 %files
@@ -71,8 +72,9 @@ install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
 /usr/local/share/locale/fr/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
 /usr/local/share/lifelines/reports
-/usr/local/man/man1/llines.1
+/usr/local/man/man1/btedit.1
 /usr/local/man/man1/dbverify.1
+/usr/local/man/man1/llines.1
 
 %changelog
 * Mon Nov 11 2002 Perry Rapp
@@ -86,4 +88,6 @@ install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
 - (lifelines-3.0.19-1)
 * Mon May 05 2003 Perry Rapp
 - Add dbverify.1
+* Tues May 06 2003 Perry Rapp
+- Add btedit.1 (& alphabetize man pages)
 

@@ -9,7 +9,7 @@ MANUALS =     ll-reportmanual.html ll-reportmanual.pdf \
 	     ll-userguide.html ll-userguide.pdf \
 	     ll-userguide.txt 
 
-EXTRA_DIST = llines.1 dbverify.1 \
+EXTRA_DIST = btedit.1 dbverify.1 llines.1 \
 	      $(MANUALS) ll-reportmanual.xml  ll-userguide.xml 
 
 CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt \

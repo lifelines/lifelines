@@ -10,6 +10,10 @@
 	Add btedit man page (from Christian Perrier), and make all
 	three man pages more consistent.
 
+	* ChangeLog build/rpm/lifelines.spec docs/Makefile.am
+
+	Add btedit.1 to distribution.
+
 2003-05-05 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
