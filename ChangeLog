@@ -12,6 +12,10 @@
 
 	Bugfix: was skipping last line in lower tandem person window.
 
+	* ChangeLog gedlib/messages.c liflines/menuitem.c:
+
+	Gettextify menuitem.c.
+
 2002-01-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib/stdstrng.c:

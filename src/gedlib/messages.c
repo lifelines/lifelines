@@ -343,15 +343,7 @@ STRING dbrecstats  = SS "Database records: ";
 STRING mtitle      = SS "LifeLines %s - Genealogical DB and Programming System";
 STRING cright      = SS "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
 STRING plschs      = SS "Please choose an operation:";
-STRING mn_ambig    = SS "Conflicting command string: %s";
-STRING mn_longcho  = SS "Menu choice sequence too long: %s";
-STRING mn_nocho    = SS "Menu item lacked choice sequence: %s";
-STRING mn_titindi  = SS "LifeLines -- Person Browse Screen (* toggles menu)";
-STRING mn_titfam   = SS "LifeLines -- Family Browse Screen (* toggles menu)";
-STRING mn_titaux   = SS "LifeLines -- Auxiliary Browse Screen (* toggles menu)";
 STRING mn_unkcmd   = SS "Not valid command";
-STRING mn_tit2indi = SS "LifeLines -- Two Person Browse Screen (* toggles menu)";
-STRING mn_tit2fam  = SS "LifeLines -- Two Family Browse Screen (* toggles menu)";
 
 /* prompt, full list, yes list */
 STRING askynq      = SS "enter y (yes) or n (no): ";
