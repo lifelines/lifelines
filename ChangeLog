@@ -1,5 +1,11 @@
+2005-02-10 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/gedlib/node.c
+
+	Fix leak of record in indi_to_next_sib_old.
+
 2005-02-09 Stephen Dum
-        * ChangeLog  src/gedlib/date.c  src/stdlib/list.c
+	* ChangeLog  src/gedlib/date.c  src/stdlib/list.c
 
 	Fixed 2 memory leaks.
 

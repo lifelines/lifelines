@@ -328,6 +328,7 @@ key_to_record_impl (CNSTRING key, INT reportmode)
 /*=====================================
  * key_to_record -- Convert key (any type) to RECORD
  * ASSERTS if record not found in database
+ *  returns addref'd record
  *===================================*/
 RECORD
 key_to_record (CNSTRING key)

@@ -525,6 +525,7 @@ indi_to_moth (NODE node)
 }
 /*==================================================
  * indi_to_prev_sib -- Return previous sib of person
+ *  returns addref'd record
  *================================================*/
 static RECORD
 indi_to_prev_sib_impl (NODE indi)
@@ -558,6 +559,7 @@ indi_to_prev_sib (RECORD irec)
 }
 /*==============================================
  * indi_to_next_sib -- Return next sib of person
+ *  returns addref'd record
  *============================================*/
 static RECORD
 indi_to_next_sib_impl (NODE indi)
@@ -583,7 +585,10 @@ indi_to_next_sib_impl (NODE indi)
 NODE
 indi_to_next_sib_old (NODE indi)
 {
-	return nztop(indi_to_next_sib_impl(indi));
+	RECORD rec = indi_to_next_sib_impl(indi);
+	NODE node = nztop(rec);
+	release_record(rec); /* release ref from indi_to_next_sib_impl */
+	return node;
 }
 RECORD
 indi_to_next_sib (RECORD irec)
