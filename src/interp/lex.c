@@ -157,6 +157,8 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		llwprintf("in lex.c -- IDEN is %s\n", tokbuf);
 #endif
 		if (reserved(tokbuf, &retval))  return retval;
+		/* TODO: Perry, 2005-01-28, this strsave is getting leaked */
+		/* I don't know where these values are going really :( */
 		*lvalp = (PNODE) strsave(tokbuf);
 		return IDEN;
 	}
