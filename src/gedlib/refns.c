@@ -330,7 +330,7 @@ resolve_traverse (NODE node)
 
 	if (!val) return TRUE;
 	if (symbolic_link(val)) {
-		refn = rmvat(val);
+		refn = rmvbrackets(val);
 		letr = record_letter(ntag(node));
 		refr = refn_to_record(refn, letr);
 		if (refr) {

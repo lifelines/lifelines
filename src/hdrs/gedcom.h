@@ -262,6 +262,7 @@ NODE rkey_to_sour(STRING);
 NODE rkeynum_to_fam(int keynum);
 NODE rkeynum_to_indi(int keynum);
 STRING rmvat(STRING);
+STRING rmvbrackets (STRING str);
 STRING shorten_date(STRING);
 STRING shorten_plac(STRING);
 void show_node_rec(INT, NODE);

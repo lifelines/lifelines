@@ -50,10 +50,11 @@ addat (STRING str)
 	return p;
 }
 /*=============================================
- * rmvat -- Remove @'s from both ends of string
+ * rmvat_char -- Remove bracketing characters from around
+ *  a string
  *===========================================*/
-STRING
-rmvat (STRING str)
+static STRING
+rmvat_char (STRING str, char c, char d)
 {
 	STRING p;
 	int len;
@@ -63,16 +64,32 @@ rmvat (STRING str)
 	static INT dex = 0;
 	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);
-	if (str[0] != '@') return NULL;
+	if (str[0] != c) return NULL;
 	if (++dex > 31) dex = 0;	/* was 9 pbm 11-jun-96*/
 	p = buffer[dex];
 	len = strlen(str+1);
-	if (str[len] != '@') return NULL;
+	if (str[len] != d) return NULL;
 	if(len > 31) len = 31;		/* 31 characters is maximum */
 	else if(len > 0) len--;
 	strncpy(p, &str[1], len);
 	p[len] = 0;	/* overwrite trailing "@" with null */
 	return p;
+}
+/*=============================================
+ * rmvat -- Remove @'s from both ends of string
+ *===========================================*/
+STRING
+rmvat (STRING str)
+{
+	return rmvat_char(str, '@', '@');
+}
+/*=============================================
+ * rmvbrackets -- Remove <>'s from around a string
+ *===========================================*/
+STRING
+rmvbrackets (STRING str)
+{
+	return rmvat_char(str, '<', '>');
 }
 /*=============================================
  * nod0_to_keynum -- key # of a 0 level node
