@@ -109,6 +109,7 @@ STRING lldatabases;
 static void show_open_error(void);
 static BOOLEAN trytocreate(STRING);
 static void platform_init(void);
+static int open_database(void);
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -227,14 +228,14 @@ main (INT argc,
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		btreepath = ask_for_lldb(idldir, "enter path: ", lldatabases);
-		if (!btreepath || *btreepath == 0) {
+		if (ISNULL(btreepath)) {
 			llwprintf(iddbse);
 			goto finish;
 		}
 		btreepath = strsave(btreepath);
 	} else {
 		btreepath = (unsigned char *)argv[optind];
-		if (!btreepath || *btreepath == 0) {
+		if (ISNULL(btreepath)) {
 			showusage = TRUE;
 			goto usage;
 		}
@@ -242,77 +243,8 @@ main (INT argc,
 
 	/* Open Database */
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
-	if (!readpath)
-		readpath = btreepath;
-	if (forceopen) {
-		char scratch[200];
-		FILE *fp;
-		KEYFILE kfile;
-		KEYFILEX kfilex;
-		struct stat sbuf;
-		sprintf(scratch, "%s/key", readpath);
-		if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			goto finish;
-		}
-		if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-		    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			goto finish;
-		}
-		if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
-			if (!validate_keyfilex(&kfilex)) {
-				llwprintf("Database error -- ");
-				llwprintf("Invalid keyfile!");
-				goto finish;
-			}
-		}
-		kfile.k_ostat = 0;
-		rewind(fp);
-		if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
-			llwprintf("Database error -- ");
-			llwprintf("could not open, read or write the key file.");
-			printf("Cannot properly write the new key file.\n");
-			fclose(fp);
-	 		goto finish;
-		}
-		fclose(fp);
-	}
-	if (!(BTR = openbtree(readpath, FALSE, !readonly))) {
-		switch (bterrno) {
-		case BTERRNOBTRE:
-		case BTERRKFILE:	{/*NEW*/
-				if (!selftest) {
-					STRING llnewdbdir = environ_determine_newdbdir();
-					readpath = strsave(concat_path(llnewdbdir, btreepath));
-				}
-				if(!trytocreate(readpath)) {
-					show_open_error();
-					goto finish;
-				}
-			}
-			break;
-		default:
-			show_open_error();
-			goto finish;
-		}
-	}
-	readonly = !bwrite(BTR);
-	if (readonly && writeable) {
-		c = bkfile(BTR).k_ostat;
-		if (c < 0) {
-			llwprintf("The database is already opened for ");
-			llwprintf("write access.\n  Try again later.");
-		} else {
-			llwprintf("The database is already opened for ");
-			llwprintf("read access by %d users.\n  ", c - 1);
-			llwprintf("Try again later.");
-		}
-		close_lifelines();
-		goto finish;
-	}
+	if (!readpath) readpath = btreepath;
+	if (!open_database()) goto finish;
 
 	/* Start Program */
 	init_lifelines();
@@ -408,5 +340,82 @@ platform_init (void)
 	sprintf(title, mtitle, version);
 	wtitle(title);
 #endif
+}
+/*==================================================
+ * open_database -- open database
+ *================================================*/
+static int open_database(void)
+{
+	int c;
+	if (forceopen) {
+		char scratch[200];
+		FILE *fp;
+		KEYFILE kfile;
+		KEYFILEX kfilex;
+		struct stat sbuf;
+		sprintf(scratch, "%s/key", readpath);
+		if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
+			llwprintf("Database error -- ");
+			llwprintf("could not open, read or write the key file.");
+			return FALSE;
+		}
+		if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
+		    fread(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+			llwprintf("Database error -- ");
+			llwprintf("could not open, read or write the key file.");
+			return FALSE;
+		}
+		if (fread(&kfilex, sizeof(kfilex), 1, fp) == 1) {
+			if (!validate_keyfilex(&kfilex)) {
+				llwprintf("Database error -- ");
+				llwprintf("Invalid keyfile!");
+				return FALSE;
+			}
+		}
+		kfile.k_ostat = 0;
+		rewind(fp);
+		if (fwrite(&kfile, sizeof(KEYFILE), 1, fp) != 1) {
+			llwprintf("Database error -- ");
+			llwprintf("could not open, read or write the key file.");
+			printf("Cannot properly write the new key file.\n");
+			fclose(fp);
+	 		return FALSE;
+		}
+		fclose(fp);
+	}
+	if (!(BTR = openbtree(readpath, FALSE, !readonly))) {
+		switch (bterrno) {
+		case BTERRNOBTRE:
+		case BTERRKFILE:	{/*NEW*/
+				if (!selftest) {
+					STRING llnewdbdir = environ_determine_newdbdir();
+					readpath = strsave(concat_path(llnewdbdir, btreepath));
+				}
+				if(!trytocreate(readpath)) {
+					show_open_error();
+					return FALSE;
+				}
+			}
+			break;
+		default:
+			show_open_error();
+			return FALSE;
+		}
+	}
+	readonly = !bwrite(BTR);
+	if (readonly && writeable) {
+		c = bkfile(BTR).k_ostat;
+		if (c < 0) {
+			llwprintf("The database is already opened for ");
+			llwprintf("write access.\n  Try again later.");
+		} else {
+			llwprintf("The database is already opened for ");
+			llwprintf("read access by %d users.\n  ", c - 1);
+			llwprintf("Try again later.");
+		}
+		close_lifelines();
+		return FALSE;
+	}
+	return TRUE;
 }
 
