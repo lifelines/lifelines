@@ -15,6 +15,10 @@
 	structure for compound numbers for these. Add corresponding tests
 	to exercise.ll.
 
+	* ChangeLog liflines/Makefile.am:
+
+	Move last three C sources into alphabetized order.
+
 2002-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog INSTALL hdrs/interp.h hdrs/screen.h

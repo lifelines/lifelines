@@ -5,10 +5,11 @@
 bin_PROGRAMS = llines
 
 # what goes into lines?
-llines_SOURCES = add.c advedit.c ask.c browse.c delete.c edit.c \
-	export.c import.c lbrowse.c main.c merge.c miscutls.c \
-	newrecs.c pedigree.c scan.c show.c screen.c swap.c \
-	tandem.c valgdcom.c llinesi.h askprogram.c menuitem.c error.c
+llines_SOURCES = add.c advedit.c ask.c askprogram.c browse.c \
+	delete.c edit.c error.c export.c import.c lbrowse.c \
+	main.c menuitem.c merge.c miscutls.c newrecs.c \
+	pedigree.c scan.c show.c screen.c swap.c \
+	tandem.c valgdcom.c llinesi.h 
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
