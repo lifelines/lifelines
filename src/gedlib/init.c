@@ -86,6 +86,12 @@ init_lifelines_global (STRING * pmsg)
 	*pmsg = NULL;
 	if (!init_lifelines_options(configfile, pmsg))
 		return FALSE;
+#if ENABLE_NLS
+	e = getoptstr("GuiOutputCharset", "");
+	if (e && *e)
+		bind_textdomain_codeset(PACKAGE, e);
+#endif
+
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
 	for (i=0; i<ARRSIZE(dirvars); ++i) {

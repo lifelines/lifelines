@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/02/24
+# 2002/05/10
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -154,3 +154,10 @@
 # Specify locale for collation in reports
 #RptLocaleCollate=en
 # Default is normal deduction from environment
+
+# Charset for output to GUI
+# This is a libiconv charset name
+# And this is passed to gettext (libintl)
+# Default is none
+# GuiOutputCharset=ASCII//TRANSLIT
+# NB: Do not append //TRANSLIT unless gettext-0.11.3-pre2 or better

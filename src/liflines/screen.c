@@ -165,13 +165,11 @@ static void check_stdout(void);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
-#ifdef HAVE_SETLOCALE
-static void test_locale_name(void);
-#endif
 static INT choose_tt(STRING prompt);
 static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
+static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static void create_windows(void);
 static void deactivate_uiwin(void);
@@ -227,7 +225,12 @@ static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
+#ifdef HAVE_SETLOCALE
+static void test_locale_name(void);
+#endif
 static void touch_all(BOOLEAN includeCurrent);
+static void uicolor(UIWINDOW, char ch);
+static void uierase(UIWINDOW uiwin);
 static INT update_menu(INT screen);
 static void user_options(void);
 
@@ -361,7 +364,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row;
 
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	show_horz_line(uiwin, 4, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
@@ -400,7 +403,7 @@ repaint_footer_menu (INT screen)
 	WINDOW *win = uiw_win(uiwin);
 	INT bottom = LINESTOTAL-3; /* 3 rows below menu */
 	INT width = ll_cols;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
 	if (!menu_enabled)
@@ -416,7 +419,7 @@ paint_list_screen (void)
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row, col;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	show_horz_line(uiwin, LIST_LINES+1, 0, ll_cols);
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
@@ -982,7 +985,7 @@ ask_for_string (STRING ttl, STRING prmpt)
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING rv, p;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl);
 	mvwaddstr(win, 2, 1, prmpt);
@@ -1011,7 +1014,7 @@ ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt)
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
 	STRING rv, p;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 1, ttl1);
 	mvwaddstr(win, 2, 1, ttl2);
@@ -1066,7 +1069,7 @@ ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 2, ttl);
 	mvwaddstr(win, 2, 2, prmpt);
@@ -1086,7 +1089,7 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT rv;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, 1, 2, msg);
 	mvwaddstr(win, 2, 2, ttl);
@@ -1349,7 +1352,7 @@ resize_win: /* we come back here if we resize the window */
 			preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
 		first=FALSE;
 	}
-	werase(win);
+	uierase(ld.uiwin);
 	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
@@ -1468,7 +1471,7 @@ draw_tt_win (STRING prompt)
 	UIWINDOW uiwin = tt_menu_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 0;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	row = 1;
 	mvwaddstr(win, row++, 2, prompt);
@@ -2388,7 +2391,7 @@ array_interact (STRING ttl, INT len, STRING *strings
 resize_win: /* we come back here if we resize the window */
 	activate_popup_list_uiwin(&ld);
 	win = uiw_win(ld.uiwin);
-	werase(win);
+	uierase(ld.uiwin);
 	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
@@ -2519,7 +2522,7 @@ clearw (void)
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
 	WINDOW *boxwin = uiw_boxwin(uiwin);
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(boxwin);
 	wmove(win, 0, 0);
 	stdout_vis = TRUE;
@@ -2802,32 +2805,25 @@ calculate_screen_lines (INT screen)
 	lines = LINESTOTAL-OVERHEAD_MENU-menu;
 	return lines;
 }
-/*===============================================
- * vmprintf -- send error, info, or status message out
- * legacy
- *=============================================*/
-#ifdef UNUSED_CODE
-static void
-vmprintf (STRING fmt, va_list args)
-{
-	vsnprintf(showing, sizeof(showing), fmt, args);
-	if (strlen(showing)>60) {
-		showing[60] = 0;
-		strcat(showing, "...");
-	}
-	display_status(showing);
-}
-#endif
 /*=====================
- * clear_hseg -- clear part of a row
- * Created: 2002/01/03
+ * clear_hseg -- clear a horizontal line segment
+ *  (used for partial screen clears)
  *====================*/
 void
 clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
 {
+	color_hseg(win, row, x1, x2, ' ');
+}
+/*=====================
+ * color_hseg -- fill a horizontal line segment
+ *  (used for clearing)
+ *====================*/
+static void
+color_hseg (WINDOW *win, INT row, INT x1, INT x2, char ch)
+{
 	INT i;
 	for (i=x1; i<=x2; ++i)
-		mvwaddch(win, row, i, ' ');
+		mvwaddch(win, row, i, ch);
 }
 /*===============================================
  * display_status -- put string in status line
@@ -3131,7 +3127,7 @@ repaint_cset_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	STRING csndloc = _("L  Test locale names");
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, _(qSmn_csttl));
 	disp_codeset(uiwin, row++, 4, _(qSmn_csintcs), int_codeset);
@@ -3161,7 +3157,7 @@ repaint_rpc_menu (UIWINDOW uiwin)
 	STRING csnrloc = _("L  Test locale names");
 	INT row = 1;
 	STRING csrptloc = _("Report locale: ");
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, _(qSmn_csrpttl));
 	disp_locale(uiwin, row++, 4, csrptloc, "RptLocale");
@@ -3197,7 +3193,7 @@ repaint_trans_menu (UIWINDOW uiwin)
 	char line[120];
 	/*INT mylen = sizeof(line);*/
 	STRING ptr = line;
-	werase(win);
+	uierase(uiwin);
 	draw_win_box(win);
 	row = 1;
 	mvwaddstr(win, row++, 2, _(qSmn_tt_ttl));
@@ -3369,4 +3365,35 @@ void
 refresh_stdout (void)
 {
 	wrefresh(uiw_win(stdout_win));
+}
+/*============================
+ * uierase -- erase window 
+ *  handles manual erasing if broken_curses flag set
+ * Created: 2001/11/24, Perry Rapp
+ *==========================*/
+static void
+uierase (UIWINDOW uiwin)
+{
+	if (getoptint("ForceScreenErase", 0) > 0) {
+		/* fill virtual output with dots */
+		uicolor(uiwin, '.');
+		wnoutrefresh(uiw_win(uiwin));
+		/* now fill it back with spaces */
+		uicolor(uiwin, ' ');
+		wrefresh(uiw_win(uiwin));
+	} else {
+		werase(uiw_win(uiwin));
+	}
+}
+/*============================
+ * uicolor -- fill window with character 
+ *==========================*/
+static void
+uicolor (UIWINDOW uiwin, char ch)
+{
+	INT i;
+	WINDOW *win = uiw_win(uiwin);
+	for (i=0; i<uiw_rows(uiwin)+9; ++i) {
+		color_hseg(win, i, 0, uiw_cols(uiwin)-1, ch);
+	}
 }

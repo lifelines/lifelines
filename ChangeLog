@@ -1,3 +1,14 @@
+2002-05-10 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg gedlib/init.c hdrs/win32/curses.h
+	liflines/screen.c win32/mycurses.c
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp:
+
+	New ForceScreenErase option for systems with ncurses
+	repaint problems.
+	New wnoutrefresh & dooutput functions in win32/mycurses.c.
+	New GuiOutputCharset option to init gettext/libintl output.
+
 2002-05-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am NEWS configure.in lifelines.spec 

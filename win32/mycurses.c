@@ -237,13 +237,19 @@ int touchwin(WINDOW *wp)
 
 int wrefresh(WINDOW *wp)
 {
-	DWORD dwLen;
-	COORD cLocation = {0,0};
+	wnoutrefresh(wp);
+	doupdate();
+	return(0);
+}
+
+/* refresh virtual image of screen (curscr) */
+int wnoutrefresh(WINDOW *wp)
+{
 	int i, j;
 	int y, x;
-	int linecount;
 
-	if(wp->_parent) wrefresh(wp->_parent);
+	if(wp->_parent)
+		wrefresh(wp->_parent);
 	for(i = 0; i < wp->_maxy; i++)
 	{
 		y = wp->_begy + i;
@@ -264,14 +270,24 @@ int wrefresh(WINDOW *wp)
 			}
  		}
 	}
+	return(0);
+}
+
+/* repaint physical screen from virtual image (curscr) */
+int doupdate(void)
+{
+	int linecount;
+	int i;
 	/* update the screen */
 	if((linecount  = (curscr->_maxcy - curscr->_mincy)) >= 0)
 	{
-		linecount++;
+		COORD cLocation = {0,0};
 		cLocation.X = 0;
 		cLocation.Y = curscr->_mincy;
+		linecount++;
 		for (i=0; i<linecount; i++, cLocation.Y++)
 		{
+			DWORD dwLen;
 			WriteConsoleOutputCharacter(hStdout,
 				(LPTSTR)(curscr->_y[curscr->_mincy+i]),
 				(DWORD)curscr->_maxx,

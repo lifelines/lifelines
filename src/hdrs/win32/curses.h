@@ -50,19 +50,23 @@ int cbreak();
 int clearok(WINDOW *wp, int okay);
 int crmode();
 int delwin(WINDOW *wp);
+int doupdate(void);
 int echo();
 int endwin();
+WINDOW  *initscr();
 int mvwaddch(WINDOW *wp, int x, int y, chtype ch);
 int mvwaddstr(WINDOW *wp, int x, int y, char *cp);
 int mvwgetnstr(WINDOW *wp, int y, int x, char *cp, int n);
 int mvwgetstr(WINDOW *wp, int y, int x, char *cp);
 int mvwprintw(WINDOW *wp, int x, int y, ...);
-int vwprintw(WINDOW *wp, char *fmt, va_list ap);
+WINDOW  *newwin(int nlines, int ncols, int begy, int begx);
 int nocbreak();
 int nocrmode();
 int noecho();
 int scrollok(WINDOW *wp, int okay);
+WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);
 int touchwin(WINDOW *wp);
+int vwprintw(WINDOW *wp, char *fmt, va_list ap);
 int waddch(WINDOW *wp, chtype ch);
 int waddstr(WINDOW *wp, const char *cp);
 int wborder(WINDOW *wp, chtype ls, chtype rs, chtype ts, chtype bs
@@ -73,12 +77,10 @@ int wgetch(WINDOW *wp);
 int wgetnstr(WINDOW *wp, char *cp, int n);
 int wgetstr(WINDOW *wp, char *cp);
 int wmove(WINDOW *wp, int x, int y);
+int wnoutrefresh(WINDOW *wp);
 int wprintw(WINDOW *wp, ...);
 int wrefresh(WINDOW *wp);
-void wtitle(const char * title); /* win32 add-on by Perry, 2001/01 */
-WINDOW  *initscr();
-WINDOW  *newwin(int nlines, int ncols, int begy, int begx);
-WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);
+void wtitle(const char * title); /* (win32) */
 
 /*
  * Standard alternate character set.  The current ACS world is evolving,
