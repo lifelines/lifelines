@@ -1,6 +1,7 @@
-# Perry's test locale (qq)
+# Perry's testing
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Perry Rapp <puddle@users.lifelines.sf.net>, 2002.
+# Please if you are Italian, feel free to fix this!
 #
 #, fuzzy
 msgid ""
@@ -16,15 +17,15 @@ msgstr ""
 
 #: gedlib/messages.c:38
 msgid "You must identify a database."
-msgstr "It (identify db)"
+msgstr "Scegliere la base di dati"
 
 #: gedlib/messages.c:39
 msgid "What directory holds the LifeLines database?"
-msgstr "It (where db)"
+msgstr "Dove e la base di dati"
 
 #: gedlib/messages.c:40
 msgid "enter path: "
-msgstr "It(path)"
+msgstr "posizione: "
 
 #: gedlib/messages.c:41
 msgid "There is no LifeLines database in that directory."
@@ -77,7 +78,7 @@ msgstr ""
 
 #: gedlib/messages.c:299
 msgid "born: "
-msgstr ""
+msgstr "nato: "
 
 #: gedlib/messages.c:300
 msgid "bapt: "
@@ -85,20 +86,20 @@ msgstr ""
 
 #: gedlib/messages.c:301
 msgid "died: "
-msgstr "Itdied: "
+msgstr "morto: "
 
 #: gedlib/messages.c:302
 msgid "buri: "
-msgstr ""
+msgstr "sepolto: "
 
 #. many menus
 #: gedlib/messages.c:374
 msgid "q  Return to main menu"
-msgstr "q  It: return"
+msgstr "q  Ritornare al menu principale"
 
 #: gedlib/messages.c:375
 msgid "q  Return to previous menu"
-msgstr "q  It: return"
+msgstr "q  Ritornare al menu precedente"
 
 #. main menu
 #: gedlib/messages.c:378
@@ -116,7 +117,7 @@ msgstr ""
 #. utility menu
 #: gedlib/messages.c:382
 msgid "What utility do you want to perform?"
-msgstr "It(what utility)"
+msgstr "Quale pratico?"
 
 #: gedlib/messages.c:383
 msgid "s  Save the database in a GEDCOM file"
