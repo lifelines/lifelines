@@ -4,6 +4,12 @@
 
 	Mention new option DisplayKeyTags in NEWS.
 
+	* ChangeLog build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.dsp build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc
+
+	Update MS-Windows version resources and projects.
+
 2003-09-29 Jens Arvidsson
 
 	* ChangeLog docs/ll-reportmanual.sv.xml docs/ll-userguide.sv.xml

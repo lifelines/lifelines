@@ -388,6 +388,10 @@ SOURCE=..\..\..\src\arch\sleep.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\soundex.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
@@ -437,6 +441,10 @@ SOURCE=..\..\..\src\gedlib\translat.c
 # Begin Source File
 
 SOURCE=..\..\..\src\btree\traverse.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\ui\ui_cli.c
 # End Source File
 # Begin Source File
 
@@ -637,6 +645,10 @@ SOURCE=..\..\..\src\hdrs\table.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\translat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\ui.h
 # End Source File
 # Begin Source File
 
