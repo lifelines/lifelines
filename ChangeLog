@@ -1,3 +1,10 @@
+2005-01-07 Perry Rapp
+
+	* ChangeLog src/liflines/show.c src/gedlib/remove.c
+
+	Fix the mother slot fix to not crash with no parents.
+	Cosmetic: add more comments to remove code.
+
 2005-01-06 Stephen Dum
         * ChangeLog INSTALL configure.in build/msvc6/llines/llines.rc 
 	  build/rpm/lifelines.spec docs/ll-devguide.xml docs/ll-reportmanual.html 

@@ -470,10 +470,10 @@ init_display_fam (RECORD frec, INT width)
 			wife = nztop(iwife);
 		}
 	}
-	/* if only one spouse and it's female list in second slot
+	/* if the only spouse is female, list in second slot
 	 * hiding the non-traditional behavior
 	 */
-	if (wife == 0 && SEX(husb) == SEX_FEMALE) {
+	if (!wife && husb && SEX(husb) == SEX_FEMALE) {
 		wife = husb;
 		husb = 0;
 		iwife = ihusb;
