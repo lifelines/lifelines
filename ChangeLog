@@ -15,7 +15,8 @@
 	& messages (eg, UiLocaleMessages). Add Swedish msg catalog.
 
 	* ChangeLog gedlib/messages.c liflines/ask.c liflines/scan.c
-	liflines/screen.c:
+	liflines/screen.c
+	*NEW po/el.po:
 
 	i18n utility, extra, & scan menus.
 
