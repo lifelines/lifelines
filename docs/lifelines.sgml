@@ -822,6 +822,7 @@ Please choose an operation:
    s Search database
    a Add information to the database
    d Delete information from the database
+   p Pick a report from list and run
    r Generate reports from the database
    t Modify character translation tables
    u Miscellaneous utilities

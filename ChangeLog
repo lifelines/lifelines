@@ -1,3 +1,7 @@
+2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* docs/lifelines.sgml: Add option 'p' to the main menu screenshot.
+
 2001-01-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/indiseq.c gedlib/keytonod.c hdrs/gedcom.h
