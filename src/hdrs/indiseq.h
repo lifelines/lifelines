@@ -122,11 +122,12 @@ typedef struct  {
 #define ILocale(s)   ((s)->is_locale)
 #define IValvtbl(s)  ((s)->is_valvtbl)
 
-#define KEYSORT   (1<<0)	/* Values of attribute flags */
-#define NAMESORT  (1<<1)
-#define UNIQUED   (1<<2)
-#define VALUESORT (1<<3)
-#define CANONKEYSORT (1<<4)
+#define KEYSORT       (1<<0)
+#define NAMESORT      (1<<1)
+#define UNIQUED       (1<<2)
+#define VALUESORT     (1<<3)
+#define CANONKEYSORT  (1<<4)
+#define WITHNAMES     (1<<5)
 #define ALLSORTS (KEYSORT+NAMESORT+VALUESORT+CANONKEYSORT)
 
 #define length_indiseq(seq)  (ISize(seq))
@@ -141,6 +142,7 @@ void append_indiseq_null(INDISEQ, STRING, STRING, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING, STRING, INT val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_pval(INDISEQ, STRING, STRING, VPTR val, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_sval(INDISEQ, STRING, STRING, STRING sval, BOOLEAN sure, BOOLEAN alloc);
+void calc_indiseq_names(INDISEQ seq);
 void canonkeysort_indiseq(INDISEQ);
 INDISEQ child_indiseq(INDISEQ);
 INDISEQ copy_indiseq(INDISEQ seq);

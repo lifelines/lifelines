@@ -174,7 +174,7 @@ static struct errinfo errs[] = {
 static struct work todo;
 static LIST tofix;
 /* sequence of NAMEs or REFNs in the same block */
-static INDISEQ soundexseq;
+static INDISEQ soundexseq=0;
 static BOOLEAN noisy=FALSE;
 static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
 static STRING lineage_tags[] = {
@@ -413,6 +413,7 @@ finish_and_delete_nameset (void)
 	STRING name="";
 	TABLE table = create_table();
 	prevkey[0]=0;
+	calc_indiseq_names(soundexseq);
 	keysort_indiseq(soundexseq);
 	/*
 	We go thru the list of equivalent names, sorted by person,

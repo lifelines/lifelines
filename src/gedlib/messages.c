@@ -331,7 +331,6 @@ STRING badsr0      = SS "The record does not begin with a SOUR line.";
 STRING badev0      = SS "The record does not begin with an EVEN line.";
 STRING badothr0    = SS "INDI, FAM, SOUR, EVEN records may not be other records.";
 STRING badmul      = SS "The record contains multiple level 0 lines.";
-STRING badnnm      = SS "This person record does not have a name line.";
 STRING badenm      = SS "This person record has bad GEDCOM name syntax.";
 STRING badpsx      = SS "You cannot change the sex of a parent.";
 STRING badirf      = SS "REFN key is already in use.";

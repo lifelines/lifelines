@@ -1,3 +1,15 @@
+2002-02-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	.linesrc ChangeLog lines.cfg gedlib/gedcom.c gedlib/indiseq.c
+	gedlib/messages.c gedlib/node.c gedlib/valid.c hdrs/indiseq.h
+	interp/builtin.c liflines/lbrowse.c liflines/main.c
+	liflines/screen.c liflines/valgdcom.c tools/dbverify.c
+	win32/msvc6/llines/llines.rc:
+
+	Allow nameless persons. Change indiseqs to not precompute names.
+	Bugfix for dbrequested getting lost when creating new db.
+	New option RequireNames to give legacy behavior.
+
 2002-02-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/screen.h liflines/screen.c:

@@ -1302,6 +1302,8 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 	BOOLEAN first=TRUE;
 
 	ASSERT(seq);
+
+	calc_indiseq_names(seq); /* we certainly need the names */
 	
 	memset(&ld, 0, sizeof(ld));
 	ld.listlen = length_indiseq(seq);

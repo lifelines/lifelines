@@ -257,23 +257,26 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val;
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, "1st arg to name must be a person");
+		prog_error(node, _("1st arg to name must be a person"));
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PSTRING, "");
 	if (inext(arg)) {
 		val = eval_and_coerce(PBOOL, inext(arg), stab, eflg);
 		if (*eflg) {
-			prog_error(node, "2nd arg to name must be boolean");
+			prog_error(node, _("2nd arg to name must be boolean"));
 			return NULL;
 		}
 		caps = (BOOLEAN) pvalue(val);
 		delete_pvalue(val);
 	}
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
-		*eflg = TRUE;
-		prog_error(node, "person does not have a name");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(name) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	return create_pvalue(PSTRING,
 	    (VPTR)manip_name(nval(name), ttr, caps, TRUE, 68));
@@ -321,9 +324,12 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	len = (INT) pvalue(val);
 	delete_pvalue(val);
 	if (!(name = NAME(indi)) || !nval(name)) {
-		*eflg = TRUE;
-		prog_error(node, "person does not have a name");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(fullname) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	return create_pvalue(PSTRING,
 	    (VPTR)manip_name(nval(name), ttr, caps, myreg, len));
@@ -345,9 +351,12 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(name = NAME(indi)) || !nval(name)) {
-		*eflg = TRUE;
-		prog_error(node, "person does not have a name");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(surname) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	str = getasurname(nval(name));
 	translate_string(ttr, str, scratch, ARRSIZE(scratch));
@@ -363,13 +372,16 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE name, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to soundex must be a person");
+		prog_error(node, _("1st arg to soundex must be a person"));
 		return NULL;
 	}
 	if (!(name = NAME(indi)) || !nval(name)) {
-		*eflg = TRUE;
-		prog_error(node, "person does not have a name");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(soundex) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	return create_pvalue(PSTRING, (VPTR)soundex(getsxsurname(nval(name))));
 }
@@ -404,14 +416,17 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	static char scratch[MAXGEDNAMELEN+1];
 	TRANTABLE ttr = NULL; /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, "1st arg to givens must be a person");
+		prog_error(node, _("1st arg to givens must be a person"));
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(name = NAME(indi)) || !nval(name)) {
-		*eflg = TRUE;
-		prog_error(node, "person does not have a name");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(givens) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	str = givens(nval(name));
 	translate_string(ttr, str, scratch, ARRSIZE(scratch));
@@ -435,7 +450,7 @@ __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = evaluate(expr, stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to set is in error");
+		prog_error(node, _("2nd arg to set is in error"));
 		return NULL;
 	}
 	assign_iden(stab, iident(var), val);
@@ -451,7 +466,7 @@ __husband (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
 	if (*eflg || !fam) {
 		*eflg = TRUE;
-		prog_error(node, "1st arg to husband must be a family");
+		prog_error(node, _("1st arg to husband must be a family"));
 		return NULL;
 	}
 	return create_pvalue_from_indi(fam_to_husb(fam));
@@ -2290,14 +2305,17 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING str;
 	/* TRANTABLE ttr = NULL; */ /* do not translate until output time */
 	if (*eflg) {
-		prog_error(node, "1st arg to trimname is not a person");
+		prog_error(node, _("1st arg to trimname is not a person"));
 		return NULL;
 	}
 	if (!indi) return create_pvalue(PSTRING, "");
 	if (!(indi = NAME(indi)) || !nval(indi)) {
-		*eflg = TRUE;
-		prog_error(node, "1st art to trimname is in error");
-		return NULL;
+		if (getoptint("RequireNames", 0)) {
+			*eflg = TRUE;
+			prog_error(node, _("(trimname) person does not have a name"));
+			return NULL;
+		}
+		return create_pvalue(PSTRING, 0);
 	}
 	*eflg = FALSE;
 	val = eval_and_coerce(PINT, inext(arg), stab, eflg);

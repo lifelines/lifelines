@@ -42,6 +42,7 @@
 #include "liflines.h"
 #include "llinesi.h"
 #include "screen.h" /* need to make interface for the wfield calls */
+#include "lloptions.h"
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -188,8 +189,11 @@ validate_gedcom (FILE *fp)
 		}
 		if (lev == 0) {
 			char str[10];
-			if (rec_type == INDI_REC && !named)
-				handle_err(noname, defline);
+			if (rec_type == INDI_REC && !named) {
+				if (getoptint("RequireNames", 0)) {
+					handle_err(noname, defline);
+				}
+			}
 			defline = flineno;
 			if (eqstr("HEAD", tag) || eqstr("TRLR", tag))
 				rec_type = IGNR_REC;

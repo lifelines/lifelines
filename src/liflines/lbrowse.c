@@ -69,6 +69,7 @@ browse_list (NODE *pindi1,
 		return  BROWSE_QUIT;
 	top = cur = 0;
 	mark =  -1;
+	calc_indiseq_names(seq); /* ensure we have names */
 	element_indiseq(seq, cur, &key, &name);
 	indi = key_to_indi(key);
 	current_seq = seq;

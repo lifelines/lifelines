@@ -67,7 +67,6 @@
 
 extern BOOLEAN opt_finnish;		/* Finnish language support */
 
-#define key_to_name(k)  nval(NAME(key_to_indi(k)))
 
 /*********************************************
  * local enums
@@ -98,6 +97,7 @@ static void deleteval(INDISEQ seq, UNION uval);
 static INDISEQ dupseq(INDISEQ seq);
 static STRING get_print_el(INDISEQ, INT i, INT len, RFMT rfmt);
 static INT key_compare(SORTEL, SORTEL);
+static STRING key_to_name(STRING key);
 static INT name_compare(SORTEL, SORTEL);
 static INT value_str_compare(SORTEL, SORTEL);
 
@@ -255,6 +255,8 @@ copy_indiseq (INDISEQ seq)
 		append_indiseq_impl(newseq, skey(el), snam(el), uval,
 		    TRUE, FALSE);
 	ENDINDISEQ
+	/* set flags after, so append doesn't do unique checks or generate names */
+	IFlags(newseq) = IFlags(seq);
 	return newseq;
 }
 /*==================================================
@@ -393,16 +395,13 @@ append_indiseq_impl (INDISEQ seq, STRING key, STRING name, UNION val
 	el = (SORTEL) stdalloc(sizeof(*el));
 	skey(el) = alloc ? key : strsave(key);
 	snam(el) = NULL;
-	if (*key == 'I') {
-			/*
-			A possible savings would be to not always
-			precompute names.
-			2001/01/20, Perry Rapp
-			*/
+	if (*key == 'I' && (IFlags(seq) & WITHNAMES)) {
+		if (!name)
+			name = key_to_name(key);
 		if (name)
 			snam(el) = strsave(name);
 		else
-			snam(el) = strsave(key_to_name(key));
+			snam(el) = NULL;
 	}
 	sval(el) = val;
 	spri(el) = 0;
@@ -421,10 +420,12 @@ append_indiseq_impl (INDISEQ seq, STRING key, STRING name, UNION val
 }
 /*=========================================================
  * rename_indiseq -- Update element name with standard name
+ *  (actually will update all instances of specified key)
+ *  seq:  [IN]  sequence to modify
+ *  key:  [IN]  particular element(s) to update
  *=======================================================*/
 void
-rename_indiseq (INDISEQ seq,
-                STRING key)     /* key of el to modify */
+rename_indiseq (INDISEQ seq, STRING key)
 {
 	INT i, n;
 	SORTEL *data;
@@ -433,8 +434,12 @@ rename_indiseq (INDISEQ seq,
 	data = IData(seq);
 	for (i = 0; i < n; i++) {
 		if (eqstr(key, skey(data[i]))) {
+			STRING name = key_to_name(key);
 			if (snam(data[i])) stdfree(snam(data[i]));
-			snam(data[i]) = strsave(key_to_name(key));
+			if (name)
+				snam(data[i]) = strsave(name);
+			else
+				snam(data[i]) = NULL;
 		}
 	}
 }
@@ -456,12 +461,14 @@ in_indiseq (INDISEQ seq, STRING key)
 	return FALSE;
 }
 /*===============================================================
- * delete_indiseq -- Remove el from sequence; if key not NULL use
- *   it; else use index, rel 0; el must be person
- * INDISEQ seq: sequence
- * STRING key:  key - may be NULL
- * STRING name: name - may be NULL
- * INT index:   index of el to remove - may be computed
+ * delete_indiseq -- Remove el from sequence
+ *  if key & name given, look for element matching both
+ *  if key given, look for element matching key
+ *   if neither, use index passed
+ * seq:   [I/O] sequence
+ * key:   [IN]  key - may be NULL
+ * name:  [IN]  name - may be NULL
+ * index: [IN]  index of el to remove - may be computed
  *==============================================================*/
 BOOLEAN
 delete_indiseq (INDISEQ seq, STRING key, STRING name, INT index)
@@ -513,12 +520,13 @@ delete_el (INDISEQ seq, SORTEL el)
 }
 /*================================================
  * element_indiseq -- Return element from sequence
+ *  seq:   [IN]  sequence
+ *  index: [IN]  element desired
+ *  pkey:  [OUT] returned key
+ *  pname: [OUT] returned name
  *==============================================*/
 BOOLEAN
-element_indiseq (INDISEQ seq,    /* sequence */
-                 INT index,      /* index */
-                 STRING *pkey,   /* returned key */
-                 STRING *pname)  /* returned name */
+element_indiseq (INDISEQ seq, INT index, STRING *pkey, STRING *pname)
 {
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
@@ -529,13 +537,15 @@ element_indiseq (INDISEQ seq,    /* sequence */
 /*================================================
  * elementval_indiseq -- Return element & value from sequence
  * Created: 2000/11/29, Perry Rapp
+ *  seq;   [IN]  sequence
+ *  index: [IN]  index of desired element
+ *  pkey:  [OUT] returned key
+ *  pval:  [OUT] returned val
+ *  pname: [OUT] returned name
  *==============================================*/
 BOOLEAN
-element_indiseq_ival (INDISEQ seq,    /* sequence */
-                      INT index,      /* index */
-                      STRING *pkey,   /* returned key */
-                      INT *pval,      /* returned val */
-                      STRING *pname)  /* returned name */
+element_indiseq_ival (INDISEQ seq, INT index, STRING *pkey, INT *pval
+	, STRING *pname)
 {
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
@@ -550,8 +560,7 @@ element_indiseq_ival (INDISEQ seq,    /* sequence */
  * name_compare -- Compare two names
  *================================*/
 INT
-name_compare (SORTEL el1,
-              SORTEL el2)
+name_compare (SORTEL el1, SORTEL el2)
 {
 	if (!snam(el2)) {
 		if (snam(el1))
@@ -621,6 +630,7 @@ void
 namesort_indiseq (INDISEQ seq)
 {
 	const char * cur_locale=0;
+	calc_indiseq_names(seq);
 	if (IFlags(seq) & NAMESORT) {
 #ifdef HAVE_SETLOCALE
 		/* watch out for locale shifts, which usually happen
@@ -1991,4 +2001,35 @@ default_create_gen_value (INT gen, INT * valtype)
 	else
 		uval.w = NULL;
 	return uval;
+}
+/*=======================================================
+ * calc_indiseq_names -- fill in element names
+ *  for any persons on list with names
+ * Created: 2002/02/14
+ *=====================================================*/
+void
+calc_indiseq_names (INDISEQ seq)
+{
+	if (IFlags(seq) & WITHNAMES)
+		return;
+
+	FORINDISEQ(seq, el, num)
+		if (*skey(el)=='I' && !snam(el)) {
+			STRING name = key_to_name(skey(el));
+			if (name)
+				snam(el) = strsave(name);
+		}
+	ENDINDISEQ
+	IFlags(seq) |= WITHNAMES;
+}
+/*=======================================================
+ * key_to_name -- find the name for person with given key
+ * Created: 2002/02/14
+ *=====================================================*/
+static STRING
+key_to_name (STRING key)
+{
+	NODE indi = key_to_indi(key);
+	NODE name = NAME(indi);
+	return (name ? nval(name) : NULL);
 }

@@ -341,6 +341,7 @@ main (INT argc, char **argv)
 	/* search for file in lifelines path */
 	dbused = filepath(dbrequested, "r", dbdir, NULL);
 	if (!dbused) dbused = dbrequested;
+	dbused = strsave(dbused);
 
 	if (!open_or_create_database(alteration, dbrequested, dbused))
 		goto finish;
@@ -369,6 +370,8 @@ main (INT argc, char **argv)
  */
 
 finish:
+	stdfree(dbused);
+	stdfree(dbrequested);
 	close_lifelines();
 	shutdown_ui(!ok);
 	strfree(&deflocale);

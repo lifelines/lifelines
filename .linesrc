@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/01/25
+# 2002/02/14
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -137,3 +137,8 @@
 # Valid values are 0 through 99.
 # Default is 1.
 # 
+
+# Disallow persons without name records (legacy 3.0.10 & earlier behavior)
+#RequireNames=1
+# Default is 0 (nameless records allowed)
+

@@ -37,6 +37,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "lloptions.h"
 
 static NODE indi_to_indi(NODE);
 static NODE fam_to_fam(NODE);
@@ -44,7 +45,6 @@ static NODE even_to_even(NODE);
 static NODE sour_to_sour(NODE);
 static NODE othr_to_othr(NODE);
 
-STRING misnam = (STRING) "Missing NAME line in INDI record; record ignored.\n";
 STRING noiref = (STRING) "FAM record has no INDI references; record ignored.\n";
 
 /*========================================================
@@ -105,20 +105,38 @@ indi_to_indi (NODE indi)
 		node = nsibling(node);
 		nsibling(prev) = NULL;
 	}
-	if (!name) {
-		llwprintf(misnam);
-		return NULL;
+	if (name) {
+		nchild(indi) = node = name;
+	} else {
+		if (getoptint("RequireNames", 0)) {
+			llwprintf(_("Missing NAME line in INDI record; record ignored.\n"));
+			return NULL;
+		}
+		nchild(indi) = node = 0;
 	}
-	nchild(indi) = node = name;
 	if (frst) {
-		nsibling(node) = frst;
+		if (node) {
+			nsibling(node) = frst;
+		} else {
+			nchild(indi) = frst;
+		}
 		node = last;
 	}
 	if (famc) {
-		nsibling(node) = famc;
+		if (node) {
+			nsibling(node) = famc;
+		} else {
+			nchild(indi) = famc;
+		}
 		node = lfmc;
 	}
-	nsibling(node) = fams;
+	if (fams) {
+		if (node) {
+			nsibling(node) = fams;
+		} else {
+			nchild(indi) = fams;
+		}
+	}
 	return indi;
 }
 /*======================================================

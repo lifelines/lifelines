@@ -35,12 +35,12 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "lloptions.h"
 
-#define SS (STRING)
 
 extern STRING badind,badfmc,badfms,badfam,badhsb,badwif,badchl;
 extern STRING bademp,badin0,badfm0,badsr0,badev0,badothr0;
-extern STRING badmul,badnnm,badenm,badpsx,badirf;
+extern STRING badmul,badenm,badpsx,badirf;
 
 /*===================================
  * valid_indi_old -- Validate person tree
@@ -71,8 +71,8 @@ valid_indi_old (NODE indi1, STRING *pmsg, NODE orig)
 		return FALSE;
 	}
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	if (!name1) {
-		*pmsg = badnnm;
+	if (getoptint("RequireNames", 0) && !name1) {
+		*pmsg = _("This person record does not have a name line.");
 		goto bad2;
 	}
 	for (node = name1; node; node = nsibling(node)) {

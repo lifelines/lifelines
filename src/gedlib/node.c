@@ -1149,8 +1149,10 @@ indi_to_next_sib (NODE indi)
 STRING
 indi_to_name (NODE node, TRANTABLE tt, INT len)
 {
-	if (!node) return (STRING) "NO NAME";
-	if (!(node = find_tag(nchild(node), "NAME"))) return (STRING) "NO NAME";
+	if (node)
+		node = find_tag(nchild(node), "NAME");
+	if (!node)
+		return _("NO NAME");
 	return manip_name(nval(node), tt, TRUE, TRUE, len);
 }
 /*======================================
