@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.10post\n"
-"POT-Creation-Date: 2002-02-24 14:44+0100\n"
+"POT-Creation-Date: 2002-04-28 00:07-0400\n"
 "PO-Revision-Date: 2002-04-28 22:38+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -100,7 +100,8 @@ msgstr "Från vilken familj ska maka(e)n/föräldern tas bort?"
 
 #: gedlib/messages.c:73
 msgid "Identify family (enter nothing to identify by individual members)."
-msgstr "Identifiera familj (lämna blank för att identifiera via familjemedlem)."
+msgstr ""
+"Identifiera familj (lämna blank för att identifiera via familjemedlem)."
 
 #: gedlib/messages.c:74
 msgid "Identify a spouse of the family, if known."
@@ -412,7 +413,9 @@ msgstr "Denna familj har redan en maka/kvinnlig förälder."
 
 #: gedlib/messages.c:156
 msgid "This family has both spouses/parents; can't add another."
-msgstr "I denna familj finns båda makarna/föräldrarna; kan inte lägga till ytterligare en."
+msgstr ""
+"I denna familj finns båda makarna/föräldrarna; kan inte lägga till "
+"ytterligare en."
 
 #: gedlib/messages.c:157
 msgid "This family has neither spouse/parent; can't remove."
@@ -812,7 +815,9 @@ msgstr "Inga fel; lägger till poster med nya nycklar..."
 #: gedlib/messages.c:268
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
-msgstr "Med ursprungliga nycklar, kommer det att finnas %d borttagna poster i databasen."
+msgstr ""
+"Med ursprungliga nycklar, kommer det att finnas %d borttagna poster i "
+"databasen."
 
 #: gedlib/messages.c:269
 msgid "Use original keys from GEDCOM file?"
@@ -868,7 +873,6 @@ msgstr "Unicode-format stöds ej (endast stöd för UTF-8)."
 msgid "Enter string for program"
 msgstr "Skriv in sträng för program"
 
-
 #: gedlib/messages.c:286
 msgid "enter string: "
 msgstr "skriv in sträng: "
@@ -922,6 +926,7 @@ msgstr ""
 "0 XXXX\n"
 "1 REFN"
 
+#. node.c errors
 #: gedlib/messages.c:296
 #, fuzzy
 msgid "The file is as positioned at EOF."
@@ -1241,12 +1246,15 @@ msgstr "Databasposter (%dP, %dF, %dS, %dE, %dX)"
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
 msgstr ""
-"Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%d).\n"
+"Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%"
+"d).\n"
 
 #: gedlib/messages.c:379
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
-msgstr "Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%d). \n"
+msgstr ""
+"Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%"
+"d). \n"
 
 #. menus
 #: gedlib/messages.c:382
@@ -1396,7 +1404,8 @@ msgstr "Välj ur historik"
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
-"Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med skrivåtkomst (-w)."
+"Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med "
+"skrivåtkomst (-w)."
 
 #: gedlib/messages.c:426
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."

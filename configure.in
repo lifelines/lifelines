@@ -9,7 +9,7 @@ AC_PREREQ(2.13)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.11)
+AM_INIT_AUTOMAKE(lifelines, 3.0.12)
 AM_CONFIG_HEADER(config.h)
 
 dnl Set of available languages (gettext)
@@ -64,7 +64,7 @@ AC_ARG_WITH(docs,
     [with_docs=no]
 )
 
-docs_dirs="docs"
+DOCS_TARGET=""
 if test "$with_docs" = "yes"
 then
    	echo Looking for sgmltools
@@ -74,14 +74,13 @@ then
 		AC_MSG_RESULT( *** Cannot find sgmltools to build docs. skipping building docs *** )
 		AC_MSG_RESULT( *** Visit http://sgmltools-lite.sourceforge.net and install it. *** )
 		AC_MSG_RESULT( ******************************************************************* )
-	       docs_dirs=""
+	else
+		DOCS_TARGET="simple"
 
 	fi
-else
-	docs_dirs=""
 fi
 
-AC_SUBST(docs_dirs)
+AC_SUBST(DOCS_TARGET)
 
 # Compile with profiling, to find bottlenecks
 AC_ARG_WITH(profiling,

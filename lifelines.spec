@@ -6,7 +6,7 @@
 # then "rpm -ba lifelines.spec"
 #
 
-%define lifelines_version       3.0.11
+%define lifelines_version       3.0.12
 
 Name: lifelines
 Summary: lifelines genealogy program
@@ -33,6 +33,7 @@ make
 %install
 mkdir -p /usr/local/share/lifelines/reports
 install -s -m 755 -o 0 -g 0 liflines/llines /usr/local/bin/llines
+install  -m 755 -o 0 -g 0 docs/llines.1 /usr/local/man/man1/llines.1
 install  -m 755 -o 0 -g 0 reports/CREDIT /usr/local/share/lifelines/reports/CREDIT
 install  -m 755 -o 0 -g 0 reports/2ppage.ll /usr/local/share/lifelines/reports/2ppage.ll
 install  -m 755 -o 0 -g 0 reports/4gen1.ll /usr/local/share/lifelines/reports/4gen1.ll
@@ -55,7 +56,7 @@ install  -m 755 -o 0 -g 0 reports/cousins.ll /usr/local/share/lifelines/reports/
 install  -m 755 -o 0 -g 0 reports/coverage.ll /usr/local/share/lifelines/reports/coverage.ll
 install  -m 755 -o 0 -g 0 reports/dates.ll /usr/local/share/lifelines/reports/dates.ll
 install  -m 755 -o 0 -g 0 reports/desc-henry.ll /usr/local/share/lifelines/reports/desc-henry.ll
-install  -m 755 -o 0 -g 0 reports/desc-henry.ll /usr/local/share/lifelines/reports/exercise.ll
+install  -m 755 -o 0 -g 0 reports/exercise.ll /usr/local/share/lifelines/reports/exercise.ll
 install  -m 755 -o 0 -g 0 reports/fam10c.ll /usr/local/share/lifelines/reports/fam10c.ll
 install  -m 755 -o 0 -g 0 reports/fam16rn1.ll /usr/local/share/lifelines/reports/fam16rn1.ll
 install  -m 755 -o 0 -g 0 reports/familyisfm1.ll /usr/local/share/lifelines/reports/familyisfm1.ll
@@ -126,9 +127,10 @@ install  -m 755 -o 0 -g 0 reports/tree.tex /usr/local/share/lifelines/reports/tr
 install  -m 755 -o 0 -g 0 reports/verify.ll /usr/local/share/lifelines/reports/verify.ll
 
 %files
-%doc README ChangeLog ANNOUNCEMENT AUTHORS LICENSE docs/lifelines.sgml docs/quickref.pdf docs/quickref.ps
+%doc README ChangeLog NEWS AUTHORS LICENSE docs/lifelines.sgml docs/quickref.pdf docs/quickref.ps
 
 /usr/local/bin/llines
+/usr/local/man/man1/llines.1
 /usr/local/share/lifelines/reports/CREDIT
 /usr/local/share/lifelines/reports/2ppage.ll
 /usr/local/share/lifelines/reports/4gen1.ll

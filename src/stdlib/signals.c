@@ -101,7 +101,7 @@ load_signames (void)
 	sig_msgs[18] = _(qSsig18);
 	sig_msgs[19] = _(qSsig19);
 	sig_msgs[20] = _(qSsig20);
-};
+}
 /*======================================
  * set_signals -- Install signal handler
  *====================================*/

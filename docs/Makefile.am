@@ -2,14 +2,15 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = quickref.pdf quickref.ps lifelines.sgml
+EXTRA_DIST = quickref.pdf quickref.ps lifelines.sgml llines.1
 CONFIG_CLEAN_FILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt
 
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
 
 
-all: simple # fancy
+# sensible values: empty, simple, fancy
+all: @DOCS_TARGET@
 
 text: lifelines.txt
 

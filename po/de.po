@@ -1,11 +1,13 @@
 # German messages for LifeLines.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Carl Becker <carl@becker-wiesbaden.de>, 2002.
+# 
+# Changes to fix the conflicts, Carl Becker, 2002-04-28
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-04-28 00:03-0400\n"
+"POT-Creation-Date: 2002-04-28 00:07-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Carl Becker <carl@becker-wiesbaden.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +62,8 @@ msgstr ""
 
 #: gedlib/messages.c:62
 msgid "The database is read only; you may not add records."
-msgstr "Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
+msgstr ""
+"Datenbank ist schreibgeschützt; Hinzufügen von Einträgen nicht möglich."
 
 #: gedlib/messages.c:63
 msgid "The database is read only; you may not change records."
@@ -68,7 +71,8 @@ msgstr "Datenbank ist schreibgeschützt; Ändern von Einträgen nicht möglich."
 
 #: gedlib/messages.c:64
 msgid "The database is read only; you may not merge records."
-msgstr "Datenbank ist schreibgeschützt; Zusammenführen von Einträgen nicht möglich."
+msgstr ""
+"Datenbank ist schreibgeschützt; Zusammenführen von Einträgen nicht möglich."
 
 #: gedlib/messages.c:65
 msgid "The database is read only; you may not remove records."
@@ -112,14 +116,12 @@ msgid "Identify a child of the family, if known."
 msgstr ""
 
 #: gedlib/messages.c:76
-#, fuzzy
 msgid "Identify the first child to swap."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:77
-#, fuzzy
 msgid "Identify the second child to swap."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:78
 msgid "Identify the child to reorder."
@@ -245,9 +247,8 @@ msgid "pattern: "
 msgstr ""
 
 #: gedlib/messages.c:107
-#, fuzzy
 msgid "Please choose from among these records."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:108
 msgid "Is this the new child? "
@@ -266,28 +267,24 @@ msgid "Select the child the new child precedes or select last."
 msgstr ""
 
 #: gedlib/messages.c:112
-#, fuzzy
 msgid "Please identify next person to browse to."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:113
-#, fuzzy
 msgid "Please identify record to browse to."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:114
 msgid "Please identify one of the spouses."
 msgstr ""
 
 #: gedlib/messages.c:115
-#, fuzzy
 msgid "Please identify person or persons to browse to."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:116
-#, fuzzy
 msgid "Please choose family create operation."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:117
 #, fuzzy
@@ -297,7 +294,7 @@ msgstr "Möchten Sie eine Datenbank anlegen?"
 #: gedlib/messages.c:119
 #, fuzzy
 msgid "This person is not a spouse or parent in any family."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr "s  [Spouse] Partner zu einer bestehenden Familie"
 
 #: gedlib/messages.c:120
 msgid "This person is not a child in any family."
@@ -339,14 +336,12 @@ msgid "This person's parents are not in the database."
 msgstr "b  [Browse] Blättern"
 
 #: gedlib/messages.c:129
-#, fuzzy
 msgid "This family has no male spouse/parent in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:130
-#, fuzzy
 msgid "This family has no female spouse/parent in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:131
 #, fuzzy
@@ -418,7 +413,7 @@ msgstr ""
 #: gedlib/messages.c:146
 #, fuzzy
 msgid "Please choose the reference to view."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr "Welches Kind soll aus der Familie gelöscht werden?"
 
 #: gedlib/messages.c:147
 msgid "Duplicated REFN - please choose."
@@ -429,24 +424,20 @@ msgid "New spouse/parent has unknown sex; can't add to family."
 msgstr ""
 
 #: gedlib/messages.c:150
-#, fuzzy
 msgid "The persons are not of opposite sex; can't make family."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:151
-#, fuzzy
 msgid "This person is not a spouse in the family; can't remove."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:152
-#, fuzzy
 msgid "This person is not a child in the family; can't remove."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:153
-#, fuzzy
 msgid "This person's sex is not known; can't make family."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:154
 msgid "This family already has a husband/male parent."
@@ -520,7 +511,7 @@ msgstr "Einfügen"
 #: gedlib/messages.c:171
 #, fuzzy
 msgid "Do you really want to add this person to the database?"
-msgstr "Möchten Sie eine Datenbank anlegen?"
+msgstr "p  neue Person in die Datenbank einfügen"
 
 #: gedlib/messages.c:172
 #, fuzzy
@@ -528,14 +519,12 @@ msgid "Do you really want to add this family to the database?"
 msgstr "Möchten Sie eine Datenbank anlegen?"
 
 #: gedlib/messages.c:173
-#, fuzzy
 msgid "Do you really want to add this child to the family?"
-msgstr "c  [Child] Kind in eine bestehende Familie"
+msgstr ""
 
 #: gedlib/messages.c:174
-#, fuzzy
 msgid "Do you really want to add this spouse/parent to the family?"
-msgstr "Möchten Sie eine Datenbank anlegen?"
+msgstr ""
 
 #: gedlib/messages.c:175
 #, fuzzy
@@ -596,19 +585,16 @@ msgid "Do you really want to merge these two persons?"
 msgstr "Möchten Sie eine Datenbank anlegen?"
 
 #: gedlib/messages.c:187
-#, fuzzy
 msgid "Do you really want to merge these two families?"
-msgstr "Möchten Sie eine Datenbank anlegen?"
+msgstr ""
 
 #: gedlib/messages.c:188
-#, fuzzy
 msgid "Do you really want to remove this child from his/her family?"
-msgstr "c  [Child] Kind in eine bestehende Familie"
+msgstr ""
 
 #: gedlib/messages.c:189
-#, fuzzy
 msgid "Do you really want to remove this spouse from his/her family?"
-msgstr "Möchten Sie eine Datenbank anlegen?"
+msgstr ""
 
 #: gedlib/messages.c:190
 msgid "Too many spouses to display full list"
@@ -619,24 +605,20 @@ msgid "These persons are children in different families."
 msgstr ""
 
 #: gedlib/messages.c:192
-#, fuzzy
 msgid "Are you sure you want to merge them?"
-msgstr "b  [Browse] Blättern"
+msgstr ""
 
 #: gedlib/messages.c:194
-#, fuzzy
 msgid "There is something wrong with the data."
-msgstr "b  [Browse] Blättern"
+msgstr ""
 
 #: gedlib/messages.c:195
-#, fuzzy
 msgid "Please identify the child."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:196
-#, fuzzy
 msgid "Please identify one of the child's siblings."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:197
 #, fuzzy
@@ -653,9 +635,8 @@ msgstr ""
 
 #. TODO: why isn't iscinf used ? 2002.04.27, Perry
 #: gedlib/messages.c:201
-#, fuzzy
 msgid "This person is already a child in a family."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:202
 #, fuzzy
@@ -663,9 +644,8 @@ msgid "Identify a spouse/parent for the new family."
 msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
 
 #: gedlib/messages.c:203
-#, fuzzy
 msgid "Identify the second spouse/parent, if known."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:204
 msgid "Both families must have husbands/fathers."
@@ -680,14 +660,12 @@ msgid "Identify spouse/parent in second family, if known."
 msgstr ""
 
 #: gedlib/messages.c:208
-#, fuzzy
 msgid "Identify child in second family."
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:209
-#, fuzzy
 msgid "Identify second person to browse to."
-msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:211
 msgid "Create a family with this person as a child."
@@ -720,12 +698,12 @@ msgstr ""
 #: gedlib/messages.c:219
 #, fuzzy
 msgid "The child was removed from his/her family."
-msgstr "c  [Child] Kind in eine bestehende Familie"
+msgstr "Welches Kind soll aus der Familie gelöscht werden?"
 
 #: gedlib/messages.c:220
 #, fuzzy
 msgid "The spouse was removed from his/her family."
-msgstr "c  [Child] Kind in eine bestehende Familie"
+msgstr "Welcher Partner/Elternteil soll aus der Familie gelöscht werden?"
 
 #: gedlib/messages.c:222
 msgid "A person cannot be merged with him/herself."
@@ -754,7 +732,7 @@ msgstr ""
 #: gedlib/messages.c:228
 #, fuzzy
 msgid "Who do you want to remove from the database?"
-msgstr "b  [Browse] Blättern"
+msgstr "Möchten Sie eine Datenbank anlegen?"
 
 #: gedlib/messages.c:229
 #, fuzzy
@@ -803,32 +781,30 @@ msgstr ""
 #: gedlib/messages.c:239
 #, fuzzy
 msgid "The new family was added to the database."
-msgstr "5  Sonstigen Datenbank-Eintrag hinzufügen"
+msgstr "1  Eintrag über eine Quelle hinzufügen"
 
 #: gedlib/messages.c:240
 #, fuzzy, c-format
 msgid "%s was modified in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr "b  [Browse] Blättern"
 
 #: gedlib/messages.c:241
-#, fuzzy
 msgid "The family was modified in the database."
-msgstr "b  [Browse] Blättern"
+msgstr ""
 
 #: gedlib/messages.c:242
 #, fuzzy
 msgid "The source was modified in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr "1  Eintrag über eine Quelle hinzufügen"
 
 #: gedlib/messages.c:243
-#, fuzzy
 msgid "The event was modified in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr ""
 
 #: gedlib/messages.c:244
 #, fuzzy
 msgid "The record was modified in the database."
-msgstr "p  neue Person in die Datenbank einfügen"
+msgstr "5  Sonstigen Datenbank-Eintrag hinzufügen"
 
 #: gedlib/messages.c:246
 #, c-format
@@ -1417,9 +1393,8 @@ msgstr ""
 
 #. adding new xref
 #: gedlib/messages.c:409
-#, fuzzy
 msgid "Please choose from the following options:"
-msgstr "Welches Kind soll aus der Familie gelöscht werden?"
+msgstr ""
 
 #: gedlib/messages.c:410
 #, c-format
@@ -1512,12 +1487,11 @@ msgstr "Name der Lokalisierung: "
 #: gedlib/messages.c:432
 #, fuzzy, c-format
 msgid "enter file name (*%s)"
-msgstr "Pfad: "
+msgstr "Name der Lokalisierung: "
 
 #: gedlib/messages.c:433
-#, fuzzy
 msgid "There is no record with that key or reference."
-msgstr "In diesem Verzeichnis befindet sich keine LifeLines - Datenbank."
+msgstr ""
 
 #. translation table errors
 #: gedlib/messages.c:436
@@ -2392,7 +2366,7 @@ msgstr "j  zum jüngeren Geschwister"
 
 #: liflines/menuitem.c:103
 msgid "g  Browse to family"
-msgstr "a  zur Familie"
+msgstr "f  zur Familie"
 
 #: liflines/menuitem.c:104
 msgid "u  Browse to parents"
@@ -2582,7 +2556,7 @@ msgstr "tk Tandem Kinder"
 
 #: liflines/menuitem.c:151
 msgid "tf Tandem to father/s"
-msgstr "tf Tandem Vater"
+msgstr "tv Tandem Vater"
 
 #: liflines/menuitem.c:152
 msgid "tg Tandem to family/s"

@@ -1,3 +1,16 @@
+2002-05-05 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog Makefile.am NEWS configure.in lifelines.spec 
+	docs/Makefile.am hdrs/version.h po/de.po po/sv.po 
+	stdlib/signals.c:
+
+	Fixed build system to always process docs subdir (so make dist works).
+	Restored llines.1 to rpm spec file.
+	Bumped version to 3.0.12 (to release with docs, to replace 3.0.11).
+	Removed extra semicolon in signals.c.
+	Added llines.1 to docs/Makefile.am (so rpm construct finds it).
+	Updated obsolete reference in lifelines.spec to ANNOUNCEMENT to NEWS.
+
 2002-05-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in lifelines.spec

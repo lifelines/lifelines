@@ -8,7 +8,7 @@
 # But we can't do this because it breaks on sytems with system gettext
 # and automake 1.4 or prior
 
-SUBDIRS = arch btree gedlib interp stdlib intl po liflines hdrs tools reports win32 @docs_dirs@
+SUBDIRS = arch btree gedlib interp stdlib intl po liflines hdrs tools reports win32 docs
 
 EXTRA_DIST = .linesrc LICENSE README.DEVELOPERS lines.cfg
 
