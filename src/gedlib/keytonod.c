@@ -787,6 +787,18 @@ lock_cache (CACHEEL cel)
 	cclock(cel)++;
 	ASSERT(cclock(cel)>0);
 }
+/*======================================
+ * lock_record_in_cache -- Load record into cache & lock it
+ *====================================*/
+void
+lock_record_in_cache (RECORD rec)
+{
+	NODE node=0;
+	ASSERT(rec);
+	node = nztop(rec); /* force record to be loaded in cache */
+	++cclock(rec->rec_cel);
+	ASSERT(cclock(rec->rec_cel) > 0);
+}
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from direct cache
  *========================================*/
@@ -796,6 +808,17 @@ unlock_cache (CACHEEL cel)
 	ASSERT(cclock(cel)>0);
 	ASSERT(cnode(cel));
 	cclock(cel)--;
+}
+/*======================================
+ * unlock_record_from_cache -- Remove lock on record
+ *====================================*/
+void
+unlock_record_from_cache (RECORD rec)
+{
+	ASSERT(rec);
+	ASSERT(rec->rec_cel);
+	ASSERT(cclock(rec->rec_cel) > 0);
+	--cclock(rec->rec_cel);
 }
 /*=========================================
  * cache_get_lock_counts -- Fill in lock counts

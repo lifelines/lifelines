@@ -1,3 +1,9 @@
+2003-11-24 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
+
+	Add lock/unlock functions for records.
+
 2003-11-23 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c
