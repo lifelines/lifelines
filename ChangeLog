@@ -1,3 +1,9 @@
+2003-08-29 Perry Rapp
+
+	* ChangeLog src/stdlib/strcvt.c
+
+	Add code to avoid 8-bit uppercasing of UTF-8 code bytes.
+
 2003-08-27 Perry Rapp
 
 	* .linesrc ChangeLog lines.cfg

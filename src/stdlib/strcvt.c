@@ -213,7 +213,11 @@ ll_toupperz (STRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			zs_appc(zstr, (uchar)ll_toupper(*s));
+			/* avoid 8-bit uppercasing UTF-8 multibyte codes */
+			if (utf8 && ((uchar)*s) > 0x7f)
+				zs_appc(zstr, (uchar)ll_toupper(*s));
+			else
+				zs_appc(zstr, (uchar)ll_toupper(*s));
 		}
 	}
 	return zstr;
