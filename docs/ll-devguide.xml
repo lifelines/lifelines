@@ -2,39 +2,8 @@
 Outline for developer's guide to lifelines code.
 This is only an outline, not a parseable XML file.
 
-2002.06.23, Perry Rapp
+2003-03-05, Perry Rapp
 
-* btree module
-  The btree subdirectory contains the implementation for a btree
-  database, using fixed length 8 letter keys (RKEY).
-
-  Each node in the btree is a separate file on disk (named, eg, "aa"),
-  and the first 4096 (BUFLEN macro) bytes are the node header.
-
-  * index nodes
-  These are the interior index nodes of the btree; they contain pointers
-  to subordinate index or block nodes. The program performs binary
-  searches through index nodes to find a particular key.
-
-  * block nodes
-  These contain the actual data (keys & their associated records).
-
-  * keyfile
-  One special file on the disk, the keyfile, contains some meta information
-  and a pointer to the root of the btree (the master key). When the root
-  changes (splits), the master key in the keyfile is updated accordingly.
-
-  * traverse
-  There is a traversal function implemented at the btree level, which uses
-  a callback.
-
-  * bterrno
-  There is a global integer error variable, bterrno, which is set by this
-  module upon most failure conditions.
-
-  * NOTE: FUTURE DIRECTIONS
-  bterrno must be removed for multi-threading. Traversal is more elegantly
-  done via iterator style repeated calls in, instead of callback.
 
 * stdlib module
 The stdlib directory contains various utility functions not specifically
@@ -180,3 +149,146 @@ in yacc.y.
 TODO:
 
 --!>
+
+<?xml version='1.0' encoding='iso-8859-1'?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
+[<!ENTITY llversion '3.0.25'>]>
+
+
+
+  <book id="docbook">
+
+  <bookinfo>
+
+
+<!--
+
+    this is ll-devguide.xml
+
+    To use this file with SGML software, replace the text above
+    this comments section with the following:
+
+_________________________________________________________
+
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+	<!entity llversion	"3.0.25">
+]>	
+	
+<book id="docbook">
+  <?dbhtml filename="ll-doc.htm">
+  <bookinfo>
+_________________________________________________________
+
+
+                                                       -->
+<!-- ================================================= -->
+
+    <title>
+
+<application>LifeLines</application> Developer Documentation
+</title>
+
+    <authorgroup>
+      <author>
+      <firstname>Perry</firstname><surname>Rapp </surname>
+      </author>
+    </authorgroup>
+
+    <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
+  </bookinfo>
+
+
+
+    <chapter><title>
+
+Introduction to Lifelines Developers Manual
+
+</title>
+
+
+<para>
+
+     <application>LifeLines</application> source code is divided into
+	 several functional subdirectories, which will be discussed 
+	 individually below. They are chained together by an autotools
+	 build system, which creates executables in both the liflines
+	 and tools subdirectories.
+
+</para>
+
+</chapter><chapter><title>btree module</title>
+
+<para>
+  The btree subdirectory contains the implementation for a btree
+  database, using fixed length 8 letter keys (RKEY).
+
+</para><para>
+
+    <formalpara><title>
+  nodes
+    </title><para>
+
+  Each node in the btree is a separate file on disk (named, eg, "aa"),
+  and the first 4096 (BUFLEN macro) bytes are the node header.
+
+    </para></formalpara><formalpara><title>
+
+  index nodes
+
+    </title><para>
+
+  These are the interior index nodes of the btree; they contain pointers
+  to subordinate index or block nodes. The program performs binary
+  searches through index nodes to find a particular key.
+
+    </para></formalpara><formalpara><title>
+
+  block nodes
+
+    </title><para>
+
+  These contain the actual data (keys & their associated records).
+
+    </para></formalpara><formalpara><title>
+
+  keyfile
+
+    </title><para>
+
+  One special file on the disk, the keyfile, contains some meta information
+  and a pointer to the root of the btree (the master key). When the root
+  changes (splits), the master key in the keyfile is updated accordingly.
+
+    </para></formalpara><formalpara><title>
+
+  traverse
+
+    </title><para>
+
+  There is a traversal function implemented at the btree level, which uses
+  a callback.
+
+    </para></formalpara><formalpara><title>
+
+  bterrno
+
+    </title><para>
+
+  There is a global integer error variable, bterrno, which is set by this
+  module upon most failure conditions.
+
+    </para></formalpara><formalpara><title>
+
+  FUTURE DIRECTIONS
+
+    </title><para>
+
+  bterrno must be removed for multi-threading. Traversal is more elegantly
+  done via iterator style repeated calls in, instead of callback.
+
+    </para></formalpara>
+
+</chapter>
+</book>

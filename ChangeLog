@@ -5,6 +5,10 @@
 
 	Minor updates to instructions for use on MS-Windows.
 
+	* ChangeLog docs/ll-devguide.xml
+
+	Attempt to make devguide parseable.
+
 2003-03-04 Steve Dum
 
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
