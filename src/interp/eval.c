@@ -146,7 +146,7 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 		    iline(node), iname(node));
 #endif
 	if (traceprogram) {
-		sprintf(trace, "%d: %s\n", iline(node), iname(node));
+		sprintf(trace, "%d: %s\n", iline(node), (char*)iname(node));
 		poutput(trace);
 	}
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);

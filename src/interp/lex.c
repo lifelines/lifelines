@@ -47,10 +47,16 @@ extern INT Plineno;	/* program line number */
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
+static int lowyylex(void);
+static INT inchar(void);
+static void unchar(INT);
+static BOOLEAN reserved(STRING, INT*);
+
 /*============================
  * initlex -- Initialize lexer
  *==========================*/
-initlex (mode)
+void initlex (mode)
+INT mode;
 {
 	ASSERT(mode == FILEMODE || mode == STRINGMODE);
 	Lexmode = mode;
@@ -59,7 +65,7 @@ initlex (mode)
 /*===================================================
  * yylex -- High level lexer function (for debugging)
  *=================================================*/
-int yylex()
+int yylex(void)
 {
 	INT lex = lowyylex();
 
@@ -75,7 +81,7 @@ int yylex()
 /*===========================
  * lowyylex -- Lexer function
  *=========================*/
-int lowyylex ()
+int lowyylex (void)
 {
 	INT c, t, retval, mul;
 	extern INT Yival;
@@ -204,34 +210,36 @@ static struct {
 	char *rword;
 	INT val;
 } rwordtable[] = {
-	"break",	BREAK,
-	"call",		CALL,
-	"children",	CHILDREN,
-	"continue",	CONTINUE,
-	"else",		ELSE,
-	"elsif",	ELSIF,
-	"families",	FAMILIES,
-	"fathers",	FATHERS,
-	"foreven",	FOREVEN,
-	"forfam",	FORFAM,
-	"forindiset",	FORINDISET,
-	"forindi",	FORINDI,
-	"forlist",	FORLIST_TOK,
-	"fornodes",	FORNODES,
-	"fornotes",     FORNOTES,
-	"forothr",	FOROTHR,
-	"forsour",	FORSOUR,
-	"func",		FUNC_TOK,
-	"if",		IF,
-	"mothers",	MOTHERS,
-	"Parents",	PARENTS,
-	"proc",		PROC,
-	"return",	RETURN,
-	"spouses",	SPOUSES,
-	"traverse",	TRAVERSE,
-	"while",	WHILE,
+	{ "break",	BREAK },
+	{ "call",	CALL },
+	{ "children",	CHILDREN },
+	{ "continue",	CONTINUE },
+	{ "else",	ELSE },
+	{ "elsif",	ELSIF },
+	{ "families",	FAMILIES },
+	{ "fathers",	FATHERS },
+	{ "foreven",	FOREVEN },
+	{ "forfam",	FORFAM },
+	{ "forindiset",	FORINDISET },
+	{ "forindi",	FORINDI },
+	{ "forlist",	FORLIST_TOK },
+	{ "fornodes",	FORNODES },
+	{ "fornotes",	FORNOTES },
+	{ "forothr",	FOROTHR },
+	{ "forsour",	FORSOUR },
+	{ "func",	FUNC_TOK },
+	{ "if",		IF },
+	{ "mothers",	MOTHERS },
+	{ "Parents",	PARENTS },
+	{ "proc",	PROC },
+	{ "return",	RETURN },
+	{ "spouses",	SPOUSES },
+	{ "traverse",	TRAVERSE },
+	{ "while",	WHILE },
 };
-static nrwords = 26;
+
+INT nrwords = ARRAYSIZE(rwordtable);
+
 /*======================================
  * reserved -- See if string is reserved
  *====================================*/
@@ -251,7 +259,7 @@ INT *pval;
 /*==============================================================
  * inchar -- Read char from input file/string; track line number
  *============================================================*/
-inchar ()
+INT inchar (void)
 {
 	INT c;
 #ifdef SKIPCTRLZ
@@ -270,7 +278,7 @@ inchar ()
 /*================================================================
  * unchar -- Unread char from input file/string; track line number
  *==============================================================*/
-unchar (c)
+void unchar (c)
 INT c;
 {
 	if (Lexmode == FILEMODE)

@@ -113,7 +113,7 @@ STRING ofile;	/* output file - can be NULL */
     	FILE *fp;
 	LIST plist = create_list();
 	TABLE stab;
-	WORD dummy;
+	PVALUE dummy;
 	INT i;
 	STRING ifile;
 	PNODE first, parm;

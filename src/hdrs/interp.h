@@ -236,25 +236,26 @@ void progmessage(char*);
 void remove_tables(void);
 void parse_file(STRING, LIST);
 
-INTERPTYPE interp_children (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_spouses (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_families (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_fathers (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_mothers (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_parents (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_fornotes (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_fornodes (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_forindi (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_forsour (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_foreven (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_forothr (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_forfam (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_indisetloop (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_forlist (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_if (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_while (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_call (PNODE, TABLE, PVALUE *);
-INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE *);
+INTERPTYPE interpret(PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_children (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_spouses (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_families (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_fathers (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_mothers (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_parents (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_fornotes (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_fornodes (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_forindi (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_forsour (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_foreven (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_forothr (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_forfam (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_indisetloop (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_forlist (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_if (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_while (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_call (PNODE, TABLE, PVALUE*);
+INTERPTYPE interp_traverse (PNODE, TABLE, PVALUE*);
 
 /* Prototypes */
 void assign_iden(TABLE, STRING, WORD);
@@ -307,6 +308,7 @@ PNODE string_node(STRING);
 PNODE traverse_node(PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(TABLE, STRING);
 PNODE while_node(PNODE, PNODE);
+int yylex(void);
 
 #endif /* _INTERP_H */
 
