@@ -164,7 +164,7 @@ translate_string (TRANTABLE tt, /* tran table */
 	n = strlen(in);
 	l = 0;
 	while (n > 0) {
-		node = tt->start[*p];
+		node = tt->start[(int)*p];
 		if (!node) {	/* this char starts no patterns */
 			add_char(out, &l, max, *p++);
 			--n;

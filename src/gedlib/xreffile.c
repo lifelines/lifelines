@@ -67,6 +67,9 @@ static void readrecs(DELETESET set);
 static STRING getxref(DELETESET set);
 static void addxref(INT key, DELETESET set);
 static void growxrefs(DELETESET set);
+static INT num_set(DELETESET set);
+static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
+static INT xref_last(DELETESET set);
 
 /* INDI, FAM, EVEN, SOUR, other sets */
 static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
@@ -88,7 +91,7 @@ initdset (DELETESET set, char ctype)
  * initdsets -- Initialize delete sets
  *=================================*/
 static void
-initdsets ()
+initdsets (void)
 {
 	initdset(&irecs, 'I');
 	initdset(&frecs, 'F');
@@ -147,7 +150,6 @@ static INT
 getxrefnum (DELETESET set)
 {
 	INT keynum;
-	static unsigned char scratch[12];
 	ASSERT(xreffp && set->n >= 1);
 	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
 	ASSERT(writexrefs());
@@ -348,7 +350,7 @@ growxrefs (DELETESET set)
  * num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-INT num_set (DELETESET set)
+static INT num_set (DELETESET set)
 {
 	return set->recs[0] - set->n;
 }
@@ -358,7 +360,7 @@ INT num_sours (void) { return num_set(&srecs); }
 INT num_evens (void) { return num_set(&erecs); }
 INT num_othrs (void) { return num_set(&xrecs); }
 /*================================================
- * newixref -- Return original or next ixref value
+ * newxref -- Return original or next xref value
  * xrefp = key of the individual
  * flag = use the current key
  *  returns static buffer
@@ -547,7 +549,7 @@ INT xref_firstx (void) { return xref_nextx(0); }
  *  returns 0 if none found
  *  5 symmetric versions
  *=====================================*/
-INT xref_last (DELETESET set)
+static INT xref_last (DELETESET set)
 {
 	return xref_prev_impl(set, set->recs[0]);
 }
