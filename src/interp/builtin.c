@@ -1851,7 +1851,8 @@ __strtoint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list;
+	LIST newlist=0;
+	PVALUE newval=0;
 	PNODE arg = (PNODE) iargs(node);
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvar1, "list");
@@ -1859,8 +1860,9 @@ __list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	list = create_list();
-	assign_iden(stab, iident(arg), create_pvalue(PLIST, (VPTR) list));
+	newlist = create_list();
+	newval = create_pvalue(PLIST, newlist);
+	assign_iden(stab, iident(arg), newval);
 	return NULL;
 }
 /*=======================================+
@@ -2535,18 +2537,18 @@ __fnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	TABLE tab;
-	PVALUE val;
+	TABLE newtab=0;
+	PVALUE newval=0;
 	PNODE var = (PNODE) iargs(node);
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, var, NULL, nonvar1, "table");
 		return NULL;
 	}
-	tab = create_table(FREEKEY);
-	val = create_pvalue(PTABLE, (VPTR)tab);
+	newtab = create_table(FREEKEY);
+	newval = create_pvalue(PTABLE, newtab);
 
-	assign_iden(stab, iident(var), val);
+	assign_iden(stab, iident(var), newval);
 	return NULL;
 }
 /*=========================================+

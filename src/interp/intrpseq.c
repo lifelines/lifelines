@@ -70,7 +70,8 @@ static struct tag_indiseq_value_fnctable pvseq_fnctbl =
 PVALUE
 __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
+	INDISEQ newseq=0;
+	PVALUE newval=0;
 	PNODE var = (PNODE) iargs(node);
 	if (!iistype(var, IIDENT)) {
 		*eflg = TRUE;
@@ -79,9 +80,10 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	seq = create_indiseq_pval();
-	set_indiseq_value_funcs(seq, &pvseq_fnctbl);
-	assign_iden(stab, iident(var), create_pvalue(PSET, (VPTR) seq));
+	newseq = create_indiseq_pval();
+	set_indiseq_value_funcs(newseq, &pvseq_fnctbl);
+	newval = create_pvalue(PSET, newseq);
+	assign_iden(stab, iident(var), newval);
 	return NULL;
 }
 /*==================================+

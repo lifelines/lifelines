@@ -34,6 +34,12 @@
 
 	const fixes (and add soundex to msvc6 dbverify project).
 
+	* ChangeLog src/interp/builtin.c src/interp/intrpseq.c
+	src/tools/Makefile.am
+
+	Cosmetic changes to __list, __table, and __indiseq for clarity and to
+	make them analogous. Add libintl & libiconv to btedit link.
+
 2003-09-15 Perry Rapp
 
 	* ChangeLog README.MAINTAINERS
