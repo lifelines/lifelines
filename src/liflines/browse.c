@@ -32,6 +32,7 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#include "lloptions.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -63,8 +64,9 @@ extern STRING ids2fm, idc2fm, idplst, idp2br, crtcfm, crtsfm;
 extern STRING ronlye, ronlya, idhbrs, idwbrs;
 extern STRING id1sbr, id2sbr, id1fbr, id2fbr, id1cbr, id2cbr;
 extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
-extern STRING spover, idfamk, nohist, idhist;
+extern STRING spover, idfamk, nohist, idhist, histclr;
 extern STRING tag2long2cnc,newrecis,autoxref,editcur,gotonew,staycur;
+extern STRING badhistcnt,badhistcnt2,badhistlen;
 
 /*********************************************
  * local enums & defines
@@ -79,6 +81,7 @@ extern STRING tag2long2cnc,newrecis,autoxref,editcur,gotonew,staycur;
 
 /* alphabetical */
 static NODE add_new_rec_maybe_ref(NODE node, char ntype);
+static void ask_clear_history(void);
 static void autoadd_xref(NODE node, NODE newnode);
 static INT browse_aux(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq);
@@ -98,27 +101,31 @@ static NODE history_back(void);
 static NODE history_list(void);
 static void history_record(NODE node);
 static NODE history_fwd(void);
+static void load_hist_lists(void);
+static void load_nkey_list(STRING key, NKEY * nkarr, INT max, INT * count);
 static void pick_add_child_to_fam(NODE fam, NODE save);
 static void pick_add_spouse_to_family(NODE fam, NODE save);
 static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
 static void pick_remove_spouse_from_family(NODE fam);
-
+static void save_hist_lists(void);
+static void save_nkey_list(STRING key, NKEY * nkarr, INT start, INT past_end, INT size);
 /*********************************************
  * local variables
  *********************************************/
 
 /*
-	The history list is a circular buffer in hist_list.
-	hist_start points at the earliest entry, and 
-	hist_past_end points just past the latest entry.
-	If hist_start==hist_past_end the the buffer is full.
-	(If hist_start==-1, then there are no entries.)
+	The history list is a circular buffer in vhist_list.
+	vhist_start points at the earliest entry, and 
+	vhist_past_end points just past the latest entry.
+	If vhist_start==vhist_past_end the the buffer is full.
+	(If vhist_start==-1, then there are no entries.)
 	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
-	-1 <= hist_start < ARRSIZE(hist_list)
-	0 <= hist_past_end < ARRSIZE(hist_list)
+	-1 <= vhist_start < vhist_size
+	0 <= vhist_past_end < vhist_size
 */
-static INT hist_start=-1, hist_past_end=0;
-static NKEY hist_list[20];
+static INT vhist_start=-1, vhist_past_end=0;
+static NKEY * vhist_list=0;
+static INT vhist_size=0;
 
 /*********************************************
  * local function definitions
@@ -1276,6 +1283,150 @@ choose_any_other (void)
 	return rec;
 }
 /*==================================================
+ * load_hist_lists -- Load previous history from database
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+static void
+load_hist_lists (void)
+{
+	/* V for visit history, planning to also have a change history */
+	INT len=0;
+	vhist_size = getoptint("HistorySize", 20);
+	if (vhist_size<0 || vhist_size > 9999)
+		vhist_size=20;
+	vhist_list = (NKEY *)stdalloc(vhist_size * sizeof(vhist_list[0]));
+	memset(vhist_list, 0, vhist_size * sizeof(vhist_list[0]));
+	if (getoptint("SaveHistory", 0))
+		load_nkey_list("VHIST", vhist_list, vhist_size, &len);
+	if (len>=1) {
+		vhist_start=0;
+		vhist_past_end=len+1 % vhist_size;
+	} else {
+		vhist_start=-1;
+		vhist_past_end=0;
+	}
+}
+/*==================================================
+ * save_hist_lists -- Save history into database
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+static void
+save_hist_lists (void)
+{
+	if (!getoptint("SaveHistory", 0)) return;
+	save_nkey_list("VHIST", vhist_list, vhist_start, vhist_past_end, vhist_size);
+}
+/*==================================================
+ * load_nkey_list -- Load node list from record into NKEY array
+ *  key:   [IN]  key used to store list in database
+ *  nkarr  [IN]  array of NKEYS (allocated by caller)
+ *  max    [IN]  size of array
+ *  count  [OUT] #keys loaded
+ * Fills in ndarray with data from database.
+ * Created: 2001/12/23, Perry Rapp
+ * TODO: should be moved to gedlib
+ *================================================*/
+static void
+load_nkey_list (STRING key, NKEY * nkarr, INT max, INT * count)
+{
+	STRING rawrec;
+	INT * ptr;
+	INT len, i, temp;
+
+	*count = 0;
+	if (!(rawrec = retrieve_raw_record(key, &len)))
+		return;
+	if (len < 8 || (len % 8) != 0)
+		return;
+	ptr = (INT *)rawrec;
+	temp = *ptr++;
+	if (temp<1 || temp > 9999) {
+		/* #records failed sanity check */
+		msg_error(badhistcnt);
+		goto end;
+	}
+	if (temp != *ptr++) {
+		/* 2nd copy of #records failed to match */
+		msg_error(badhistcnt2);
+		goto end;
+	}
+	if (len != (temp+1)*8) {
+		/* length should be 8 bytes per record + 8 byte header */
+		msg_error(badhistlen);
+	}
+	*count = temp;
+	for (i=0; i<*count; ++i) {
+		char key[12];
+		nkarr[i].ntype = *ptr++;
+		nkarr[i].keynum = *ptr++;
+		/* We could sanity check these */
+		snprintf(key, sizeof(key), "%c%d", nkarr[i].ntype, nkarr[i].keynum);
+		nkarr[i].key = strdup(key);
+	}
+
+end:
+	stdfree(rawrec);
+}
+/*==================================================
+ * get_hist_count -- Calculate current size of history
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+static INT
+get_hist_count (INT start, INT past_end, INT size)
+{
+	if (!size || start==-1)
+		return 0;
+	else if (past_end > start)
+		return  past_end - start;
+	else
+		return size - start + past_end;
+}
+/*==================================================
+ * save_nkey_list -- Save nkey list from circular array
+ *  key:     [IN]  key used to store list in database
+ *  nkarr    [IN]  array of NKEYS (allocated by caller)
+ *  start    [IN]  first element in circle
+ *  past_end [IN]  just past last element in circle
+ *  size     [IN]  actual size of array
+ * Created: 2001/12/23, Perry Rapp
+ * TODO: should be moved to gedlib
+ *================================================*/
+static void
+save_nkey_list (STRING key, NKEY * nkarr, INT start, INT past_end, INT size)
+{
+	FILE * fp=0;
+	INT next, prev, count, temp;
+	size_t rtn;
+
+	count = get_hist_count(start, past_end, size);
+
+	unlink(editfile);
+
+	fp = fopen(editfile, "w");
+	if (!fp) return;
+
+	/* write count first -- twice just to take up 8 bytes same as records */
+	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
+	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
+
+	prev = -1;
+	next = start;
+	while (1) {
+		/* write type & number, 4 bytes each */
+		temp = vhist_list[next].ntype;
+		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
+		temp = vhist_list[next].keynum;
+		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
+		prev = next;
+		next = (next+1) % vhist_size;
+		if (next == vhist_past_end)
+			break; /* finished them all */
+	}
+	fclose(fp);
+
+	store_text_file_to_db(key, editfile, 0);
+}
+/*==================================================
  * history_record -- add node to history if different from top of history
  * Created: 2001/03?, Perry Rapp
  *================================================*/
@@ -1284,29 +1435,29 @@ history_record (NODE node)
 {
 	NKEY nkey = nkey_zero();
 	INT last;
-	if (hist_start==-1) {
-		hist_start=hist_past_end;
-		node_to_nkey(node, &hist_list[hist_start]);
-		hist_past_end = (hist_start+1) % ARRSIZE(hist_list);
-		/* hist_list[1+] are all zero because of static data initialization */
+	if (!vhist_size) return;
+	if (vhist_start==-1) {
+		vhist_start=vhist_past_end;
+		node_to_nkey(node, &vhist_list[vhist_start]);
+		vhist_past_end = (vhist_start+1) % vhist_size;
 		return;
 	}
 	/*
 	copy new node into nkey variable so we can check
-	if this is the same as our most recent (hist_list[last])
+	if this is the same as our most recent (vhist_list[last])
 	*/
 	node_to_nkey(node, &nkey);
-	last = (hist_past_end-1) % ARRSIZE(hist_list);
-	if (nkey_eq(&nkey, &hist_list[last]))
+	last = (vhist_past_end-1) % vhist_size;
+	if (nkey_eq(&nkey, &vhist_list[last]))
 		return;
 	/* it is a new one so add it to circular list */
-	nkey_copy(&nkey, &hist_list[hist_past_end]);
-	if (hist_start == hist_past_end) {
+	nkey_copy(&nkey, &vhist_list[vhist_past_end]);
+	if (vhist_start == vhist_past_end) {
 		/* full buffer & we just overwrote the oldest */
-		hist_start = (hist_start+1) % ARRSIZE(hist_list);
+		vhist_start = (vhist_start+1) % vhist_size;
 	}
 	/* advance pointer to account for what we just added */
-	hist_past_end = (hist_past_end+1) % ARRSIZE(hist_list);
+	vhist_past_end = (vhist_past_end+1) % vhist_size;
 }
 /*==================================================
  * history_back -- return prev NODE in history, if exists
@@ -1317,17 +1468,17 @@ history_back (void)
 {
 	INT last;
 	NODE node;
-	if (hist_start==-1)
+	if (!vhist_size || vhist_start==-1)
 		return NULL;
-	/* back up from hist_past_end to current item */
-	last = (hist_past_end-1) % ARRSIZE(hist_list);
-	while (last != hist_start) {
+	/* back up from vhist_past_end to current item */
+	last = (vhist_past_end-1) % vhist_size;
+	while (last != vhist_start) {
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
-		last = (last-1) % ARRSIZE(hist_list);
-		nkey_to_node(&hist_list[last], &node);
+		last = (last-1) % vhist_size;
+		nkey_to_node(&vhist_list[last], &node);
 		if (node) {
-			hist_past_end = (last+1) % ARRSIZE(hist_list);
+			vhist_past_end = (last+1) % vhist_size;
 			return node;
 		}
 	}
@@ -1342,10 +1493,10 @@ history_fwd (void)
 {
 	INT next;
 	NODE node;
-	if (hist_past_end == hist_start)
+	if (!vhist_size || vhist_past_end == vhist_start)
 		return NULL; /* at end of full history */
-	next = hist_past_end;
-	nkey_to_node(&hist_list[next], &node);
+	next = vhist_past_end;
+	nkey_to_node(&vhist_list[next], &node);
 	return node;
 }
 /*==================================================
@@ -1360,28 +1511,48 @@ history_list (void)
 	INDISEQ seq;
 	NODE node;
 	INT next, prev;
-	if (hist_start==-1) {
+	if (!vhist_size || vhist_start==-1) {
 		message(nohist);
 		return NULL;
 	}
 	/* add all items of history to seq */
 	seq = create_indiseq_null();
 	prev = -1;
-	next = hist_start;
+	next = vhist_start;
 	while (1) {
-		nkey_to_node(&hist_list[next], &node);
+		nkey_to_node(&vhist_list[next], &node);
 		if (node) {
 			STRING key = node_to_key(node);
 			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		}
 		prev = next;
-		next = (next+1) % ARRSIZE(hist_list);
-		if (next == hist_past_end)
+		next = (next+1) % vhist_size;
+		if (next == vhist_past_end)
 			break; /* finished them all */
 	}
 	node = nztop(choose_from_indiseq(seq, DOASK1, idhist, idhist));
 	remove_indiseq(seq);
 	return node;
+}
+/*==================================================
+ * ask_clear_history -- delete vist history
+ *  (first verify via y/n prompt)
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+static void
+ask_clear_history (void)
+{
+	char buffer[120];
+	INT count;
+
+	if (!vhist_size || vhist_start==-1) {
+		message(nohist);
+		return;
+	}
+	count = get_hist_count(vhist_start, vhist_past_end, vhist_size);
+	sprintf(buffer, histclr, count);
+	if (ask_yes_or_no(buffer))
+		vhist_start = -1;
 }
 /*==================================================
  * handle_history_cmds -- handle the history commands
@@ -1418,6 +1589,10 @@ handle_history_cmds (INT c, NODE * pindi1)
 			*pindi1 = node;
 			return -1; /* handled, change pages */
 		}
+		return 1;
+	}
+	if (c == CMD_HISTORY_CLEAR) {
+		ask_clear_history();
 		return 1;
 	}
 	return 0; /* unhandled */
@@ -1499,4 +1674,25 @@ autoadd_xref (NODE node, NODE newnode)
 		nsibling(prev) = xref;
 	}
 	unknown_node_to_dbase(node);
+}
+/*==================================================
+ * init_browse_module -- Do any initialization
+ *  This is after database is determined, and before
+ *  main_menu begins processing.
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+void
+init_browse_module (void)
+{
+	load_hist_lists();
+}
+/*==================================================
+ * term_browse_module -- Cleanup for browse module
+ *  Primarily to persist history
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+void
+term_browse_module (void)
+{
+	save_hist_lists();
 }

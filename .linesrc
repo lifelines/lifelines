@@ -4,13 +4,10 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2001/11/20
+# 2001/12/23
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
-
-# Use new metadata code (not ready for production!)
-#AddMetadata=0
 
 # Root path for utility/read command
 #InputPath=/home/user/LifeLines
@@ -64,7 +61,6 @@
 # Omit this entirely to see dates as given in GEDCOM
 #LongDisplayDate=1,1,0,9,1
 
-
 # As above, except that omitting this defaults to combining mode 12 (year only)
 #  (the traditional short form)
 #ShortDisplayDate=1,1,0,10,1
@@ -110,3 +106,10 @@
 #HDR_CHAR=1 CHAR ASCII
 # This sample version is the same as the default if none is given.
 
+# Set the visit history size (# of entries remembered in visit history)
+#HistorySize=20
+# This sample line is the same as the default if none is given.
+
+# Enable persistent history (remember in database between uses).
+#SaveHistory=1
+# Default is history starts from nothing every use.

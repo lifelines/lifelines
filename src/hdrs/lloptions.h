@@ -1,5 +1,5 @@
 /* 
-   options.h
+   lloptions.h
    Copyright (c) 2000-2001 Perry Rapp
    Created: 2000/12, Perry Rapp
    Brought into repository: 2001/02/04
@@ -25,11 +25,16 @@
    SOFTWARE.
 */
 /*
- options.h - metadata types for liflines records
+ lloptions.h - handling for (opaque) string & numeric options
  Copyright (c) 2000-2001 by Perry Rapp; all rights reserved
   Added to repository during 3.0.6 development
 
-  Options read from config file & from database options
+  Options are fetched on-the-fly when requested
+   first from useroptions table
+   then from cache from config file
+   both getoptint & getoptstr have defval in case not found
+   changeoptstr changes the cache from the config file
+    (but the config file itself is unchanged)
 */
 
 #ifndef _OPTIONS_H

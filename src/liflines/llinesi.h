@@ -29,6 +29,8 @@ BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
 BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
+void init_browse_module(void);
+void term_browse_module(void);
 
 /* delete.c */
 void delete_indi(NODE, BOOLEAN);
@@ -111,6 +113,7 @@ void toggle_menu(void);
 /* show.c */
 extern struct rfmt_s disp_long_rfmt, disp_shrt_rfmt;
 void display_cache_stats(void);
+void init_show_module(void);
 void show_childnumbers(void);
 void show_list(INDISEQ, INT, INT, INT);
 void show_reset_scroll(void);
@@ -118,6 +121,7 @@ void show_sour_display(NODE, INT, INT);
 void show_scroll(INT delta);
 void show_scroll2(INT delta);
 void switch_scrolls(void);
+void term_show_module(void);
 
 /* swap.c */
 BOOLEAN swap_children(NODE prnt, NODE fam);

@@ -37,7 +37,7 @@
  * external/imported variables
  *********************************************/
 
-extern STRING mn_ambig;
+extern STRING mn_ambig,mn_longcho,mn_nocho;
 extern STRING mn_titindi,mn_titfam,mn_titaux,mn_titmain;
 extern STRING mn_tit2indi, mn_tit2fam;
 
@@ -67,6 +67,7 @@ static CMDARRAY create_cmd_array(INT alloc);
 static void grow_cmd_array(CMDARRAY cmds);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
 static BOOLEAN find_cmd(CMDARRAY cmds, char c, INT * pos);
+static void get_menu_choice(STRING display, STRING choice, INT max);
 static void insert_cmd(CMDARRAY cmds, STRING str, INT cmdnum
 	, STRING display);
 static void free_cmds(CMDARRAY cmds);
@@ -182,6 +183,7 @@ static MenuItem f_MenuItemPointers = { "$$  List references", "$$", CMD_POINTERS
 static MenuItem f_MenuItemHistoryBack = { "^b  History/back", "^b", CMD_HISTORY_BACK };
 static MenuItem f_MenuItemHistoryFwd = { "^f  History/fwd", "^f", CMD_HISTORY_FWD };
 static MenuItem f_MenuItemHistoryList = { "^l  History list", "^l", CMD_HISTORY_LIST };
+static MenuItem f_MenuItemHistoryClean = { "^c Clear history", "^c", CMD_HISTORY_CLEAR };
 static MenuItem f_MenuItemAddSour = { "%s  Add source", "%s", CMD_ADD_SOUR };
 static MenuItem f_MenuItemAddEven = { "%e  Add event", "%e", CMD_ADD_EVEN };
 static MenuItem f_MenuItemAddOthr = { "%o  Add other", "%o", CMD_ADD_OTHR };
@@ -249,6 +251,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
+	&f_MenuItemHistoryClean,
 	0
 };
 
@@ -298,6 +301,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
+	&f_MenuItemHistoryClean,
 	0
 };
 
@@ -398,6 +402,7 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemHistoryBack,
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
+	&f_MenuItemHistoryClean,
 	0
 };
 
@@ -449,18 +454,45 @@ setup_menu (INT screen, STRING Title, INT MenuRows, INT MenuCols
 	g_ScreenInfo[screen].Commands = cmds;
 	for (i=0; i<Size; i++) {
 		if (Menu[i]->Command == CMD_CHILD_DIRECT0) {
-			ASSERT(eqstr(Menu[i]->Choices, "123456789"));
+			/* CMD_CHILD_DIRECT0 is always hooked up to digits */
 			for (j=1; j<=9; j++) {
 				char choice[2];
-				sprintf(choice, "%d", j); /* don't need \0, sprintf does it */
+				sprintf(choice, "%d", j);
 				insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+j, Menu[i]->Display);
 			}
 		} else {
-			/* TO DO - check that width is not too large */
-			insert_cmd(cmds, Menu[i]->Choices, Menu[i]->Command, Menu[i]->Display);
+			char choice[9];
+			strcpy(choice, Menu[i]->Choices);
+			/* add to nested menu arrays (stored by choice keys */
+			insert_cmd(cmds, choice, Menu[i]->Command, Menu[i]->Display);
 		}
 	}
 }
+/*============================
+ * get_menu_choice -- extract menu key sequence
+ *  This must be first characters of display, ending with space
+ * Created: 2001/12/23, Perry Rapp
+ *==========================*/
+#ifdef UNUSED_CODE
+/* This will work now, but it will break if we add arrows, PageUp, ... */
+static void
+get_menu_choice (STRING display, STRING choice, INT max)
+{
+	INT i;
+	for (i=0; i<max && display[i] && display[i]!=' ' ; ++i) {
+		choice[i] = display[i];
+	}
+	if (i == max) {
+		msg_error(mn_longcho, display);
+		FATAL();
+	}
+	if (display[i] != ' ') {
+		msg_error(mn_nocho, display);
+		FATAL();
+	}
+	choice[i]=0;
+}
+#endif
 /*============================
  * create_cmd_array -- create an empty array of commands
  * Created: 2001/02/01, Perry Rapp
@@ -536,14 +568,12 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 	char c = str[0];
 	if (find_cmd(cmds, c, &pos)) {
 		if (len==1) {
-			sprintf(error, mn_ambig, display);
-			message(error);
+			msg_error(error, mn_ambig, display);
 			FATAL();
 		} else {
 			/* multicharacter new cmd */
 			if (cmds->array[pos].direct) {
-				sprintf(error, mn_ambig, display);
-				message(error);
+				msg_error(error, mn_ambig, display);
 				FATAL();
 			} else {
 				CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;

@@ -330,8 +330,11 @@ main (INT argc, char **argv)
 	/* Start Program */
 	init_lifelines_db();
 	init_show_module();
+	init_browse_module();
 	while (!alldone)
 		main_menu();
+	term_show_module();
+	term_browse_module();
 	ok=TRUE;
 
 /*

@@ -1,3 +1,18 @@
+2001-12-23 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg gedlib/messages.c hdrs/feedback.h
+	hdrs/gedcom.h hdrs/lloptions.h hdrs/llstdlib.h hdrs/menuitem.h
+	hdrs/screen.h liflines/browse.c liflines/llinesi.h
+	liflines/main.c liflines/menuitem.c liflines/screen.c
+	liflines/show.c:
+
+	Made visit history persistent, with new config options
+	(HistorySize & SaveHistory). Added to sample config files
+	and synched sample config files (.linesrc & lines.cfg).
+	Added clear history (^c) command.
+	Altered menuitem code to read command sequence out of display,
+	but then disabled it, pending research on matter of arrow keys...
+
 2001-12-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/screen.c:

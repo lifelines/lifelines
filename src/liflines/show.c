@@ -144,6 +144,28 @@ init_show_module (void)
 	init_disp_reformat();
 }
 /*===============================================
+ * term_show_module -- Free memory used by show module
+ *=============================================*/
+void
+term_show_module (void)
+{
+	INT i;
+	stdfree(Spers);
+	stdfree(Sbirt);
+	stdfree(Sdeat);
+	stdfree(Sfath);
+	stdfree(Smoth);
+	stdfree(Smarr);
+	stdfree(Shusb);
+	stdfree(Shbirt);
+	stdfree(Shdeat);
+	stdfree(Swife);
+	stdfree(Swbirt);
+	stdfree(Swdeat);
+	for (i=0; i<MAXOTHERS; i++)
+		stdfree(Sothers[i]);
+}
+/*===============================================
  * init_display_indi -- Initialize display person
  *  Fill in all the local buffers for normal person
  *  display mode (Spers, Sbirt, etc)

@@ -293,7 +293,6 @@ void init_lifelines_db(void);
 BOOLEAN init_lifelines_global(STRING * pmsg);
 void init_mapping(void);
 void init_new_record(RECORD rec, char ntype, INT keynum);
-void init_show_module(void);
 BOOLEAN init_valtab_from_file(STRING, TABLE, TRANTABLE, INT, STRING*);
 BOOLEAN init_valtab_from_rec(STRING, TABLE, INT, STRING*);
 BOOLEAN in_string(INT, STRING);
