@@ -165,6 +165,7 @@ choose_and_remove_orphaned_record (void)
 		return FALSE;
 	}
 	delete_orphaned_record(key);
+	message(_("Orphaned record has been deleted"));
 	return TRUE;
 }
 /*===========================================
