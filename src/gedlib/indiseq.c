@@ -1777,13 +1777,10 @@ INDISEQ
 str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
-	XLAT ttmg = transl_get_predefined_xlat(MDSIN);
-	char intname[100];
-	translate_string(ttmg, name, intname, sizeof(intname)-1);
-	seq = find_named_seq(intname);
-	if (!seq) seq = key_to_indiseq(intname, ctype);
-	if (!seq) seq = refn_to_indiseq(intname, ctype, NAMESORT);
-	if (!seq) seq = name_to_indiseq(intname);
+	seq = find_named_seq(name);
+	if (!seq) seq = key_to_indiseq(name, ctype);
+	if (!seq) seq = refn_to_indiseq(name, ctype, NAMESORT);
+	if (!seq) seq = name_to_indiseq(name);
 	return seq;
 }
 /*=======================================================

@@ -4,6 +4,10 @@
 
 	Document alt-0xxx bug in relevant code.
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Remove extraneous codeset conversion in str_to_indiseq (fix bug 724761).
+
 2003-04-19 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c
