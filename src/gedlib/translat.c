@@ -366,7 +366,7 @@ transl_xlat (XLAT xlat, ZSTR * pzstr)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
-transl_load_xlats (void)
+transl_load_xlats (BOOLEAN indb)
 {
 	INT i;
 
@@ -392,7 +392,8 @@ transl_load_xlats (void)
 		src = *conversions[i].src_codeset;
 		dest = *conversions[i].dest_codeset;
 		conversions[i].xlat = xl_get_xlat(src, dest, adhoc);
-		init_map_from_rec(conversions[i].key, i, &conversions->tt_legacy);
+		if (indb)
+			init_map_from_rec(conversions[i].key, i, &conversions->tt_legacy);
 	}
 }
 /*==========================================================

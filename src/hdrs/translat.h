@@ -98,7 +98,7 @@ XLAT transl_get_predefined_xlat(INT trnum);
 XLAT transl_get_xlat(CNSTRING src, CNSTRING dest);
 XLAT transl_get_xlat_to_int(CNSTRING codeset);
 void transl_load_all_tts(void);
-void transl_load_xlats(void);
+void transl_load_xlats(BOOLEAN indb);
 void transl_parse_codeset(CNSTRING codeset, ZSTR * zcsname, LIST * subcodes);
 BOOLEAN transl_xlat(XLAT xlat, ZSTR * pzstr);
 

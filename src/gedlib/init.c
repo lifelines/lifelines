@@ -148,7 +148,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	/* read available translation tables */
 	transl_load_all_tts();
 	/* set up translations (for first time, will do it again after loading database */
-	transl_load_xlats();
+	transl_load_xlats(FALSE);
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
@@ -260,7 +260,7 @@ init_lifelines_db (void)
 	set_gettext_codeset(int_codeset);
 #endif /* ENABLE_NLS */
 
-	transl_load_xlats();
+	transl_load_xlats(TRUE);
 
 	return TRUE;
 }
@@ -606,7 +606,7 @@ update_useropts (VPTR uparm)
 	uilocale(); /* in case user changed locale */
 	/* in case user changed any codesets */
 	init_codesets();
-	transl_load_xlats();
+	transl_load_xlats(FALSE);
 	/* old system charmaps */
 	load_char_mappings(); /* in case user changed codesets */
 
@@ -628,7 +628,7 @@ update_db_options (void)
 			strfree(&int_codeset);
 			int_codeset = strsave(str);
 			uu8 = is_codeset_utf8(int_codeset);
-			transl_load_xlats();
+			transl_load_xlats(TRUE);
 		}
 	}
 	

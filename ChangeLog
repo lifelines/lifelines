@@ -1,3 +1,10 @@
+2002-12-10 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/gedlib/translat.c
+	src/hdrs/translat.h:
+
+	Don't segfault loading db tts when db not open.
+
 2002-12-09 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
