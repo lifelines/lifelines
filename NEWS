@@ -5,6 +5,8 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.6.1-dev
 ==================
 
+- _substring subject to buffer overflow
+
 - Import not closing file handle. striplead could read before
   beginning of buffer.
 
