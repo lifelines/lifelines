@@ -141,6 +141,17 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 			return FALSE;
 		}
 	}
+
+#ifdef WIN32
+	/* On MS-Windows, attempt to set any requested non-standard codepage */
+	/* Do this now, before init_codesets below */
+	i = getoptint("ConsoleCodepage", 0);
+	if (i) {
+		w_set_oemout_codepage(i);
+		w_set_oemin_codepage(i);
+	}
+#endif
+
 	/* now that codeset variables are set from config file, lets initialize codesets */
 	/* although int_codeset can't be determined yet, we need GUI codeset for gettext */
 	init_codesets();

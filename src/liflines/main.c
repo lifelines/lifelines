@@ -107,7 +107,7 @@ static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static BOOLEAN open_or_create_database(INT alteration, STRING *dbused);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
-static void platform_init(void);
+static void platform_postcurses_init(void);
 static void show_open_error(INT dberr);
 
 /*********************************************
@@ -281,7 +281,7 @@ prompt_for_db:
 	/* Initialize Curses UI */
 	if (!init_curses_ui())
 		goto finish;
-	platform_init();
+	platform_postcurses_init();
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -479,10 +479,11 @@ show_open_error (INT dberr)
 	sleep(5);
 }
 /*==================================================
- * platform_init -- platform specific initialization
+ * platform_postcurses_init -- platform-specific code
+ *  coming after curses initialized
  *================================================*/
 static void
-platform_init (void)
+platform_postcurses_init (void)
 {
 #ifdef WIN32
 	char buffer[80];

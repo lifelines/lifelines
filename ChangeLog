@@ -10,6 +10,12 @@
 	Added a couple more casing tests, including Greek & Cyrillic, and the
 	Greek sigma special case.
 
+	* ChangeLog lines.cfg build/msvc6/llines/llines.rc
+	src/arch/platform.c src/gedlib/init.c src/hdrs/arch.h
+	src/hdrs/version.h src/liflines/main.c
+
+	Added Win32 config option to set console codepage.
+
 2003-04-16 Perry Rapp
 
 	* ChangeLog src/stdlib/strcvt.c

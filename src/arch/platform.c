@@ -49,6 +49,24 @@ w_get_oemin_codepage (void)
 	return GetConsoleCP();
 }
 /*=================================================
+ * w_set_oemout_codepage -- set current output console codeset
+ * Created: 2003/04/19 (Perry Rapp)
+ *===============================================*/
+void
+w_set_oemout_codepage (int codepage)
+{
+	SetConsoleOutputCP(codepage);
+}
+/*=================================================
+ * w_set_oemin_codepage -- set current input console codeset
+ * Created: 2003/04/19 (Perry Rapp)
+ *===============================================*/
+void
+w_set_oemin_codepage (int codepage)
+{
+	SetConsoleCP(codepage);
+}
+/*=================================================
  * w_get_has_console -- does process have a console ?
  * Created: 2002/11/27 (Perry Rapp)
  *===============================================*/

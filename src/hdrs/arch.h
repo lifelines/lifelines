@@ -116,6 +116,8 @@ int w_get_codepage(void); /* Windows codepage */
 int w_get_oemin_codepage(void); /* Console codepage */
 int w_get_oemout_codepage(void); /* Console output codepage */
 int w_get_has_console(void); /* does process have console ? */
+void w_set_oemin_codepage(int codepage); /* Console codepage */
+void w_set_oemout_codepage(int codepage); /* Console output codepage */
 #endif
 
 #endif /* ARCH_H */
