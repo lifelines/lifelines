@@ -2059,21 +2059,38 @@ __dequeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*=================================+
  * __empty -- Check if list is empty
- *   usage: empty(LIST) -> BOOL
+ *   usage: empty(LIST/TABLE/SET) -> BOOL
  *================================*/
 PVALUE
 __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	LIST list;
-	BOOLEAN bEmpty;
-	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
-	if (*eflg || !val) {
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	int type = which_pvalue_type(val);
+	BOOLEAN bEmpty = TRUE;
+
+	if (val && (type == PLIST))
+	{
+		LIST list = pvalue_to_list(val);
+		set_pvalue_int(val, length_list(list));
+		bEmpty = !list || !length_list(list);
+	}
+	else if (val && (type == PTABLE))
+	{
+		TABLE table = pvalue_to_table(val);
+		bEmpty = !table || !get_table_count(table);
+	}
+	else if (val && (type == PSET))
+	{
+       	INDISEQ seq = pvalue_to_seq(val);
+		bEmpty = !seq || !length_indiseq(seq);
+	}
+	else
+	{
+		prog_error(node, _("the arg to empty is not a list, table or set"));
 		*eflg = TRUE;
-		prog_error(node, "the arg to empty is not a list");
 		return NULL;
 	}
-	list = pvalue_to_list(val);
-	bEmpty = is_empty_list(list);
+
 	set_pvalue_bool(val, bEmpty);
 	return val;
 }
@@ -2164,29 +2181,31 @@ __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
 	int type = which_pvalue_type(val);
+	INT len=0;
 
 	if (val && (type == PLIST))
 	{
 		LIST list = pvalue_to_list(val);
-		set_pvalue_int(val, length_list(list));
+		len = length_list(list);
 	}
 	else if (val && (type == PTABLE))
 	{
 		TABLE table = pvalue_to_table(val);
-		set_pvalue_int(val, get_table_count(table));
+		len = get_table_count(table);
 	}
 	else if (val && (type == PSET))
 	{
-        	INDISEQ seq = pvalue_to_seq(val);
-		set_pvalue_int(val, length_indiseq(seq));
+		INDISEQ seq = pvalue_to_seq(val);
+		len = length_indiseq(seq);
 	}
 	else
 	{
-		prog_error(node, "the arg to length is not a list, table or set");
+		prog_error(node, _("the arg to length is not a list, table or set"));
 		*eflg = TRUE;
-		val = NULL;
+		return NULL;
 	}
 
+	set_pvalue_int(val, len);
 	return val;
 }
 /*==========================+

@@ -1,0 +1,83 @@
+/*
+ * @progname       st_table.li
+ * @version        1.0 (2005-02-01)
+ * @author         Perry Rapp
+ * @category       self-test
+ * @output         none
+ * @description    validate table functions
+*/
+
+char_encoding("ASCII")
+
+require("lifelines-reports.version:1.3")
+option("explicitvars") /* Disallow use of undefined variables */
+include("st_aux")
+
+/* entry point in case not invoked via st_all.ll */
+proc main()
+{
+	call testTables()
+}
+
+/*
+ test some table functions
+  */
+proc testTables()
+{
+	call initSubsection()
+
+	table(tbl)
+/* empty table tests */
+	if (not(empty(tbl))) {
+		call reportfail("empty FAILED")
+	}
+	else { incr(testok) }
+	if (ne(length(tbl), 0)) {
+		call reportfail("length(table)==0 FAILED")
+	}
+	else { incr(testok) }
+/* single element table tests */
+	insert(tbl, "alpha", 1)
+	if (empty(tbl)) {
+		call reportfail("not empty FAILED")
+	}
+	else { incr(testok) }
+	set(el, lookup(tbl, "alpha"))
+	if (ne(el, 1)) {
+		call reportfail("lookup(alpha) FAILED")
+	}
+	else { incr(testok) }
+	if (ne(length(tbl), 1)) {
+		call reportfail("length(table)==1 FAILED")
+	}
+	else { incr(testok) }
+	insert(tbl, "alpha", 2)
+	set(el, lookup(tbl, "alpha"))
+	if (ne(el, 2)) {
+		call reportfail("lookup(alpha) FAILED")
+	}
+	else { incr(testok) }
+	if (ne(length(tbl), 1)) {
+		call reportfail("length(table)==1 FAILED")
+	}
+	else { incr(testok) }
+/* two element table tests */
+	insert(tbl, "bravo", 2)
+	if (ne(length(tbl), 2)) {
+		call reportfail("length(table)==2 FAILED")
+	}
+	else { incr(testok) }
+
+	call testFreeTable(tbl)
+
+	call reportSubsection("table tests")
+}
+
+proc testFreeTable(tbl)
+{
+	free(tbl)
+	if (ne(tbl, 0)) {
+		call reportfail("free table FAILED")
+	}
+	else { incr(testok) }
+}

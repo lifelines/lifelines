@@ -1,6 +1,6 @@
 /*
  * @progname       st_list.li
- * @version        1.13 (2003-09-09)
+ * @version        1.14 (2005-02-01)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -232,7 +232,7 @@ proc testFreeList(li)
 {
 	free(li)
 	if (ne(li, 0)) {
-		call reportfail("empty (getel & setel) FAILED")
+		call reportfail("free list FAILED")
 	}
 	else { incr(testok) }
 }

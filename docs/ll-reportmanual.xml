@@ -2405,6 +2405,16 @@ lookup and return entry from table
 size of the table
 </para>
 
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>BOOL <function>empty</function></funcdef>
+<paramdef><parameter>TABLE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+check if table is empty
+</para>
+
 </glossdef></glossentry></glosslist>
 
 <para>

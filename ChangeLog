@@ -4,6 +4,14 @@
 
 	Plus string leak in table_insert_ptr.
 
+	* ChangeLog NEWS docs/ll-reportmanual.xml
+	reports/st/st_all.ll reports/st/st_list.li
+	src/interp/builtin.c
+	*NEW reports/st/st_table.li
+
+	Add self-test report for tables.
+	Extend report 'empty' function to handle tables & sets.
+
 2005-01-31 lifelines beta 3.0.41 RELEASE
 
 2005-01-31 Perry Rapp

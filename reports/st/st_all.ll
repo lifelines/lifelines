@@ -1,6 +1,6 @@
 /*
  * @progname       st_all.ll
- * @version        1.13 (2003-06-19)
+ * @version        1.14 (2005-02-01)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -33,6 +33,7 @@ include("st_name.li")
 include("st_number.li")
 include("st_convert.li")
 include("st_list.li")
+include("st_table.li")
 include("st_db.li")
 
 global(true)
@@ -54,6 +55,9 @@ proc main()
 	}
 	if (dostep(alltests, "Test lists ? (0=no)")) {
 		call testLists()
+	}
+	if (dostep(alltests, "Test tables ? (0=no)")) {
+		call testTables()
 	}
 	if (dostep(alltests, "Test UTF-8strings ? (0=no)")) {
 		call testStrings_UTF_8()
