@@ -33,6 +33,10 @@
 #ifndef _CACHE_H
 #define _CACHE_H
 
+#ifndef _GEDCOM_H
+#include "gedcom.h"
+#endif
+
 /*===============================
  * CACHEEL -- Cache element type.
  *=============================*/

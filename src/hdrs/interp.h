@@ -33,6 +33,10 @@
 #ifndef _INTERP_H
 #define _INTERP_H
 
+#ifndef _CACHE_H
+#include "cache.h"
+#endif
+
 typedef struct itag *PNODE;
 struct itag {
 	char   i_type;	/* type of node */
