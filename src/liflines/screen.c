@@ -211,11 +211,7 @@ paint_main_screen(void)
 	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
 	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
 	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
-#ifdef WIN32
-	mvwaddstr(win, row++, 4, "q  Quit [return to command prompt]");
-#else
-	mvwaddstr(win, row++, 4, "q  Quit and return to UNIX");
-#endif
+	mvwaddstr(win, row++, 4, "q  Quit");
 }
 /*================================================
  * paint_one_per_screen -- Paint one person screen
