@@ -120,6 +120,10 @@ SOURCE=..\..\..\src\gedlib\brwslist.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\btree\btrec.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\builtin.c
 # End Source File
 # Begin Source File
@@ -184,6 +188,10 @@ SOURCE=..\..\..\src\gedlib\gedcom.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\generic.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\gengedc.c
 # End Source File
 # Begin Source File
@@ -237,10 +245,6 @@ SOURCE=..\..\..\src\interp\intrpseq.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\keytonod.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\arch\nl_langinfo.c
 # End Source File
 # Begin Source File
 
@@ -320,6 +324,10 @@ SOURCE=..\..\..\src\gedlib\names.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\arch\nl_langinfo.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
@@ -372,7 +380,7 @@ SOURCE=..\..\..\src\interp\rassa.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\btree\record.c
+SOURCE=..\..\..\src\gedlib\record.c
 # End Source File
 # Begin Source File
 
@@ -572,6 +580,10 @@ SOURCE=..\..\..\src\gedlib\gedcomi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\generic.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\gengedc.h
 # End Source File
 # Begin Source File
@@ -637,6 +649,10 @@ SOURCE=..\..\..\src\hdrs\lloptions.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\llstdlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\log.h
 # End Source File
 # Begin Source File
 
