@@ -561,6 +561,10 @@ SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\vtable.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
@@ -790,6 +794,10 @@ SOURCE=..\..\..\src\hdrs\uiprompts.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\vtable.h
 # End Source File
 # Begin Source File
 

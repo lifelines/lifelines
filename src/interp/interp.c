@@ -275,9 +275,9 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	/* Parse each file in the list -- don't reparse any file */
 	/* (paths are resolved before files are enqueued, & stored in pathinfo) */
 
-	gproctab = create_table();
+	gproctab = create_table_old();
 	create_symtab(&globtab);
-	gfunctab = create_table();
+	gfunctab = create_table_old();
 	initinterp();
 
 	while (!is_empty_list(plist)) {
@@ -404,7 +404,7 @@ static void
 init_pactx (PACTX pactx)
 {
 	memset(pactx, 0, sizeof(*pactx));
-	pactx->filetab = create_table();
+	pactx->filetab = create_table_old();
 }
 /*===============================================
  * wipe_pactx -- destroy global parsing context

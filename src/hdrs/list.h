@@ -6,13 +6,11 @@
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /*=============================================================
- * listd.h -- Declare doubly-linked list type
+ * list.h -- Declare doubly-linked list type
  * Copyright(c) 1991-95 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 #ifndef list_h_included
 #define list_h_included
-
-typedef struct tag_ovtbl *OVTBL;
 
 /* types for lists */
 typedef struct tag_lnode *LNODE;
@@ -25,7 +23,9 @@ struct tag_lnode {
 #define lnext(n) ((n)->l_next)
 #define lelement(n) ((n)->l_element)
 
+struct tag_vtable;
 typedef struct tag_list {
+	struct tag_vtable * vtable;
 	INT l_refcnt;
 	LNODE l_head;
 	LNODE l_tail;

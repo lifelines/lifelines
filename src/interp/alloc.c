@@ -1067,13 +1067,13 @@ get_rptinfo (CNSTRING fullpath)
 {
 	RPTINFO rptinfo;
 	if (!f_rptinfos)
-		f_rptinfos = create_table();
+		f_rptinfos = create_table_old();
 	rptinfo = (RPTINFO)valueof_ptr(f_rptinfos, fullpath);
 	if (!rptinfo) {
 		rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));
 		rptinfo->fullpath = strsave(fullpath);
-		rptinfo->functab = create_table();
-		rptinfo->proctab = create_table();
+		rptinfo->functab = create_table_old();
+		rptinfo->proctab = create_table_old();
 		rptinfo->codeset = strsave(report_codeset_in);
 		insert_table_ptr(f_rptinfos, strsave(fullpath), rptinfo);
 	}

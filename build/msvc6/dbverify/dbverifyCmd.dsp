@@ -244,6 +244,10 @@ SOURCE=..\..\..\src\gedlib\node.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\nodeio.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
@@ -356,6 +360,10 @@ SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\vtable.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\warehouse.c
 # End Source File
 # Begin Source File
@@ -380,7 +388,27 @@ SOURCE=..\..\..\src\stdlib\zstr.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\arch.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\btree.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\btree\btreei.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\btree\btreei.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\cache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\codesets.h
 # End Source File
 # Begin Source File
 
@@ -388,7 +416,59 @@ SOURCE=.\config.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\date.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\feedback.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\gedcheck.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\gedcom.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\gedlib\gedcomi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\gedcomi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\gengedc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\win32\iconvshim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\icvt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\indiseq.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\interp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\win32\intlshim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\isolangs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\langinfz.h
 # End Source File
 # Begin Source File
 
@@ -396,7 +476,51 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\sequence.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\standard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\stdlibi.h
+# End Source File
+# Begin Source File
+
+SOURCE=D:\dev\PlatformSdk\Include\StrAlign.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\sys_inc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\table.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\translat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\uiprompts.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\vtable.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\warehouse.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\xlat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

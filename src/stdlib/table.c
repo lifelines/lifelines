@@ -34,6 +34,7 @@
 #include "standard.h"
 #include "llstdlib.h"
 #include "table.h"
+#include "vtable.h"
 
 /*********************************************
  * local enums & defines
@@ -60,7 +61,23 @@ static void insert_table_impl(TABLE tab, CNSTRING key, UNION uval);
 static INT hash(TABLE tab, CNSTRING key);
 static BOOLEAN next_element(TABLE_ITER tabit);
 static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
+void table_destructor(VTABLE *obj);
+const char * table_get_type_name(VTABLE *obj);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
+
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static struct tag_vtable vtable_for_table = {
+	&table_destructor
+	, &generic_isref
+	, &generic_addref
+	, &generic_delref
+	, 0 /* copy_fnc */
+	, &table_get_type_name
+};
 
 /*********************************************
  * local & exported function definitions
@@ -101,18 +118,29 @@ fndentry (TABLE tab, CNSTRING key)
  * create_table -- Create table
  *===========================*/
 TABLE
-create_table (void)
+create_table (INT whattofree)
 {
 	TABLE tab = (TABLE) stdalloc(sizeof(*tab));
 	INT i;
 	memset(tab, 0, sizeof(*tab));
+	tab->vtable = &vtable_for_table;
+	/* refcount zero */
 	tab->maxhash = MAXHASH_DEF;
 	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
 	tab->count = 0;
 	tab->valtype = TB_NULL;
+	tab->whattofree = whattofree;
 	for (i = 0; i < tab->maxhash; i++)
 		tab->entries[i] = NULL;
 	return tab;
+}
+/*=============================
+ * create_table_old -- Create table
+ *===========================*/
+TABLE
+create_table_old (void)
+{
+	return create_table(-1);
 }
 /*======================================
  * insert_table_impl -- Insert key & value into table
@@ -422,6 +450,7 @@ remove_table (TABLE tab, INT whattofree)
 	INT i;
 	ENTRY ent, nxt;
 	if (!tab) return;
+	if (tab->whattofree!=-1) { ASSERT(whattofree==tab->whattofree); }
 	if (tab->valtype == TB_INT) {
 		/* can't free INTs */
 		ASSERT(whattofree != FREEBOTH && whattofree != FREEVALUE);
@@ -625,4 +654,34 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 			nxt = ent->enext;
 		}
 	}
+}
+/*=================================================
+ * destroy_table -- public destructor for a table
+ *===============================================*/
+void
+destroy_table (TABLE tab)
+{
+	ASSERT(tab);
+	/* to use this (and I'd prefer all code to use this)
+	the whattofree must have been set, so I plan to revise
+	all code to set it at creation time */
+	ASSERT(tab->whattofree != -1);
+	remove_table(tab, tab->whattofree);
+}
+/*=================================================
+ * table_get_type_name -- get_type_name for vtable
+ *===============================================*/
+static const char *
+table_get_type_name (VTABLE *obj)
+{
+	return "table";
+}
+/*=================================================
+ * table_destructor -- destructor for vtable
+ *===============================================*/
+static void
+table_destructor (VTABLE *obj)
+{
+	TABLE tab = (TABLE)obj;
+	destroy_table(tab);
 }

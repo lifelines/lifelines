@@ -2447,7 +2447,7 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, var, NULL, nonvar1, "table");
 		return NULL;
 	}
-	tab = create_table();
+	tab = create_table_old();
 	val = create_pvalue(PTABLE, (VPTR)tab);
 
 	assign_iden(stab, iident(var), val);

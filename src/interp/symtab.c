@@ -112,7 +112,7 @@ void
 create_symtab (SYMTAB * stab)
 {
 	remove_symtab(stab);
-	stab->tab = create_table();
+	stab->tab = create_table_old();
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?

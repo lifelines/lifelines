@@ -1070,7 +1070,7 @@ parent_indiseq (INDISEQ seq)
 	STRING key;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_old();
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1106,7 +1106,7 @@ child_indiseq (INDISEQ seq)
 	STRING key;
 	UNION uval;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_old();
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
@@ -1332,7 +1332,7 @@ sibling_indiseq (INDISEQ seq,
 	STRING key, fkey;
 	INT num2;
 	/* table lists people already listed (values unused) */
-	TABLE tab = create_table();
+	TABLE tab = create_table_old();
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
 	FORINDISEQ(seq, el, num)
@@ -1376,7 +1376,7 @@ ancestor_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
-	tab = create_table();
+	tab = create_table_old();
 		/* paired processing list - see comments in descendant_indiseq code */
 	anclist = create_list();
 	genlist = create_list();
@@ -1434,9 +1434,9 @@ descendent_indiseq (INDISEQ seq)
 	UNION uval;
 	if (!seq) return NULL;
 		/* itab = people already added */
-	itab = create_table();
+	itab = create_table_old();
 		/* ftab = families already added (processed) */
-	ftab = create_table();
+	ftab = create_table_old();
 		/*
 		deslist & genlist are paired - 
 		dequeue the person from deslist & the generation
@@ -1498,7 +1498,7 @@ spouse_indiseq (INDISEQ seq)
 	NODE indi;
 	INT num1;
 	if (!seq) return NULL;
-	tab = create_table();
+	tab = create_table_old();
 	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));

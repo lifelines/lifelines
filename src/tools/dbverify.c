@@ -415,7 +415,7 @@ finish_and_delete_nameset (void)
 {
 	char prevkey[8];
 	STRING name="";
-	TABLE table = create_table();
+	TABLE table = create_table(DONTFREE);
 	prevkey[0]=0;
 	calc_indiseq_names(soundexseq);
 	keysort_indiseq(soundexseq);
@@ -429,7 +429,7 @@ finish_and_delete_nameset (void)
 		if (!eqstr(skey(el), prevkey)) {
 			/* new person, start over */
 			remove_table(table, DONTFREE);
-			table = create_table();
+			table = create_table(DONTFREE);
 		}
 		if (in_table(table, name)) {
 			report_error(ERR_DUPNAME, _("Duplicate name for %s (%s)")
@@ -454,7 +454,7 @@ finish_and_delete_refnset (void)
 {
 	char prevkey[8];
 	STRING refn="";
-	TABLE table = create_table();
+	TABLE table = create_table(DONTFREE);
 	prevkey[0]=0;
 	canonkeysort_indiseq(soundexseq);
 	FORINDISEQ(soundexseq, el, num)
@@ -462,7 +462,7 @@ finish_and_delete_refnset (void)
 		if (!eqstr(skey(el), prevkey)) {
 			/* new person, start over */
 			remove_table(table, DONTFREE);
-			table = create_table();
+			table = create_table(DONTFREE);
 		}
 		if (in_table(table, refn)) {
 			report_error(ERR_DUPREFN, _("Duplicate refn for %s (%s)")

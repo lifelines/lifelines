@@ -57,11 +57,13 @@ struct tag_entry {
 
 /* table object itself */
 struct tag_table {
+	struct tag_vtable *vtable;
+	INT refcnt; /* used by pvalues which share table pointers */
 	ENTRY *entries;
 	INT count; /* #entries */
-	INT refcnt; /* used by pvalues which share table pointers */
 	INT valtype; /* TB_VALTYPE enum in table.c */
 	INT maxhash;
+	INT whattofree; /* TODO: set always in constructor */
 };
 typedef struct tag_table *TABLE;
 
@@ -80,8 +82,10 @@ VPTR * access_value_ptr(TABLE tab, STRING key);
 BOOLEAN begin_table(TABLE tab, TABLE_ITER tabit);
 BOOLEAN change_table_ptr(TABLE_ITER tabit, VPTR newptr);
 void copy_table(const TABLE src, TABLE dest, INT whattodup);
-TABLE create_table(void);
+TABLE create_table(INT whattofree);
+TABLE create_table_old(void);
 void delete_table(TABLE, STRING);
+void destroy_table(TABLE);
 INT get_table_count(TABLE);
 BOOLEAN in_table(TABLE, CNSTRING);
 void insert_table_ptr(TABLE, CNSTRING key, VPTR);
@@ -89,7 +93,7 @@ void insert_table_int(TABLE, CNSTRING key, INT);
 void insert_table_str(TABLE, CNSTRING key, STRING);
 BOOLEAN next_table_ptr(TABLE_ITER tabit, STRING *pkey, VPTR *pptr);
 BOOLEAN next_table_str(TABLE_ITER tabit, STRING *pkey, STRING *pstr);
-void remove_table(TABLE, INT whattofree);
+void remove_table(TABLE, INT whattofree); /* TODO: remove this */
 void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void traverse_table(TABLE, void (*proc)(ENTRY));
 void traverse_table_param(TABLE tab, INT (*tproc)(ENTRY, VPTR), VPTR param);

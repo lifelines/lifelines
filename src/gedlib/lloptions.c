@@ -194,7 +194,7 @@ load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
 	free_optable(&f_global);
-	f_global= create_table();
+	f_global= create_table_old();
 	if (!load_config_file(configfile, pmsg))
 		return FALSE;
 	return TRUE;
@@ -208,7 +208,7 @@ set_cmd_options (TABLE opts)
 {
 	ASSERT(opts);
 	free_optable(&f_cmd);
-	f_cmd = create_table();
+	f_cmd = create_table_old();
 	copy_table(opts, f_cmd, FREEBOTH);
 	send_notifications();
 }
@@ -221,7 +221,7 @@ set_db_options (TABLE opts)
 {
 	ASSERT(opts);
 	free_optable(&f_db);
-	f_db = create_table();
+	f_db = create_table_old();
 	copy_table(opts, f_db, FREEBOTH);
 	send_notifications();
 }
@@ -233,7 +233,7 @@ void
 get_db_options (TABLE opts)
 {
 	if (!f_db)
-		f_db = create_table();
+		f_db = create_table_old();
 	copy_table(f_db, opts, FREEBOTH);
 }
 /*=================================
@@ -245,7 +245,7 @@ set_global_options (TABLE opts)
 {
 	ASSERT(opts);
 	free_optable(&f_global);
-	f_global = create_table();
+	f_global = create_table_old();
 	copy_table(opts, f_global, FREEBOTH);
 	send_notifications();
 }
@@ -257,7 +257,7 @@ void
 get_global_options (TABLE opts)
 {
 	if (!f_global)
-		f_global = create_table();
+		f_global = create_table_old();
 	copy_table(f_global, opts, FREEBOTH);
 }
 /*==========================================
@@ -364,7 +364,7 @@ void
 setoptstr_fallback (STRING optname, STRING newval)
 {
 	if (!f_fallback)
-		f_fallback = create_table();
+		f_fallback = create_table_old();
 	replace_table_str(f_fallback, strsave(optname), newval, FREEBOTH);
 	send_notifications();
 }
