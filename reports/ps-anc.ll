@@ -1,6 +1,6 @@
 /*
  * @progname       ps-anc
- * @version        5.0
+ * @version        6.0
  * @author         Wheeler, Stringer
  * @category       
  * @output         PostScript
@@ -12,9 +12,19 @@
 **  etc.).  A multi-page poster chart can also be generated.  The
 **  chart format is based on the program GedChart, by Tom Blumer.
 ** 
-**  ps-anc5, 19 Feb 1996, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
-**           - all comments/bugs should now go to Phil Stringer
+**  ps-anc6, 30 Jan 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
+**
+**  GETTING THIS FILE
+**
+**  This file is available via anonymous ftp from
+**   (1) ftp://ipl.rpi.edu/pub/wheeler/ps-anc1
+**   (2) ftp://hoth.stsci.edu/lines/reports/ps-anc1
+**   (3) ftp://ftp.cac.psu.edu/pub/genealogy/lines/reports/ps-anc1
+**   (4) ftp://cs6400.mcc.ac.uk/pub/genealogy/lines/reports/ps-anc3
+**   (5) ftp://cs6400.mcc.ac.uk/pub/genealogy/lines/reports/ps-anc5
+**  It was uploaded to (1) on the date above, and will appear at (2)
+**  and (3) soon after.  If you cannot ftp it, I will e-mail it to you.
 **
 **  BRIEF DESCRIPTION
 **
@@ -93,12 +103,13 @@
 **    Descendant chart has reduced lines and is more tree like
 **
 **  Changes since version 4:
-**    Enhanced descendant chart
-**    Automatic choice of chart type if no children or no ancestors
-**    Multi page landscape bug fixed
-**    Enhancements to user option specification
-**    Character set enhanced to iso-8859-1
-**    Additional titles
+**    Corrected multi-page landscape printing
+**    Descriptive title at bottom of chart
+**    Smaller and faster PostScript code on multi-page output (previously n-pages had
+**      n * single page size of file)
+**    Automatic choice of ancestor/descendant chart if no descendants/ancestors
+**    Fixed bug on descendant charts of overprinting if it branched up, and there was a
+**      spouse with birth and death details, and no children in that family.
 **
 **  CREDITS
 **
@@ -222,9 +233,7 @@ func interrogate_user ()
 **  QUESTION: What type of chart?
 **
 **  This should always be asked, unless you never use one of the two
-**  types of charts. If there is only one type of chart possible e.g.
-**  the person has no children, or no ancestors then the question
-**  isn't asked.
+**  types of charts.
 **
 */
   if (1)  {
@@ -234,10 +243,10 @@ func interrogate_user ()
       print ("Printing ancestor chart as ", name(root_person), " has no known children.", nl())
       set (chart_type, 0)
     } elsif (eq( lengthset(parentset(pset)), 0) ) {
-        print ("Printing descendant chart as ", name(root_person), " no known ancestors.", nl())
-        set (chart_type, 1)
+      print ("Printing descendant chart as ", name(root_person), " no known ancestors.", nl())
+      set (chart_type, 1)
     } else {
-        getintmsg (chart_type, "Enter 0 for ancestral, 1 for descendant chart")
+      getintmsg (chart_type, "Enter 0 for ancestral, 1 for descendant chart")
     }
   } else {
      set (chart_type, 1)
@@ -294,7 +303,7 @@ func interrogate_user ()
     dateformat (0)
     set (chart_label,
       concat (save (stddate (gettoday ())),
-        "    produced by Phil Stringer, 40 Broomfields, Denton, Manchester M34 3TH.    Tel: 0161 320 6530"))
+	"    produced by Phil Stringer, 40 Broomfields, Denton, Manchester M34 3TH.    Tel: 0161 320 6530"))
   }
 
 /*
@@ -312,6 +321,8 @@ func interrogate_user ()
       "Font (Times-Roman, NewCenturySchlbk-Roman, ZapfChancery, etc.")
     set (font_name, save (font_name))
   }  else  {
+ /*   copyfile("/usr/local/lib/ghostscript/zcr.gsf")
+    copyfile("/usr/local/lib/ghostscript/zcb.gsf")*/
     set (font_name, "ZapfChancery-MediumItalic")
    /* set (font_name, "Times-Roman")*/
   }
@@ -347,7 +358,7 @@ func interrogate_user ()
     setel(options,4,"Multi page, using landscape sheets of paper")
     set(mc, menuchoose(options, "Select chart type:"))
     if (eq(0,mc)) {
-      return(0)
+      return(0) 
     } elsif (eq(1,mc)) {
       set (multi_page, 0)
       set (portrait, 1)
@@ -373,13 +384,20 @@ func interrogate_user ()
 */
 
   if (multi_page)  {
+
     if (1)  {
+      if (portrait) {
         getintmsg (x_pages, "Number of horizontal pages on finished chart")
         getintmsg (y_pages, "Number of vertical pages on finished chart")
-    } else {
+      } else {
+        getintmsg (x_pages, "Number of horizontal pages before rotation to landscape")
+        getintmsg (y_pages, "Number of vertical pages before rotation to landscape")
+      }
+    }  else  {
       set (x_pages, 3)
       set (y_pages, 3)
     }
+
   }  else  {
     set (x_pages, 1)
     set (y_pages, 1)
@@ -390,7 +408,7 @@ func interrogate_user ()
 **
 **  I would leave this default set to 'guess' (3), or 'none' (0), if you
 **  don't want the titles.  If find a title that is guessed incorrectly,
-**  please send an e-mail to wheeler@ipl.rpi.edu.
+**  please send an e-mail to the maintainer.
 **
 */
 
@@ -565,26 +583,29 @@ proc main ()
     call do_des (root_person, 1, 0, 0, 1)
   }
 
-  /* Ensure that the vertical columns do not cross a page edge, as its hard to fit
-   * the text into a perfect line! */
-
-  set (hd,mul(div(high_depth,x_pages),x_pages))
-  if (gt(high_depth,hd)) {
-        set(high_depth,add(hd,x_pages))
-  }
-
   /* put the pieces together to make the output file */
 
   set (xi, 1)
+  call print_header(chart_label, color_true_false, font_name,
+                    x_pages, y_pages, high_pos_all, high_depth)
   while ( le (xi, x_pages))  {
     set (yi, 1)
     while ( le (yi, y_pages))  {
 
-      call print_header (font_name, high_depth, high_pos_all, color_true_false,
-                         chart_label, xi, x_pages, yi, y_pages)
+      call print_page_head (xi, yi)
+      if (eq (0,chart_type)) {
+        "(The ancestors of "
+      } else {
+        "(The descendants of "
+      }
+      name(root_person) " "
+	call fromto(root_person)
+      ") printhead" nl()
+
       call dequeue_all_persons ()
       call dequeue_all_verticals ()
       "showpage" nl()
+      "%--- End of page " d(xi) "/" d(yi) " ---" nl()
 
       set (yi, add (yi, 1))
     }
@@ -622,7 +643,7 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     set (min_pos, 0)
   }
 
-  /* make we will not overlap the another branch at the younger generation */
+  /* make we will not overlap another branch at the younger generation */
 
   if (gt (depth, 1))  {
     if (high, getel (high_pos_gen, sub (depth, 1)))  {
@@ -632,7 +653,7 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     }
   }
 
-  /* make we will not overlap the another branch at the same generation */
+  /* make we will not overlap another branch at the same generation */
 
   if (high, getel (high_pos_gen, depth))  {
     if (lt (min_pos, add (high, branch_dist_same)))  {
@@ -640,7 +661,7 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     }
   }
 
-  /* make we will not overlap the another branch at the older generation */
+  /* make we will not overlap another branch at the older generation */
 
   if (lt (depth, max_depth))  {
     if (high, getel (high_pos_gen, add (depth, 1)))  {
@@ -662,15 +683,15 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     if ( gt (nfamilies(father(person)),1)) {
       families(father(person),fv,sv,nf) {
         if (ne(famkey,key(fv))) {
-          children (fv, child, un) {
+	  children (fv, child, un) {
 
-            set(dhs,1)
+	    set(dhs,1)
 
             /* increment position by height of person plus the spacer */
 
             call person_height (child)
             set (fhsize, add (fhsize, person_height_return))
-          }
+	  }
         }
       }
     }
@@ -719,13 +740,13 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     families(father(person),fv,sv,nf) {
       if (ne(famkey,key(fv))) {
         children (fv, child, un) {
-          call enqueue_person (child, depth, pos, 0, 0, 1, 0)
+	  call enqueue_person (child, depth, pos, 0, 0, 1, 0)
 
           /* increment position by height of person plus the spacer */
 
           call person_height (child)
           set (pos, add (pos, person_height_return))
-        }
+	}
       }
     }
     call enqueue_vertical (depth, sdhs, pos, 1) /* Draw th line */
@@ -894,16 +915,16 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
     if ( gt (nfamilies(mother(person)),1)) {
       families(mother(person),fv,sv,nf) {
         if (ne(famkey,key(fv))) {
-          children (fv, child, un) {
+	  children (fv, child, un) {
 
-            set(dhs,1)
-            call enqueue_person (child, depth, pos, 0, 0, 1, 0)
+	    set(dhs,1)
+	    call enqueue_person (child, depth, pos, 0, 0, 1, 0)
 
             /* increment position by height of person plus the spacer */
 
             call person_height (child)
             set (pos, add (pos, person_height_return))
-          }
+	  }
         }
       }
     }
@@ -947,16 +968,16 @@ proc do_anc (person, depth, min_pos_arg, marriage_date, des)
 **  Descendant charts are harder to make look neat, as ancestor charts
 **  branch from the ends of a family group, whilst descendant charts can
 **  branch from any child. A person's family can either branch up to the
-**  top of the page or down to the bottom. So to get a spreading chart the
+**  top of the page or down to the bottom. So to get a spreading chart the 
 **  first half of a family branch up, and the rest branch down.
 **
-**  As a child's own family affects the position of his/her siblings, then
+**  As a child's own family affects the position of his/her siblings, then 
 **  those higher on the page may need to move down. At the moment this is done
 **  for the parent or spouse (branch down or up) but not for siblings without
 **  children. An improvement could therfore be made by stacking such individuals
 **  then printing as required. However it gets more complicated with spouses and
 **  multiple families.
-**
+**  
 **  A simpler enhancement required is to position a person with no spouse halfway
 **  between the children when branching up as is already done when branching
 **  down.
@@ -1014,13 +1035,13 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
         set (pos, add(pos,name_height))
       }
     }
-    set (change_point, div (add(1,nchildren(fam)), 2))
+    set (change_point, div (add(1,nchildren(fam)), 2)) 
     if (lt (depth, max_depth))  {
       children (fam, child, cn)  {
-        set (had_kids, 1)
-        if ( and(and(and(eq(1,cn),eq(1,fn)),eq(1,nfamilies(person))),eq(1,nchildren(fam))) ) {
+	set (had_kids, 1)
+	if ( and(and(and(eq(1,cn),eq(1,fn)),eq(1,nfamilies(person))),eq(1,nchildren(fam))) ) {
           call do_des (child, add (depth, 1), pos, 1, branch_up)
-        } else {
+	} else {
           if ( gt (cn, change_point)) {
             call do_des (child, add (depth, 1), pos, 1, 0)
           } else {
@@ -1028,39 +1049,39 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
           }
         }
         set (pos, pop (do_anc_stack))
-        if (eq (1,cn)) {
-          if (branch_down) {
-            set (start_fam, pos)
-          } else {
+	if (eq (1,cn)) {
+	  if (branch_down) {
+	    set (start_fam, pos)
+	  } else {
             if (spouse) {
-              set (start_fam, sub(pos,name_height))
-            } else {
-              set (start_fam, pos)
-            }
-          }
-          if (eq (1, fn)) {
-            set (ffcp, pos)
+	      set (start_fam, sub(pos,name_height))
+	    } else {
+	      set (start_fam, pos)
+	    }
+	  }
+	  if (eq (1, fn)) {
+	    set (ffcp, pos)
             set (line_top, start_fam)
-          }
-        }
+	  }
+	}
       }
       if (nchildren(fam)) {
         set(nd, add(depth,1))
         set(ov, getel(high_pos_gen,nd))
-        setel(high_pos_gen, nd, add(ov,branch_dist_same))
+        setel(high_pos_gen, nd, add(ov,branch_dist_same)) 
       }
     }
     if (branch_up) {
       if (spouse)  {
         set (known_spouse, 1)
-/*      if (had_kids) {
+/*	if (had_kids) {
           set (nms, sub (start_fam, name_height))
-        } else {*/
-          set (nms, start_fam)
-/*      }*/
-        if (eq (1,fn)) {
+	} else {*/
+	  set (nms, start_fam)
+/*	}*/
+	if (eq (1,fn)) {
           set (line_top, nms)
-        }
+	}
         call enqueue_person (spouse, depth, nms, 0, mdate, 0, 1)
         call person_height (person)
         set (nms, add (nms, person_height_return))
@@ -1077,9 +1098,9 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
       set (mdate, dateplace_return)
       if (spouse)  {
         set (known_spouse, 1)
-        if (had_kids) {
+	if (had_kids) {
           set (pos, add (pos, name_height))
-        }
+	}
         call enqueue_person (spouse, depth, pos, 0, mdate, 0, 1)
         set (line_bot, pos)
         call person_height (spouse)
@@ -1107,6 +1128,12 @@ proc do_des (person, depth, min_pos_arg, anc, branch_up)
         set(pos, nmp)
       }
     } else {
+	if (and(known_spouse,not(had_kids))) {
+		/* To fix a bug of overwriting when we branch up, there is a spouse
+		   and no children */
+	  call person_height(spouse)
+	  set (pos, add (pos, sub(person_height_return,name_height)))
+	}
       call enqueue_person (person, depth, pos, 1, 0, anc, des)
       push (do_anc_stack, pos)
       set (line_bot, pos)
@@ -1182,18 +1209,18 @@ proc dateplace (ev, style)
     set (dateplace_return, save (long (ev)))
   }
   if (eq (style, 4))  {
-        if (long(ev)) {
-                if (place(ev)) {
-                        list(pl)
-                        extractplaces(ev,pl,np)
-                        set(where,concat(", ",dequeue(pl)))
-                        set (dateplace_return, save (concat(date (ev), where)))
-                } else {
-                        set (dateplace_return, save (date (ev)))
-                }
-        } else {
-                set (dateplace_return, 0)
-        }
+	if (long(ev)) {
+		if (place(ev)) {
+			list(pl)
+			extractplaces(ev,pl,np)
+			set(where,concat(", ",dequeue(pl)))
+			set (dateplace_return, save (concat(date (ev), where)))
+		} else {
+			set (dateplace_return, save (date (ev)))
+		}
+	} else {
+		set (dateplace_return, 0)
+	}
   }
   if (ge (style, 5))  {
     print ("error: invalid date style code")
@@ -1245,40 +1272,38 @@ proc is_prefix_title (t)
 {
   set (is_prefix_title_return, 0)
 
-  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Canon", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Mr", 1))      { set (is_prefix_title_return, 1) }
   if (index (t, "Mrs", 1))     { set (is_prefix_title_return, 1) }
   if (index (t, "Ms", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Msgr", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Pope", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Pres", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
   if (index (t, "Prof", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Rabbi", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Rav", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Rep", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Sir", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
   if (index (t, "Sis", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Canon", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
+  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
+  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Msgr", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Pope", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Sir", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
+  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Pres", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
+  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
+  if (index (t, "Rep", 1))     { set (is_prefix_title_return, 1) }
 }
 
 /*
@@ -1575,56 +1600,70 @@ proc print_thousandths (n_arg)
 }
 
 /*
-**  procedure: print_header
+**  procedure: fromto
 **
-**  Arguments:
-**    fn:  font name
-**    md:  maximum level, integer
-**    mp:  maximum position, integer in thousandths
-**    ctf: color true/false, string "true" or "false"
-**    cl:  chart label, string
-**    xi:  which horizontal page
-**    xn:  number of horizontal pages
-**    yi:  which vertical page
-**    yn:  number of vertical pages
+**  Print when a person lived
+*/
+
+proc fromto(indi) {
+	set(e,birth(indi))
+	set(f,death(indi))
+	if (or(year(e),year(f))) {
+		"("
+		if (year(e)) {year(e)} else { "?" }
+		"-"
+		if (f) {
+			if (year(f)) {year(f)} else { "?" }
+		}
+		")"
+	}
+}
+
+/*
+**  procedure: print_header
 **
 **  Print the initial postscript code.  This code will likely be the
 **  bulk of the output file.  It prints the border, defines postscript
 **  functions for printing peoples names, dates and the lines on the
-**  chart, and more.  It will be followed by the data.
+**  chart, and more.
+**  
+**  Arguments:
+**    cl:  chart label, string
+**    ctf: color true/false, string "true" or "false"
+**    fn:  font name
+**    xn:  number of horizontal pages
+**    yn:  number of vertical pages
+**    mp:  maximum position, integer in thousandths
+**    ml:  maximum level, integer
 **
-**  This postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
-**  The only modification is where data from the arguments is inserted.
+**  The original postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
 **
 */
 
-proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
+proc print_header (cl, ctf, fn, xn, yn, mp, ml)
 {
   "%!PS-Adobe-2.0 EPSF-1.2" nl()
   "%%BoundingBox:0 0 612 792" nl()
-  "/#copies 1 def" nl()
+  "% --- Define any constants ---" nl()
+  "/color " ctf " def" nl()
+  "/fontname /" fn " def" nl()
   "/xpages " d (xn) " def" nl()
   "/ypages " d (yn) " def" nl()
-  "/xpage " d (xi) " def" nl()
-  "/ypage " d (yi) " def" nl()
+  "/maxpos " call print_thousandths(mp) " def" nl()
   "/maxlevel " d (ml) " def" nl()
   "/mirror " if (mirror_chart) { "true" } else { "false" } " def" nl()
-  "/maxpos " call print_thousandths (mp)  nl()
-  "0.02 ypages div 1.0 add mul def" nl()
-  "/color " ctf " def" nl()
   "/bold " if (bold_chart) { "true" } else { "false" } " def" nl()
   "/portrait " if (portrait) { "true" } else { "false" } " def" nl()
+  "/border true def" nl()
+  "/bwid1 2.5 def" nl()
+  "/gapwid 1.5 def" nl()
+  "/bwid2 0.7 def" nl()
+  "/bgap 10 def" nl()
   "/indent 3.00 def" nl()
   "/linwidf 1.000 def" nl()
   "/font_adjust 1.000 def" nl()
   "/offset_name 0.000 def" nl()
-  "% Put PostScript code here to print a label on the chart" nl()
   "/inch {72 mul} def" nl()
-  "/chart_label {" nl()
-  "     .30 inch .15 inch moveto" nl()
-  "     /Helvetica-Narrow findfont 7 scalefont setfont" nl()
-  "     (" cl ") show" nl()
-  "} def" nl()
   "/lr 0 def /lg 1 def /lb 1 def" nl()
   "/Lr 0 def /Lg 0 def /Lb 1 def" nl()
   "/tr 0 def /tg 0 def /tb 0 def" nl()
@@ -1633,252 +1672,7 @@ proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
   "/Lmr 0 def /Lmg 0 def /Lmb 1 def" nl()
   "/tmr 0 def /tmg 0 def /tmb 0 def" nl()
   "/Tmr 0 def /Tmg 0 def /Tmb 0 def" nl()
-  "/fontname /" fn " def" nl()
-  "/encvec [" nl()
-  "16#80 /Ccedilla" nl()
-  "16#81 /udieresis" nl()
-  "16#82 /eacute" nl()
-  "16#83 /acircumflex" nl()
-  "16#84 /adieresis" nl()
-  "16#85 /agrave" nl()
-  "16#86 /aring" nl()
-  "16#87 /ccedilla" nl()
-  "16#88 /ecircumflex" nl()
-  "16#89 /edieresis" nl()
-  "16#8a /egrave" nl()
-  "16#8b /idieresis" nl()
-  "16#8c /icircumflex" nl()
-  "16#8d /igrave" nl()
-  "16#8e /Adieresis" nl()
-  "16#8f /Aring" nl()
-/*---  "16#90 /Eacute" nl()
-  "16#91 /ae" nl()
-  "16#92 /AE" nl()
-  "16#93 /ocircumflex" nl()
-  "16#94 /odieresis" nl()
-  "16#95 /ograve" nl()
-  "16#96 /ucircumflex" nl()
-  "16#97 /ugrave" nl()
-  "16#98 /ydieresis" nl()
-  "16#99 /Odieresis" nl()
-  "16#9a /Udieresis" nl()
-  "16#9b /cent" nl()
-  "16#9c /sterling" nl()
-  "16#9d /yen" nl()
-  "16#9f /florin" nl() ---*/
-  "16#90 /dotlessi" nl()
-  "16#91 /grave" nl()
-  "16#92 /acute" nl()
-  "16#93 /circumflex" nl()
-  "16#94 /tilde" nl()
-  "16#95 /macron" nl()
-  "16#96 /breve" nl()
-  "16#97 /dotaccent" nl()
-  "16#98 /dieresis" nl()
-  "16#99 /.notdef" nl()
-  "16#9a /ring" nl()
-  "16#9b /cedilla" nl()
-  "16#9c /.notdef" nl()
-  "16#9d /hungarumlaut" nl()
-  "16#9e /ogonek" nl()
-  "16#9f /caron" nl()
-  "16#a0 /space" nl()
-/*----  "16#a0 /aacute" nl()
-  "16#a1 /iacute" nl()
-  "16#a2 /oacute" nl()
-  "16#a3 /uacute" nl()
-  "16#a4 /ntilde" nl()
-  "16#a5 /Ntilde" nl()
-  "16#a6 /ordfeminine" nl()
-  "16#a7 /ordmasculine" nl()
-  "16#a8 /questiondown" nl()
-  "16#aa /logicalnot" nl()
-  "16#ab /onehalf" nl()
-  "16#ac /onequarter" nl()
-  "16#ad /exclamdown" nl()
-  "16#ae /guillemotleft" nl()
-  "16#af /guillemotright" nl() -----*/
-  "16#a1 /exclamdown" nl()
-  "16#a2 /cent" nl()
-  "16#a3 /sterling" nl()
-  "16#a4 /currency" nl()
-  "16#a5 /yen" nl()
-  "16#a6 /brokenbar" nl()
-  "16#a7 /section" nl()
-  "16#a8 /dieresis" nl()
-  "16#a9 /copyright" nl()
-  "16#aa /ordfeminine" nl()
-  "16#ab /guillemotleft" nl()
-  "16#ac /logicalnot" nl()
-  "16#ad /hyphen" nl()
-  "16#ae /registered" nl()
-  "16#af /macron" nl()
-  "16#b0 /degree" nl()
-  "16#b1 /plusminus" nl()
-  "16#b2 /twosuperior" nl()
-  "16#b3 /threesuperior" nl()
-  "16#b4 /acute" nl()
-  "16#b5 /mu" nl()
-  "16#b6 /paragraph" nl()
-  "16#b7 /periodcentered" nl()
-  "16#b8 /cedilla" nl()
-  "16#b9 /onesuperior" nl()
-  "16#ba /ordmasculine" nl()
-  "16#bb /guillemotright" nl()
-  "16#bc /onequarter" nl()
-  "16#bd /onehalf" nl()
-  "16#be /threequarters" nl()
-  "16#bf /questiondown" nl()
-  "16#c0 /Agrave" nl()
-  "16#c1 /Aacute" nl()
-  "16#c2 /Acircumflex" nl()
-  "16#c3 /Atilde" nl()
-  "16#c4 /Adieresis" nl()
-  "16#c5 /Aring" nl()
-  "16#c6 /AE" nl()
-  "16#c7 /Ccedilla" nl()
-  "16#c8 /Egrave" nl()
-  "16#c9 /Eacute" nl()
-  "16#ca /Ecircumflex" nl()
-  "16#cb /Edieresis" nl()
-  "16#cc /Igrave" nl()
-  "16#cd /Iacute" nl()
-  "16#ce /Icircumflex" nl()
-  "16#cf /Idieresis" nl()
-  "16#d0 /Eth" nl()
-  "16#d1 /Ntilde" nl()
-  "16#d2 /Ograve" nl()
-  "16#d3 /Oacute" nl()
-  "16#d4 /Ocircumflex" nl()
-  "16#d5 /Otilde" nl()
-  "16#d6 /Odieresis" nl()
-  "16#d7 /multiply" nl()
-  "16#d8 /Oslash" nl()
-  "16#d9 /Ugrave" nl()
-  "16#da /Uacute" nl()
-  "16#db /Ucircumflex" nl()
-  "16#dc /Udieresis" nl()
-  "16#dd /Yacute" nl()
-  "16#de /Thorn" nl()
-  "16#df /germandbls" nl()
-  "16#e0 /agrave" nl()
-  "16#e1 /aacute" nl()
-  "16#e2 /acircumflex" nl()
-  "16#e3 /atilde" nl()
-  "16#e4 /adieresis" nl()
-  "16#e5 /aring" nl()
-  "16#e6 /ae" nl()
-  "16#e7 /ccedilla" nl()
-  "16#e8 /egrave" nl()
-  "16#e9 /eacute" nl()
-  "16#ea /ecircumflex" nl()
-  "16#eb /edieresis" nl()
-  "16#ec /igrave" nl()
-  "16#ed /iacute" nl()
-  "16#ee /icircumflex" nl()
-  "16#ef /idieresis" nl()
-  "16#f0 /eth" nl()
-  "16#f1 /ntilde" nl()
-  "16#f2 /ograve" nl()
-  "16#f3 /oacute" nl()
-  "16#f4 /ocircumflex" nl()
-  "16#f5 /otilde" nl()
-  "16#f6 /odieresis" nl()
-  "16#f7 /divide" nl()
-  "16#f8 /oslash" nl()
-  "16#f9 /ugrave" nl()
-  "16#fa /uacute" nl()
-  "16#fb /ucircumflex" nl()
-  "16#fc /udieresis" nl()
-  "16#fd /yacute" nl()
-  "16#fe /thorn" nl()
-  "16#ff /ydieresis" nl()
-/*  "16#f8 /degree" nl()
-  "16#f9 /bullet" nl()
-  "16#fa /periodcentered" nl()*/
-  "] def" nl()
-  "% Copyright (c) 1991-1993 Thomas P. Blumer.  All Rights Reserved." nl()
-  "% Permission granted to use in LifeLines report generation." nl()
-  "/border true def" nl()
-  nl()
-  "color {" nl()
-  "     /setcmykcolor where { pop" nl()
-  "             Tr Tg Tb add add 0 eq {" nl()
-  "                     /Tk 1 def" nl()
-  "             } {" nl()
-  "                     /Tk 0 def" nl()
-  "                     /Tr 1 Tr sub def /Tg 1 Tg sub def /Tb 1 Tb sub def" nl()
-  "             } ifelse" nl()
-  nl()
-  "             tr tg tb add add 0 eq {" nl()
-  "                     /tk 1 def" nl()
-  "             } {" nl()
-  "                     /tk 0 def" nl()
-  "                     /tr 1 tr sub def /tg 1 tg sub def /tb 1 tb sub def" nl()
-  "             } ifelse" nl()
-  nl()
-  "             Lr Lg Lb add add 0 eq {" nl()
-  "                     /Lk 1 def" nl()
-  "             } {" nl()
-  "                     /Lk 0 def" nl()
-  "                     /Lr 1 Lr sub def /Lg 1 Lg sub def /Lb 1 Lb sub def" nl()
-  "             } ifelse" nl()
-  nl()
-  "             lr lg lb add add 0 eq {" nl()
-  "                     /lk 1 def" nl()
-  "             } {" nl()
-  "                     /lk 0 def" nl()
-  "                     /lr 1 lr sub def /lg 1 lg sub def /lb 1 lb sub def" nl()
-  "             } ifelse" nl()
-  nl()
-  "             /textcolr0 {Tr Tg Tb Tk setcmykcolor} bind def % direct ancestor name" nl()
-  "             /textcolr1 {tr tg tb tk setcmykcolor} bind def % indirect names" nl()
-  "             /lincolr0 {Lr Lg Lb Lk setcmykcolor} bind def  % direct ancestor lines" nl()
-  "             /lincolr1 {lr lg lb lk setcmykcolor} bind def  % indirect lines" nl()
-  "     } {" nl()
-  "             /textcolr0 {Tr Tg Tb setrgbcolor} bind def % direct ancestor name" nl()
-  "             /textcolr1 {tr tg tb setrgbcolor} bind def % indirect names" nl()
-  "             /lincolr0 {Lr Lg Lb setrgbcolor} bind def  % direct ancestor lines" nl()
-  "             /lincolr1 {lr lg lb setrgbcolor} bind def  % indirect lines" nl()
-  "     } ifelse" nl()
-  "} {" nl()
-  "     /textcolr0 {} bind def" nl()
-  "     /textcolr1 {} bind def" nl()
-  "     /lincolr0 {} bind def" nl()
-  "     /lincolr1 {} bind def" nl()
-  "} ifelse" nl()
-  nl()
-  "% table of how to get bold fonts" nl()
-  "/bolddict 25 dict def" nl()
-  "bolddict begin" nl()
-  nl()
-  "% default table entry is that boldfontname = fontname" nl()
-  "fontname fontname def" nl()
-  nl()
-  "/Courier /Courier-Bold def" nl()
-  "/Courier-Oblique /Courier-BoldOblique def" nl()
-  "/Times-Roman /Times-Bold def" nl()
-  "/Times-Italic /Times-BoldItalic def" nl()
-  "/Helvetica /Helvetica-Bold def" nl()
-  "/Helvetica-Oblique /Helvetica-BoldOblique def" nl()
-  "/Bookman-Light /Bookman-Demi def" nl()
-  "/Bookman-LightItalic /Bookman-DemiItalic def" nl()
-  "/Palatino-Roman /Palatino-Bold def" nl()
-  "/Palatino-Italic /Palatino-BoldItalic def" nl()
-  "/AvantGarde-Book /AvantGarde-Demi def" nl()
-  "/AvantGarde-BookOblique /AvantGarde-DemiOblique def" nl()
-  "/Helvetica-Narrow /Helvetica-Narrow-Bold def" nl()
-  "/Helvetica-Narrow-Oblique /Helvetica-Narrow-BoldOblique def" nl()
-  "/Helvetica-Condensed /Helvetica-Condensed-Bold def" nl()
-  "/Helvetica-Condensed-Oblique /Helvetica-Condensed-BoldObl def" nl()
-  "/NewCenturySchlbk-Roman /NewCenturySchlbk-Bold def" nl()
-  "/NewCenturySchlbk-Italic /NewCenturySchlbk-BoldItalic def" nl()
-  "/ZapfChancery /ZapfChancery-Bold def" nl()
-  "end" nl()
-  nl()
-  "/boldfontname fontname def" nl()
-  "/boldfontname bolddict fontname get def" nl()
-  nl()
+  "% Find the basic dimensions of the paper" nl()
   "% get printable area" nl()
   "clippath pathbbox newpath" nl()
   "/ury exch def /urx exch def" nl()
@@ -1893,40 +1687,127 @@ proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
   "     } if" nl()
   "} if" nl()
   nl()
-  "% set portrait mode, get width and height" nl()
+  nl()
+  "% get width and height of a sheet of paper" nl()
   "/wp urx llx sub def" nl()
   "/hp ury lly sub def" nl()
+  "% get width and height of a sheet of printable area" nl()
   "/w wp xpages mul def" nl()
   "/h hp ypages mul def" nl()
+  nl()
+  "% adjust for portrait or landscape" nl()
   "portrait {" nl()
   "       % portrait mode" nl()
-  "       llx lly translate" nl()
-  "  } {" nl()
-  "       % landscape mode" nl()
+  "} {" nl()
   "       /tmp hp def" nl()
   "       /hp wp def" nl()
   "       /wp tmp def" nl()
   "       /tmp h def" nl()
   "       /h w def" nl()
   "       /w tmp def" nl()
-  "       urx lly translate 90 rotate" nl()
   "} ifelse" nl()
+  "% Total printable dimensions" nl()
+  "/thp h def" nl()
+  "/twp w def" nl()
   nl()
-  "% multi page output" nl()
-  "xpages 1 ne ypages 1 ne or {" nl()
-  "     portrait {" nl()
-  "       1 xpage sub wp mul  1 ypage sub hp mul  translate" nl()
-  "     } {" nl()
-  "       1 ypage sub wp mul  1 xpage sub hp mul  translate" nl()
-  "     } ifelse" nl()
+  "% If we have a border take it off the size of the printable area" nl()
+  "border {" nl()
+  "  /tbwid bwid1 gapwid bwid2 bgap add add add def" nl()
+  "  /w w tbwid 2 mul sub def" nl()
+  "  /h h tbwid 2 mul sub def" nl()
   "} if" nl()
   nl()
-  "% decorative border" nl()
-  "border {" nl()
-  "     /bwid1 2.5 def" nl()
-  "     /gapwid 1.5 def" nl()
-  "     /bwid2 0.7 def" nl()
-  "     /bgap 10 def" nl()
+  "/hh h 20 div def    % height of title line" nl()
+  "/h h hh sub def     % take from printable area" nl()
+  nl()
+  "% ---- Start Subroutines ---" nl()
+  "%" nl()
+  "% show string given as argument" nl()
+  "% select font size so that string fits in available length" nl()
+  "%" nl()
+  "/wshow {" nl()
+  "     /s exch def" nl()
+  "     /len exch def" nl()
+  "     /fntsiz exch def" nl()
+  "     bold direct and {" nl()
+  "             boldfontname findfont fntsiz scalefont setfont" nl()
+  "     } {" nl()
+  "             fontname findfont fntsiz scalefont setfont" nl()
+  "     } ifelse" nl()
+  "     s stringwidth pop dup len lt {" nl()
+  "             pop" nl()
+  "     } {" nl()
+  "             % compute new font size for exact fit" nl()
+  "             len exch div fntsiz mul /fsize exch def" nl()
+  "             bold direct and {" nl()
+  "                     boldfontname findfont fsize scalefont setfont" nl()
+  "             } {" nl()
+  "                     fontname findfont fsize scalefont setfont" nl()
+  "             } ifelse" nl()
+  "     } ifelse" nl()
+  "     direct {textcolr0} {textcolr1} ifelse" nl()
+  "     s show" nl()
+  "} bind def" nl()
+  nl()
+  "%" nl()
+  "% give length of string given as argument" nl()
+  "% select font size so that string fits in available length" nl()
+  "%" nl()
+  "/wlen {" nl()
+  "     /s exch def" nl()
+  "     /len exch def" nl()
+  "     /fntsiz exch def" nl()
+  "     bold direct and {" nl()
+  "             boldfontname findfont fntsiz scalefont setfont" nl()
+  "     } {" nl()
+  "             fontname findfont fntsiz scalefont setfont" nl()
+  "     } ifelse" nl()
+  "     s stringwidth pop dup len lt {" nl()
+  "             pop" nl()
+  "     } {" nl()
+  "             % compute new font size for exact fit" nl()
+  "             len exch div fntsiz mul /fsize exch def" nl()
+  "             bold direct and {" nl()
+  "                     boldfontname findfont fsize scalefont setfont" nl()
+  "             } {" nl()
+  "                     fontname findfont fsize scalefont setfont" nl()
+  "             } ifelse" nl()
+  "     } ifelse" nl()
+  "     s stringwidth pop dup" nl()
+  "     pop" nl()
+  "} bind def" nl()
+  nl()
+  "%" nl()
+  "% Print a title across the bottom of the page" nl()
+  "%" nl()
+  "/printhead {" nl()
+  "  /mytitle exch def" nl()
+  "%  /tsz hh hh 10 div sub def" nl()
+  "  /tsz hh def" nl()
+  "  /len w w 10 div sub def" nl()
+  "  /fsize len def" nl()
+  "  fontname findfont tsz scalefont setfont" nl()
+  "  mytitle stringwidth pop dup len lt {" nl()
+  "    pop" nl()
+  "  } {" nl()
+  "    % compute new font size for exact fit" nl()
+  "    len exch div tsz mul /fsize exch def" nl()
+  "    fontname findfont fsize scalefont setfont" nl()
+  "  } ifelse" nl()
+  "  mytitle stringwidth pop dup" nl()
+  "  pop" nl()
+  "  /ls exch def" nl()
+  "  /start w ls sub 2 div def" nl()
+  "  start 10 hh fsize sub 2 div add moveto" nl()
+  "  textcolr0" nl()
+  "  mytitle show" nl()
+  "  0 hh translate" nl()
+  "} bind def" nl()
+  nl()
+  "%" nl()
+  "% Print a decorative border" nl()
+  "%" nl()
+  "/printborder {" nl()
   "     /tw 7.2 def" nl()
   "     /rect {" nl()
   "             /rh exch def" nl()
@@ -1960,156 +1841,40 @@ proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
   nl()
   "     bwid1 setlinewidth" nl()
   "     lincolr0" nl()
-  "     bwid1 2 div  dup  w bwid1 sub  h bwid1 sub  rectt" nl()
+  "     bwid1 2 div  dup  twp bwid1 sub  thp bwid1 sub  rectt" nl()
   nl()
   "     bwid2 setlinewidth" nl()
   "     bwid1 gapwid bwid2 2 div add add  dup" nl()
-  "     w bwid1 2 mul sub gapwid 2 mul sub bwid2 sub " nl()
-  "     h bwid1 2 mul sub gapwid 2 mul sub bwid2 sub rect" nl()
-  nl()
-  "     % cut the border out of the imageable area" nl()
-  "     /tmp bwid1 gapwid bwid2 bgap add add add def" nl()
-  "     tmp tmp translate" nl()
-  "     /w w tmp 2 mul sub def" nl()
-  "     /h h tmp 2 mul sub def" nl()
-  "} if" nl()
-  nl()
-  "% for multi page: only label bottom left page" nl()
-  "/chart_label where xpage 1 eq ypage 1 eq and and {" nl()
-  "     pop" nl()
-  "     gsave" nl()
-  "     % set up coordinate system for custom chart label" nl()
-  "     clippath pathbbox newpath pop pop translate" nl()
-  "     chart_label" nl()
-  "     grestore" nl()
-  "} if" nl()
-  nl()
-  "% Reencode the font so that we can use the IBMPC set of international chars" nl()
-  "/encdict 12 dict def" nl()
-  "/reenc {" nl()
-  "     encdict begin" nl()
-  "     /newenc exch def" nl()
-  "     /nfont exch def" nl()
-  "     /ofont exch def" nl()
-  "     /ofontdict ofont findfont def" nl()
-  "     /newfont ofontdict maxlength 1 add dict def" nl()
-  "     ofontdict {" nl()
-  "             exch dup /FID ne {" nl()
-  "                     dup /Encoding eq" nl()
-  "                      {exch dup length array copy newfont 3 1 roll put}" nl()
-  "                      {exch newfont 3 1 roll put} ifelse" nl()
-  "             }" nl()
-  "             {pop pop}" nl()
-  "             ifelse" nl()
-  "     } forall" nl()
-  "     newfont /Fontname nfont put" nl()
-  "     newenc aload pop" nl()
-  "     newenc length 2 idiv" nl()
-  "     { newfont /Encoding get 3 1 roll put}" nl()
-  "     repeat" nl()
-  "     nfont newfont definefont pop" nl()
-  "     end" nl()
-  "} def" nl()
-  nl()
-  "fontname /gedfont encvec reenc" nl()
-  "/fontname /gedfont def" nl()
-  "boldfontname /boldgedfont encvec reenc" nl()
-  "/boldfontname /boldgedfont def" nl()
-  "% end font reencoding" nl()
-  nl()
-  "/rl w maxlevel div def" nl()
-  "/posunit h maxpos div def" nl()
-  nl()
-  "/posname 1.0 def" nl()
-  "/posdate 0.75 def" nl()
-  "/posmarg 0.3 def" nl()
-  "/posbase posname posmarg 2 div add def" nl()
-  nl()
-  "/top h posunit posbase mul sub def" nl()
-  nl()
-  "% calculate base font size from segment length" nl()
-  "/fntsize rl 9.0 div def" nl()
-  nl()
-  "% space for one individual" nl()
-  "fntsize posunit gt {" nl()
-  "     /fntsize posunit def" nl()
-  "} if" nl()
-  nl()
-  "% font adjustment" nl()
-  "/fntsize fntsize font_adjust mul def" nl()
-  nl()
-  "% font for birth/death dates" nl()
-  "/fntsize2 fntsize posdate mul def" nl()
-  nl()
-  "fontname findfont fntsize scalefont setfont" nl()
-  "/space ( ) stringwidth pop def" nl()
-  nl()
-  "% calc line width from segment length - .24 pts = 1 pixel" nl()
-  "/linwid fntsize .1 mul .6 mul def" nl()
-  "/linwid linwid linwidf mul def" nl()
-  "linwid setlinewidth" nl()
-  "/namey0 linwid fntsize 16.0 div add offset_name add def" nl()
-  nl()
-  "/dashwid rl 72 div def" nl()
-  nl()
-  "2 setlinecap" nl()
-  nl()
-  "% name string length for all generations" nl()
-  "/len1 rl space indent 1 add mul sub def" nl()
-  nl()
-  "% show string given as argument" nl()
-  "% select font size so that string fits in available length" nl()
-  "/wshow {" nl()
-  "     /s exch def" nl()
-  "     /len exch def" nl()
-  "     /fntsiz exch def" nl()
-  "     bold direct and {" nl()
-  "             boldfontname findfont fntsiz scalefont setfont" nl()
-  "     } {" nl()
-  "             fontname findfont fntsiz scalefont setfont" nl()
-  "     } ifelse" nl()
-  "     s stringwidth pop dup len lt {" nl()
-  "             pop" nl()
-  "     } {" nl()
-  "             % compute new font size for exact fit" nl()
-  "             len exch div fntsiz mul /fsize exch def" nl()
-  "             bold direct and {" nl()
-  "                     boldfontname findfont fsize scalefont setfont" nl()
-  "             } {" nl()
-  "                     fontname findfont fsize scalefont setfont" nl()
-  "             } ifelse" nl()
-  "     } ifelse" nl()
-  "     direct {textcolr0} {textcolr1} ifelse" nl()
-  "     s show" nl()
+  "     twp bwid1 2 mul sub gapwid 2 mul sub bwid2 sub " nl()
+  "     thp bwid1 2 mul sub gapwid 2 mul sub bwid2 sub rect" nl()
   "} bind def" nl()
   nl()
-  "% give length of string given as argument" nl()
-  "% select font size so that string fits in available length" nl()
-  "/wlen {" nl()
-  "     /s exch def" nl()
-  "     /len exch def" nl()
-  "     /fntsiz exch def" nl()
-  "     bold direct and {" nl()
-  "             boldfontname findfont fntsiz scalefont setfont" nl()
+  "%" nl()
+  "% Draw a verticle line" nl()
+  "%" nl()
+  "/l {" nl()
+  "     /indirect exch 1 eq def" nl()
+  "     /parent exch def" nl()
+  "     /pos exch def" nl()
+  "     /level exch def" nl()
+  nl()
+  "     mirror {" nl()
+  "             /x maxlevel level sub 1 sub rl mul def" nl()
   "     } {" nl()
-  "             fontname findfont fntsiz scalefont setfont" nl()
+  "             /x level 1 add rl mul def" nl()
   "     } ifelse" nl()
-  "     s stringwidth pop dup len lt {" nl()
-  "             pop" nl()
-  "     } {" nl()
-  "             % compute new font size for exact fit" nl()
-  "             len exch div fntsiz mul /fsize exch def" nl()
-  "             bold direct and {" nl()
-  "                     boldfontname findfont fsize scalefont setfont" nl()
-  "             } {" nl()
-  "                     fontname findfont fsize scalefont setfont" nl()
-  "             } ifelse" nl()
-  "     } ifelse" nl()
-  "     s stringwidth pop dup" nl()
-  "     pop" nl()
+  "     /y1 top pos posunit mul sub def" nl()
+  "     /y2 top parent posunit mul sub def" nl()
+  "     indirect {lincolr1} {lincolr0} ifelse" nl()
+  "     bold indirect not and {linwid 2.0 mul setlinewidth} if" nl()
+  "     x y1 moveto x y2 lineto stroke" nl()
+  "     bold indirect not and {linwid setlinewidth} if" nl()
   "} bind def" nl()
   nl()
+  "%" nl()
+  "% Print a person" nl()
   "% called once for each individual on chart" nl()
+  "%" nl()
   "/i {" nl()
   "     /des exch 1 eq def      % true if person has descendants" nl()
   "     /anc exch 1 eq def      % true if person has ancestors" nl()
@@ -2196,7 +1961,7 @@ proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
   "                     fntsize len1 name wshow" nl()
   "             } {" nl()
   "                     x lname add space add y2 moveto x2 y2 lineto stroke" nl()
-  "                     % print name" nl()
+  "            		% print name" nl()
   "                     x y namey add moveto" nl()
   "                     fntsize len1 name wshow" nl()
   "             } ifelse" nl()
@@ -2221,22 +1986,282 @@ proc print_header (fn, ml, mp, ctf, cl, xi, xn, yi, yn)
   "     } if" nl()
   "} bind def" nl()
   nl()
-  "/l {" nl()
-  "     /indirect exch 1 eq def" nl()
-  "     /parent exch def" nl()
-  "     /pos exch def" nl()
-  "     /level exch def" nl()
+  "% Print a signature/label on the chart" nl()
+  "/chart_label {" nl()
+  "     .30 inch .15 inch moveto" nl()
+  "     /Helvetica-Narrow findfont 7 scalefont setfont" nl()
+  "     (" cl ") show" nl()
+  "} def" nl()
   nl()
-  "     mirror {" nl()
-  "             /x maxlevel level sub 1 sub rl mul def" nl()
+  "% --- End of Subroutines ---" nl()
+  "%" nl()
+  "% If colour is required, set the appropriate fields" nl()
+  "%" nl()
+   "color {" nl()
+  "     /setcmykcolor where { pop" nl()
+  "             Tr Tg Tb add add 0 eq {" nl()
+  "                     /Tk 1 def" nl()
+  "             } {" nl()
+  "                     /Tk 0 def" nl()
+  "                     /Tr 1 Tr sub def /Tg 1 Tg sub def /Tb 1 Tb sub def" nl()
+  "             } ifelse" nl()
+  nl()
+  "             tr tg tb add add 0 eq {" nl()
+  "                     /tk 1 def" nl()
+  "             } {" nl()
+  "                     /tk 0 def" nl()
+  "                     /tr 1 tr sub def /tg 1 tg sub def /tb 1 tb sub def" nl()
+  "             } ifelse" nl()
+  nl()
+  "             Lr Lg Lb add add 0 eq {" nl()
+  "                     /Lk 1 def" nl()
+  "             } {" nl()
+  "                     /Lk 0 def" nl()
+  "                     /Lr 1 Lr sub def /Lg 1 Lg sub def /Lb 1 Lb sub def" nl()
+  "             } ifelse" nl()
+  nl()
+  "             lr lg lb add add 0 eq {" nl()
+  "                     /lk 1 def" nl()
+  "             } {" nl()
+  "                     /lk 0 def" nl()
+  "                     /lr 1 lr sub def /lg 1 lg sub def /lb 1 lb sub def" nl()
+  "             } ifelse" nl()
+  nl()
+  "             /textcolr0 {Tr Tg Tb Tk setcmykcolor} bind def % direct ancestor name" nl()
+  "             /textcolr1 {tr tg tb tk setcmykcolor} bind def % indirect names" nl()
+  "             /lincolr0 {Lr Lg Lb Lk setcmykcolor} bind def  % direct ancestor lines" nl()
+  "             /lincolr1 {lr lg lb lk setcmykcolor} bind def  % indirect lines" nl()
   "     } {" nl()
-  "             /x level 1 add rl mul def" nl()
+  "             /textcolr0 {Tr Tg Tb setrgbcolor} bind def % direct ancestor name" nl()
+  "             /textcolr1 {tr tg tb setrgbcolor} bind def % indirect names" nl()
+  "             /lincolr0 {Lr Lg Lb setrgbcolor} bind def  % direct ancestor lines" nl()
+  "             /lincolr1 {lr lg lb setrgbcolor} bind def  % indirect lines" nl()
   "     } ifelse" nl()
-  "     /y1 top pos posunit mul sub def" nl()
-  "     /y2 top parent posunit mul sub def" nl()
-  "     indirect {lincolr1} {lincolr0} ifelse" nl()
-  "     bold indirect not and {linwid 2.0 mul setlinewidth} if" nl()
-  "     x y1 moveto x y2 lineto stroke" nl()
-  "     bold indirect not and {linwid setlinewidth} if" nl()
-  "} bind def" nl()
+  "} {" nl()
+  "     /textcolr0 {} bind def" nl()
+  "     /textcolr1 {} bind def" nl()
+  "     /lincolr0 {} bind def" nl()
+  "     /lincolr1 {} bind def" nl()
+  "} ifelse" nl()
+  nl()
+  "%" nl()
+  "% Adjust the font so that it is iso-8859-1 compatible" nl()
+  "%" nl()
+  "/encvec [" nl()
+  "16#80 /Ccedilla" nl()
+  "16#81 /udieresis" nl()
+  "16#82 /eacute" nl()
+  "16#83 /acircumflex" nl()
+  "16#84 /adieresis" nl()
+  "16#85 /agrave" nl()
+  "16#86 /aring" nl()
+  "16#87 /ccedilla" nl()
+  "16#88 /ecircumflex" nl()
+  "16#89 /edieresis" nl()
+  "16#8a /egrave" nl()
+  "16#8b /idieresis" nl()
+  "16#8c /icircumflex" nl()
+  "16#8d /igrave" nl()
+  "16#8e /Adieresis" nl()
+  "16#8f /Aring" nl()
+  "16#90 /Eacute" nl()
+  "16#91 /ae" nl()
+  "16#92 /AE" nl()
+  "16#93 /ocircumflex" nl()
+  "16#94 /odieresis" nl()
+  "16#95 /ograve" nl()
+  "16#96 /ucircumflex" nl()
+  "16#97 /ugrave" nl()
+  "16#98 /ydieresis" nl()
+  "16#99 /Odieresis" nl()
+  "16#9a /Udieresis" nl()
+  "16#9b /cent" nl()
+  "16#9c /sterling" nl()
+  "16#9d /yen" nl()
+  "16#9f /florin" nl()
+  "16#a0 /aacute" nl()
+  "16#a1 /iacute" nl()
+  "16#a2 /oacute" nl()
+  "16#a3 /uacute" nl()
+  "16#a4 /ntilde" nl()
+  "16#a5 /Ntilde" nl()
+  "16#a6 /ordfeminine" nl()
+  "16#a7 /ordmasculine" nl()
+  "16#a8 /questiondown" nl()
+  "16#aa /logicalnot" nl()
+  "16#ab /onehalf" nl()
+  "16#ac /onequarter" nl()
+  "16#ad /exclamdown" nl()
+  "16#ae /guillemotleft" nl()
+  "16#af /guillemotright" nl()
+  "16#f8 /degree" nl()
+  "16#f9 /bullet" nl()
+  "16#fa /periodcentered" nl()
+  "] def" nl()
+  "% Copyright (c) 1991-1993 Thomas P. Blumer.  All Rights Reserved." nl()
+  "% Permission granted to use in LifeLines report generation." nl()
+  nl()
+  "% table of how to get bold fonts" nl()
+  "/bolddict 25 dict def" nl()
+  "bolddict begin" nl()
+  nl()
+  "% default table entry is that boldfontname = fontname" nl()
+  "fontname fontname def" nl()
+  nl()
+  "/Courier /Courier-Bold def" nl()
+  "/Courier-Oblique /Courier-BoldOblique def" nl()
+  "/Times-Roman /Times-Bold def" nl()
+  "/Times-Italic /Times-BoldItalic def" nl()
+  "/Helvetica /Helvetica-Bold def" nl()
+  "/Helvetica-Oblique /Helvetica-BoldOblique def" nl()
+  "/Bookman-Light /Bookman-Demi def" nl()
+  "/Bookman-LightItalic /Bookman-DemiItalic def" nl()
+  "/Palatino-Roman /Palatino-Bold def" nl()
+  "/Palatino-Italic /Palatino-BoldItalic def" nl()
+  "/AvantGarde-Book /AvantGarde-Demi def" nl()
+  "/AvantGarde-BookOblique /AvantGarde-DemiOblique def" nl()
+  "/Helvetica-Narrow /Helvetica-Narrow-Bold def" nl()
+  "/Helvetica-Narrow-Oblique /Helvetica-Narrow-BoldOblique def" nl()
+  "/Helvetica-Condensed /Helvetica-Condensed-Bold def" nl()
+  "/Helvetica-Condensed-Oblique /Helvetica-Condensed-BoldObl def" nl()
+  "/NewCenturySchlbk-Roman /NewCenturySchlbk-Bold def" nl()
+  "/NewCenturySchlbk-Italic /NewCenturySchlbk-BoldItalic def" nl()
+  "/ZapfChancery /ZapfChancery-Bold def" nl()
+  "end" nl()
+  nl()
+  "/boldfontname fontname def" nl()
+  "/boldfontname bolddict fontname get def" nl()
+  nl()
+  "% Reencode the font so that we can use the IBMPC set of international chars" nl()
+  "/encdict 12 dict def" nl()
+  "/reenc {" nl()
+  "     encdict begin" nl()
+  "     /newenc exch def" nl()
+  "     /nfont exch def" nl()
+  "     /ofont exch def" nl()
+  "     /ofontdict ofont findfont def" nl()
+  "     /newfont ofontdict maxlength 1 add dict def" nl()
+  "     ofontdict {" nl()
+  "             exch dup /FID ne {" nl()
+  "                     dup /Encoding eq" nl()
+  "                      {exch dup length array copy newfont 3 1 roll put}" nl()
+  "                      {exch newfont 3 1 roll put} ifelse" nl()
+  "             }" nl()
+  "             {pop pop}" nl()
+  "             ifelse" nl()
+  "     } forall" nl()
+  "     newfont /Fontname nfont put" nl()
+  "     newenc aload pop" nl()
+  "     newenc length 2 idiv" nl()
+  "     { newfont /Encoding get 3 1 roll put}" nl()
+  "     repeat" nl()
+  "     nfont newfont definefont pop" nl()
+  "     end" nl()
+  "} def" nl()
+  nl()
+  "fontname /gedfont encvec reenc" nl()
+  "/fontname /gedfont def" nl()
+  "% end font reencoding" nl()
+  nl()
+  "%" nl()
+  "% Now we have the remaining height and width, compute" nl()
+  "% the column width, font size etc." nl()
+  "%" nl()
+  "/rl w maxlevel div def" nl()
+  "/posunit h maxpos div def" nl()
+  "/posname 1.0 def" nl()
+  "/posdate 0.75 def" nl()
+  "/posmarg 0.3 def" nl()
+  "/posbase posname posmarg 2 div add def" nl()
+  nl()
+  "/top h posunit posbase mul sub def" nl()
+  nl()
+  "% calculate base font size from segment length" nl()
+  "/fntsize rl 9.0 div def" nl()
+  nl()
+  "% space for one individual" nl()
+  "fntsize posunit gt {" nl()
+  "     /fntsize posunit def" nl()
+  "} if" nl()
+  nl()
+  "% font adjustment" nl()
+  "/fntsize fntsize font_adjust mul def" nl()
+  nl()
+  "% font for birth/death dates" nl()
+  "/fntsize2 fntsize posdate mul def" nl()
+  nl()
+  "fontname findfont fntsize scalefont setfont" nl()
+  "/space ( ) stringwidth pop def" nl()
+  nl()
+  "% calc line width from segment length - .24 pts = 1 pixel" nl()
+  "/linwid fntsize .1 mul .6 mul def" nl()
+  "/linwid linwid linwidf mul def" nl()
+  "linwid setlinewidth" nl()
+  "/namey0 linwid fntsize 16.0 div add offset_name add def" nl()
+  nl()
+  "/dashwid rl 72 div def" nl()
+  nl()
+  "2 setlinecap" nl()
+  nl()
+  "% name string length for all generations" nl()
+  "/len1 rl space indent 1 add mul sub def" nl()
+  nl()
 }
+
+/*
+**  procedure: print_page_head
+**
+**  Arguments:
+**    xi:  which horizontal page
+**    yi:  which vertical page
+**
+**  Print the code which must appear for each page.
+**
+**  The original postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
+**
+*/
+
+proc print_page_head (xi, yi)
+{
+  "%--- Start of page " d(xi) "/" d(yi) " ---" nl()
+  "/xpage " d (xi) " def" nl()
+  "/ypage " d (yi) " def" nl()
+  "% adjust for portrait or landscape" nl()
+  "portrait {" nl()
+  "       % portrait mode" nl()
+  "       llx lly translate" nl()
+  "} {" nl()
+  "       urx lly translate 90 rotate" nl()
+  "} ifelse" nl()
+  nl()
+  "% if multi page output, select the right page" nl()
+  "xpages 1 ne ypages 1 ne or {" nl()
+  "     portrait {" nl() 
+  "       1 xpage sub wp mul  1 ypage sub hp mul  translate" nl()
+  "     } {" nl()
+  "       1 ypage sub wp mul  1 xpage sub hp mul  translate" nl()
+  "     } ifelse" nl()
+  "} if" nl()
+  nl()
+  "% print the border if we want one" nl()
+  "border {" nl()
+  "  printborder" nl()
+  "  % cut the border out of the imageable area" nl()
+  "%  /tmp bwid1 gapwid bwid2 bgap add add add def" nl()
+  "  tbwid tbwid translate" nl()
+  "% /w w tmp 2 mul sub def" nl()
+  "%  /h h tmp 2 mul sub def" nl()
+  "} if" nl()
+  nl ()
+  "% for multi page: only label bottom left page" nl()
+  "/chart_label where xpage 1 eq ypage 1 eq and and {" nl()
+  "     pop" nl()
+  "     gsave" nl()
+  "     % set up coordinate system for custom chart label" nl()
+  "     clippath pathbbox newpath pop pop translate" nl()
+  "     chart_label" nl()
+  "     grestore" nl()
+  "} if" nl()
+  nl()
+ }
+
