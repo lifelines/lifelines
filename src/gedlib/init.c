@@ -78,6 +78,7 @@ static void init_win32_iconv_shim(void);
  *********************************************/
 
 static int rdr_count = 0;
+static void (*f_dbnotify)(STRING db, BOOLEAN opening) = 0;
 
 /*********************************************
  * local & exported function definitions
@@ -89,12 +90,14 @@ static int rdr_count = 0;
  *  This is called before first (or later) database opened
  *===============================*/
 BOOLEAN
-init_lifelines_global (STRING configfile, STRING * pmsg)
+init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING db, BOOLEAN opening))
 {
 	STRING e;
 	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", "LLNEWDBDIR" };
 	INT i;
+
+	f_dbnotify = notify;
 
 	if (!configfile)
 		configfile = getenv("LLCONFIGFILE");
@@ -278,6 +281,8 @@ close_lldb (void)
 		closebtree(BTR);
 		BTR=NULL;
 	}
+	if (f_dbnotify)
+		(*f_dbnotify)(readpath, FALSE);
 }
 /*==================================================
  * alterdb -- force open, lock, or unlock a database
@@ -413,6 +418,9 @@ open_database (BOOLEAN alteration, STRING dbrequested, STRING dbused)
 	/* tentatively copy paths into gedlib module versions */
 	btreepath=strsave(dbrequested);
 	readpath=strsave(dbused);
+
+	if (f_dbnotify)
+		(*f_dbnotify)(readpath, TRUE);
 
 	rtn = open_database_impl(alteration);
 	if (!rtn) {
@@ -609,6 +617,9 @@ getdbdesc (STRING path)
 	BTREE btr;
 	BOOLEAN cflag=FALSE, writ=FALSE, immut=TRUE;
 	char desc[MAXPATHLEN];
+
+	if (f_dbnotify)
+		(*f_dbnotify)(path, TRUE);
 
 	strcpy(desc, "");
 	btr = openbtree(path, cflag, writ, immut);

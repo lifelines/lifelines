@@ -34,7 +34,8 @@
 #include "feedback.h"
 #include "arch.h"
 
-char crashfile[MAXPATHLEN]="";
+static char f_crashfile[MAXPATHLEN]="";
+static char f_currentdb[MAXPATHLEN]="";
 
 /*===============================
  * __fatal -- Fatal error routine
@@ -46,27 +47,32 @@ void
 __fatal (STRING file, int line, STRING details)
 {
 	/* send to error log if one is specified */
-	if (crashfile[0]) {
-		FILE * fp = fopen(crashfile, LLAPPENDTEXT);
+	if (f_crashfile[0]) {
+		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
 		if (fp) {
 			LLDATE creation;
 			get_current_lldate(&creation);
-			fprintf(fp, "\nFatal Error: %s\n    ", creation.datestr);
+			fprintf(fp, "\n%s: %s\n", _("Fatal Error")
+				, creation.datestr);
 			if (details && details[0]) {
-				fprintf(fp, details);
-				fprintf(fp, "\n    AT: ");
+				fprintf(fp, "    %s\n", details);
 			}
-			fprintf(fp, "%s: line %d\n", file, line);
+			if (!file || !file[0])
+				file = "?";
+			fprintf(fp, _("    in file <%s> at line %d\n"), file, line);
+			if (f_currentdb[0])
+				fprintf(fp, "    %s: %s\n", _("Current database"), f_currentdb);
 			fclose(fp);
 		}
 	}
 	/* send to screen */
-	llwprintf("FATAL ERROR: ");
+	llwprintf("%s\n", _("FATAL ERROR"));
 	if (details && details[0]) {
-		llwprintf(details);
-		llwprintf("\nAT: ");
+		llwprintf("  %s\n", details);
 	}
-	llwprintf("%s: line %d\n", file, line);
+	llwprintf(_("  in file <%s> at line %d\n"), file, line);
+	if (f_currentdb[0])
+		llwprintf("%s: %s\n", _("Current database"), f_currentdb);
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
 	ll_abort(_("ASSERT failure"));
@@ -83,8 +89,8 @@ crashlog (STRING fmt, ...)
 	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
-	if (crashfile[0]) {
-		FILE * fp = fopen(crashfile, LLAPPENDTEXT);
+	if (f_crashfile[0]) {
+		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
 		if (fp) {
 			LLDATE creation;
 			get_current_lldate(&creation);
@@ -97,12 +103,23 @@ crashlog (STRING fmt, ...)
 }
 /*===============================
  * crash_setcrashlog -- specify where to log alloc messages
- * Creatd: 2001/10/28, Perry Rapp
+ * Created: 2001/10/28, Perry Rapp
  *=============================*/
 void
 crash_setcrashlog (STRING crashlog)
 {
-	if (crashlog)
-		llstrncpy(crashfile, crashlog, sizeof(crashfile)/sizeof(crashfile[0]));
+	if (!crashlog)
+		crashlog = "";
+	llstrncpy(f_crashfile, crashlog, sizeof(f_crashfile));
 }
-
+/*===============================
+ * crash_setdb -- record current database in case of a crash
+ * Created: 2002/06/16, Perry Rapp
+ *=============================*/
+void
+crash_setdb (STRING dbname)
+{
+	if (!dbname)
+		dbname = "";
+	llstrncpy(f_currentdb, dbname, sizeof(f_currentdb));
+}

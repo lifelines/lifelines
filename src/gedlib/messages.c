@@ -43,7 +43,7 @@ STRING empstr120 = SS "                                                         
 
 
 ZST qSiddbse      = N_("You must identify a database.");
-ZST qSidldir      = N_("What directory holds the LifeLines database? (enter ? for list)");
+ZST qSidldir      = N_("What directory holds (or will hold) the LifeLines database? (? to list)");
 ZST qSidldrp      = N_("enter path: ");
 ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
 ZST qScrdbse      = N_("Do you want to create a database there?");

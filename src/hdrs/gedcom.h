@@ -313,7 +313,7 @@ void initxref(void);
 void init_browse_lists(void);
 void init_caches(void);
 BOOLEAN init_lifelines_db(void);
-BOOLEAN init_lifelines_global(STRING configfile, STRING * pmsg);
+BOOLEAN init_lifelines_global(STRING configfile, STRING * pmsg, void (*notify)(STRING db, BOOLEAN opening));
 void init_mapping(void);
 void init_new_record(RECORD rec, char ntype, INT keynum);
 BOOLEAN init_valtab_from_file(STRING, TABLE, TRANMAPPING, INT, STRING*);

@@ -146,9 +146,10 @@ INT browse_tandem(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 INT browse_2fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 
 /* valgdcom.c */
-int check_stdkeys (void);
 void addmissingkeys (INT);
-INT xref_to_index (STRING);
+int check_stdkeys (void);
 BOOLEAN validate_gedcom (struct import_feedback * ifeed, FILE*);
+INT xref_to_index (STRING);
+
 
 #endif /* _LIFLINES_PRIV_H */

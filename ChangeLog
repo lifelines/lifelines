@@ -1,8 +1,19 @@
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
+	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:
+
 	Document Windows shim options in config files.
 	Move Windows shim code out of main init_global function.
 	Handful of i18n's in builtin.c.
+
+	* .linesrc ChangeLog lines.cfg gedlib/init.c gedlib/messages.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/llstdlib.h
+	hdrs/mystring.h interp/builtin.c interp/interp.c
+	liflines/error.c liflines/llinesi.h liflines/main.c
+	liflines/valgdcom.c stdlib/mystring.c:
+
+	Make config option ImportLog for location of import log.
+	Standardize string functions (llstrcpy & llstrapp families).
 
 2002-06-15 Perry Rapp <puddle@users.sourceforge.net>
 

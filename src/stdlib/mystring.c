@@ -614,13 +614,13 @@ vappendstrf (char ** pdest, int * len, const char * fmt, va_list args)
 }
 /*==================================
  * llstrncpy -- strncpy that always zero-terminates
- *  and handles UTF-8
+ * handles UTF-8
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 char *
 llstrncpy (char *dest, const char *src, size_t n)
 {
-	if (n<2) return dest;
+	if (n<2) return dest; /* must fit trailing zero */
 	strncpy(dest, src, n);
 	if (dest[n-1]) {
 		/* overflowed -- back up to last character that fits */
@@ -631,32 +631,102 @@ llstrncpy (char *dest, const char *src, size_t n)
 	return dest;
 }
 /*==================================
+ * llstrncpyf -- snprintf replacement
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrncpyf (char *dest, size_t n, const char * fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	llstrncpyvf(dest, n, fmt, args);
+	va_end(args);
+	return dest;
+}
+/*==================================
+ * llstrncpyvf -- vsnprintf replacement
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrncpyvf (char *dest, size_t n, const char * fmt, va_list args)
+{
+	if (n<1) return dest;
+	dest[0] = 0;
+	return llstrappvf(dest, n, fmt, args);
+}
+/*==================================
  * llstrncat -- strncat that always zero-terminates
- *  and handles UTF-8
+ * handles UTF-8
  * Created: 2001/03/17, Perry Rapp
  *================================*/
 char *
 llstrncat (char *dest, const char *src, size_t n)
 {
 	size_t len = strlen(dest);
-	if (len < n) {
-		llstrncpy(dest+len, src, n);
-	}
+	if (len > n-2) /* must fit trailing zero */
+		return dest;
+	llstrncpy(dest+len, src, n);
 	return dest;
 }
 /*==================================
- * llstrappend -- llstrncat except limit includes existing string
+ * llstrapp -- llstrncat except limit includes existing string
  *  ie, strncat except it always terminates, it handles UTF-8,
  *  and the limit is inclusive of existing contents
+ * handles UTF-8
  * Created: 2002/06/13, Perry Rapp
  *================================*/
 char *
-llstrappend (char *dest, const char *src, size_t limit)
+llstrapp (char *dest, size_t limit, const char *src)
 {
 	size_t len = strlen(dest);
 	size_t n = limit-len;
-	if (n > 0) {
-		llstrncpy(dest+len, src, n);
+	if (n < 2) /* must fit trailing zero */
+		return dest;
+
+	llstrncpy(dest+len, src, n);
+	return dest;
+}
+/*==================================
+ * llstrappf -- snprintf style append to string,
+ * subject to length limit (including current contents)
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrappf (char * dest, int limit, const char * fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	llstrappvf(dest, limit, fmt, args);
+	va_end(args);
+	return dest;
+}
+/*==================================
+ * llstrappvf -- vsnprintf style append to string,
+ * subject to length limit (including current contents)
+ * handles UTF-8
+ * Created: 2002/06/16, Perry Rapp
+ *================================*/
+char *
+llstrappvf (char * dest, int limit, const char * fmt, va_list args)
+{
+	/* TODO: Revise for UTF-8 */
+	size_t len = strlen(dest);
+	size_t n = limit-len;
+	int rtn;
+	if (n < 2) /* must fit trailing zero */
+		return dest;
+
+	rtn = vsnprintf(dest+len, n, fmt, args);
+	if (rtn == (int)(len-1) || rtn == -1) {
+		/* overflowed -- back up to last character that fits */
+		INT width=0;
+		STRING prev;
+		dest[len-1] = 0; /* make sure we're zero-terminated! */
+		prev = find_prev_char(&dest[n-1], &width, dest);
+		prev[width]=0;
 	}
 	return dest;
 }

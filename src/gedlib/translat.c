@@ -811,8 +811,8 @@ llsetenv (STRING name, STRING value)
 	INT len = ARRSIZE(buffer);
 	
 	llstrncpy(buffer, name, len);
-	llstrappend(buffer, "=", len);
-	llstrappend(buffer, value, len);
+	llstrapp(buffer, len, "=");
+	llstrapp(buffer, len, value);
 
 #ifdef HAVE_SETENV
 	if (setenv(name, value, 1) != -1)

@@ -76,8 +76,9 @@ static INT struct_max = 0;
 static INT num_errors;
 static INT num_warns;
 static INT defline;
-static BOOLEAN logopen;
-static FILE *flog;
+static BOOLEAN f_logopen = FALSE;
+static FILE *f_flog = 0;
+static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSmisval      = N_("Line %d: This %s line is missing a value field.");
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
@@ -85,27 +86,32 @@ static STRING qSundrec      = N_("Record %s is referred to but not defined.");
 ELMNT *index_data = NULL;
 
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
 static INT add_even_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_fam_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_indi_defn(struct import_feedback * ifeed, STRING, INT, ELMNT*);
 static INT add_othr_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_sour_defn(struct import_feedback * ifeed, STRING, INT);
 static INT add_to_structures(STRING, ELMNT);
+static int check_akey (int firstchar, STRING keyp, INT *maxp);
 static void check_even_links(struct import_feedback * ifeed, ELMNT);
 static void check_fam_links(struct import_feedback * ifeed, ELMNT);
 static void check_indi_links(struct import_feedback * ifeed, ELMNT per);
 static void check_othr_links(struct import_feedback * ifeed, ELMNT);
 static void check_references(struct import_feedback * ifeed);
 static void check_sour_links(struct import_feedback * ifeed, ELMNT src);
+static void clear_structures(void);
 static void handle_fam_lev1(struct import_feedback * ifeed, STRING tag, STRING val, INT line);
 static void handle_indi_lev1(struct import_feedback * ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
-static void clear_structures(void);
+static BOOLEAN openlog(void);
 static void handle_warn(struct import_feedback * ifeed, STRING, ...);
 static void handle_err(struct import_feedback * ifeed, STRING, ...);
-static int check_akey (int firstchar,
-		       STRING keyp,
-		       INT *maxp);
+static void set_import_log(STRING logpath);;
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
@@ -121,7 +127,9 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 
 	nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
-	logopen = FALSE;
+	f_logopen = FALSE;
+	f_flog = 0;
+	set_import_log(getoptstr("ImportLog", "errs.log"));
 	flineno = 0;
 	defline = 0;
 	curlev = 0;
@@ -206,9 +214,10 @@ validate_gedcom (struct import_feedback * ifeed, FILE *fp)
 	if (rec_type == INDI_REC && !named)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
-	if (logopen) {
-		fclose(flog);
-		logopen = FALSE;
+	if (f_logopen) {
+		fclose(f_flog);
+		f_logopen = FALSE;
+		f_flog = 0;
 	}
 	return num_errors == 0;
 }
@@ -776,24 +785,45 @@ handle_value (STRING val,
 static void
 handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 {
-	va_list args;
-	char str[100];
+	char msg[100+MAXPATHLEN];
 
-	if (!logopen) {
-
-		unlink("err.log");
-
-		ASSERT(flog = fopen("err.log", LLWRITETEXT));
-		logopen = TRUE;
+	if (openlog()) {
+		va_list args;
+		fprintf(f_flog, "%s: ", _("error"));
+		va_start(args, fmt);
+		vfprintf(f_flog, fmt, args);
+		va_end(args);
+		fprintf(f_flog, "\n");
 	}
-	fprintf(flog, "Error: ");
-	va_start(args, fmt);
-	vfprintf(flog, fmt, args);
-	va_end(args);
-	fprintf(flog, "\n");
-	sprintf(str, "%6d Errors (see log file `err.log')", ++num_errors);
+
+	++num_errors;
+	llstrncpyf(msg, sizeof(msg)
+		, ngettext("%6d Error", "%6d Errors", num_errors)
+		, num_errors);
+	if (f_logopen)
+		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);
+	else
+		llstrapp(msg, sizeof(msg), _(" (no log file)"));
+
 	if (ifeed && ifeed->validation_error_fnc)
-		(*ifeed->validation_error_fnc)(str);
+		(*ifeed->validation_error_fnc)(msg);
+}
+/*=====================================
+ * openlog -- open import error log if not already open
+ *===================================*/
+static BOOLEAN
+openlog (void)
+{
+	if (f_logopen)
+		return TRUE;
+
+	ASSERT(!f_flog);
+	if (!f_logpath[0])
+		return FALSE;
+
+	f_flog = fopen(f_logpath, LLWRITETEXT);
+	f_logopen = (f_flog != 0);
+	return f_logopen;
 }
 /*=====================================
  * handle_warn -- Handle GEDCOM warning
@@ -801,21 +831,26 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 static void
 handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 {
-	va_list args;
-	char str[100];
-	if (!logopen) {
-		unlink("err.log");
-		ASSERT(flog = fopen("err.log", LLWRITETEXT));
-		logopen = TRUE;
+	char msg[100+MAXPATHLEN];
+	if (openlog()) {
+		va_list args;
+		fprintf(f_flog, "%s: ", _("warning"));
+		va_start(args, fmt);
+		vfprintf(f_flog, fmt, args);
+		va_end(args);
+		fprintf(f_flog, "\n");
 	}
-	fprintf(flog, "Warning: ");
-	va_start(args, fmt);
-	vfprintf(flog, fmt, args);
-	va_end(args);
-	fprintf(flog, "\n");
-	sprintf(str, "%6d Warnings (see log file `err.log')", ++num_warns);
+	
+	++num_warns;
+	llstrncpyf(msg, sizeof(msg)
+		, ngettext("%6d Warning", "%6d Warnings", num_warns)
+		, num_warns);
+	if (f_logopen)
+		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);
+	else
+		llstrapp(msg, sizeof(msg), _(" (no log file)"));
 	if (ifeed && ifeed->validation_warning_fnc)
-		(*ifeed->validation_warning_fnc)(str);
+		(*ifeed->validation_warning_fnc)(msg);
 }
 /*=========================================
  * xref_to_index - Convert pointer to index
@@ -865,4 +900,14 @@ clear_structures (void)
 		remove_table(convtab, DONTFREE);
 		convtab = NULL;
 	}
+}
+/*=====================================
+ * set_import_log -- Specify where import errors logged
+ *===================================*/
+static void
+set_import_log (STRING logpath)
+{
+	if (!logpath)
+		logpath = "";
+	llstrncpy(f_logpath, logpath, sizeof(f_logpath));
 }

@@ -51,6 +51,7 @@ should return.
 void __fatal(STRING file, int line, STRING details);
 void crashlog(STRING fmt, ...);
 void crash_setcrashlog(STRING crashlog);
+void crash_setdb(STRING dbname);
 
 
 /* dirs.c */

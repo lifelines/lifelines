@@ -84,7 +84,7 @@ __getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PNODE arg2;
 	INT val;
-	STRING msg = 0;(STRING) "Enter integer for program";
+	STRING msg = 0;
 	PVALUE mval = NULL;
 	if (!iistype(arg, IIDENT)) {
 		prog_var_error(node, stab, arg, NULL, nonvarx, "getint", "1");

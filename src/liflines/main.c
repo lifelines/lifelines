@@ -108,6 +108,7 @@ STRING  ext_codeset = 0;       /* default codeset from locale */
 /* alphabetical */
 static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
+static void main_db_notify(STRING db, BOOLEAN opening);
 static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested
 	, STRING *dbused);
 static void platform_init(void);
@@ -278,7 +279,7 @@ prompt_for_db:
 	keypad(0, 1);
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
-	if (!init_lifelines_global(configfile, &msg)) {
+	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
@@ -482,8 +483,9 @@ static BOOLEAN
 open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 {
 	/* Open Database */
-	if (open_database(alteration, dbrequested, *dbused))
+	if (open_database(alteration, dbrequested, *dbused)) {
 		return TRUE;
+	}
 	/* filter out real errors */
 	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
 	{
@@ -545,4 +547,17 @@ load_usage (void)
 	opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
 	usage = _(qSusgNorm);
 #endif
+}
+/*==================================================
+ * main_db_notify -- callback called whenever a db is
+ *  opened or closed
+ * Created: 2002/06/16, Perry Rapp
+ *================================================*/
+static void
+main_db_notify (STRING db, BOOLEAN opening)
+{
+	if (opening)
+		crash_setdb(db);
+	else
+		crash_setdb("");
 }
