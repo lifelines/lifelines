@@ -1,3 +1,9 @@
+2000-12-29 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/indiseq.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
+	hdrs/indiseq.h liflines/browse.c:
+	Fixed some () to (void).
+
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* hdrs/interp.h: Correct prototype for type PFUNC.
