@@ -27,7 +27,7 @@
 #include <windows.h>
 #include <stdarg.h>
 #include <fcntl.h>
-#include "mycurses.h"
+#include <curses.h>
 
 /* Windows Console */
 
@@ -291,6 +291,13 @@ int wmove(WINDOW *wp, int y, int x)
 	wp->_curx = x;
 	wp->_cury = y;
 	return(0);
+}
+
+int vwprintw(WINDOW *wp, char *fmtp, va_list ap)
+{
+	char tmpbuf[2048]; /* help what should this be ? */
+	_vsnprintf(tmpbuf, sizeof(tmpbuf), fmtp, ap);
+	waddstr(wp, tmpbuf);
 }
 
 int wprintw(WINDOW *wp, ...)
