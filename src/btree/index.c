@@ -29,6 +29,7 @@
  *   3.0.2 - 24 Nov 1994
  *===========================================================*/
 
+#include "standard.h"
 #include "btreei.h"
 
 static INT incache (BTREE, FKEY);
