@@ -26,7 +26,6 @@
 #include "llstdlib.h"
 #include "feedback.h"
 #include "gedcom.h"
-#include "interp.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
