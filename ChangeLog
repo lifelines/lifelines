@@ -8,6 +8,10 @@
 	Revised year() report function to also accept string.
 	Renamed originformat to eraformat.
 
+	* .linesrc lines.cfg:
+
+	Add lines for LongDisplayDatePic & ShortDisplayDatePic.
+
 2002-01-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c hdrs/llstdlib.h hdrs/standard.h
