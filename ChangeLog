@@ -1,5 +1,8 @@
 2000-11-08  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* Makefile.am README.DEVELOPERS: Add first guess on source layout
+	description.  Make sure it is included in distribution.
+
 	* hdrs/interp.h interp/alloc.c interp/builtin.c interp/date.c
 	interp/eval.c interp/heapused.c interp/interp.c interp/intrpseq.c
 	interp/lex.c interp/more.c interp/pvalue.c interp/rassa.c

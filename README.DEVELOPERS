@@ -15,10 +15,7 @@ Makefiles generated will be able to regenerate any file dependent on a
 Makefile.am or configure.in.  To regenerate the build system explicitly,
 you need to run the following four commands:
 
-aclocal
-autoheader
-automake
-autoconf
+  aclocal; autoheader; automake; autoconf
 
 This list of commands *must* be run after freshly checking a copy of the
 project out of CVS -- the files generated automatically are no longer
@@ -30,3 +27,38 @@ build system to suit your development needs...
 Rob Fugina
 robf@geeks.com
 
+
+Source layout
+=============
+
+(This is a first try to describe the source layout.  Please correct
+and extend it. :-)
+
+  hdrs
+
+    Header files.
+
+  btree
+
+    btree implementation, with access functions.  Used by the rest of
+    lifelines to access the binary database.
+
+  gedlib
+
+    (GEDCOM access functions?)
+
+  interp
+
+    Report generator program interpreter.
+
+  stdlib
+
+    Common functions needed by the other libraries.
+
+  liflines
+
+    The frontend logic and GUI code.
+
+  tools
+
+    Extra tool to edit the binary files.
