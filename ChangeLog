@@ -14,6 +14,11 @@
 	Add ASSERT in swap_families to verify its args are FAMS nodes.
 	(rf. sf.net bug#1059724: Problem with add source/event/other commands)
 
+	* ChangeLog src/hdrs/arch.h src/interp/builtin.c
+
+	Remove support for X_OK in test() (not really needed and
+	not supported on MS-Windows).
+
 2005-01-01 Stephen Dum
 
         *Changelog po/fr.po reports/anniver.ll, reports/cron.ll
