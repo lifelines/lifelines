@@ -725,10 +725,14 @@ partition (INT left,
 		SORTEL tmp = ldata[i];
 		ldata[i] = ldata[j];
 		ldata[j] = tmp;
-		while ((*lcmp)(ldata[i], pivot) < 0)
+		while ((*lcmp)(ldata[i], pivot) < 0) {
+			ASSERT(i<right); /* or bad compare routine */
 			i++;
-		while ((*lcmp)(ldata[j], pivot) >= 0)
+		}
+		while ((*lcmp)(ldata[j], pivot) >= 0) {
+			ASSERT(j>left); /* or bad compare routine */
 			j--;
+		}
 	} while (i <= j);
 	return i;
 }

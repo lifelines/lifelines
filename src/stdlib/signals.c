@@ -66,7 +66,7 @@ char *sig_msgs[] = {
 	"POWER-FAIL RESTART",
 	"WINDOW CHANGE",
 };
-#define NUM_SIGNALS ARRAYSIZE(sig_msgs)
+#define NUM_SIGNALS ARRSIZE(sig_msgs)
 
 static void on_signals(int);
 

@@ -247,7 +247,7 @@ static struct {
 	{ "while",	WHILE },
 };
 
-INT nrwords = ARRAYSIZE(rwordtable);
+INT nrwords = ARRSIZE(rwordtable);
 
 /*======================================
  * reserved -- See if string is reserved

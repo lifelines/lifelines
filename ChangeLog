@@ -1,3 +1,9 @@
+2007-07-29 Perry Rapp <puddle@users.sourceforge.net>
+
+	Deleted redundant ARRAYSIZE macro (same as ARRSIZE).
+	Bugfix in bfs.c BufCatNum (but unused function at present).
+	Added sanity ASSERT in sort code in case string compare misbehaves.
+
 2001-07-28  Marc Nozell  <marc@nozell.com>
 
 	* docs/lifelines.sgml: Missed a typo.

@@ -158,8 +158,7 @@ STRING
 bfCatNum(bfptr bfs, int num)
 {
 	char scratch[33];
-	/*	itoa(num, scratch, 10); */
-	sprintf(scratch, "33%d", num);/* nozell fixed this */
+	snprintf(scratch, ARRSIZE(scratch), "%d", num);
 	bfCat(bfs, scratch);
 	return bfs->str;
 }

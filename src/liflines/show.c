@@ -697,8 +697,8 @@ person_display (NODE indi, NODE fam, INT len)
 
 	if (!indi) return NULL;
 
-	if (evlen > sizeof(scratch2)/sizeof(scratch2[0])-1)
-		evlen = sizeof(scratch2)/sizeof(scratch2[0])-1;
+	if (evlen > ARRSIZE(scratch2)-1)
+		evlen = ARRSIZE(scratch2)-1;
 	if (fam) {
 		family_events(scratch2, ttd, indi, fam, evlen);
 	} else {

@@ -238,4 +238,4 @@ BUILTINS builtins[] = {
 	{"year",		1,	1,	__year},
 };
 
-INT nobuiltins = ARRAYSIZE(builtins);
+INT nobuiltins = ARRSIZE(builtins);

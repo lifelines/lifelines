@@ -129,18 +129,20 @@ Perry, 2001/07/20
 #define cmpstr(s,t)    (strcmp((s),(t)))
 #define cmpstrloc(s,t) (ll_strcmploc((s),(t)))
 
-#define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
 
-/* TRANSLFNC must return stdalloc'd memory */
+/* TRANSLFNC must return stdalloc'd memory
+translation function type, used by some higher-level
+functions to pass in translations to lower-level functions */
 typedef STRING (*TRANSLFNC)(STRING str, INT len);
 
-
+/* types returned by chartype */
 #define WHITE  ' '
 #define LETTER 'a'
 #define DIGIT  '0'
 #define ZERO    0
 
+/* types for lists */
 typedef struct lntag *LNODE;
 struct lntag {
 	VPTR l_element;
@@ -179,6 +181,14 @@ typedef struct ltag {
 
 #define ISNULL(k)	(!k || *k == 0)
 
+/*
+	ARRSIZE is to make compiler insert size of
+		(1) static array (# elements)
+		or
+		(2) static string (# characters) (will matter if we shift to wchar_t)
+	ONLY use this for true arrays & locally sized strings.
+	NEVER use this for pointers!
+*/
 #define ARRSIZE(qq) (sizeof(qq)/sizeof(qq[0]))
 
 struct WAREHOUSE_S;

@@ -326,7 +326,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = getasurname(nval(name));
-	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
+	translate_string(ttr, str, scratch, ARRSIZE(scratch));
 	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*========================================+
@@ -390,7 +390,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	str = givens(nval(name)); /* static buffer, but create_pvalue will copy */
-	translate_string(ttr, str, scratch, sizeof(scratch)/sizeof(scratch[0]));
+	translate_string(ttr, str, scratch, ARRSIZE(scratch));
 	return create_pvalue(PSTRING, (VPTR)scratch);
 }
 /*===============================+
@@ -1728,7 +1728,7 @@ __concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			hold[nstrs++] = NULL;
 		arg = inext(arg);
 		delete_pvalue(val);
-		if (nstrs == sizeof(hold)/sizeof(hold[0])) {
+		if (nstrs == ARRSIZE(hold)) {
 			*eflg = TRUE;
 			prog_error(node, "Too many (>32) args to concat");
 			return NULL;
