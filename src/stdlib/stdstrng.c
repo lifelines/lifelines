@@ -60,8 +60,8 @@ STRING s1, s2;
 	if (!s2) return strsave(s1);
 	len = strlen(s1) + strlen(s2);
 	p = s3 = (STRING) stdalloc(len+1);
-	while (c = *s1++) *p++ = c;
-	while (c = *s2++) *p++ = c;
+	while ((c = *s1++)) *p++ = c;
+	while ((c = *s2++)) *p++ = c;
 	*p = 0;
 	return s3;
 }
@@ -133,7 +133,7 @@ STRING str;
 {
 	INT c;
 	if (!str) return FALSE;
-	while (c = *str++) {
+	while ((c = *str++)) {
 #ifndef OS_NOCTYPE
 		if (chartype(c) != DIGIT) return FALSE;
 #else
@@ -151,7 +151,7 @@ STRING str;
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c;
-	while (c = *str++)
+	while ((c = *str++))
 		*p++ = ll_tolower(c);
 	*p = 0;
 	return scratch;
@@ -165,7 +165,7 @@ STRING str;
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
 	INT c;
-	while (c = *str++)
+	while ((c = *str++))
 		*p++ = ll_toupper(c);
 	*p = 0;
 	return scratch;

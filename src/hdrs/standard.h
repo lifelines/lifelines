@@ -159,7 +159,20 @@ WORD dequeue_list(LIST);
 void set_list_element(LIST, INT, WORD);
 WORD get_list_element(LIST, INT);
 INT length_list(LIST);
+
+STRING strsave(STRING);
+STRING strconcat(STRING, STRING);
+INT chartype(INT);
+BOOLEAN iswhite(INT);
+BOOLEAN isletter(INT);
+BOOLEAN isnumeric(STRING);
+STRING lower(STRING);
+STRING upper(STRING);
+STRING capitalize(STRING);
+INT ll_toupper(INT);
+INT ll_tolower(INT);
 STRING trim(STRING, INT);
+
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 
 /* Internal Functions */
