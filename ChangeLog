@@ -13,6 +13,8 @@
 	Fixed firstindi, nextindi.., firstfam,nextfam,...
 	Added NOD0 type to cacheel to hold info on the entire record (indi...).
 
+	* docs/lifelines.sgml: Updated documentation a bit.
+
 2000-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/indiseq.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h

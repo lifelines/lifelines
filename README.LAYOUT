@@ -39,7 +39,8 @@ Source Code Directories
 
 ./stdlib/
 
-    Common functions used by other LifeLines modules
+    Common functions used by other LifeLines modules, including:
+    lists (in double.c), tables, sequences, string stuff
 
 ./liflines/
 
