@@ -50,12 +50,14 @@ BOOLEAN
 init_valtab_from_rec (CNSTRING key, TABLE tab, INT sep, STRING *pmsg)
 {
 	INT len;
-	STRING rawrec;
+	STRING rawrec, rawrec1;
 	BOOLEAN rc;
 	if (!tab) return FALSE;
 	if (!(rawrec = retrieve_raw_record(key, &len))) return FALSE;
+	rawrec1 = rawrec;
+	skip_BOM(&rawrec);
 	rc = init_valtab_from_string(rawrec, tab, sep, pmsg);
-	stdfree(rawrec);
+	stdfree(rawrec1);
 	return rc;
 }
 /*====================================================
@@ -91,8 +93,7 @@ init_valtab_from_file (STRING fname, TABLE tab, XLAT ttm, INT sep, STRING *pmsg)
 	ASSERT(siz == buf.st_size || feof(fp));
 	fclose(fp);
 	/* skip over UTF-8 BOM (byte order mark) if present */
-	if ((uchar)str[0] == 0xEF && (uchar)str[1] == 0xBB && (uchar)str[2] == 0xBF)
-		str += 3;
+	skip_BOM(&str);
 	zstr = translate_string_to_zstring(ttm, str);
 	stdfree(str1); /* done with original record - we use translated record */
  	rc = init_valtab_from_string(zs_str(zstr), tab, sep, pmsg);

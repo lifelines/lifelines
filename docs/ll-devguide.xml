@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.30'>]>
+[<!ENTITY llversion '3.0.31'>]>
 
 <!--
 Outline for developer's guide to lifelines code.
@@ -897,10 +897,10 @@ mkdir ~/rpmbuild/SRPMS
 mkdir ~/rpmbuild/RPMS
 mkdir ~/rpmbuild/BUILD
 mkdir ~/rpmbuild/tmp
-mkdir ~/rpmbuild/lifelines-3.0.30
-cp bld/lifelines-3.0.30.tar.gz ~/rpmbuild/lifelines-3.030.
-cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.30
-cd ~/rpmbuild/lifeines-3.0.30
+mkdir ~/rpmbuild/lifelines-3.0.31
+cp bld/lifelines-3.0.31.tar.gz ~/rpmbuild/lifelines-3.0.31.
+cp build/rpm/lifelines.spec ~/rpmbuild/lifelines-3.0.31
+cd ~/rpmbuild/lifeines-3.0.31
 rpmbuild -ba lifelines.spec
 </programlisting>
 The mkdir commands only need to be executed if needed.

@@ -188,6 +188,8 @@ STRING upperascii_s(STRING str);
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT utf8len(char ch);
 INT next_char32(STRING * ptr, int utf8);
+void skip_BOM(STRING * pstr);
+
 
 
 /* strwhite.c */

@@ -18,6 +18,14 @@
 
 	Include legacy translation tables in translations.
 
+	* ChangeLog NEWS configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml
+	src/gedlib/valtable.c src/hdrs/llstdlib.h src/hdrs/version.h
+	src/liflines/screen.c src/stdlib/strutf8.c
+
+	Fix value tables to handle BOM, and change version to 3.0.31.
+
 2003-09-08 Matt Emmerton
 
 	* ChangeLog src/gedlib/init.c

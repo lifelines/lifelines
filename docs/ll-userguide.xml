@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.30'>]>
+[<!ENTITY llversion '3.0.31'>]>
 
   <book id="docbook">
 
@@ -19,7 +19,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.30">
+	<!entity llversion	"3.0.31">
 ]>	
 	
 <book id="docbook">

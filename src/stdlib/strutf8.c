@@ -135,3 +135,15 @@ next_char32 (STRING * ptr, int utf8)
 		return ch;
 	}
 }
+/*=========================================
+ * skip_BOM -- advance string past BOM if present
+ *  BOM is a byte order mark that Microsoft likes to use
+ *=======================================*/
+void
+skip_BOM (STRING * pstr)
+{
+	STRING str = *pstr;
+	/* UTF-8 is the only BOM we handle */
+	if ((uchar)str[0] == 0xEF && (uchar)str[1] == 0xBB && (uchar)str[2] == 0xBF)
+		*pstr += 3;
+}
