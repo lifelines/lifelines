@@ -1470,7 +1470,7 @@ lower_dup (STRING s)
 static STRING
 title_dup (STRING s)
 {
-	ZSTR zstr = ll_tolowerz(s, uu8);
+	ZSTR zstr = ll_totitlecasez(s, uu8);
 	STRING str = strdup(zs_str(zstr));
 	zs_free(&zstr);
 	return str;

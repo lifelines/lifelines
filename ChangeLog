@@ -1,3 +1,10 @@
+2003-04-19 Perry Rapp
+
+	* ChangeLog src/gedlib/date.c
+
+	Fix title_dup copy&paste (it was doing lower), which was causing
+	many failures in st\st_date.ll.
+
 2003-04-16 Perry Rapp
 
 	* ChangeLog src/stdlib/strcvt.c
