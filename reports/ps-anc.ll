@@ -1,27 +1,35 @@
 /*
- * @progname       ps-anc
- * @version        8.0
- * @author         Wheeler, Stringer
- * @category       
- * @output         PostScript
- * @description    
-**
-**  This LifeLines report program generates Postscript ancestral and
-**  descendant charts.  The ancestral charts can include the siblings
-**  of all direct ancestors (aunts, uncles, great-aunts, great-uncles,
-**  etc.).  A multi-page poster chart can also be generated.  The
-**  chart format is based on the program GedChart, by Tom Blumer.
-** 
+    @prognam      ps-anc
+    @version      8.86, 4 Jul 2004
+    @author       Robert Simms
+    @output       PostScript
+    @category     chart making
+    @description  PS Charts
+
+    a LifeLines genealogy report program that produces ancestry charts in
+    PostScript
+
+    This is an interim version on the way to a release of ps-anc9.
+    For a log of changes, visit the web page
+      http://www.math.clemson.edu/~rsimms/genealogy/ll/ps-anc/log.html
+*/
+
+/*
+**  ps-anc,   9 Sep 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
+**  ps-anc2, 16 August 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
+**  ps-anc5, 19 Feb 1996, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
+**           - all comments/bugs should now go to Phil Stringer
+**  ps-anc6, 30 Jan 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
+**  ps-anc7, 1 Feb 1997, enhanced by Phil Stringer (P.Stringer@mcc.ac.uk)
 **  ps-anc8, 18 Mar 1998, enhanced by Robert Simms and Allan Yates,
 **                                 rsimms@math.clemson.edu and ayates@nortel.ca
-**  ps-anc, 9 September 1994, by Fred Wheeler (wheeler@ipl.rpi.edu)
 **
 **  GETTING THIS FILE
 **
-**  The ps-anc versions are available via anonymous ftp (and www) from
+**  The ps-anc final release versions are available via the Internet:
+**   (1) http://lifelines.sourceforge.net/
 **   (1) ftp://ftp.cac.psu.edu/pub/genealogy/lines/reports/
-**   (2) ftp://cs6400.mcc.ac.uk/pub/genealogy/lines/reports/
-**   (3) http://math.clemson.edu/~rsimms/genealogy/ll/
+**   (2) http://www.math.clemson.edu/~rsimms/genealogy/ll/
 **
 **  BRIEF DESCRIPTION
 **
@@ -59,9 +67,9 @@
 **    Multi-page poster option
 **    Multi-page charts scaled correctly (thanks to broman@Np.nosc.mil)
 **    Maximum name length configurable by user (fixes long squashed names)
-**    Option to supress siblings of later generations in ancestral charts
+**    Option to suppress siblings of later generations in ancestral charts
 **    Checks that user selects a valid person (bug fix)
-**    Can make a guess at whether a title is a prefix of suffix type
+**    Can make a guess at whether a title is a prefix or suffix type
 **    Use of titles is configurable (prefix, suffix, guess, none)
 **    Birth/death/marriage date styles are configurable (may include place)
 **    Corner message is slightly smaller, and chart will not overlap it
@@ -102,7 +110,7 @@
 **  CHANGES in version 5:
 **    Enhanced descendant chart
 **    Automatic choice of chart type if no children or no ancestors
-**    Multi page landscape bug fixed
+**    Multi-page landscape bug fixed
 **    Enhancements to user option specification
 **    Character set enhanced to iso-8859-1
 **    Additional personal titles 
@@ -121,7 +129,7 @@
 **  CHANGES in version 7:
 **    Fixed bug on descendant charts of overlapping vertical lines if it
 **      branched up, and there was a spouse and no children in that family.
-**    iso-8859-1 support re-instated.
+**    iso-8859-1 support reinstated.
 **    More efficient print_all_persons code from Fred Wheeler
 **
 **    CREDITS
@@ -131,47 +139,46 @@
 **
 **  CHANGES in version 8 by Robert Simms and (+) Allan Yates:
 **
-**   >proc do_anc:
+**   >procedure do_anc:
 **    Closed up extra space between branches of the chart by changing
-**      min_pos to person_min_pos, to be used to keep person from being drawn
+**      min_pos to person_minpos, to be used to keep person from being drawn
 **      too high on chart, but not to keep all ancestors of a person from being
 **      drawn above this point.  Introduced abs_min_pos as the absolutely
-**      highest position for any older siblings or half-siblings of a person.
-**    Fixed the printing of half-siblings to be subject to the sibling depth
+**      highest position for any older siblings or half siblings of a person.
+**    Fixed the printing of half siblings to be subject to the sibling depth
 **      limit obtained from the interrogate function.
-**    Fixed a mis-alignment in half-sib branch vertical line.
-**   >proc do_des:
+**    Fixed a mis-alignment in half sib. branch vertical line.
+**   >procedure do_des:
 **    Fixed conditions for drawing vertical line to exclude case where there
 **      are children but no spouse and depth = max_depth.  In this case the
 **      children heights are never computed so a vertical line can't be drawn.
 **   >general:
-**    +Added option for displaying surnames in uppercase
+**    +Added option for displaying surnames in upper case.
 **    +Added date option to display the first two items in a place list
 **    +Added option for not displaying large descriptive title, print small
 **      one instead with title text added
 **    +Do not print preceding comma if place exists and date does not exist
 **    Fixed positioning of names that caused some names to be too close
 **      to vertical lines, eliminating horizontal lines in come cases.
-**    Added support in postscript file for increasing the page margins together
+**    Added support in PostScript file for increasing the page margins together
 **      with a new question in the interrogate function.  (This required
 **      calculation of a clip rectangle since the device clip rectangle would
 **      allow redundant display of parts of the chart at adjoining edges in
 **      multi-page charts.)  This is useful for imposing a margin when a
-**      postscript file is converted to another format, such as Adobe PDF.
-**      Converters as devices may present a zero margin. If the postscript file
-**      has a margin built in then the converted file can be printed on more
-**      printers without worrying about losing the edges of the chart.
+**      PostScript file is converted to another format, such as Adobe PDF.
+**      This was to prevent the converted file from having a zero margin
+**      which doesn't print well on most printers.
 **    Centered chart label and coordinated its placement with that of the title
 **      to avoid having the two overlap.  This fix became more necessary with
 **      the addition of the ability to increase the margins.
 **    Added option for centering or left justifying chart label.
 **    Replaced tabs in LifeLines code with spaces to avoid irregular
 **      indentation.
-**    Experimented with putting chart drawing code into a procedure to reduce
+**    Experimented with putting page drawing code into a procedure to reduce
 **      the size of multi-page files.  Determined that doing so would
 **      require changing the MaxOpStack limit in PostScript to handle the
 **      potentially large number of items that would go into the procedure.
-**      This could still potentially place a limit on how many individuals
+**      This could potentially place a limit on how many individuals
 **      could be shown in a chart for some devices.  So, the idea was dropped.
 **
 **    CREDITS:
@@ -180,9 +187,9 @@
 **
 **  ABOUT GEDCHART (a different program)
 **
-**  This program includes postscript code written by Tom Blumer
+**  This program includes PostScript code written by Tom Blumer
 **  (blumer@ptltd.com).  It is used here with his permission.  This
-**  postscript code is from Tom Blumer's GedChart package.  The report
+**  PostScript code is from Tom Blumer's GedChart package.  The report
 **  is very much like that generated by GedChart using the -Sa or -Sd
 **  option.
 **
@@ -195,70 +202,152 @@
 **
 */
 
-global (high_pos_gen)         /* array, highest so far in each generation */
-global (high_pos_all)         /* highest position so far for any generation */
-global (high_depth)           /* highest depth so far */
+option("explicitvars")  /* to catch misspellings or uninit'ed use of variables*/
 
-global (name_height)          /* height of name text on chart */
-global (date_height)          /* height of birth/death/marriage date text */
+/* If translation tables are in effect, and UTF-8 or 8-bit characters are used
+   in a custom title, for instance, then it might be necessary to specify what
+   codeset the report is using (say ISO-8859-1, ISO-8859-2, UTF-8, etc.)
+   to ensure that those 8-bit characters arrive safely in the output
+   This is done with the char_encoding() statement... */
+/*char_encoding("ISO-8859-1")*/
 
-global (no_parent_extra)      /* constant, extra vert. line when no parent */
+global(version)              /* version string */
+global(TRUE)                 /* int, set to 1 for use as boolean value */
+global(FALSE)                /* int, set to 0 for use as boolean value */
+global(UP)                   /* int, constant, set to -1 for desc. branches */
+global(NEUTRAL)              /* int, constant, set to  0 for desc. branches */
+global(DOWN)                 /* int, constant, set to  1 for desc. branches */
+global(max_dateplace)        /* int, number of date-place styles */
+global(place_modify)         /* boolean, use (included) abbreviation routine */
+
+global(updown_override)      /* int, to force desc. to be all up or all down */
+global(high_pos_gen)         /* array, highest so far in each generation */
+global(high_pos_gen_offset)  /* used to allow non-positive array indexing */
+global(high_depth)           /* int, highest depth so far */
+global(low_depth)            /* int, lowest depth so far */
+
+global(name_height)          /* height of name text on chart                */
+global(date_height)          /* height of birth/death/marriage date text  */
+global(corner_height)        /* space between parent and extreme child 
+                              *   -- name_height was formerly used for this */
+global(min_sibling_spacer)   /* constant, min. vert. space between siblings */
+global(cloaked_depth)        /* used for hidding a gen. from get_clearance */
+global(tighten)              /* boolean, descendant branches to be closer */
+global(debug)
+global(debug2)
+global(debug_postscript)
 
 /* variables prompted from or configured by the user */
 
-global (chart_type)           /* int, 0: ancestral, 1: descendant */
-global (root_person)          /* indi, person for whom to generate the chart */
-global (font_name)            /* string, name of font */
-global (max_depth)            /* int, maximum number of generations */
-global (chart_label)          /* string, label for corner of chart */
-global (chart_label_centered) /* boolean, center chart_label on first page */
-global (color_chart)          /* boolean, is chart in color */
-global (multi_page)           /* boolean, is chart many page poster type */
-global (x_pages)              /* int, number of horizontal pages */
-global (y_pages)              /* int, number of vertical pages */
-global (name_letters)         /* int, maximum number of letters in a name */
-global (title_method)         /* int, code for how to insert titles */
-global (depth_siblings)       /* int, number of generations to show siblings */
-global (dateplace_birth)      /* int, date style for birth/death/marriage */
-global (dateplace_death)
-global (dateplace_marriage)
-global (surname_upper)        /* boolean, display surnames in upper case */
-global (display_title)        /* boolean, display descriptive title */
-global (bold_chart)           /* int, direct line in bold 0: no, 1: yes */
-global (mirror_chart)         /* int, root person on right 0: no, 1: yes */
-global (half_sib)             /* int, show half-siblings 0: no, 1: yes */
-global (portrait)             /* int, 0: landscape, 1: portrait */
-global (extra_margin)         /* int, length in points to add to margin */
+global(chart_type)           /* int, 0: ancestral, 1: descendant */
+global(root_person)          /* indi, person for whom to generate the chart */
+global(root_fam)             /* fam, family for combination chart */
+global(font_name)            /* string, name of font for individual names*/
+global(ifont_name)           /* string, name of font for person info */
+global(enc_choice)           /* int, specifies character encoding to use */
+global(max_depth)            /* int, maximum number of gen. up from root */
+global(min_depth)            /* int, minimum number of gen. down from root */
+global(start_depth)          /* int, depth of root, used by reserve() also */
+global(chart_label)          /* string, label for corner of chart */
+global(chart_label_centered) /* boolean, center chart_label on first page */
+global(color_chart)          /* boolean, is chart in color */
+global(multi_page)           /* boolean, is chart many page poster type */
+global(x_pages)              /* int, number of horizontal pages */
+global(y_pages)              /* int, number of vertical pages */
+global(name_letters)         /* int, maximum number of letters in a name */
+global(title_method)         /* int, code for how to insert titles */
+global(depth_siblings)       /* int, number of generations to show siblings */
+global(dateplace_birth)      /* int, date style for birth/death/marriage */
+global(dateplace_death)
+global(dateplace_marriage)
+global(dateplace_burial)
+global(show_altname)         /* boolean, whether or not to show 2nd names */
+global(show_address)         /* boolean, whether or not to show addresses */
+global(no_resides_at)        /* boolean, show all or just current addresses */
+global(surname_upper)        /* boolean, display surnames in upper case? */
+global(display_title)        /* boolean, display descriptive title? */
+global(chart_title_override) /* string, user-specified title */
+global(display_label)        /* boolean, display identifying label? */
+global(label_outside)        /* boolean, place label outside border? */ 
+global(display_border)       /* boolean, display a fancy border? */
+global(bold_chart)           /* bool, direct line in bold 0: no, 1: yes */
+global(bold_factor)          /* int, how much larger bold lines should be */
+global(mirror_chart)         /* bool, root person on right 0: no, 1: yes */
+global(mom_first)            /* bool, mothers at branch tops: no(0), yes(1) */
+global(halfsib)              /* bool, show half siblings 0: no, 1: yes */
+global(halfsib_anc)          /* bool, show half sibling ancestors 0: no,1:yes*/
+global(depth_halfsib_anc)    /* int, smallest generation in which half
+                                      siblings will have ancestors plotted */
+global(desc_gender)          /* int, gender restriction on descendants */
+global(opt_rel_famc)         /* bool, non-birth branches use thin blue line*/
+global(duplic_handling)      /* int, 0 do nothing, 1 dashed line, 2 anc once */
+global(portrait)             /* int, 0: landscape, 1: portrait */
+global(paper_width)          /* int, width in points of target paper */
+global(paper_height)         /* int, height in points of target paper */
+global(paper_name)           /* string, name of paper for PostScript device */
+global(margin_top)           /* int, minimum top margin, in points*/
+global(margin_bottom)        /* int, minimum bottom margin, in points*/
+global(margin_left)          /* int, minimum left margin, in points*/
+global(margin_right)         /* int, minimum rightmargin, in points*/
+global(manual_feed_opt)      /* int, 0 don't specify, 1 on, 2 off */
+global(postscript_level)     /* int, 1 or 2 for PostScript level 1 or greater */
+global(pacificpage)          /* int, 0/1 have pacific page cartridge on Laser */
 
-/* variables to return values from procedures to make them functions */
-global (do_anc_stack)         /* stack, function do_anc is recursive */
-global (person_height_return)
-global (is_prefix_title_return)
-global (dateplace_return)
+/* variables to return additional values from functions */
+global(min_gap_return)
+global(branch_up_min_pos)
+global(dup_line_return)
 
 /* these three constants define how close branches of the tree can get */
-global (branch_dist_prev)     /* minimum distance from previous generation */
-global (branch_dist_same)     /* minimum distance from same generation */
-global (branch_dist_next)     /* minimum distance from next generation */
+global(branch_dist_prev)     /* minimum distance from previous generation */
+global(branch_dist_same)     /* minimum distance from same generation */
+global(branch_dist_next)     /* minimum distance from next generation */
 
 /* stacks for storing the information for each person on the chart */
 /* see proc's enqueue_person and print_all_persons */
 
-global (plist_person)  /* the person (to extract name, birth, death) */
-global (plist_depth)   /* generation depth */
-global (plist_pos)     /* vertical position */
-global (plist_line)    /* 0,1 boolean, is direct ancestor? */
-global (plist_mdate)   /* marriage date */
-global (plist_anc)    /* 0,1 boolean, person has ancestor? */
-global (plist_des)    /* 0,1 boolean, person has descendant? */
+global(plist_person)  /* the person (to extract name, birth, death) */
+global(plist_depth)   /* generation depth */
+global(plist_pos)     /* vertical position */
+global(plist_line)    /* 0,1 boolean, is direct ancestor? */
+global(plist_mdate)   /* marriage date */
+global(plist_up)      /* 0,1 boolean, person connects to next up level*/
+global(plist_down)    /* 0,1 boolean, person connects to next down level */
+global(plist_duplic)  /* 0,1 boolean, the person is a duplicate appearance */
+global(plist_height)  /* to store person height for ease of branch adjustment */
+
+/* set for enabling originality of chart appearances by individuals */
+global(original_person)
+global(original_depth)
+global(duplicate_anc_return)
+global(duplicate_return)
 
 /* stacks for storing the information for each vertical line on the chart */
-/* see proc's enqueue_vertical and dequeue_all_verticals */
+/* see proc's enqueue_vertical and print_all_verticals */
 
-global (llist_depth)   /* generation depth */
-global (llist_low)     /* starting point */
-global (llist_high)    /* finishing point */
-global (llist_dash)    /* dashed lines */
+global(llist_depth)   /* generation depth */
+global(llist_low)     /* starting point */
+global(llist_high)    /* finishing point */
+global(llist_color)   /* line color */
+global(llist_duplic)  /* dashed lines for duplicates */
+
+/* stacks for marking the beginning of a branch in the person and line lists */
+global(branch_start_person)
+global(branch_start_line)
+
+
+global(ps_xlat)       /* for a table to hold character translations */
+global(opt_xlat)      /* boolean, to control character translation */
+global(opt_deparen)   /* boolean, control removal of parenthesized name text */
+
+/*
+   keyword: SHORTEN
+   uncomment the following 'include' command and verify that the
+   included file contains subroutines for place name shortening
+*/
+
+/* include("shorten.lllib") */
+
 
 /*
 **  function: interrogate_user
@@ -268,14 +357,33 @@ global (llist_dash)    /* dashed lines */
 **  to one of the questions is always the same, you can easily
 **  hardwire your answer here so that you are never asked again.
 **
-**  An 'if' statement is wrapped around each question.  The 'if (1)'
-**  can be changed to an 'if (0)' to make the program use the default
+**  An 'if' statement is wrapped around each question.  The 'if(TRUE)'
+**  can be changed to an 'if(FALSE)' to make the program use the default
 **  value defined in the 'else' clause instead of asking every time.
+**
+**  The questions are grouped in the following way:
+**    o CHART CONTENT -- root person, chart type, # gen, # gen sib,
+**          show half siblings, show half sibling ancestors,
+**          # gen half sibling ancestors, matrilinear/patrilinear drop line
+**    o LAYOUT -- multi-page and orientation, # pages for multi-page,
+**          root person on left or right, mothers or fathers at tops of branches
+**    o ADD-ONS -- border, title, label, label text, center label,
+**          label in/outside border
+**    o STYLE -- font, character encoding, color, desc. branch directions,
+**          bold lines of descent, bold line width factor, duplicate handling,
+**          display of non-birth relations
+**    o FORMAT OF INFORMATION -- date/place format, show 2nd names,
+**          address specifics, title before/after name, 
+**          lower/upper-case surnames,max. length for names,
+**          removing parenthesized text from names
+**    o OUTPUT OPTIONS -- paper size/type, minimum margins, manual feed request
+**          PacificPage margin modification, filter some PostScript strings
 **
 */
 
-func interrogate_user ()
-{
+func interrogate_user() {
+
+/* CHART CONTENT */
 
 /*
 **  QUESTION: Who is the root person?
@@ -286,38 +394,75 @@ func interrogate_user ()
 **
 */
 
-  if (1)  {
-    set (root_person, 0)
-    while ( not (root_person) )  {
-      getindimsg (root_person, "Identify root person for chart")
+  if(TRUE) {
+    set(root_person, 0)
+    getindimsg(root_person, "Identify root person for chart (blank to cancel)")
+    if(not(root_person)) {
+      return(0)       /* signals abnormal termination of interrogate_user() */
     }
-  }  else  {
-    set (root_person, indi ("1"))
+  } else {
+    set(root_person, indi("1"))
   }
 
 /*
 **  QUESTION: What type of chart?
 **
-**  This should always be asked, unless you never use one of the two
+**  This should always be asked, unless you never use two of the three
 **  types of charts.
 **
 */
-  if (1)  {
-    indiset(pset)
-    addtoset(pset,root_person,1)
-    if (eq( lengthset(childset(pset)), 0) ) {
-      print ("Printing ancestor chart as ", name(root_person), " has no known children.", nl())
-      set (chart_type, 0)
-    } elsif (eq( lengthset(parentset(pset)), 0) ) {
-      print ("Printing descendant chart as ", name(root_person), " no known ancestors.", nl())
-      set (chart_type, 1)
-    } else {
-      getintmsg (chart_type, "Enter 0 for ancestral, 1 for descendant chart")
+  if(TRUE) {
+    list(options)
+    setel(options, 1, "Ancestors")
+    setel(options, 2, "Descendants and Spouses")
+    setel(options, 3, "Direct Descendants (Drop line)")
+    setel(options, 4, "Ancestors and Descendants of a Family (Combo.)")
+    setel(options, 5, "Ancestors and Descendants of an Extended Family (Cousins)")
+    setel(options, 6, "Multiple Charts (program editing required)")
+    set(chart_type, menuchoose(options, "Select chart type:"))
+    if(or(le(chart_type, 0), ge(chart_type, 7))) {
+      return(0)       /* signals abnormal termination of interrogate_user() */
     }
+
+/*
+    indiset(pset)
+    addtoset(pset, root_person, 1)
+    if(eq(lengthset(childset(pset)), 0) ) {
+      print(" Printing ancestor chart as ", name(root_person), nl())
+      print("                                    has no known children.", nl())
+      set(chart_type, 1)
+    } elsif(eq(lengthset(parentset(pset)), 0) ) {
+      print(" Choose a chart with descendants as ", name(root_person),
+          " has no known ancestors.", nl())
+      getintmsg(chart_type,
+          "Specify chart type: 2/descendant, 3/drop line, 4/combo.")
+    } else {
+      getintmsg(chart_type,
+          "Enter chart type: 1/anc., 2/des., 3/drop line, 4/combo., 5/cousins")
+    }
+*/
   } else {
-     set (chart_type, 1)
+     set(chart_type, 1)
   }
 
+  /*
+     The following is code that pertains to the combination and cousin charts.
+     No user-modification is needed between here and the next question.
+  */
+  if(or( eq(chart_type, 4), eq(chart_type, 5) )) {
+    print(" Choose a family via spouse...")
+    set(root_fam, choosefam(root_person))
+    if(eq(root_fam, 0)) {
+       return(0)       /* signals abnormal termination of interrogate_user() */
+    }
+    print(" done.", nl())
+
+    if(not(and(husband(root_fam), wife(root_fam)))) {
+       print(" That family only has one parent.", nl())
+       print(" This chart-type requires a family with two parents.", nl())
+       return(0)
+    }
+  }
 
 /*
 **  QUESTION: How many generations should be shown?
@@ -327,123 +472,176 @@ func interrogate_user ()
 **
 */
 
-  if (1)  {
-    getintmsg (max_depth, "Maximum number of generations")
-  }  else  {
-    set (max_depth, 99)
+  if(TRUE) {
+    set(min_depth, 1)
+    set(max_depth, 1)
+    if(ge(chart_type, 2)) {    /* chart has descendants: gen #s go negative */
+      getintmsg(min_depth,
+          "Maximum number of generations of descendants, including root")
+      if(le(min_depth, 0)) {
+        set(min_depth, 1)
+      }
+    }
+    if(and( ne(chart_type, 2), ne(chart_type, 3) )) {
+      /* chart has ancestors: gen #s go positive */
+      getintmsg(max_depth,
+          "Maximum number of generations of ancestors, including root")
+      if(le(max_depth, 0)) {
+        set(max_depth, 1)
+      }
+    }
+
+  } else {
+    set(min_depth, 1)
+    set(max_depth, 1)
+    if(ne(chart_type, 1)) {
+      set(min_depth, 4)
+    }
+    if(or( eq(chart_type, 1), eq(chart_type, 4), eq(chart_type, 5) )) {
+      set(max_depth, 4)
+    }
   }
 
 /*
-**  QUESTION: How many generations should show siblings?
+**  QUESTION: How many ancestral generations should show siblings?
 **
 **  If you want to show siblings in all generations, set this default to 999.
 **  This question is only asked for ancestral charts.
 **
 */
 
-  if (eq (chart_type, 0))  {
+  if(and( ne(chart_type, 2), ne(chart_type, 3) )) {
 
-    if (1)  {
-      getintmsg (depth_siblings, "How many generations to show siblings")
-    }  else  {
-      set (depth_siblings, 999)
+    if(FALSE) {
+      getintmsg(depth_siblings,
+          "How many ancestral generations to show siblings")
+    } else {
+      set(depth_siblings, 999)
     }
-
   }
 
 /*
-**  QUESTION: What font should be used?
+**  QUESTION: Should half siblings be shown?
 **
-**  Because it is such a pain to enter a font name, and a spelling mistake
-**  will get you an ugly default font, this should be set to a default.  I
-**  suggest one of: Times-Roman, NewCenturySchlbk-Roman, or ZapfChancery.
-**  Search the Postscript code at bottom of this file for a longer list.
+**  In the ancestral report, if a parent has had multiple marriages
+**  this determines whether the children of these marriages are shown
+**  in the aunts/uncles. They are placed above the father or below the
+**  mother with a thin vertical line in the aunt/uncle colour.
 **
 */
 
-  if (0)  {
-    getstrmsg (font_name,
-      "Font (Times-Roman, NewCenturySchlbk-Roman, ZapfChancery, etc.")
-    set (font_name, save (font_name))
-  }  else  {
- /*   copyfile("/usr/local/lib/ghostscript/zcr.gsf")
-    copyfile("/usr/local/lib/ghostscript/zcb.gsf")*/
-    set (font_name, "ZapfChancery-MediumItalic")
-   /* set (font_name, "Times-Roman")*/
+  if( and( ne(chart_type, 2), ne(chart_type, 3), gt(depth_siblings, 0))) {
+
+    if(FALSE) {
+      getintmsg(halfsib,
+          "Enter 1 to show half-brothers/sisters, 0 to omit them")
+    } else {
+       set(halfsib, 1)
+    }
   }
 
 /*
-**  QUESTION: Should color be used?
-**
-**  If you don't have access to a color printer, you should probably turn
-**  off this question.
-**
+**  QUESTION: Should ancestors of half siblings be shown?
+**  In the ancestral report, if a parent has had multiple marriages
+**  this determines whether the ancestors of these spouses are shown.
 */
 
-  if (0)  {
-    getintmsg (color_chart, "Enter 0 for black/white, 1 for color")
-  }  else  {
-    set (color_chart, 1)
+  if( and(ne(chart_type, 2), ne(chart_type, 3))) {
+
+    if(FALSE) {
+      if(halfsib) {
+        getintmsg(halfsib_anc,
+            "Enter 1 to show ancestors of half siblings, 0 to omit them")
+      }
+    } else {
+      set(halfsib_anc, 1)
+    }
+  }
+  
+/*  QUESTION:  In how many generations do you want to show ancestors
+**  of half siblings?
+**
+**  This is the last generation in which, if there are half siblings shown,
+**  their ancestors will be shown, subject to the maximum depth limit.
+*/
+
+  if( and(ne(chart_type, 2), ne(chart_type, 3))) {
+
+    if(FALSE) {
+      if(halfsib_anc) {
+        getintmsg(depth_halfsib_anc,
+          "Number of generations from which to show ancestors of half siblings")
+        if(ge(depth_halfsib_anc, max_depth)) {
+          set(depth_halfsib_anc, sub(max_depth, 1))
+        }
+      }
+    } else {
+      set(depth_halfsib_anc, sub(max_depth, 1))
+    }
   }
 
 /*
-**  QUESTION: Should descriptive title be displayed?
+**  QUESTION: Do you want descendant lines be matrilinear/patrilinear?
 **
+**  Currently only for dropline charts, this option allows the restriction
+**  of descendant lines followed to a particular gender.
+**  For branches that are cut off, a short horizontal line is drawn from a
+**  person towards the younger generation to indicate that the person has
+**  descendants.  This is the same thing that is done when a person has
+**  descendants in that go off-chart.
 */
 
-  if (1)  {
-    getintmsg (display_title, "Enter 1 to display descriptive title , 0 for no title")
-    }  else  {
-    set (display_title, 0)
+  if(TRUE) {
+    if(eq(chart_type, 3)) {
+      getintmsg(desc_gender,
+          "Enter 2 for patrilinear, 1 for matrilinear, 0 for all descendants")
+    } else {
+      set(desc_gender, 0)  /* won't be used */
+    }
+  } else {
+    set(desc_gender, 0)
   }
 
-/*
-**  QUESTION: Should surnames be in upper case?
-**
-*/
-
-  if (1)  {
-    getintmsg (surname_upper, "Enter 1 for surnames in upper case, 0 for as is")
-  }  else  {
-    set (surname_upper, 1)
-  }
+/* LAYOUT */
 
 /*
 **  QUESTION: Do you want multi-page poster output, and select orientation.
 **
-**  So that I am not hassled with this question everytime I run this
-**  program, I turn this question off, but change the default on the
-**  special occasion that I want a poster chart.
-**
+**  This controls whether (PostScript) output spans multiple pages.
+**  In PostScript, this is achieved by enlarging the chart and moving
+**  the plot origin to cause the desired portion of the chart to land in
+**  a clipped region of a given page.
+**  
 */
 
-  if (1)  {
+  if(TRUE) {
     list(options)
-    setel(options,1,"Single page, in portrait")
-    setel(options,2,"Single page, in landscape")
-    setel(options,3,"Multi page, using portrait sheets of paper")
-    setel(options,4,"Multi page, using landscape sheets of paper")
-    set(mc, menuchoose(options, "Select chart type:"))
-    if (eq(0,mc)) {
+    setel(options, 1, "Single page, in portrait")
+    setel(options, 2, "Single page, in landscape")
+    setel(options, 3, "Multi page, using portrait sheets of paper")
+    setel(options, 4, "Multi page, using landscape sheets of paper")
+    set(mc, menuchoose(options, "Select page type:"))
+    if( eq(0, mc)) {
       return(0) 
-    } elsif (eq(1,mc)) {
-      set (multi_page, 0)
-      set (portrait, 1)
-      print("Single page - portrait", nl())
-    } elsif (eq(2,mc)) {
-      set (multi_page, 0)
-      set (portrait, 0)
-    } elsif (eq(3,mc)) {
-      set (multi_page, 1)
-      set (portrait, 1)
+    } elsif( eq(1, mc)) {
+      set(multi_page, 0)
+      set(portrait, 1)
+    } elsif( eq(2, mc)) {
+      set(multi_page, 0)
+      set(portrait, 0)
+    } elsif( eq(3, mc)) {
+      set(multi_page, 1)
+      set(portrait, 1)
     } else {
-      set (multi_page, 0)
-      set (portrait, 1)
+      set(multi_page, 1)
+      set(portrait, 0)
     }
-  }
-  else {
-    set (multi_page, 0)
-    set (portrait, 1)
+    /* purge options list for later use */
+    list(options)  /* new - RES */
+    /*while(length(options)) {set(mc, pop(options))}*/
+  } else {
+    set(multi_page, 0)
+    set(portrait, 1)
   }
 
 /*
@@ -454,74 +652,383 @@ func interrogate_user ()
 **
 */
 
-  if (multi_page)  {
+  if(multi_page) {
 
-    if (1)  {
-      if (portrait) {
-        getintmsg (x_pages, "Number of horizontal pages on finished chart")
-        getintmsg (y_pages, "Number of vertical pages on finished chart")
-      } else {
-        getintmsg (x_pages, "Number of horizontal pages before rotation to landscape")
-        getintmsg (y_pages, "Number of vertical pages before rotation to landscape")
-      }
-    }  else  {
-      set (x_pages, 3)
-      set (y_pages, 3)
+    if(TRUE) {
+      getintmsg( x_pages, "Number of horizontal pages on finished chart")
+      getintmsg( y_pages, "Number of vertical pages on finished chart")
+    } else {
+      set(x_pages, 1)
+      set(y_pages, 2)
     }
 
-  }  else  {
-    set (x_pages, 1)
-    set (y_pages, 1)
+  } else {
+    set(x_pages, 1)
+    set(y_pages, 1)
   }
 
 /*
-**  QUESTION: How much extra space to add to the page margin determined by
-**            the printing environment?
-**
-**  The output postscript file is setup to ask the printer how close to
-**  the edge of the paper can it print.
-**  If you're converting the postscript file to a PDF file, to be printed
-**  by many different types of printers, you may want to allow more space
-**  near the edge of each page.  If so, turn this question on to play with
-**  different values.  The answer should be to the nearest integer point value,
-**  18 points = 1/4 inch, 36 points = 1/2 inch, 72 points = 1 inch.
+**  QUESTION: Should the younger generations be on the left or right?
 **
 */
 
-  if (1)  {
-    getintmsg (extra_margin, "How much extra space for the page margins, in points")
-  }  else  {
-    set (extra_margin, 0)
+  if(FALSE) {
+    getintmsg( mirror_chart,
+        "Enter younger generations on the left (0), or the right (1)")
+  } else {
+    set( mirror_chart, 1)
   }
 
 /*
-**  QUESTION: How should titles be used?
-**
-**  I would leave this default set to 'guess' (3), or 'none' (0), if you
-**  don't want the titles.  If find a title that is guessed incorrectly,
-**  please send an e-mail to the maintainer.
-**
+**  QUESTION: Should mothers appear at the tops of ancestral branches?
 */
 
-  if (0)  {
-    getintmsg (title_method, "Title method (0:none,1:prefix,2:suffix,3:guess)")
-  }  else  {
-    set (title_method, 3)
+  if( and(ne(chart_type, 2), ne(chart_type, 3))) {
+
+    if(TRUE) {
+      getintmsg(mom_first,
+          "Enter 1 to put mothers at top of anc. branches, 0 for fathers")
+    } else {
+      set(mom_first, 0)
+    }
+  }
+
+/* ADD-ONS */
+
+/*
+**  QUESTION: Should a decorative border be shown?
+*/
+
+  if(FALSE) {
+    getintmsg(display_border,
+      "Enter 1 to print a decorative border, 0 to print no border")
+  } else {
+    set(display_border, 1)
   }
 
 /*
-**  QUESTION: What is the maximum length for names?
+**  QUESTION: Should descriptive title be displayed?
+*/
+
+  if(TRUE) {
+    getintmsg(display_title,
+        "Enter 1 to display descriptive title , 0 for no title")
+    } else {
+    set(display_title, 1)
+  }
+
+/*
+**  QUESTION: Use an automaticly generated title, or a user-specified one?
+*/
+
+  if(and(FALSE, display_title)) {
+    getstrmsg(chart_title_override,
+        "Enter chart title, or none to have one created automatically.") 
+  } else {
+    set(chart_title_override, "")
+  }
+
+/*
+**  QUESTION: Should a chart label be shown?
 **
-**  It is best to just set a default maximum name length.  If you want
-**  to always show the complete name, just set the default to 999.
+**  The chart label identifies the preparer, and optionally,
+**  what would have been in the chart title, should one be omitted.
+*/
+
+  if(FALSE) {
+    getintmsg(display_label,
+        "Enter 1 to display identifying label , 0 for no label")
+  } else {
+    set(display_label, 0)
+  }
+
+/*
+**  QUESTION: What message (label) should be shown at the bottom of the chart?
+**
+**  I suggest not asking this question, and setting a default credit with
+**  your name.  The advantage of this is that you can have the date
+**  automatically inserted.
 **
 */
 
-  if (0)  {
-    getintmsg (name_letters, "Maximum name length")
-  }  else  {
-    set (name_letters, 40)
+  set(label_set, 0)
+
+  if(FALSE) {
+    if(display_label) {
+      getstrmsg(chart_label, "Label for corner of chart (your name, date)")
+      set(chart_label, save(chart_label))
+      set(label_set, 1)
+    }
   }
+  if(not(label_set)) {
+    /* want to make sure there is a label written to the PostScript file, */
+    /* in case user sets 'display_label' to true in PostScript output later */
+    dayformat(2)
+    monthformat(4)
+    dateformat(0) /* format for date, if used in 'rpt_name' or 'chart_label' */
+
+    set(rpt_name,
+      "produced by Your Name, your web, e-mail, or mail address, for instance"
+    )
+    if(display_title) {
+      /* don't need to repeat information given in title */
+      set( chart_label, concat( save( stddate( gettoday() )), "  ", rpt_name))
+    } else {
+      set(chart_label,
+        concat(save(stddate(gettoday())), "  ", chart_title(), "  ", rpt_name))
+    }
+  }
+
+
+/*
+**  QUESTION: Should the chart_label be centered?
+**
+**  Concerns the position on the first page (lower left) for the chart label.
+**  The choices are to center the label, or to put it near the left edge.
+**
+*/
+
+  if(display_label) {
+
+    if(FALSE) {
+      getintmsg(chart_label_centered,
+          "Enter 1 to center chart label, 0 for left")
+    } else {
+       set(chart_label_centered, 0)
+    }
+  }
+
+/*
+**  QUESTION: Print label inside or outside the border?
+**  If both a border and the label are to be on a chart, it is possible
+**  to specify whether the label should go inside or outside the border.
+*/
+
+  if( and(display_border, display_label)) {
+
+    if(FALSE) {
+      getintmsg(label_outside,
+          "Enter 1 to place label outside border, 0 for inside")
+    } else {
+      set(label_outside, 1)
+    }
+
+  } else {
+    set(label_outside, 1)
+  }
+
+/* STYLE */
+
+/*
+**  QUESTION: What font should be used for names?
+**
+**  Because it is such a pain to enter a font name, and a spelling mistake
+**  will get you an ugly default font, this should be set to a default.  I
+**  suggest one of: Times-Roman, NewCenturySchlbk-Roman, or ZapfChancery.
+**  Choosing the font via lists is provided primarily for when one is
+**  curious as to what the others look like on a chart.
+**
+**  Search the Postscript code at bottom of this file for ideas (and spellings).
+**  Look for "bolddict" where font names and their bold equivalents are defined.
+**  When adding a new font choice, you should add the bold name (if one exists)
+**  in the PS code yourself, using the existing code as a guide.  If your font
+**  doesn't have a bold version, then the font itself will be used when a bold
+**  font is called for.
+**
+**  For fonts with characters that are to be placed right-to-left it may be
+**  necessary to add the font's name and an association with the 'rlshow'
+**  procedure within the PostScript code.  This is done in the setup of a
+**  PostScript dictionary.  Look for "fshowdict begin" below and follow
+**  existing code as an example.  If that font also has a bold version, then
+**  do the same for it, or the font will be shown r-to-l but the bold version
+**  will go l-to-r.
+**
+**  If a font encoding array (like ISOLatin1, provided by PostScript Level 2)
+**  is used with a font that uses non-standard character names, then many
+**  or all characters may not show (they get replaced with .notdef).
+**  In that case, in order to use the font, font reencoding should not be used.
+**
+**  Some fonts don't specify a FontBBox -- the dimensions of a rectangle that
+**  will enclose any letter form, or glyph, from the font.  In this case,
+**  the PostScript code produced may rely on estimating character dimensions
+**  by testing a few letters.  Hershey-Gothic-English is such a font.
+*/
+
+  if(TRUE) {
+    set(font_name, choose_font("individual names"))
+    if(not(font_name)) {
+      return(0)
+    }
+  } else {
+    /*set( font_name, "Times-Roman")*/
+    set( font_name, "ZapfChancery-MediumItalic")
+    /*copyfile("/usr/local/lib/ghostscript/zcr.gsf")*/
+    /*copyfile("/usr/local/lib/ghostscript/zcb.gsf")*/
+  }
+
+/*
+**  QUESTION: Which font should be used for individual info (dates/places)?
+*/
+
+  if(TRUE) {
+    set(ifont_name, choose_font("individual info"))
+    if(not(ifont_name)) {
+      return(0)
+    }
+  } else {
+    set(ifont_name, "Times-Roman")
+  }
+
+/*
+**  QUESTION: Which, if any, character encoding to enforce?
+**
+**  In some PostScript fonts, there are more characters available than
+**  the 256 integers (ASCII) used to represent different text characters.
+**  An encoding vector is used to assign a subset of the available glyphs or
+**  letterforms to the 256 character codes (0 through 255).
+**  This allows PostScript output to match the characters available to
+**  genealogy software on many platforms.
+**
+**  However, if accented characters are not needed, or the encodings in
+**  the fonts are sufficient, then simply using
+**  an encoding built into a font file (no change) results in a smaller
+**  PostScript file.
+**
+**  Printers may be incapable of composing accents with plain letters when
+**  an accented character is not directly available in a font.
+**  To get around this, printing the output through Ghostscript or converting
+**  the PostScript output to PDF with Ghostscript or other conversion utility
+**  should work.
+**
+**  ISO-Latin 1, or ISO 8859-1, is a world-wide standard for most languages
+**  of Latin origin: Albanian, Basque, Breton, Catalan, Cornish, Danish, Dutch
+**  English, Faroese, Finish (exc. S,s,Z,z with caron),
+**  French (except OE, oe, and Y-with-dieresis), Frisian, Galician, German,
+**  Greenlandic, Icelandic, Irish Gaelic (new orthography), Italian, Latin,
+**  Luxemburgish, Norwegian, Portuguese, Rhaeto-Romanic, Scottish Gaelic,
+**  Spanish, Swedish.
+**
+**  ISO Latin 2, or ISO 8859-2, covers these languages:  Albanian, Croatian,
+**  Czech, English, German, Hungarian, Latin, Polish, Romanian (cedilla below
+**  S,s,T,t instead of comma), Slovak, Sloverian, Sorbian.
+*/
+
+  if(TRUE) {
+    list(options)
+    setel(options, 1, "ISO Latin 1")
+    setel(options, 2, "ISO Latin 2")
+    setel(options, 3, "MS-DOS Codepage 437 (extended ASCII) international chars.")
+    setel(options, 4, "let the font decide for me (use encoding specified in PS font)")
+    set(enc_choice, menuchoose(options,
+       "Select font reencoding, or (q) to use font's built-in encoding"))
+    if(eq(enc_choice, 4)) {
+       set(enc_choice, 0)
+    }
+  } else {
+    set(enc_choice, 1)
+  }
+
+
+/*
+**  QUESTION: Should color be used?
+**
+**  If you don't have access to a color printer, you should probably turn
+**  off this question.
+**
+*/
+
+  if(FALSE) {
+    getintmsg( color_chart, "Enter 0 for black/white, 1 for color")
+  } else {
+    set(color_chart, 1)
+  }
+
+/*
+**  QUESTION: Which way should descendant branches go?
+**
+**  The charting procedures can make decisions about branch directions,
+**  roughtly, choosing up for the first half and down for the second half
+**  of a person's descendant branches.
+**  This may be overriden by forcing all branches to go up or all to go down.
+*/
+
+  if(FALSE) {
+    if(and( ne(chart_type, 1) , ne(chart_type, 3))) {
+      getintmsg( updown_override,
+          "Desc. branch direction: -2: all up, 0: mix, 2: all down")
+    } else {
+      set(updown_override, 0)
+    }
+  } else {
+    set(updown_override, 0)
+  }
+
+/*
+**  QUESTION: Should the direct line of descent be put in bold?
+**
+**  Puts the text and lines for the direct line in bold.
+**
+*/
+
+  if(FALSE) {
+    getintmsg(bold_chart, "Enter 1 for bold direct line, 0 for all the same")
+  } else {
+    set(bold_chart, 1)
+  }
+
+/*
+**  QUESTION: What scale factor should be used to make bold lines?
+**
+**  The default value should be 2 or 3.
+**  A value of 1 will make bold lines look the same as non-bolded ones.
+*/
+
+    if(and( FALSE, bold_chart)) {
+      getintmsg(bold_factor,
+          "Enter the bold factor for direct relation lines")
+    } else {
+      set(bold_factor, 3)
+    }
+
+/*
+**  QUESTION: How should duplicate individuals be handled?
+**
+**  When someone appears on a chart twice it can be helpful
+**  to mark the duplicate entries so they aren't thought to
+**  be different ancestors/descendants at first glance.
+**
+**  The options are to print a duplicate's horizontal lines in
+**  a dashed style or to do that plus truncate a duplicate's ancestors
+**  (since they would possibly already appear on the chart).
+
+*/
+/* RES!? -has truncation of descendants been enabled yet? */
+
+  if(FALSE) {
+    getintmsg(duplic_handling,
+      "For duplicate individuals, make: 0 no change, 1 dashed, 2 truncated")
+  } else {
+    set(duplic_handling, 2)
+  }
+
+/*
+** QUESTION: Do you want to show non-birth or legal relatives
+**           (by adoption, fostering, or sealing relationsships) with
+**           thin light blue lines, same as for other non-blood relatives?
+** Non-birth child-to-family (FAMC) connections are indicated
+** (according to GEDCOM 5.5) with a PEDI subnode of the FAMC node.
+** The recognized values for the PEDI subnode are
+** Birth, Adopted, Foster, Sealed.
+*/
+
+  if(TRUE) {
+    getintmsg(opt_rel_famc,
+      "Enter 1/0 for Adopted, Foster, and Sealing connections to be non-blood")
+  } else {
+    set(opt_rel_famc, 1)
+  }
+
+/* FORMAT OF INFORMATION */
 
 /*
 **  QUESTION: How should dates/places of birth/death/marriage be shown?
@@ -539,122 +1046,386 @@ func interrogate_user ()
 **         [ LifeLines long() function ]
 **      4: full date and first item on PLAC line
 **      5: full date and first two items on PLAC line
+**      6: full date and first three items on PLAC line
+**      7: year and up to two sufficient components from the PLAC line
+**
+**  For more specific comments and the code that corresponds to these styles,
+**  search for "func dateplace(".
+**  To enable place modification or shortening, a date-place style that calls
+**  on the modify function must be used. Currently: 4, 5, 6, 7.
+**                                                      keyword: SHORTEN
 */
 
-  if (0)  {
-    set (dateplace_birth, 99)
-    while (or (lt (dateplace_birth, 0), gt (dateplace_birth, 5)))  {
-      getintmsg (dateplace_birth,
-              "Birth date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p)")
+  if(FALSE) {
+    set(dateplace_birth, 99)
+    while( or( lt(dateplace_birth, 0), gt(dateplace_birth, max_dateplace))) {
+      getintmsg(dateplace_birth,
+              "Birth date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p,6:d+3p,7:y+2p)")
     }
-    set (dateplace_death, 99)
-    while (or (lt (dateplace_death, 0), gt (dateplace_death, 5)))  {
-      getintmsg (dateplace_death,
-              "Death date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p)")
+    set(dateplace_death, 99)
+    while( or( lt(dateplace_death, 0), gt(dateplace_death, max_dateplace))) {
+      getintmsg(dateplace_death,
+              "Death date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p,6:d+3p,7:y+2p)")
     }
-    set (dateplace_marriage, 99)
-    while (or (lt (dateplace_marriage, 0), gt (dateplace_marriage, 5)))  {
-      getintmsg (dateplace_marriage,
-              "Marriage date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p)")
+    set(dateplace_marriage, 99)
+    while( or( lt(dateplace_marriage, 0), gt(dateplace_marriage, max_dateplace))) {
+      getintmsg(dateplace_marriage,
+              "Marriage date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p,6:d+3p,6:y+2p)")
     }
-  }  else  {
-    set (dateplace_birth, 5)
-    set (dateplace_death, 5)
-    set (dateplace_marriage, 5)
-  }
-
-/*
-**  QUESTION: Should the direct line of descent be put in bold?
-**
-**  Puts the text and lines for the direct line in bold.
-**
-*/
-
-  if (0)  {
-    getintmsg (bold_chart, "Enter 1 for bold direct line, 0 for all the same")
-  }  else  {
-    set (bold_chart, 1)
-  }
-
-/*
-**  QUESTION: Should the selected person be on the left or right of the page?
-**
-*/
-
-  if (0)  {
-    getintmsg (mirror_chart, "Enter 0 to start on left of paper, 1 to start on right")
+    set(dateplace_burial, 99)
+    while( or( lt(dateplace_burial, 0), gt(dateplace_burial, max_dateplace))) {
+      getintmsg(dateplace_burial,
+              "Burial date style (0:no,1:date,2:short,3:long,4:d+1p,5:d+2p,6:d+3p,7:y+2p*)")
+    }
   } else {
-    if (chart_type) {
-      /* Descendant chart */
-      set (mirror_chart, 0)
+    set(dateplace_birth, 6)
+    set(dateplace_death, 6)
+    set(dateplace_marriage, 6)
+    set(dateplace_burial, 6)
+  }
+
+/*
+**  QUESTION: Is it ok to abbreviate (some) place components?
+**
+**  Should a function made available in an external file via an include
+**  statement prior to this function (interrogate_user) be used to 
+**  abbreviate some place components, such as country, state, or province
+**  names?
+*/
+
+  if(FALSE) {
+    getintmsg( place_modify,
+        "Enter a 1 to allow place abbreviating, 0 to dissallow")
+  } else {
+    set(place_modify, 0)      /* keyword: SHORTEN */
+  }
+
+/*
+**  QUESTION: Should second names be shown with person info?
+**
+**  Should there be a second name for a person, is it to be shown
+**  with the other person info (in the same font size as the other info lines)?
+*/
+
+  if(FALSE) {
+    getintmsg( show_altname,
+        "Enter 1 to show 2nd name as information, 0 to suppress")
+  } else {
+    set(show_altname, 1)
+  }
+
+/*
+**  QUESTION: Should addresses be shown?
+**
+**  Should a person's last address node be used to obtain a street address,
+**  phone number, and e-mail address?
+*/
+
+  if(FALSE) {
+    getintmsg( show_address,
+        "Enter 1 to show address information, 0 to suppress")
+  } else {
+    set(show_address, 0)
+  }
+
+/*
+**  QUESTION: Should any address node (ADDR, RESI) be used or
+**            just active ones (ADDR)?
+**
+**  Notes: ADDR is a GEDCOM 5.5 standard.
+**         RESI is a GEDCOM 5.5 standard for a former, "resided at"
+**              address.  This allows the ADDR node type to be used strictly
+**              for current addresses.
+*/
+
+  if(show_address) {
+
+    if(FALSE) {
+      getintmsg(no_resides_at,
+          "Enter 1 to show only current addresses, 0 for any address type")
     } else {
-      set (mirror_chart, 1)
+      set(no_resides_at, 0)
     }
   }
 
 /*
-**  QUESTION: Should half siblings be shown?
+**  QUESTION: How should an individual's title be used?
 **
-**  In the ancestral report, if a parent has had multiple marriages
-**  this determines whether the children of these marriages are shown
-**  in the aunts/uncles. They ar placed above the father or below the
-**  mother with a thin vertical line in the aunt/uncle colour.
+**  I would leave this default set to 'guess' (3), or 'none' (0), if you
+**  don't want the titles.  If you find a title that is guessed incorrectly,
+**  please send an e-mail to the maintainer.
 **
 */
 
-  if (0)  {
-    getintmsg (half_sib, "Enter 1 to show half brothers/sisters, 0 to omit them")
+  if(FALSE) {
+    getintmsg(title_method, "Title method (0:none,1:prefix,2:suffix,3:guess)")
   } else {
-     set (half_sib, 1)
+    set(title_method, 3)
   }
 
 /*
-**  QUESTION: What message should be shown in the corner of the chart?
-**
-**  I suggest not asking this question, and setting a default credit with
-**  your name.  The advantage of this is that you can have the date
-**  automatically inserted.
+**  QUESTION: Should surnames be in upper case?
 **
 */
 
-  if (0)  {
-    getstrmsg (chart_label, "Label for corner of chart (your name, date)")
-    set (chart_label, save (chart_label))
-  }  else  {
-    dayformat (2)
-    monthformat (4)
-    dateformat (0)
-    set (rpt_name,"produced by Robert Simms, http://math.clemson.edu/~rsimms/genealogy.html")
-    if (display_title) {
-       set (chart_label, concat (save (stddate (gettoday ())),"    ",rpt_name))
-    }
-    else {
-      if (eq (0,chart_type)) {
-        set (chart_label, concat (save (stddate (gettoday ())),
-                                  "  The ancestors of ", name(root_person),
-                                  "  ", rpt_name) )
-      }
-      else {
-        set (chart_label, concat (save (stddate (gettoday ())),
-                                  "  The descendants of ", name(root_person),
-                                  "  ",rpt_name) )
-      }
-    }
-  }
-
-/*
-**  QUESTION: Should the chart_label be centered?
-**
-**  Concerns the position on the first page (lower left) for the chart label.
-**  The choices are to center the label, or to put it near the left edge.
-**
-*/
-
-  if (1)  {
-    getintmsg (chart_label_centered, "Enter 1 to center chart label, 0 for left"
-)
+  if(FALSE) {
+    getintmsg(surname_upper,
+        "Enter 1 for surnames in upper case, 0 for as is")
   } else {
-     set (chart_label_centered, 1)
+    set(surname_upper, 0)
+  }
+
+/*
+**  QUESTION: What is the maximum length for names?
+**
+**  It is best to just set a default maximum name length.  If you want
+**  to always show the complete name, just set the default to 999.
+*/
+
+  if(FALSE) {
+    getintmsg(name_letters, "Maximum name length")
+  } else {
+    set(name_letters, 40)
+  }
+
+/*
+**  QUESTION: Should parenthesized text be omitted from names in charts.
+**
+**  This is to improve the chances that all important parts of a name
+**  are shown.  Before names are cut to their length limit
+**  (name_letters, above) text within a full name that is parenthesized may
+**  be removed.  The routine used will catch any logical pairings of
+**  '(' and ')' and can even handle nesting of parentheses.
+*/
+
+  if(FALSE) {
+    getintmsg(opt_deparen,
+        "Enter 1 to remove parenthesized text from names, 0 otherwise.")
+  } else {
+    set(opt_deparen, 1)
+  }
+
+/* OUTPUT OPTIONS */
+
+/*
+**  QUESTION: What paper size is expected?
+**
+**  This presents a list of paper sizes to choose from, or the option
+**  of a custom size.  The custom size feature would be appropriate to
+**  make a chart that can be included as an EPS file in another document.
+**
+**  The variables paper_height and paper_width are set to integer values
+**  corresponding to the page dimensions, in points (72 points = 1 inch)*
+**  Here are sizes and names taken from the PostScript news group's FAQ:
+          Paper Size                      Dimension (in points)
+          ------------------------------  ---------------------
+          Comm #10 Envelope               297 x 684
+          C5 Envelope                     461 x 648
+          DL Envelope                     312 x 624
+          Folio                           595 x 935
+          Executive                       522 x 756
+          Letter                          612 x 792
+          Legal                           612 x 1008
+          Ledger                          1224 x 792
+          Tabloid                         792 x 1224
+      **  A0                              2384 x 3370
+          A1                              1684 x 2384
+          A2                              1191 x 1684
+          A3                              842 x 1191
+          A4                              595 x 842
+          A5                              420 x 595
+          A6                              297 x 420
+          A7                              210 x 297
+          A8                              148 x 210
+          A9                              105 x 148
+          B0                              2920 x 4127
+          B1                              2064 x 2920
+          B2                              1460 x 2064
+          B3                              1032 x 1460
+          B4                              729 x 1032
+          B5                              516 x 729
+          B6                              363 x 516
+          B7                              258 x 363
+          B8                              181 x 258
+          B9                              127 x 181 
+          B10                             91 x 127
+
+    * In PostScript and desktop publishing in general, points 1/72 inch,
+      or .3527777778 mm.  1 pica = 12 points.  In traditional typography,
+      points are 1/72.27 inch, or .3514598035 mm.  Metric resolutions are
+      common with phototypesetters and supported by HTML, while laser and
+      inkjet printers primarily use points or inches.
+
+    **ISO 216 paper size system is based on the principle of doubling and
+      halving to produce larger or smaller sizes, which are proportional to
+      the original when rotated one quarter turn.  The side length ratio which
+      accomplishes this is 1 : 'square root of 2'.
+      Size A0 has an area of one square meter.
+      The fixed aspect ratio of the different size papers makes photocopier
+      enlarging/reducing a breeze.  Only the U.S. and Canada persist in their
+      government and business use of non-ISO paper sizes, among industrialized
+      nations.
+*/
+
+  if(TRUE) {
+    list(options)
+    setel(options, 1, "Adaptive, maximum area available")
+    setel(options, 2, "EPSF, custom size (single page)")
+    setel(options, 3, "Letter, 8 1/2\" x 11\" or 612 x 792 points")
+    setel(options, 4, "Legal, 8 1/2\" x 14\" or 612 x 1008 points")
+    setel(options, 5, "Ledger (Tabloid), 11\" x 17\" or 792 x 1224 points")
+    setel(options, 6, "A4, 595 x 842 points")
+    setel(options, 7, "A3, 842 x 1191 points")
+    setel(options, 8, "B5, 516 x 729 points")
+    setel(options, 9, "B4, 729 x 1032 points")
+    set(mc, menuchoose(options, "Select page size:"))
+    if( eq(mc, 1)) {
+       set(paper_name, "NONE")  /* other paper_names are suitable for ps2pdf */
+    } elsif( eq(mc, 2)) {
+       getintmsg(paper_width, "Enter image width, in points")
+       getintmsg(paper_height, "Enter image height, in points")
+       set(paper_name, "EPSF")
+       set( multi_page, 0)
+       set( x_pages, 1)
+       set( y_pages, 1)
+    } elsif( eq(mc, 3)) {     /* Letter */
+       set(paper_width, 612)
+       set(paper_height, 792)
+       set(paper_name, "letter")
+    } elsif( eq(mc, 4)) {     /* Legal  */
+       set(paper_width, 612)
+       set(paper_height, 1008)
+       set(paper_name, "legal")
+    } elsif( eq(mc, 5)) {     /* Ledger */
+       set(paper_width, 792)
+       set(paper_height, 1223)
+       set(paper_name, "ledger")
+    } elsif( eq(mc, 6)) {     /*  A4    */
+       set(paper_width, 595)
+       set(paper_height, 842)
+       set(paper_name, "a4")
+    } elsif( eq(mc, 7)) {     /*  A3    */
+       set(paper_width, 842)
+       set(paper_height, 1191)
+       set(paper_name, "a3")
+    } elsif( eq(mc, 8)) {     /*  B5    */
+       set(paper_width, 516)
+       set(paper_height, 729)
+       set(paper_name, "b5")
+    } elsif( eq(mc, 9)) {     /*  B4    */
+       set(paper_width, 729)
+       set(paper_height, 1032)
+       set(paper_name, "b4")
+    } else {  /* user must have chosen 'q'uit */
+      return(0)
+    }
+  } else {
+    /* DEFAULT paper size, if the question is not to be asked */
+    /* copy from above, capitalization and spelling of name are important */
+    set(paper_name, "NONE")
+  }
+
+/*
+**  QUESTION:  Specify minimum margins for each side of the paper.
+**
+**  The resulting PostScript file asks the printer how close to
+**  the edge of the paper it can print.
+**  If the maximum size chart is desired, set the margins to zero.
+**
+**  For all but the Adaptive page size, if a margin is required, specify it
+**  here to ensure a margin at least that wide.
+**      Margins on printed pages may be wider if the printing device requires
+**      more distance from the edges of the paper.
+**
+**  For the Adaptive page size, margins are subtracted from what the printing
+**  device gives as it's printing area.  In this case, margins specified here
+**  are added onto the devices margins.
+**  Be aware that when converting to a PDF file, margins become fixed.
+**  This can result in edges of the intended output getting cropped by printing
+**  from a PDF viewer.  If necessary, a shrink-to-fit option may be used
+**  with such viewers -or- the margins specified here may be made large
+**  enough to accomodate most printers self-imposed margins.  30 points may do.
+**
+**  The answers to these questions should be to the nearest integer point value,
+**  18 points = 1/4 inch, 36 points = 1/2 inch, 72 points = 1 inch.
+**
+*/
+
+    if(FALSE) {
+      getintmsg(margin_top, "Minimum width of TOP margin")
+      getintmsg(margin_bottom, "Minimum width of BOTTOM margin")
+      getintmsg(margin_left, "Minimum width of LEFT margin")
+      getintmsg(margin_right, "Minimum width of RIGHT margin")
+    } else {
+      set(margin_top, 30)
+      set(margin_bottom, 30)
+      set(margin_left, 30)
+      set(margin_right, 30)
+    }
+
+/*
+**   QUESTION: Do you want to try to tell the printer to request a manual feed?
+**
+*/
+  if( and( nestr(paper_name, "EPSF"), nestr(paper_name, "NONE"))) {
+
+    if(TRUE) {
+      getintmsg(manual_feed_opt,
+          "Manual feed request: 0 don't specify, 1 on, 2 off")
+    } else {
+      set( manual_feed_opt, 0)
+    }
+
+  } else {
+    set( manual_feed_opt, 0)
+  }
+
+/*
+**   QUESTION: Use PostScript Level 1 or Level 2 paper size request?
+**
+*/
+  if( eq(manual_feed_opt, 1)) {
+
+    if(TRUE) {
+      set(postscript_level, 0)
+      while( and( ne(postscript_level, 1), ne(postscript_level, 2))) {
+        getintmsg(postscript_level,
+               "Specify PostScript Level of printer: 1 or 2 (for 2 or higher)")
+      }
+    } else {
+      set(postscript_level, 1)
+    }
+  }
+
+/*
+**   QUESTION: Use modification for PacificPage cartridge?
+**
+**   Adds to the PostScript output a margin modification specific to this
+**   device.  This PostScript modification should be left out for
+**   PostScript Level 1 compatibility.
+*/
+
+  if(FALSE) {
+    getintmsg(pacificpage,
+        "Enter 1 for PacificPage modification, 0 to leave it out")
+  } else {
+    set(pacificpage, 0)
+  }
+
+/*
+**  QUESTION: Do you want to filter some PostScript strings to protect
+**            PostScript files from errors.
+**
+**  Unbalanced parentheses or lone backslash characters can cause problems in
+**  strings stored in PostScript files.  This option enables their being
+**  made safer.
+*/
+
+  if(FALSE) {
+    getintmsg(opt_xlat,
+        "Enter 1 to protect PostScript from dangerous characters, 0 otherwise")
+  } else {
+    set(opt_xlat, 1)
   }
 
 /*
@@ -662,7 +1433,84 @@ func interrogate_user ()
 **
 */
 
-  return(1)
+  return(1)      /* signals that all necessary questions were answered */
+}
+
+/*
+** function: choose_font
+**
+** Assists the user in selecting a font name.
+**
+*/
+
+func choose_font(purpose) {
+  list(options)
+  setel(options, 1, "Roman")
+  setel(options, 2, "Italic (default)")
+  setel(options, 3, "Arabic")
+  setel(options, 4, "Hebrew")
+  set(ff, menuchoose(options, concat("Select font face for ", purpose, ": ")))
+  if(eq(ff, 1)) {
+    list(options)
+    setel(options, 1, "Times Roman (default)")
+    setel(options, 2, "New Century Schoolbook")
+    setel(options, 3, "Garamond")
+    setel( options, 4, "Hershey Plain")
+    set(mc, menuchoose(options, "Select font family: "))
+    if( eq(2, mc)) {
+      set(font_choice, "NewCenturySchlbk-Roman")
+    } elsif( eq(3, mc)) {
+      set(font_choice, "AGaramond-Regular")
+    } elsif( eq(4, mc)) {
+      set(font_choice, "Hershey-Plain")
+    } else {
+      set(font_choice, "Times-Roman")
+    }
+  } elsif(eq(ff, 2)) {
+    list(options)
+    setel(options, 1, "Times Italic (default)")
+    setel(options, 2, "New Century Schoolbook Italic")
+    setel(options, 3, "Garamond Italic")
+    setel(options, 4, "ZapfChancery")
+    set(mc, menuchoose(options, "Select font: "))
+    if(eq(1, mc)) {
+      set(font_choice, "Times-Italic")
+    } elsif(eq(2, mc)) {
+      set(font_choice, "NewCenturySchlbk-Italic")
+    } elsif(eq(3, mc)) {
+      set(font_choice, "AGaramond-Italic")
+    } elsif(eq(4, mc)) {
+      set(font_choice, "ZapfChancery-MediumItalic")
+      /*copyfile("/usr/local/lib/ghostscript/fonts/zcr.gsf")*/
+      /*copyfile("/usr/local/lib/ghostscript/fonts/zcb.gsf")*/
+    } else {
+      set(font_choice, "Times-Italic")
+    }
+  } elsif(eq(ff, 3)) {
+    list(options)
+    setel(options, 1, "OmegaRsimms")
+    setel(options, 2, "Baghdad")
+    set(mc, menuchoose(options, "Select font: "))
+    if(eq(1, mc)) {
+      set(font_choice, "OmArabicRsimms (default)")
+    } elsif(eq(2, mc)) {
+      set(font_choice, "Baghdad")
+    } else {
+      set(font_choice, "OmArabicRsimms")
+    }
+  } elsif(eq(ff, 4)) {
+    list(options)
+    setel(options, 1, "Jerusalem")
+    set(mc, menuchoose(options, "Select font: "))
+    if(eq(1, mc)) {
+      set(font_choice, "Jerusalem (default)")
+    } else {
+      set(font_choice, "Jerusalem")
+    }
+  } else {
+    set(font_choice, 0)     /* user must want to quit */
+  }
+  return(font_choice)
 }
 
 /*
@@ -672,99 +1520,164 @@ func interrogate_user ()
 **
 */
 
-proc main ()
-{
-
+proc main() {
   /* set constants */
 
-  set (name_height, 1250)          /* height to allow for name text */
-  set (date_height, 750)           /* height to allow for date text */
+  set(version, "ps-anc8.86, 4 Jul 2004")
+  set(TRUE, 1)       /* to make code in interrogate_user() */
+  set(FALSE, 0)      /* more user friendly                 */
+  set(UP, neg(1))    /* constant, branch direction indicator */
+  set(NEUTRAL, 0)    /* constant, branch direction indicator */
+  set(DOWN, 1)       /* constant, branch direction indicator */
 
-  set (branch_dist_prev, 1000)     /* previous generation */
-  set (branch_dist_same, 1250)     /* same generation */
-  set (branch_dist_next, 1000)     /* next generation */
+  set(name_height, 1000)          /* height to allow for name text */
+  set(date_height, 600)           /* height to allow for date text */
 
-  set (no_parent_extra, 500)       /* a little extra line when no parent */
+  set(branch_dist_prev, 1000)     /* previous generation */
+  set(branch_dist_same, 1250)     /* same generation */
+  set(branch_dist_next, 1000)     /* next generation */
+  set(tighten, TRUE)              /* ok for desc branches to be side-by-side */
+
+  set(corner_height, 1000)        /* space between parent and extreme child 
+                                     -- name_height was formerly used for this*/
+  set(min_sibling_spacer, 500)    /* force this much space between siblings */
+  
+  set(max_dateplace, 6)           /* number of date-place styles */
 
   /* initialize other global variables and declare global stacks */
 
-  set (high_pos_all, 0)
+  set(debug, FALSE)              /* debugging output should depend on these */
+  set(debug2, FALSE)
+  set(debug_postscript, TRUE)    /* adds features to PostScript file:        */
+                                 /* in PS file, set show_positions to 'true' */
 
-  list (high_pos_gen)
-  list (do_anc_stack)
+  print(nl()) /* trying to make screen output not get clobbered by LL menu */
+  if(interrogate_user()) {        /* set options, some specified by user */
+    set(start_depth, 0)           /* any posInteger or neg(posInteger) is ok */
 
-  list (plist_person)
-  list (plist_depth)
-  list (plist_pos)
-  list (plist_line)
-  list (plist_mdate)
-  list (plist_anc)
-  list (plist_des)
-
-  list (llist_depth)
-  list (llist_low)
-  list (llist_high)
-  list (llist_dash)
-
-  if (interrogate_user()) {
-
-  /* convert the numerical response for color to string, "true" or "false" */
-
-  if (eq (color_chart, 0))  {
-    set (color_true_false, "false")
-  }  else  {
-    set (color_true_false, "true")
-  }
-
-  /* start iteration that creates the chart */
-
-  if (eq (chart_type, 0))  {
-    call do_anc (root_person, 1, 0, 0, 0)
-  }  else  {
-    call do_des (root_person, 1, 0, 0, 1)
-  }
-
-  /* put the pieces together to make the output file */
-
-  set (xi, 1)
-  call print_header(chart_label, color_true_false, font_name,
-                    x_pages, y_pages, high_pos_all, high_depth, extra_margin)
-  while ( le (xi, x_pages))  {
-    set (yi, 1)
-    while ( le (yi, y_pages))  {
-
-      call print_page_head (xi, yi)
-
-      if (display_title) {
-        if (eq (0,chart_type)) {
-          "(The ancestors of "
-        } else {
-          "(The descendants of "
-        }
-        name(root_person) " "
-        call fromto(root_person)
-        ") printhead" nl()
-      }
-      else {
-        "0 hh hh2 sub hh2 .17 mul add    % chart starts above chart_label" nl()
-       "dup 0 lt {pop 0} if translate" nl()
-      }
-
-      call print_all_persons ()
-      call dequeue_all_verticals ()
-      "showpage" nl()
-      "%--- End of page " d(xi) "/" d(yi) " ---" nl()
-
-      set (yi, add (yi, 1))
+    /* make depths rel. to start_depth, and figure depth offset for array */
+    /*if(or( eq(chart_type, 1), eq(chart_type, 4), eq(chart_type, 5) )) {*/
+    if( and(ne(chart_type, 2), ne(chart_type, 3))) {
+      set(depth_siblings, add(start_depth, sub(depth_siblings, 1)))
+      set(depth_halfsib_anc, add(start_depth, sub(depth_halfsib_anc, 1)))
     }
-    set (xi, add (xi, 1))
-  }
-  }
+    set( max_depth, add(start_depth, sub(max_depth, 1)))
+    set( min_depth, sub(start_depth, sub(min_depth, 1)))
+    set( high_pos_gen_offset, sub( 1, min_depth))
 
+    call initialize_data()    /* declares and clears contents of lists */
+
+    if(place_modify) {
+      /* keyword: SHORTEN
+         these commands prepare for place abbreviation supported
+         by an included program 
+      */
+      table(abbvtab)
+      call setupabbvtab()
+    }
+
+    if(opt_xlat) {
+      /*  Initialize PostScript translation table to escape characters */
+      table(ps_xlat)
+      insert(ps_xlat,"(","\\(")
+      insert(ps_xlat,")","\\)")
+      insert(ps_xlat,"\\","\\\\")
+    }
+
+    /* generate chart data */
+    if( eq(chart_type, 1)) {
+      set(not_used, do_anc( root_person, start_depth, 0, 0, 0, 2, 0) )
+    } elsif( eq(chart_type, 2)) {
+      set(not_used, do_des2(root_person, start_depth, 0, NEUTRAL, 2, 0, 0, 0))
+    } elsif( eq(chart_type, 4)) {
+      call combo2()    /* all the information it needs is global */
+    } elsif( eq(chart_type, 5)) {
+      call do_cousins()  /* all the information it needs is global */
+    } elsif( eq(chart_type, 3)) {
+      set(not_used, dropline(root_person, start_depth, 0, FALSE, 2, 0))
+    } elsif( eq(chart_type, 6)) {
+      /* With a few rules, you can put multiple charts in the same layout
+         The first chart may be of any type, but for now, additional charts
+         within the same layout must be among anc, des, and drop line.     */
+      /* The combo and cousins charts insist on their central generation
+         being at 'start_depth'.  However, anc, des, and drop line charts may
+         be started from any generation, specified in their 'depth' argument. */
+      /* Run the program, choose a person who has descendants (to avoid the
+         automatic choice of ancestor chart)
+         Give '5' for the chart type.
+         If duplicate appearances happen accross different charts, then
+         the lists original_person and original_depth must be init'ed between
+         chart calls to keep them from being treated as duplicates, if desired.
+      */
+      set(display_label, 1)
+      set(chart_label_centered, 0)
+      set(chart_label, "© Rugrats created by Arlene Klasky, Gabor Csupo and Paul Germain.")
+      set(display_title, 1)
+      set(chart_title_override, "The Rugrats")
+      
+      set(child_depth, sub(start_depth, 1))
+
+      set(root_person, indi("17")) /* Tommy Pickles */
+      set(root_fam, parents(root_person)) /* Stu & Didi */
+      call do_cousins()
+      print("Done Stu & Didi.", nl())
+
+      set(root_person, indi("7")) /* Phil */
+      set(root_fam, parents(root_person))
+      call combo2()
+      print("Done Phil & Lil", nl())
+
+       set(root_fam, fam("F1"))
+      call combo2()
+      /*set(root_person, indi("1"))*/ /* Chuckie Finster */
+      /*set(not_used, do_anc(root_person, child_depth, 0, 0, 0, 2, 0))*/
+      print("Done Chuckie.", nl())
+
+      set(root_person, indi("26")) /* Susie Carmichael */
+      set(root_fam, parents(root_person))
+      call combo2()
+      print("Done Susie.", nl())
+    }
+    print(" ", d(length(plist_person)), " individuals shown on the chart.",nl())
+
+    /* use chart data to create a PostScript file as output */
+    call write_ps(font_name, ifont_name,
+        x_pages, y_pages, high_depth, low_depth)
+
+    /* apply external file conversion/viewing command */
+    newfile(outfile(), TRUE)  /* thump output buffer */
+
+    list(actions)
+    list(choices)
+    print("Output file full-name: ", outfile(), nl())
+    enqueue(choices, "Convert with 'ps2pdf'")
+    if(eqstr(paper_name, "NONE")) {
+      enqueue(actions, concat("ps2pdf -dPDFSETTINGS=/printer ", outfile(),
+        " `echo ", outfile(), "|sed 's:\.ps:\.pdf:'` && rm -i ", outfile() ))
+    } else {
+      enqueue(actions, concat("ps2pdf -dPDFSETTINGS=/printer ",
+        "-sPAPERSIZE=", paper_name, " ", 
+        outfile(),
+        " `echo ", outfile(), "|sed 's:\.ps:\.pdf:'` && rm -i ", outfile() ))
+    }
+    /*enqueue(actions, concat("ps2pdf ", outfile())*/
+    enqueue(choices, "View with 'MacGhostViewX'")
+    enqueue(actions, concat("open -a ",
+      "/Applications/MacGhostViewX/MacGhostViewX.app ", outfile()))
+    enqueue(choices, "Convert with 'PStill'")
+    enqueue(actions, concat("open -a ",
+      "/Applications/Stone\\ Studio/PStill.app ", outfile()))
+    set(mc, menuchoose(choices, "Choose an action or (q)uit to leave as is"))
+    if(mc) {
+      print("performing: ", getel(actions, mc), nl())
+      system(getel(actions, mc))
+    }
+
+  }
 }
 
 /*
-**  procedure: do_anc
+**  function: do_anc
 **
 **  A recursive function to position persons on an ancestral chart.
 **  First, a recursive call is made to put the father on the chart.
@@ -772,740 +1685,2481 @@ proc main ()
 **  the mother.  Once the father and mother are put on the chart, the
 **  siblings are put on the chart.
 **
-**  The position of the person is returned via the global stack
-**  do_anc_stack.  A stack is necessary since this procedure is
-**  reentrant.
-**
 */
 
-proc do_anc (person, depth, min_pos_arg, marriage_date, des)
-{
-  set(anc, 0)
-
-  /* don't want to modify procedure argument variable, so copy it */
-  set (person_min_pos, min_pos_arg)
-
-  /* make sure minimum position is greater than zero */
-  if (lt (person_min_pos, 0))  {
-    set (person_min_pos, 0)
+func do_anc(person, depth, person_minpos, marriage_date, has_des, rel, duplicate) {
+  if( or( gt(depth, add(high_depth, 1)), eq(length(plist_person), 0)) ) {
+    set(ceiling, FALSE)
+  } else {
+    set(ceiling, TRUE)
+  }
+  set(min_gap_set, FALSE)
+  if(and(tighten, lt(depth, max_depth))) {
+    call cloak(add(depth, 1))
+  }
+  set(abs_min_pos, get_clearance(depth, 0))
+  if(gt(depth, max_depth)) {
+    set(duplicate_anc_return, 0)
+    set(min_gap_return, -1)
+    return(max(person_minpos, abs_min_pos))
   }
 
-  set(abs_min_pos, 0)
+  set(fam, choosefamc(person))
+  set(rel_next, rel_famc(person, fam, rel))
+  if(fam) {   /* make a var suitable for passing as a parameter */
+    set(has_anc, 1)
+  } else {
+    set(has_anc, 0)
+  }
+  if(mom_first) {
+    set(par1, mother(person))
+    set(par2, father(person))
+  } else {
+    set(par1, father(person))
+    set(par2, mother(person))
+  }
+  set(notcutoff, not(
+    and( eq(duplic_handling, 2), or(duplicate, blocked(person, depth)) ) ))
 
-  /* make we will not overlap another branch at the younger generation */
-  if (gt (depth, 1))  {
-    if (high, getel (high_pos_gen, sub (depth, 1)))  {
-      if (lt (abs_min_pos, add (high, branch_dist_prev)))  {
-        set (abs_min_pos, add (high, branch_dist_prev))
+  /* Figure out number of siblings and total sibling height.         */
+  /* Father is allowed to be older_sib_height above person_minpos.   */
+  /* sibling_height will be min distance between the first and last  */
+  /* sibling horizontal  */
+  set(sibling_height, 0)
+  set(older_sib_height, 0)
+  set(num_not_younger, 1) /* count of prior sibling buffers space */
+  if(and( fam, le(depth, depth_siblings), notcutoff )) {
+    set(num_siblings, nchildren(fam))
+    children(fam, child, cn) {
+      if(eq(person, child)) {
+        set(older_sib_height, sibling_height)
+        if(gt(num_siblings, 1)) {
+          set(older_sib_height, add(older_sib_height, corner_height))
+        }
+        set(num_not_younger, cn)
       }
-    }
-  }
-
-  /* make we will not overlap another branch at the same generation */
-  if (high, getel (high_pos_gen, depth))  {
-    if (lt (abs_min_pos, add (high, branch_dist_same)))  {
-      set (abs_min_pos, add (high, branch_dist_same))
-    }
-  }
-
-  /* make we will not overlap another branch at the older generation */
-  if (lt (depth, max_depth))  {
-    if (high, getel (high_pos_gen, add (depth, 1)))  {
-      if (lt (abs_min_pos, add (high, branch_dist_next)))  {
-        set (abs_min_pos, add (high, branch_dist_next))
+      if(ne(cn, num_siblings)) {
+        set(sibling_height, add(sibling_height,
+          person_height2(child, eq(child, person), marriage_date),
+          min_sibling_spacer))
       }
+      call reserve(child, depth)
     }
+    call reserve(fam, depth)
+  } else {
+    set(num_siblings, 1)
+    call reserve(person, depth)
   }
 
   /* See if father had any other children by a different mother
-   * and add up the space to show them */
+   * and add up the space to show them.  */
+  set(branch_top, max(sub(person_minpos, older_sib_height), abs_min_pos))
+  /* space for adjustment for cases except half-sibs with their ancestors */
+  if(ceiling) {
+    set(min_gap, sub(branch_top, abs_min_pos))
+  }
+  set(hsibling_height, 0)
+  set(do_hs, 0)
+  set(hs_line_start, 0)
+      /* remember the people of this branch in case they have to be moved */
+  call remember_branch_start()   /* for branch adjustment */
 
-  set (fam, parents (person))
-  set (famkey,key(fam))
-  set(fhsize, 0)
-  set(dhs,0)
-  if (father(person)) {
-    /* when anc. are off-chart, this turns on a line from indiv to next gen */
-    set(anc, 1)
-    if (and(le(depth,depth_siblings),half_sib)) {
-      if ( gt (nfamilies(father(person)),1)) {
-        families(father(person),fv,sv,nf) {
-          if (ne(famkey,key(fv))) {
-            children (fv, child, un) {
-
-              set(dhs,1)
-
-              /* add height of person to half-sib height */
-
-              call person_height (child)
-              set (fhsize, add (fhsize, person_height_return))
+  if(and( gt(nfamilies(par1), 1), le(depth, depth_siblings),
+           halfsib, notcutoff )) {
+    set(dup_line, 1)
+    families(par1, fv, sv, nf) {
+/*      if(ne(fam, fv)) {*/
+/* RES: stopgap */
+      if(nestr(key(fam), key(fv))) {
+        set(dup_line, and( dup_line, blocked(fv, depth)))
+        if(and( halfsib_anc, le(depth, depth_halfsib_anc), notcutoff )) {
+          call reserve(fv, depth)   /* reserve since parents will show */
+          set(mdate, dateplace(marriage(fv), dateplace_marriage))
+          set(pos, do_anc(sv, add(depth, 1), add(branch_top, hsibling_height),
+              mdate, 1, 0, duplicate) )
+          if(not(do_hs)){
+            set(hs_line_start, pos) /* top end of half sib. vertical */
+            set(branch_top, pos)
+            /* this min_gap will be less than or equal to the previous one */
+            if(and(ceiling, ne(min_gap_return, -1))) {
+              set(min_gap, min(min_gap_return, min_gap))
+              set(min_gap_set, TRUE)
+            }
+            set(do_hs, 1)
+          } else {
+            set(hs_bottom, pos)
+            /* show children by previous spouse */
+            set(pos, distribute_children(fv_prev, branch_top, hs_bottom,
+                hsibling_height, depth, rel_next) )
+            set(branch_top, hs_bottom)
+          }
+          set(fv_prev, fv)
+          /* figure height of siblings by current spouse */
+          set(hsibling_height, corner_height)
+          children(fv, child, cn) {
+            set(hsibling_height, add(hsibling_height,
+                person_height2(child, FALSE, 0), min_sibling_spacer))
+            call reserve(child, depth)
+          }
+        } else {
+          children(fv, child, cn) {
+            set(hsibling_height, add(hsibling_height,
+                person_height2(child, FALSE, 0), min_sibling_spacer))
+            call reserve(child, depth)
+            if(not(do_hs)) {
+              set(do_hs, 1)
             }
           }
         }
       }
-    }
-  }
-
-  /* figure out number of siblings and total sibling height */
-  /* done differently, depending on whether the parents family exists */
-  set(flag, 1)
-  set(older_sib_height, 0)
-  if ( and ( fam, le (depth, depth_siblings) ) )  {
-
-    set (sibling_height, 0)
-    children (fam, child, unused_number)  {
-      call person_height (child)
-      set (sibling_height, add (sibling_height, person_height_return))
-      if (flag) {
-        if (eq(person, child)) {
-          set (flag, 0)
-        } else {
-          set(older_sib_height, add(older_sib_height, person_height_return))
-        }
-      }
-    }
-    set (num_siblings, nchildren (fam))
-
-  }  else  {
-
-    call person_height (child)
-    set (sibling_height, person_height_return)
-    set (num_siblings, 1)
-
-  }
-
-  set (older_sib_height, add (older_sib_height, name_height))
-
-  /* add extra height for marriage date of person (male), if it is known */
-  if (marriage_date)  {
-    set (sibling_height, add (sibling_height, date_height))
+    } /* end families loop for stepfamilies via parent #1 */
   }
 
   /* do father if he exists and is not too deep */
-  set ( dad_min_pos, add(abs_min_pos, fhsize) )
-  if (lt(dad_min_pos, sub(person_min_pos, older_sib_height))) {
-    set (dad_min_pos, sub(person_min_pos, older_sib_height))
-  }
-  set ( dad_pos, dad_min_pos )
-  set ( did_dad, 0 )                     /* boolean, is dad on the chart */
-
-  if (lt (depth, max_depth))  {
-    if (par, father (person))  {
-      set(anc, 1)
-      call dateplace (marriage (parents (person)), dateplace_marriage)
-      if (dateplace_return)  {
-        call do_anc (par, add (depth, 1), dad_min_pos, dateplace_return, 1)
-      }  else  {
-        call do_anc (par, add (depth, 1), dad_min_pos, 0, 1)
-      }
-      set (dad_pos, pop (do_anc_stack))
-      set (did_dad, 1)
+  set(dad_min_pos, add(branch_top, hsibling_height) )
+  if(and( fam, lt(depth, max_depth), notcutoff )) {
+    /* don't want to stretch the siblings, so constrain dad *
+     * to be older_sib_height distance from person_minpos;  *
+     * it will get added back before placement of person    */
+    set(dad_pos, do_anc(par1, add(depth, 1), dad_min_pos,
+        dateplace(marriage(fam), dateplace_marriage), 1, rel_next,
+          or(duplicate, blocked(person, depth))) )
+    set(first_sib_pos, add(dad_pos, corner_height))
+    set(dup_dad, duplicate_anc_return)
+    if( and( ceiling, ne(min_gap_return, -1), not(min_gap_set) ) ) {
+      set(min_gap, min(min_gap_return, min_gap))
+      set(min_gap_set, TRUE)
     }
-  }
-
-  /* If father had any other kids by a different mother print them*/
-
-  set(pos,sub(dad_pos, fhsize))
-  set(sdhs, pos)
-  if (dhs) {
-    families(father(person),fv,sv,nf) {
-      if (ne(famkey,key(fv))) {
-        children (fv, child, un) {
-          call enqueue_person (child, depth, pos, 0, 0, 1, 0)
-
-          /* increment position by height of person */
-
-          call person_height (child)
-          set (pos, add (pos, person_height_return))
-        }
-      }
+  } else {    /* didn't do dad */
+    set(dad_pos, dad_min_pos)
+    if(gt(num_siblings, 1)) {
+      /* if there are siblings then allow for just corner_height vert. *
+       * line above first sibling  when siblings aren't shown            */
+      set(first_sib_pos, add(dad_pos, corner_height))
+    } else {
+      set(first_sib_pos, dad_min_pos)
     }
+    set(dup_dad, 0)
   }
 
-  /* do mother if she exists and is not too deep */
-
-  set (mom_min_pos, add (add (dad_pos, name_height), sibling_height))
-  set (mom_min_pos,sub(mom_min_pos,250))
-  set (mom_pos, mom_min_pos)
-  set (did_mom, 0)                     /* boolean, is mom on the chart */
-
-  if (lt (depth, max_depth))  {
-    if (par, mother (person))  {
-      set(anc, 1)
-      call do_anc (par, add (depth, 1), mom_min_pos, 0, 1)
-      set (mom_pos, pop (do_anc_stack))
-      set (did_mom, 1)
+  /* Do mother if she exists and is not too deep. */
+  /* Her branch, will be at least branch_dist_same from dad's branch. */
+  set(last_sib_pos, add(first_sib_pos, sibling_height))
+  set(mom_min_pos, last_sib_pos)
+  if(and( fam, lt(depth, max_depth), notcutoff )) {
+    set(mom_min_pos, add(mom_min_pos, corner_height))
+    set(mom_pos, do_anc(par2, add(depth, 1), mom_min_pos, 0, 1, rel_next,
+        or(duplicate, blocked(person, depth))) )
+    set(last_sib_pos, sub(mom_pos, corner_height))
+    set(dup_mom, duplicate_anc_return)
+    set(do_vertical_line, TRUE)
+  } else {    /* didn't do mom */
+    if(gt(num_siblings, 1)) {
+      /* if more than one sibling then corner_height    *
+       * is added to siblings vertical line             */
+      set(mom_pos, add(mom_min_pos, corner_height))
+      set(do_vertical_line, TRUE)
+    } else {
+      /* no vertical line */
+      set(mom_pos, mom_min_pos)
+      set(do_vertical_line, FALSE)
     }
+    set(dup_mom, 0)
   }
 
   /* find the spacer needed to line up siblings between mother and father */
+  set(extra, sub(sub(last_sib_pos, first_sib_pos), sibling_height))
+  set(spacer, div(extra, add(num_siblings, 1)))
+  if(and( debug, lt(spacer, 0) )) {
+    print(" Spacer<0 for ", name(person), "(", key(person), ")", nl())
+    print(" Dad_min_pos, dad_pos: ", d(dad_min_pos), ", ", d(dad_pos), nl())
+    print(" sibling_height: ", d(sibling_height), nl())
+    print(" Mom_min_pos, mom_pos: ",
+      d(mom_min_pos), ", ", d(mom_pos), nl(), nl())
+  }
 
-  set (delta, sub (mom_pos, add (dad_pos, name_height)))
-  set (extra, sub (delta, sibling_height))
-  set (spacer, div (extra, add (num_siblings, 1)))
+  /* Shift the parents' branches back up the page if possible. */
+  /* min_gap = space availble for upward shift */
+  /* compared with diff between anticipated person_pos and minimum person_pos */
+  /* - includes stretching of older siblings  */
+  set(person_pos, add(dad_pos, older_sib_height, mul(num_not_younger, spacer)))
+  set(gapshrink, sub(person_minpos, person_pos))
+  if(ceiling) {
+    set(gapshrink, max(neg(min_gap), gapshrink))
+  }
 
-  set (pos, add (dad_pos, name_height))
-  set (pos, add (pos, spacer))
+  /* call branch_adjust to pop the branch_start* stacks, even if shift=0 */
+  call branch_adjust(gapshrink)
+  if(ne(gapshrink, 0)) {
+    /* adjust local position variables affected by branch shift */
+    set(dad_pos, add(dad_pos, gapshrink))
+    set(mom_pos, add(mom_pos, gapshrink))
+    set(first_sib_pos, add(first_sib_pos, gapshrink))
+    /*set(last_sib_pos, add(last_sib_pos, gapshrink))*/  /*RES-not used again */
+    if(do_hs) {
+      set(branch_top, add(branch_top, gapshrink))
+      set(hs_line_start, add(hs_line_start, gapshrink))
+    }
+    if(ceiling) {
+      set(min_gap, min(0, add(min_gap, gapshrink)))
+    }
+    if(debug) {
+      print(" ", make_thousandths(neg(gapshrink)))
+      print(" units of space recovered for the branch of ", name(person), nl())
+    }
+  }
 
-  /* position siblings, differently depending on whether parents exist */
+  /* position siblings differently depending on whether there's more than 1 */
+  set(pos, first_sib_pos)
+  if(and( le(depth, depth_siblings), gt(num_siblings, 1), notcutoff )) {
+    children(fam, child, cn) {
+      set(pos, add(pos, spacer))
+      /* if this is the ancestor, return the position and use marriage */
+/*      if(eq(child, person)) {*/
+/*RES: stopgap measure for INDI equality problem in LL from CVS March 2004 */      if(eqstr(key(child), key(person))) {
+        call enqueue_person(child, depth, pos, rel, marriage_date,
+            1, has_des, fam)
+        set(do_anc_return, pos)
+        set(duplicate_anc_return, duplicate_return)
+      } else {
+        call enqueue_person(child, depth, pos, half(rel_next), 0, 1, 0, fam)
+      }
+      /* increment position by height of person, used for high_pos */
+      set(pos, add(pos,
+          person_height2(child, eq(child, person), marriage_date)))
+      if(ne(cn, num_siblings)) {
+        set(pos, add(pos, min_sibling_spacer))
+      }
+    }  /* end of children loop */
 
-  if (fam, parents (person))  {
+  } else {    /* depth > depth_siblings or person has no siblings */
+    if(do_vertical_line) {
+      /* center person on vertical line of parent(s) */
+      set(pos, add(pos, spacer))
+    }
+    call enqueue_person(person, depth, pos, rel, marriage_date,
+        has_anc, has_des, fam)
+    set(do_anc_return, pos)
+    set(duplicate_anc_return, duplicate_return)
+    /* increment position by height of person, used for */
+    /* high_pos and maternal half siblings line start   */
+    set(pos, add(pos, person_height2(person, TRUE, marriage_date)))
+  }
 
-    if ( le (depth, depth_siblings))  {
+  if(do_vertical_line) {
+    call enqueue_vertical(depth, dad_pos, mom_pos, rel_next, blocked(fam, depth))
+    /* pos is used in setting high_pos later */
+    set(pos, max(mom_pos, pos))
+    /* only if parents have been shown should a family be considered as shown */
+    if(and( lt(depth, max_depth), has_anc, not(blocked(fam, depth)) )) {
+      call reserve(fam, start_depth)
+    }
+  }
 
-      children (fam, child, number)  {
-
-        /* if this is the ancestor, return the position and use marriage */
-
-        if (eq (child, person))  {
-          call enqueue_person (child, depth, pos, 1, marriage_date, 1, des)
-          push (do_anc_stack, pos)
-        }  else  {
-          call enqueue_person (child, depth, pos, 0, 0, 1, 0)
+  /* If father had any other kids by a different mother print them        */
+  /* use hpos instead of pos to avoid messing up pos for high_pos setting */
+  if(do_hs) {
+    if(and( halfsib_anc, le(depth, depth_halfsib_anc), notcutoff )) {
+      set(hs_bottom, dad_pos)
+      set(hpos, distribute_children(fv_prev, branch_top, hs_bottom,
+          hsibling_height, depth, rel_next))
+    } else {
+      set(hpos, branch_top)  /*sub(dad_pos, hsibling_height)) */
+      set(hs_line_start, hpos)
+      families(par1, fv, sv, nf) {
+/*        if(ne(fam, fv)) {*/
+/* RES: stopgap */
+        if(nestr(key(fam), key(fv))) {
+          children(fv, child, un) {
+            call enqueue_person(child, depth, hpos, half(rel_next), 0, 1, 0, fv)
+            /* increment position by height of person */
+            set(hpos, add(
+                hpos, person_height2(child, FALSE, 0), min_sibling_spacer))
+          }
         }
-
-        /* store the positions of the first and last children */
-
-        if (eq (number, 1))  {
-          set (first_pos, pos)
-        }
-        if (eq (number, nchildren (fam)))  {
-          set (last_pos, pos)
-        }
-
-        /* increment position by height of person plus the spacer */
-
-        call person_height (child)
-        set (pos, add (pos, person_height_return))
-        if (and (eq (child, person), marriage_date))  {
-          set (pos, add (pos, date_height))
-        }
-        set (pos, add (pos, spacer))
-      }
-
-    }  else  {
-      /* depth > depth_siblings */
-
-      call enqueue_person (person, depth, pos, 1, marriage_date, anc, des)
-      push (do_anc_stack, pos)
-
-      /* this may cause a line of zero length to be drawn */
-      set (first_pos, pos)
-      set (last_pos, pos)
-
-      /* increment position by height of person plus the spacer */
-
-      call person_height (person)
-      set (pos, add (pos, person_height_return))
-      if (marriage_date)  {
-        set (pos, add (pos, date_height))
-      }
-      set (pos, add (pos, spacer))
-    }
-
-    /* if father is on the chart, he determines the vertical line start */
-    /* otherwise, the oldest sibling does */
-
-    if (eq (did_dad, 1))  {
-      set (line_start, dad_pos)
-    }  else  {
-      if (eq(nchildren(fam), 1)) {
-        set (line_start, first_pos)  /* for case of father's half-sib. line */
-      }  else  {
-        set (line_start, sub (first_pos, no_parent_extra))
       }
     }
-
-    /* note: line_start may be < 0, that is OK */
-
-    /* if mother is on the chart, she determines the vertical line end */
-    /* otherwise, the youngest sibling does */
-
-    if (eq (did_mom, 1))  {
-      set (line_end, mom_pos)
-    }  else  {
-      if (eq(nchildren(fam),1)) {
-        set (line_end, last_pos)  /* for case of mother's half-sib. line */
-      }  else  {
-        set (line_end, add (last_pos, no_parent_extra))
-      }
-    }
-
-    /* print vert. line if mother, father or any siblings are on the chart */
-
-    if (or (or (did_mom, did_dad), gt (nchildren (fam), 1)))  {
-      call enqueue_vertical (depth, line_start, line_end, 0)
-      /* update highest overall position */
-      if (lt (high_pos_all, add (line_end, name_height)))  {
-        set (high_pos_all, add (line_end, name_height))
-      }
-    }
-    if (dhs) {  /* Draw line for half-siblings via father */
-      call enqueue_vertical (depth, sdhs, line_start, 1)
-    }
-
-  }  else  {  /* matching the "if (fam, parents(person))" above */
-
-    /* else, if the person has no visible siblings */
-
-    call enqueue_person (person, depth, pos, 1, marriage_date, anc, des)
-    push (do_anc_stack, pos)
-    set (last_pos, pos)
-
-    /* increment position by height of person plus the spacer */
-
-    call person_height (person)
-    set (pos, add (pos, person_height_return))
-    if (marriage_date)  {
-      set (pos, add (pos, date_height))
-    }
-    set (pos, add (pos, spacer))
+    call enqueue_vertical(depth, hs_line_start, dad_pos,
+        half(rel_next), dup_line)
   }
 
   /* See if mother had any other children by a different father */
+  set(do_hs, 0)
+  if(and( halfsib, le(depth, depth_siblings),
+           gt(nfamilies(par2), 1), notcutoff )) {
+    set(hs_line_start, mom_pos)
+                        /* pos here is from end of vertical line of parents */
+    set(branch_top,
+        add(max(pos, add(mom_pos, corner_height)), min_sibling_spacer))
+    set(dup_line, 1)
+    set(pos, branch_top)
+    families(par2, fv, sv, nf) {
+/*      if(ne(fam, fv)) {*/
+/* RES: more stopgap measure */
+      if(nestr(key(fam), key(fv))) {
+        set(dup_line, and(dup_line, blocked(fv, depth)))
+        if(and( lt( depth, max_depth), halfsib_anc )) {
+          set(do_hs, 1)
+          call reserve(fv, depth)   /* reserve since parents will show */
+          /* get height of stepfather's children */
+          set(hsibling_height, corner_height)
+          children(fv, child, un) {
+            set(hsibling_height, add(hsibling_height,
+                person_height2(child, FALSE, 0), min_sibling_spacer))
+            call reserve(child, depth)
+          }
+          /* print ancestors of stepfather, including marriage date */
+          set(mdate, dateplace(marriage(fv), dateplace_marriage))
+          set(hs_bottom, do_anc(sv, add(depth, 1),
+              add(branch_top, hsibling_height), mdate, 1, 0, duplicate) )
+          /* show this stepfather's children */
+          set(pos, distribute_children(fv, branch_top, hs_bottom,
+              hsibling_height, depth, rel_next) )
+          set(branch_top, hs_bottom)
+        } else {
+          set(hs_bottom, pos)
+          children(fv, child, un) {
+            if(not(do_hs)) { /* first maternal half siblings group */
+              set(do_hs, 1)
+            }
+            call enqueue_person(child, depth, pos,
+                half(rel_next), 0, 1, 0, fv)
+            set(hs_bottom, pos)
+            set(pos, add(pos, person_height2(child, FALSE, 0),
+                min_sibling_spacer))
+          }
+        }
+      }
+    }
+    /* If there were any maternal half siblings draw the vertical line */
+    if(do_hs) {
+      call enqueue_vertical(depth, hs_line_start, hs_bottom,
+          half(rel_next), dup_line)
+    }
+  }
 
-  set(dhs,0)
-  set(pos, add (pos,branch_dist_next))
-  if ( and(and(le(depth,depth_siblings),half_sib),mother(person) )) {
-    set(smhs, line_end)
-    if ( gt (nfamilies(mother(person)),1)) {
-      families(mother(person),fv,sv,nf) {
-        if (ne(famkey,key(fv))) {
-          children (fv, child, un) {
+  if(ceiling) {
+    set(min_gap_return, min_gap)
+  } else {
+    set(min_gap_return, -1)
+  }
+  call max_with_high_pos_gen(depth, pos)
+  return(do_anc_return)
+}
 
-            set(dhs,1)
-            call enqueue_person (child, depth, pos, 0, 0, 1, 0)
+/*
+**  function: do_des2
+**
+**  Produces descendant branches which recursively do as follows:
+**  For the specified person, show all spouses and, if not at the generation
+**  limit, show in the next generation a descendant branch for each child
+**  by those spouses.
+**
+**  Branches may be directed up or down, under the influence of the user
+**  option 'updown_override'.  However, a person's marriages are always
+**  in database order from top to bottom.
+**
+**  If the user option 'duplic_handling' specifies that truncation of
+**  a duplicate person's branch is prefered, this is done only if
+**  all of a person's marriages have been shown.
+*/
 
-            /* increment position by height of person plus the spacer */
+func do_des2(person, depth, min_pos, updown, rel, has_anc, duplicate, famc) {
+  set(rel, rel_famc(person, famc, rel))
+  set(nfam, nfamilies(person))
+  set(child_depth, sub(depth, 1))
+  if(eq(updown, NEUTRAL)) {
+    if(or( and(mom_first, eqstr(sex(person), "F")),
+           and(not(mom_first), eqstr(sex(person), "M")) )) {
+      set(updown, direction(DOWN))
+    } else {
+      set(updown, direction(UP))
+    }
+  }
+  set(notcutoff, not(and(
+      eq(duplic_handling, 2), or(duplicate, blocked(person, depth)) )))
+  if(not(notcutoff)) {  /* if we're about to cut off a branch... */
+    families(person, fv, sp, nf) { /* cut off only if all marriages are shown */
+      set(notcutoff, or(notcutoff, not(blocked(fv, depth))))
+    }
+  }
+  if(tighten) {
+    call cloak(add(depth, 1))
+    call cloak(child_depth)
+  }
+  if(and( eq(updown, UP), notcutoff )) {
+    if(or( lt(depth, sub(low_depth, 1)),
+           and(lt(depth, low_depth), cloak_check(low_depth)) )) {
+      set(ceiling, FALSE)
+    } else {
+      set(ceiling, TRUE)
+    }
+    call remember_branch_start()
+    if(nfam) {
+      set(line_top, branch_up(person, 0, depth, 1, rel))
+      set(person_pos, branch_up_min_pos)
+    } else {
+      set(person_pos, get_clearance(depth, min_pos))
+    }
+    call enqueue_person(person, depth, person_pos, rel, 0, has_anc, nfam, famc)
+    set(shift, sub(min_pos, person_pos))
+    if(ceiling) {
+      set(shift, max(0, shift))
+    }
+    call branch_adjust(shift)
+    set(person_pos, add(person_pos, shift))
+    if(nfam) {
+      set(line_top, add(line_top, shift))
+      call enqueue_vertical(child_depth, line_top, person_pos,
+          rel, dup_line_return)
+    }
+    call max_with_high_pos_gen(depth,
+             add(person_pos, person_height2(person, 0, 0)))
+  } elsif(and( eq(updown, DOWN), notcutoff )) {
+    set(person_pos, get_clearance(depth, min_pos))
+    set(person_extent, add(person_pos, person_height2(person, 0, 0)))
+    if(nfam) {
+      set(person_pos, branch_down(person, person_pos, person_extent, TRUE, 0,
+          depth, 1, rel))
+    } else {
+      call max_with_high_pos_gen(depth, person_extent)
+    }
+    call enqueue_person(person, depth, person_pos, rel, 0, has_anc, nfam, famc)
+  } else {  /* cut off this person's branch */
+    set(person_pos, get_clearance(depth, min_pos))
+    call enqueue_person(person, depth, person_pos, rel, 0, has_anc, 0, famc)
+    set(person_extent, add(person_pos, person_height2(person, 0, 0)))
+    call max_with_high_pos_gen(depth, person_extent)
+  }
+  return(person_pos)
+}
 
-            call person_height (child)
-            set (pos, add (pos, person_height_return))
+/*
+**  procedure: distribute_children
+**
+**  Given a family key, evenly space
+**  the children of the family in a vertical range determined
+**  by top and bottom positions of the range.
+**
+**  sibling_height should include an extra corner_height to allow for
+**  vertical skip that balances with the mandatory corner_height skip that
+**  follows the last sibling's placement.
+**
+*/
+/* RES - would be nice to either eliminate this pocedure or make
+         it general enough to take on more tasks from do_anc
+*/
+
+func distribute_children(fam, top, bottom, sibling_height, depth, rel) {
+  set(extra, sub(bottom, add(top, sibling_height)))
+  set(spacer, div(extra, add(nchildren(fam), 1)))
+  if(and(debug, lt(spacer, 0))) {
+    print(" distribute_children: spacer < 0 !!\n")
+    print("          top: ", d(top), "  bottom: ", d(bottom), nl())
+  }
+  
+  set(pos, add(top, corner_height, spacer))
+  children(fam, child, num) {
+    call enqueue_person(child, depth, pos, half(rel), 0, 1, 0, fam)
+    set(pos, add(
+            pos, person_height2(child, FALSE, 0), min_sibling_spacer, spacer))
+  }
+  return(pos)
+}
+
+/*
+**  function: branch_up
+**
+**  For a specific person, charts his/her spouses and the children/descendants
+**  by them.
+**
+**  Shouldn't be called if nfamilies(person) is 0, or 1 when exclude_fam=0.
+**  To notify us of a problem, this function is designed to intentionally
+**  force an error message if there are no families to work with.  That is
+**  because there is no good value to return in that case.
+*/
+/* RES -- add descriptions of the various return values to the above comment */
+
+func branch_up(person, exclude_fam, depth, show_des, rel) {
+  set(child_depth, sub(depth, 1))
+  set(nfam, nfamilies(person))
+  if(exclude_fam) { decr(nfam) }
+  set(switch_fam, half(add(nfam, 1))) /* last family to branch up */
+  set(dup_line, 1)
+  set(dir, UP)
+  set(fnn, 0)
+  if(tighten) {
+    call cloak(add(depth, 1))
+    call cloak(child_depth)
+  }
+  set(spouse_minpos, get_clearance(depth, 0))
+  families(person, fv, sv, fn) {
+    if(ne(fv, exclude_fam)) {
+      incr(fnn)
+      set(dup_line, and(dup_line, blocked(fv, depth)))
+      call reserve(sv, depth)
+      call reserve(fv, depth)
+      if(tighten) {
+        call cloak(sub(child_depth, 1))
+      }
+      set(child_minpos, add(spouse_minpos, corner_height))
+      set(child_minpos, get_clearance(child_depth, child_minpos))
+      set(child_extent, 0)
+      set(first_child_pos, child_minpos)
+      if(gt(depth, min_depth)) {
+        set(num_children, nchildren(fv))
+        set(switch_child, half(add(nchildren(fv), 1)))
+        children(fv, child, cn) {
+          if(show_des) {
+            set(child_pos,
+                do_des2(child, child_depth, child_minpos, dir, rel, 1, 0, fv))
+          } else {
+            set(child_pos, child_minpos)
+            call enqueue_person(child, child_depth, child_pos, rel, 0, 1, 0, fv)
+            set(child_extent, add(child_pos, person_height2(child, 0, 0)))
+            set(child_minpos, add(child_extent, min_sibling_spacer))
+          }
+          if(eq(cn, 1)) {
+            set(first_child_pos, child_pos)
+          }
+          if(eq(cn, num_children)) {
+            set(spouse_minpos, add(child_pos, corner_height))
+          }
+          if(and(eq(nfam, 1), eq(cn, switch_child))) {
+            set(dir, DOWN)
+          }
+        }
+        if(num_children) {
+          call max_with_high_pos_gen(child_depth, child_extent)
+        }
+      }
+      set(spouse_pos, sub(first_child_pos, corner_height))
+      if(eq(fnn, 1)) {
+        set(branch_top, spouse_pos)
+      }
+      /*
+      print("sp: ", d(spouse_pos), "   bt: ", d(branch_top), "   fnn: ", d(fnn), "  fv: ", key(fv), nl())
+      */
+      if(le(depth, max_depth)) {
+        set(mdate, dateplace(marriage(fv), dateplace_marriage))
+        call enqueue_person(sv, depth, spouse_pos, 0, mdate, 0, 1, 0)
+        set(spouse_extent, add(person_height2(sv, TRUE, mdate), spouse_pos))
+        call max_with_high_pos_gen(depth, spouse_extent)
+        if(not(blocked(fv, depth))) {
+          call reserve(fv, start_depth)
+        }
+        set(spouse_minpos,
+            max(add(get_high_pos_gen(depth), branch_dist_same), spouse_minpos))
+      }
+      if(eq(fnn, switch_fam)) {
+        set(dir, DOWN)
+      }
+    }
+  }
+  set(branch_up_min_pos, spouse_minpos)
+  set(dup_line_return, dup_line)
+  return(branch_top)
+}
+
+/*
+**  procedure: branch_down
+**
+**  person_extent should be either the bottom of the info on the person,
+*/
+/* RES -- add descriptions of the various return values to the above comment
+          also need to just fix the above comment
+*/
+
+func branch_down(person, prev_spouse_pos, prev_spouse_extent, adjustable, exclude_fam, depth, show_des, rel) {
+  set(person_pos, prev_spouse_pos)
+  set(child_depth, sub(depth, 1))
+  set(nfam, nfamilies(person))
+  if(exclude_fam) { decr(nfam) }
+  set(switch_fam, half(nfam)) /* last family to branch up */
+  set(dup_line, 1)
+  if(tighten) {
+    call cloak(sub(child_depth, 1))
+  }
+  set(child_minpos, add(prev_spouse_pos, corner_height))
+  set(child_minpos, get_clearance(child_depth, child_minpos))
+  set(dir, direction(UP))
+  set(fnn, 0)
+  families(person, fv, sv, fn) {
+    if(ne(fv, exclude_fam)) {
+      incr(fnn)
+      set(dup_line, and(dup_line, blocked(fv, depth)))
+      call reserve(sv, depth)
+      call reserve(fv, depth)
+      if(tighten) {
+        call cloak(sub(child_depth, 1))
+      }
+      set(child_minpos, add(prev_spouse_pos, corner_height))
+      set(child_minpos, get_clearance(child_depth, child_minpos))
+      set(child_extent, 0)
+      set(first_child_pos, child_minpos)
+      set(last_child_pos, child_minpos)
+      call remember_branch_start()
+      if(gt(depth, min_depth)) {
+        set(num_children, nchildren(fv))
+        set(switch_child, half(num_children)) /* favors DOWN when odd num_ch. */
+        if(and(eq(nfam, 1), eq(switch_child, 0))) {
+          set(dir, direction(DOWN))
+        }
+        children(fv, child, cn) {
+          if(show_des) {
+            set(child_pos,
+                do_des2(child, child_depth, child_minpos, dir, rel, 1, 0, fv))
+          } else {
+            set(child_pos, child_minpos)
+            call enqueue_person(child, child_depth, child_pos,
+                     rel, 0, 1, 0, fv)
+            set(child_extent, add(child_pos, person_height2(child, 0, 0)))
+            set(child_minpos, add(child_extent, min_sibling_spacer))
+          }
+          if(eq(cn, 1)) {
+            set(first_child_pos, child_pos)
+          }
+          if(eq(cn, num_children)) {
+            set(last_child_pos, child_pos)
+          }
+          if(and(eq(nfam, 1), eq(cn, switch_child))) {
+            set(dir, direction(DOWN))
+          }
+        }
+        if(num_children) {
+          call max_with_high_pos_gen(child_depth, child_extent)
+        }
+      }
+      set(spouse_pos, add(last_child_pos, corner_height))
+      /* adjust children + spouse to keep spouse clear of prev parent info */
+      set(shift, max(
+          0, sub(add(prev_spouse_extent, branch_dist_same), spouse_pos) ))
+      call branch_adjust(shift)
+      set(first_child_pos, add(first_child_pos, shift))
+      set(spouse_pos, add(spouse_pos, shift))
+      if(and(eq(fnn, 1), adjustable)) {
+        set(person_pos, add(prev_spouse_pos, min(
+          sub(sub(first_child_pos, corner_height), prev_spouse_pos),
+          max(0, sub(spouse_pos, add(prev_spouse_extent, branch_dist_same)))
+        )))
+      }
+      if(le(depth, max_depth)) {
+        set(mdate, dateplace(marriage(fv), dateplace_marriage))
+        call enqueue_person(sv, depth, spouse_pos, 0, mdate, 0, 1, 0)
+        set(spouse_extent, add(person_height2(sv, TRUE, mdate), spouse_pos))
+      } else {
+        set(spouse_extent, name_height)
+      }
+      set(prev_spouse_pos, spouse_pos)
+      set(prev_spouse_extent, spouse_extent)
+      /* set next fam's child_minpos before this spouse can interfere */
+      set(child_minpos, add(prev_spouse_pos, corner_height))
+      set(child_minpos, get_clearance(child_depth, child_minpos))
+      if(le(depth, max_depth)) {
+        call max_with_high_pos_gen(depth, spouse_extent)
+        if(not(blocked(fv, depth))) {
+          call reserve(fv, start_depth)
+        }
+      }
+      if(eq(fnn, switch_fam)) {
+        set(dir, direction(DOWN))
+      }
+    }
+  }
+  if(gt(fnn, 0)) {
+    call enqueue_vertical(child_depth, person_pos, spouse_pos, rel, dup_line)
+  }
+  return(person_pos)
+}
+
+/*
+**  function: dropline
+**
+**  Generates a drop line chart of descendants of a person.
+**  The return value is the vertical position of the person's horizontal line.
+**
+*/
+
+func dropline(person, depth, has_anc, duplicate, rel, famc) {
+   set(rel, rel_famc(person, famc, rel))
+   set(abs_min_pos, get_clearance(depth, 0))
+   set(child_depth, sub(depth, 1))
+   set(low_depth, min(depth, low_depth))
+   set(high_depth, max(depth, high_depth))
+   set(notcutoff, not(and(
+       eq(duplic_handling, 2), or(duplicate, blocked(person, depth)) )))
+   if(and(desc_gender, ne(depth, start_depth))) {
+     set(notcutoff, and(notcutoff, or(
+       and(eq(desc_gender, 1), eqstr(sex(person), "F")),
+       and(eq(desc_gender, 2), eqstr(sex(person), "M")) )))
+   }
+   call reserve(person, depth)
+   set(line_to_kids, FALSE)
+   set(vertical_line, FALSE)
+   set(dup_line, TRUE)
+   set(first_pos, abs_min_pos)
+   set(last_pos, first_pos)
+   set(child_pos, first_pos)
+   call remember_branch_start()
+   families(person, fam, spouse, fn) {
+      set(dup_line, and(dup_line, blocked(fam, depth)))
+      call reserve(fam, depth)
+      children(fam, child, cn) {
+         if(and(ge(child_depth, min_depth), notcutoff)) {
+            set(child_pos, dropline(child, child_depth, TRUE,
+               or(duplicate, blocked(person, depth)), rel, fam))
+            if(not(line_to_kids)) {
+               set(first_pos, child_pos)
+            } else {
+               set(vertical_line, TRUE)
+            }
+         }
+         set(line_to_kids, TRUE)
+      }
+      if(and( ge(child_depth, min_depth), not(blocked(fam, depth)),
+          notcutoff)) {
+         /* marriage, indicated by vert. line, is original on the chart */
+         call reserve(fam, start_depth)
+      }
+   }
+
+   set(last_pos, child_pos)
+   if(vertical_line) {
+      call enqueue_vertical(child_depth, first_pos, last_pos, 2, dup_line)
+   }
+
+   set(this_pos, half(add(first_pos, last_pos)))
+   set(shift, max(0, sub(abs_min_pos, this_pos)))
+   call branch_adjust(shift)
+   set(this_pos, add(this_pos, shift))
+   call enqueue_person(person, depth, this_pos, rel, 0, has_anc, line_to_kids, famc)
+
+   /* RES - this could be made obsolete if done by enqueue_person */
+   /* maybe enqueue_person could return the person's extent */
+   set(this_extent, add(this_pos, person_height2(person, FALSE, 0)))
+   call max_with_high_pos_gen(depth, this_extent)
+   return(this_pos)
+}
+
+
+/*
+**  procedure: combo2
+**
+**  Show ancestors and descendants of a couple.
+*/
+
+proc combo2() {
+  set(child_depth, sub(start_depth, 1))
+  if(mom_first) {
+    set(par1, wife(root_fam))
+    set(par2, husband(root_fam))
+  } else {
+    set(par1, husband(root_fam))
+    set(par2, wife(root_fam))
+  }
+  set(mdate, dateplace(marriage(root_fam), dateplace_marriage))
+  set(num_siblings, nchildren(root_fam))
+
+  call reserve(root_fam, start_depth)
+  call reserve(par1, start_depth)
+  call reserve(par2, start_depth)
+
+  if(gt(nfamilies(par1), 1)) {
+    set(hline_top, branch_up(par1, root_fam, start_depth, 1, 1))
+  }
+  call remember_branch_start()
+  set(dad_pos, do_anc(par1, start_depth, 0, 0, 1, 2, 0) )
+
+  if(and( ge(num_siblings, 1), gt(start_depth, min_depth) )) {
+    set(first_sib_pos, add(dad_pos, corner_height))
+    set(child_minpos, first_sib_pos)
+    set(prev_pos, child_minpos)
+    set(last_sib_pos, first_sib_pos)
+    set(dir, direction(UP))
+    set(switch_child, half(add(nchildren(root_fam), 1)))
+    children(root_fam, child, cn) {
+       call cloak(start_depth)
+       call remember_branch_start()
+       set(this_pos,
+         do_des2(child, child_depth, child_minpos, dir, 2, 1, 0, root_fam) )
+       set(prev_pos, this_pos)
+       if(eq(cn, 1)) {
+         set(first_sib_pos, this_pos)
+       }
+       if(eq(cn, num_siblings)) {
+         set(last_sib_pos, this_pos)
+       }
+       if(eq(cn, switch_child)) {
+         set(dir, direction(DOWN))
+       }
+    }
+    set(dad_minpos, sub(first_sib_pos, corner_height))
+    set(sibling_span, add(
+        sub(last_sib_pos, first_sib_pos), mul(2, corner_height) ))
+  } else {
+    set(sibling_span, 0)
+    set(dad_minpos, dad_pos)
+  }
+ 
+  set(shift, sub(dad_minpos, dad_pos))
+  call branch_adjust_first(shift)
+  /* need to shift dad's ancestor branch */
+  set(dad_pos, dad_minpos)
+  
+  set(mom_minpos, add(dad_pos, sibling_span))
+  call remember_branch_start()
+  call cloak(child_depth)
+  set(mom_pos, do_anc(par2, start_depth, mom_minpos, mdate, 1, 2, 0) )
+
+  set(mom_shift, max(0, sub(mom_pos, mom_minpos)))
+  call multi_branch_adjust(mom_shift, nchildren(root_fam))
+  
+  /* dad's marriage line for other spouses
+     do this now to avoid the vert line being shifted by multi_branch_adjust */
+  if(gt(nfamilies(par1), 1)) {
+    call enqueue_vertical(child_depth, hline_top, dad_pos, 1, dup_line_return)
+  }
+
+
+  call enqueue_vertical(child_depth, dad_pos, mom_pos, 2, 0)
+
+  set(not_used,
+      branch_down(par2, mom_pos, 0, FALSE, root_fam, start_depth, 1, 1))
+}
+
+
+/*
+**  procedure: do_cousins
+**    show a couple as married along with their ancestors, descendants, and
+**    the descendants of their siblings
+*/
+
+proc do_cousins() {
+  set(child_depth, sub(start_depth, 1))
+  set(grand_depth, add(start_depth, 1))
+
+  set(num_sib, nchildren(root_fam))
+  set(mdate_root_fam, dateplace(marriage(root_fam), dateplace_marriage))
+  if(mom_first) {
+    set(par1, wife(root_fam))
+    set(par2, husband(root_fam))
+  } else {
+    set(par1, husband(root_fam))
+    set(par2, wife(root_fam))
+  }
+
+  set(dfam, choosefamc(par1))
+  set(drel, rel_famc(par1, dfam, 2))
+  if(dfam) {
+    set(num_dsib, nchildren(dfam))
+    set(mdate_dfam, dateplace(marriage(dfam), dateplace_marriage))
+    if(mom_first) {
+      set(dpar1, wife(dfam))
+      set(dpar2, husband(dfam))
+    } else {
+      set(dpar1, husband(dfam))
+      set(dpar2, wife(dfam))
+    }
+  } else {
+    set(dpar1, 0)
+    set(dpar2, 0)
+    set(num_dsib, 1)
+    set(mdate_dfam, 0)
+  }
+
+  set(mfam, choosefamc(par2))
+  set(mrel, rel_famc(par2, mfam, 2))
+  if(mfam) {
+    set(num_msib, nchildren(mfam))
+    set(mdate_mfam, dateplace(marriage(mfam), dateplace_marriage))
+    if(mom_first) {
+      set(mpar1, wife(mfam))
+      set(mpar2, husband(mfam))
+    } else {
+      set(mpar1, husband(mfam))
+      set(mpar2, wife(mfam))
+    }
+  } else {
+    set(mpar1, 0)
+    set(mpar2, 0)
+    set(num_msib, 1)
+    set(mdate_mfam, 0)
+  }
+
+  call reserve(par1, start_depth)
+  call reserve(par2, start_depth)
+  call reserve(root_fam, start_depth)
+  if(dfam) { /* this is enough to catch extra appearances in anc branches */
+    call reserve(dpar1, grand_depth)
+    call reserve(dpar2, grand_depth)
+    call reserve(dfam, grand_depth)
+    families(dpar1, fv, sv, fn) { /* claim originality for start_depth people */
+      children(fv, cv, cn) {
+        call reserve(cv, start_depth)
+        families(cv, cfv, csv, cfn) {
+          call reserve(cfv, start_depth)
+        }
+      }
+    }
+    families(dpar2, fv, sv, fn) {
+      if(ne(sv, dpar1)) {
+        children(fv, cv, cn) {
+          call reserve(cv, start_depth)
+          families(cv, cfv, csv, cfn) {
+            call reserve(cfv, start_depth)
+          }
+        }
+      }
+    }
+  }
+  if(mfam) {
+    call reserve(mpar1, grand_depth)
+    call reserve(mpar2, grand_depth)
+    call reserve(mfam, grand_depth)
+    families(mpar1, fv, sv, fn) { /* claim originality for start_depth people */
+      children(fv, cv, cn) {
+        call reserve(cv, start_depth)
+        families(cv, cfv, csv, cfn) {
+          call reserve(cfv, start_depth)
+        }
+      }
+    }
+    families(mpar2, fv, sv, fn) {
+      if(ne(sv, mpar1)) {
+        children(fv, cv, cn) {
+          call reserve(cv, start_depth)
+          families(cv, cfv, csv, cfn) {
+            call reserve(cfv, start_depth)
           }
         }
       }
     }
   }
 
-  /* If there were any more children on the mothers side draw the vert line */
-
-  if (dhs) {
-    call enqueue_vertical (depth, smhs, sub(pos,person_height_return), 1)
-    set(pos,add(pos,no_parent_extra))
+  print(" Determining relative spacing of 1st parent's ancestors...\n")
+  if(gt(nfamilies(dpar1), 1)) {
+    set(hline_top, branch_up(dpar1, dfam, grand_depth, FALSE, half(drel)))
+    call cloak(start_depth)
   }
+  set(ddad_pos, do_anc(dpar1, grand_depth, 0, mdate_dfam, 1, drel, 0) )
+  set(ddad_minpos, ddad_pos)
 
-  /* update the highest position array, or set it for the first time */
+  set(dmom_pos, do_anc(dpar2, grand_depth, ddad_minpos, 0, 1, drel, 0) )
+  set(dmom_relpos, sub(dmom_pos, ddad_pos))
+  if(not(blocked(dfam, grand_depth))) {
+    call reserve(dfam, start_depth)
+  }
+/* RES interferes with relative position figuring of the grandparents */
+/* RES need to just replace this with a reserving of the spouses and children */
+/*
+  set(not_used, branch_down(dpar2, dmom_pos, 0, FALSE, dfam,
+      grand_depth, FALSE, half(drel)))
+*/
 
-  if (high, getel (high_pos_gen, depth))  {
-    if (lt (high, pos))  {
-      setel (high_pos_gen, depth, pos)
+  print(" Determining relative spacing of 1st parent's siblings...\n")
+  set(child_minpos, add(ddad_minpos, corner_height))
+  set(prevpos, child_minpos)
+  if(gt(num_dsib, 1)) {
+    list(dsib_relpos)
+    set(dir, direction(UP)) /* all of 1st parent's siblings can branch up */
+    set(cnn, 0)
+    children(dfam, child, cn) {
+      if(ne(child, par1)) {
+        set(cnn, add(cnn, 1))
+        call cloak(grand_depth)
+        set(thispos,
+          do_des2(child, start_depth, child_minpos, dir,
+              half(drel), 1, 0, dfam))
+        setel(dsib_relpos, cn, sub(thispos, prevpos))
+        set(prevpos, thispos)
+        if(eq(cnn, 1)) {
+          set(first_dsib_pos, thispos)
+          setel(dsib_relpos, cn, 0)
+        }
+        if(eq(cnn, sub(num_dsib, 1))) {
+          set(last_dsib_pos, thispos)
+          set(dad_minpos, add(thispos,
+            person_height2(child, FALSE, 0), branch_dist_same))
+        }
+      }
     }
-  }  else  {
-    setel (high_pos_gen, depth, pos)
+    /* ddad_minpos might be affected by up-branching of descendants */
+    set(ddad_minpos, sub(first_dsib_pos, corner_height))
+  } else {
+    set(first_dsib_pos, child_minpos)
+    set(last_dsib_pos, first_dsib_pos)
+    set(dad_minpos, add(ddad_minpos, corner_height))
   }
 
-  /* update the overall highest position */
+  print(" Determining relative spacing of the family's descendants...\n")
+  if(gt(nfamilies(par1), 1)) {
+    call cloak(grand_depth)
+    set(line_top, branch_up(par1, root_fam, start_depth, TRUE, 1))
+    set(dad_minpos, max(
+        dad_minpos, add(get_high_pos_gen(start_depth), branch_dist_same) ))
+  }
+  set(dad_relpos, sub(dad_minpos, last_dsib_pos))
+  set(older_dsib_height, sub(dad_minpos, ddad_minpos))
 
-  if (lt (high_pos_all, pos))  {
-    set (high_pos_all, pos)
+  set(prevpos, add(dad_minpos, corner_height))
+  set(child_minpos, prevpos)
+  if( and(gt(num_sib, 0), ge(child_depth, min_depth)) ) {
+    list(sib_relpos)
+    set(dir, direction(UP))
+    set(switch_child, half(add(nchildren(root_fam), 1)))
+    children(root_fam, child, cn) {
+      call cloak(start_depth)
+      set(thispos,
+        do_des2(child, child_depth, child_minpos, dir, 2, 1, 0, root_fam) )
+      setel(sib_relpos, cn, sub(thispos, prevpos))
+      set(prevpos, thispos)
+      if(eq(cn, 1)) {
+        set(first_sib_pos, thispos)
+        setel(sib_relpos, cn, 0)
+      }
+      if(eq(cn, num_sib)) {
+        set(last_sib_pos, thispos)
+      }
+      if(eq(cn, switch_child)) {
+        set(dir, direction(DOWN))
+      }
+    }
+  } else {
+    set(first_sib_pos, child_minpos)
+    set(last_sib_pos, first_sib_pos)
+  }
+  set(sib_span, add(sub(last_sib_pos, first_sib_pos), mul(2, corner_height)))
+  /* place dad corner_height before his first child */
+  set(dad_pos, max( dad_minpos, sub(first_sib_pos, corner_height) ))
+  if(gt(num_dsib, 1)) {
+/* commented out because it can cause first parent to push away from siblings*/
+/*    set(dad_relpos, sub(dad_pos, last_dsib_pos))*/
+    set(older_dsib_height, sub(dad_pos, ddad_minpos))
+  }
+  
+  set(dsib_span, add(older_dsib_height, corner_height))
+  set(spacer1, div( max(0, sub(dmom_relpos, dsib_span)), add(num_dsib, 1) ))
+  set(ddad_minpos, max( ddad_minpos,
+      sub(sub(dad_pos, older_dsib_height), mul(num_dsib, spacer1)) ))
+
+  call enqueue_person(par1, start_depth, dad_pos, 2, mdate_root_fam, 1, 1, 0)
+  set(par1_extent, add(dad_pos, person_height2(par1, TRUE, mdate_root_fam)))
+  call max_with_high_pos_gen(start_depth, par1_extent)
+
+  print(" Determining relative spacing of the 2nd parent's ancestors...\n")
+/* RES - up-branch above mother would have parent(s) that block mdad from
+   determining how close he can go to dmom's branch
+
+  if(gt(nfamilies(mpar1), 1)) {
+    call cloak(child_depth)
+    set(hline_top, branch_up(mpar1, mfam, grand_depth, FALSE, half(mrel)))
+  }
+*/
+  call cloak(start_depth) /* RES - necessary due to par1 info lines ? */
+  set(mdad_pos, do_anc(mpar1, grand_depth, 0, mdate_mfam, 1, mrel, 0))
+  set(mdad_relpos, sub(mdad_pos, dmom_pos))
+
+  call cloak(start_depth)
+  set(mmom_pos, do_anc(mpar2, grand_depth, mdad_pos, 0, 1, mrel, 0) )
+  set(mmom_relpos, sub(mmom_pos, mdad_pos))
+  if(not(blocked(mfam, grand_depth))) {
+    call reserve(mfam, start_depth)
+  }
+  set(not_used, branch_down(mpar2, mmom_pos, 0, FALSE, mfam,
+      grand_depth, FALSE, half(mrel)))
+
+  set(mom_pos, max( add(last_sib_pos, corner_height),
+      add(get_high_pos_gen(start_depth), branch_dist_same) ))
+  call enqueue_person(par2, start_depth, mom_pos, 2, 0, 1, 1, 0)
+  set(par2_extent, add(mom_pos, person_height2(par2, FALSE, 0)))
+  call max_with_high_pos_gen(start_depth, par2_extent)
+  set(not_used, branch_down(par2, mom_pos, 0, FALSE, root_fam,
+      start_depth, TRUE, 1))
+
+  print(" Determining relative spacing of 2nd parent's siblings...\n")
+  set(prevpos, mom_pos)
+  set(child_minpos,
+      add(mom_pos, person_height2(par2, FALSE, 0), branch_dist_same))
+  if(gt(num_msib, 1)) {
+    list(msib_relpos)
+    set(dir, direction(DOWN)) /* all of 2nd parent's siblings branch down */
+    set(cnn, 0)
+    children(mfam, child, cn) {
+      if(ne(child, par2)) {
+        incr(cnn)
+        call cloak(grand_depth)
+        call cloak(child_depth)   /* RES experimental */
+        set(thispos, do_des2(child, start_depth, child_minpos,
+            dir, half(mrel), 1, 0, mfam))
+        setel(msib_relpos, cn, sub(thispos, prevpos))
+        set(prevpos, thispos)
+        if(eq(cnn, sub(num_msib, 1))) {
+          set(last_msib_pos, thispos)
+        }
+      }
+    }
+  } else {
+    set(last_msib_pos, prevpos)
+  }
+  set(msib_span, sub(add(last_msib_pos, corner_height),
+                       sub(mom_pos, corner_height)) )
+  set(spacer2, div( max(0, sub(mmom_relpos, msib_span)), add(num_msib, 1) ))
+
+  call initialize_data()
+/*------------------------cousin middle-------------------------------------*/
+
+  print(" Determining final positions on the chart...\n")
+  call reserve(root_fam, start_depth)
+  call reserve(par1, start_depth)
+  call reserve(par2, start_depth)
+  if(dfam) { /* this is enough to catch extra appearances in anc branches */
+    call reserve(dpar1, grand_depth)
+    call reserve(dpar2, grand_depth)
+    call reserve(dfam, grand_depth)
+    families(dpar1, fv, sv, fn) { /* claim originality for start_depth people */
+      children(fv, cv, cn) {
+        call reserve(cv, start_depth)
+        families(cv, cfv, csv, cfn) {
+          call reserve(cfv, start_depth)
+        }
+      }
+    }
+    families(dpar2, fv, sv, fn) {
+      if(ne(sv, dpar1)) {
+        children(fv, cv, cn) {
+          call reserve(cv, start_depth)
+          families(cv, cfv, csv, cfn) {
+            call reserve(cfv, start_depth)
+          }
+        }
+      }
+    }
+  }
+  if(mfam) {
+    call reserve(mpar1, grand_depth)
+    call reserve(mpar2, grand_depth)
+    call reserve(mfam, grand_depth)
+    families(mpar1, fv, sv, fn) { /* claim originality for start_depth people */
+      children(fv, cv, cn) {
+        call reserve(cv, start_depth)
+        families(cv, cfv, csv, cfn) {
+          call reserve(cfv, start_depth)
+        }
+      }
+    }
+    families(mpar2, fv, sv, fn) {
+      if(ne(sv, mpar1)) {
+        children(fv, cv, cn) {
+          call reserve(cv, start_depth)
+          families(cv, cfv, csv, cfn) {
+            call reserve(cfv, start_depth)
+          }
+        }
+      }
+    }
   }
 
-  /* update the overall highest depth */
+  if(gt(nfamilies(dpar1), 1)) {
+    set(hline_top, branch_up(dpar1, dfam, grand_depth, FALSE, half(drel)))
+    call cloak(start_depth)
+  }
+  set(ddad_pos, do_anc(dpar1, grand_depth, ddad_minpos, mdate_dfam, 1, drel, 0))
+  if(gt(nfamilies(dpar1), 1)) {
+    call enqueue_vertical(start_depth, hline_top, ddad_pos,
+        half(drel), dup_line_return)
+  }
+  if(debug2) {
+    if(ne(ddad_minpos, ddad_pos)) {
+      print(" ddad appears to be slipping...", nl())
+      print("  ", d(ddad_minpos), " -> ", d(ddad_pos), nl())
+    }
+  }
 
-  if (lt (high_depth, depth))  {
-    set (high_depth, depth)
+  set(prevpos, add(ddad_pos, corner_height))
+  set(dir, direction(UP))
+  children(dfam, child, cn) {
+    if(ne(child, par1)) {
+      set(child_minpos, add(prevpos, getel(dsib_relpos, cn), spacer1))
+      call cloak(grand_depth)
+      set(prevpos,
+        do_des2(child, start_depth, child_minpos, dir, half(drel), 1, 0, dfam))
+      if(and(debug, ne(prevpos, child_minpos))) {
+        print(name(child), " child_minpos != actual\n")
+      }
+    } else {
+      if(ne(cn, num_dsib)) {
+        print("The first parent has been moved to last in his/her sibling order.", nl())
+      }
+    }
+  }
+
+  call remember_branch_start()
+  set(dad_minpos, add(prevpos, dad_relpos))
+  if(gt(nfamilies(par1), 1)) {
+    call cloak(grand_depth)
+    set(hline_top, branch_up(par1, root_fam, start_depth, TRUE, 1))
+    set(dad_pos, max(branch_up_min_pos,
+        add(get_high_pos_gen(start_depth), branch_dist_same)) )
+  }
+/* HERE */
+  call enqueue_person(par1, start_depth, dad_pos, 2, mdate_root_fam, 1, 1, 0)
+  set(par1_extent, add(dad_pos, person_height2(par1, TRUE, mdate_root_fam)))
+  call max_with_high_pos_gen(start_depth, par1_extent)
+  set(dad_minpos, add(prevpos, dad_relpos, spacer1))
+  call branch_adjust(max(0, sub(dad_minpos, dad_pos)))
+  set(dad_pos, max(dad_minpos, dad_pos))
+  if(gt(nfamilies(par1), 1)) {
+    call enqueue_vertical(child_depth, hline_top, dad_pos,
+        1, dup_line_return)
+  }
+
+  set(dmom_minpos, add(dad_pos, corner_height, spacer1))
+  call cloak(start_depth)        /* to ignore dsibs */
+  set(dmom_pos, do_anc(dpar2, grand_depth, dmom_minpos, 0, 1, drel, 0))
+  if(debug2) {
+    if(ne(dmom_minpos, dmom_pos)) {
+      print(" dmom appears to be slipping...", nl())
+      print(d(dmom_minpos), " -> ", d(dmom_pos), nl())
+    }
+  }
+  call enqueue_vertical(start_depth, ddad_pos, dmom_pos, drel,
+      blocked(dfam, grand_depth))
+  if(not(blocked(dfam, grand_depth))) {
+    call reserve(dfam, start_depth)
+  }
+  set(not_used, branch_down(dpar2, dmom_pos, 0, FALSE, dfam,
+      grand_depth, FALSE, half(drel)))
+
+  /* RES - new25jun 1 line*/
+  set(mdad_minpos, max(add(dmom_pos, mdad_relpos),
+      get_high_pos_gen(start_depth)))
+  if(gt(nfamilies(mpar1), 1)) {
+    call remember_branch_start()
+    set(hline_top, branch_up(mpar1, mfam, grand_depth, FALSE, half(mrel)))
+/* RES - new22jun */
+    set(shift, max(0, sub(mdad_minpos, branch_up_min_pos)))
+    call branch_adjust(shift)
+    set(hline_top, add(hline_top, shift))
+    call cloak(start_depth)
+  }
+  /* RES - max with mdad_minpos + c.h. + sp2 is a safeguard */
+  set(mom_pos, max( add(dad_pos, sib_span),
+      add(mdad_minpos, corner_height, spacer2)))
+  set(mdad_minpos, max(mdad_minpos, sub(sub(mom_pos, corner_height), spacer2)))
+  call cloak(start_depth)
+  set(mdad_pos, do_anc(mpar1, grand_depth, mdad_minpos, mdate_mfam, 1, mrel, 0))
+  if(gt(nfamilies(mpar1), 1)) {
+    call enqueue_vertical(start_depth, hline_top, mdad_pos,
+        half(mrel), dup_line_return)
+  }
+  
+  set(mmom_minpos, add(mdad_pos, max(mmom_relpos, msib_span)) )
+  set(spacer, div( max(0, sub(sub(mom_pos, dad_pos), sib_span)),
+      add(num_sib, 1) ))
+
+  set(prevpos, add(dad_pos, corner_height))
+  if(ge(child_depth, min_depth)) {
+    set(dir, direction(UP))
+    set(switch_child, half(add(nchildren(root_fam), 1)))
+    children(root_fam, child, cn) {
+      set(child_minpos, add(prevpos, getel(sib_relpos, cn), spacer))
+      call cloak(start_depth)
+      set(prevpos,
+        do_des2(child, child_depth, child_minpos, dir, 2, 1, 0, root_fam))
+      if(debug) {
+        if(ne(child_minpos, prevpos)) {
+          print(" ! Descendant branch slipping down page ! (",
+              name(child), ")\n")
+          print("  As a result, there will be extra space above the branch.\n")
+        }
+      }
+      if(eq(cn, switch_child)) {
+        set(dir, direction(DOWN))
+      }
+    }
+  }
+
+  if(gt(add(prevpos, spacer, corner_height), mom_pos)) {
+    print(" 2nd parent will be moved to compensate for descendant slippage\n")
+    set(mom_pos, max(mom_pos, add(prevpos, spacer, corner_height)))
+  }
+  /* RES - fix unknown reason why mom has no corner between her and mpar1 */
+  set(mom_pos, max(mom_pos, add(mdad_pos, corner_height, spacer2)))
+  call enqueue_person(par2, start_depth, mom_pos, 2, 0, 1, 1, 0)
+  set(par2_extent, add(mom_pos, person_height2(par2, FALSE, 0)))
+  call max_with_high_pos_gen(start_depth, par2_extent)
+  call enqueue_vertical(child_depth, dad_pos, mom_pos, 2, 0)
+  set(not_used, branch_down(par2, mom_pos, 0, FALSE, root_fam,
+      start_depth, TRUE, 1))
+
+  set(prevpos, mom_pos)
+  set(dir, direction(DOWN))
+  children(mfam, child, cn) {
+    if(ne(child, par2)) {
+      set(child_minpos, add(prevpos, getel(msib_relpos, cn), spacer2))
+      call cloak(grand_depth)
+      call cloak(child_depth)
+      set(prevpos,
+        do_des2(child, start_depth, child_minpos, dir, half(mrel), 1, 0, mfam))
+    } else {
+      if(ne(cn, num_msib)) {
+        print("The second parent has been moved to first in his/her sibling order.", nl())
+      }
+    }
+  }
+
+  set(mmom_minpos, max(mmom_minpos, add(prevpos, corner_height, spacer2)))
+  call cloak(start_depth)        /* to ignore msibs */
+  set(mmom_pos, do_anc(mpar2, grand_depth, mmom_minpos, 0, 1, 2, 0) )
+  if(and(debug, ne(mmom_pos, mmom_minpos))) {
+    print(" mmom appears to be slipping...", nl())
+    print("  ", d(mmom_minpos), " -> ", d(mmom_pos), nl())
+  }
+  call enqueue_vertical(start_depth, mdad_pos, mmom_pos, mrel,
+      blocked(mfam, grand_depth))
+  if(not(blocked(mfam, grand_depth))) {
+    call reserve(mfam, start_depth)
+  }
+  set(not_used, branch_down(mpar2, mmom_pos, 0, FALSE, mfam,
+      grand_depth, FALSE, half(mrel)))
+}
+
+/*========================== end of charting functions ======================*/
+
+/*
+** function: rel_famc
+**
+** Checks for a pedigree tag on a FAMC link to determine if the relationsship
+** is not by birth.  Returns 0 if not birth or echoes the relationship passed
+** in otherwise.
+*/
+
+func rel_famc(ind, fam, rel) {
+  if(or(not(opt_rel_famc), not(fam))) {
+    return(rel)
+  }
+  set(ped_label, pedigree(ind, fam))
+  if(eq(1, index(lower(ped_label), "birth", 1))) {
+    return(rel)
+  } else {
+    return(0)
   }
 }
 
 /*
-**  procedure: do_des
+** function: pedigree
 **
-**  A recursive function to position persons on a descendant chart.
-**
-**  Descendant charts are harder to make look neat, as ancestor charts
-**  branch from the ends of a family group, whilst descendant charts can
-**  branch from any child. A person's family can either branch up to the
-**  top of the page or down to the bottom. So to get a spreading chart the 
-**  first half of a family branch up, and the rest branch down.
-**
-**  As a child's own family affects the position of his/her siblings, then 
-**  those higher on the page may need to move down. At the moment this is done
-**  for the parent or spouse (branch down or up) but not for siblings without
-**  children. An improvement could therfore be made by stacking such individuals
-**  then printing as required. However it gets more complicated with spouses and
-**  multiple families.
-**  
-**  A simpler enhancement required is to position a person with no spouse
-**  halfway between the children when branching up as is already done when
-**  branching down.
+** Returns a string identifying the nature of a child-to-family (FAMC) link.
+** Different relationships are indicated by a subnode tag of PEDI which may
+** have the following values:  Birth, Adopted, Foster, Sealed
 */
 
-proc do_des (person, depth, min_pos_arg, anc, branch_up)
-{
-  if (branch_up) {
-    set (branch_down,0)
-  } else {
-    set (branch_down,1)
+func pedigree(ind, fam_match) {
+  if(or(not(ind), not(fam_match))) {
+    return(0)
   }
-  set(des, 0)
-  if( ne(nfamilies(person),0) ) {
-    set(des, 1)
-  }
-  /* don't want to modify procedure argument variable, so copy it */
-
-  set (min_pos, min_pos_arg)
-
-  /* make sure we will not overlap the another branch at the same generation */
-
-  if (high, getel (high_pos_gen, depth))  {
-    if (lt (min_pos, high))  {
-      set (min_pos, high)
-    }
-  }
-  if (lt (min_pos, branch_dist_same))  {
-    set (min_pos, branch_dist_same)
-  }
-
-  set (make_line, 0)
-  set (pos, min_pos)
-  set (had_kids, 0)
-  set (known_spouse, 0)
-
-  set (start_pos,pos)
-  if (and(nspouses(person),branch_down)) {
-    call person_height (person)
-    set (pos, add (pos, person_height_return))
-  }
-  set (ffcp, pos)
-
-  /* Run through all the families to process all the children as this will likely
-     move us down the page a bit */ 
- 
-  families (person, fam, spouse, fn)  {
-    if (or(spouse, and(nchildren(fam),lt(depth,max_depth)) )) {
-      /* If we have a spouse or any children (appearing on the chart),
-         this family will need a vertical line */
-      set (make_line, 1)
-    }
-    if (branch_up)  {
-      call dateplace (marriage (fam), dateplace_marriage)
-      set (mdate, dateplace_return)
-      set (start_fam, pos)
-      if (spouse) {
-        set (pos, add(pos,name_height))
-      }
-    }
-    set (change_point, div (add(1,nchildren(fam)), 2)) 
-    if (lt (depth, max_depth))  {
-      children (fam, child, cn)  {
-        set (had_kids, 1)
-        if ( and(and(and(eq(1,cn),eq(1,fn)),eq(1,nfamilies(person))),eq(1,nchildren(fam))) ) {
-          call do_des (child, add (depth, 1), pos, 1, branch_up)
-        } else {
-          if ( gt (cn, change_point)) {
-            call do_des (child, add (depth, 1), pos, 1, 0)
-          } else {
-            call do_des (child, add (depth, 1), pos, 1, 1)
-          }
-        }
-        set (pos, pop (do_anc_stack))
-        if (eq (1,cn)) {
-          if (branch_down) {
-            set (start_fam, pos)
-          } else {
-            if (spouse) {
-              set (start_fam, sub(pos,name_height))
-            } else {
-              set (start_fam, pos)
+  set(pedi_label, "")
+  fornodes(inode(ind), node) {
+    if(eqstr(tag(node), "FAMC")) {
+      set(fam_this, fam(value(node)))
+      if(eq(fam_this, fam_match)) {
+        set(birth_famc, 1)
+        set(pedi_label, "Birth (assumed)")
+        fornodes(node, subnode) {
+          if(eqstr(tag(subnode), "PEDI")) {
+            set(birth_famc, 0)
+            set(pedi_label, value(subnode))
+            if( or( eqstr(pedi_label, "Birth"),
+                eqstr(pedi_label, "birth")) ) {
+              set(birth_famc, 1)
+            } elsif(eqstr(pedi_label, "")) {
+              print("! ", name(indi),
+                " has a FAMC.PEDI node with no value.", nl())
             }
           }
-          if (eq (1, fn)) {
-            set (ffcp, pos)
-            set (line_top, start_fam)
+        }
+      }
+    }
+  }
+  return(pedi_label)
+}
+
+/*
+** function: choosefamc
+**
+** Offers the choice of parent families of a child when there are several,
+** as with adoption, fostering, or sealing (LDS).
+** A child-to-family link is indicated by a FAMC tag with a family
+** cross-reference in an individual's GEDCOM record.
+**
+*/
+
+func choosefamc(ind) {
+  if(not(ind)) {
+    return(0)
+  }
+  list(choices)
+  table(fams)
+  fornodes(inode(ind), node) {
+    if(eqstr(tag(node), "FAMC")) {
+      set(choice, "")
+      set(choice, concat("FAMC ", value(node)))
+      set(fam_this, fam(value(node)))
+      set(birth_famc, 1)
+      set(pedi_label, "Birth (assumed)")
+      fornodes(node, subnode) {
+        if(eqstr(tag(subnode), "PEDI")) {
+          set(birth_famc, 0)
+          set(pedi_label, value(subnode))
+          if( or( eqstr(pedi_label, "Birth"),
+              eqstr(pedi_label, "birth")) ) {
+            set(birth_famc, 1)
+          } elsif(eqstr(pedi_label, "")) {
+            print(" ", name(indi), " has a FAMC.PEDI node with no value.", nl())
           }
+          break()
         }
       }
-      if (nchildren(fam)) {
-        set(nd, add(depth,1))
-        set(ov, getel(high_pos_gen,nd))
-        setel(high_pos_gen, nd, add(ov,branch_dist_same)) 
-      }
-    }
-    if (branch_up) {
-      if (spouse)  {
-        set (known_spouse, 1)
-        set (nms, start_fam)
-        if (eq (1,fn)) {
-          set (line_top, nms)
-        }
-        call enqueue_person (spouse, depth, nms, 0, mdate, 0, 1)
-        call person_height (person)
-        set (nms, add (nms, person_height_return))
-        if (mdate)  {
-          set (nms, add (nms, date_height))
-        }
-        if (gt (nms, pos)) {
-          set(pos, nms)
-        }
-      }
-      set (line_bot, pos)
-    } else {
-      call dateplace (marriage (fam), dateplace_marriage)
-      set (mdate, dateplace_return)
-      if (spouse)  {
-        set (known_spouse, 1)
-        if (had_kids) {
-          set (pos, add (pos, name_height))
-        }
-        call enqueue_person (spouse, depth, pos, 0, mdate, 0, 1)
-        set (line_bot, pos)
-        call person_height (spouse)
-        set (pos, add (pos, person_height_return))
-        if (mdate)  {
-          set (pos, add (pos, date_height))
-        }
-      } else {
-        set (line_bot, pos)
-      }
+      set(choice, concat(choice, " ", pedi_label))
+      enqueue(choices, choice)
+      insert(fams, d(length(choices)), fam_this)
     }
   }
-
-  /* Now work out where to put this person */
-
-  if (branch_up)  {
-    /* If we are branching up its more difficult as we could have a spouse to put in first */
-    if (had_kids) {
-      set (pos, add (pos, name_height))
-    }
-    if (and (had_kids, not (known_spouse))) {
-      set (nmp, add (line_top, div (sub(line_bot, line_top), 2)))
-      call enqueue_person (person, depth, nmp, 1, 0, anc, des)
-      push (do_anc_stack, nmp)
-      set (nmp, add (nmp, person_height_return))
-      if (gt (nmp, pos)) {
-        set(pos, nmp)
-      }
-    } else {
-      if (and(known_spouse,not(had_kids))) {
-        /* To fix a bug of overwriting when we branch up, there is a spouse
-           and no children */
-        call person_height(spouse)
-        set (pos, add (pos, sub(person_height_return,name_height)))
-      }
-      call enqueue_person (person, depth, pos, 1, 0, anc, des)
-      push (do_anc_stack, pos)
-      set (line_bot, pos)
-      call person_height (person)
-      set (pos, add (pos, person_height_return))
-    }
+  if(empty(choices)) {
+    return(0)
+  }
+  if(eq(length(choices), 1)) {
+    set(mc, 1)
   } else {
-    call person_height (person)
-    if (and (had_kids, known_spouse)) {
-      set (nmp, sub (ffcp, person_height_return))
+    set(mc,
+      menuchoose(choices, concat("Choose a parent family of ", name(ind))))
+    if(eq(mc, 0)) {
+      return(0)
+    }
+  }
+  return(lookup(fams, d(mc)))
+}
+
+/*
+**  procedure: reserve
+**
+**
+*/
+
+proc reserve(person, depth) {
+  if(and(person, duplic_handling)) {
+    /* better code for LL 3.0.5 users -tentative*/
+    /* problem seems to be that inlist only returns T/F, not position */
+    /*
+    set(n, inlist(original_person, person))
+    if(ne(n, 0)) {
+      set(level, getel(original_depth, n))
+      if(le( abs(sub(depth, start_depth)), abs(sub(level, start_depth)) )) {
+        setel(original_depth, n, depth)
+      }
     } else {
-      set (nmp, start_pos)
+      enqueue(original_person, key(person))
+      enqueue(original_depth, depth)
     }
-    set (line_top, nmp)
-    if (and (had_kids, not (known_spouse))) {
-      set (nmp, add (line_top, div (sub(line_bot, line_top), 2)))
+    */
+    set(on_list, 0)
+    forlist(original_person, i, n) {
+      if(eqstr(key(person), i)) {
+        set(on_list, 1)
+        set(level, getel(original_depth, n))
+        if(le( abs(sub(depth, start_depth)), abs(sub(level, start_depth)) )) {
+          setel(original_depth, n, depth)
+        }
+        break()
+      }
     }
-    call enqueue_person (person, depth, nmp, 1, 0, anc, des)
-    push (do_anc_stack, nmp)
-    set (nmp, add (nmp, person_height_return))
-    if (gt (nmp, pos)) {
-      set(pos, nmp)
+    if(not(on_list)) {
+      enqueue(original_person, key(person))
+      enqueue(original_depth, depth)
     }
-  }
-
-  /* update the highest position array, or set it for the first time */
-
-  if (high, getel (high_pos_gen, depth))  {
-    if (lt (high, pos))  {
-      setel (high_pos_gen, depth, pos)
-    }
-  }  else  {
-    setel (high_pos_gen, depth, pos)
-  }
-
-  /* update the overall highest position */
-
-  if (lt (high_pos_all, pos))  {
-    set (high_pos_all, pos)
-  }
-
-   /* update the overall highest depth */
-
-  if (lt (high_depth, depth))  {
-    set (high_depth, depth)
-  }
-
-  if (make_line)  {
-    call enqueue_vertical (depth, line_top, line_bot, 0)
   }
 }
 
 /*
-**  procedure: dateplace
+**  function: blocked
+**
+**  Return 1 if individual is  blocked by a reservation at an earlier depth,
+**         0 otherwise
+*/
+
+func blocked(person, depth) {
+  set(ans, 0)
+  if(not(person)) {
+    return(ans)
+  }
+  if(duplic_handling) {
+    /* better code for LL 3.0.5 users -tentative*/
+    /*
+    set(n, inlist(original_person, person))
+    if(ne(n, 0)) {
+      if(gt( abs(sub(depth, start_depth)), abs( sub(level, start_depth)) )) {
+        set(ans, 1)
+        break()
+      }
+    }
+    */
+    forlist(original_person, i, n) {
+      if(eqstr(key(person), i)) {
+        set(level, getel(original_depth, n))
+        /* only block appearances farther away from root than original person */
+        if(gt( abs(sub(depth, start_depth)), abs(sub(level, start_depth)) )) {
+           set(ans, 1)
+           break()
+        }
+      }
+    }
+  }
+  return(ans)
+}
+
+
+/*
+**  procedure: remember_branch_start
+**
+**  pushes lengths of person and line lists onto special stacks
+**
+*/
+
+proc remember_branch_start() {
+   push(branch_start_person, add(length(plist_pos), 1))
+   push(branch_start_line, add(length(llist_low), 1))
+   set(bsp, length(branch_start_person))
+   set(bsl, length(branch_start_line))
+   if(ne(bsp, bsl)) {
+     print("! for some reason, a fragment of a branch mark was left behind\n")
+     print("  length(branch_start_person): ", d(bsp), nl())
+     print("  length(branch_start_line): ", d(bsl), nl())
+   }
+}
+
+
+/*
+** procedure: branch_adjust
+**
+** 'shift' is the signed distance of the adjustment,
+**         positive for down the chart.
+** 
+** Originally written to recover space when younger siblings get spread
+** apart and their first parent branch has room to move back up the page.
+** Now this task has been made general enough to be able to shift any branch
+** in either direction, vertically. -- by Robert Simms 
+*/
+
+proc branch_adjust(shift) {
+  set(start_plist, pop(branch_start_person))
+  set(start_llist, pop(branch_start_line))
+
+  if(and(ne(shift, 0), ge(length(plist_depth), start_plist))) {
+    /* initialize low_depth_this_branch and high_depth_this_branch */
+    set(low_depth_this_branch, getel(plist_depth, start_plist))
+    set(high_depth_this_branch, low_depth_this_branch)
+    forlist(plist_depth, stored_depth, pc) {
+      if(ge(pc, start_plist)) {
+        /* find the depth range from plist_depth  */
+        set(low_depth_this_branch, min(low_depth_this_branch, stored_depth)) 
+        set(high_depth_this_branch, max(high_depth_this_branch, stored_depth))
+      }
+    }
+    /* make adjustment in global lists */
+    forlist(plist_pos, stored_pos, pc) {
+      if(ge(pc, start_plist)) {
+        setel(plist_pos, pc, add(stored_pos, shift))
+      }
+    }
+    forlist(llist_low, stored_pos, pc) {
+      if(ge(pc, start_llist)) {
+        setel(llist_low, pc, add(stored_pos, shift))
+      }
+    }
+    forlist(llist_high, stored_pos, pc) {
+      if(ge(pc, start_llist)) {
+        setel(llist_high, pc, add(stored_pos, shift))
+      }
+    }
+    set(depth_val, low_depth_this_branch)
+    while(le(depth_val, high_depth_this_branch)) {
+       set(stored_pos, get_high_pos_gen(depth_val))
+       /* don't need to do this for current depth of caller because
+        * high_pos_gen has likely already been read and will be set by caller
+        * after use of this procedure.  Leave it just in case -- it's easier. */
+       call set_high_pos_gen(depth_val, add(stored_pos, shift))
+       incr(depth_val)
+    }
+  }
+}
+
+/*
+** procedure: branch_adjust_first
+**
+** 'shift' is the signed distance of the adjustment,
+**         positive for down the chart.
+** 
+** this procedure will adjust the first branch delimited by 'markers'
+** (markers are indices stored in branch_start_person and branch_start_line
+** that refer to the various plist_ and llist_ lists that store person and line
+** vertical coordinates.
+*/
+
+proc branch_adjust_first(shift) {
+  set(start_plist, dequeue(branch_start_person))
+  set(start_llist, dequeue(branch_start_line))
+  if(gt(length(branch_start_person), 0)) {
+    set(stop_plist, getel(branch_start_person, 1))
+  } else {
+    set(stop_plist, add(length(plist_person), 1))
+  }
+  if(gt(length(branch_start_line), 0)) {
+    set(stop_llist, getel(branch_start_line, 1))
+  } else {
+    set(stop_llist, add(length(llist_low), 1))
+  }
+
+  if(and(ne(shift, 0), ge(length(plist_depth), start_plist))) {
+    /* initialize low_depth_this_branch and high_depth_this_branch */
+    set(low_depth_this_branch, getel(plist_depth, start_plist))
+    set(high_depth_this_branch, low_depth_this_branch)
+    forlist(plist_depth, stored_depth, pc) {
+      if(and(ge(pc, start_plist), lt(pc, stop_plist))) {
+        /* find the depth range from plist_depth  */
+        set(low_depth_this_branch, min(low_depth_this_branch, stored_depth)) 
+        set(high_depth_this_branch, max(high_depth_this_branch, stored_depth))
+      }
+    }
+    /* make adjustment in global lists */
+    forlist(plist_pos, stored_pos, pc) {
+      if(and(ge(pc, start_plist), lt(pc, stop_plist))) {
+        setel(plist_pos, pc, add(stored_pos, shift))
+      }
+    }
+    forlist(llist_low, stored_pos, pc) {
+      if(and(ge(pc, start_llist), lt(pc, stop_llist))) {
+        setel(llist_low, pc, add(stored_pos, shift))
+      }
+    }
+    forlist(llist_high, stored_pos, pc) {
+      if(and(ge(pc, start_llist), lt(pc, stop_llist))) {
+        setel(llist_high, pc, add(stored_pos, shift))
+      }
+    }
+    set(depth_val, low_depth_this_branch)
+    while(le(depth_val, high_depth_this_branch)) {
+       set(stored_pos, get_high_pos_gen(depth_val))
+       /* don't need to do this for current depth of caller because
+        * high_pos_gen has likely already been read and will be set by caller
+        * after use of this procedure.  Leave it just in case -- it's easier. */
+       /* doing this under the assumption that nothing has been placed beneath this branch on the chart*/
+       call set_high_pos_gen(depth_val, add(stored_pos, shift))
+       incr(depth_val)
+    }
+  }
+}
+
+
+/*
+** procedure: multi_branch_adjust
+**
+** 'shift' is the signed distance of the adjustment,
+**         positive for down the chart.
+** 
+** Originally written to recover space when younger siblings get spread
+** apart and their first parent branch has room to move back up the page.
+** Now this task has been made general enough to be able to shift any branch
+** in either direction, vertically. -- by Robert Simms 
+*/
+
+proc multi_branch_adjust(total_shift, nbranches) {
+  set(i, 1)
+  set(stop_plist, dequeue(branch_start_person))
+  set(stop_llist, dequeue(branch_start_line))
+  while(le(i, nbranches)) {
+    set(start_plist, stop_plist)
+    set(start_llist, stop_llist)
+    set(stop_plist, dequeue(branch_start_person))
+    set(stop_llist, dequeue(branch_start_line))
+
+    set(shift, div(mul(i, total_shift), add(nbranches, 1)))
+
+    if(and(ne(shift, 0), ge(length(plist_depth), start_plist))) {
+      /* initialize low_depth_this_branch and high_depth_this_branch */
+      set(low_depth_this_branch, getel(plist_depth, start_plist))
+      set(high_depth_this_branch, low_depth_this_branch)
+      forlist(plist_depth, stored_depth, pc) {
+        if(and(ge(pc, start_plist), lt(pc, stop_plist))) {
+          /* find the depth range from plist_depth  */
+          set(low_depth_this_branch, min(low_depth_this_branch, stored_depth)) 
+          set(high_depth_this_branch, max(high_depth_this_branch, stored_depth))
+        }
+      }
+      /* make adjustment in global lists */
+      forlist(plist_pos, stored_pos, pc) {
+        if(and(ge(pc, start_plist), lt(pc, stop_plist))) {
+          setel(plist_pos, pc, add(stored_pos, shift))
+/* RES - won't be necessary when highest person in each gen is tracked */
+          call max_with_high_pos_gen(getel(plist_depth, pc), add(stored_pos,
+             shift, getel(plist_height, pc)))
+        }
+      }
+      forlist(llist_low, stored_pos, pc) {
+        if(and(ge(pc, start_llist), lt(pc, stop_llist))) {
+          setel(llist_low, pc, add(stored_pos, shift))
+        }
+      }
+      forlist(llist_high, stored_pos, pc) {
+        if(and(ge(pc, start_llist), lt(pc, stop_llist))) {
+          setel(llist_high, pc, add(stored_pos, shift))
+        }
+      }
+    }
+    incr(i)
+  }
+/* MUST reassess high_pos_gen for each gen in [low, high] this branch */
+/*
+  set(depth_val, low_depth_this_branch)
+  while(le(depth_val, high_depth_this_branch)) {
+     set(stored_pos, get_high_pos_gen(depth_val))
+     call set_high_pos_gen(depth_val,
+         add(stored_pos, div(mul(sub(nbranches, 1), shift), nbranches)))
+     incr(depth_val)
+  }
+*/
+}
+
+
+/*
+** procedure: max_with_high_pos_gen
+**
+** handles the updating of the highest position (down) on the page
+** in a particular generation and over all generations
+*/
+
+proc max_with_high_pos_gen(depth, pos) {
+  /* update the highest position array, or set it for the first time */
+  set(prev_high, get_high_pos_gen(depth))
+  call set_high_pos_gen(depth, max(pos, prev_high))
+}
+
+/*
+** functions: calc_high_pos_text & calc_high_pos_line
+**
+** Determines maximum of all entries in
+** high_pos_gen array and llist_high list, respectively.
+**
+*/
+
+/* RES!!!
+   Really need to search over  plist_pos -- but we need pos+extent
+   which means plist_extent will need to be created
+   (that will help with accurate knowledge of highest element anyway)
+*/
+func calc_high_pos_text() {
+  set(high_pos_text, get_high_pos_gen(low_depth))
+  set(depth_val, low_depth)
+  while(le(depth_val, high_depth)) {
+    set(high_pos_text, max(high_pos_text, get_high_pos_gen(depth_val)))
+    incr(depth_val)
+  }
+  return(high_pos_text)
+}
+
+func calc_high_pos_line() {
+  set(high_pos_line, getel(llist_high, 1))
+  forlist(llist_high, x, pc) {
+    set(high_pos_line, max(high_pos_line, x))
+  }
+  return(high_pos_line)
+}
+
+/*
+** functions: calc_low_pos_text & calc_low_pos_line
+**
+** Determines minimum of all entries in
+** plist_pos array and llist_low list, respectively.
+**
+*/
+
+func calc_low_pos_text() {
+  set(low_pos_text, get_high_pos_gen(low_depth))
+  forlist(plist_pos, x, pc) {
+    set(low_pos_text, min(low_pos_text, x))
+  }
+  return(low_pos_text)
+}
+
+func calc_low_pos_line() {
+  set(low_pos_line, getel(llist_low, 1))
+  forlist(llist_low, x, pc) {
+    set(low_pos_line, min(low_pos_line, x))
+  }
+  return(low_pos_line)
+}
+
+/*
+** function: get_clearance
+**
+** handles the determination of a minimum position down the chart
+** necessary for a person to stay clear of others already on the chart
+**
+*/
+
+func get_clearance(depth, min_pos) {
+   set(next_depth, sub(depth, 1))
+   set(prev_depth, add(depth, 1))
+
+   set(new_min_pos, min_pos)
+   if(high, get_high_pos_gen(prev_depth)) {
+      if(not(cloak_check(prev_depth))) {
+         set(new_min_pos, max(add(high, branch_dist_prev), new_min_pos))
+      }
+   }
+   if(high, get_high_pos_gen(depth)) {
+      set(new_min_pos, max(add(high, branch_dist_same), new_min_pos))
+   }
+   if(high, get_high_pos_gen(next_depth)) {
+      if(not(cloak_check(next_depth))) {
+         set(new_min_pos, max(add(high, branch_dist_next), new_min_pos))
+      }
+   }
+   list(cloaked_depth)
+   return(new_min_pos)
+}
+
+/*
+** procedure cloak
+**
+** To be called just before a main charting procedure.
+** Enables temporary hidding of a generation from get_clearance()
+** so that generations closer to the root don't interfere with placement of
+** branches in adjacent generations, such as with placement of maternal
+** ancestor branches.
+*/
+
+proc cloak(depth) {
+  push(cloaked_depth, depth)
+}
+
+/*
+** function not_cloaked
+**
+** Checks whether a generation has been hidden from get_clearance...
+**    if not then TRUE is returned,
+**    if yes then FALSE is returned and the hidden status is cleared.
+*/
+
+func not_cloaked(depth) {
+  if(inlist(cloaked_depth, depth)) {
+    list(cloaked_depth)
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
+/*
+** function cloak_check
+**
+** Returns true or false depending on whether a depth is the cloaked_depth.
+*/
+
+func cloak_check(depth) {
+  return(inlist(cloaked_depth, depth))
+}
+
+/*
+** procedure: set_high_pos_gen
+**     &
+** function:  get_high_pos_gen
+**
+** They simplify access to the high_pos_gen list.
+** LifeLines lists are indexed from 1.  In order to allow generation
+** (depth) numbers to span an arbitrary range of integers, it is necessary
+** to translate the depth range to one that has a minimum value of 1.
+** The global variable high_pos_gen_offset is the amount necessary
+** to translate the depths.
+**
+*/
+
+proc set_high_pos_gen(depth, pos) {
+   if(and(ge(depth, min_depth), le(depth, max_depth))) {
+      set(low_depth, min(low_depth, depth))
+      set(high_depth, max(high_depth, depth))
+      /* not using max(pos, get_high_pos_gen(depth)) because *
+       * branch_adjust() might need to decrease these numbers */
+      setel(high_pos_gen, add(depth, high_pos_gen_offset), pos)
+   } else {
+      print(" ! Attempt to access array out of bounds: set_high_pos_gen()\n")
+      print("   position: ", d(pos), "      depth: ", d(depth), nl())
+   }
+}
+
+func get_high_pos_gen(depth) {
+  if(and(ge(depth, low_depth), le(depth, high_depth))) {
+    set(ans, getel(high_pos_gen, add(depth, high_pos_gen_offset)))
+  } else {
+    set(ans, 0)
+  }
+  return(ans)
+}
+
+/*
+**  function: person_height2
+**
+**  Return the height of a single person's information.
+**  All lines of information on a person that print_person() may issue
+**  should be accounted for here.
+**  The name is assumed to be in the database.  So this height will always
+**  be at least name_height.  The dates are checked for in the person's record.
+**
+**  A TRUE (non-zero) value for the second parameter along with a non-zero
+**  marriage date (third parameter) will result in
+**  an extra date_height being added to the person's height corresponding
+**  to the assumed intention of including the marriage date when the
+**  associated enqueue_person() call is made.
+**  It is thus the responsibility of the calling code to determine when to
+**  use a marriage date.
+*/
+
+func person_height2(person, use_mdate, mdate) {
+  /* determine height of person and put in global var person_height_return */
+  set(num_info_lines, 0)
+  set(person_height_return, name_height)
+  if(show_altname) {
+    if(altname, name2(person)) {
+      incr(num_info_lines)
+    }
+  }
+  if(dateplace(birth(person), dateplace_birth)) {
+    incr(num_info_lines)
+  }
+  if(and(use_mdate, mdate)) {
+    incr(num_info_lines)
+  }
+  if(dateplace(death(person), dateplace_death)) {
+    incr(num_info_lines)
+  }
+  if(dateplace(burial(person), dateplace_burial)) {
+    incr(num_info_lines)
+  }
+  set(num_info_lines, add(num_info_lines, address_ps(person, FALSE)) )
+  set(person_height_return, add(person_height_return,
+                                 mul(num_info_lines, date_height)) )
+  return(person_height_return)
+}
+
+/*
+**  function: dateplace
 **
 **  Get the date of an event in the appropriate style (which may include
-**  the place.  Return via global variable.
+**  the place).  Comments below describe the date styles.
 **
 */
 
-proc dateplace (ev, style)
-{
-  if (eq (style, 0))  {
-    set (dateplace_return, 0)
+func dateplace(ev, style) {
+  if(or( eq(ev, 0), eq(style, 0) )) {
+    set(dateplace_return, 0)
   }
-  if (eq (style, 1))  {
-    set (dateplace_return, save (date (ev)))
+  /* 1 - use only the date value */
+  if(eq(style, 1)) {
+    set(dateplace_return, save(date(ev)))
   }
-  if (eq (style, 2))  {
-    set (dateplace_return, save (short (ev)))
+
+  /* 2 - use only the year and/or LAST place component (no modification) */
+  if(eq(style, 2)) {
+    set(dateplace_return, save(short(ev)))
   }
-  if (eq (style, 3))  {
-    set (dateplace_return, save (long (ev)))
+
+  /* 3 - use VERBATIM values from date and place (no modification) */
+  if(eq(style, 3)) {
+    set(dateplace_return, save(long(ev)))
   }
-  if (eq (style, 4))  {
-    if (long(ev)) {
-      if (place(ev)) {
+
+  /* 4 - date value and the FIRST component of the place */
+  if(eq(style, 4)) {
+    if(long(ev)) {
+      if(place(ev)) {
         list(pl)
-        extractplaces(ev,pl,np)
-        set(where,concat(", ",dequeue(pl)))
-        set (dateplace_return, save (concat(date (ev), where)))
-      } else {
-        set (dateplace_return, save (date (ev)))
-      }
-    } else {
-      set (dateplace_return, 0)
-    }
-  }
-  if (eq (style, 5))  {
-    if (long(ev)) {
-      if (place(ev)) {
-        list(pl)
-        extractplaces(ev,pl,np)
-        if (eq(1,length(pl))) {
-          set(where,dequeue(pl))
+        extractplaces(ev, pl, np)
+        set(where, modify(dequeue(pl)))
+        if(eqstr(date(ev), "")) {
+          set(dateplace_return, save(where))
         } else {
-          set(where,concat(dequeue(pl),", ",dequeue(pl)))
-        }
-        if (eqstr(date(ev),"")) {
-          set (dateplace_return, save (where))
-        } else {
-          set (dateplace_return, save (concat(date (ev),", ",where)))
+          set(dateplace_return, save(concat(date(ev), ", ", where)))
         }
       } else {
-        set (dateplace_return, save (date (ev)))
+        set(dateplace_return, save(date(ev)))
       }
     } else {
-        set (dateplace_return, 0)
+      set(dateplace_return, 0)
     }
   }
-  if (ge (style, 6))  {
-    print ("error: invalid date style code")
+
+  /* 5 - date value and the FIRST TWO components of the place */
+  if(eq(style, 5)) {
+    if(long(ev)) {
+      if(place(ev)) {
+        list(pl)
+        extractplaces(ev, pl, np)
+        if(eq(1, np)) {
+          set(where, modify(dequeue(pl)))
+        } else {
+          set(where, concat(modify(dequeue(pl)), ", ", modify(dequeue(pl))))
+        }
+        if(eqstr(date(ev), "")) {
+          set(dateplace_return, save(where))
+        } else {
+          set(dateplace_return, save(concat(date(ev), ", ", where)))
+        }
+      } else {
+        set(dateplace_return, save(date(ev)))
+      }
+    } else {
+        set(dateplace_return, 0)
+    }
   }
+
+  /* 6 - date value and the first THREE components of the place */
+  if(eq(style, 6)) {
+    if(long(ev)) {
+      if(place(ev)) {
+        list(pl)
+        extractplaces(ev, pl, np)
+        if(eq(1, np)) {
+          set(where, modify(dequeue(pl)))
+        } elsif(eq(2, np)) {
+          set(where, concat(modify(dequeue(pl)), ", ", modify(dequeue(pl))))
+  } else {
+    set(where, concat(
+        modify(dequeue(pl)), ", ",
+        modify(dequeue(pl)), ", ",
+        modify(dequeue(pl)) ))
+        }
+        if(eqstr(date(ev), "")) {
+          set(dateplace_return, save(where))
+        } else {
+          set(dateplace_return, save(concat(date(ev), ", ", where)))
+        }
+      } else {
+        set(dateplace_return, save(date(ev)))
+      }
+    } else {
+        set(dateplace_return, 0)
+    }
+  }
+  /* 7 - For US places, in the format "city, county, state, country"
+     where any one component implies that all less specific ones are present,
+     this style will choose, when available, the country,
+     state, county and state, or city and state
+     If enabled, place modification (abbreviation) is applied to the
+     country (when the only place item) or
+     the state (when NOT the only place item).
+  */
+  if(eq(style, 7)) {
+    if(long(ev)) {
+      if(place(ev)) {
+        list(pl)
+        extractplaces(ev, pl, np)
+        if(eq(1, np)) {
+           set(where, modify(getel(pl,1)))
+        } elsif(eq(np, 2)) {
+          set(where, getel(pl, 1))
+        } elsif(eq(np, 3)) {
+          set(where,concat(getel(pl, 1), ", ", modify(getel(pl, 2))))
+        } elsif(ge(np, 4)) {
+          set(where, concat(getel(pl, sub(np, 3)), ", " ,
+              modify(getel(pl, sub(np, 1)))))
+        } 
+        if(eqstr(date(ev), "")) {
+          set(dateplace_return, save(where))
+        } else {
+          set(dateplace_return, save(concat(year(ev), ", ", where)))
+        }
+      } else {
+        set(dateplace_return, save(year(ev)))
+      }
+    } else {
+        set(dateplace_return, 0)
+    }
+  }
+  if(ge(style, 7)) {
+    set(dateplace_return, 0)
+    print(" error: invalid date style code", nl())
+  }
+  return(dateplace_return)
 }
 
 /*
-**  procedure: person_height
+**  function: address_ps
 **
-**  Return the height of a single persons entry.  Only the name, and
-**  birth and death dates are considered.  The name is assumed to be in
-**  the database, the dates are checked for.  The marriage date is not
-**  checked for here.  It is more tricky since it is only put below the
-**  father's name and you have to make sure you have the date from the
-**  right marriage.
+**  Prints address info as PostScript strings, if the print_flag is non-zero.
+**  Returns a count of the number of info lines whether or not info is printed.
 **
-**  The height of the person is returned via the global variable
-**  person_height_return.  This global variable is used since LifeLines
-**  does not yet provide user-defined functions.
+**  Finds last address or residence of PERSON by traversing
+**  all ADDR (GEDCOM 5.5),
+**  and RESI (GEDCOM 5.5)
+**  nodes.
+**  Here are some examples:
+**      1 ADDR 122 Oak Street
+**        2 CONT Somewhere, MO 55555
+**      1 PHON 501-555-1212
+**      1 EMAI itsme@sofa.net
+** or
+**      1 RESI
+**        2 ADDR 122 Oak Street
+**          3 CONT Somewhere, MO 55555
+**        2 DATE from 23 Dec 1996
+**
+**  Phone and e-mail information is printed as well.
 **
 */
 
-proc person_height (person)
-{
-  /* determine height of person and put in global var person_height_return */
-
-  set (person_height_return, name_height)
-
-  call dateplace (birth (person), dateplace_birth)
-  if (dateplace_return)  {
-    set (person_height_return, add (person_height_return, date_height))
+func address_ps(person, print_flag) {
+  set(lines_return, 0)
+  if(not(and(person, show_address))) {
+    return(lines_return)
   }
-
-  call dateplace (death (person), dateplace_death)
-  if (dateplace_return)  {
-    set (person_height_return, add (person_height_return, date_height))
+  list(addrlist)
+  set(addrnode, FALSE)
+  set(found_addr, FALSE)
+  traverse(inode(person), node, lev) {
+    if(eq(lev, 1)) {
+      if(eqstr(tag(node),"ADDR")) {
+        set(addrnode, node)
+        set(found_addr, TRUE)
+      } elsif(and( eqstr(tag(node),"RESI"), not(no_resides_at),
+                   not(found_addr) )) {
+        set(addrnode, node)
+      }
+    }
   }
+  if(addrnode) {
+    if(eqstr(tag(addrnode), "RESI")) {
+      set(addrflag, "* ")
+      set(newnode, 0)
+      traverse(addrnode, node, lev) {
+        if(and( eq(parent(node), addrnode), or(eqstr(tag(node), "ADDR"),
+          eqstr(tag(node), "PLAC") ))) {
+          set(newnode, node)
+        }
+      }
+      if(newnode) {
+        set(addrnode, newnode)
+      } else {
+        print("RESI node with no ADDR subnode, for ", name(person), nl())
+      }
+    } else {
+      set(addrflag, "! ")
+    }
+    if(gt(strlen(place(addrnode)), 23)) {
+      if(debug) {
+        print(" caught a long place node, for ", name(person), nl())
+      }
+      extractplaces(addrnode, addrlist, np)
+      /* RES - might be better to do this with a stack, to handle more than 2 */
+      set(line1, 0)
+      set(line1, modify(dequeue(addrlist)))
+      set(line2, 0)
+      if(not(empty(addrlist))) {
+        set(line2, concat(line2, modify(dequeue(addrlist))))
+      }
+      while(not(empty(addrlist))) {
+        set(line2, concat(line2, " ", modify(dequeue(addrlist))))
+      }
+      if(print_flag) {
+        "(" addrflag strxlat(ps_xlat, line1) ")"
+        "(" addrflag strxlat(ps_xlat, line2) ")"
+      }
+      set(lines_return, 2)
+    } elsif(gt(strlen(place(addrnode)), 0)) {
+      print(" caught an empty place/addr node, for ", name(person), nl())
+      if(print_flag) {
+        "(" addrflag strxlat(ps_xlat, place(addrnode)) ")"
+      }
+      set(lines_return, 1)
+    } else {
+      set(line1, 0)
+      set(line1, modify(value(addrnode)))
+      if(not(line1)) {
+        print("ADDR node with no address info with tag, for ", name(person),
+          nl())
+        set(lines_return, 0)
+      } else {
+        if(print_flag) {
+          "(" addrflag strxlat(ps_xlat, line1) ")"
+        }
+        set(lines_return, 1)
+        traverse(addrnode, subnode, lev) {
+          if(and(eq(parent(subnode), addrnode), eqstr(tag(subnode), "CONT") )) {
+            set(line2, modify(value(subnode)))
+            if(print_flag) {
+              "(" addrflag strxlat(ps_xlat, line2) ")"
+            }
+            incr(lines_return)
+          }
+        }
+      } 
+    }
+  }
+  traverse(inode(person), subnode, lev) {
+    if(or( eqstr(tag(subnode), "EMAI"), eqstr(tag(subnode), "PHON") )) {
+      incr(lines_return)
+      if(print_flag) {
+        "(" "! " strxlat(ps_xlat, value(subnode)) ")"
+      }
+    }
+    if(eqstr(tag(subnode), "PLACE")) {
+      print("5-letter subnode tag: PLACE, for ", name(person), nl())
+    }
+    if(eqstr(tag(subnode), "EMAIL")) {
+      print("5-letter subnode tag: EMAIL, for ", name(person), nl())
+    }
+  }
+  return(lines_return)
 }
 
 /*
-**  procedure: is_prefix_title
+**  function: name2
 **
-**  Decide if the given title is a prefix type title.  Returns boolean
-**  response in global variable is_prefix_title_return.
+**  Returns the name from the second NAME node, or a 0 (FALSE) if none.
+**  This function attempts to format the name as is done to other names
+**  elsewhere in the program.  The difficulty lies in LifeLines having
+**  name formatting commands that only that work only with the first NAME
+**  node of a person, and not on NAME nodes or strings.
+*/
+
+func name2(ind) {
+  if(not(ind)) {
+    return(0)
+  }
+  set(altnamenode, 0)
+  set(found_one, FALSE)
+  traverse(inode(ind), node, lev) {
+    if(eq(lev, 1)) {
+      if(eqstr(tag(node), "NAME")) {
+        if(not(found_one)) {
+          set(found_one, TRUE)
+        } else {
+          set(altnamenode, node)
+          break()
+        }
+      }
+    }
+  }
+  if(altnamenode) {
+    list(parts)
+    extractnames(altnamenode, parts, np, sni)
+    set(altname, "")
+    forlist(parts, nstr, si) {
+      if(and(ge(si, sni), surname_upper)) {
+        set(altname, concat(altname, upper(nstr), " "))
+      } else {
+        set(altname, concat(altname, nstr, " "))
+      }
+    }
+    set(altname, trim(altname, sub(strlen(altname), 1)))
+  } else {
+    set(altname, 0)
+  }
+  return(altname)
+}
+
+
+/*
+**  function: modify
+**
+**  Use a function (shorten), possibly accessed via an "include" statement
+**  prior to the main() procedure code block.
+**  The purpose of which is to modify place strings.
+**  If the global variable 'place_modify' is set to FALSE, then place strings
+**  will be returned unaltered.                       keyword: SHORTEN
 **
 */
 
-proc is_prefix_title (t)
-{
-  set (is_prefix_title_return, 0)
-
-  if (index (t, "Arch", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Baron", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Bish", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Brot", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Card", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Canon", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Cong", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Deacon", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Dr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Duke", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Father", 1))  { set (is_prefix_title_return, 1) }
-  if (index (t, "Fr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Hon", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Judge", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "King", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Lady", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Lord", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Miss", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Mons", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Mr", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Mrs", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Ms", 1))      { set (is_prefix_title_return, 1) }
-  if (index (t, "Msgr", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Pope", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Pres", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Princ", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Prof", 1))    { set (is_prefix_title_return, 1) }
-  if (index (t, "Queen", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Rabbi", 1))   { set (is_prefix_title_return, 1) }
-  if (index (t, "Rav", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Rep", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Sen", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Sir", 1))     { set (is_prefix_title_return, 1) }
-  if (index (t, "Sis", 1))     { set (is_prefix_title_return, 1) }
+func modify(old) {
+  if(and(strlen(old), place_modify)) {
+    if(index(old, ",", 1)) {   /* is this a string with commas? */
+      list(pl)
+      extracttokens(old, pl, np, ",")
+      set(new, "")
+      if(gt(length(pl), 0)) {
+        set(new, shorten(dequeue(pl)))
+        while(gt(length(pl), 0)) {
+          set(new, concat(new, ", ", shorten(dequeue(pl))))
+        }
+      }
+    } else {
+      set(new, shorten(old))
+    }
+  } else {
+    set(new, old)
+  }
+  if(debug) { print("modify: ", old, " -> ", new, nl())}
+  return(new)
 }
 
 /*
-**  procedure: enqueue_person
+**  function: strxlat
+**
+**  If there is a chance that text containing unbalanced parentheses may
+**  be written to a PostScript file as a string (which is delimited with
+**  parentheses) then at least the lone parentheses must be escaped, meaning
+**  preceeded by a '\' character.  The appearance of '\' characters in such
+**  strings must also be escaped.
+**  This function returns a string with all parentheses and
+**  backslash characters escaped.
+**  This idea was copied and/or adapted from Jim Eggert's modification
+**  to the ps-circ(le) program for LifeLines.
+**  A typical call would look like:
+**      set(str, strxlat(ps_xlat, name(person)))
+**  which would translate characters in person's name according to the
+**  table called ps_xlat.  The output is assigned to str.
+**  The output of strxlat() can also be sent directly to output.
+*/
+
+func strxlat(xlat, string) {
+  if(opt_xlat) {
+    set(fixstring, "")
+    set(pos, 1)
+    while(le(pos, strlen(string))) {
+      set(char, substring(string, pos, pos))
+      if (special, lookup(xlat, char)) {
+        set(fixstring, concat(fixstring, special))
+      } else {
+        set(fixstring, concat(fixstring, char))
+      }
+      incr(pos)
+    }
+  } else {
+    set(fixstring, string)
+  }
+  return(save(fixstring))  /* save() is used for compatibilty with older LL */
+}
+
+/*
+**  function: deparen
+**
+**  Removes parenthesized text from a string and returns the result.
+**  This routine can handle nesting of parentheses and multiple occurences
+**  of parenthesized text in the same string.
+*/
+
+func deparen(str) {
+  if(and(opt_deparen, index(str, ")", 1), nestr(str, ""))) {
+    list(maybe)
+    set(level, 0)
+    while(len, strlen(str)) {
+      set(s, substring(str, 1, 1))
+      set(str, substring(str, 2, len))
+      if(eqstr(s, ")")) {
+        if(gt(level, 0)) {
+          set(d, pop(maybe))
+          while(nestr(d, "(")) {
+            set(d, pop(maybe))
+          }
+          if(d, pop(maybe)) {
+            if(nestr(d, " ")) {
+              push(maybe, d)
+            }
+          } elsif(eqstr(" ", substring(str, 1, 1))) {
+            set(str, substring(str, 2, len))
+          }
+          decr(level)
+        } else {
+          push(maybe, s)
+        }
+      } elsif(eqstr(s, "(")) {
+        push(maybe, s)
+        incr(level)
+      } else {
+        push(maybe, s)
+      }
+    }
+    while(s, dequeue(maybe)) {
+      set(str, concat(str, s))
+    }
+  }
+  return(str)
+}
+
+
+/*
+**  procedures: enqueue_person
 **
 **  Store the data for a person in the global lists.  It will be
 **  printed later.
 **
+**  Some variable meanings:
+**    line   2 = bold line, for direct anc/des
+**           1 = thin line, for non-direct, blood relatives
+**                                             (aunts and uncles, cousins)
+**           0 = thin line in second color, for non-blood relatives
+**    rel_up   = 1 if person is connected to the next level up, 0 otherwise
+**    rel_down = 1 if person is connected to the next level down, 0 otherwise
+**         fam = parents, if chart flow is down through this person
+**               0, otherwise
+**               The purpose is to check the type of connection to parents
+**               and set line style accordingly.
 */
 
-proc enqueue_person (person, depth, pos, line, mdate, anc, des)
-{
-  enqueue (plist_person, person)
-  enqueue (plist_depth,  depth)
-  enqueue (plist_pos,    pos)
-  enqueue (plist_line,   line)
-  enqueue (plist_mdate,  mdate)
-  enqueue (plist_anc,    anc)
-  enqueue (plist_des,    des)
+proc enqueue_person(person, depth, pos, rel, mdate, rel_up, rel_down, fam) {
+  set(line, rel_famc(person, fam, rel))
+  set(duplicate, blocked(person, depth))
+  if(not(duplicate)) {
+    call reserve(person, start_depth)
+  }
+  set(height, person_height2(person, mdate, mdate))
+
+  enqueue(plist_person, person)
+  enqueue(plist_depth,  depth)
+  enqueue(plist_pos,    pos)
+  enqueue(plist_line,   line)
+  enqueue(plist_mdate,  mdate)
+  enqueue(plist_up,     rel_up)
+  enqueue(plist_down,   rel_down)
+  enqueue(plist_duplic, duplicate)
+  enqueue(plist_height, height)
+
+  set(duplicate_return, duplicate)
 }
 
+/*
+** procedure: initialize_data
+**
+**  Empty the lists that hold chart data.
+**  This clears the way for a second pass for the more complex charts.
+**
+*/
+
+proc initialize_data() {
+  list(branch_start_person)
+  list(branch_start_line)
+  list(original_person)
+  list(original_depth)
+  list(high_pos_gen)
+
+  list(plist_person)
+  list(plist_depth)
+  list(plist_pos)
+  list(plist_line)
+  list(plist_mdate)
+  list(plist_up)
+  list(plist_down)
+  list(plist_duplic)
+  list(plist_height)
+
+  list(llist_depth)
+  list(llist_low)
+  list(llist_high)
+  list(cloaked_depth)
+  list(llist_color)
+  list(llist_duplic)
+
+  set(low_depth, start_depth)
+  set(high_depth, start_depth)
+}
 
 /*
 **  procedure: print_all_persons
@@ -1513,17 +4167,17 @@ proc enqueue_person (person, depth, pos, line, mdate, anc, des)
 **  Print all persons stored in the global lists.
 */
 
-proc print_all_persons()
-{
-  forlist(plist_person,person,pnum) {
-    set (depth,  getel (plist_depth, pnum))
-    set (pos,    getel (plist_pos, pnum))
-    set (line,   getel (plist_line, pnum))
-    set (mdate,  getel (plist_mdate, pnum))
-    set (anc,    getel (plist_anc, pnum))
-    set (des,    getel (plist_des, pnum))                                     
-
-    call print_person (person, depth, pos, line, mdate, anc, des)
+proc print_all_persons() {
+  while(length(plist_person)) {
+    set(person,  dequeue(plist_person))
+    set(depth,  dequeue(plist_depth))
+    set(pos,    dequeue(plist_pos))
+    set(line,   dequeue(plist_line))
+    set(mdate,   dequeue(plist_mdate))
+    set(rel_up,   dequeue(plist_up))
+    set(rel_down, dequeue(plist_down))                                     
+    set(duplic,   dequeue(plist_duplic))
+    call print_person(person, depth, pos, line, mdate, rel_up, rel_down, duplic)
   }
 }
 
@@ -1531,129 +4185,200 @@ proc print_all_persons()
 /*
 **  procedure: print_person
 **
-**  Print a line of data for a person in postscript format.  Each line
-**  printed is essentially a call to a postscript function defined in the
+**  Print a line of data for a person in PostScript format.  Each line
+**  printed is essentially a call to a PostScript function defined in the
 **  header.
 **
 */
 
-proc print_person (person, depth, pos, line, mdate, anc, des)
-{
+proc print_person(person, depth, pos, rel, mdate, rel_up, rel_down, duplicate) {
+  /* specify an index for storage in PostScript array*/
+  d(length(plist_person)) " {"
 
-  if (eq (title_method, 0))  {
-    set (prefix_title, 0)
-    set (suffix_title, 0)
+  /* print generation */
+  d(depth) " "
+
+  /* print vertical position */
+  make_thousandths(pos) " "
+
+  /* 2=direct ancestor, 1=blood relative, 0=non-blood relative */
+  d(rel) " "
+  if(or(lt(rel, 0), lt(2, rel))) {
+    print(" >> print_person() caught invalid relationship code for ",
+      name(person), nl())
   }
-  if (eq (title_method, 1))  {
-    set (prefix_title, title (person))
-    set (suffix_title, 0)
+
+  /* duplicate individual */
+  if(duplicate) { "1 " } else { "0 " }
+
+  /* person has ancestors (descendants, if mirror_chart)*/
+  if(rel_up) { "1 " } else { "0 " }
+
+  /* person has descendants (ancestors, if mirror_chart)*/
+  if(rel_down) { "1 " } else { "0 " }
+
+  set(t, title(person))
+  if(eqstr(t, "")) {
+    set(t, 0)
   }
-  if (eq (title_method, 2))  {
-    set (prefix_title, 0)
-    set (suffix_title, title (person))
-  }
-  if (eq (title_method, 3))  {
-    set (prefix_title, 0)
-    set (suffix_title, 0)
-    if (t, title (person))  {
-      call is_prefix_title (t)
-      if (is_prefix_title_return)  {
-        set (prefix_title, t)
-      }  else  {
-        set (suffix_title, t)
+  if(person) {
+    if(or(t, eq(title_method, 0))) {
+      set(prefix_title, 0)
+      set(suffix_title, 0)
+    }
+    if(eq(title_method, 1)) {
+      set(prefix_title, t)
+      set(suffix_title, 0)
+    }
+    if(eq(title_method, 2)) {
+      set(prefix_title, 0)
+      set(suffix_title, t)
+    }
+    if(eq(title_method, 3)) {
+      set(prefix_title, 0)
+      set(suffix_title, 0)
+      if(is_prefix_title(t)) {
+        set(prefix_title, t)
+      } else {
+        set(suffix_title, t)
       }
+    }
+
+    set(nlet, name_letters)
+    if(prefix_title) {
+      set(nlet, sub(nlet, add(strlen(prefix_title), 1)))
+    }
+    if(suffix_title) {
+      set(nlet, sub(nlet, add(strlen(suffix_title), 1)))
     }
   }
 
-  set (nlet, name_letters)
-  if (prefix_title)  {
-    set (nlet, sub (nlet, strlen (prefix_title)))
-  }
-  if (suffix_title)  {
-    set (nlet, sub (nlet, strlen (suffix_title)))
-  }
-
-  /* print name and title, if it exists */
+  /* print name and title */
   "("
-  if (prefix_title)  {
-    prefix_title " "
-  }
-  fullname (person, surname_upper, 1, nlet)
-  if (suffix_title)  {
-    " " suffix_title
+  if(not(person)) {
+    "                           "
+  } else {
+    if(prefix_title) {
+      prefix_title " "
+    }
+    strxlat(ps_xlat, deparen(fullname(person, surname_upper, 1, nlet)))
+    if(suffix_title) {
+      " " suffix_title
+    }
   }
   ")"
 
-  /* print birth date, if it exists */
-  call dateplace (birth (person), dateplace_birth)
-  if (dateplace_return)  {
-    " (b. " dateplace_return ")"
-  }  else  {
-    " ()"
+  /* print info: birth, death, etc. */
+  " ["
+  if(person) {
+    if(show_altname) {
+      if(altname, name2(person)) {
+        "(" strxlat(ps_xlat, altname) ")"
+      }
+    }
+    if(date_birth, dateplace(birth(person), dateplace_birth)) {
+      "(b. " strxlat(ps_xlat, date_birth) ")"
+    }
+
+    /* print marriage date, if it exists */
+    if(mdate) {
+      "(m. " strxlat(ps_xlat, mdate) ")"
+    }
+
+    /* print death date, if it exists */
+    if(date_death, dateplace(death(person), dateplace_death)) {
+      "(d. " strxlat(ps_xlat, date_death) ")"
+    }
+
+    /* print burial date/place, if it exists */
+    if(date_burial, dateplace(burial(person), dateplace_burial)) {
+      "(bur. " strxlat(ps_xlat, date_burial) ")"
+    }
+
+    /* print last known address or living address */
+    set(dummy, address_ps(person, TRUE))
   }
 
-  /* print marriage date, if it exists */
-  if (mdate)  {
-    " (m. " mdate ")"
-  }  else  {
-    " ()"
+  "]"         /* end of info array */
+
+  " ("         /* drop in a complimentary indi. key -- to aid in debugging */
+  if(person) {
+    key(person, 1)
+  } else {
+    "-"
   }
+  ")"
 
-  /* optional special tagged note, not used yet */
-  " ()"
-
-  /* print death date, if it exists */
-  call dateplace (death (person), dateplace_death)
-  if (dateplace_return)  {
-    " (d. " dateplace_return ")"
-  }  else  {
-    " ()"
-  }
-
-  /* print generation, 0=youngest */
-  " " d (sub (depth, 1))
-
-  /* print vertical position */
-  " " call print_thousandths (pos)
-
-  /* extra height, not used or understood */
-  " 1"
-
-  /* 1=direct ancestor, 0=sibling */
-  " " d (line)
-
-  /* duplicate individual, not used */
-  " 0"
-
-  /* person has ancestors */
-  " " d(anc)
-
-  /* person has descendants*/
-  " " d(des)
-
-  /* call postscript function to process and print this data */
-  " i"
+  /* call PostScript function to process and print this data */
+  "} Q"
 
   nl()
 }
 
 /*
-**  procedure: enqueue_vertical
+**  function: is_prefix_title
+**
+**  Decide if the given title is a prefix type title.
+**
+*/
+
+func is_prefix_title(t) {
+  set(is_prefix_title_return, 0)
+  if( index(t, "Arch",   1))  { set( is_prefix_title_return, 1) }
+  if( index(t, "Baron",  1))  { set( is_prefix_title_return, 1) }
+  if( index(t, "Bish", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Brot", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Card", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Colonel", 1)) { set( is_prefix_title_return, 1) }
+  if( index(t, "Canon", 1))   { set( is_prefix_title_return, 1) }
+  if( index(t, "Cong", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Deacon", 1))  { set( is_prefix_title_return, 1) }
+  if( index(t, "Dr", 1))      { set( is_prefix_title_return, 1) }
+  if( index(t, "Duke", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Father", 1))  { set( is_prefix_title_return, 1) }
+  if( index(t, "Fr", 1))      { set( is_prefix_title_return, 1) }
+  if( index(t, "Hon", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Judge", 1))   { set( is_prefix_title_return, 1) }
+  if( index(t, "King", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Lady", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Lord", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Miss", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Mons", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Mr", 1))      { set( is_prefix_title_return, 1) }
+  if( index(t, "Mrs", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Ms", 1))      { set( is_prefix_title_return, 1) }
+  if( index(t, "Msgr", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Pope", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Pres", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Princ", 1))   { set( is_prefix_title_return, 1) }
+  if( index(t, "Prof", 1))    { set( is_prefix_title_return, 1) }
+  if( index(t, "Queen", 1))   { set( is_prefix_title_return, 1) }
+  if( index(t, "Rabbi", 1))   { set( is_prefix_title_return, 1) }
+  if( index(t, "Rav", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Rep", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Sen", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Sir", 1))     { set( is_prefix_title_return, 1) }
+  if( index(t, "Sis", 1))     { set( is_prefix_title_return, 1) }
+  return(is_prefix_title_return)
+}
+
+/*
+**  procedures: enqueue_vertical
 **
 **  Enqueue the data for a single vertical line onto the global lists.
 **
 */
 
-proc enqueue_vertical (depth, low, high, dash)
-{
-  enqueue (llist_depth,  depth)
-  enqueue (llist_low,    sub(low,500))
-  enqueue (llist_high,   sub(high,500))
-  enqueue (llist_dash,   dash)
+proc enqueue_vertical(depth, low, high, color, duplicate) {
+  enqueue(llist_depth,  depth)
+  enqueue(llist_low,    low)
+  enqueue(llist_high,   high)
+  enqueue(llist_color,  color)
+  enqueue(llist_duplic, duplicate)
 }
 
 /*
-**  procedure: dequeue_all_verticals
+**  procedure: print_all_verticals
 **
 **  Dequeue and print all vertical lines.  The lines are stored in a
 **  second queue as they are printed and then placed back in the
@@ -1661,387 +4386,655 @@ proc enqueue_vertical (depth, low, high, dash)
 **
 */
 
-proc dequeue_all_verticals ()
-{
-  list (tlist_depth)
-  list (tlist_low)
-  list (tlist_high)
-  list (tlist_dash)
+proc print_all_verticals() {
+  while(length(llist_depth)) {
+    set(depth,  dequeue(llist_depth))
+    set(low,    dequeue(llist_low))
+    set(high,   dequeue(llist_high))
+    set(color,  dequeue(llist_color))
+    set(duplic, dequeue(llist_duplic))
 
-  while (depth,  dequeue (llist_depth))  {
-    set (low,    dequeue (llist_low))
-    set (high,   dequeue (llist_high))
-    set (dash,   dequeue (llist_dash))
-
-    call print_vertical (depth, low, high, dash)
-
-    enqueue (tlist_depth, depth)
-    enqueue (tlist_low,   low)
-    enqueue (tlist_high,  high)
-    enqueue (tlist_dash,  dash)
-  }
-
-  while (depth,  dequeue (tlist_depth))  {
-    set (low,    dequeue (tlist_low))
-    set (high,   dequeue (tlist_high))
-    set (dash,   dequeue (tlist_dash))
-
-    enqueue (llist_depth, depth)
-    enqueue (llist_low,   low)
-    enqueue (llist_high,  high)
-    enqueue (llist_dash,  dash)
+    d(length(llist_depth))
+    " {" d(depth)
+    " " make_thousandths(low)
+    " " make_thousandths(high)
+    " " d(color)
+    " " d(duplic)
+    "} P" nl()
   }
 }
 
 /*
-**  procedure: print_vertical
+**  function: make_thousandths
 **
-**  Print a single vertical line to link a married couple or siblings.
-**
-*/
-
-proc print_vertical (depth, low, high, dash)
-{
-  d (sub (depth, 1))
-  " " call print_thousandths (low)
-  " " call print_thousandths (high)
-  " " d(dash)
-  " l" nl()
-}
-
-/*
-**  procedure: print_thousandths
-**
-**  Since LifeLines does not offer a floating point type, decimal
+**  Since LifeLines does not have a floating point type, decimal
 **  computation is done using integers that represent thousands.  This
-**  procedure converts a number in thousandths to decimal notation and
-**  prints it.  The length of the decimal part is checked to make sure
-**  it is padded with zeros correctly.
-**
+**  procedure converts a number in thousandths to decimal notation as a string.
+**  The result always has three decimal places.
 */
 
-proc print_thousandths (n_arg)
-{
-
-  /* don't want to modify proc argument, so copy it */
-  set (n, n_arg)
-
-  if (lt (n, 0))  {
-    "-"
-    set (n, neg (n))
+func make_thousandths(n) {
+  set(s, "")
+  if(lt(n, 0)) {
+    set(s, "-")
+    set(n, neg(n))
   }
-
-  d (div (n, 1000)) "."
-
-  set (t, d (mod (n, 1000)))
-  if (eq (strlen (t), 1))  {
-    "00" t
+  set(s, concat(s, d(div(n, 1000)), "."))
+  set(t, d(mod(n, 1000)))
+  if(eq(strlen(t), 1)) {
+    set(s, concat(s, "00", t))
   }
-  if (eq (strlen (t), 2))  {
-    "0" t
+  if(eq(strlen(t), 2)) {
+    set(s, concat(s, "0", t))
   }
-  if (eq (strlen (t), 3))  {
-    t
+  if(eq(strlen(t), 3)) {
+    set(s, concat(s, t))
   }
-
+  return(s)
 }
 
 /*
-**  procedure: fromto
+**  function: direction
 **
-**  Print when a person lived
+**  applies global option: updown_override to direction (UP or DOWN)
+**  and returns a direction.  This allows for statements like
+**  set(dir, direction(UP)) that are simpler than the actual formula used.
 */
 
-proc fromto(indi) {
-  set(e,birth(indi))
-  set(f,death(indi))
-  if (or(year(e),year(f))) {
-    "("
-    if (year(e)) {year(e)} else { "?" }
-    "-"
-    if (f) {
-      if (year(f)) {year(f)} else { "?" }
+func direction(updown) {
+  return(mod(add(updown, updown_override), 2))
+}
+
+/*
+**  functions: min and max; half
+**
+**  min() and max() return the minimum and maximum of a pair of integers
+**
+**  half() returns the integer part of dividing its argument by 2.
+*/
+
+func min(x, y) {
+  if(le(x, y)) {
+    set(ans, x)
+  } else {
+    set(ans, y)
+  }
+  return(ans)
+}
+
+func max(x, y) {
+  if(ge(x, y)) {
+    set(ans, x)
+  } else {
+    set(ans, y)
+  }
+  return(ans)
+}
+
+func half(x) {
+  return(div(x, 2))
+}
+
+/*
+**  function: abs
+**
+**  Return the absolute value of an integer
+*/
+
+func abs(x) {
+  if(lt(x, 0)) {
+    set(ans, neg(x))
+  } else {
+    set(ans, x)
+  }
+  return(ans)
+}
+
+/*
+**  function: chart_title
+**
+**  Return a string containing a standard chart title based
+**  on chart type and possibly generation restrictions.
+*/
+
+func chart_title() {
+  set(title_return, "")
+  if(nestr(chart_title_override, "")) {
+    set(title_return, chart_title_override)
+  } else {
+    if(eq(chart_type, 1)) {
+      set(title_return, concat("The ancestors of ",
+        name(root_person, surname_upper),
+        fromto(root_person) ))
+    } elsif(or( eq(chart_type, 2), eq(chart_type, 3) )) {
+      set(title_return, concat("The descendants of ",
+        name(root_person, surname_upper),
+        fromto(root_person) ))
+    } elsif(eq(chart_type, 4)) {
+      if(eq(low_depth, start_depth)) {
+        set(title_return, "The ancestors of the ")
+      } else {
+        set(title_return, "The ancestors and descendants of the ")
+      }
+      set(title_return, concat(title_return,
+        name(husband(root_fam), surname_upper), " and ",
+        name(wife(root_fam), surname_upper), " family" ))
+    } elsif(eq(chart_type, 5)) {
+      if(eq(low_depth, start_depth)) {
+        set(title_return, "The ancestors of the extended family of " )
+      } else {
+        set(title_return,
+          "The ancestors and descendants of the extended family of " )
+      }
+      set(title_return, concat(title_return,
+        name(husband(root_fam), surname_upper), " and ",
+        name(wife(root_fam), surname_upper) ))
+    } else {
+      set(title_return, concat("<<Set chart title with",
+        " 'chart_title_override' or set 'display_title' to 0 to disable.>>" ))
     }
-    ")"
   }
+  return(title_return)
 }
 
 /*
-**  procedure: print_header
+**  function: fromto
 **
-**  Print the initial postscript code.  This code will likely be the
-**  bulk of the output file.  It prints the border, defines postscript
+**  Return a string reprsenting the time when a person lived.
+*/
+
+func fromto(indi) {
+  set(e, birth(indi))
+  set(f, death(indi))
+  set(s, "")
+  if(or(year(e), year(f))) {
+    /* balanced parenthesis are OK unescaped in PostScript strings */
+    set(s, concat(s, " ("))
+    if(e) {
+      if(year(e)) {
+        set(s, concat(s, year(e)))
+      } else {
+        set(s, concat(s, "?"))
+      }
+    }
+    set(s, concat(s, "-"))
+    if(f) {
+      if(year(f)) {
+        set(s, concat(s, year(f)))
+      } else {
+        set(s, concat(s, "?"))
+      }
+    }
+    set(s, concat(s, ")"))
+  }
+  return(save(s))
+}
+
+/*
+**  procedure: write_ps
+**
+**  Generate the PostScript code.  Defines PostScript
 **  functions for printing peoples names, dates and the lines on the
-**  chart, and more.
-**  
+**  chart, and more.  Then the actual names and lines with their positions
+**  and other data are inserted as array definitions in the PostScript code.
+**  Maybe some day, other output procedures will be written, like write_pdf?
+**
 **  Arguments:
 **    cl:  chart label, string
-**    ctf: color true/false, string "true" or "false"
-**    fn:  font name
+**    fn:  font name for an individual's name
+**    fi:  font name for an individual's info (birth, death, marriage, etc.)
 **    xn:  number of horizontal pages
 **    yn:  number of vertical pages
-**    mp:  maximum position, integer in thousandths
 **    ml:  maximum level, integer
-**    em:  extra margin, integer (points)
+**    nl:  minimum level, integer
 **
-**  The original postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
+**    Not all arguments are passed, because there are so many.
+**
+**  The original PostScript code was written by Thomas P. Blumer
+**  (blumer@ptltd.com).
 **
 */
 
-proc print_header (cl, ctf, fn, xn, yn, mp, ml, em)
-{
-  "%!PS-Adobe-2.0 EPSF-1.2" nl()
-  "%%BoundingBox:0 0 612 792" nl()
-  "% --- Define any constants ---" nl()
-  "/color " ctf " def" nl()
+proc write_ps(fn, fi, xn, yn, ml, nl) {
+  "%!PS-Adobe-3.0" if(eqstr(paper_name, "EPSF")) {" EPSF-3.0"} nl()
+  "%%Title: " chart_title() nl()
+  "%%CreationDate: " stddate(gettoday()) nl()
+  "%%Creator: " version
+      ", a report program for LifeLines" nl()
+  "%%Pages: " d(mul(xn, yn)) nl()
+  "%%PageOrder: Ascend" nl()
+  if(nestr(paper_name, "NONE")) {
+    "%%BoundingBox: 0 0 " d(paper_width) " " d(paper_height) nl()
+  }
+  "%%Orientation: "
+    if(portrait) {
+      "Portrait"
+    } else {
+      "Landscape"
+    }
+    nl()
+  "%%EndComments" nl()
+  "%%BeginDefaults" nl()
+  "%%ViewingOrientation: " if(portrait) {"1 0 0 1"} else {"0 -1 1 0"} nl()
+  "%%EndDefaults" nl()
+  "%%BeginProlog" nl()
+  "% --- Define constants ---" nl()
+  "% ** This first section of constants are "
+          "user-modifiable here in the PS file **" nl()
   "/fontname /" fn " def" nl()
-  "/xpages " d (xn) " def" nl()
-  "/ypages " d (yn) " def" nl()
-  "/maxpos " call print_thousandths(mp) " def" nl()
-  "/maxlevel " d (ml) " def" nl()
-  "/mirror " if (mirror_chart) { "true" } else { "false" } " def" nl()
-  "/bold " if (bold_chart) { "true" } else { "false" } " def" nl()
-  "/portrait " if (portrait) { "true" } else { "false" } " def" nl()
-  "/extra_margin " d (em) " def" nl()
-  "/border true def" nl()
-  "/bwid1 2.5 def" nl()
-  "/gapwid 1.5 def" nl()
-  "/bwid2 0.7 def" nl()
-  "/bgap 10 def" nl()
-  "/indent 3.00 def" nl()
-  "/linwidf 1.000 def" nl()
-  "/font_adjust 1.000 def" nl()
-  "/offset_name 0.000 def" nl()
-  "/inch {72 mul} def" nl()
+  "/ifontname /" fi " def" nl()
+  "/titlefontname fontname def" nl()
+  "/labelfontname /Helvetica def" nl()
+  "/chart_title (" strxlat(ps_xlat, chart_title()) ") def" nl()
+  "/display_title " if(display_title) {"true"} else {"false"} " def" nl()
+  "/chart_label (" strxlat(ps_xlat, chart_label) ") def" nl()
+  "/display_label " if(display_label) {"true"} else {"false"} " def" nl()
+  "/chart_label_centered "
+      if(chart_label_centered) {"true"} else {"false"} " def" nl()
+  "/label_outside_border "
+      if(label_outside) {"true"} else {"false"} " def" nl()
+  "/show_border " if(display_border) {"true"} else {"false"} " def" nl()
+  "/mirror " if(mirror_chart) { "true" } else { "false" } " def" nl()
+  "/portrait " if(portrait) { "true" } else { "false" } " def" nl()
+  "/margin_top " d(margin_top) " def" nl()
+  "/margin_bottom " d(margin_bottom) " def" nl()
+  "/margin_left " d(margin_left) " def" nl()
+  "/margin_right " d(margin_right) " def" nl()
+  "% indent is the fraction of generation width to allow for horizontal lines"
+  nl()
+  "/indent .05 def" nl()
+  "/use_color " if(color_chart) { "true" } else { "false" } " def" nl()
+  "/use_bold " if(bold_chart) { "true" } else { "false" } " def" nl()
+  "/bold_factor " make_thousandths(mul(bold_factor, 1000)) " def" nl()
+  "/tweak 0 def    % points to shift chart vertically within border" nl()
+  "% Red,Green,Blue intensities for lines and text (regular and bold)" nl()
+  "%   Values may have decimals and must be between 0 and 1." nl()
   "/lr 0 def /lg 1 def /lb 1 def" nl()
   "/Lr 0 def /Lg 0 def /Lb 1 def" nl()
   "/tr 0 def /tg 0 def /tb 0 def" nl()
   "/Tr 0 def /Tg 0 def /Tb 0 def" nl()
-  "/lmr 0 def /lmg 1 def /lmb 1 def" nl()
-  "/Lmr 0 def /Lmg 0 def /Lmb 1 def" nl()
-  "/tmr 0 def /tmg 0 def /tmb 0 def" nl()
-  "/Tmr 0 def /Tmg 0 def /Tmb 0 def" nl()
-  "% Find the basic dimensions of the paper" nl()
-  "% get printable area" nl()
-  "clippath pathbbox newpath" nl()
-  "/ury exch def /urx exch def" nl()
-  "/lly exch def /llx exch def" nl()
-  nl()
-  "% adjust for PacificPage cartridge" nl()
-  "statusdict /product known {" nl()
-  "     statusdict begin product end (PacificPage) eq" nl()
-  "     version (4.06) eq and {" nl()
-  "             /lly lly 5 add def" nl()
-  "             /ury ury 10 sub def" nl()
-  "     } if" nl()
-  "} if" nl()
-  nl()
-  "/lly lly extra_margin add def /llx llx extra_margin add def" nl()
-  "/ury ury extra_margin sub def /urx urx extra_margin sub def" nl()
-  nl()
-  "% get width and height of a sheet of paper" nl()
-  "/wp urx llx sub def" nl()
-  "/hp ury lly sub def" nl()
-  "% get width and height of a sheet of printable area" nl()
-  "/w wp xpages mul def" nl()
-  "/h hp ypages mul def" nl()
-  nl()
-  "% adjust for portrait or landscape" nl()
-  "portrait {" nl()
-  "       % portrait mode" nl()
-  "} {" nl()
-  "       /tmp hp def" nl()
-  "       /hp wp def" nl()
-  "       /wp tmp def" nl()
-  "       /tmp h def" nl()
-  "       /h w def" nl()
-  "       /w tmp def" nl()
-  "} ifelse" nl()
-  "% Total printable dimensions" nl()
-  "/thp h def" nl()
-  "/twp w def" nl()
-  nl()
-  "% If we have a border take it off the size of the printable area" nl()
-  "border {" nl()
-  "  /tbwid bwid1 gapwid bwid2 bgap add add add def" nl()
-  "  /w w tbwid 2 mul sub def" nl()
-  "  /h h tbwid 2 mul sub def" nl()
-  "} if" nl()
-  nl()
-  "/hh h 20 div def    % height of title line" nl()
-  "/hh2 hh def  % title line and chart label fit in this space" nl()
-  "% Expand title and label space into .7 of buffer zone next to border." nl()
-  "%   Title can be larger, and small label is pushed closer to border." nl()
-  "border {/hh2 hh2 bgap .7 mul add def} if" nl()
-  if (display_title) {
-       "/h h hh sub def     % take from printable area" nl()
-  } else {
-       "% take from printable area only the space used for chart_label" nl()
-       "/h h hh hh2 sub hh2 .17 mul add sub def" nl()
+  if(debug_postscript) {
+    "/show_positions false def    % make true to show person positions" nl()
   }
-  nl()
-  "% ---- Start Subroutines ---" nl()
+  "/show_keys false def     % set to true to turn on display of keys" nl()
+  "% ** End of user-modifiable constants **" nl()
+  if(nestr(paper_name, "NONE")) {
+    "/paper_height " d(paper_height) " def" nl()
+    "/paper_width " d(paper_width) " def" nl()
+  }
+  "/name_height " make_thousandths(name_height) " def" nl()
+  "/date_height " make_thousandths(date_height) " def" nl()
+  "/xpages " d(xn) " def" nl()
+  "/ypages " d(yn) " def" nl()
+  "/minpos_text " make_thousandths(calc_low_pos_text()) " def" nl()
+  "/minpos_line " make_thousandths(calc_low_pos_line()) " def" nl()
+  "/maxpos_text " make_thousandths(calc_high_pos_text()) " def" nl()
+  "/maxpos_line " make_thousandths(calc_high_pos_line()) " def" nl()
+  "/maxlevel " d(ml) " def" nl()
+  "/minlevel " d(nl) " def" nl()
+  "% --- Start Subroutines ---" nl()
+  "% emulations of Level 2 operators" nl()
   "%" nl()
-  "% show string given as argument" nl()
-  "% select font size so that string fits in available length" nl()
-  "%" nl()
-  "/wshow {" nl()
-  "     /s exch def" nl()
-  "     /len exch def" nl()
-  "     /fntsiz exch def" nl()
-  "     bold direct and {" nl()
-  "             boldfontname findfont fntsiz scalefont setfont" nl()
-  "     } {" nl()
-  "             fontname findfont fntsiz scalefont setfont" nl()
-  "     } ifelse" nl()
-  "     s stringwidth pop dup len lt {" nl()
-  "             pop" nl()
-  "     } {" nl()
-  "             % compute new font size for exact fit" nl()
-  "             len exch div fntsiz mul /fsize exch def" nl()
-  "             bold direct and {" nl()
-  "                     boldfontname findfont fsize scalefont setfont" nl()
-  "             } {" nl()
-  "                     fontname findfont fsize scalefont setfont" nl()
-  "             } ifelse" nl()
-  "     } ifelse" nl()
-  "     direct {textcolr0} {textcolr1} ifelse" nl()
-  "     s show" nl()
+  "/*SF {                 % Complete selectfont emulation" nl()
+  "  exch findfont exch" nl()
+  "  dup type /arraytype eq {makefont}{scalefont} ifelse setfont" nl()
   "} bind def" nl()
   nl()
-  "%" nl()
-  "% give length of string given as argument" nl()
-  "% select font size so that string fits in available length" nl()
-  "%" nl()
+  "/BuildRectPath {" nl()
+  "  dup type dup /integertype eq exch /realtype eq or {" nl()
+  "    4 -2 roll moveto" nl()
+  "    dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath" nl()
+  "  }{" nl()
+  "    dup length 4 sub 0 exch 4 exch" nl()
+  "    {" nl()
+  "      1 index exch 4 getinterval aload pop" nl()
+  "      BuildRectPath" nl()
+  "    } for" nl()
+  "    pop" nl()
+  "  } ifelse" nl()
+  "} bind def" nl()
+  nl()
+  "/*RC {" nl()
+  "  gsave newpath BuildRectPath clip grestore" nl()
+  "} bind def" nl()
+  nl()
+  "% install Level 2 emulations, or substitute built-in Level 2 operators" nl()
+  "/languagelevel where" nl()
+  "  {pop languagelevel}{1} ifelse" nl()
+  "2 lt {" nl()
+  "  /RC /*RC load def" nl()
+  "  /SF /*SF load def" nl()
+  "}{" nl()
+  "  /RC /rectclip load def      % use RC instead of rectclip" nl()
+  "  /SF /selectfont load def    % use SF instead of selectfont" nl()
+  "} ifelse" nl()
+  "/SF2 {SF" nl()
+  "  /fshow fshowdict currentfont /FontName get get load def" nl()
+  "} bind def" nl()
+  nl()
+  "% Handy little functions: min, max" nl()
+  "/min {" nl()
+  "  2 copy gt { exch } if pop" nl()
+  "} bind def" nl()
+  "/max {" nl()
+  "  2 copy lt { exch } if pop" nl()
+  "} bind def" nl()
+  nl()
+  "% Line and Person array filling procedures" nl()
+  "/P {Alin 3 1 roll put} def" nl()
+  "/Q {Aind 3 1 roll put} def" nl()
+  nl()
+  "/black-and-white-device     % true for black & white, false otherwise" nl()
+  "{    statusdict begin" nl() 
+  "     /processcolors where" nl()
+  "     { pop processcolors } { 1 } ifelse" nl()
+  "     end" nl()
+  "     1 eq" nl()
+  "} def" nl()
+  nl()
+  "% wshow* usage:  string num  wshow*  --" nl()
+  "% scale to fit string in specified width at current point" nl()
+  "/wshow* {" nl()
+  "  /s exch def" nl()
+  "  /len exch def" nl()
+  "  s stringwidth pop line_gap add dup len lt {" nl()
+  "    pop s fshow" nl()
+  "  }{" nl()
+  "    gsave" nl()
+  "    % scale for exact fit (current point is not affected)" nl()
+  "    len exch div dup scale" nl()
+  "    s fshow" nl()
+  "    grestore" nl()
+  "  } ifelse" nl()
+  "} bind def" nl()
+  nl()
+  "% wlen usage:  string num1 num2  wlen  num3 num4" nl()
+  "% The string is to be rendered no longer than specified length (num1)," nl()
+  "% starting with initial font size (num2)." nl()
+  "% Determines scale (num3) necessary to render string with length (num4)" nl()
+  "% Assumes 'direct' variable is currently set to indicate use of bold font."
+  nl()
   "/wlen {" nl()
   "     /s exch def" nl()
   "     /len exch def" nl()
   "     /fntsiz exch def" nl()
-  "     bold direct and {" nl()
-  "             boldfontname findfont fntsiz scalefont setfont" nl()
+  "     /bfn exch def" nl()
+  "     /fn exch def" nl()
+  "     use_bold direct and {" nl()
+  "        bfn fntsiz SF2" nl()
   "     } {" nl()
-  "             fontname findfont fntsiz scalefont setfont" nl()
+  "        fn fntsiz SF2" nl()
   "     } ifelse" nl()
-  "     s stringwidth pop dup len lt {" nl()
-  "             pop" nl()
+  "     s stringwidth pop line_gap add dup len lt {" nl()
+  "        % text already fits so return scale of 1 and text length" nl()
+  "        1 exch" nl()
   "     } {" nl()
-  "             % compute new font size for exact fit" nl()
-  "             len exch div fntsiz mul /fsize exch def" nl()
-  "             bold direct and {" nl()
-  "                     boldfontname findfont fsize scalefont setfont" nl()
-  "             } {" nl()
-  "                     fontname findfont fsize scalefont setfont" nl()
-  "             } ifelse" nl()
+  "        % scale, len for text length since scale makes fit exact" nl()
+  "        len exch div len" nl()
   "     } ifelse" nl()
-  "     s stringwidth pop" nl()
   "} bind def" nl()
   nl()
-  if (display_title) {
-    "%" nl()
-    "% Print a title across the bottom of the page" nl()
-    "%" nl()
-    "/printhead {" nl()
-    "  /mytitle exch def" nl()
-    "  /tsz hh2 .84 mul def" nl()
-    "  /len w w 10 div sub def" nl()
-    "  /fsize tsz def" nl()
-    "  fontname findfont fsize scalefont setfont" nl()
-    "  mytitle stringwidth pop dup len lt {" nl()
-    "    pop" nl()
-    "  } {" nl()
-    "    % compute new font size for exact fit lengthwise" nl()
-    "    len exch div fsize mul /fsize exch def" nl()
-    "    fontname findfont fsize scalefont setfont" nl()
-    "  } ifelse" nl()
-    "  newpath 0 0 moveto" nl()
-    "  mytitle false charpath flattenpath pathbbox newpath" nl()
-    "  exch pop exch sub exch pop dup tsz lt {" nl()
-    "    pop" nl()
-    "  } {" nl()
-    "    % compute new font size for exact fit heightwise" nl()
-    "    tsz exch div fsize mul /fsize exch def" nl()
-    "    fontname findfont fsize scalefont setfont" nl()
-    "  } ifelse" nl()
-    "  newpath 0 0 moveto" nl()
-    "  mytitle false charpath flattenpath pathbbox newpath" nl()
-    "  /lsy exch def" nl()
-    "  /lsy2 lsy def" nl()
-    "  /ls exch def" nl()
-    "  lsy exch sub /lsy exch def" nl()
-    "  pop" nl()
-    "  /start w ls sub 2 div def" nl()
-    "  start hh tsz lsy sub 2 div sub lsy2 sub moveto   % center title line in its area" nl()
-    "  textcolr0" nl()
-    "  mytitle show" nl()
-    "  0 hh translate" nl()
-    "} bind def" nl()
-    nl()
-  }
   "%" nl()
+  "% Show text from right to left, with left end at current point" nl()
+  "%" nl()
+  "/rlshow {" nl()
+  "  dup stringwidth rmoveto" nl()
+  "  { (_) dup 0 4 -1 roll put" nl()
+  "    dup stringwidth pop neg 0 rmoveto" nl()
+  "    currentpoint 3 -1 roll show" nl()
+  "    moveto" nl()
+  "  } forall" nl()
+  "} bind def" nl()
+  nl()
+  "%" nl()
+  "% Print a title across the bottom of the page" nl()
+  "%" nl()
+  "/print_title {" nl()
+  "  /fsize th1 18 div def" nl()
+  "  /len tw1 .9 mul def" nl()
+  "  titlefontname fsize SF2" nl()
+  "  chart_title stringwidth pop dup len lt {" nl()
+  "    pop" nl()
+  "  } {" nl()
+  "    % compute new font size for exact fit lengthwise" nl()
+  "    len exch div fsize mul /fsize exch def" nl()
+  "    titlefontname fsize SF2" nl()
+  "  } ifelse" nl()
+  "  titlefontname findfont /FontBBox get dup" nl()
+  "  3 get /sy2 exch fsize mul 1000 div def" nl()
+  "  1 get /sy1 exch fsize mul 1000 div def" nl()
+  "  sy2 0 eq {" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (A) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (p) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop" nl()
+  "  } if" nl()
+  "  /title_length chart_title stringwidth pop def" nl()
+  "  /title_height sy2 sy1 sub def" nl()
+  "  /title_allowance title_height 1.1 mul def" nl()
+  "  /startx tw1 title_length sub 2 div def" nl()
+  "  /starty sy1 neg title_height .05 mul add def" nl()
+  "  startx starty chart_title stringwidth pop" nl()
+  "  startx starty moveto" nl()
+  "  textcolr0" nl()
+  "  chart_title fshow" nl()
+  "  0 title_allowance translate       % set origin above title" nl()
+  "  /th1 th1 title_allowance sub def  % shorten chart space accordingly" nl()
+  "} bind def" nl()
+  nl()
+  "/print_label {" nl()
+  "  /labelfs 6 def" nl()
+  "  /len wp1 def" nl()
+  "  labelfontname labelfs SF2" nl()
+  "  chart_label stringwidth pop dup len lt {pop} {" nl()
+  "    len exch div labelfs mul /labelfs exch def" nl()
+  "    labelfontname labelfs SF2" nl()
+  "  } ifelse" nl()
+  "  labelfontname findfont /FontBBox get dup" nl()
+  "  3 get /sy2 exch labelfs mul 1000 div def" nl()
+  "  1 get /sy1 exch labelfs mul 1000 div def" nl()
+  "  sy2 0 eq {" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (A) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (p) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop   " nl()
+  "  } if" nl()
+  "  chart_label_centered" nl()
+  "    {len chart_label stringwidth pop sub 2 div}" nl()
+  "    {0} ifelse" nl()
+  "  0 sy1 neg moveto" nl()
+  "  chart_label fshow" nl()
+  "  sy2 sy1 sub 1.2 mul dup" nl()
+  "  0 exch translate" nl()
+  "  th1 exch sub /th1 exch def" nl()
+  "} bind def" nl()
+  nl()
+
+  /* To write an alternative PostScript border procedure,
+     here are the current guidelines for compatibility:
+     - external PostScript variables used in the original border procedure:
+        lincolr0 -- a procedure that sets the drawing color to the one used
+                    for blood relatives
+        tw1      -- the width, in points, available
+        th1      -- the height, in points, available
+        wp1      -- the width, in points, available on the lower left page
+     - what the border procedure must do when finished:
+        1. translate to just inside the lower left corner of the border
+        2. subtract border thickness from /tw1, /th1, and /wp1
+        3. set /bgap to the empty space at the bottom on the inside of
+           the border -- some of which is used as extra space for a title
+           or inside label
+  */
   "% Print a decorative border" nl()
   "%" nl()
-  "/printborder {" nl()
-  "     /tw 7.2 def" nl()
-  "     /rect {" nl()
-  "             /rh exch def" nl()
-  "             /rw exch def" nl()
-  "             moveto" nl()
-  "             rw 0 rlineto" nl()
-  "             0 rh rlineto" nl()
-  "             rw neg 0 rlineto" nl()
-  "             closepath stroke" nl()
-  "     } def" nl()
-  "     /rectt {" nl()
-  "             /rh exch def" nl()
-  "             /rw exch def" nl()
-  "             /rhs rh tw sub tw sub def" nl()
-  "             /rws rw tw sub tw sub def" nl()
-  "             moveto" nl()
-  "             0 tw rmoveto" nl()
-  "             tw 0 rlineto" nl()
-  "             0 tw neg rlineto" nl()
-  "             rws 0 rlineto" nl()
-  "             0 tw rlineto" nl()
-  "             tw 0 rlineto" nl()
-  "             0 rhs rlineto" nl()
-  "             tw neg 0 rlineto" nl()
-  "             0 tw rlineto" nl()
-  "             rws neg 0 rlineto" nl()
-  "             0 tw neg rlineto" nl()
-  "             tw neg 0 rlineto" nl()
-  "             closepath stroke" nl()
-  "     } def" nl()
+  "/print_border {" nl()
+  "  /bwid1 2.5 def" nl()
+  "  /gapwid 1.5 def" nl()
+  "  /bwid2 0.7 def" nl()
+  "  /bgap 10 def" nl()
+  "  /tbwid bwid1 gapwid bwid2 bgap add add add def" nl()
+  "  /tw 7.2 def" nl()
+  "  /rect {" nl()
+  "    /rh exch def" nl()
+  "    /rw exch def" nl()
+  "    moveto" nl()
+  "    rw 0 rlineto" nl()
+  "    0 rh rlineto" nl()
+  "    rw neg 0 rlineto" nl()
+  "    closepath stroke" nl()
+  "  } def" nl()
+  "  /rectt {" nl()
+  "    /rh exch def" nl()
+  "    /rw exch def" nl()
+  "    /rhs rh tw sub tw sub def" nl()
+  "    /rws rw tw sub tw sub def" nl()
+  "    moveto" nl()
+  "    0 tw rmoveto" nl()
+  "    tw 0 rlineto" nl()
+  "    0 tw neg rlineto" nl()
+  "    rws 0 rlineto" nl()
+  "    0 tw rlineto" nl()
+  "    tw 0 rlineto" nl()
+  "    0 rhs rlineto" nl()
+  "    tw neg 0 rlineto" nl()
+  "    0 tw rlineto" nl()
+  "    rws neg 0 rlineto" nl()
+  "    0 tw neg rlineto" nl()
+  "    tw neg 0 rlineto" nl()
+  "    closepath stroke" nl()
+  "  } def" nl()
   nl()
-  "     bwid1 setlinewidth" nl()
-  "     lincolr0" nl()
-  "     bwid1 2 div  dup  twp bwid1 sub  thp bwid1 sub  rectt" nl()
-  nl()
-  "     bwid2 setlinewidth" nl()
-  "     bwid1 gapwid bwid2 2 div add add  dup" nl()
-  "     twp bwid1 2 mul sub gapwid 2 mul sub bwid2 sub " nl()
-  "     thp bwid1 2 mul sub gapwid 2 mul sub bwid2 sub rect" nl()
+  /* assuming that 2*(border thickness) < (chart width) */
+  "  2 setlinecap" nl()
+  "  0 setlinejoin" nl()
+  "  bwid1 setlinewidth" nl()
+  "  lincolr0" nl()
+  "  bwid1 2 div  dup  tw1 bwid1 sub  th1 bwid1 sub  rectt" nl()
+  "  bwid2 setlinewidth" nl()
+  "  bwid1 gapwid bwid2 2 div add add  dup" nl()
+  "  tw1 bwid1 2 mul sub gapwid 2 mul sub bwid2 sub " nl()
+  "  th1 bwid1 2 mul sub gapwid 2 mul sub bwid2 sub rect" nl()
+  "  %  move the chart origin inside the border zone" nl()
+  "  tbwid tbwid translate" nl()
+  "  % take border thickness away from chart area" nl()
+  "  /th1 th1 tbwid 2 mul sub def" nl()
+  "  /tw1 tw1 tbwid 2 mul sub def" nl()
+  "  /wp1 wp1 tbwid xpages 1 eq {2 mul} if sub def" nl()
   "} bind def" nl()
   nl()
-  "%" nl()
-  "% Draw a verticle line" nl()
+
+  "% calculate max. font sizes and scale factor for placement of chart elements" nl()
+  "% depends on: th1, tw1" nl()
+  "% determines: posunit, minpos, rl, fntsize, fntsize2, linwid, dashwid," nl()
+  "%       char2line, line2char, line_gap, name_adjust, name_extra, len1" nl()
+  "/calcScale {" nl()
+  "  % for now, overestimate the upwards name_adjust with name_height" nl()
+  "  /minpos minpos_text name_height sub minpos_line min def" nl()
+  "  /maxpos maxpos_text maxpos_line max def" nl()
+  "  /posunit th1 maxpos minpos sub div def" nl()
+  nl()
+  "  % Now we have the remaining height and width, compute" nl()
+  "  % the column width, font size etc." nl()
+  "  %" nl()
+  "  /rl tw1 maxlevel minlevel sub 1 add div def" nl()
+  nl()
+  "  % calculate base font size from segment length" nl()
+  "  /fntsize rl 9.0 div def" nl()
+  nl()
+  /* RES: make so two solid marks of dashed line appear on indent length */
+  "  /dashwid rl indent mul 3 div def" nl()
+  nl()
+  "  % size of name text, layout relies on a restricted font size" nl()
+  "  fntsize name_height posunit mul gt {" nl()
+  "     /fntsize name_height posunit mul def" nl()
+  "  } if" nl()
+  nl()
+  "  % find out how low below baseline any of the letters can reach" nl()
+  "  fontname findfont /FontBBox get dup" nl()
+  "  3 get /sy2 exch fntsize mul 1000 div def" nl()
+  "  1 get /sy1 exch fntsize mul 1000 div def" nl()
+  "  sy2 0 eq {" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (A) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (p) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop   " nl()
+  "  } if" nl()
+  "  /name_desc sy1 neg def" nl()
+  nl()
+  "  % font for birth/death dates" nl()
+  "  /fntsize2 fntsize date_height mul def" nl()
+  nl()
+  "  % find out how low below baseline any of the letters can reach" nl()
+  "  ifontname findfont /FontBBox get dup" nl()
+  "  3 get /sy2 exch fntsize2 mul 1000 div def" nl()
+  "  1 get /sy1 exch fntsize2 mul 1000 div def" nl()
+  "  sy2 0 eq {" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (A) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop" nl()
+  "    newpath 0 0 moveto" nl()
+  "    (p) false charpath flattenpath pathbbox newpath" nl()
+  "    sy2 max /sy2 exch def pop sy1 min /sy1 exch def pop   " nl()
+  "  } if" nl()
+  "  /info_desc sy1 neg def" nl()
+  "  /info_asc sy2 def" nl()
+  nl()
+  "  % calc line width from font size" nl()
+  "  /linwid fntsize .06 mul def" nl()
+  nl()
+  "  % name_adjust -- adjustment to 'center' names on horiz. lines." nl()
+  "  %               it's the distance from baseline to middle of '-'." nl()
+  "  % char2line & line2char -- indicate offsets to horiz. line ends" nl()
+  "  % relative to char origins matching behavior of minus char. as a line" nl()
+  "  boldfontname fntsize SF2" nl()
+  "  newpath 0 0 moveto" nl()
+  "  (-) false charpath flattenpath pathbbox newpath" nl()
+  "    exch /minus_end exch def add 2 div /name_adjust exch def" nl()
+  "    /char2line exch def" nl()
+  "  (-) stringwidth pop minus_end sub /line2char exch def" nl()
+  "  /line_gap char2line line2char add def" nl()
+  nl()
+  "  % this is the highest a name can extend above its horiz. line (pos)" nl()
+  "  /name_extra sy2 name_adjust sub def" nl()
+  nl()
+  "  % name string length for all generations" nl()
+  "  /len1 rl 1 indent 2 mul sub mul def" nl()
+  "} def" nl()
+  nl()
+  "% Draw a vertical line" nl()
   "%" nl()
   "/l {" nl()
-  "     /indirect exch 1 eq def" nl()
-  "     /parent exch def" nl()
-  "     /pos exch def" nl()
-  "     /level exch def" nl()
+  "    /duplic exch 1 eq def" nl()
+  "    dup /direct exch 2 eq def" nl()
+  "    /blood exch 1 ge def" nl()
+  "    /parent exch def" nl()
+  "    /pos exch def" nl()
+  "    /level exch def" nl()
   nl()
-  "     mirror {" nl()
-  "             /x maxlevel level sub 1 sub rl mul def" nl()
-  "     } {" nl()
-  "             /x level 1 add rl mul def" nl()
-  "     } ifelse" nl()
-  "     /y1 top pos posunit mul sub def" nl()
-  "     /y2 top parent posunit mul sub def" nl()
-  "     indirect {lincolr1} {lincolr0} ifelse" nl()
-  "     bold indirect not and {linwid 2.0 mul setlinewidth} if" nl()
-  "     x y1 moveto x y2 lineto stroke" nl()
-  "     bold indirect not and {linwid setlinewidth} if" nl()
+  "    mirror {" nl()
+  "        /x maxlevel level sub rl mul def" nl()
+  "    } {" nl()
+  "        /x level minlevel sub 1 add rl mul def" nl()
+  "    } ifelse" nl()
+  "    /y1 top pos minpos sub posunit mul sub def" nl()
+  "    /y2 top parent minpos sub posunit mul sub def" nl()
+  "    blood {lincolr0}{lincolr1} ifelse" nl()
+  "    duplic {[dashwid] 0 setdash}{[] 0 setdash} ifelse" nl()
+  "    use_bold direct and {" nl()
+  "        linwid bold_factor mul setlinewidth" nl()
+  "    } {" nl()
+  "        linwid setlinewidth" nl()
+  "    } ifelse" nl()
+  "    0 setlinecap" nl()
+  "    % 2 setlinecap affects dashes, so have to extend line ends manually" nl()
+  "    x y1 currentlinewidth 2 div add moveto" nl()
+  "    x y2 currentlinewidth 2 div sub lineto stroke" nl()
   "} bind def" nl()
   nl()
   "%" nl()
@@ -2049,489 +5042,576 @@ proc print_header (cl, ctf, fn, xn, yn, mp, ml, em)
   "% called once for each individual on chart" nl()
   "%" nl()
   "/i {" nl()
-  "     /des exch 1 eq def      % true if person has descendants" nl()
-  "     /anc exch 1 eq def      % true if person has ancestors" nl()
-  "     /duplic exch 1 eq def   % true for duplicate individual" nl()
-  "     /direct exch 1 eq def   % true for direct ancestor, false for indirect" nl()
-  "     /xhgt exch def          % extra height - not used here" nl()
-  "     /pos exch def           % vertical position" nl()
-  "     /level exch def         % generation level, 0 = youngest" nl()
-  "     /marriage exch def      % marriage date" nl()
-  "     /tagnote exch def       % tagged note from PAF" nl()
-  "     /death exch def         % death date" nl()
-  "     /birth exch def         % birth date" nl()
-  "     /name exch def          % name" nl()
+  "   /key exch def           % database key, make show_keys true to show" nl()
+  "   /info exch def          % array of info strings: birth, death, etc." nl()
+  "   /name exch def" nl()
+  "   /rel_down exch 1 eq def % true if person connects to next level down" nl()
+  "   /rel_up exch 1 eq def   % true if person connects to next level up" nl()
+  "   /duplic exch 1 eq def   % true for duplicate individual" nl()
+  "   dup                     % copy line-type for two uses" nl() 
+  "   /direct exch 2 eq def   % true for direct ancestor, false for indirect"
   nl()
-  "     % x1 = left edge, x2 = right edge" nl()
-  "     mirror {" nl()
-  "             /x1 maxlevel level sub 1 sub rl mul def" nl()
-  "             /x x1 space indent mul add def" nl()
-  "     } {" nl()
-  "             /x1 level rl mul def" nl()
-  "             /x x1 space indent mul add def" nl()
-  "     } ifelse" nl()
-  "     /x2 x1 rl add def" nl()
+  "   /blood exch 1 ge def    % true for blood relatives" nl()
+  "   /pos exch def           % vertical position" nl()
+  "   /level exch def         % generation level, 0 = youngest" nl()
   nl()
-  "     % Column positions" nl()
-  "     % x1=left x=start of text x2=right" nl()
+  "   mirror {  % smallest gen. # on the right" nl()
+  "      /rel_left rel_up def" nl()
+  "      /rel_right rel_down def" nl()
+  "      /x1 maxlevel level sub rl mul def" nl()
+  "   } {  % smallest gen. # on the left" nl()
+  "      /rel_left rel_down def" nl()
+  "      /rel_right rel_up def" nl()
+  "      /x1 level minlevel sub rl mul def" nl()
+  "   } ifelse" nl()
+  "   /x2 x1 rl add def" nl()
   nl()
-  "     /y top pos posunit mul sub def" nl()
-  "     /y2 top pos 0.5 sub posunit mul sub def" nl()
+  "   % x1=left edge, x=start of text, x2=right edge" nl()
   nl()
-  "     lincolr0" nl()
+  "   /ylin top pos minpos sub posunit mul sub def" nl()
   nl()
-  "     /namey namey0 def" nl()
+  "   % Calculate the printed length of the name" nl()
+  "   fontname boldfontname fntsize len1 name wlen" nl()
+  "   /lname exch def /scalefactor exch def" nl()
   nl()
-  "     % Calcuate the printed length of the name" nl()
-  "     fntsize len1 name wlen" nl()
-  "     /lname exch def" nl()
+  "   % use relative change in fontsize determined by wlen to scale name_adjust"
   nl()
-  "     % Find the size of the longest text string" nl()
-  "     /ls lname def" nl()
-  "     birth length 0 gt {" nl()
-  "       fntsize2 len1 birth wlen" nl()
-  "       /lb exch def" nl()
-  "       lb ls gt {/ls lb def} if" nl()
-  "     } if" nl()
-  "     death length 0 gt {" nl()
-  "       fntsize2 len1 death wlen" nl()
-  "       /ld exch def" nl()
-  "       ld ls gt {/ls ld def} if" nl()
-  "     } if" nl()
-  "     marriage length 0 gt {" nl()
-  "       fntsize2 len1 marriage wlen" nl()
-  "       /lm exch def" nl()
-  "       lm ls gt {/ls lm def} if" nl()
-  "     } if" nl()
+  "   % then determine the baseline position relative to the horizontal line"
   nl()
-  "     anc not {" nl()
-  "       /x x2 ls sub space indent mul sub def" nl()
-  "     } if" nl()
-  "     des not {" nl()
-  "       /x x1 space indent mul add def" nl()
-  "     } if" nl()
-  "     anc des and {" nl()
-  "       /sr rl ls sub def" nl()
-  "       /x sr 2 div x1 add def" nl()
-  "     } if" nl()
+  "   /y ylin name_adjust scalefactor mul sub def" nl()
   nl()
-  "     direct {" nl()
-  "             bold {linwid 2.0 mul setlinewidth /namey namey linwid add def} if" nl()
-  "             duplic {[dashwid dup currentlinewidth add] 0 setdash} if" nl()
-  "             anc {x1 y2 moveto x space sub y2 lineto stroke} if" nl()
-  "             des {x lname add space add y2 moveto x2 y2 lineto stroke} if" nl()
-  "             duplic {[] 0 setdash} if" nl()
-  "             bold {linwid setlinewidth} if" nl()
-  "             % print name" nl()
-  "             x y namey add moveto" nl()
-  "             fntsize len1 name wshow" nl()
-  "     } {" nl()
-  "             duplic {[dashwid dup currentlinewidth add] 0 setdash} if" nl()
-  "             mirror {" nl()
-  "                     x1 y2 moveto x y2 lineto stroke" nl()
-  "                     % print name" nl()
-  "                     x y namey add moveto" nl()
-  "                     fntsize len1 name wshow" nl()
-  "             } {" nl()
-  "                     x lname add space add y2 moveto x2 y2 lineto stroke" nl()
-  "                     % print name" nl()
-  "                     x y namey add moveto" nl()
-  "                     fntsize len1 name wshow" nl()
-  "             } ifelse" nl()
-  "             duplic {[] 0 setdash} if" nl()
-  "     } ifelse" nl()
+  "   % Find the size of the longest text string" nl()
+  "   /ls lname def" nl()
+  "   /infoscale 1 def" nl()
+  "   info {" nl()
+  "     dup length 0 gt" nl()
+  "     {ifontname boldifontname fntsize2 len1 5 4 roll wlen" nl()
+  "       dup ls gt {/ls exch def}{pop}ifelse" nl()
+  "       dup infoscale lt {/infoscale exch def}{pop}ifelse" nl()
+  "     }{pop" nl()
+  "     }ifelse" nl()
+  "   }forall" nl()
   nl()
-  "     % print birth/death" nl()
-  "     birth length 0 gt {" nl()
-  "             /y y fntsize2 sub def" nl()
-  "             x y moveto" nl()
-  "             fntsize2 len1 birth wshow" nl()
-  "     } if" nl()
-  "     death length 0 gt {" nl()
-  "             /y y fntsize2 sub def" nl()
-  "             x y moveto" nl()
-  "             fntsize2 len1 death wshow" nl()
-  "     } if" nl()
-  "     marriage length 0 gt {" nl()
-  "             /y y fntsize2 sub def" nl()
-  "             x y moveto" nl()
-  "             fntsize2 len1 marriage wshow" nl()
-  "     } if" nl()
+  "   direct rel_left rel_right and or {" nl()
+  "      % center record within generation" nl()
+  "      /x x1 rl ls line_gap scalefactor mul add sub 2 div add def" nl()
+  "   }{" nl()
+  "      rel_right {/x x2 rl indent mul sub ls sub def} if" nl()
+  "      rel_left {/x x1 rl indent mul add def} if" nl()
+  "   } ifelse" nl()
+  "   /xlin x def" nl()
+  "   /x xlin line2char scalefactor mul add def" nl()
+  nl()
+  "   use_bold direct and {" nl()
+  "      boldfontname fntsize SF2" nl()
+  "      linwid bold_factor mul setlinewidth" nl()
+  "   } {" nl()
+  "      fontname fntsize SF2" nl()
+  "      linwid setlinewidth" nl()
+  "   } ifelse" nl()
+  nl()
+  "   blood {lincolr0}{lincolr1} ifelse" nl()
+  "   duplic {[dashwid] 0 setdash}{[] 0 setdash} ifelse" nl()
+  "   0 setlinecap   % don't cap lines -- stay clear of name characters" nl()
+  nl()
+  "   rel_left {" nl()
+  "      x1 ylin moveto xlin ylin lineto stroke" nl()
+  "   } if" nl()
+  "   rel_right {" nl()
+  "      x lname add char2line scalefactor mul add ylin moveto" nl()
+  "      x2 ylin lineto stroke" nl()
+  "   } if" nl()
+  nl()
+  "   % print name" nl()
+  "   direct use_bold and {textcolr0}{textcolr1} ifelse"  nl()
+  "   x y moveto" nl()
+  "   len1 name wshow*" nl()
+  "   % drop down by height of name font descenders" nl()
+  "   /y y name_desc sub def" nl()
+  "   % drop down by height of small text above its baseline + small font gap" nl()
+  "   /y y info_asc infoscale mul sub def" nl()
+  nl()
+  "  use_bold direct and {" nl()
+        /* RES - alternative is to pass infoscale to wshow* */
+        /* that would avoid danger of generating too many fonts in PS engine */
+  "     boldifontname fntsize2 infoscale mul SF2" nl()
+  "  }{" nl()
+  "     ifontname fntsize2 infoscale mul SF2" nl()
+  "  } ifelse" nl()
+  nl()
+  "  % print info: birth, death, etc." nl()
+  "  info" nl()
+  "  { dup length 0 gt" nl()
+  "    { x y moveto" nl()
+  "      len1 exch wshow*" nl()
+  "      /y y fntsize2 sub def" nl()
+  "    }{pop" nl()
+  "    }ifelse" nl()
+  "  }forall" nl()
+  if(debug_postscript) {
+    nl()
+    "  show_positions {     % not for use with show_keys simultaneously" nl()
+    "    pos abs floor 1 ge {" nl()
+    "      pos abs log cvi" nl()
+    "    }{1}ifelse" nl()
+    "    pos 0 lt {1 add} if" nl()
+    "    5 add string /tmp exch def" nl()
+    "    pos tmp cvs" nl()
+    "    x y moveto" nl()
+    "    len1 tmp wshow*" nl()
+    "  }if" nl()
+  }
+  "  show_keys {" nl()
+  "    x y moveto" nl()
+  "    len1 key wshow*" nl()
+  "  }if" nl()
   "} bind def" nl()
   nl()
-  "% Print a signature/label on the chart" nl()
-  "/chart_label {" nl()
-  "     /mylabel (" cl ") def" nl()
-  "     /len wp def" nl()
-  "     border {" nl()
-  "          xpages 1 eq {" nl()
-  "               /len len tbwid 2 mul sub .9 mul def" nl()
-  "          } {" nl()
-  "               /len len tbwid sub .9 mul def" nl()
-  "          } ifelse" nl()
-  "     } if" nl()
-  "     /Helvetica-Narrow findfont hh2 .14 mul scalefont setfont" nl()
-  "     mylabel stringwidth pop dup len lt {pop} {" nl()
-  "          len exch div hh2 .14 mul mul /Helvetica-Narrow findfont" nl()
-  "          exch scalefont setfont" nl()
-  "     } ifelse" nl()
-  if (chart_label_centered) {
-    "     len 18 div len mylabel stringwidth pop sub 2 div add" nl()
-  } else {
-    "     len 45 div" nl()
-  }
-  "     hh hh2 sub     moveto" nl()
-  "     mylabel show" nl()
-  "} def" nl()
-  nl()
-  "% --- End of Subroutines ---" nl()
-  "%" nl()
+
   "% If colour is required, set the appropriate fields" nl()
+  "%   and define colour setting procedures accordingly." nl()
+  "% Note: setcmykcolor is a PostScript Level 2 operator." nl()
   "%" nl()
-   "color {" nl()
-  "     /setcmykcolor where { pop" nl()
-  "             Tr Tg Tb add add 0 eq {" nl()
-  "                     /Tk 1 def" nl()
-  "             } {" nl()
-  "                     /Tk 0 def" nl()
-  "                     /Tr 1 Tr sub def /Tg 1 Tg sub def /Tb 1 Tb sub def" nl()
-  "             } ifelse" nl()
+  "use_color black-and-white-device not and {" nl()
+  "  /setcmykcolor where { pop" nl()
+  "    Tr Tg Tb add add 0 eq {" nl()
+  "      /Tk 1 def" nl()
+  "    } {" nl()
+  "      /Tk 0 def" nl()
+  "      /Tr 1 Tr sub def /Tg 1 Tg sub def /Tb 1 Tb sub def" nl()
+  "    } ifelse" nl()
   nl()
-  "             tr tg tb add add 0 eq {" nl()
-  "                     /tk 1 def" nl()
-  "             } {" nl()
-  "                     /tk 0 def" nl()
-  "                     /tr 1 tr sub def /tg 1 tg sub def /tb 1 tb sub def" nl()
-  "             } ifelse" nl()
+  "    tr tg tb add add 0 eq {" nl()
+  "      /tk 1 def" nl()
+  "    } {" nl()
+  "      /tk 0 def" nl()
+  "      /tr 1 tr sub def /tg 1 tg sub def /tb 1 tb sub def" nl()
+  "    } ifelse" nl()
   nl()
-  "             Lr Lg Lb add add 0 eq {" nl()
-  "                     /Lk 1 def" nl()
-  "             } {" nl()
-  "                     /Lk 0 def" nl()
-  "                     /Lr 1 Lr sub def /Lg 1 Lg sub def /Lb 1 Lb sub def" nl()
-  "             } ifelse" nl()
+  "    Lr Lg Lb add add 0 eq {" nl()
+  "      /Lk 1 def" nl()
+  "    } {" nl()
+  "      /Lk 0 def" nl()
+  "      /Lr 1 Lr sub def /Lg 1 Lg sub def /Lb 1 Lb sub def" nl()
+  "    } ifelse" nl()
   nl()
-  "             lr lg lb add add 0 eq {" nl()
-  "                     /lk 1 def" nl()
-  "             } {" nl()
-  "                     /lk 0 def" nl()
-  "                     /lr 1 lr sub def /lg 1 lg sub def /lb 1 lb sub def" nl()
-  "             } ifelse" nl()
+  "    lr lg lb add add 0 eq {" nl()
+  "      /lk 1 def" nl()
+  "    } {" nl()
+  "      /lk 0 def" nl()
+  "      /lr 1 lr sub def /lg 1 lg sub def /lb 1 lb sub def" nl()
+  "    } ifelse" nl()
   nl()
-  "             /textcolr0 {Tr Tg Tb Tk setcmykcolor} bind def % direct ancestor name" nl()
-  "             /textcolr1 {tr tg tb tk setcmykcolor} bind def % indirect names" nl()
-  "             /lincolr0 {Lr Lg Lb Lk setcmykcolor} bind def  % direct ancestor lines" nl()
-  "             /lincolr1 {lr lg lb lk setcmykcolor} bind def  % indirect lines" nl()
-  "     } {" nl()
-  "             /textcolr0 {Tr Tg Tb setrgbcolor} bind def % direct ancestor name" nl()
-  "             /textcolr1 {tr tg tb setrgbcolor} bind def % indirect names" nl()
-  "             /lincolr0 {Lr Lg Lb setrgbcolor} bind def  % direct ancestor lines" nl()
-  "             /lincolr1 {lr lg lb setrgbcolor} bind def  % indirect lines" nl()
-  "     } ifelse" nl()
+  "    /textcolr0 {Tr Tg Tb Tk setcmykcolor} bind def % direct names" nl()
+  "    /textcolr1 {tr tg tb tk setcmykcolor} bind def % indirect names" nl()
+  "    /lincolr0 {Lr Lg Lb Lk setcmykcolor} bind def  % direct lines" nl()
+  "    /lincolr1 {lr lg lb lk setcmykcolor} bind def  % indirect lines" nl()
+  "  } {" nl()
+  "    /textcolr0 {Tr Tg Tb setrgbcolor} bind def % direct names" nl()
+  "    /textcolr1 {tr tg tb setrgbcolor} bind def % indirect names" nl()
+  "    /lincolr0 {Lr Lg Lb setrgbcolor} bind def  % direct lines" nl()
+  "    /lincolr1 {lr lg lb setrgbcolor} bind def  % indirect lines" nl()
+  "  } ifelse" nl()
   "} {" nl()
-  "     /textcolr0 {} bind def" nl()
-  "     /textcolr1 {} bind def" nl()
-  "     /lincolr0 {} bind def" nl()
-  "     /lincolr1 {} bind def" nl()
+  "  /textcolr0 {} bind def" nl()
+  "  /textcolr1 {} bind def" nl()
+  "  /lincolr0 {} bind def" nl()
+  "  /lincolr1 {} bind def" nl()
   "} ifelse" nl()
   nl()
-  "%" nl()
-  "% Adjust the font so that it is iso-8859-1 compatible" nl()
-  "%" nl()
-  "/encvec [" nl()
-  "16#80 /Ccedilla" nl()
-  "16#81 /udieresis" nl()
-  "16#82 /eacute" nl()
-  "16#83 /acircumflex" nl()
-  "16#84 /adieresis" nl()
-  "16#85 /agrave" nl()
-  "16#86 /aring" nl()
-  "16#87 /ccedilla" nl()
-  "16#88 /ecircumflex" nl()
-  "16#89 /edieresis" nl()
-  "16#8a /egrave" nl()
-  "16#8b /idieresis" nl()
-  "16#8c /icircumflex" nl()
-  "16#8d /igrave" nl()
-  "16#8e /Adieresis" nl()
-  "16#8f /Aring" nl()
-  "16#90 /dotlessi" nl()
-  "16#91 /grave" nl()
-  "16#92 /acute" nl()
-  "16#93 /circumflex" nl()
-  "16#94 /tilde" nl()
-  "16#95 /macron" nl()
-  "16#96 /breve" nl()
-  "16#97 /dotaccent" nl()
-  "16#98 /dieresis" nl()
-  "16#99 /.notdef" nl()
-  "16#9a /ring" nl()
-  "16#9b /cedilla" nl()
-  "16#9c /.notdef" nl()
-  "16#9d /hungarumlaut" nl()
-  "16#9e /ogonek" nl()
-  "16#9f /caron" nl()
-  "16#a0 /space" nl()
-  "16#a1 /exclamdown" nl()
-  "16#a2 /cent" nl()
-  "16#a3 /sterling" nl()
-  "16#a4 /currency" nl()
-  "16#a5 /yen" nl()
-  "16#a6 /brokenbar" nl()
-  "16#a7 /section" nl()
-  "16#a8 /dieresis" nl()
-  "16#a9 /copyright" nl()
-  "16#aa /ordfeminine" nl()
-  "16#ab /guillemotleft" nl()
-  "16#ac /logicalnot" nl()
-  "16#ad /hyphen" nl()
-  "16#ae /registered" nl()
-  "16#af /macron" nl()
-  "16#b0 /degree" nl()
-  "16#b1 /plusminus" nl()
-  "16#b2 /twosuperior" nl()
-  "16#b3 /threesuperior" nl()
-  "16#b4 /acute" nl()
-  "16#b5 /mu" nl()
-  "16#b6 /paragraph" nl()
-  "16#b7 /periodcentered" nl()
-  "16#b8 /cedilla" nl()
-  "16#b9 /onesuperior" nl()
-  "16#ba /ordmasculine" nl()
-  "16#bb /guillemotright" nl()
-  "16#bc /onequarter" nl()
-  "16#bd /onehalf" nl()
-  "16#be /threequarters" nl()
-  "16#bf /questiondown" nl()
-  "16#c0 /Agrave" nl()
-  "16#c1 /Aacute" nl()
-  "16#c2 /Acircumflex" nl()
-  "16#c3 /Atilde" nl()
-  "16#c4 /Adieresis" nl()
-  "16#c5 /Aring" nl()
-  "16#c6 /AE" nl()
-  "16#c7 /Ccedilla" nl()
-  "16#c8 /Egrave" nl()
-  "16#c9 /Eacute" nl()
-  "16#ca /Ecircumflex" nl()
-  "16#cb /Edieresis" nl()
-  "16#cc /Igrave" nl()
-  "16#cd /Iacute" nl()
-  "16#ce /Icircumflex" nl()
-  "16#cf /Idieresis" nl()
-  "16#d0 /Eth" nl()
-  "16#d1 /Ntilde" nl()
-  "16#d2 /Ograve" nl()
-  "16#d3 /Oacute" nl()
-  "16#d4 /Ocircumflex" nl()
-  "16#d5 /Otilde" nl()
-  "16#d6 /Odieresis" nl()
-  "16#d7 /multiply" nl()
-  "16#d8 /Oslash" nl()
-  "16#d9 /Ugrave" nl()
-  "16#da /Uacute" nl()
-  "16#db /Ucircumflex" nl()
-  "16#dc /Udieresis" nl()
-  "16#dd /Yacute" nl()
-  "16#de /Thorn" nl()
-  "16#df /germandbls" nl()
-  "16#e0 /agrave" nl()
-  "16#e1 /aacute" nl()
-  "16#e2 /acircumflex" nl()
-  "16#e3 /atilde" nl()
-  "16#e4 /adieresis" nl()
-  "16#e5 /aring" nl()
-  "16#e6 /ae" nl()
-  "16#e7 /ccedilla" nl()
-  "16#e8 /egrave" nl()
-  "16#e9 /eacute" nl()
-  "16#ea /ecircumflex" nl()
-  "16#eb /edieresis" nl()
-  "16#ec /igrave" nl()
-  "16#ed /iacute" nl()
-  "16#ee /icircumflex" nl()
-  "16#ef /idieresis" nl()
-  "16#f0 /eth" nl()
-  "16#f1 /ntilde" nl()
-  "16#f2 /ograve" nl()
-  "16#f3 /oacute" nl()
-  "16#f4 /ocircumflex" nl()
-  "16#f5 /otilde" nl()
-  "16#f6 /odieresis" nl()
-  "16#f7 /divide" nl()
-  "16#f8 /oslash" nl()
-  "16#f9 /ugrave" nl()
-  "16#fa /uacute" nl()
-  "16#fb /ucircumflex" nl()
-  "16#fc /udieresis" nl()
-  "16#fd /yacute" nl()
-  "16#fe /thorn" nl()
-  "16#ff /ydieresis" nl()
-  "] def" nl()
+
+  "% page printing procedure" nl()
+  "/print-a-page {" nl()
+  "  /ypage exch def" nl()
+  "  /xpage exch def" nl()
+  "  /th1 th0 def" nl()
+  "  /tw1 tw0 def" nl()
+  "  /wp1 wp def" nl()
+  "  % adjust for portrait or landscape" nl()
+  "  % move origin so that desired page lands on the clip rectangle" nl()
+  "  gsave     % so we can undo portrait/landscape adjustments" nl()
+  nl()
+  "  portrait {" nl()
+  "    % portrait mode" nl()
+  "    llx lly translate" nl()
+  "  }{" nl()
+  "    llx ury translate -90 rotate" nl()
+  "  } ifelse" nl()
+  nl()
+  "  % specify (rectangular) clipping path to keep the margins clean" nl()
+  "  0 0 wp hp RC" nl()
+  nl()
+  "  % move origin so that desired portion of chart lands within clipping path"
+    nl()
+  "  xpage wp mul neg ypage hp mul neg translate" nl()
+  nl()
+  "  label_outside_border {" nl()
+  "    display_label {print_label} if" nl()
+  "    show_border {print_border} if" nl()
+  "    display_title {" nl()
+  "      show_border {" nl()
+  "        % let the title or inside label get in closer to the border" nl()
+  "        0 bgap .9 mul neg translate /th1 th1 bgap .9 mul add def" nl()
+  "        } if" nl()
+  "      print_title" nl()
+  "    } if" nl()
+  "  }{" nl()
+  "    show_border {print_border} if" nl()
+  "    display_label display_title or {" nl()
+  "      % let the title or inside label get in closer to the border" nl()
+  "      0 bgap .9 mul neg translate /th1 th1 bgap .9 mul add def" nl()
+  "      display_label {print_label} if" nl()
+  "      display_title {print_title} if" nl()
+  "    } if" nl()
+  "  } ifelse" nl()
+  nl()
+
+  "  calcScale  % figure font size and scale factor to make chart fit" nl()
+  nl()
+
+  "  % chart starts this high on the page from chart origin.  Allow for" nl()
+  "  % the first name to extend above the 0 position." nl()
+  "  /top th1 tweak add def" nl()
+  nl()
+
+  "  % print all lines and person info" nl()
+  "  Aind {exec i} forall" nl()
+  "  Alin {exec l} forall" nl()
+  nl()
+  "  grestore" nl()
+  nl()
+  "} def      % print-a-page procedure" nl()
+  "% --- End of Subroutines ---" nl()
+  "%%EndProlog" nl()
+  "%%BeginSetUp" nl()
+  if(and( nestr(paper_name, "NONE"), nestr(paper_name, "EPSF") )) {
+    if(manual_feed_opt) {
+      "%%BeginFeature: *ManualFeed "
+      if(eq(manual_feed_opt, 1)) {"True"} else {"False"} nl()
+      "/languagelevel where {pop languagelevel 2 ge}{false} ifelse" nl()
+      "  {1 dict dup /ManualFeed "
+      if(eq(manual_feed_opt, 1)) {"true"} else {"false"}
+      " put setpagedevice" nl()
+      "  }{statusdict /manualfeed "
+      if(eq(manual_feed_opt, 1)) {"true"} else {"false"}
+      " put}" nl()
+      "ifelse" nl()
+      "%%EndFeature" nl()
+    }
+    "%%BeginFeature: "
+      if(eq(manual_feed_opt, 1)) {"*PageRegion "} else {"*PageSize "}
+      if(eq(postscript_level, 1)) {
+        lower(paper_name)
+      } else {
+        paper_name
+      }
+      nl()
+      "/languagelevel where {pop languagelevel 2 ge}{false} ifelse" nl()
+      " {1 dict" nl()
+      "  dup /Policies 2 dict dup /PageSize 2 put dup /MediaType 0 put put" nl()
+      "  setpagedevice" nl()
+      "  2 dict" nl()
+      "  dup /PageSize [" d(paper_width) " " d(paper_height) "] put" nl()
+      "  dup /ImagingBBox null put" nl()
+      "  setpagedevice" nl()
+      " }{ " lower(paper_name) nl()
+      " } ifelse" nl()
+    "%%EndFeature" nl()
+  }
+  nl()
+  if(ne(enc_choice, 0)) {
+    "/encvecmod* {  % on stack should be /Encoding and an encoding array" nl()
+    "  % make an array copy so we don't try to modify the original via pointer"
+      nl()
+    "  dup length array copy" nl()
+    "  encvecmod aload length dup 2 idiv exch 2 add -1 roll exch" nl()
+    "  {dup 4 2 roll put}" nl()
+    "  repeat" nl()
+    "} def" nl()
+    "/reenc {" nl()
+    "   findfont" nl()
+    "   dup length dict begin" nl()
+    "      {1 index /FID eq {pop pop} {" nl()
+    "         1 index /Encoding eq {" nl()
+    "               encvecmod* def" nl()
+    "            }{def} ifelse" nl()
+    "         } ifelse" nl()
+    "      } forall" nl()
+    "      currentdict" nl()
+    "   end" nl()
+    "   definefont pop" nl()
+    "} def" nl()
+  }
+  if(eq(enc_choice, 1)) {
+    "% Adjust the font so that it is iso-8859-1 compatible" nl()
+    "/languagelevel where" nl()
+    "   {pop languagelevel}{1} ifelse" nl()
+    "2 ge {" nl()
+    "    % Use built-in ISOLatin1Encoding if PS interpreter is Level 2" nl()
+    "    /encvecmod* {pop ISOLatin1Encoding} def" nl()
+    "}{" nl()
+    /* This array indicates changes to go from the Standard Encoding Vector
+       to the ISOLatin1 Encoding Vector for ISO-8859-1 compatibility,
+       according to the PostScript Language Reference Manual, 2nd ed.
+       The characters from A0 to FF are essential for 8859-1 conformance.
+    */
+    "   /encvecmod [" nl()
+"16#90 /dotlessi   16#91 /grave        16#92 /acute      16#93 /circumflex" nl()
+"16#94 /tilde      16#95 /macron       16#96 /breve      16#97 /dotaccent" nl()
+"16#98 /dieresis   16#99 /.notdef      16#9a /ring       16#9b /cedilla" nl()
+"16#9c /.notdef    16#9d /hungarumlaut 16#9e /ogonek     16#9f /caron" nl()
+"16#a0 /space      16#a1 /exclamdown   16#a2 /cent       16#a3 /sterling" nl()
+"16#a4 /currency   16#a5 /yen         16#a6 /brokenbar   16#a7 /section" nl()
+"16#a8 /dieresis   16#a9 /copyright   16#aa /ordfeminine 16#ab /guillemotleft"
+  nl()
+"16#ac /logicalnot 16#ad /hyphen      16#ae /registered  16#af /macron" nl()
+"16#b0 /degree     16#b1 /plusminus   16#b2 /twosuperior 16#b3 /threesuperior"
+  nl()
+"16#b4 /acute      16#b5 /mu          16#b6 /paragraph    16#b7 /periodcentered"
+  nl()
+"16#b8 /cedilla    16#b9 /onesuperior 16#ba /ordmasculine 16#bb /guillemotright"
+  nl()
+"16#bc /onequarter 16#bd /onehalf    16#be /threequarters 16#bf /questiondown"
+  nl()
+"16#c0 /Agrave      16#c1 /Aacute    16#c2 /Acircumflex 16#c3 /Atilde" nl()
+"16#c4 /Adieresis   16#c5 /Aring     16#c6 /AE          16#c7 /Ccedilla" nl()
+"16#c8 /Egrave      16#c9 /Eacute    16#ca /Ecircumflex 16#cb /Edieresis" nl()
+"16#cc /Igrave      16#cd /Iacute    16#ce /Icircumflex 16#cf /Idieresis" nl()
+"16#d0 /Eth         16#d1 /Ntilde    16#d2 /Ograve      16#d3 /Oacute" nl()
+"16#d4 /Ocircumflex 16#d5 /Otilde    16#d6 /Odieresis   16#d7 /multiply" nl()
+"16#d8 /Oslash      16#d9 /Ugrave    16#da /Uacute      16#db /Ucircumflex" nl()
+"16#dc /Udieresis   16#dd /Yacute    16#de /Thorn       16#df /germandbls" nl()
+"16#e0 /agrave      16#e1 /aacute    16#e2 /acircumflex 16#e3 /atilde" nl()
+"16#e4 /adieresis   16#e5 /aring     16#e6 /ae          16#e7 /ccedilla" nl()
+"16#e8 /egrave      16#e9 /eacute    16#ea /ecircumflex 16#eb /edieresis" nl()
+"16#ec /igrave      16#ed /iacute    16#ee /icircumflex 16#ef /idieresis" nl()
+"16#f0 /eth         16#f1 /ntilde    16#f2 /ograve      16#f3 /oacute" nl()
+"16#f4 /ocircumflex 16#f5 /otilde    16#f6 /odieresis   16#f7 /divide" nl()
+"16#f8 /oslash      16#f9 /ugrave    16#fa /uacute      16#fb /ucircumflex" nl()
+"16#fc /udieresis   16#fd /yacute    16#fe /thorn       16#ff /ydieresis" nl()
+    "  ] def" nl()
+    "} ifelse" nl()
+    nl()
+  } elsif(eq(enc_choice, 2)) {
+    /* The following array specifies changes to make to a font encoding
+       to make characters A0 through FF match the ISO Latin alphabet no. 2
+       This will work as long as there are instructions in the font for
+       drawing the glyphs named here.  Missing glyphs would be 
+       substituted with /.notdef from the font by the PostScript interpreter.
+    */
+    "/encvecmod [" nl()
+    "16#a0 /space     16#a1 /Aogonek 16#a2 /breve     16#a3 /Lslash" nl()
+    "16#a4 /currency  16#a5 /Lcaron  16#a6 /Sacute    16#a7 /section" nl()
+    "16#a8 /dieresis  16#a9 /Scaron  16#aa /Scedilla  16#ab /Tcaron" nl()
+    "16#ac /Zacute    16#ad /hyphen  16#ae /Zcaron    16#af /Zdotaccent" nl()
+    "16#b0 /degree    16#b1 /aogonek 16#b2 /ogonek    16#b3 /lslash" nl()
+    "16#b4 /acute     16#b5 /lcaron  16#b6 /sacute    16#b7 /caron" nl()
+    "16#b8 /cedilla   16#b9 /scaron  16#ba /scedilla  16#bb /tcaron" nl()
+    "16#bc /zacute    16#bd /hungarumlaut 16#be /zcaron 16#bf /zdotaccent" nl()
+    "16#c0 /Racute    16#c1 /Aacute  16#c2 /Acircumflex 16#c3 /Abreve" nl()
+    "16#c4 /Adieresis 16#c5 /Lacute  16#c6 /Cacute    16#c7 /Ccedilla" nl()
+    "16#c8 /Ccaron    16#c9 /Eacute  16#ca /Eogonek   16#cb /Edieresis" nl()
+    "16#cc /Ecaron    16#cd /Iacute  16#ce /Icircumflex 16#cf /Dcaron" nl()
+    "16#d0 /Dcroat    16#d1 /Nacute   16#d2 /Ncaron    16#d3 /Oacute" nl()
+    "16#d4 /Ocircumflex 16#d5 /Ohungarumlaut 16#d6 /Odieresis 16#d7 /multiply"
+      nl()
+    "16#d8 /Rcaron    16#d9 /Uring   16#da /Uacute    16#db /Uhungarumlaut" nl()
+    "16#dc /Udieresis 16#dd /Yacute  16#de /Tcommaaccent 16#df /germandbls" nl()
+    "16#e0 /racute    16#e1 /aacute  16#e2 /acircumflex 16#e3 /abreve" nl()
+    "16#e4 /adieresis 16#e5 /lacute  16#e6 /cacute    16#e7 /ccedilla" nl()
+    "16#e8 /ccaron    16#e9 /eacute  16#ea /eogonek   16#eb /edieresis" nl()
+    "16#ec /ecaron    16#ed /iacute  16#ee /icircumflex 16#ef /dcaron" nl()
+    "16#f0 /dcroat    16#f1 /nacute  16#f2 /ncaron     16#f3 /oacute" nl()
+    "16#f4 /ocircumflex 16#f5 /ohungarumlaut 16#f6 /odieresis 16#f7 /divide"
+      nl()
+    "16#f8 /rcaron    16#f9 /uring   16#fa /uacute    16#fb /uhungarumlaut" nl()
+    "16#fc /udieresis 16#fd /yacute  16#fe /tcommaaccent  16#ff /dotaccent" nl()
+    "  ] def" nl()
+    nl()
+  } elsif(eq(enc_choice, 3)) {
+    /* This array indicates changes necessary to go from the Standard Encoding
+       Vector to one matching the int'l characters and some others in the
+       IBM Extended Character Set (extended ASCII).
+    */
+    "/encvecmod [" nl()
+"16#80 /Ccedilla    16#81 /udieresis 16#82 /eacute      16#83 /acircumflex" nl()
+"16#84 /adieresis   16#85 /agrave    16#86 /aring       16#87 /ccedilla" nl()
+"16#88 /ecircumflex 16#89 /edieresis 16#8a /egrave      16#8b /idieresis" nl()
+"16#8c /icircumflex 16#8d /igrave    16#8e /Adieresis   16#8f /Aring" nl()
+"16#90 /Eacute      16#91 /ae        16#92 /AE          16#93 /ocircumflex" nl()
+"16#94 /odieresis   16#95 /ograve    16#96 /ucircumflex 16#97 /ugrave" nl()
+"16#98 /ydieresis   16#99 /Odieresis 16#9a /Udieresis   16#9b /cent" nl()
+"16#9c /sterling    16#9d /yen       16#9e /.notdef     16#9f /florin" nl()
+"16#a0 /aacute      16#a1 /iacute    16#a2 /oacute      16#a3 /uacute" nl()
+"16#a4 /ntilde      16#a5 /Ntilde    16#a6 /ordfeminine 16#a7 /ordmasculine"
+nl()
+"16#a8 /questiondown 16#a9 /.notdef  16#aa /.notdef     16#ab /onehalf" nl()
+"16#ac /onequarter  16#ad /exclamdown 16#ae /guillemotleft "
+                                                    "16#af /guillemotright" nl()
+"16#e1 /germandbls  16#ed /oslash    16#f1 /plusminus   16#f6 /divide" nl()
+"16#f8 /degree      16#f9 /bullet" nl()
+    "  ] def" nl()
+    nl()
+  }
+
   "% Copyright (c) 1991-1993 Thomas P. Blumer.  All Rights Reserved." nl()
   "% Permission granted to use in LifeLines report generation." nl()
-  nl()
   "% table of how to get bold fonts" nl()
-  "/bolddict 25 dict def" nl()
+  "/bolddict 40 dict def" nl()  /* dictionary size might need boosting */
   "bolddict begin" nl()
-  nl()
-  "% default table entry is that boldfontname = fontname" nl()
-  "fontname fontname def" nl()
-  nl()
-  "/Courier /Courier-Bold def" nl()
-  "/Courier-Oblique /Courier-BoldOblique def" nl()
-  "/Times-Roman /Times-Bold def" nl()
-  "/Times-Italic /Times-BoldItalic def" nl()
-  "/Helvetica /Helvetica-Bold def" nl()
-  "/Helvetica-Oblique /Helvetica-BoldOblique def" nl()
-  "/Bookman-Light /Bookman-Demi def" nl()
-  "/Bookman-LightItalic /Bookman-DemiItalic def" nl()
-  "/Palatino-Roman /Palatino-Bold def" nl()
-  "/Palatino-Italic /Palatino-BoldItalic def" nl()
-  "/AvantGarde-Book /AvantGarde-Demi def" nl()
-  "/AvantGarde-BookOblique /AvantGarde-DemiOblique def" nl()
-  "/Helvetica-Narrow /Helvetica-Narrow-Bold def" nl()
-  "/Helvetica-Narrow-Oblique /Helvetica-Narrow-BoldOblique def" nl()
-  "/Helvetica-Condensed /Helvetica-Condensed-Bold def" nl()
-  "/Helvetica-Condensed-Oblique /Helvetica-Condensed-BoldObl def" nl()
-  "/NewCenturySchlbk-Roman /NewCenturySchlbk-Bold def" nl()
-  "/NewCenturySchlbk-Italic /NewCenturySchlbk-BoldItalic def" nl()
-  "/ZapfChancery /ZapfChancery-Bold def" nl()
+  "  % default table entry is that boldfontname = fontname" nl()
+  "  fontname fontname def" nl()
+  "  ifontname ifontname def" nl()
+  "  labelfontname labelfontname def" nl() 
+                                /* ADD new bold font associations below here */
+  "  /AvantGarde-Book /AvantGarde-Demi def" nl()
+  "  /AvantGarde-BookOblique /AvantGarde-DemiOblique def" nl()
+  "  /Bookman-Light /Bookman-Demi def" nl()
+  "  /Bookman-LightItalic /Bookman-DemiItalic def" nl()
+  "  /Courier /Courier-Bold def" nl()
+  "  /Courier-Oblique /Courier-BoldOblique def" nl()
+  "  /Times-Roman /Times-Bold def" nl()
+  "  /Times-Italic /Times-BoldItalic def" nl()
+  "  /Helvetica /Helvetica-Bold def" nl()
+  "  /Helvetica-Condensed /Helvetica-Condensed-Bold def" nl()
+  "  /Helvetica-Condensed-Oblique /Helvetica-Condensed-BoldObl def" nl()
+  "  /Helvetica-Narrow /Helvetica-Narrow-Bold def" nl()
+  "  /Helvetica-Narrow-Oblique /Helvetica-Narrow-BoldOblique def" nl()
+  "  /Helvetica-Oblique /Helvetica-BoldOblique def" nl()
+  "  /Hershey-Plain /Hershey-Plain-Bold def" nl()
+  "  /NewCenturySchlbk-Roman /NewCenturySchlbk-Bold def" nl()
+  "  /NewCenturySchlbk-Italic /NewCenturySchlbk-BoldItalic def" nl()
+  "  /Palatino-Roman /Palatino-Bold def" nl()
+  "  /Palatino-Italic /Palatino-BoldItalic def" nl()
+  "  /ZapfChancery /ZapfChancery-Bold def" nl()
+  "  /ZapfChancery-MediumItalic /ZapfChancery-Bold def" nl()
+  "  /OmArabicRsimms /OmArabicRsimms-Bold def" nl()
   "end" nl()
   nl()
-  "/boldfontname fontname def" nl()
   "/boldfontname bolddict fontname get def" nl()
+  "/boldifontname bolddict ifontname get def" nl()
   nl()
-  "% Reencode the font so that we can use the IBMPC set of international chars" nl()
-  "/encdict 12 dict def" nl()
-  "/reenc {" nl()
-  "     encdict begin" nl()
-  "     /newenc exch def" nl()
-  "     /nfont exch def" nl()
-  "     /ofont exch def" nl()
-  "     /ofontdict ofont findfont def" nl()
-  "     /newfont ofontdict maxlength 1 add dict def" nl()
-  "     ofontdict {" nl()
-  "             exch dup /FID ne {" nl()
-  "                     dup /Encoding eq" nl()
-  "                      {exch dup length array copy newfont 3 1 roll put}" nl()
-  "                      {exch newfont 3 1 roll put} ifelse" nl()
-  "             }" nl()
-  "             {pop pop}" nl()
-  "             ifelse" nl()
-  "     } forall" nl()
-  "     newfont /Fontname nfont put" nl()
-  "     newenc aload pop" nl()
-  "     newenc length 2 idiv" nl()
-  "     { newfont /Encoding get 3 1 roll put}" nl()
-  "     repeat" nl()
-  "     nfont newfont definefont pop" nl()
-  "     end" nl()
-  "} def" nl()
+  "% The fshowdict is used to declare which PostScript proc to use" nl()
+  "% to show strings.  For some Arabic and Hebrew fonts at least, the" nl()
+  "% characters have positive widths, which makes the 'show' command" nl()
+  "% place a character to the right of the prior one." nl()
+  "% A special 'show' variant, 'rlshow,' compensates for this." nl()
+  "% Record font names, both internal and those used to refer to a font." nl()
+  "% A font's real FontName should be here when there's the possibility" nl()
+  "%  of using aliases for that font -- like using ZapfChancery instead of" nl()
+  "%  ZapfChancery-MediumItalic.  The font still thinks its name is the" nl()
+  "%  latter." nl()
+  "/fshowdict 25 dict def" nl()
+  "fshowdict begin" nl()
+  "  fontname /show def" nl()
+  "  ifontname /show def" nl()
+  "  boldfontname /show def" nl()
+  "  boldifontname /show def" nl()
+  "  labelfontname /show def" nl()
+                           /* these two are typical substitution fonts */
+  "  /Courier /show def" nl() 
+  "  /Helvetica-Bold /show def" nl()
+                           /* real font names, for which aliases may be used*/
+  "  /ZapfChancery-MediumItalic /show def" nl()
+                           /* ADD NEW rlshow associations below here */
+  "  /Baghdad /rlshow def" nl()
+  "  /Jerusalem /rlshow def" nl()
+  "  /Jslm /rlshow def" nl()
+  "  /OmArabicRsimms /rlshow def" nl()
+  "  /OmArabicRsimms-Bold /rlshow def" nl()
+  "  /OmegaSerifArabicOne /rlshow def" nl()
+  "end" nl()
   nl()
-  "fontname /gedfont encvec reenc" nl()
-  "/fontname /gedfont def" nl()
-  "% end font reencoding" nl()
-  nl()
-  "%" nl()
-  "% Now we have the remaining height and width, compute" nl()
-  "% the column width, font size etc." nl()
-  "%" nl()
-  "/rl w maxlevel div def" nl()
-  "/posunit h maxpos div def" nl()
-  "/posname 1.0 def" nl()
-  "/posdate 0.75 def" nl()
-  "/posmarg 0.3 def" nl()
-  "/posbase posname posmarg 2 div add def" nl()
-  nl()
-  "/top h posunit posbase mul sub def" nl()
-  nl()
-  "% calculate base font size from segment length" nl()
-  "/fntsize rl 9.0 div def" nl()
-  nl()
-  "% space for one individual" nl()
-  "fntsize posunit gt {" nl()
-  "     /fntsize posunit def" nl()
-  "} if" nl()
-  nl()
-  "% font adjustment" nl()
-  "/fntsize fntsize font_adjust mul def" nl()
-  nl()
-  "% font for birth/death dates" nl()
-  "/fntsize2 fntsize posdate mul def" nl()
-  nl()
-  "fontname findfont fntsize scalefont setfont" nl()
-  "/space ( ) stringwidth pop def" nl()
-  nl()
-  "% calc line width from segment length - .24 pts = 1 pixel" nl()
-  "/linwid fntsize .1 mul .6 mul def" nl()
-  "/linwid linwid linwidf mul def" nl()
-  "linwid setlinewidth" nl()
-  "/namey0 linwid fntsize 16.0 div add offset_name add def" nl()
-  nl()
-  "/dashwid rl 72 div def" nl()
-  nl()
-  "2 setlinecap" nl()
-  nl()
-  "% name string length for all generations" nl()
-  "/len1 rl space indent 2 add mul sub def" nl()
-  nl()
-}
+  if(ne(enc_choice, 0)) {
+    "/NewFont fontname reenc" nl()
+    "/fontname /NewFont def" nl()
+    nl()
+    "/NewBoldFont boldfontname reenc" nl()
+    "/boldfontname /NewBoldFont def" nl()
+    nl()
+    "/NewLabelFont labelfontname reenc" nl()
+    "/labelfontname /NewLabelFont def" nl()
+    nl()
+    "/NewTitleFont titlefontname reenc" nl()
+    "/titlefontname /NewTitleFont def" nl()
+    nl()
+    "/NewIFont ifontname reenc" nl()
+    "/ifontname /NewIFont def" nl()
+    nl()
+    "/NewBoldIFont boldifontname reenc"
+    "/boldifontname /NewBoldIFont def"
+    "% end font reencoding" nl()
+    nl()
+  }
 
-/*
-**  procedure: print_page_head
-**
-**  Arguments:
-**    xi:  which horizontal page
-**    yi:  which vertical page
-**
-**  Print the code which must appear for each page.
-**
-**  The original postscript code was written by Thomas P. Blumer (blumer@ptltd.com).
-**
-*/
-
-proc print_page_head (xi, yi)
-{
-  "%--- Start of page " d(xi) "/" d(yi) " ---" nl()
-  "/xpage " d (xi) " def" nl()
-  "/ypage " d (yi) " def" nl()
+  "% Find printable dimension for chart with a sequence of steps" nl()
+  nl()
+  "% get printable area for each page" nl()
+  "clippath pathbbox newpath" nl()
+  "/ury exch def /urx exch def" nl()
+  "/lly exch def /llx exch def" nl()
+  nl()
+  if(pacificpage) {
+    "% adjust for PacificPage cartridge" nl()
+    "statusdict /product known {" nl()
+    "     statusdict begin product end (PacificPage) eq" nl()
+    "     version (4.06) eq and {" nl()
+    "             /lly lly 5 add def" nl()
+    "             /ury ury 10 sub def" nl()
+    "     } if" nl()
+    "} if" nl()
+    nl()
+  }
+  if(nestr(paper_name, "NONE")) {
+    "% ensure minimum margins and that chart fits in defined paper size" nl()
+    "llx margin_left lt {/llx margin_left def} if" nl()
+    "lly margin_bottom lt {/lly margin_bottom def} if" nl()
+    "paper_height margin_top sub dup ury lt {/ury exch def}{pop} ifelse" nl()
+    "paper_width margin_right sub dup urx lt {/urx exch def}{pop} ifelse" nl()
+    nl()
+  } else { /* paper dimensions not specified, so take margins from print area */
+    "/llx llx margin_left add def /lly lly margin_bottom add def" nl()
+    "/urx urx margin_right sub def /ury ury margin_top sub def" nl()
+    nl()
+  }
+  "% get available width and height for printing on a sheet of paper" nl()
+  "/wp urx llx sub def" nl()
+  "/hp ury lly sub def" nl()
+  nl()
   "% adjust for portrait or landscape" nl()
-  "portrait {" nl()
-  "       % portrait mode" nl()
-  "       llx lly translate" nl()
-  "} {" nl()
-  "       urx lly translate 90 rotate" nl()
-  "} ifelse" nl()
-  nl()
-/**
-    The negative translation used here is to cause different areas of a multi-
-    page chart to appear in the bounding box.  Page 1,1 is the lower left corner
-    page.  To view other pages, the chart must be shifted left and/or down.
-**/
-  "% if multi page output, select the right page" nl()
-  "xpages 1 ne ypages 1 ne or {" nl()
-  "     portrait {" nl() 
-  "       1 xpage sub wp mul  1 ypage sub hp mul  translate" nl()
-  "       xpage 1 sub wp mul ypage 1 sub hp mul xpage wp mul ypage hp mul rectclip" nl()
-  "     } {" nl()
-  "       1 ypage sub wp mul  1 xpage sub hp mul  translate" nl()
-  "       ypage 1 sub wp mul xpage 1 sub hp mul ypage wp mul xpage hp mul rectclip" nl()
-  "     } ifelse" nl()
+  "portrait not {" nl()
+  "   /tmp hp def" nl()
+  "   /hp wp def" nl()
+  "   /wp tmp def" nl()
   "} if" nl()
   nl()
-  "% print the border if we want one" nl()
-  "border {" nl()
-  "  printborder" nl()
-  "  % cut the border out of the imageable area" nl()
-  "  tbwid tbwid translate" nl()
-  "} if" nl()
-  nl ()
-  "% for multi page: only label bottom left page" nl()
-  "/chart_label where xpage 1 eq ypage 1 eq and and {" nl()
-  "     pop" nl()
-  "     chart_label" nl()
-  "} if" nl()
+  "% get width and height of the multi-page printable area" nl()
+  "/tw0 wp xpages mul def" nl()
+  "/th0 hp ypages mul def" nl()
   nl()
- }
-
+  "% store vertical lines and individual records in arrays" nl()
+  "/Alin " d(length(llist_depth)) " array def" nl()
+  "/Aind " d(length(plist_person)) " array def" nl()
+  nl()
+  call print_all_verticals()
+  nl()
+  call print_all_persons()
+  "%%EndSetUp" nl()
+  set(yi, sub(yn, 1))
+  while(ge(yi, 0)) {
+    set(yi_ord, sub(sub(yn, 1), yi))
+    set(xi, 0)
+    while(lt(xi, xn)) {
+      set(page_num, add(mul(yi_ord, xn), xi, 1))
+      "%%Page: " d(page_num) " " d(page_num) nl()
+      if(nestr(paper_name, "NONE")) {
+        "%%PageBoundingBox: 0 0 " d(paper_width) " " d(paper_height) nl()
+      }
+      d(xi) " " d(yi) " print-a-page" nl()
+      "showpage" nl()
+      set(xi, add(xi, 1))
+    }
+    set(yi, sub(yi, 1))
+  }
+  "%%EOF" nl()
+}
