@@ -1,3 +1,11 @@
+2005-01-01 Stephen Dum
+
+        *Changelog liflines/add.c interp/builtin.c
+	
+	Fix test operator to fail rather than segfault when given null arguments.
+	Fix add_family() to use traditional flag and allow creating
+	non-traditional families when -n option is used
+
 2005-01-01 Perry Rapp
 
 	* ChangeLog src/interp/more.c
