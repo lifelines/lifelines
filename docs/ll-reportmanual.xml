@@ -830,9 +830,13 @@ included file had been in the body of the original file at that point. This allo
 program library files that can be used by many programs. Included files may in turn contain <type>include</type>
 statements, and so on to any depth. <application>LifeLines</application> will use the <envar>LLPROGRAMS</envar> shell variable, if set, to
 search for the <type>include</type> files.
-
 </para>
-
+<para>
+The only main procedure actually executed is the one in the
+report the user chose.  main procedures in other reports
+which are included do not get run.  This allows a module intended
+to be included in other programs to have a main procedure for test purposes.
+</para>
 
 
 </sect1>
