@@ -82,10 +82,10 @@ STRING idfswp = SS "Whose families/spouses are to be swapped?";
 STRING idprnt = SS "Identify one of the child's parents, if known.";
 
 STRING scanrs = SS "Scan results:";
-STRING scnnmf = SS "Enter pattern to match against single surname or given name.";
-STRING scnfnm = SS "Enter pattern to match against full name.";
-STRING scnrfn = SS "Enter pattern to match against refn.";
-STRING scantt = SS "pattern: ";
+STRING scnnmf = N_("Enter pattern to match against single surname or given name.");
+STRING scnfnm = N_("Enter pattern to match against full name.");
+STRING scnrfn = N_("Enter pattern to match against refn.");
+STRING scantt = N_("pattern: ");
 
 STRING chfamily = SS "Please choose a family.";
 STRING notone = SS "Please choose from among these records.";
@@ -450,20 +450,20 @@ STRING mn_add_fam  = N_("f  Family - create family record from one or two spouse
 STRING mn_add_chil = N_("c  Child - add a child to an existing family");
 STRING mn_add_spou = N_("s  Spouse - add a spouse to an existing family");
 /* delete menu */
-STRING mn_del_ttl  = SS "What do you want to remove?";
-STRING mn_del_chil = SS "c  Child - remove a child from his/her family";
-STRING mn_del_spou = SS "s  Spouse - remove a spouse from a family";
-STRING mn_del_indi = SS "i  Individual - remove a person completely";
-STRING mn_del_fam  = SS "f  Family - remove a family completely";
+STRING mn_del_ttl  = N_("What do you want to remove?");
+STRING mn_del_chil = N_("c  Child - remove a child from his/her family");
+STRING mn_del_spou = N_("s  Spouse - remove a spouse from a family");
+STRING mn_del_indi = N_("i  Individual - remove a person completely");
+STRING mn_del_fam  = N_("f  Family - remove a family completely");
 /* scan menu */
-STRING mn_sca_ttl  = SS "What scan type?";
-STRING mn_sca_nmfu = SS "f  Full name scan";
-STRING mn_sca_nmfr = SS "n  Name fragment (whitespace-delimited) scan";
-STRING mn_sca_refn = SS "r  Refn scan";
-STRING sts_sca_ful = SS "Performing full name scan";
-STRING sts_sca_fra = SS "Performing name fragment scan";
-STRING sts_sca_ref = SS "Performing refn scan";
-STRING sts_sca_non = SS "No records found in scan";
+STRING mn_sca_ttl  = N_("What scan type?");
+STRING mn_sca_nmfu = N_("f  Full name scan");
+STRING mn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");
+STRING mn_sca_refn = N_("r  Refn scan");
+STRING sts_sca_ful = N_("Performing full name scan");
+STRING sts_sca_fra = N_("Performing name fragment scan");
+STRING sts_sca_ref = N_("Performing refn scan");
+STRING sts_sca_non = N_("No records found in scan");
 /* complex date strings (A=abbrev, B=full)*/
 STRING datea_abtA  = N_("abt %1");
 STRING datea_abtB  = N_("about %1");

@@ -14,6 +14,11 @@
 	Finish i18n main menu. Split locale options into collate
 	& messages (eg, UiLocaleMessages). Add Swedish msg catalog.
 
+	* ChangeLog gedlib/messages.c liflines/ask.c liflines/scan.c
+	liflines/screen.c:
+
+	i18n utility, extra, & scan menus.
+
 2002-02-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in arch/alphasort.c

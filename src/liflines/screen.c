@@ -1283,6 +1283,7 @@ activate_popup_list_uiwin (listdisp * ld)
  * choose_one_from_indiseq -- 
  * Choose a single person from indiseq
  * Returns index of selected item (or -1 if user quit)
+ *  ttl:  [IN]  title (unlocalized)
  *===========================================================*/
 INT
 choose_one_from_indiseq (STRING ttl, INDISEQ seq)
@@ -1292,7 +1293,7 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 /*=============================================================
  * choose_one_or_list_from_indiseq -- 
  * Implements the two choose_xxx_from_indiseq
- *  ttl:   [IN]  title/caption for choice list
+ *  ttl:   [IN]  title/caption for choice list (unlocalized)
  *  seq:   [IN]  list from which to choose
  *  multi: [IN]  if true, selecting a sublist
  * returns index of selected (or -1 for quit)
@@ -1344,7 +1345,7 @@ resize_win: /* we come back here if we resize the window */
 	done = FALSE;
 	while (!done) {
 		INT code=0, ret=0;
-		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
+		print_list_title(fulltitle, sizeof(fulltitle), &ld, _(ttl));
 		mvwaddstr(win, 1, 1, fulltitle);
 		shw_popup_list(seq, &ld);
 		wmove(win, row, 11);
@@ -1580,7 +1581,7 @@ invoke_scan_menu (void)
 		}
 		deactivate_uiwin();
 		if (!done)
-			msg_status(sts_sca_non);
+			msg_status(_(sts_sca_non));
 	}
 	return rec;
 }
@@ -2325,7 +2326,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
  *  buffer:  [OUT] output string
  *  len:     [IN]  size of buffer
  *  ld:      [IN]  list display structure
- *  ttl:     [IN]  title to print
+ *  ttl:     [IN]  title to print (localized)
  *================================*/
 static void
 print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
@@ -2383,7 +2384,7 @@ resize_win: /* we come back here if we resize the window */
 	done = FALSE;
 	while (!done) {
 		INT code=0, ret=0;
-		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
+		print_list_title(fulltitle, sizeof(fulltitle), &ld, _(ttl));
 		mvwaddstr(win, 1, 1, fulltitle);
 		shw_array_of_strings(strings, &ld, detfnc, param);
 		wrefresh(win);
@@ -3079,11 +3080,11 @@ repaint_delete_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_del_ttl);
-	mvwaddstr(win, row++, 4, mn_del_chil);
-	mvwaddstr(win, row++, 4, mn_del_spou);
-	mvwaddstr(win, row++, 4, mn_del_indi);
-	mvwaddstr(win, row++, 4, mn_del_fam);
+	mvwaddstr(win, row++, 2, _(mn_del_ttl));
+	mvwaddstr(win, row++, 4, _(mn_del_chil));
+	mvwaddstr(win, row++, 4, _(mn_del_spou));
+	mvwaddstr(win, row++, 4, _(mn_del_indi));
+	mvwaddstr(win, row++, 4, _(mn_del_fam));
 	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================
@@ -3096,10 +3097,10 @@ repaint_scan_menu (UIWINDOW uiwin)
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
 	draw_win_box(win);
-	mvwaddstr(win, row++, 2, mn_sca_ttl);
-	mvwaddstr(win, row++, 4, mn_sca_nmfu);
-	mvwaddstr(win, row++, 4, mn_sca_nmfr);
-	mvwaddstr(win, row++, 4, mn_sca_refn);
+	mvwaddstr(win, row++, 2, _(mn_sca_ttl));
+	mvwaddstr(win, row++, 4, _(mn_sca_nmfu));
+	mvwaddstr(win, row++, 4, _(mn_sca_nmfr));
+	mvwaddstr(win, row++, 4, _(mn_sca_refn));
 	mvwaddstr(win, row++, 4, _(mn_ret));
 }
 /*=====================================

@@ -417,12 +417,14 @@ ask_for_indi_key (STRING ttl,
 }
 /*===============================================================
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases
+ *  seq:   [IN]  sequence from which to choose
+ *  ask1:  [IN]  whether to prompt if only one element in sequence
+ *  titl1: [IN]  title if sequence has one element (unlocalized)
+ *  titln: [IN]  title if sequence has multiple elements (unlocalized)
  *=============================================================*/
 static INT
-choose_one_from_indiseq_if_needed (INDISEQ seq,
-                                   ASK1Q ask1,
-                                   STRING titl1,
-                                   STRING titln)
+choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
+	, STRING titln)
 {
 	if (length_indiseq(seq) > 1)
 		return choose_one_from_indiseq(titln, seq);
@@ -435,13 +437,13 @@ choose_one_from_indiseq_if_needed (INDISEQ seq,
  *  choose from it (any type)
  * This handles bad pointers, which can get into the data
  *  several ways.
+ *  seq:   [IN]  sequence from which to choose
+ *  ask1:  [IN]  whether to prompt if only one element in sequence
+ *  titl1: [IN]  title if sequence has one element (unlocalized)
+ *  titln: [IN]  title if sequence has multiple elements (unlocalized)
  *=====================================================*/
 RECORD
-choose_from_indiseq (
-	INDISEQ seq,    /* sequence */
-	ASK1Q ask1,   /* choose if len one? */
-	STRING titl1,   /* title if len = one */
-	STRING titln)   /* title if len > one */
+choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 {
 	INT i = 0;
 	RECORD rec=0;

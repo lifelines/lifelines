@@ -168,7 +168,7 @@ set_pattern (SCAN_PATTERN * patt, STRING str, INT scantype)
 /*==============================
  * name_scan -- traverse names looking for pattern matching
  *  scantype:  [IN]  which type of scan (full or partial)
- *  sts:       [IN]  status msg to display during scan
+ *  sts:       [IN]  status msg to display during scan (unlocalized)
  *============================*/
 static RECORD
 name_scan (INT scantype, STRING sts)
@@ -180,16 +180,16 @@ name_scan (INT scantype, STRING sts)
 	patt.scantype = scantype;
 	while (1) {
 		if (scantype == NAMESCAN_FRAG)
-			str = ask_for_string(scnnmf, scantt);
+			str = ask_for_string(_(scnnmf), _(scantt));
 		else
-			str = ask_for_string(scnfnm, scantt);
+			str = ask_for_string(_(scnfnm), _(scantt));
 		if (!str || !str[0])
 			return NULL;
 		if (set_pattern(&patt, str, scantype))
 			break;
 	}
 
-	msg_status(sts);
+	msg_status(_(sts));
 
 	results_seq = create_indiseq_null();
 	traverse_names(ns_callback, &patt);
@@ -203,6 +203,7 @@ name_scan (INT scantype, STRING sts)
 }
 /*==============================================
  * name_fragment_scan -- traverse name fragments
+ *  sts: [IN]  status to show during scan (unlocalized)
  *  looking for pattern matching
  *============================================*/
 RECORD
@@ -212,6 +213,7 @@ name_fragment_scan (STRING sts)
 }
 /*======================================
  * full_name_scan -- traverse full names
+ *  sts: [IN]  status to show during scan (unlocalized)
  *  looking for pattern matching
  *====================================*/
 RECORD
@@ -221,6 +223,7 @@ full_name_scan (STRING sts)
 }
 /*==============================
  * refn_scan -- traverse refns
+ *  sts: [IN]  status to show during scan (unlocalized)
  *  looking for pattern matching
  *============================*/
 RECORD
@@ -233,14 +236,14 @@ refn_scan (STRING sts)
 
 	patt.scantype = scantype;
 	while (1) {
-		str = ask_for_string(scnrfn, scantt);
+		str = ask_for_string(_(scnrfn), _(scantt));
 		if (!str || !str[0])
 			return NULL;
 		if (set_pattern(&patt, str, scantype))
 			break;
 	}
 
-	msg_status(sts);
+	msg_status(_(sts));
 
 	results_seq = create_indiseq_null();
 	traverse_refns(rs_callback, &patt);
