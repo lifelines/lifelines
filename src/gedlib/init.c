@@ -57,7 +57,7 @@ INT int_codeset=0; /* internal codeset */
  * external/imported variables
  *********************************************/
 
-extern BOOLEAN selftest, writeable;
+extern BOOLEAN writeable;
 extern STRING btreepath,readpath;
 
 /*********************************************

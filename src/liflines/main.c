@@ -125,7 +125,6 @@ static BOOLEAN is_unadorned_directory(STRING path);
 static BOOLEAN open_or_create_database(INT alteration, STRING dbrequested, STRING dbused);
 static void platform_init(void);
 static void show_open_error(INT dberr);
-static STRING getsaveenv(STRING key);
 
 /*********************************************
  * local function definitions
@@ -428,74 +427,4 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
 
 	show_open_error(bterrno);
 	return FALSE;
-}
-/*=================================
- * init_lifelines_global -- Initialize LifeLines
- *  before db opened
- * STRING * pmsg: heap-alloc'd error string if fails
- *===============================*/
-BOOLEAN
-init_lifelines_global (STRING * pmsg)
-{
-	STRING e;
-	*pmsg = NULL;
-	read_lloptions_from_config();
-	if (lloptions.lleditor[0])
-		e = lloptions.lleditor;
-	else
-		e = environ_determine_editor(PROGRAM_LIFELINES);
-	editfile = environ_determine_tempfile();
-	if (!editfile) {
-		*pmsg = strsave("Error creating temp file");
-		return FALSE;
-	}
-	editfile = strsave(editfile );
-	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
-	sprintf(editstr, "%s %s", e, editfile);
-	/* read dirs from env if lacking */
-	if (!lloptions.llprograms[0])
-		changeoptstr(&lloptions.llprograms, getsaveenv("LLPROGRAMS"));
-	if (!lloptions.llreports[0])
-		changeoptstr(&lloptions.llreports, getsaveenv("LLREPORTS"));
-	if (!lloptions.llarchives[0])
-		changeoptstr(&lloptions.llarchives, getsaveenv("LLARCHIVES"));
-	if (!lloptions.lldatabases[0])
-		changeoptstr(&lloptions.lldatabases, getsaveenv("LLDATABASES"));
-	if (!lloptions.llnewdbdir[0])
-		changeoptstr(&lloptions.llnewdbdir, getsaveenv("LLNEWDBDIR"));
-	if (selftest) {
-		/* need to always find test stuff locally */
-		changeoptstr(&lloptions.llprograms, NULL);
-		changeoptstr(&lloptions.llreports, NULL);
-		changeoptstr(&lloptions.lldatabases, NULL);
-		changeoptstr(&lloptions.llnewdbdir, NULL);
-	}
-	/* fallback for dirs is . */
-	if (!lloptions.llprograms[0])
-		changeoptstr(&lloptions.llprograms, strsave("."));
-	if (!lloptions.llreports[0])
-		changeoptstr(&lloptions.llreports, strsave("."));
-	if (!lloptions.llarchives[0])
-		changeoptstr(&lloptions.llarchives, strsave("."));
-	if (!lloptions.lldatabases[0])
-		changeoptstr(&lloptions.lldatabases, strsave("."));
-	if (!lloptions.llnewdbdir[0])
-		changeoptstr(&lloptions.llnewdbdir, strsave("."));
-
-	set_usersort(custom_sort);
-	stdlib_set_errorfile(lloptions.errorlog);
-	return TRUE;
-}
-/*===============================================
- * getsaveenv -- Return strsave'd env value
- *  returns saved("") if getenv was NULL
- * Created: 2001/02/04, Perry Rapp
- *=============================================*/
-static STRING
-getsaveenv (STRING key)
-{
-	STRING val = getenv(key);
-	if (!val)
-		val = "";
-	return strsave(val);
 }

@@ -6,7 +6,7 @@ noinst_LIBRARIES = libstdlib.a
 
 libstdlib_a_SOURCES = assert.c bfs.c dirs.c double.c environ.c fpattern.c\
 	lldate.c llstrcmp.c memalloc.c mystring.c path.c sequence.c\
-	signals.c stdstrng.c stdlibi.h table.c warehouse.c
+	signals.c stdstrng.c stdlibi.h table.c warehouse.c lloptions.c
 
 INCLUDES=-I$(srcdir)/.. -I$(srcdir)/../hdrs
 

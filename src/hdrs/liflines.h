@@ -31,6 +31,4 @@ NOD0 choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 /* from askprogram.c */
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);
 
-BOOLEAN init_lifelines_global(STRING * pmsg);
-
 #endif /* _LIFLINES_H */

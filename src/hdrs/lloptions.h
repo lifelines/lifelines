@@ -77,4 +77,6 @@ void read_lloptions_from_config(void);
 void read_lloptions_from_db(void);
 void term_lloptions(void);
 
+BOOLEAN init_lifelines_global(STRING * pmsg);
+
 #endif /* _OPTIONS_H */
