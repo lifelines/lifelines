@@ -24,6 +24,11 @@
 
 	Bring llexec MSVC6 project up-to-date.
 
+	* ChangeLog po/da.po po/de.po po/el.po po/fr.po po/it.po
+	po/sv.po reports/Makefile.am:
+
+	Update distribution reports to include self-test reports.
+
 2002-12-15 Perry Rapp
 
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c

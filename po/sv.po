@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.21\n"
-"POT-Creation-Date: 2002-11-11 20:02-0500\n"
+"POT-Creation-Date: 2002-12-15 22:52-0500\n"
 "PO-Revision-Date: 2002-10-19 14:03+0200\n"
 "Last-Translator: Jens Arvidsson <arvid-jens@algonet.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -14,85 +14,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/gedlib/charmaps.c:288
-#, c-format
-msgid "Error initializing %s map.\n"
-msgstr "Fel vid initiering av mappningen %s.\n"
+#: src/gedlib/charmaps.c:759
+msgid "<unnamed>"
+msgstr ""
 
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "NAME-rad saknas i INDI-posten; posten ignoreras.\n"
 
-#: src/gedlib/init.c:513
+#: src/gedlib/init.c:529
 msgid "Database error: -- "
 msgstr "Databasfel: -- "
 
-#: src/gedlib/init.c:517
+#: src/gedlib/init.c:533
 msgid "requested database does not exist."
 msgstr "den efterfrågade databasen finns inte."
 
-#: src/gedlib/init.c:520
+#: src/gedlib/init.c:536
 msgid "db directory is file, not directory."
 msgstr "db-katalog är en fil, inte en katalog."
 
-#: src/gedlib/init.c:523
+#: src/gedlib/init.c:539
 msgid "creation of new database failed."
 msgstr "misslyckades att skapa ny databas."
 
-#: src/gedlib/init.c:526
+#: src/gedlib/init.c:542
 msgid "error accessing database directory."
 msgstr "fel vid åtkomst av databaskatalog."
 
-#: src/gedlib/init.c:529
+#: src/gedlib/init.c:545
 msgid "no keyfile (directory does not appear to be a database)."
 msgstr "ingen nyckelfil (katalogen förefaller inte att vara en databas)."
 
-#: src/gedlib/init.c:532
+#: src/gedlib/init.c:548
 msgid "could not open, read or write an index file."
 msgstr "kunde inte öppna, läsa eller skriva till en indexfil."
 
-#: src/gedlib/init.c:535
+#: src/gedlib/init.c:551
 msgid "could not open, read or write the key file."
 msgstr "kunde inte öppna, läsa eller skriva till nyckelfilen."
 
-#: src/gedlib/init.c:538
+#: src/gedlib/init.c:554
 #, fuzzy
 msgid "could not open, read or write the key file (to alter database)."
 msgstr "kunde inte öppna, läsa eller skriva till nyckelfilen."
 
-#: src/gedlib/init.c:541
+#: src/gedlib/init.c:557
 msgid "could not open, read or write a block file."
 msgstr "kunde inte öppna, läsa eller skriva till en blockfil."
 
-#: src/gedlib/init.c:544
+#: src/gedlib/init.c:560
 msgid "name of database is too long."
 msgstr "namnet på databasen är för långt."
 
-#: src/gedlib/init.c:547
+#: src/gedlib/init.c:563
 msgid "The database is already open for writing."
 msgstr "Databasen är redan öppnad för skrivning."
 
-#: src/gedlib/init.c:550
+#: src/gedlib/init.c:566
 msgid "The database is locked (no readwrite access)."
 msgstr "Databasen är låst (ingen läs- och skrivåtkomst)."
 
-#: src/gedlib/init.c:553
+#: src/gedlib/init.c:569
 msgid "keyfile is corrupt."
 msgstr "nyckelfilen är trasig."
 
-#: src/gedlib/init.c:556
+#: src/gedlib/init.c:572
 msgid "keyfile is wrong alignment."
 msgstr "nyckelfilen har fel justering."
 
-#: src/gedlib/init.c:559
+#: src/gedlib/init.c:575
 msgid "keyfile is wrong version."
 msgstr "nyckelfilen har fel version."
 
-#: src/gedlib/init.c:562
+#: src/gedlib/init.c:578
 msgid "Existing database found."
 msgstr "Fann befintlig databas."
 
-#: src/gedlib/init.c:566
+#: src/gedlib/init.c:582
 #, c-format
 msgid ""
 "The database is already opened for read access by %d users.\n"
@@ -101,11 +100,11 @@ msgstr ""
 "Databasen är redan öppnad för läsning av %d användare.\n"
 "  "
 
-#: src/gedlib/init.c:570
+#: src/gedlib/init.c:586
 msgid "Invalid properties set for new database"
 msgstr "Ogiltiga egenskapsinställningar för ny databas."
 
-#: src/gedlib/init.c:573
+#: src/gedlib/init.c:589
 msgid "Undefined database error -- fix program."
 msgstr "Odefinierat databasfel -- laga programmet."
 
@@ -169,906 +168,911 @@ msgstr "Databasen är skrivskyddad; du får inte slå samman poster."
 msgid "The database is read only; you may not remove records."
 msgstr "Databasen är skrivskyddad; du får inte ta bort poster."
 
-#: src/gedlib/messages.c:64
+#: src/gedlib/messages.c:63
+#, fuzzy
+msgid "The database is read only."
+msgstr "Databasen är redan öppnad för skrivning."
+
+#: src/gedlib/messages.c:65
 msgid "enter name, key, refn or list:"
 msgstr "skriv in namn, nyckel, refn eller lista:"
 
-#: src/gedlib/messages.c:65
+#: src/gedlib/messages.c:66
 msgid "enter key or refn: "
 msgstr "skriv in nyckel eller refn:"
 
-#: src/gedlib/messages.c:66
+#: src/gedlib/messages.c:67
 msgid "Please choose the child to remove from the family."
 msgstr "Välj barn att ta bort från familjen:"
 
-#: src/gedlib/messages.c:67
+#: src/gedlib/messages.c:68
 msgid "Please choose the spouse/parent to remove from the family."
 msgstr "Välj maka/make/förälder att ta bort från familjen"
 
-#: src/gedlib/messages.c:68
+#: src/gedlib/messages.c:69
 msgid "From which family is the child to be removed?"
 msgstr "Från vilken familj ska barnet tas bort?"
 
-#: src/gedlib/messages.c:69
+#: src/gedlib/messages.c:70
 msgid "From which family is the spouse/parent to be removed?"
 msgstr "Från vilken familj ska makan/maken/föräldern tas bort?"
 
-#: src/gedlib/messages.c:70
+#: src/gedlib/messages.c:71
 msgid "Identify family (enter nothing to identify by individual members)."
 msgstr ""
 "Identifiera familj (lämna blank för att identifiera via familjemedlem)."
 
-#: src/gedlib/messages.c:71
+#: src/gedlib/messages.c:72
 msgid "Identify a spouse of the family, if known."
 msgstr "Identifiera en maka/make i familjen, om känd."
 
-#: src/gedlib/messages.c:72
+#: src/gedlib/messages.c:73
 msgid "Identify a child of the family, if known."
 msgstr "Identifiera ett barn i familjen, om känt."
 
-#: src/gedlib/messages.c:73
+#: src/gedlib/messages.c:74
 msgid "Identify the first child to swap."
 msgstr "Identifiera det första barnet att växla."
 
-#: src/gedlib/messages.c:74
+#: src/gedlib/messages.c:75
 msgid "Identify the second child to swap."
 msgstr "Identifiera det andra barnet att växla."
 
-#: src/gedlib/messages.c:75
+#: src/gedlib/messages.c:76
 msgid "Identify the child to reorder."
 msgstr "Identifiera barnet som ska ordnas om."
 
-#: src/gedlib/messages.c:76
+#: src/gedlib/messages.c:77
 msgid "Identify the first family/spouse to swap."
 msgstr "Identifiera den första familjen/makan/maken att växla."
 
-#: src/gedlib/messages.c:77
+#: src/gedlib/messages.c:78
 msgid "Identify the second family/spouse to swap."
 msgstr "Identifiera den andra familjen/makan/maken att växla."
 
-#: src/gedlib/messages.c:78
+#: src/gedlib/messages.c:79
 msgid "Please choose the spouse/parent to browse to."
 msgstr "Välj maka/make/förälder att bläddra till."
 
-#: src/gedlib/messages.c:79
+#: src/gedlib/messages.c:80
 msgid "Please choose the first spouse/parent to browse to."
 msgstr "Välj den första makan/maken/föräldern att bläddra till."
 
-#: src/gedlib/messages.c:80
+#: src/gedlib/messages.c:81
 msgid "Please choose the second spouse/parent to browse to."
 msgstr "Välj den andra makan/maken/föräldern att bläddra till."
 
-#: src/gedlib/messages.c:81
+#: src/gedlib/messages.c:82
 msgid "Please choose the child to browse to."
 msgstr "Välj barn att bläddra till."
 
-#: src/gedlib/messages.c:82
+#: src/gedlib/messages.c:83
 msgid "Please choose the first child to browse to."
 msgstr "Välj det första barnet att bläddra till."
 
-#: src/gedlib/messages.c:83
+#: src/gedlib/messages.c:84
 msgid "Please choose the second child to browse to."
 msgstr "Välj det andra barnet att bläddra till."
 
-#: src/gedlib/messages.c:84
+#: src/gedlib/messages.c:85
 msgid "Please choose the family to browse to."
 msgstr "Välj familj att bläddra till."
 
-#: src/gedlib/messages.c:85
+#: src/gedlib/messages.c:86
 msgid "Enter Family Number to Browse to"
 msgstr "Skriv in familjenummer att bläddra till"
 
-#: src/gedlib/messages.c:86
+#: src/gedlib/messages.c:87
 msgid "Please choose the first family to browse to."
 msgstr "Välj den första familjen att bläddra till."
 
-#: src/gedlib/messages.c:87
+#: src/gedlib/messages.c:88
 msgid "Please choose the second family to browse to."
 msgstr "Välj den andra familjen att bläddra till."
 
-#: src/gedlib/messages.c:88
+#: src/gedlib/messages.c:89
 msgid "Please choose the father/husband to browse to."
 msgstr "Välj fader/make att bläddra till."
 
-#: src/gedlib/messages.c:89
+#: src/gedlib/messages.c:90
 msgid "Please choose the first father/husband to browse to."
 msgstr "Välj den första fadern/maken att bläddra till."
 
-#: src/gedlib/messages.c:90
+#: src/gedlib/messages.c:91
 msgid "Please choose the second father/husband to browse to."
 msgstr "Välj den andra fadern/maken att bläddra till."
 
-#: src/gedlib/messages.c:91
+#: src/gedlib/messages.c:92
 msgid "Please choose the mother/wife to browse to."
 msgstr "Välj moder/maka att bläddra till."
 
-#: src/gedlib/messages.c:92
+#: src/gedlib/messages.c:93
 msgid "Please choose the first mother/wife to browse to."
 msgstr "Välj den första modern/makan att bläddra till."
 
-#: src/gedlib/messages.c:93
+#: src/gedlib/messages.c:94
 msgid "Please choose the second mother/wife to browse to."
 msgstr "Välj den andra modern/makan att bläddra till."
 
-#: src/gedlib/messages.c:94
+#: src/gedlib/messages.c:95
 msgid "Identify a parent in the family having children swapped."
 msgstr "Identifiera en förälder i familjen vars barn ska växlas."
 
-#: src/gedlib/messages.c:95
+#: src/gedlib/messages.c:96
 msgid "Whose families/spouses are to be swapped?"
 msgstr "Vems familjer/makar ska växlas?"
 
-#: src/gedlib/messages.c:96
+#: src/gedlib/messages.c:97
 msgid "Identify one of the child's parents, if known."
 msgstr "Identifiera en av barnens föräldrar, om känd."
 
-#: src/gedlib/messages.c:98
+#: src/gedlib/messages.c:99
 msgid "Scan results:"
 msgstr "Sökresultat:"
 
-#: src/gedlib/messages.c:99
+#: src/gedlib/messages.c:100
 msgid "Enter pattern to match against single surname or given name."
 msgstr "Ange mönster för att matcha ensamt efter- eller förnamn."
 
-#: src/gedlib/messages.c:100
+#: src/gedlib/messages.c:101
 msgid "Enter pattern to match against full name."
 msgstr "Ange mönster för att matcha fullständigt namn."
 
-#: src/gedlib/messages.c:101
+#: src/gedlib/messages.c:102
 msgid "Enter pattern to match against refn."
 msgstr "Ange mönster för att matcha refn."
 
-#: src/gedlib/messages.c:102
+#: src/gedlib/messages.c:103
 msgid "pattern: "
 msgstr "mönster: "
 
-#: src/gedlib/messages.c:104
+#: src/gedlib/messages.c:105
 msgid "Please choose from among these records."
 msgstr "Välj mellan dessa poster."
 
-#: src/gedlib/messages.c:105
+#: src/gedlib/messages.c:106
 msgid "Is this the new child? "
 msgstr "Är detta det nya barnet? "
 
-#: src/gedlib/messages.c:106
+#: src/gedlib/messages.c:107
 msgid "Is this the new spouse? "
 msgstr "Är detta den nya makan/maken? "
 
-#: src/gedlib/messages.c:107
+#: src/gedlib/messages.c:108
 msgid "Is this the person?  Select if so."
 msgstr "Är detta personen? Välj om så."
 
-#: src/gedlib/messages.c:108
+#: src/gedlib/messages.c:109
 msgid "Select the child the new child precedes or select last."
 msgstr "Välj vilket barn som det nya barnet föregår eller välj sist."
 
-#: src/gedlib/messages.c:109
+#: src/gedlib/messages.c:110
 msgid "Please identify next person to browse to."
 msgstr "Identifiera nästa person att bläddra till."
 
-#: src/gedlib/messages.c:110
+#: src/gedlib/messages.c:111
 msgid "Please identify record to browse to."
 msgstr "Välj post att bläddra till."
 
-#: src/gedlib/messages.c:111
+#: src/gedlib/messages.c:112
 msgid "Please identify one of the spouses."
 msgstr "Identifiera en av makarna."
 
-#: src/gedlib/messages.c:112
+#: src/gedlib/messages.c:113
 msgid "Please identify person or persons to browse to."
 msgstr "Identifiera person eller personer att bläddra till."
 
-#: src/gedlib/messages.c:113
+#: src/gedlib/messages.c:114
 msgid "Please choose family create operation."
 msgstr "Välj kommando för att skapa familj."
 
-#: src/gedlib/messages.c:114
+#: src/gedlib/messages.c:115
 msgid "Do you want to enter another name?"
 msgstr "Vill du skriva in ett namn till?"
 
-#: src/gedlib/messages.c:116
+#: src/gedlib/messages.c:117
 msgid "This person is not a spouse or parent in any family."
 msgstr "Denna person är inte maka/make eller förälder i någon familj."
 
-#: src/gedlib/messages.c:117
+#: src/gedlib/messages.c:118
 msgid "This person is not a child in any family."
 msgstr "Denna person är inte barn i någon familj."
 
-#: src/gedlib/messages.c:118
+#: src/gedlib/messages.c:119
 msgid "There is no one in the database with that name or key."
 msgstr "Det finns ingen i databasen med det namnet eller den nyckeln."
 
-#: src/gedlib/messages.c:120
+#: src/gedlib/messages.c:121
 msgid "This person's father is not in the database."
 msgstr "Denna persons fader finns inte i databasen."
 
-#: src/gedlib/messages.c:121
+#: src/gedlib/messages.c:122
 msgid "This person's mother is not in the database."
 msgstr "Denna persons moder finns inte i databasen."
 
-#: src/gedlib/messages.c:122
+#: src/gedlib/messages.c:123
 msgid "This person has no spouse in the database."
 msgstr "Denna person har ingen maka/make i databasen."
 
-#: src/gedlib/messages.c:123
+#: src/gedlib/messages.c:124
 msgid "This person has no younger sibling in the database."
 msgstr "Denna person har inget yngre syskon i databasen."
 
-#: src/gedlib/messages.c:124
+#: src/gedlib/messages.c:125
 msgid "This person has no older sibling in the database."
 msgstr "Denna person har inget äldre syskon i databasen."
 
-#: src/gedlib/messages.c:125
+#: src/gedlib/messages.c:126
 msgid "This person's parents are not in the database."
 msgstr "Denna persons föräldrar finns inte i databasen."
 
-#: src/gedlib/messages.c:126
+#: src/gedlib/messages.c:127
 msgid "This family has no male spouse/parent in the database."
 msgstr "Denna familj har ingen make/manlig förälder i databasen."
 
-#: src/gedlib/messages.c:127
+#: src/gedlib/messages.c:128
 msgid "This family has no female spouse/parent in the database."
 msgstr "Denna familj har ingen maka/kvinnlig förälder i databasen."
 
-#: src/gedlib/messages.c:128
+#: src/gedlib/messages.c:129
 msgid "There are no children in the database for this family."
 msgstr "Det finns inga barn i databasen för denna familj."
 
-#: src/gedlib/messages.c:129
+#: src/gedlib/messages.c:130
 msgid "This person has no children in the database."
 msgstr "Denna person har inga barn i databasen."
 
-#: src/gedlib/messages.c:130
+#: src/gedlib/messages.c:131
 msgid "No such child."
 msgstr "Finns inget sådant barn."
 
-#: src/gedlib/messages.c:131
+#: src/gedlib/messages.c:132
 msgid "No such person."
 msgstr "Finns ingen sådan person."
 
-#: src/gedlib/messages.c:132
+#: src/gedlib/messages.c:133
 msgid "No such record."
 msgstr "Finns ingen sådan post."
 
-#: src/gedlib/messages.c:133
+#: src/gedlib/messages.c:134
 msgid "No such family."
 msgstr "Finns ingen sådan familj."
 
-#: src/gedlib/messages.c:134
+#: src/gedlib/messages.c:135
 msgid "No sources present."
 msgstr "Finns inga källor."
 
-#: src/gedlib/messages.c:135
+#: src/gedlib/messages.c:136
 msgid "Please choose the source to view."
 msgstr "Välj källa att granska."
 
-#: src/gedlib/messages.c:136
+#: src/gedlib/messages.c:137
 msgid "No events present."
 msgstr "Finns inga händelser."
 
-#: src/gedlib/messages.c:137
+#: src/gedlib/messages.c:138
 msgid "Please choose the event to view."
 msgstr "Välj händelse att granska."
 
-#: src/gedlib/messages.c:138
+#: src/gedlib/messages.c:139
 msgid "No others present."
 msgstr "Finns inga övriga."
 
-#: src/gedlib/messages.c:139
+#: src/gedlib/messages.c:140
 msgid "Please choose the other to view."
 msgstr "Välj vilken av övriga att granska."
 
-#: src/gedlib/messages.c:140
+#: src/gedlib/messages.c:141
 msgid "No notes present."
 msgstr "Finns inga notiser."
 
-#: src/gedlib/messages.c:141
+#: src/gedlib/messages.c:142
 msgid "Please choose the note to view."
 msgstr "Välj notis att granska."
 
-#: src/gedlib/messages.c:142
+#: src/gedlib/messages.c:143
 msgid "No references present."
 msgstr "Finns inga referenser."
 
-#: src/gedlib/messages.c:143
+#: src/gedlib/messages.c:144
 msgid "Please choose the reference to view."
 msgstr "Välj referens att granska."
 
-#: src/gedlib/messages.c:144
+#: src/gedlib/messages.c:145
 msgid "Duplicated REFN - please choose."
 msgstr "Dubblerat REFN - välj."
 
-#: src/gedlib/messages.c:146
+#: src/gedlib/messages.c:147
 msgid "New spouse/parent has unknown sex; can't add to family."
 msgstr "Ny maka/make/förälder har okänt kön; kan inte lägga till i familj."
 
-#: src/gedlib/messages.c:147
+#: src/gedlib/messages.c:148
 msgid "The persons are not of opposite sex; can't make family."
 msgstr "Personerna är inte av motsatt kön; kan inte skapa familj."
 
-#: src/gedlib/messages.c:148
+#: src/gedlib/messages.c:149
 msgid "This person is not a spouse in the family; can't remove."
 msgstr "Denna person är inte maka/make i familjen; kan inte ta bort."
 
-#: src/gedlib/messages.c:149
+#: src/gedlib/messages.c:150
 msgid "This person is not a child in the family; can't remove."
 msgstr "Denna person är inte barn i familj; kan inte ta bort."
 
-#: src/gedlib/messages.c:150
+#: src/gedlib/messages.c:151
 msgid "This person's sex is not known; can't make family."
 msgstr "Denna persons kön är inte känt; kan inte skapa familj."
 
-#: src/gedlib/messages.c:151
+#: src/gedlib/messages.c:152
 msgid "This family already has a husband/male parent."
 msgstr "Denna familj har redan en make/manlig förälder."
 
-#: src/gedlib/messages.c:152
+#: src/gedlib/messages.c:153
 msgid "This family already has a wife/female parent."
 msgstr "Denna familj har redan en maka/kvinnlig förälder."
 
-#: src/gedlib/messages.c:153
+#: src/gedlib/messages.c:154
 msgid "This family has both spouses/parents; can't add another."
 msgstr ""
 "I denna familj finns båda makarna/föräldrarna; kan inte lägga till "
 "ytterligare en."
 
-#: src/gedlib/messages.c:154
+#: src/gedlib/messages.c:155
 msgid "This family has neither spouse/parent; can't remove."
 msgstr "I denna familj finns ingendera av föräldrarna; kan inte ta bort."
 
-#: src/gedlib/messages.c:155
+#: src/gedlib/messages.c:156
 msgid "This family still has links; not removed."
 msgstr "Denna familj har fortfarande länkar; ej borttagen."
 
-#: src/gedlib/messages.c:157
+#: src/gedlib/messages.c:158
 msgid "Choose a family by selecting a spouse/parent."
 msgstr "Välj en familj genom att välja en maka/make/förälder."
 
-#: src/gedlib/messages.c:158
+#: src/gedlib/messages.c:159
 msgid ""
 "Do you want to edit the person again? (Otherwise changes will be discarded.)"
 msgstr ""
 "Vill du redigera personen igen? (Om inte, så kommer ändringar att kastas.)"
 
-#: src/gedlib/messages.c:159
+#: src/gedlib/messages.c:160
 msgid "Do you want to edit the person again?"
 msgstr "Vill du redigera personen igen?"
 
-#: src/gedlib/messages.c:160
+#: src/gedlib/messages.c:161
 msgid ""
 "Do you want to edit the family again? (Otherwise changes will be discarded.)"
 msgstr ""
 "Vill du redigera familjen igen? (Om inte, så kommer ändringar att kastas.)"
 
-#: src/gedlib/messages.c:161
+#: src/gedlib/messages.c:162
 msgid "Do you want to edit the family again?"
 msgstr "Vill du redigera familjen igen?"
 
-#: src/gedlib/messages.c:162
+#: src/gedlib/messages.c:163
 msgid ""
 "Do you want to edit the source again? (Otherwise changes will be discarded.)"
 msgstr ""
 "Vill du redigera källan igen? (Om inte, så kommer ändringar att kastas.)"
 
-#: src/gedlib/messages.c:163
+#: src/gedlib/messages.c:164
 msgid "Do you want to edit the source again?"
 msgstr "Vill du redigera källan igen?"
 
-#: src/gedlib/messages.c:164
+#: src/gedlib/messages.c:165
 msgid ""
 "Do you want to edit the event again? (Otherwise changes will be discarded.)"
 msgstr ""
 "Vill du redigera händelsen igen? (Om inte, så kommer ändringar att kastas.)"
 
-#: src/gedlib/messages.c:165
+#: src/gedlib/messages.c:166
 msgid "Do you want to edit the event again?"
 msgstr "Vill du redigera händelsen igen?"
 
-#: src/gedlib/messages.c:166
+#: src/gedlib/messages.c:167
 msgid ""
 "Do you want to edit the record again? (Otherwise changes will be discarded.)"
 msgstr ""
 "Vill du redigera posten igen? (Om inte, så kommer ändringar att kastas.)"
 
-#: src/gedlib/messages.c:167
+#: src/gedlib/messages.c:168
 msgid "Do you want to edit the record again?"
 msgstr "Vill du redigera posten igen?"
 
-#: src/gedlib/messages.c:168
+#: src/gedlib/messages.c:169
 msgid "Whom do you want to edit?"
 msgstr "Vem vill du redigera?"
 
-#: src/gedlib/messages.c:169
+#: src/gedlib/messages.c:170
 msgid "Which source record do you want to edit?"
 msgstr "Vilken källpost vill du redigera?"
 
-#: src/gedlib/messages.c:170
+#: src/gedlib/messages.c:171
 msgid "Which event record do you want to edit?"
 msgstr "Vilken händelsepost vill du redigera?"
 
-#: src/gedlib/messages.c:171
+#: src/gedlib/messages.c:172
 msgid "What record do you want to edit?"
 msgstr "Vilken post vill du redigera?"
 
-#: src/gedlib/messages.c:173
+#: src/gedlib/messages.c:174
 msgid "Do you really want to add this person to the database?"
 msgstr "Vill du verkligen lägga till den här personen i databasen?"
 
-#: src/gedlib/messages.c:174
+#: src/gedlib/messages.c:175
 msgid "Do you really want to add this family to the database?"
 msgstr "Vill du verkligen lägga till den här familjen i databasen?"
 
-#: src/gedlib/messages.c:175
+#: src/gedlib/messages.c:176
 msgid "Do you really want to add this child to the family?"
 msgstr "Vill du verkligen lägga till det här barnet i familjen?"
 
-#: src/gedlib/messages.c:176
+#: src/gedlib/messages.c:177
 msgid "Do you really want to add this spouse/parent to the family?"
 msgstr "Vill du verkligen lägga till den här makan/maken/föräldern i familjen?"
 
-#: src/gedlib/messages.c:177
+#: src/gedlib/messages.c:178
 msgid "Do you really want to add this source to the database?"
 msgstr "Vill du verkligen lägga till den här källan i databasen?"
 
-#: src/gedlib/messages.c:178
+#: src/gedlib/messages.c:179
 msgid "Do you really want to add this event to the database?"
 msgstr "Vill du verkligen lägga till den här händelsen i databasen?"
 
-#: src/gedlib/messages.c:179
+#: src/gedlib/messages.c:180
 msgid "Do you really want to add this record to the database?"
 msgstr "Vill du verkligen lägga till den här posten i databasen?"
 
-#: src/gedlib/messages.c:180
+#: src/gedlib/messages.c:181
 msgid "Do you really want to update this person?"
 msgstr "Vill du verkligen uppdatera den här personen?"
 
-#: src/gedlib/messages.c:181
+#: src/gedlib/messages.c:182
 msgid "Do you really want to update this family?"
 msgstr "Vill du verkligen uppdatera den här familjen?"
 
-#: src/gedlib/messages.c:182
+#: src/gedlib/messages.c:183
 msgid "Do you really want to update this source?"
 msgstr "Vill du verkligen uppdatera den här källan?"
 
-#: src/gedlib/messages.c:183
+#: src/gedlib/messages.c:184
 msgid "Do you really want to update this event?"
 msgstr "Vill du verkligen uppdatera den här händelsen?"
 
-#: src/gedlib/messages.c:184
+#: src/gedlib/messages.c:185
 msgid "Do you really want to update this record?"
 msgstr "Vill du verkligen uppdatera den här posten?"
 
-#: src/gedlib/messages.c:185
+#: src/gedlib/messages.c:186
 msgid "Are you sure you want to remove the person from the database?"
 msgstr "Är du säker på att du vill ta bort den här personen från databasen?"
 
-#: src/gedlib/messages.c:186
+#: src/gedlib/messages.c:187
 msgid "Remove this family record ?"
 msgstr "Ta bort den här familjeposten?"
 
-#: src/gedlib/messages.c:187
+#: src/gedlib/messages.c:188
 #, c-format
 msgid "(Family %s (%s, %s)"
 msgstr ""
 
-#: src/gedlib/messages.c:188
+#: src/gedlib/messages.c:189
 msgid "Do you really want to merge these two persons?"
 msgstr "Vill du verkligen slå samman dessa båda personer?"
 
-#: src/gedlib/messages.c:189
+#: src/gedlib/messages.c:190
 msgid "Do you really want to merge these two families?"
 msgstr "Vill du verkligen slå samman dessa båda familjer?"
 
-#: src/gedlib/messages.c:190
+#: src/gedlib/messages.c:191
 msgid "Do you really want to remove this child from his/her family?"
 msgstr "Vill du verkligen ta bort detta barn från hans/hennes familj?"
 
-#: src/gedlib/messages.c:191
+#: src/gedlib/messages.c:192
 msgid "Do you really want to remove this spouse from his/her family?"
 msgstr "Vill du verkligen ta bort denna maka/make från hans/hennes familj?"
 
-#: src/gedlib/messages.c:192
+#: src/gedlib/messages.c:193
 msgid "Too many spouses to display full list"
 msgstr "För många makar för att visa hela listan"
 
-#: src/gedlib/messages.c:193
+#: src/gedlib/messages.c:194
 msgid "These persons are children in different families."
 msgstr "Dessa personer är barn i olika familjer."
 
-#: src/gedlib/messages.c:194
+#: src/gedlib/messages.c:195
 msgid "Are you sure you want to merge them?"
 msgstr "Är du säker på att du vill slå samman dem?"
 
-#: src/gedlib/messages.c:196
+#: src/gedlib/messages.c:197
 msgid "There is something wrong with the data."
 msgstr "Något är fel i data."
 
-#: src/gedlib/messages.c:197
+#: src/gedlib/messages.c:198
 msgid "Please identify the child."
 msgstr "Identifiera barnet."
 
-#: src/gedlib/messages.c:198
+#: src/gedlib/messages.c:199
 msgid "Please identify one of the child's siblings."
 msgstr "Identifiera ett av barnets syskon."
 
-#: src/gedlib/messages.c:199
+#: src/gedlib/messages.c:200
 msgid "Identify spouse/parent to add to an existing family."
 msgstr "Identifiera maka/make/förälder att lägga till i en befintlig familj."
 
-#: src/gedlib/messages.c:200
+#: src/gedlib/messages.c:201
 msgid "Identify spouse/parent already in family, if known."
 msgstr "Identifiera maka/make/förälder som redan finns i familjen, om känd."
 
-#: src/gedlib/messages.c:201
+#: src/gedlib/messages.c:202
 msgid "Identify child already in family."
 msgstr "Identifiera barn som redan finns i familjen."
 
-#: src/gedlib/messages.c:203
+#: src/gedlib/messages.c:204
 msgid "This person is already a child in a family."
 msgstr "Den här personen är redan barn i en familj."
 
-#: src/gedlib/messages.c:204
+#: src/gedlib/messages.c:205
 msgid "Identify a spouse/parent for the new family."
 msgstr "Identifiera en maka/make/förälder för den nya familjen."
 
-#: src/gedlib/messages.c:205
+#: src/gedlib/messages.c:206
 msgid "Identify the second spouse/parent, if known."
 msgstr "Identifiera den andra makan/maken/föräldern, om känd."
 
-#: src/gedlib/messages.c:206
+#: src/gedlib/messages.c:207
 msgid "Both families must have husbands/fathers."
 msgstr "Båda familjerna måste ha män/fäder."
 
-#: src/gedlib/messages.c:207
+#: src/gedlib/messages.c:208
 msgid "Both families must have wives/mothers."
 msgstr "Båda familjerna måste ha hustrur/mödrar."
 
-#: src/gedlib/messages.c:209
+#: src/gedlib/messages.c:210
 msgid "Identify spouse/parent in second family, if known."
 msgstr "Identifiera maka/make/förälder i den andra familjen, om känd."
 
-#: src/gedlib/messages.c:210
+#: src/gedlib/messages.c:211
 msgid "Identify child in second family."
 msgstr "Identifiera barn i den andra familjen."
 
-#: src/gedlib/messages.c:211
+#: src/gedlib/messages.c:212
 msgid "Identify second person to browse to."
 msgstr "Identifiera den andra personen att bläddra till."
 
-#: src/gedlib/messages.c:213
+#: src/gedlib/messages.c:214
 msgid "Create a family with this person as a child."
 msgstr "Skapa en familj med denna person som barn."
 
-#: src/gedlib/messages.c:214
+#: src/gedlib/messages.c:215
 msgid "Create a family with this person as a spouse/parent."
 msgstr "Skapa en familj med denna person som maka/make/förälder."
 
-#: src/gedlib/messages.c:215
+#: src/gedlib/messages.c:216
 msgid "This family has less than two children; can't swap."
 msgstr "Denna familj har mindre än två barn; kan inte växla."
 
-#: src/gedlib/messages.c:216
+#: src/gedlib/messages.c:217
 msgid "This person is a spouse/parent in less than two families."
 msgstr "Denna person är maka/make/förälder i färre än två familjer."
 
-#: src/gedlib/messages.c:217
+#: src/gedlib/messages.c:218
 msgid "Something impossible happened. Contact tech support."
 msgstr "Någonting omöjligt hände. Kontakta teknisk support."
 
-#: src/gedlib/messages.c:219
+#: src/gedlib/messages.c:220
 msgid "The two children were swapped."
 msgstr "De båda barnen växlades."
 
-#: src/gedlib/messages.c:220
+#: src/gedlib/messages.c:221
 msgid "The two families were swapped."
 msgstr "De båda familjerna växlades."
 
-#: src/gedlib/messages.c:221
+#: src/gedlib/messages.c:222
 msgid "The child was removed from his/her family."
 msgstr "Barnet togs bort från dess familj."
 
-#: src/gedlib/messages.c:222
+#: src/gedlib/messages.c:223
 msgid "The spouse was removed from his/her family."
 msgstr "Makan/maken togs bort från dess familj."
 
-#: src/gedlib/messages.c:224
+#: src/gedlib/messages.c:225
 msgid "A person cannot be merged with him/herself."
 msgstr "En person kan inte slås samman med sig själv."
 
-#: src/gedlib/messages.c:225
+#: src/gedlib/messages.c:226
 msgid "A family cannot be merged with itself."
 msgstr "En familj kan inte slås samman med sig själv."
 
-#: src/gedlib/messages.c:226
+#: src/gedlib/messages.c:227
 msgid "Two persons with different parents cannot be merged."
 msgstr "Två personer med olika föräldrar kan inte slås samman."
 
-#: src/gedlib/messages.c:227
+#: src/gedlib/messages.c:228
 msgid "Two parents of different sexes cannot be merged."
 msgstr "Två föräldrar med olika kön kan inte slås samman."
 
-#: src/gedlib/messages.c:228
+#: src/gedlib/messages.c:229
 msgid "The families have different fathers/husbands; cannot merge."
 msgstr "Familjerna har olika fäder/män; kan inte slå samman."
 
-#: src/gedlib/messages.c:229
+#: src/gedlib/messages.c:230
 msgid "The families have different wives/mothers; cannot merge."
 msgstr "Familjerna har olika hustrur/mödrar; kan inte slå samman."
 
-#: src/gedlib/messages.c:230
+#: src/gedlib/messages.c:231
 msgid "Who do you want to remove from the database?"
 msgstr "Vem vill du ta bort från databasen?"
 
-#: src/gedlib/messages.c:231
+#: src/gedlib/messages.c:232
 msgid "Place the child last in the family."
 msgstr "Placera barnet sist i familjen."
 
-#: src/gedlib/messages.c:232
+#: src/gedlib/messages.c:233
 msgid "Error in abbreviations file."
 msgstr "Fel i förkortningsfil."
 
-#: src/gedlib/messages.c:233
+#: src/gedlib/messages.c:234
 msgid "Error in user options file."
 msgstr "Fel i filen för användarinställningar."
 
-#: src/gedlib/messages.c:234
+#: src/gedlib/messages.c:235
 msgid "Error in character mapping file."
 msgstr "Fel i teckenmappningsfil."
 
-#: src/gedlib/messages.c:235
+#: src/gedlib/messages.c:236
 #, c-format
 msgid "(Separator is %s)"
 msgstr "(Avdelare är %s)"
 
-#: src/gedlib/messages.c:236
+#: src/gedlib/messages.c:237
 msgid "Do you want to re-edit it?"
 msgstr "Vill du redigera om den?"
 
-#: src/gedlib/messages.c:238
+#: src/gedlib/messages.c:239
 #, c-format
 msgid "%s was added to the database."
 msgstr "%s lades till i databasen."
 
-#: src/gedlib/messages.c:239
+#: src/gedlib/messages.c:240
 #, c-format
 msgid "%s was added as a child."
 msgstr "%s lades till som barn."
 
-#: src/gedlib/messages.c:240
+#: src/gedlib/messages.c:241
 #, c-format
 msgid "%s was added as a spouse and/or parent."
 msgstr "%s lades till som maka/make och/eller förälder."
 
-#: src/gedlib/messages.c:241
+#: src/gedlib/messages.c:242
 msgid "The new family was added to the database."
 msgstr "Den nya familjen lades till i databasen."
 
-#: src/gedlib/messages.c:242
+#: src/gedlib/messages.c:243
 #, c-format
 msgid "%s was modified in the database."
 msgstr "%s modifierades i databasen."
 
-#: src/gedlib/messages.c:243
+#: src/gedlib/messages.c:244
 msgid "The family was modified in the database."
 msgstr "Familjen modifierades i databasen."
 
-#: src/gedlib/messages.c:244
+#: src/gedlib/messages.c:245
 msgid "The source was modified in the database."
 msgstr "Källan modifierades i databasen."
 
-#: src/gedlib/messages.c:245
+#: src/gedlib/messages.c:246
 msgid "The event was modified in the database."
 msgstr "Händelsen modifierades i databasen."
 
-#: src/gedlib/messages.c:246
+#: src/gedlib/messages.c:247
 msgid "The record was modified in the database."
 msgstr "Posten modifierades i databasen."
 
-#: src/gedlib/messages.c:248
+#: src/gedlib/messages.c:249
 #, c-format
 msgid "Could not open file %s."
 msgstr "Kunde inte öppna filen %s."
 
-#: src/gedlib/messages.c:249
+#: src/gedlib/messages.c:250
 msgid "Filepath too long."
 msgstr "Filsökväg för lång."
 
-#: src/gedlib/messages.c:251
+#: src/gedlib/messages.c:252
 msgid "Please mark a person first."
 msgstr "Markera en person först."
 
-#: src/gedlib/messages.c:253
+#: src/gedlib/messages.c:254
 #, c-format
 msgid "The current list is now named %s."
 msgstr "Den aktuella listan har nu namnet %s."
 
-#: src/gedlib/messages.c:254
+#: src/gedlib/messages.c:255
 msgid "The current list is not named."
 msgstr "Den aktuella listan har inget namn."
 
-#: src/gedlib/messages.c:255
+#: src/gedlib/messages.c:256
 msgid "What should the name of this list be?"
 msgstr "Vad ska denna lista ha för namn?"
 
-#: src/gedlib/messages.c:256
+#: src/gedlib/messages.c:257
 msgid "No persons were added to the current list."
 msgstr "Inga personer lades till i den aktuella listan."
 
-#: src/gedlib/messages.c:257
+#: src/gedlib/messages.c:258
 msgid "What persons or list do you want to add to the current list?"
 msgstr "Vilka personer/vilken lista vill du lägga till i den aktuella listan?"
 
-#: src/gedlib/messages.c:258
+#: src/gedlib/messages.c:259
 msgid "You are at the bottom of the list."
 msgstr "Du är längst ned i listan."
 
-#: src/gedlib/messages.c:259
+#: src/gedlib/messages.c:260
 msgid "You are at the top of the list."
 msgstr "Du är högst upp i listan."
 
-#: src/gedlib/messages.c:260
+#: src/gedlib/messages.c:261
 msgid "New persons were added to the current list."
 msgstr "Nya personer lades till i den aktuella listan."
 
-#: src/gedlib/messages.c:262
+#: src/gedlib/messages.c:263
 msgid "System error: illegal map code"
 msgstr "Systemfel: otillåten mappningskod"
 
-#: src/gedlib/messages.c:263
+#: src/gedlib/messages.c:264
 msgid "No such translation table in this database"
 msgstr "Ingen sådan översättningstabell i denna databas."
 
-#: src/gedlib/messages.c:266
+#: src/gedlib/messages.c:267
 msgid "Because of errors the GEDCOM file was not loaded.\n"
 msgstr "På grund av felaktigheter laddades inte GEDCOM-filen.\n"
 
-#: src/gedlib/messages.c:267
+#: src/gedlib/messages.c:268
 msgid "No errors; adding records with original keys..."
 msgstr "Inga fel; lägger till poster med ursprungliga nycklar..."
 
-#: src/gedlib/messages.c:268
+#: src/gedlib/messages.c:269
 msgid "No errors; adding records with new keys..."
 msgstr "Inga fel; lägger till poster med nya nycklar..."
 
-#: src/gedlib/messages.c:269
+#: src/gedlib/messages.c:270
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
 msgstr ""
 "Med ursprungliga nycklar kommer det att finnas %d borttagna poster i "
 "databasen."
 
-#: src/gedlib/messages.c:270
+#: src/gedlib/messages.c:271
 msgid "Use original keys from GEDCOM file?"
 msgstr "Vill du använda ursprungliga nycklar från GEDCOM-filen?"
 
-#: src/gedlib/messages.c:271
+#: src/gedlib/messages.c:272
 msgid "Enter name of output archive file."
 msgstr "Skriv in namn för utmatad arkivfil."
 
-#: src/gedlib/messages.c:272
+#: src/gedlib/messages.c:273
 #, c-format
 msgid "Database `%s' has been saved in `%s'."
 msgstr "Databasen \"%s\" har sparats till \"%s\"."
 
-#: src/gedlib/messages.c:273
+#: src/gedlib/messages.c:274
 msgid "Enter name of translation table file to write"
 msgstr "Skriv in namn på översättningstabellsfil att skriva till"
 
-#: src/gedlib/messages.c:274
+#: src/gedlib/messages.c:275
 msgid "Enter name of translation table file to read"
 msgstr "Skriv in namn på översättningstabellsfil att läsa in"
 
-#: src/gedlib/messages.c:275
+#: src/gedlib/messages.c:276
 #, c-format
 msgid "Line %d: The person defined here has no key: skipped."
 msgstr "Rad %d: Personen som definieras här har ingen nyckel: hoppas över."
 
-#: src/gedlib/messages.c:276
+#: src/gedlib/messages.c:277
 #, c-format
 msgid "Line %d: The family defined here has no key."
 msgstr "Rad %d: Familjen som definieras här har ingen nyckel."
 
-#: src/gedlib/messages.c:277
+#: src/gedlib/messages.c:278
 #, c-format
 msgid "Lines %d and %d: Person %s is multiply defined: skipped."
 msgstr ""
 "Raderna %d och %d: Personen %s är definierad mer än en gång: hoppas över."
 
-#: src/gedlib/messages.c:278
+#: src/gedlib/messages.c:279
 #, c-format
 msgid "Lines %d and %d: Family %s is multiply defined."
 msgstr "Raderna %d och %d: Familjen %s är definierad mer än en gång."
 
-#: src/gedlib/messages.c:279
+#: src/gedlib/messages.c:280
 #, c-format
 msgid "Line %d: Person %s has an incorrect key: skipped."
 msgstr "Rad %d: Personen %s har en felaktig nyckel: hoppas över."
 
-#: src/gedlib/messages.c:280
+#: src/gedlib/messages.c:281
 #, c-format
 msgid "Line %d: Family %s has an incorrect key."
 msgstr "Rad %d: Familjen %s har en felaktig nyckel."
 
-#: src/gedlib/messages.c:281
+#: src/gedlib/messages.c:282
 #, c-format
 msgid "Person %s is referred to but not defined."
 msgstr "Referens till personen %s, som inte är definierad."
 
-#: src/gedlib/messages.c:282
+#: src/gedlib/messages.c:283
 #, c-format
 msgid "Family %s is referred to but not defined."
 msgstr "Referens till familjen %s, som inte är definierad."
 
-#: src/gedlib/messages.c:283
+#: src/gedlib/messages.c:284
 #, c-format
 msgid "Source %s is referred to but not defined."
 msgstr "Referens till källan %s, som inte är definierad."
 
-#: src/gedlib/messages.c:284
+#: src/gedlib/messages.c:285
 #, c-format
 msgid "Event %s is referred to but not defined."
 msgstr "Referens till händelsen %s, som inte är definierad."
 
-#: src/gedlib/messages.c:285
+#: src/gedlib/messages.c:286
 #, c-format
 msgid "Line %d: This line has a level number that is too large."
 msgstr "Rad %d: Denna rad har ett nivånummer som är för stort."
 
-#: src/gedlib/messages.c:286
+#: src/gedlib/messages.c:287
 #, c-format
 msgid "Line %d: Person defined here has no name."
 msgstr "Rad %d: Personen som definieras här saknar namn."
 
-#: src/gedlib/messages.c:292
+#: src/gedlib/messages.c:293
 msgid "<Choose outside this list>"
 msgstr "<Välj utanför denna lista>"
 
-#: src/gedlib/messages.c:294
+#: src/gedlib/messages.c:295
 msgid "What is the name of the program?"
 msgstr "Vad är namnet på programmet?"
 
-#: src/gedlib/messages.c:295
+#: src/gedlib/messages.c:296
 msgid "Please enter the name of the GEDCOM file."
 msgstr "Skriv in namnet på GEDCOM-filen."
 
-#: src/gedlib/messages.c:297
+#: src/gedlib/messages.c:298
 msgid "What is the name of the output file?"
 msgstr "Vad är namnet på utmatningsfilen?"
 
-#: src/gedlib/messages.c:298
+#: src/gedlib/messages.c:299
 msgid "Malformed configuration file: line too long."
 msgstr "Fel i konfigurationsfil: för lång rad."
 
-#: src/gedlib/messages.c:299
+#: src/gedlib/messages.c:300
 msgid "Unsupported file encoding (no multibyte encodings except UTF-8)."
 msgstr "Ostödd filkodning (inga multibytekodningar utom UTF-8)."
 
-#: src/gedlib/messages.c:300
+#: src/gedlib/messages.c:301
 #, c-format
 msgid "Unsupported file encoding: %s."
 msgstr "Ostödd filkodning: %s."
 
-#: src/gedlib/messages.c:303
+#: src/gedlib/messages.c:304
 msgid "Enter string for program"
 msgstr "Skriv in sträng för program"
 
-#: src/gedlib/messages.c:304
+#: src/gedlib/messages.c:305
 msgid "enter string: "
 msgstr "skriv in sträng: "
 
-#: src/gedlib/messages.c:305
+#: src/gedlib/messages.c:306
 msgid "enter integer:"
 msgstr "skriv in heltal:"
 
-#: src/gedlib/messages.c:306
+#: src/gedlib/messages.c:307
 msgid "enter name: "
 msgstr "skriv in namn: "
 
-#: src/gedlib/messages.c:307
+#: src/gedlib/messages.c:308
 msgid "Strike any key to continue."
 msgstr "Tryck på valfri tangent för att fortsätta."
 
-#: src/gedlib/messages.c:311
+#: src/gedlib/messages.c:312
 msgid ""
 "0 SOUR\n"
 "1 REFN\n"
@@ -1080,78 +1084,78 @@ msgstr ""
 "1 TITL Titel\n"
 "1 AUTH Författare"
 
-#: src/gedlib/messages.c:312
-msgid ""
-"0 EVEN\n"
-"1 REFN\n"
-"1 DATE\n"
-"1 PLAC\n"
-"1 INDI\n"
-"  2 NAME\n"
-"  2 ROLE\n"
-"1 SOUR"
-msgstr ""
-"0 EVEN\n"
-"1 REFN\n"
-"1 DATE\n"
-"1 PLAC\n"
-"1 INDI\n"
-"  2 NAME\n"
-"  2 ROLE\n"
-"1 SOUR"
-
 #: src/gedlib/messages.c:313
 msgid ""
+"0 EVEN\n"
+"1 REFN\n"
+"1 DATE\n"
+"1 PLAC\n"
+"1 INDI\n"
+"  2 NAME\n"
+"  2 ROLE\n"
+"1 SOUR"
+msgstr ""
+"0 EVEN\n"
+"1 REFN\n"
+"1 DATE\n"
+"1 PLAC\n"
+"1 INDI\n"
+"  2 NAME\n"
+"  2 ROLE\n"
+"1 SOUR"
+
+#: src/gedlib/messages.c:314
+msgid ""
 "0 XXXX\n"
 "1 REFN"
 msgstr ""
 "0 XXXX\n"
 "1 REFN"
 
-#: src/gedlib/messages.c:317
+#: src/gedlib/messages.c:318
 msgid "The file is as positioned at EOF."
 msgstr "Filen är positionerad vid filslut."
 
-#: src/gedlib/messages.c:318
+#: src/gedlib/messages.c:319
 #, c-format
 msgid "Line %d: This line is empty; EOF?"
 msgstr "Rad %d: Denna rad är tom; filslut?"
 
-#: src/gedlib/messages.c:319
+#: src/gedlib/messages.c:320
 #, c-format
 msgid "Line %d: This line is too long."
 msgstr "Rad %d: Denna rad är för lång."
 
-#: src/gedlib/messages.c:320
+#: src/gedlib/messages.c:321
 #, c-format
 msgid "Line %d: This line has no level number."
 msgstr "Rad %d: Denna rad har inget nivånummer."
 
-#: src/gedlib/messages.c:321
+#: src/gedlib/messages.c:322
 #, c-format
 msgid "Line %d: This line is incomplete."
 msgstr "Rad %d: Denna rad är ofullständig."
 
-#: src/gedlib/messages.c:322
+#: src/gedlib/messages.c:323
 #, c-format
 msgid "Line %d: This line has a bad link."
 msgstr "Rad %d: Denna rad har en ogiltig länk."
 
-#: src/gedlib/messages.c:323
+#: src/gedlib/messages.c:324
 #, c-format
 msgid "Line %d: This line needs white space before tag."
 msgstr "Rad %d: Denna rad behöver blanksteg innan tagg."
 
-#: src/gedlib/messages.c:324
+#: src/gedlib/messages.c:325
 #, c-format
 msgid "Line %d: This line has an illegal level."
 msgstr "Rad %d: Denna rad har en otillåten nivå."
 
-#: src/gedlib/messages.c:325
+#: src/gedlib/messages.c:326
 msgid "The record begins at wrong level."
 msgstr "Posten börjar på fel nivå."
 
-#: src/gedlib/messages.c:328
+#: src/gedlib/messages.c:329
 msgid ""
 "\n"
 "Aborting now. Core dump? [y/n]"
@@ -1159,7 +1163,7 @@ msgstr ""
 "\n"
 "Avbryter nu. Skapa minnesutskrift? [y/n]"
 
-#: src/gedlib/messages.c:329
+#: src/gedlib/messages.c:330
 msgid ""
 "Looks like a program was running.\n"
 "Check file %1 around line %2.\n"
@@ -1167,252 +1171,252 @@ msgstr ""
 "Verkar som att ett program kördes.\n"
 "Kontrollera fil %1 omkring rad %2.\n"
 
-#: src/gedlib/messages.c:330
+#: src/gedlib/messages.c:331
 msgid "signal %1: %2"
 msgstr "signal %1: %2"
 
-#: src/gedlib/messages.c:332
+#: src/gedlib/messages.c:333
 msgid "SIGNAL 0"
 msgstr "SIGNAL 0"
 
-#: src/gedlib/messages.c:333
+#: src/gedlib/messages.c:334
 msgid "HANGUP"
 msgstr "AVRINGD"
 
-#: src/gedlib/messages.c:334
+#: src/gedlib/messages.c:335
 msgid "INTERRUPT"
 msgstr "AVBROTT"
 
-#: src/gedlib/messages.c:335
+#: src/gedlib/messages.c:336
 msgid "QUIT"
 msgstr "LÄMNAD"
 
-#: src/gedlib/messages.c:336
+#: src/gedlib/messages.c:337
 msgid "ILLEGAL INSTRUCTION"
 msgstr "OTILLÅTEN INSTRUKTION"
 
-#: src/gedlib/messages.c:337
+#: src/gedlib/messages.c:338
 msgid "TRACE TRAP"
 msgstr "SPÅRNINGSFÄLLA"
 
-#: src/gedlib/messages.c:338
+#: src/gedlib/messages.c:339
 msgid "ABORT"
 msgstr "AVBRUTEN"
 
-#: src/gedlib/messages.c:339
+#: src/gedlib/messages.c:340
 msgid "EMT INST"
 msgstr "EMT INST"
 
-#: src/gedlib/messages.c:340
+#: src/gedlib/messages.c:341
 msgid "FLOATING POINT EXCEPTION"
 msgstr "FLYTTALSUNDANTAG"
 
-#: src/gedlib/messages.c:341
+#: src/gedlib/messages.c:342
 msgid "KILL"
 msgstr "DÖDAD"
 
-#: src/gedlib/messages.c:342
+#: src/gedlib/messages.c:343
 msgid "BUS ERROR"
 msgstr "BUSSFEL"
 
-#: src/gedlib/messages.c:343
+#: src/gedlib/messages.c:344
 msgid "SEGMENTATION ERROR"
 msgstr "SEGMENTERINGSFEL"
 
-#: src/gedlib/messages.c:344
+#: src/gedlib/messages.c:345
 msgid "SYSTEM CALL ERROR"
 msgstr "SYSTEMANROPSFEL"
 
-#: src/gedlib/messages.c:345
+#: src/gedlib/messages.c:346
 msgid "PIPE WRITE"
 msgstr "RÖRSKRIVNING"
 
-#: src/gedlib/messages.c:346
+#: src/gedlib/messages.c:347
 msgid "ALARM CLOCK"
 msgstr "ALARMKLOCKA"
 
-#: src/gedlib/messages.c:348
+#: src/gedlib/messages.c:349
 msgid "TERMINATE FROM KILL"
 msgstr "AVSLUTAD"
 
-#: src/gedlib/messages.c:349
+#: src/gedlib/messages.c:350
 msgid "USER SIGNAL 1"
 msgstr "ANVÄNDARSIGNAL 1"
 
-#: src/gedlib/messages.c:350
+#: src/gedlib/messages.c:351
 msgid "USER SIGNAL 2"
 msgstr "ANVÄNDARSIGNAL 2"
 
-#: src/gedlib/messages.c:351
+#: src/gedlib/messages.c:352
 msgid "DEATH OF CHILD"
 msgstr "BARN DÖTT"
 
-#: src/gedlib/messages.c:352
+#: src/gedlib/messages.c:353
 msgid "POWER-FAIL RESTART"
 msgstr "STRÖMAVBROTTSOMSTART"
 
-#: src/gedlib/messages.c:353
+#: src/gedlib/messages.c:354
 msgid "WINDOW CHANGE"
 msgstr "FÖNSTERÄNDRING"
 
-#: src/gedlib/messages.c:354
+#: src/gedlib/messages.c:355
 msgid "Unknown signal"
 msgstr "Okänd signal"
 
-#: src/gedlib/messages.c:358
+#: src/gedlib/messages.c:359
 msgid "person"
 msgstr "person"
 
-#: src/gedlib/messages.c:359
+#: src/gedlib/messages.c:360
 msgid ", of "
 msgstr ", från "
 
-#: src/gedlib/messages.c:360
+#: src/gedlib/messages.c:361
 msgid "father"
 msgstr "fader"
 
-#: src/gedlib/messages.c:361
+#: src/gedlib/messages.c:362
 msgid "mother"
 msgstr "moder"
 
-#: src/gedlib/messages.c:362
+#: src/gedlib/messages.c:363
 msgid "spouse"
 msgstr "maka/make"
 
-#: src/gedlib/messages.c:363
+#: src/gedlib/messages.c:364
 msgid "child"
 msgstr "barn"
 
-#: src/gedlib/messages.c:366
+#: src/gedlib/messages.c:367
 msgid "m. "
 msgstr "g. "
 
-#: src/gedlib/messages.c:368
+#: src/gedlib/messages.c:369
 msgid "div. "
 msgstr "ski."
 
-#: src/gedlib/messages.c:370
+#: src/gedlib/messages.c:371
 msgid "b. "
 msgstr "f. "
 
-#: src/gedlib/messages.c:372
+#: src/gedlib/messages.c:373
 msgid "bap. "
 msgstr "döp. "
 
-#: src/gedlib/messages.c:374
+#: src/gedlib/messages.c:375
 msgid "d. "
 msgstr "d. "
 
-#: src/gedlib/messages.c:376
+#: src/gedlib/messages.c:377
 msgid "bur. "
 msgstr "beg. "
 
-#: src/gedlib/messages.c:378
+#: src/gedlib/messages.c:379
 msgid "cb. "
 msgstr "bf. "
 
-#: src/gedlib/messages.c:380
+#: src/gedlib/messages.c:381
 msgid "married: "
 msgstr "gift: "
 
-#: src/gedlib/messages.c:381
+#: src/gedlib/messages.c:382
 msgid "born: "
 msgstr "född: "
 
-#: src/gedlib/messages.c:382
+#: src/gedlib/messages.c:383
 msgid "bapt: "
 msgstr "döpt: "
 
-#: src/gedlib/messages.c:383
+#: src/gedlib/messages.c:384
 msgid "died: "
 msgstr "död: "
 
-#: src/gedlib/messages.c:384
+#: src/gedlib/messages.c:385
 msgid "buri: "
 msgstr "begr: "
 
-#: src/gedlib/messages.c:388
+#: src/gedlib/messages.c:389
 msgid "You cannot edit the INDI line in a person record."
 msgstr "Du kan inte redigera INDI-raden i en personpost."
 
-#: src/gedlib/messages.c:389
+#: src/gedlib/messages.c:390
 msgid "You cannot edit the FAMC line in a person record."
 msgstr "Du kan inte redigera FAMC-raden i en personpost."
 
-#: src/gedlib/messages.c:390
+#: src/gedlib/messages.c:391
 msgid "You cannot edit the FAMS lines in a person record."
 msgstr "Du kan inte redigera FAMS-raden i en personpost."
 
-#: src/gedlib/messages.c:391
+#: src/gedlib/messages.c:392
 msgid "You cannot edit the FAM line in a family record."
 msgstr "Du kan inte redigera FAM-raden i en familjepost."
 
-#: src/gedlib/messages.c:392
+#: src/gedlib/messages.c:393
 msgid "You cannot edit the HUSB line in a family record."
 msgstr "Du kan inte redigera HUSB-raden i en familjepost."
 
-#: src/gedlib/messages.c:393
+#: src/gedlib/messages.c:394
 msgid "You cannot edit the WIFE line in a family record."
 msgstr "Du kan inte redigera WIFE-raden i en familjepost."
 
-#: src/gedlib/messages.c:394
+#: src/gedlib/messages.c:395
 msgid "You cannot edit the CHIL lines in a family record."
 msgstr "Du kan inte redigera CHIL-raderna i en familjepost."
 
-#: src/gedlib/messages.c:395
+#: src/gedlib/messages.c:396
 msgid "The record is empty."
 msgstr "Posten är tom."
 
-#: src/gedlib/messages.c:396
+#: src/gedlib/messages.c:397
 msgid "The record does not begin with an INDI line."
 msgstr "Posten börjar inte med en INDI-rad."
 
-#: src/gedlib/messages.c:397
+#: src/gedlib/messages.c:398
 msgid "The record does not begin with a FAM line."
 msgstr "Posten börjar inte med en FAM-rad."
 
-#: src/gedlib/messages.c:398
+#: src/gedlib/messages.c:399
 msgid "The record does not begin with a SOUR line."
 msgstr "Posten börjar inte med en SOUR-rad."
 
-#: src/gedlib/messages.c:399
+#: src/gedlib/messages.c:400
 msgid "The record does not begin with an EVEN line."
 msgstr "Posten börjar inte med en EVEN-rad."
 
-#: src/gedlib/messages.c:400
+#: src/gedlib/messages.c:401
 msgid "INDI, FAM, SOUR, EVEN records may not be other records."
 msgstr "INDI-, FAM-, SOUR- och EVEN-poster får inte vara andra poster."
 
-#: src/gedlib/messages.c:401
+#: src/gedlib/messages.c:402
 msgid "The record contains multiple level 0 lines."
 msgstr "Posten innehåller flera rader på 0-nivån."
 
-#: src/gedlib/messages.c:402
+#: src/gedlib/messages.c:403
 msgid "This person record has bad GEDCOM name syntax."
 msgstr "Denna personpost har ogiltig GEDCOM-namnsyntax."
 
-#: src/gedlib/messages.c:403
+#: src/gedlib/messages.c:404
 msgid "You cannot change the sex of a parent."
 msgstr "Du kan inte ändra kön för en förälder."
 
-#: src/gedlib/messages.c:404
+#: src/gedlib/messages.c:405
 msgid "REFN key is already in use."
 msgstr "REFN-nyckel används redan."
 
-#: src/gedlib/messages.c:406
+#: src/gedlib/messages.c:407
 msgid "Tag is too long to connect automatically."
 msgstr "Taggen är för lång för att anknyta automatiskt."
 
-#: src/gedlib/messages.c:408
+#: src/gedlib/messages.c:409
 msgid "Database records"
 msgstr "Databasposter"
 
-#: src/gedlib/messages.c:409
+#: src/gedlib/messages.c:410
 #, c-format
 msgid "%dI, %dF, %dS, %dE, %dX"
 msgstr "%dI, %dF, %dS, %dE, %dX"
 
-#: src/gedlib/messages.c:412
+#: src/gedlib/messages.c:413
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
@@ -1420,919 +1424,919 @@ msgstr ""
 "Den efterfrågade fönsterstorleken (%d,%d) är för stor för din terminal (%d,%"
 "d).\n"
 
-#: src/gedlib/messages.c:413
+#: src/gedlib/messages.c:414
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 "Den efterfrågade fönsterstorleken (%d,%d) är för liten för LifeLines (%d,%"
 "d). \n"
 
-#: src/gedlib/messages.c:416
+#: src/gedlib/messages.c:417
 #, c-format
 msgid "LifeLines %s - Genealogical DB and Programming System"
 msgstr "LifeLines %s - Genealogiskt databas- och programmeringssystem"
 
-#: src/gedlib/messages.c:417
+#: src/gedlib/messages.c:418
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
 msgstr "Copyright© 1991 till 1996, av T. T. Wetmore IV"
 
-#: src/gedlib/messages.c:418
+#: src/gedlib/messages.c:419
 #, c-format
 msgid "Current Database - %s"
 msgstr "Aktuell databas - %s"
 
-#: src/gedlib/messages.c:420
+#: src/gedlib/messages.c:421
 msgid " (immutable)"
 msgstr " (oföränderlig)"
 
-#: src/gedlib/messages.c:422
+#: src/gedlib/messages.c:423
 msgid " (read only)"
 msgstr "(skrivskyddad)"
 
-#: src/gedlib/messages.c:423
+#: src/gedlib/messages.c:424
 msgid "Please choose an operation:"
 msgstr "Välj ett kommando:"
 
-#: src/gedlib/messages.c:424
+#: src/gedlib/messages.c:425
 msgid "Not valid command"
 msgstr "Ogiltigt kommando"
 
-#: src/gedlib/messages.c:427
+#: src/gedlib/messages.c:428
 msgid "enter y (yes) or n (no): "
 msgstr "skriv in j (ja) eller n (nej): "
 
-#: src/gedlib/messages.c:428
+#: src/gedlib/messages.c:429
 msgid "yYnN"
 msgstr "yYjJnN"
 
-#: src/gedlib/messages.c:429
+#: src/gedlib/messages.c:430
 msgid "yY"
 msgstr "yYjJ"
 
-#: src/gedlib/messages.c:432
+#: src/gedlib/messages.c:433
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Personfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:433
+#: src/gedlib/messages.c:434
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Familjefönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:434
+#: src/gedlib/messages.c:435
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Tvåpersonsfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:435
+#: src/gedlib/messages.c:436
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Tvåfamiljsfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:436
+#: src/gedlib/messages.c:437
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Assistentfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:437
+#: src/gedlib/messages.c:438
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Listfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:440
+#: src/gedlib/messages.c:441 src/liflines/screen.c:1440
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr "Kommandon:   j Flytta ned     k Flytta upp    i Välj     q Avsluta"
 
-#: src/gedlib/messages.c:441
+#: src/gedlib/messages.c:442
 msgid "Commands:   j Move down     k Move up    q Quit"
 msgstr "Kommandon:   j Flytta ned     k Flytta upp    q Avsluta"
 
-#: src/gedlib/messages.c:442
+#: src/gedlib/messages.c:443
 msgid "Messages:"
 msgstr "Meddelanden:"
 
-#: src/gedlib/messages.c:445
+#: src/gedlib/messages.c:446
 msgid "Please choose from the following options:"
 msgstr "Välj något av följande alternativ:"
 
-#: src/gedlib/messages.c:446
+#: src/gedlib/messages.c:447
 #, c-format
 msgid "New record is %s"
 msgstr "Den nya posten är %s"
 
-#: src/gedlib/messages.c:447
+#: src/gedlib/messages.c:448
 msgid "Insert xref automatically at bottom of current record."
 msgstr "Lägg in korsref automatiskt längst ned i aktuell post."
 
-#: src/gedlib/messages.c:448
+#: src/gedlib/messages.c:449
 msgid "Edit current record now to add xref manually."
 msgstr "Redigera aktuell post nu för att lägga till korsref manuellt."
 
-#: src/gedlib/messages.c:449
+#: src/gedlib/messages.c:450
 msgid "Browse new record (without adding xref)."
 msgstr "Bläddra i ny post (utan att lägga till korsref)."
 
-#: src/gedlib/messages.c:450
+#: src/gedlib/messages.c:451
 msgid "Return to current record (without adding xref)."
 msgstr "Återgå till aktuell post (utan att lägga till korsref)."
 
-#: src/gedlib/messages.c:453
+#: src/gedlib/messages.c:454
 msgid "Spouse unknown"
 msgstr "Maka/make okänd"
 
-#: src/gedlib/messages.c:454
+#: src/gedlib/messages.c:455
 msgid "No more history"
 msgstr "Slut på historik"
 
-#: src/gedlib/messages.c:455
+#: src/gedlib/messages.c:456
 msgid "Bad history count"
 msgstr "Ogiltig historiknumrering"
 
-#: src/gedlib/messages.c:456
+#: src/gedlib/messages.c:457
 msgid "Bad backup history count"
 msgstr "Ogiltig säkerhetskopierad historiknumrering"
 
-#: src/gedlib/messages.c:457
+#: src/gedlib/messages.c:458
 msgid "Bad history length"
 msgstr "Ogiltig historiklängd"
 
-#: src/gedlib/messages.c:458
+#: src/gedlib/messages.c:459
 #, c-format
 msgid "Delete history (%d entries) ?"
 msgstr "Ta bort historik (%d stycken)?"
 
-#: src/gedlib/messages.c:459
+#: src/gedlib/messages.c:460
 msgid "Error accessing data"
 msgstr "Fel vid dataåtkomst"
 
-#: src/gedlib/messages.c:460
+#: src/gedlib/messages.c:461
 msgid "Choose from history"
 msgstr "Välj ur historik"
 
-#: src/gedlib/messages.c:461
+#: src/gedlib/messages.c:462
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 "Kan inte kombinera oföränderlig (-i) eller skrivskyddad (-r) med "
 "skrivåtkomst (-w)."
 
-#: src/gedlib/messages.c:462
+#: src/gedlib/messages.c:463
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
 msgstr "Kan inte kombinera flaggorna tvinga upp (-f) och lås (-l)."
 
-#: src/gedlib/messages.c:463
+#: src/gedlib/messages.c:464
 msgid "Program"
 msgstr "Program"
 
-#: src/gedlib/messages.c:464
+#: src/gedlib/messages.c:465
 msgid "Default path: "
 msgstr "Förvald sökväg: "
 
-#: src/gedlib/messages.c:465
+#: src/gedlib/messages.c:466
 msgid "WARNING: missing keys"
 msgstr "VARNING: nycklar saknas"
 
-#: src/gedlib/messages.c:466
+#: src/gedlib/messages.c:467
 msgid "This does not point to another record in the database!"
 msgstr "Detta pekar inte på en annan post i databasen!"
 
-#: src/gedlib/messages.c:467
+#: src/gedlib/messages.c:468
 msgid "enter file name"
 msgstr "skriv in filnamn"
 
-#: src/gedlib/messages.c:468
+#: src/gedlib/messages.c:469
 #, c-format
 msgid "enter file name (*%s)"
 msgstr "skriv in filnamn (*%s)"
 
-#: src/gedlib/messages.c:469
+#: src/gedlib/messages.c:470
 msgid "There is no record with that key or reference."
 msgstr "Det finns ingen post med den nyckeln eller referensen."
 
-#: src/gedlib/messages.c:470
+#: src/gedlib/messages.c:471
 msgid "Database was corrupt."
 msgstr "Databasen var trasig."
 
-#: src/gedlib/messages.c:473
+#: src/gedlib/messages.c:474
 msgid "Bad decimal number format."
 msgstr "Ogiltigt format för decimaltal."
 
-#: src/gedlib/messages.c:474
+#: src/gedlib/messages.c:475
 msgid "Bad hexidecimal number format."
 msgstr "Ogiltigt format för hexadecimala tal."
 
-#: src/gedlib/messages.c:475
+#: src/gedlib/messages.c:476
 msgid "No replacement string on line."
 msgstr "Ingen ersättningssträng på raden."
 
-#: src/gedlib/messages.c:476
+#: src/gedlib/messages.c:477
 msgid "No original string on line."
 msgstr "Ingen ursprunglig sträng på raden."
 
-#: src/gedlib/messages.c:477
+#: src/gedlib/messages.c:478
 msgid "Bad escape format."
 msgstr "Felaktigt kontrollsekvensformat."
 
-#: src/gedlib/messages.c:478
-#, c-format
-msgid "%s: line %d (entry %d): %s\n"
+#: src/gedlib/messages.c:479
+#, fuzzy, c-format
+msgid "%s: line %d (entry %d): %s"
 msgstr "%s: rad %d (notering %d): %s\n"
 
-#: src/gedlib/messages.c:481 src/liflines/brwsmenu.c:26
+#: src/gedlib/messages.c:482 src/liflines/brwsmenu.c:26
 msgid "q  Return to main menu"
 msgstr "q  Återgå till huvudmenyn"
 
-#: src/gedlib/messages.c:482
+#: src/gedlib/messages.c:483
 msgid "q  Return to previous menu"
 msgstr "q  Återgå till föregående meny"
 
-#: src/gedlib/messages.c:483
+#: src/gedlib/messages.c:484
 msgid "q  Quit program"
 msgstr "q  Avsluta programmet"
 
-#: src/gedlib/messages.c:484
+#: src/gedlib/messages.c:485
 msgid "Q  Quit current database"
 msgstr "Q  Avsluta aktuell databas"
 
-#: src/gedlib/messages.c:487
+#: src/gedlib/messages.c:488
 msgid "b  Browse the persons in the database"
 msgstr "b  Bläddra mellan personer i databasen"
 
-#: src/gedlib/messages.c:488
+#: src/gedlib/messages.c:489
 msgid "s  Search database"
 msgstr "s  Sök i databasen"
 
-#: src/gedlib/messages.c:489
+#: src/gedlib/messages.c:490
 msgid "a  Add information to the database"
 msgstr "a  Lägg till information i databasen"
 
-#: src/gedlib/messages.c:490
+#: src/gedlib/messages.c:491
 msgid "d  Delete information from the database"
 msgstr "d  Ta bort information från databasen"
 
-#: src/gedlib/messages.c:491
+#: src/gedlib/messages.c:492
 msgid "r  Generate report by entering report name"
 msgstr "r  Skapa rapport genom att ange rapportens namn"
 
-#: src/gedlib/messages.c:492
+#: src/gedlib/messages.c:493
 msgid "p  Pick a report from list and run"
 msgstr "p  Välj en rapport från lista och kör"
 
-#: src/gedlib/messages.c:493
+#: src/gedlib/messages.c:494
 msgid "c  Character set options"
 msgstr "c  Inställningar för teckenuppsättning"
 
-#: src/gedlib/messages.c:494
+#: src/gedlib/messages.c:495
 msgid "t  Modify character translation tables"
 msgstr "t  Modifiera teckenöversättningstabeller"
 
-#: src/gedlib/messages.c:495
+#: src/gedlib/messages.c:496
 msgid "u  Miscellaneous utilities"
 msgstr "u  Diverse verktyg"
 
-#: src/gedlib/messages.c:496
+#: src/gedlib/messages.c:497
 msgid "x  Handle source, event and other records"
 msgstr "x  Hantera käll-, händelse- och övriga poster"
 
-#: src/gedlib/messages.c:499
+#: src/gedlib/messages.c:500
 msgid "What utility do you want to perform?"
 msgstr "Vilket verktyg vill du använda?"
 
-#: src/gedlib/messages.c:500
+#: src/gedlib/messages.c:501
 msgid "s  Save the database in a GEDCOM file"
 msgstr "s  Spara databasen till GEDCOM-fil"
 
-#: src/gedlib/messages.c:501
+#: src/gedlib/messages.c:502
 msgid "r  Read in data from a GEDCOM file"
 msgstr "r  Läs in data från en GEDCOM-fil"
 
-#: src/gedlib/messages.c:502
+#: src/gedlib/messages.c:503
 msgid "R  Pick a GEDCOM file and read in"
 msgstr ""
 
-#: src/gedlib/messages.c:503
+#: src/gedlib/messages.c:504
 msgid "k  Find a person's key value"
 msgstr "k  Finn nyckelvärde för en person"
 
-#: src/gedlib/messages.c:504
+#: src/gedlib/messages.c:505
 msgid "i  Identify a person from key value"
 msgstr "i  Identifiera en person via nyckelvärde"
 
-#: src/gedlib/messages.c:505
+#: src/gedlib/messages.c:506
 msgid "d  Show database statistics"
 msgstr "d  Visa databasstatistik"
 
-#: src/gedlib/messages.c:506
+#: src/gedlib/messages.c:507
 msgid "m  Show memory statistics"
 msgstr "m  Visa minnesstatistik"
 
-#: src/gedlib/messages.c:507
+#: src/gedlib/messages.c:508
 msgid "e  Edit the place abbreviation file"
 msgstr "e  Redigera platsförkortningsfilen"
 
-#: src/gedlib/messages.c:508
+#: src/gedlib/messages.c:509
 msgid "o  Edit the user options file"
 msgstr "o  Redigera fil för användarinställningar"
 
-#: src/gedlib/messages.c:511
+#: src/gedlib/messages.c:512
 msgid "What activity do you want to perform?"
 msgstr "Vilken funktion vill du använda?"
 
-#: src/gedlib/messages.c:512
+#: src/gedlib/messages.c:513
 msgid "s  Browse source records"
 msgstr "s  Bläddra i källposter"
 
-#: src/gedlib/messages.c:513
+#: src/gedlib/messages.c:514
 msgid "e  Browse event records"
 msgstr "e  Bläddra i händelseposter"
 
-#: src/gedlib/messages.c:514
+#: src/gedlib/messages.c:515
 msgid "x  Browse other records"
 msgstr "x  Bläddra i övriga posttyper"
 
-#: src/gedlib/messages.c:515
+#: src/gedlib/messages.c:516
 msgid "1  Add a source record to the database"
 msgstr "1  Lägg till en källpost i databasen"
 
-#: src/gedlib/messages.c:516
+#: src/gedlib/messages.c:517
 msgid "2  Edit source record from the database"
 msgstr "2  Redigera källpost i databasen"
 
-#: src/gedlib/messages.c:517
+#: src/gedlib/messages.c:518
 msgid "3  Add an event record to the database"
 msgstr "3  Lägg till en händelsepost i databasen"
 
-#: src/gedlib/messages.c:518
+#: src/gedlib/messages.c:519
 msgid "4  Edit event record from the database"
 msgstr "4  Redigera händelsepost i databasen"
 
-#: src/gedlib/messages.c:519
+#: src/gedlib/messages.c:520
 msgid "5  Add an other record to the database"
 msgstr "5  Lägg till en post av övrig typ i databasen"
 
-#: src/gedlib/messages.c:520
+#: src/gedlib/messages.c:521
 msgid "6  Edit other record from the database"
 msgstr "6  Redigera en post av övrig typ i databasen"
 
-#: src/gedlib/messages.c:523
+#: src/gedlib/messages.c:524
 msgid "Translation Tables"
 msgstr "Teckenöversättningstabeller"
 
-#: src/gedlib/messages.c:524
+#: src/gedlib/messages.c:525
 msgid "e  edit individual tables (in db)"
 msgstr "e  redigera enskilda tabeller (i db)"
 
-#: src/gedlib/messages.c:525
+#: src/gedlib/messages.c:526
 msgid "l  load a table from a file (into db)"
 msgstr "l  ladda en tabell från en fil (till db)"
 
-#: src/gedlib/messages.c:526
+#: src/gedlib/messages.c:527
 msgid "s  save a table to a file (from db)"
 msgstr "s  spara en tabell till en fil (från db)"
 
-#: src/gedlib/messages.c:527
+#: src/gedlib/messages.c:528
 msgid "x  export all tables (from db to files)"
 msgstr "x  exportera alla tabeller (från db till filer)"
 
-#: src/gedlib/messages.c:528
+#: src/gedlib/messages.c:529
 msgid "i  import all tables (from files into db)"
 msgstr "i  importera alla tabeller (från filer till db)"
 
-#: src/gedlib/messages.c:529
+#: src/gedlib/messages.c:530
 msgid "export/import directory:"
 msgstr "exportera/importera katalog:"
 
-#: src/gedlib/messages.c:532
+#: src/gedlib/messages.c:533
 msgid "Which character mapping do you want to edit?"
 msgstr "Vilken teckenmappning vill du redigera?"
 
-#: src/gedlib/messages.c:533
+#: src/gedlib/messages.c:534
 msgid "Which character mapping do you want to save?"
 msgstr "Vilken teckenmappning vill du spara?"
 
-#: src/gedlib/messages.c:535
+#: src/gedlib/messages.c:536
 msgid "e  Editor to Internal mapping "
 msgstr "e  Mappning från editor till intern "
 
-#: src/gedlib/messages.c:536
+#: src/gedlib/messages.c:537
 msgid "m  Internal to Editor mapping "
 msgstr "m  Mappning från intern till editor "
 
-#: src/gedlib/messages.c:537
+#: src/gedlib/messages.c:538
 msgid "i  GEDCOM to Internal mapping "
 msgstr "i  Mappning från GEDCOM till intern "
 
-#: src/gedlib/messages.c:538
+#: src/gedlib/messages.c:539
 msgid "x  Internal to GEDCOM mapping "
 msgstr "x  Mappning från intern till GEDCOM "
 
-#: src/gedlib/messages.c:539
+#: src/gedlib/messages.c:540
 msgid "g  Display to Internal mapping"
 msgstr "g  Mappning från skärm till intern  "
 
-#: src/gedlib/messages.c:540
+#: src/gedlib/messages.c:541
 msgid "d  Internal to Display mapping"
 msgstr "d  Mappning från intern till skärm  "
 
-#: src/gedlib/messages.c:541
+#: src/gedlib/messages.c:542
 msgid "r  Internal to Report mapping "
 msgstr "r  Mappning från intern till rapport"
 
-#: src/gedlib/messages.c:543
+#: src/gedlib/messages.c:544
 msgid "Not implemented yet"
 msgstr "Ej implementerat ännu"
 
-#: src/gedlib/messages.c:546
+#: src/gedlib/messages.c:547
 msgid "What do you want to add?"
 msgstr "Vad vill du lägga till?"
 
-#: src/gedlib/messages.c:547
+#: src/gedlib/messages.c:548
 msgid "p  Person - add new person to the database"
 msgstr "p  Person - lägg till ny person i databasen"
 
-#: src/gedlib/messages.c:548
+#: src/gedlib/messages.c:549
 msgid "f  Family - create family record from one or two spouses"
 msgstr "f  Familj - skapa familjepost med en eller två makar"
 
-#: src/gedlib/messages.c:549
+#: src/gedlib/messages.c:550
 msgid "c  Child - add a child to an existing family"
 msgstr "c  Barn - lägg till ett barn i en befintlig familj"
 
-#: src/gedlib/messages.c:550
+#: src/gedlib/messages.c:551
 msgid "s  Spouse - add a spouse to an existing family"
 msgstr "s  Maka/make - lägg till en maka/make i en befintlig familj"
 
-#: src/gedlib/messages.c:553
+#: src/gedlib/messages.c:554
 msgid "What do you want to remove?"
 msgstr "Vad vill du ta bort?"
 
-#: src/gedlib/messages.c:554
+#: src/gedlib/messages.c:555
 msgid "c  Child - remove a child from his/her family"
 msgstr "c  Barn - ta bort ett barn från dess familj"
 
-#: src/gedlib/messages.c:555
+#: src/gedlib/messages.c:556
 msgid "s  Spouse - remove a spouse from a family"
 msgstr "s  Maka/make - ta bort en maka/make från en befintlig familj"
 
-#: src/gedlib/messages.c:556
+#: src/gedlib/messages.c:557
 msgid "i  Individual - remove a person completely"
 msgstr "i  Person - ta bort en person fullständigt"
 
-#: src/gedlib/messages.c:557
+#: src/gedlib/messages.c:558
 msgid "f  Family - remove a family completely"
 msgstr "f  Familj - ta bort en familj fullständigt"
 
-#: src/gedlib/messages.c:560
+#: src/gedlib/messages.c:561
 msgid "How would you like to find a record?"
 msgstr "Hur skulle du vilja finna en post?"
 
-#: src/gedlib/messages.c:561
+#: src/gedlib/messages.c:562
 msgid "f  Full database scan"
 msgstr "f  Sökning i hela databasen"
 
-#: src/gedlib/messages.c:564
+#: src/gedlib/messages.c:565
 msgid "What scan type?"
 msgstr "Vilken typ av sökning?"
 
-#: src/gedlib/messages.c:565
+#: src/gedlib/messages.c:566
 msgid "f  Full name scan"
 msgstr "f  Sök på hela namnet"
 
-#: src/gedlib/messages.c:566
+#: src/gedlib/messages.c:567
 msgid "n  Name fragment (whitespace-delimited) scan"
 msgstr "n  Sök på namnfragment (avdelade med blanksteg)"
 
-#: src/gedlib/messages.c:567
+#: src/gedlib/messages.c:568
 msgid "r  Refn scan"
 msgstr "r  Refn-sökning"
 
-#: src/gedlib/messages.c:568
+#: src/gedlib/messages.c:569
 msgid "Performing full name scan"
 msgstr "Utför sökning på hela namnet"
 
-#: src/gedlib/messages.c:569
+#: src/gedlib/messages.c:570
 msgid "Performing name fragment scan"
 msgstr "Utför sökning på namnfragment"
 
-#: src/gedlib/messages.c:570
+#: src/gedlib/messages.c:571
 msgid "Performing refn scan"
 msgstr "Utför sökning på refn"
 
-#: src/gedlib/messages.c:571
+#: src/gedlib/messages.c:572
 msgid "No records found in scan"
 msgstr "Inga poster återfanns i sökning"
 
-#: src/gedlib/messages.c:574
+#: src/gedlib/messages.c:575
 msgid "abt %1"
 msgstr "omk %1"
 
-#: src/gedlib/messages.c:575
+#: src/gedlib/messages.c:576
 msgid "about %1"
 msgstr "omkring %1"
 
-#: src/gedlib/messages.c:576
+#: src/gedlib/messages.c:577
 msgid "est %1"
 msgstr "upp %1"
 
-#: src/gedlib/messages.c:577
+#: src/gedlib/messages.c:578
 msgid "estimated %1"
 msgstr "uppskattat %1"
 
-#: src/gedlib/messages.c:578
+#: src/gedlib/messages.c:579
 msgid "cal %1"
 msgstr "ber %1"
 
-#: src/gedlib/messages.c:579
+#: src/gedlib/messages.c:580
 msgid "calculated %1"
 msgstr "beräknat %1"
 
-#: src/gedlib/messages.c:580
+#: src/gedlib/messages.c:581
 msgid "fr %1"
 msgstr "fr %1"
 
-#: src/gedlib/messages.c:581
+#: src/gedlib/messages.c:582
 msgid "from %1"
 msgstr "från %1"
 
-#: src/gedlib/messages.c:582 src/gedlib/messages.c:583
+#: src/gedlib/messages.c:583 src/gedlib/messages.c:584
 msgid "to %1"
 msgstr "t %1"
 
-#: src/gedlib/messages.c:584
+#: src/gedlib/messages.c:585
 msgid "fr %1 to %2"
 msgstr "fr %1 t %2"
 
-#: src/gedlib/messages.c:585
+#: src/gedlib/messages.c:586
 msgid "from %1 to %2"
 msgstr "från %1 till %2"
 
-#: src/gedlib/messages.c:586
+#: src/gedlib/messages.c:587
 msgid "bef %1"
 msgstr "för %1"
 
-#: src/gedlib/messages.c:587
+#: src/gedlib/messages.c:588
 msgid "before %1"
 msgstr "före %1"
 
-#: src/gedlib/messages.c:588
+#: src/gedlib/messages.c:589
 msgid "aft %1"
 msgstr "eft %1"
 
-#: src/gedlib/messages.c:589
+#: src/gedlib/messages.c:590
 msgid "after %1"
 msgstr "efter %1"
 
-#: src/gedlib/messages.c:590
+#: src/gedlib/messages.c:591
 msgid "bet %1 and %2"
 msgstr "mel %1 och %2"
 
-#: src/gedlib/messages.c:591
+#: src/gedlib/messages.c:592
 msgid "between %1 and %2"
 msgstr "mellan %1 och %2"
 
-#: src/gedlib/messages.c:594
+#: src/gedlib/messages.c:595
 msgid "B.C."
 msgstr "f. Kr."
 
-#: src/gedlib/messages.c:596
+#: src/gedlib/messages.c:597
 msgid "BC"
 msgstr "fKr"
 
-#: src/gedlib/messages.c:598
+#: src/gedlib/messages.c:599
 msgid "B.C.E."
 msgstr "f. Kr."
 
-#: src/gedlib/messages.c:600
+#: src/gedlib/messages.c:601
 msgid "BCE"
 msgstr "fKr"
 
-#: src/gedlib/messages.c:602
+#: src/gedlib/messages.c:603
 msgid "A.D."
 msgstr "e. Kr."
 
-#: src/gedlib/messages.c:604
+#: src/gedlib/messages.c:605
 msgid "AD"
 msgstr "eKr"
 
-#: src/gedlib/messages.c:606
+#: src/gedlib/messages.c:607
 msgid "C.E."
 msgstr "e. Kr."
 
-#: src/gedlib/messages.c:608
+#: src/gedlib/messages.c:609
 msgid "CE"
 msgstr "eKr"
 
-#: src/gedlib/messages.c:611
+#: src/gedlib/messages.c:612
 msgid "%1J"
 msgstr "%1J"
 
-#: src/gedlib/messages.c:613
+#: src/gedlib/messages.c:614
 msgid "%1 HEB"
 msgstr "%1 HEB"
 
-#: src/gedlib/messages.c:615
+#: src/gedlib/messages.c:616
 msgid "%1 FR"
 msgstr "%1 FR"
 
-#: src/gedlib/messages.c:617
+#: src/gedlib/messages.c:618
 msgid "%1 AUC"
 msgstr "%1 AUC"
 
-#: src/gedlib/messages.c:619
+#: src/gedlib/messages.c:620
 msgid "jan"
 msgstr "jan"
 
-#: src/gedlib/messages.c:620
+#: src/gedlib/messages.c:621
 msgid "january"
 msgstr "januari"
 
-#: src/gedlib/messages.c:621
+#: src/gedlib/messages.c:622
 msgid "feb"
 msgstr "feb"
 
-#: src/gedlib/messages.c:622
+#: src/gedlib/messages.c:623
 msgid "february"
 msgstr "februari"
 
-#: src/gedlib/messages.c:623
+#: src/gedlib/messages.c:624
 msgid "mar"
 msgstr "mar"
 
-#: src/gedlib/messages.c:624
+#: src/gedlib/messages.c:625
 msgid "march"
 msgstr "mars"
 
-#: src/gedlib/messages.c:625
+#: src/gedlib/messages.c:626
 msgid "apr"
 msgstr "apr"
 
-#: src/gedlib/messages.c:626
+#: src/gedlib/messages.c:627
 msgid "april"
 msgstr "april"
 
-#: src/gedlib/messages.c:628
+#: src/gedlib/messages.c:629
 msgid "**may"
 msgstr "maj"
 
-#: src/gedlib/messages.c:629
+#: src/gedlib/messages.c:630
 msgid "may"
 msgstr "maj"
 
-#: src/gedlib/messages.c:630
+#: src/gedlib/messages.c:631
 msgid "jun"
 msgstr "jun"
 
-#: src/gedlib/messages.c:631
+#: src/gedlib/messages.c:632
 msgid "june"
 msgstr "juni"
 
-#: src/gedlib/messages.c:632
+#: src/gedlib/messages.c:633
 msgid "jul"
 msgstr "jul"
 
-#: src/gedlib/messages.c:633
+#: src/gedlib/messages.c:634
 msgid "july"
 msgstr "juli"
 
-#: src/gedlib/messages.c:634
+#: src/gedlib/messages.c:635
 msgid "aug"
 msgstr "aug"
 
-#: src/gedlib/messages.c:635
+#: src/gedlib/messages.c:636
 msgid "august"
 msgstr "augusti"
 
-#: src/gedlib/messages.c:636
+#: src/gedlib/messages.c:637
 msgid "sep"
 msgstr "sep"
 
-#: src/gedlib/messages.c:637
+#: src/gedlib/messages.c:638
 msgid "september"
 msgstr "september"
 
-#: src/gedlib/messages.c:638
+#: src/gedlib/messages.c:639
 msgid "oct"
 msgstr "okt"
 
-#: src/gedlib/messages.c:639
+#: src/gedlib/messages.c:640
 msgid "october"
 msgstr "oktober"
 
-#: src/gedlib/messages.c:640
+#: src/gedlib/messages.c:641
 msgid "nov"
 msgstr "nov"
 
-#: src/gedlib/messages.c:641
+#: src/gedlib/messages.c:642
 msgid "november"
 msgstr "november"
 
-#: src/gedlib/messages.c:642
+#: src/gedlib/messages.c:643
 msgid "dec"
 msgstr "dec"
 
-#: src/gedlib/messages.c:643
+#: src/gedlib/messages.c:644
 msgid "december"
 msgstr "december"
 
-#: src/gedlib/messages.c:645
+#: src/gedlib/messages.c:646
 msgid "tsh"
 msgstr "tsh"
 
-#: src/gedlib/messages.c:646
+#: src/gedlib/messages.c:647
 msgid "tishri"
 msgstr "tishri"
 
-#: src/gedlib/messages.c:647
+#: src/gedlib/messages.c:648
 msgid "csh"
 msgstr "csh"
 
-#: src/gedlib/messages.c:648
+#: src/gedlib/messages.c:649
 msgid "cheshvan"
 msgstr "cheshvan"
 
-#: src/gedlib/messages.c:649
+#: src/gedlib/messages.c:650
 msgid "ksl"
 msgstr "ksl"
 
-#: src/gedlib/messages.c:650
+#: src/gedlib/messages.c:651
 msgid "kislev"
 msgstr "kislev"
 
-#: src/gedlib/messages.c:651
+#: src/gedlib/messages.c:652
 msgid "tvt"
 msgstr "tvt"
 
-#: src/gedlib/messages.c:652
+#: src/gedlib/messages.c:653
 msgid "tevet"
 msgstr "tevet"
 
-#: src/gedlib/messages.c:653
+#: src/gedlib/messages.c:654
 msgid "shv"
 msgstr "shv"
 
-#: src/gedlib/messages.c:654
+#: src/gedlib/messages.c:655
 msgid "shevat"
 msgstr "shevat"
 
-#: src/gedlib/messages.c:655
+#: src/gedlib/messages.c:656
 msgid "adr"
 msgstr "adr"
 
-#: src/gedlib/messages.c:656
+#: src/gedlib/messages.c:657
 msgid "adar"
 msgstr "adar"
 
-#: src/gedlib/messages.c:657
+#: src/gedlib/messages.c:658
 msgid "ads"
 msgstr "ads"
 
-#: src/gedlib/messages.c:658
+#: src/gedlib/messages.c:659
 msgid "adar sheni"
 msgstr "adar sheni"
 
-#: src/gedlib/messages.c:659
+#: src/gedlib/messages.c:660
 msgid "nsn"
 msgstr "nsn"
 
-#: src/gedlib/messages.c:660
+#: src/gedlib/messages.c:661
 msgid "nisan"
 msgstr "nisan"
 
-#: src/gedlib/messages.c:661
+#: src/gedlib/messages.c:662
 msgid "iyr"
 msgstr "iyr"
 
-#: src/gedlib/messages.c:662
+#: src/gedlib/messages.c:663
 msgid "iyar"
 msgstr "iyar"
 
-#: src/gedlib/messages.c:663
+#: src/gedlib/messages.c:664
 msgid "svn"
 msgstr "svn"
 
-#: src/gedlib/messages.c:664
+#: src/gedlib/messages.c:665
 msgid "sivan"
 msgstr "sivan"
 
-#: src/gedlib/messages.c:665
+#: src/gedlib/messages.c:666
 msgid "tmz"
 msgstr "tmz"
 
-#: src/gedlib/messages.c:666
+#: src/gedlib/messages.c:667
 msgid "tamuz"
 msgstr "tamuz"
 
-#: src/gedlib/messages.c:667
+#: src/gedlib/messages.c:668
 msgid "aav"
 msgstr "aav"
 
-#: src/gedlib/messages.c:668
+#: src/gedlib/messages.c:669
 msgid "av"
 msgstr "av"
 
-#: src/gedlib/messages.c:669
+#: src/gedlib/messages.c:670
 msgid "ell"
 msgstr "ell"
 
-#: src/gedlib/messages.c:670
+#: src/gedlib/messages.c:671
 msgid "elul"
 msgstr "elul"
 
-#: src/gedlib/messages.c:672
+#: src/gedlib/messages.c:673
 msgid "vend"
 msgstr "vend"
 
-#: src/gedlib/messages.c:673
+#: src/gedlib/messages.c:674
 msgid "vendemiaire"
 msgstr "vendemiaire"
 
-#: src/gedlib/messages.c:674
+#: src/gedlib/messages.c:675
 msgid "brum"
 msgstr "brum"
 
-#: src/gedlib/messages.c:675
+#: src/gedlib/messages.c:676
 msgid "brumaire"
 msgstr "brumaire"
 
-#: src/gedlib/messages.c:676
+#: src/gedlib/messages.c:677
 msgid "frim"
 msgstr "frim"
 
-#: src/gedlib/messages.c:677
+#: src/gedlib/messages.c:678
 msgid "frimaire"
 msgstr "frimaire"
 
-#: src/gedlib/messages.c:678
+#: src/gedlib/messages.c:679
 msgid "nivo"
 msgstr "nivo"
 
-#: src/gedlib/messages.c:679
+#: src/gedlib/messages.c:680
 msgid "nivose"
 msgstr "nivose"
 
-#: src/gedlib/messages.c:680
+#: src/gedlib/messages.c:681
 msgid "pluv"
 msgstr "pluv"
 
-#: src/gedlib/messages.c:681
+#: src/gedlib/messages.c:682
 msgid "pluviose"
 msgstr "pluviose"
 
-#: src/gedlib/messages.c:682
+#: src/gedlib/messages.c:683
 msgid "vent"
 msgstr "vent"
 
-#: src/gedlib/messages.c:683
+#: src/gedlib/messages.c:684
 msgid "ventose"
 msgstr "ventose"
 
-#: src/gedlib/messages.c:684
+#: src/gedlib/messages.c:685
 msgid "germ"
 msgstr "germ"
 
-#: src/gedlib/messages.c:685
+#: src/gedlib/messages.c:686
 msgid "germinal"
 msgstr "germinal"
 
-#: src/gedlib/messages.c:686
+#: src/gedlib/messages.c:687
 msgid "flor"
 msgstr "flor"
 
-#: src/gedlib/messages.c:687
+#: src/gedlib/messages.c:688
 msgid "floreal"
 msgstr "floreal"
 
-#: src/gedlib/messages.c:688
+#: src/gedlib/messages.c:689
 msgid "prai"
 msgstr "prai"
 
-#: src/gedlib/messages.c:689
+#: src/gedlib/messages.c:690
 msgid "prairial"
 msgstr "prairial"
 
-#: src/gedlib/messages.c:690
+#: src/gedlib/messages.c:691
 msgid "mess"
 msgstr "mess"
 
-#: src/gedlib/messages.c:691
+#: src/gedlib/messages.c:692
 msgid "messidor"
 msgstr "messidor"
 
-#: src/gedlib/messages.c:692
+#: src/gedlib/messages.c:693
 msgid "ther"
 msgstr "ther"
 
-#: src/gedlib/messages.c:693
+#: src/gedlib/messages.c:694
 msgid "thermidor"
 msgstr "thermidor"
 
-#: src/gedlib/messages.c:694
+#: src/gedlib/messages.c:695
 msgid "fruc"
 msgstr "fruc"
 
-#: src/gedlib/messages.c:695
+#: src/gedlib/messages.c:696
 msgid "fructidor"
 msgstr "fructidor"
 
-#: src/gedlib/messages.c:696
+#: src/gedlib/messages.c:697
 msgid "comp"
 msgstr "comp"
 
-#: src/gedlib/messages.c:697
+#: src/gedlib/messages.c:698
 msgid "jour_complementairs"
 msgstr "jour_complementairs"
 
@@ -2344,141 +2348,146 @@ msgstr "INGET NAMN"
 msgid "This person record does not have a name line."
 msgstr "Denna personpost har ingen namnrad."
 
-#: src/interp/alloc.c:63
-#, c-format
-msgid "%s: the arg must be a person."
-msgstr "%s: argumentet måste vara en person."
-
-#: src/interp/alloc.c:666
+#: src/interp/alloc.c:670
 #, c-format
 msgid "Error: file \"%s\": line %d: "
 msgstr "Fel: fil \"%s\": rad %d: "
 
-#: src/interp/alloc.c:762
+#: src/interp/alloc.c:769
 #, c-format
 msgid "%s: the arg must be an integer."
 msgstr "%s: argumentet måste vara ett heltal."
 
-#: src/interp/alloc.c:763
+#: src/interp/alloc.c:770
 #, c-format
 msgid "%s: the arg #%s must be an integer."
 msgstr "%s: argumentet no. %s måste vara ett heltal."
 
-#: src/interp/alloc.c:764
+#: src/interp/alloc.c:771
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a float."
+msgstr "%s: argumentet no. %s måste vara en lista."
+
+#: src/interp/alloc.c:772
 #, c-format
 msgid "%s: the arg must be a string."
 msgstr "%s: argumentet måste vara en sträng."
 
-#: src/interp/alloc.c:765
+#: src/interp/alloc.c:773
 #, c-format
 msgid "%s: the arg #%s must be a string."
 msgstr "%s: argumentet no. %s måste vara en sträng."
 
-#: src/interp/alloc.c:766
+#: src/interp/alloc.c:774
 #, c-format
 msgid "%s: null arg not permissible."
 msgstr "%s: nollargument inte tillåtet."
 
-#: src/interp/alloc.c:767
+#: src/interp/alloc.c:775
 #, c-format
 msgid "%s: the arg must be a filename."
 msgstr "%s: argumentet måste vara ett filnamn."
 
-#: src/interp/alloc.c:768
+#: src/interp/alloc.c:776
 #, c-format
 msgid "%s: the arg must be a node or string."
 msgstr "%s: argumentet måste vara en nod eller sträng."
 
-#: src/interp/alloc.c:769
+#: src/interp/alloc.c:777
+#, c-format
+msgid "%s: the arg must be a person."
+msgstr "%s: argumentet måste vara en person."
+
+#: src/interp/alloc.c:778
 #, c-format
 msgid "%s: the arg #%s must be a person."
 msgstr "%s: argumentet no. %s måste vara en person."
 
-#: src/interp/alloc.c:770
+#: src/interp/alloc.c:779
 #, c-format
 msgid "%s: the arg must be a family."
 msgstr "%s: argumentet måste vara en familj."
 
-#: src/interp/alloc.c:771
+#: src/interp/alloc.c:780
 #, c-format
 msgid "%s: the arg #%s must be a family."
 msgstr "%s: argumentet no. %s måste vara en familj."
 
-#: src/interp/alloc.c:772
+#: src/interp/alloc.c:781
 #, c-format
 msgid "%s: the arg #%s must be a record."
 msgstr "%s: argumentet no. %s måste vara en post."
 
-#: src/interp/alloc.c:773
+#: src/interp/alloc.c:782
 #, c-format
 msgid "%s: the arg must be a node."
 msgstr "%s: argumentet måste vara en nod."
 
-#: src/interp/alloc.c:774
+#: src/interp/alloc.c:783
 #, c-format
 msgid "%s: the arg #%s must be a node."
 msgstr "%s: argumentet no. %s måste vara en nod."
 
-#: src/interp/alloc.c:775
+#: src/interp/alloc.c:784
 #, c-format
 msgid "%s: the arg must be a variable."
 msgstr "%s: argumentet måste vara en variabel."
 
-#: src/interp/alloc.c:776
+#: src/interp/alloc.c:785
 #, c-format
 msgid "%s: the arg #%s must be a variable."
 msgstr "%s: argumentet no. %s måste vara en variabel."
 
-#: src/interp/alloc.c:777
+#: src/interp/alloc.c:786
 #, c-format
 msgid "%s: the arg #%s must be a boolean."
 msgstr "%s: argumentet no. %s måste vara booleskt."
 
-#: src/interp/alloc.c:778
+#: src/interp/alloc.c:787
 #, c-format
 msgid "%s: the arg must be a list."
 msgstr "%s: argumentet måste vara en lista."
 
-#: src/interp/alloc.c:779
+#: src/interp/alloc.c:788
 #, c-format
 msgid "%s: the arg #%s must be a list."
 msgstr "%s: argumentet no. %s måste vara en lista."
 
-#: src/interp/alloc.c:780
+#: src/interp/alloc.c:789
 #, fuzzy, c-format
 msgid "%s: Bad arguments"
 msgstr "%s: Felaktigt (felaktiga) argument"
 
-#: src/interp/alloc.c:781
+#: src/interp/alloc.c:790
 #, c-format
 msgid "%s: the arg #%s had a major error."
 msgstr "%s: argumentet no. %s hade ett större fel."
 
-#: src/interp/builtin.c:108
+#: src/interp/builtin.c:109
 msgid "Enter integer for program"
 msgstr "Skriv in heltal för program"
 
-#: src/interp/builtin.c:179
+#: src/interp/builtin.c:180
 msgid "Identify person for program:"
 msgstr "Skriv in sträng för program"
 
-#: src/interp/builtin.c:207
+#: src/interp/builtin.c:208
 msgid "Enter a spouse from family."
 msgstr "Lägg till en maka/make från familj."
 
-#: src/interp/builtin.c:208
+#: src/interp/builtin.c:209
 msgid "Enter a sibling from family."
 msgstr "Lägg till ett syskon från familj."
 
-#: src/interp/builtin.c:241
+#: src/interp/builtin.c:242
 msgid "Identify list of persons for program:"
 msgstr "Identifiera lista över personer för programmet:"
 
-#: src/interp/builtin.c:300
+#: src/interp/builtin.c:301
 msgid "name: person does not have a name"
 msgstr "name: personen har inget namn."
 
-#: src/interp/builtin.c:353
+#: src/interp/builtin.c:354
 msgid "fullname: person does not have a name"
 msgstr "fullname: personen har inget namn"
 
@@ -2486,289 +2495,287 @@ msgstr "fullname: personen har inget namn"
 msgid "surname: person does not have a name"
 msgstr "surname: personen har inget namn"
 
-#: src/interp/builtin.c:407
+#: src/interp/builtin.c:406
 msgid "soundex: person does not have a name"
 msgstr "soundex: personen har inget namn"
 
-#: src/interp/builtin.c:454
-#, c-format
-msgid "Bad UTF character %d in UTF escape string <%s>"
+#: src/interp/builtin.c:468
+#, fuzzy, c-format
+msgid "Bad escape code at offset %d in bytecode string <%s>"
 msgstr "Ogiltigt UTF-tecken %d i UTF-kontrollsträng <%s>"
 
-#: src/interp/builtin.c:554
+#: src/interp/builtin.c:610
 msgid "(givens) person does not have a name"
 msgstr "(givens) personen har inget namn"
 
-#: src/interp/builtin.c:581
+#: src/interp/builtin.c:636
 msgid "set: error evaluating 2nd arg"
 msgstr "set: fel vid utvärdering av andra argumentet"
 
-#: src/interp/builtin.c:968
-msgid "the arg to f is not a float"
-msgstr "argumentet till f är inte ett flyttal"
-
-#: src/interp/builtin.c:1018
+#: src/interp/builtin.c:1071
 msgid "first"
 msgstr "första"
 
-#: src/interp/builtin.c:1018
+#: src/interp/builtin.c:1071
 msgid "second"
 msgstr "andra"
 
-#: src/interp/builtin.c:1018
+#: src/interp/builtin.c:1071
 msgid "third"
 msgstr "tredje"
 
-#: src/interp/builtin.c:1018
+#: src/interp/builtin.c:1071
 msgid "fourth"
 msgstr "fjärde"
 
-#: src/interp/builtin.c:1018
+#: src/interp/builtin.c:1071
 msgid "fifth"
 msgstr "femte"
 
-#: src/interp/builtin.c:1019
+#: src/interp/builtin.c:1072
 msgid "sixth"
 msgstr "sjätte"
 
-#: src/interp/builtin.c:1019
+#: src/interp/builtin.c:1072
 msgid "seventh"
 msgstr "sjunde"
 
-#: src/interp/builtin.c:1019
+#: src/interp/builtin.c:1072
 msgid "eighth"
 msgstr "åttonde"
 
-#: src/interp/builtin.c:1019
+#: src/interp/builtin.c:1072
 msgid "ninth"
 msgstr "nionde"
 
-#: src/interp/builtin.c:1019
+#: src/interp/builtin.c:1072
 msgid "tenth"
 msgstr "tionde"
 
-#: src/interp/builtin.c:1020
+#: src/interp/builtin.c:1073
 msgid "eleventh"
 msgstr "elfte"
 
-#: src/interp/builtin.c:1020
+#: src/interp/builtin.c:1073
 msgid "twelfth"
 msgstr "tolfte"
 
-#: src/interp/builtin.c:1033
+#: src/interp/builtin.c:1086
 #, c-format
 msgid "%dth"
 msgstr "%d:e"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "zero"
 msgstr "noll"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "one"
 msgstr "en"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "two"
 msgstr "två"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "three"
 msgstr "tre"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "four"
 msgstr "fyra"
 
-#: src/interp/builtin.c:1043
+#: src/interp/builtin.c:1096
 msgid "five"
 msgstr "fem"
 
-#: src/interp/builtin.c:1044
+#: src/interp/builtin.c:1097
 msgid "six"
 msgstr "sex"
 
-#: src/interp/builtin.c:1044
+#: src/interp/builtin.c:1097
 msgid "seven"
 msgstr "sju"
 
-#: src/interp/builtin.c:1044
+#: src/interp/builtin.c:1097
 msgid "eight"
 msgstr "åtta"
 
-#: src/interp/builtin.c:1044
+#: src/interp/builtin.c:1097
 msgid "nine"
 msgstr "nio"
 
-#: src/interp/builtin.c:1044
+#: src/interp/builtin.c:1097
 msgid "ten"
 msgstr "tio"
 
-#: src/interp/builtin.c:1045
+#: src/interp/builtin.c:1098
 msgid "eleven"
 msgstr "elva"
 
-#: src/interp/builtin.c:1045
+#: src/interp/builtin.c:1098
 msgid "twelve"
 msgstr "tolv"
 
-#: src/interp/builtin.c:2092
+#: src/interp/builtin.c:2145
 msgid "He"
 msgstr "Han"
 
-#: src/interp/builtin.c:2092
+#: src/interp/builtin.c:2145
 msgid "he"
 msgstr "han"
 
-#: src/interp/builtin.c:2092
+#: src/interp/builtin.c:2145
 msgid "His"
 msgstr "Hans"
 
-#: src/interp/builtin.c:2092
+#: src/interp/builtin.c:2145
 msgid "his"
 msgstr "hans"
 
-#: src/interp/builtin.c:2092
+#: src/interp/builtin.c:2145
 msgid "him"
 msgstr "honom"
 
-#: src/interp/builtin.c:2094
+#: src/interp/builtin.c:2147
 msgid "She"
 msgstr "Hon"
 
-#: src/interp/builtin.c:2094
+#: src/interp/builtin.c:2147
 msgid "she"
 msgstr "hon"
 
-#: src/interp/builtin.c:2094
+#: src/interp/builtin.c:2147
 msgid "Her"
 msgstr "Henne"
 
-#: src/interp/builtin.c:2094
+#: src/interp/builtin.c:2147
 msgid "her"
 msgstr "henne"
 
-#: src/interp/builtin.c:2094
+#: src/interp/builtin.c:2147
 #, fuzzy
 msgid "her_"
 msgstr "henne"
 
-#: src/interp/builtin.c:2503
+#: src/interp/builtin.c:2555
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) personen har inget namn"
 
-#: src/interp/interp.c:246
+#: src/interp/interp.c:241
+#, fuzzy, c-format
+msgid "Report not found: %s"
+msgstr "Teckenkodning för rapporter: %s"
+
+#: src/interp/interp.c:252
 #, c-format
 msgid "Error: file <%s> not found"
 msgstr "Fel: filen <%s> hittades ej"
 
-#: src/interp/interp.c:293
+#: src/interp/interp.c:313
 msgid "contains errors."
 msgstr "innehåller fel."
 
-#: src/interp/interp.c:300
+#: src/interp/interp.c:320
 msgid "needs a starting procedure."
 msgstr "behöver en startprocedur."
 
-#: src/interp/interp.c:307
+#: src/interp/interp.c:327
 #, c-format
 msgid "Error: output file <%s> could not be created.\n"
 msgstr "Fel: utmatningsfilen <%s> kunde inte skapas.\n"
 
-#: src/interp/interp.c:317
+#: src/interp/interp.c:337
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
 msgstr "Proc %s måste anropas med %d (inte %d) parametrar."
 
-#: src/interp/interp.c:332
+#: src/interp/interp.c:352
 msgid "is running..."
 msgstr "körs..."
 
-#: src/interp/interp.c:336
+#: src/interp/interp.c:356
 msgid "was run successfully."
 msgstr "kördes utan problem."
 
-#: src/interp/interp.c:340
+#: src/interp/interp.c:360
 msgid "was cancelled."
 msgstr "avbröts."
 
-#: src/interp/interp.c:342
+#: src/interp/interp.c:362
 msgid "was not run because of errors."
 msgstr "kördes inte p. g. a. fel."
 
-#: src/interp/interp.c:445
+#: src/interp/interp.c:484
 #, c-format
 msgid "Error: file <%s> not found: %s\n"
 msgstr "Fel: filen <%s> hittades ej: %s\n"
 
-#: src/interp/interp.c:523
+#: src/interp/interp.c:562
 #, c-format
 msgid "identifier: %s should be a string\n"
 msgstr "identifierare: %s bör vara en sträng\n"
 
-#: src/interp/interp.c:1713
+#: src/interp/interp.c:1644
+#, c-format
+msgid "Undefined proc: %s"
+msgstr ""
+
+#: src/interp/interp.c:1646
+#, c-format
+msgid "Ambiguous call to proc: %s"
+msgstr ""
+
+#: src/interp/interp.c:1786
 #, c-format
 msgid "Display locals (%d)"
 msgstr "Visa lokala symboler (%d)"
 
-#: src/interp/interp.c:1716
+#: src/interp/interp.c:1789
 #, c-format
 msgid "Display globals (%d)"
 msgstr "Visa globala symboler (%d)"
 
-#: src/interp/interp.c:1718
+#: src/interp/interp.c:1791
 msgid "Pop one level"
 msgstr "Kasta bort en nivå"
 
-#: src/interp/interp.c:1719
+#: src/interp/interp.c:1792
 msgid "Quit debugger"
 msgstr "Avsluta felsökaren"
 
-#: src/interp/interp.c:1726
+#: src/interp/interp.c:1799
 msgid "Local variables"
 msgstr "Lokala variabler"
 
-#: src/interp/interp.c:1730
+#: src/interp/interp.c:1803
 msgid "Global variables"
 msgstr "Globala variabler"
 
-#: src/interp/interp.c:1821
+#: src/interp/interp.c:1891
 msgid "Report cancelled"
 msgstr "Rapporten avbröts"
 
-#: src/interp/interp.c:1829
-#, c-format
-msgid ""
-"\n"
-"Parsing Error in <%s>"
-msgstr ""
-"\n"
-"Tolkningsfel i <%s>"
+#: src/interp/interp.c:1898
+#, fuzzy
+msgid "Report file: "
+msgstr "Teckenkodning för rapporter: %s"
 
-#: src/interp/interp.c:1832
-#, c-format
-msgid ""
-"\n"
-"Runtime Error in: <%s>"
-msgstr ""
-"\n"
-"Körningsfel i: <%s>"
-
-#: src/interp/interp.c:1838
+#: src/interp/interp.c:1905
 #, c-format
 msgid "Parsing Error at line %d: "
 msgstr "Tolkningsfel vid rad %d: "
 
-#: src/interp/interp.c:1841
+#: src/interp/interp.c:1908
 #, c-format
 msgid "Runtime Error at line %d: "
 msgstr "Körningsfel vid rad %d: "
 
-#: src/interp/interp.c:1843
+#: src/interp/interp.c:1911
 msgid "Aborting: "
 msgstr "Avbryter: "
 
-#: src/interp/interp.c:1860
+#: src/interp/interp.c:1924
 #, c-format
 msgid ""
 "\n"
@@ -2777,7 +2784,17 @@ msgstr ""
 "\n"
 "Fel i rapporten: %s"
 
-#: src/interp/interp.c:2073
+#: src/interp/interp.c:2067
+#, c-format
+msgid "Duplicate proc %s (lines %d and %d) in report: %s"
+msgstr ""
+
+#: src/interp/interp.c:2096
+#, c-format
+msgid "Duplicate func %s (lines %d and %d) in report: %s"
+msgstr ""
+
+#: src/interp/interp.c:2158
 msgid "This report requires a newer program to run"
 msgstr "Denna rapport kräver ett nyare program för att köras"
 
@@ -3113,23 +3130,23 @@ msgstr "d  Kopiera öv. t. ned."
 msgid "j  Merge bottom to top"
 msgstr "j  Sammanl. ned. - öv."
 
-#: src/liflines/brwsmenu.c:146
+#: src/liflines/brwsmenu.c:146 src/liflines/screen.c:410
 msgid "j  Move down list"
 msgstr "j  Gå nedåt i lista"
 
-#: src/liflines/brwsmenu.c:147
+#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:411
 msgid "k  Move up list"
 msgstr "k  Gå uppåt i lista"
 
-#: src/liflines/brwsmenu.c:148
+#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:412
 msgid "e  Edit this person"
 msgstr "e Redigera denna pers."
 
-#: src/liflines/brwsmenu.c:149
+#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:413
 msgid "i  Browse this person"
 msgstr "i  Bläddra till denna pers"
 
-#: src/liflines/brwsmenu.c:150
+#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:414
 msgid "m  Mark this person"
 msgstr "m  Markera denna pers."
 
@@ -3137,19 +3154,19 @@ msgstr "m  Markera denna pers."
 msgid "d  Delete from list"
 msgstr "d  Ta bort från lista"
 
-#: src/liflines/brwsmenu.c:152
+#: src/liflines/brwsmenu.c:152 src/liflines/screen.c:417
 msgid "n  Name this list"
 msgstr "n  Ge denna lista namn"
 
-#: src/liflines/brwsmenu.c:153
+#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:418
 msgid "b  Browse new persons"
 msgstr "b  Bläddra till nya pers."
 
-#: src/liflines/brwsmenu.c:154
+#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:419
 msgid "a  Add to this list"
 msgstr "a  Lägg t. i denna lista"
 
-#: src/liflines/brwsmenu.c:155
+#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:420
 msgid "x  Swap mark/current"
 msgstr "x  Växla märke/aktuell"
 
@@ -3220,14 +3237,14 @@ msgstr "B  Bläddra i ny familj"
 msgid "Missing title"
 msgstr "Titel saknas"
 
-#: src/liflines/delete.c:87
+#: src/liflines/delete.c:85
 #, fuzzy, c-format
 msgid "%d spouse"
 msgid_plural "%d spouses"
 msgstr[0] "maka/make"
 msgstr[1] "maka/make"
 
-#: src/liflines/delete.c:90
+#: src/liflines/delete.c:88
 #, fuzzy, c-format
 msgid "%d child"
 msgid_plural "%d children"
@@ -3259,6 +3276,23 @@ msgstr "  i filen <%s> vid rad %d\n"
 #: src/liflines/error.c:82
 msgid "ASSERT failure"
 msgstr "ASSERT-misslyckande"
+
+#: src/liflines/import.c:139
+msgid "No current internal codeset, so no codeset conversion can be done"
+msgstr ""
+
+#: src/liflines/import.c:140
+msgid "Proceed without codeset conversion ?"
+msgstr ""
+
+#: src/liflines/import.c:163
+#, c-format
+msgid "Cannot convert codeset (from <%s> to <%s>)"
+msgstr ""
+
+#: src/liflines/import.c:166
+msgid "Enter codeset to assume (* for none)"
+msgstr ""
 
 #: src/liflines/loadsave.c:91
 msgid "Person"
@@ -3312,13 +3346,21 @@ msgstr "Lade till (%dP, %dF, %dS, %dE, %dX) poster"
 msgid "The database was not saved."
 msgstr "Databasen var trasig."
 
-#: src/liflines/main.c:351
+#: src/liflines/main.c:346
 msgid "Choose database to open"
 msgstr "Välj databas att öppna"
 
-#: src/liflines/main.c:359
+#: src/liflines/main.c:354
 msgid "No databases found in database path"
 msgstr "Inga databaser hittades i sökvägen för databaser"
+
+#: src/liflines/main.c:381
+msgid "Warning: database codeset unspecified"
+msgstr ""
+
+#: src/liflines/main.c:383
+msgid "Warning: not all conversions available"
+msgstr ""
 
 #: src/liflines/menuset.c:154
 #, fuzzy, c-format
@@ -3350,279 +3392,360 @@ msgstr "Krock med längre snabbnyckel i post: %s"
 msgid "Clash with shorter hotkey in item: %s"
 msgstr "Krock med kortare snabbnyckel i post: %s"
 
-#: src/liflines/miscutls.c:69
+#: src/liflines/miscutls.c:67
 msgid "Please enter person's internal key value."
 msgstr "Skriv in internt nyckelvärde för personen."
 
-#: src/liflines/miscutls.c:70
+#: src/liflines/miscutls.c:68
 msgid "enter key:"
 msgstr "skriv in nyckel: "
 
-#: src/liflines/screen.c:684
+#: src/liflines/screen.c:408
+#, fuzzy
+msgid "Choose an operation:"
+msgstr "Välj ett kommando:"
+
+#: src/liflines/screen.c:415
+#, fuzzy
+msgid "r  Remove from list"
+msgstr "d  Ta bort från lista"
+
+#: src/liflines/screen.c:416
+#, fuzzy
+msgid "t  Enter tandem mode"
+msgstr "tt Växla t. tandemläge"
+
+#: src/liflines/screen.c:681
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(sid %d/%d)"
 
-#: src/liflines/screen.c:1771
+#: src/liflines/screen.c:1437
+#, fuzzy
+msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
+msgstr "Kommandon:   j Flytta ned     k Flytta upp    i Välj     q Avsluta"
+
+#: src/liflines/screen.c:1568
+#, fuzzy
+msgid "No conversion"
+msgstr "Finns ingen sådan person."
+
+#: src/liflines/screen.c:1745
 msgid "Internal codeset"
 msgstr "Intern teckenkodning"
 
-#: src/liflines/screen.c:1776
+#: src/liflines/screen.c:1749
 msgid "Locales are enabled."
 msgstr "Lokaler är aktiverade."
 
-#: src/liflines/screen.c:1778
+#: src/liflines/screen.c:1751
 msgid "Locales are disabled."
 msgstr "Lokaler är avaktiverade."
 
-#: src/liflines/screen.c:1781
+#: src/liflines/screen.c:1754
 msgid "NLS (National Language Support) is enabled."
 msgstr "NLS (nationellt språkstöd) är aktiverat."
 
-#: src/liflines/screen.c:1787
+#: src/liflines/screen.c:1760
 msgid "NLS (National Language Support) is disabled."
 msgstr "NLS (nationellt språkstöd) är avaktiverat."
 
-#: src/liflines/screen.c:1793
+#: src/liflines/screen.c:1766
 msgid "iconv (codeset conversion) is enabled."
 msgstr "iconv (konvertering av teckenkodning) är aktiverad."
 
-#: src/liflines/screen.c:1795
+#: src/liflines/screen.c:1768
 msgid "iconv (codeset conversion) is disabled."
 msgstr "iconv (konvertering av teckenkodning) är avaktiverad."
 
-#: src/liflines/screen.c:1797
+#: src/liflines/screen.c:1770
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Sorteringslokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1801
+#: src/liflines/screen.c:1773
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Meddelandelokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1805
+#: src/liflines/screen.c:1776
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Aktuell sorteringslokal: %s"
 
-#: src/liflines/screen.c:1809
+#: src/liflines/screen.c:1779
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Aktuell meddelandelokal: %s"
 
-#: src/liflines/screen.c:1813
+#: src/liflines/screen.c:1782
 #, c-format
 msgid "Collation routine: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1817
+#: src/liflines/screen.c:1786
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1821
-#, c-format
-msgid "Editor codeset: %s"
+#: src/liflines/screen.c:1789
+#, fuzzy, c-format
+msgid "GUI output codeset: %s"
+msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
+
+#: src/liflines/screen.c:1791
+#, fuzzy, c-format
+msgid "GUI input codeset: %s"
+msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
+
+#: src/liflines/screen.c:1796
+#, fuzzy, c-format
+msgid "editor codeset: %s"
 msgstr "Teckenkodning för editor: %s"
 
-#: src/liflines/screen.c:1825
-#, c-format
-msgid "Report codeset: %s"
+#: src/liflines/screen.c:1799
+#, fuzzy, c-format
+msgid "editor output codeset: %s"
+msgstr "Teckenkodning för editor: %s"
+
+#: src/liflines/screen.c:1801
+#, fuzzy, c-format
+msgid "editor input codeset: %s"
+msgstr "Teckenkodning för editor: %s"
+
+#: src/liflines/screen.c:1806
+#, fuzzy, c-format
+msgid "report codeset: %s"
 msgstr "Teckenkodning för rapporter: %s"
 
-#: src/liflines/screen.c:1829
+#: src/liflines/screen.c:1809
+#, fuzzy, c-format
+msgid "report output codeset: %s"
+msgstr "Teckenkodning för rapporter: %s"
+
+#: src/liflines/screen.c:1811
+#, fuzzy, c-format
+msgid "report input codeset: %s"
+msgstr "Teckenkodning för rapporter: %s"
+
+#: src/liflines/screen.c:1816
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "Teckenkodning för GEDCOM: %s"
 
-#: src/liflines/screen.c:1845
+#: src/liflines/screen.c:1819
+#, fuzzy, c-format
+msgid "gedcom output codeset: %s"
+msgstr "Teckenkodning för rapporter: %s"
+
+#: src/liflines/screen.c:1821
+#, fuzzy, c-format
+msgid "gedcom input codeset: %s"
+msgstr "Teckenkodning för editor: %s"
+
+#: src/liflines/screen.c:1828
 msgid "Codeset information"
 msgstr "Information om teckenkodning"
 
-#: src/liflines/screen.c:1862
+#: src/liflines/screen.c:1846
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll för gettext: %s"
 
-#: src/liflines/screen.c:1866
+#: src/liflines/screen.c:1850
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version för gettext-dll: %s"
 
-#: src/liflines/screen.c:1871
+#: src/liflines/screen.c:1855
 msgid "gettext dll had no version"
 msgstr "gettext-dll hade ingen version"
 
-#: src/liflines/screen.c:1876
+#: src/liflines/screen.c:1860
 msgid "no gettext dll found"
 msgstr "ingen gettext-dll hittades"
 
-#: src/liflines/screen.c:1886
+#: src/liflines/screen.c:1869
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll för iconv: %s"
 
-#: src/liflines/screen.c:1890
+#: src/liflines/screen.c:1873
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version för iconv-dll: %s"
 
-#: src/liflines/screen.c:1895
+#: src/liflines/screen.c:1878
 msgid "iconv dll had no version"
 msgstr "iconv-dll hade ingen version"
 
-#: src/liflines/screen.c:1900
+#: src/liflines/screen.c:1883
 msgid "no iconv dll found"
 msgstr "ingen iconv-dll hittades"
 
-#: src/liflines/screen.c:2150
+#: src/liflines/screen.c:2134
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Otillåtet att ändra teckenkodning i en befolkad databas"
 
-#: src/liflines/screen.c:2725
+#: src/liflines/screen.c:2298
+msgid "--- CURRENT SELECTION ---"
+msgstr ""
+
+#: src/liflines/screen.c:2301 src/liflines/screen.c:2527
+msgid "--- LIST ---"
+msgstr ""
+
+#: src/liflines/screen.c:2558
+msgid "-- CURRENT SELECTION --"
+msgstr ""
+
+#: src/liflines/screen.c:2708
 msgid "LifeLines -- Main Menu"
 msgstr ""
 
-#: src/liflines/screen.c:3366
+#: src/liflines/screen.c:3352
 #, fuzzy, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Granska besökshistorik (%d post)"
 msgstr[1] "v  Granska besökshistorik (%d post)"
 
-#: src/liflines/screen.c:3376
+#: src/liflines/screen.c:3356
+msgid "(visit history is empty)"
+msgstr "(besökshistoriken är tom)"
+
+#: src/liflines/screen.c:3362
 #, fuzzy, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Granska ändringshistorik (%d post)"
 msgstr[1] "c  Granska ändringshistorik (%d post)"
 
-#: src/liflines/valgdcom.c:83
+#: src/liflines/valgdcom.c:85
 #, c-format
 msgid "Line %d: This %s line is missing a value field."
 msgstr "Rad %d: Denna %s-rad saknar ett fält med ett värde."
 
-#: src/liflines/valgdcom.c:84
+#: src/liflines/valgdcom.c:86
 #, c-format
 msgid "Record %s is referred to but not defined."
 msgstr "Referens till posten %s, som inte är definierad."
 
-#: src/liflines/valgdcom.c:330
+#: src/liflines/valgdcom.c:340
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Rad %d: Källan som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:345
+#: src/liflines/valgdcom.c:355
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Rad %d: Källan %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:352
+#: src/liflines/valgdcom.c:362
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Raderna %d och %d: Källan %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:385
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Rad %d: Händelsen som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:390
+#: src/liflines/valgdcom.c:400
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Rad %d: Händelsen %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:397
+#: src/liflines/valgdcom.c:407
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Raderna %d och %d: Händelsen %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:430
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Rad %d: Posten som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:435
+#: src/liflines/valgdcom.c:445
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Rad %d: Posten %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:442
+#: src/liflines/valgdcom.c:452
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Raderna %d och %d: Posten %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:501
+#: src/liflines/valgdcom.c:536
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Rad %d: Ogiltig NAME-syntax."
 
-#: src/liflines/valgdcom.c:689
+#: src/liflines/valgdcom.c:724
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Rad %d: Personen %s är länkad till mer än en fader."
 
-#: src/liflines/valgdcom.c:693
+#: src/liflines/valgdcom.c:728
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Rad %d: Personen %s är länkad till mer än en moder."
 
-#: src/liflines/valgdcom.c:705
+#: src/liflines/valgdcom.c:740
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Rad %d: Personen %s är både man och kvinna."
 
-#: src/liflines/valgdcom.c:709
+#: src/liflines/valgdcom.c:744
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Rad %d: Personen %s är man, men måste vara kvinna."
 
-#: src/liflines/valgdcom.c:713
+#: src/liflines/valgdcom.c:748
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Rad %d: Personen %s är kvinna, men måste vara man."
 
-#: src/liflines/valgdcom.c:717
+#: src/liflines/valgdcom.c:752
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr "Rad %d: Personen %s förutsätts vara både man och kvinna."
 
-#: src/liflines/valgdcom.c:729
+#: src/liflines/valgdcom.c:764
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en make."
 
-#: src/liflines/valgdcom.c:733
+#: src/liflines/valgdcom.c:768
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en maka."
 
-#: src/liflines/valgdcom.c:792
+#: src/liflines/valgdcom.c:826
 msgid "error"
 msgstr "fel"
 
-#: src/liflines/valgdcom.c:801
+#: src/liflines/valgdcom.c:834
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d fel"
 msgstr[1] "%6d fel"
 
-#: src/liflines/valgdcom.c:804 src/liflines/valgdcom.c:849
+#: src/liflines/valgdcom.c:836 src/liflines/valgdcom.c:864
 #, c-format
 msgid " (see log file <%s>)"
 msgstr " (se loggfil <%s>)"
 
-#: src/liflines/valgdcom.c:806 src/liflines/valgdcom.c:851
+#: src/liflines/valgdcom.c:838 src/liflines/valgdcom.c:866
 msgid " (no log file)"
 msgstr " (ingen loggfil)"
 
-#: src/liflines/valgdcom.c:837
+#: src/liflines/valgdcom.c:854
 msgid "warning"
 msgstr "varning"
 
-#: src/liflines/valgdcom.c:846
+#: src/liflines/valgdcom.c:862
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
@@ -3926,14 +4049,31 @@ msgstr "ÖDESDIGERT FEL"
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"
 
+#~ msgid "Error initializing %s map.\n"
+#~ msgstr "Fel vid initiering av mappningen %s.\n"
+
+#~ msgid "the arg to f is not a float"
+#~ msgstr "argumentet till f är inte ett flyttal"
+
+#~ msgid ""
+#~ "\n"
+#~ "Parsing Error in <%s>"
+#~ msgstr ""
+#~ "\n"
+#~ "Tolkningsfel i <%s>"
+
+#~ msgid ""
+#~ "\n"
+#~ "Runtime Error in: <%s>"
+#~ msgstr ""
+#~ "\n"
+#~ "Körningsfel i: <%s>"
+
 #~ msgid "(%s: %d spouse(s), %d child(ren))"
 #~ msgstr "(%s: %d maka(r), %d barn)"
 
 #~ msgid "v  Review visit history (%d records)"
 #~ msgstr "v  Granska besökshistorik (%d poster)"
-
-#~ msgid "(visit history is empty)"
-#~ msgstr "(besökshistoriken är tom)"
 
 #~ msgid "c  Review change history (%d records)"
 #~ msgstr "c  Granska ändringshistorik (%d poster)"
