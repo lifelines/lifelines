@@ -14,6 +14,10 @@
 
 	Propagate on-the-fly language changes to menuitem.c.
 
+	* .linesrc ChangeLog lines.cfg:
+
+	List LocaleDir in config files.
+
 2002-09-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
