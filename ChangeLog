@@ -43,6 +43,13 @@
 
 	liflines/screen.c: (Matthew made small changes.)
 
+2001-01-23 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* liflines/screen.c:
+	Fix screen refresh bug in choose_from_list() reported by Robert
+	Simms on LINES_L.  Also fixed same bug in choose_list_from_indiseq().
+	Cleaned up similar code in choose_one_from_indiseq().
+
 2001-01-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/keytonod.c hdrs/cache.h tools/dbverify.c:
@@ -1093,7 +1100,7 @@
 	* interp/Makefile.am: turn off -O2, pvalue.c will force a gcc
 	2.95.2 compiler bug
 
-2000-11-04  Matt Emmerton <matt@gsicomp.on.ca>
+2000-11-04  Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* hdrs/liflines.h, hdrs/indiseq.h, hdrs/cache.h: Added
 	function prototypes
@@ -1107,7 +1114,7 @@
 
 	* stdlib/stdstrng.c: Removed strcpy declaration. 
 
-2000-11-03  Matt Emmerton <matt@gsicomp.on.ca>
+2000-11-03  Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* Updated function prototypes in hdrs/*.h
 
