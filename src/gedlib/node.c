@@ -89,6 +89,7 @@ static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
 static void hook_node_to_rec_recurse(RECORD rec, NODE node);
+static void hook_record_to_root_node(RECORD rec, NODE node);
 static void load_record_wh(RECORD rec, char * whptr, INT whlen);
 static INT node_strlen(INT levl, NODE node);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
@@ -205,7 +206,8 @@ create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 	nval(node) = fixup(val);
 	nparent(node) = prnt;
 	nrefcnt(node) = 1;
-	node->n_rec = prnt->n_rec;
+	if (prnt)
+		node->n_rec = prnt->n_rec;
 	return node;
 }
 /*===========================
@@ -242,6 +244,25 @@ free_temp_node_tree (NODE node)
 		nsibling(node) = 0;
 	}
 	free_node(node);
+}
+/*===================================
+ * is_temp_node -- Return whether node is a temp
+ * Created: 2003-02-04 (Perry Rapp)
+ *=================================*/
+BOOLEAN
+is_temp_node (NODE node)
+{
+	return !!(nflag(node) & ND_TEMP);
+}
+/*===================================
+ * set_temp_node -- make node temp (or not)
+ * Created: 2003-02-04 (Perry Rapp)
+ *=================================*/
+void
+set_temp_node (NODE node, BOOLEAN temp)
+{
+	if (is_temp_node(node) ^ temp)
+		nflag(node) ^= ND_TEMP;
 }
 /*===================================
  * alloc_new_record -- record allocator
@@ -345,12 +366,21 @@ create_record (NODE node)
 		rec = alloc_record_from_key(node_to_key(node));
 	else
 		rec = alloc_new_record();
-	rec->top = node;
-	hook_node_to_rec_recurse(rec, node);
+	hook_record_to_root_node(rec, node);
 	return rec;
 }
 /*===================================
- * hook_record_to_node -- Connect record to node tree
+ * hook_record_to_root_node -- Connect record to node tree
+ * Created: 2003-02-04 (Perry Rapp)
+ *=================================*/
+static void
+hook_record_to_root_node (RECORD rec, NODE node)
+{
+	rec->top = node;
+	hook_node_to_rec_recurse(rec, node);
+}
+/*===================================
+ * hook_node_to_rec_recurse -- Connect node subtree to record
  * Created: 2003-02-04 (Perry Rapp)
  *=================================*/
 static void
@@ -853,7 +883,7 @@ string_to_record (STRING str, CNSTRING key, INT len)
 		}
 	}
 	if (node) {
-		rec->top = node;
+		hook_record_to_root_node(rec, node);
 		assign_record(rec, key[0], atoi(key+1));
 		if (!rec->mdwh)
 			alloc_record_wh(rec, EXISTING_LACKING_WH_RECORD);

@@ -2399,7 +2399,9 @@ record_to_node (PVALUE val)
 
 	if (!cel) return FALSE;
 	
-	if (!cnode(cel)) {
+	if (cnode(cel)) {
+		gnode = cnode(cel);
+	} else {
 		/* not in direct cache, so load into cache */
 		key = ckey(cel);
 		switch (*key) {
@@ -2411,7 +2413,7 @@ record_to_node (PVALUE val)
 		default:  FATAL();
 		}
 	}
-	set_pvalue(val, PGNODE, (VPTR)gnode); 
+	set_pvalue(val, PGNODE, gnode); 
 	return TRUE;
 }
 /*================================+
@@ -3152,7 +3154,7 @@ __child (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "child");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, (VPTR)nchild(ged));
+	set_pvalue(val, PGNODE, nchild(ged));
 	return val;
 }
 /*=================================+
@@ -3175,7 +3177,7 @@ __parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "parent");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, (VPTR)nparent(ged));
+	set_pvalue(val, PGNODE, nparent(ged));
 	return val;
 }
 /*========================================+
@@ -3198,7 +3200,7 @@ __sibling (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "sibling");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, (VPTR)nsibling(ged));
+	set_pvalue(val, PGNODE, nsibling(ged));
 	return val;
 }
 /*===============================+
@@ -3366,7 +3368,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* TODO - use gedlib layer code as in __indi above */
 	rawrec = retrieve_raw_record(scratch, &len);
 	if (rawrec && len > 6)
-		val = create_pvalue(PFAM, (VPTR)key_to_fam_cacheel(scratch));
+		val = create_pvalue(PFAM, key_to_fam_cacheel(scratch));
 	else
 		val = create_pvalue(PFAM, NULL);
 	if (rawrec) stdfree(rawrec);

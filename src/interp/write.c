@@ -118,6 +118,7 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* reparent node, but ensure its locking is only releative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
 	nparent(newchild) = prnt;
+	set_temp_node(newchild, is_temp_node(prnt));
 	dolock_node_in_cache(newchild, TRUE);
 	if (prev == NULL) {
 		next = nchild(prnt);
@@ -180,18 +181,25 @@ __writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING rawrec, msg;
 	INT len;
 	if (*eflg) return NULL;
-	ASSERT(rawrec = retrieve_raw_record(rmvat(nxref(indi2)), &len));
-        ASSERT(indi1 = string_to_node(rawrec));
-	/* LEAK -- need stdfree(rawrec) -- Perry, 2001/11/18 */
-	if (replace_indi(indi1, indi2, &msg)) {
-#ifdef DEBUG
-	llwprintf("Oh, happy days, person written to database okay.\n");
-#endif
+	rawrec = retrieve_raw_record(rmvat(nxref(indi2)), &len);
+	if (!rawrec) {
+		/*
+		TODO: What do we do here ? Are they adding a new indi ?
+		or did they get the xref wrong ?
+		*/
 		return NULL;
-	} else {
-		*eflg = TRUE;
-		if (msg) llwprintf("Error: writeindi: %s\n", msg);
 	}
+	ASSERT(indi1 = string_to_node(rawrec));
+	/*
+	TODO: 2003-02-04
+	indi2 is the cache'd indi, and the xref is getting deleted here
+	I don't know what is wrong -- Perry
+	*/
+	if (!replace_indi(indi1, indi2, &msg)) {
+		*eflg = TRUE;
+		prog_error(node, _("writeindi failed: %s"), msg ? msg : _("Unknown error"));
+	}
+	strfree(&rawrec);
 	return NULL;
 }
 /*=====================================
@@ -206,18 +214,19 @@ __writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING rawrec, msg;
 	INT len;
 	if (*eflg) return NULL;
-	ASSERT(rawrec = retrieve_raw_record(rmvat(nxref(fam2)), &len));
-        ASSERT(fam1 = string_to_node(rawrec));
-	/* LEAK -- need stdfree(rawrec) -- Perry, 2001/11/18 */
-	if (replace_fam(fam1, fam2, &msg)) {
-#ifdef DEBUG
-		llwprintf("Oh, happy days, family written to database okay.\n");
-#endif
+	rawrec = retrieve_raw_record(rmvat(nxref(fam2)), &len);
+	if (!rawrec) {
+		/*
+		TODO: What do we do here ? Are they adding a new fam ?
+		or did they get the xref wrong ?
+		*/
 		return NULL;
-	} else {
-		*eflg = TRUE;
-		if (msg)
-			llwprintf("Error: writefam: %s\n", msg);
 	}
+	ASSERT(fam1 = string_to_node(rawrec));
+	if (!replace_fam(fam1, fam2, &msg)) {
+		*eflg = TRUE;
+		prog_error(node, _("writefam failed: %s"), msg ? msg : _("Unknown error"));
+	}
+	strfree(&rawrec);
 	return NULL;
 }

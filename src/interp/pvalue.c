@@ -351,9 +351,9 @@ clear_pvalue (PVALUE val)
 	case PGNODE:
 		{
 			NODE node = (NODE)pvalue(val);
-			if (node && (nflag(node) & ND_TEMP)) {
+			if (node) {
 				--nrefcnt(node);
-				if (!nrefcnt(node)) {
+				if (!nrefcnt(node) && is_temp_node(node)) {
 					free_temp_node_tree(node);
 				}
 			}

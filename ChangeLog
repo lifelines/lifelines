@@ -8,6 +8,11 @@
 	Lock nodes into direct cache while pvalues point at them.
 	(Add record pointer to node, and cacheel pointer to record.)
 
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+	src/interp/builtin.c src/interp/pvalue.c src/interp/write.c:
+
+	More fixing of node ref counting. Try to fix __writeindi.
+
 2003-02-03 Matt Emmerton
 
 	* ChangeLog src/interp/write.c
