@@ -1,3 +1,12 @@
+2000-11-30 Perry Rapp <prapp@users.sourceforge.net>
+	* gedlib/refns.c: Changed some indents that didn't
+	conform to surrounding style.
+
+	* hdrs/btree.h hdrs/llinesi.h
+	liflines/browse.c liflines/screen.c liflines/show.c:
+	Added direct to child navigation via digits, and optional
+	child numeric prefixes.
+
 2000-11-29 Marc Nozell <marc@nozell.com>
 
 	* reports/alive.ll: Fix typo.
