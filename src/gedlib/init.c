@@ -222,6 +222,7 @@ init_win32_gettext_shim (void)
 static void
 set_gettext_codeset (CNSTRING codeset)
 {
+#if ENABLE_NLS
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	if (codeset && codeset[0]) {
 		ZSTR zcsname=0;
@@ -235,6 +236,7 @@ set_gettext_codeset (CNSTRING codeset)
 		zs_free(&zcsname);
 	}
 #endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
+#endif /* ENABLE_NLS */
 }
 /*=================================
  * init_lifelines_db -- Initialization after db opened
@@ -256,10 +258,6 @@ init_lifelines_db (void)
 	if (!openxref(readonly))
 		return FALSE;
 
-
-#if ENABLE_NLS
-	set_gettext_codeset(int_codeset);
-#endif /* ENABLE_NLS */
 
 	transl_load_xlats();
 
@@ -607,10 +605,14 @@ update_useropts (VPTR uparm)
 	uparm = uparm; /* unused */
 	if (suppress_reload)
 		return;
-	update_db_options(); /* deal with db-specific options */
-	uilocale(); /* in case user changed locale */
+	/* deal with db-specific options */
+	/* includes setting int_codeset */
+	update_db_options();
 	/* in case user changed any codesets */
 	init_codesets();
+	/* in case user changed locale (need int_codeset already set) */
+	uilocale();
+	/* in case user changed codesets */
 	transl_load_xlats();
 
 	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
@@ -631,10 +633,13 @@ update_db_options (void)
 			strfree(&int_codeset);
 			int_codeset = strsave(str);
 			uu8 = is_codeset_utf8(int_codeset);
+			/* always translate to internal codeset */
+			set_gettext_codeset(int_codeset);
+			/* need to reload all predefined codeset conversions */
 			transl_load_xlats();
 		}
 	}
-	
+
 	remove_table(opttab, FREEBOTH);
 }
 /*==================================================

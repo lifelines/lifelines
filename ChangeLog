@@ -1,3 +1,10 @@
+2002-12-14 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c:
+
+	Fix ordering bug, in which menuitems were not translated into correct codeset, if
+	databases in different locales.
+
 2002-12-13 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/codesets.c
