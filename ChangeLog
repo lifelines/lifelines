@@ -13,6 +13,11 @@
 
 	Bugfix: tinytafel2 being installed as tree.tex in rpm.
 
+	* gedlib/indiseq.c gedlib/messages.c:
+
+	Fix sort of mixed items to be in canonical key order (eg, S1,S2,E1,E2).
+	Change "among these persons" to "among these records".
+
 2002-02-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c:
