@@ -4,7 +4,7 @@
  * @version        1.0
  * @author         Wetmore, Nozell
  * @category       
- * @output         SGML
+ * @output         SGML, NROFF
  * @description    
  *
  * This program shows all ancestral lines of a specified person

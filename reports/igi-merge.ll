@@ -91,7 +91,7 @@ corrupt your database, so don't worry.
 
 The user interface depends on the size of the LifeLines screen,
 I have marked the sensitive lines with a /*#*/
-*/
+
 
 global(famged)
 global(gedsex)

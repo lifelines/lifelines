@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 ### pkgdir := $(pkgdatadir)/reports
-pkg_REPORTS = \
+LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	ahnentafel.ll alive.ll alllines.ll alllines.sgml.ll	\
 	ancestors2.ll bias.ll bkdes16-1.ll book-latex.ll \
@@ -22,15 +22,21 @@ pkg_REPORTS = \
 	ps-anc2.ll ps-anc5.ll ps-anc6.ll ps-anc7.ll ps-anc8.ll	\
 	register-tex.ll register1.ll regvital.ll regvital1.ll	\
 	relate.ll related_spouses.ll relation.ll rllgen.ll rslgen.ll	\
-	select.li showlines1.ll simpleged.ll soundex-isfm.ll	\
+	showlines1.ll simpleged.ll soundex-isfm.ll	\
 	soundex1.ll sources.ll stats.ll surname1.ll timeline1.ll	\
 	timeline2.ll tinytafel1.ll tinytafel2.ll verify.ll \
 	st/st_all.ll st/st_aux.ll st/st_collate.ll \
 	st/st_collate_8859-1.ll st/st_collate_UTF-8.ll \
 	st/st_convert.ll st/st_date.ll st/st_db.ll \
 	st/st_number.ll st/st_string.ll st/st_string_UTF-8.ll
+OTHER_REPORTS = select.li boc.gif ll.png gen_index
+dist_pkgdata_DATA = index.html
+pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(dist_pkgdata_DATA)
 
 EXTRA_DIST = \
 	$(pkg_REPORTS) \
 	tree.tex \
 	CREDIT README
+PERL = perl
+index.html: $(LL_REPORTS)
+	-$(PERL) gen_index $(LL_REPORTS)
