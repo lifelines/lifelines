@@ -75,66 +75,69 @@ typedef struct  {
 
 #define length_indiseq(seq)  (ISize(seq))
 
-void append_indiseq(INDISEQ, STRING, STRING, WORD, BOOLEAN, BOOLEAN);
-INDISEQ create_indiseq(void);
-INDISEQ copy_indiseq(INDISEQ);
-void remove_indiseq(INDISEQ,BOOLEAN);
-BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
-void format_indiseq(INDISEQ);
-void format_famseq(INDISEQ);
-void format_spouseseq(INDISEQ);
-void rename_indiseq(INDISEQ, STRING);
-BOOLEAN in_indiseq(INDISEQ, STRING);
-INDISEQ union_indiseq(INDISEQ, INDISEQ);
-INDISEQ intersect_indiseq(INDISEQ, INDISEQ);
-INDISEQ difference_indiseq(INDISEQ, INDISEQ);
-INDISEQ parent_indiseq(INDISEQ);
-INDISEQ child_indiseq(INDISEQ);
-INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
-INDISEQ ancestor_indiseq(INDISEQ);
-INDISEQ spouse_indiseq(INDISEQ);
-INDISEQ descendent_indiseq(INDISEQ);
-INDISEQ name_to_indiseq(STRING);
-INDISEQ refn_to_indiseq(STRING);
-INDISEQ key_to_indiseq(STRING);
-INDISEQ str_to_indiseq(STRING);
+/*=====================
+ * INDISEQ -- Functions
+ *===================*/
 
-INDISEQ indi_to_children(NODE);
-INDISEQ indi_to_fathers(NODE);
-INDISEQ indi_to_mothers(NODE);
+void add_browse_list(STRING, INDISEQ);
+INDISEQ ancestor_indiseq(INDISEQ);
+void append_indiseq(INDISEQ, STRING, STRING, WORD, BOOLEAN, BOOLEAN);
+INDISEQ child_indiseq(INDISEQ);
+INDISEQ copy_indiseq(INDISEQ);
+INDISEQ create_indiseq(void);
+BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
+INDISEQ descendent_indiseq(INDISEQ);
+INDISEQ difference_indiseq(INDISEQ, INDISEQ);
+BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
-INDISEQ indi_to_spouses(NODE);
-INDISEQ indi_to_families(NODE, BOOLEAN);
-INDISEQ name_to_indiseq(STRING);
-INDISEQ refn_to_indiseq(STRING);
-INDISEQ node_to_sources(NODE);
-INDISEQ get_all_sour(void);
+INDISEQ find_named_seq(STRING);
+void format_famseq(INDISEQ);
+void format_indiseq(INDISEQ);
+void format_spouseseq(INDISEQ);
+void gen_gedcom(INDISEQ);
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
-
+INDISEQ get_all_sour(void);
+INT getpivot(INT, INT);
+BOOLEAN in_indiseq(INDISEQ, STRING);
+BOOLEAN indiseq_elementval(INDISEQ, INT, STRING*, INT *, STRING*);
+INDISEQ indi_to_children(NODE);
+INDISEQ indi_to_families(NODE, BOOLEAN);
+INDISEQ indi_to_fathers(NODE);
+INDISEQ indi_to_mothers(NODE);
+INDISEQ indi_to_spouses(NODE);
+INDISEQ intersect_indiseq(INDISEQ, INDISEQ);
+INDISEQ key_to_indiseq(STRING);
+void keysort_indiseq(INDISEQ);
+void llqsort(INT, INT);
+INDISEQ name_to_indiseq(STRING);
+void namesort_indiseq(INDISEQ);
+void new_write_node(INT, NODE, BOOLEAN);
+INDISEQ node_to_sources(NODE);
+INDISEQ parent_indiseq(INDISEQ);
+INT partition(INT, INT, SORTEL);
+void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
+INDISEQ refn_to_indiseq(STRING);
+void remove_browse_list(STRING, INDISEQ);
+void remove_indiseq(INDISEQ,BOOLEAN);
+void rename_indiseq(INDISEQ, STRING);
+INDISEQ sibling_indiseq(INDISEQ, BOOLEAN);
+INDISEQ spouse_indiseq(INDISEQ);
+INDISEQ str_to_indiseq(STRING);
+void unique_indiseq(INDISEQ);
+INDISEQ union_indiseq(INDISEQ, INDISEQ);
+void update_browse_list(STRING, INDISEQ);
+void valuesort_indiseq(INDISEQ, BOOLEAN*);
 void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);
-void new_write_node(INT, NODE, BOOLEAN);
 
-BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
-BOOLEAN indiseq_elementval(INDISEQ, INT, STRING*, INT *, STRING*);
-void namesort_indiseq(INDISEQ);
-void keysort_indiseq(INDISEQ);
-void valuesort_indiseq(INDISEQ, BOOLEAN*);
-void unique_indiseq(INDISEQ);
-void gen_gedcom(INDISEQ);
 
-void add_browse_list(STRING, INDISEQ);
-INDISEQ find_named_seq(STRING);
-void remove_browse_list(STRING, INDISEQ);
-void update_browse_list(STRING, INDISEQ);
 
-void partition_sort(SORTEL*, INT, INT (*func)(SORTEL, SORTEL));
-void llqsort(INT, INT);
-INT partition(INT, INT, SORTEL);
-INT getpivot(INT, INT);
+/*==================
+ * INDISEQ -- Macros
+ *================*/
 
 #define FORINDISEQ(s,e,i)\
 	{	int i, _n;\

@@ -1,6 +1,9 @@
 2000-12-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* liflines/screen.c: Removed some unnecessary local prototypes.
+	* hdrs/indiseq.h liflines/llinesi.h liflines/newrecs.c:
+	Sorted indiseq.h functions & removed dups.
+	Changed add_to_record to extern.
 
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 

@@ -52,7 +52,6 @@ SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
 SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
 SS xstr = (STRING) "0 XXXX\n1 REFN";
 
-static NODE ask_for_record(STRING, INT);
 static void edit_record (NODE node1, STRING idedt, INT letr, STRING redt,
                          BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm,
                          STRING tag, void (*todbase)(NODE), STRING gdmsg);
@@ -269,7 +268,7 @@ edit_record (NODE node1,           /* record to edit, poss NULL */
 /*==============================================
  * ask_for_record -- Ask user to identify record
  *============================================*/
-static NODE
+NODE
 ask_for_record (STRING idstr,   /* question prompt */
                 INT letr)       /* letter to possibly prepend to key */
 {
