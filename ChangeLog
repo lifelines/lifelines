@@ -5,7 +5,7 @@
 	* ChangeLog NEWS configure.in lifelines.spec hdrs/version.h
 	win32/msvc/llines/llines.rc:
 
-	Building release 2.0.13.
+	Building release 3.0.13.
 
 	* configure.in po/LINGUAS po/de.po po/sv.po reports/Makefile.am
 
@@ -15,6 +15,12 @@
 	* .linesrc ChangeLog lines.cfg
 
 	Added ForceScreenErase to prototype config files.
+
+	* ChangeLog hdrs/version.h liflines/screen.c
+	win32/msvc6/llines/llines.rc:
+
+	Bump version for 3.0.13-post.
+	Erase popup windows when closing them, and redraw other windows.
 
 2002-05-25 Perry Rapp <puddle@users.sourceforge.net>
 

@@ -173,6 +173,7 @@ static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
 static UIWINDOW create_uisubwindow(UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
 static void create_windows(void);
 static void deactivate_uiwin(void);
+static void deactivate_uiwin_and_touch_all(void);
 static void delete_uiwindow(UIWINDOW uiw);
 static void disp_codeset(UIWINDOW uiwin, INT row, INT col, STRING menuit, INT codeset);
 static void disp_locale(UIWINDOW uiwin, INT row, INT col, STRING menuit
@@ -993,7 +994,7 @@ ask_for_string (STRING ttl, STRING prmpt)
 	mvwaddstr(win, 2, 1, prmpt);
 	activate_uiwin(uiwin);
 	rv = get_answer(uiwin, 2, strlen(prmpt) + 2); /* less than 100 chars */
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 	if (!rv) return (STRING) "";
 	p = rv;
 	while (chartype((uchar)*p) == WHITE)
@@ -1401,8 +1402,7 @@ resize_win: /* we come back here if we resize the window */
 		if (handle_list_cmds(&ld, code))
 			continue;
 		if (handle_popup_list_resize(&ld, code)) {
-			deactivate_uiwin();
-			touch_all(TRUE);
+			deactivate_uiwin_and_touch_all();
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}
@@ -1654,7 +1654,7 @@ invoke_add_menu (void)
 	activate_uiwin(uiwin);
 	wmove(win, 1, 27);
 	code = interact(uiwin, "pfcsq", -1);
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
 	case 'p':
@@ -1741,7 +1741,7 @@ invoke_cset_menu (void)
 		case 'q': done=TRUE; break;
 		}
 	}
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 }
 /*======================================
  * rpt_cset_menu -- Handle report character set menu
@@ -1777,7 +1777,7 @@ rpt_cset_menu (void)
 		case 'q': done=TRUE; break;
 		}
 	}
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
@@ -1812,7 +1812,7 @@ invoke_trans_menu (void)
 		}
 		end_action(); /* displays any errors that happened */
 	}
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 }
 /*======================================
  * edit_tt_menu -- menu for "Edit translation table"
@@ -1928,7 +1928,7 @@ choose_tt (STRING prompt)
 		activate_uiwin(uiwin);
 		wmove(uiw_win(uiwin), 1, strlen(prompt)+3);
 		code = interact(uiwin, "emixgdrq", -1);
-		deactivate_uiwin();
+		deactivate_uiwin_and_touch_all();
 		switch (code) {
 		case 'e': return MEDIN;
 		case 'm': return MINED;
@@ -1962,7 +1962,7 @@ invoke_utils_menu (void)
 
 	wmove(win, 1, strlen(_(qSmn_uttl))+3);
 	code = interact(uiwin, "srkidmeoq", -1);
-	deactivate_uiwin();
+	deactivate_uiwin_and_touch_all();
 
 	begin_action();
 	switch (code) {
@@ -1995,12 +1995,12 @@ invoke_extra_menu (void)
 	}
 	uiwin = extra_menu_win;
 	win = uiw_win(uiwin);
-	activate_uiwin(uiwin);
 
 	while (1) {
+		activate_uiwin(uiwin);
 		wmove(win, 1, strlen(_(qSmn_xttl))+3);
 		code = interact(uiwin, "sex123456q", -1);
-		deactivate_uiwin();
+		deactivate_uiwin_and_touch_all();
 
 		switch (code) {
 		case 's': return BROWSE_SOUR;
@@ -2488,8 +2488,7 @@ resize_win: /* we come back here if we resize the window */
 		if (handle_list_cmds(&ld, code))
 			continue;
 		if (handle_popup_list_resize(&ld, code)) {
-			deactivate_uiwin();
-			touch_all(TRUE);
+			deactivate_uiwin_and_touch_all();
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}
@@ -3388,6 +3387,17 @@ deactivate_uiwin (void)
 		ASSERT(uiw_child(active_uiwin)==uiw);
 		uiw_child(active_uiwin)=0;
 	}
+}
+/*=============================================
+ * deactivate_uiwin_and_touch_all --
+ *  remove current window & repaint ones left
+ *===========================================*/
+static void
+deactivate_uiwin_and_touch_all (void)
+{
+	deactivate_uiwin();
+	if (active_uiwin)
+		touch_all(TRUE);
 }
 /*============================
  * touch_all -- Repaint all ancestors of current window
