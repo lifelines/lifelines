@@ -1650,8 +1650,11 @@ prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
 	STRING choices[3];
 	STRING titl;
 	INT rtn;
-
 	va_list args;
+
+	arg = arg; /* unused */
+	val = val; /* unused */
+
 	va_start(args, fmt);
 	titl = vprog_error(node, fmt, args);
 	va_end(args);

@@ -174,8 +174,6 @@ extern TABLE proctab;
 extern INT Plineno;
 extern FILE *Pinfp;
 extern FILE *Poutfp;
-extern INT curcol;
-extern INT currow;
 extern INT _rows;
 extern INT _cols;
 extern INT Perrors;

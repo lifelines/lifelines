@@ -1,3 +1,10 @@
+2002-02-21 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/indiseq.c hdrs/interp.h interp/interp.c
+	interp/pvalmath.c:
+
+	Cleanup compiler warnings.
+
 2002-02-20 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c hdrs/indiseq.h interp/intrpseq.c

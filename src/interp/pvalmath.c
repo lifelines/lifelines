@@ -52,21 +52,7 @@
  * body of module
  *********************************************/
 
-static INT
-bool_to_int (BOOLEAN b)
-{
-	return b ? 1 : 0;
-}
-static FLOAT
-bool_to_float (BOOLEAN b)
-{
-	return b ? 1. : 0.;
-}
-static int
-float_to_int (float f)
-{
-	return (int)f;
-}
+
 /*===============================
  * add_pvalues -- Add two PVALUEs
  * modify val1 and delete val2

@@ -582,6 +582,7 @@ name_compare (SORTEL el1, SORTEL el2, VPTR param)
 INT
 key_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
+	param = param; /* unused */
 	return spri(el1) - spri(el2);
 }
 /*===========================================
@@ -609,6 +610,7 @@ static INT
 canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
 {
 	char c1=skey(el1)[0], c2=skey(el2)[0];
+	param = param; /* unused */
 	if (c1 == c2)
 		return spri(el1) - spri(el2);
 	return canonkey_order(c1) - canonkey_order(c2);
@@ -718,6 +720,7 @@ void
 valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
 {
 	const char * cur_locale=0;
+	eflg = eflg; /* unused */
 	if (IFlags(seq) & VALUESORT) {
 #ifdef HAVE_SETLOCALE
 		/* watch out for locale shifts, which usually happen
@@ -2010,6 +2013,7 @@ default_create_gen_value (INT gen, INT * valtype)
 INT
 default_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 {
+	valtype = valtype; /* unused */
 	/* We don't know how to deal with ptrs here */
 	/* Let's just sort them in memory order */
 	return (INT)ptr1 - (INT)ptr2;
