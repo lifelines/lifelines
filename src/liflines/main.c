@@ -213,7 +213,7 @@ main (INT argc,
 		showusage = TRUE;
 	}
 
-	/* Open Database */
+	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		btreepath = (STRING) ask_for_lldb(idldir, "enter path: ", lldatabases);
 		if (!btreepath || *btreepath == 0) {
@@ -221,11 +221,14 @@ main (INT argc,
 			goto finish;
 		}
 		btreepath = strsave(btreepath);
-	} else
+	} else {
 		btreepath = (unsigned char *)argv[optind];
-	if (!btreepath || *btreepath == 0) {
-		showusage = TRUE;
+		if (!btreepath || *btreepath == 0) {
+			showusage = TRUE;
+		}
 	}
+
+	/* Open Database */
 	lldatabases = (STRING) getenv("LLDATABASES");
 	if (!lldatabases || *lldatabases == 0) lldatabases = (STRING) ".";
 	readpath = filepath(btreepath, "r", lldatabases, NULL);
