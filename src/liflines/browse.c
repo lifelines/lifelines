@@ -241,14 +241,18 @@ goto_indi_child (RECORD irec, int childno)
 {
 	INT num1, num2, i = 0;
 	RECORD answer = 0;
+	INT akeynum=0; /* answer key */
 	NODE indi = nztop(irec);
 	if (!irec) return NULL;
 	FORFAMS(indi, fam, num1)
 		FORCHILDREN(fam, chil, num2)
 			i++;
-			if (i == childno) answer = chil;
+			if (i == childno) 
+				akeynum = nzkeynum(chil);
 		ENDCHILDREN
 	ENDFAMS
+	if (akeynum)
+		answer = keynum_to_irecord(akeynum);
 	return answer;
 }
 /*================================================

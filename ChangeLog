@@ -29,6 +29,10 @@
 	Free records in macros FORCHILDRENx, FORCHILDREN, FORFAMCS.
 	Fix bug in remove_indiseq. Fix multiple delete bug in FORFAMS.
 
+	* ChangeLog src/liflines/browse.c
+
+	Fix goto_indi_child not to use deleted record.
+
 2005-01-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/node.c
