@@ -83,13 +83,14 @@ extern int opterr;
 #endif /* HAVE_GETOPT_H */
 
 /* *****************************************************************
- * S_ISREGT()
+ * WIN32/MSVC hacks
  * ***************************************************************** */
 #ifdef WIN32
 #ifdef _MSC_VER
-/* temporary hack by Perry */
+/* hacks by Perry to compile */
 #define S_ISREG(qq) ((qq) & S_IFREG)
 #define S_ISDIR(qq) ((qq) & S_IFDIR)
+#define snprintf _snprintf
 #endif
 #endif
 

@@ -33,6 +33,12 @@
 #include "llstdlib.h"
 
 /*********************************************
+ * external variables (no header)
+ *********************************************/
+
+extern BOOLEAN alloclog;
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
@@ -43,8 +49,7 @@ static void alloc_out(STRING str);
  *********************************************/
 
 static BOOLEAN logopen = FALSE;
-FILE *logfp = NULL;
-extern BOOLEAN alloclog;
+static FILE *logfp = NULL;
 static char scratch[80];
 static INT live_allocs = 0;
 
