@@ -67,6 +67,7 @@ STRING get_todays_date(void);
 BOOLEAN set_cmplx_pic(INT ecmplx, STRING pic);
 void set_date_pic(STRING pic);
 STRING shorten_date(STRING);
+void term_date(void);
 
 
 #endif /* _DATE_H */

@@ -43,6 +43,7 @@
 #include "codesets.h"
 #include "zstr.h"
 #include "icvt.h"
+#include "date.h"
 
 /*********************************************
  * global/exported variables
@@ -302,6 +303,9 @@ close_lifelines (void)
 		editstr=NULL;
 	}
 	term_lloptions();
+	term_date();
+	term_codesets();
+	strfree(&int_codeset);
 }
 /*===================================
  * close_lldb -- Close current database

@@ -173,7 +173,13 @@ set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
 void
 term_codesets (void)
 {
+	strfree(&editor_codeset_out);
+	strfree(&editor_codeset_in);
+	strfree(&gedcom_codeset_out);
+	strfree(&gedcom_codeset_in);
 	strfree(&gui_codeset_out);
 	strfree(&gui_codeset_in);
+	strfree(&report_codeset_out);
+	strfree(&report_codeset_in);
 }
 

@@ -1,3 +1,10 @@
+2003-02-02 Perry Rapp
+
+	* ChangeLog src/gedlib/codesets.c src/gedlib/date.c
+	src/gedlib/init.c src/hdrs/date.h src/liflines/llexec.c:
+
+	Cleanup some heap memory at end of program.
+
 2003-02-01 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/interp/interp.c

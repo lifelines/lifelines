@@ -1495,6 +1495,43 @@ load_one_month (INT monum, MONTH_NAMES * monarr, STRING abbrev, STRING full)
 	stdfree(loc_full);
 }
 /*=============================
+ * clear_lang -- Free all generated picture strings
+ * This is used both changing languages, and at cleanup time
+ *===========================*/
+static void
+clear_lang (void)
+{
+	INT i,j;
+	/* clear complex pics */
+	for (i=0; i<ECMPLX_END; ++i) {
+		for (j=0; j<6; ++j) {
+			strfree(&cmplx_pics[i][j]);
+		}
+	}
+	/* clear calendar pics */
+	for (i=0; i<ARRSIZE(calendar_pics); ++i) {
+		strfree(&calendar_pics[i]);
+	}
+	/* clear Gregorian/Julian month names */
+	for (i=0; i<ARRSIZE(months_gj); ++i) {
+		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
+			strfree(&months_gj[i][j]);
+		}
+	}
+	/* clear Hebrew month names */
+	for (i=0; i<ARRSIZE(months_heb); ++i) {
+		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
+			strfree(&months_heb[i][j]);
+		}
+	}
+	/* clear French Republic month names */
+	for (i=0; i<ARRSIZE(months_fr); ++i) {
+		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
+			strfree(&months_fr[i][j]);
+		}
+	}
+}
+/*=============================
  * load_lang -- Load generated picture strings
  *  based on current language
  * This must be called if current language changes.
@@ -1507,15 +1544,9 @@ load_lang (void)
 	/* TODO: if we have language-specific cmplx_custom, deal with
 	that here */
 
-	/* clear complex pics */
-	for (i=0; i<ECMPLX_END; ++i) {
-		for (j=0; j<6; ++j) {
-			if (cmplx_pics[i][j]) {
-				stdfree(cmplx_pics[i][j]);
-				cmplx_pics[i][j] = 0;
-			}
-		}
-	}
+	/* free all pictures */
+	clear_lang();
+
 	/* load complex pics */
 	load_one_cmplx_pic(ECMPLX_ABT, _(qSdatea_abtA), _(qSdatea_abtB));
 	load_one_cmplx_pic(ECMPLX_EST, _(qSdatea_estA), _(qSdatea_estB));
@@ -1533,28 +1564,13 @@ load_lang (void)
 		}
 	}
 
-	/* clear calendar pics */
-	for (i=0; i<ARRSIZE(calendar_pics); ++i) {
-		if (calendar_pics[i]) {
-			stdfree(calendar_pics[i]);
-			calendar_pics[i] = 0;
-		}
-	}
+
 	calendar_pics[GDV_JULIAN] = strsave(_(qScaljul));
 	calendar_pics[GDV_HEBREW] = strsave(_(qScalheb));
 	calendar_pics[GDV_FRENCH] = strsave(_(qScalfr));
 	calendar_pics[GDV_ROMAN] = strsave(_(qScalrom));
 	/* not all slots in calendar_pics are used */
 
-	/* clear Gregorian/Julian month names */
-	for (i=0; i<ARRSIZE(months_gj); ++i) {
-		for (j=0; j<ARRSIZE(months_gj[0]); ++j) {
-			if (months_gj[i][j]) {
-				stdfree(months_gj[i][j]);
-				months_gj[i][j] = 0;
-			}
-		}
-	}
 	/* load Gregorian/Julian month names */
 	load_one_month(0, months_gj, _(qSmon_gj1A), _(qSmon_gj1B));
 	load_one_month(1, months_gj, _(qSmon_gj2A), _(qSmon_gj2B));
@@ -1575,15 +1591,6 @@ load_lang (void)
 		}
 	}
 
-	/* clear Hebrew month names */
-	for (i=0; i<ARRSIZE(months_heb); ++i) {
-		for (j=0; j<ARRSIZE(months_heb[0]); ++j) {
-			if (months_heb[i][j]) {
-				stdfree(months_heb[i][j]);
-				months_heb[i][j] = 0;
-			}
-		}
-	}
 	/* load Hebrew month names */
 	load_one_month(0, months_heb, _(qSmon_heb1A), _(qSmon_heb1B));
 	load_one_month(1, months_heb, _(qSmon_heb2A), _(qSmon_heb2B));
@@ -1605,15 +1612,6 @@ load_lang (void)
 		}
 	}
 
-	/* clear French Republic month names */
-	for (i=0; i<ARRSIZE(months_fr); ++i) {
-		for (j=0; j<ARRSIZE(months_fr[0]); ++j) {
-			if (months_fr[i][j]) {
-				stdfree(months_fr[i][j]);
-				months_fr[i][j] = 0;
-			}
-		}
-	}
 	/* load French Republic month names */
 	load_one_month(0, months_fr, _(qSmon_fr1A), _(qSmon_fr1B));
 	load_one_month(1, months_fr, _(qSmon_fr2A), _(qSmon_fr2B));
@@ -1634,6 +1632,15 @@ load_lang (void)
 			ASSERT(months_fr[i][j]);
 		}
 	}
+}
+/*=============================
+ * term_date -- Cleanup for finishing program
+ * Created: 2003-02-02 (Perry Rapp)
+ *===========================*/
+void
+term_date (void)
+{
+	clear_lang();
 }
 /*=============================
  * get_todays_date -- Get today's date

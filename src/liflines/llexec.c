@@ -383,6 +383,7 @@ finish:
 	if (alldone == 2)
 		goto prompt_for_db; /* changing databases */
 	termlocale();
+	strfree(&ext_codeset);
 
 usage:
 	/* Display Command-Line Usage Help */
