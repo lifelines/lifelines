@@ -116,9 +116,12 @@ rs_callback (STRING key, STRING refn, void *param)
  *  for first cut, just refuse anything with spaces
  *===========================================*/
 static BOOLEAN
-valid_pattern (STRING str)
+valid_pattern (STRING str, INT scantype)
 {
 	INT i;
+	/* for full name & refn scans, accept anything ? */
+	if (scantype != NAMESCAN_FRAG)
+		return TRUE;
 	for (i=0; str[i]; i++)
 		if (str[i] == ' ')
 			return FALSE;
@@ -143,7 +146,7 @@ name_scan (INT scantype)
 			str = ask_for_string(scnfnm, scantt);
 		if (!str || !str[0])
 			return NULL;
-		if (valid_pattern(str))
+		if (valid_pattern(str, scantype))
 			break;
 	}
 
@@ -186,13 +189,14 @@ refn_scan(void)
 	SCAN_PATTERN patt;
 	NODE node = NULL;
 	STRING str;
+	INT scantype = REFNSCAN;
 
-	patt.scantype = REFNSCAN;
+	patt.scantype = scantype;
 	while (1) {
 		str = ask_for_string(scnrfn, scantt);
 		if (!str || !str[0])
 			return NULL;
-		if (valid_pattern(str))
+		if (valid_pattern(str, scantype))
 			break;
 	}
 
