@@ -1,3 +1,10 @@
+2003-03-16 Stephen Dum
+
+        * ChangeLog docs/ll-reportmanual.xml docs/ll-reportmanual.html
+
+	Updated report manual to include all functions in 3.0.27
+	updated version number in manual to 3.0.27
+
 2003-03-16 Perry Rapp
 
 	* ChangeLog src/btree/record.c src/liflines/error.c
