@@ -33,6 +33,11 @@
 	Call init_cel for new cel in get_free_cacheel (assure not wrong
 	record pointer) and put_node_in_cache.
 
+	* ChangeLog src/gedlib/indiseq.c
+
+	Fix indi_to_families to check families only once, and include ones
+	without spouse.
+
 2005-02-12 lifelines beta 3.0.43 RELEASE
 
 2005-02-12 Perry Rapp

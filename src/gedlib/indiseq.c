@@ -1347,23 +1347,37 @@ indi_to_mothers (NODE indi)
  * indi_to_families -- Create sequence of person's families
  *  values will be spouse keynums
  *  (this is the ISPRN_FAMSEQ style)
+ * indi: [IN]  find families of this person
+ * fams: [IN]  if TRUE, find spousal families, else parental
  *=======================================================*/
 INDISEQ
-indi_to_families (NODE indi,      /* person */
-                  BOOLEAN fams)   /* families as spouse? */
+indi_to_families (NODE indi, BOOLEAN fams)
 {
 	INDISEQ seq;
-	INT num, val;
+	INT num, num2, val;
 	STRING key;
+	INT mykeynum=0;
 	if (!indi) return NULL;
+	mykeynum = atoi(indi_to_key(indi) + 1);
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_FAMSEQ;
 	if (fams) {
-		FORFAMSS(indi, fam, spouse, num)
-			key = fam_to_key(fam);
-			val = spouse ? atoi(indi_to_key(spouse) + 1) : 0;
-			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
-		ENDFAMSS
+		FORFAMS(indi, fam, num)
+		{
+			INT spkeynum=0;
+			STRING fkey = strsave(fam_to_key(fam));
+			/* look for a spouse besides indi */
+			FORFAMSPOUSES(fam, spouse, num2)
+			{
+				INT temp = atoi(indi_to_key(spouse) + 1);
+				if (temp && temp != mykeynum)
+					spkeynum = temp;
+			}
+			ENDFAMSPOUSES
+			append_indiseq_ival(seq, fkey, NULL, spkeynum, TRUE, FALSE);
+			strfree(&fkey);
+		}
+		ENDFAMS
 	} else {
 		FORFAMCS(indi, fam, fath, moth, num)
 			key = fam_to_key(fam);
