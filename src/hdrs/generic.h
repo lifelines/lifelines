@@ -61,6 +61,8 @@ void set_generic_object(GENERIC *gen, VPTR oval);
 void copy_generic_value(GENERIC *gen, const GENERIC * src);
 
 /* Test type of generic */
+/* NB: Obviously macro versions would be much faster, but
+using functions for development */
 BOOLEAN is_generic_null(GENERIC *gen);
 BOOLEAN is_generic_int(GENERIC *gen);
 BOOLEAN is_generic_float(GENERIC *gen);
