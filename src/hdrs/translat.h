@@ -51,7 +51,7 @@ typedef struct {
 } *TRANTABLE;
 
 /* forward declaration - real declaration in bfs.h */
-typedef struct Buffer_s * bfptr;
+struct Buffer_s;
 
 /* Variables */
 
@@ -70,7 +70,7 @@ void remove_trantable(TRANTABLE);
 void remove_xnodes(XNODE);
 void translate_catn(TRANTABLE tt, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(TRANTABLE, CNSTRING in, STRING out, INT max);
-void translate_string_to_buf(TRANTABLE tt, CNSTRING in, bfptr bfs);
+void translate_string_to_buf(TRANTABLE tt, CNSTRING in, struct Buffer_s * bfs);
 BOOLEAN translate_write(TRANTABLE, STRING, INT*, FILE*, BOOLEAN);
 
 

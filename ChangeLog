@@ -21,6 +21,10 @@
 	NEW hdrs/bfs.h stdlib/bfs.c:
 	Added new dynamic string code (bfs.*).
 
+	* ChangeLog btree/file.c hdrs/translat.h:
+	Bugfix for twice-declared typedef (bfptr) - change to single declaration
+	and only forward declaration of underlying struct.
+
 2007-07-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/names.c liflines/add.c

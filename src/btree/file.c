@@ -161,7 +161,6 @@ write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 	INT len;
 	INT siz;
 	RECORD record = getrecord(btree, rkey, &len);
-	bfptr bfs = 0;
 	if (record == NULL)
 		return RECORD_NOT_FOUND;
 	if (translfnc) {
