@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.43'>]>
+[<!ENTITY llversion '3.0.44'>]>
 
 <!--
 Outline for developer's guide to lifelines code.
@@ -240,7 +240,7 @@ TODO:
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.25">
+	<!entity llversion	"3.0.44">
 ]>	
 	
 <book id="docbook">

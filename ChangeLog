@@ -1,3 +1,12 @@
+2005-02-13 Perry Rapp
+
+	* ChangeLog INSTALL build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec configure.in docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml src/hdrs/version.h
+
+	Bump version info for 3.0.44.
+
 2005-02-12 Perry Rapp
 
 	* ChangeLog src/gedlib/xlat.c
