@@ -305,6 +305,7 @@ qkey_to_type (CNSTRING key)
 }
 /*=====================================
  * key_to_record_impl -- Convert key (any type) to RECORD
+ *  returns addref'd record
  *===================================*/
 static RECORD
 key_to_record_impl (CNSTRING key, INT reportmode)
@@ -330,6 +331,7 @@ key_to_record (CNSTRING key)
 /*=====================================
  * qkey_to_record -- Convert key (any type) to RECORD
  * quiet -- that is, returns NULL if record not in database
+ *  returns addref'd record
  *===================================*/
 RECORD
 qkey_to_record (CNSTRING key)

@@ -546,8 +546,9 @@ static PVALUE
 create_pvalue_from_key_impl (STRING key, INT ptype)
 {
 	/* report mode, so may return NULL */
-	RECORD rec = qkey_to_record(key);
+	RECORD rec = qkey_to_record(key); /* addref'd record */
 	PVALUE val = create_pvalue_from_record(rec, ptype);
+	delref_record(rec); /* release our reference, now only pvalue holds */
 	return val;
 }
 /*==================================================

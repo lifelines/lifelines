@@ -37,6 +37,10 @@
 
 	Add children loop to st_db.li.
 
+	* ChangeLog src/gedlib/keytonod.c src/interp/pvalue.c
+
+	Fix record leak in create_pvalue_from_key_impl.
+
 2005-01-24 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/node.c
