@@ -58,9 +58,15 @@ environ_determine_tempfile (void)
 	return win32_tempfile;
 #else
 	static char template[] = "/tmp/lltmpXXXXXX";
+	int fd;
 	static char unix_tempfile[sizeof(template)];
 	strcpy(unix_tempfile, template);
-	return mktemp(unix_tempfile);
+	/* security precaution */
+	/* fd = open(unix_tempfile, O_EXCL|O_CREAT|O_WRONLY, 0x600); */
+	fd = mkstemp(unix_tempfile);
+	if (-1 == fd) return 0;
+	close(fd);
+	return unix_tempfile;
 #endif
 }
 /*============================================================
