@@ -372,7 +372,7 @@ INT num_indis(void);
 INT num_spouses_of_indi(NODE);
 INT num_sours(void);
 INT num_othrs(void);
-BOOLEAN openxref(void);
+BOOLEAN openxref(BOOLEAN readonly);
 STRING other_to_list_string(NODE node, INT len, STRING delim);
 void othr_to_cache(NODE);
 void othr_to_dbase(NODE);

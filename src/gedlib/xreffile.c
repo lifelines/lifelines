@@ -76,6 +76,7 @@ static INT xref_last(DELETESET set);
 static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 
 static FILE *xreffp=0;	/* open xref file pointer */
+static BOOLEAN xrefReadonly = FALSE;
 
 static INT maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
 
@@ -110,6 +111,7 @@ initxref (void)
 {
 	char scratch[100];
 	INT i = 1, j;
+	ASSERT(!xrefReadonly);
 	initdsets();
 	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
@@ -123,13 +125,19 @@ initxref (void)
  * openxref -- Open xrefs file
  *==========================*/
 BOOLEAN
-openxref (void)
+openxref (BOOLEAN readonly)
 {
 	char scratch[100];
+	STRING fmode;
+
 	initdsets();
 	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
-	if (!(xreffp = fopen(scratch, LLREADBINARYUPDATE))) return FALSE;
+	xrefReadonly = readonly;
+	fmode = xrefReadonly ? LLREADBINARY : LLREADBINARYUPDATE;
+	if (!(xreffp = fopen(scratch, fmode))) {
+		return FALSE;
+	}
 	return readxrefs();
 }
 /*==============================
@@ -276,6 +284,7 @@ readrecs (DELETESET set)
 BOOLEAN
 writexrefs (void)
 {
+	ASSERT(!xrefReadonly);
 	ASSERT(xreffp);
 	rewind(xreffp);
 	ASSERT(fwrite(&irecs.n, sizeof(INT), 1, xreffp) == 1);

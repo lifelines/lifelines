@@ -148,7 +148,7 @@ init_lifelines_db (void)
 	init_caches();
 	init_browse_lists();
 	init_mapping();
-	openxref();
+	openxref(readonly);
 }
 /*===============================================
  * get_lifelines_version -- Return version string

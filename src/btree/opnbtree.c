@@ -179,11 +179,20 @@ openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 	}
 
 /* Open and read key file (KEYFILE1) */
+immutretry:
 	dbmode = immut ? LLREADBINARY : LLREADBINARYUPDATE;
-	if (!(fp = fopen(scratch, dbmode)) ||
-	    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+	if (!(fp = fopen(scratch, dbmode))) {
+		if (!immut && writ<2) {
+			/* maybe it is read-only media */
+			immut = TRUE;
+			goto immutretry;
+		}
 		bterrno = BTERR_KFILE;
-		goto failopenbtree; /* validate set bterrno */
+		goto failopenbtree;
+	}
+	if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		bterrno = BTERR_KFILE;
+		goto failopenbtree;
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {

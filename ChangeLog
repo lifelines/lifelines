@@ -1,3 +1,11 @@
+2002-05-13 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog btree/opnbtree.c gedlib/init.c gedlib/xreffile.c
+	hdrs/gedcom.h hdrs/version.h liflines/browse.c
+	win32/msvc6/llines/llines.rc:
+
+	Fix for immutable (don't use r+ for keyfile, and don't save history).
+
 2002-05-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog README.INTERNATIONAL:

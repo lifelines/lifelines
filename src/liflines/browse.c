@@ -1319,6 +1319,7 @@ static void
 save_hist_lists (void)
 {
 	if (!getoptint("SaveHistory", 0)) return;
+	if (readonly || immutable) return;
 	save_nkey_list("VHIST", &vhist);
 }
 /*==================================================
