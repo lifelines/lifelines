@@ -38,7 +38,6 @@
 #ifndef WIN32
 #include <unistd.h>
 #else
-#include <dir.h>
 #include <io.h>
 #endif
 #include "standard.h"
@@ -217,7 +216,7 @@ int llmkdir (dir)
 STRING dir;	/* dir to create */
 {
 	static int status;
-#ifndef WIN32
+#ifdef OBSOLETE_CODE
 	register int pid;
 	if ((pid = fork()))
 		while ((wait(&status) != pid));
@@ -227,10 +226,13 @@ STRING dir;	/* dir to create */
 		exit(2);
 	}
 	return status>>8 == 0;
-#else
-	status = mkdir(dir);
-	return status == 0;
 #endif
+#ifdef WIN32
+	status = mkdir(dir);
+#else
+	status = mkdir(dir,0777);
+#endif
+	return status == 0;
 }
 /*===================================
  * mkalldirs -- Make all dirs in path
