@@ -1,3 +1,15 @@
+2001-01-20 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/gengedc.c gedlib/indiseq.c gedlib/names.c
+	hdrs/indiseq.h hdrs/interp.h hdrs/llstdlib.h hdrs/standard.h
+	hdrs/table.h interp/alloc.c interp/builtin.c interp/interp.c
+	interp/intrpseq.c interp/pvalue.c liflines/ask.c
+	liflines/main.c liflines/screen.c stdlib/double.c
+	stdlib/environ.c stdlib/memalloc.c stdlib/mystring.c
+	stdlib/signals.c stdlib/table.c:
+	Reduce memory leaks during reports.
+	2 custom block allocators & cleaners (pvalues & pnodes).
+
 2001-01-19 John Chandler <jchbn@cuvmb.columbia.edu>
 	* reports/longlines.ll
 	  New version with option to find the longest line(s) through a
