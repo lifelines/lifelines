@@ -1,13 +1,13 @@
-# French messages for Lifelines http://lifelines.sourceforge.net .
+# French messages for Lifelines <http://lifelines.sourceforge.net>
 # Copyright (C) 1991-1999 Thomas T. Wetmore IV
 # Patrick Texier <p.texier@orsennes.com>, 2002.
-# ftp://ftp/genindre/org/pub/lifelines/
+# <ftp://ftp.genindre.org/pub/lifelines/>
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.19\n"
+"Project-Id-Version: Lifelines 3.0.18\n"
 "POT-Creation-Date: 2002-09-29 05:23-0400\n"
-"PO-Revision-Date: 2002-09-23 19:30+0200\n"
+"PO-Revision-Date: 2002-09-25 08:45+0200\n"
 "Last-Translator: Patrick Texier <p.texier@orsennes.com>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
@@ -15,98 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: src/gedlib/charmaps.c:288
-#, c-format
-msgid "Error initializing %s map.\n"
-msgstr "Erreur d'initialisation de la table %s.\n"
-
-#: src/gedlib/gedcom.c:112
-msgid "Missing NAME line in INDI record; record ignored.\n"
-msgstr "Ligne NAME manquante dans enr. INDI ; enr. ignoré.\n"
-
-#: src/gedlib/init.c:512
-msgid "Database error: -- "
-msgstr "Erreur base : -- "
-
-#: src/gedlib/init.c:516
-msgid "requested database does not exist."
-msgstr "base demandée inexistante."
-
-#: src/gedlib/init.c:519
-msgid "db directory is file, not directory."
-msgstr "répertoire de base est un fichier, pas un répertoire."
-
-#: src/gedlib/init.c:522
-msgid "creation of new database failed."
-msgstr "échec de la création d'une nouvelle base"
-
-#: src/gedlib/init.c:525
-msgid "error accessing database directory."
-msgstr "erreur d'accès au répertoire de la base"
-
-#: src/gedlib/init.c:528
-msgid "no keyfile (directory does not appear to be a database)."
-msgstr "pas de fichier clé (le répertoire ne semble pas être une base)."
-
-#: src/gedlib/init.c:531
-msgid "could not open, read or write an index file."
-msgstr "impossible d'ouvrir, lire ou écrire un fichier d'index."
-
-#: src/gedlib/init.c:534
-msgid "could not open, read or write the key file."
-msgstr "impossible d'ouvrir, lire ou écrire un fichier de clés."
-
-#: src/gedlib/init.c:537
-msgid "could not open, read or write a block file."
-msgstr "impossible d'ouvrir, lire ou écrire un fichier 'bloc'."
-
-#: src/gedlib/init.c:540
-msgid "name of database is too long."
-msgstr "nom de base trop long."
-
-#: src/gedlib/init.c:543
-msgid "The database is already open for writing."
-msgstr "La base est déja ouverte en écriture."
-
-#: src/gedlib/init.c:546
-msgid "The database is locked (no readwrite access)."
-msgstr "La base est bloquée (pas d'accès en lecture/écriture)."
-
-#: src/gedlib/init.c:549
-msgid "keyfile is corrupt."
-msgstr "le fichier de clés est corrompu."
-
-#: src/gedlib/init.c:552
-msgid "keyfile is wrong alignment."
-msgstr "le fichier de clés a un mauvais alignement."
-
-#: src/gedlib/init.c:555
-msgid "keyfile is wrong version."
-msgstr "le fichier de clés n'a pas la bonne version."
-
-#: src/gedlib/init.c:558
-msgid "Existing database found."
-msgstr "Base existante trouvée."
-
-#: src/gedlib/init.c:562
-#, c-format
-msgid ""
-"The database is already opened for read access by %d users.\n"
-"  "
-msgstr ""
-"La base est déja ouverte en lecture par %d utilisateurs.\n"
-"  "
-
-#: src/gedlib/init.c:566
-msgid "Invalid properties set for new database"
-msgstr "Ensemble de propriétés invalide pour la nouvelle base"
-
-#: src/gedlib/init.c:569
-msgid "Undefined database error -- fix program."
-msgstr "Erreur de base indéfinie -- verifiez le programme."
-
-#: src/gedlib/messages.c:45
-=======
 #: src/gedlib/charmaps.c:288
 #, c-format
 msgid "Error initializing %s map.\n"
@@ -158,7 +66,7 @@ msgstr "nom de base trop long."
 
 #: src/gedlib/init.c:547
 msgid "The database is already open for writing."
-msgstr "La base est déja ouverte en écriture."
+msgstr "La base est déjà ouverte en écriture."
 
 #: src/gedlib/init.c:550
 msgid "The database is locked (no readwrite access)."
@@ -186,7 +94,7 @@ msgid ""
 "The database is already opened for read access by %d users.\n"
 "  "
 msgstr ""
-"La base est déja ouverte en lecture par %d utilisateurs.\n"
+"La base est déjà ouverte en lecture par %d utilisateurs.\n"
 "  "
 
 #: src/gedlib/init.c:570
@@ -195,7 +103,7 @@ msgstr "Ensemble de propriétés invalide pour la nouvelle base"
 
 #: src/gedlib/init.c:573
 msgid "Undefined database error -- fix program."
-msgstr "Erreur de base indéfinie -- verifiez le programme."
+msgstr "Erreur de base indéfinie -- vérifiez le programme."
 
 #: src/gedlib/messages.c:45
 msgid "You must identify a database."
@@ -267,11 +175,11 @@ msgstr "entrez une clé ou un refn :"
 
 #: src/gedlib/messages.c:66
 msgid "Please choose the child to remove from the family."
-msgstr "Sélectionez l'enfant à supprimer de cette famille."
+msgstr "Sélectionnez l'enfant à supprimer de cette famille."
 
 #: src/gedlib/messages.c:67
 msgid "Please choose the spouse/parent to remove from the family."
-msgstr "Sélectionez le conjoint/parent à supprimer de cette famille."
+msgstr "Sélectionnez le conjoint/parent à supprimer de cette famille."
 
 #: src/gedlib/messages.c:68
 msgid "From which family is the child to be removed?"
@@ -283,7 +191,7 @@ msgstr "De quelle famille doit être supprimé le conjoint/parent ?"
 
 #: src/gedlib/messages.c:70
 msgid "Identify family (enter nothing to identify by individual members)."
-msgstr "Identifiez une famille (rien pour l'indentifier par individus)."
+msgstr "Identifiez une famille (rien pour l'identifier par individus)."
 
 #: src/gedlib/messages.c:71
 msgid "Identify a spouse of the family, if known."
@@ -311,7 +219,7 @@ msgstr "Identifiez le premier conjoint à permuter."
 
 #: src/gedlib/messages.c:77
 msgid "Identify the second family/spouse to swap."
-msgstr "Indentifiez le second conjoint à permuter."
+msgstr "Identifiez le second conjoint à permuter."
 
 #: src/gedlib/messages.c:78
 msgid "Please choose the spouse/parent to browse to."
@@ -323,7 +231,7 @@ msgstr "Choisissez le premier conjoint à atteindre, svp."
 
 #: src/gedlib/messages.c:80
 msgid "Please choose the second spouse/parent to browse to."
-msgstr "Choissisez le second conjoint à atteindre, svp."
+msgstr "Choisissez le second conjoint à atteindre, svp."
 
 #: src/gedlib/messages.c:81
 msgid "Please choose the child to browse to."
@@ -331,7 +239,7 @@ msgstr "Choisissez l'enfant à atteindre, svp."
 
 #: src/gedlib/messages.c:82
 msgid "Please choose the first child to browse to."
-msgstr "Choisissez le permier enfant à atteindre, svp."
+msgstr "Choisissez le premier enfant à atteindre, svp."
 
 #: src/gedlib/messages.c:83
 msgid "Please choose the second child to browse to."
@@ -400,7 +308,7 @@ msgstr "Entrez un motif de recherche pour un seul nom ou surnom."
 
 #: src/gedlib/messages.c:100
 msgid "Enter pattern to match against full name."
-msgstr "Entrez un modif de recherche pour un nom complet."
+msgstr "Entrez un motif de recherche pour un nom complet."
 
 #: src/gedlib/messages.c:101
 msgid "Enter pattern to match against refn."
@@ -480,11 +388,11 @@ msgstr "Cette personne n'a pas de conjoint dans la base."
 
 #: src/gedlib/messages.c:123
 msgid "This person has no younger sibling in the database."
-msgstr "Cette personne n'a pas de frêre/soeur plus jeune dans la base."
+msgstr "Cette personne n'a pas de frère/soeur plus jeune dans la base."
 
 #: src/gedlib/messages.c:124
 msgid "This person has no older sibling in the database."
-msgstr "Cette personne n'a pas de frêre/soeur plus âgé dans la base."
+msgstr "Cette personne n'a pas de frère/soeur plus âgé dans la base."
 
 #: src/gedlib/messages.c:125
 msgid "This person's parents are not in the database."
@@ -492,7 +400,7 @@ msgstr "Les parents de cette personne ne sont pas dans la base."
 
 #: src/gedlib/messages.c:126
 msgid "This family has no male spouse/parent in the database."
-msgstr "Cette famille n'a pas n'époux dans la base."
+msgstr "Cette famille n'a pas d'époux dans la base."
 
 #: src/gedlib/messages.c:127
 msgid "This family has no female spouse/parent in the database."
@@ -512,7 +420,7 @@ msgstr "Enfant non trouvé"
 
 #: src/gedlib/messages.c:131
 msgid "No such person."
-msgstr "Persone non trouvée"
+msgstr "Personne non trouvée"
 
 #: src/gedlib/messages.c:132
 msgid "No such record."
@@ -520,7 +428,7 @@ msgstr "Enregistrement non trouvé."
 
 #: src/gedlib/messages.c:133
 msgid "No such family."
-msgstr "Familles non trouvée."
+msgstr "Famille non trouvée."
 
 #: src/gedlib/messages.c:134
 msgid "No sources present."
@@ -532,11 +440,11 @@ msgstr "Choisissez la source à visualiser."
 
 #: src/gedlib/messages.c:136
 msgid "No events present."
-msgstr "Pas d'évènements."
+msgstr "Pas d'événements."
 
 #: src/gedlib/messages.c:137
 msgid "Please choose the event to view."
-msgstr "Choisissez l'évènement à visualiser."
+msgstr "Choisissez l'événement à visualiser."
 
 #: src/gedlib/messages.c:138
 msgid "No others present."
@@ -590,15 +498,15 @@ msgstr "Cette personne n'a pas de sexe ; ne peut faire partie d'une famille."
 
 #: src/gedlib/messages.c:151
 msgid "This family already has a husband/male parent."
-msgstr "Cette famille a déja un mari."
+msgstr "Cette famille a déjà un mari."
 
 #: src/gedlib/messages.c:152
 msgid "This family already has a wife/female parent."
-msgstr "Cette famille a déja une femme."
+msgstr "Cette famille a déjà une femme."
 
 #: src/gedlib/messages.c:153
 msgid "This family has both spouses/parents; can't add another."
-msgstr "Cette famille a ces deux conjoints/parents ; ajout impossible."
+msgstr "Cette famille a ses deux conjoints/parents ; ajout impossible."
 
 #: src/gedlib/messages.c:154
 msgid "This family has neither spouse/parent; can't remove."
@@ -646,11 +554,11 @@ msgstr "Voulez-vous rééditer cette source ?"
 msgid ""
 "Do you want to edit the event again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditer cet évènement ? (Sinon les changements seront perdus.)"
+"Voulez-vous rééditer cet événement ? (Sinon les changements seront perdus.)"
 
 #: src/gedlib/messages.c:165
 msgid "Do you want to edit the event again?"
-msgstr "Voulez-vous rééditer cet évènement ?"
+msgstr "Voulez-vous rééditer cet événement ?"
 
 #: src/gedlib/messages.c:166
 msgid ""
@@ -673,7 +581,7 @@ msgstr "Quel enregistrement source voulez-vous éditer ?"
 
 #: src/gedlib/messages.c:170
 msgid "Which event record do you want to edit?"
-msgstr "Quel enregistrement évènement voulez-vous éditer ?"
+msgstr "Quel enregistrement événement voulez-vous éditer ?"
 
 #: src/gedlib/messages.c:171
 msgid "What record do you want to edit?"
@@ -701,7 +609,7 @@ msgstr "Voulez-vous ajouter cette source dans la base ?"
 
 #: src/gedlib/messages.c:178
 msgid "Do you really want to add this event to the database?"
-msgstr "Voulez-vous ajouter cet évènement dans la base ?"
+msgstr "Voulez-vous ajouter cet événement dans la base ?"
 
 #: src/gedlib/messages.c:179
 msgid "Do you really want to add this record to the database?"
@@ -721,7 +629,7 @@ msgstr "Voulez-vous mettre à jour cette source ?"
 
 #: src/gedlib/messages.c:183
 msgid "Do you really want to update this event?"
-msgstr "Voulez-vous mettre à jour cet évènement ?"
+msgstr "Voulez-vous mettre à jour cet événement ?"
 
 #: src/gedlib/messages.c:184
 msgid "Do you really want to update this record?"
@@ -754,7 +662,7 @@ msgstr "Voulez-vous supprimer cet enfant de sa famille ?"
 
 #: src/gedlib/messages.c:191
 msgid "Do you really want to remove this spouse from his/her family?"
-msgstr "Voulez-vous supprimer ce coinjoint de sa famille ?"
+msgstr "Voulez-vous supprimer ce conjoint de sa famille ?"
 
 #: src/gedlib/messages.c:192
 msgid "Too many spouses to display full list"
@@ -766,7 +674,7 @@ msgstr "Ces personnes sont enfants dans différentes familles."
 
 #: src/gedlib/messages.c:194
 msgid "Are you sure you want to merge them?"
-msgstr "Etes-vous sur de vouloir les fusionner ?"
+msgstr "Êtes-vous sur de vouloir les fusionner ?"
 
 #: src/gedlib/messages.c:196
 msgid "There is something wrong with the data."
@@ -794,7 +702,7 @@ msgstr "Identifiez l'enfant présent dans la famille."
 
 #: src/gedlib/messages.c:203
 msgid "This person is already a child in a family."
-msgstr "Cette personne est déja un enfant dans une famille."
+msgstr "Cette personne est déjà un enfant dans une famille."
 
 #: src/gedlib/messages.c:204
 msgid "Identify a spouse/parent for the new family."
@@ -802,7 +710,7 @@ msgstr "Identifiez un conjoint pour la nouvelle famille."
 
 #: src/gedlib/messages.c:205
 msgid "Identify the second spouse/parent, if known."
-msgstr "Identifiez le second conjoin, s'il est connu."
+msgstr "Identifiez le second conjoint, s'il est connu."
 
 #: src/gedlib/messages.c:206
 msgid "Both families must have husbands/fathers."
@@ -810,11 +718,11 @@ msgstr "Les deux familles doivent avoir des maris/pères."
 
 #: src/gedlib/messages.c:207
 msgid "Both families must have wives/mothers."
-msgstr "Les deux familles doivent avoir des femmes/mêres."
+msgstr "Les deux familles doivent avoir des femmes/mères."
 
 #: src/gedlib/messages.c:209
 msgid "Identify spouse/parent in second family, if known."
-msgstr "Identifiez le coinjoint dans la seconde famille, s'il est connu."
+msgstr "Identifiez le conjoint dans la seconde famille, s'il est connu."
 
 #: src/gedlib/messages.c:210
 msgid "Identify child in second family."
@@ -948,7 +856,7 @@ msgstr "La source a été modifiée dans la base."
 
 #: src/gedlib/messages.c:245
 msgid "The event was modified in the database."
-msgstr "L'évènement a été modifié dans la base."
+msgstr "L'événement a été modifié dans la base."
 
 #: src/gedlib/messages.c:246
 msgid "The record was modified in the database."
@@ -1094,7 +1002,7 @@ msgstr "La source %s est référencée mais non définie."
 #: src/gedlib/messages.c:284
 #, c-format
 msgid "Event %s is referred to but not defined."
-msgstr "L'évènement %s est référencé mais non défini."
+msgstr "L'événement %s est référencé mais non défini."
 
 #: src/gedlib/messages.c:285
 #, c-format
@@ -1218,17 +1126,17 @@ msgstr "Ligne %d : Cette ligne est incomplète."
 #: src/gedlib/messages.c:321
 #, c-format
 msgid "Line %d: This line has a bad link."
-msgstr "Line %d : Cette ligne a un lien invalide."
+msgstr "Ligne %d : Cette ligne a un lien invalide."
 
 #: src/gedlib/messages.c:322
 #, c-format
 msgid "Line %d: This line needs white space before tag."
-msgstr "Line %d : Il faut un espace avant le tag."
+msgstr "Ligne %d : Il faut un espace avant le tag."
 
 #: src/gedlib/messages.c:323
 #, c-format
 msgid "Line %d: This line has an illegal level."
-msgstr "Line %d : Cette ligne a un lien illégal."
+msgstr "Ligne %d : Cette ligne a un lien illégal."
 
 #: src/gedlib/messages.c:324
 msgid "The record begins at wrong level."
@@ -1484,7 +1392,7 @@ msgstr "Vous ne pouvez pas modifier le sexe d'un parent."
 
 #: src/gedlib/messages.c:403
 msgid "REFN key is already in use."
-msgstr "Clé REFN déja utilisée."
+msgstr "Clé REFN déjà utilisée."
 
 #: src/gedlib/messages.c:405
 msgid "Tag is too long to connect automatically."
@@ -1521,7 +1429,7 @@ msgstr "LifeLines %s - BdD Généalogique et Système de Programmation"
 
 #: src/gedlib/messages.c:416
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
-msgstr "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
+msgstr "Copyright(c) de 1991 à 1996, par T. T. Wetmore IV"
 
 #: src/gedlib/messages.c:417
 #, c-format
@@ -1558,27 +1466,27 @@ msgstr "yY"
 
 #: src/gedlib/messages.c:431
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Ecran individu (* cacher/montrer menu)"
+msgstr "LifeLines -- Écran individu (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:432
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Ecran Famille (* cacher/montrer menu)"
+msgstr "LifeLines -- Écran Famille (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:433
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
-msgstr "Lifelines -- Ecran deux individus (* cacher/montrer menu)"
+msgstr "Lifelines -- Écran deux individus (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:434
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Ecran deux familles (* cacher/montrer menu)"
+msgstr "LifeLines -- Écran deux familles (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:435
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Ecran auxiliaire (* cacher/montrer menu)"
+msgstr "LifeLines -- Écran auxiliaire (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:436
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
-msgstr "LifeLines -- Ecran liste (* cacher/montrer menu)"
+msgstr "LifeLines -- Écran liste (* cacher/montrer menu)"
 
 #: src/gedlib/messages.c:439
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
@@ -1773,7 +1681,7 @@ msgstr "u  Utilitaires divers"
 
 #: src/gedlib/messages.c:495
 msgid "x  Handle source, event and other records"
-msgstr "x  Gérer les enregistrements source, évènements et autres"
+msgstr "x  Gérer les enregistrements sources, événements et autres"
 
 #: src/gedlib/messages.c:498
 msgid "What utility do you want to perform?"
@@ -1821,7 +1729,7 @@ msgstr "s  Parcourir les enregistrements source"
 
 #: src/gedlib/messages.c:511
 msgid "e  Browse event records"
-msgstr "e  Parcourir les enregistrements évènement"
+msgstr "e  Parcourir les enregistrements événement"
 
 #: src/gedlib/messages.c:512
 msgid "x  Browse other records"
@@ -1837,11 +1745,11 @@ msgstr "2  Modifier un enregistrement source dans la base"
 
 #: src/gedlib/messages.c:515
 msgid "3  Add an event record to the database"
-msgstr "3  Ajouter un enregistrement évènement dans la base"
+msgstr "3  Ajouter un enregistrement événement dans la base"
 
 #: src/gedlib/messages.c:516
 msgid "4  Edit event record from the database"
-msgstr "4  Modifier un enregistrement évènement dans la base"
+msgstr "4  Modifier un enregistrement événement dans la base"
 
 #: src/gedlib/messages.c:517
 msgid "5  Add an other record to the database"
@@ -1889,11 +1797,11 @@ msgstr "Quelle table de caractères voulez-vous enregistrer ?"
 
 #: src/gedlib/messages.c:533
 msgid "e  Editor to Internal mapping "
-msgstr "e  Table Editeur -> Interne"
+msgstr "e  Table Éditeur -> Interne"
 
 #: src/gedlib/messages.c:534
 msgid "m  Internal to Editor mapping "
-msgstr "m  Table Interne -> Editeur"
+msgstr "m  Table Interne -> Éditeur"
 
 #: src/gedlib/messages.c:535
 msgid "i  GEDCOM to Internal mapping "
@@ -1966,12 +1874,12 @@ msgstr "Comment voulez-vous retrouver un enregistrement ?"
 #: src/gedlib/messages.c:559
 #, c-format
 msgid "v  Review visit history (%d record)"
-msgstr "v  Voir histor. des visites (%d enr.)"
+msgstr "v  Voir historique des visites (%d enr.)"
 
 #: src/gedlib/messages.c:560
 #, c-format
 msgid "v  Review visit history (%d records)"
-msgstr "v  Voir histor. des visites (%d enr.)"
+msgstr "v  Voir historique des visites (%d enr.)"
 
 #: src/gedlib/messages.c:561
 msgid "(visit history is empty)"
@@ -1980,16 +1888,16 @@ msgstr "(l'historique de visites est vide)"
 #: src/gedlib/messages.c:562
 #, c-format
 msgid "c  Review change history (%d record)"
-msgstr "c  Voir histor. des chang. (%d enr.)"
+msgstr "c  Voir historique des chang. (%d enr.)"
 
 #: src/gedlib/messages.c:563
 #, c-format
 msgid "c  Review change history (%d records)"
-msgstr "c  Voir histor. des chang. (%d enr.)"
+msgstr "c  Voir historique des chang. (%d enr.)"
 
 #: src/gedlib/messages.c:564
 msgid "(change history is empty)"
-msgstr "(l'historique de changements est vide)"
+msgstr "(l'historique des modifications est vide)"
 
 #: src/gedlib/messages.c:565
 msgid "f  Full database scan"
@@ -2620,162 +2528,144 @@ msgstr "l'arg. de f n'est pas un décimal"
 
 #: src/interp/builtin.c:1015
 msgid "first"
-msgstr ""
+msgstr "premier"
 
 #: src/interp/builtin.c:1015
-#, fuzzy
 msgid "second"
-msgstr "vend"
+msgstr "second"
 
 #: src/interp/builtin.c:1015
-#, fuzzy
 msgid "third"
-msgstr "ther"
+msgstr "troisième"
 
 #: src/interp/builtin.c:1015
-#, fuzzy
 msgid "fourth"
-msgstr "flor"
+msgstr "quatrième"
 
 #: src/interp/builtin.c:1015
 msgid "fifth"
-msgstr ""
+msgstr "cinquième"
 
 #: src/interp/builtin.c:1016
 msgid "sixth"
-msgstr ""
+msgstr "sixième"
 
 #: src/interp/builtin.c:1016
-#, fuzzy
 msgid "seventh"
-msgstr "vent"
+msgstr "septième"
 
 #: src/interp/builtin.c:1016
 msgid "eighth"
-msgstr ""
+msgstr "huitième"
 
 #: src/interp/builtin.c:1016
-#, fuzzy
 msgid "ninth"
-msgstr "nisan"
+msgstr "neuvième"
 
 #: src/interp/builtin.c:1016
-#, fuzzy
 msgid "tenth"
-msgstr "vent"
+msgstr "dixième"
 
 #: src/interp/builtin.c:1017
-#, fuzzy
 msgid "eleventh"
-msgstr "vent"
+msgstr "onzième"
 
 #: src/interp/builtin.c:1017
 msgid "twelfth"
-msgstr ""
+msgstr "douzième"
 
 #: src/interp/builtin.c:1030
 #, c-format
 msgid "%dth"
-msgstr ""
+msgstr "%dème"
 
 #: src/interp/builtin.c:1040
-#, fuzzy
 msgid "zero"
-msgstr "erreur"
+msgstr "zéro"
 
 #: src/interp/builtin.c:1040
 msgid "one"
-msgstr ""
+msgstr "un"
 
 #: src/interp/builtin.c:1040
 msgid "two"
-msgstr ""
+msgstr "deux"
 
 #: src/interp/builtin.c:1040
-#, fuzzy
 msgid "three"
-msgstr "ther"
+msgstr "trois"
 
 #: src/interp/builtin.c:1040
-#, fuzzy
 msgid "four"
-msgstr "flor"
+msgstr "quatre"
 
 #: src/interp/builtin.c:1040
-#, fuzzy
 msgid "five"
-msgstr "nivôse"
+msgstr "cinq"
 
 #: src/interp/builtin.c:1041
 msgid "six"
-msgstr ""
+msgstr "six"
 
 #: src/interp/builtin.c:1041
-#, fuzzy
 msgid "seven"
-msgstr "svn"
+msgstr "sept"
 
 #: src/interp/builtin.c:1041
 msgid "eight"
-msgstr ""
+msgstr "huit"
 
 #: src/interp/builtin.c:1041
-#, fuzzy
 msgid "nine"
-msgstr "nisan"
+msgstr "neuf"
 
 #: src/interp/builtin.c:1041
 msgid "ten"
-msgstr ""
+msgstr "dix"
 
 #: src/interp/builtin.c:1042
-#, fuzzy
 msgid "eleven"
-msgstr "vent"
+msgstr "onze"
 
 #: src/interp/builtin.c:1042
-#, fuzzy
 msgid "twelve"
-msgstr "tevet"
+msgstr "douze"
 
 #: src/interp/builtin.c:2089
 msgid "He"
-msgstr ""
+msgstr "Il"
 
 #: src/interp/builtin.c:2089
-#, fuzzy
 msgid "he"
-msgstr "ther"
+msgstr "il"
 
 #: src/interp/builtin.c:2089
 msgid "His"
-msgstr ""
+msgstr "Son"
 
 #: src/interp/builtin.c:2089
 msgid "his"
-msgstr ""
+msgstr "son"
 
 #: src/interp/builtin.c:2089
 msgid "him"
-msgstr ""
+msgstr "lui"
 
 #: src/interp/builtin.c:2090
 msgid "She"
-msgstr ""
+msgstr "Elle"
 
 #: src/interp/builtin.c:2090
-#, fuzzy
 msgid "she"
-msgstr "shevat"
+msgstr "elle"
 
 #: src/interp/builtin.c:2090
 msgid "Her"
-msgstr ""
+msgstr "Son"
 
 #: src/interp/builtin.c:2090
-#, fuzzy
 msgid "her"
-msgstr "ther"
+msgstr "son"
 
 #: src/interp/builtin.c:2493
 msgid "(trimname) person does not have a name"
@@ -2802,15 +2692,15 @@ msgstr "Erreur : Le fichier de sortie <%s> ne peut être créé.\n"
 #: src/interp/interp.c:324
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
-msgstr "La proc. %s doit être appellée avec %d paramètres et non %d."
+msgstr "La proc. %s doit être appelée avec %d paramètres et non %d."
 
 #: src/interp/interp.c:339
 msgid "is running..."
-msgstr "s'éxécute..."
+msgstr "s'exécute..."
 
 #: src/interp/interp.c:343
 msgid "was run successfully."
-msgstr "s'est correctement éxécuté."
+msgstr "s'est correctement exécuté."
 
 #: src/interp/interp.c:347
 msgid "was cancelled."
@@ -2867,7 +2757,7 @@ msgid ""
 "Parsing Error in <%s>"
 msgstr ""
 "\n"
-"Error d'interprétation en <%s>"
+"Erreur d'interprétation en <%s>"
 
 #: src/interp/interp.c:1835
 #, c-format
@@ -2899,7 +2789,7 @@ msgid ""
 "Report Errors: %s"
 msgstr ""
 "\n"
-"Erreurs de Rapport : %s"
+"Erreurs de rapport : %s"
 
 #: src/interp/interp.c:2076
 msgid "This report requires a newer program to run"
@@ -3216,7 +3106,7 @@ msgstr "!t mode GEDCOMT"
 
 #: src/liflines/menuitem.c:133
 msgid "!a Ancestors mode"
-msgstr "!a mode ancendants"
+msgstr "!a mode ascendants"
 
 #: src/liflines/menuitem.c:134
 msgid "!d Descendants mode"
@@ -3252,7 +3142,7 @@ msgstr "tc Tandem enfants"
 
 #: src/liflines/menuitem.c:143
 msgid "tf Tandem to father/s"
-msgstr "tf Tandem pere/s"
+msgstr "tf Tandem père/s"
 
 #: src/liflines/menuitem.c:144
 msgid "tg Tandem to family/s"
@@ -3268,7 +3158,7 @@ msgstr "m  Atteindre mères"
 
 #: src/liflines/menuitem.c:147
 msgid "tm Tandem to mother/s"
-msgstr "tm Tamdem mères"
+msgstr "tm Tandem mères"
 
 #: src/liflines/menuitem.c:148
 msgid "ts Tandem to spouse/s"
@@ -3600,17 +3490,17 @@ msgstr "Lignes %d et %d : La source %s est défini plusieurs fois."
 #: src/liflines/valgdcom.c:375
 #, c-format
 msgid "Line %d: The event defined here has no key."
-msgstr "Ligne %d : L'évènement défini ici n'a pas de clé."
+msgstr "Ligne %d : L'événement défini ici n'a pas de clé."
 
 #: src/liflines/valgdcom.c:390
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
-msgstr "Ligne %d : L'évènement %s a une clé incorrecte."
+msgstr "Ligne %d : L'événement %s a une clé incorrecte."
 
 #: src/liflines/valgdcom.c:397
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
-msgstr "Lignes %d et %d : L'évènement %s est défini plusieurs fois."
+msgstr "Lignes %d et %d : L'événement %s est défini plusieurs fois."
 
 #: src/liflines/valgdcom.c:420
 #, c-format
@@ -3717,7 +3607,7 @@ msgstr "Noms dupliqués"
 
 #: src/tools/dbverify.c:153
 msgid "Non-indi names"
-msgstr "Noms non-indivudus"
+msgstr "Noms non-individus"
 
 #: src/tools/dbverify.c:154
 msgid "Duplicate individuals"
@@ -3777,15 +3667,15 @@ msgstr "Mauvaise référence CHIL"
 
 #: src/tools/dbverify.c:168
 msgid "Improper HUSB"
-msgstr "HUSB impropre"
+msgstr "HUSB incorrect"
 
 #: src/tools/dbverify.c:169
 msgid "Improper WIFE"
-msgstr "WIFE impropre"
+msgstr "WIFE incorrect"
 
 #: src/tools/dbverify.c:170
 msgid "Improper child"
-msgstr "Enfant impropre"
+msgstr "Enfant incorrect"
 
 #: src/tools/dbverify.c:171
 msgid "Empty family"
@@ -3829,7 +3719,7 @@ msgstr ""
 "\t-i = Vérifie les individus\n"
 "\t-f = Vérifie les familles\n"
 "\t-s = Vérifie les sources\n"
-"\t-e = Vérifie les évènements\n"
+"\t-e = Vérifie les événements\n"
 "\t-x = Vérifie les autres enregistrements\n"
 "\t-n = Bruyant (affiche chaque enregistrement traité)\n"
 
@@ -3881,7 +3771,7 @@ msgstr "Mauvais nom pour l'individu %s : %s"
 #: src/tools/dbverify.c:563 src/tools/dbverify.c:576
 #, c-format
 msgid "Bad family reference (%s) individual %s"
-msgstr "Mauvais référence familliale (%s) individu %s"
+msgstr "Mauvais référence familiale (%s) individu %s"
 
 #: src/tools/dbverify.c:567
 #, c-format
@@ -3911,7 +3801,7 @@ msgstr "Impropre HUSB (%s) dans la famille (%s)"
 #: src/tools/dbverify.c:640
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
-msgstr "Mauvaise référence femmme (%s) dans la famille %s"
+msgstr "Mauvaise référence femme (%s) dans la famille %s"
 
 #: src/tools/dbverify.c:646
 #, c-format
