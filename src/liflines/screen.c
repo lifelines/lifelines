@@ -220,7 +220,7 @@ static void shw_array_of_strings(STRING *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
 static void shw_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
-static void touch_all(void);
+static void touch_all(BOOLEAN includeCurrent);
 static INT update_menu(INT screen);
 static void user_options(void);
 /*static void vmprintf(STRING fmt, va_list args);*/
@@ -528,15 +528,11 @@ static void
 check_stdout (void)
 {
 	if (stdout_vis) {
-		WINDOW * win = uiw_win(stdout_win);
-		touchwin(win);
 		llwprintf("\nStrike any key to continue.\n");
 		crmode();
 		(void) wgetch(uiw_win(stdout_win));
 		nocrmode();
 		stdout_vis = FALSE;
-		if (active_uiwin)
-			touch_all();
 	}
 }
 /*=====================================
@@ -901,7 +897,6 @@ static void
 refresh_main (void)
 {
 	WINDOW *win = stdout_vis ? uiw_win(stdout_win) : uiw_win(main_win);
-	touchwin(win);
 	wrefresh(win);
 }
 /*======================================
@@ -1250,6 +1245,7 @@ resize_win: /* we come back here if we resize the window */
 		ret = handle_list_cmds(&ld, code);
 		if (ret == -1) {
 			deactivate_uiwin();
+			touch_all(TRUE);
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}
@@ -2240,6 +2236,7 @@ resize_win: /* we come back here if we resize the window */
 		ret = handle_list_cmds(&ld, code);
 		if (ret == -1) {
 			deactivate_uiwin();
+			touch_all(TRUE);
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}
@@ -2297,8 +2294,6 @@ place_std_msg (void)
 	mvwaddstr(win, row, 2, str);
 	wrefresh(win); /* ensure message is displayed */
 	place_cursor();
-	if (active_uiwin)
-		touch_all();
 }
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
@@ -2445,7 +2440,6 @@ do_edit (void)
 #else
 	system(editstr);
 #endif
-	touchwin(uiw_win(main_win));
 	clearok(curscr, 1);
 	wrefresh(curscr);
 	noecho();
@@ -2678,8 +2672,6 @@ display_status (STRING text)
 	mvwaddstr(win, row, 2, status_showing);
 	place_cursor();
 	wrefresh(win);
-	if (active_uiwin)
-		touch_all();
 }
 /*=========================================
  * msg_error -- handle error message
@@ -3111,19 +3103,17 @@ deactivate_uiwin (void)
 	active_uiwin = uiw_parent(active_uiwin);
 	uiw_parent(uiw)=0;
 	if (active_uiwin) {
-		touch_all();
 		ASSERT(uiw_child(active_uiwin)==uiw);
 		uiw_child(active_uiwin)=0;
 	}
 }
 /*============================
- * touch_ancestors -- Touch current window & all
- *  ancestors (but in order starting with most
- *  remote ancestor window)
+ * touch_all -- Repaint all ancestors of current window
+ * from furthest to nearest
  * Created: 2001/12/01, Perry Rapp
  *==========================*/
 static void
-touch_all (void)
+touch_all (BOOLEAN includeCurrent)
 {
 	UIWINDOW uiwin=active_uiwin;
 	ASSERT(uiwin);
@@ -3132,7 +3122,7 @@ touch_all (void)
 		uiwin = uiw_parent(uiwin);
 	}
 	/* walk down touching */
-	while (uiwin) {
+	while (uiwin && (includeCurrent || uiwin!=active_uiwin)) {
 		touchwin(uiw_win(uiwin));
 		wrefresh(uiw_win(uiwin));
 		uiwin = uiw_child(uiwin);
