@@ -58,7 +58,7 @@ STRING key;
 	if (!tab || !key) return NULL;
 	entry = tab[hash(key)];
 	while (entry) {
-		if (eqstr(key, entry->ekey)) return entry;
+		if (eqstr(key, (char*)entry->ekey)) return entry;
 		entry = entry->enext;
 	}
 	return NULL;
@@ -77,7 +77,7 @@ TABLE create_table (void)
 /*======================================
  * insert_table -- Insert entry in table
  *====================================*/
-insert_table (tab, key, val)
+void insert_table (tab, key, val)
 TABLE tab;
 STRING key;
 WORD val;
@@ -97,7 +97,7 @@ WORD val;
 /*==========================================
  * delete_table -- Remove element from table
  *========================================*/
-delete_table (tab, key)
+void delete_table (tab, key)
 TABLE tab;
 STRING key;
 {
@@ -133,7 +133,7 @@ STRING key;
 {
 	ENTRY entry;
 	if (!key) return NULL;
-	if (entry = fndentry(tab, key))
+	if ((entry = fndentry(tab, key)))
 		return entry->evalue;
 	else
 		return NULL;
@@ -149,7 +149,7 @@ BOOLEAN *there;
 	ENTRY entry;
 	*there = FALSE;
 	if (!key) return NULL;
-	if (entry = fndentry(tab, key)) {
+	if ((entry = fndentry(tab, key))) {
 		*there = TRUE;
 		return entry->evalue;
 	}
@@ -158,7 +158,7 @@ BOOLEAN *there;
 /*=============================
  * remove_table -- Remove table
  *===========================*/
-remove_table (tab, rcode)
+void remove_table (tab, rcode)
 TABLE tab;
 INT rcode;
 {
@@ -167,7 +167,7 @@ INT rcode;
 	if (!tab) return;
 	for (i = 0; i < MAXHASH; i++) {
 		nxt = tab[i];
-		while (ent = nxt) {
+		while ((ent = nxt)) {
 			nxt = ent->enext;
 			switch (rcode) {
 			case FREEBOTH:
@@ -187,7 +187,7 @@ INT rcode;
 /*=================================================
  * traverse_table -- Traverse table doing something
  *===============================================*/
-traverse_table (tab, tproc)
+void traverse_table (tab, tproc)
 TABLE tab;
 INT (*tproc)();
 {
@@ -196,7 +196,7 @@ INT (*tproc)();
 	if (!tab || !tproc) return;
 	for (i = 0; i < MAXHASH; i++) {
 		nxt = tab[i];
-		while (ent = nxt) {
+		while ((ent = nxt)) {
 			nxt = ent->enext;
 			(*tproc)(ent);
 		}

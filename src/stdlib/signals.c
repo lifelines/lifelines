@@ -64,7 +64,7 @@ char *sig_msgs[] = {
 /*======================================
  * set_signals -- Install signal handler
  *====================================*/
-set_signals ()
+void set_signals (void)
 {
 	extern void on_signals();
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
@@ -112,11 +112,11 @@ int sig;
 	ll_abort(sig);
 }
 
-ll_abort(sig)
+void ll_abort(sig)
 	int sig;
 {
 	int c;
-	fputs("\nCore Dump? [n/y] ", stdout);
+	fprintf(stdout,"\nAborting on signal %d\nCore dump? [y/n]",sig);
 	fflush(stdout);
 	c = getchar();
 	putchar(c);

@@ -33,7 +33,7 @@
 /*===============================
  * __fatal -- Fatal error routine
  *=============================*/
-__fatal (file, line)
+void __fatal (file, line)
 STRING file;
 int line;
 {
@@ -44,7 +44,7 @@ int line;
 /*============================
  * __assert -- Check assertion
  *==========================*/
-__assert (exp, file, line)
+void __assert (exp, file, line)
 BOOLEAN exp;
 STRING file;
 int line;

@@ -28,6 +28,7 @@
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
 
+#include <stdlib.h>
 #include "standard.h"
 
 static BOOLEAN logopen = FALSE;
@@ -38,7 +39,7 @@ static char scratch[80];
 /*=================================================
  * __allocate -- Allocate memory - used by sdtalloc
  *===============================================*/
-char *__allocate (len, file, line)
+void *__allocate (len, file, line)
 int len;	/* num of bytes to alloc */
 STRING file;	/* file requesting */
 int line;	/* line num in file */
@@ -49,27 +50,27 @@ int line;	/* line num in file */
 	p = malloc(len);
 	if((p == NULL) && alloclog)
 		{
-		sprintf(scratch, "%8d ? %s\t%d\t%d", p, file, line, len);
+		sprintf(scratch, "%8p ? %s\t%d\t%d", p, file, line, len);
 		alloc_out(scratch);
 		}
 	ASSERT(p);
 	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
-		sprintf(scratch, "%8d A %s\t%d\t%d", p, file, line, len);
+		sprintf(scratch, "%8p A %s\t%d\t%d", p, file, line, len);
 		alloc_out(scratch);
 	}
-	return p;
+	return (void*)p;
 }
 /*====================================================
  * __deallocate -- Deallocate memory - used by sdtfree
  *==================================================*/
-__deallocate (ptr, file, line)
-char *ptr;	/* memory to return */
+void __deallocate (ptr, file, line)
+void *ptr;	/* memory to return */
 STRING file;	/* file returning */
 int line;	/* line num in file */
 {
 	if (alloclog) {
-		sprintf(scratch, "%8d F %s\t%d", ptr, file, line);
+		sprintf(scratch, "%8p F %s\t%d", ptr, file, line);
 		alloc_out(scratch);
 	}
 	if(ptr) free(ptr);
@@ -77,7 +78,7 @@ int line;	/* line num in file */
 /*=======================================
  * alloc_out -- Output allocation message
  *=====================================*/
-alloc_out (str)
+void alloc_out (str)
 STRING str;
 {
 	if (!alloclog) return;

@@ -32,6 +32,7 @@
 #ifndef WIN32
 #include <unistd.h>
 #endif
+#include <string.h>
 #include "standard.h"
 
 /*===========================================
@@ -70,7 +71,7 @@ STRING name, mode, path, ext;
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 	strcpy(buf1, path);
 	p = buf1;
-	while (c = *p) {
+	while ((c = *p)) {
 		if (c == LLCHRPATHSEPARATOR
 #ifdef WIN32
 	    	    || c == '/'
@@ -142,7 +143,7 @@ STRING path;
 		p[len] = 0;
 	}
 	q = p;
-	while (c = *p++) {
+	while ((c = *p++)) {
 		if (c == LLCHRDIRSEPARATOR
 #ifdef WIN32
 	    	    || c == '/'
