@@ -4,6 +4,10 @@
 
 	Supply valid window argument to keypad (to prevent crash on Solaris).
 
+	* ChangeLog src/hdrs/version.h:
+
+	Bumped version to 3.0.24b3 for new beta release for work on SunOS5.8.
+
 2003-01-03 Perry Rapp
 
 	* ChangeLog
