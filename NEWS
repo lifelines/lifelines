@@ -6,6 +6,7 @@ New features added in 3.0.42
 ============================
 - empty() report function can also be used on tables and sets
 - delete orphan record choice added to delete menu
+- dbverify can fix bad family linking references
 
 New features added in 3.0.41
 ============================
