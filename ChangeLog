@@ -1,4 +1,10 @@
-2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
+2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog README.DEVELOPERS autogen.sh
+
+	Make sure we run 'aclocal -I m4 -I build/autotools' everywhere.
+
+2002-06-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* .linesrc ChangeLog lines.cfg gedlib/init.c gedlib/messages.c
 	hdrs/feedback.h hdrs/llstdlib.h hdrs/screen.h

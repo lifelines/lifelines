@@ -40,9 +40,12 @@ robf@geekthing.com
 
 At development (or package creation) time:
 
-aclocal: This generates aclocal.m4 from acinclude.m4
-   (and the m4 subdirectory if you gave it -I m4)
-   These are all the macros unknown to autoconf which it will need.
+aclocal: This generates aclocal.m4 from acinclude.m4.
+
+Please run 'aclocal -I m4 -I build/autotools' in order to get all the 
+autoconf, automake and gettext macros into aclocal.m4.
+[ The autogen.sh script has been updated to do this. ]
+
 autoheader: This generates acconfig.h.
 automake: This generates Makefile.in files from Makefile.am files.
 autoconf: This generates configure from configure.in (or configure.ac).
