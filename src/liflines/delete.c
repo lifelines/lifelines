@@ -108,10 +108,11 @@ choose_and_delete_family (void)
 /*================================================================
  * delete_indi -- Delete person and links; if this leaves families
  *   with no links, remove them
+ *  indi:  [in]  person to remove - may be null
+ *  conf:  [in]  have user confirm ?
  *==============================================================*/
 void
-delete_indi (NODE indi,      /* person to remove - may be null */
-             BOOLEAN conf)   /* have user confirm */
+delete_indi (NODE indi, BOOLEAN conf)
 {
 	STRING key;
 	NODE name, refn, sex, body, famc, fams, this;
