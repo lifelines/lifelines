@@ -87,9 +87,13 @@ static struct tag_vtable vtable_for_symtabit = {
 void
 insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 {
+	/* pvalue is in table as vptr, so table can't free it */
 	PVALUE oldval = (PVALUE) valueof_ptr(stab->tab, iden);
-	if (oldval) delete_pvalue(oldval);
-	insert_table_ptr(stab->tab, iden, val);
+	if (oldval) {
+		set_pvalue_to_pvalue(oldval, val);
+	} else {
+		table_insert_ptr(stab->tab, iden, val);
+	}
 }
 /*======================================================
  * delete_symtab_element -- Delete a value from a symbol table
@@ -99,11 +103,10 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 void
 delete_symtab_element (SYMTAB stab, STRING iden)
 {
+	/* pvalue is in table as vptr, so table can't free it */
 	PVALUE val = (PVALUE) valueof_ptr(stab->tab, iden);
-	/* delete_table_element_old doesn't free the key or value */
-	/* our key belongs to lexer, I think, but free our value */
 	if (val) delete_pvalue(val);
-	delete_table_element_old(stab->tab, iden);
+	delete_table_element(stab->tab, iden);
 }
 /*========================================
  * remove_symtab -- Remove symbol table 
@@ -130,7 +133,7 @@ remove_symtab (SYMTAB stab)
 		}
 	}
 	end_table_iter(&tabit);
-	remove_table(stab->tab, DONTFREE);
+	destroy_table(stab->tab);
 	stdfree(stab);
 }
 /*======================================================
@@ -143,7 +146,7 @@ create_symtab (void)
 	SYMTAB symtab = (SYMTAB)stdalloc(sizeof(*symtab));
 	memset(symtab, 0, sizeof(*symtab));
 
-	symtab->tab = create_table_old();
+	symtab->tab = create_table();
 
 	return symtab;
 }

@@ -157,6 +157,7 @@ void set_pvalue(PVALUE, INT, VPTR);
 void set_pvalue_bool(PVALUE val, BOOLEAN bv);
 void set_pvalue_float(PVALUE val, float fnum);
 void set_pvalue_int(PVALUE val, INT iv);
+void set_pvalue_to_pvalue(PVALUE val, const PVALUE src);
 void set_pvalue_seq(PVALUE val, INDISEQ seq);
 void set_pvalue_string(PVALUE val, CNSTRING str);
 void show_pvalue(PVALUE);

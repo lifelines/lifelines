@@ -1201,3 +1201,11 @@ create_new_pvalue_list (void)
 	release_list(list); /* release our ref to list */
 	return val;
 }
+/*=============================================
+ * set_pvalue_to_pvalue -- Set val to be same value as src
+ *============================================*/
+void
+set_pvalue_to_pvalue (PVALUE val, const PVALUE src)
+{
+	set_pvalue(val, ptype(src), pvalvv(src));
+}

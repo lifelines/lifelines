@@ -211,9 +211,17 @@ static void
 free_all_pvalues (void)
 {
 	PV_BLOCK block;
-	/* live_pvalues is the # leaked */
-	while ((block = block_list)) {
-		PV_BLOCK next = block->next;
+	INT found_leaks=0;
+	INT orig_leaks = live_pvalues;
+	/* Notes
+	live_pvalues is the count of leaked pvalues
+	We have to go through all blocks and free all pvalues
+	in first pass, because, due to containers, pvalues can
+	cross-link between blocks (ie, a list on one block could
+	contain pointers to pvalues on other blocks)
+	*/
+	/* First pass, free all leaked pvalues */
+	for (block = block_list; block; block = block->next) {
 		/*
 		As we free the blocks, all their pvalues go back to CRT heap
 		so we must not touch them again - so keep zeroing out free_list
@@ -227,9 +235,16 @@ free_all_pvalues (void)
 				if (val1->type != PFREED) {
 					/* leaked */
 					delete_pvalue(val1);
+					++found_leaks;
 				}
 			}
 		}
+	}
+	ASSERT(orig_leaks == found_leaks);
+	ASSERT(live_pvalues == 0);
+	/* Second pass, free the blocks */
+	while ((block = block_list)) {
+		PV_BLOCK next = block->next;
 		stdfree(block);
 		block_list = next;
 	}

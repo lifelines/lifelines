@@ -765,7 +765,7 @@ next_element (TABLE_ITER tabit)
 	return FALSE;
 }
 /*=================================================
- * next_table_ptr -- Advance to next pointer in table
+ * next_table_ptr -- Advance to next pointer or object in table
  * skips over any other types of table elements
  * returns FALSE if runs out of table elements
  *===============================================*/
@@ -782,6 +782,10 @@ advance:
 		if (is_generic_vptr(&tabit->enext->generic)) {
 			*pkey = tabit->enext->ekey;
 			*pptr = get_generic_vptr(&tabit->enext->generic);
+			return TRUE;
+		} else if (is_generic_object(&tabit->enext->generic)) {
+			*pkey = tabit->enext->ekey;
+			*pptr = get_generic_object(&tabit->enext->generic);
 			return TRUE;
 		} else {
 			/* wrong type of element, skip it */
@@ -809,7 +813,12 @@ change_table_ptr (TABLE_ITER tabit, VPTR newptr)
 {
 	if (!tabit || !tabit->enext)
 		return FALSE;
-	tabit->enext->uval.w = newptr;
+	if (!is_generic_null(&tabit->enext->generic)) {
+		ASSERT(is_generic_vptr(&tabit->enext->generic));
+		set_generic_vptr(&tabit->enext->generic, newptr);
+	} else {
+		tabit->enext->uval.w = newptr;
+	}
 	return TRUE;
 }
 /*=================================================
@@ -911,7 +920,7 @@ copy_table (const TABLE src, TABLE dest, INT whattodup)
 	}
 }
 /*=================================================
- * destroy_table -- public destructor for a table
+ * destroy_table -- destroy all element & memory for table
  *===============================================*/
 void
 destroy_table (TABLE tab)

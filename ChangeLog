@@ -98,6 +98,14 @@
 	Rename delete_table_element to delete_table_element_old.
 	New delete_table_element which does free memory.
 
+	* ChangeLog src/hdrs/pvalue.h src/hdrs/table.h
+	src/interp/pvalalloc.c src/interp/pvalue.c src/interp/symtab.c
+	src/stdlib/table.c
+
+	Convert symtab to use generic table.
+	Fix free_all_pvalues (was not handling leaked pvalues
+	cross-linked between blocks).
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
