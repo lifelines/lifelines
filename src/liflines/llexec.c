@@ -62,7 +62,6 @@ BOOLEAN keyflag   = TRUE;      /* show key values */
 BOOLEAN readonly  = FALSE;     /* database is read only */
 BOOLEAN writeable = FALSE;     /* database must be writeable */
 BOOLEAN immutable = FALSE;     /* make no changes at all to database, for access to truly read-only medium */
-BOOLEAN cursesio  = TRUE;      /* use curses i/o */
 INT alldone       = 0;         /* completion flag */
 BOOLEAN progrunning = FALSE;   /* program is running */
 BOOLEAN progparsing = FALSE;   /* program is being parsed */
@@ -141,7 +140,7 @@ main (INT argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fmntc:Fu:x:o:zC:I:")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fntc:Fu:x:o:zC:I:")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -203,9 +202,6 @@ main (INT argc, char **argv)
 		case 'l': /* locking switch */
 			lockchange = TRUE;
 			lockarg = *optarg;
-			break;
-		case 'm':
-			cursesio = FALSE;
 			break;
 		case 'f':	/* force database open in all cases */
 			forceopen = TRUE;

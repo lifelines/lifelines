@@ -259,7 +259,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      <application>LifeLines</application> is: 
 
      <synopsis> 
-        <command>lines</command> <option>[-adkrwilfmntcuFyz]</option><replaceable class="parameter">[database]</replaceable> 
+        <command>lines</command> <option>[-adkrwifmntcuxoC]</option><replaceable class="parameter">[database]</replaceable> 
      </synopsis> 
 
 </para> 
@@ -273,6 +273,14 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 </para>
 
     <glosslist>
+    <glossentry><glossterm>-C</glossterm><glossdef> 
+
+<para> 
+
+     Specify config file location (eg, -C/home/bill/lifelines/.linesrc2)
+
+</para> 
+    <glosslist>
     <glossentry><glossterm>-F</glossterm><glossdef> 
 
 <para> 
@@ -280,7 +288,6 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      Finnish option (only available if so compiled) 
 
 </para> 
-
 
 </glossdef></glossentry><glossentry><glossterm>-a</glossterm><glossdef> 
 
@@ -341,29 +348,27 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm>-n</glossterm><glossdef> 
+
+<para> 
+
+     do not use traditional family rules 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-o</glossterm><glossdef> 
+
+<para> 
+
+     Specify program output directory (eg, -o/tmp/mytests)
+
+</para>
 </glossdef></glossentry><glossentry><glossterm>-r</glossterm><glossdef> 
 
 <para> 
 
      open database with read-only access (protect against other 
      writer access) 
-
-</para> 
-
-</glossdef></glossentry><glossentry><glossterm>-w</glossterm><glossdef> 
-
-<para> 
-
-     open database with writeable access (protect against other 
-     writer or reader access) 
-
-</para> 
-
-</glossdef></glossentry><glossentry><glossterm>-n</glossterm><glossdef> 
-
-<para> 
-
-     do not use traditional family rules 
 
 </para> 
 
@@ -383,6 +388,22 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 
 </para> 
 
+</glossdef></glossentry><glossentry><glossterm>-w</glossterm><glossdef> 
+
+<para> 
+
+     open database with writeable access (protect against other 
+     writer or reader access) 
+
+</para> 
+
+</glossdef></glossentry><glossentry><glossterm>-x</glossterm><glossdef> 
+
+<para> 
+
+     execute a single lifelines report program directly
+
+</para> 
 
 <para> 
 

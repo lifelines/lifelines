@@ -6,6 +6,11 @@
 
 	Code cleanup.
 
+	* ChangeLog docs/ll-userguide.xml src/gedlib/messages.c
+	src/hdrs/gedcom.h src/liflines/llexec.c src/liflines/main.c:
+
+	Remove unused arguments -m and -z. Update docs.
+
 2002-10-28 Perry Rapp
 
 	* ChangeLog src/hdrs/menuitem.h src/hdrs/screen.h
