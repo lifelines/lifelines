@@ -1,4 +1,5239 @@
-<DT
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>&#13;
+Dokumentation för LifeLines
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="docbook"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2"
+></A
+>Dokumentation för <TT
+CLASS="application"
+>LifeLines</TT
+></H1
+><H2
+CLASS="subtitle"
+><TT
+CLASS="application"
+>LifeLines</TT
+> Version 3.0.36</H2
+><H3
+CLASS="author"
+><A
+NAME="AEN6"
+></A
+>Thomas T.  Wetmore , IV</H3
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Innehållsförteckning</B
+></DT
+><DT
+><A
+HREF="#AEN12"
+>Användarmanual</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN14"
+>INTRODUKTION</A
+></DT
+><DT
+><A
+HREF="#AEN36"
+>INSTALLATION</A
+></DT
+><DT
+><A
+HREF="#AEN64"
+>STARTA <TT
+CLASS="application"
+>LIFELINES</TT
+> OCH SKAPA DATABASER</A
+></DT
+><DT
+><A
+HREF="#AEN171"
+>INTRODUKTION TILL <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+></A
+></DT
+><DT
+><A
+HREF="#AEN340"
+>HUVUDMENY</A
+></DT
+><DT
+><A
+HREF="#AEN351"
+>TECKENKODNING</A
+></DT
+><DT
+><A
+HREF="#AEN361"
+>LÄGGA IN DEN FÖRSTA PERSONEN</A
+></DT
+><DT
+><A
+HREF="#AEN405"
+>TEXTREDIGERARE OCH MILJÖVARIABLER</A
+></DT
+><DT
+><A
+HREF="#AEN465"
+>GRUNDLÄGGANDE OM BLÄDDRING</A
+></DT
+><DT
+><A
+HREF="#AEN483"
+>IDENTIFIERA EN PERSON ELLER EN LISTA ÖVER PERSONER ATT BLÄDDRA TILL</A
+></DT
+><DT
+><A
+HREF="#AEN511"
+>SNABBIDENTIFIERA EN PERSON</A
+></DT
+><DT
+><A
+HREF="#AEN526"
+>GRUNDLÄGGANDE OM BLÄDDRINGSFÖNSTER</A
+></DT
+><DT
+><A
+HREF="#AEN529"
+>PERSONFÖNSTRET</A
+></DT
+><DT
+><A
+HREF="#AEN698"
+>LISTFÖNSTRET</A
+></DT
+><DT
+><A
+HREF="#AEN786"
+>FAMILJEFÖNSTRET</A
+></DT
+><DT
+><A
+HREF="#AEN896"
+>TANDEMLÄGE FÖR PERSONER</A
+></DT
+><DT
+><A
+HREF="#AEN983"
+>TANDEMLÄGE FÖR FAMILJER</A
+></DT
+><DT
+><A
+HREF="#AEN1091"
+>OPERATIONEN LÄGG TILL</A
+></DT
+><DT
+><A
+HREF="#AEN1098"
+>OPERATIONEN TA BORT</A
+></DT
+><DT
+><A
+HREF="#AEN1108"
+>KONVERTERING AV TECKENKODNINGAR</A
+></DT
+><DT
+><A
+HREF="#AEN1203"
+>DIVERSE VERKTYG</A
+></DT
+><DT
+><A
+HREF="#AEN1301"
+>FEL VID IMPORT</A
+></DT
+><DT
+><A
+HREF="#AEN1338"
+>HANTERA KÄLL-, HÄNDELSE- OCH ANVÄNDARDEFINIERADE POSTER</A
+></DT
+><DT
+><A
+HREF="#AEN1520"
+>FAMILJESTRUKTUR OCH ATT SLÅ SAMMAN PERSONER OCH FAMILJER</A
+></DT
+><DT
+><A
+HREF="#AEN1529"
+>LÄNKA SAMMAN POSTER OCH ANVÄNDA FUNKTIONEN "REFN"</A
+></DT
+><DT
+><A
+HREF="#AEN1580"
+>System- och användaregenskaper</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN12"
+></A
+>
+
+Användarmanual
+
+</H1
+><DIV
+CLASS="sect1"
+><H2
+CLASS="sect1"
+><A
+NAME="AEN14"
+></A
+>INTRODUKTION</H2
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> är ett
+	släktforskningsprogram som är utvecklat för
+	<SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>-system. Det ordnar genealogiska poster
+	(personer, familjer, källor, händelser och andra) i en
+	databas, och genererar rapporter från dessa poster. Det finns
+	inga praktiska begränsningar för det antal poster som kan
+	lagras i en <TT
+CLASS="application"
+>LifeLines</TT
+>databas, inte
+	heller för storleken på eller vilken typ av data som posterna
+	kan innehålla. <TT
+CLASS="application"
+>LifeLines</TT
+> innehåller
+	inte inbyggda rapporter. Istället tillhandahåller det ett
+	programmeringssystem som du använder för att programmera dina
+	egna rapporter och tavlor. Med programmeringssystemet kan du
+	också skicka förfrågningar till dina databaser och behandla
+	dina data på valfritt sätt.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> använder de
+	terminaloberoende egenskaperna hos <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+> för
+	att tillhandahålla en skärmbild och ett menybaserat
+	användargränssnitt.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> är ett icke-kommersiellt,
+	experimentellt system, som du använder helt på egen risk. Jag
+	utvecklade <TT
+CLASS="application"
+>LifeLines</TT
+> för personligt
+	bruk, och delade med mig till vänner. Muntligen och via
+	Internet uppkom en såpass stor efterfrågan, att jag gjort
+	källkoden och övrig information till
+	<TT
+CLASS="application"
+>LifeLines</TT
+> fritt tillgänglig, under
+	en en licens av MIT-typ som återges nedan:
+
+</P
+><P
+>&#13;	<SPAN
+CLASS="QUOTE"
+>"
+Copyright (c) 1991-1999 Thomas T. Wetmore IV
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	"</SPAN
+>
+
+</P
+><P
+>&#13;
+	Källkoden, dokumentationen och en samling rapportskript finns
+	tillgängliga vid <A
+HREF="http://lifelines.sourceforge.net/"
+TARGET="_top"
+>http://lifelines.sourceforge.net/</A
+>.
+	Där finns också förkompilerade programpaket för några
+	plattformar. Om du är en utvecklare och vill bidra med
+	förbättringar, så anmäl dig på Sourceforge och kontakta <A
+HREF="mailto:marc@nozell.com"
+TARGET="_top"
+> Marc Nozell</A
+> som är den
+	som för närvarande är ansvarig för projektet. 
+	</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="./stylesheet-images/note.gif"
+HSPACE="5"
+ALT="Not"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;	Före 1999 fanns LifeLines tillgängligt på ftp-platserna
+	<A
+HREF="ftp://ftp.cac.psu.edu"
+TARGET="_top"
+>ftp.cac.psu.edu</A
+> och
+	<A
+HREF="ftp://hoth.stsci.edu"
+TARGET="_top"
+>hoth.stsci.edu</A
+>.
+	Använd Sourceforge istället.
+	</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN36"
+></A
+>INSTALLATION</H2
+><P
+>&#13;	Du kan installera <TT
+CLASS="application"
+>LifeLines</TT
+> från en
+	källkodsdistributionspaket med, eller som ett exekverbart
+	program för ditt <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>- eller
+	<SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+>system. Källkodsdistributionen
+	kommer med de läs-mig- (readme), byggskripts- och "make"-filer
+	som är nödvändiga för att bygga <TT
+CLASS="application"
+>LifeLines</TT
+>.
+	Följ instruktionerna i läs-mig-filen. Ett antal program byggs
+	vilka kan placeras i en katalog i din sökväg för program. Om
+	du får programmet i exekverbar form, så följ de instruktioner
+	som följde med det.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="command"
+>llines</B
+></B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="application"
+>LifeLines</TT
+>programmet med fullständigt
+användargränssnitt
+</P
+></DD
+><DT
+><B
+><B
+CLASS="command"
+>llexec</B
+></B
+></DT
+><DD
+><P
+>&#13;En avskalad version av
+<TT
+CLASS="application"
+>LifeLines</TT
+>programmet, utan
+användargränssnittet för icke-interaktiv behandling av rapportprogram
+</P
+></DD
+><DT
+><B
+><B
+CLASS="command"
+>dbverify</B
+></B
+></DT
+><DD
+><P
+>&#13;Ett programverktyg för att kontrollera
+<TT
+CLASS="application"
+>LifeLines</TT
+>databaser.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Källdistributionspaketet innehåller också dokumentationen samt några
+<TT
+CLASS="application"
+>LifeLines</TT
+>program.
+I katalogen reports medföljer en kortfattad översikt över rapporterna
+i filen index.html.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN64"
+></A
+>STARTA <TT
+CLASS="application"
+>LIFELINES</TT
+> OCH SKAPA DATABASER</H2
+><P
+>&#13;
+	Du startar normalt <TT
+CLASS="application"
+>LifeLines</TT
+> med
+	kommandot: <TT
+CLASS="userinput"
+><B
+><B
+CLASS="command"
+>lines</B
+> <TT
+CLASS="replaceable"
+><I
+>databas</I
+></TT
+></B
+></TT
+>, där
+	databas är namnet på en
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas. Om
+	<TT
+CLASS="application"
+>LifeLines</TT
+> hittar databasen, öppnar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> databasen och tar dig
+	till programmets huvudmeny. Om databasen inte finns, så frågar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> om den ska skapa den, och
+	om du då svarar ja, så gör den så. Du får skapa valfritt antal
+	databaser, men <TT
+CLASS="application"
+>LifeLines</TT
+> kan bara
+	öppna en i taget. Om du byggde
+	<TT
+CLASS="application"
+>LifeLines</TT
+> från källkodspaketet, så
+	kan programfilen heta <B
+CLASS="command"
+>llines</B
+> istället för
+	<B
+CLASS="command"
+>lines</B
+>. Du kan då antingen byta namn på
+	programfilen, eller starta
+	<TT
+CLASS="application"
+>LifeLines</TT
+> genom att använda
+	kommandot <B
+CLASS="command"
+>llines</B
+> istället.
+
+</P
+><P
+>&#13;
+	Det fullständiga kommandoradsgränssnittet för
+	<TT
+CLASS="application"
+>LifeLines</TT
+> är:
+
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>&#13;        <B
+CLASS="command"
+>lines</B
+> <TT
+CLASS="option"
+>[-acdfiklnortuwxzCFI]</TT
+> <TT
+CLASS="replaceable"
+><I
+>[databas]</I
+></TT
+>
+     </PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Följande flaggor stöds:
+
+</P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN89"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-C</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Ange plats för konfigurationsfil (t. ex.
+-C/home/bill/lifelines/.linesrc2)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-F</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Finsk flagga (endast tillgänglig om kompilerad så)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-I</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Ange en användaregenskap (t. ex. -ILLEDITOR=gvim )
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>logga dynamiska minnesoperationer (för felsökning)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-c</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>tillhandahåll cachevärden (t. ex., -ci400,4000f400,4000 sätter
+direkta indi- &#38; famcachevärden till 400, och indirekta indi- &#38;
+famcachevärden till 4000)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-d</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;felsökningsläge (signalskydd avstängt för att passa bättre med
+avbrottspunkter)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-f</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;tvinga upp databasen - använd endast i nödfall
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-i</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;öppna en oföränderlig databas (inget skydd från andras åtkomst -- för
+användning på media utan skrivåtkomst) 
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-k</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;nyckelvärde visas alltid (normalt är nyckelvärdet undertryckt om
+REFN-värde finns)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-l</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;lås (-ly) eller lås upp (-ln) en databas för användning med media utan
+skrivåtkomst (åtkomst till en låst databas behandlas som en
+oföränderlig)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-n</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;använd ej traditionella familjeregler
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-o</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Ange programutmatningskatalog (t. ex., -o/tmp/minatest)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-r</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;öppna databasen med skrivskydd (skydda andra som skriver till
+databasen)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-t</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;spåra funktionsanrop i rapportprogram (för felsökning)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-u</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;ange fönsterstorlek (t. ex., -u120,34 anger 120 kolumner till 34 rader)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-w</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;öppna databasen med skrivåtkomst (skydda från att andra skriver till
+eller läser databasen)
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-x</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;exekvera ett enskilt LifeLinesrapportprogram direkt
+</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-z</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>&#13;Använd vanliga ASCII-tecken för att rita linjer i användargränsnittet
+i stället för specialtecknen för vt100.
+</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+><P
+>&#13;
+	Flaggan <TT
+CLASS="option"
+>-r</TT
+> öppnar databasen med skrivskydd. I
+	detta läge tillåter <TT
+CLASS="application"
+>LifeLines</TT
+> inte
+	att du gör några ändringar i databasen; inga andra operationer
+	påverkas. Flaggan <TT
+CLASS="option"
+>-w</TT
+> öppnar databasen med
+	skrivåtkomst. Om databasen inte kan öppnas med begärd flagga, så
+	avslutas <TT
+CLASS="application"
+>LifeLines</TT
+> omedelbart. Om
+	du öppnar databasen utan vare sig flaggan <TT
+CLASS="option"
+>-r</TT
+>
+	eller <TT
+CLASS="option"
+>-w</TT
+>, försöker
+	<TT
+CLASS="application"
+>LifeLines</TT
+> först att öppna databasen
+	med skrivåtkomst; om det inte är möjligt försöker
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att öppna databasen med
+	skrivskydd; och om inte det är möjligt, så avslutas
+	<TT
+CLASS="application"
+>LifeLines</TT
+>. En
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas får öppnas
+	samtidigt av ett obegränsat antal program i skrivskyddat läge;
+	men, om databasen öppnas av ett program med skrivåtkomst, så
+	kan det inte öppnas av något annat program.
+
+</P
+><P
+>&#13;
+	I sällsynta fall kan mekanismen för skriv/läsläge misslyckas.
+	När detta händer kan databasen förefalla omöjlig att öppna. Om
+	det skulle hända, så använd flaggan <TT
+CLASS="option"
+>-f</TT
+> för
+	att tvinga upp databasen; detta kommer att öppna databasen och
+	återställa lägesmekanismen. Det här är en farlig funktion; du
+	kan använda den för att öppna samma databas med skrivåtkomst
+	fler än en gång; följderna är oförutsägbara och i allmänhet
+	katastrofala.
+
+</P
+><P
+>&#13;
+	Fleranvändarskyddet som fås genom denna mekanism för
+	skriv/läsåtkomst tillhandahålls via en flagginställning i
+	databasen, så att faktiskt både skrivskyddad åtkomst och
+	skrivåtkomst förändrar databasen (åtkomst med skrivskydd
+	ändrar bara värdet på denna flagga). För att åstadkomma
+	verkligt skrivskydd, t. ex. för användning på media utan
+	skrivåtkomst, är den bästa lösningen att låsa (-ly) databasen
+	innan kopiering sker till mediet. Detta anger att databasen är
+	avsedd att vara oföränderlig. Alternativt, för att använda en
+	databas som redan ligger på media utan skrivåtkomst och inte
+	angiven som en sådan, så använd flaggan för oföränderlighet
+	(-i).
+
+</P
+><P
+>&#13;
+	Om du inte anger namnet på en databas på kommandoraden, så
+	kommer <TT
+CLASS="application"
+>LifeLines</TT
+> att be dig skriva
+	in det. Om du inte använder skalvariabeln eller användarvärdet
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+> (beskrivs senare), så måste namnet
+	du skriver in vara namnet på en katalog innehållande en
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas, uttryckt som en
+	vanlig, absolut eller relativ, sökväg i
+	<SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>. Om du använder variabeln
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+>, så kommer
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att söka efter databasen
+	i de kataloger som finns angivna där; detta kan vara mycket
+	praktiskt.
+
+</P
+><P
+>&#13;
+     Om du skulle vilja välja en databas från en lista av redan
+     befintliga, så skriv in ett ensamt frågetecken och tryck enter
+     när <TT
+CLASS="application"
+>LifeLines</TT
+> frågar dig efter namnet
+     på databasen. <TT
+CLASS="application"
+>LifeLines</TT
+> kommer då att
+     visa en lista över alla databaser som det kan finna, och du får
+     välja en från listan.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN171"
+></A
+>INTRODUKTION TILL <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+></H2
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+>poster lagras i
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-formatet; du organiserar, redigerar,
+	och sparar dina data i detta format. <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>
+	är en standard som definierar ett filformat för att flytta
+	data mellan datorsystem. <TT
+CLASS="application"
+>LifeLines</TT
+>
+	har antagit detta format för att strukturera posterna i sina
+	databaser. Detta tillhandahåller en strukturerad, men ändå
+	flexibel metod för att lagra alla typer av uppgifter som du
+	kan tänkas vilja uppteckna. Det finns få begränsningar
+	gällande format på, mängd, eller typ av data som du får lagra
+	i en <TT
+CLASS="application"
+>LifeLines</TT
+>databas.
+
+</P
+><P
+>&#13;
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> är definierad på två nivåer. På den
+	syntaktiska nivån är <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> en enkel
+	uppsättning regler för att organisera och strukturera data i
+	poster, utan hänsyn till vilka typer av poster, typer av eller
+	format på information i posterna, eller relationer mellan
+	posterna det rör sig om. På den semantiska nivån lägger
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> till ytterligare en uppsättning
+	regler, som anger vilka typer av poster som är tillåtna, hur
+	poster ska struktureras, hur data inom posterna ska
+	identifieras och formateras, och vilka specifika relationer
+	mellan olika typer av poster som är tillåtna. I princip kan
+	det existera multipla semantiska versioner av
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>, men i praktiken finns det bara en,
+	"anlänkad" <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>. Olyckligtvis är denna
+	semantiska version av <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> dåligt
+	definierad, och alla system för genealogiska data har tolkat
+	den på olika sätt.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> använder
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> primärt på den syntaktiska nivån,
+	även om några av de allmänt accepterade semantiska reglerna
+	för anlänkad <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> är obligatoriska. Detta
+	har några viktiga följder. Det innebär att du kan lagra alla
+	dina genealogiska data i din
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas, och att du har
+	stor frihet när du väljer dina regler för att strukturera och
+	formatera dina data. Men det innebär också att det sätt på
+	vilket du lagrar data i dina databaser kan vara olikt det som
+	någon annan lagrar sina på. Detta kan vara ett problem om du
+	delar med dig av dina data till andra, eller delar med dig av
+	dina rapportprogram till andra användare av
+	<TT
+CLASS="application"
+>LifeLines</TT
+>. Min rekommendation är
+	att du följer vedertaget bruk för anlänkad
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> närhelst det är möjligt.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> använder sig inte av
+	formulär eller fönster för att vägleda dig när du för in
+	eller ändrar poster. Istället använder du en textredigerare
+	och redigerar dataposterna direkt. För detta krävs att du
+	förstår <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-formatet, och klarar av att
+	redigera data i <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-format, innan du kan
+	använda <TT
+CLASS="application"
+>LifeLines</TT
+>.
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-formatet är ganska enkelt; den här
+	introduktionen ger all information du behöver för att kunna
+	använda <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>.
+
+</P
+><P
+>&#13;
+	Här är ett exempel på en post om en person skriven i
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN203"
+></A
+><P
+><B
+>Exempel 1. 
+
+ Personpost i <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>
+
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @I25@ INDI
+  1 NAME <TT
+CLASS="userinput"
+><B
+>Thomas Trask /Wetmore/ Sr</B
+></TT
+>
+  1 SEX <TT
+CLASS="userinput"
+><B
+>M</B
+></TT
+>
+  1 BIRT
+    2 DATE <TT
+CLASS="userinput"
+><B
+>13 March 1866</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>St. Mary's Bay, Digby, Nova Scotia</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>Social Security application</B
+></TT
+>
+  1 NATU
+    2 NAME <TT
+CLASS="userinput"
+><B
+>Thomas T. Wetmore</B
+></TT
+>
+    2 DATE <TT
+CLASS="userinput"
+><B
+>26 October 1888</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>Norwich, New London, Connecticut</B
+></TT
+>
+    2 AGE <TT
+CLASS="userinput"
+><B
+>22 years</B
+></TT
+>
+    2 COUR <TT
+CLASS="userinput"
+><B
+>New London County Court of Common Pleas</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>court record from National Archives</B
+></TT
+>
+  1 OCCU <TT
+CLASS="userinput"
+><B
+>Antiques Dealer</B
+></TT
+>
+  1 DEAT
+    2 NAME <TT
+CLASS="userinput"
+><B
+>Thomas Trask Wetmore</B
+></TT
+>
+    2 DATE <TT
+CLASS="userinput"
+><B
+>17 February 1947</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>New London, New London, Connecticut</B
+></TT
+>
+    2 AGE <TT
+CLASS="userinput"
+><B
+>80 years, 11 months, 4 days</B
+></TT
+>
+    2 CAUS <TT
+CLASS="userinput"
+><B
+>Heart Attack</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>New London Death Records</B
+></TT
+>
+  1 FAMC @F11@
+  1 FAMS @F6@
+  1 FAMS @F12@
+
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	En <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-post består av rader. Varje rad
+	har ett nivånummer och en etikett, och på de flesta rader
+	följer ett värde efter etiketten. På första raden i varje post
+	finns alltid ett korsreferensvärde angivet mellan nivånumret
+	och etiketten.
+
+</P
+><P
+>&#13;
+	Nivånummer gör det möjligt att strukturera data så detaljerat
+	som man vill; rader med högre nivånummer läggs till rader
+	med lägre nummer. Varje post börjar på nivå 0, och för varje
+	nivå djupare ned höjs nivånumret ett steg.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> har inga begränsningar
+	för strukturdjupet. Etiketterna är kodord, som det är vedertaget
+	bruk att skriva med versaler. De specificerar typen av
+	information på raden eller på efterföljande, högre numrerade,
+	rader. Informationen efter etiketten, om någon, är radens värde.
+
+</P
+><P
+>&#13;
+	Den första raden i en post anger vilken typ av post är. Det
+	finns fyra fasta typer av poster i
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databaser: person-,
+	familje-, käll- och händelseposter. Den första raden, på nivå
+	0, i dessa poster har etiketterna
+	<SPAN
+CLASS="structname"
+>INDI</SPAN
+> respektive
+	<SPAN
+CLASS="structname"
+>FAM</SPAN
+>, <SPAN
+CLASS="structname"
+>SOUR</SPAN
+>
+	och <SPAN
+CLASS="structname"
+>EVEN</SPAN
+>. Förutom dessa typer av
+	poster, kan du skapa egna typer av poster genom att använda
+	vilken annan etikett som helst på raden för nivå 0 i en post.
+	Raderna som inleder poster är de enda raderna på nivå 0 som
+	används i <TT
+CLASS="application"
+>LifeLines</TT
+>. Varje rad på
+	nivå 0 har ett korsreferensvärde mellan nivånumret och
+	etiketten. Detta värde är postens interna referensnyckel;
+	andra poster kan hänvisa till denna post genom att använda
+	detta värde. Korsreferensvärden innesluts alltid av två "@".
+
+</P
+><P
+>&#13;
+	Den första raden i exempelposten har etiketten
+	<SPAN
+CLASS="structname"
+>INDI</SPAN
+>, som visar att det är en person.
+	Korsreferensvärdet, I25, kan användas av andra poster för att
+	hänvisa till denna post.
+
+</P
+><P
+>&#13;
+	Den andra raden i exemplet anger personens namn. Varje
+	personpost i en <TT
+CLASS="application"
+>LifeLines</TT
+>databas
+	måste ha minst en rad av typen <TT
+CLASS="structfield"
+><I
+>1
+	NAME</I
+></TT
+>, och dess värde måste vara i
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>s namnformat. Formatet tillåter namn
+	att vara hur långa som helst, men efternamnet, som kan
+	placeras var som helst i namnet, måste avskiljas från övriga
+	delar av namnet med ett eller två snedstreck. Till exempel:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN242"
+></A
+><P
+><B
+>Exempel 2. 
+Exempel på NAME-format
+
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;1 NAME <TT
+CLASS="userinput"
+><B
+>John/Smith</B
+></TT
+>
+1 NAME <TT
+CLASS="userinput"
+><B
+>John /Smith/</B
+></TT
+>
+1 NAME <TT
+CLASS="userinput"
+><B
+>John/Smith/Jr.</B
+></TT
+>
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Det andra snedstrecket krävs enbart om delar av namnet följer
+	efter efternamnet. Blanksteg är tillåtna före det första
+	snedstrecket och efter det andra. Om du inte känner till en
+	persons efternamn, eller om personen inte har ett efternamn,
+	får du använda / eller // eller inga snedstreck alls. Till
+	exempel:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN249"
+></A
+><P
+><B
+>Exempel 3. 
+Exempel på sökning på NAME
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+1 NAME <TT
+CLASS="userinput"
+><B
+>Mary//</B
+></TT
+>
+1 NAME <TT
+CLASS="userinput"
+><B
+>Mary/</B
+></TT
+>
+1 NAME <TT
+CLASS="userinput"
+><B
+>Mary</B
+></TT
+>
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+	är alla sätt att skriva in en person benämnd Mary, utan
+	känt efternamn. En person kan ha valfritt antal, inklusive
+	noll, förnamn, och/eller initialer. En personpost i
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kan ha ett obegränsat
+	antal rader med <TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+>, men
+	personen kommer bara att synas med värdet i den första av
+	dessa rader. Personer indexeras med alla sina namn, så du kan
+	söka efter en person under vilket som helst av deras namn.
+
+</P
+><P
+>&#13;
+	Nästa rad i exemplet anger personens kön.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> tvingar dig inte att
+	inkludera en rad av typen <TT
+CLASS="structfield"
+><I
+>1 SEX</I
+></TT
+>,
+	men den är ändå lämplig att ha med. Radens värde ska vara
+	<TT
+CLASS="userinput"
+><B
+>M</B
+></TT
+> eller <TT
+CLASS="userinput"
+><B
+>F</B
+></TT
+> om
+	personens kön är bekant; du kan låta bli att ge den ett värde,
+	eller sätta det till, exempelvis, <TT
+CLASS="userinput"
+><B
+>U</B
+></TT
+>
+	eller <TT
+CLASS="userinput"
+><B
+>?</B
+></TT
+> om det är obekant. En person
+	måste ha en rad av typen <TT
+CLASS="structfield"
+><I
+>1 SEX</I
+></TT
+>, med
+	endera av <TT
+CLASS="userinput"
+><B
+>M</B
+></TT
+> eller
+	<TT
+CLASS="userinput"
+><B
+>F</B
+></TT
+> som värde, innan du kan göra
+	honom/henne till make/maka eller förälder i en familj.
+
+</P
+><P
+>&#13;
+	Exempelposten innehåller också tre händelser: födelse,
+	naturalisering, och död. En händelse inleds med en rad på nivå
+	1, där etiketten indikerar vilken typ av händelse det rör sig
+	om. <TT
+CLASS="structfield"
+><I
+>BIRT</I
+></TT
+> är exempelvis den etikett
+	som används för en födelse.
+
+</P
+><P
+>&#13;
+	Händelser har vanligen åtminstone en <TT
+CLASS="structfield"
+><I
+>2
+	DATE</I
+></TT
+>-rad och en <TT
+CLASS="structfield"
+><I
+>2
+	PLAC</I
+></TT
+>-rad, och ofta en <TT
+CLASS="structfield"
+><I
+>2
+	SOUR</I
+></TT
+>-rad. <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+>- och
+	<TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+>-rader anger datum och ort för
+	händelsen. Värdet för en <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+>-rad i
+	<TT
+CLASS="application"
+>LifeLines</TT
+> får se ut hur som helst,
+	men <TT
+CLASS="application"
+>LifeLines</TT
+> försöker alltid att
+	tolka det och finna information om år, månad och dag i det.
+	Värdet för en rad med etiketten
+	<TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+> är vanligen en uppräkning av
+	geografiska angivelser, separerade av kommatecken, som börjar
+	med den mest specifika informationen, och avslutas med den
+	mest allmänna. Raden <TT
+CLASS="structfield"
+><I
+>SOUR</I
+></TT
+> kan
+	antingen vara roten för en fullständig beskrivning av källan,
+	men dess värde kan också vara en korsreferensnyckel som pekar
+	på en källpost som beskriver källan.
+
+</P
+><P
+>&#13;
+	Händelsen naturalisering (med etiketten
+	<TT
+CLASS="structfield"
+><I
+>NATU</I
+></TT
+>) visar några andra rader.
+	Raden <TT
+CLASS="structfield"
+><I
+>2 NAME</I
+></TT
+> anger personens namn,
+	så som det är noterat i källan (det är bara i raden
+	<TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+> som man måste följa
+	formateringsreglerna för <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>). Raden
+	<TT
+CLASS="structfield"
+><I
+>2 AGE</I
+></TT
+> anger personens ålder vid
+	tiden för händelsen. Raden <TT
+CLASS="structfield"
+><I
+>2 COUR</I
+></TT
+>
+	anger vid vilken domstol naturaliseringen skedde.
+
+</P
+><P
+>&#13;
+	Den avslutande händelsen är en dödshändelse (med etiketten
+	<TT
+CLASS="structfield"
+><I
+>DEAT</I
+></TT
+>). Raden av typen
+	<TT
+CLASS="structfield"
+><I
+>2 CAUS</I
+></TT
+> anger dödsorsak.
+
+</P
+><P
+>&#13;
+	Vid slutet av posten återfinns tre rader som hänvisar till
+	familjeposter. En rad av typen <TT
+CLASS="structfield"
+><I
+>1
+	FAMC</I
+></TT
+> hänvisar till en familjepost som personen
+	tillhör som barn där; dess värde anger korsreferensvärdet för
+	den familjen. En <TT
+CLASS="structfield"
+><I
+>1 FAMS</I
+></TT
+>-rad
+	hänvisar till en familjepost som personen tillhör i egenskap
+	av maka/make eller förälder.
+
+</P
+><P
+>&#13;
+	När du använder <TT
+CLASS="application"
+>LifeLines</TT
+> för att
+	redigera en person, så kommer du inte att kunna redigera
+	korsreferensvärdena på raderna <TT
+CLASS="structfield"
+><I
+>0
+	INDI</I
+></TT
+>, <TT
+CLASS="structfield"
+><I
+>1 FAMC</I
+></TT
+> eller
+	<TT
+CLASS="structfield"
+><I
+>1 FAMS</I
+></TT
+>; dessa sköts av
+	<TT
+CLASS="application"
+>LifeLines</TT
+>.
+
+</P
+><P
+>&#13;
+	Här är ett exempel på en familjepost:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN300"
+></A
+><P
+><B
+>Exempel 4. 
+Exempel på familjepost
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 @F6@ FAM
+  1 HUSB @I25@
+  1 WIFE @I26@
+  1 MARR
+    2 DATE <TT
+CLASS="userinput"
+><B
+>31 MAR 1891</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>New London, New London, Connecticut</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>New London Vital Records</B
+></TT
+>
+  1 CHIL @I27@
+  1 CHIL @I17@</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Raden <TT
+CLASS="structfield"
+><I
+>0 FAM</I
+></TT
+> tilldelar familjen
+	korsreferensvärdet F6. Posten innehåller <TT
+CLASS="structfield"
+><I
+>1
+	HUSB</I
+></TT
+>- och <TT
+CLASS="structfield"
+><I
+>1
+	WIFE</I
+></TT
+>-rader som ger hänvisningar till de två
+	makarna/föräldrarna. Posten innehåller också en
+	giftermålshändelse (etiketten <TT
+CLASS="structfield"
+><I
+>MARR</I
+></TT
+>)
+	och två <TT
+CLASS="structfield"
+><I
+>1 CHIL</I
+></TT
+>-rader, som hänvisar
+	till två barn i familjen. När du redigerar familjeposter, kan
+	du inte redigera <TT
+CLASS="structfield"
+><I
+>0 FAM</I
+></TT
+>-,
+	<TT
+CLASS="structfield"
+><I
+>1 HUSB</I
+></TT
+>-, <TT
+CLASS="structfield"
+><I
+>1
+	WIFE</I
+></TT
+>- eller <TT
+CLASS="structfield"
+><I
+>1
+	CHIL</I
+></TT
+>-rader; dessa sköts av
+	<TT
+CLASS="application"
+>LifeLines</TT
+>.
+
+</P
+><P
+>&#13;
+	När du skapar nya poster för din databas, kan du hitta på
+	etiketter och strukturera dina uppgifter helt efter eget
+	huvud. Det är emellertid en god vana att använda de etiketter
+	och värdeformat som specificerats i
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-standarden.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> påtvingar dig en liten
+	uppsättning regler som du måste följa. Inom personposter
+	kräver <TT
+CLASS="application"
+>LifeLines</TT
+> att du använder
+	raderna <TT
+CLASS="structfield"
+><I
+>1 NAME</I
+></TT
+> och <TT
+CLASS="structfield"
+><I
+>1
+	SEX</I
+></TT
+> med deras speciella betydelse och och
+	värdeformat. <TT
+CLASS="application"
+>LifeLines</TT
+> utgår också
+	från, men det inte är obligatoriskt, att du använder raderna
+	<TT
+CLASS="structfield"
+><I
+>1 BIRT</I
+></TT
+>, <TT
+CLASS="structfield"
+><I
+>1
+	DEAT</I
+></TT
+>, <TT
+CLASS="structfield"
+><I
+>1 CHR</I
+></TT
+> och
+	<TT
+CLASS="structfield"
+><I
+>1 BURI</I
+></TT
+> för respektive händelserna
+	födelse, död, dop och begravning. I familjeposter utgår
+	<TT
+CLASS="application"
+>LifeLines</TT
+> från att du kommer att
+	använda händelsen <TT
+CLASS="structfield"
+><I
+>1 MARR</I
+></TT
+> för
+	giftermål. Inom personposter får du inte använda raderna
+	<TT
+CLASS="structfield"
+><I
+>0 INDI</I
+></TT
+>, <TT
+CLASS="structfield"
+><I
+>1
+	FAMC</I
+></TT
+> eller <TT
+CLASS="structfield"
+><I
+>1 FAMS</I
+></TT
+>,
+	eftersom dessa används för att sköta information om länkning.
+	Inom familjeposter får du inte använda <TT
+CLASS="structfield"
+><I
+>0
+	FAM</I
+></TT
+>-, <TT
+CLASS="structfield"
+><I
+>1 HUSB</I
+></TT
+>-,
+	<TT
+CLASS="structfield"
+><I
+>1 WIFE</I
+></TT
+>- eller <TT
+CLASS="structfield"
+><I
+>1
+	CHIL</I
+></TT
+>-rader.
+
+</P
+><P
+>&#13;
+	Indenteringen i exemplen är inte en del av
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-formatet, men när
+	<TT
+CLASS="application"
+>LifeLines</TT
+> preparerar poster för dig
+	att redigera, så indenterar det alltid posterna, så att de
+	blir lättare att läsa och förstå. Indenteringen tas bort innan
+	dina data åter sparas i databasen.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN340"
+></A
+>HUVUDMENY</H2
+><P
+>&#13;
+	Efter att <TT
+CLASS="application"
+>LifeLines</TT
+> öppnat en
+	befintlig databas, eller skapat en ny, presenterar den
+	huvudmenyn för dig:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Please choose an operation:
+   b Browse the persons in the database
+   s Search database
+   a Add information to the database
+   d Delete information from the database
+   p Pick a report from list and run
+   r Generate report by entering report name
+   t Modify character translation tables
+   u Miscellaneous utilities
+   x Handle source, event and other records
+   q Quit and return to UNIX
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+Om du har ställt in svensk lokal (inställning för att LifeLines ska
+visa kommandon och meddelanden på svenska), ser huvudmenyn ut så här
+(i fortsättningen visas endast programmenyer och -meddelanden så som
+de ser ut med svensk lokal):
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Välj ett kommando:
+   b Bläddra mellan personer i databasen
+   s Sök i databasen
+   a Lägg till information i databasen
+   d Ta bort information från databasen
+   p Välj en rapport från lista och kör
+   r Skapa rapport genom att ange rapportens namn
+   t Modifiera teckenöversättningstabeller
+   u Diverse verktyg
+   x Hantera käll-, händelse- och övriga poster
+   q Avsluta programmet
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Välj ett kommando genom att trycka på bokstaven för önskat val.
+
+</P
+><P
+>&#13;
+	Med bläddringskommandot kan du bläddra i databasen och utföra
+	många operationer på dina data. Sökkommandot tillhandahåller
+	några enkla sökmöjligheter med jokertecken, som leder till att
+	bläddra i särskilda poster. Med lägg till-kommandot kan du
+	lägga till nya uppgifter, och ta bort-kommandot raderar
+	uppgifter. Rapportkommandona läser in rapportprogram och
+	genererar utdata från rapporter. Kommandot modifiera
+	teckenöversättningstabeller gör ändringar i
+	teckenöversättningstabeller. Diverse verktyg-kommandot
+	tillhandahåller sådant som säkerhetskopiering och återläsning
+	av data. Kommandot hantera käll-, händelse- och övriga poster
+	ger dig tillgång till dessa tre posttyper. händelse- och
+	övriga typer av poster. Kommandot avsluta stänger databasen
+	och återgår till <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>.
+
+</P
+><P
+>&#13;
+	Bläddringskommandot förtjänar särskilt omnämnande, eftersom
+	det tillhandahåller en rik miljö för att söka, läsa, lägga
+	till, redigera, slå samman och ta bort uppgifter i databasen.
+	Du kommer att märka att du manövrerar från bläddringslägena
+	den mesta tiden. Samtliga dessa operationer beskrivs i senare
+	avsnitt.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN351"
+></A
+>TECKENKODNING</H2
+><P
+>&#13;
+     Efter att du har skapat en ny databas, och innan du
+     överhuvudtaget lägger till några data till den, är den tidpunkt
+     då du ställer in den teckenkodning som ska användas i databasen.
+
+</P
+><P
+>&#13;
+     Teckenkodningen är valet av hur bokstäver ska representeras av
+     datorn. Om du endast har använt engelska bokstäver under
+     datoranvändning, kanske du inte har träffat på denna
+     frågeställning, eftersom det råkar vara så att de engelska
+     bokstäverna (a-z och A-Z) lagras numeriskt på samma sätt i nästan
+     alla teckenkodningar som används av datorer. Men inom genealogin
+     är det särskilt troligt att du stöter på bokstäver utanför det
+     engelska alfabetet (exempelvis vokaler med accent).
+
+</P
+><P
+>&#13;
+     Du har i grunden tre val när det gäller vilken teckenkodning du
+     ska använda i din databas, listade nedan från enklast till mest
+     kraftfull.
+
+</P
+><P
+>&#13;
+     För det första kan du lämna den helt ospecificerad. Med detta
+     uppträder LifeLines på traditionellt vis. Detta passar egentligen
+     endast om antingen a), du endast använder engelska (ASCII-) data,
+     eller b), du arbetar i en miljö som helt och hållet använder
+     samma 8-bitars teckenkodning (t. ex. en GNU/Linux-dator som är
+     helt och hållet ISO-8859-15), och du endast kör LifeLines på
+     engelska. Om du använder någon icke-engelsk data på MS-Windows,
+     kommer detta sannolikt inte passa, eftersom LifeLines körs i
+     konsolläge, men du sannolikt använder MS-Windowsprogram för
+     redigering eller för att läsa utdata, och MS-Windowskonsollen
+     använder en annan teckenkodning än MS-Windowsprogram. En annan
+     anledning till att detta inte kan passa är om du använder
+     LifeLines på ett annat språk än engelska, eftersom
+     gettextmeddelandekatalogerna (för icke-engelskt gränssnitt) inte
+     kommer att konverteras till din teckenkodning.
+
+</P
+><P
+>&#13;
+     För det andra kan du specificera en särskild 8-bits
+     teckenkodning. Om vi antar att du har iconv och gettext
+     installerade (eller att du använder MS-Windowsversionen, där
+     dessa ingår), kan du ställa in valfri 8-bits teckenkodning som
+     stöds av iconv, och iconv stöder ganska många. Ett naturligt val
+     för västeuropeiska språk är ISO-8859-1, eller (endast för
+     MS-Windows) CP-1252. Med denna inställning kommer gettexts
+     språkfiler att konverteras till din teckenkodning.
+
+</P
+><P
+>&#13;
+     För det tredje kan du specificera att UTF-8 ska användas. Detta
+     är en Unicodekodning, och är det överlägset mest kraftfulla
+     valet. Det är faktiskt det enda riktigt praktiska sättet att
+     lagra, exempelvis, namn på engelska, namn på ryska och namn på
+     grekiska, i en och samma databas, med deras riktiga tecken
+     (alfabet). I nyare versioner har LifeLines blivit mer kunnig på
+     att hantera UTF-8, så att, exempelvis, versaler och gemener
+     endast fungerar korrekt med versioner från 3.0.28 och framåt.
+
+</P
+><P
+>&#13;
+     För att faktiskt specificera en kodning, så skriv in den via
+     Diverse verktyg och Redigera fil för användarinställningar (som
+     dokumenteras nedan). Från huvudmenyn, tryck u för att nå
+     verktygssidan, och sedan o för att redigera
+     användarinställningarna. För att ställa in t. ex. teckenkodningen
+     ISO-8859-1, så skriv den här strängen på en egen rad, utan de
+     omgivande citationstecknen: "codeset=ISO-8859-1". Eller, för att
+     specificera användning av UTF-8, "codeset=UTF-8".
+
+</P
+><P
+>&#13;
+     Ytterligare information om teckenkodningskonvertering återfinns i
+     det senare kapitlet med det namnet (exempelvis information om att
+     skapa rapporter som använder namn på HTML-entiteter för tecken i
+     icke-ASCII).
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN361"
+></A
+>LÄGGA IN DEN FÖRSTA PERSONEN</H2
+><P
+>&#13;
+     Notis: Innan du lägger in den första personen i din databas,
+     ställer du in intern teckenkodning (se kapitlet Teckenkodning för
+     information).
+
+</P
+><P
+>&#13;
+        Normalt lägger du in personer i databasen från
+	bläddringslägena, men när den första personen ska läggas in,
+	finns det ingen i databasen att bläddra till. För att lägga in
+	den första personen i en
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas, så välj först
+	lägg till-kommandot från huvudmenyn. Du kommer att hamna i
+	menyn för att lägga till data (beskrivs längre fram). Tryck p
+	för att lägga till en person.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall för en
+	personpost i <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>, och placerar dig i en
+	textredigerare för att redigera mallen. Den förvalda mallen
+	ser ut så här:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN368"
+></A
+><P
+><B
+>Exempel 5. 
+Förvald mall för personposter
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 INDI
+  1 NAME <TT
+CLASS="replaceable"
+><I
+>Fname /Surname/</I
+></TT
+>
+  1 SEX <TT
+CLASS="replaceable"
+><I
+>MF</I
+></TT
+>
+  1 BIRT
+    2 DATE
+    2 PLAC
+    2 SOUR
+  1 DEAT
+    2 DATE
+    2 PLAC
+    2 SOUR</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Redigera mallen för att skapa en post för den nya personen.
+	Ändra namnet till personens namn. Indikera personens kön genom
+	att ta bort endera av <TT
+CLASS="userinput"
+><B
+>M</B
+></TT
+> eller
+	<TT
+CLASS="userinput"
+><B
+>F</B
+></TT
+>. Fyll i de födelse- och dödsdata så
+	bra du kan. Om personen lever, så ta bort dödshändelsen. Ta
+	bort alla <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+>- och
+	<TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+>-rader som du inte har
+	information för.
+
+</P
+><P
+>&#13;
+	Den förinställda mallen tillhandahåller rader för en födelse-
+	och en dödshändelse. Du kan utöka posten med andra händelser
+	(t. o. m. ytterligare födelse- eller dödshändelser) och rader.
+	Indenteringen gör det enklare att läsa och göra ändringar i
+	posten, men är inte nödvändig. Du kan ändra den förvalda
+	mallen genom att att ändra användarinställningen
+	<TT
+CLASS="option"
+>INDIREC</TT
+> (beskrivs senare).
+
+</P
+><P
+>&#13;
+	Så här skulle jag kunna redigera mallen om jag ville skapa en
+	post om mig själv:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN381"
+></A
+><P
+><B
+>Exempel 6. 
+Exempelredigering av mall för post
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 INDI
+  1 NAME <TT
+CLASS="userinput"
+><B
+>Thomas Trask /Wetmore/ IV</B
+></TT
+>
+  1 SEX <TT
+CLASS="userinput"
+><B
+>M</B
+></TT
+>
+  1 BIRT
+    2 DATE <TT
+CLASS="userinput"
+><B
+>18 DEC 1949</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>New London, New London, Connecticut</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>Birth Certificate</B
+></TT
+>
+  1 OCCU <TT
+CLASS="userinput"
+><B
+>Software Engineer</B
+></TT
+>
+  1 RESI
+    2 DATE <TT
+CLASS="userinput"
+><B
+>1982 to 1995</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>Newburyport, Essex, Massachusetts</B
+></TT
+>
+    2 ADDR <TT
+CLASS="userinput"
+><B
+>2 Barton Street, Newburyport, MA 01950</B
+></TT
+>
+	
+... en massa andra händelser och fakta
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	När du redigerar en personpost, så lägg inte till eller
+	redigera rader med <TT
+CLASS="structfield"
+><I
+>INDI</I
+></TT
+>,
+	<TT
+CLASS="structfield"
+><I
+>FAMC</I
+></TT
+> eller
+	<TT
+CLASS="structfield"
+><I
+>FAMS</I
+></TT
+>.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar och sköter dessa
+	rader via särskilda användarkommandon.
+
+</P
+><P
+>&#13;
+	När du avslutar redigeringen och lämnar redigeraren, så
+	återvänder du automatiskt till
+	<TT
+CLASS="application"
+>LifeLines</TT
+>. Om du gjorde något fel
+	(t. ex. inte använde korrekta nivånummer eller inte följde
+	reglerna för att skriva in namn), visar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ett felmeddelande, och
+	frågar om du vill redigera om posten. Om du inte gör det, så
+	kommer <TT
+CLASS="application"
+>LifeLines</TT
+> inte att lägga in
+	personen i databasen.
+
+</P
+><P
+>&#13;
+	När posten är korrekt formaterad, frågar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> om du är säker på att du
+	vill lägga in personen i databasen. Om du svarar ja, så läggs
+	personen in; om du svarar nej, så läggs den inte in. I båda
+	fallen återvänder <TT
+CLASS="application"
+>LifeLines</TT
+> till
+	huvudmenyn.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN405"
+></A
+>TEXTREDIGERARE OCH MILJÖVARIABLER</H2
+><P
+>&#13;
+	I <TT
+CLASS="application"
+>LifeLines</TT
+> sköter du
+	databasposterna med hjälp av en textredigerarea. Detta skiljer
+	<TT
+CLASS="application"
+>LifeLines</TT
+> från andra
+	släktforskningsprogram, där man använder fönster eller
+	formulär för att samla in data. Den förvalda textredigeraren
+	för <TT
+CLASS="application"
+>LifeLines</TT
+> är
+	<TT
+CLASS="application"
+>vi</TT
+>. (Versionen för
+	<SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+> har istället
+	<TT
+CLASS="application"
+>notepad.exe</TT
+> förvald.) Detta kan
+	upphävas genom miljövariablerna <TT
+CLASS="envar"
+>ED</TT
+>,
+	<TT
+CLASS="envar"
+>EDITOR</TT
+> eller <TT
+CLASS="envar"
+>LLEDITOR</TT
+>. Om du
+	exempelvis föredrar textredigeraren
+	<TT
+CLASS="application"
+>emacs</TT
+>, kan du lägga till raden
+	<TT
+CLASS="userinput"
+><B
+><TT
+CLASS="envar"
+>ED</TT
+>=<TT
+CLASS="replaceable"
+><I
+>emacs</I
+></TT
+></B
+></TT
+>
+	i filen för din inloggningsprofil, varpå
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kommer att använda
+	<TT
+CLASS="application"
+>emacs</TT
+> för redigering.
+
+</P
+><P
+>&#13;
+	Det finns fyra andra
+	<TT
+CLASS="application"
+>LifeLines</TT
+>specifika miljövariabler. De är
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+>, <TT
+CLASS="envar"
+>LLARCHIVES</TT
+>,
+	<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> och <TT
+CLASS="envar"
+>LLREPORTS</TT
+>.
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+> och 
+	<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> är sökvägslistvariabler för
+	<SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>.
+
+</P
+><P
+>&#13;
+	Det finns även en konfigurationsfil, och inställningar kan
+	göras i den istället för i miljövariabler. Den kallas vanligen
+	.linesrc i <SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>, och lines.cfg i
+	<SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+>. En exempelkonfigurationsfil bör
+	finnas inkluderad i distributionen.
+
+</P
+><P
+>&#13;     See avsnittet om system- och användaregenskaper för fler
+     detaljer.
+</P
+><P
+>&#13;
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+> kan sättas till en lista över
+	kataloger som innehåller
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databaser. När du startar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kommer dessa kataloger
+	att sökas igenom i tur och ordning efter den databas som nämns
+	på kommandoraden. Exempelvis indikerar
+	<TT
+CLASS="userinput"
+><B
+><TT
+CLASS="envar"
+>LLDATABASES</TT
+>=<TT
+CLASS="replaceable"
+><I
+>.:/home/ttw4/LifeLines/Databaser</I
+></TT
+></B
+></TT
+>
+	att <TT
+CLASS="application"
+>LifeLines</TT
+> ska söka efter
+	databaser i aktuell katalog först, och om den inte hittas där,
+	därefter söka i:
+	<TT
+CLASS="filename"
+>/home/ttw4/LifeLines/Databaser</TT
+>
+
+</P
+><P
+>&#13;
+	Varje <TT
+CLASS="application"
+>LifeLines</TT
+>databas
+	implementeras som en katalog med specifikt innehåll. Variabeln
+	<TT
+CLASS="envar"
+>LLDATABASES</TT
+> ska sättas till en lista över
+	kataloger som innehåller dessa databaskataloger, inte till en
+	lista över själva databaskatalogerna.
+
+</P
+><P
+>&#13;
+	Miljövariabeln <TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> används på samma vis,
+	men för att ange sökvägen för rapportskapande och andra
+	program för <TT
+CLASS="application"
+>LifeLines</TT
+> (beskrivs
+	senare).
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="envar"
+>LLARCHIVES</TT
+> och <TT
+CLASS="envar"
+>LLREPORTS</TT
+> kan var
+	och en sättas till att ange en enda katalog.
+	<TT
+CLASS="envar"
+>LLARCHIVES</TT
+> används för att välja en katalog där
+	alla säkerhetskopierade databaser ska sparas, och
+	<TT
+CLASS="envar"
+>LLREPORTS</TT
+> används för att välja en katalog där
+	alla skapade rapporter och utdata från program ska placeras.
+
+</P
+><P
+>&#13;
+	Nya databaser utan angivna sökvägar kommer att skapas i den
+	första katalogen som listats i LLDATABASES-sökvägen. (Detta är
+	en ändring; versionerna från 3.0.6 till 3.0.31 använde en nu
+	obsolet variabel LLNEWDBDIR.
+
+</P
+><P
+>&#13;
+	Det är inte obligatoriskt att använda dessa miljövariabler;
+	när en variabel inte är definierad, så använder
+	<TT
+CLASS="application"
+>LifeLines</TT
+> aktuell katalog som
+	förvalt värde. Om du använder variablerna, så kan du upphäva
+	användningen av dem genom att ange filer och kataloger som
+	antingen absoluta eller relativa sökvägar.
+
+</P
+><P
+>&#13;
+	Du kan använda konfigurationsfilen
+	i stället för miljövariabler. Detta är gjort speciellt med
+	tanke på användare på <SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+>system,
+	där miljövariabler inte är en så vanlig konfigureringsteknik.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> använder biblioteket
+	curses för att få terminaloberoende I/O. Detta innebär att du
+	måste ange terminaltyp med miljövariabeln <TT
+CLASS="envar"
+>TERM</TT
+>.
+	(Detta gäller inte i versionen för
+	<SPAN
+CLASS="acronym"
+>MS-Windows</SPAN
+>.)
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN465"
+></A
+>GRUNDLÄGGANDE OM BLÄDDRING</H2
+><P
+>&#13;
+	Du kommer att använda de olika bläddringsfönstrena i
+	<TT
+CLASS="application"
+>LifeLines</TT
+> den mesta tiden. Härifrån
+	kan du snabbt söka efter eller bläddra genom personerna och
+	familjerna i databasen. När du finner en person eller familj
+	som du är intresserad av, kan du gå in och redigera posterna
+	för dem.
+
+</P
+><P
+>&#13;
+	Via bläddringsfönstrena kan du också lägga in nya personer och
+	familjer i databasen, lägga till makar i familjer, lägga till
+	barn i familjer, ändra inbördes ordning mellan makar och
+	mellan barn, slå samman personer och slå samman familjer, och
+	utföra andra operationer. Du kan också ta bort makar från
+	familjer och ta bort barn från familjer via
+	bläddringsfönstrena.
+
+</P
+><P
+>&#13;
+	Det finns sex bläddringsfönster. Person- och familjefönstrena
+	fokuserar på en enskild person respektive familj. I
+	listfönstret kan du bläddra igenom en lista över personer. I
+	tvåpersonsfönstret visas två personer samtidigt, och i
+	tvåfamiljsfönstret visas två familjer samtidigt.
+	Assistentfönstret används för att bläddra i alla andra typer
+	av poster (t. ex. händelser, källor och notiser).
+
+</P
+><P
+>&#13;
+	Varje bläddringsfönster har flera olika visningslägen.
+	Visningsläget påverkar hur informationen visas i fönstret, men
+	påverkar inte vilka menyval som finns tillgängliga längst ner
+	på i fönstret. Menykommandon finns tillgängliga i varje
+	fönster för att byta mellan de tillgängliga visningslägena för
+	det fönstret.
+
+</P
+><P
+>&#13;
+	Personfönstret har flest visningslägen. Det har normalt läge,
+	vilket visar en sammanfattning av basdata för personen. Det
+	har (i likhet med alla andra fönster)
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-läge, vilket visar den verkliga
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-informationen, men förstärker den
+	med information för de rader som har en korsreferens
+	(<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> xref). Det finns två typer av
+	tavel- eller trädfönster, ett för antavlor och ett för
+	stamtavlor. Djupet för träd som visas kan justeras via
+	menykommandon.
+
+</P
+><P
+>&#13;
+	Tvåpersonsfönstret har samma visningslägen som personfönstret.
+
+</P
+><P
+>&#13;
+	Familjefönstret och Tvåfamiljsfönstret har båda vanlig visning
+	(där sammanfattande basdata visas),
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-läge, och utökat
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-läge.
+
+</P
+><P
+>&#13;	Assistentfönstret har enbart <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-läge
+	och utökat <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-läge.
+	(Listfönstret har inga visningslägen för närvarande.)
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN483"
+></A
+>IDENTIFIERA EN PERSON ELLER EN LISTA ÖVER PERSONER ATT BLÄDDRA TILL</H2
+><P
+>&#13;
+	Tryck b från huvudmenyn för att komma in i bläddringslägena.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig identifiera en
+	person eller lista över personer att bläddra till.
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Please identify person or persons to browse to.
+Enter name, key, refn or list:
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	I den svenska menyn ser det ut så här:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Identifiera person eller personer att bläddra till.
+skriv in namn, nyckel, refn eller lista:
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Skriv in antingen ett namn eller en del av ett namn, eller ett
+	internt nyckelvärde, eller en användardefinierad
+	referensnyckel (beskrivs senare) eller namnet på en tidigare
+	definierad lista över personer (beskrivs senare), och tryck
+	enter.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ger stor flexibilitet i
+	hur man skriver in namn. Du kan skriva in namn i versaler
+	eller gemener, eller fritt kombinerat. Du kan utelämna alla
+	förnamn utom det första, och för förnamn kan du utelämna alla
+	bokstäver utom den första. Du kan utelämna vokaler från
+	efternamnet, och när du har skrivit in fyra eller fem
+	konsonanter, kan du hoppa över också de kvarvarande av dessa.
+	Du måste avdela förnamnen från efternamnet med ett snedstreck,
+	och om du skriver in förnamnen efter efternamnet (som i
+	kinesiska namn), eller bestämningsord (tex. Jr, Sr, IV, etc.),
+	så måste de avdelas från efternamnet med ytterligare ett
+	snedstreck. Här är några av de sätt som jag kan skriva in mitt
+	namn på:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN493"
+></A
+><P
+><B
+>Exempel 7. 
+Exempel på att skriva in ett namn
+</B
+></P
+><P
+CLASS="literallayout"
+><br>
+Thomas&nbsp;Trask&nbsp;/Wetmore/&nbsp;IV<br>
+thomas/wetmore/iv<br>
+t&nbsp;t/wetmr/i<br>
+th&nbsp;tr/Wetmore<br>
+t/wtmr/iv<br>
+</P
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Du kan bläddra till en lista över alla personer med samma
+	efternamn genom att använda en asterisk som initial i
+	förnamnet. Till exempel:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN497"
+></A
+><P
+><B
+>Exempel 8. 
+Exempel på användning av jokertecken vid bläddring
+</B
+></P
+><P
+CLASS="literallayout"
+>*/wetmore</P
+></DIV
+>
+
+	matchar alla personer med efternamnet Wetmore. Detta är den
+	enda användning av jokertecken som fungerar i
+	visningsfönstren. (Däremot finns det några enkla jokertecken
+	för sökkommandot för att hitta delar av personnamn, eller för
+	sökning på användardefinierade referensnycklar. Man kommer åt
+	sökkommandot från ett annat val i huvudmenyn.)
+
+</P
+><P
+>&#13;
+	När du har skrivit in ett namn, så söker
+	<TT
+CLASS="application"
+>LifeLines</TT
+> efter alla personer som
+	matchar. Det finns tre möjligheter: ingen träff; träff på en
+	person; träff på fler personer än en. I det första fallet
+	skriver <TT
+CLASS="application"
+>LifeLines</TT
+>: 
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Det finns ingen i databasen med det namnet eller den nyckeln.
+</PRE
+></TD
+></TR
+></TABLE
+> 
+        och stannar kvar vid huvudmenyn.
+
+</P
+><P
+>&#13;
+	Om sökningen ger träff på en person, går
+	<TT
+CLASS="application"
+>LifeLines</TT
+> in i
+	personläget och visar personen som matchar där. Om det fler
+	personer än en matchar, går
+	<TT
+CLASS="application"
+>LifeLines</TT
+> in i listbläddringsläget
+	med listan över personer som matchar.
+
+</P
+><P
+>&#13;
+	Du kan också identifiera en person genom att skriva in värdet
+	på hans eller hennes interna korsreferensnyckel. Det interna
+	nyckelvärdet för alla personposter är ett I följt av siffror.
+	I den aktuella versionen måste du när du skriver in ett
+	nyckelvärde utelämna I:t. Om
+	<TT
+CLASS="application"
+>LifeLines</TT
+> hittar en person med det
+	nyckelvärde som du angivit, så går
+	<TT
+CLASS="application"
+>LifeLines</TT
+> in i personläget och
+	visar den personen.
+
+</P
+><P
+>&#13;
+	Bläddringskommandot b finns också tillgängligt från de flesta
+	av bläddringslägena. Kommandot fungerar likadant från dessa
+	lägen som det gör från huvudmenyn.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN511"
+></A
+>SNABBIDENTIFIERA EN PERSON</H2
+><P
+>&#13;
+	Några operationer i <TT
+CLASS="application"
+>LifeLines</TT
+>
+	kräver att du identifierar en person, inte för att bläddra
+	fram till den, men för att kunna fullfölja den operation som
+	du begärt. Till exempel, när du lägger till ett barn i en
+	familj, så kan det hända att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	barnet. När detta händer kommer en ruta att visas, där du
+	ombeds att identifiera en person. Du svarar genom att skriva
+	in ett namn eller en nyckel precis på samma sätt som du skulle
+	göra för kommandot b. Om ingen matchar, så återgår
+	<TT
+CLASS="application"
+>LifeLines</TT
+> till det föregående
+	bläddringsläget. Om namnet matchar personer i databasen, så
+	visar <TT
+CLASS="application"
+>LifeLines</TT
+> något i stil med:
+	
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Välj mellan dessa poster.
+  &#62;Thomas Trask Wetmore, b. 1826, N.B. (42)
+   Thomas Trask Wetmore IV, b. 1949, Conn. (1)
+   Thomas Trask Wetmore III, b. 1925, Conn. (6)
+   Thomas Trask Wetmore Jr, b. 1896, Conn. (11)
+   Thomas Trask Wetmore Sr, b. 1866, N.S. (23)
+   Thomas Trask Wetmore V, b. 1982, Mass. (5)
+_______________________________________________
+Kommandon: j Flytta ned k Flytta upp i Välj q Avsluta
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Använd kommandona j och k för att flytta markeringspilen (&#62;)
+	till rätt person, och använd sedan kommandot i för att välja
+	den personen. Det kan finnas fler personer i listan än vad du
+	kan se samtidigt, men om så skulle vara fallet, så kan du
+	använda kommandona j och k för att bläddra igenom hela listan.
+	Om du inte hittar önskad person, så använd kommandot q, varvid
+	<TT
+CLASS="application"
+>LifeLines</TT
+> frågar om du vill skriva
+	in ett annat namn.
+
+</P
+><P
+>&#13;
+     Från version 3.0.15 kan listor också navigeras med upp- och
+     nedpilarna, PageUp- och PageDown-tangenterna och Home- och
+     End-tangenterna. Skift-PageUp och Skift-PageDown flyttar mer än
+     en sida i taget i den givna riktningen. Motsvarigheterna på
+     tangentbordet är j=pil upp, k=pil ned, u=PageUp, d=PageDown,
+     ^=Home, $=End, U=Skift-PageUp, D=Skift-PageDown, i=Enter.
+
+</P
+><P
+>&#13;
+	När <TT
+CLASS="application"
+>LifeLines</TT
+> skapar en lista över
+	namn för dig att välja från, så försöker det att lägga till
+	extra information till namnet; detta är till hjälp för att
+	avgöra vilket namn som ska väljas, och är betydelsefullt i
+	databaser där det finns många personer med samma namn.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> visar placerar också
+	värdet på personens nyckelvärde på slutet av varje menyrad;
+	detta kan vara till hjälp i stora databaser.
+
+</P
+><P
+>&#13;
+	Några visningsfönster tillhandahåller kommandot z,
+	med vilket du kan bläddra till en ny person med
+	snabbidentifiering i stället för b-stilen.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN526"
+></A
+>GRUNDLÄGGANDE OM BLÄDDRINGSFÖNSTER</H2
+><P
+>&#13;
+	Fönstret är uppdelat i rutor i alla bläddringsfönster. Längst
+	ned i varje fönster finns alltid en meddelanderuta, som används för
+	för enradiga meddelanden. Alla fönster har en eller två rutor
+	som visar information ur databasen. Och varje fönster har en ruta
+	med en meny som visar tillgänglig kommandon i det fönstret.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN529"
+></A
+>PERSONFÖNSTRET</H2
+><P
+>&#13;
+	När du har identifierat en person att bläddra till, så går
+	<TT
+CLASS="application"
+>LifeLines</TT
+> till personfönstret. Den
+	översta rutan på skärmen visar basfakta om personen (i normalt
+	läge, som är det förvalda). Rutan i mitten visar en meny med
+	kommandon. Till exempel:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;person: Thomas Trask WETMORE Sr (25)
+  född: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
+  död: 17 February 1947, New London, New London, Connecticut
+  fader: Daniel Lorenzo WETMORE, f. 1821, N.S., d. 1903, Conn. (48)
+  moder: Mary Ann DOTY, f. 1824, N.S., d. 1897, Conn. (59)
+  maka/make: Margaret Ellen KANEEN, f. 1855, Eng., d. 1900, Conn. (26)
+    barn: Portia Louise WETMORE, f. 1892, Conn., d. 1921, Conn. (27)
+    barn: Thomas Trask WETMORE, f. 1896, Conn., d. 1970, Conn. (17)
+  maka/make: Arleen M KEENEY, g. 1914, Conn. (75)
+_______________________________________________________________________
+Välj ett kommando:             (sid 1/3)
+  e Redigera personen     g Bläddra t. familj     p  Tavelläge
+  f Bläddra till fader    u Bläddra t. föräldrar  n  Skapa ny person
+  m Bläddra till moder    b Bläddra t. personer   a  Skapa ny familj
+  s Bläddra till make/m*  h Lägg t. som maka/ma*  x  Växla två familjer
+  c Bläddra till barn     i Lägg till som barn    tt Växla t. tandemläge
+  o Bl. t. äldre syskon   r Ta bort som maka/make ?  Andra menyval
+  y Bl. t. yngre syskon   d Ta bort som barn      q  Återgå till huvudm*
+_______________________________________________________________________
+LifeLines -- Personfönster (* visar/döljer meny) 
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+Kommandona utför ett brett urval av funktioner.
+
+</P
+><P
+>&#13;
+<DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera personen. </SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Redigera personens databaspost.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> placerar posten i en fil,
+	och startar därefter en textredigerare så att du kan redigera
+	posten. När du återgår från redigeraren, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> från redigeraren, dig
+	bekräfta ändringar; personen ändras bara om du svarar ja.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>f</B
+> <SPAN
+CLASS="action"
+>Bläddra till fader.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till personens fader. Om fadern inte finns i
+	databasen, så ändrar inte <TT
+CLASS="application"
+>LifeLines</TT
+>
+	det som visas i fönstret. Om det finns fler än en fader, så
+	ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att välja en.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+> <SPAN
+CLASS="action"
+>Bläddra till moder.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till personens moder. Om modern inte finns i
+	databasen, så ändrar inte <TT
+CLASS="application"
+>LifeLines</TT
+>
+	det som visas i fönstret. Om det finns fler än en moder, så
+	ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att välja en.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>s</B
+> <SPAN
+CLASS="action"
+>Bläddra till maka/make.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till personens maka/make. Om personen har fler makar
+	än en, så ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att
+	välja en. Om personen inte har några makar, så ändras inte det
+	som visas i fönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>c</B
+> <SPAN
+CLASS="action"
+>Bläddra till barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till ett av personens barn. Om det finns flera barn än
+	ett, så ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att välja
+	ett. Om personen inte har några barn, så ändras inte det som
+	visas i fönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>o</B
+> <SPAN
+CLASS="action"
+>Bl. till äldre syskon.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till personens närmaste äldre syskon. Om personen inte
+	har något sådant syskon, så ändras inte det som visas i
+	fönstret. Endast syskon från samma familj bläddras i med detta
+	kommando.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>y</B
+> <SPAN
+CLASS="action"
+>Bl. t. yngre syskon.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till personens närmaste yngre syskon. Om personen inte
+	har något sådant syskon, så ändras inte det som visas i
+	fönstret. Endast syskon från samma familj bläddras i med detta
+	kommando.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>g</B
+> <SPAN
+CLASS="action"
+>Bläddra t. familj.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till den familj som personen är maka/make eller
+	förälder i, och gå in i familjefönstret. Om personen finns i
+	fler än en familj, så ber <TT
+CLASS="application"
+>LifeLines</TT
+>
+	dig att identifiera vilken av dem. Om personen inte är maka/make
+	eller förälder i någon familj, så ändras inte det som visas i
+	fönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>u</B
+> <SPAN
+CLASS="action"
+>Bläddra t. föräldrar.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till den familj som personen är barn i, och växla till
+	familjeläget. Om personen inte är barn i någon familj, så
+	ändras inte det som visas i fönstret. Om personen är barn i
+	fler än en familj, så ber <TT
+CLASS="application"
+>LifeLines</TT
+>
+	dig att identifiera vilken av dem.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>b</B
+> <SPAN
+CLASS="action"
+>Bläddra t. personer.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till en ny person eller lista över personer.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	en eller flera personer via namn, nyckel eller listnamn, och,
+	beroende på hur många personer som identifierats, växlar
+	antingen till listläget, eller stannar kvar i personläget.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>h</B
+> <SPAN
+CLASS="action"
+>Lägg t. som maka/make.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg till personen som en maka/make/förälder i en befintlig
+	familj. <TT
+CLASS="application"
+>LifeLines</TT
+> ber dig
+	identifiera familjen, och ber dig därefter att bekräfta din
+	begäran.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>i</B
+> <SPAN
+CLASS="action"
+>Lägg till som barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg till personen som barn i en befintlig familj. Personen
+	får redan vara barn i en annan familj.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig identifiera
+	familjen, och ber dig därefter att bekräfta din begäran.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>r</B
+> <SPAN
+CLASS="action"
+>Ta bort som maka/make.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ta bort personen som maka/make eller förälder från en
+	befintlig familj. Om personen är maka/make eller förälder i
+	fler familjer än en, så ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera
+	familjen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>d</B
+> <SPAN
+CLASS="action"
+>Ta bort som barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Ta bort personen som barn i en befintlig familj.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>p</B
+> <SPAN
+CLASS="action"
+>Tavelläge.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla till tavelläge. Personen blir proband i antavlan.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>n</B
+> <SPAN
+CLASS="action"
+>Skapa ny person.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Skapa och lägg till en ny person i databasen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall för en
+	personpost och skickar den till textredigeraren för att
+	redigera mallen. När du återgår från redigeraren, så ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att bekräfta
+	operationen. Om du gör det, så läggs den nya personen in och
+	blir aktuell person. Om inte, så läggs personen inte in, och
+	<TT
+CLASS="application"
+>LifeLines</TT
+> återgår till det
+	ursprungliga fönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>a</B
+> <SPAN
+CLASS="action"
+>Skapa ny familj.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Skapa och lägg in en ny familj i databasen. Den nya familjen
+	kan ha den aktuella personen som antingen maka/make/förälder,
+	eller som barn; <TT
+CLASS="application"
+>LifeLines</TT
+> frågar
+	vilket. Om du väljer att skapa en familj med personen som
+	maka/make/förälder, så ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera den
+	andra makan/maken om hon eller han är bekant. I båda fallen
+	skapar <TT
+CLASS="application"
+>LifeLines</TT
+> en familjemall,
+	och placerar dig i textredigeraren. När du återgår från
+	redigeraren ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att
+	bekräfta operationen. Om du gör det, så lägger
+	<TT
+CLASS="application"
+>LifeLines</TT
+> in familjen och växlar
+	till familjeläget. Om det kommando du använde precis innan
+	kommandot a var kommandot n, och du väljer att skapa en familj
+	med personen som maka/make/förälder, så gissar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att den andra makan/maken
+	i familjen kommer att vara den personen som visades precis
+	innan den nya personen skapades.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> frågar dig om så är
+	fallet, och om så, så görs automatiskt den personen till den
+	andra makan/maken i den nya familjen. Om så inte är fallet, så
+	ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera
+	den andra makan/maken.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+> <SPAN
+CLASS="action"
+>Växla två familjer.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla plats (ändra kronologisk ordning) för två valfria
+	familjer som personen tillhör som maka/make eller förälder.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	de två familjerna och växlar därefter plats för dem.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>tt</B
+> <SPAN
+CLASS="action"
+>Växla t. tandemläge.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla till tvåpersonsläget.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig först att
+	identifiera den andra personen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>?</B
+> <SPAN
+CLASS="action"
+>Andra menyval.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Gå till nästa sida med menyval. Detta kommer inte att påverka
+	den övre delen (med de data som du har framme) av fönstret,
+	men ger dig möjlighet att bläddra genom alla tillgängliga
+	kommandon för det aktuella fönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>q</B
+>
+<SPAN
+CLASS="action"
+>Återgå till huvudmenyn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Återgå till <TT
+CLASS="application"
+>LifeLines</TT
+> huvudmeny.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>zi</B
+> <SPAN
+CLASS="action"
+>Bläddra t. pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Snabbläddra till en ny person.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	en person via namn eller nyckelvärde, och om du gör det, så
+	bläddras den personen fram.
+
+</P
+></DD
+></DL
+></DIV
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN698"
+></A
+>LISTFÖNSTRET</H2
+><P
+>&#13;
+	Det här fönstret hanterar listor med personer. I den översta
+	rutan visas information om en person i listan. I den vänstra
+	rutan visas en lista över upp till 12 personer. Vilken person
+	som visas i den översta rutan indikeras genom tecknet &#62;. Den
+	högra rutan är menyn över tillgängliga kommandon.
+	
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;person: Thomas Trask WETMORE Sr (25)
+  född: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
+  död: 17 February 1947, New London, New London, Connecticut
+  fader: Daniel Lorenzo WETMORE, f. 1821, N.S., d. 1903, Conn. (48)
+  moder: Mary Ann DOTY, f. 1824, N.S., d. 1897, Conn. (59)
+  maka/make: Margaret Ellen KANEEN, f. 1855, Eng., d. 1900, Conn. (26)
+_______________________________________________________________________
+  Thomas Trask WETMORE (42)                Choose an operation:
+  Thomas Trask WETMORE III (6)              j Gå nedåt i lista
+  Thomas Trask WETMORE IV (1)               k Gå uppåt i lista
+  Thomas Trask WETMORE (11)                 e Redigera denna pers.
+ &#62;Thomas Trask WETMORE Sr (23)              i Bläddra till denna pers.
+  Thomas Trask WETMORE (5)                  m Markera denna pers.
+                                            r Ta bort från lista
+                                            t Växla t. tandemläge
+                                            n Ge denna lista namn
+                                            b Bläddra till nya pers.
+                                            a Lägg t. i denna lista
+                                            x Växla märke/aktuell
+                                            q Återgå till huvudmenyn
+_______________________________________________________________________
+LifeLines -- Listfönster
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+<DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>j</B
+> <SPAN
+CLASS="action"
+>Gå nedåt i lista.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Gå nedåt i listan en person. Listrutan är bara stor nog för
+	att visa 12 personer, men en lista kan innehålla många fler
+	personer. Använd tangenterna <B
+CLASS="keycap"
+>j</B
+> och
+	<B
+CLASS="keycap"
+>k</B
+> för att bläddra fram till dessa andra
+	personer.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>k</B
+> <SPAN
+CLASS="action"
+>Gå uppåt i lista.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Gå uppåt i listan en person. Listrutan är bara stor nog för
+	att visa 12 personer, men en lista kan innehålla många fler
+	personer. Använd tangenterna <B
+CLASS="keycap"
+>j</B
+> och
+	<B
+CLASS="keycap"
+>k</B
+> för att bläddra fram till dessa andra
+	personer.
+
+</P
+><P
+>&#13;
+     Från version 3.0.15 kan listor också navigeras med upp- och
+     nedpilarna, PageUp- och PageDown-tangenterna och Home- och
+     End-tangenterna. Skift-PageUp och Skift-PageDown flyttar mer än
+     en sida i taget i den givna riktningen. Motsvarigheterna på
+     tangentbordet är j=pil upp, k=pil ned, u=PageUp, d=PageDown,
+     ^=Home, $=End, U=Skift-PageUp, D=Skift-PageDown, i=Enter.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera denna pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Redigera databasposten för den visade personen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> startar redigeraren på
+	personposten. När du återgår från redigeraren, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att bekräfta
+	ändringar, och därefter placeras du åter i listfönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>i</B
+> <SPAN
+CLASS="action"
+>Bläddra till denna pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla till personfönstret med aktuell person.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+> <SPAN
+CLASS="action"
+>Markera denna pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Markera aktuell person om han/hon inte är markerad; avmarkera
+	personen om han/hon är det. Den markerade personen visas med
+	ett x vid sitt namn. Markerade personer används av kommandona
+	t och x. Endast en person i taget kan markeras.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>d</B
+> <SPAN
+CLASS="action"
+>Ta bort från lista.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ta bort aktuell person från listan (inte från databasen).
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>t</B
+> <SPAN
+CLASS="action"
+>Växla t. tandemläge.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla till tvåpersonsfönstret med aktuell person och
+	den markerade personen som de två personerna. Om ingen person
+	har markerats sker ingen förändring.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>n</B
+> <SPAN
+CLASS="action"
+>Ge denna lista namn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Listor med personer kan namnges, vilket gör det möjligt att
+	snabbt bläddra tillbaka till dem genom att ange ett listnamn
+	när du använder kommandot b från olika lägen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kommer att fråga dig
+	efter namnet. Listnamn bör av praktiska skäl vara korta.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>b</B
+> <SPAN
+CLASS="action"
+>Bläddra till nya pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till en ny person eller lista över personer. Du kan
+	identifiera en person eller en lista över personer via namn,
+	intern eller användardefinierad nyckel eller via listnamn.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>a</B
+> <SPAN
+CLASS="action"
+>Add to this list.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg till personer till aktuell lista.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	en ny person eller lista med personer via namn, nyckel eller
+	listnamn, varpå de läggs till och sorteras efter namn i den
+	aktuella listan.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+> <SPAN
+CLASS="action"
+>Växla märke/aktuell.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla aktuell person med den markerad personen i listan.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>q</B
+> <SPAN
+CLASS="action"
+>Återgå till huvudmenyn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Återgå till <TT
+CLASS="application"
+>LifeLines</TT
+> huvudmeny.
+
+</P
+></DD
+></DL
+></DIV
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN786"
+></A
+>FAMILJEFÖNSTRET</H2
+><P
+>&#13;
+	Det här fönstret visar information om en familj. I den övre
+	rutan visas basinformation om familjen. I den nedre rutan
+	visas menyn med tillgängliga kommandon.
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;fader: Thomas Trask WETMORE IV (1)
+  född: 18 December 1949, New London, New London, Connecticut
+  död:
+moder: Luann Frances GRENDA (2)
+  född: 10 July 1949, Pittsburgh, Allegheny, Pennsylvania
+  död:
+gifta: 1 August 1970, Governors Island, New York, New York
+  barn: Anna Vivian Wetmore, f. 1974, Alaska (3)
+  barn: Marie Margaret WETMORE, f. 1979, Conn. (4)
+  barn: Thomas Trask WETMORE V, f. 1982, Mass. (5)
+_______________________________________________________________________
+Välj ett kommando:             (sid 1/3)
+  e Redigera familjen   s Lägg t. maka/make *   tt Växla t. fam.tandem
+  f Bläddra till fader  a Lägg t. barn i fam.   b  Bläddra t. personer
+  m Bläddra till moder  r Ta bort maka/make *   zi Bläddra t. personer
+  c Bläddra till barn   d Remove child from     q  Återgå till huvudm*
+  n Skapa ny person     x Växla två barn
+_______________________________________________________________________
+LifeLines - Familjefönster (* visar/döljer meny)
+
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;
+<DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera familjen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Redigera familjens databaspost.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skriver posten till en
+	fil och placersr dig i en redigerare för att redigera filen.
+	När du återgår från redigeraren, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att bekräfta
+	uppdateringen; familjen ändras bara om du gör så.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>f</B
+> <SPAN
+CLASS="action"
+>Bläddra till fader.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till fadern/maken i familjen, och växla till
+	personfönstret. Om fadern saknas sker ingen ändring.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+><SPAN
+CLASS="action"
+>Bläddra till moder.</SPAN
+>
+	    </B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till modern/makan i familjen, och växla till
+	personfönstret. Om modern saknas sker ingen ändring.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>c</B
+> <SPAN
+CLASS="action"
+>Bläddra till barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till ett barn i familjen, och växla till
+	personfönstret. Om det finns fler än ett barn i familjen, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera ett
+	av barnen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>n</B
+> <SPAN
+CLASS="action"
+>Skapa ny person.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Skapa och lägg till en ny person i databasen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall för en
+	databaspost och skickar den till textredigeraren för att
+	redigera posten. När du återgår från redigeraren, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att bekräfta
+	operationen. Om du gör så, läggs personen in. Om inte, så
+	läggs inte personen in. I båda fallen sker ingen ändring i vad
+	som visas på skärmen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>s</B
+> <SPAN
+CLASS="action"
+>Lägg t. maka/make i fam.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg till en maka/make i familjen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	den nya makan/en. Om kommandot du körde precis innan kommandot
+	s var kommandot n, så gissar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att den nya makan/maken
+	är den nyss skapade personen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> frågar om så är fallet,
+	och i så fall blir den personen den andra makan/maken i
+	familjen. Om inte, så ber <TT
+CLASS="application"
+>LifeLines</TT
+>
+	dig att identifiera den andra makan/maken.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>a</B
+> <SPAN
+CLASS="action"
+>Lägg t. barn i fam.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg till ett barn i familjen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	det nya barnet. Om kommandot du körde precis innan kommandot s
+	var kommandot n, så gissar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att det nya barnet är den
+	nyss skapade personen. <TT
+CLASS="application"
+>LifeLines</TT
+>
+	frågar om så är fallet, och om så, så läggs barnet till i
+	familjen. Om inte, så ber <TT
+CLASS="application"
+>LifeLines</TT
+>
+	dig att identifiera barnet. Om det redan finns barn i
+	familjen, så frågar <TT
+CLASS="application"
+>LifeLines</TT
+> också
+	var i familjen barnet ska placeras.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>r</B
+> <SPAN
+CLASS="action"
+>Ta bort maka/make från.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ta bort en maka/make från familjen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	personen, och om du gör så, tas hon eller han bort. Personen
+	tas inte bort från databasen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>d</B
+> <SPAN
+CLASS="action"
+>Ta bort barn från.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ta bort ett barn från familjen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	barnet, och om du gör så, tas barnet bort från familjen.
+	Personen tas inte bort från databasen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+> <SPAN
+CLASS="action"
+>Växla två barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla plats (ändra kronologisk ordning) för två valfria barn i
+	familjen. <TT
+CLASS="application"
+>LifeLines</TT
+> ber dig
+	identifiera de två barnen och växlar därefter plats på dem.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>tt</B
+> <SPAN
+CLASS="action"
+>Växla t. fam.tandem.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando tar dig till tvåfamiljsfönstret.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	en familj till, och tar dig därefter till tvåfamiljsfönstret,
+	där båda familjerna visas.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>b</B
+> <SPAN
+CLASS="action"
+>Bläddra t. personer.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till en ny person eller lista över personer. Du kan
+	identifiera en person eller lista via namn, nyckel eller
+	listnamn. Om du lyckas identifiera en ny person eller
+	personer, så växlar du till person- eller listfönstret.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>z</B
+> <SPAN
+CLASS="action"
+>Bläddra t. personer.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Snabbläddra till en ny person.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att identifiera
+	en person via namn eller nyckelvärde, och om du gör det,
+	bläddrar det fram den personen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>q</B
+> <SPAN
+CLASS="action"
+>Återgå till huvudmenyn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Återgå till <TT
+CLASS="application"
+>LifeLines</TT
+> huvudmeny.
+
+</P
+></DD
+></DL
+></DIV
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN896"
+></A
+>TANDEMLÄGE FÖR PERSONER</H2
+><P
+>&#13;
+	Tvåpersonsfönstret visar information om två personer. Dess
+	huvudanvändning är att vara till hjälp vid sammanslagning av
+	personer. De översta två rutorna visar två personer i samma
+	format som i person- och listfönstrena. I den nedersta rutan
+	visas menyn med tillgängliga kommandon. Exempelvis:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;  person: Thomas Trask WETMORE Sr (25)
+  född: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
+  död: 17 February 1947, New London, New London, Connecticut
+  fader: Daniel Lorenzo WETMORE, f. 1821, N.S., d. 1903, Conn. (48)
+  moder: Mary Ann DOTY, f. 1824, N.S., d. 1897, Conn. (59)
+  maka/make: Margaret Ellen KANEEN, f. 1855, Eng., d. 1900, Conn. (26)
+______________________________________________________________________
+person: Thomas Trask WETMORE IV (1)
+  född: 18 December 1949, New London, New London, Connecticut
+  död:
+  fader: Thomas Trask WETMORE III, f. 1925, Conn. (6)
+  moder: Joan Marie HANCOCK, f. 1928, Conn. (7)
+  maka/make: Luann Frances GRENDA, g. 1970, N.Y. (2)
+______________________________________________________________________
+Välj ett kommando:             (sid 1/3)
+ e Redigera övre pers.  s Bl. t. övre make/m*   a Lägg till familj
+ t Bläddra till övre    c Bl. t. övre barn      j Sammanl. ned. - öv.
+ f Bläddra t. övre fa*  b Bläddra t. personer   x Växla övre/nedre
+ m Bläddra t. övre mo*  d Kopiera öv. t. ned.   q Återgå till huvudm*
+______________________________________________________________________
+LifeLines - Tvåpersonsfönster (* visar/döljer meny)
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+<DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera övre pers.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Redigera posten för den övre personen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skriver posten till en
+	fil och placerar dig i textredigeraren för att redigera filen.
+	När du återgår från redigeraren, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att bekräfta
+	uppdateringen; personen ändras bara om du gör så.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>t</B
+> <SPAN
+CLASS="action"
+>Bläddra till övre.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Växla till personläge med den övre personen som aktuell
+	person.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>f</B
+> <SPAN
+CLASS="action"
+>Bläddra t. övre fader.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ersätt den övre personen med hans/hennes fader.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+> <SPAN
+CLASS="action"
+>Bläddra t. övre moder.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ersätt den övre personen med hans/hennes moder.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>s</B
+> <SPAN
+CLASS="action"
+>Bl. t. övre make/maka/r.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ersätt den övre personen med hans/hennes maka/make. Om
+	personen har fler än en maka/make, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera en av
+	dem.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>c</B
+> <SPAN
+CLASS="action"
+>Bl. t. övre barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Ersätt den övre personen med ett av hans/hennes barn. Om
+	personen har fler än ett barn, ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera
+	ett av dem.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>b</B
+> <SPAN
+CLASS="action"
+>Bläddra t. personer.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Bläddra till en ny person eller lista över
+	personer. <TT
+CLASS="application"
+>LifeLines</TT
+> ber dig att
+	identifiera en ny person eller personer via namn, nyckel eller
+	listnamn, och gör sedan som beskrivs i avsnittet om att
+	identifiera en person.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>d</B
+> <SPAN
+CLASS="action"
+>Kopiera öv. t. ned.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Kopiera den övre personen till den nedre personen. Det skapas
+	inte en ny person; samma person visas på två ställen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>a</B
+> <SPAN
+CLASS="action"
+>Lägg till familj.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Skapa en ny familjepost; <TT
+CLASS="application"
+>LifeLines</TT
+>
+	antar att de två personer som visas ska vara makar/föräldrar i
+	den nya familjen; de måste vara av motsatt kön.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>j</B
+> <SPAN
+CLASS="action"
+>Sammanl. ned. - öv.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg samman den nedre personen i den övre personen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kombinerar ihop de båda
+	personposterna och placerar dig i textredigeraren för att
+	redigera den kombinerade posten. När du är klar kommer
+	<TT
+CLASS="application"
+>LifeLines</TT
+>, om du bekräftar att du
+	vill fullfölja operationen, att ta bort den nedre personen
+	från databasen, och den övre personen får den kombinerade
+	posten. Se avsnittet om sammanläggning.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+> <SPAN
+CLASS="action"
+>Växla övre/nedre.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla plats för de två personer som visas.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>q</B
+> <SPAN
+CLASS="action"
+>Återgå till huvudmenyn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Återgå till <TT
+CLASS="application"
+>LifeLines</TT
+> huvudmeny.
+
+</P
+></DD
+></DL
+></DIV
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN983"
+></A
+>TANDEMLÄGE FÖR FAMILJER</H2
+><P
+>&#13;
+	Tvåfamiljsfönstret visar information om två familjer. Dess
+	huvudanvändning är att vara till hjälp vid sammanslagning av
+	familjer. De översta två rutorna visar information om de två
+	familjer som du bläddrat fram, och den nedersta rutan
+	innehåller menyn med tillgängliga kommandon. Till exempel:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;fader: Thomas Trask WETMORE IV (1)
+  född: 18 December 1949, New London, New London, Connecticut
+moder: Luann Frances GRENDA (2)
+  född: 10 July 1949, Pittsburgh, Allegheny, Pennsylvania
+gifta: 1 August 1970, Governors Island, New York, New York
+  barn: Anna Vivian WETMORE, f. 1974, Alaska (3)
+__________________________________________________________________
+fader: Thomas Trask WETMORE III (6)
+  född: 26 October 1925, New London, New London, Connecticut
+moder: Joan Marie Hancock (7)
+  född: 6 June 1928, New London, New London, Connecticut
+gifta: 5 February 1949, New London, New London, Connecticut
+  barn: Thomas Trask WETMORE IV, b. 1949, Conn. (1)
+__________________________________________________________________
+ Välj ett kommando:             (sid 1/2)
+ e  Redigera övre fam.    m  Bläddra t. mödrar    )b Rulla nedre ned
+ t  Bläddra till övre     (t Rulla övre upp       (( Rulla båda upp
+ b  Bläddra t. nedre      )t Rulla övre ned       ?  Andra menyval
+ f  Bläddra t. fäder      (b Rulla nedre upp      q  Återgå till huvudm*
+__________________________________________________________________
+LifeLines -- Tvåfamiljsfönster (* visar/döljer meny)
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+<DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera övre fam.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Med detta kommando kan du redigera posten för den övre
+	familjen. <TT
+CLASS="application"
+>LifeLines</TT
+> skriver posten
+	till en fil, och skickar den därefter till redigeraren för att
+	redigera texten. När du återgår från editorn, frågar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> om du är säker på att du
+	vill uppdatera familjen i databasen. Familjen ändras bara om
+	du svarar ja.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>t</B
+> <SPAN
+CLASS="action"
+>Bläddra till övre.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla till familjefönstret med den övre familjen som aktuell familj.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>b</B
+> <SPAN
+CLASS="action"
+>Bläddra t. nedre.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla till familjefönstret med den nedre familjen som aktuell familj.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>f</B
+> <SPAN
+CLASS="action"
+>Bläddra t. fäder.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla till tvåpersonsfönstret med fäderna i de två familjerna som de
+två personerna.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+> <SPAN
+CLASS="action"
+>Bläddra t. mödrar.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla till tvåpersonsfönstret med mödrarna i de två familjerna som de
+två personerna.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>(t</B
+> <SPAN
+CLASS="action"
+>Rulla övre upp.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>)t</B
+> <SPAN
+CLASS="action"
+>Rulla övre ned.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>(b</B
+> <SPAN
+CLASS="action"
+>Rulla nedre upp.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>)b</B
+> <SPAN
+CLASS="action"
+>Rulla nedre ned.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>((</B
+> <SPAN
+CLASS="action"
+>Rulla båda upp.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>))</B
+> <SPAN
+CLASS="action"
+>Rulla båda ned.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>#</B
+> <SPAN
+CLASS="action"
+>Slå på/av barnnr.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>(1-9)</B
+> <SPAN
+CLASS="action"
+>Bläddra t. barn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+TODO
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>j</B
+> <SPAN
+CLASS="action"
+>Sammanl. ned. - öv.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Lägg samman den nedre familjen i den övre familjen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kombinerar ihop de båda
+	familjeposterna och placerar dig i textredigeraren för att
+	redigera den kombinerade posten. När du är klar kommer
+	<TT
+CLASS="application"
+>LifeLines</TT
+>, om du bekräftar att du
+	vill fullfölja operationen, att ta bort den nedre familjen
+	från databasen, och den övre personen får den kombinerade
+	posten. Se avsnittet om sammanläggning.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+> <SPAN
+CLASS="action"
+>Växla övre/nedre.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+Växla plats för de två familjer som visas.
+
+</P
+><P
+>&#13;   [Det finns en del andra varierande kommandon tillgängliga i
+   menyerna.]
+</P
+></DD
+><DT
 ><B
 ><B
 CLASS="keycap"
@@ -18,4 +5253,3477 @@ CLASS="application"
 
 </P
 ></DD
+></DL
+></DIV
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1091"
+></A
+>OPERATIONEN LÄGG TILL</H2
+><P
+>&#13;
+	Om du väljer operationen lägg till från huvudmenyn, visar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> följande meny:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vad vill du lägga till?
+  p  Person - lägg till ny person i databasen
+  f  Familj - skapa familjepost med en eller två makar
+  c  Barn - lägg till ett barn i en befintlig familj
+  s  Maka/make - lägg till en maka/make i en befintlig familj
+  q  Återgå till föregående meny                     
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	De här operationerna fungerar på ett okomplicerat sätt.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> frågar dig de nödvändiga
+	frågorna, och ger dig möjlighet att avbryta när som helst.
+	Operationerna som finns tillgängliga via den här menyn finns
+	också tillgängliga via bläddringslägena, och är ofta lättare
+	att utföra därifrån.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1098"
+></A
+>OPERATIONEN TA BORT</H2
+><P
+>&#13;
+	Om du väljer operationen ta bort från huvudmenyn, visar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> följande meny:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vad vill du ta bort?
+  c  Barn - ta bort ett barn från dess familj
+  s  Maka/make - ta bort en maka/make från en befintlig familj
+  i  Person - ta bort en person fullständigt
+  f  Familj - ta bort en familj fullständigt
+  q  Återgå till föregående meny
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	De här operationerna är också okomplicerade att använda.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> frågar dig de nödvändiga
+	frågorna, och ger dig möjlighet att avbryta när som helst.
+
+</P
+><P
+>&#13;
+	Du kan också ta bort ett barn från hans/hennes familj, eller
+	ta bort en maka/make/förälder från dess familj, från
+	personläget. I båda fallen är det bara en relation som tas
+	bort, inte en person. Å andra sidan måste menyvalet ta bort
+	användas om du helt och hållet vill ta bort en person från
+	databasen; det kan inte göras från personläget.
+
+</P
+><P
+>&#13;
+	Det finns ingen speciell operation för att ta bort en
+	familjepost. <TT
+CLASS="application"
+>LifeLines</TT
+> tar
+	tyst bort de familjer som det varken finns några föräldrar
+	eller barn i.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1108"
+></A
+>KONVERTERING AV TECKENKODNINGAR</H2
+><P
+>&#13;
+     (Detta avsnitt var tidigare betitlat TECKENÖVERSÄTTNING.)
+
+</P
+><P
+>&#13;
+	Avsikten är att du endast behöver ange den interna kodningen
+	för varje databas du skapar (och detta steg kan automatiseras
+	via egenskapen NewDbProps), så fungerar allt annat ganska bra
+	utan justeringar. Det vill säga, LifeLines försöker att gissa
+	den korrekta teckenkodningen för din miljö (inklusive att
+	gissa konsoll- och Windowskodningar när du kör i 
+	MS-Windows, vilket det bör göra ganska bra).
+
+</P
+><P
+>&#13;
+	Emellertid kan du hamna i situationer där du önskar ändra
+	kodningens arbetssätt, eller där kodningskonverteringen inte
+	fungerar korrekt (i dessa fall hoppas vi att du kommer att
+	rapportera problemet till e-postlistan och/eller
+	felrapporteringslistan på Sourceforge).
+
+</P
+><P
+>&#13;
+	Det finns två sätt att korrigera kodningskonvertering. Den
+	första metoden är att genom att ändra konfigureringsvariabler.
+	Till exempel, om du vill generera en HTML-rapport av alla dina
+	data, vilket inkluderar namn på ryska (med kyrilliska
+	bokstäver), för din släkting, och du vet att din släktings
+	dator inte har någon font för kyrilliska bokstäver, så kan du
+	vilja tillfälligt ställa om din kodning för rapportutdata så
+	att du får interpolerade ASCII-bokstäver för de ryska
+	bokstäverna. Du kan göra detta genom att tillfälligt ändra
+	konfigurationsvariabeln ReportCodeSetOut till "ASCII" (fast,
+	om någon del av din data innehåller tecken som är reserverade
+	i HTML, som till exempel mindre än-tecknet, eller och-tecknet,
+	så vill du förmodligen ha "ASCII//HTML").
+
+</P
+><P
+>&#13;
+	Det andra sättet att ändra kodningskonvertering, och det ändra
+	sättet i LifeLines 3.0.6, är att redigera de inbäddade
+	teckenöversättningstabellerna, i vilka du faktiskt anger de
+	bokstäver du vill ska konverteras, bokstav för bokstav, och
+	hur du vill att de ska konverteras. Den här metoden, till
+	skillnad från den första, fungerar till och med i databaser
+	utan angiven intern kodning.
+
+</P
+><P
+>&#13;
+	Om du väljer operationen modifiera teckentabeller från
+	hvudmenyn, så visar <TT
+CLASS="application"
+>LifeLines</TT
+>
+	teckenöversättningsmenyn:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilken teckenmappning vill du redigera:
+Editor to Internal
+Internal to Editor
+GEDCOM to Internal
+Internal to GEDCOM
+Internal to Display
+Internal to Report
+q Återgå till föregående meny
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> har väldigt litet inbyggd
+	kunskap om teckenkodning. Om du använder 7-bitars
+	<SPAN
+CLASS="acronym"
+>ASCII</SPAN
+>-tecken, så kommer du inte att stöta
+	på några problem. Emellertid krävs det ytterligare tecken i
+	många europeiska och andra språk, och det finns många
+	8-bitars- och andra schema för att koda koda dessa tecken.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> känner inte till något av
+	dem. Däremot tillhandahåller
+	<TT
+CLASS="application"
+>LifeLines</TT
+> ett antal funktioner för
+	teckenöversättning som du kan använda för detta ändamål.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> tillhandahåller
+	hjälpmedel för mappning mellan tecken närhelst en datapost
+	förändras. <TT
+CLASS="application"
+>LifeLines</TT
+> stödjer fyra
+	former:
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>intern</B
+></DT
+><DD
+><P
+>&#13;
+för poster i databasen
+
+</P
+></DD
+><DT
+><B
+>editor</B
+></DT
+><DD
+><P
+>&#13;
+för poster som redigeras
+
+</P
+></DD
+><DT
+><B
+>display</B
+></DT
+><DD
+><P
+>&#13;
+för poster som visas
+
+</P
+></DD
+><DT
+><B
+>report</B
+></DT
+><DD
+><P
+>&#13;
+för poster som skrivs till utmatningsfil
+
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;
+	När text konverteras från ett format till ett annat översätter
+	<TT
+CLASS="application"
+>LifeLines</TT
+> normalt inte
+	teckenkodningar. Du kan emellertid ändra det här förinställda
+	beteendet genom att skapa teckenöversättningstabeller som
+	<TT
+CLASS="application"
+>LifeLines</TT
+> kommer att använda när du
+	konverterar mellan olika format. Det finns sex olika
+	översättningstabeller som du kan definiera. Följande tabell
+	visar de sex tabellerna och beskriver när de tillämpas:
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>internal to editor</B
+></DT
+><DD
+><P
+>&#13;
+vid konvertering från internt databasformat till redigerarformat
+
+</P
+></DD
+><DT
+><B
+>editor to internal</B
+></DT
+><DD
+><P
+>&#13;
+vid konvertering från redigerarformat tillbaka till internt
+databasformat
+
+</P
+></DD
+><DT
+><B
+><SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> to internal</B
+></DT
+><DD
+><P
+>&#13;
+vid inläsning av <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-indataposter och skrivning
+av dem till databasen.
+
+</P
+></DD
+><DT
+><B
+>internal to <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+vid skrivning av interna databasposter till extern
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil
+
+</P
+></DD
+><DT
+><B
+>internal to display</B
+></DT
+><DD
+><P
+>&#13;
+vid visning av en post i ett fönster i ett bläddringsläge
+
+</P
+></DD
+><DT
+><B
+>internal to report</B
+></DT
+><DD
+><P
+>&#13;
+vid skrivning av interna databasposter till extern rapportfil
+
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;
+	Efter att du valt en översättningstabell startas redigeraren
+	så att du kan redigera tabellen där. Översättningstabellerna
+	består av rader som ser ut så här:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><TT
+CLASS="replaceable"
+><I
+>mönster</I
+></TT
+> <TT
+CLASS="replaceable"
+><I
+>mönster</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+	där ett tabbsteg avdelar mönstren. Varje mönster är en
+	godtycklig följd av <SPAN
+CLASS="acronym"
+>ASCII</SPAN
+>-tecken och
+	kontrollsekvenser. Översättningen sker genom att hitta alla
+	mönster som matchar mönster på vänster sida, och ersätta dem
+	med motsvarande teckenföljd på höger sida.
+
+</P
+><P
+>&#13;
+	Det finns fem kontrollmekanismer som används i mönster:
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>#nnn</B
+></DT
+><DD
+><P
+>&#13;
+nnn är ett decimalt teckenvärde
+
+</P
+></DD
+><DT
+><B
+>$hh</B
+></DT
+><DD
+><P
+>&#13;
+hh är ett hexadecimalt teckenvärde
+
+</P
+></DD
+><DT
+><B
+>\ #</B
+></DT
+><DD
+><P
+>&#13;
+representerar tecknet #
+
+</P
+></DD
+><DT
+><B
+>\$</B
+></DT
+><DD
+><P
+>&#13;
+representerar tecknet $
+
+</P
+></DD
+><DT
+><B
+>\\</B
+></DT
+><DD
+><P
+>&#13;
+representerar tecknet \
+
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;
+	Teckenöversättningsfunktionen är inte fullständigt testad, och
+	inte alla översättningar är ännu implementerade.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1203"
+></A
+>DIVERSE VERKTYG</H2
+><P
+>&#13;
+Om du väljer operationen diverse verktyg, så visar
+<TT
+CLASS="application"
+>LifeLines</TT
+> verktygsmenyn:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilket verktyg vill du använda?
+  s  Spara databasen till GEDCOM-fil
+  r  Läs in data från en GEDCOM-fil
+  k  Finn nyckelvärde för en person
+  i  Identifiera en person via nyckelvärde
+  d  Visa databasstatistik
+  m  Visa minnesstatistik
+  e  Redigera platsförkortningsfilen
+  o  Redigera fil för användarinställningar
+  c  Inställningar för teckenuppsättning
+  q  Återgå till huvudmenyn
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>s</B
+> <SPAN
+CLASS="action"
+>Spara databasen till GEDCOM-fil.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Med det här kommandot sparas hela
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databasen i en
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil. Alla person-, familje-,
+	händelse-, käll- och användardefinierade poster lagras. Detta
+	kommando kan användas för regelbunden säkerhetskopiering av
+	din databas. När du använder detta kommando, frågar
+	<TT
+CLASS="application"
+>LifeLines</TT
+> efter namnet på filen. Om
+	du har definierat skalvariabeln <TT
+CLASS="envar"
+>LLARCHIVE</TT
+>, så
+	lagrar <TT
+CLASS="application"
+>LifeLines</TT
+> filen i den
+	katalog som variabeln satts till.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>r</B
+> <SPAN
+CLASS="action"
+>Läs in data från en GEDCOM-fil.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Med detta kommando kan du återställa en fullständig databas
+	från en <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil. När du väljer det här
+	kommandot, frågar <TT
+CLASS="application"
+>LifeLines</TT
+> efter
+	namnet på <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filen. Det här kommandot
+	kan också användas för att importera data från en
+	<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil till en befintlig databas. När
+	<TT
+CLASS="application"
+>LifeLines</TT
+> utför det här kommandot,
+	läser det först in hela <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filen, och
+	kontrollerar att den är giltig. Om det finns problem med
+	filen, så beskriver <TT
+CLASS="application"
+>LifeLines</TT
+> dessa
+	och skriver dem till filen err.log, och lägger inte till några
+	poster i databasen. Om det inte finns några problem, så lägger
+	<TT
+CLASS="application"
+>LifeLines</TT
+> till alla funna poster i
+	filen till databasen (endast rubrik- och avslutningsposterna
+	tas bort).
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>k</B
+> <SPAN
+CLASS="action"
+>Finn nyckelvärde för en person.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando finner det interna nyckelvärdet för en person.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>i</B
+> <SPAN
+CLASS="action"
+>Identifiera en person via nyckelvärde.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando identifierar vilken person som har ett visst
+	internt nyckelvärde.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>d</B
+> <SPAN
+CLASS="action"
+>Visa databasstatistik.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando ger en summering av innehållet i den aktuella
+	databasen. Det visar antalet person-, familje-, käll-,
+	händelse-, och andra poster i databasen.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>m</B
+> <SPAN
+CLASS="action"
+>Visa minnesstatistik.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando används av utvecklaren för felsökning.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+> <SPAN
+CLASS="action"
+>Redigera platsförkortningsfilen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando ger dig möjlighet att redigera
+	platsförkortningsfilen. Denna fil definierar de förkortningar
+	som används av <TT
+CLASS="application"
+>LifeLines</TT
+> när det
+	skapar listor över personer skapas för dig att välja från.
+	Raderna i filen har formatet:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><TT
+CLASS="replaceable"
+><I
+>ord</I
+></TT
+>:<TT
+CLASS="replaceable"
+><I
+>förk
+	</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>, där ord är ett ord som ska
+	förkortas, och förk är dess förkortning. Ordet och dess
+	förkortning separeras med ett kolon. Till exempel:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN1268"
+></A
+><P
+><B
+>Exempel 9. 
+Exempel på användning av förkortningar
+</B
+></P
+><P
+CLASS="literallayout"
+>Connecticut:Conn.<br>
+Massachusetts:Mass.<br>
+Nova&nbsp;Scotia:N.S.</P
+></DIV
+>
+
+</P
+><P
+>&#13;
+	När <TT
+CLASS="application"
+>LifeLines</TT
+> skapar listor över
+	personer för dig att välja från, eftersöks den sista
+	komponenten i vissa <TT
+CLASS="structfield"
+><I
+>PLAC</I
+></TT
+>-rader, och
+	om den komponenten återfinns, ersätts den med dess
+	förkortning.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>o</B
+> <SPAN
+CLASS="action"
+>Redigera fil för användarinställningar.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Med detta kommando kan du redigera filen med
+	användarinställningar. Filen med användarinställningar är en
+	post som lagras i databasen som innehåller de inställningar
+	som är valbara för användaren. Varje inställning har ett namn
+	och ett strängvärde. Varje rad i inställningsfilen har
+	formatet:
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><TT
+CLASS="replaceable"
+><I
+>inställning</I
+></TT
+>=<TT
+CLASS="replaceable"
+><I
+>värde</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+	där inställning är namnet på en inställning och värde är
+	strängvärdet för inställningen. Om värdet är mer än en rad
+	långt, så måste det sista tecknet vara ett backstreck. Man kan
+	också använda specialtecknen \n and \t från version 3.0.7 och
+	framåt (för att representera en radmatning respektive ett
+	tabbsteg). Dessa (\n och \t) är i första hand avsedda för
+	användning i anpassade postmallar. I version 3.0.14 finns det
+	39 inställningar. Lägg märke till att alla dessa också kan
+	anges i konfigurationsfilen, för att gälla i alla databaser,
+	men om de finns angivna på båda ställena, så har inställningen
+	i databasen (tabell med användarinställningar) företräde. För
+	mer information, se exempelkonfigurationsfilen; varje
+	inställning föregås av en kortfattad förklaring.  
+
+</P
+><P
+>&#13;Listan med inställningar återfinns i avsnittet "System- och
+användaregenskaper" nedan.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;
+Om du till exempel skulle vilja ersätta den förvalda personpostmallen
+med följande:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN1285"
+></A
+><P
+><B
+>Exempel 10. 
+Exempel på att ersätta den förvalda personpostmallen
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 INDI
+  1 NAME //
+  1 SEX</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+så redigerar du filen med användarinställningar till att
+innehålla:<DIV
+CLASS="example"
+><A
+NAME="AEN1288"
+></A
+><P
+><B
+>Exempel 11. 
+Exempel på ersatt förvald personpostmall
+</B
+></P
+><P
+CLASS="literallayout"
+>INDIREC=0&nbsp;INDI\<br>
+&nbsp;&nbsp;1&nbsp;NAME&nbsp;//\<br>
+&nbsp;&nbsp;1&nbsp;SEX</P
+></DIV
+>
+
+eller, med användning av kontrolltecknet \n för att hålla
+inställningen på en rad:<DIV
+CLASS="example"
+><A
+NAME="AEN1291"
+></A
+><P
+><B
+>Exempel 12. 
+Exempel på ersatt enradig förvald personpostmall
+</B
+></P
+><P
+CLASS="literallayout"
+>INDIREC=0&nbsp;INDI\n1&nbsp;NAME&nbsp;//\n1&nbsp;SEX</P
+></DIV
+>
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>q</B
+> <SPAN
+CLASS="action"
+>Återgå till huvudmenyn.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;Detta kommando tar dig tillbaka till huvudmenyn.
+</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1301"
+></A
+>FEL VID IMPORT</H2
+><P
+>&#13;Fel som uppkommit under <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-import loggas till
+en fil, som har det förinställda namnet errs.log. 
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>Ogiltig NAME-syntax.</B
+></DT
+><DD
+><P
+>&#13;
+	En NAME-post på nivå ett måste ha ett värde, och värdet får
+	inte vara en pekare, och får inte ha fler snedstreck än två.
+</P
+></DD
+><DT
+><B
+>Familjen %s har en felaktig nyckel.</B
+></DT
+><DD
+><P
+>&#13;
+	Varje FAM-post måste ha ett xref-värde som börjar med
+	bokstaven F. (Xref är bokstäverna mellan "0" och "FAM".)
+
+</P
+></DD
+><DT
+><B
+>Personen som definieras här saknar namn.</B
+></DT
+><DD
+><P
+>&#13;
+     Varje INDI-post måste ha minst en NAME-post på nivå 1, om
+     konfigurationsvalet RequireNames är icke-noll.
+
+</P
+></DD
+><DT
+><B
+>Personen %s har en felaktig nyckel: hoppas över.</B
+></DT
+><DD
+><P
+>&#13;
+     Varje INDI-post måste ha ett xref-värde som börjar med bokstaven I.
+     (Xref är bokstäverna mellan "0" och "INDI".)
+
+</P
+></DD
+><DT
+><B
+>Personen %s är definierad mer än en gång: hoppas över.</B
+></DT
+><DD
+><P
+>&#13;
+     Inget Xref-värde för en INDI får återanvändas.
+     (Xref är bokstäverna mellan "0" och "INDI".)
+
+</P
+></DD
+><DT
+><B
+>Familjen som definieras här har ingen nyckel.</B
+></DT
+><DD
+><P
+>&#13;
+     Varje FAM-post måste ha ett xref-värde.
+     (Xref är bokstäverna mellan "0" och "FAM".)
+
+</P
+></DD
+><DT
+><B
+>Personen som definieras här har ingen nyckel: hoppas över.</B
+></DT
+><DD
+><P
+>&#13;
+     Varje INDI-post måste ha ett xref-värde.
+     (Xref är bokstäverna mellan "0" och "INDI".)
+
+</P
+></DD
+><DT
+><B
+>Denna rad har ett nivånummer som är för stort.</B
+></DT
+><DD
+><P
+>&#13;
+     En barnnivå måste vara ett högre än dess föräldranivå.
+
+</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1338"
+></A
+>HANTERA KÄLL-, HÄNDELSE- OCH ANVÄNDARDEFINIERADE POSTER</H2
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> stödjer käll-,
+	händelse- och andra, användardefinierade typer av poster.
+	Du kan komma åt dessa funktioner på två sätt: Antingen via
+	menyvalet x från huvudmenyn, eller via kommandon i person- och
+	familjefönstren. Den första metoden är kanske mest praktisk
+	när du enbart arbetar med dessa typer av poster. Den andra gör
+	det lättare att arbeta med källposter, händelseposter och
+	användardefinierade poster parallellt med dina person- och
+	familjeposter; det här kan vara användbart till exempel när du
+	vill skapa referenser från dina person- och familjeposter till
+	dina käll-, händelse- och användardefinierade poster allt
+	eftersom du skapar dem, och för att se och redigera poster som
+	du har lagt in referenser till från en person- eller
+	familjepost.
+
+</P
+><P
+>&#13;
+	Om du väljer den första av de två metoderna som beskrevs ovan
+	visar <TT
+CLASS="application"
+>LifeLines</TT
+> följande meny:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilken funktion vill du använda?
+  s  Bläddra i källposter
+  e  Bläddra i händelseposter
+  x  Bläddra i övriga posttyper
+  1  Lägg till en källpost i databasen
+  2  Redigera källpost i databasen
+  3  Lägg till en händelsepost i databasen
+  4  Redigera händelsepost i databasen
+  5  Lägg till en post av övrig typ i databasen
+  6  Redigera en post av övrig typ i databasen
+  q  Återgå till huvudmenyn
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+	Om du använder den andra varianten (från person- och
+	familjefönstren), så har du tillgång till följande sex
+	kommandon. De första tre beskrivs gemensamt med sina
+	motsvarigheter i x-menyn (de gör mestadels, men inte helt och
+	hållet, samma saker); de sista tre har separata beskrivningar:
+
+ <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;   %s  Lägg till källa
+   %e  Lägg till händelse
+   %o  Lägg till övrig
+ </PRE
+></TD
+></TR
+></TABLE
+>
+
+ <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;   $s  Lista källor
+   $n  Lista notiser
+   $$  Lista referenser
+ </PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+       Stödet för källposter, händelseposter och användardefinierade
+       poster i <TT
+CLASS="application"
+>LifeLines</TT
+> är fortfarande
+       under utveckling. Till exempel kan man inte söka efter
+       källposter via REFN-värde, eller ta bort dem.
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><B
+CLASS="keycap"
+>s</B
+>
+<SPAN
+CLASS="action"
+>Bläddra i källposter.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+       Här visas en nummersorterad lista över alla källposter, där
+       REFN-värde, titel och författare visas för varje post. Ur denna
+       lista kan man välja en post för redigering.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>e</B
+>
+<SPAN
+CLASS="action"
+>Bläddra i händelseposter.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+       Här visas en nummersorterad lista över alla händelseposter. För
+       närvarande visas ingen information om händelseposterna.
+       (Förslag om hur händelser kan summeras välkomnas.) Härifrån kan
+       man välja en post för redigering.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>x</B
+>
+<SPAN
+CLASS="action"
+>Bläddra i övriga posttyper.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+       Här visas en nummersorterad lista över alla användardefinierade
+       poster, där informationen på 0-nivåraden visas som
+       summering. Härifrån kan man välja en post för redigering.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>1</B
+> <SPAN
+CLASS="action"
+>Lägg till en källpost i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Denna operation (eller, alternativt, <B
+CLASS="keycap"
+>%s</B
+> från
+	person-, familj- eller assistentfönstret) används för att
+	lägga till en ny källpost i databasen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall för en
+	källpost och placerar dig i textredigeraren för redigering av
+	mallen. Den förinställda mallen ser ut så här:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 SOUR
+  1 REFN
+  1 TITL <TT
+CLASS="replaceable"
+><I
+>Title</I
+></TT
+>
+  1 AUTH <TT
+CLASS="replaceable"
+><I
+>Author</I
+></TT
+>
+
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Ändra inte raden <TT
+CLASS="structfield"
+><I
+>0 SOUR</I
+></TT
+>. I övrigt
+	får du redigera den här posten som du vill. Raden
+	<TT
+CLASS="structfield"
+><I
+>1 REFN</I
+></TT
+> är en speciell rad som du
+	kan använda för att ge källposten ett symboliskt namn för att
+	hänvisa till källposten. Se avsnittet om att använda
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värden. Eftersom många källor
+	har en titel och en författare, så finns dessa rader i den
+	förinställda mallen. Du kan justera källmallen via
+	användarinställningen SOURREC (antingen på databasnivå, via
+	menyvalet user options, eller globalt, i din
+	konfigurationsfil). Här kan du se hur jag förde in en av
+	källposterna i min databas:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN1383"
+></A
+><P
+><B
+>Exempel 13. 
+Exempel på en källpost
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 SOUR
+  1 REFN <TT
+CLASS="userinput"
+><B
+>jcw</B
+></TT
+>
+  1 TITL <TT
+CLASS="userinput"
+><B
+>The Wetmore Family of America, and its Collateral Branches: with</B
+></TT
+>
+    2 CONT <TT
+CLASS="userinput"
+><B
+>Genealogical, Biographical, and Historical Notices</B
+></TT
+>
+  1 AUTH <TT
+CLASS="userinput"
+><B
+>James Carnahan Wetmore</B
+></TT
+>
+  1 PUBL
+    2 DATE <TT
+CLASS="userinput"
+><B
+>1861</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>Albany, New York</B
+></TT
+>
+    2 INST <TT
+CLASS="userinput"
+><B
+>Munsell and Rowland</B
+></TT
+>
+    2 ADDR <TT
+CLASS="userinput"
+><B
+>78 State Street</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Kommandot "lägg till källa" i x-menyn motsvarar kommandot
+	<B
+CLASS="keycap"
+>%s</B
+>, som finns tillgängligt från person- eller
+	familjefönstret, i fråga om att skriva in källposten, men när
+	man sparat källposten, finns det en signifikant skillnad, i
+	det att följande prompt därefter visas (dessutom visas nu
+	nyckelvärdet för den nya posten i statuslisten):
+
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Välj något av följande alternativ: (1/4)
+  1: Lägg in korsref automatiskt längst ned i aktuell post.
+  2: Redigera aktuell post nu för att lägga till korsref manuellt.
+  3: Bläddra i ny post (utan att lägga till korsref).
+  4: Återgå till aktuell post (utan att lägga till korsref) 
+
+ Kommandon:   j Flytta ned   k Flytta upp   i Välj   q Avsluta
+</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;
+	De fyra valmöjligheterna utför följande aktiviteter:
+
+	</P
+><P
+>&#13;
+	1: <TT
+CLASS="application"
+>LifeLines</TT
+> lägger till en
+	referens till den nya källposten längst ned i den person-
+	eller familjepost som visades i fönstret när du begärde att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa en ny
+	källpost.
+
+	</P
+><P
+>&#13;
+	2: <TT
+CLASS="application"
+>LifeLines</TT
+> kommer att öppna den
+	person- eller familjepost som visades i fönstret när du
+	begärde att <TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa
+	den nya källposten, så att du manuellt kan lägga in en
+	referens till den nya källposten (till exempel som en
+	källreferens till en händelse för personen (familjen) som du
+	tänker föra in).
+
+	</P
+><P
+>&#13;
+	3: <TT
+CLASS="application"
+>LifeLines</TT
+> ger dig möjlighet att
+	bläddra i din källpost (och eventuellt åter öppna den för
+	redigering).
+
+	</P
+><P
+>&#13;
+	4: Du återvänder till den person- eller familjepost som
+	visades i fönstret när du begärde att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa den nya
+	källposten. Ingen referens läggs in till den nya posten.
+
+	</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>2</B
+> <SPAN
+CLASS="action"
+>Redigera källpost i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Använd den här operationen för att redigera en befintlig
+	källpost i databasen. När du väljer denna operation ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera en
+	källa:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilken källpost vill du redigera?
+skriv in nyckel eller refn:
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Identifiera en källa genom att skriva in dess nyckelvärde, med
+	eller utan det inledande S-et, eller genom att skriva in dess
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värde.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> hämtar posten, och
+	placerar dig i redigeraren med posten.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>3</B
+> <SPAN
+CLASS="action"
+>Lägg till en händelsepost i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Med den här operationen (eller, alternativt,
+	<B
+CLASS="keycap"
+>%e</B
+> från person-, familj- eller
+	assistentfönstret) läggs en ny händelsepost till i
+	databasen. <TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall
+	för en händelsepost, och placerar dig i textredigeraren för
+	redigering av mallen. Den förinställda mallen är:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+0 EVEN
+  1 REFN
+  1 DATE
+  1 PLAC
+  1 INDI
+    2 NAME
+    2 ROLE
+  1 SOUR</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Du kan justera händelsemallen via användarinställningen
+	EVENREC (antingen på databasnivå, via menyvalet user options,
+	eller globalt, via konfigurationsfilen).
+
+</P
+><P
+>&#13;
+	Ändra inte raden <TT
+CLASS="structfield"
+><I
+>0 EVEN</I
+></TT
+>. I övrigt
+	får du redigera den här posten som du vill. Raden
+	<TT
+CLASS="structfield"
+><I
+>1 REFN</I
+></TT
+> ger dig möjlighet att ge
+	händelseposten ett symboliskt namn om du vill hänvisa till den
+	här händelsen från andra poster. Se avsnittet om att använda
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värden. Den förinställda
+	mallen föreslår att en händelsepost ska innehålla ett datum,
+	en plats, och hänvisar till personer med hänseende till den
+	roll de haft vid händelsen. Det finns mycket mindre
+	erfarenheter med händelsebaserad <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+> än
+	med vanlig person- och familjebaserad. Du kanske till och med
+	undrar vad det finns för behov av händelseposter, när man helt
+	enkelt kan stoppa undan händelser i person- och familjeposter.
+	Detta är ett ämne som kan komma att täckas i ett appendix.
+
+</P
+><P
+>&#13;
+	Kommandot "lägg till en händelsepost i databasen" i x-menyn
+	motsvarar kommandot <B
+CLASS="keycap"
+>%e</B
+>, som finns
+	tillgängligt från person- eller familjefönstret, i fråga om
+	att skriva in källposten, men när man sparat händelseposten,
+	finns det en signifikant skillnad, i det att följande prompt
+	därefter visas (dessutom visas nu värdet för den nya posten i
+	statuslisten):
+
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Välj något av följande alternativ: (1/4)
+  1: Lägg in korsref automatiskt längst ned i aktuell post.
+  2: Redigera aktuell post nu för att lägga till korsref manuellt.
+  3: Bläddra i ny post (utan att lägga till korsref).
+  4: Återgå till aktuell post (utan att lägga till korsref) 
+
+ Kommandon:   j Flytta ned   k Flytta upp   i Välj   q Avsluta
+</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;
+	De fyra valmöjligheterna utför följande aktiviteter:
+
+	</P
+><P
+>&#13;
+	1: <TT
+CLASS="application"
+>LifeLines</TT
+> lägger till en
+	referens till den nya händelseposten längst ned i den person-
+	eller familjepost som visades i fönstret när du begärde att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa en ny
+	händelsepost.
+
+	</P
+><P
+>&#13;
+	2: <TT
+CLASS="application"
+>LifeLines</TT
+> kommer att öppna den
+	person- eller familjepost som visades i fönstret när du
+	begärde att <TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa
+	den nya händelseposten, så att du manuellt kan lägga in en
+	referens till den nya händelseposten.
+
+	</P
+><P
+>&#13;
+	3: <TT
+CLASS="application"
+>LifeLines</TT
+> ger dig möjlighet att
+	bläddra i din händelsepost (och eventuellt åter öppna den för
+	redigering).
+
+	</P
+><P
+>&#13;
+	4: Du återvänder till den person- eller familjepost som
+	visades i fönstret när du begärde att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa den nya
+	händelseposten. Ingen referens läggs in till den nya posten.
+
+	</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>4</B
+> <SPAN
+CLASS="action"
+>Redigera händelsepost i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Använd den här operationen för att redigera en befintlig
+	händelsepost i databasen. När du väljer den här operationen ber
+	<TT
+CLASS="application"
+>LifeLines</TT
+> dig att identifiera en
+	händelse:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilken händelsepost vill du redigera?
+skriv in nyckel eller refn:
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Du identifierar en händelsepost genom att skriva in dess
+	nyckelvärde, med eller utan det inledande E-t, eller genom att
+	skriva in dess <TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värde.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> hämtar posten och
+	placerar dig i redigeraren med posten.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>5</B
+> <SPAN
+CLASS="action"
+>Lägg till en post av övrig typ i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Den här operationen (eller, alternativt, <B
+CLASS="keycap"
+>%o</B
+>
+	från person-, familj- eller assistentfönstret) lägger till en
+	ny, användardefinierad post i databasen.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skapar en mall och
+	placerar dig i textredigeraren för att redigera mallen. Den
+	förinställda mallen är:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;0 XXXX
+1 REFN
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+><P
+>&#13;
+	Ersätt <TT
+CLASS="replaceable"
+><I
+>XXXX</I
+></TT
+> med den etikett som du
+	valt för den nya posten. Du kan välja vilken etikett du vill,
+	förutom <TT
+CLASS="structfield"
+><I
+>INDI</I
+></TT
+>,
+	<TT
+CLASS="structfield"
+><I
+>FAM</I
+></TT
+>,
+	<TT
+CLASS="structfield"
+><I
+>SOUR</I
+></TT
+> och
+	<TT
+CLASS="structfield"
+><I
+>EVEN</I
+></TT
+>. Till exempel, om du har
+	information om de skepp som dina nordamerikanska släktingar
+	anlände på, så kommer du att ha poster om de skeppen i din
+	databas; etiketten <TT
+CLASS="structfield"
+><I
+>SHIP</I
+></TT
+> är nästan
+	självskriven för de posterna. Raden <TT
+CLASS="structfield"
+><I
+>1
+	REFN</I
+></TT
+> ger dig möjlighet att ge den här posten ett
+	symboliskt namn som du kan använda när du vill hänvisa till
+	den från andra poster. Se avsnittet om att använda
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värden. Du kan justera mallen
+	för användardefinierade poster via användarinställningen OTHR
+	(antingen på databasnivå, via menyvalet user options, eller
+	globalt, via konfigurationsfilen).
+
+</P
+><P
+>&#13;
+	Kommandot "lägg till en post av övrig typ i databasen" i
+	x-menyn motsvarar kommandot <B
+CLASS="keycap"
+>%o</B
+>, som finns
+	tillgängligt från person- eller familjefönstret, i fråga om
+	att skriva in den användardefinierade posten, men när man
+	sparat posten, finns det en signifikant skillnad, i det att
+	följande prompt därefter visas (dessutom visas nu nyckelvärdet
+	för den nya posten i statuslisten):
+
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Välj något av följande alternativ: (1/4)
+  1: Lägg in korsref automatiskt längst ned i aktuell post.
+  2: Redigera aktuell post nu för att lägga till korsref manuellt.
+  3: Bläddra i ny post (utan att lägga till korsref).
+  4: Återgå till aktuell post (utan att lägga till korsref).
+
+ Kommandon:   j Flytta ned   k Flytta upp   i Välj   q Avsluta
+</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;
+	De fyra valmöjligheterna utför följande aktiviteter:
+
+	</P
+><P
+>&#13;
+	1: <TT
+CLASS="application"
+>LifeLines</TT
+> lägger till en
+	referens till den nya användardefinierade posten längst ned i
+	den person- eller familjepost som visades i visningsfönstret
+	när du begärde att <TT
+CLASS="application"
+>LifeLines</TT
+> skulle
+	skapa en ny användardefinierad post.
+
+	</P
+><P
+>&#13;
+	2: <TT
+CLASS="application"
+>LifeLines</TT
+> kommer att öppna den
+	person- eller familjepost som visades i fönstret när
+	du begärde att <TT
+CLASS="application"
+>LifeLines</TT
+> skulle
+	skapa den nya posten, så att du manuellt kan lägga in en
+	referens till den nya posten (kanske som en referensnotis till
+	en händelse som du planerar att lägga in).
+
+	</P
+><P
+>&#13;
+	3: <TT
+CLASS="application"
+>LifeLines</TT
+> ger dig möjlighet att
+	bläddra i din användardefinierade post (och eventuellt åter
+	öppna den för redigering).
+
+	</P
+><P
+>&#13;
+	4: Du återvänder till den person- eller familjepost som
+	visades i fönstret när du begärde att
+	<TT
+CLASS="application"
+>LifeLines</TT
+> skulle skapa den nya
+	användardefinierade posten. Ingen referens läggs in till den
+	nya posten.
+
+	</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>6</B
+> <SPAN
+CLASS="action"
+>Redigera en post av övrig typ i databasen.</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Använd den här operationen för att redigera en befintlig,
+	användardefinierad post i databasen.  När du väljer den här
+	operationen ber <TT
+CLASS="application"
+>LifeLines</TT
+> dig att
+	identifiera posten:
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Vilken post vill du redigera?
+skriv in nyckel eller refn:
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;
+	Du identifierar en post genom att skriva in dess nyckelvärde,
+	med eller utan det inledande X:et, eller genom att skriva in
+	dess <TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värde.
+	<TT
+CLASS="application"
+>LifeLines</TT
+> hämtar posten och
+	placerar dig i textredigeraren med posten.
+
+</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>$s</B
+>
+<SPAN
+CLASS="action"
+>List sources</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando finns tillgängligt i person- och
+	familjefönstren. Det tar fram en lista över alla källposter
+	som finns refererade i den person- eller familjepost som visas
+	för tillfället, visade i den ordning som de är inlagda i
+	person/familjeposten, och där REFN-värde, titel och författare
+	visas för varje post. Man kan välja en post ur listan för
+	visning i assistentfönstret (och eventuellt redigera den
+	därifrån).
+
+	</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>$n</B
+>
+<SPAN
+CLASS="action"
+>List notes</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando finns tillgängligt i person- och
+	familjefönstren. Det tar fram en lista över alla notisposter
+	som finns refererade i den person- eller familjepost som visas
+	för tillfället, visade i den ordning som de är inlagda i
+	person/familjeposten, och där REFN-värde, titel och författare
+	visas för varje post. Man kan välja en post ur listan för
+	visning i assistentfönstret (och eventuellt redigera den
+	därifrån).
+
+	</P
+></DD
+><DT
+><B
+><B
+CLASS="keycap"
+>$$</B
+>
+<SPAN
+CLASS="action"
+>List all references</SPAN
+></B
+></DT
+><DD
+><P
+>&#13;
+	Detta kommando finns tillgängligt i person- och
+	familjefönstren. Det tar fram en lista över alla
+	poster som finns refererade i den person- eller familjepost
+	som visas för tillfället, visade i den ordning som de är
+	inlagda i person/familjeposten, och där REFN-värde, titel och
+	författare visas för varje post. Man kan välja en post ur
+	listan för visning i assistentfönstret (och eventuellt
+	redigera den därifrån).
+
+	</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1520"
+></A
+>FAMILJESTRUKTUR OCH ATT SLÅ SAMMAN PERSONER OCH FAMILJER</H2
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> 3.0.2 har mjukat upp de
+	flesta av restriktionerna för familjestrukturer som fanns i
+	tidigare versioner. Till exempel: En familjepost kan innehålla
+	fler än en förälder eller maka/make av samma kön; en person
+	kan vara barn i fler än en familj. Det här är ett
+	kontroversiellt spörsmål. En del användare menar att
+	familjerelationer bör implicera biologiskt släktskap, och att
+	alla andra relationer ska hanteras på andra sätt. Andra menar
+	att icke-traditionella familjer (valfritt antal
+	makar/föräldrar av valfritt kön) bör tillåtas, och att barn
+	kan vara medlemmar av fler än en familj (d. v. s. en naturlig
+	familj och en adoptivfamilj).
+	<TT
+CLASS="application"
+>LifeLines</TT
+> tar inte längre ställning
+	i den här frågan; du kan välja fritt hur du vill strukturera
+	dina familjer; operationen som lägger till hustrur och barn
+	kontrollerar inte längre efter icke-traditionella arrangemang.
+	Det är möjligt att en framtida utgåva kommer att inkludera en
+	användarinställning där man kan antingen ta bort eller be om
+	bekräftelse för icke-traditionella relationer.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> tillhandahåller
+	funktioner för att slå samman personer och slå samman
+	familjer. Funktionen slå samman personer finns tillgänglig
+	från tvåpersonsläget, och funktionen slå samman familjer finns
+	tillgänglig från tvåfamiljsläget. Du bläddrar fram till de två
+	personer eller familjer som du vill slå samman och använder
+	därefter kommandot j. Sammanslagning är en nödvändighet när du
+	upptäcker att två eller flera personposter, eller två eller
+	flera familjeposter, representerar samma person respektive
+	familj.
+
+</P
+><P
+>&#13;
+	I versioner av <TT
+CLASS="application"
+>LifeLines</TT
+> tidigare
+	än 3.0.2 krävdes det att personer och familjer mötte vissa
+	kriterier innan de kunde slås samman. Kriterierna säkerställde
+	att personerna och familjerna skulle passa in i en
+	traditionell familjestruktur. I och med att
+	struktureringsreglerna har mjukats upp, har också
+	restriktionerna för sammanslagning tagits bort. Numera är det
+	möjligt att skapa icke-traditionella relationer genom att slå
+	samman traditionella personer och/eller familjer. Till
+	exempel, om du slår samman två personer som råkar vara barn i
+	två olika familjer, så kommer personen som resulterar av
+	sammanslagningen att bli barn i båda familjerna. Om du enbart
+	vill ta med traditionella relationer i din databas kan det
+	hända att du måste göra ytterligare förändringar i relationer
+	efter att du har gjort en sammanläggningsoperation.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1529"
+></A
+>LÄNKA SAMMAN POSTER OCH ANVÄNDA FUNKTIONEN "REFN"</H2
+><P
+>&#13;
+	Poster i en <TT
+CLASS="application"
+>LifeLines</TT
+>databas kan
+	hänvisa till andra poster via korsreferenslänkar. De anlänkade
+	referenserna sköts direkt av
+	<TT
+CLASS="application"
+>LifeLines</TT
+> genom operationer som
+	återfinns i menyerna för de olika bläddringslägena. Dessa
+	referenser avser dels länkarna från personer till familjer
+	(<TT
+CLASS="structfield"
+><I
+>1 FAMC</I
+></TT
+> och <TT
+CLASS="structfield"
+><I
+>1
+	FAMS</I
+></TT
+>), dels länkarna från familjer till personer
+	(<TT
+CLASS="structfield"
+><I
+>1 HUSB</I
+></TT
+>, <TT
+CLASS="structfield"
+><I
+>1
+	WIFE</I
+></TT
+> och <TT
+CLASS="structfield"
+><I
+>1 CHIL</I
+></TT
+>).
+	Eftersom det är <TT
+CLASS="application"
+>LifeLines</TT
+> självt
+	som sköter dessa länkar, så är det inte tillåtet för dig att
+	ändra dessa rader när du redigerar poster. Det finns till
+	synes några undantag till den här regeln. Exempelvis får du
+	ändra ordningen på rader av typen <TT
+CLASS="structfield"
+><I
+>1
+	CHIL</I
+></TT
+> i en familjepost för att ändra ordningen
+	mellan barnen, och du får ändra ordningen på rader av typen
+	<TT
+CLASS="structfield"
+><I
+>1 FAMS</I
+></TT
+> i en personpost för att
+	ändra ordningen mellan de familjer som personen var make eller
+	förälder i. Dessa operationer är tillåtna eftersom de inte
+	påverkar vilka personposter som hänvisar till vilka
+	familjeposter och vice versa.
+
+</P
+><P
+>&#13;
+	Förutom de anlänkar som sköts av
+	<TT
+CLASS="application"
+>LifeLines</TT
+>, så kan du lägga in egna
+	länkar i poster. Det förmodligen vanligaste exemplet på detta
+	är att hänvisa till en händelse från en personpost genom en
+	hänvisning till källnotisen för händelsen. Till exempel:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN1544"
+></A
+><P
+><B
+>Exempel 14. 
+Exempel på att hänvisa till händelser från en personpost
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+0 @I23@ INDI
+  1 NAME <TT
+CLASS="userinput"
+><B
+>Thomas/Whitmore/</B
+></TT
+>
+  1 BIRT
+    2 DATE <TT
+CLASS="userinput"
+><B
+>about 1615</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>England</B
+></TT
+>
+    2 SOUR @S3@
+...
+0 @S3@ SOUR
+  1 REFN <TT
+CLASS="userinput"
+><B
+>cat</B
+></TT
+>
+  1 TITL <TT
+CLASS="userinput"
+><B
+>New England Marriages Prior to 1700</B
+></TT
+>
+  1 AUTH <TT
+CLASS="userinput"
+><B
+>Clarence Almon Torrey</B
+></TT
+>
+...</PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Raden <TT
+CLASS="structfield"
+><I
+>2 SOUR</I
+></TT
+>
+	<TT
+CLASS="replaceable"
+><I
+>@S3@</I
+></TT
+> i personposten hänvisar till
+	källposten. <TT
+CLASS="application"
+>LifeLines</TT
+> tillåter
+	vilken specifik struktur som helst (i det här fallet en
+	födelsehändelse) att hänvisa till en annan post. Det är inte
+	möjligt att hänvisa till ett specifikt ställe inom en annan
+	post, även om det eventuellt kommer att stödjas längre fram.
+
+</P
+><P
+>&#13;
+	I det här exemplet underförstås det att du, när du länkar en
+	post till en annan, känner till nyckelvärdet för målposten
+	(<TT
+CLASS="replaceable"
+><I
+>@S3@</I
+></TT
+> i exemplet). Det här är inte
+	önskvärt eftersom de interna nyckelvärdena kan ändras när
+	poster exporteras och importeras från en databas till en
+	annan.
+
+</P
+><P
+>&#13;
+	Eftersom de interna nyckelvärdena inte är permanenta, tillåter
+	<TT
+CLASS="application"
+>LifeLines</TT
+> att du tilldelar en
+	permanent, användardefinierad nyckel till en post i databasen,
+	med hjälp av en <TT
+CLASS="structfield"
+><I
+>1 REFN</I
+></TT
+>-rad. Värdet
+	för den här raden är en sträng som du väljer som permanent
+	nyckelvärde för posten. När du lägger till en länk till en
+	post som har ett användarbestämt
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värde, så kan du använda det
+	värdet istället för det interna nyckelvärdet. Till exempel,
+	när du lägger in personen i det föregående exemplet, kan du
+	redigera den nya posten som följer:
+
+<DIV
+CLASS="example"
+><A
+NAME="AEN1563"
+></A
+><P
+><B
+>Exempel 15. 
+Exempel på att lägga in en ny person
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+  0 INDI
+  1 NAME <TT
+CLASS="userinput"
+><B
+>Thomas/Whitmore/</B
+></TT
+>
+  1 BIRT
+    2 DATE <TT
+CLASS="userinput"
+><B
+>about 1615</B
+></TT
+>
+    2 PLAC <TT
+CLASS="userinput"
+><B
+>England</B
+></TT
+>
+    2 SOUR <TT
+CLASS="userinput"
+><B
+>&#60;cat&#62;</B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+
+</P
+><P
+>&#13;
+	Istället för att använda det egentliga nyckelvärdet för
+	källan, <TT
+CLASS="replaceable"
+><I
+>@S3@</I
+></TT
+>, så används
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värdet cat.
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värdet måste omges av
+	vinkelparenteser när de används på detta
+	sätt. <TT
+CLASS="application"
+>LifeLines</TT
+> ersätter
+	automatiskt <TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-länken med
+	motsvarande internt nyckelvärde när posten lagrats i
+	databasen.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värdet kan också användas när
+	vid sökning efter efter person-, käll-, händelse- och
+	användardefinierade poster. Du bör inte lägga till fler än en
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-rad i en post, och alla
+	<TT
+CLASS="structfield"
+><I
+>REFN</I
+></TT
+>-värden bör vara unika.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1580"
+></A
+>System- och användaregenskaper</H2
+><P
+>&#13;
+	Det finns ett antal egenskaper som kan anges för att anpassa
+	<TT
+CLASS="application"
+>LifeLines</TT
+> beteende. Dessa
+	egenskaper kan anges i anpassningsfiler för
+	<TT
+CLASS="application"
+>LifeLines</TT
+>, i varje
+	<TT
+CLASS="application"
+>LifeLines</TT
+>databas eller i några fall
+	genom miljövariabler.
+
+</P
+><P
+>&#13;
+	<TT
+CLASS="application"
+>LifeLines</TT
+> konfigurationsfiler letas
+	först efter i katalogen som angivits i miljövariabeln HOME,
+	med antagande att den ställts in, och därefter i den aktuella
+	katalogen. Namnet på konfigurationsfilen är .linesrc på
+	<SPAN
+CLASS="acronym"
+>UNIX</SPAN
+>- eller linuxsystem och lines.cfg på
+	windowssystem. 
+
+</P
+><P
+>&#13;
+	En konfigurationsfil kan också anges genom att använda flaggan
+	-C till <TT
+CLASS="application"
+>LifeLines</TT
+> eller genom att
+	definiera miljövariabeln "LLCONFIGFILE" med ett värde
+	innehållande den fullständiga sökvägen till
+	konfigurationsfilen. Om ingendera av dessa mekanismer används,
+	så letar inte <TT
+CLASS="application"
+>LifeLines</TT
+> efter en
+	konfigurationsfil någon annanstans. Om flaggan -C anges, så
+	ignoreras miljövariabeln LLCONFIGFILE, om den är definierad.
+	Om varken flaggan -C eller miljövariabeln LLCONFIGFILE anges,
+	så används konfigurationfilsnamnet som nämnts ovan. En
+	konfigurationsfil letas efter i din hemkatalog och läses in,
+	om den finns, och därefter läses en konfigurationsfil in, om
+	den finns i den aktuella katalogen. Värdena i den här andra
+	filen används för att ersätta eller läggas till värdena som
+	hittats i den första filen.
+
+</P
+><P
+>&#13;
+	När <TT
+CLASS="application"
+>LifeLines</TT
+> letar efter en
+	egenskap, letar det efter den som följer:
+
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>kommandoradstabell</B
+></DT
+><DD
+><P
+>&#13;First, <TT
+CLASS="application"
+>LifeLines</TT
+> letar i
+kommandoradstabellen. Denna tabell innehåller värden som har angetts
+genom flaggan -I för <TT
+CLASS="application"
+>LifeLines</TT
+>.
+</P
+></DD
+><DT
+><B
+>databastabell</B
+></DT
+><DD
+><P
+> Därefter letar <TT
+CLASS="application"
+>LifeLines</TT
+> i
+databastabellen. Denna tabell innehåller de värden som har lagrats i
+den aktuella databasen.
+</P
+></DD
+><DT
+><B
+>global tabell</B
+></DT
+><DD
+><P
+>&#13;Därefter letar <TT
+CLASS="application"
+>LifeLines</TT
+> i den globala
+tabellen. Denna tabell innehåller de värden som hittats vid inläsning
+av konfigurationsfilerna.
+</P
+></DD
+><DT
+><B
+>miljötabell</B
+></DT
+><DD
+><P
+>&#13;Slutligen letar <TT
+CLASS="application"
+>LifeLines</TT
+> i miljötabellen.
+Denna tabell innehåller de värden som hittats i miljövariablerna
+<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+>, <TT
+CLASS="envar"
+>LLREPORTS</TT
+>, <TT
+CLASS="envar"
+>LLARCHIVES</TT
+>, <TT
+CLASS="envar"
+>LLDATABASES</TT
+>, <TT
+CLASS="envar"
+>LLNEWDBDIR</TT
+>, and
+<TT
+CLASS="envar"
+>LLEDITOR</TT
+>.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Egenskaper benämns grupp.undergrupp eller grupp.egenskap, eller till
+och med enbart egenskap.
+Följande nycklar finns tillgängliga för tillfället:
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>LLPROGRAMS</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLPROGRAMS</TT
+> är sökvägen för
+<TT
+CLASS="application"
+>LifeLines</TT
+> rapportgenererande och övriga
+program.
+</P
+></DD
+><DT
+><B
+>LLREPORTS</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLREPORTS</TT
+> används för att välja en katalog där alla
+genererade rapporter och programutdtata kommer att placeras.
+</P
+></DD
+><DT
+><B
+>LLARCHIVES</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLARCHIVES</TT
+> används för att välja en katalog där alla
+säkerhetskopierade databasfiler kommer att lagras.
+</P
+></DD
+><DT
+><B
+>LLDATABASES</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLDATABASES</TT
+> är en lista med kataloger som innehåller
+databaskataloger som används för att finna själva databaskatalogerna.
+</P
+></DD
+><DT
+><B
+>LLNEWDBDIR</B
+></DT
+><DD
+><P
+>&#13;<TT
+CLASS="envar"
+>LLNEWDBDIR</TT
+> är en enda katalog där nya databaser som
+angivits utan sökvägar kommer att skapas. Detta är praktiskt för
+användare som generellt placerar alla sina databaser under en enda
+gemensam katalog.
+directory.
+</P
+></DD
+><DT
+><B
+>LLEDITOR</B
+></DT
+><DD
+><P
+>&#13;Upphäver den förvalda textredigeraren.
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;Information om kodning:
+</P
+><P
+>&#13;För följande parametrar relaterade till kodning, är värdena en sträng
+som anger kodning inställda för användning i data. Speciell behandling
+tillhandahålls för UTF-8, vilket kan anges som "UTF-8", "utf-8" eller
+"65001". (Det officiella, och föredragna, namnet är UTF-8.)
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>GedcomCodeSet</B
+></DT
+><DD
+><P
+>&#13;Anger den förvalda kodningen att använda vid behandling av
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filer. Det finns faktiskt tre egenskaper.
+<I
+CLASS="glossterm"
+>GedcomCodeSetOut</I
+> och
+<I
+CLASS="glossterm"
+>GedcomCodeSetIn</I
+>
+kan användas för att ange kodning för utmatning eller inmatning. Om
+endera av dessa inte är angiven, så används
+<I
+CLASS="glossterm"
+>GedcomCodeSet</I
+>. De flesta
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filer bör innehålla en kodningsegenskap, så
+detta är vanligen inte relevant vid inläsning av en
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil, såvida inte
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filen saknar en kodningsegenskap. Detta
+används, emellertid, när en <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil skrivs ut.
+OBS: Detta ignoreras om databasen inte har någon intern kodning
+angiven.
+</P
+></DD
+><DT
+><B
+>EditorCodeSet</B
+></DT
+><DD
+><P
+>&#13;Anger kodning att använda vid redigering. Det finns egentligen tre
+egenskaper. <I
+CLASS="glossterm"
+>EditorCodeSetOut</I
+> och
+<I
+CLASS="glossterm"
+>EditorCodeSetIn</I
+> kan användas för att ange
+kodning för utmatning eller inmatning. Om endera av dessa inte är
+angiven, så används <I
+CLASS="glossterm"
+>EditorCodeSet</I
+>. Med denna
+egenskap kan <TT
+CLASS="application"
+>LifeLines</TT
+> konvertera från sin
+interna kodning till den som du använder i din redigerare, så detta är
+viktigt när din redigerare inte använder samma kodning som din
+databas.
+OBS: Detta ignoreras om databasen inte har någon intern kodning
+angiven.
+</P
+></DD
+><DT
+><B
+>ReportCodeSet</B
+></DT
+><DD
+><P
+>&#13;Anger kodning att använda för rapporter. Det finns egentligen tre
+egenskaper. <I
+CLASS="glossterm"
+>ReportCodeSetOut</I
+> och
+<I
+CLASS="glossterm"
+>ReportCodeSetIn</I
+> kan användas för att ange
+kodning för utmatning eller inmatning. Om endera av dessa inte har
+angivits, så används <I
+CLASS="glossterm"
+>ReportCodeSet</I
+>. Nyligen
+skapade rapporter kan faktiskt ange sin kodning, i vilket fall detta
+inte används, men för rapporter där det inte inkluderas någon
+angivelse av kodning, anger <I
+CLASS="glossterm"
+>ReportCodeSetIn</I
+>
+(eller <I
+CLASS="glossterm"
+>ReportCodeSet</I
+>) hur rapporten kommer att
+förstås. I endera fallet, kommer utmatningen från ett rapportprogram
+skrivas i den kodning som angivits i
+<I
+CLASS="glossterm"
+>ReportCodeSetOut</I
+> (eller
+<I
+CLASS="glossterm"
+>ReportCodeSet</I
+>).
+OBS: Detta ignoreras om databasen inte har någon intern kodning
+angiven.
+</P
+></DD
+><DT
+><B
+>LongDisplayDate</B
+></DT
+><DD
+><P
+>&#13;Sex kommaseparerade siffror. Anger formatet för dagar, månader, år,
+datumformat, eraformat och komplext format. Om strängen inte
+innehåller sex kommaseparerade siffror sätts alla format till 0, utom
+datumformat som sätts till 14.
+Dessa format används av <TT
+CLASS="application"
+>LifeLines</TT
+> för att
+visa datum i långt format.
+</P
+></DD
+><DT
+><B
+>LongDisplayDatePic</B
+></DT
+><DD
+><P
+>&#13;En anpassad åmd-datumbild. En sträng i vilken %y, %m och %d kommer att
+konverteras till motsvarande år, månad och dag.
+Denna bild används av <TT
+CLASS="application"
+>LifeLines</TT
+> för att
+visa datum i långt format.
+</P
+></DD
+><DT
+><B
+>ShortDisplayDate</B
+></DT
+><DD
+><P
+>&#13;Sex kommaseparerade siffror. Anger formatet för dagar, månader, år,
+datumformat, eraformat och komplext format. Om strängen inte
+innehåller sex kommaseparerade siffror sätts alla format till 0, utom
+datumformat som sätts till 14.
+Dessa format används av <TT
+CLASS="application"
+>LifeLines</TT
+> för att
+visa datum i kort format.
+</P
+></DD
+><DT
+><B
+>ShortDisplayDatePic</B
+></DT
+><DD
+><P
+>&#13;En anpassad åmd-datumbild. En sträng i vilken %y, %m och %d kommer att
+konverteras till motsvarande år, månad och dag.
+Denna bild används av <TT
+CLASS="application"
+>LifeLines</TT
+> för att
+visa datum i kort format.
+</P
+></DD
+><DT
+><B
+>LocaleDir</B
+></DT
+><DD
+><P
+>&#13;körtidsangivelse av katalog för lokal
+</P
+></DD
+><DT
+><B
+>NewDbProps</B
+></DT
+><DD
+><P
+>&#13;om angiven, egenskaper att lägga till i en nyss skapad databas.
+Strängen har formen "egenskap1=värde1\negenskap2=värde2".
+</P
+></DD
+><DT
+><B
+>IllegalChar</B
+></DT
+><DD
+><P
+>&#13;Tydligen inte använd för närvarande.
+</P
+></DD
+><DT
+><B
+> DenySystemCalls</B
+></DT
+><DD
+><P
+>&#13;Om satt till en ett icke-nollvärde, så avaktiveras användningen av
+funktionen <TT
+CLASS="function"
+>system</TT
+>.
+</P
+></DD
+><DT
+><B
+>UiLocaleCollate</B
+></DT
+><DD
+><P
+>&#13;sorteringssekvens för användargränssnitt
+</P
+></DD
+><DT
+><B
+>UiLocaleMessages</B
+></DT
+><DD
+><P
+>&#13;lokal för meddelanden i användargränssnitt
+</P
+></DD
+><DT
+><B
+>RptLocaleCollate</B
+></DT
+><DD
+><P
+>&#13;sorteringssekvens för rapporter
+</P
+></DD
+><DT
+><B
+>RptLocaleMessages</B
+></DT
+><DD
+><P
+>&#13;lokal för rapportmeddelanden
+</P
+></DD
+><DT
+><B
+>ShortOmitString</B
+></DT
+><DD
+><P
+>&#13;Om definierad, ersätter denna sträng tecken på slutet av en händelse
+som skrivs ut.
+</P
+></DD
+><DT
+><B
+>DisplayKeyTags</B
+></DT
+><DD
+><P
+>&#13;Om satt till 1, så kommer person- och familjenycklar föregås av ett i
+respektive f när de visas på skärmen.
+</P
+></DD
+><DT
+><B
+>AnnotatePointers</B
+></DT
+><DD
+><P
+>&#13;Om satt till ett, så kommer en beskrivande kommentar läggas till
+pekare vid redigering av familje- eller individposter, för att hjälpa
+till att identifiera vem som hänvisas till. Dessa etiketter tas bort
+när redigeringen avslutas, och lagras inte i databasen.
+</P
+></DD
+><DT
+><B
+>TTPATH</B
+></DT
+><DD
+><P
+>&#13;
+lista över kataloger att leta i efter filer med
+teckenöversättningstabeller (*.tt).
+</P
+></DD
+><DT
+><B
+>TTDIR</B
+></DT
+><DD
+><P
+>&#13;Katalog att leta i efter kodningsinformation?
+</P
+></DD
+><DT
+><B
+>InputPath</B
+></DT
+><DD
+><P
+>&#13;sökväg att leta i vid inläsning av <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filer
+</P
+></DD
+><DT
+><B
+>INDIREC</B
+></DT
+><DD
+><P
+>&#13;Förvald mall att använda närhelst en ny person skapas. Om ej angiven,
+så används en sammanläggning av det följande:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n"
+"1 BIRT\n  2 DATE\n  2 PLAC\n"
+"1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>FAMRECBODY</B
+></DT
+><DD
+><P
+>&#13;Förvald mall att använda närhelst en ny familj skapas. Om ej angiven,
+så används det följande:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n"
+</PRE
+></TD
+></TR
+></TABLE
+>
+Obs: Till skillnad från de övriga, bör inte denna inkludera
+FAM-etiketten på nivå 0.
+</P
+></DD
+><DT
+><B
+>SOURREC</B
+></DT
+><DD
+><P
+>&#13;Förvald mall att använda närhelst en ny källa skapas. Om ej
+angiven, så används det följande:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 SOUR\n1 REFN\n1 TITL Titel\n1 AUTH Författare"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>EVENREC</B
+></DT
+><DD
+><P
+>&#13;Förvald mall att använda närhelst en ny händelse skapas. Om ej
+angiven, så används det följande:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>OTHR</B
+></DT
+><DD
+><P
+>&#13;Förvald mall att använda närhelst en användardefinierad post skapas.
+Om ej angiven, så används det följande:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"0 XXXX\n1 REFN"
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_SUBM</B
+></DT
+><DD
+><P
+>&#13;sträng att använda vid skrivning av <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-filer
+för SUBM.
+Det förvalda är
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 SUBM".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_GEDC</B
+></DT
+><DD
+><P
+>&#13;Sträng som innehåller GEDC-blocket för rubrikposten vid export till
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>.
+Det förvalda är
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>HDR_CHAR</B
+></DT
+><DD
+><P
+>&#13;Sträng som innehåller CHAR-blocket för rubrikposten vid export till
+<SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>.
+Det förvalda är
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;"1 CHAR ASCII".
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
+></DD
+><DT
+><B
+>ReportLog</B
+></DT
+><DD
+><P
+>&#13;namn på fil att skriva fel i rapportprogram till, om ej angiven använd
+standardutfönstret.
+</P
+></DD
+><DT
+><B
+>CrashLog_llexec</B
+></DT
+><DD
+><P
+>&#13;fil att skriva kraschlogg till för llexec.
+</P
+></DD
+><DT
+><B
+>CrashLog_llines</B
+></DT
+><DD
+><P
+>&#13;fil att skriva kraschlogg till för llines.
+</P
+></DD
+><DT
+><B
+>LLTTEXPORT</B
+></DT
+><DD
+><P
+>&#13;katalog att skriva teckenöversättningstabeller till. Det förvalda är
+den aktuella mappen.
+</P
+></DD
+><DT
+><B
+>ImportLog</B
+></DT
+><DD
+><P
+>&#13;Var fel som påträffas vid import av en <SPAN
+CLASS="acronym"
+>GEDCOM</SPAN
+>-fil
+ska skrivas.
+Det förvalda är errs.log 
+</P
+></DD
+><DT
+><B
+>gettext.path</B
+></DT
+><DD
+><P
+>&#13;för Windows, om angiven, sökväg för att (åter)läsa dll för gettext
+</P
+></DD
+><DT
+><B
+>iconv.path</B
+></DT
+><DD
+><P
+>&#13;för Windows, sökväg för dynamisk länkning till gettext och iconv
+</P
+></DD
+><DT
+><B
+>user.fullname</B
+></DT
+><DD
+><P
+>&#13;Fullständigt namn för aktuell användare. Om ej hittad som egenskap
+hämtas den, om möjligt, från systemet.
+</P
+></DD
+><DT
+><B
+>user.email</B
+></DT
+><DD
+><P
+>&#13;E-postadressen för aktuell användare. Om ej hittad som egenskap
+hämtas den, om möjligt, från systemet.
+</P
+></DD
+><DT
+><B
+>user.address</B
+></DT
+><DD
+><P
+>&#13;Postadress för aktuell användare.
+</P
+></DD
+><DT
+><B
+>user.url</B
+></DT
+><DD
+><P
+>&#13;URL till användarens hemsida.
+</P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+></DIV
+></BODY
+></HTML
 >
