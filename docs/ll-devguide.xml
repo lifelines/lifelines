@@ -1,3 +1,9 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
+[<!ENTITY llversion '3.0.25'>]>
+
 <!--
 Outline for developer's guide to lifelines code.
 This is only an outline, not a parseable XML file.
@@ -148,13 +154,7 @@ in yacc.y.
 * liflines module
 TODO:
 
---!>
-
-<?xml version='1.0' encoding='iso-8859-1'?>
-
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.25'>]>
+-->
 
 
 
@@ -218,22 +218,23 @@ Introduction to Lifelines Developers Manual
 
 </para>
 
-</chapter><chapter><title>btree module</title>
+</chapter>
+<chapter>
+<title>btree module</title>
 
 <para>
   The btree subdirectory contains the implementation for a btree
   database, using fixed length 8 letter keys (RKEY).
+</para>
 
-</para><para>
-
-    <formalpara><title>
-  nodes
-    </title><para>
-
+<formalpara>
+<title>nodes</title>
+<para>
   Each node in the btree is a separate file on disk (named, eg, "aa"),
   and the first 4096 (BUFLEN macro) bytes are the node header.
+</para></formalpara>
 
-    </para></formalpara><formalpara><title>
+<formalpara><title>
 
   index nodes
 

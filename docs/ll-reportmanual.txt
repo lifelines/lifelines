@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.26
+LifeLines Version 3.0.27
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -36,6 +36,7 @@ Thomas T. Wetmore , IV
         Record Update Functions
         Record Linking Functions
         Miscellaneous Functions
+        Deprecated Functions
      _____________________________________________________________
 
 Report Programming Manual
@@ -421,19 +422,19 @@ if ([varb,] expr) { statements }
 
 Expressions
 
-   There are four types of expressions: literals, integers, variables
+   There  are four types of expressions: literals, numbers, variables
    and built-in or user defined function calls.
 
    A  literal  is  any string enclosed in double quotes; its value is
-   itself. An integer is any integer constant; its value is itself. A
-   variable is a named location that can be assigned different values
-   during  program  execution.  The  value  of a variable is the last
-   value  assigned  to  it.  Variables  do  not  have  fixed type; at
-   different  times  in  a program, the same variable may be assigned
-   data  of  completely  different  types.  An identifier followed by
-   comma-separated  list  of  expressions enclosed in parentheses, is
-   either  a  call to a built-in function or a call to a user-defined
-   function.
+   itself.  A  number  is any integer or floating point constant; its
+   value  is  itself.  A  variable  is  a  named location that can be
+   assigned different values during program execution. The value of a
+   variable  is  the last value assigned to it. Variables do not have
+   fixed type; at different times in a program, the same variable may
+   be  assigned  data  of  completely  different types. An identifier
+   followed  by  comma-separated  list  of  expressions  enclosed  in
+   parentheses,  is either a call to a built-in function or a call to
+   a user-defined function.
      _____________________________________________________________
 
 Include Feature
@@ -470,41 +471,44 @@ Value Types
    ANY
           union of all types
 
-   INT
-          integer (on most systems a 32-bit signed value)
-
    BOOL
           boolean (0 represents false; anything else represents true)
+
+   EVENT
+          event;  reference  to  substructure  of  nodes  in a GEDCOM
+          record (reference)
+
+   FAM
+          family; reference to a GEDCOM FAM record (reference)
 
    FLOAT
           floating  point  number (may be used anywhere an INT may be
           used)
 
-   STRING
-          text string
-
-   LIST
-          arbitrary length list of any values (reference)
-
-   TABLE
-          keyed look-up table (reference)
-
    INDI
           person; reference to a GEDCOM INDI record (reference)
 
-   FAM
-          family; reference to a GEDCOM FAM record (reference)
+   INT
+          integer (on most systems a 32-bit signed value)
 
-   SET
-          arbitrary length set of persons (reference)
+   LIST
+          arbitrary length list of any values (reference)
 
    NODE
           GEDCOM  node;  reference  to a line in a GEDCOM tree/record
           (reference)
 
-   EVENT
-          event;  reference  to  substructure  of  nodes  in a GEDCOM
-          record (reference)
+   NUMBER
+          union of all arithmetic types (INT and FLOAT)
+
+   SET
+          arbitrary length set of persons (reference)
+
+   STRING
+          text string
+
+   TABLE
+          keyed look-up table (reference)
 
    VOID
           type with no values
@@ -532,19 +536,19 @@ Value Types
 
 Arithmetic and Logic Functions
 
-   INT add(INT, INT ...);
+   NUMBER add(NUMBER, NUMBER ...);
 
           addition - two to 32 arguments
 
-   INT sub(INT, INT);
+   NUMBER sub(NUMBER, NUMBER);
 
           subtraction
 
-   INT mul(INT, INT ...);
+   NUMBER mul(NUMBER, NUMBER ...);
 
           multiplication - two to 32 arguments
 
-   INT div(INT, INT);
+   NUMBER div(NUMBER, NUMBER);
 
           division
 
@@ -552,19 +556,19 @@ Arithmetic and Logic Functions
 
           modulus (remainder)
 
-   INT exp(INT, INT);
+   NUMBER exp(NUMBER, INT);
 
           exponentiation
 
-   INT neg(INT);
+   NUMBER neg(NUMBER);
 
-          integer negation
+          negation
 
-   VOID incr(INT_V);
+   VOID incr(NUMBER);
 
           increment variable by one
 
-   VOID decr(INT_V);
+   VOID decr(NUMBER);
 
           decrement variable by one
 
@@ -604,15 +608,16 @@ Arithmetic and Logic Functions
 
           greater than or equal
 
-   Add, sub, mul and div do integer arithmetic. Functions add and mul
-   can  have  two to 32 arguments; the sum or product of the full set
-   of arguments is computed. Functions sub and div have two arguments
-   each;  sub  subtracts  its second argument from its first, and div
-   divides its first argument by its second. The mod function returns
-   the remainder after dividing the first parameter by the second. If
-   the  second argument to div or mod is zero, these functions return
-   0   and   generate   a   run  time  error.  Exp  performs  integer
-   exponentiation. Neg negates its argument.
+   Add,  sub, mul and div do normal arithmetic of integer or floating
+   values.  If  any  operand is float, the result is float. Functions
+   add  and  mul  can have two to 32 arguments; the sum or product of
+   the  full set of arguments is computed. Functions sub and div have
+   two  arguments  each;  sub  subtracts its second argument from its
+   first,  and  div divides its first argument by its second. The mod
+   function  returns the remainder after dividing the first parameter
+   by the second. If the second argument to div or mod is zero, these
+   functions  return  0  and  generate a run time error. Exp performs
+   integer exponentiation. Neg negates its argument.
 
    Incr and decr increment by one and decrement by one, respectively,
    the  value of a variable. The argument to both functions must be a
@@ -881,7 +886,7 @@ Parents (INDI, FAM, INT) { commands }
    family  in the third parameter; The fourth parameter is a variable
    that counts the families returned starting at one.
 
-   Parents  is  an iterator that loops through every family of that a
+   Parents  is  an  iterator  that  loops through every family that a
    person  is  a  child  in. Note: This iterator's name begins with a
    capital  P. There is another function of the same name that begins
    with  a  lower case p. Its first parameter is a person; its second
@@ -1200,6 +1205,10 @@ GEDCOM Node Functions
 
           copy a node structure
 
+   INT level(NODE);
+
+          level of a node
+
 fornodes (NODE, NODE_V) { commands }
 
           loop through child nodes
@@ -1230,6 +1239,8 @@ traverse (NODE, NODE_V, INT_V) { commands }
    Savenode  makes  a copy of the node, and the substructure of nodes
    below  the  node, that is passed to it. Beware: the memory used to
    make the copy is never returned to the system.
+
+   The level function returns the level of the node.
 
    Fornodes  is  an  iterator that loops through the child nodes of a
    GEDCOM  node.  Its  first  argument  is a node expression, and its
@@ -1295,9 +1306,25 @@ Event and Date Functions
 
           set date format for stddate calls
 
-   STRING stddate(EVENT);
+   VOID datepic(STRING);
+
+          set custom date format for stddate calls
+
+   STRING stddate(EVENT|STRING);
 
           date of, in current format
+
+   VOID complexformat(INT);
+
+          set complex date format
+
+   VOID complexpic(INT, STRING);
+
+          set custom complex date picture string
+
+   STRING complexdate(EVENT|STRING);
+
+          date of, in current complex format
 
    These  functions extract information about the dates and places of
    events.
@@ -1310,9 +1337,9 @@ Event and Date Functions
    number is assumed to be the year of the event.
 
    Long  returns the verbatim values of the first DATE and PLAC lines
-   in  an  event,  catenated together and separated by a comma. Short
+   in an event, concatenated together and separated by a comma. Short
    abbreviates  information  from  the  first  DATE  and  PLAC lines,
-   catenates   the   shortened  information  together  with  a  comma
+   concatenates  the  shortened  information  together  with  a comma
    separator  and  returns  it.  An  abbreviated date is its year; an
    abbreviated  place  is  the  last  component in the value, further
    abbreviated   if   the   component  has  an  entry  in  the  place
@@ -1320,11 +1347,30 @@ Event and Date Functions
 
    Gettoday creates an event that has today's date in the DATE line.
 
-   The  last  six  functions are used to format dates in a variety of
+   The  next seven functions are used to format dates in a variety of
    ways.   Dayformat,   monthformat,   yearformat,   eraformat,   and
    dateformat  select  style  options  for formatting the day, month,
    year,  era,  and  overall date structure; stddate returns dates in
-   the selected style.
+   the  selected  style.  datepic  allows specifying a custom pattern
+   that  overrides  the  date  format  selected  with dateformat. The
+   string supplied specifies the placement of the day, month and year
+   in  the  string  with  %d, %m and %y. A null argument disables the
+   overrided format. The argument to stddate is normally an event and
+   the  date  is  extracted  from  the  event  and  formatted. If the
+   argument  is  a date string it is converted using the current date
+   formats.
+
+   The  next  three  functions provide for more complex formatting of
+   dates.  Taking into account the abt, est, cal, bef, aft, fr and to
+   qualifiers  on  GEDCOM  dates. complexformat selects the format to
+   use.  The  format effects only the complex picture, not the format
+   of the date itself. The function complexpic can be used to specify
+   a  custom  picture  string  for  any or all of the 9 custom format
+   strings.  The  custom string can be canceled by passing a null for
+   the  string. When a custom picture string is provided it overrides
+   both  the  abbreviated  and full word picture strings. complexdate
+   formats  the  date  similarly to stddate, but with the addition of
+   the complex date format string selected.
 
    The day format codes passed to dayformat are:
 
@@ -1382,6 +1428,31 @@ Event and Date Functions
    12 yr (year only, omitting all else)
    13 da/mo yr
    14 (As in GEDCOM)
+
+   The complex date formats selected by the complexformat and used by
+   complexdate are:
+
+     Mode                           Example
+   3 use abbreviations in uppercase ABT 1 JAN 2002
+   4 use abbreviations in titlecase Abt 1 JAN 2002
+   5 use uppercased full words      ABOUT 1 JAN 2002
+   6 use titlecased full words      About 1 JAN 2002
+   7 use abbreviations in lowercase abt 1 JAN 2002
+   8 use lowercase full words       about 1 JAN 2002
+
+   The  complex  date string pictures that can be overridden with the
+   complexpic are:
+
+     Abbreviation  Full word
+   0 abt %1        about %1
+   1 est %1        estimated %1
+   2 cal %1        calculated %1
+   3 bef %1        before %1
+   4 aft %1        after %1
+   5 bet %1 and %2 between %1 and %2
+   6 fr %1         from %1
+   7 to %1         to %1
+   8 fr %1 to %2   from %1 to $2
      _____________________________________________________________
 
 Value Extraction Functions
@@ -1401,6 +1472,10 @@ Value Extraction Functions
    VOID extracttokens(STRING, LIST_V, INT_V, STRING);
 
           extract tokens
+
+   VOID extractdatestr(VARB, VARB, VARB, VARB, VARB, STRING);
+
+          extract date from string
 
    Value  extraction  functions  read the values of certain lines and
    return those values in extracted form.
@@ -1445,6 +1520,13 @@ Value Extraction Functions
    extracted.  The  fourth  parameter  is  the  string  of  delimiter
    characters  that extracttokens uses to break the input string into
    tokens.
+
+   extractdatestr  extracts  date  values  from  a  .  STRING.  It is
+   intended  for  internal  verification of date extraction code. The
+   remaining five arguments are variables. The second is assigned the
+   integer  value  of  the  extracted  day; the third is assigned the
+   integer  value  of the extracted month; and the fourth is assigned
+   the integer value of the extracted year.
      _____________________________________________________________
 
 User Interaction Functions
@@ -1471,7 +1553,7 @@ User Interaction Functions
 
    INDI choosechild(INDI|FAM);
 
-          select child of person/family thru user interface
+          select child of person/family through user interface
 
    FAM choosefam(INDI);
 
@@ -1546,14 +1628,6 @@ String Functions
 
           right justify in field
 
-   STRING save(STRING);
-
-          save and return copy of string
-
-   STRING strsave(STRING);
-
-          same as save function
-
    STRING concat(STRING, STRING ...);
 
           catenate two strings
@@ -1577,6 +1651,10 @@ String Functions
    STRING d(INT);
 
           number as decimal string
+
+   STRING f(FLOAT, INT);
+
+          number as floating point string
 
    STRING card(INT);
 
@@ -1627,10 +1705,6 @@ String Functions
    consequence  the  strings  returned  by these functions were to be
    either used or saved before the function was called again.
 
-   By  the  release  of  version  3.0.6,  all string values are local
-   copies,  and  the  save  and  strsave functions should be entirely
-   unnecessary.
-
    Lower and upper convert the letters in their arguments to lower or
    upper  case, respectively. Capitalize converts the first character
    of the argument, if it is a letter, to upper case. Lower and upper
@@ -1649,15 +1723,10 @@ String Functions
    on  the  right.  Trim  historically used the buffer return method;
    rjustify creates and returns a new string.
 
-   Save  is  present  only  for  compatibility reasons. Previously it
-   duplicated  its  argument (to prevent strings from becoming stale;
-   this  is not currently necessary (and this function no longer does
-   anything). Strsave is the same function as save.
-
    Concat  and strconcat catenate strings and return the result. They
    are identical functions. They may take two to 32 string arguments;
-   null  arguments  are allowed. The arguments are catenated together
-   into a single, newly allocated string, which is returned.
+   null   arguments  are  allowed.  The  arguments  are  concatenated
+   together into a single, newly allocated string, which is returned.
 
    Strlen returns the length of the string argument.
 
@@ -1679,6 +1748,10 @@ String Functions
    integer  to  an  ordinal  number (eg, first, second, third); alpha
    converts  an integer to a letter (eg, a, b, c); and roman converts
    an integer to a Roman numeral (eg, i, ii, iii).
+
+   The  f  function converts a float to a string. The optional second
+   argument  specifies  the  precision  of  the  output.  The default
+   precision is 2.
 
    Strsoundex  converts  an  arbitrary  string  to  a  SOUNDEX value.
    Non-ASCII text characters are ignored in the string.
@@ -1888,18 +1961,6 @@ Person Set Functions and GEDCOM Extraction
 
           true if the Individual is in the set.
 
-   VOID gengedcom(SET);
-
-          generate GEDCOM file from person set
-
-   VOID gengedcomweak(SET);
-
-          generate GEDCOM file from person set
-
-   VOID gengedcomstrong(SET);
-
-          generate GEDCOM file from person set
-
 forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
 
           loop through all persons in person set
@@ -1965,20 +2026,6 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    the user interaction getindiset function.
 
    Inset returns true if the the specified individual is in the SET.
-
-   Three functions are available for to generate GEDCOM format output
-   to  the  report  output file of all persons in the argument person
-   set.  Gengedcom output contains a person record for each person in
-   the  set, and all the family records that link at least two of the
-   persons  in  the  set  together.  This  function  is  provided for
-   backwards compatiblity. Source, Event and Other(X) record pointers
-   are output unmodified, but none of their records are output - this
-   yields an inconsistent output.
-
-   Gengedcomweak  output  does  not contain Source, Event or Other(X)
-   record  pointers  or  their  records. Gengedcomstrong includes the
-   Source, Event and Other(X) record pointers and all top-level nodes
-   referenced by them.
 
    Forindiset  is  an  iterator  that loops through each person in an
    indiset.  The  first parameter is an indiset. The second parameter
@@ -2079,10 +2126,38 @@ Miscellaneous Functions
 
           execute string as a UNIX shell command
 
+   INT heapused(void);
+
+          amount of heap used for windows
+
    STRING getproperty(STRING);
 
           extract  system  or user property. Function available after
           v3.0.5.
+
+   STRING setlocale(STRING);
+
+          set the locale
+
+   STRING bytecode(STRING, STRING);
+
+          encode a string in a codeset
+
+   STRING convertcode(STRING, STRING, STRING);
+
+          convert string from one codeset to another
+
+   VOID debug(BOOLEAN);
+
+          set interperter debug mode
+
+   STRING pvalue(ANY);
+
+          dump information about a pvalue
+
+   VOID free(ANY);
+
+          free space associated with a variable
 
    Lock  and  unlock  are  used  to  lock a person or family into RAM
    memory,  and  to  unlock  a  person  or  family  from  RAM memory,
@@ -2091,14 +2166,118 @@ Miscellaneous Functions
    Database  returns  the  name  of  the  current database, useful in
    titling  reports.  program  returns the name of the current report
    program.  Version  returns  the  version  of the running LifeLines
-   program, eg, 3.0.26.
+   program, eg, 3.0.27.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate)  shell  command,  by  invoking the system shell. This
    will  not  occur  if the user has chosen to disallow report system
    calls (via the DenySystemCalls user option).
 
+   The heapused function returns the amount of system heap that is in
+   use at the time. This is implemented only on windows.
+
    The  getproperty  function  extracts  system  or  user properties.
    Properties  are  named  group.subgroup.property, group.property or
    even  property.  The keys are available at the moment can be found
    in the ll-userguide under System and User Properties.
+
+   The  setlocale  function  sets the locale and returns the previous
+   setting of locale.
+
+   The  bytecode  function  converts  the supplied string with escape
+   codes  to  the current codeset, or to the codeset specified by the
+   optional second parameter if specified. A escaped code is a dollar
+   sign ($) followed by 2 hex characters, e.g. $C1.
+
+   The  convertcode function converts a string to another codeset. In
+   the  two  argument  form,  the  second argument is the destination
+   codeset,  and the source codeset is the internal codeset. In the 3
+   argument  form,  the second argument is the source codeset and the
+   third argument is the destination codeset.
+
+   The  debug  function  turns  on or off programming debugging. When
+   enabled  gobs  of information is printed as a LifeLines program is
+   run.  This  can  be  useful  to  figure  out  why a program is not
+   behaving as expected.
+
+   The  pvalue function returns a string that represents the contents
+   of  a  variable  in  the  interpreter.  This  is present for debug
+   purposes.
+
+   The  function  free deallocates space associated with the variable
+   provided  as argument 1. Care must be taken when free is used in a
+   function  on a variable which is a parameter to the function. free
+   will not effect the variable in the calling program.
+     _____________________________________________________________
+
+Deprecated Functions
+
+   The  functionality  of  the following three functions, getindimsg,
+   getintmsg  and  getstrmsg  is  now  available  using  the optional
+   parameter of getindi, getint and getstr. These functions should no
+   longer  be  used  as they will be removed from a future version of
+   Lifelines.
+
+   VOID getindimsg(INDI_V, STRING);
+
+          identify person through user interface
+
+   VOID getintmsg(INT_V, STRING);
+
+          get integer through user interface
+
+   VOID getstrmsg(STRING_V, STRING);
+
+          get string through user interface
+
+   Three functions are available for to generate GEDCOM format output
+   to  the  report  output file of all persons in the argument person
+   set.  These functions do not in most cases generate consistent and
+   usable  output.  This  can  be  done  with  a  program,  but it is
+   suggested  that  these  routines  are probably not what you really
+   wanted.
+
+   Gengedcom  output  contains a person record for each person in the
+   set,  and  all  the  family  records that link at least two of the
+   persons  in  the  set  together.  This  function  is  provided for
+   backward compatibility. Source, Event and Other(X) record pointers
+   are output unmodified, but none of their records are output - this
+   yields an inconsistent output.
+
+   Gengedcomweak  output  does  not contain Source, Event or Other(X)
+   record  pointers  or  their  records. Gengedcomstrong includes the
+   Source, Event and Other(X) record pointers and all top-level nodes
+   referenced by them.
+
+   VOID gengedcom(SET);
+
+          generate GEDCOM file from person set
+
+   VOID gengedcomweak(SET);
+
+          generate GEDCOM file from person set
+
+   VOID gengedcomstrong(SET);
+
+          generate GEDCOM file from person set
+
+   By  the  release  of  version  3.0.6,  all string values are local
+   copies,  and  the  save  and  strsave functions should be entirely
+   unnecessary.  Save  is  present  only  for  compatibility reasons.
+   Previously  it  duplicated  its  argument (to prevent strings from
+   becoming stale; this is not currently necessary (and this function
+   no longer does anything). Strsave is the same function as save.
+
+   STRING save(STRING);
+
+          save and return copy of string
+
+   STRING strsave(STRING);
+
+          same as save function
+
+   Use detachnode instead of deletenode.
+
+   VOID deletenode(NODE);
+
+          delete a node from a GEDCOM tree

@@ -783,7 +783,7 @@ Expressions
 
 <para>
 
-There are four types of expressions: <type>literals</type>, <type>integers</type>, <type>variables</type> and built-in or user defined function
+There are four types of expressions: <type>literals</type>, <type>numbers</type>, <type>variables</type> and built-in or user defined function
 <type>calls</type>.
 
 
@@ -793,7 +793,8 @@ There are four types of expressions: <type>literals</type>, <type>integers</type
 
 <para>
 
-A <type>literal</type> is any string enclosed in double quotes; its value is itself. An <type>integer</type> is any integer constant;
+A <type>literal</type> is any string enclosed in double quotes; its value is 
+itself. A <type>number</type> is any integer or floating point constant;
 its value is itself. A <type>variable</type> is a named location that can be assigned different values during program
 execution. The value of a <type>variable</type> is the last value assigned to it. <type>Variables</type> do not have fixed type; at
 different times in a program, the same <type>variable</type> may be assigned data of completely different types. An
@@ -2669,8 +2670,8 @@ line in an event; this number is assumed to be the year of the event.
 </para>
 
 <para>
-<function>Long</function> returns the verbatim values of the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines in an event, catenated together
-and separated by a comma. <function>Short</function> abbreviates information from the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines, catenates the shortened information together with a comma separator and returns it. An abbreviated
+<function>Long</function> returns the verbatim values of the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines in an event, concatenated together
+and separated by a comma. <function>Short</function> abbreviates information from the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines, concatenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
 </para>
@@ -2686,10 +2687,10 @@ The next seven functions are used to format dates in a variety of ways.
 <function>dateformat</function> select style options for formatting the day,
 month, year, era, and overall date structure; <function>stddate</function>
 returns dates in the selected style.
-<function>datepic</function> allows specifing a custom pattern that overides
+<function>datepic</function> allows specifying a custom pattern that overrides
 the date format selected with <function>dateformat</function>.  The string
 supplied specifies the placement of the day, month and year in the string with
-%d, %m and %y.  A null argument disables the overided format.
+%d, %m and %y.  A null argument disables the overrided format.
 The argument to <function>stddate</function> is normally an event and the
 date is extracted from the event and formatted. If the argument is a 
 date string it is converted using the current date formats.
@@ -2697,11 +2698,15 @@ date string it is converted using the current date formats.
 
 <para>
 The next three functions provide for more complex formatting of dates. Taking
-into acount the abt, est, cal, bef, aft, fr and to qualifiers on GEDCOM dates. 
-<function>complexformat</function> selects the format to use.  The function
+into account the abt, est, cal, bef, aft, fr and to qualifiers on GEDCOM dates. 
+<function>complexformat</function> selects the format to use. The format
+effects only the complex picture, not the format of the date itself.
+The function
 <function>complexpic</function> can be used to specify a custom picture string
 for any or all of the 9 custom format strings.  The custom string can be
-canceled by passing a null for the string.  <function>complexdate</function>
+canceled by passing a null for the string.  When a custom picture string is
+provided it overrides both the abbreviated and full word picture strings.
+<function>complexdate</function>
 formats the date similarly to <function>stddate</function>, but with the 
 addition of the complex date format string selected.
 </para>
@@ -3092,8 +3097,8 @@ about  1 JAN 2002
 </informaltable>
 
 <para>
-The complex date strings that can be overridden with the
-<function>complexpic</function> are: 
+The complex date string pictures that can be overridden with the
+<function>complexpic</function> are:
 </para>
 
 <informaltable pgwide='0' frame='none'>
@@ -3406,7 +3411,7 @@ get string through user interface
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-select child of person/family thru user interface
+select child of person/family through user interface
 </para>
 </glossdef></glossentry>
 
@@ -3775,7 +3780,7 @@ a new string.
 
 <para>
 <function>Concat</function> and <function>strconcat</function> catenate strings and return the result. They are identical functions. They may
-take two to 32 string arguments; null arguments are allowed. The arguments are catenated together into
+take two to 32 string arguments; null arguments are allowed. The arguments are concatenated together into
 a single, newly allocated string, which is returned.
 </para>
 
@@ -4638,7 +4643,7 @@ chosen to disallow report system calls (via the DenySystemCalls user option).
 </para>
 
 <para>
-The <function>heapused</function> function returnes the amount of system heap
+The <function>heapused</function> function returns the amount of system heap
 that is in use at the time.  This is implemented only on windows.
 </para>
 
@@ -4751,7 +4756,7 @@ get string through user interface
 <para>
 Three functions are available for to generate <acronym>GEDCOM</acronym>
 format output to the report output file of all persons in the argument
-person set.  These functions do not in most cases generate consistant
+person set.  These functions do not in most cases generate consistent
 and usable output.  This can be done with a program, but it is 
 suggested that these routines are probably not what you really wanted.
 </para>
@@ -4760,7 +4765,7 @@ suggested that these routines are probably not what you really wanted.
 output contains a person record for each person in the set,
 and all the family records that
 link at least two of the persons in the set together.
-This function is provided for backwards compatiblity. Source, Event and
+This function is provided for backward compatibility. Source, Event and
 Other(X) record pointers are output unmodified, but none of their records
 are output - this yields an inconsistent output.
 </para>
@@ -4834,6 +4839,22 @@ save and return copy of string
 
 <para>
 same as save function
+</para>
+</glossdef></glossentry>
+</glosslist>
+
+<para>
+Use <function>detachnode</function> instead of
+<function>deletenode</function>.
+</para>
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>deletenode</function></funcdef>
+<paramdef><parameter>NODE</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+delete a node from a GEDCOM tree
 </para>
 </glossdef></glossentry>
 </glosslist>

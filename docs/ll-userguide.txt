@@ -2244,20 +2244,32 @@ System and User Properties
           either of these is not specified ReportCodeSet is used.
 
    LongDisplayDate
-          Seven  comma  separated  numbers.  Specifing the format for
-          days, months, years, sfmt, efmt, and cmplx.
+          Six comma separated numbers. Specifing the format for days,
+          months, years, date format, era format, and complex format.
+          If  string  does  not contain 6 comma separated numbers all
+          formats  are  set  to  0,  except date format is set to 14.
+          These  formats  are  used  by LifeLines to display dates in
+          long format.
 
    LongDisplayDatePic
           a  custom ymd date picture. A string in which %y, %m and %d
           will be converted to the corresponding year, month and day.
+          This  picture is used by LifeLines to display dates in long
+          format.
 
    ShortDisplayDate
-          Seven  comma  separated  numbers.  Specifing the format for
-          days, months, years, sfmt, efmt, and cmplx.
+          Six comma separated numbers. Specifing the format for days,
+          months, years, date format, era format, and complex format.
+          If  string  does  not contain 6 comma separated numbers all
+          formats  are  set  to  0,  except date format is set to 14.
+          These  formats  are  used  by LifeLines to display dates in
+          short format.
 
    ShortDisplayDatePic
           a  custom ymd date picture. A string in which %y, %m and %d
           will be converted to the corresponding year, month and day.
+          This picture is used by LifeLines to display dates in short
+          format.
 
    LocaleDir
           run-time specification of locale directory
@@ -2269,6 +2281,10 @@ System and User Properties
 
    IllegalChar
           Apparently not used at this time.
+
+   DenySystemCalls
+          If  set  to a non-zero value will disable use of the system
+          function.
 
    UiLocaleCollate
           ui collating sequence
@@ -2283,7 +2299,8 @@ System and User Properties
           Report Messages Locale
 
    ShortOmitString
-          String prepended on an event converted to a string ???
+          If defined this string replaces characters at the end of an
+          event being printed.
 
    TTPATH
           list  of  directories to search for translation table files

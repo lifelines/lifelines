@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>&#13;
+LifeLines Developer Documentation
+</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="docbook"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2"
+></A
+><TT
+CLASS="application"
+>LifeLines</TT
+> Developer Documentation</H1
+><H2
+CLASS="subtitle"
+><TT
+CLASS="application"
+>LifeLines</TT
+> Version 3.0.25</H2
+><H3
+CLASS="author"
+><A
+NAME="AEN6"
+></A
+>Perry Rapp </H3
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="#AEN11"
+>Introduction to Lifelines Developers Manual</A
+></DT
+><DT
+><A
+HREF="#AEN15"
+>btree module</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN11"
+></A
+>
+
+Introduction to Lifelines Developers Manual
+
+</H1
+><P
+>&#13;
+     <TT
+CLASS="application"
+>LifeLines</TT
+> source code is divided into
+	 several functional subdirectories, which will be discussed 
+	 individually below. They are chained together by an autotools
+	 build system, which creates executables in both the liflines
+	 and tools subdirectories.
+
+</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN15"
+></A
+>btree module</H1
+><P
+>&#13;  The btree subdirectory contains the implementation for a btree
+  database, using fixed length 8 letter keys (RKEY).
+
+</P
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>nodes. </B
+></B
+>
+  Each node in the btree is a separate file on disk (named, eg, "aa"),
+  and the first 4096 (BUFLEN macro) bytes are the node header.
+</P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  index nodes
+
+    . </B
+></B
+>
+
+  These are the interior index nodes of the btree; they contain pointers
+  to subordinate index or block nodes. The program performs binary
+  searches through index nodes to find a particular key.
+
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  block nodes
+
+    . </B
+></B
+>
+
+  These contain the actual data (keys &#38; their associated records).
+
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  keyfile
+
+    . </B
+></B
+>
+
+  One special file on the disk, the keyfile, contains some meta information
+  and a pointer to the root of the btree (the master key). When the root
+  changes (splits), the master key in the keyfile is updated accordingly.
+
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  traverse
+
+    . </B
+></B
+>
+
+  There is a traversal function implemented at the btree level, which uses
+  a callback.
+
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  bterrno
+
+    . </B
+></B
+>
+
+  There is a global integer error variable, bterrno, which is set by this
+  module upon most failure conditions.
+
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><B
+><B
+>&#13;
+  FUTURE DIRECTIONS
+
+    . </B
+></B
+>
+
+  bterrno must be removed for multi-threading. Traversal is more elegantly
+  done via iterator style repeated calls in, instead of callback.
+
+    </P
+></DIV
+></DIV
+></DIV
+></BODY
+></HTML
+>

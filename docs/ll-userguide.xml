@@ -4485,8 +4485,11 @@ not specified <glossterm>ReportCodeSet</glossterm> is used.
 <glossentry><glossterm>LongDisplayDate</glossterm><glossdef>
 
 <para>
-Seven comma separated numbers. Specifing the format for
-days, months, years, sfmt, efmt, and cmplx.
+Six comma separated numbers. Specifing the format for
+days, months, years, date format, era format, and complex format.
+If string does not contain 6 comma separated numbers all formats are
+set to 0, except date format is set to 14.
+These formats are used by <application>LifeLines</application> to display dates in long format.
 </para>
 </glossdef></glossentry>
 
@@ -4495,14 +4498,18 @@ days, months, years, sfmt, efmt, and cmplx.
 <para>
 a custom ymd date picture.  A string in which %y, %m and %d will be
 converted to the corresponding year, month and day.
+This picture is used by <application>LifeLines</application> to display dates in long format.
 </para>
 </glossdef></glossentry>
 
 <glossentry><glossterm>ShortDisplayDate</glossterm><glossdef>
 
 <para>
-Seven comma separated numbers. Specifing the format for
-days, months, years, sfmt, efmt, and cmplx.
+Six comma separated numbers. Specifing the format for
+days, months, years, date format, era format, and complex format.
+If string does not contain 6 comma separated numbers all formats are
+set to 0, except date format is set to 14.
+These formats are used by <application>LifeLines</application> to display dates in short format.
 </para>
 </glossdef></glossentry>
 
@@ -4511,6 +4518,7 @@ days, months, years, sfmt, efmt, and cmplx.
 <para>
 a custom ymd date picture.  A string in which %y, %m and %d will be
 converted to the corresponding year, month and day.
+This picture is used by <application>LifeLines</application> to display dates in short format.
 </para>
 </glossdef></glossentry>
 
@@ -4574,7 +4582,8 @@ Report Messages Locale
 <glossentry><glossterm>ShortOmitString</glossterm><glossdef>
 
 <para>
-String prepended on an event converted to a string ???
+If defined this string replaces characters at the end of an event being
+printed.
 </para>
 </glossdef></glossentry>
 

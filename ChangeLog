@@ -1,3 +1,13 @@
+2003-03-18 Stephen Dum
+        * ChangeLog docs/ll-devguide.html docs/ll-devguide.xml
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-reportmanual.xml 
+	docs/ll-userguide.html docs/ll-userguide.pdf 
+	docs/ll-userguide.txt docs/ll-userguide.xml
+
+	Format devguide and checkin html version.  Minor cleanup of
+	report manual and user guide.
+
 2003-03-17 Stephen Dum
         * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.xml
 	docs/ll-userguide.xml src/liflines/llexec.c
