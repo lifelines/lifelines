@@ -15,7 +15,7 @@
 	Reordered pvalue type blocks into order of types in pvalue.h
 	(int,float,bool,string,node,indi,...).
 
-	* ChangeLog
+	* ChangeLog src/hdrs/pvalue.h src/interp/pvalmath.c
 
 	Removed pvalue_to_pfloat & pvalue_to_pint.
 
