@@ -1,3 +1,8 @@
+2000-12-30 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/translat.c interp/builtin.c:
+	Changed a variable name for more convenient greps.
+
 2000-12-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* gedlib/indiseq.c gedlib/names.c hdrs/btree.h hdrs/gedcom.h
