@@ -4,6 +4,7 @@ http://lifelines.sourceforge.net
 
 Bug fixes in 3.0.33
 ============================
+- Fix crash when opening second database in same session.
 - Fix browsing */surname for non-ASCII first initials.
 - Fix all edits of indi to expand refns (not all were doing it).
 - Prepend UTF-8 BOM for file passed to editor on Windows (when appropriate).
