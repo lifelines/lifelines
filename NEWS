@@ -38,6 +38,14 @@ New Features Added in 3.0.7
 
 - Detail area in popup lists (accessible via [ and ] keys).
 
+- New report date commands: titlecase, yearformat, originformat, datepic
+  complexpic
+
+- New report command to help debug reports: global(explicitvars)
+
+- New commandline arguments for batch files on MS-Windows: -x and -o
+
+
 Bug fixes in 3.0.7
 ==================
 
@@ -85,6 +93,9 @@ Bug fixes in 3.0.7
 - Deep recursive search with children (or similar) could flush cache & crash
   (Now it will report cache overflow & fail, instead of failing unpredictably
   with no explanation)
+
+- (GEDCOM compliant) French Republic & Hebrew dates were not parsed correctly.
+
 
 New Features Added in 3.0.6
 ===========================
