@@ -4,6 +4,16 @@
 
 	Cleanup compiler warnings.
 
+	* .linesrc ChangeLog configure.in lines.cfg gedlib/messages.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/llstdlib.h
+	liflines/main.c liflines/screen.c po/LINGUAS po/it.po
+	reports/exercise.ll stdlib/stdstrng.c tools/dbverify.c
+	win32/msvc6/llines/config.h win32/msvc6/llines/llines.rc
+	*NEW po/sv.po:
+
+	Finish i18n main menu. Split locale options into collate
+	& messages (eg, UiLocaleMessages). Add Swedish msg catalog.
+
 2002-02-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am configure.in arch/alphasort.c
@@ -12,7 +22,7 @@
 	liflines/Makefile.am liflines/main.c liflines/menuitem.c
 	liflines/screen.c tools/Makefile.am
 	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp
-	*NEW: intl/* intl/hdr/libintl.h po/* win32/libintl/*:
+	*NEW intl/* intl/hdr/libintl.h po/* win32/libintl/*:
 
 	Implemented gettext-0.10.40 (new intl/ & po/).
 	Added win32/msvc6/libintl project. Added it.po as test
@@ -23,7 +33,7 @@
 	liflines/delete.c liflines/edit.c liflines/main.c
 	liflines/merge.c liflines/newrecs.c liflines/screen.c
 	liflines/show.c liflines/swap.c po/POTFILES.in po/it.po
-	*NEW: ABOUT_NLS
+	*NEW ABOUT_NLS
 
 	More i18n.
 

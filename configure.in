@@ -11,8 +11,9 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE(lifelines, 3.0.10)
 AM_CONFIG_HEADER(config.h)
 
-dnl Set of available languages (gettext) (zu is just a preliminary test)
-ALL_LINGUAS="it"
+dnl Set of available languages (gettext)
+dnl Perry is using test entries in Italian (ascii) & Greek (utf-8)
+ALL_LINGUAS="el it sv"
 
 AC_PREFIX_DEFAULT($HOME)
 

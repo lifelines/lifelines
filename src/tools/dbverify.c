@@ -57,7 +57,6 @@ STRING readpath = NULL;		/* normally defined in liflines/main.c */
 BOOLEAN readonly = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;	/* normally defined in liflines/main.c */
 BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
-STRING deflocale_coll = "C";
 int opt_finnish = 0;
 
 /*********************************************
@@ -838,8 +837,11 @@ main (int argc,
 	INT writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
 	BOOLEAN allchecks=FALSE; /* if user requested all checks */
+	INT returnvalue=1;
 
 	validate_errs();
+
+	initlocale();
 
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
@@ -848,7 +850,7 @@ main (int argc,
 
 	if (argc != 3 || argv[1][0] != '-' || argv[1][1] == '\0') {
 		print_usage();
-		return (1);
+		goto done;
 	}
 	flags = argv[1];
 	dbname = argv[2];
@@ -863,7 +865,7 @@ main (int argc,
 		case 'x': todo.check_othes=TRUE; break;
 		case 'n': noisy=TRUE; break;
 		case 'a': allchecks=TRUE; break;
-		default: print_usage(); return (1); 
+		default: print_usage(); goto done;
 		}
 	}
 
@@ -874,13 +876,13 @@ main (int argc,
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {
 		printf("%s\n", msg);
-		return (1);
+		goto done;
 	}
 	if (!(BTR = openbtree(dbname, cflag, writ, immut))) {
 		char buffer[256];
 		describe_dberror(bterrno, buffer, ARRSIZE(buffer));
 		puts(buffer);
-		return (1);
+		goto done;
 	}
 	init_lifelines_db();
 	printf("Checking %s\n", dbname);
@@ -918,7 +920,10 @@ main (int argc,
 	report_results();
 
 	closebtree(BTR);
-	return TRUE;
+	returnvalue = 0;
+
+done:
+	return returnvalue;
 }
 /*===============================================
  * report_results -- Print out error & fix counts

@@ -373,11 +373,20 @@ STRING badesc      = SS "Bad escape format.";
 /* many menus */
 STRING mn_quit     = N_("q  Return to main menu");
 STRING mn_ret      = N_("q  Return to previous menu");
+STRING mn_exit     = N_("q  Quit program");
 
 /* main menu */
+STRING mn_mmbrws   = N_("b  Browse the persons in the database");
+STRING mn_mmsear   = N_("s  Search database");
+STRING mn_mmadd    = N_("a  Add information to the database");
+STRING mn_mmdel    = N_("d  Delete information from the database");
 STRING mn_mmrpt    = N_("r  Generate report by entering report name");
 STRING mn_mmprpt   = N_("p  Pick a report from list and run");
 STRING mn_mmcset   = N_("c  Character set options");
+STRING mn_mmtt     = N_("t  Modify character translation tables");
+STRING mn_mmut     = N_("u  Miscellaneous utilities");
+STRING mn_mmex     = N_("x  Handle source, event and other records");
+
 /* utility menu */
 STRING mn_uttl     = N_("What utility do you want to perform?");
 STRING mn_utsave   = N_("s  Save the database in a GEDCOM file");

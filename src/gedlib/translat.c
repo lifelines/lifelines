@@ -43,7 +43,6 @@
 #	undef max
 #endif
 
-extern STRING deflocale_coll;
 
 /*********************************************
  * local types
@@ -64,10 +63,21 @@ static struct codeset_name
 
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
+static void customlocale(STRING prefix);
+static STRING get_current_locale(INT category);
+static STRING setmsgs(STRING localename);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
 static XNODE step_xnode(XNODE, INT);
 static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
+
+/*********************************************
+ * local variables
+ *********************************************/
+
+static STRING  deflocale_coll = NULL; /* fallback for invalid user options */
+static BOOLEAN customized_loc = FALSE; /* set if any dynamic locale changes */
+static BOOLEAN customized_msgs = FALSE; /* set if any dynamic messages changes */
 
 /*********************************************
  * local & exported function definitions
@@ -605,6 +615,41 @@ get_codesets (void)
 	return list;
 }
 /*==========================================
+ * get_current_locale -- return current locale
+ *  returns "C" in case setlocale(x, 0) returns 0
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+static STRING
+get_current_locale (INT category)
+{
+	STRING str = 0;
+#ifdef HAVE_SETLOCALE
+	str = setlocale(category, NULL);
+#endif
+	return str ? str : "C";
+}
+/*==========================================
+ * initlocale -- grab current locales for later default
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+void
+initlocale (void)
+{
+#ifdef HAVE_SETLOCALE
+	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
+#endif
+}
+/*==========================================
+ * termlocale -- free locale related variables
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+void
+termlocale (void)
+{
+	/* free & zero out globals */
+	strfree(&deflocale_coll);
+}
+/*==========================================
  * uilocale -- set locale to GUI locale
  *  (eg, for displaying a sorted list of people)
  * Created: 2001/08/02 (Perry Rapp)
@@ -612,14 +657,101 @@ get_codesets (void)
 void
 uilocale (void)
 {
+	customlocale("UiLocale");
+}
+/*==========================================
+ * setmsgs -- set locale for LC_MESSAGES
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+static STRING
+setmsgs (STRING localename)
+{
+	/* setlocale(LC_MESSAGES,) doesn't work on Win32 */
+	/* does it work anywhere ? */
+
+	char buffer[128];
+	STRING str = buffer;
+	INT len = ARRSIZE(buffer);
+	
+	buffer[0] = 0;
+	appendstr(&str, &len, "LANG=");
+	appendstr(&str, &len, localename);
+
+#ifdef HAVE_SETENV
+	setenv("LANG", localename, 1);
+	str = buffer;
+#else
+#ifdef HAVE_PUTENV
+	putenv(buffer);
+	str = buffer;
+#else
+#ifdef HAVE__PUTENV
+	_putenv(buffer);
+	str = buffer;
+#else
+	str = 0; /* failed */
+#endif /* HAVE__PUTENV */
+#endif /* HAVE_PUTENV */
+#endif /* HAVE_SETENV */
+	return str;
+}
+/*==========================================
+ * customlocale -- set locale to custom setting
+ *  depending on user options
+ *  prefix:  [IN]  option prefix (eg, "UiLocale")
+ * Created: 2002/02/24 (Perry Rapp)
+ *========================================*/
+static void
+customlocale (STRING prefix)
+{
+	char option[64];
+	STRING str;
+	INT prefixlen = strlen(prefix);
+	
+	if (prefixlen > 30) return;
+
+	strcpy(option, prefix);
+
 #ifdef HAVE_SETLOCALE
-	STRING str = getoptstr("UiLocale", "C");
-	if (str)
+	strcpy(option+prefixlen, "Collate");
+	str = getoptstr(option, 0);
+	if (str) {
+		customized_loc = TRUE;
 		str = setlocale(LC_COLLATE, str);
-	/* if unspecified or illegal user value, use default */
-	if (!str)
-		setlocale(LC_COLLATE, deflocale_coll);
-#endif
+	}
+	if (!str) {
+		option[prefixlen] = 0;
+		str = getoptstr(option, 0);
+		if (str) {
+			customized_loc = TRUE;
+			str = setlocale(LC_COLLATE, str);
+		}
+		if (!str && customized_loc)
+			setlocale(LC_COLLATE, deflocale_coll);
+	}
+#endif /* HAVE_SETLOCALE */
+
+#if ENABLE_NLS
+	strcpy(option+prefixlen, "Messages");
+	str = getoptstr(option, 0);
+	if (str) {
+		customized_msgs = TRUE;
+		str = setmsgs(str);
+	} else {
+		option[prefixlen] = 0;
+		str = getoptstr(option, 0);
+		if (str) {
+			customized_msgs = TRUE;
+			str = setmsgs(str);
+		}
+		/* no default for messages */
+	}
+	
+	if (customized_msgs) {
+		extern int _nl_msg_cat_cntr;
+		++_nl_msg_cat_cntr;
+	}
+#endif /* ENABLE_NLS */
 }
 /*==========================================
  * rptlocale -- set locale to report locale
@@ -629,12 +761,5 @@ uilocale (void)
 void
 rptlocale (void)
 {
-#ifdef HAVE_SETLOCALE
-	STRING str = getoptstr("RptLocale", "C");
-	if (str)
-		str = setlocale(LC_COLLATE, str);
-	/* if unspecified or illegal user value, use default */
-	if (!str)
-		setlocale(LC_COLLATE, deflocale_coll);
-#endif
+	customlocale("RptLocale");
 }

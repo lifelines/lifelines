@@ -118,7 +118,6 @@ BOOLEAN selftest = FALSE;      /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
 STRING  readpath = NULL;       /* database path used to open */
-STRING  deflocale_coll = NULL; /* fallback for invalid user options */
 
 /*********************************************
  * local function prototypes
@@ -157,9 +156,8 @@ main (INT argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 
-#ifdef HAVE_SETLOCALE
-	deflocale_coll = strsave(setlocale(LC_COLLATE, NULL));
-#endif
+	initlocale();
+
 #if ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
@@ -379,7 +377,7 @@ finish:
 	shutdown_interpreter();
 	close_lifelines();
 	shutdown_ui(!ok);
-	strfree(&deflocale_coll);
+	termlocale();
 
 usage:
 	/* Display Command-Line Usage Help */

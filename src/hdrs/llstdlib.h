@@ -105,9 +105,6 @@ STRING capitalize(STRING);
 INT chartype(INT);
 void chomp(STRING);
 void free_array_strings(INT n, STRING * arr);
-STRING strconcat(STRING, STRING);
-void strfree(STRING *);
-STRING strsave(CNSTRING);
 BOOLEAN isletter(INT);
 BOOLEAN isnumeric(STRING);
 BOOLEAN iswhite(INT);
@@ -116,11 +113,16 @@ INT ll_tolower(INT);
 STRING lower(STRING);
 void sprintpic0(STRING buffer, INT len, CNSTRING pic);
 BOOLEAN sprintpic1(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1);
-BOOLEAN sprintpic2(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2);
-BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
-	, CNSTRING arg3);
+BOOLEAN sprintpic2(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
+	, CNSTRING arg2);
+BOOLEAN sprintpic3(STRING buffer, INT len, CNSTRING pic, CNSTRING arg1
+	, CNSTRING arg2, CNSTRING arg3);
+STRING strconcat(STRING, STRING);
+void strfree(STRING *);
 void striplead(STRING);
 void striptrail(STRING);
+STRING strsave(CNSTRING);
+void strupdate(STRING * str, CNSTRING value);
 STRING titlecase(STRING);
 STRING trim(STRING, INT);
 STRING upper(STRING);

@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.95 (2002/02/17)
+ * @version        0.95 (2002/02/24)
  * @author         Perry Rapp
  
  * @category       test
@@ -617,6 +617,11 @@ proc testNums()
 	}
 	else { incr(testok) }
 
+	if (ne(mul(2,.5),1)) {
+		call reportfail("2*.5 FAILED")
+	}
+	else { incr(testok) }
+
 	if (gt(.5, .7)) {
 		call reportfail(".5>.7 FAILED")
 	}
@@ -639,6 +644,16 @@ proc testNums()
 
 	if (not(le(-.4,-.4))) {
 		call reportfail("-.4<=-.4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-1,-.4))) {
+		call reportfail("-1<=-.4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-1.1,-1))) {
+		call reportfail("-1.1<=-1 FAILED")
 	}
 	else { incr(testok) }
 
@@ -673,6 +688,13 @@ proc testNums()
 	decr(bubba)
 	if (ne(bubba,44)) {
 		call reportfail("decr(45) == 44 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45.3)
+	decr(bubba)
+	if (ne(bubba,44.3)) {
+		call reportfail("decr(45.3) == 44.3 FAILED")
 	}
 	else { incr(testok) }
 
@@ -783,6 +805,9 @@ proc testDates()
 {
 	set(testok, 0)
 	set(testfail, 0)
+
+/* TODO: The ones with month names will mostly fail in other locales
+ We need to specifically request English or C locale */
 
 /* Test parsing only */
 	call tdparse("2 JAN 1953", 1953, 1, 2)

@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2002/02/14
+# 2002/02/24
 #
 # All variables here are available to report programs
 # via the report language function getproperty, so, for
@@ -142,3 +142,15 @@
 #RequireNames=1
 # Default is 0 (nameless records allowed)
 
+# Specify language for message catalog
+#UiLocaleMessages=en
+# Default is normal gettext behavior (deduces it from environment)
+# This is injected into the LANG variable
+
+# Specify locale for collation
+#UiLocaleCollate=en
+# Default is normal deduction from environment
+
+# Specify locale for collation in reports
+#RptLocaleCollate=en
+# Default is normal deduction from environment

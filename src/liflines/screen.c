@@ -94,8 +94,10 @@ extern STRING abverr,uoperr,badttnum,nosuchtt,mouttt,mintt;
 extern STRING mtitle,cright,plschs;
 extern STRING mn_unkcmd,ronlya,ronlyr;
 extern STRING askynq,askynyn,askyny;
-extern STRING mn_quit,mn_ret;
+extern STRING mn_quit,mn_ret, mn_exit;
+extern STRING mn_mmbrws,mn_mmsear,mn_mmadd,mn_mmdel;
 extern STRING mn_mmprpt,mn_mmrpt,mn_mmcset;
+extern STRING mn_mmtt,mn_mmut,mn_mmex;
 extern STRING mn_csttl,mn_cstt,mn_csintcs,mn_csrptcs;
 extern STRING mn_cstsort,mn_cspref,mn_cschar,mn_cslcas,mn_csucas,mn_csrpt;
 extern STRING mn_csdsploc,mn_csrpttl;
@@ -372,19 +374,19 @@ repaint_main_menu (UIWINDOW uiwin)
 	else if (readonly)
 		wprintw(win, " (read only)");
 	row = 5;
-	/* TODO: internationalize this -- but deal with menu letters somehow */
+	/* i18n problem: the letters are not being read from the menu strings */
 	mvwaddstr(win, row++, 2, plschs);
-	mvwaddstr(win, row++, 4, _("b  Browse the persons in the database"));
-	mvwaddstr(win, row++, 4, _("s  Search database"));
-	mvwaddstr(win, row++, 4, _("a  Add information to the database"));
-	mvwaddstr(win, row++, 4, _("d  Delete information from the database"));
+	mvwaddstr(win, row++, 4, _(mn_mmbrws));
+	mvwaddstr(win, row++, 4, _(mn_mmsear));
+	mvwaddstr(win, row++, 4, _(mn_mmadd));
+	mvwaddstr(win, row++, 4, _(mn_mmdel));
 	mvwaddstr(win, row++, 4, _(mn_mmprpt));
 	mvwaddstr(win, row++, 4, _(mn_mmrpt));
 	mvwaddstr(win, row++, 4, _(mn_mmcset));
-	mvwaddstr(win, row++, 4, "t  Modify character translation tables");
-	mvwaddstr(win, row++, 4, "u  Miscellaneous utilities");
-	mvwaddstr(win, row++, 4, "x  Handle source, event and other records");
-	mvwaddstr(win, row++, 4, "q  Quit");
+	mvwaddstr(win, row++, 4, _(mn_mmtt));
+	mvwaddstr(win, row++, 4, _(mn_mmut));
+	mvwaddstr(win, row++, 4, _(mn_mmex));
+	mvwaddstr(win, row++, 4, _(mn_exit));
 }
 /*================================================
  * repaint_footer_menu -- Paint footer menu for 

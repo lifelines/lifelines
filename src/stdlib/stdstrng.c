@@ -70,6 +70,17 @@ strfree (STRING * str)
 		*str = NULL;
 	}
 }
+/*===============================
+ * strupdate -- strfree followed by strsave
+ *  (STRING may be NULL)
+ *=============================*/
+void
+strupdate (STRING * str, CNSTRING value)
+{
+	strfree(str);
+	if (value)
+		*str = strsave(value);
+}
 /*==================================
  * strconcat -- Catenate two strings
  * Either (but not both) args may be null
