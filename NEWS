@@ -49,6 +49,10 @@ New Features Added in 3.0.6
   (hotkeys '[' and ']' to adjust generation depth)
   (hotkeys '(' and ')' to scroll)
 
+- New browse source/event/nodes in gedcom mode
+  (from extra menu, or from '$' cross-reference to sources)
+
+
 
 New Features in 3.0.4
 =====================
