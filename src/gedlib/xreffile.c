@@ -62,7 +62,7 @@ static INT maxfxrefs = 0;
 static INT maxexrefs = 0;
 static INT maxsxrefs = 0;
 static INT maxxxrefs = 0;
-static FILE *xreffp;	/* open xref file pointer */
+static FILE *xreffp=0;	/* open xref file pointer */
 static BOOLEAN xrefopen = FALSE;
 
 /*============================== 
@@ -79,7 +79,7 @@ initxref (void)
 	for (j = 0; j < 10; j++) {
 		ASSERT(fwrite(&i, sizeof(INT), 1, xreffp) == 1);
 	}
-	fclose(xreffp);
+	fclose(xreffp); xreffp=0;
 }
 /*============================
  * openxref -- Open xrefs file
@@ -100,7 +100,9 @@ openxref (void)
 void
 closexref (void)
 {
-	if (xreffp) fclose(xreffp);
+	if (xreffp) {
+		fclose(xreffp); xreffp = 0;
+	}
 	xrefopen = FALSE;
 }
 /*====================================
