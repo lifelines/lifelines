@@ -358,7 +358,7 @@ check_ghosts (void)
 		}
 	}
 	
-	remove_list(tofix);
+	destroy_list(tofix);
 	tofix=0;
 }
 /*============================================

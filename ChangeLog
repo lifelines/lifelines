@@ -41,6 +41,10 @@
 
 	Move some btree internal calls to btreei.h.
 
+	* ChangeLog src/hdrs/table.h src/tools/dbverify.c
+
+	Remove unused traverse_table function. Fix dbverify compile.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c

@@ -63,7 +63,6 @@ void release_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
 /* working with entire table */
 INT get_table_count(TABLE);
 void remove_table(TABLE, INT whattofree); /* TODO: remove this */
-void traverse_table(TABLE tab, void (*tproc)(CNSTRING key, UNION uval));
 void traverse_table_param(TABLE tab, INT (*tproc)(CNSTRING key, UNION uval, GENERIC *pgeneric, VPTR param), VPTR param);
 
 /* working with elements of table */
