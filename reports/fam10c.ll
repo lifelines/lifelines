@@ -42,8 +42,11 @@ proc main ()
         col(0) "HUSBAND'S MOTHER:   " name(mother(h))
         col(63) "(RN=" key(mother(h)) ")"
         nl nl
-        col(0) "WIFE:   "  fullname(w,1,1,50)
-        col(63) "(RN=" key(w) ")"
+        col(0) "WIFE:   "  
+	if (w) { 
+	    fullname(w,1,1,50)
+	    col(63) "(RN=" key(w) ")"
+	}
         nl nl
         set(evt, birth(w))
         col(0) "Born:  " stddate(evt) col(25) "Place:  " place(evt)

@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.30
+LifeLines Version 3.0.31
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -1115,7 +1115,10 @@ forlist (LIST, ANY_V, INT_V) { commands }
    LifeLines  provides  general purpose lists that can be accessed as
    queues,  stacks  or  arrays. A list must be declared with the list
    function  before  it can be used. Redeclaring an existing variable
-   with the list clears it and restores it to being an empty list.
+   with the list clears it and restores it to being an empty list. If
+   the  argument  to list() is the name of a parameter to the current
+   routine, the reference to the calling routines list is removed and
+   a new list is created.
 
    A  list can have any number of elements. Empty returns true if the
    list  has  no  elements  and  false  otherwise. Length returns the
@@ -1153,7 +1156,10 @@ forlist (LIST, ANY_V, INT_V) { commands }
    to   determine  the  new  order.  Both  lists  are  reordered,  so
    essentially  both  are  sorted  using the sort order of the second
    argument.  (If only one argument is given, it is sorted on its own
-   elements.) rsort sorts in order reverse of sort.
+   elements.)  rsort  sorts  in order reverse of sort. The order that
+   sort  produces  places  the largest element at position 1, and the
+   smallest element at the end of the list, such that pop will remove
+   the smallest element.
 
    Forlist  is  an iterator that loops through the element in a list.
    Its  first parameter is a LIST expression; its second parameter is
@@ -2184,7 +2190,7 @@ Miscellaneous Functions
    Database  returns  the  name  of  the  current database, useful in
    titling  reports.  program  returns the name of the current report
    program.  Version  returns  the  version  of the running LifeLines
-   program, eg, 3.0.30.
+   program, eg, 3.0.31.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate)  shell  command,  by  invoking the system shell. This
