@@ -21,7 +21,7 @@ msgstr ""
 
 #: gedlib/messages.c:39
 msgid "What directory holds the LifeLines database?"
-msgstr "»¿I~@I¿I~E Iµá¼°I½IµI1 I~DI¿ database ;"
+msgstr "Ï€Î¿Ï… ÎµÎ¹Î½Î±Î¹ Ï„Î¿ database ;"
 
 #: gedlib/messages.c:40
 msgid "enter path: "
