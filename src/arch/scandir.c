@@ -43,26 +43,11 @@
 #  include <dirent.h>
 #endif
 
-/*
- * XXX This is a simple hack version which doesn't sort the data, and
- * just passes all unsorted.
- */
 
 #ifdef HAVE_WINDOWS_H
 
 #include <windows.h>
 
-/*
- * File comparison for sorting for MS-Windows scandir
- */
-static int __cdecl cmpnames (const void * el1, const void *el2)
-{
-  const struct dirent * ent1 = *(const struct dirent **)el1;
-  const struct dirent * ent2 = *(const struct dirent **)el2;
-  /* we don't have to ifdef this, because this is MS-Windows specific */
-  /* MS-Windows standard is case-insensitive collation */
-  return _stricoll(ent1->d_name, ent2->d_name);
-}
 /*
  * MS-Windows version of scandir (uses FindFirst...)
  */
@@ -133,7 +118,7 @@ scandir (const char *dir, struct dirent ***namelist,
 
   free(pattern);
   /* Now sort them */
-  qsort(names, pos, sizeof(names[0]), cmpnames);
+  qsort(names, pos, sizeof(names[0]), compar);
   *namelist = names;
   return pos;
 }

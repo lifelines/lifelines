@@ -91,6 +91,7 @@ STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext);
 FILE* fopenpath(STRING, STRING, STRING, STRING, STRING*);
 BOOLEAN is_dir_sep(char c);
 STRING lastpathname(STRING);
+INT path_cmp(CNSTRING path1, CNSTRING path2);
 BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 /* signals.c */

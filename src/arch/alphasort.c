@@ -31,21 +31,16 @@
 #include "config.h"
 #endif
 
-#ifdef _WIN32
-/* Petter this doesn't work on windows yet */
-int
-alphasort(const void *a, const void *b)
-{
-	return 0;
-}
-
-#else
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
+
+#include "standard.h"
+#include "arch.h"
+#include "llstdlib.h"
 
 int
-alphasort(const void *a, const void *b)
+alphasort(const struct dirent **a, const struct dirent **b)
 {
-  const struct dirent **s1 = a, **s2 = b;
-  return strcmp((*s1)->d_name, (*s2)->d_name);
+	return path_cmp((*a)->d_name, (*b)->d_name);
 }
-#endif

@@ -83,6 +83,23 @@ path_match (CNSTRING path1, CNSTRING path2)
 	return !strcmp((STRING)path1, (STRING)path2);
 #endif
 }
+/*=================================
+ * path_cmp -- compare two paths
+ * handle WIN32 filename case insensitivity
+ *===============================*/
+int
+path_cmp (CNSTRING path1, CNSTRING path2)
+{
+#ifdef WIN32
+	return _stricoll(path1, path2);
+#else
+#ifdef HAVE_STRCOLL_H
+	return strcoll(path1, path2);
+#else
+	return strcmp(path1, path2);
+#endif
+#endif
+}
 /*=============================================
  * test_concat_path -- test code for concat_path
  *===========================================*/
