@@ -48,7 +48,11 @@
 #define _(String) gettext(String)
 
 /* TODO: add keyword argument for _pl:2,3 & start using _pl macro */
-/* #define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) */
+#ifdef HAVE_NGETTEXT
+#define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) 
+#else
+#define _pl(Singular, Plural, Num) (Num > 1 ? Plural : Singular)
+#endif
 
 
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */

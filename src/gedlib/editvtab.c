@@ -59,8 +59,6 @@ static BOOLEAN edit_valtab_impl(TABLE *ptab, INT sep, STRING ermsg, STRING (*val
 BOOLEAN
 edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
 {
-	TABLE tmptab = NULL;
-	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	endwin();
 
 	unlink(editfile);
@@ -141,6 +139,7 @@ trans_edin (STRING input, INT len)
 {
 	TRANMAPPING ttmi = get_tranmapping(MEDIN);
 	bfptr bfs = translate_string_to_buf(ttmi, input);
+	len=len; /* unused */
 	return bfDetachAndKill(&bfs);
 }
 /*==============================================
@@ -155,5 +154,6 @@ trans_ined (STRING input, INT len)
 {
 	TRANMAPPING ttmo = get_tranmapping(MINED);
 	bfptr bfs = translate_string_to_buf(ttmo, input);
+	len=len; /* unused */
 	return bfDetachAndKill(&bfs);
 }

@@ -403,7 +403,7 @@ send_notifications (void)
 	if (!f_notifications || is_empty_list(f_notifications))
 		return;
 	FORLIST(f_notifications, el)
-		fncptr=el;
+		fncptr=(options_notify_fnc)el;
 		(*fncptr)();
 	ENDLIST
 }

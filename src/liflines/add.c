@@ -59,7 +59,7 @@ extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronl
 STRING
 get_unresolved_ref_error_string (INT count)
 {
-	return ngettext("There was %d unresolved reference."
+	return _pl("There was %d unresolved reference."
 		, "There were %d unresolved references.", count);
 }
 /*==========================================================

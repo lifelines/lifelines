@@ -78,23 +78,23 @@ update_rec_count (INT pass, char ctype, STRING tag, INT count)
 
 	switch(ctype) {
 	case 'I':
-		numstr = ngettext("Person", "Persons", count);
+		numstr = _pl("Person", "Persons", count);
 		row = 1;
 		break;
 	case 'F':
-		numstr = ngettext("Family", "Families", count);
+		numstr = _pl("Family", "Families", count);
 		row = 2;
 		break;
 	case 'S':
-		numstr = ngettext("Source", "Sources", count);
+		numstr = _pl("Source", "Sources", count);
 		row = 3;
 		break;
 	case 'E':
-		numstr = ngettext("Event", "Events", count);
+		numstr = _pl("Event", "Events", count);
 		row = 4;
 		break;
 	default: 
-		numstr = ngettext("Other", "Others", count);
+		numstr = _pl("Other", "Others", count);
 		row = 5;
 		break;
 	}

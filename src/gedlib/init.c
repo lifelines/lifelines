@@ -127,6 +127,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 #if ENABLE_NLS
 
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	e = getoptstr("GuiCodeset", "");
 	if (e && *e) {
 		/* This doesn't work with gettext before 0.11.3pre2
@@ -136,6 +137,8 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		STRING f=e;
 		bind_textdomain_codeset(PACKAGE, f);
 	}
+#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
+
 	e = getoptstr("LocaleDir", "");
 	if (e && *e)
 		bindtextdomain(PACKAGE, e);

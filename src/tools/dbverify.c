@@ -970,11 +970,11 @@ report_results (void)
 			char buffer[64];
 			printf("%s: ", _(errs[i].desc));
 			snprintf(buffer, sizeof(buffer)
-				, ngettext("%d error", "%d errors", errs[i].err_count)
+				, _pl("%d error", "%d errors", errs[i].err_count)
 				, errs[i].err_count);
 			printf("%s, ", buffer);
 			snprintf(buffer, sizeof(buffer)
-				, ngettext("%d fixed", "%d fixed", errs[i].fix_count)
+				, _pl("%d fixed", "%d fixed", errs[i].fix_count)
 				, errs[i].fix_count);
 			printf("%s\n", buffer);
 			ct++;

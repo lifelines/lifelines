@@ -69,7 +69,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	RECORD current1, current2;
 	INT nkey1p, nkey2p, modep;
-	RECORD tmp=0, tmp2=0;
+	RECORD tmp=0;
 	STRING key, name;
 	INDISEQ seq;
 	INT c, rc, reuse;

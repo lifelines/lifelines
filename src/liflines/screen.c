@@ -3373,19 +3373,20 @@ repaint_search_menu (UIWINDOW uiwin)
 	INT row = 1;
 	INT n = 0;
 	char buffer[80];
-	STRING str = 0;
 	draw_win_box(win);
 	mvwaddstr(win, row++, 2, _(qSmn_sea_ttl));
 	n = get_vhist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), ngettext(qSmn_sea_vhis, qSmn_sea_vhi2, n), n);
+		llstrncpyf(buffer, sizeof(buffer)
+			, _pl(qSmn_sea_vhis, qSmn_sea_vhi2, n), n);
 	} else {
 		llstrncpy(buffer, qSmn_sea_vhix, sizeof(buffer));
 	}
 	mvwaddstr(win, row++, 4, buffer);
 	n = get_chist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), ngettext(qSmn_sea_chis, qSmn_sea_chi2, n), n);
+		llstrncpyf(buffer, sizeof(buffer)
+			, _pl(qSmn_sea_chis, qSmn_sea_chi2, n), n);
 	} else {
 		llstrncpy(buffer, qSmn_sea_chix, sizeof(buffer));
 	}

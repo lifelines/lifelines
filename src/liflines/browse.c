@@ -654,7 +654,7 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp=0, auxmode=0, auxmodep=0;
 	char ntype=0, ntypep=0;
-	RECORD tmp=0, tmp2=0;
+	RECORD tmp=0;
 	char c2;
 
 	ASSERT(prec1 && *prec1);

@@ -798,7 +798,7 @@ handle_err (struct import_feedback * ifeed, STRING fmt, ...)
 
 	++num_errors;
 	llstrncpyf(msg, sizeof(msg)
-		, ngettext("%6d Error", "%6d Errors", num_errors)
+		, _pl("%6d Error", "%6d Errors", num_errors)
 		, num_errors);
 	if (f_logopen)
 		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);
@@ -843,7 +843,7 @@ handle_warn (struct import_feedback * ifeed, STRING fmt, ...)
 	
 	++num_warns;
 	llstrncpyf(msg, sizeof(msg)
-		, ngettext("%6d Warning", "%6d Warnings", num_warns)
+		, _pl("%6d Warning", "%6d Warnings", num_warns)
 		, num_warns);
 	if (f_logopen)
 		llstrappf(msg, sizeof(msg), _(" (see log file <%s>)"), f_logpath);

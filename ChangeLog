@@ -1,3 +1,10 @@
+2002-06-26 Perry Rapp <puddle@users.sourceforge.net>
+
+	*
+
+	Test for bind_textdomain_codeset & ngettext for old gettext versions.
+	Cosmetic cleanup.
+
 2002-06-25 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in:

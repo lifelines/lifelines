@@ -1821,6 +1821,7 @@ handle_include (PNODE node)
 	STRING newfname;
 	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
 	newfname = pvalue(pval);
+	fname=fname; /* unused -- could be used if we resolved path now */
 	/*
 	If we resolved the path now, we could try relative to the path of the
 	current report, and then fallback to regular programsdir rules.

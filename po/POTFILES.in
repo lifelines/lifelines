@@ -3,22 +3,48 @@
 # in menuitem.c. Then a handful are scattered elsewhere.
 # This list may not be complete.
 
+gedlib/charmaps.c
+gedlib/editmap.c
+gedlib/editvtab.c
+gedlib/gedcom.c
+gedlib/gstrings.c
+gedlib/init.c
+gedlib/lloptions.c
 gedlib/messages.c
+gedlib/node.c
+gedlib/remove.c
 gedlib/valid.c
 
 interp/alloc.c
 interp/builtin.c
+interp/date.c
 interp/interp.c
 interp/more.c
+interp/rassa.c
 
 liflines/add.c
+liflines/ask.c
+liflines/askprogram.c
+liflines/browse.c
+liflines/delete.c
+liflines/edit.c
 liflines/error.c
+liflines/export.c
+liflines/import.c
+liflines/lbrowse.c
 liflines/loadsave.c
 liflines/main.c
 liflines/menuitem.c
+liflines/merge.c
+liflines/miscutls.c
 liflines/newrecs.c
+liflines/scan.c
 liflines/screen.c
 liflines/show.c
+liflines/swap.c
+liflines/tandem.c
 liflines/valgdcom.c
+
+stdlib/signals.c
 
 tools/dbverify.c
