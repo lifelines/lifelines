@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.100 (2002/07/23)
+ * @version        0.101 (2002/07/24)
  * @author         Perry Rapp
  
  * @category       test
@@ -43,12 +43,31 @@ global(testfail)
 global(testskip)
 
 
-proc check_collate(str1, str2, str1nam, str2nam)
+proc check_collate2(str1, str2)
 {
 	if (ge(strcmp(str1,str2),0)) {
+		/* str1 might be of the form string:[name] */
+		set(str1nam, str1)
+		set(i1, index(str1, ":", 1))
+		if (gt(i1,0)) {
+			set(str1nam, substring(str1, add(i1,1), strlen(str1)))
+			set(str1, substring(str1, 1, sub(i1,1)))
+		}
+		/* str2 might be of the form string:[name] */
+		set(str2nam, str2)
+		set(i2, index(str2, ":", 1))
+		if (gt(i2,0)) {
+			set(str2nam, substring(str2, add(i2,1), strlen(str2)))
+			set(str2, substring(str2, 1, sub(i2,1)))
+		}
 		set(fstr, concat("strcmp(", str1nam,",",str2nam,") FAILED"))
 		call reportfail(fstr)
 	}
+}
+proc check_collate3(str1, str2, str3)
+{
+	call check_collate2(str1, str2)
+	call check_collate2(str2, str3)
 }
 func set_and_check_locale(locstr, locname)
 {

@@ -11,6 +11,16 @@
 	Propagate both user-specified & opened path through program logic.
 	Convert report to internal codeset.
 
+	* ChangeLog configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec hdrs/interp.h hdrs/version.h
+	interp/builtin.c interp/eval.c interp/interp.c interp/more.c
+	liflines/main.c reports/exer_8859-1.ll reports/exer_UTF-8.ll
+	reports/exercise.ll tools/dbverify.c:
+
+	Make report strcmp call strcmp_loc (so it gets localized collation).
+	Improve collation tests in exercise scripts.
+	Bump version to 3.0.18pre.
+
 2002-07-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/addkey.c gedlib/charmaps.c gedlib/date.c

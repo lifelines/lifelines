@@ -44,6 +44,9 @@
 #include "feedback.h"
 #include "lloptions.h"
 
+static void trace_outv(STRING fmt, va_list args);
+
+
 extern BOOLEAN traceprogram, explicitvars;
 
 /*=============================+
@@ -52,10 +55,10 @@ extern BOOLEAN traceprogram, explicitvars;
 PVALUE
 evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	if (prog_debug) {
-		llwprintf("%d: ", iline(node)+1);
-		debug_show_one_pnode(node);
-		llwprintf("\n");
+	if (prog_trace) {
+		trace_out("%d: ", iline(node)+1);
+		trace_pnode(node);
+		trace_endl();
 	}
 	if (iistype(node, IIDENT))
 		return evaluate_iden(node, stab, eflg);
@@ -74,16 +77,69 @@ evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*====================================+
+ * trace_out -- output report trace info
+ *===================================*/
+void
+trace_out (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	trace_outv(fmt, args);
+	va_end(args);
+}
+/*====================================+
+ * trace_outv -- output report trace info
+ *===================================*/
+static void
+trace_outv (STRING fmt, va_list args)
+{
+	llvwprintf(fmt, args);
+}
+/*====================================+
+ * trace_outl -- output report trace info & line end
+ *===================================*/
+void
+trace_outl (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	trace_outv(fmt, args);
+	va_end(args);
+	trace_endl();
+}
+/*====================================+
+ * trace_pvalue -- Send pvalue to trace output
+ *===================================*/
+void
+trace_pvalue (PVALUE val)
+{
+	show_pvalue(val);
+}
+/*====================================+
+ * trace_pnode -- Send pnode to trace output
+ *===================================*/
+void
+trace_pnode (PNODE node)
+{
+	debug_show_one_pnode(node);
+}
+/*====================================+
+ * trace_endl -- Finish trace line
+ *===================================*/
+void
+trace_endl (void)
+{
+	llwprintf("\n");
+}
+/*====================================+
  * evaluate_iden -- Evaluate identifier
  *===================================*/
 PVALUE
 evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING iden = (STRING) iident(node);
-#if 0
-	if (prog_debug)
-		llwprintf("evaluate_iden called: iden = %s\n", iden);
-#endif
+	if (prog_trace)
+		trace_out("evaluate_iden called: iden = %s\n", iden);
 	*eflg = FALSE;
 	return valueof_iden(node, stab, iden, eflg);
 }
@@ -155,18 +211,11 @@ PVALUE
 evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val;
-	char trace[20];
 
 	*eflg = FALSE;
-#if 0
-	if (prog_debug)
-		llwprintf("evaluate_func called: %d: %s\n",
+	if (prog_trace)
+		trace_out("evaluate_func called: %d: %s\n",
 		    iline(node)+1, iname(node));
-#endif
-	if (traceprogram) {
-		sprintf(trace, "%d: %s\n", iline(node)+1, (char*)iname(node));
-		poutput(trace, eflg);
-	}
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);
 	return val;
 }

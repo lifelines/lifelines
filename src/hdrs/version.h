@@ -7,6 +7,6 @@
 	changed to default to the variable from configure.in.
 */
 
-#define LIFELINES_VERSION "3.0.17p1"
+#define LIFELINES_VERSION "3.0.18pre"
 
 #endif /* _VERSION_H */

@@ -509,10 +509,10 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 	while (node) {
 		Pnode = node;
-		if (prog_debug) {
-			llwprintf("d%d: ", iline(node)+1);
-			debug_show_one_pnode(node);
-			llwprintf("\n");
+		if (prog_trace) {
+			trace_out("d%d: ", iline(node)+1);
+			trace_pnode(node);
+			trace_endl();
 		}
 		switch (itype(node)) {
 		case ISCONS:
@@ -1975,7 +1975,6 @@ make_internal_string_node (PACTX pactx, STRING str)
 			bfs = iconv_trans(rcodeset, int_codeset, bfs, "?", &success);
 			node = string_node(pactx, bfStr(bfs));
 			bfDelete(bfs);
-			/* TODO - call iconv */
 		}
 	}
 	if (!node)

@@ -92,7 +92,6 @@ INT alldone       = 0;         /* completion flag */
 BOOLEAN progrunning = FALSE;   /* program is running */
 BOOLEAN progparsing = FALSE;   /* program is being parsed */
 INT     progerror = 0;         /* error count during report program */
-BOOLEAN traceprogram = FALSE;  /* trace program */
 BOOLEAN traditional = TRUE;    /* use traditional family rules */
 BOOLEAN showusage = FALSE;     /* show usage */
 STRING  btreepath = NULL;      /* database path given by user */
@@ -234,7 +233,7 @@ main (INT argc, char **argv)
 			traditional = FALSE;
 			break;
 		case 't': /* show lots of trace statements for debugging */
-			traceprogram = TRUE;
+			prog_trace = TRUE;
 			break;
 		case 'u': /* specify screen dimensions */
 			sscanf(optarg, "%d,%d", &winx, &winy);

@@ -69,7 +69,7 @@ static STRING rightjustify(STRING str, INT len);
  * local variables
  *********************************************/
 
-BOOLEAN prog_debug = FALSE;
+BOOLEAN prog_trace = FALSE;
 
 /*********************************************
  * local function definitions
@@ -424,7 +424,7 @@ allocsubstring (STRING s, INT i, INT j)
 	/* validate startch */
 	if (startch<0)
 		startch=0;
-	if (uu8) {
+	if (0 && uu8) { /* don't turn this on -- index isn't ready for UTF-8 */
 		INT start=0, num=0; /* byte units */
 		STRING ptr = s;
 		while (startch) {
@@ -1141,7 +1141,7 @@ PVALUE
 __debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
-	prog_debug = pvalue_to_bool(val);
+	prog_trace = pvalue_to_bool(val);
 	return NULL;
 }
 /*========================================

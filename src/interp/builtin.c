@@ -1554,7 +1554,7 @@ __strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	llwprintf("\n");
 #endif
 
-	set_pvalue(val1, PINT, (VPTR)cmpstr(str1, str2));
+	set_pvalue(val1, PINT, (VPTR)cmpstrloc(str1, str2));
 	delete_pvalue(val2);
 	return val1;
 }
@@ -2394,6 +2394,14 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*====================================+
+ * prot -- protect string (replace if NULL)
+ *===================================*/
+STRING
+prot (STRING str)
+{
+	return str ? str : "<NULL>";
+}
+/*====================================+
  * __lookup -- Look up element in table
  *   usage: lookup(TAB, STRING) -> ANY
  *===================================*/
@@ -2427,13 +2435,11 @@ __lookup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	newv = valueof_ptr(tab, str);
 	delete_pvalue(val);
 	newv = (newv ? copy_pvalue(newv) : create_pvalue_any());
-#if 0
-	if (prog_debug) {
-		llwprintf("lookup: new =");
-		show_pvalue(newv);
-		llwprintf("\n");
+	if (prog_trace) {
+		trace_out("lookup(,%s)->", prot(str));
+		trace_pvalue(newv);
+		trace_endl();
 	}
-#endif
 	return newv;
 }
 /*====================================+

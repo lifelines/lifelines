@@ -1,6 +1,6 @@
 /*
  * @progname       exer_8859-1
- * @version        0.01 (2002/07/23)
+ * @version        0.02 (2002/07/24)
  * @author         Perry Rapp
  
  * @category       test
@@ -22,18 +22,25 @@ proc finnish_8859_1()
 	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
 		return()
 	}
-	call check_collate("A", "Z", "A", "Z")
-	call check_collate("Z", "Ä", "Z", "Adia")
-	call check_collate("Ä", "Ö", "Ä", "Odia")
+	/* sanity check */
+	call check_collate3("A", "L", "Z")
+	/* Adia sorts between Z and Odia */
+	call check_collate3("Z", "Ä:[Adia]", "Ö:[Odia]")
+	/* ydia & udia sort as y */
+	call check_collate3("x", "y", "z")
+	call check_collate3("x", "ÿ:[ydia]", "z")
+	call check_collate3("x", "ü:[udia]", "z")
+	/* eth (lower=u00F0) sorts as d */
+	call check_collate3("c", "d", "e")
+	call check_collate3("c", "ð:[eth]", "e")
 }
 proc spanish_8859_1()
 {
 	if (not(set_and_check_locale("es", "Spanish"))) {
 		return()
 	}
-	call check_collate("A", "Z", "A", "Z")
-	call check_collate("N", "Ñ", "N", "Ntilde")
-	call check_collate("Ñ", "O", "Ntilde", "O")
+	call check_collate3("A", "N", "Z")
+	call check_collate3("N", "Ñ:[Ntilde]", "O")
 }
 proc testCollate_8859_1()
 {

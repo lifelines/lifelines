@@ -172,7 +172,7 @@ typedef struct {
 
 extern BUILTINS builtins[];
 extern INT nobuiltins;
-extern BOOLEAN prog_debug;
+extern BOOLEAN prog_trace;
 
 extern TABLE functab;
 extern SYMTAB globtab;
@@ -360,6 +360,7 @@ PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE proc_node(PACTX pactx, STRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
+STRING prot(STRING str);
 BOOLEAN record_to_node(PVALUE val);
 PNODE return_node(PACTX pactx, PNODE);
 void set_rptfile_prop(PACTX pactx, STRING fname, STRING key, STRING value);
@@ -368,6 +369,10 @@ void show_pnodes(PNODE);
 void shutdown_interpreter(void);
 PNODE spouses_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE string_node(PACTX pactx, STRING);
+void trace_endl(void);
+void trace_out(STRING fmt, ...);
+void trace_pnode(PNODE node);
+void trace_pvalue(PVALUE val);
 PNODE traverse_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PVALUE valueof_iden(PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg);
 PNODE while_node(PACTX pactx, PNODE, PNODE);
