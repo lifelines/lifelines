@@ -11,6 +11,12 @@
 	Added llines.1 to docs/Makefile.am (so rpm construct finds it).
 	Updated obsolete reference in lifelines.spec to ANNOUNCEMENT to NEWS.
 
+ 	* ChangeLog hdrs/version.h win32/msvc6/btedit/btedit.rc 
+ 	win32/msvc6/dbverify/dbVerify.rc win32/msvc6/llines/llines.rc:
+
+	Updated win32 resource version numbers. Bumped code version
+	to 3.0.12post.
+
 2002-05-01 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog configure.in lifelines.spec
