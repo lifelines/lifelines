@@ -82,21 +82,31 @@
 #endif
 
 /*=========================================
- * WINDOWs -- Main screen, menus and popups
+ * UIWINDOWs -- Main screen, menus and popups
  *=======================================*/
+/* wrapper for WINDOW */
+typedef struct uiwindow_s {
+	WINDOW * win;
+	struct uiwindow_s * parent;
+	BOOLEAN permsub; /* TRUE if a fixed subwindow */
+} UIWINDOW;
+#define uiw_win(x) (x->win)
+#define uiw_parent(x) (x->parent)
+#define uiw_permsub(x) (x->permsub)
+
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
 extern INT cur_screen;
-extern WINDOW *stdout_win;
-extern WINDOW *main_win;
-extern WINDOW *ask_win;
-extern WINDOW *ask_msg_win;
-extern WINDOW *choose_from_list_win;
-extern WINDOW *start_menu_win;
-extern WINDOW *add_menu_win;
-extern WINDOW *del_menu_win;
-extern WINDOW *scan_menu_win;
-extern WINDOW *utils_menu_win;
+extern UIWINDOW *stdout_win;
+extern UIWINDOW *main_win;
+extern UIWINDOW *ask_win;
+extern UIWINDOW *ask_msg_win;
+extern UIWINDOW *choose_from_list_win;
+extern UIWINDOW *start_menu_win;
+extern UIWINDOW *add_menu_win;
+extern UIWINDOW *del_menu_win;
+extern UIWINDOW *scan_menu_win;
+extern UIWINDOW *utils_menu_win;
 
 /* Function Prototype */
 INT aux_browse(NODE, INT mode, BOOLEAN reuse);
@@ -109,7 +119,7 @@ INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
 INT fam_browse(NODE, INT mode, BOOLEAN reuse);
-STRING get_answer (WINDOW*, STRING);
+STRING get_answer (UIWINDOW*, STRING);
 INT indi_browse(NODE, INT mode, BOOLEAN reuse);
 int init_screen(void);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
@@ -120,9 +130,9 @@ void paint_main_screen(void);
 void paint_screen(INT screen);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
-void show_horz_line(WINDOW*, INT, INT, INT);
-void show_vert_line(WINDOW*, INT, INT, INT);
-void shw_array_of_strings(WINDOW*, STRING*, INT, INT, INT);
+void show_horz_line(UIWINDOW*, INT, INT, INT);
+void show_vert_line(UIWINDOW*, INT, INT, INT);
+void shw_array_of_strings(UIWINDOW*, STRING*, INT, INT, INT);
 void term_screen(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);

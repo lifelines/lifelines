@@ -111,7 +111,7 @@ finishinterp (void)
 	/* is this necessary ? */
 
 	if (progerror) {
-		wrefresh(stdout_win);
+		wrefresh(uiw_win(stdout_win));
 		sleep(5);
 	}
 

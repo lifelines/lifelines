@@ -21,11 +21,13 @@ FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING path,
 STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
+RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 
+/* screen.c */
 INT choose_from_array(STRING, INT, STRING*);
 INDISEQ choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
-RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
+void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* from askprogram.c */
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING, BOOLEAN picklist);

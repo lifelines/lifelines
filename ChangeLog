@@ -1,3 +1,11 @@
+2001-11-23 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog hdrs/liflines.h hdrs/screen.h interp/interp.c
+	liflines/import.c liflines/llinesi.h liflines/screen.c
+	liflines/show.c liflines/tandem.c:
+
+	Wrapped curses WINDOW in UIWINDOW.
+
 2001-11-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c gedlib/messages.c gedlib/node.c

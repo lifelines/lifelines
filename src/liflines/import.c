@@ -128,8 +128,8 @@ import_from_file (void)
 		}
 		else strcpy(msgbuf, " ");
 		gd_reuse = ask_yes_or_no_msg(msgbuf, cfoldk);
-		touchwin(stdout_win);
-		wrefresh(stdout_win);
+		touchwin(uiw_win(stdout_win));
+		wrefresh(uiw_win(stdout_win));
 	}
 
 	/* start loading the file */

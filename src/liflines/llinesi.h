@@ -111,7 +111,7 @@ void show_descendants(NODE indi, INT row, INT hgt, BOOLEAN reuse);
 void show_gedcom_main(NODE node, INT gdvw, INT row, INT hgt, BOOLEAN reuse);
 void show_list(INDISEQ, INT, INT, INT);
 void show_long_family(NODE, INT row, INT hgt, INT width, BOOLEAN reuse);
-	/* we pass a WINDOW * here as void * to avoid pulling curses into this */
+	/* we pass a UIWINDOW * here as void * to avoid pulling curses into this */
 void show_person(void * win, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
 void show_person_main(NODE, INT row, INT hgt, BOOLEAN reuse);
 void show_reset_scroll(void);
