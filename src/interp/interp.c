@@ -1067,6 +1067,7 @@ interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 eloop:	;
 	ENDFAMCS
+	irc = INTOKAY;
 eleave:
 	delete_symtab(stab, ifamily(node));
 	delete_symtab(stab, iiparent(node));

@@ -10,13 +10,13 @@ static void dbgchk(ZSTR);
 
 #define DBGCHK(zq) dbgchk(zq)
 
+
+#ifdef TEST_ZSTR
 static char *
 safez (char * str)
 {
 	return str ? str : "";
 }
-
-#ifdef TEST_ZSTR
 int
 main()
 {
@@ -151,10 +151,10 @@ zs_set_len (ZSTR * pzstr, unsigned int len)
 		*pzstr = zstr;
 	}
 	DBGCHK(zstr);
-	if (len == -1) {
+	if (len == (unsigned int)-1) {
 		len = strlen(zstr->str);
 	}
-	ASSERT(len >= 0 && len < zstr->max);
+	ASSERT(len < zstr->max);
 	zstr->end = zstr->str + len;
 	return zstr->str;
 }

@@ -52,11 +52,9 @@ edit_mapping (INT ttnum)
 	do_edit();
 	while (TRUE) {
 		char buffer[128];
-		STRING ptr=buffer;
-		INT mylen = sizeof(buffer);
 		if (load_new_tt(editfile, ttnum))
 			return TRUE;
-		llstrsets(buffer, sizeof(buffer), uu8, "%s ", _(qScmperr));
+		llstrsetf(buffer, sizeof(buffer), uu8, "%s ", _(qScmperr));
 		llstrappf(buffer, sizeof(buffer), uu8, _(qSsepch), "<tab>"); /* (separator is %s) */
 		if (ask_yes_or_no_msg(buffer, _(qSaredit)))
 			do_edit();

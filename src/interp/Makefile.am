@@ -17,7 +17,7 @@ AM_YFLAGS = -d
 
 # pvalue.c with -O2 triggers a gcc error in gcc version 2.95.2 19991024 (release) 
 # The CFLAGS below is gcc specific.  Sorry. -marc
-CFLAGS = -g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
+AM_CFLAGS = -g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
 
 EXTRA_DIST = yacc.h interpi.h parse.h
 

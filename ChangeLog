@@ -12,7 +12,13 @@
 	src/stdlib/strapp.c src/stdlib/zstr.c
 	*NEW src/stdlib/strset.c:
 
-	More work trying to simplify string functions. Starting to replace appendstr* functions.
+	More work trying to simplify string functions.
+	Starting to replace appendstr* functions.
+
+	* src/gedlib/editmap.c src/interp/Makefile.am
+	src/interp/interp.c src/interp/pvalmath.c src/stdlib/zstr.c:
+
+	Cleanup.
 
 2002-11-23 Perry Rapp
 

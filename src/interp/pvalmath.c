@@ -159,7 +159,7 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 void
 le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
-	BOOLEAN rel;
+	BOOLEAN rel=FALSE;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
@@ -184,7 +184,7 @@ le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 void
 ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
-	BOOLEAN rel;
+	BOOLEAN rel=FALSE;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
@@ -210,7 +210,7 @@ ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 void
 lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
-	BOOLEAN rel;
+	BOOLEAN rel=FALSE;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
@@ -235,7 +235,7 @@ lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 void
 gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
-	BOOLEAN rel;
+	BOOLEAN rel=FALSE;
 	if (*eflg) return;
 	num_conform_pvalues(val1, val2, eflg);
 	if (*eflg) return;
