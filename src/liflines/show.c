@@ -202,7 +202,7 @@ disp_person_name (ZSTR * zstr, STRING prefix, RECORD irec, INT width)
 static void
 disp_person_birth (ZSTR * zstr, RECORD irec, INT width)
 {
-	STRING tags[] = { "BIRT", "CHR", "BAPM", "BARM", "BASM", "BLES", 0 };
+	STRING tags[] = { "BIRT", "CHR", "BAPM", "BARM", "BASM", "BLES", "RESI", 0 };
 	STRING tag;
 	STRING date=NULL, plac=NULL, tgdate=NULL, tgplac=NULL, td=NULL, tp=NULL;
 	for (tag = tags[0]; *tag; ++tag) {
@@ -217,6 +217,15 @@ disp_person_birth (ZSTR * zstr, RECORD irec, INT width)
 		}
 		if (date && plac) break;
 	}
+	/*
+TODO:
+	Figure birth prefix, eg, BIRT -> _(qSdspl_bir)
+	Print birth string (rfmt)
+	Figure place prefix
+	Print place string (rfmt), including prefix if different from birth
+	Combine these two (rfmt)
+	Assign to zstr
+	*/
 }
 /*===============================================
  * init_display_indi -- Initialize display person

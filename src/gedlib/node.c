@@ -1387,6 +1387,7 @@ indi_to_event (NODE node, STRING tag, STRING head
 	/* need at least room for head + 1 character + "..." or no point */
 	if ((INT)strlen(head)+4>len) return NULL;
 	p[0] = 0;
+	/* TODO: break out following code into a subroutine for disp_person_birth to call */
 	llstrcatn(&p, head, &mylen);
 	if (mylen<(INT)strlen(event)+1) {
 		omit = getoptstr("ShortOmitString", NULL);

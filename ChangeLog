@@ -5,6 +5,10 @@
 
 	Begin translation table for tex.
 
+	* ChangeLog src/gedlib/node.c src/liflines/show.c:
+
+	Comments on new birth display code.
+
 2003-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/misc.c src/gedlib/node.c
