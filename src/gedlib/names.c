@@ -534,13 +534,13 @@ piecematch (STRING part,
             STRING comp)
 {
 	if(opt_finnish) {
-	  if(my_chrcmp(*part++, *comp++) != 0) return FALSE;
+	  if(fi_chrcmp(*part++, *comp++) != 0) return FALSE;
 	} else {
 	  if (*part++ != *comp++) return FALSE;
 	}
 	while (*part && *comp) {
 		if(opt_finnish) {
-			if (my_chrcmp(*part, *comp++) == 0) part++;
+			if (fi_chrcmp(*part, *comp++) == 0) part++;
 		} else {
 			if (*part == *comp++) part++;
 		}
@@ -660,7 +660,7 @@ namecmp (STRING name1, STRING name2)
 	INT r = cmpstrloc(sur1, sur2);
 	if (r) return r;
 	if(opt_finnish) {
-	  r = my_chrcmp(getfinitial(name1),  getfinitial(name2));
+	  r = fi_chrcmp(getfinitial(name1),  getfinitial(name2));
 	} else {
 	  r = getfinitial(name1) - getfinitial(name2);
 	}

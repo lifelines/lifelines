@@ -12,14 +12,14 @@
 #endif
 
 
-int my_chrcmp(const int s1, const int s2);
-int my_isalpha(const int c);
-int my_iscntrl(const int c);
-int my_islower(const int c);
-int my_isprint(const int c);
-int my_isupper(const int c);
-int my_tolower(const int c);
-int my_toupper(const int c);
+int fi_chrcmp(const int s1, const int s2);
+int lat1_isalpha(const int c);
+int lat1_iscntrl(const int c);
+int lat1_islower(const int c);
+int lat1_isprint(const int c);
+int lat1_isupper(const int c);
+int lat1_tolower(const int c);
+int lat1_toupper(const int c);
 int my_strcmp(const char *s1, const char *s2, const int cmp_table[]);
 int my_strncmp(const char *s1,
                 const char *s2,

@@ -1545,7 +1545,7 @@ name_to_indiseq (STRING name)
 	if(opt_finnish) lastchar = 255;
 	/* start with '@' to include non-ASCII letters */
 	for (c = 'a'-1; c <= lastchar; c++) {
-		if(opt_finnish && !my_islower(c)) continue;
+		if(opt_finnish && !lat1_islower(c)) continue;
 		scratch[0] = c;
 		get_names(scratch, &num, &keys, TRUE);
 		if (num == 0) continue;

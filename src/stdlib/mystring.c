@@ -47,7 +47,9 @@ typedef struct {
   unsigned char islow;   /* Is lowercase letter?  */
 } my_charset_info;
 
-
+/* a set of character properties for Latin1 (ISO-8859-1)
+ fairly independent of language I believe -- 2002-11-05, Perry
+ */
 static my_charset_info ISO_Latin1[] = {
   /*   0 0 */ {0, 0, 1, 0, 0},
   /*   1 1 */ {1, 1, 1, 0, 0},
@@ -356,51 +358,73 @@ const int my_ISO_Latin1_Finnish[] = {
 #define islat1(c) (0 <= (c) && (c) <= 255)
 
 
+/*====================================
+ * lat1_isalpha -- Is a character alphabetic ?
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_isalpha (const int c1)
+lat1_isalpha (const int c1)
 {
   int c = safechar(c1);
   return (islat1(c) && (ISO_Latin1[c].isup || ISO_Latin1[c].islow));
 }
-
+/*====================================
+ * lat1_iscntrl -- Is a character in control character range ?
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_iscntrl (const int c1)
+lat1_iscntrl (const int c1)
 {
   int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].iscntrl);
 }
-
+/*====================================
+ * lat1_islower -- Is a character lowercase ?
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_islower (const int c1)
+lat1_islower (const int c1)
 {
   int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].islow);
 }
-
+/*====================================
+ * lat1_isprint -- Is a character printable ?
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_isprint (const int c1)
+lat1_isprint (const int c1)
 {
   int c = safechar(c1);
   return (islat1(c) && !ISO_Latin1[c].iscntrl);
 }
-
+/*====================================
+ * lat1_isupper -- Is a character lowercase ?
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_isupper (const int c1)
+lat1_isupper (const int c1)
 {
   int c = safechar(c1);
   return (islat1(c) && ISO_Latin1[c].isup);
 }
-
+/*====================================
+ * lat1_tolower -- Return lowercase version (or input)
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_tolower (const int c1)
+lat1_tolower (const int c1)
 {
   int c = safechar(c1);
   if (islat1(c)) return (ISO_Latin1[c].tolow);
   return c;
 }
-
+/*====================================
+ * lat1_toupper -- Return uppercase version (or input)
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_toupper (const int c1)
+lat1_toupper (const int c1)
 {
   /* BUG: ß is not converted to SS. */
   /* Note that ÿ does not have an   */
@@ -411,9 +435,12 @@ my_toupper (const int c1)
 }
 
 
+/*====================================
+ * fi_chrcmp -- Compare two characters, Finnish case-insensitive
+ * Assumes Latin1 character set
+ *==================================*/
 int
-my_chrcmp (const int sa1,
-           const int sa2)
+fi_chrcmp (const int sa1, const int sa2)
 {
   int s1 = safechar(sa1);
   int s2 = safechar(sa2);
@@ -510,7 +537,7 @@ int main()
   int mini = NCHARS;
   int maxi = 0;
   for (i=0; i<NCHARS; i++) {   /* Min and max code for letters. */
-    if (my_isalpha(i)) {
+    if (lat1_isalpha(i)) {
       if (mini > i) mini = i;
       if (maxi < i) maxi = i;
     }
@@ -519,7 +546,7 @@ int main()
   for (i=mini; i<=maxi; i++) {
     int j, flag = 0;
     for (j=0; j<NCHARS; j++) {
-      if (my_isalpha(j) && t[j] == i) {
+      if (lat1_isalpha(j) && t[j] == i) {
         fprintf (stdout, "%c ", j);  
         flag = 1;
       }
@@ -539,11 +566,11 @@ int main()
 
   fprintf (stdout, "Uppercase: ");
   for (i=0; i<NCHARS; i++) {
-    if (my_isupper(i)) fprintf (stdout, "%c", i);
+    if (lat1_isupper(i)) fprintf (stdout, "%c", i);
   }
   fprintf (stdout, "\nLowercase: ");
   for (i=0; i<NCHARS; i++) {
-    if (my_islower(i) && (char)i != 'ß' && (char)i != 'ÿ') {
+    if (lat1_islower(i) && (char)i != 'ß' && (char)i != 'ÿ') {
       fprintf (stdout, "%c", i);
     }
   }

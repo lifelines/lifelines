@@ -66,30 +66,33 @@ chartype (INT c)
 	are table driven, and we certainly don't want to give them an
 	offset of several billion negative.
 	*/
+	/* TODO: This will have to be removed if we start passing wchars
+	through here, which I think we need to do to support internal
+	use of Unicode -- Perry, 2002-11-05 */
 	
 		return c;
 	}
+	if (iswhite(c))
+		return WHITE;
+	if (isletter(c))
+		return LETTER;
+	if (isnumber(c))
+		return DIGIT;
+	return c;
+}
+/*=================================
+ * isnumber -- Check if character is a digit
+ * Note: input character is passed to isdigit, so it
+ *  should be in unsigned char range.
+ * TODO: Fix for Unicode
+ *===============================*/
+BOOLEAN
+isnumber (INT c)
+{
 #ifndef OS_NOCTYPE
-	if (isspace(c))
-		return WHITE;
-	if (opt_finnish) {
-		if (my_isalpha(c)) return LETTER;
-	}
-	else if (isalpha(c)) return LETTER;
-	if (isdigit(c)) return DIGIT;
-	return c;
+	return (isdigit(c));
 #else
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
-		return WHITE;
-	if (opt_finnish) {
-		if( my_isalpha(c) ) return LETTER;
-	}
-	else {
-		if (c >= 'a' && c <= 'z') return LETTER;
-		if (c >= 'A' && c <= 'Z') return LETTER;
-	}
-	if (c >= '0' && c <= '9') return DIGIT;
-	return c;
+	return (c >= '0' && c <= '9');
 #endif
 }
 /*=================================
@@ -123,7 +126,7 @@ islinebreak (INT c)
 BOOLEAN
 isletter (INT c)
 {
-	if (opt_finnish) return (my_isalpha(c));
+	if (opt_finnish) return (lat1_isalpha(c));
 #ifndef OS_NOCTYPE
 	return (isalpha(c));
 #else
@@ -137,7 +140,7 @@ isletter (INT c)
 INT
 ll_toupper (INT c)
 {
-	if(opt_finnish) return(my_toupper(c));
+	if(opt_finnish) return(lat1_toupper(c));
 #ifndef OS_NOCTYPE
 	if(islower(c)) return( toupper(c) );
 	return c;
@@ -152,7 +155,7 @@ ll_toupper (INT c)
 INT
 ll_tolower (INT c)
 {
-	if(opt_finnish) return(my_tolower(c));
+	if(opt_finnish) return(lat1_tolower(c));
 #ifndef OS_NOCTYPE
 	if(isupper(c)) return( tolower(c) );
 	return(c);
