@@ -65,6 +65,7 @@ add_browse_list (STRING name,
 			remove_indiseq(blel->bl_seq);
 			blel->bl_seq = seq;
 			done = TRUE;
+			STOPLIST
 			break;
 		}
 	ENDLIST
@@ -74,6 +75,7 @@ add_browse_list (STRING name,
 		if (!blel->bl_name) {
 			blel->bl_name = name;
 			blel->bl_seq = seq;
+			STOPLIST
 			return;
 		}
 	ENDLIST
@@ -109,8 +111,10 @@ find_named_seq (STRING name)
 	BLEL blel;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
-		if (eqstr(name, blel->bl_name))
+		if (eqstr(name, blel->bl_name)) {
+			STOPLIST
 			return copy_indiseq(blel->bl_seq);
+		}
 	ENDLIST
 	return NULL;
 }
@@ -126,6 +130,7 @@ new_name_browse_list (STRING oldstr, STRING newstr)
 		if (eqstr(oldstr, blel->bl_name)) {
 			stdfree(blel->bl_name);
 			blel->bl_name = newstr;
+			STOPLIST
 			return;
 		}
 	ENDLIST

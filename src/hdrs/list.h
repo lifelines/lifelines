@@ -69,6 +69,9 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 			_lnode = _lnode->l_prev;\
 		}\
 	}
+#define STOPLIST\
+			unlock_list_node(_lnode);\
+			_lnode = 0;
 
 /* cycle through list from head to tail */
 #define FORXLIST(l,e)\

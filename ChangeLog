@@ -1,3 +1,13 @@
+2003-03-06 Perry Rapp
+
+	* ChangeLog src/gedlib/brwslist.c src/gedlib/xlat.c
+	src/hdrs/list.h src/interp/interp.c src/interp/more.c
+	src/liflines/advedit.c src/liflines/scan.c
+
+	Add STOPLIST macro to clear current lock when breaking
+	(or returning) out of a FORLIST loop. This fixes the
+	ASSERT crash when doing a successful name scan.
+
 2003-03-05 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt

@@ -705,6 +705,7 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		strngs[i] = (STRING)stdalloc(nsize);
 		makestring(vel, strngs[i], nsize, eflg);
 		if (*eflg) {
+			STOPLIST
 			prog_error(node, _("Illegal type found in list in menuchoose"));
 			return NULL;
 		}

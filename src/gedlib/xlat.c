@@ -201,6 +201,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 			xlattemp = (XLAT)el;
 			if (eqstr_ex(xlattemp->src, src) && eqstr_ex(xlattemp->dest, dest)) {
 				xlat = xlattemp;
+				STOPLIST
 				goto end_get_xlat;
 			}
 		ENDLIST

@@ -1605,8 +1605,10 @@ interp_forlist (PNODE node, SYMTAB stab, PVALUE *pval)
 		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
+			STOPLIST
 			goto iloop;
 		default:
+			STOPLIST
 			goto ileave;
 		}
 iloop:	;

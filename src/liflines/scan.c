@@ -117,6 +117,7 @@ ns_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 			if (pattern_match(patt, piece)) {
 				/* if we pass in name, append_indiseq won't check for dups */
 				append_indiseq_null(results_seq, strsave(key), NULL, FALSE, TRUE);
+				STOPLIST
 				break;
 			}
 		ENDLIST
