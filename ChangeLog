@@ -12,6 +12,10 @@
 
 	Add new stripped down target llexec (doesn't function yet).
 
+	* ChangeLog NEWS README.LAYOUT:
+
+	Update documentation.
+
 2002-10-05 Perry Rapp
 
 	* ChangeLog src/interp/interp.c:

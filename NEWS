@@ -1,6 +1,12 @@
-LifeLines Source Release, Version 3.0.20
+LifeLines Source Release, Version 3.0.21
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.21
+============================
+
+- Fix to handle bad system comparison without ASSERT in indiseq.c
+- Fix broken -x option (run report directly)
 
 Bug fixes in 3.0.20
 ============================

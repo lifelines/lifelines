@@ -1,4 +1,4 @@
-LifeLines Source Release, Version 3.0.15
+LifeLines Source Release, Version 3.0.20
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
@@ -7,16 +7,54 @@ This is a brief description of the directory layout.
 Source Code Directories
 -----------------------
 
-./arch/
+./build/autotools
+
+    Some of the scripts needed for autotools based development
+    README.DEVELOPERS has some information about autotools
+
+./build/gettext
+
+    m4 macro files needed by gettext (the GNU internationalization package)
+
+./build/gnu
+
+    Unused & empty
+
+./build/msvc6
+
+    Project files for Miscrosoft Visual C++ 6
+
+./build/rpm
+
+    spec file used to create rpm (source & binary) distributions
+    (rpm is RedHat package distribution format)
+
+./intl/
+
+    Local gettext implementation, which substitutes in appropriate language
+    translation strings on the fly.
+
+./m4/
+
+    m4 language macros for the Autoconf/Automake system, mostly
+    for the gettext intl subdirectory.
+    The contents of this directory will be entirely created by 
+    the autotools during development.
+
+./po/
+
+    Translations (gettext message catalogs).
+
+./src/arch/
 
     Library of replacement functions missing on some platforms.
 
-./btree/
+./src/btree/
 
     btree (database) implementation, with access functions.
     Used by the rest of lifelines to access the binary database.
 
-./gedlib/
+./src/gedlib/
 
     Implementation of the INDISEQ type.
     Implementation of NAME & REFN records.
@@ -25,25 +63,20 @@ Source Code Directories
     messages (attempt to put together all strings for hopeful localization).
     miscellaneous other stuff (including initialization code & options).
 
-./hdrs/
+./src/hdrs/
 
     Header files.
     screen.h is curses-specific, and will probably be moved eventually.
 
-./hdrs/win32/
+./src/hdrs/win32/
 
     Headers for win32 implementation code.
 
-./interp/
+./src/interp/
 
     Report generator program interpreter.
 
-./intl/
-
-    Local gettext implementation, which substitutes in appropriate language
-    translation strings on the fly.
-
-./liflines/
+./src/liflines/
 
     The frontend logic and GUI code of the LifeLines application.
     Code to implement import & export, editing, & merging records.
@@ -55,23 +88,14 @@ Source Code Directories
     probably will not be used by other interfaces:
       menuitem.c, pedigree.c
 
-./m4/
-
-    m4 language macros for the Autoconf/Automake system, mostly
-    for the gettext intl subdirectory.
-
-./po/
-
-    Translations (gettext message catalogs).
-
-./stdlib/
+./src/stdlib/
 
     Common data types & functions used by other LifeLines modules,
     including:
       lists (in double.c), tables, sequences, string stuff
     These are all independent of LifeLines or GEDCOM.
 
-./tools/
+./src/tools/
 
     btedit - edit the binary records in the btree (database) itself
     dbverify - check a database for errors
@@ -88,10 +112,6 @@ Source Code Directories
 ./win32/hdrs/ (OBSOLETE)
 
     Headers used in win32 port (before ./hdrs existed)
-
-./win32/msvc6
-
-    Project files for Miscrosoft Visual C++ 6
 
 
 Non-Source Code Directories
