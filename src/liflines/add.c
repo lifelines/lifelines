@@ -157,12 +157,12 @@ add_linked_indi (NODE indi)
 	stdfree(str);
 	return TRUE;
 }
-/*==================================
+/*========================================================
  * ask_child_order --  ask user in what order to put child
  * (with user interaction)
- *================================*/
+ *======================================================*/
 INT
-ask_child_order(NODE fam, int prompt)
+ask_child_order(NODE fam, PROMPTQ promptq)
 {
 	INT i, nchildren;
 	STRING *childstrings, *childkeys;
@@ -170,7 +170,7 @@ ask_child_order(NODE fam, int prompt)
 
 	childstrings = get_child_strings(fam, &nchildren, &childkeys);
 	if (nchildren == 0) {
-		if (prompt == ALWAYS_PROMPT && !ask_yes_or_no(cfcadd))
+		if (promptq == ALWAYS_PROMPT && !ask_yes_or_no(cfcadd))
 				return -1;
 		i=0;
 /* If not first, find where child belongs */
@@ -214,10 +214,10 @@ add_child (NODE child,
 	return fam;
 }
 
-/*===================================
+/*========================================
  * add_child_to_fam -- Add child to family
  * (no user interaction)
- *=================================*/
+ *======================================*/
 void
 add_child_to_fam(NODE child, NODE fam, INT i)
 {

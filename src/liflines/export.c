@@ -88,7 +88,7 @@ archive_in_file (void)
 	wfield(4, 1, "     0 Events");
 	wfield(5, 1, "     0 Sources");
 	wfield(6, 1, "     0 Others");
-	traverse(BTR, bmaster(BTR), NULL, archive);
+	traverse_index_blocks(BTR, bmaster(BTR), NULL, archive);
 	fprintf(fn, "0 TRLR\n");
 	fclose(fn);
 	wpos(7,0);

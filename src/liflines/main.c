@@ -42,6 +42,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "arch.h"
 
 /* TO DO - needs adding to autoconf */
 #ifdef WIN32

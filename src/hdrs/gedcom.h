@@ -61,6 +61,14 @@ struct ntag {
 #define nchild(n)   ((n)->n_child)
 #define nsibling(n) ((n)->n_sibling)
 
+/*==============================================
+ * Option type enumerations (but we use defines)
+ *============================================*/
+
+typedef INT PROMPTQ;
+#define ALWAYS_PROMPT 0
+#define PROMPT_IF_CHILDREN 1
+
 #define SEX_MALE    1
 #define SEX_FEMALE  2
 #define SEX_UNKNOWN 3
@@ -80,6 +88,10 @@ struct ntag {
 #define MINDS 4
 #define MINRP 5
 
+/*========
+ * Globals
+ *======*/
+
 extern INT lineno;
 extern INT tlineno;
 extern BOOLEAN inited;
@@ -93,7 +105,10 @@ extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
 extern TABLE useropts;		/* table for user options */
 
-/* function definitions */
+/*=====================
+ * Function definitions
+ *===================*/
+
 STRING addat(STRING);
 void addixref(INT);
 void addexref(INT);
@@ -109,8 +124,7 @@ BOOLEAN add_name(STRING, STRING);
 BOOLEAN add_refn(STRING, STRING);
 NODE add_unlinked_indi (NODE indi);
 BOOLEAN allwhite(STRING);
-enum {ALWAYS_PROMPT, PROMPT_IF_CHILDREN};
-INT ask_child_order(NODE fam, int prompt);
+INT ask_child_order(NODE fam, PROMPTQ promptq);
 void cache_stats(void);
 NODE choose_any_source();
 NODE choose_child(NODE, NODE, STRING, STRING, BOOLEAN);
@@ -147,6 +161,7 @@ INT file_to_line(FILE*, TRANTABLE, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, STRING);
 NODE first_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
+void free_name_list (LIST list);
 void free_node(NODE);
 void free_nodes(NODE);
 STRING full_value(NODE);
@@ -279,7 +294,9 @@ BOOLEAN store_record(STRING, STRING, INT);
 NODE string_to_node(STRING);
 void striptrail(STRING);
 BOOLEAN symbolic_link(STRING);
+void traverse_names(BOOLEAN(*func)(STRING skey, STRING name, void *param), void *param);
 BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)(NODE));
+void traverse_db_rec_skeys(STRING lo, STRING hi, BOOLEAN(*func)(STRING key, STRING, INT, void *), void * data);
 INT tree_strlen(INT, NODE);
 STRING trim_name(STRING, INT);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);

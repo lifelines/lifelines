@@ -102,29 +102,13 @@ static INT     LMcount = 0;
 static INT     LMmax = 0;
 
 /*====================================================
- * getnamerec -- Read name record and store in globals
+ * parsenamerec -- Store name rec in file buffers
  *==================================================*/
-BOOLEAN
-getnamerec (STRING name)
+static void
+parsenamerec (RKEY rkey, STRING p)
 {
-	STRING p;
 	INT i;
-
-/* Convert name to key and read name record */
-	NRkey = name2rkey(name);
-	if (NRrec) stdfree(NRrec);
-	p = NRrec = (STRING) getrecord(BTR, NRkey, &NRsize);
-	if (!NRrec) {
-		NRcount = 0;
-		if (NRmax == 0) {
-			NRmax = 10;
-			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
-			NRoffs = (INT *) stdalloc(10*sizeof(INT));
-			NRnames = (STRING *) stdalloc(10*sizeof(STRING));
-		}
-		return FALSE;
-	}
-
+	NRkey = rkey;
 /* Store name record in data structures */
 	memcpy (&NRcount, p, sizeof(INT));
 	p += sizeof(INT);
@@ -149,12 +133,35 @@ getnamerec (STRING name)
 	}
 	for (i = 0; i < NRcount; i++)
 		NRnames[i] = p + NRoffs[i];
+}
+/*====================================================
+ * getnamerec -- Read name record and store in file buffers
+ *==================================================*/
+static BOOLEAN
+getnamerec (STRING name)
+{
+	STRING p;
+/* Convert name to key and read name record */
+	NRkey = name2rkey(name);
+	if (NRrec) stdfree(NRrec);
+	p = NRrec = (STRING) getrecord(BTR, NRkey, &NRsize);
+	if (!NRrec) {
+		NRcount = 0;
+		if (NRmax == 0) {
+			NRmax = 10;
+			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
+			NRoffs = (INT *) stdalloc(10*sizeof(INT));
+			NRnames = (STRING *) stdalloc(10*sizeof(STRING));
+		}
+		return FALSE;
+	}
+	parsenamerec(NRkey, p);
 	return TRUE;
 }
 /*============================================
  * name2rkey - Convert name to name record key
  *==========================================*/
-RKEY
+static RKEY
 name2rkey (STRING name)
 {
 	RKEY rkey;
@@ -167,6 +174,32 @@ name2rkey (STRING name)
 	rkey.r_rkey[5] = *sdex++;
 	rkey.r_rkey[6] = *sdex++;
 	rkey.r_rkey[7] = *sdex;
+	return rkey;
+}
+/*=======================================
+ * name_lo - Lower limit for name records
+ *=====================================*/
+RKEY
+name_lo ()
+{
+	RKEY rkey;
+	INT i;
+	for (i=0; i<8; i++)
+		rkey.r_rkey[i] = ' ';
+	rkey.r_rkey[2] = 'N';
+	return rkey;
+}
+/*=======================================
+ * name_hi - Upper limit for name records
+ *=====================================*/
+RKEY
+name_hi ()
+{
+	RKEY rkey;
+	INT i;
+	for (i=0; i<8; i++)
+		rkey.r_rkey[i] = ' ';
+	rkey.r_rkey[2] = 'O';
 	return rkey;
 }
 /*=============================
@@ -310,7 +343,7 @@ add_name (STRING name,  /* person's name */
 	INT i, len, off;
 	RKEY rkey;
 	rkey = str2rkey(key);
-	(void) getnamerec(name);
+	ASSERT(getnamerec(name));
 	for (i = 0; i < NRcount; i++) {
 		if (!ll_strncmp(rkey.r_rkey, NRkeys[i].r_rkey, 8) &&
 		    eqstr(name, NRnames[i]))
@@ -887,4 +920,51 @@ name_to_list (STRING name,      /* GEDCOM name */
 	}
 	*plen = i;
 	return TRUE;
+}
+/*====================================================
+ * free_name_el -- free element of list created by name_to_list
+ *==================================================*/
+static void
+free_name_el(WORD w)
+{
+	free((STRING)w);
+}
+/*====================================================
+ * free_name_list -- Free list created by name_to_list
+ *==================================================*/
+void
+free_name_list (LIST list)
+{
+	remove_list(list, free_name_el);
+}
+/*=======================================
+ * traverse_names -- traverse names in db
+ *=====================================*/
+typedef struct
+{
+	BOOLEAN(*func)(STRING skey, STRING name, void *param);
+	void * param;
+} TRAV_NAME_PARAM;
+static BOOLEAN
+traverse_name_callback(RKEY rkey, STRING data, INT len, void *param)
+{
+	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
+	INT i;
+
+	parsenamerec(rkey, data);
+
+	for (i=0; i<NRcount; i++)
+	{
+		if (!tparam->func(rkey2str(NRkeys[i]), NRnames[i], tparam->param))
+			return FALSE;
+	}
+	return TRUE;
+}
+void
+traverse_names(BOOLEAN(*func)(STRING skey, STRING name, void *param), void *param)
+{
+	TRAV_NAME_PARAM tparam;
+	tparam.param = param;
+	tparam.func = func;
+	traverse_db_rec_rkeys(BTR, name_lo(), name_hi(), &traverse_name_callback, &tparam);
 }

@@ -27,13 +27,13 @@
 #include "llstdlib.h"
 #include "btreei.h"
 
-/*========================================
- * traverse - Traverse BTREE, doing things
- *======================================*/
+/*=====================================================
+ * traverse_index_blocks - Traverse BTREE, doing things
+ *===================================================*/
 BOOLEAN
-traverse (BTREE btree, INDEX index,
-          BOOLEAN (*ifunc)(BTREE, INDEX),
-          BOOLEAN (*dfunc)(BTREE, BLOCK))
+traverse_index_blocks (BTREE btree, INDEX index,
+                       BOOLEAN (*ifunc)(BTREE, INDEX),
+                       BOOLEAN (*dfunc)(BTREE, BLOCK))
 {
 	INDEX newdex;
 	STRING bdir = bbasedir(btree);
@@ -48,7 +48,7 @@ traverse (BTREE btree, INDEX index,
 		for (i = 0; i <= n; i++) {
 			BOOLEAN rc;
 			newdex = readindex(bdir, fkeys(index, i));
-			rc = traverse(btree, newdex, ifunc, dfunc);
+			rc = traverse_index_blocks(btree, newdex, ifunc, dfunc);
 			stdfree(newdex);
 			if (!rc) return FALSE;
 		}
@@ -57,4 +57,74 @@ traverse (BTREE btree, INDEX index,
 	if (dfunc != NULL)
 		return (*dfunc)(btree, (BLOCK)index);
 	return TRUE;
+}
+/*====================================================
+ * traverse_block -- traverse subtree whilst under key
+ *==================================================*/
+static BOOLEAN
+traverse_block (BTREE btree, BLOCK block, RKEY lo, RKEY hi,
+	BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+{
+	STRING p;
+	INT i, len;
+	RECORD rec;
+	for (i=0; i<nkeys(block);i++)
+	{
+		if (ll_strncmp(lo.r_rkey, rkeys(block, i).r_rkey, 8) >= 0)
+			continue;
+		if (ll_strncmp(hi.r_rkey, rkeys(block, i).r_rkey, 8) < 0)
+			continue;
+		rec = readrec(btree, block, i, &len);
+		p = rec;
+		if (!(*func)(rkeys(block,i), p, len, param))
+			return FALSE;
+	}
+	return TRUE;
+}
+/*====================================================
+ * traverse_index -- traverse subtree whilst under key
+ *==================================================*/
+static BOOLEAN
+traverse_index (BTREE btree, INDEX index, RKEY lo, 
+	RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+{
+	INDEX index1;
+	BLOCK block1;
+	SHORT i, n;
+	FKEY nfkey;
+
+	n = nkeys(index);
+	/* advance over any below lo */
+	for (i=1; i<=n; i++) {
+		if (ll_strncmp(lo.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			break;
+	}
+	/* process all until above hi */
+	for ( ; i<=n+1; i++) {
+		if (i<n+1 && ll_strncmp(hi.r_rkey, rkeys(index, i).r_rkey, 8) < 0)
+			break;
+		nfkey = fkeys(index, i-1);
+		ASSERT(index1 = getindex(btree, nfkey));
+		if (itype(index1) == BTINDEXTYPE) {
+			if (!traverse_index(btree, index1,lo, hi, func, param))
+				return FALSE;
+		} else {
+			block1 = (BLOCK)index1;
+			if (!traverse_block(btree, block1, lo, hi, func, param))
+				return FALSE;
+		}
+	}
+	return TRUE;
+}
+/*==============================================
+ * traverse_db_rec_rkeys -- traverse a span of records
+ *  using rkeys
+ *============================================*/
+void
+traverse_db_rec_rkeys (BTREE btree, RKEY lo, RKEY hi, 
+	BOOLEAN(*func)(RKEY, STRING, INT len, void *), void * param)
+{
+	INDEX index;
+	ASSERT(index = bmaster(btree));
+	traverse_index(btree, index, lo, hi, func, param);
 }

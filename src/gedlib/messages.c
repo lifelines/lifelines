@@ -74,6 +74,10 @@ STRING idcswp = SS "Identify a parent in the family having children swapped.";
 STRING idfswp = SS "Whose families/spouses are to be swapped?";
 STRING idprnt = SS "Identify one of the child's parents, if known.";
 
+STRING scanrs = SS "Scan results:";
+STRING scannm = SS "Enter a single surname or given name (no wildcards at present).";
+STRING scantt = SS "pattern: ";
+
 STRING chfamily = SS "Please choose a family.";
 STRING notone = SS "Please choose from among these persons.";
 STRING iscnew = SS "Is this the new child? ";

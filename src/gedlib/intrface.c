@@ -70,3 +70,29 @@ store_file (STRING key,
 {
 	return addfile(BTR, str2rkey(key), file);
 }
+/*====================================================
+ * traverse_db_key_skeys -- traverse a span of records
+ *  using STRING keys
+ *==================================================*/
+typedef struct
+{
+	BOOLEAN(*func)(STRING key, STRING data, INT len, void * param);
+	void * param;
+} TRAV_PARAM;
+static BOOLEAN
+trav_callback(RKEY rkey, STRING data, INT len, void * param)
+{
+	TRAV_PARAM *tparam = (TRAV_PARAM *)param;
+	unsigned char skey[9];
+	strcpy(skey, rkey2str(rkey));
+	return tparam->func(skey, data, len, tparam->param);
+}
+void
+traverse_db_rec_skeys(STRING lo, STRING hi, 
+	BOOLEAN(*func)(STRING key, STRING, INT len, void *param), void *param)
+{
+	TRAV_PARAM tparam;
+	tparam.param = param;
+	tparam.func = func;
+	traverse_db_rec_rkeys(BTR, str2rkey(lo), str2rkey(hi), trav_callback, &tparam);
+}

@@ -274,6 +274,32 @@ filecopy (FILE *fo,
 		ASSERT(fwrite(buffer, len, 1, fn) == 1);
 	}
 }
+/*==================================
+ * readrec -- read record from block
+ *================================*/
+RECORD
+readrec(BTREE btree, BLOCK block, INT i, INT *plen)
+{
+	char scratch[200];
+	FILE *fr;
+	RECORD record;
+	INT len;
+
+	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
+	ASSERT(fr = fopen(scratch, LLREADBINARY));
+	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) FATAL();
+	if ((len = lens(block, i)) == 0) {
+		*plen = 0;
+		fclose(fr);
+		return NULL;
+	}
+	record = (RECORD) stdalloc(len + 1);
+	ASSERT(fread(record, len, 1, fr) == 1);
+	fclose(fr);
+	record[len] = 0;
+	*plen = len;
+	return record;
+}
 /*===================================
  * getrecord -- Get record from BTREE
  *=================================*/
@@ -287,10 +313,6 @@ getrecord (BTREE btree,
 	FKEY nfkey;
 	BLOCK block;
 	BOOLEAN found = FALSE;
-	char scratch[200];
-	FILE *fr;
-	RECORD record;
-	INT len;
 
 #ifdef DEBUG
 	llwprintf("GETRECORD: rkey: %s\n", rkey2str(rkey));
@@ -329,20 +351,7 @@ getrecord (BTREE btree,
 	}
 	if (!found) return NULL;
 
-	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(iself(block)));
-	ASSERT(fr = fopen(scratch, LLREADBINARY));
-	if (fseek(fr, (long)(offs(block, lo) + BUFLEN), 0)) FATAL();
-	if ((len = lens(block, lo)) == 0) {
-		*plen = 0;
-		fclose(fr);
-		return NULL;
-	}
-	record = (RECORD) stdalloc(len + 1);
-	ASSERT(fread(record, len, 1, fr) == 1);
-	fclose(fr);
-	record[len] = 0;
-	*plen = len;
-	return record;
+	return readrec(btree, block, lo, plen);
 }
 /*=======================================
  * movefiles -- Move first file to second

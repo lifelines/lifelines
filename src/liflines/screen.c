@@ -72,6 +72,7 @@ static void create_windows (void);
 static void del_menu (void);
 static void extra_menu (void);
 static void init_all_windows (void);
+static void scan_menu (void);
 static void trans_menu (void);
 static void utils_menu (void);
 static void win_list_init (void);
@@ -94,6 +95,7 @@ WINDOW *debug_win, *debug_box_win;
 WINDOW *ask_win, *ask_msg_win;
 WINDOW *choose_from_list_win;
 WINDOW *add_menu_win, *del_menu_win;
+WINDOW *scan_menu_win;
 WINDOW *utils_menu_win, *trans_menu_win;
 WINDOW *extra_menu_win;
 
@@ -228,6 +230,7 @@ paint_main_screen(void)
 	row = 5;
 	mvwaddstr(win, row++, 2, plschs);
 	mvwaddstr(win, row++, 4, "b  Browse the persons in the database");
+	mvwaddstr(win, row++, 4, "s  Search database");
 	mvwaddstr(win, row++, 4, "a  Add information to the database");
 	mvwaddstr(win, row++, 4, "d  Delete information from the database");
 	mvwaddstr(win, row++, 4, "r  Generate reports from the database");
@@ -468,6 +471,7 @@ create_windows (void)
  	main_win = NEWWIN(ll_lines, ll_cols);
 	add_menu_win = NEWWIN(8, 66);
 	del_menu_win = NEWWIN(7, 66);
+	scan_menu_win = NEWWIN(6,66);
 	trans_menu_win = NEWWIN(10,66);
 	utils_menu_win = NEWWIN(12, 66);
 	extra_menu_win = NEWWIN(13,66);
@@ -478,6 +482,7 @@ create_windows (void)
 
 	BOX(add_menu_win, 0, 0);
 	BOX(del_menu_win, 0, 0);
+	BOX(scan_menu_win, 0, 0);
 	BOX(trans_menu_win, 0, 0);
 	BOX(utils_menu_win, 0, 0);
 	BOX(extra_menu_win, 0, 0);
@@ -510,6 +515,12 @@ init_all_windows (void)
 	    "c  Child - remove a child from his/her family");
 	mvwaddstr(win, row++, 4, "s  Spouse - remove a spouse from a family");
 	mvwaddstr(win, row++, 4, "i  Individual - remove a person completely");
+	mvwaddstr(win, row++, 4, "q  Quit - return to the previous menu");
+
+	win = scan_menu_win;
+	row = 1;
+	mvwaddstr(win, row++, 2, "What scan type?");
+	mvwaddstr(win, row++, 4, "n  Name scan");
 	mvwaddstr(win, row++, 4, "q  Quit - return to the previous menu");
 
 	win = trans_menu_win;
@@ -583,11 +594,12 @@ main_menu (void)
 	if (cur_screen != MAIN_SCREEN) paint_main_screen();
 	display_screen(MAIN_SCREEN);
 	/* place_std_msg(); */ /*POSS*/
-	c = interact(main_win, "badrtuxq");
+	c = interact(main_win, "bsadrtuxq");
 	place_std_msg();
 	wrefresh(main_win);
 	switch (c) {
 	case 'b': browse(NULL); break;
+	case 's': scan_menu(); break;
 	case 'a': add_menu(); break;
 	case 'd': del_menu(); break;
 	case 'r': interp_main(); break;
@@ -834,6 +846,28 @@ choose_list_from_indiseq (STRING ttl,
 	wrefresh(main_win);
 	return seq;
 }
+/*==============================
+ * scan_menu -- Handle scan menu
+ *============================*/
+void
+scan_menu (void)
+{
+	NODE node;
+	INT code;
+	touchwin(scan_menu_win);
+	wmove(scan_menu_win, 1, 27);
+	wrefresh(scan_menu_win);
+	code = interact(scan_menu_win, "nq");
+	touchwin(main_win);
+	wrefresh(main_win);
+	switch (code) {
+	case 'n':
+		node = name_scan();
+		if (node) browse(node);
+		break;
+	case 'q': break;
+	}
+}
 /*============================
  * add_menu -- Handle add menu
  *==========================*/
@@ -882,7 +916,7 @@ del_menu (void)
 /*======================================
  * trans_menu -- Handle translation menu
  *====================================*/
-void
+static void
 trans_menu (void)
 {
 	INT code;
@@ -905,7 +939,7 @@ trans_menu (void)
 /*====================================
  * utils_menu -- Handle utilities menu
  *==================================*/
-void
+static void
 utils_menu (void)
 {
 	INT code;

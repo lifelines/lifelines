@@ -94,6 +94,7 @@ extern WINDOW *choose_from_list_win;
 extern WINDOW *start_menu_win;
 extern WINDOW *add_menu_win;
 extern WINDOW *del_menu_win;
+extern WINDOW *scan_menu_win;
 extern WINDOW *utils_menu_win;
 
 /* Function Prototype */

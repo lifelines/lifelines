@@ -60,6 +60,9 @@ void pedigree_toggle_mode(void);
 BOOLEAN remove_child(NODE, NODE, BOOLEAN);
 BOOLEAN remove_spouse(NODE, NODE, BOOLEAN);
 
+/* scan.c */
+NODE name_scan(void);
+
 /* show.c */
 void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT flag);
 void show_list(INDISEQ, INT, INT, INT);

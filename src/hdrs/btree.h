@@ -135,13 +135,19 @@ BOOLEAN closebtree(BTREE);
 BTREE openbtree(STRING, BOOLEAN, BOOLEAN);
 BOOLEAN validate_keyfilex(KEYFILEX *);
 
+/* names.c */
+RKEY name_hi();
+RKEY name_lo();
+
 /* record.c */
 BOOLEAN addrecord(BTREE, RKEY, RECORD, INT);
 RECORD getrecord(BTREE, RKEY, INT*);
 BOOLEAN isrecord(BTREE, RKEY);
+RECORD readrec(BTREE btree, BLOCK block, INT i, INT *plen);
 
 /* traverse.c */
-BOOLEAN traverse(BTREE, INDEX, BOOLEAN (*ifunc)(BTREE, INDEX), BOOLEAN (*dfunc)(BTREE, BLOCK));
+BOOLEAN traverse_index_blocks(BTREE, INDEX, BOOLEAN (*ifunc)(BTREE, INDEX), BOOLEAN (*dfunc)(BTREE, BLOCK));
+void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING, INT len, void *param), void *param);
 
 /* utils.c */
 STRING rkey2str(RKEY);

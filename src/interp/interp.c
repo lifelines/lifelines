@@ -40,6 +40,7 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "screen.h"
+#include "arch.h"
 
 extern STRING llprograms;
 extern BOOLEAN progrunning;
