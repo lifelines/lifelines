@@ -4,6 +4,12 @@
 
 	Clear previous error info when running a new report.
 
+	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/interp.h
+	src/hdrs/zstr.h src/interp/alloc.c src/interp/builtin.c
+	src/interp/pvalmath.c src/interp/pvalue.c src/stdlib/zstr.c:
+
+	Improved error reporting for numeric operators.
+
 2003-01-23 Steve Dum
   
         * ChangeLog reports/Makefile.am, reports/gen_index, 

@@ -35,12 +35,16 @@
 #include "interp.h"
 #include "liflines.h"
 #include "feedback.h"
+#include "zstr.h"
 
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
+static void illegal_value(CNSTRING op, PVALUE val, BOOLEAN *eflg, ZSTR * zerr);
+static void invalid_numeric_type(CNSTRING op, PVALUE val, BOOLEAN *eflg, ZSTR * zerr);
+static void num_conform_pvalues(CNSTRING op, PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
 
 /*********************************************
  * local variables
@@ -52,25 +56,55 @@
  * body of module
  *********************************************/
 
-
+/*===============================
+ * invalid_numeric_type -- Report error of using
+ *  non-numeric type in numeric operation
+ * Created: 2003-01-30 (Perry Rapp)
+ *=============================*/
+static void
+invalid_numeric_type (CNSTRING op, PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
+{
+	if (zerr) {
+		ZSTR zt = describe_pvalue(val);
+		ASSERT(!(*zerr));
+		(*zerr) = zs_newf(_("Nonnumeric type to operation %s: %s"), op, zs_str(zt));
+		zs_free(&zt);
+	}
+	*eflg = TRUE;
+}
+/*===============================
+ * illegal_value -- Report error of using illegal value in numeric operation
+ * Created: 2003-01-30 (Perry Rapp)
+ *=============================*/
+static void
+illegal_value (CNSTRING op, PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
+{
+	if (zerr) {
+		ZSTR zt = describe_pvalue(val);
+		ASSERT(!(*zerr));
+		(*zerr) = zs_newf(_("Illegal value to operation %s: %s"), op, zs_str(zt));
+		zs_free(&zt);
+	}
+	*eflg = TRUE;
+}
 /*===============================
  * add_pvalues -- Add two PVALUEs
  * modify val1 and delete val2
  *=============================*/
 void
-add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	UNION u1, u2;
 
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("add", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	u1.w = pvalue(val1);
 	u2.w = pvalue(val2);
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) += pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) += pvalue_to_float(val2); break;
-	default: *eflg = TRUE; return;
+	default: invalid_numeric_type("add", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
@@ -78,15 +112,15 @@ add_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * sub_pvalues -- Subtract two PVALUEs
  *==================================*/
 void
-sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("sub", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) -= pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) -= pvalue_to_float(val2); break;
-	default: *eflg = TRUE; return;
+	default: invalid_numeric_type("sub", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
@@ -94,15 +128,15 @@ sub_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * mul_pvalues -- Multiply two PVALUEs
  *==================================*/
 void
-mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("mul", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) *= pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) *= pvalue_to_float(val2); break;
-	default: *eflg = TRUE; return;
+	default: invalid_numeric_type("mul", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
@@ -110,19 +144,16 @@ mul_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * div_pvalues -- Divide two PVALUEs
  *================================*/
 void
-div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("div", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) {
-		*eflg = TRUE;
-		return;
-	}
+	if (is_zero(val2)) { illegal_value("div", val2, eflg, zerr); }
 	switch (ptype(val1)) {
 	case PINT:   *pvalue_to_pint(val1) /= pvalue_to_int(val2); break;
 	case PFLOAT: *pvalue_to_pfloat(val1) /= pvalue_to_float(val2); break;
-	default: *eflg = TRUE; return;
+	default: invalid_numeric_type("div", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
@@ -130,15 +161,12 @@ div_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * mod_pvalues -- Modulus two PVALUEs
  *=================================*/
 void
-mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("mod", val1, val2, eflg, zerr);
 	if (*eflg) return;
-	if (is_zero(val2)) {
-		*eflg = TRUE;
-		return;
-	}
+	if (is_zero(val2)) { illegal_value("mod", val2, eflg, zerr); }
 	switch (ptype(val1)) {
 	case PINT:
 		{
@@ -146,22 +174,20 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 			*pvalue_to_pint(val1) = i1;
 		}
 		break;
-	default:
-		*eflg = TRUE;
-		return;
+	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
 /*================================================
  * le_pvalues -- Check <= relation between PVALUEs
- * delete val2
+ * Result into val1, deletes val2
  *==============================================*/
 void
-le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel=FALSE;
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("le", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PFLOAT: 
@@ -170,23 +196,21 @@ le_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	case PINT:
 		rel = (pvalue_to_int(val1) <= pvalue_to_int(val2));
 		break;
-	default:
-		*eflg = TRUE;
-		break;
+	default: invalid_numeric_type("le", val1, eflg, zerr); return;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }
 /*================================================
  * ge_pvalues -- Check >= relation between PVALUEs
- * delete val2
+ * Result into val1, deletes val2
  *==============================================*/
 void
-ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel=FALSE;
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("ge", val1, val2, eflg, zerr);
 	if (*eflg) return;
 
 	switch (ptype(val1)) {
@@ -196,9 +220,7 @@ ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	case PINT:
 		rel = (pvalue_to_int(val1) >= pvalue_to_int(val2)); 
 		break;
-	default:
-		*eflg = TRUE;
-		break;
+	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
@@ -208,11 +230,11 @@ ge_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * delete val2
  *=============================================*/
 void
-lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel=FALSE;
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("lt", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PFLOAT:
@@ -221,9 +243,7 @@ lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	case PINT: 
 		rel = (pvalue_to_int(val1) < pvalue_to_int(val2)); 
 		break;
-	default:
-		*eflg = TRUE;
-		break;
+	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
@@ -233,11 +253,11 @@ lt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * delete val2
  *=============================================*/
 void
-gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel=FALSE;
 	if (*eflg) return;
-	num_conform_pvalues(val1, val2, eflg);
+	num_conform_pvalues("gt", val1, val2, eflg, zerr);
 	if (*eflg) return;
 	switch (ptype(val1)) {
 	case PFLOAT: 
@@ -246,9 +266,7 @@ gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	case PINT:
 		rel = pvalue_to_int(val1) > pvalue_to_int(val2);
 		break;
-	default: 
-		*eflg = TRUE;
-		break;
+	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
@@ -258,7 +276,7 @@ gt_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * delete val2
  *============================*/
 void
-exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	INT i, n;
 
@@ -283,9 +301,7 @@ exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 			*pvalue_to_pfloat(val1) = xf;
 		}
 		break;
-	default: 
-		*eflg=TRUE;
-		break;
+	default: invalid_numeric_type("exp", val1, eflg, zerr); return;
 	}
 	delete_pvalue(val2);
 }
@@ -293,14 +309,13 @@ exp_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
  * incr_pvalue -- Increment a PVALUE
  *================================*/
 void
-incr_pvalue (PVALUE val,
-             BOOLEAN *eflg)
+incr_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
 	case PINT:   *pvalue_to_pint(val) += 1; break;
 	case PFLOAT: *pvalue_to_pfloat(val) += 1.; break;
-	default: *eflg = TRUE; break;
+	default: invalid_numeric_type("incr", val, eflg, zerr); return;
 	}
 	return;
 }
@@ -308,28 +323,26 @@ incr_pvalue (PVALUE val,
  * decr_pvalue -- Decrement a PVALUE
  *================================*/
 void
-decr_pvalue (PVALUE val,
-             BOOLEAN *eflg)
+decr_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
 	case PINT:   *pvalue_to_pint(val) -= 1; break;
 	case PFLOAT: *pvalue_to_pfloat(val) -= 1.; break;
-	default: *eflg = TRUE; break;
+	default: invalid_numeric_type("decr", val, eflg, zerr); return;
 	}
 }
 /*============================
  * neg_pvalue -- Negate PVALUE
  *==========================*/
 void
-neg_pvalue (PVALUE val,
-            BOOLEAN *eflg)
+neg_pvalue (PVALUE val, BOOLEAN *eflg, ZSTR * zerr)
 {
 	if (*eflg) return;
 	switch (ptype(val)) {
 	case PINT:   *pvalue_to_pint(val) = -pvalue_to_int(val); break;
 	case PFLOAT: *pvalue_to_pfloat(val) = -pvalue_to_float(val); break;
-	default: *eflg = TRUE; return;
+	default: invalid_numeric_type("neg", val, eflg, zerr); return;
 	}
 	return;
 }
@@ -344,4 +357,32 @@ is_zero (PVALUE val)
 	case PFLOAT: return pvalue_to_float(val) == 0.;
 	default: return TRUE;
 	}
+}
+/*============================================================
+ * num_conform_pvalues -- Make the types of two values conform
+ *==========================================================*/
+static void
+num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
+{
+	ASSERT(val1 && val2);
+
+	if (ptype(val1) == PANY && pvalue(val1) == NULL)
+		ptype(val1) = ptype(val2);
+	if (ptype(val2) == PANY && pvalue(val2) == NULL)
+		ptype(val2) = ptype(val1);
+	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
+		INT hitype = max(ptype(val1), ptype(val2));
+		if (ptype(val1) != hitype) coerce_pvalue(hitype, val1, eflg);
+		if (ptype(val2) != hitype) coerce_pvalue(hitype, val2, eflg);
+		if (!(*eflg)) return;
+	}
+	if (zerr) {
+		ZSTR zt1 = describe_pvalue(val1), zt2 = describe_pvalue(val2);
+		ASSERT(!(*zerr));
+		(*zerr) = zs_newf(_("%s: incompatible types: %s and %s")
+			, op, zs_str(zt1), zs_str(zt2));
+		zs_free(&zt1);
+		zs_free(&zt2);
+	}
+	*eflg = TRUE;
 }

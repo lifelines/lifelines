@@ -440,6 +440,18 @@ delete_pvalue (PVALUE val)
 	clear_pvalue(val);
 	free_pvalue_memory(val);
 }
+/*========================================
+ * delete_pvalue_ptr -- Delete & clear a program value
+ * Created: 2003-01-30 (Perry Rapp)
+ *======================================*/
+void
+delete_pvalue_ptr (PVALUE * valp)
+{
+	if (valp) {
+		delete_pvalue(*valp);
+		*valp = 0;
+	}
+}
 /*====================================
  * copy_pvalue -- Create a new pvalue & copy into it
  *  handles NULL
@@ -816,29 +828,6 @@ is_numeric_pvalue (PVALUE val)
 	INT type = ptype(val);
 	return type == PINT || type == PFLOAT;
 }
-/*============================================================
- * num_conform_pvalues -- Make the types of two values conform
- *==========================================================*/
-void
-num_conform_pvalues (PVALUE val1,
-                     PVALUE val2,
-                     BOOLEAN *eflg)
-{
-	INT hitype;
-
-	ASSERT(val1 && val2);
-	if (ptype(val1) == PANY && pvalue(val1) == NULL)
-		ptype(val1) = ptype(val2);
-	if (ptype(val2) == PANY && pvalue(val2) == NULL)
-		ptype(val2) = ptype(val1);
-	if (is_numeric_pvalue(val1) && is_numeric_pvalue(val2)) {
-		hitype = max(ptype(val1), ptype(val2));
-		if (ptype(val1) != hitype) coerce_pvalue(hitype, val1, eflg);
-		if (ptype(val2) != hitype) coerce_pvalue(hitype, val2, eflg);
-		return;
-	}
-	*eflg = TRUE;
-}
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform
  *=========================================================*/
@@ -1060,17 +1049,49 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 	return rel;
 }
 /*===========================================
- * eq_pvalues -- See if two PVALUEs are equal
- *  and delete val2
+ * bad_type_error -- Set error description
+ *  for types that cannot be compared
+ * Created: 2003-01-30 (Perry Rapp)
  *=========================================*/
 void
-eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+bad_type_error (CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2)
+{
+	if (zerr) {
+		ZSTR zt1 = describe_pvalue(val1), zt2 = describe_pvalue(val2);
+		ASSERT(!(*zerr));
+		(*zerr) = zs_newf(_("%s: Incomparable types: %s and %s")
+			, op, zs_str(zt1), zs_str(zt2));
+		zs_free(&zt1);
+		zs_free(&zt2);
+	}
+}
+/*===============================================
+ * eq_pstrings -- Compare two PSTRINGS
+ *  Caller is responsible for ensuring these are PSTRINGS
+ *=============================================*/
+static BOOLEAN
+eq_pstrings (PVALUE val1, PVALUE val2)
+{
+	STRING str1 = pvalue(val1), str2 = pvalue(val2);
+	if (!str1) str1 = "";
+	if (!str2) str2 = "";
+	return eqstr(str1, str2);
+}
+/*===========================================
+ * eq_pvalues -- See if two PVALUEs are equal
+ * Result into val1, deletes val2
+ *=========================================*/
+void
+eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel;
 
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
-	if (*eflg) return;
+	if (*eflg) {
+		bad_type_error("eq", zerr, val1, val2);
+		return;
+	}
 	switch (ptype(val1)) {
 	case PSTRING:
 		rel = eq_pstrings(val1, val2);
@@ -1087,30 +1108,20 @@ eq_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	delete_pvalue(val2);
 }
 /*===============================================
- * eq_pstrings -- Compare two PSTRINGS
- *  Caller is responsible for ensuring these are PSTRINGS
- *=============================================*/
-static BOOLEAN
-eq_pstrings (PVALUE val1, PVALUE val2)
-{
-	STRING str1 = pvalue(val1), str2 = pvalue(val2);
-	if (!str1) str1 = "";
-	if (!str2) str2 = "";
-	return eqstr(str1, str2);
-}
-/*===============================================
  * ne_pvalues -- See if two PVALUEs are not equal
- * delete val2
+ * Result into val1, deletes val2
  *=============================================*/
 void
-ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
+ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
 	BOOLEAN rel;
 
 	if (*eflg) return;
 	eq_conform_pvalues(val1, val2, eflg);
-
-	if (*eflg) return;
+	if (*eflg) {
+		bad_type_error("ne", zerr, val1, val2);
+		return;
+	}
 	switch (ptype(val1)) {
 	case PSTRING:
 		rel = !eq_pstrings(val1, val2);
@@ -1122,7 +1133,6 @@ ne_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 		rel = (pvalue(val1) != pvalue(val2));
 		break;
 	}
-
 	set_pvalue(val1, PBOOL, (VPTR)rel);
 	delete_pvalue(val2);
 }

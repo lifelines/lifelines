@@ -133,6 +133,17 @@ zs_newz (ZCSTR zsrc)
 	zs_setz(zstr, zsrc);
 	return zstr;
 }
+/* create & return new zstring copying from printf style input */
+ZSTR
+zs_newf (const char * fmt, ...)
+{
+	ZSTR zstr;
+	va_list args;
+	va_start(args, fmt);
+	zstr = zs_newvf(fmt, args);
+	va_end(args);
+	return zstr;
+}
 /* create & return new zstring copying from varargs input */
 ZSTR
 zs_newvf (const char * fmt, va_list args)

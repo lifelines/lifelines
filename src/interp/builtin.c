@@ -57,7 +57,8 @@ extern STRING nonnodstr1;
 extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
 extern STRING nontabx;
-extern STRING badargs,qSaskstr,qSchoostrttl;
+extern STRING badargs,badargx,badarg1;
+extern STRING qSaskstr,qSchoostrttl;
 
 /*********************************************
  * local function prototypes
@@ -624,21 +625,21 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE var = (PNODE) iargs(node);
-	PNODE expr = inext(var);
+	PNODE argvar = (PNODE) iargs(node);
+	PNODE argexpr = inext(argvar);
 	PVALUE val;
-	if (!iistype(var, IIDENT)) {
+	if (!iistype(argvar, IIDENT)) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, var, NULL, nonvarx, "set", "1");
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "set", "1");
 		return NULL;
 	}
-	val = evaluate(expr, stab, eflg);
+	val = evaluate(argexpr, stab, eflg);
 	if (*eflg || !val) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, expr, val, _("set: error evaluating 2nd arg"));
+		prog_var_error(node, stab, argexpr, val, badargx, "set", "2");
 		return NULL;
 	}
-	assign_iden(stab, iident(var), val);
+	assign_iden(stab, iident(argvar), val);
 	return NULL;
 }
 /*=========================================+
@@ -1148,9 +1149,10 @@ __roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nchildren (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam = eval_fam(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE fam = eval_fam(arg, stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to nchildren must be a family");
+		prog_var_error(node, stab, arg, NULL, nonfam1, "nchildren");
 		return NULL;
 	}
 	if (!fam) return create_pvalue_from_int(0);
@@ -1163,9 +1165,10 @@ __nchildren (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __nfamilies (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = (PNODE) iargs(node);
+	NODE indi = eval_indi(arg, stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to nfamilies must be a person");
+		prog_var_error(node, stab, arg, NULL, nonind1, "nfamilies");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_int(0);
@@ -1179,9 +1182,10 @@ PVALUE
 __nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT nspouses;
+	PNODE arg = (PNODE) iargs(node);
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to nspouses must be a person");
+		prog_var_error(node, stab, arg, NULL, nonind1, "nspouses");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_int(0);
@@ -1197,13 +1201,20 @@ __eq (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	eq_pvalues(val1, val2, eflg);
-	val2=NULL; /* eq_pvalues cleared it */
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for eq");
+		prog_var_error(node, stab, arg, val1, badargx, "eq", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "eq", "2");
+		return NULL;
+	}
+	eq_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1217,18 +1228,20 @@ __ne (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "1st arg to ne is in error");
+		prog_var_error(node, stab, arg, val1, badargx, "ne", "1");
 		return NULL;
 	}
-	val2 = evaluate(inext(arg), stab, eflg);
+	val2 = evaluate(arg=inext(arg), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to ne is in error");
+		prog_var_error(node, stab, arg, val2, badargx, "ne", "2");
 		return NULL;
 	}
-	ne_pvalues(val1, val2, eflg);
+	ne_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
 	if (*eflg) {
-		prog_error(node, "incorrect operands for ne");
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1242,12 +1255,20 @@ __le (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	le_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for le");
+		prog_var_error(node, stab, arg, val1, badargx, "le", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "le", "2");
+		return NULL;
+	}
+	le_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1261,12 +1282,20 @@ __ge (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	ge_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for ge");
+		prog_var_error(node, stab, arg, val1, badargx, "ge", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "le", "2");
+		return NULL;
+	}
+	ge_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1280,17 +1309,20 @@ __lt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-
-#ifdef DEBUG
-	llwprintf("__lt @ %d\n", iline(node)+1);
-#endif
-
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	lt_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for lt");
+		prog_var_error(node, stab, arg, val1, badargx, "lt", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "lt", "2");
+		return NULL;
+	}
+	lt_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1304,17 +1336,20 @@ __gt (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	gt_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-
-#ifdef DEBUG
-	show_pvalue(val1);
-	show_pvalue(val2);
-#endif
-		prog_error(node, "incorrect operands for gt");
+		prog_var_error(node, stab, arg, val1, badargx, "gt", "1");
+		return NULL;
+	}
+	val2 = evaluate(inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "gt", "2");
+		return NULL;
+	}
+	gt_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1330,28 +1365,15 @@ __and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
 	BOOLEAN rc = TRUE;
 	if (*eflg) {
-
-#ifdef DEBUG
-	show_pvalue(val1);
-#endif
 		prog_error(node, "an arg to and is not boolean");
 		return NULL;
 	}
 	rc = rc && pvalue_to_bool(val1);
-
-#ifdef DEBUG
-	llwprintf("rc == %d\n", rc);
-#endif
-
 	delete_pvalue(val1);
 	while ((arg = inext(arg))) {
 		if (rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
-
-#ifdef DEBUG
-	show_pvalue(val2);
-#endif
 				prog_error(node, "an arg to and is not boolean");
 				return NULL;
 			}
@@ -1399,13 +1421,25 @@ __add (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
+	ZSTR zerr=0;
+	INT iarg=1;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val1, badargx, "add", "1");
+		return NULL;
+	}
 	while ((arg = inext(arg))) {
+		++iarg;
 		val2 = evaluate(arg, stab, eflg);
-		if (*eflg) return NULL;
-		add_pvalues(val1, val2, eflg);
 		if (*eflg) {
-			prog_error(node, "incorrect operands for add");
+			char numstr[33];
+			snprintf(numstr, sizeof(numstr), "%d", iarg);
+			prog_var_error(node, stab, arg, val2, badargx, "add", numstr);
+			return NULL;
+		}
+		add_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+		if (*eflg) {
+			prog_error(node, zs_str(zerr));
+			zs_free(&zerr);
 			return NULL;
 		}
 	}
@@ -1420,12 +1454,20 @@ __sub (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	sub_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for sub");
+		prog_var_error(node, stab, arg, val1, badargx, "sub", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "sub", 2);
+		return NULL;
+	}
+	sub_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1439,13 +1481,25 @@ __mul (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
+	ZSTR zerr=0;
+	INT iarg=1;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val1, badargx, "mul", "1");
+		return NULL;
+	}
 	while ((arg = inext(arg))) {
+		++iarg;
 		val2 = evaluate(arg, stab, eflg);
-		if (*eflg) return NULL;
-		mul_pvalues(val1, val2, eflg);
 		if (*eflg) {
-			prog_error(node, "incorrect operands for mul");
+			char numstr[33];
+			snprintf(numstr, sizeof(numstr), "%d", iarg);
+			prog_var_error(node, stab, arg, val2, badargx, "mul", numstr);
+			return NULL;
+		}
+		mul_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+		if (*eflg) {
+			prog_error(node, zs_str(zerr));
+			zs_free(&zerr);
 			return NULL;
 		}
 	}
@@ -1460,12 +1514,20 @@ __div (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	div_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for div");
+		prog_var_error(node, stab, arg, val1, badargx, "div", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "div", 2);
+		return NULL;
+	}
+	div_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1479,12 +1541,20 @@ __mod (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	mod_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for mod");
+		prog_var_error(node, stab, arg, val1, badargx, "mod", "1");
+		return NULL;
+	}
+	val2 = evaluate(arg=inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "mod", 2);
+		return NULL;
+	}
+	mod_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1496,14 +1566,22 @@ __mod (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __exp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
+	PNODE arg = iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
-	if (*eflg) return NULL;
-	val2 = evaluate(inext(arg), stab, eflg);
-	if (*eflg) return NULL;
-	exp_pvalues(val1, val2, eflg);
+	ZSTR zerr=0;
 	if (*eflg) {
-		prog_error(node, "incorrect operands for exp");
+		prog_var_error(node, stab, arg, val1, badargx, "sub", "1");
+		return NULL;
+	}
+	val2 = evaluate(inext(arg), stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val2, badargx, "sub", 2);
+		return NULL;
+	}
+	exp_pvalues(val1, val2, eflg, &zerr); /* result in val1, val2 deleted */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
 	return val1;
@@ -1515,9 +1593,20 @@ __exp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __neg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = evaluate(iargs(node), stab, eflg);
+	PNODE arg = iargs(node);
+	PVALUE val = evaluate(arg, stab, eflg);
+	ZSTR zerr=0;
+	if (*eflg) {
+		prog_var_error(node, stab, arg, val, badarg1, "neg");
+		return NULL;
+	}
 	if (*eflg) return NULL;
-	neg_pvalue(val, eflg);
+	neg_pvalue(val, eflg, &zerr); /* result in val */
+	if (*eflg) {
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
+		return NULL;
+	}
 	return val;
 }
 /*===========================+
@@ -1527,27 +1616,27 @@ __neg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE var = (PNODE) iargs(node);
+	PNODE vararg = (PNODE) iargs(node);
 	PVALUE val;
-	*eflg = TRUE;
-	if (!iistype(var, IIDENT)) {
+	ZSTR zerr=0;
+	if (!iistype(vararg, IIDENT)) {
+		*eflg = TRUE;
 		prog_error(node, "arg to incr must be a variable");
 		return NULL;
 	}
-	*eflg = FALSE;
-	val = evaluate(var, stab, eflg);
+	val = evaluate(vararg, stab, eflg);
 	if (*eflg || !val) {
-		prog_error(node, "arg to incr is in error");
 		*eflg = TRUE;
+		prog_var_error(node, stab, vararg, val, badarg1, "incr");
 		return NULL;
 	}
-	incr_pvalue(val, eflg);
+	incr_pvalue(val, eflg, &zerr);
 	if (*eflg) {
-		prog_error(node, "arg to incr is not numeric");
-		*eflg = TRUE;
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
-	assign_iden(stab, iident(var), val);
+	assign_iden(stab, iident(vararg), val);
 	return NULL;
 }
 /*============================+
@@ -1557,27 +1646,27 @@ __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __decr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE var = (PNODE) iargs(node);
+	PNODE vararg = (PNODE) iargs(node);
 	PVALUE val;
-	*eflg = TRUE;
-	if (!iistype(var, IIDENT)) {
+	ZSTR zerr=0;
+	if (!iistype(vararg, IIDENT)) {
+		*eflg = TRUE;
 		prog_error(node, "arg to decr must be a variable");
 		return NULL;
 	}
-	*eflg = FALSE;
-	val = evaluate(var, stab, eflg);
+	val = evaluate(vararg, stab, eflg);
 	if (*eflg || !val) {
-		prog_error(node, "arg to decr is in error");
 		*eflg = TRUE;
+		prog_var_error(node, stab, vararg, val, badarg1, "decr");
 		return NULL;
 	}
-	decr_pvalue(val, eflg);
+	decr_pvalue(val, eflg, &zerr);
 	if (*eflg) {
-		prog_error(node, "arg to decr is not numeric");
-		*eflg = TRUE;
+		prog_error(node, zs_str(zerr));
+		zs_free(&zerr);
 		return NULL;
 	}
-	assign_iden(stab, iident(var), val);
+	assign_iden(stab, iident(vararg), val);
 	return NULL;
 }
 /*======================================+
