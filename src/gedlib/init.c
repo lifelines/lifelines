@@ -36,6 +36,7 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "gedcomi.h"
 #include "version.h"
 #include "lloptions.h"
 #include "codesets.h"
@@ -50,7 +51,6 @@
 
 TABLE tagtable=NULL;		/* table for tag strings */
 TABLE placabbvs=NULL;	/* table for place abbrevs */
-BTREE BTR=NULL;	/* database */
 STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 
@@ -69,8 +69,9 @@ extern STRING illegal_char;
  *********************************************/
 
 static void add_dbs_to_list(LIST dblist, LIST dbdesclist, STRING dir);
-static STRING getdbdesc(STRING path, STRING userpath);
+static CNSTRING getdbdesc(STRING path, STRING userpath);
 static void init_win32_gettext_shim(void);
+static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
 static void update_db_options(void);
 
 /*********************************************
@@ -323,7 +324,7 @@ get_lifelines_version (INT maxlen)
 void
 close_lifelines (void)
 {
-	close_lldb(); /* make sure database closed */
+	lldb_close(def_lldb); /* make sure database closed */
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
@@ -337,34 +338,6 @@ close_lifelines (void)
 	term_date();
 	term_codesets();
 	strfree(&int_codeset);
-}
-/*===================================
- * close_lldb -- Close current database
- *  Safe to call even if not opened
- * fullclose is FALSE when building dblist
- *=================================*/
-void
-close_lldb ()
-{
-	if (tagtable)
-		destroy_table(tagtable);
-	tagtable = 0;
-	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
-	if (placabbvs) {
-		destroy_table(placabbvs);
-		placabbvs = NULL;
-	}
-	free_caches();
-	closexref();
-	if (BTR) {
-		closebtree(BTR);
-		BTR=NULL;
-	}
-	if (f_dbnotify)
-		(*f_dbnotify)(readpath, FALSE);
-	transl_free_predefined_xlats(); /* clear any active legacy translation tables */
-	strfree(&readpath_file);
-	strfree(&readpath);
 }
 /*==================================================
  * alterdb -- force open, lock, or unlock a database
@@ -453,24 +426,26 @@ force_open_db_exit:
  * Upon failure, sets bterrno and returns false
  *================================================*/
 static BOOLEAN
-open_database_impl (INT alteration)
+open_database_impl (LLDATABASE lldb, INT alteration)
 {
 	int c;
 	INT writ = !readonly + writeable;
+	BTREE btree = 0;
 
 	/* handle db adjustments (which only affect keyfile) first */
 	if (alteration > 0 && !alterdb(alteration)) return FALSE;
 
 	/* call btree module to do actual open of BTR */
-	if (!(BTR = openbtree(readpath, FALSE, writ, immutable)))
+	if (!(btree = openbtree(readpath, FALSE, writ, immutable)))
 		return FALSE;
+	lldb_set_btree(lldb, btree);
 	/* we have to set the global variable readonly correctly, because
 	it is used widely */
-	readonly = !bwrite(BTR);
-	immutable = bimmut(BTR);
+	readonly = !bwrite(btree);
+	immutable = bimmut(btree);
 	if (readonly && writeable) {
 		int myerr=0;
-		c = bkfile(BTR).k_ostat;
+		c = bkfile(btree).k_ostat;
 		if (c < 0) {
 			myerr = BTERR_WRITER;
 		} else {
@@ -478,11 +453,20 @@ open_database_impl (INT alteration)
 			myerr = BTERR_READERS;
 		}
 		/* close_lldb may have set bterrno itself */
-		close_lldb();
 		bterrno = myerr;
 		return FALSE;
 	}
 	return TRUE;
+}
+/*==================================================
+ * dbnotify_close -- Send notification that default database closed
+ *================================================*/
+void
+dbnotify_close (void)
+{
+
+	if (f_dbnotify)
+		(*f_dbnotify)(readpath, FALSE);
 }
 /*==================================================
  * open_database -- open database
@@ -492,7 +476,8 @@ open_database_impl (INT alteration)
 BOOLEAN
 open_database (INT alteration, STRING dbpath)
 {
-	BOOLEAN rtn;
+	LLDATABASE lldb = lldb_alloc();
+	BOOLEAN rtn = FALSE;
 	char fpath[MAXPATHLEN];
 
 	/* tentatively copy paths into gedlib module versions */
@@ -504,13 +489,14 @@ open_database (INT alteration, STRING dbpath)
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, TRUE);
 
-	rtn = open_database_impl(alteration);
+	rtn = open_database_impl(lldb, alteration);
 	if (!rtn) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
-		close_lldb();
+		lldb_close(lldb);
 		bterrno = myerr;
 	}
+	def_lldb = lldb;
 	return rtn;
 }
 /*==================================================
@@ -520,6 +506,9 @@ open_database (INT alteration, STRING dbpath)
 BOOLEAN
 create_database (STRING dbpath)
 {
+	LLDATABASE lldb = lldb_alloc();
+	BTREE btree = 0;
+
 	/* first test that newdb props are legal */
 	STRING props = getoptstr("NewDbProps", 0);
 	if (props && props[0]) {
@@ -537,13 +526,15 @@ create_database (STRING dbpath)
 	readpath_file=strsave(lastpathname(dbpath));
 	readpath=strsave(dbpath);
 
-	if (!(BTR = openbtree(dbpath, TRUE, 2, immutable))) {
+	if (!(btree = openbtree(dbpath, TRUE, 2, immutable))) {
 		/* open failed so clean up, preserve bterrno */
 		int myerr = bterrno;
-		close_lldb();
+		lldb_close(lldb);
 		bterrno = myerr;
 		return FALSE;
 	}
+	def_lldb = lldb;
+	lldb_set_btree(lldb, btree);
 	initxref();
 	if (props)
 		store_record("VUOPT", props, strlen(props));
@@ -652,7 +643,7 @@ update_useropts (VPTR uparm)
 		return;
 	/* deal with db-specific options */
 	/* includes setting int_codeset */
-	if (BTR)
+	if (def_lldb)
 		update_db_options();
 	/* in case user changed any codesets */
 	init_codesets();
@@ -730,7 +721,7 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 	struct dirent **programs=0;
 	char candidate[MAXPATHLEN];
 	char userpath[MAXPATHLEN];
-	STRING dbstr=0;
+	CNSTRING dbstr=0;
 	char dirbuf[MAXPATHLEN];
 
 	llstrncpy(dirbuf, dir, sizeof(dirbuf), 0);
@@ -744,7 +735,7 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 		concat_path(dir, programs[n]->d_name, uu8, userpath, sizeof(userpath));
 		if ((dbstr = getdbdesc(candidate, userpath)) != NULL) {
 			back_list(dblist, strsave(userpath));
-			back_list(dbdesclist, dbstr);
+			back_list(dbdesclist, (STRING)dbstr);
 		}
 		stdfree(programs[n]);
 	}
@@ -755,37 +746,20 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
  *  is a lifelines database
  *  returns stdalloc'd string or NULL (if not db)
  *================================================*/
-static STRING
+static CNSTRING
 getdbdesc (STRING path, STRING userpath)
 {
-	BTREE btr;
-	BOOLEAN cflag=FALSE, writ=FALSE, immut=TRUE;
-	char desc[MAXPATHLEN];
+	INT nindis=0, nfams=0, nsours=0, nevens=0, nothrs=0;
+	char desc[MAXPATHLEN] = "";
+	if (xrefs_get_counts_from_unopened_db(path, &nindis, &nfams
+		, &nsours, &nevens, &nothrs)) {
 
-	if (f_dbnotify)
-		(*f_dbnotify)(path, TRUE);
-
-	suppress_reload = TRUE; /* do not reload options */
-
-	strcpy(desc, "");
-	btr = openbtree(path, cflag, writ, immut);
-	if (btr) {
-		/* TODO: 'twould be nice to clean up & remove these globals */
-		BTR = btr; /* various code assumes BTR is the btree */
-		readonly = TRUE; /* openxrefs depends on this global */
-		if (init_lifelines_db()) {
-			desc[0]=0;
-			llstrapps(desc, sizeof(desc), uu8, userpath);
-			llstrapps(desc, sizeof(desc), uu8, " <");
-			llstrappf(desc, sizeof(desc), uu8, _(qSdbrecstats)
-				, num_indis(), num_fams(), num_sours(), num_evens(), num_othrs());
-			llstrappf(desc, sizeof(desc), uu8, ">");
-		}
+		llstrapps(desc, sizeof(desc), uu8, userpath);
+		llstrapps(desc, sizeof(desc), uu8, " <");
+		llstrappf(desc, sizeof(desc), uu8, _(qSdbrecstats)
+			, nindis, nfams, nsours, nevens, nothrs);
+		llstrappf(desc, sizeof(desc), uu8, ">");
 	}
-	close_lldb();
-	readonly = FALSE;
-	BTR = 0;
-	suppress_reload = FALSE;
 	return desc[0] ? strsave(desc) : 0;
 }
 /*====================================================
@@ -798,12 +772,4 @@ release_dblist (LIST dblist)
 		make_list_empty(dblist);
 		remove_list(dblist, 0);
 	}
-}
-/*====================================================
- * is_db_open -- 
- *==================================================*/
-BOOLEAN
-is_db_open (void)
-{
-	return BTR!=0;
 }

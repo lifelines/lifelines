@@ -53,6 +53,7 @@ static void zstr_destructor(VTABLE *obj);
  * local variables
  *********************************************/
 
+/* class vtable for ZSTR objects */
 static struct tag_vtable vtable_for_zstr = {
 	VTABLE_MAGIC
 	, "zstring"

@@ -7,6 +7,8 @@
 */
 /*==============================================================
  * vtable.h -- vtables for objects
+ * This header is used by object implementations.
+ * Clients merely using objects use object.h.
  *============================================================*/
 
 #ifndef vtable_h_included
@@ -45,10 +47,15 @@ struct tag_generic_ref_object {
 	int ref;
 };
 
+
+/* vtable functions implementations */
+
 /* for any object (content to use vtable_class) */
 const char * generic_get_type_name(OBJECT obj);
+
 /* for non-refcountable object */
 int nonrefcountable_isref(OBJECT obj);
+
 /* for refcountable object (with refcount right after vtable) */
 int refcountable_isref(OBJECT obj);
 int refcountable_addref(OBJECT obj);

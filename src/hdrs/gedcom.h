@@ -114,6 +114,12 @@ NODE nztop(RECORD); /* function so it can handle NULL input */
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)
 
+/*=====================================
+ * LLDATABASE types -- LifeLines database
+ *===================================*/
+
+typedef struct tag_lldatabase *LLDATABASE;
+
 /*
  reformating functions - format date or place for display
  callbacks to GUI client to tailor display as desired
@@ -177,8 +183,10 @@ extern BOOLEAN readonly;
 extern BOOLEAN immutable;
 extern STRING editstr;
 extern STRING editfile;
+/* tabtable & placabbvs should be moved into LLDATABASE */
 extern TABLE tagtable;		/* table for GEDCOM tags */
 extern TABLE placabbvs;		/* table for place abbrvs */
+extern LLDATABASE def_lldb;        /* default database */
 
 
 /*=====================
@@ -211,7 +219,6 @@ RECORD choose_spouse(RECORD irec, STRING msg0, STRING msgn);
 void classify_nodes(NODE*, NODE*, NODE*);
 void closexref(void);
 void close_lifelines(void);
-void close_lldb(void);
 NODE convert_first_fp_to_node(FILE*, BOOLEAN, XLAT, STRING*, BOOLEAN*);
 NODE copy_node(NODE);
 NODE copy_nodes(NODE, BOOLEAN, BOOLEAN);
@@ -302,7 +309,6 @@ void init_new_record(RECORD rec, char ntype, INT keynum);
 BOOLEAN init_valtab_from_file(STRING, TABLE, XLAT, INT sep, STRING*);
 BOOLEAN init_valtab_from_rec(CNSTRING, TABLE, INT sep, STRING*);
 BOOLEAN init_valtab_from_string(CNSTRING, TABLE, INT sep, STRING*);
-BOOLEAN is_db_open(void);
 BOOLEAN is_codeset_utf8(CNSTRING codeset);
 BOOLEAN is_iconv_supported(void);
 BOOLEAN is_nls_supported(void);
@@ -500,6 +506,12 @@ INT xrefval(char ntype, STRING str);
 STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey);
 STRING *get_child_strings(NODE, RFMT, INT*, STRING**);
 STRING indi_to_list_string(NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey);
+
+/* lldatabase.c */
+void lldb_adderror(LLDATABASE lldb, int errnum, CNSTRING errstr);
+LLDATABASE lldb_alloc(void);
+void lldb_close(LLDATABASE lldb);
+void lldb_set_btree(LLDATABASE lldb, void * btree);
 
 /* names.c */
 void add_name(STRING, STRING);

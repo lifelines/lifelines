@@ -1,3 +1,13 @@
+2003-10-10 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/Makefile.am src/gedlib/gedcomi.h src/gedlib/init.c
+	src/gedlib/xreffile.c src/hdrs/gedcom.h src/hdrs/vtable.h
+	src/stdlib/zstr.c
+	*NEW src/gedlib/lldatabase.c
+
+	New structure LLDATABASE to wrap db connection.
+
 2003-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c

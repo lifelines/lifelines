@@ -313,6 +313,10 @@ SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\lldatabase.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File

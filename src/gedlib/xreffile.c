@@ -371,6 +371,7 @@ growxrefs (DELETESET set)
  *========================================================*/
 static INT num_set (DELETESET set)
 {
+	ASSERT(set);
 	return set->recs[0] - set->n;
 }
 INT num_indis (void) { return num_set(&irecs); }
@@ -610,3 +611,44 @@ INT xref_lastf (void) { return xref_last(&frecs); }
 INT xref_lasts (void) { return xref_last(&srecs); }
 INT xref_laste (void) { return xref_last(&erecs); }
 INT xref_lastx (void) { return xref_last(&xrecs); }
+/*=======================================
+ * xrefs_get_counts_from_unopened_db --
+ *  read record counts out of file on disk
+ *=====================================*/
+BOOLEAN
+xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
+	, INT *nsours, INT *nevens, INT *nothrs)
+{
+	char scratch[100];
+	STRING fmode;
+	FILE * fp = 0;
+	INT i;
+	INT ndels[5], nmax[5];
+
+	ASSERT(!xreffp);
+	sprintf(scratch, "%s/xrefs", path);
+	fmode = LLREADBINARY;
+	if (!(fp = fopen(scratch, fmode))) {
+		return FALSE;
+	}
+	for (i=0; i<5; ++i) {
+		ASSERT(fread(&ndels[i], sizeof(INT), 1, fp) == 1);
+	}
+	for (i=0; i<5; ++i) {
+		INT j;
+		for (j=0; j<ndels[i]; ++j) {
+			INT k;
+			ASSERT(fread(&k, sizeof(INT), 1, fp) == 1);
+			if (!j)
+				nmax[i] = k;
+		}
+	}
+	*nindis = nmax[0] - ndels[0];
+	*nfams = nmax[1] - ndels[1];
+	*nevens = nmax[2] - ndels[2];
+	*nsours = nmax[3] - ndels[3];
+	*nothrs = nmax[4] - ndels[4];
+	fclose(fp);
+	return TRUE;
+}
+
