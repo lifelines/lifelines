@@ -908,7 +908,7 @@ node_to_cache (CACHE cache, NODE top)
 	key = node_to_key(top);
 	ASSERT(key);
 	ASSERT(!valueof_ptr(cacdata(cache), key));
-	if (cacsizedir(cache) >= cacmaxdir(cache)) {
+	if (!cacfree(cache)) {
 		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
 		ASSERT(0);
 	}
@@ -926,6 +926,7 @@ put_node_in_cache (CACHE cache, NODE node, STRING key)
 	ASSERT(cache && node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
 	cel = cacfree(cache);
+	ASSERT(cel); /* Otherwise we overflowed cache */
 	cacfree(cache) = cnext(cel);
 	if (cnext(cel))
 		cprev(cnext(cel)) = 0;
