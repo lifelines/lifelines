@@ -137,11 +137,6 @@ typedef PVALUE (*PFUNC)();
 #define pitype(i)	ptype(ivalue(i))
 #define pivalue(i)	pvalue(ivalue(i))
 
-PNODE string_node(STRING);
-PNODE children_node(PNODE, STRING, STRING, PNODE);
-PNODE iden_node(STRING);
-PNODE proc_node(STRING, PNODE, PNODE);
-
 typedef struct {
 	char *ft_name;
 	INT ft_nparms_min;
@@ -157,19 +152,92 @@ extern TABLE functab;
 extern TABLE globtab;
 extern TABLE proctab;
 
-PVALUE evaluate(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_iden(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_func(PNODE, TABLE, BOOLEAN*);
-PVALUE evaluate_ufunc(PNODE, TABLE, BOOLEAN*);
-PVALUE eval_and_coerce(INT, PNODE, TABLE, BOOLEAN*);
-BOOLEAN evaluate_cond(PNODE, TABLE, BOOLEAN*);
+/* PVALUE Arithmetic Functions */
+void add_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void sub_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void mul_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void div_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void mod_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void neg_pvalues(PVALUE, BOOLEAN*);
+void decr_pvalues(PVALUE, BOOLEAN*);
+void incr_pvalues(PVALUE, BOOLEAN*);
+void exp_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void gt_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void ge_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void lt_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void le_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void ne_pvalues(PVALUE, PVALUE, BOOLEAN*);
+void eq_pvalues(PVALUE, PVALUE, BOOLEAN*);
+
+/* PVALUE Functions */
+void coerce_pvalue(INT, PVALUE, BOOLEAN*);
+PVALUE copy_pvalue(PVALUE);
 PVALUE create_pvalue(INT, WORD);
 void delete_pvalue(PVALUE);
-PVALUE copy_pvalue(PVALUE);
+void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
+BOOLEAN eqv_pvalues(PVALUE, PVALUE);
+BOOLEAN is_pvalue(PVALUE);
+BOOLEAN is_record_pvalue(PVALUE);
+BOOLEAN is_zero(PVALUE);
+void num_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
+BOOLEAN numeric_pvalue(PVALUE);
+void set_pvalue(PVALUE, INT, WORD);
+void show_pvalue(PVALUE);
+STRING pvalue_to_string(PVALUE);
+void insert_pvtable(TABLE, STRING, INT, WORD);
+void remove_pvtable(TABLE);
+#ifndef HOGMEMORY
+void zero_pventry(ENTRY);
+#endif
+
+/* Prototypes */
+void assign_iden(TABLE, STRING, WORD);
+INT bool_to_int(BOOLEAN);
+FLOAT bool_to_float(BOOLEAN);
+PNODE break_node(void);
+PNODE call_node(STRING, PNODE);
+PNODE children_node(PNODE, STRING, STRING, PNODE);
+PNODE children_node(PNODE, STRING, STRING, PNODE);
+PNODE create_pnode(INT);
+PVALUE evaluate(PNODE, TABLE, BOOLEAN*);
+BOOLEAN evaluate_cond(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_func(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_iden(PNODE, TABLE, BOOLEAN*);
+PVALUE evaluate_ufunc(PNODE, TABLE, BOOLEAN*);
+PVALUE eval_and_coerce(INT, PNODE, TABLE, BOOLEAN*);
 NODE eval_indi(PNODE, TABLE, BOOLEAN*, CACHEEL*);
 NODE eval_fam(PNODE, TABLE, BOOLEAN*, CACHEEL*);
-PVALUE valueof_iden(TABLE, STRING);
+PNODE families_node(PNODE, STRING, STRING, STRING, PNODE);
+PNODE fcons_node(FLOAT);
+PNODE fdef_node(STRING, PNODE, PNODE);
+PNODE foreven_node(STRING, STRING, PNODE);
+PNODE forfam_node(STRING, STRING, PNODE);
+PNODE forindi_node(STRING, STRING, PNODE);
+PNODE forindiset_node(PNODE, STRING, STRING, STRING, PNODE);
+PNODE forlist_node(PNODE, STRING, STRING, PNODE);
+PNODE forsour_node(STRING, STRING, PNODE);
+PNODE fornotes_node(PNODE, STRING, PNODE);
+PNODE forothr_node(STRING, STRING, PNODE);
+PNODE func_node(STRING, PNODE);
 STRING get_date(void);
+PNODE icons_node(INT);
+PNODE iden_node(STRING);
+PNODE if_node(PNODE, PNODE, PNODE);
+BOOLEAN iistype(PNODE, INT);
+PNODE mothers_node(PNODE, STRING, STRING, STRING, PNODE);
+INT num_params(PNODE);
+PNODE parents_node(PNODE, STRING, STRING, PNODE);
+PNODE proc_node(STRING, PNODE, PNODE);
+PNODE return_node(PNODE);
+void set_parents(PNODE, PNODE);
+void show_one_pnode(PNODE);
+void show_pnode(PNODE);
+void show_pnodes(PNODE);
+PNODE spouses_node(PNODE, STRING, STRING, STRING, PNODE);
+PNODE string_node(STRING);
+PNODE traverse_node(PNODE, STRING, STRING, PNODE);
+PVALUE valueof_iden(TABLE, STRING);
+PNODE while_node(PNODE, PNODE);
 
 extern INT Plineno;
 extern FILE *Pinfp;
