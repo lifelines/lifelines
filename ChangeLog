@@ -5,6 +5,10 @@
 
 	Set version 3.0.10 for making dist. Add llines.1 to rpm spec.
 
+	* interp/builtin.c:
+
+	Bugfix (because date.year is structure now instead of int).
+
 2002-02-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/indiseq.c:

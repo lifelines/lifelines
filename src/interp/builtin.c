@@ -2728,7 +2728,7 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = gdv->date1.year.str;
 	} else if (gdv->date1.year.val != BAD_YEAR) {
 		/* no year string, so must have been a simple number */
-		snprintf(buff, sizeof(buff), "%d", gdv->date1.year);
+		snprintf(buff, sizeof(buff), "%d", gdv->date1.year.val);
 		str = buff;
 	} else
 		str = 0;
