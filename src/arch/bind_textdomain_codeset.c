@@ -26,7 +26,7 @@
  *   Created: 2002 by Perry Rapp
  *==============================================================*/
 
-#include "llstdlib.h"
+#include "standard.h"
 
 
 /*********************************************
@@ -34,8 +34,8 @@
  * body of module
  *********************************************/
 
-#if ENABLE_NLS
-#if !HAVE_BIND_TEXTDOMAIN_CODESET
+#ifdef ENABLE_NLS
+#if !defined HAVE_BIND_TEXTDOMAIN_CODESET
 char * bind_textdomain_codeset (const char * domainname,
                                 const char * codeset)
 {
