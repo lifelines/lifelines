@@ -210,7 +210,7 @@ sortxref (DELETESET set)
 	array, ready to be handed out
 
 	they should normally already be sorted, 
-	so use watchtful bubble-sort for O(n)
+	so use watchful bubble-sort for O(n)
 	*/
 	INT i,j, temp, ct;
 	for (i=1; i<set->n; i++) {

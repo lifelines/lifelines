@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /map /debug /machine:I386 /out:"..\..\..\..\bin\llines\Release\Lines.exe" /libpath:"..\..\..\..\bin\libintl\Release" /libpath:"..\..\..\iconv" /mapinfo:lines
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /map /debug /machine:I386 /out:"..\..\..\..\bin\llines\Release\Lines.exe" /libpath:"..\..\..\..\bin\libintl\Release" /libpath:"..\..\..\iconv.rel\lib" /mapinfo:lines
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "llinesprj - Win32 Debug"
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "HAVE_STRCOLL" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"..\..\..\..\bin\llines\Debug/llines.exe" /pdbtype:sept /libpath:"..\..\..\..\bin\libintl\Debug" /libpath:"..\..\..\iconv"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /out:"..\..\..\..\bin\llines\Debug/llines.exe" /pdbtype:sept /libpath:"..\..\..\..\bin\libintl\Debug" /libpath:"..\..\..\iconv.dbg\lib"
 
 !ENDIF 
 

@@ -157,12 +157,13 @@ typedef struct ltag {
 	INT l_type;
 	LNODE l_first;
 	LNODE l_last;
+	INT l_len;
 	INT l_refcnt;
-	/* TO DO - would be nice to keep count here */
 } *LIST;
 #define ltype(l) ((l)->l_type)
 #define lfirst(l) ((l)->l_first)
 #define llast(l) ((l)->l_last)
+#define llen(l) ((l)->l_len)
 #define lrefcnt(l) ((l)->l_refcnt)
 
 #define LISTNOFREE 0
@@ -211,15 +212,9 @@ typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS }
 #include "config.h"
 #endif
 
-/*
-  I can't figure out how to make gettext work without
-  having gettext & libiconv preinstalled
-*/
-#ifndef HAVE_GETTEXT_H
-/*#define ENABLE_NLS 0*/
-#endif
-#ifndef HAVE_ICONV_H
-/*#define ENABLE_NLS 0*/
+/* must capture this before including libgnuintl.h */
+#ifdef LC_MESSAGES
+#define HAVE_LC_MESSAGES
 #endif
 
 /* NLS (National Language Support) */

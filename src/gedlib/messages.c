@@ -169,8 +169,6 @@ ZST qSidpedt      = N_("Whom do you want to edit?");
 ZST qSidredt      = N_("Which source record do you want to edit?");
 ZST qSideedt      = N_("Which event record do you want to edit?");
 ZST qSidxedt      = N_("What record do you want to edit?");
-ZST qSbadreflink  = N_("There was %d unresolved reference.");
-ZST qSbadreflinks = N_("There were %d unresolved references.");
 
 ZST qScfpadd      = N_("Do you really want to add this person to the database?");
 ZST qScffadd      = N_("Do you really want to add this family to the database?");
@@ -520,7 +518,6 @@ ZST qSmn_csttl    = N_("Character set menu");
 ZST qSmn_cstt     = N_("t  Edit translation tables");
 ZST qSmn_csrpt    = N_("r  Report character set setup");
 ZST qSmn_csintcs  = N_("Internal code set: ");
-ZST qSmn_csdsploc = N_("Display locale: ");
  /* The following 5 choices look best if padded to same length (70 chars after spaces) */
 ZST qSmn_cstsort  = N_("s  Edit custom sort table        ");
 ZST qSmn_cspref   = N_("p  Edit custom sort prefix table ");

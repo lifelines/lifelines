@@ -39,26 +39,30 @@ LIST
 create_list (void)
 {
 	LIST list = (LIST) stdalloc(sizeof(*list));
-	lfirst(list) = llast(list) = NULL;
+	memset(list, 0, sizeof(*list));
 	ltype(list) = LISTNOFREE;
+	lfirst(list) = llast(list) = NULL;
+	llen(list) = 0;
 	lrefcnt(list) = 1;
 	return list;
 }
 /*===============================
  * set_list_type -- Set list type
+ *  list: [I/O] list to change
+ *  type: [IN]  new type (LISTNOFREE or LISTDOFREE)
  *=============================*/
 void
-set_list_type (LIST list,
-               int type)
+set_list_type (LIST list, int type)
 {
 	ltype(list) = type;
 }
 /*===========================
- * remove_list -- Remove list
+ * remove_list -- Delete all elements & delete list
+ *  list: [IN]  list to completely delete
+ *  func: [IN]  function to call on each element first (may be NULL)
  *=========================*/
 void
-remove_list (LIST list,
-             void (*func)(VPTR))
+remove_list (LIST list, void (*func)(VPTR))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;
@@ -72,19 +76,25 @@ remove_list (LIST list,
 	stdfree(list);
 }
 /*===========================
- * in_list -- see if in list
+ * in_list -- find first element returning true from check function
+ *  list: [IN]  list to search
+ *  el:   [IN]  parameter to pass thru to check function
+ *  func: [IN]  check function
+ * Calls check function on each element in turn until one returns TRUE
+ * Returns index of element found, or -1 if none pass check
  *=========================*/
-BOOLEAN
+INT
 in_list (LIST list, VPTR el, int (*func)(VPTR, VPTR))
 {
 	LNODE lnode;
+	INT index=0;
 	if (!list) return FALSE;
 	lnode = lfirst(list);
 	while (lnode) {
-		if((*func)(el, lelement(lnode))) return TRUE;
+		if((*func)(el, lelement(lnode))) return index;
 		lnode = lnext(lnode);
 	}
-	return FALSE;
+	return -1;
 }
 /*===================================
  * make_list_empty -- Make list empty
@@ -105,15 +115,16 @@ make_list_empty (LIST list)
 	}
 	lfirst(list) = llast(list) = NULL;
 	ltype(list) = LISTNOFREE;
+	llen(list) = 0;
+	/* no effect on refcount */
 }
 /*===================================
- * empty_list -- Check for empty list
+ * is_empty_list -- Check for empty list
  *=================================*/
 BOOLEAN
-empty_list (LIST list)
+is_empty_list (LIST list)
 {
-	if (!list) return FALSE;
-	return !lfirst(list);
+	return !list || !llen(list);
 }
 /*==================================
  * push_list -- Push element on list
@@ -127,7 +138,7 @@ push_list (LIST list,
 	if (!list) return;
 	node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
-	if (empty_list(list)) {
+	if (is_empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
 		lfirst(list) = llast(list) = node;
 	} else {
@@ -136,6 +147,7 @@ push_list (LIST list,
 		lprev(node) = NULL;
 		lfirst(list) = node;
 	}
+	++llen(list);
 }
 /*=========================================
  * back_list -- Put element on back of list
@@ -149,7 +161,7 @@ back_list (LIST list,
 	if (!list) return;
 	node = (LNODE) stdalloc(sizeof(*node));
 	lelement(node) = el;
-	if (empty_list(list)) {
+	if (is_empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
 		lfirst(list) = llast(list) = node;
 	} else {
@@ -158,6 +170,7 @@ back_list (LIST list,
 		lnext(node) = NULL;
 		llast(list) = node;
 	}
+	++llen(list);
 }
 /*==================================
  * pop_list -- Pop element from list
@@ -167,15 +180,16 @@ pop_list (LIST list)
 {
 	LNODE node;
 	VPTR el;
-	if (empty_list(list)) return NULL;
+	if (is_empty_list(list)) return NULL;
 	node = lfirst(list);
 	lfirst(list) = lnext(node);
-	if (empty_list(list))
+	if (is_empty_list(list))
 		llast(list) = NULL;
 	else
 		lprev(lfirst(list)) = NULL;
 	el = lelement(node);
 	stdfree(node);
+	--llen(list);
 	return el;
 }
 /*========================================
@@ -194,7 +208,7 @@ dequeue_list (LIST list)
 {
 	LNODE node;
 	VPTR el;
-	if (empty_list(list)) return NULL;
+	if (is_empty_list(list)) return NULL;
 	node = llast(list);
 	llast(list) = lprev(node);
 	if (!llast(list))
@@ -203,6 +217,7 @@ dequeue_list (LIST list)
 		lnext(llast(list)) = NULL;
 	el = lelement(node);
 	stdfree(node);
+	--llen(list);
 	return el;
 }
 /*=================================================
@@ -254,13 +269,5 @@ get_list_element (LIST list, INT ind)
 INT
 length_list (LIST list)
 {
-	LNODE node;
-	INT len = 0;
-	if (!list) return 0;
-	node = lfirst(list);
-	while (node) {
-		len++;
-		node = lnext(node);
-	}
-	return len;
+	return !list ? 0 : llen(list);
 }

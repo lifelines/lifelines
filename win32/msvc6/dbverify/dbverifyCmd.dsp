@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /Zi /O2 /I "../../../hdrs" /I "../../../hdrs/win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /Zi /O2 /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /map /debug /machine:I386 /out:"..\..\..\..\bin\dbverify\Release\dbverify.exe" /mapinfo:lines
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /map /debug /machine:I386 /out:"..\..\..\..\bin\dbverify\Release\dbverify.exe" /libpath:"..\..\..\..\bin\libintl\Release" /libpath:"..\..\..\iconv.rel\lib" /mapinfo:lines
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "dbverifyCmd - Win32 Debug"
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../hdrs" /I "../../../hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -75,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"..\..\..\..\bin\dbverify\Debug\dbverify.exe" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib libintlvc6.lib iconv.lib /nologo /subsystem:console /debug /machine:I386 /out:"..\..\..\..\bin\dbverify\Debug\dbverify.exe" /pdbtype:sept /libpath:"..\..\..\..\bin\libintl\Debug" /libpath:"..\..\..\iconv.dbg\lib"
 
 !ENDIF 
 
@@ -244,6 +244,10 @@ SOURCE=..\..\..\gedlib\replace.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\arch\scandir.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\stdlib\sequence.c
 # End Source File
 # Begin Source File
@@ -301,6 +305,10 @@ SOURCE=..\..\..\gedlib\xreffile.c
 # Begin Source File
 
 SOURCE=..\..\..\btree\btreei.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\config.h
 # End Source File
 # Begin Source File
 

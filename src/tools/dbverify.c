@@ -31,14 +31,14 @@
  *===============================================================*/
 
 #include <stdarg.h>
-#include "sys_inc.h"
-#include "standard.h"
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "gedcom.h"
 #include "btree.h"
 #include "indiseq.h"
 #include "lloptions.h"
 #include "cache.h"
+
 
 /*********************************************
  * external variables (no header)
@@ -145,31 +145,31 @@ enum {
 };
 
 static struct errinfo errs[] = {
-	{ ERR_ORPHANNAME, 0, 0, "Orphan names" }
-	, { ERR_GHOSTNAME, 0, 0, "Ghost names" }
-	, { ERR_DUPNAME, 0, 0, "Duplicate names" }
-	, { ERR_DUPREFN, 0, 0, "Duplicate names" }
-	, { ERR_NONINDINAME, 0, 0, "Non-indi names" }
-	, { ERR_DUPINDI, 0, 0, "Duplicate individuals" }
-	, { ERR_DUPFAM, 0, 0, "Duplicate families" }
-	, { ERR_DUPSOUR, 0, 0, "Duplicate sources" }
-	, { ERR_DUPEVEN, 0, 0, "Duplicate events" }
-	, { ERR_DUPOTHE, 0, 0, "Duplicate others" }
-	, { ERR_MISSING, 0, 0, "Missing records" }
-	, { ERR_DELETED, 0, 0, "Deleted records" }
-	, { ERR_BADNAME, 0, 0, "Bad name" }
-	, { ERR_BADFAMREF, 0, 0, "Bad family reference" }
-	, { ERR_MISSINGCHILD, 0, 0, "Missing child" }
-	, { ERR_MISSINGSPOUSE, 0, 0, "Missing spouse" }
-	, { ERR_BADHUSBREF, 0, 0, "Bad husb reference" }
-	, { ERR_BADWIFEREF, 0, 0, "Bad wife reference" }
-	, { ERR_BADCHILDREF, 0, 0, "Bad child reference" }
-	, { ERR_EXTRAHUSB, 0, 0, "Improper husb" }
-	, { ERR_EXTRAWIFE, 0, 0, "Improper wife" }
-	, { ERR_EXTRACHILD, 0, 0, "Improper child" }
-	, { ERR_EMPTYFAM, 0, 0, "Empty family" }
-	, { ERR_SOLOFAM, 0, 0, "Single person family" }
-	, { ERR_BADPOINTER, 0, 0, "Bad pointer" }
+	{ ERR_ORPHANNAME, 0, 0, N_("Orphan names") }
+	, { ERR_GHOSTNAME, 0, 0, N_("Ghost names") }
+	, { ERR_DUPNAME, 0, 0, N_("Duplicate names") }
+	, { ERR_DUPREFN, 0, 0, N_("Duplicate names") }
+	, { ERR_NONINDINAME, 0, 0, N_("Non-indi names") }
+	, { ERR_DUPINDI, 0, 0, N_("Duplicate individuals") }
+	, { ERR_DUPFAM, 0, 0, N_("Duplicate families") }
+	, { ERR_DUPSOUR, 0, 0, N_("Duplicate sources") }
+	, { ERR_DUPEVEN, 0, 0, N_("Duplicate events") }
+	, { ERR_DUPOTHE, 0, 0, N_("Duplicate others") }
+	, { ERR_MISSING, 0, 0, N_("Missing records") }
+	, { ERR_DELETED, 0, 0, N_("Deleted records") }
+	, { ERR_BADNAME, 0, 0, N_("Bad name") }
+	, { ERR_BADFAMREF, 0, 0, N_("Bad family reference") }
+	, { ERR_MISSINGCHILD, 0, 0, N_("Missing child") }
+	, { ERR_MISSINGSPOUSE, 0, 0, N_("Missing spouse") }
+	, { ERR_BADHUSBREF, 0, 0, N_("Bad HUSB reference") }
+	, { ERR_BADWIFEREF, 0, 0, N_("Bad WIFE reference") }
+	, { ERR_BADCHILDREF, 0, 0, N_("Bad CHIL reference") }
+	, { ERR_EXTRAHUSB, 0, 0, N_("Improper HUSB") }
+	, { ERR_EXTRAWIFE, 0, 0, N_("Improper WIFE") }
+	, { ERR_EXTRACHILD, 0, 0, N_("Improper child") }
+	, { ERR_EMPTYFAM, 0, 0, N_("Empty family") }
+	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
+	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
 };
 static struct work todo;
 static LIST tofix;
@@ -198,14 +198,14 @@ print_usage (void)
 	char verstr[80];
 	STRING title = _(qSmtitle);
 #ifdef WIN32
-	char * fname = "\\My Documents\\LifeLines\\Databases\\MyFamily";
+	char * fname = _("\\My Documents\\LifeLines\\Databases\\MyFamily");
 #else
-	char * fname = "/home/users/myname/lifelines/databases/myfamily";
+	char * fname = _("/home/users/myname/lifelines/databases/myfamily");
 #endif
 	snprintf(verstr, sizeof(verstr), title
 		, get_lifelines_version(sizeof(verstr)-1-strlen(title)));
 	printf(
-		"usage: dbverify -(flags) <btree>\n"
+		_("usage: dbverify -(flags) <btree>\n"
 		"flags:\n"
 		"\t-a = Perform all checks (does not include fixes)\n"
 		"\t-g = Check for ghosts (names/refns)\n"
@@ -215,9 +215,9 @@ print_usage (void)
 		"\t-s = Check sours\n"
 		"\t-e = Check events\n"
 		"\t-x = Check others\n"
-		"\t-n = Noisy (echo every record processed)\n"
+		"\t-n = Noisy (echo every record processed)\n")
 		);
-	printf("example: dbverify -ifsex \"%s\"\n", fname);
+	printf(_("example: dbverify -ifsex \"%s\"\n"), fname);
 	printf("%s\n", verstr);
 }
 /*========================================
@@ -290,7 +290,7 @@ check_ghosts (void)
 
 	if (todo.fix_ghosts) {
 		NAMEREFN_REC * rec;
-		while (!empty_list(tofix)) {
+		while (!is_empty_list(tofix)) {
 			rec = (NAMEREFN_REC *) dequeue_list(tofix);
 			remove_name(rec->namerefn, rec->key);
 			errs[rec->err].fix_count++;
@@ -298,7 +298,7 @@ check_ghosts (void)
 		}
 	}
 
-	ASSERT(empty_list(tofix) && !soundexseq);
+	ASSERT(is_empty_list(tofix) && !soundexseq);
 
 	soundexseq = create_indiseq_sval();
 	/* soundexseq is used inside cgr_callback, across calls */
@@ -307,7 +307,7 @@ check_ghosts (void)
 
 	if (todo.fix_ghosts) {
 		NAMEREFN_REC * rec;
-		while (!empty_list(tofix)) {
+		while (!is_empty_list(tofix)) {
 			rec = (NAMEREFN_REC *) dequeue_list(tofix);
 			remove_refn(rec->namerefn, rec->key);
 			free_namerefn(rec);
@@ -332,7 +332,9 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 
 	/* bail out immediately if not INDI */
 	if (key[0] != 'I') {
-		report_error(ERR_NONINDINAME, "Non-indi name, key=%s, name=%s", key, name);
+		report_error(ERR_NONINDINAME
+			, _("Non-indi name, key=%s, name=%s")
+			, key, name);
 		return 1; /* continue traversal */
 	}
 
@@ -345,7 +347,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		, TRUE, TRUE); /* sure, alloc */
 
 	if (!indi) {
-		report_error(ERR_ORPHANNAME, "Orphaned name: %s", name);
+		report_error(ERR_ORPHANNAME, _("Orphaned name: %s"), name);
 		if (todo.fix_ghosts)
 			enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_ORPHANNAME));
 	} else {
@@ -359,7 +361,7 @@ cgn_callback (STRING key, STRING name, BOOLEAN newset, void *param)
 		}
 		join_indi(indi, nam, refn, sex, body, famc, fams);
 		if (!found) {
-			report_error(ERR_GHOSTNAME, "Ghost name: %s -> %s", name, key);
+			report_error(ERR_GHOSTNAME, _("Ghost name: %s -> %s"), name, key);
 			if (todo.fix_ghosts)
 				enqueue_list(tofix, (VPTR)alloc_namerefn(name, key, ERR_GHOSTNAME));
 		}
@@ -391,7 +393,7 @@ cgr_callback (STRING key, STRING refn, BOOLEAN newset, void *param)
 		, TRUE, TRUE); /* sure, alloc */
 	
 	if (!node) {
-		report_error(ERR_ORPHANNAME, "Orphaned refn: %s", refn);
+		report_error(ERR_ORPHANNAME, _("Orphaned refn: %s"), refn);
 		if (todo.fix_ghosts)
 			enqueue_list(tofix, (VPTR)alloc_namerefn(refn, key, ERR_ORPHANNAME));
 	} else {
@@ -429,7 +431,7 @@ finish_and_delete_nameset (void)
 			table = create_table();
 		}
 		if (in_table(table, name)) {
-			report_error(ERR_DUPNAME, "Duplicate name for %s (%s)"
+			report_error(ERR_DUPNAME, _("Duplicate name for %s (%s)")
 				, skey(el), name);
 		} else {
 			insert_table_int(table, name, 1);
@@ -462,7 +464,7 @@ finish_and_delete_refnset (void)
 			table = create_table();
 		}
 		if (in_table(table, refn)) {
-			report_error(ERR_DUPREFN, "Duplicate refn for %s (%s)"
+			report_error(ERR_DUPREFN, _("Duplicate refn for %s (%s)")
 				, skey(el), refn);
 		} else {
 			insert_table_int(table, refn, 1);
@@ -532,7 +534,7 @@ check_indi (STRING key, RECORD rec)
 	NODE node1;
 	CACHEEL icel1;
 	if (eqstr(key, prevkey)) {
-		report_error(ERR_DUPINDI, "Duplicate individual for %s", key);
+		report_error(ERR_DUPINDI, _("Duplicate individual for %s"), key);
 	}
 	icel1 = indi_to_cacheel(rec);
 	lock_cache(icel1);
@@ -542,7 +544,7 @@ check_indi (STRING key, RECORD rec)
 	for (node1 = name1; node1; node1 = nsibling(node1)) {
 		STRING name=nval(node1);
 		if (!valid_name(name)) {
-			report_error(ERR_BADNAME, "Bad name for individual %s: %s", key, name);
+			report_error(ERR_BADNAME, _("Bad name for individual %s: %s"), key, name);
 		} else {
 		/* TO DO: verify that name is in db */
 		}
@@ -557,11 +559,11 @@ check_indi (STRING key, RECORD rec)
 		STRING famkey=rmvat(nval(node1));
 		NODE fam2 = qkey_to_fam(famkey);
 		if (!fam2) {
-			report_error(ERR_BADFAMREF, "Bad family reference (%s) individual %s", famkey, key);
+			report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
 		} else {
 			/* look for indi1 (key) in fam2's children */
 			if (!find_xref(key, fam2, "CHIL", NULL)) {
-				report_error(ERR_MISSINGCHILD, "Missing child (%s) in family (%s)", key, famkey);
+				report_error(ERR_MISSINGCHILD, _("Missing child (%s) in family (%s)"), key, famkey);
 			}
 		}
 	}
@@ -570,11 +572,11 @@ check_indi (STRING key, RECORD rec)
 		STRING famkey=rmvat(nval(node1));
 		NODE fam2 = qkey_to_fam(famkey);
 		if (!fam2) {
-			report_error(ERR_BADFAMREF, "Bad family reference (%s) individual %s", famkey, key);
+			report_error(ERR_BADFAMREF, _("Bad family reference (%s) individual %s"), famkey, key);
 		} else {
 			/* look for indi1 (key) in fam2's spouses */
 			if (!find_xref(key, fam2, "HUSB", "WIFE")) {
-				report_error(ERR_MISSINGSPOUSE, "Missing spouse (%s) in family (%s)", key, famkey);
+				report_error(ERR_MISSINGSPOUSE, _("Missing spouse (%s) in family (%s)"), key, famkey);
 			}
 		}
 	}
@@ -598,7 +600,7 @@ check_fam (STRING key, RECORD rec)
 	CACHEEL fcel1;
 	INT members = 0;
 	if (eqstr(key, prevkey)) {
-		report_error(ERR_DUPFAM, "Duplicate family for %s", key);
+		report_error(ERR_DUPFAM, _("Duplicate family for %s"), key);
 	}
 	fam1 = nztop(rec);
 	fcel1 = fam_to_cacheel(fam1);
@@ -615,11 +617,15 @@ check_fam (STRING key, RECORD rec)
 		NODE husb = qkey_to_indi(husbkey);
 		members++;
 		if (!husb) {
-			report_error(ERR_BADHUSBREF, "Bad husb reference (%s) in family %s", husbkey, key);
+			report_error(ERR_BADHUSBREF
+				, _("Bad HUSB reference (%s) in family %s")
+				, husbkey, key);
 		} else {
 			/* look for family (key) in husb */
 			if (!find_xref(key, husb, "FAMS", NULL)) {
-				report_error(ERR_EXTRAHUSB, "Improper husb (%s) in family (%s)", husbkey, key);
+				report_error(ERR_EXTRAHUSB
+					, _("Improper HUSB (%s) in family (%s)")
+					, husbkey, key);
 			}
 		}
 	}
@@ -629,11 +635,15 @@ check_fam (STRING key, RECORD rec)
 		NODE wife = qkey_to_indi(wifekey);
 		members++;
 		if (!wife) {
-			report_error(ERR_BADWIFEREF, "Bad wife reference (%s) in family %s", wifekey, key);
+			report_error(ERR_BADWIFEREF
+				, _("Bad wife reference (%s) in family %s")
+				, wifekey, key);
 		} else {
 			/* look for family (key) in wife */
 			if (!find_xref(key, wife, "FAMS", NULL)) {
-				report_error(ERR_EXTRAWIFE, "Improper wife (%s) in family (%s)", wifekey, key);
+				report_error(ERR_EXTRAWIFE
+					, _("Improper wife (%s) in family (%s)")
+					, wifekey, key);
 			}
 		}
 	}
@@ -643,20 +653,24 @@ check_fam (STRING key, RECORD rec)
 		NODE child = qkey_to_indi(chilkey);
 		members++;
 		if (!child) {
-			report_error(ERR_BADCHILDREF, "Bad child reference (%s) in family %s", chilkey, key);
+			report_error(ERR_BADCHILDREF
+				, _("Bad child reference (%s) in family %s")
+				, chilkey, key);
 		} else {
 			/* look for family (key) in child */
 			if (!find_xref(key, child, "FAMC", NULL)) {
-				report_error(ERR_EXTRACHILD, "Improper child (%s) in family (%s)", chilkey, key);
+				report_error(ERR_EXTRACHILD
+					, _("Improper child (%s) in family (%s)")
+					, chilkey, key);
 			}
 		}
 	}
 	join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
 	/* check for undersized family */
 	if (!members) {
-		report_error(ERR_EMPTYFAM, "Empty family (%s)", key);
+		report_error(ERR_EMPTYFAM, _("Empty family (%s)"), key);
 	} else if (members == 1) {
-		report_error(ERR_SOLOFAM, "Single person family (%s)", key);
+		report_error(ERR_SOLOFAM, _("Single person family (%s)"), key);
 	}
 	unlock_cache(fcel1);
 	check_pointers(key, rec);
@@ -673,7 +687,7 @@ check_sour (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
-		report_error(ERR_DUPSOUR, "Duplicate source for %s", key);
+		report_error(ERR_DUPSOUR, _("Duplicate source for %s"), key);
 	}
 	check_pointers(key, rec);
 	append_indiseq_null(seq_sours, strsave(key), NULL, TRUE, TRUE);
@@ -689,7 +703,7 @@ check_even (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
-		report_error(ERR_DUPEVEN, "Duplicate event for %s", key);
+		report_error(ERR_DUPEVEN, _("Duplicate event for %s"), key);
 	}
 	check_pointers(key, rec);
 	append_indiseq_null(seq_evens, strsave(key), NULL, TRUE, TRUE);
@@ -705,7 +719,7 @@ check_othe (STRING key, RECORD rec)
 {
 	static char prevkey[9];
 	if (!strcmp(key, prevkey)) {
-		report_error(ERR_DUPOTHE, "Duplicate record for %s", key);
+		report_error(ERR_DUPOTHE, _("Duplicate record for %s"), key);
 	}
 	check_pointers(key, rec);
 	append_indiseq_null(seq_othes, strsave(key), NULL, TRUE, TRUE);
@@ -775,7 +789,9 @@ check_node (STRING n0key, NODE node, INT level)
 		if (skey) {
 			NODE xnode = qkey_to_type(skey);
 			if (!xnode) {
-				report_error(ERR_BADPOINTER, "Bad pointer (in %s): %s", n0key, nval(node));
+				report_error(ERR_BADPOINTER
+					, _("Bad pointer (in %s): %s")
+					, n0key, nval(node));
 			}
 		}
 	}
@@ -796,14 +812,18 @@ check_set (INDISEQ seq, char ctype)
 	i = xref_next(ctype, i);
 	FORINDISEQ(seq, el, num)
 		while (i<spri(el)) {
-			report_error(ERR_MISSING, "Missing undeleted record %c%d", ctype, i);
+			report_error(ERR_MISSING
+				, _("Missing undeleted record %c%d")
+				, ctype, i);
 			i = xref_next(ctype, i);
 		}
 		if (i == spri(el)) {
 			/* in synch */
 			i = xref_next(ctype, i);
 		} else { /* spri(el) < i */
-			report_error(ERR_DELETED, "Delete set contains valid record %s", skey(el));
+			report_error(ERR_DELETED
+				, _("Delete set contains valid record %s")
+				, skey(el));
 			/* fall thru and only advance seq */
 		}
 	ENDINDISEQ
@@ -818,7 +838,9 @@ validate_errs (void)
 	INT i;
 	for (i=0; i<ARRSIZE(errs); i++) {
 		if (errs[i].err != i) {
-			fprintf(stderr, "Invalid errs array[%d] in dbverify - fix program\n", i);
+			fprintf(stderr
+				, _("Invalid errs array[%d] in dbverify - fix program\n")
+				, i);
 			FATAL();
 		}
 	}
@@ -843,6 +865,11 @@ main (int argc,
 	validate_errs();
 
 	initlocale();
+
+#if ENABLE_NLS
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+#endif
 
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
@@ -940,13 +967,21 @@ report_results (void)
 	INT i, ct=0;
 	for (i=0; i<ARRSIZE(errs); i++) {
 		if (errs[i].err_count || errs[i].fix_count) {
+			char buffer[64];
+			printf("%s: ", _(errs[i].desc));
+			snprintf(buffer, sizeof(buffer)
+				, ngettext("%d error", "%d errors", errs[i].err_count)
+				, errs[i].err_count);
+			printf("%s, ", buffer);
+			snprintf(buffer, sizeof(buffer)
+				, ngettext("%d fixed", "%d fixed", errs[i].fix_count)
+				, errs[i].fix_count);
+			printf("%s\n", buffer);
 			ct++;
-			printf("%s: %d errors, %d fixed\n", 
-				errs[i].desc, errs[i].err_count, errs[i].fix_count);
 		}
 	}
 	if (!ct) {
-		printf("No errors found\n");
+		printf("%s\n", _("No errors found"));
 	}
 }
 /*=============================
@@ -957,11 +992,12 @@ report_results (void)
 void
 __fatal (STRING file, int line, STRING details)
 {
-	printf("FATAL ERROR: ");
+	printf(_("FATAL ERROR: "));
 	if (details && details[0]) {
 		printf(details);
-		printf("\nAT: ");
 	}
-	printf("%s: line %d\n", file, line);
+	printf("\n");
+	printf(_("In file <%s> at line %d"), file, line);
+	printf("\n");
 	exit(1);
 }

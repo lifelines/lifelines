@@ -1576,6 +1576,7 @@ __inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	LIST list;
 	PVALUE el;
+	BOOLEAN bFound;
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
 	if (*eflg || !val || ptype(val) != PLIST) {
 		*eflg = TRUE;
@@ -1589,7 +1590,8 @@ __inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	set_pvalue(val, PBOOL, (VPTR)in_list(list, el, eqv_pvalues));
+	bFound = in_list(list, el, eqv_pvalues) >= 0;
+	set_pvalue(val, PBOOL, (VPTR)bFound);
 	delete_pvalue(el);
 	return val;
 }
@@ -1662,7 +1664,7 @@ __pop (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 	}
 	list = pvalue_to_list(val);
 	delete_pvalue(val);
-	if (empty_list(list)) return create_pvalue_any();
+	if (is_empty_list(list)) return create_pvalue_any();
 	return (PVALUE) pop_list(list);
 }
 /*=============================================+
@@ -1693,6 +1695,7 @@ PVALUE
 __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list;
+	BOOLEAN bEmpty;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
 	if (*eflg || !val || ptype(val) != PLIST) {
 		*eflg = TRUE;
@@ -1700,7 +1703,8 @@ __empty (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	set_pvalue(val, PBOOL, (VPTR)empty_list(list));
+	bEmpty = is_empty_list(list);
+	set_pvalue(val, PBOOL, (VPTR)bEmpty);
 	return val;
 }
 /*==================================+

@@ -215,7 +215,7 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 	create_symtab(&globtab);
 	functab = create_table();
 	initinterp();
-	while (!empty_list(plist)) {
+	while (!is_empty_list(plist)) {
 		ifile = (STRING) dequeue_list(plist);
 		if (!in_table(filetab, ifile)) {
 			insert_table_int(filetab, ifile, 0);

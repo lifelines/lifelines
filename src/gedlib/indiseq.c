@@ -1386,7 +1386,7 @@ ancestor_indiseq (INDISEQ seq)
 		enqueue_list(anclist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)0);
 	ENDINDISEQ
-	while (!empty_list(anclist)) {
+	while (!is_empty_list(anclist)) {
 		key = (STRING) dequeue_list(anclist);
 		gen = (INT) dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
@@ -1455,7 +1455,7 @@ descendent_indiseq (INDISEQ seq)
 		enqueue_list(genlist, (VPTR)0);
 	ENDINDISEQ
 		/* loop until processing list is empty */
-	while (!empty_list(deslist)) {
+	while (!is_empty_list(deslist)) {
 		INT num1, num2;
 		key = (STRING) dequeue_list(deslist);
 		gen = (INT) dequeue_list(genlist) + 1;

@@ -4,9 +4,21 @@
 # This list may not be complete.
 
 gedlib/messages.c
+gedlib/valid.c
 
+interp/alloc.c
+interp/builtin.c
+interp/interp.c
+interp/more.c
+
+liflines/add.c
+liflines/error.c
+liflines/loadsave.c
+liflines/main.c
 liflines/menuitem.c
+liflines/newrecs.c
 liflines/screen.c
 liflines/show.c
 liflines/valgdcom.c
-liflines/loadsave.c
+
+tools/dbverify.c

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.10\n"
-"POT-Creation-Date: 2002-06-08 07:19-0400\n"
+"POT-Creation-Date: 2002-06-09 05:57-0400\n"
 "PO-Revision-Date: 2002-05-28 21:06-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -485,479 +485,469 @@ msgstr ""
 msgid "What record do you want to edit?"
 msgstr ""
 
-#: gedlib/messages.c:172
-#, c-format
-msgid "There was %d unresolved reference."
-msgstr ""
-
 #: gedlib/messages.c:173
-#, c-format
-msgid "There were %d unresolved references."
-msgstr ""
-
-#: gedlib/messages.c:175
 msgid "Do you really want to add this person to the database?"
 msgstr ""
 
-#: gedlib/messages.c:176
+#: gedlib/messages.c:174
 msgid "Do you really want to add this family to the database?"
 msgstr ""
 
-#: gedlib/messages.c:177
+#: gedlib/messages.c:175
 msgid "Do you really want to add this child to the family?"
 msgstr ""
 
-#: gedlib/messages.c:178
+#: gedlib/messages.c:176
 msgid "Do you really want to add this spouse/parent to the family?"
 msgstr ""
 
-#: gedlib/messages.c:179
+#: gedlib/messages.c:177
 msgid "Do you really want to add this source to the database?"
 msgstr ""
 
-#: gedlib/messages.c:180
+#: gedlib/messages.c:178
 msgid "Do you really want to add this event to the database?"
 msgstr ""
 
-#: gedlib/messages.c:181
+#: gedlib/messages.c:179
 msgid "Do you really want to add this record to the database?"
 msgstr ""
 
-#: gedlib/messages.c:182
+#: gedlib/messages.c:180
 msgid "Do you really want to update this person?"
 msgstr ""
 
-#: gedlib/messages.c:183
+#: gedlib/messages.c:181
 msgid "Do you really want to update this family?"
 msgstr ""
 
-#: gedlib/messages.c:184
+#: gedlib/messages.c:182
 msgid "Do you really want to update this source?"
 msgstr ""
 
-#: gedlib/messages.c:185
+#: gedlib/messages.c:183
 msgid "Do you really want to update this event?"
 msgstr ""
 
-#: gedlib/messages.c:186
+#: gedlib/messages.c:184
 msgid "Do you really want to update this record?"
 msgstr ""
 
-#: gedlib/messages.c:187
+#: gedlib/messages.c:185
 msgid "Are you sure you want to remove the person from the database?"
 msgstr ""
 
-#: gedlib/messages.c:188
+#: gedlib/messages.c:186
 msgid "Remove this family record ?"
 msgstr ""
 
-#: gedlib/messages.c:189
+#: gedlib/messages.c:187
 #, c-format
 msgid "(%s: %d spouse(s), %d child(ren))"
 msgstr ""
 
-#: gedlib/messages.c:190
+#: gedlib/messages.c:188
 msgid "Do you really want to merge these two persons?"
 msgstr ""
 
-#: gedlib/messages.c:191
+#: gedlib/messages.c:189
 msgid "Do you really want to merge these two families?"
 msgstr ""
 
-#: gedlib/messages.c:192
+#: gedlib/messages.c:190
 msgid "Do you really want to remove this child from his/her family?"
 msgstr ""
 
-#: gedlib/messages.c:193
+#: gedlib/messages.c:191
 msgid "Do you really want to remove this spouse from his/her family?"
 msgstr ""
 
-#: gedlib/messages.c:194
+#: gedlib/messages.c:192
 msgid "Too many spouses to display full list"
 msgstr ""
 
-#: gedlib/messages.c:195
+#: gedlib/messages.c:193
 msgid "These persons are children in different families."
 msgstr ""
 
-#: gedlib/messages.c:196
+#: gedlib/messages.c:194
 msgid "Are you sure you want to merge them?"
 msgstr ""
 
-#: gedlib/messages.c:198
+#: gedlib/messages.c:196
 msgid "There is something wrong with the data."
 msgstr ""
 
-#: gedlib/messages.c:199
+#: gedlib/messages.c:197
 msgid "Please identify the child."
 msgstr ""
 
-#: gedlib/messages.c:200
+#: gedlib/messages.c:198
 msgid "Please identify one of the child's siblings."
 msgstr ""
 
-#: gedlib/messages.c:201
+#: gedlib/messages.c:199
 msgid "Identify spouse/parent to add to an existing family."
 msgstr ""
 
-#: gedlib/messages.c:202
+#: gedlib/messages.c:200
 msgid "Identify spouse/parent already in family, if known."
 msgstr ""
 
-#: gedlib/messages.c:203
+#: gedlib/messages.c:201
 msgid "Identify child already in family."
 msgstr ""
 
-#: gedlib/messages.c:205
+#: gedlib/messages.c:203
 msgid "This person is already a child in a family."
 msgstr ""
 
-#: gedlib/messages.c:206
+#: gedlib/messages.c:204
 msgid "Identify a spouse/parent for the new family."
 msgstr ""
 
-#: gedlib/messages.c:207
+#: gedlib/messages.c:205
 msgid "Identify the second spouse/parent, if known."
 msgstr ""
 
-#: gedlib/messages.c:208
+#: gedlib/messages.c:206
 msgid "Both families must have husbands/fathers."
 msgstr ""
 
-#: gedlib/messages.c:209
+#: gedlib/messages.c:207
 msgid "Both families must have wives/mothers."
 msgstr ""
 
-#: gedlib/messages.c:211
+#: gedlib/messages.c:209
 msgid "Identify spouse/parent in second family, if known."
 msgstr ""
 
-#: gedlib/messages.c:212
+#: gedlib/messages.c:210
 msgid "Identify child in second family."
 msgstr ""
 
-#: gedlib/messages.c:213
+#: gedlib/messages.c:211
 msgid "Identify second person to browse to."
 msgstr ""
 
-#: gedlib/messages.c:215
+#: gedlib/messages.c:213
 msgid "Create a family with this person as a child."
 msgstr ""
 
-#: gedlib/messages.c:216
+#: gedlib/messages.c:214
 msgid "Create a family with this person as a spouse/parent."
 msgstr ""
 
-#: gedlib/messages.c:217
+#: gedlib/messages.c:215
 msgid "This family has less than two children; can't swap."
 msgstr ""
 
-#: gedlib/messages.c:218
+#: gedlib/messages.c:216
 msgid "This person is a spouse/parent in less than two families."
 msgstr ""
 
-#: gedlib/messages.c:219
+#: gedlib/messages.c:217
 msgid "Something impossible happened. Contact tech support."
 msgstr ""
 
-#: gedlib/messages.c:221
+#: gedlib/messages.c:219
 msgid "The two children were swapped."
 msgstr ""
 
-#: gedlib/messages.c:222
+#: gedlib/messages.c:220
 msgid "The two families were swapped."
 msgstr ""
 
-#: gedlib/messages.c:223
+#: gedlib/messages.c:221
 msgid "The child was removed from his/her family."
 msgstr ""
 
-#: gedlib/messages.c:224
+#: gedlib/messages.c:222
 msgid "The spouse was removed from his/her family."
 msgstr ""
 
-#: gedlib/messages.c:226
+#: gedlib/messages.c:224
 msgid "A person cannot be merged with him/herself."
 msgstr ""
 
-#: gedlib/messages.c:227
+#: gedlib/messages.c:225
 msgid "A family cannot be merged with itself."
 msgstr ""
 
-#: gedlib/messages.c:228
+#: gedlib/messages.c:226
 msgid "Two persons with different parents cannot be merged."
 msgstr ""
 
-#: gedlib/messages.c:229
+#: gedlib/messages.c:227
 msgid "Two parents of different sexes cannot be merged."
 msgstr ""
 
-#: gedlib/messages.c:230
+#: gedlib/messages.c:228
 msgid "The families have different fathers/husbands; cannot merge."
 msgstr ""
 
-#: gedlib/messages.c:231
+#: gedlib/messages.c:229
 msgid "The families have different wives/mothers; cannot merge."
 msgstr ""
 
-#: gedlib/messages.c:232
+#: gedlib/messages.c:230
 msgid "Who do you want to remove from the database?"
 msgstr ""
 
-#: gedlib/messages.c:233
+#: gedlib/messages.c:231
 msgid "Place the child last in the family."
 msgstr ""
 
-#: gedlib/messages.c:234
+#: gedlib/messages.c:232
 msgid "Error in abbreviations file."
 msgstr ""
 
-#: gedlib/messages.c:235
+#: gedlib/messages.c:233
 msgid "Error in user options file."
 msgstr ""
 
-#: gedlib/messages.c:236
+#: gedlib/messages.c:234
 msgid "Error in character mapping file."
 msgstr ""
 
-#: gedlib/messages.c:237
+#: gedlib/messages.c:235
 #, c-format
 msgid "(Separator is %s)"
 msgstr ""
 
-#: gedlib/messages.c:238
+#: gedlib/messages.c:236
 msgid "Do you want to re-edit it?"
 msgstr ""
 
-#: gedlib/messages.c:240
+#: gedlib/messages.c:238
 #, c-format
 msgid "%s was added to the database."
 msgstr ""
 
-#: gedlib/messages.c:241
+#: gedlib/messages.c:239
 #, c-format
 msgid "%s was added as a child."
 msgstr ""
 
-#: gedlib/messages.c:242
+#: gedlib/messages.c:240
 #, c-format
 msgid "%s was added as a spouse and/or parent."
 msgstr ""
 
-#: gedlib/messages.c:243
+#: gedlib/messages.c:241
 msgid "The new family was added to the database."
 msgstr ""
 
-#: gedlib/messages.c:244
+#: gedlib/messages.c:242
 #, c-format
 msgid "%s was modified in the database."
 msgstr ""
 
-#: gedlib/messages.c:245
+#: gedlib/messages.c:243
 msgid "The family was modified in the database."
 msgstr ""
 
-#: gedlib/messages.c:246
+#: gedlib/messages.c:244
 msgid "The source was modified in the database."
 msgstr ""
 
-#: gedlib/messages.c:247
+#: gedlib/messages.c:245
 msgid "The event was modified in the database."
 msgstr ""
 
-#: gedlib/messages.c:248
+#: gedlib/messages.c:246
 msgid "The record was modified in the database."
 msgstr ""
 
-#: gedlib/messages.c:250
+#: gedlib/messages.c:248
 #, c-format
 msgid "Could not open file %s."
 msgstr ""
 
-#: gedlib/messages.c:252
+#: gedlib/messages.c:250
 msgid "Please mark a person first."
 msgstr ""
 
-#: gedlib/messages.c:254
+#: gedlib/messages.c:252
 #, c-format
 msgid "The current list is now named %s."
 msgstr ""
 
-#: gedlib/messages.c:255
+#: gedlib/messages.c:253
 msgid "The current list is not named."
 msgstr ""
 
-#: gedlib/messages.c:256
+#: gedlib/messages.c:254
 msgid "What should the name of this list be?"
 msgstr ""
 
-#: gedlib/messages.c:257
+#: gedlib/messages.c:255
 msgid "No persons were added to the current list."
 msgstr ""
 
-#: gedlib/messages.c:258
+#: gedlib/messages.c:256
 msgid "What persons or list do you want to add to the current list?"
 msgstr ""
 
-#: gedlib/messages.c:259
+#: gedlib/messages.c:257
 msgid "You are at the bottom of the list."
 msgstr ""
 
-#: gedlib/messages.c:260
+#: gedlib/messages.c:258
 msgid "You are at the top of the list."
 msgstr ""
 
-#: gedlib/messages.c:261
+#: gedlib/messages.c:259
 msgid "New persons were added to the current list."
 msgstr ""
 
-#: gedlib/messages.c:263
+#: gedlib/messages.c:261
 msgid "System error: illegal map code"
 msgstr ""
 
-#: gedlib/messages.c:264
+#: gedlib/messages.c:262
 msgid "No such translation table in this database"
 msgstr ""
 
-#: gedlib/messages.c:267
+#: gedlib/messages.c:265
 msgid "Because of errors the GEDCOM file was not loaded.\n"
 msgstr ""
 
-#: gedlib/messages.c:268
+#: gedlib/messages.c:266
 msgid "No errors; adding records with original keys..."
 msgstr ""
 
-#: gedlib/messages.c:269
+#: gedlib/messages.c:267
 msgid "No errors; adding records with new keys..."
 msgstr ""
 
-#: gedlib/messages.c:270
+#: gedlib/messages.c:268
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
 msgstr ""
 
-#: gedlib/messages.c:271
+#: gedlib/messages.c:269
 msgid "Use original keys from GEDCOM file?"
 msgstr ""
 
-#: gedlib/messages.c:272
+#: gedlib/messages.c:270
 msgid "Enter name of output archive file."
 msgstr ""
 
-#: gedlib/messages.c:273
+#: gedlib/messages.c:271
 #, c-format
 msgid "Database `%s' has been saved in `%s'."
 msgstr ""
 
-#: gedlib/messages.c:274
+#: gedlib/messages.c:272
 msgid "Enter name of translation table file to write"
 msgstr ""
 
-#: gedlib/messages.c:275
+#: gedlib/messages.c:273
 msgid "Enter name of translation table file to read"
 msgstr ""
 
-#: gedlib/messages.c:276
+#: gedlib/messages.c:274
 #, c-format
 msgid "Line %d: The person defined here has no key: skipped."
 msgstr ""
 
-#: gedlib/messages.c:277
+#: gedlib/messages.c:275
 #, c-format
 msgid "Line %d: The family defined here has no key."
 msgstr ""
 
-#: gedlib/messages.c:278
+#: gedlib/messages.c:276
 #, c-format
 msgid "Lines %d and %d: Person %s is multiply defined: skipped."
 msgstr ""
 
-#: gedlib/messages.c:279
+#: gedlib/messages.c:277
 #, c-format
 msgid "Lines %d and %d: Family %s is multiply defined."
 msgstr ""
 
-#: gedlib/messages.c:280
+#: gedlib/messages.c:278
 #, c-format
 msgid "Line %d: Person %s has an incorrect key: skipped."
 msgstr ""
 
-#: gedlib/messages.c:281
+#: gedlib/messages.c:279
 #, c-format
 msgid "Line %d: Family %s has an incorrect key."
 msgstr ""
 
-#: gedlib/messages.c:282
+#: gedlib/messages.c:280
 #, c-format
 msgid "Person %s is referred to but not defined."
 msgstr ""
 
-#: gedlib/messages.c:283
+#: gedlib/messages.c:281
 #, c-format
 msgid "Family %s is referred to but not defined."
 msgstr ""
 
-#: gedlib/messages.c:284
+#: gedlib/messages.c:282
 #, c-format
 msgid "Source %s is referred to but not defined."
 msgstr ""
 
-#: gedlib/messages.c:285
+#: gedlib/messages.c:283
 #, c-format
 msgid "Event %s is referred to but not defined."
 msgstr ""
 
-#: gedlib/messages.c:286
+#: gedlib/messages.c:284
 #, c-format
 msgid "Line %d: This line has a level number that is too large."
 msgstr ""
 
-#: gedlib/messages.c:287
+#: gedlib/messages.c:285
 #, c-format
 msgid "Line %d: Person defined here has no name."
 msgstr ""
 
-#: gedlib/messages.c:293
+#: gedlib/messages.c:291
 msgid "<Choose outside this list>"
 msgstr ""
 
-#: gedlib/messages.c:295
+#: gedlib/messages.c:293
 msgid "What is the name of the program?"
 msgstr ""
 
-#: gedlib/messages.c:297
+#: gedlib/messages.c:295
 msgid "What is the name of the output file?"
 msgstr ""
 
-#: gedlib/messages.c:298
+#: gedlib/messages.c:296
 msgid "Malformed configuration file: line too long."
 msgstr ""
 
-#: gedlib/messages.c:299
+#: gedlib/messages.c:297
 msgid "Unsupported Unicode format (only UTF-8 is supported)."
 msgstr ""
 
-#: gedlib/messages.c:302
+#: gedlib/messages.c:300
 msgid "Enter string for program"
 msgstr ""
 
-#: gedlib/messages.c:303
+#: gedlib/messages.c:301
 msgid "enter string: "
 msgstr ""
 
-#: gedlib/messages.c:304
+#: gedlib/messages.c:302
 msgid "enter integer:"
 msgstr ""
 
-#: gedlib/messages.c:305
+#: gedlib/messages.c:303
 msgid "enter name: "
 msgstr ""
 
-#: gedlib/messages.c:306
+#: gedlib/messages.c:304
 msgid "Strike any key to continue."
 msgstr ""
 
-#: gedlib/messages.c:310
+#: gedlib/messages.c:308
 msgid ""
 "0 SOUR\n"
 "1 REFN\n"
@@ -965,7 +955,7 @@ msgid ""
 "1 AUTH Author"
 msgstr ""
 
-#: gedlib/messages.c:311
+#: gedlib/messages.c:309
 msgid ""
 "0 EVEN\n"
 "1 REFN\n"
@@ -977,1256 +967,1572 @@ msgid ""
 "1 SOUR"
 msgstr ""
 
-#: gedlib/messages.c:312
+#: gedlib/messages.c:310
 msgid ""
 "0 XXXX\n"
 "1 REFN"
 msgstr ""
 
-#: gedlib/messages.c:316
+#: gedlib/messages.c:314
 msgid "The file is as positioned at EOF."
 msgstr ""
 
-#: gedlib/messages.c:317
+#: gedlib/messages.c:315
 #, c-format
 msgid "Line %d: This line is empty; EOF?"
 msgstr ""
 
-#: gedlib/messages.c:318
+#: gedlib/messages.c:316
 #, c-format
 msgid "Line %d: This line is too long."
 msgstr ""
 
-#: gedlib/messages.c:319
+#: gedlib/messages.c:317
 #, c-format
 msgid "Line %d: This line has no level number."
 msgstr ""
 
-#: gedlib/messages.c:320
+#: gedlib/messages.c:318
 #, c-format
 msgid "Line %d: This line is incomplete."
 msgstr ""
 
-#: gedlib/messages.c:321
+#: gedlib/messages.c:319
 #, c-format
 msgid "Line %d: This line has a bad link."
 msgstr ""
 
-#: gedlib/messages.c:322
+#: gedlib/messages.c:320
 #, c-format
 msgid "Line %d: This line needs white space before tag."
 msgstr ""
 
-#: gedlib/messages.c:323
+#: gedlib/messages.c:321
 #, c-format
 msgid "Line %d: This line has an illegal level."
 msgstr ""
 
-#: gedlib/messages.c:324
+#: gedlib/messages.c:322
 msgid "The record begins at wrong level."
 msgstr ""
 
-#: gedlib/messages.c:327
+#: gedlib/messages.c:325
 msgid ""
 "\n"
 "Aborting now. Core dump? [y/n]"
 msgstr ""
 
-#: gedlib/messages.c:328
+#: gedlib/messages.c:326
 msgid ""
 "Looks like a program was running.\n"
 "Check file %1 around line %2.\n"
 msgstr ""
 
-#: gedlib/messages.c:329
+#: gedlib/messages.c:327
 msgid "signal %1: %2"
 msgstr ""
 
-#: gedlib/messages.c:331
+#: gedlib/messages.c:329
 msgid "SIGNAL 0"
 msgstr ""
 
-#: gedlib/messages.c:332
+#: gedlib/messages.c:330
 msgid "HANGUP"
 msgstr ""
 
-#: gedlib/messages.c:333
+#: gedlib/messages.c:331
 msgid "INTERRUPT"
 msgstr ""
 
-#: gedlib/messages.c:334
+#: gedlib/messages.c:332
 msgid "QUIT"
 msgstr ""
 
-#: gedlib/messages.c:335
+#: gedlib/messages.c:333
 msgid "ILLEGAL INSTRUCTION"
 msgstr ""
 
-#: gedlib/messages.c:336
+#: gedlib/messages.c:334
 msgid "TRACE TRAP"
 msgstr ""
 
-#: gedlib/messages.c:337
+#: gedlib/messages.c:335
 msgid "ABORT"
 msgstr ""
 
-#: gedlib/messages.c:338
+#: gedlib/messages.c:336
 msgid "EMT INST"
 msgstr ""
 
-#: gedlib/messages.c:339
+#: gedlib/messages.c:337
 msgid "FLOATING POINT EXCEPTION"
 msgstr ""
 
-#: gedlib/messages.c:340
+#: gedlib/messages.c:338
 msgid "KILL"
 msgstr ""
 
-#: gedlib/messages.c:341
+#: gedlib/messages.c:339
 msgid "BUS ERROR"
 msgstr ""
 
-#: gedlib/messages.c:342
+#: gedlib/messages.c:340
 msgid "SEGMENTATION ERROR"
 msgstr ""
 
-#: gedlib/messages.c:343
+#: gedlib/messages.c:341
 msgid "SYSTEM CALL ERROR"
 msgstr ""
 
-#: gedlib/messages.c:344
+#: gedlib/messages.c:342
 msgid "PIPE WRITE"
 msgstr ""
 
-#: gedlib/messages.c:345
+#: gedlib/messages.c:343
 msgid "ALARM CLOCK"
 msgstr ""
 
-#: gedlib/messages.c:347
+#: gedlib/messages.c:345
 msgid "TERMINATE FROM KILL"
 msgstr ""
 
-#: gedlib/messages.c:348
+#: gedlib/messages.c:346
 msgid "USER SIGNAL 1"
 msgstr ""
 
-#: gedlib/messages.c:349
+#: gedlib/messages.c:347
 msgid "USER SIGNAL 2"
 msgstr ""
 
-#: gedlib/messages.c:350
+#: gedlib/messages.c:348
 msgid "DEATH OF CHILD"
 msgstr ""
 
-#: gedlib/messages.c:351
+#: gedlib/messages.c:349
 msgid "POWER-FAIL RESTART"
 msgstr ""
 
-#: gedlib/messages.c:352
+#: gedlib/messages.c:350
 msgid "WINDOW CHANGE"
 msgstr ""
 
-#: gedlib/messages.c:353
+#: gedlib/messages.c:351
 msgid "Unknown signal"
 msgstr ""
 
-#: gedlib/messages.c:357
+#: gedlib/messages.c:355
 msgid "person"
 msgstr ""
 
-#: gedlib/messages.c:358
+#: gedlib/messages.c:356
 msgid ", of "
 msgstr ""
 
-#: gedlib/messages.c:359
+#: gedlib/messages.c:357
 msgid "father"
 msgstr ""
 
-#: gedlib/messages.c:360
+#: gedlib/messages.c:358
 msgid "mother"
 msgstr ""
 
-#: gedlib/messages.c:361
+#: gedlib/messages.c:359
 msgid "spouse"
 msgstr ""
 
-#: gedlib/messages.c:362
+#: gedlib/messages.c:360
 msgid "child"
 msgstr ""
 
-#: gedlib/messages.c:365
+#: gedlib/messages.c:363
 msgid "m. "
 msgstr ""
 
-#: gedlib/messages.c:367
+#: gedlib/messages.c:365
 msgid "div. "
 msgstr ""
 
-#: gedlib/messages.c:369
+#: gedlib/messages.c:367
 msgid "b. "
 msgstr ""
 
-#: gedlib/messages.c:371
+#: gedlib/messages.c:369
 msgid "bap. "
 msgstr ""
 
-#: gedlib/messages.c:373
+#: gedlib/messages.c:371
 msgid "d. "
 msgstr ""
 
-#: gedlib/messages.c:375
+#: gedlib/messages.c:373
 msgid "bur. "
 msgstr ""
 
-#: gedlib/messages.c:377
+#: gedlib/messages.c:375
 msgid "cb. "
 msgstr ""
 
-#: gedlib/messages.c:379
+#: gedlib/messages.c:377
 msgid "married: "
 msgstr ""
 
-#: gedlib/messages.c:380
+#: gedlib/messages.c:378
 msgid "born: "
 msgstr ""
 
-#: gedlib/messages.c:381
+#: gedlib/messages.c:379
 msgid "bapt: "
 msgstr ""
 
-#: gedlib/messages.c:382
+#: gedlib/messages.c:380
 msgid "died: "
 msgstr ""
 
-#: gedlib/messages.c:383
+#: gedlib/messages.c:381
 msgid "buri: "
 msgstr ""
 
-#: gedlib/messages.c:387
+#: gedlib/messages.c:385
 msgid "You cannot edit the INDI line in a person record."
 msgstr ""
 
-#: gedlib/messages.c:388
+#: gedlib/messages.c:386
 msgid "You cannot edit the FAMC line in a person record."
 msgstr ""
 
-#: gedlib/messages.c:389
+#: gedlib/messages.c:387
 msgid "You cannot edit the FAMS lines in a person record."
 msgstr ""
 
-#: gedlib/messages.c:390
+#: gedlib/messages.c:388
 msgid "You cannot edit the FAM line in a family record."
 msgstr ""
 
-#: gedlib/messages.c:391
+#: gedlib/messages.c:389
 msgid "You cannot edit the HUSB line in a family record."
 msgstr ""
 
-#: gedlib/messages.c:392
+#: gedlib/messages.c:390
 msgid "You cannot edit the WIFE line in a family record."
 msgstr ""
 
-#: gedlib/messages.c:393
+#: gedlib/messages.c:391
 msgid "You cannot edit the CHIL lines in a family record."
 msgstr ""
 
-#: gedlib/messages.c:394
+#: gedlib/messages.c:392
 msgid "The record is empty."
 msgstr ""
 
-#: gedlib/messages.c:395
+#: gedlib/messages.c:393
 msgid "The record does not begin with an INDI line."
 msgstr ""
 
-#: gedlib/messages.c:396
+#: gedlib/messages.c:394
 msgid "The record does not begin with a FAM line."
 msgstr ""
 
-#: gedlib/messages.c:397
+#: gedlib/messages.c:395
 msgid "The record does not begin with a SOUR line."
 msgstr ""
 
-#: gedlib/messages.c:398
+#: gedlib/messages.c:396
 msgid "The record does not begin with an EVEN line."
 msgstr ""
 
-#: gedlib/messages.c:399
+#: gedlib/messages.c:397
 msgid "INDI, FAM, SOUR, EVEN records may not be other records."
 msgstr ""
 
-#: gedlib/messages.c:400
+#: gedlib/messages.c:398
 msgid "The record contains multiple level 0 lines."
 msgstr ""
 
-#: gedlib/messages.c:401
+#: gedlib/messages.c:399
 msgid "This person record has bad GEDCOM name syntax."
 msgstr ""
 
-#: gedlib/messages.c:402
+#: gedlib/messages.c:400
 msgid "You cannot change the sex of a parent."
 msgstr ""
 
-#: gedlib/messages.c:403
+#: gedlib/messages.c:401
 msgid "REFN key is already in use."
 msgstr ""
 
-#: gedlib/messages.c:405
+#: gedlib/messages.c:403
 msgid "Tag is too long to connect automatically."
 msgstr ""
 
-#: gedlib/messages.c:407
+#: gedlib/messages.c:405
 #, c-format
 msgid "Database records (%dI, %dF, %dS, %dE, %dX)"
 msgstr ""
 
-#: gedlib/messages.c:410
+#: gedlib/messages.c:408
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
 msgstr ""
 
-#: gedlib/messages.c:411
+#: gedlib/messages.c:409
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 
-#: gedlib/messages.c:414
+#: gedlib/messages.c:412
 #, c-format
 msgid "LifeLines %s - Genealogical DB and Programming System"
 msgstr ""
 
-#: gedlib/messages.c:415
+#: gedlib/messages.c:413
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
 msgstr ""
 
-#: gedlib/messages.c:416
+#: gedlib/messages.c:414
 #, c-format
 msgid "Current Database - %s"
 msgstr ""
 
-#: gedlib/messages.c:418
+#: gedlib/messages.c:416
 msgid " (immutable)"
 msgstr ""
 
-#: gedlib/messages.c:420
+#: gedlib/messages.c:418
 msgid " (read only)"
 msgstr ""
 
-#: gedlib/messages.c:421
+#: gedlib/messages.c:419
 msgid "Please choose an operation:"
 msgstr ""
 
-#: gedlib/messages.c:422
+#: gedlib/messages.c:420
 msgid "Not valid command"
 msgstr ""
 
-#: gedlib/messages.c:425
+#: gedlib/messages.c:423
 msgid "enter y (yes) or n (no): "
 msgstr ""
 
-#: gedlib/messages.c:426
+#: gedlib/messages.c:424
 msgid "yYnN"
 msgstr ""
 
-#: gedlib/messages.c:427
+#: gedlib/messages.c:425
 msgid "yY"
 msgstr ""
 
-#: gedlib/messages.c:430
+#: gedlib/messages.c:428
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:431
+#: gedlib/messages.c:429
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:432
+#: gedlib/messages.c:430
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:433
+#: gedlib/messages.c:431
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:434
+#: gedlib/messages.c:432
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:435
+#: gedlib/messages.c:433
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr ""
 
-#: gedlib/messages.c:438
+#: gedlib/messages.c:436
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr ""
 
-#: gedlib/messages.c:439
+#: gedlib/messages.c:437
 msgid "Commands:   j Move down     k Move up    q Quit"
 msgstr ""
 
-#: gedlib/messages.c:440
+#: gedlib/messages.c:438
 msgid "Messages:"
 msgstr ""
 
-#: gedlib/messages.c:443
+#: gedlib/messages.c:441
 msgid "Please choose from the following options:"
 msgstr ""
 
-#: gedlib/messages.c:444
+#: gedlib/messages.c:442
 #, c-format
 msgid "New record is %s"
 msgstr ""
 
-#: gedlib/messages.c:445
+#: gedlib/messages.c:443
 msgid "Insert xref automatically at bottom of current record."
 msgstr ""
 
-#: gedlib/messages.c:446
+#: gedlib/messages.c:444
 msgid "Edit current record now to add xref manually."
 msgstr ""
 
-#: gedlib/messages.c:447
+#: gedlib/messages.c:445
 msgid "Browse new record (without adding xref)."
 msgstr ""
 
-#: gedlib/messages.c:448
+#: gedlib/messages.c:446
 msgid "Return to current record (without adding xref)."
 msgstr ""
 
-#: gedlib/messages.c:451
+#: gedlib/messages.c:449
 msgid "Spouse unknown"
 msgstr ""
 
-#: gedlib/messages.c:452
+#: gedlib/messages.c:450
 msgid "No more history"
 msgstr ""
 
-#: gedlib/messages.c:453
+#: gedlib/messages.c:451
 msgid "Bad history count"
 msgstr ""
 
-#: gedlib/messages.c:454
+#: gedlib/messages.c:452
 msgid "Bad backup history count"
 msgstr ""
 
-#: gedlib/messages.c:455
+#: gedlib/messages.c:453
 msgid "Bad history length"
 msgstr ""
 
-#: gedlib/messages.c:456
+#: gedlib/messages.c:454
 #, c-format
 msgid "Delete history (%d entries) ?"
 msgstr ""
 
-#: gedlib/messages.c:457
+#: gedlib/messages.c:455
 msgid "Error accessing data"
 msgstr ""
 
-#: gedlib/messages.c:458
+#: gedlib/messages.c:456
 msgid "Choose from history"
 msgstr ""
 
-#: gedlib/messages.c:459
+#: gedlib/messages.c:457
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 
-#: gedlib/messages.c:460
+#: gedlib/messages.c:458
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
 msgstr ""
 
-#: gedlib/messages.c:461
+#: gedlib/messages.c:459
 msgid "Program"
 msgstr ""
 
-#: gedlib/messages.c:462
+#: gedlib/messages.c:460
 msgid "Default path: "
 msgstr ""
 
-#: gedlib/messages.c:463
+#: gedlib/messages.c:461
 msgid "WARNING: missing keys"
 msgstr ""
 
-#: gedlib/messages.c:464
+#: gedlib/messages.c:462
 msgid "WARNING: invalid pointer"
 msgstr ""
 
-#: gedlib/messages.c:465
+#: gedlib/messages.c:463
 msgid "enter file name"
 msgstr ""
 
-#: gedlib/messages.c:466
+#: gedlib/messages.c:464
 #, c-format
 msgid "enter file name (*%s)"
 msgstr ""
 
-#: gedlib/messages.c:467
+#: gedlib/messages.c:465
 msgid "There is no record with that key or reference."
 msgstr ""
 
-#: gedlib/messages.c:468
+#: gedlib/messages.c:466
 msgid "Database was corrupt."
 msgstr ""
 
-#: gedlib/messages.c:471
+#: gedlib/messages.c:469
 msgid "Bad decimal number format."
 msgstr ""
 
-#: gedlib/messages.c:472
+#: gedlib/messages.c:470
 msgid "Bad hexidecimal number format."
 msgstr ""
 
-#: gedlib/messages.c:473
+#: gedlib/messages.c:471
 msgid "No replacement string on line."
 msgstr ""
 
-#: gedlib/messages.c:474
+#: gedlib/messages.c:472
 msgid "No original string on line."
 msgstr ""
 
-#: gedlib/messages.c:475
+#: gedlib/messages.c:473
 msgid "Bad escape format."
 msgstr ""
 
-#: gedlib/messages.c:476
+#: gedlib/messages.c:474
 #, c-format
 msgid "%s: line %d (entry %d): %s\n"
 msgstr ""
 
-#: gedlib/messages.c:479 liflines/menuitem.c:86
+#: gedlib/messages.c:477 liflines/menuitem.c:86
 msgid "q  Return to main menu"
 msgstr ""
 
-#: gedlib/messages.c:480
+#: gedlib/messages.c:478
 msgid "q  Return to previous menu"
 msgstr ""
 
-#: gedlib/messages.c:481
+#: gedlib/messages.c:479
 msgid "q  Quit program"
 msgstr ""
 
-#: gedlib/messages.c:484
+#: gedlib/messages.c:482
 msgid "b  Browse the persons in the database"
 msgstr ""
 
-#: gedlib/messages.c:485
+#: gedlib/messages.c:483
 msgid "s  Search database"
 msgstr ""
 
-#: gedlib/messages.c:486
+#: gedlib/messages.c:484
 msgid "a  Add information to the database"
 msgstr ""
 
-#: gedlib/messages.c:487
+#: gedlib/messages.c:485
 msgid "d  Delete information from the database"
 msgstr ""
 
-#: gedlib/messages.c:488
+#: gedlib/messages.c:486
 msgid "r  Generate report by entering report name"
 msgstr ""
 
-#: gedlib/messages.c:489
+#: gedlib/messages.c:487
 msgid "p  Pick a report from list and run"
 msgstr ""
 
-#: gedlib/messages.c:490
+#: gedlib/messages.c:488
 msgid "c  Character set options"
 msgstr ""
 
-#: gedlib/messages.c:491
+#: gedlib/messages.c:489
 msgid "t  Modify character translation tables"
 msgstr ""
 
-#: gedlib/messages.c:492
+#: gedlib/messages.c:490
 msgid "u  Miscellaneous utilities"
 msgstr ""
 
-#: gedlib/messages.c:493
+#: gedlib/messages.c:491
 msgid "x  Handle source, event and other records"
 msgstr ""
 
-#: gedlib/messages.c:496
+#: gedlib/messages.c:494
 msgid "What utility do you want to perform?"
 msgstr ""
 
-#: gedlib/messages.c:497
+#: gedlib/messages.c:495
 msgid "s  Save the database in a GEDCOM file"
 msgstr ""
 
-#: gedlib/messages.c:498
+#: gedlib/messages.c:496
 msgid "r  Read in data from a GEDCOM file"
 msgstr ""
 
-#: gedlib/messages.c:499
+#: gedlib/messages.c:497
 msgid "k  Find a person's key value"
 msgstr ""
 
-#: gedlib/messages.c:500
+#: gedlib/messages.c:498
 msgid "i  Identify a person from key value"
 msgstr ""
 
-#: gedlib/messages.c:501
+#: gedlib/messages.c:499
 msgid "d  Show database statistics"
 msgstr ""
 
-#: gedlib/messages.c:502
+#: gedlib/messages.c:500
 msgid "m  Show memory statistics"
 msgstr ""
 
-#: gedlib/messages.c:503
+#: gedlib/messages.c:501
 msgid "e  Edit the place abbreviation file"
 msgstr ""
 
-#: gedlib/messages.c:504
+#: gedlib/messages.c:502
 msgid "o  Edit the user options file"
 msgstr ""
 
-#: gedlib/messages.c:507
+#: gedlib/messages.c:505
 msgid "What activity do you want to perform?"
 msgstr ""
 
-#: gedlib/messages.c:508
+#: gedlib/messages.c:506
 msgid "s  Browse source records"
 msgstr ""
 
-#: gedlib/messages.c:509
+#: gedlib/messages.c:507
 msgid "e  Browse event records"
 msgstr ""
 
-#: gedlib/messages.c:510
+#: gedlib/messages.c:508
 msgid "x  Browse other records"
 msgstr ""
 
-#: gedlib/messages.c:511
+#: gedlib/messages.c:509
 msgid "1  Add a source record to the database"
 msgstr ""
 
-#: gedlib/messages.c:512
+#: gedlib/messages.c:510
 msgid "2  Edit source record from the database"
 msgstr ""
 
-#: gedlib/messages.c:513
+#: gedlib/messages.c:511
 msgid "3  Add an event record to the database"
 msgstr ""
 
-#: gedlib/messages.c:514
+#: gedlib/messages.c:512
 msgid "4  Edit event record from the database"
 msgstr ""
 
-#: gedlib/messages.c:515
+#: gedlib/messages.c:513
 msgid "5  Add an other record to the database"
 msgstr ""
 
-#: gedlib/messages.c:516
+#: gedlib/messages.c:514
 msgid "6  Edit other record from the database"
 msgstr ""
 
-#: gedlib/messages.c:519
+#: gedlib/messages.c:517
 msgid "Character set menu"
 msgstr ""
 
-#: gedlib/messages.c:520
+#: gedlib/messages.c:518
 msgid "t  Edit translation tables"
 msgstr ""
 
-#: gedlib/messages.c:521
+#: gedlib/messages.c:519
 msgid "r  Report character set setup"
 msgstr ""
 
-#: gedlib/messages.c:522
+#: gedlib/messages.c:520
 msgid "Internal code set: "
 msgstr ""
 
-#: gedlib/messages.c:523
-msgid "Display locale: "
-msgstr ""
-
-#: gedlib/messages.c:525
+#: gedlib/messages.c:522
 msgid "s  Edit custom sort table        "
 msgstr ""
 
-#: gedlib/messages.c:526
+#: gedlib/messages.c:523
 msgid "p  Edit custom sort prefix table "
 msgstr ""
 
-#: gedlib/messages.c:527
+#: gedlib/messages.c:524
 msgid "c  Edit custom codepage mapping  "
 msgstr ""
 
-#: gedlib/messages.c:528
+#: gedlib/messages.c:525
 msgid "l  Edit custom lower case mapping"
 msgstr ""
 
-#: gedlib/messages.c:529
+#: gedlib/messages.c:526
 msgid "u  Edit custom upper case mapping"
 msgstr ""
 
-#: gedlib/messages.c:531
+#: gedlib/messages.c:528
 msgid "Report character set menu"
 msgstr ""
 
-#: gedlib/messages.c:532
+#: gedlib/messages.c:529
 msgid "Report code set: "
 msgstr ""
 
-#: gedlib/messages.c:535
+#: gedlib/messages.c:532
 msgid "Translation Tables"
 msgstr ""
 
-#: gedlib/messages.c:536
+#: gedlib/messages.c:533
 msgid "e  edit individual tables (in db)"
 msgstr ""
 
-#: gedlib/messages.c:537
+#: gedlib/messages.c:534
 msgid "l  load a table from a file (into db)"
 msgstr ""
 
-#: gedlib/messages.c:538
+#: gedlib/messages.c:535
 msgid "s  save a table to a file (from db)"
 msgstr ""
 
-#: gedlib/messages.c:539
+#: gedlib/messages.c:536
 msgid "x  export all tables (from db to files)"
 msgstr ""
 
-#: gedlib/messages.c:540
+#: gedlib/messages.c:537
 msgid "i  import all tables (from files into db)"
 msgstr ""
 
-#: gedlib/messages.c:541
+#: gedlib/messages.c:538
 msgid "export/import directory:"
 msgstr ""
 
-#: gedlib/messages.c:544
+#: gedlib/messages.c:541
 msgid "Which character mapping do you want to edit?"
 msgstr ""
 
-#: gedlib/messages.c:545
+#: gedlib/messages.c:542
 msgid "Which character mapping do you want to save?"
 msgstr ""
 
-#: gedlib/messages.c:547
+#: gedlib/messages.c:544
 msgid "e  Editor to Internal mapping "
 msgstr ""
 
-#: gedlib/messages.c:548
+#: gedlib/messages.c:545
 msgid "m  Internal to Editor mapping "
 msgstr ""
 
-#: gedlib/messages.c:549
+#: gedlib/messages.c:546
 msgid "i  GEDCOM to Internal mapping "
 msgstr ""
 
-#: gedlib/messages.c:550
+#: gedlib/messages.c:547
 msgid "x  Internal to GEDCOM mapping "
 msgstr ""
 
-#: gedlib/messages.c:551
+#: gedlib/messages.c:548
 msgid "g  Display to Internal mapping"
 msgstr ""
 
-#: gedlib/messages.c:552
+#: gedlib/messages.c:549
 msgid "d  Internal to Display mapping"
 msgstr ""
 
-#: gedlib/messages.c:553
+#: gedlib/messages.c:550
 msgid "r  Internal to Report mapping "
 msgstr ""
 
-#: gedlib/messages.c:555
+#: gedlib/messages.c:552
 msgid "Not implemented yet"
 msgstr ""
 
-#: gedlib/messages.c:558
+#: gedlib/messages.c:555
 msgid "What do you want to add?"
 msgstr ""
 
-#: gedlib/messages.c:559
+#: gedlib/messages.c:556
 msgid "p  Person - add new person to the database"
 msgstr ""
 
-#: gedlib/messages.c:560
+#: gedlib/messages.c:557
 msgid "f  Family - create family record from one or two spouses"
 msgstr ""
 
-#: gedlib/messages.c:561
+#: gedlib/messages.c:558
 msgid "c  Child - add a child to an existing family"
 msgstr ""
 
-#: gedlib/messages.c:562
+#: gedlib/messages.c:559
 msgid "s  Spouse - add a spouse to an existing family"
 msgstr ""
 
-#: gedlib/messages.c:565
+#: gedlib/messages.c:562
 msgid "What do you want to remove?"
 msgstr ""
 
-#: gedlib/messages.c:566
+#: gedlib/messages.c:563
 msgid "c  Child - remove a child from his/her family"
 msgstr ""
 
-#: gedlib/messages.c:567
+#: gedlib/messages.c:564
 msgid "s  Spouse - remove a spouse from a family"
 msgstr ""
 
-#: gedlib/messages.c:568
+#: gedlib/messages.c:565
 msgid "i  Individual - remove a person completely"
 msgstr ""
 
-#: gedlib/messages.c:569
+#: gedlib/messages.c:566
 msgid "f  Family - remove a family completely"
 msgstr ""
 
-#: gedlib/messages.c:572
+#: gedlib/messages.c:569
 msgid "What scan type?"
 msgstr ""
 
-#: gedlib/messages.c:573
+#: gedlib/messages.c:570
 msgid "f  Full name scan"
 msgstr ""
 
-#: gedlib/messages.c:574
+#: gedlib/messages.c:571
 msgid "n  Name fragment (whitespace-delimited) scan"
 msgstr ""
 
-#: gedlib/messages.c:575
+#: gedlib/messages.c:572
 msgid "r  Refn scan"
 msgstr ""
 
-#: gedlib/messages.c:576
+#: gedlib/messages.c:573
 msgid "Performing full name scan"
 msgstr ""
 
-#: gedlib/messages.c:577
+#: gedlib/messages.c:574
 msgid "Performing name fragment scan"
 msgstr ""
 
-#: gedlib/messages.c:578
+#: gedlib/messages.c:575
 msgid "Performing refn scan"
 msgstr ""
 
-#: gedlib/messages.c:579
+#: gedlib/messages.c:576
 msgid "No records found in scan"
 msgstr ""
 
-#: gedlib/messages.c:582
+#: gedlib/messages.c:579
 msgid "abt %1"
 msgstr ""
 
-#: gedlib/messages.c:583
+#: gedlib/messages.c:580
 msgid "about %1"
 msgstr ""
 
-#: gedlib/messages.c:584
+#: gedlib/messages.c:581
 msgid "est %1"
 msgstr ""
 
-#: gedlib/messages.c:585
+#: gedlib/messages.c:582
 msgid "estimated %1"
 msgstr ""
 
-#: gedlib/messages.c:586
+#: gedlib/messages.c:583
 msgid "cal %1"
 msgstr ""
 
-#: gedlib/messages.c:587
+#: gedlib/messages.c:584
 msgid "calculated %1"
 msgstr ""
 
-#: gedlib/messages.c:588
+#: gedlib/messages.c:585
 msgid "fr %1"
 msgstr ""
 
-#: gedlib/messages.c:589
+#: gedlib/messages.c:586
 msgid "from %1"
 msgstr ""
 
-#: gedlib/messages.c:590 gedlib/messages.c:591
+#: gedlib/messages.c:587 gedlib/messages.c:588
 msgid "to %1"
 msgstr ""
 
-#: gedlib/messages.c:592
+#: gedlib/messages.c:589
 msgid "fr %1 to %2"
 msgstr ""
 
-#: gedlib/messages.c:593
+#: gedlib/messages.c:590
 msgid "from %1 to %2"
 msgstr ""
 
-#: gedlib/messages.c:594
+#: gedlib/messages.c:591
 msgid "bef %1"
 msgstr ""
 
-#: gedlib/messages.c:595
+#: gedlib/messages.c:592
 msgid "before %1"
 msgstr ""
 
-#: gedlib/messages.c:596
+#: gedlib/messages.c:593
 msgid "aft %1"
 msgstr ""
 
-#: gedlib/messages.c:597
+#: gedlib/messages.c:594
 msgid "after %1"
 msgstr ""
 
-#: gedlib/messages.c:598
+#: gedlib/messages.c:595
 msgid "bet %1 and %2"
 msgstr ""
 
-#: gedlib/messages.c:599
+#: gedlib/messages.c:596
 msgid "between %1 and %2"
 msgstr ""
 
-#: gedlib/messages.c:602
+#: gedlib/messages.c:599
 msgid "B.C."
 msgstr ""
 
-#: gedlib/messages.c:604
+#: gedlib/messages.c:601
 msgid "BC"
 msgstr ""
 
-#: gedlib/messages.c:606
+#: gedlib/messages.c:603
 msgid "B.C.E."
 msgstr ""
 
-#: gedlib/messages.c:608
+#: gedlib/messages.c:605
 msgid "BCE"
 msgstr ""
 
-#: gedlib/messages.c:610
+#: gedlib/messages.c:607
 msgid "A.D."
 msgstr ""
 
-#: gedlib/messages.c:612
+#: gedlib/messages.c:609
 msgid "AD"
 msgstr ""
 
-#: gedlib/messages.c:614
+#: gedlib/messages.c:611
 msgid "C.E."
 msgstr ""
 
-#: gedlib/messages.c:616
+#: gedlib/messages.c:613
 msgid "CE"
 msgstr ""
 
-#: gedlib/messages.c:619
+#: gedlib/messages.c:616
 msgid "%1J"
 msgstr ""
 
-#: gedlib/messages.c:621
+#: gedlib/messages.c:618
 msgid "%1 HEB"
 msgstr ""
 
-#: gedlib/messages.c:623
+#: gedlib/messages.c:620
 msgid "%1 FR"
 msgstr ""
 
-#: gedlib/messages.c:625
+#: gedlib/messages.c:622
 msgid "%1 AUC"
 msgstr ""
 
-#: gedlib/messages.c:627
+#: gedlib/messages.c:624
 msgid "jan"
 msgstr ""
 
-#: gedlib/messages.c:628
+#: gedlib/messages.c:625
 msgid "january"
 msgstr ""
 
-#: gedlib/messages.c:629
+#: gedlib/messages.c:626
 msgid "feb"
 msgstr ""
 
-#: gedlib/messages.c:630
+#: gedlib/messages.c:627
 msgid "february"
 msgstr ""
 
-#: gedlib/messages.c:631
+#: gedlib/messages.c:628
 msgid "mar"
 msgstr ""
 
-#: gedlib/messages.c:632
+#: gedlib/messages.c:629
 msgid "march"
 msgstr ""
 
-#: gedlib/messages.c:633
+#: gedlib/messages.c:630
 msgid "apr"
 msgstr ""
 
-#: gedlib/messages.c:634
+#: gedlib/messages.c:631
 msgid "april"
 msgstr ""
 
-#: gedlib/messages.c:636
+#: gedlib/messages.c:633
 msgid "**may"
 msgstr ""
 
-#: gedlib/messages.c:637
+#: gedlib/messages.c:634
 msgid "may"
 msgstr ""
 
-#: gedlib/messages.c:638
+#: gedlib/messages.c:635
 msgid "jun"
 msgstr ""
 
-#: gedlib/messages.c:639
+#: gedlib/messages.c:636
 msgid "june"
 msgstr ""
 
-#: gedlib/messages.c:640
+#: gedlib/messages.c:637
 msgid "jul"
 msgstr ""
 
-#: gedlib/messages.c:641
+#: gedlib/messages.c:638
 msgid "july"
 msgstr ""
 
-#: gedlib/messages.c:642
+#: gedlib/messages.c:639
 msgid "aug"
 msgstr ""
 
-#: gedlib/messages.c:643
+#: gedlib/messages.c:640
 msgid "august"
 msgstr ""
 
-#: gedlib/messages.c:644
+#: gedlib/messages.c:641
 msgid "sep"
 msgstr ""
 
-#: gedlib/messages.c:645
+#: gedlib/messages.c:642
 msgid "september"
 msgstr ""
 
-#: gedlib/messages.c:646
+#: gedlib/messages.c:643
 msgid "oct"
 msgstr ""
 
-#: gedlib/messages.c:647
+#: gedlib/messages.c:644
 msgid "october"
 msgstr ""
 
-#: gedlib/messages.c:648
+#: gedlib/messages.c:645
 msgid "nov"
 msgstr ""
 
-#: gedlib/messages.c:649
+#: gedlib/messages.c:646
 msgid "november"
 msgstr ""
 
-#: gedlib/messages.c:650
+#: gedlib/messages.c:647
 msgid "dec"
 msgstr ""
 
-#: gedlib/messages.c:651
+#: gedlib/messages.c:648
 msgid "december"
 msgstr ""
 
-#: gedlib/messages.c:653
+#: gedlib/messages.c:650
 msgid "tsh"
 msgstr ""
 
-#: gedlib/messages.c:654
+#: gedlib/messages.c:651
 msgid "tishri"
 msgstr ""
 
-#: gedlib/messages.c:655
+#: gedlib/messages.c:652
 msgid "csh"
 msgstr ""
 
-#: gedlib/messages.c:656
+#: gedlib/messages.c:653
 msgid "cheshvan"
 msgstr ""
 
-#: gedlib/messages.c:657
+#: gedlib/messages.c:654
 msgid "ksl"
 msgstr ""
 
-#: gedlib/messages.c:658
+#: gedlib/messages.c:655
 msgid "kislev"
 msgstr ""
 
-#: gedlib/messages.c:659
+#: gedlib/messages.c:656
 msgid "tvt"
 msgstr ""
 
-#: gedlib/messages.c:660
+#: gedlib/messages.c:657
 msgid "tevet"
 msgstr ""
 
-#: gedlib/messages.c:661
+#: gedlib/messages.c:658
 msgid "shv"
 msgstr ""
 
-#: gedlib/messages.c:662
+#: gedlib/messages.c:659
 msgid "shevat"
 msgstr ""
 
-#: gedlib/messages.c:663
+#: gedlib/messages.c:660
 msgid "adr"
 msgstr ""
 
-#: gedlib/messages.c:664
+#: gedlib/messages.c:661
 msgid "adar"
 msgstr ""
 
-#: gedlib/messages.c:665
+#: gedlib/messages.c:662
 msgid "ads"
 msgstr ""
 
-#: gedlib/messages.c:666
+#: gedlib/messages.c:663
 msgid "adar sheni"
 msgstr ""
 
-#: gedlib/messages.c:667
+#: gedlib/messages.c:664
 msgid "nsn"
 msgstr ""
 
-#: gedlib/messages.c:668
+#: gedlib/messages.c:665
 msgid "nisan"
 msgstr ""
 
-#: gedlib/messages.c:669
+#: gedlib/messages.c:666
 msgid "iyr"
 msgstr ""
 
-#: gedlib/messages.c:670
+#: gedlib/messages.c:667
 msgid "iyar"
 msgstr ""
 
-#: gedlib/messages.c:671
+#: gedlib/messages.c:668
 msgid "svn"
 msgstr ""
 
-#: gedlib/messages.c:672
+#: gedlib/messages.c:669
 msgid "sivan"
 msgstr ""
 
-#: gedlib/messages.c:673
+#: gedlib/messages.c:670
 msgid "tmz"
 msgstr ""
 
-#: gedlib/messages.c:674
+#: gedlib/messages.c:671
 msgid "tamuz"
 msgstr ""
 
-#: gedlib/messages.c:675
+#: gedlib/messages.c:672
 msgid "aav"
 msgstr ""
 
-#: gedlib/messages.c:676
+#: gedlib/messages.c:673
 msgid "av"
 msgstr ""
 
-#: gedlib/messages.c:677
+#: gedlib/messages.c:674
 msgid "ell"
 msgstr ""
 
-#: gedlib/messages.c:678
+#: gedlib/messages.c:675
 msgid "elul"
 msgstr ""
 
-#: gedlib/messages.c:680
+#: gedlib/messages.c:677
 msgid "vend"
 msgstr ""
 
-#: gedlib/messages.c:681
+#: gedlib/messages.c:678
 msgid "vendemiaire"
 msgstr ""
 
-#: gedlib/messages.c:682
+#: gedlib/messages.c:679
 msgid "brum"
 msgstr ""
 
-#: gedlib/messages.c:683
+#: gedlib/messages.c:680
 msgid "brumaire"
 msgstr ""
 
-#: gedlib/messages.c:684
+#: gedlib/messages.c:681
 msgid "frim"
 msgstr ""
 
-#: gedlib/messages.c:685
+#: gedlib/messages.c:682
 msgid "frimaire"
 msgstr ""
 
-#: gedlib/messages.c:686
+#: gedlib/messages.c:683
 msgid "nivo"
 msgstr ""
 
-#: gedlib/messages.c:687
+#: gedlib/messages.c:684
 msgid "nivose"
 msgstr ""
 
-#: gedlib/messages.c:688
+#: gedlib/messages.c:685
 msgid "pluv"
 msgstr ""
 
-#: gedlib/messages.c:689
+#: gedlib/messages.c:686
 msgid "pluviose"
 msgstr ""
 
-#: gedlib/messages.c:690
+#: gedlib/messages.c:687
 msgid "vent"
 msgstr ""
 
-#: gedlib/messages.c:691
+#: gedlib/messages.c:688
 msgid "ventose"
 msgstr ""
 
-#: gedlib/messages.c:692
+#: gedlib/messages.c:689
 msgid "germ"
 msgstr ""
 
-#: gedlib/messages.c:693
+#: gedlib/messages.c:690
 msgid "germinal"
 msgstr ""
 
-#: gedlib/messages.c:694
+#: gedlib/messages.c:691
 msgid "flor"
 msgstr ""
 
-#: gedlib/messages.c:695
+#: gedlib/messages.c:692
 msgid "floreal"
 msgstr ""
 
-#: gedlib/messages.c:696
+#: gedlib/messages.c:693
 msgid "prai"
 msgstr ""
 
-#: gedlib/messages.c:697
+#: gedlib/messages.c:694
 msgid "prairial"
 msgstr ""
 
-#: gedlib/messages.c:698
+#: gedlib/messages.c:695
 msgid "mess"
 msgstr ""
 
-#: gedlib/messages.c:699
+#: gedlib/messages.c:696
 msgid "messidor"
 msgstr ""
 
-#: gedlib/messages.c:700
+#: gedlib/messages.c:697
 msgid "ther"
 msgstr ""
 
-#: gedlib/messages.c:701
+#: gedlib/messages.c:698
 msgid "thermidor"
 msgstr ""
 
-#: gedlib/messages.c:702
+#: gedlib/messages.c:699
 msgid "fruc"
 msgstr ""
 
-#: gedlib/messages.c:703
+#: gedlib/messages.c:700
 msgid "fructidor"
 msgstr ""
 
-#: gedlib/messages.c:704
+#: gedlib/messages.c:701
 msgid "comp"
 msgstr ""
 
-#: gedlib/messages.c:705
+#: gedlib/messages.c:702
 msgid "jour_complementairs"
+msgstr ""
+
+#: gedlib/valid.c:75
+msgid "This person record does not have a name line."
+msgstr ""
+
+#: interp/alloc.c:729
+#, c-format
+msgid "%s: the arg must be an integer."
+msgstr ""
+
+#: interp/alloc.c:730
+#, c-format
+msgid "%s: the arg #%s must be an integer."
+msgstr ""
+
+#: interp/alloc.c:731
+#, c-format
+msgid "%s: the arg must be a string."
+msgstr ""
+
+#: interp/alloc.c:732
+#, c-format
+msgid "%s: the arg #%s must be a string."
+msgstr ""
+
+#: interp/alloc.c:733
+#, c-format
+msgid "%s: null arg not permissible."
+msgstr ""
+
+#: interp/alloc.c:734
+#, c-format
+msgid "%s: the arg must be a filename."
+msgstr ""
+
+#: interp/alloc.c:735
+#, c-format
+msgid "%s: the arg must be a node or string."
+msgstr ""
+
+#: interp/alloc.c:736
+#, c-format
+msgid "%s: the arg must be a person."
+msgstr ""
+
+#: interp/alloc.c:737
+#, c-format
+msgid "%s: the arg #%s must be a person."
+msgstr ""
+
+#: interp/alloc.c:738
+#, c-format
+msgid "%s: the arg must be a family."
+msgstr ""
+
+#: interp/alloc.c:739
+#, c-format
+msgid "%s: the arg #%s must be a family."
+msgstr ""
+
+#: interp/alloc.c:740
+#, c-format
+msgid "%s: the arg #%s must be a record."
+msgstr ""
+
+#: interp/alloc.c:741
+#, c-format
+msgid "%s: the arg must be a node."
+msgstr ""
+
+#: interp/alloc.c:742
+#, c-format
+msgid "%s: the arg #%s must be a node."
+msgstr ""
+
+#: interp/alloc.c:743
+#, c-format
+msgid "%s: the arg must be a variable."
+msgstr ""
+
+#: interp/alloc.c:744
+#, c-format
+msgid "%s: the arg #%s must be a variable."
+msgstr ""
+
+#: interp/alloc.c:745
+#, c-format
+msgid "%s: the arg #%s must be a boolean."
+msgstr ""
+
+#: interp/alloc.c:746
+#, c-format
+msgid "%s: the arg must be a list."
+msgstr ""
+
+#: interp/alloc.c:747
+#, c-format
+msgid "%s: the arg #%s must be a list."
+msgstr ""
+
+#: interp/alloc.c:748
+#, c-format
+msgid "%s: Bad argument(s)"
+msgstr ""
+
+#: interp/alloc.c:749
+#, c-format
+msgid "%s: the arg #%s had a major error."
+msgstr ""
+
+#: interp/builtin.c:286
+msgid "name: person does not have a name"
+msgstr ""
+
+#: interp/builtin.c:339
+msgid "fullname: person does not have a name"
+msgstr ""
+
+#: interp/builtin.c:367
+msgid "surname: person does not have a name"
+msgstr ""
+
+#: interp/builtin.c:393
+msgid "soundex: person does not have a name"
+msgstr ""
+
+#: interp/builtin.c:432
+msgid "1st arg to givens must be a person"
+msgstr ""
+
+#: interp/builtin.c:439
+msgid "(givens) person does not have a name"
+msgstr ""
+
+#: interp/builtin.c:466
+msgid "set: error evaluating 2nd arg"
+msgstr ""
+
+#: interp/builtin.c:2375
+msgid "(trimname) person does not have a name"
+msgstr ""
+
+#: interp/interp.c:199
+#, c-format
+msgid "Error: file <%s> not found"
+msgstr ""
+
+#: interp/interp.c:232
+msgid "contains errors."
+msgstr ""
+
+#: interp/interp.c:239
+msgid "needs a starting procedure."
+msgstr ""
+
+#: interp/interp.c:246
+#, c-format
+msgid "Error: output file <%s> could not be created.\n"
+msgstr ""
+
+#: interp/interp.c:256
+#, c-format
+msgid "Proc %s must be called with %d (not %d) parameters."
+msgstr ""
+
+#: interp/interp.c:271
+msgid "is running..."
+msgstr ""
+
+#: interp/interp.c:275
+msgid "was run successfully."
+msgstr ""
+
+#: interp/interp.c:279
+msgid "was cancelled."
+msgstr ""
+
+#: interp/interp.c:281
+msgid "was not run because of errors."
+msgstr ""
+
+#: interp/interp.c:330
+#, c-format
+msgid "Error: file <%s> not found.\n"
+msgstr ""
+
+#: interp/interp.c:388
+#, c-format
+msgid "identifier: %s should be a string\n"
+msgstr ""
+
+#: interp/interp.c:1577
+#, c-format
+msgid "Display locals (%d)"
+msgstr ""
+
+#: interp/interp.c:1580
+msgid "Pop one level"
+msgstr ""
+
+#: interp/interp.c:1581
+msgid "Quit debugger"
+msgstr ""
+
+#: interp/interp.c:1611
+msgid "Local variables"
+msgstr ""
+
+#: interp/interp.c:1671
+msgid "Report cancelled"
+msgstr ""
+
+#: interp/interp.c:1679
+#, c-format
+msgid ""
+"\n"
+"Parsing Error in <%s>"
+msgstr ""
+
+#: interp/interp.c:1682
+#, c-format
+msgid ""
+"\n"
+"Runtime Error in: <%s>"
+msgstr ""
+
+#: interp/interp.c:1688
+#, c-format
+msgid "Parsing Error at line %d: "
+msgstr ""
+
+#: interp/interp.c:1691
+#, c-format
+msgid "Runtime Error at line %d: "
+msgstr ""
+
+#: interp/interp.c:1693
+msgid "Aborting: "
+msgstr ""
+
+#: interp/interp.c:1710
+#, c-format
+msgid ""
+"\n"
+"Report Errors: %s"
+msgstr ""
+
+#: interp/more.c:688
+msgid "Please choose from the following list."
+msgstr ""
+
+#: liflines/add.c:63
+#, c-format
+msgid "There was %d unresolved reference."
+msgid_plural "There were %d unresolved references."
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/error.c:72
+msgid "ASSERT failure"
+msgstr ""
+
+#: liflines/loadsave.c:81
+msgid "Person"
+msgid_plural "Persons"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:85
+msgid "Family"
+msgid_plural "Families"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:89
+msgid "Source"
+msgid_plural "Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:93
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:97
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] ""
+msgstr[1] ""
+
+#: liflines/loadsave.c:145
+msgid "Checking GEDCOM file for errors.\n"
+msgstr ""
+
+#: liflines/loadsave.c:160
+msgid "The database is read-only; loading has been canceled."
+msgstr ""
+
+#: liflines/loadsave.c:166
+msgid "Adding unused keys as deleted keys..."
+msgstr ""
+
+#: liflines/loadsave.c:172
+#, c-format
+msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
+msgstr ""
+
+#: liflines/loadsave.c:197
+msgid "Please enter the name of the GEDCOM file."
+msgstr ""
+
+#: liflines/main.c:327
+msgid "Choose database to open"
+msgstr ""
+
+#: liflines/main.c:335
+msgid "No databases found in database path"
 msgstr ""
 
 #: liflines/menuitem.c:85
@@ -2659,28 +2965,24 @@ msgstr ""
 msgid "Missing title"
 msgstr ""
 
-#: liflines/screen.c:1538
+#: liflines/screen.c:1536
 msgid "Enter locale name"
 msgstr ""
 
-#: liflines/screen.c:1539
+#: liflines/screen.c:1537
 msgid "Locale: "
 msgstr ""
 
-#: liflines/screen.c:1547
+#: liflines/screen.c:1545
 msgid "Valid locale: %1"
 msgstr ""
 
-#: liflines/screen.c:1552
+#: liflines/screen.c:1550
 msgid "Invalid locale, try again"
 msgstr ""
 
-#: liflines/screen.c:3299 liflines/screen.c:3327
+#: liflines/screen.c:3280 liflines/screen.c:3307
 msgid "L  Test locale names"
-msgstr ""
-
-#: liflines/screen.c:3329
-msgid "Report locale: "
 msgstr ""
 
 #: liflines/valgdcom.c:82
@@ -2783,53 +3085,288 @@ msgstr ""
 msgid "Line %d: Family %s has multiple wife links."
 msgstr ""
 
-#: liflines/loadsave.c:81
-msgid "Person"
-msgid_plural "Persons"
-msgstr[0] ""
-msgstr[1] ""
-
-#: liflines/loadsave.c:85
-msgid "Family"
-msgid_plural "Families"
-msgstr[0] ""
-msgstr[1] ""
-
-#: liflines/loadsave.c:89
-msgid "Source"
-msgid_plural "Sources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: liflines/loadsave.c:93
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
-#: liflines/loadsave.c:97
-msgid "Other"
-msgid_plural "Others"
-msgstr[0] ""
-msgstr[1] ""
-
-#: liflines/loadsave.c:145
-msgid "Checking GEDCOM file for errors.\n"
+#: tools/dbverify.c:148
+msgid "Orphan names"
 msgstr ""
 
-#: liflines/loadsave.c:160
-msgid "The database is read-only; loading has been canceled."
+#: tools/dbverify.c:149
+msgid "Ghost names"
 msgstr ""
 
-#: liflines/loadsave.c:166
-msgid "Adding unused keys as deleted keys..."
+#: tools/dbverify.c:150 tools/dbverify.c:151
+msgid "Duplicate names"
 msgstr ""
 
-#: liflines/loadsave.c:172
+#: tools/dbverify.c:152
+msgid "Non-indi names"
+msgstr ""
+
+#: tools/dbverify.c:153
+msgid "Duplicate individuals"
+msgstr ""
+
+#: tools/dbverify.c:154
+msgid "Duplicate families"
+msgstr ""
+
+#: tools/dbverify.c:155
+msgid "Duplicate sources"
+msgstr ""
+
+#: tools/dbverify.c:156
+msgid "Duplicate events"
+msgstr ""
+
+#: tools/dbverify.c:157
+msgid "Duplicate others"
+msgstr ""
+
+#: tools/dbverify.c:158
+msgid "Missing records"
+msgstr ""
+
+#: tools/dbverify.c:159
+msgid "Deleted records"
+msgstr ""
+
+#: tools/dbverify.c:160
+msgid "Bad name"
+msgstr ""
+
+#: tools/dbverify.c:161
+msgid "Bad family reference"
+msgstr ""
+
+#: tools/dbverify.c:162
+msgid "Missing child"
+msgstr ""
+
+#: tools/dbverify.c:163
+msgid "Missing spouse"
+msgstr ""
+
+#: tools/dbverify.c:164
+msgid "Bad HUSB reference"
+msgstr ""
+
+#: tools/dbverify.c:165
+msgid "Bad WIFE reference"
+msgstr ""
+
+#: tools/dbverify.c:166
+msgid "Bad CHIL reference"
+msgstr ""
+
+#: tools/dbverify.c:167
+msgid "Improper HUSB"
+msgstr ""
+
+#: tools/dbverify.c:168
+msgid "Improper WIFE"
+msgstr ""
+
+#: tools/dbverify.c:169
+msgid "Improper child"
+msgstr ""
+
+#: tools/dbverify.c:170
+msgid "Empty family"
+msgstr ""
+
+#: tools/dbverify.c:171
+msgid "Single person family"
+msgstr ""
+
+#: tools/dbverify.c:172
+msgid "Bad pointer"
+msgstr ""
+
+#: tools/dbverify.c:201
+msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
+msgstr ""
+
+#: tools/dbverify.c:203
+msgid "/home/users/myname/lifelines/databases/myfamily"
+msgstr ""
+
+#: tools/dbverify.c:208
+msgid ""
+"usage: dbverify -(flags) <btree>\n"
+"flags:\n"
+"\t-a = Perform all checks (does not include fixes)\n"
+"\t-g = Check for ghosts (names/refns)\n"
+"\t-G = Check for & fix ghosts (names/refns)\n"
+"\t-i = Check individuals\n"
+"\t-f = Check families\n"
+"\t-s = Check sours\n"
+"\t-e = Check events\n"
+"\t-x = Check others\n"
+"\t-n = Noisy (echo every record processed)\n"
+msgstr ""
+
+#: tools/dbverify.c:220
 #, c-format
-msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
+msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr ""
 
-#: liflines/loadsave.c:197
-msgid "Please enter the name of the GEDCOM file."
+#: tools/dbverify.c:336
+#, c-format
+msgid "Non-indi name, key=%s, name=%s"
+msgstr ""
+
+#: tools/dbverify.c:350
+#, c-format
+msgid "Orphaned name: %s"
+msgstr ""
+
+#: tools/dbverify.c:364
+#, c-format
+msgid "Ghost name: %s -> %s"
+msgstr ""
+
+#: tools/dbverify.c:396
+#, c-format
+msgid "Orphaned refn: %s"
+msgstr ""
+
+#: tools/dbverify.c:434
+#, c-format
+msgid "Duplicate name for %s (%s)"
+msgstr ""
+
+#: tools/dbverify.c:467
+#, c-format
+msgid "Duplicate refn for %s (%s)"
+msgstr ""
+
+#: tools/dbverify.c:537
+#, c-format
+msgid "Duplicate individual for %s"
+msgstr ""
+
+#: tools/dbverify.c:547
+#, c-format
+msgid "Bad name for individual %s: %s"
+msgstr ""
+
+#: tools/dbverify.c:562 tools/dbverify.c:575
+#, c-format
+msgid "Bad family reference (%s) individual %s"
+msgstr ""
+
+#: tools/dbverify.c:566
+#, c-format
+msgid "Missing child (%s) in family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:579
+#, c-format
+msgid "Missing spouse (%s) in family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:603
+#, c-format
+msgid "Duplicate family for %s"
+msgstr ""
+
+#: tools/dbverify.c:621
+#, c-format
+msgid "Bad HUSB reference (%s) in family %s"
+msgstr ""
+
+#: tools/dbverify.c:627
+#, c-format
+msgid "Improper HUSB (%s) in family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:639
+#, c-format
+msgid "Bad wife reference (%s) in family %s"
+msgstr ""
+
+#: tools/dbverify.c:645
+#, c-format
+msgid "Improper wife (%s) in family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:657
+#, c-format
+msgid "Bad child reference (%s) in family %s"
+msgstr ""
+
+#: tools/dbverify.c:663
+#, c-format
+msgid "Improper child (%s) in family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:671
+#, c-format
+msgid "Empty family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:673
+#, c-format
+msgid "Single person family (%s)"
+msgstr ""
+
+#: tools/dbverify.c:690
+#, c-format
+msgid "Duplicate source for %s"
+msgstr ""
+
+#: tools/dbverify.c:706
+#, c-format
+msgid "Duplicate event for %s"
+msgstr ""
+
+#: tools/dbverify.c:722
+#, c-format
+msgid "Duplicate record for %s"
+msgstr ""
+
+#: tools/dbverify.c:793
+#, c-format
+msgid "Bad pointer (in %s): %s"
+msgstr ""
+
+#: tools/dbverify.c:816
+#, c-format
+msgid "Missing undeleted record %c%d"
+msgstr ""
+
+#: tools/dbverify.c:825
+#, c-format
+msgid "Delete set contains valid record %s"
+msgstr ""
+
+#: tools/dbverify.c:842
+#, c-format
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
+msgstr ""
+
+#: tools/dbverify.c:973
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tools/dbverify.c:977
+#, c-format
+msgid "%d fixed"
+msgid_plural "%d fixed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tools/dbverify.c:984
+msgid "No errors found"
+msgstr ""
+
+#: tools/dbverify.c:995
+msgid "FATAL ERROR: "
+msgstr ""
+
+#: tools/dbverify.c:1000
+#, c-format
+msgid "In file <%s> at line %d"
 msgstr ""

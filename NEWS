@@ -2,6 +2,18 @@ LifeLines Source Release, Version 3.0.14
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.0.15
+============================
+
+- Option to list all databases at startup
+- Shift page keys to move quickly through long lists
+- Prompt after edit if unresolved references
+
+Bug fixes in 3.0.15
+==================
+
+- Import was validing but not importing from UTF-8 files with UTF-8 BOM.
+
 New features added in 3.0.13
 ============================
 

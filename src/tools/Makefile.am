@@ -28,6 +28,11 @@ dbverify$(EXEEXT): $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
 # .. for config.h, hdrs for lots of stuff, ../intl for libgnuintl.h
 INCLUDES=-I$(srcdir)/../hdrs -I$(srcdir)/../intl
 
+# Stuff for gettext (copied from gnu hello-1.3.35)
+localedir = $(datadir)/locale
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+# End stuff for gettext
+
 # these dependencies are so that building parts ('make btedit' or 'make
 # lines') will work
 

@@ -65,6 +65,7 @@ static struct codeset_name
 static XNODE create_xnode(XNODE, INT, STRING);
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
+static BOOLEAN llsetenv(STRING name, STRING value);
 static STRING setmsgs(STRING localename);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
@@ -75,9 +76,10 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
  * local variables
  *********************************************/
 
-static STRING  deflocale_coll = NULL; /* fallback for invalid user options */
-static BOOLEAN customized_loc = FALSE; /* set if any dynamic locale changes */
-static BOOLEAN customized_msgs = FALSE; /* set if any dynamic messages changes */
+static STRING  deflocale_coll = NULL;
+static STRING  deflocale_msgs = NULL;
+static BOOLEAN customized_loc = FALSE;
+static BOOLEAN customized_msgs = FALSE;
 
 /*********************************************
  * local & exported function definitions
@@ -539,35 +541,6 @@ custom_sort (char *str1, char *str2, INT * rtn)
 	}
 }
 /*===================================================
- * get_sort_desc -- Get string describing collate order
- * caller supplies buffer (& its size)
- * Created: 2001/07/21
- *  locVarName: [IN] user option variable name (eg, "UiLocale")
- *=================================================*/
-char *
-get_sort_desc (STRING buffer, INT max, STRING locVarName)
-{
-#ifdef HAVE_SETLOCALE
-	const char *optval, *str;
-	if ((optval = getoptstr(locVarName, NULL)) != NULL) {
-		str = setlocale(LC_COLLATE, optval);
-		if (str) {
-			sprintpic0(buffer, max, str);
-		} else {
-			str = deflocale_coll;
-			sprintpic2(buffer, max, _("(Invalid: %1) default: %2")
-				, optval, str);
-		}
-	} else {
-		str = deflocale_coll;
-		sprintpic1(buffer, max, _("default: %1"), str);
-	}
-#else
-	sprintpic0(buffer, max, _("Locales not supported on this platform.)"));
-#endif
-	return buffer;
-}
-/*===================================================
  * get_codeset_desc -- Get string describing code set
  * (code set, not charset or codepage)
  * caller supplies buffer (& its size)
@@ -620,17 +593,20 @@ get_codesets (void)
  *  returns "C" in case setlocale(x, 0) returns 0
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
+#ifdef HAVE_SETLOCALE
 static STRING
 get_current_locale (INT category)
 {
 	STRING str = 0;
-#ifdef HAVE_SETLOCALE
 	str = setlocale(category, NULL);
-#endif
 	return str ? str : "C";
 }
+#endif /* HAVE_SETLOCALE */
 /*==========================================
  * initlocale -- grab current locales for later default
+ *  We need these for an obscure problem. If user sets only
+ *  locales for report, then when we switch back to GUI mode,
+ *  we shouldn't stay in the customized report locale.
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
 void
@@ -638,7 +614,17 @@ initlocale (void)
 {
 #ifdef HAVE_SETLOCALE
 	deflocale_coll = strsave(get_current_locale(LC_COLLATE));
-#endif
+#endif /* HAVE_SETLOCALE */
+
+#ifdef HAVE_SETLOCALE
+#ifdef HAVE_LC_MESSAGES
+	deflocale_msgs = strsave(get_current_locale(LC_MESSAGES));
+#endif /* HAVE_LC_MESSAGES */
+#endif /* HAVE_SETLOCALE */
+	/* if we're not using LC_MESSAGES locale, we use it in the environment (see setmsgs) */
+	if (!deflocale_msgs)
+		deflocale_msgs = getenv("LC_MESSAGES");
+
 }
 /*==========================================
  * termlocale -- free locale related variables
@@ -649,6 +635,7 @@ termlocale (void)
 {
 	/* free & zero out globals */
 	strfree(&deflocale_coll);
+	strfree(&deflocale_msgs);
 }
 /*==========================================
  * uilocale -- set locale to GUI locale
@@ -662,24 +649,37 @@ uilocale (void)
 }
 /*==========================================
  * setmsgs -- set locale for LC_MESSAGES
+ * Returns non-null string if succeeds
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
 static STRING
 setmsgs (STRING localename)
 {
-	/* setlocale(LC_MESSAGES,) doesn't work on Win32 */
-	/* does it work anywhere ? */
+#ifdef HAVE_SETLOCALE
+#ifdef HAVE_LC_MESSAGES
+	return setlocale(LC_MESSAGES, localename);
+#endif /* HAVE_LC_MESSAGES */
+#endif /* HAVE_SETLOCALE */
 
+	return llsetenv("LC_MESSAGES", localename) ? "1" : 0;
+}
+/*==========================================
+ * llsetenv -- assign a value to an environment variable
+ * Returns TRUE if supported on this platform
+ *========================================*/
+static BOOLEAN
+llsetenv (STRING name, STRING value)
+{
 	char buffer[128];
 	STRING str = buffer;
 	INT len = ARRSIZE(buffer);
 	
 	buffer[0] = 0;
-	appendstr(&str, &len, "LANG=");
-	appendstr(&str, &len, localename);
+	appendstr(&str, &len, name);
+	appendstr(&str, &len, value);
 
 #ifdef HAVE_SETENV
-	setenv("LANG", localename, 1);
+	setenv(name, value, 1);
 	str = buffer;
 #else
 #ifdef HAVE_PUTENV
@@ -694,7 +694,7 @@ setmsgs (STRING localename)
 #endif /* HAVE__PUTENV */
 #endif /* HAVE_PUTENV */
 #endif /* HAVE_SETENV */
-	return str;
+	return str ? TRUE : FALSE;
 }
 /*==========================================
  * customlocale -- set locale to custom setting
@@ -714,6 +714,7 @@ customlocale (STRING prefix)
 	strcpy(option, prefix);
 
 #ifdef HAVE_SETLOCALE
+	/* did user set, eg, UiLocaleCollate option ? */
 	strcpy(option+prefixlen, "Collate");
 	str = getoptstr(option, 0);
 	if (str) {
@@ -721,12 +722,14 @@ customlocale (STRING prefix)
 		str = setlocale(LC_COLLATE, str);
 	}
 	if (!str) {
+		/* did user set, eg, UiLocale option ? */
 		option[prefixlen] = 0;
 		str = getoptstr(option, 0);
 		if (str) {
 			customized_loc = TRUE;
 			str = setlocale(LC_COLLATE, str);
 		}
+		/* nothing set, so try to revert to startup value */
 		if (!str && customized_loc)
 			setlocale(LC_COLLATE, deflocale_coll);
 	}
@@ -739,19 +742,22 @@ customlocale (STRING prefix)
  * propagate them to menuitem and to date modules,
  * which have to reload arrays if the language changes
  */
+	/* did user set, eg, UiLocaleMessages option ? */
 	strcpy(option+prefixlen, "Messages");
 	str = getoptstr(option, 0);
 	if (str) {
 		customized_msgs = TRUE;
 		str = setmsgs(str);
 	} else {
+		/* did user set, eg, UiLocale option ? */
 		option[prefixlen] = 0;
 		str = getoptstr(option, 0);
 		if (str) {
 			customized_msgs = TRUE;
 			str = setmsgs(str);
 		}
-		/* no default for messages */
+		if (!str && customized_msgs)
+			setmsgs(deflocale_msgs);
 	}
 	
 	if (customized_msgs) {

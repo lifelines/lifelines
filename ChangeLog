@@ -1,3 +1,31 @@
+2002-06-09 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog NEWS README.LAYOUT configure.in lifelines.spec
+	arch/scandir.c docs/ll-userguide.xml gedlib/indiseq.c
+	gedlib/messages.c gedlib/translat.c gedlib/xreffile.c
+	hdrs/llstdlib.h hdrs/standard.h hdrs/translat.h hdrs/version.h
+	interp/builtin.c interp/interp.c liflines/add.c
+	liflines/edit.c liflines/llinesi.h liflines/loadsave.c
+	liflines/main.c liflines/newrecs.c liflines/pedigree.c
+	liflines/screen.c po/POTFILES.in po/de.po po/el.po po/it.po
+	po/sv.po stdlib/double.c tools/Makefile.am tools/dbverify.c
+	win32/msvc6/dbverify/dbVerify.rc
+	win32/msvc6/dbverify/dbverifyCmd.dsp
+	win32/msvc6/libintl/libintlvc6.dsp win32/msvc6/llines/config.h
+	win32/msvc6/llines/llines.rc win32/msvc6/llines/llinesprj.dsp:
+
+	Fix handling of ? (list databases) when none found.
+	Remove some carriage returns that I accidentally left in sources.
+	Generalize in_list. Rename empty_list to is_empty_list.
+	Remove locale display (it was collation only, and msg catalogs may
+	be multiple, and can't be obtained from gettext anyway).
+	I18nize dbverify.
+	Fix unresolved reference string for plurals.
+	Use setlocale(LC_MESSAGES if available.
+	Fix MSVC projects to link to release or debug versions of iconv.
+	Add more files to POTFILES, and update lifelines.pot.
+	Bump version to 3.0.15 & release.
+
 2002-06-08 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog Makefile.am gedlib/init.c gedlib/messages.c

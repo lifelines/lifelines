@@ -50,7 +50,6 @@ extern STRING qScfradd, qScfeadd, qScfxadd, qSrredit, qSeredit, qSxredit;
 extern STRING qScfrupt, qScfeupt, qScfxupt, qSgdrmod, qSgdemod, qSgdxmod;
 extern STRING qSidredt, qSideedt, qSidxedt, qSduprfn, qSronlya, qSronlye;
 extern STRING qSrreditopt, qSereditopt, qSxreditopt;
-extern STRING qSbadreflink, qSbadreflinks;
 extern STRING qSnofopn, qSidkyrfn;
 extern STRING qSdefsour,qSdefeven,qSdefothr,qSnosuchrec;
 
@@ -186,7 +185,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, redtopt)) {
 				write_node_to_editfile(node);
 				do_edit();
@@ -326,7 +325,7 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, redtopt)) {
 				write_node_to_editfile(root2);
 				do_edit();

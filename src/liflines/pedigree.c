@@ -372,7 +372,7 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 		(*count)++;
 	ENDLIST
 	/* special handling for empty list, which didn't get its leader */
-	if (empty_list(list)) {
+	if (is_empty_list(list)) {
 		tn1 = alloc_displaynode();
 		tn = tn1;
 		tn1->str = strdup(line);

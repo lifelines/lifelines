@@ -11,10 +11,11 @@ typedef struct llrect_s {
 struct import_feedback;
 
 /* add.c */
-NODE prompt_add_child(NODE, NODE);
 NODE add_family(NODE, NODE, NODE);
-BOOLEAN add_indi_no_cache(NODE);
 RECORD add_indi_by_edit(void);
+BOOLEAN add_indi_no_cache(NODE);
+STRING get_unresolved_ref_error_string(INT count);
+NODE prompt_add_child(NODE, NODE);
 BOOLEAN prompt_add_spouse(NODE, NODE, BOOLEAN);
 
 /* advedit.c */

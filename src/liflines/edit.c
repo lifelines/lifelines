@@ -45,7 +45,6 @@ extern STRING qSiredit, qSfredit, qScfpupt, qScffupt, qSidpedt, qSidspse, qSidfb
 extern STRING qSireditopt, qSfreditopt;
 extern STRING qSntprnt, qSgdpmod, qSgdfmod, qSronlye;
 extern STRING qSparadox;
-extern STRING qSbadreflink, qSbadreflinks;
 
 /*=====================================
  * write_indi_to_editfile - write indi gedcom node to editfile
@@ -130,7 +129,7 @@ edit_indi (NODE indi1)  /* may be NULL */
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
 				write_indi_to_editfile(indi2);
 				do_edit();
@@ -274,7 +273,7 @@ edit_family (NODE fam1) /* may be NULL */
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
 				write_fam_to_editfile(fam2);
 				do_edit();

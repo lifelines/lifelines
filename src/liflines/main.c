@@ -331,6 +331,9 @@ main (INT argc, char **argv)
 				}
 				release_dblist(dblist);
 				release_dblist(dbdesclist);
+			} else {
+				llwprintf(_("No databases found in database path"));
+				goto finish;
 			}
 			if (!dbrequested) {
 				llwprintf(_(qSiddbse));

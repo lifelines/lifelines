@@ -46,14 +46,23 @@
 extern BOOLEAN traditional;
 extern STRING qSidcfam, qSfredit, qScffadd, qSidprnt, qSunksex, qSidsbln, qSmklast;
 extern STRING qSireditopt, qSfreditopt;
-extern STRING qSbadreflink, qSbadreflinks;
 extern STRING qSidsadd, qSidsinf, qSkchild, qSiscinf, qSnotopp, qSidsps1, qSidsps2;
 extern STRING qSnosex,  qShashsb, qShaswif, qSidchld, qSgdfadd, qScfcadd, qSiredit;
 extern STRING qScfpadd, qScfsadd, qSgdpadd, qSgdcadd, qSgdsadd, qSronlya, qSronlye;
 
 extern TRANTABLE tran_tables[];
 
-
+/*==========================================================
+ * get_unresolved_ref_error -- get string for unresolved reference(s)
+ *  xgettext doesn't support special keywords for plural forms, AFAIK
+ *  so we can't put these in static variables
+ *========================================================*/
+STRING
+get_unresolved_ref_error_string (INT count)
+{
+	return ngettext("There was %d unresolved reference."
+		, "There were %d unresolved references.", count);
+}
 /*==========================================================
  * add_indi_by_edit -- Add new person to database by editing
  * (with user interaction)
@@ -117,7 +126,7 @@ add_indi_by_edit (void)
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
 				write_indi_to_editfile(indi);
 				do_edit();
@@ -591,7 +600,7 @@ editfam:
 		if (cnt > 0) {
 			char msgb[120];
 			snprintf(msgb, sizeof(msgb)
-				, ngettext(qSbadreflink, qSbadreflinks, cnt), cnt);
+				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
 				write_fam_to_editfile(fam2);
 				do_edit();
