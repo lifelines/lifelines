@@ -22,8 +22,8 @@ extern TRANTABLE init_map_from_file();
 /*==============================================
  * edit_mapping -- Edit character mapping record
  *============================================*/
-BOOLEAN edit_mapping (code)
-INT code;	/* map code */
+BOOLEAN
+edit_mapping (INT code) /* map code */
 {
 	TRANTABLE tt;
 	BOOLEAN err;

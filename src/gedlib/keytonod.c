@@ -64,87 +64,88 @@ int listbadkeys = 0;
 /*=====================================
  * key_to_indi -- Convert key to person
  *===================================*/
-NODE key_to_indi (key)
-STRING key;
+NODE
+key_to_indi (STRING key)
 {
 	return key_to_node(indicache, key, "INDI");
 }
 /*====================================
  * key_to_fam -- Convert key to family
  *==================================*/
-NODE key_to_fam (key)
-STRING key;
+NODE
+key_to_fam (STRING key)
 {
 	return key_to_node(famcache, key, "FAM");
 }
 /*====================================
  * key_to_even -- Convert key to event
  *==================================*/
-NODE key_to_even (key)
-STRING key;
+NODE
+key_to_even (STRING key)
 {
 	return key_to_node(evencache, key, "EVEN");
 }
 /*=====================================
  * key_to_sour -- Convert key to source
  *===================================*/
-NODE key_to_sour (key)
-STRING key;
+NODE
+key_to_sour (STRING key)
 {
 	return key_to_node(sourcache, key, "SOUR");
 }
 /*====================================
  * key_to_othr -- Convert key to other
  *==================================*/
-NODE key_to_othr (key)
-STRING key;
+NODE
+key_to_othr (STRING key)
 {
 	return key_to_node(othrcache, key, NULL);
 }
 /*=====================================================
  * key_to_indi_cacheel -- Convert key to person cacheel
  *===================================================*/
-CACHEEL key_to_indi_cacheel (key)
-STRING key;
+CACHEEL
+key_to_indi_cacheel (STRING key)
 {
 	return key_to_cacheel(indicache, key, "INDI", FALSE);
 }
 /*====================================================
  * key_to_fam_cacheel -- Convert key to family_cacheel
  *==================================================*/
-CACHEEL key_to_fam_cacheel (key)
-STRING key;
+CACHEEL
+key_to_fam_cacheel (STRING key)
 {
 	return key_to_cacheel(famcache, key, "FAM", FALSE);
 }
 /*====================================================
  * key_to_even_cacheel -- Convert key to event_cacheel
  *==================================================*/
-CACHEEL key_to_even_cacheel (key)
-STRING key;
+CACHEEL
+key_to_even_cacheel (STRING key)
 {
 	return key_to_cacheel(evencache, key, "EVEN", FALSE);
 }
 /*=====================================================
  * key_to_sour_cacheel -- Convert key to source_cacheel
  *===================================================*/
-CACHEEL key_to_sour_cacheel (key)
-STRING key;
+CACHEEL
+key_to_sour_cacheel (STRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", FALSE);
 }
 /*====================================================
  * key_to_othr_cacheel -- Convert key to other_cacheel
  *==================================================*/
-CACHEEL key_to_othr_cacheel (key)
-STRING key;
+CACHEEL
+key_to_othr_cacheel (STRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, FALSE);
 }
 /*======================================
  * init_caches -- Create and init caches
  *====================================*/
-void init_caches (void)
+void
+init_caches (void)
 {
 	indicache = create_cache((INT)csz_indi, (INT)icsz_indi);
 	famcache  = create_cache((INT)csz_fam, (INT)icsz_fam);
@@ -155,8 +156,9 @@ void init_caches (void)
 /*=============================
  * create_cache -- Create cache
  *===========================*/
-static CACHE create_cache (dirsize, indsize)
-INT dirsize, indsize;
+static CACHE
+create_cache (INT dirsize,
+              INT indsize)
 {
 	CACHE cache;
 	if (dirsize < 1) dirsize = 1;
@@ -173,9 +175,9 @@ INT dirsize, indsize;
 /*=================================================
  * remove_direct -- Unlink CACHEEL from direct list
  *===============================================*/
-static void remove_direct (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+remove_direct (CACHE cache,
+               CACHEEL cel)
 {
 	CACHEEL prev = cprev(cel);
 	CACHEEL next = cnext(cel);
@@ -189,9 +191,9 @@ CACHEEL cel;
 /*=====================================================
  * remove_indirect -- Unlink CACHEEL from indirect list
  *===================================================*/
-static void remove_indirect (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+remove_indirect (CACHE cache,
+                 CACHEEL cel)
 {
 	CACHEEL prev = cprev(cel);
 	CACHEEL next = cnext(cel);
@@ -205,9 +207,9 @@ CACHEEL cel;
 /*===========================================================
  * first_direct -- Make unlinked CACHEEL first in direct list
  *=========================================================*/
-static void first_direct (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+first_direct (CACHE cache,
+              CACHEEL cel)
 {
 	CACHEEL frst = cfirstdir(cache);
 	ASSERT(cache && cel);
@@ -221,9 +223,9 @@ CACHEEL cel;
 /*===============================================================
  * first_indirect -- Make unlinked CACHEEL first in indirect list
  *=============================================================*/
-static void first_indirect (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+first_indirect (CACHE cache,
+                CACHEEL cel)
 {
 	CACHEEL frst = cfirstind(cache);
 	ASSERT(cache && cel);
@@ -237,8 +239,8 @@ CACHEEL cel;
 /*=======================================================
  * remove_last -- Remove last indirect element from cache
  *=====================================================*/
-static void remove_last (cache)
-CACHE cache;
+static void
+remove_last (CACHE cache)
 {
 	CACHEEL cel = clastind(cache);
 	STRING key;
@@ -252,9 +254,9 @@ CACHE cache;
 /*============================================================
  * direct_to_first -- Make direct CACHEEL first in direct list
  *==========================================================*/
-static void direct_to_first (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+direct_to_first (CACHE cache,
+                 CACHEEL cel)
 {
 	ASSERT(cache && cel);
 	if (cel == cfirstdir(cache)) return;
@@ -264,9 +266,9 @@ CACHEEL cel;
 /*==================================================================
  * indirect_to_first -- Make indirect CACHEEL first in indirect list
  *================================================================*/
-static void indirect_to_first (cache, cel)
-CACHE cache;
-CACHEEL cel;
+static void
+indirect_to_first (CACHE cache,
+                   CACHEEL cel)
 {
 	ASSERT(cache && cel);
 	remove_indirect(cache, cel);
@@ -276,8 +278,8 @@ CACHEEL cel;
 /*==============================================================
  * direct_to_indirect -- Make last direct CACHEEL first indirect
  *============================================================*/
-static void direct_to_indirect (che)
-CACHE che;
+static void
+direct_to_indirect (CACHE che)
 {
 	CACHEEL cel = clastdir(che);
 	for (cel = clastdir(che); cel && cclock(cel); cel = cprev(cel))
@@ -291,8 +293,8 @@ CACHE che;
 /*=====================================================
  * dereference -- Dereference cel by reading its record
  *===================================================*/
-static void dereference (cel)
-CACHEEL cel;
+static void
+dereference (CACHEEL cel)
 {
 	STRING rec;
 	INT len;
@@ -306,13 +308,13 @@ CACHEEL cel;
 /*========================================================
  * add_to_direct -- Add new CACHEL to direct part of cache
  *======================================================*/
-static CACHEEL add_to_direct (cache, key, reportmode)
-CACHE cache;
-STRING key;
-INT reportmode;	/* if True, then return NULL rather than aborting
-		   if there is no record. Also return NULL
-		   for deleted records (of length less than 6???)
-		 */
+static CACHEEL
+add_to_direct (CACHE cache,
+               STRING key,
+               INT reportmode) /* if True, then return NULL rather
+                                  than aborting if there is no
+                                  record. Also return NULL for deleted
+                                  records (of length less than 6???)  */
 {
 	STRING record;
 	INT len;
@@ -367,11 +369,11 @@ INT reportmode;	/* if True, then return NULL rather than aborting
 /*======================================================
  * key_to_cacheel -- Return CACHEEL corresponding to key
  *====================================================*/
-static CACHEEL key_to_cacheel (cache, key, tag, reportmode)
-CACHE cache;
-STRING key;
-STRING tag;
-INT reportmode;
+static CACHEEL
+key_to_cacheel (CACHE cache,
+                STRING key,
+                STRING tag,
+                INT reportmode)
 {
 	CACHEEL cel;
 
@@ -410,10 +412,10 @@ INT reportmode;
 /*===============================================================
  * key_to_node -- Return tree from key; add to cache if not there
  *=============================================================*/
-static NODE key_to_node (cache, key, tag)
-CACHE cache;
-STRING key;
-STRING tag;
+static NODE
+key_to_node (CACHE cache,
+             STRING key,
+             STRING tag)
 {
 	CACHEEL cel;
 	ASSERT(cache && key);
@@ -423,8 +425,8 @@ STRING tag;
 /*======================================
  * lock_cache -- Lock CACHEEL into cache
  *====================================*/
-void lock_cache (cel)
-CACHEEL cel;
+void
+lock_cache (CACHEEL cel)
 {
 	ASSERT(cnode(cel));
 	cclock(cel)++;
@@ -432,8 +434,8 @@ CACHEEL cel;
 /*==========================================
  * unlock_cache -- Unlock CACHEEL from cache
  *========================================*/
-void unlock_cache (cel)
-CACHEEL cel;
+void
+unlock_cache (CACHEEL cel)
 {
 	ASSERT(cnode(cel));
 	cclock(cel)--;
@@ -441,7 +443,8 @@ CACHEEL cel;
 /*================================
  * cache_stats -- Show cache stats
  *==============================*/
-void cache_stats (void)
+void
+cache_stats (void)
 {
 	CACHE c = indicache;
 	CACHE f = famcache;
@@ -456,49 +459,49 @@ void cache_stats (void)
 /*============================================
  * indi_to_cache -- Add person to person cache
  *==========================================*/
-void indi_to_cache (node)
-NODE node;
+void
+indi_to_cache (NODE node)
 {
 	node_to_cache(indicache, node);
 }
 /*===========================================
  * fam_to_cache -- Add family to family cache
  *=========================================*/
-void fam_to_cache (node)
-NODE node;
+void
+fam_to_cache (NODE node)
 {
 	node_to_cache(famcache, node);
 }
 /*==========================================
  * even_to_cache -- Add event to event cache
  *========================================*/
-void even_to_cache (node)
-NODE node;
+void
+even_to_cache (NODE node)
 {
 	node_to_cache(evencache, node);
 }
 /*============================================
  * sour_to_cache -- Add source to source cache
  *==========================================*/
-void sour_to_cache (node)
-NODE node;
+void
+sour_to_cache (NODE node)
 {
 	node_to_cache(sourcache, node);
 }
 /*===========================================
  * othr_to_cache -- Add other record to cache
  *=========================================*/
-void othr_to_cache (node)
-NODE node;
+void
+othr_to_cache (NODE node)
 {
 	node_to_cache(othrcache, node);
 }
 /*========================================
  * node_to_cache -- Add node tree to cache
  *======================================*/
-void node_to_cache (cache, node)
-CACHE cache;
-NODE node;
+void
+node_to_cache (CACHE cache,
+               NODE node)
 {
 	STRING key = rmvat(nxref(node));
 	ASSERT(cache && node);
@@ -519,9 +522,9 @@ NODE node;
 /*=======================================================
  * add_node_to_direct -- Add node to direct part of cache
  *=====================================================*/
-void add_node_to_direct(cache, node)
-CACHE cache;
-NODE node;
+void
+add_node_to_direct(CACHE cache,
+                   NODE node)
 {
 	CACHEEL cel;
 	STRING key;
@@ -537,25 +540,25 @@ NODE node;
 /*==============================================
  * remove_indi_cache -- Remove person from cache
  *============================================*/
-void remove_indi_cache (key)
-STRING key;
+void
+remove_indi_cache (STRING key)
 {
 	remove_from_cache(indicache, key);
 }
 /*=============================================
  * remove_fam_cache -- Remove family from cache
  *===========================================*/
-void remove_fam_cache (key)
-STRING key;
+void
+remove_fam_cache (STRING key)
 {
 	remove_from_cache(famcache, key);
 }
 /*=============================================
  * remove_from_cache -- Remove entry from cache
  *===========================================*/
-void remove_from_cache (cache, key)
-CACHE cache;
-STRING key;
+void
+remove_from_cache (CACHE cache,
+                   STRING key)
 {
 	CACHEEL cel;
 	if (!key || *key == 0 || !cache) return;
@@ -570,8 +573,8 @@ STRING key;
 /*================================================================
  * value_to_xref -- Converts a string to a record key, if possible
  *==============================================================*/
-STRING value_to_xref (val)
-STRING val;
+STRING
+value_to_xref (STRING val)
 {
 	INT c;
 
@@ -586,8 +589,8 @@ STRING val;
 /*===================================================
  * indi_to_cacheel -- Convert person to cache element
  *=================================================*/
-CACHEEL indi_to_cacheel (indi)
-NODE indi;
+CACHEEL
+indi_to_cacheel (NODE indi)
 {
         CACHEEL cel;
         if (!indi) return NULL;
@@ -601,8 +604,8 @@ NODE indi;
 /*==================================================
  * fam_to_cacheel -- Convert family to cache element
  *================================================*/
-CACHEEL fam_to_cacheel (fam)
-NODE fam;
+CACHEEL
+fam_to_cacheel (NODE fam)
 {
         CACHEEL cel;
         if (!fam) return NULL;
@@ -613,8 +616,8 @@ NODE fam;
 /*===================================================
  * sour_to_cacheel -- Convert source to cache element
  *=================================================*/
-CACHEEL sour_to_cacheel (node)
-NODE node;
+CACHEEL
+sour_to_cacheel (NODE node)
 {
         CACHEEL cel;
         if (!node) return NULL;
@@ -625,8 +628,8 @@ NODE node;
 /*==================================================
  * even_to_cacheel -- Convert event to cache element
  *================================================*/
-CACHEEL even_to_cacheel (even)
-NODE even;
+CACHEEL
+even_to_cacheel (NODE even)
 {
         CACHEEL cel;
         if (!even) return NULL;
@@ -637,8 +640,8 @@ NODE even;
 /*==================================================
  * othr_to_cacheel -- Convert other to cache element
  *================================================*/
-CACHEEL othr_to_cacheel (othr)
-NODE othr;
+CACHEEL
+othr_to_cacheel (NODE othr)
 {
         CACHEEL cel;
         if (!othr) return NULL;
@@ -649,8 +652,8 @@ NODE othr;
 /*==============================================
  * key_of_record -- Return display key of record
  *============================================*/
-STRING key_of_record (node)
-NODE node;
+STRING
+key_of_record (NODE node)
 {
         NODE refn;
         ASSERT(node);
@@ -661,40 +664,40 @@ NODE node;
 /*=====================================================
  * rkey_to_indi_cacheel -- Convert key to person cacheel (report mode)
  *===================================================*/
-CACHEEL rkey_to_indi_cacheel (key)
-STRING key;
+CACHEEL
+rkey_to_indi_cacheel (STRING key)
 {
 	return key_to_cacheel(indicache, key, "INDI", TRUE);
 }
 /*====================================================
  * key_to_fam_cacheel -- Convert key to family_cacheel (report mode)
  *==================================================*/
-CACHEEL rkey_to_fam_cacheel (key)
-STRING key;
+CACHEEL
+rkey_to_fam_cacheel (STRING key)
 {
 	return key_to_cacheel(famcache, key, "FAM", TRUE);
 }
 /*====================================================
  * key_to_even_cacheel -- Convert key to event_cacheel (report mode)
  *==================================================*/
-CACHEEL rkey_to_even_cacheel (key)
-STRING key;
+CACHEEL
+rkey_to_even_cacheel (STRING key)
 {
 	return key_to_cacheel(evencache, key, "EVEN", TRUE);
 }
 /*=====================================================
  * key_to_sour_cacheel -- Convert key to source_cacheel (report mode)
  *===================================================*/
-CACHEEL rkey_to_sour_cacheel (key)
-STRING key;
+CACHEEL
+rkey_to_sour_cacheel (STRING key)
 {
 	return key_to_cacheel(sourcache, key, "SOUR", TRUE);
 }
 /*====================================================
  * key_to_othr_cacheel -- Convert key to other_cacheel (report mode)
  *==================================================*/
-CACHEEL rkey_to_othr_cacheel (key)
-STRING key;
+CACHEEL
+rkey_to_othr_cacheel (STRING key)
 {
 	return key_to_cacheel(othrcache, key, NULL, TRUE);
 }

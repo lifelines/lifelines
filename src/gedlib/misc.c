@@ -38,8 +38,8 @@
 /*========================================
  * addat -- Add @'s to both ends of string
  *======================================*/
-STRING addat (str)
-STRING str;
+STRING
+addat (STRING str)
 {
 	STRING p;
 	static unsigned char buffer[3][20];
@@ -52,8 +52,8 @@ STRING str;
 /*=============================================
  * rmvat -- Remove @'s from both ends of string
  *===========================================*/
-STRING rmvat (str)
-STRING str;
+STRING
+rmvat (STRING str)
 {
 	STRING p;
 	int len;
@@ -76,8 +76,9 @@ STRING str;
 /*==============================================
  * find_tag -- Search node list for specific tag
  *============================================*/
-NODE find_tag (node, str)
-NODE node;  STRING str;
+NODE
+find_tag (NODE node,
+          STRING str)
 {
 	while (node) {
 		if (eqstr(str, ntag(node))) return node;
@@ -88,8 +89,8 @@ NODE node;  STRING str;
 /*=================================================
  * val_to_sex -- Convert SEX value to internal form
  *===============================================*/
-INT val_to_sex (node)
-NODE node;
+INT
+val_to_sex (NODE node)
 {
 	if (!node || !nval(node)) return SEX_UNKNOWN;
 	if (eqstr("M", nval(node))) return SEX_MALE;
@@ -99,8 +100,8 @@ NODE node;
 /*====================================================
  * full_value -- Return value of node, with CONT lines
  *==================================================*/
-STRING full_value (node)
-NODE node;
+STRING
+full_value (NODE node)
 {
 	NODE cont;
 	INT len = 0;

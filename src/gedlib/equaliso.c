@@ -35,8 +35,9 @@
 /*=========================================
  * equal_tree -- See if two trees are equal
  *=======================================*/
-BOOLEAN equal_tree (root1, root2)
-NODE root1, root2;
+BOOLEAN
+equal_tree (NODE root1,
+            NODE root2)
 {
 	STRING str1, str2;
 	if (!root1 && !root2) return TRUE;
@@ -58,8 +59,9 @@ NODE root1, root2;
 /*=========================================
  * equal_node -- See if two nodes are equal
  *=======================================*/
-BOOLEAN equal_node (node1, node2)
-NODE node1, node2;
+BOOLEAN
+equal_node (NODE node1,
+            NODE node2)
 {
 	STRING str1, str2;
 	if (!node1 && !node2) return TRUE;
@@ -75,8 +77,9 @@ NODE node1, node2;
 /*=================================================
  * iso_list -- See if two node lists are isomorphic
  *===============================================*/
-BOOLEAN iso_list (root1, root2)
-NODE root1, root2;
+BOOLEAN
+iso_list (NODE root1,
+          NODE root2)
 {
 	INT len1, len2;
 	NODE node1, node2;
@@ -103,9 +106,11 @@ NODE root1, root2;
 /*====================================================
  * equal_nodes -- See if two node structures are equal
  *==================================================*/
-BOOLEAN equal_nodes (root1, root2, kids, sibs)
-NODE root1, root2;
-BOOLEAN kids, sibs;
+BOOLEAN
+equal_nodes (NODE root1,
+             NODE root2,
+             BOOLEAN kids,
+             BOOLEAN sibs)
 {
 	if (!root1 && !root2) return TRUE;
 	while (root1) {
@@ -121,9 +126,11 @@ BOOLEAN kids, sibs;
 /*=======================================================
  * iso_nodes -- See if two node structures are isomorphic
  *=====================================================*/
-BOOLEAN iso_nodes (root1, root2, kids, sibs)
-NODE root1, root2;
-BOOLEAN kids, sibs;
+BOOLEAN
+iso_nodes (NODE root1,
+           NODE root2,
+           BOOLEAN kids,
+           BOOLEAN sibs)
 {
 	INT len1, len2;
 	NODE node1, node2;

@@ -37,11 +37,11 @@
 /*=====================================================
  * init_valtab_from_rec -- Init value table from record
  *===================================================*/
-BOOLEAN init_valtab_from_rec (key, tab, sep, pmsg)
-STRING key;	/* record key */
-TABLE tab;	/* hash table */
-INT sep;	/* separator char */
-STRING *pmsg;	/* error message */
+BOOLEAN
+init_valtab_from_rec (STRING key,       /* record key */
+                      TABLE tab,        /* hash table */
+                      INT sep,  /* separator char */
+                      STRING *pmsg)     /* error message */
 {
 	INT len;
 	STRING rec;
@@ -55,11 +55,11 @@ STRING *pmsg;	/* error message */
 /*====================================================
  * init_valtab_from_file -- Init value table from file
  *==================================================*/
-BOOLEAN init_valtab_from_file (fname, tab, sep, pmsg)
-STRING fname;	/* file with value table */
-TABLE tab;	/* hash table for values */
-INT sep;	/* separator char */
-STRING *pmsg;	/* error message */
+BOOLEAN
+init_valtab_from_file (STRING fname,    /* file with value table */
+                       TABLE tab,       /* hash table for values */
+                       INT sep,         /* separator char */
+                       STRING *pmsg)    /* error message */
 {
 	FILE *fp;
 	struct stat buf;
@@ -82,11 +82,11 @@ STRING *pmsg;	/* error message */
 /*========================================================
  * init_valtab_from_string -- Init value table from string
  *======================================================*/
-BOOLEAN init_valtab_from_string (str, tab, sep, pmsg)
-STRING str;	/* string with value table */
-TABLE tab;	/* hash table for values */
-INT sep;	/* separator char */
-STRING *pmsg;	/* error message */
+BOOLEAN
+init_valtab_from_string (STRING str,    /* string with value table */
+                         TABLE tab,     /* hash table for values */
+                         INT sep,       /* separator char */
+                         STRING *pmsg)  /* error message */
 {
 	STRING tag, val, q, p = str;
 	INT c;

@@ -91,8 +91,8 @@ static INT     RMmax = 0;
 /*====================================================
  * getrefnrec -- Read refn record and store in globals
  *==================================================*/
-BOOLEAN getrefnrec (refn)
-STRING refn;
+BOOLEAN
+getrefnrec (STRING refn)
 {
 	STRING p;
 	INT i;
@@ -141,8 +141,8 @@ STRING refn;
 /*============================================
  * refn2rkey - Convert refn to refn record key
  *==========================================*/
-static RKEY refn2rkey (refn)
-STRING refn;
+static RKEY
+refn2rkey (STRING refn)
 {
 	RKEY rkey;
 	rkey.r_rkey[0] = rkey.r_rkey[1] = ' ';
@@ -156,9 +156,9 @@ STRING refn;
 /*=========================================
  * add_refn -- Add new entry to refn record
  *=======================================*/
-BOOLEAN add_refn (refn, key)
-STRING refn;	/* record's user refn key */
-STRING key;	/* record's GEDCOM key */
+BOOLEAN
+add_refn (STRING refn,  /* record's user refn key */
+          STRING key)   /* record's GEDCOM key */
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -204,9 +204,9 @@ STRING key;	/* record's GEDCOM key */
 /*=============================================
  * remove_refn -- Remove entry from refn record
  *===========================================*/
-BOOLEAN remove_refn (refn, key)
-STRING refn;	/* record's refn */
-STRING key;	/* record's GEDCOM key */
+BOOLEAN
+remove_refn (STRING refn,       /* record's refn */
+             STRING key)        /* record's GEDCOM key */
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -257,11 +257,11 @@ STRING key;	/* record's GEDCOM key */
 /*====================================================
  * get_refns -- Find all records who match refn or key
  *==================================================*/
-void get_refns (refn, pnum, pkeys, letr)
-STRING refn;
-INT *pnum;
-STRING **pkeys;
-INT letr;
+void
+get_refns (STRING refn,
+           INT *pnum,
+           STRING **pkeys,
+           INT letr)
 {
 	INT i, n;
 
@@ -309,8 +309,8 @@ INT letr;
  * resolve_links -- Resolve and check all links in node tree
  *========================================================*/
 static BOOLEAN unresolved;
-void resolve_links (node)
-NODE node;
+void
+resolve_links (NODE node)
 {
 	BOOLEAN resolve_traverse();
 	tlineno = 0;
@@ -321,8 +321,8 @@ NODE node;
 /*=======================================================
  * resolve_traverse -- Traverse routine for resolve_links
  *=====================================================*/
-BOOLEAN resolve_traverse (node)
-NODE node;
+BOOLEAN
+resolve_traverse (NODE node)
 {
 	STRING refn, val = nval(node);
 	INT letr;
@@ -343,8 +343,8 @@ NODE node;
 /*===============================================
  * symbolic_link -- See if value is symbolic link
  *=============================================*/
-BOOLEAN symbolic_link (val)
-STRING val;
+BOOLEAN
+symbolic_link (STRING val)
 {
         if (!val || *val != '<' || strlen(val) < 3) return FALSE;
         return val[strlen(val)-1] == '>';
@@ -352,8 +352,8 @@ STRING val;
 /*===============================================
  * record_letter -- Return letter for record type
  *=============================================*/
-INT record_letter (tag)
-STRING tag;
+INT
+record_letter (STRING tag)
 {
 	if (eqstr("FATH", tag)) return 'I';
 	if (eqstr("MOTH", tag)) return 'I';
@@ -372,9 +372,9 @@ STRING tag;
 /*=========================================
  * key_to_record -- Returns record with key
  *=======================================*/
-NODE key_to_record (str, let)
-STRING str;	/* string that may be a key */
-INT let;	/* if string starts with letter it must be this */
+NODE key_to_record (STRING str, /* string that may be a key */
+                    INT let)    /* if string starts with letter it
+                                   must be this */
 {
 	char kbuf[MAXNAMELEN];
 	INT i = 0, c;
@@ -403,9 +403,9 @@ INT let;	/* if string starts with letter it must be this */
 /*================================================
  * refn_to_record - Get record from user reference
  *==============================================*/
-NODE refn_to_record (ukey, letr)
-STRING ukey;	/* user refn key */
-INT letr;	/* type of record */
+NODE
+refn_to_record (STRING ukey,    /* user refn key */
+                INT letr)       /* type of record */
 {
         STRING *keys;
         INT num;
@@ -420,9 +420,9 @@ INT letr;	/* type of record */
 /*===============================================
  * index_by_refn - Index node tree by REFN values
  *=============================================*/
-void index_by_refn (node, key)
-NODE node;
-STRING key;
+void
+index_by_refn (NODE node,
+               STRING key)
 {
 	if (!node || !key) return;
 	for (node = nchild(node); node; node = nsibling(node)) {

@@ -29,7 +29,8 @@
  * llwprintf -- Called as llwprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-void llwprintf (char *fmt, ...)
+void
+llwprintf (char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -40,7 +41,8 @@ void llwprintf (char *fmt, ...)
  * mprintf -- Called as mprintf(fmt, arg, arg, arg, ...)
  *===========================================================*/
 /*VARARGS*/
-void mprintf (char *fmt, ...)
+void
+mprintf (char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -50,8 +52,8 @@ void mprintf (char *fmt, ...)
 /*======================================
  * poutput -- Print argument as a string
  *====================================*/
-void poutput (str)
-char *str;
+void
+poutput (char *str)
 {
 	printf("%s", str);
 }

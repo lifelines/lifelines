@@ -36,34 +36,37 @@ extern BTREE BTR;
 /*=================================================
  * retrieve_record -- Retrieve record from database
  *===============================================*/
-STRING retrieve_record (key, plen)
-STRING key;
-INT *plen;
+STRING
+retrieve_record (STRING key,
+                 INT *plen)
 {
 	return (STRING) getrecord(BTR, str2rkey(key), plen);
 }
 /*=========================================
  * store_record -- Store record in database
  *=======================================*/
-BOOLEAN store_record (key, rec, len)
-STRING key, rec;
-INT len;
+BOOLEAN
+store_record (STRING key,
+              STRING rec,
+              INT len)
 {
 	return addrecord (BTR, str2rkey(key), rec, len);
 }
 /*=========================================
  * retrieve_file -- Retrieve record to file
  *=======================================*/
-BOOLEAN retrieve_file (key, file)
-STRING key, file;
+BOOLEAN
+retrieve_file (STRING key,
+               STRING file)
 {
 	return getfile(BTR, str2rkey(key), file);
 }
 /*=====================================
  * store_file -- Store record from file
  *===================================*/
-BOOLEAN store_file (key, file)
-STRING key, file;
+BOOLEAN
+store_file (STRING key,
+            STRING file)
 {
 	return addfile(BTR, str2rkey(key), file);
 }

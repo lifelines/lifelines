@@ -49,7 +49,8 @@ char *getenv();
 /*=================================
  * init_lifelines -- Open LifeLines
  *===============================*/
-void init_lifelines (void)
+void
+init_lifelines (void)
 {
 	STRING e, emsg;
 #ifdef WIN32
@@ -84,7 +85,8 @@ void init_lifelines (void)
 /*===================================
  * close_lifelines -- Close LifeLines
  *=================================*/
-void close_lifelines (void)
+void
+close_lifelines (void)
 {
 	closexref();
 	unlink(editfile);

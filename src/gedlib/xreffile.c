@@ -66,7 +66,8 @@ static BOOLEAN xrefopen = FALSE;
 /*============================== 
  * initxref -- Create xrefs file
  *============================*/
-void initxref (void)
+void
+initxref (void)
 {
 	char scratch[100];
 	INT i = 1, j;
@@ -81,7 +82,8 @@ void initxref (void)
 /*============================
  * openxref -- Open xrefs file
  *==========================*/
-BOOLEAN openxref (void)
+BOOLEAN
+openxref (void)
 {
 	char scratch[100];
 	ASSERT(!xrefopen);
@@ -93,7 +95,8 @@ BOOLEAN openxref (void)
 /*==============================
  * closexref -- Close xrefs file
  *============================*/
-void closexref (void)
+void
+closexref (void)
 {
 	if (xreffp) fclose(xreffp);
 	xrefopen = FALSE;
@@ -101,7 +104,8 @@ void closexref (void)
 /*====================================
  * getixref -- Return next ixref value
  *==================================*/
-STRING getixref (void)
+STRING
+getixref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -114,7 +118,8 @@ STRING getixref (void)
 /*====================================
  * getfxref -- Return next fxref value
  *==================================*/
-STRING getfxref (void)
+STRING
+getfxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -127,7 +132,8 @@ STRING getfxref (void)
 /*====================================
  * getexref -- Return next exref value
  *==================================*/
-STRING getexref (void)
+STRING
+getexref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -140,7 +146,8 @@ STRING getexref (void)
 /*====================================
  * getsxref -- Return next sxref value
  *==================================*/
-STRING getsxref (void)
+STRING
+getsxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -153,7 +160,8 @@ STRING getsxref (void)
 /*====================================
  * getxxref -- Return next xxref value
  *==================================*/
-STRING getxxref (void)
+STRING
+getxxref (void)
 {
 	INT n;
 	static unsigned char scratch[12];
@@ -166,7 +174,8 @@ STRING getxxref (void)
 /*=============================
  * readxrefs -- Read xrefs file
  *===========================*/
-BOOLEAN readxrefs (void)
+BOOLEAN
+readxrefs (void)
 {
 	ASSERT(xrefopen);
 	ASSERT(fread(&nixrefs, sizeof(INT), 1, xreffp) == 1);
@@ -194,7 +203,8 @@ BOOLEAN readxrefs (void)
 /*================================
  * writexrefs -- Write xrefs file.
  *==============================*/
-BOOLEAN writexrefs (void)
+BOOLEAN
+writexrefs (void)
 {
 	ASSERT(xrefopen);
 	rewind(xreffp);
@@ -214,8 +224,8 @@ BOOLEAN writexrefs (void)
 /*============================================
  * addixref -- Add deleted INDI key to ixrefs.
  *==========================================*/
-void addixref (key)
-INT key;
+void
+addixref (INT key)
 {
 	if (key <= 0 || !xrefopen || nixrefs < 1) FATAL();
 	if (nixrefs >= maxixrefs) growixrefs();
@@ -225,8 +235,8 @@ INT key;
 /*===========================================
  * addfxref -- Add deleted FAM key to fxrefs.
  *=========================================*/
-void addfxref (key)
-INT key;
+void
+addfxref (INT key)
 {
 	if (key <= 0 || !xrefopen || nfxrefs < 1) FATAL();
 	if (nfxrefs >= maxfxrefs) growfxrefs();
@@ -236,8 +246,8 @@ INT key;
 /*============================================
  * addexref -- Add deleted EVEN key to exrefs.
  *==========================================*/
-void addexref (key)
-INT key;
+void
+addexref (INT key)
 {
 	if (key <= 0 || !xrefopen || nexrefs < 1) FATAL();
 	if (nexrefs >= maxexrefs) growexrefs();
@@ -247,8 +257,8 @@ INT key;
 /*============================================
  * addsxref -- Add deleted SOUR key to sxrefs.
  *==========================================*/
-void addsxref (key)
-INT key;
+void
+addsxref (INT key)
 {
 	if (key <= 0 || !xrefopen || nsxrefs < 1) FATAL();
 	if (nsxrefs >= maxsxrefs) growsxrefs();
@@ -258,8 +268,8 @@ INT key;
 /*=============================================
  * addfxref -- Add other deleted key to xxrefs.
  *===========================================*/
-void addxxref (key)
-INT key;
+void
+addxxref (INT key)
 {
 	if (key <= 0 || !xrefopen || nxxrefs < 1) FATAL();
 	if (nxxrefs >= maxxxrefs) growxxrefs();
@@ -269,7 +279,8 @@ INT key;
 /*============================================
  * growixrefs -- Grow memory for ixrefs array.
  *==========================================*/
-void growixrefs (void)
+void
+growixrefs (void)
 {
 	INT i, m = maxixrefs, *newp;
 	maxixrefs = nixrefs + 10;
@@ -284,7 +295,8 @@ void growixrefs (void)
 /*============================================
  * growfxrefs -- Grow memory for fxrefs array.
  *==========================================*/
-void growfxrefs (void)
+void
+growfxrefs (void)
 {
 	INT i, m = maxfxrefs, *newp;
 	maxfxrefs = nfxrefs + 10;
@@ -299,7 +311,8 @@ void growfxrefs (void)
 /*============================================
  * growexrefs -- Grow memory for exrefs array.
  *==========================================*/
-void growexrefs (void)
+void
+growexrefs (void)
 {
 	INT i, m = maxexrefs, *newp;
 	maxexrefs = nexrefs + 10;
@@ -314,7 +327,8 @@ void growexrefs (void)
 /*============================================
  * growsxrefs -- Grow memory for sxrefs array.
  *==========================================*/
-void growsxrefs (void)
+void
+growsxrefs (void)
 {
 	INT i, m = maxsxrefs, *newp;
 	maxsxrefs = nsxrefs + 10;
@@ -329,7 +343,8 @@ void growsxrefs (void)
 /*============================================
  * growxxrefs -- Grow memory for xxrefs array.
  *==========================================*/
-void growxxrefs (void)
+void
+growxxrefs (void)
 {
 	INT i, m = maxxxrefs, *newp;
 	maxxxrefs = nxxrefs + 10;
@@ -344,44 +359,49 @@ void growxxrefs (void)
 /*===================================================
  * num_indis -- Return number of persons in database.
  *=================================================*/
-INT num_indis (void)
+INT
+num_indis (void)
 {
 	return ixrefs[0] - nixrefs;
 }
 /*===================================================
  * num_fams -- Return number of families in database.
  *=================================================*/
-INT num_fams (void)
+INT
+num_fams (void)
 {
 	return fxrefs[0] - nfxrefs;
 }
 /*==================================================
  * num_evens -- Return number of events in database.
  *================================================*/
-INT num_evens (void)
+INT
+num_evens (void)
 {
 	return exrefs[0] - nexrefs;
 }
 /*===================================================
  * num_sours -- Return number of sources in database.
  *=================================================*/
-INT num_sours (void)
+INT
+num_sours (void)
 {
 	return sxrefs[0] - nsxrefs;
 }
 /*=========================================================
  * num_othrs -- Return number of other records in database.
  *=======================================================*/
-INT num_othrs (void)
+INT
+num_othrs (void)
 {
 	return xxrefs[0] - nxxrefs;
 }
 /*================================================
  * newixref -- Return original or next ixref value
  *==============================================*/
-STRING newixref (xrefp, flag)
-    STRING xrefp;	/* key of the individual */
-    BOOLEAN flag;	/* use the current key */
+STRING
+newixref (STRING xrefp, /* key of the individual */
+          BOOLEAN flag) /* use the current key */
 {
     INT n;
     BOOLEAN changed;
@@ -400,9 +420,9 @@ STRING newixref (xrefp, flag)
 /*================================================
  * newfxref -- Return original or next fxref value
  *==============================================*/
-STRING newfxref (xrefp, flag)
-    STRING xrefp;	/* key of the individual */
-    BOOLEAN flag;	/* use the current key */
+STRING
+newfxref (STRING xrefp, /* key of the individual */
+          BOOLEAN flag) /* use the current key */
 {
     INT n;
     BOOLEAN changed;
@@ -421,9 +441,9 @@ STRING newfxref (xrefp, flag)
 /*================================================
  * newsxref -- Return original or next sxref value
  *==============================================*/
-STRING newsxref (xrefp, flag)
-    STRING xrefp;	/* key of the individual */
-    BOOLEAN flag;	/* use the current key */
+STRING
+newsxref (STRING xrefp, /* key of the individual */
+          BOOLEAN flag) /* use the current key */
 {
     INT n;
     BOOLEAN changed;
@@ -442,9 +462,9 @@ STRING newsxref (xrefp, flag)
 /*================================================
  * newexref -- Return original or next exref value
  *==============================================*/
-STRING newexref (xrefp, flag)
-    STRING xrefp;	/* key of the individual */
-    BOOLEAN flag;	/* use the current key */
+STRING
+newexref (STRING xrefp, /* key of the individual */
+          BOOLEAN flag) /* use the current key */
 {
     INT n;
     BOOLEAN changed;
@@ -463,9 +483,9 @@ STRING newexref (xrefp, flag)
 /*================================================
  * newxxref -- Return original or next xxref value
  *==============================================*/
-STRING newxxref (xrefp, flag)
-    STRING xrefp;	/* key of the individual */
-    BOOLEAN flag;	/* use the current key */
+STRING
+newxxref (STRING xrefp, /* key of the individual */
+          BOOLEAN flag) /* use the current key */
 {
     INT n;
     BOOLEAN changed;

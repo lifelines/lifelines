@@ -38,10 +38,12 @@
 /*=================================================
  * choose_child -- Choose child of person or family
  *===============================================*/
-NODE choose_child (indi, fam, msg0, msgn, ask1)
-NODE indi, fam;
-STRING msg0, msgn;
-BOOLEAN ask1;
+NODE
+choose_child (NODE indi,
+              NODE fam,
+              STRING msg0,
+              STRING msgn,
+              BOOLEAN ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;
@@ -58,9 +60,10 @@ BOOLEAN ask1;
 /*========================================
  * choose_spouse -- Choose person's spouse
  *======================================*/
-NODE choose_spouse (indi, msg0, msgn)
-NODE indi;
-STRING msg0, msgn;
+NODE
+choose_spouse (NODE indi,
+               STRING msg0,
+               STRING msgn)
 {
 	INDISEQ seq;
 	NODE node;
@@ -76,10 +79,11 @@ STRING msg0, msgn;
 /*==========================================================
  * choose_family -- Choose family from person's FAMS/C lines
  *========================================================*/
-NODE choose_family (indi, msg0, msgn, fams)
-NODE indi;
-STRING msg0, msgn;
-BOOLEAN fams;
+NODE
+choose_family (NODE indi,
+               STRING msg0,
+               STRING msgn,
+               BOOLEAN fams)
 {
 	NODE node;
 	INDISEQ seq = indi_to_families(indi, fams);
@@ -94,10 +98,12 @@ BOOLEAN fams;
 /*===================================================
  * choose_father -- Choose father of person or family
  *=================================================*/
-NODE choose_father (indi, fam, msg0, msgn, ask1)
-NODE indi, fam;
-STRING msg0, msgn;
-BOOLEAN ask1;
+NODE
+choose_father (NODE indi,
+               NODE fam,
+               STRING msg0,
+               STRING msgn,
+               BOOLEAN ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;
@@ -114,10 +120,12 @@ BOOLEAN ask1;
 /*===================================================
  * choose_mother -- Choose mother of person or family
  *=================================================*/
-NODE choose_mother (indi, fam, msg0, msgn, ask1)
-NODE indi, fam;
-STRING msg0, msgn;
-BOOLEAN ask1;
+NODE
+choose_mother (NODE indi,
+               NODE fam,
+               STRING msg0,
+               STRING msgn,
+               BOOLEAN ask1)
 {
 	INDISEQ seq = NULL;
 	NODE node;

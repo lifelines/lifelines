@@ -57,8 +57,8 @@ STRING rerwlv = (STRING) "The record begins at wrong level.";
 /*==============================
  * fixup -- Save non-tag strings
  *============================*/
-STRING fixup (str)
-STRING str;
+STRING
+fixup (STRING str)
 {
 	if (!str || *str == 0) return NULL;
 	return strsave(str);
@@ -66,8 +66,8 @@ STRING str;
 /*=============================
  * fixtag -- Keep tags in table
  *===========================*/
-STRING fixtag (tag)
-STRING tag;
+STRING
+fixtag (STRING tag)
 {
 	STRING str;
 	if ((str = (STRING) valueof(tagtable, tag))) return str;
@@ -81,7 +81,8 @@ STRING tag;
 typedef struct blck *ALLOC;
 struct blck { ALLOC next; };
 static ALLOC first_blck = (ALLOC) 0;
-NODE alloc_node ()
+NODE
+alloc_node (void)
 {
 	NODE node;
 	ALLOC blck;
@@ -103,8 +104,8 @@ NODE alloc_node ()
 /*======================================
  * free_node -- Special node deallocator
  *====================================*/
-void free_node (node)
-NODE node;
+void
+free_node (NODE node)
 {
 	((ALLOC) node)->next = first_blck;
 	first_blck = (ALLOC) node;
@@ -112,9 +113,11 @@ NODE node;
 /*===========================
  * create_node -- Create NODE
  *=========================*/
-NODE create_node (xref, tag, val, prnt)
-STRING xref, tag, val;
-NODE prnt;
+NODE
+create_node (STRING xref,
+             STRING tag,
+             STRING val,
+             NODE prnt)
 {
 	NODE node = alloc_node();
 	nxref(node) = fixup(xref);
@@ -128,8 +131,8 @@ NODE prnt;
 /*=====================================
  * free_nodes -- Free all NODEs in tree
  *===================================*/
-void free_nodes (node)
-NODE node;
+void
+free_nodes (NODE node)
 {
 	NODE sib;
 	while (node) {
@@ -144,11 +147,14 @@ NODE node;
 /*==========================================
  * file_to_line -- Get GEDCOM line from file
  *========================================*/
-INT file_to_line (fp, tt, plev, pxref, ptag, pval, pmsg)
-FILE *fp;
-TRANTABLE tt;
-INT *plev;
-STRING *pxref, *ptag, *pval, *pmsg;
+INT
+file_to_line (FILE *fp,
+              TRANTABLE tt,
+              INT *plev,
+              STRING *pxref,
+              STRING *ptag,
+              STRING *pval,
+              STRING *pmsg)
 {
 	static char in[MAXLINELEN+2];
 	static char out[MAXLINELEN+2];
@@ -168,13 +174,13 @@ STRING *pxref, *ptag, *pval, *pmsg;
 /*==============================================
  * string_to_line -- Get GEDCOM line from string
  *============================================*/
-BOOLEAN string_to_line (ps, plev, pxref, ptag, pval, pmsg)
-STRING *ps;	/* string ptr - modified */
-INT *plev;	/* level ptr */
-STRING *pxref;	/* cross-ref ptr */
-STRING *ptag;	/* tag ptr */
-STRING *pval;	/* value ptr */
-STRING *pmsg;	/* error msg ptr */
+BOOLEAN
+string_to_line (STRING *ps,     /* string ptr - modified */
+                INT *plev,      /* level ptr */
+                STRING *pxref,  /* cross-ref ptr */
+                STRING *ptag,   /* tag ptr */
+                STRING *pval,   /* value ptr */
+                STRING *pmsg)   /* error msg ptr */
 {
 	STRING s0, s;
 	*pmsg = NULL;
@@ -192,10 +198,13 @@ STRING *pmsg;	/* error msg ptr */
 /*================================================================
  * buffer_to_line -- Get GEDCOM line from buffer with <= 1 newline
  *==============================================================*/
-static BOOLEAN buffer_to_line (p, plev, pxref, ptag, pval, pmsg)
-STRING p;
-INT *plev;
-STRING *pxref, *ptag, *pval, *pmsg;
+static BOOLEAN
+buffer_to_line (STRING p,
+                INT *plev,
+                STRING *pxref,
+                STRING *ptag,
+                STRING *pval,
+                STRING *pmsg)
 {
 	INT lev;
 	extern INT lineno;
@@ -275,11 +284,11 @@ gettag:
 /*=================================================
  * file_to_node -- Convert GEDCOM file to NODE tree
  *===============================================*/
-NODE file_to_node (fname, tt, pmsg, pemp)
-STRING fname;	/* name of file that holds GEDCOM record */
-TRANTABLE tt;	/* character translation table */
-STRING *pmsg;	/* possible error message */
-BOOLEAN *pemp;	/* set true if file is empty */
+NODE
+file_to_node (STRING fname,     /* name of file that holds GEDCOM record */
+              TRANTABLE tt,     /* character translation table */
+              STRING *pmsg,     /* possible error message */
+              BOOLEAN *pemp)    /* set true if file is empty */
 {
 	FILE *fp;
 	NODE node;
@@ -305,12 +314,12 @@ static BOOLEAN ateof = FALSE;
 /*================================================================
  * first_fp_to_node -- Convert first GEDCOM record in file to tree
  *==============================================================*/
-NODE first_fp_to_node (fp, list, tt, pmsg, peof)
-FILE *fp;	/* file that holds GEDCOM record/s */
-BOOLEAN list;	/* can be list at level 0? */
-TRANTABLE tt;	/* character translation table */
-STRING *pmsg;	/* possible error message */
-BOOLEAN *peof;	/* set true if file is at end of file */
+NODE
+first_fp_to_node (FILE *fp,     /* file that holds GEDCOM record/s */
+                  BOOLEAN list, /* can be list at level 0? */
+                  TRANTABLE tt, /* character translation table */
+                  STRING *pmsg, /* possible error message */
+                  BOOLEAN *peof)/* set true if file is at end of file */
 {
 	INT rc;
 	ateof = FALSE;
@@ -331,12 +340,12 @@ BOOLEAN *peof;	/* set true if file is at end of file */
 /*==============================================================
  * next_fp_to_node -- Convert next GEDCOM record in file to tree
  *============================================================*/
-NODE next_fp_to_node (fp, list, tt, pmsg, peof)
-FILE *fp;	/* file that holds GEDCOM record/s */
-BOOLEAN list;	/* can be list at level 0? */
-TRANTABLE tt;	/* character translation table */
-STRING *pmsg;	/* possible error message */
-BOOLEAN *peof;	/* set true if file is at end of file */
+NODE
+next_fp_to_node (FILE *fp,       /* file that holds GEDCOM record/s */
+                 BOOLEAN list,   /* can be list at level 0? */
+                 TRANTABLE tt,   /* character translation table */
+                 STRING *pmsg,   /* possible error message */
+                 BOOLEAN *peof)  /* set true if file is at end of file */
 {
 	INT curlev, bcode, rc;
 	NODE root, node, curnode;
@@ -419,8 +428,8 @@ BOOLEAN *peof;	/* set true if file is at end of file */
 /*========================================
  * string_to_node -- Read tree from string
  *======================================*/
-NODE string_to_node (str)
-STRING str;
+NODE
+string_to_node (STRING str)
 {
 	/* the following variables were made local rather than
 	   use the static variables - pbm 12-jun-96 */
@@ -475,12 +484,12 @@ STRING str;
 /*============================================
  * node_to_file -- Convert tree to GEDCOM file
  *==========================================*/
-BOOLEAN node_to_file (levl, node, fname, indent, tt)
-INT levl;	/* top level */
-NODE node;	/* root node */
-STRING fname;	/* file */
-BOOLEAN indent;	/* indent? */
-TRANTABLE tt;	/* char map */
+BOOLEAN
+node_to_file (INT levl,       /* top level */
+              NODE node,      /* root node */
+              STRING fname,   /* file */
+              BOOLEAN indent, /* indent? */
+              TRANTABLE tt)   /* char map */
 {
 	FILE *fp;
 	if (!(fp = fopen(fname, LLWRITETEXT))) {
@@ -495,12 +504,12 @@ TRANTABLE tt;	/* char map */
 /*========================================
  * write_node -- Write NODE to GEDCOM file
  *======================================*/
-void write_node (levl, fp, tt, node, indent)
-INT levl;	/* level */
-FILE *fp;	/* file */
-TRANTABLE tt;	/* char map */
-NODE node;	/* node */
-BOOLEAN indent;	/* indent? */
+void
+write_node (INT levl,       /* level */
+            FILE *fp,       /* file */
+            TRANTABLE tt,   /* char map */
+            NODE node,      /* node */
+            BOOLEAN indent) /* indent? */
 {
 	unsigned char out[MAXLINELEN+1];
 	STRING p;
@@ -524,14 +533,14 @@ BOOLEAN indent;	/* indent? */
 /*==========================================
  * write_nodes -- Write NODEs to GEDCOM file
  *========================================*/
-void write_nodes (levl, fp, tt, node, indent, kids, sibs)
-INT levl;	/* level */
-FILE *fp;	/* file */
-TRANTABLE tt;	/* char map */
-NODE node;	/* root */
-BOOLEAN indent;	/* indent? */
-BOOLEAN kids;	/* output kids? */
-BOOLEAN sibs;	/* output sibs? */
+void
+write_nodes (INT levl,       /* level */
+             FILE *fp,       /* file */
+             TRANTABLE tt,   /* char map */
+             NODE node,      /* root */
+             BOOLEAN indent, /* indent? */
+             BOOLEAN kids,   /* output kids? */
+             BOOLEAN sibs)   /* output sibs? */
 {
 	if (!node) return;
 	write_node(levl, fp, tt, node, indent);
@@ -543,10 +552,10 @@ BOOLEAN sibs;	/* output sibs? */
 /*====================================
  * swrite_node -- Write NODE to string
  *==================================*/
-STRING swrite_node (levl, node, p)
-INT levl;	/* level */
-NODE node;	/* node */
-STRING p;	/* write string */
+STRING
+swrite_node (INT levl,       /* level */
+             NODE node,      /* node */
+             STRING p)       /* write string */
 {
 	unsigned char scratch[600];
 	STRING q = scratch;
@@ -572,10 +581,10 @@ STRING p;	/* write string */
 /*=====================================
  * swrite_nodes -- Write tree to string
  *===================================*/
-STRING swrite_nodes (levl, node, p)
-INT levl;	/* level */
-NODE node;	/* root */
-STRING p;	/* write string */
+STRING
+swrite_nodes (INT levl,       /* level */
+              NODE node,      /* root */
+              STRING p)       /* write string */
 {
 	while (node) {
 		p = swrite_node(levl, node, p);
@@ -588,8 +597,8 @@ STRING p;	/* write string */
 /*=========================================
  * node_to_string -- Convert tree to string
  *=======================================*/
-STRING node_to_string (node)
-NODE node;	/* root */
+STRING
+node_to_string (NODE node)      /* root */
 {
 	INT len = tree_strlen(0, node) + 1;
 	STRING str;
@@ -601,9 +610,9 @@ NODE node;	/* root */
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
  *============================================================*/
-INT tree_strlen (levl, node)
-INT levl;	/* level */
-NODE node;	/* root */
+INT
+tree_strlen (INT levl,       /* level */
+             NODE node)      /* root */
 {
 	INT len = 0;
 	while (node) {
@@ -617,9 +626,9 @@ NODE node;	/* root */
 /*================================================================
  * node_strlen -- Compute NODE string length -- count \n but not 0
  *==============================================================*/
-INT node_strlen (levl, node)
-INT levl;	/* level */
-NODE node;	/* node */
+INT
+node_strlen (INT levl,       /* level */
+             NODE node)      /* node */
 {
 	INT len;
 	unsigned char scratch[10];
@@ -633,49 +642,49 @@ NODE node;	/* node */
 /*==========================================
  * indi_to_dbase -- Store person in database
  *========================================*/
-void indi_to_dbase (node)
-NODE node;
+void
+indi_to_dbase (NODE node)
 {
 	node_to_dbase(node, "INDI");
 }
 /*=========================================
  * fam_to_dbase -- Store family in database
  *=======================================*/
-void fam_to_dbase (node)
-NODE node;
+void
+fam_to_dbase (NODE node)
 {
 	node_to_dbase(node, "FAM");
 }
 /*=========================================
  * even_to_dbase -- Store event in database
  *=======================================*/
-void even_to_dbase (node)
-NODE node;
+void
+even_to_dbase (NODE node)
 {
 	node_to_dbase(node, "EVEN");
 }
 /*==========================================
  * sour_to_dbase -- Store source in database
  *========================================*/
-void sour_to_dbase (node)
-NODE node;
+void
+sour_to_dbase (NODE node)
 {
 	node_to_dbase(node, "SOUR");
 }
 /*================================================
  * othr_to_dbase -- Store other record in database
  *==============================================*/
-void othr_to_dbase (node)
-NODE node;
+void
+othr_to_dbase (NODE node)
 {
 	node_to_dbase(node, NULL);
 }
 /*===============================================
  * node_to_dbase -- Store GEDCOM tree in database
  *=============================================*/
-void node_to_dbase (node, tag)
-NODE node;
-STRING tag;
+void
+node_to_dbase (NODE node,
+               STRING tag)
 {
 	STRING str;
 	ASSERT(node);
@@ -687,8 +696,8 @@ STRING tag;
 /*==================================================
  * indi_to_famc -- Return family-as-child for person
  *================================================*/
-NODE indi_to_famc (node)
-NODE node;
+NODE
+indi_to_famc (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "FAMC"))) return NULL;
@@ -697,8 +706,8 @@ NODE node;
 /*========================================
  * fam_to_husb -- Return husband of family
  *======================================*/
-NODE fam_to_husb (node)
-NODE node;
+NODE
+fam_to_husb (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "HUSB"))) return NULL;
@@ -707,8 +716,8 @@ NODE node;
 /*=====================================
  * fam_to_wife -- Return wife of family
  *===================================*/
-NODE fam_to_wife (node)
-NODE node;
+NODE
+fam_to_wife (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "WIFE"))) return NULL;
@@ -717,8 +726,9 @@ NODE node;
 /*===============================================
  * fam_to_spouse -- Return other spouse of family
  *=============================================*/
-NODE fam_to_spouse (fam, indi)
-NODE fam, indi;
+NODE
+fam_to_spouse (NODE fam,
+               NODE indi)
 {
     	INT num;
 	if (!fam) return NULL;
@@ -733,8 +743,8 @@ NODE fam, indi;
 /*==================================================
  * fam_to_first_chil -- Return first child of family
  *================================================*/
-NODE fam_to_first_chil (node)
-NODE node;
+NODE
+fam_to_first_chil (NODE node)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "CHIL"))) return NULL;
@@ -743,8 +753,8 @@ NODE node;
 /*=================================================
  * fam_to_last_chil -- Return first child of family
  *===============================================*/
-NODE fam_to_last_chil (node)
-NODE node;
+NODE
+fam_to_last_chil (NODE node)
 {
 	NODE prev = NULL;
 	if (!node) return NULL;
@@ -758,24 +768,24 @@ NODE node;
 /*========================================
  * indi_to_fath -- Return father of person
  *======================================*/
-NODE indi_to_fath (node)
-NODE node;
+NODE
+indi_to_fath (NODE node)
 {
 	return fam_to_husb(indi_to_famc(node));
 }
 /*========================================
  * indi_to_moth -- Return mother of person
  *======================================*/
-NODE indi_to_moth (node)
-NODE node;
+NODE
+indi_to_moth (NODE node)
 {
 	return fam_to_wife(indi_to_famc(node));
 }
 /*==================================================
  * indi_to_prev_sib -- Return previous sib of person
  *================================================*/
-NODE indi_to_prev_sib (indi)
-NODE indi;
+NODE
+indi_to_prev_sib (NODE indi)
 {
 	NODE fam, prev, chil;
 	if (!indi) return NULL;
@@ -795,8 +805,8 @@ NODE indi;
 /*==============================================
  * indi_to_next_sib -- Return next sib of person
  *============================================*/
-NODE indi_to_next_sib (indi)
-NODE indi;
+NODE
+indi_to_next_sib (NODE indi)
 {
 	NODE fam, chil;
 	if (!indi) return NULL;
@@ -815,10 +825,10 @@ NODE indi;
 /*======================================
  * indi_to_name -- Return name of person
  *====================================*/
-STRING indi_to_name (node, tt, len)
-NODE node;
-TRANTABLE tt;
-INT len;
+STRING
+indi_to_name (NODE node,
+              TRANTABLE tt,
+              INT len)
 {
 	if (!node) return (STRING) "NO NAME";
 	if (!(node = find_tag(nchild(node), "NAME"))) return (STRING) "NO NAME";
@@ -827,10 +837,10 @@ INT len;
 /*======================================
  * indi_to_title -- Return title of person
  *====================================*/
-STRING indi_to_title (node, tt, len)
-NODE node;
-TRANTABLE tt;
-INT len;
+STRING
+indi_to_title (NODE node,
+               TRANTABLE tt,
+               INT len)
 {
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), "TITL"))) return NULL;
@@ -839,12 +849,13 @@ INT len;
 /*==============================================
  * indi_to_event -- Convert event tree to string
  *============================================*/
-STRING indi_to_event (node, tt, tag, head, len, shrt)
-NODE node;
-TRANTABLE tt;
-STRING tag, head;
-INT len;
-BOOLEAN shrt;
+STRING
+indi_to_event (NODE node,
+               TRANTABLE tt,
+               STRING tag,
+               STRING head,
+               INT len,
+               BOOLEAN shrt)
 {
 	static unsigned char scratch[200];
 	STRING event;
@@ -865,10 +876,10 @@ BOOLEAN shrt;
 /*===========================================
  * event_to_string -- Convert event to string
  *=========================================*/
-STRING event_to_string (node, tt, shrt)
-NODE node;
-TRANTABLE tt;
-BOOLEAN shrt;
+STRING
+event_to_string (NODE node,
+                 TRANTABLE tt,
+                 BOOLEAN shrt)
 {
 	static unsigned char scratch1[MAXLINELEN+1];
 	static unsigned char scratch2[MAXLINELEN+1];
@@ -911,10 +922,10 @@ BOOLEAN shrt;
 /*=======================================
  * event_to_date -- Convert event to date
  *=====================================*/
-STRING event_to_date (node, tt, shrt)
-NODE node;
-TRANTABLE tt;
-BOOLEAN shrt;
+STRING
+event_to_date (NODE node,
+               TRANTABLE tt,
+               BOOLEAN shrt)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	if (!node) return NULL;
@@ -926,9 +937,9 @@ BOOLEAN shrt;
 /*========================================
  * event_to_plac -- Convert event to place
  *======================================*/
-STRING event_to_plac (node, shrt)
-NODE node;
-BOOLEAN shrt;
+STRING
+event_to_plac (NODE node,
+               BOOLEAN shrt)
 {
 	if (!node) return NULL;
 	node = PLAC(node);
@@ -939,8 +950,8 @@ BOOLEAN shrt;
 /*=========================================
  * striptrail -- Strip trailing white space
  *=======================================*/
-void striptrail (p)
-STRING p;
+void
+striptrail (STRING p)
 {
 	unsigned char *q = p + strlen(p) - 1;
 	while (iswhite(*q) && q >= p)
@@ -949,8 +960,8 @@ STRING p;
 /*=========================================
  * allwhite -- Check if string is all white
  *=======================================*/
-BOOLEAN allwhite (p)
-STRING p;
+BOOLEAN
+allwhite (STRING p)
 {
 	while (*p)
 		if (!iswhite(*p++)) return FALSE;
@@ -959,8 +970,8 @@ STRING p;
 /*================================
  * show_node -- Show tree -- DEBUG
  *==============================*/
-void show_node (node)
-NODE node;
+void
+show_node (NODE node)
 {
 	if (!node) llwprintf("(NIL)");
 	show_node_rec(0, node);
@@ -968,8 +979,9 @@ NODE node;
 /*================================================
  * show_node_rec -- Recursive version of show_node
  *==============================================*/
-void show_node_rec (levl, node)
-INT levl;  NODE node;
+void
+show_node_rec (INT levl,
+               NODE node)
 {
 	INT i;
 	if (!node) return;
@@ -986,8 +998,8 @@ INT levl;  NODE node;
 /*===========================================
  * length_nodes -- Return length of NODE list
  *=========================================*/
-INT length_nodes (node)
-NODE node;
+INT
+length_nodes (NODE node)
 {
 	INT len = 0;
 	while (node) {
@@ -999,8 +1011,8 @@ NODE node;
 /*================================================
  * shorten_date -- Return short form of date value
  *==============================================*/
-STRING shorten_date (date)
-STRING date;
+STRING
+shorten_date (STRING date)
 {
 	static unsigned char buffer[3][MAXLINELEN+1];
 	static int dex = 0;
@@ -1034,8 +1046,8 @@ STRING date;
 /*=================================================
  * shorten_plac -- Return short form of place value
  *===============================================*/
-STRING shorten_plac (plac)
-STRING plac;
+STRING
+shorten_plac (STRING plac)
 {
 	STRING plac0 = plac, comma, val;
 	if (!plac) return NULL;
@@ -1053,8 +1065,8 @@ STRING plac;
 /*============================================
  * all_digits -- Check if string is all digits
  *==========================================*/
-static BOOLEAN all_digits (s)
-STRING s;
+static BOOLEAN
+all_digits (STRING s)
 {
 	INT c;
 	while ((c = *s++)) {
@@ -1067,17 +1079,18 @@ STRING s;
 /*=======================
  * copy_node -- Copy node
  *=====================*/
-NODE copy_node (node)
-NODE node;
+NODE
+copy_node (NODE node)
 {
 	return create_node(nxref(node), ntag(node), nval(node), NULL);
 }
 /*========================
  * copy_nodes -- Copy tree
  *======================*/
-NODE copy_nodes (node, kids, sibs)
-NODE node;
-BOOLEAN kids, sibs;
+NODE
+copy_nodes (NODE node,
+            BOOLEAN kids,
+            BOOLEAN sibs)
 {
 	NODE new, kin;
 	if (!node) return NULL;
@@ -1102,9 +1115,9 @@ BOOLEAN kids, sibs;
  * traverse_nodes -- Traverse nodes in tree while doing something
  *=============================================================*/
 INT tlineno;
-BOOLEAN traverse_nodes (node, func)
-NODE node;		/* root of tree to traverse */
-BOOLEAN (*func)();	/* function to call at each node */
+BOOLEAN
+traverse_nodes (NODE node,              /* root of tree to traverse */
+                BOOLEAN (*func)(NODE))  /* function to call at each node */
 {
 	while (node) {
 		tlineno++;
@@ -1120,8 +1133,8 @@ BOOLEAN (*func)();	/* function to call at each node */
 /*==================================================
  * num_spouses -- Returns number of spoues of person
  *================================================*/
-INT num_spouses (indi)
-NODE indi;
+INT
+num_spouses (NODE indi)
 {
 	INT nsp;
 	if (!indi) return 0;
@@ -1131,11 +1144,11 @@ NODE indi;
 /*===================================================
  * find_node -- Find node with specific tag and value
  *=================================================*/
-NODE find_node (prnt, tag, val, plast)
-NODE prnt;	/* parent node */
-STRING tag;	/* tag, may be NULL */
-STRING val;	/* value, may be NULL */
-NODE *plast;	/* previous node, may be NULL */
+NODE
+find_node (NODE prnt,      /* parent node */
+           STRING tag,     /* tag, may be NULL */
+           STRING val,     /* value, may be NULL */
+           NODE *plast)    /* previous node, may be NULL */
 {
 	NODE last, node;
 
@@ -1154,8 +1167,8 @@ NODE *plast;	/* previous node, may be NULL */
  * father_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
  *   lines they contain
  *=====================================================================*/
-NODE father_nodes (faml)
-NODE faml;	/* list of FAMC and/or FAMS nodes */
+NODE
+father_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;
@@ -1175,8 +1188,8 @@ NODE faml;	/* list of FAMC and/or FAMS nodes */
  * mother_nodes -- Given list of FAMS or FAMC nodes, returns list of WIFE
  *   lines they contain
  *=====================================================================*/
-NODE mother_nodes (faml)
-NODE faml;	/* list of FAMC and/or FAMS nodes */
+NODE
+mother_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;
@@ -1196,8 +1209,8 @@ NODE faml;	/* list of FAMC and/or FAMS nodes */
  * children_nodes -- Given list of FAMS or FAMC nodes, returns list of CHIL
  *   lines they contain
  *=======================================================================*/
-NODE children_nodes (faml)
-NODE faml;	/* list of FAMC and/or FAMS nodes */
+NODE
+children_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;
@@ -1217,8 +1230,8 @@ NODE faml;	/* list of FAMC and/or FAMS nodes */
  * parents_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
  *   and WIFE lines they contain
  *======================================================================*/
-NODE parents_nodes (faml)
-NODE faml;	/* list of FAMC and/or FAMS nodes */
+NODE
+parents_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 {
 	NODE fam, refn, husb, wife, chil, rest;
 	NODE old = NULL, new = NULL;

@@ -36,10 +36,10 @@
 /*===================================================================
  * replace_indi -- Replace a person in database with modified version
  *=================================================================*/
-BOOLEAN replace_indi (indi1, indi2, pmsg)
-NODE indi1;	/* original person - as now in database */
-NODE indi2;	/* as person should now be */
-STRING *pmsg;
+BOOLEAN
+replace_indi (NODE indi1,       /* original person - as now in database */
+              NODE indi2,       /* as person should now be */
+              STRING *pmsg)
 {
 	NODE name1, name2, refn1, refn2, sex, body, famc, fams;
 	NODE node, namen, refnn, name1n, refn1n, indi0;
@@ -90,10 +90,10 @@ STRING *pmsg;
 /*==================================================================
  * replace_fam -- Replace a family in database with modified version
  *================================================================*/
-BOOLEAN replace_fam (fam1, fam2, pmsg)
-NODE fam1;	/* original family - now in database */
-NODE fam2;	/* as family should now be */
-STRING *pmsg;
+BOOLEAN
+replace_fam (NODE fam1, /* original family - now in database */
+             NODE fam2, /* as family should now be */
+             STRING *pmsg)
 {
 	NODE refn1, refn2, husb, wife, chil, body;
 	NODE refnn, refn1n, node, fam0;

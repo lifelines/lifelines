@@ -50,9 +50,9 @@ STRING noiref = (STRING) "FAM record has no INDI references; record ignored.\n";
 /*========================================================
  * node_to_node -- Convert GEDCOM record to LifeLines form
  *======================================================*/
-NODE node_to_node (node, ptype)
-NODE node;
-INT *ptype;
+NODE
+node_to_node (NODE node,
+              INT *ptype)
 {
 	*ptype = 0;
 	if (eqstr("HEAD", ntag(node)) ||
@@ -75,8 +75,8 @@ INT *ptype;
 /*=======================================================
  * indi_to_indi - Convert person record to LifeLines form
  *=====================================================*/
-static NODE indi_to_indi (indi)
-NODE indi;
+static NODE
+indi_to_indi (NODE indi)
 {
 	NODE node, last, name, famc, lfmc, fams, lfms, frst, prev = 0;
 	last = name = famc = fams = frst = lfmc =lfms = NULL;
@@ -124,8 +124,8 @@ NODE indi;
 /*======================================================
  * fam_to_fam -- Convert family record to LifeLines form
  *====================================================*/
-static NODE fam_to_fam (fam)
-NODE fam;
+static NODE
+fam_to_fam (NODE fam)
 {
 	NODE node, frst, last, husb, wife, chil, lchl, prev;
 	frst = last = husb = wife = chil = lchl = NULL;
@@ -181,24 +181,24 @@ NODE fam;
 /*=======================================================
  * even_to_even -- Convert event record to LifeLines form
  *=====================================================*/
-static NODE even_to_even (evn)
-NODE evn;
+static NODE
+even_to_even (NODE evn)
 {
 	return evn;
 }
 /*========================================================
  * sour_to_sour -- Convert source record to LifeLines form
  *======================================================*/
-static NODE sour_to_sour (src)
-NODE src;
+static NODE
+sour_to_sour (NODE src)
 {
 	return src;
 }
 /*=======================================================
  * othr_to_othr -- Convert other record to LifeLines form
  *=====================================================*/
-static NODE othr_to_othr (oth)
-NODE oth;
+static NODE
+othr_to_othr (NODE oth)
 {
 	return oth;
 }

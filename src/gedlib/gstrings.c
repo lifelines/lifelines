@@ -42,10 +42,10 @@ static STRING *chstrings = NULL, *chkeys = NULL;
  * get_child_strings -- Return children strings; each string has name
  *   and event info, if avail  
  *=================================================================*/
-STRING *get_child_strings (fam, pnum, pkeys)
-NODE fam;
-INT *pnum;
-STRING **pkeys;
+STRING *
+get_child_strings (NODE fam,
+                   INT *pnum,
+                   STRING **pkeys)
 {
 	NODE chil;
 	INT i;
@@ -78,9 +78,10 @@ STRING **pkeys;
 /*================================================
  * indi_to_list_string -- Return menu list string.
  *==============================================*/
-STRING indi_to_list_string (indi, fam, len)
-NODE indi, fam;
-INT len;
+STRING
+indi_to_list_string (NODE indi,
+                     NODE fam,
+                     INT len)
 {
 	char unsigned scratch[MAXLINELEN];
 	STRING name, evt = NULL, p = scratch;

@@ -57,7 +57,8 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 /*==================================
  * create_indiseq -- Create sequence
  *================================*/
-INDISEQ create_indiseq (void)
+INDISEQ
+create_indiseq (void)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
 	ISize(seq) = 0;
@@ -69,9 +70,9 @@ INDISEQ create_indiseq (void)
 /*==================================
  * remove_indiseq -- Remove sequence
  *================================*/
-void remove_indiseq (seq, fval)
-INDISEQ seq;
-BOOLEAN fval;	/* free values? */
+void
+remove_indiseq (INDISEQ seq,
+                BOOLEAN fval)   /* free values? */
 {
 	SORTEL *d = IData(seq);
 	INT i, n = ISize(seq);
@@ -87,8 +88,8 @@ BOOLEAN fval;	/* free values? */
 /*==============================
  * copy_indiseq -- Copy sequence
  *============================*/
-INDISEQ copy_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+copy_indiseq (INDISEQ seq)
 {
 	INDISEQ new;
 	if (!seq) return NULL;
@@ -102,13 +103,14 @@ INDISEQ seq;
 /*=============================================
  * append_indiseq -- Append element to sequence
  *===========================================*/
-void append_indiseq (seq, key, name, val, sure, alloc)
-INDISEQ seq;	/* sequence */
-STRING key;	/* key - not NULL */
-STRING name;	/* name - may be NULL */
-WORD val;	/* extra val - may be NULL (otherwise must be a PVALUE) */
-BOOLEAN sure;	/* no dupe check? */
-BOOLEAN alloc;	/* key alloced? */
+void
+append_indiseq (INDISEQ seq,    /* sequence */
+                STRING key,     /* key - not NULL */
+                STRING name,    /* name - may be NULL */
+                WORD val,       /* extra val - may be NULL (otherwise
+                                   must be a PVALUE) */
+                BOOLEAN sure,   /* no dupe check? */
+                BOOLEAN alloc)  /* key alloced? */
 {
 	INT i, m, n;
 	SORTEL el, *new, *old;
@@ -149,9 +151,9 @@ BOOLEAN alloc;	/* key alloced? */
 /*=========================================================
  * rename_indiseq -- Update element name with standard name
  *=======================================================*/
-void rename_indiseq (seq, key)
-INDISEQ seq;
-STRING key;	/* key of el to modify */
+void
+rename_indiseq (INDISEQ seq,
+                STRING key)     /* key of el to modify */
 {
 	INT i, n;
 	SORTEL *data;
@@ -168,9 +170,9 @@ STRING key;	/* key of el to modify */
 /*==============================================
  * in_indiseq -- See if element is in an INDISEQ
  *=============================================*/
-BOOLEAN in_indiseq (seq, key)
-INDISEQ seq;	/* sequence */
-STRING key;	/* key */
+BOOLEAN
+in_indiseq (INDISEQ seq,    /* sequence */
+            STRING key)     /* key */
 {
 	INT i, len;
 	SORTEL *data;
@@ -187,11 +189,11 @@ STRING key;	/* key */
  * delete_indiseq -- Remove el from sequence; if key not NULL use
  *   it; else use index, rel 0; el must be person
  *==============================================================*/
-BOOLEAN delete_indiseq (seq, key, name, index)
-INDISEQ seq;	/* sequence */
-STRING key;	/* key - may be NULL */
-STRING name;	/* name - may be NULL */
-INT index;	/* index of el to remove - may be computed */
+BOOLEAN
+delete_indiseq (INDISEQ seq,    /* sequence */
+                STRING key,     /* key - may be NULL */
+                STRING name,    /* name - may be NULL */
+                INT index)      /* index of el to remove - may be computed */
 {
 	INT i, len;
 	SORTEL *data, el;
@@ -222,11 +224,11 @@ INT index;	/* index of el to remove - may be computed */
 /*================================================
  * element_indiseq -- Return element from sequence
  *==============================================*/
-BOOLEAN element_indiseq (seq, index, pkey, pname)
-INDISEQ seq;	/* sequence */
-INT index;	/* index */
-STRING *pkey;	/* returned key */
-STRING *pname;	/* returned name */
+BOOLEAN
+element_indiseq (INDISEQ seq,    /* sequence */
+                 INT index,      /* index */
+                 STRING *pkey,   /* returned key */
+                 STRING *pname)  /* returned name */
 {
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
@@ -237,8 +239,9 @@ STRING *pname;	/* returned name */
 /*==================================
  * name_compare -- Compare two names
  *================================*/
-INT name_compare (el1, el2)
-SORTEL el1, el2;
+INT
+name_compare (SORTEL el1,
+              SORTEL el2)
 {
 	INT rel = namecmp(snam(el1), snam(el2));
 	if (rel) return rel;
@@ -248,16 +251,18 @@ SORTEL el1, el2;
  * key_compare -- Compare two keys
  * also used for integer value sort
  *==============================*/
-INT key_compare (el1, el2)
-SORTEL el1, el2;
+INT
+key_compare (SORTEL el1,
+             SORTEL el2)
 {
 	return spri(el1) - spri(el2);
 }
 /*===================================================
  * value_str_compare -- Compare two values as strings
  *=================================================*/
-INT value_str_compare (el1, el2)
-SORTEL el1, el2;
+INT
+value_str_compare (SORTEL el1,
+                   SORTEL el2)
 {
 	PVALUE val1, val2;
 	val1 = sval(el1);
@@ -267,8 +272,9 @@ SORTEL el1, el2;
 /*====================================
  * value_compare -- Compare two values
  *==================================*/
-INT value_compare (el1, el2)
-SORTEL el1, el2;
+INT
+value_compare (SORTEL el1,
+               SORTEL el2)
 {
 	/* WARNING: this is not correct as sval() is a PVALUE structure */
 	return (INT) sval(el1) - (INT) sval(el2);
@@ -276,8 +282,8 @@ SORTEL el1, el2;
 /*==========================================
  * namesort_indiseq -- Sort sequence by name
  *========================================*/
-void namesort_indiseq (seq)
-INDISEQ seq;
+void
+namesort_indiseq (INDISEQ seq)
 {
 	if (IFlags(seq) & NAMESORT) return;
 	FORINDISEQ(seq, el, num)
@@ -291,8 +297,8 @@ INDISEQ seq;
 /*========================================
  * keysort_indiseq -- Sort sequence by key
  *======================================*/
-void keysort_indiseq (seq)
-INDISEQ seq;
+void
+keysort_indiseq (INDISEQ seq)
 {
 	if (IFlags(seq) & KEYSORT) return;
 	FORINDISEQ(seq, el, num)
@@ -306,8 +312,9 @@ INDISEQ seq;
 /*============================================
  * valuesort_indiseq -- Sort sequence by value
  *==========================================*/
-void valuesort_indiseq (seq, eflg)
-INDISEQ seq; BOOLEAN *eflg;
+void
+valuesort_indiseq (INDISEQ seq,
+                   BOOLEAN *eflg)
 {
 	PVALUE val;
 	SORTEL *data;
@@ -341,12 +348,12 @@ INDISEQ seq; BOOLEAN *eflg;
  *=======================================*/
 #define LNULL -1
 static SORTEL *ldata;
-static INT (*lcmp)();
+static INT (*lcmp)(SORTEL, SORTEL);
 
-void partition_sort (data, len, cmp)
-SORTEL *data;	/* array of els to sort */
-INT len;	/* len of array */
-INT (*cmp)();	/* compare function */
+void
+partition_sort (SORTEL *data,   /* array of els to sort */
+                INT len,        /* len of array */
+                INT (*cmp)(SORTEL, SORTEL))   /* compare function */
 {
 	ldata = data;
 	lcmp = cmp;
@@ -355,8 +362,9 @@ INT (*cmp)();	/* compare function */
 /*======================================
  * llqsort -- Recursive core of quick sort
  *====================================*/
-void llqsort (left, right)
-INT left, right;	/* range to sort */
+void
+llqsort (INT left,        /* range to sort */
+         INT right)
 {
 	INT pcur = getpivot(left, right);
 	if (pcur != LNULL) {
@@ -369,9 +377,10 @@ INT left, right;	/* range to sort */
 /*====================================
  * partition -- Partition around pivot
  *==================================*/
-INT partition (left, right, pivot)
-INT left, right;
-SORTEL pivot;
+INT
+partition (INT left,
+           INT right,
+           SORTEL pivot)
 {
 	INT i = left, j = right;
 	do {
@@ -388,8 +397,9 @@ SORTEL pivot;
 /*=============================
  * getpivot -- Choose key pivot
  *===========================*/
-INT getpivot (left, right)
-INT left, right;
+INT
+getpivot (INT left,
+          INT right)
 {
 	SORTEL pivot = ldata[left];
 	INT left0 = left, rel;
@@ -405,8 +415,8 @@ INT left, right;
  * NOTE: this routine has MEMORY LEAK -- it doesn't free storage for
  *   els removed from sequence
  *================================================================*/
-void unique_indiseq (seq)
-INDISEQ seq;
+void
+unique_indiseq (INDISEQ seq)
 {
 	INT i, j, n;
 	SORTEL *d;
@@ -423,8 +433,9 @@ INDISEQ seq;
 /*===============================================
  * union_indiseq -- Create union of two sequences
  *=============================================*/
-INDISEQ union_indiseq (one, two)
-INDISEQ one, two;
+INDISEQ
+union_indiseq (INDISEQ one,
+               INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;
@@ -478,8 +489,9 @@ INDISEQ one, two;
 /*==========================================================
  * intersect_indiseq -- Create intersection of two sequences
  *========================================================*/
-INDISEQ intersect_indiseq (one, two)
-INDISEQ one, two;
+INDISEQ
+intersect_indiseq (INDISEQ one,
+                   INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;
@@ -517,8 +529,9 @@ INDISEQ one, two;
 /*=========================================================
  * difference_indiseq -- Create difference of two sequences
  *=======================================================*/
-INDISEQ difference_indiseq (one, two)
-INDISEQ one, two;
+INDISEQ
+difference_indiseq (INDISEQ one,
+                    INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;
@@ -561,8 +574,8 @@ INDISEQ one, two;
 /*=====================================================
  * parent_indiseq -- Create parent sequence of sequence
  *===================================================*/
-INDISEQ parent_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+parent_indiseq (INDISEQ seq)
 {
 	TABLE tab;
 	INDISEQ par;
@@ -592,8 +605,8 @@ INDISEQ seq;
 /*======================================================
  * child_indiseq -- Create children sequence of sequence
  *====================================================*/
-INDISEQ child_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+child_indiseq (INDISEQ seq)
 {
 	INT num1, num2;
 	TABLE tab;
@@ -623,8 +636,8 @@ INDISEQ seq;
 /*=========================================================
  * indi_to_children -- Create sequence of person's children
  *=======================================================*/
-INDISEQ indi_to_children (indi)
-NODE indi;
+INDISEQ
+indi_to_children (NODE indi)
 {
 	INDISEQ seq;
 	INT num1, num2, len = 0;
@@ -645,8 +658,8 @@ NODE indi;
 /*=======================================================
  * indi_to_spouses -- Create sequence of person's spouses
  *=====================================================*/
-INDISEQ indi_to_spouses (indi)
-NODE indi;
+INDISEQ
+indi_to_spouses (NODE indi)
 {
 	INDISEQ seq;
 	INT num, num1, val, len = 0;
@@ -687,8 +700,8 @@ NODE indi;
 /*=======================================================
  * indi_to_fathers -- Create sequence of person's fathers
  *=====================================================*/
-INDISEQ indi_to_fathers (indi)
-NODE indi;
+INDISEQ
+indi_to_fathers (NODE indi)
 {
 	INDISEQ seq;
 	INT num1, num2, len = 0;
@@ -709,8 +722,8 @@ NODE indi;
 /*=======================================================
  * indi_to_mothers -- Create sequence of person's mothers
  *=====================================================*/
-INDISEQ indi_to_mothers (indi)
-NODE indi;
+INDISEQ
+indi_to_mothers (NODE indi)
 {
 	INDISEQ seq;
 	INT num1, num2, len = 0;
@@ -731,9 +744,9 @@ NODE indi;
 /*=========================================================
  * indi_to_families -- Create sequence of person's families
  *=======================================================*/
-INDISEQ indi_to_families (indi, fams)
-NODE indi;	/* person */
-BOOLEAN fams;	/* families as spouse? */
+INDISEQ
+indi_to_families (NODE indi,      /* person */
+                  BOOLEAN fams)   /* families as spouse? */
 {
 	INDISEQ seq;
 	INT num, val;
@@ -762,8 +775,8 @@ BOOLEAN fams;	/* families as spouse? */
 /*========================================================
  * fam_to_children -- Create sequence of family's children
  *======================================================*/
-INDISEQ fam_to_children (fam)
-NODE fam;
+INDISEQ
+fam_to_children (NODE fam)
 {
 	INDISEQ seq;
 	INT num;
@@ -781,8 +794,8 @@ NODE fam;
 /*======================================================
  * fam_to_fathers -- Create sequence of family's fathers
  *====================================================*/
-INDISEQ fam_to_fathers (fam)
-NODE fam;
+INDISEQ
+fam_to_fathers (NODE fam)
 {
 	INDISEQ seq;
 	INT num;
@@ -800,8 +813,8 @@ NODE fam;
 /*======================================================
  * fam_to_mothers -- Create sequence of family's mothers
  *====================================================*/
-INDISEQ fam_to_mothers (fam)
-NODE fam;
+INDISEQ
+fam_to_mothers (NODE fam)
 {
 	INDISEQ seq;
 	INT num;
@@ -819,9 +832,9 @@ NODE fam;
 /*=========================================================
  * sibling_indiseq -- Create sibling sequence of a sequence
  *=======================================================*/
-INDISEQ sibling_indiseq (seq, close)
-INDISEQ seq;
-BOOLEAN close;
+INDISEQ
+sibling_indiseq (INDISEQ seq,
+                 BOOLEAN close)
 {
 	INDISEQ fseq, sseq;
 	NODE indi, fam;
@@ -857,8 +870,8 @@ BOOLEAN close;
 /*=========================================================
  * ancestor_indiseq -- Create ancestor sequence of sequence
  *=======================================================*/
-INDISEQ ancestor_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+ancestor_indiseq (INDISEQ seq)
 {
 	TABLE tab;
 	LIST anclist, genlist;
@@ -906,8 +919,8 @@ INDISEQ seq;
 /*=============================================================
  * descendant_indiseq -- Create descendant sequence of sequence
  *===========================================================*/
-INDISEQ descendent_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+descendent_indiseq (INDISEQ seq)
 {
 	INT gen;
 	TABLE itab, ftab;
@@ -956,8 +969,8 @@ INDISEQ seq;
 /*========================================================
  * spouse_indiseq -- Create spouses sequence of a sequence
  *======================================================*/
-INDISEQ spouse_indiseq (seq)
-INDISEQ seq;
+INDISEQ
+spouse_indiseq (INDISEQ seq)
 {
 	TABLE tab;
 	INDISEQ sps;
@@ -988,8 +1001,8 @@ INDISEQ seq;
  *   sequence refer to are also in file; other persons referred to by
  *   families are not included
  *=================================================================*/
-void gen_gedcom (seq)
-INDISEQ seq;
+void
+gen_gedcom (INDISEQ seq)
 {
 	INT num1, num2, sex;
 	NODE indi, husb, wife, chil, rest, famc, fref;
@@ -1076,8 +1089,8 @@ INDISEQ seq;
 /*======================================================
  * write_nonlink_indi -- Write person minus linking info
  *====================================================*/
-void write_nonlink_indi (indi)
-NODE indi;
+void
+write_nonlink_indi (NODE indi)
 {
 	STRING t;
 	char scratch[30];
@@ -1095,10 +1108,10 @@ NODE indi;
  * new_write_node -- Recursively write nodes to file
  * NOTE: consolidate with write_node?
  *================================================*/
-void new_write_node (levl, node, list)
-INT levl;	/* level of root */
-NODE node;	/* root */
-BOOLEAN list;	/* output siblings? */
+void
+new_write_node (INT levl,       /* level of root */
+                NODE node,      /* root */
+                BOOLEAN list)   /* output siblings? */
 {
 	char unsigned scratch[MAXLINELEN+1];
 	STRING p = scratch;
@@ -1124,9 +1137,9 @@ BOOLEAN list;	/* output siblings? */
 /*============================================
  * write_family -- Write family record to file
  *==========================================*/
-void write_family (key, itab)
-STRING key;	/* family key */
-TABLE itab;	/* table of persons in file */
+void
+write_family (STRING key,     /* family key */
+              TABLE itab)     /* table of persons in file */
 {
 	NODE fam = key_to_fam(key);
 	char scratch[30];
@@ -1153,8 +1166,8 @@ TABLE itab;	/* table of persons in file */
 /*============================================================
  * name_to_indiseq -- Return person sequence whose names match
  *==========================================================*/
-INDISEQ name_to_indiseq (name)
-STRING name;
+INDISEQ
+name_to_indiseq (STRING name)
 {
 	STRING *keys, *names;
 	INT i, num, c, lastchar;
@@ -1214,10 +1227,10 @@ STRING name;
 /*==================================================
  * format_indiseq -- Format print lines of sequence.
  *================================================*/
-void format_indiseq (seq, famp, marr)
-INDISEQ seq;	/* sequence */
-BOOLEAN famp;	/* seq of fams? */
-BOOLEAN marr;	/* try to give marriage? */
+void
+format_indiseq (INDISEQ seq,    /* sequence */
+                BOOLEAN famp,   /* seq of fams? */
+                BOOLEAN marr)   /* try to give marriage? */
 {
 	NODE indi, fam, spouse;
 	char scratch[20];
@@ -1246,8 +1259,8 @@ BOOLEAN marr;	/* try to give marriage? */
 /*==============================================================
  * refn_to_indiseq -- Return indiseq whose user references match
  *============================================================*/
-INDISEQ refn_to_indiseq (ukey)
-STRING ukey;
+INDISEQ
+refn_to_indiseq (STRING ukey)
 {
 	STRING *keys;
 	INT num, i;
@@ -1270,8 +1283,8 @@ STRING ukey;
 /*=============================================================
  * key_to_indiseq -- Return person sequence of the matching key
  *=============================================================*/
-INDISEQ key_to_indiseq (name)
-STRING name;
+INDISEQ
+key_to_indiseq (STRING name)
 {
 	STRING *keys;
 	INDISEQ seq = NULL;
@@ -1289,8 +1302,8 @@ STRING name;
  *  3. REFN
  *  4. name
  *===========================================================*/
-INDISEQ str_to_indiseq (name)
-STRING name;
+INDISEQ
+str_to_indiseq (STRING name)
 {
 	INDISEQ seq;
 	seq = find_named_seq(name);

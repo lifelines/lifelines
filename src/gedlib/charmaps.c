@@ -65,7 +65,8 @@ static STRING badesc = (STRING) "Bad escape format.";
 /*========================================
  * init_mapping -- Init translation tables
  *======================================*/
-void init_mapping (void)
+void
+init_mapping (void)
 {
 	INT indx;
 	BOOLEAN err;
@@ -80,9 +81,9 @@ void init_mapping (void)
 /*===================================================
  * init_map_from_rec -- Init single translation table
  *=================================================*/
-TRANTABLE init_map_from_rec (indx, perr)
-INT indx;
-BOOLEAN *perr;
+TRANTABLE
+init_map_from_rec (INT indx,
+                   BOOLEAN *perr)
 {
 	STRING rec;
 	INT len;
@@ -98,10 +99,10 @@ BOOLEAN *perr;
 /*====================================================
  * init_map_from_file -- Init single translation table
  *==================================================*/
-TRANTABLE init_map_from_file (file, indx, perr)
-STRING file;
-INT indx;
-BOOLEAN *perr;
+TRANTABLE
+init_map_from_file (STRING file,
+                    INT indx,
+                    BOOLEAN *perr)
 {
 	FILE *fp;
 	struct stat buf;
@@ -128,10 +129,10 @@ BOOLEAN *perr;
  *
  * <original><tab><translation>
  *================================================*/
-TRANTABLE init_map_from_str (str, indx, perr)
-STRING str;
-INT indx;
-BOOLEAN *perr;
+TRANTABLE
+init_map_from_str (STRING str,
+                   INT indx,
+                   BOOLEAN *perr)
 {
 	INT i, n, maxn, line = 1, newc;
 	BOOLEAN done;
@@ -280,8 +281,8 @@ BOOLEAN *perr;
 /*==================================================
  * get_decimal -- Get decimal number from map string
  *================================================*/
-INT get_decimal (str)
-STRING str;
+INT
+get_decimal (STRING str)
 {
 	INT value, c;
 	if (chartype(c = *str++) != DIGIT) return -1;
@@ -295,8 +296,8 @@ STRING str;
 /*==========================================================
  * get_hexidecimal -- Get hexidecimal number from map string
  *========================================================*/
-INT get_hexidecimal (str)
-STRING str;
+INT
+get_hexidecimal (STRING str)
 {
 	INT value, h;
 	if ((h = hexvalue(*str++)) == -1) return -1;
@@ -307,8 +308,8 @@ STRING str;
 /*================================================
  * hexvalue -- Find hexidecimal value of character
  *==============================================*/
-INT hexvalue (c)
-INT c;
+INT
+hexvalue (INT c)
 {
 	if (c >= '0' && c <= '9') return c - '0';
 	if (c >= 'a' && c <= 'f') return 10 + c - 'a';
@@ -318,9 +319,10 @@ INT c;
 /*====================================================
  * maperror -- Print error message from reading string
  *==================================================*/
-void maperror(indx, line, errmsg)
-INT indx, line;
-STRING errmsg;
+void
+maperror(INT indx,
+         INT line,
+         STRING errmsg)
 {
 	llwprintf("%s: line %d: %s\n", map_names[indx], line, errmsg);
 }

@@ -37,16 +37,16 @@
 #	undef max
 #endif
 
-XNODE create_xnode();
-XNODE step_xnode();
+static XNODE create_xnode(XNODE, INT, STRING);
+static XNODE step_xnode(XNODE, INT);
 
 /*=============================================
  * create_trantable -- Create translation table
  *===========================================*/
-TRANTABLE create_trantable (lefts, rights, n)
-STRING *lefts;	/* patterns */
-STRING *rights;	/* replacements */
-INT n;		/* num pairs */
+TRANTABLE
+create_trantable (STRING *lefts,        /* patterns */
+                  STRING *rights,       /* replacements */
+                  INT n)                /* num pairs */
 {
 	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
 	STRING left, right;
@@ -74,10 +74,10 @@ INT n;		/* num pairs */
 /*=============================
  * create_xnode -- Create XNODE
  *===========================*/
-XNODE create_xnode (parent, achar, string)
-XNODE parent;
-INT achar;
-STRING string;
+static XNODE
+create_xnode (XNODE parent,
+              INT achar,
+              STRING string)
 {
 	XNODE node = (XNODE) stdalloc(sizeof(*node));
 	node->parent = parent;
@@ -100,9 +100,9 @@ STRING string;
 /*==========================================
  * step_xnode -- Step to node from character
  *========================================*/
-XNODE step_xnode (node, achar)
-XNODE node;
-INT achar;
+static XNODE
+step_xnode (XNODE node,
+            INT achar)
 {
 	XNODE prev, node0 = node;
 	if (node->child == NULL)
@@ -119,8 +119,8 @@ INT achar;
 /*=============================================
  * remove_trantable -- Remove translation table
  *===========================================*/
-void remove_trantable (tt)
-TRANTABLE tt;
+void
+remove_trantable (TRANTABLE tt)
 {
 	INT i;
 	if (!tt) return;
@@ -131,8 +131,8 @@ TRANTABLE tt;
 /*====================================
  * remove_xnodes -- Remove xnodes tree
  *==================================*/
-void remove_xnodes (node)
-XNODE node;
+void
+remove_xnodes (XNODE node)
 {
 	if (!node) return;
 	remove_xnodes(node->child);
@@ -143,11 +143,11 @@ XNODE node;
 /*===================================================
  * translate_string -- Translate string via TRANTABLE
  *=================================================*/
-BOOLEAN translate_string (tt, in, out, max)
-TRANTABLE tt;	/* tran table */
-STRING in;	/* in string */
-STRING out;	/* out string */
-INT max;	/* max len of out string */
+BOOLEAN
+translate_string (TRANTABLE tt, /* tran table */
+                  STRING in,    /* in string */
+                  STRING out,   /* out string */
+                  INT max)      /* max len of out string */
 {
 	STRING p, q, r;
 	STRING add;
@@ -212,12 +212,13 @@ INT max;	/* max len of out string */
  * translate_write -- Translate and output lines in a buffer
  *========================================================*/
 
-BOOLEAN translate_write(tt, in, lenp, ofp, last)
-TRANTABLE tt;	/* tran table */
-STRING in;	/* in string */
-INT *lenp;	/* points to number of characters in buffer (updated) */
-FILE *ofp;	/* output file */
-BOOLEAN last;	/* translate remainder of buffer even if no '\n' */
+BOOLEAN
+translate_write(TRANTABLE tt,   /* tran table */
+                STRING in,      /* in string */
+                INT *lenp,      /* points to number of characters in
+                                   buffer (updated) */
+                FILE *ofp,      /* output file */
+                BOOLEAN last)   /* translate remainder of buffer even if no '\n' */
 {
 	char intmp[MAXLINELEN+2];
 	char out[MAXLINELEN+2];
@@ -262,10 +263,11 @@ BOOLEAN last;	/* translate remainder of buffer even if no '\n' */
 /*======================================
  * add_char -- Add char to output string
  *====================================*/
-void add_char (buf, plen, max, achar)
-STRING buf;
-INT *plen, max;
-INT achar;
+void
+add_char (STRING buf,
+          INT *plen,
+          INT max,
+          INT achar)
 {
 	if (*plen >= max - 1)
 		buf[*plen] = 0;
@@ -275,10 +277,11 @@ INT achar;
 /*==========================================
  * add_string -- Add string to output string
  *========================================*/
-void add_string (buf, plen, max, str)
-STRING buf;
-INT *plen, max;
-STRING str;
+void
+add_string (STRING buf,
+            INT *plen,
+            INT max,
+            STRING str)
 {
 	INT len;
 	ASSERT(str);
@@ -293,8 +296,8 @@ STRING str;
 /*=======================================================
  * show_trantable -- DEBUG routine that shows a TRANTABLE
  *=====================================================*/
-void show_trantable (tt)
-TRANTABLE tt;
+void
+show_trantable (TRANTABLE tt)
 {
 	INT i;
 	XNODE node;
@@ -312,9 +315,9 @@ TRANTABLE tt;
 /*===============================================
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/
-void show_xnodes (indent, node)
-INT indent;
-XNODE node;
+void
+show_xnodes (INT indent,
+             XNODE node)
 {
 	INT i;
 	if (!node) return;
@@ -327,8 +330,8 @@ XNODE node;
 /*================================================
  * show_xnode -- DEBUG routine that shows 1 XNODE
  *==============================================*/
-void show_xnode (node)
-XNODE node;
+void
+show_xnode (XNODE node)
 {
 	llwprintf("%d(%c)", node->achar, node->achar);
 	if (node->replace) {

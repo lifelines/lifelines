@@ -36,8 +36,14 @@
 /*======================================
  * split_indi -- Split person into parts
  *====================================*/
-void split_indi (indi, pname, prefn, psex, pbody, pfamc, pfams)
-NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
+void
+split_indi (NODE indi,
+            NODE *pname,
+            NODE *prefn,
+            NODE *psex,
+            NODE *pbody,
+            NODE *pfamc,
+            NODE *pfams)
 {
 	NODE name, lnam, refn, sex, body, famc, fams, last;
 	NODE lfmc, lfms, lref, prev, node;
@@ -90,8 +96,14 @@ NODE indi, *pname, *prefn, *psex, *pbody, *pfamc, *pfams;
 /*====================================
  * join_indi -- Join person from parts
  *==================================*/
-void join_indi (indi, name, refn, sex, body, famc, fams)
-NODE indi, name, refn, sex, body, famc, fams;
+void
+join_indi (NODE indi,
+           NODE name,
+           NODE refn,
+           NODE sex,
+           NODE body,
+           NODE famc,
+           NODE fams)
 {
 	NODE node = NULL;
 	ASSERT(indi && eqstr("INDI", ntag(indi)));
@@ -142,8 +154,13 @@ NODE indi, name, refn, sex, body, famc, fams;
 /*=======================================
  * split_fam -- Split a family into parts
  *=====================================*/
-void split_fam (fam, prefn, phusb, pwife, pchil, prest)
-NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
+void
+split_fam (NODE fam,
+           NODE *prefn,
+           NODE *phusb,
+           NODE *pwife,
+           NODE *pchil,
+           NODE *prest)
 {
 	NODE node, rest, last, husb, lhsb, wife, lwfe, chil, lchl;
 	NODE prev, refn, lref;
@@ -192,8 +209,13 @@ NODE fam, *prefn, *phusb, *pwife, *pchil, *prest;
 /*===================================
  * join_fam -- Join family from parts
  *=================================*/
-void join_fam (fam, refn, husb, wife, chil, rest)
-NODE fam, refn, husb, wife, chil, rest;
+void
+join_fam (NODE fam,
+          NODE refn,
+          NODE husb,
+          NODE wife,
+          NODE chil,
+          NODE rest)
 {
 	NODE node = NULL;
 

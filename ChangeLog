@@ -1,5 +1,14 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* gedlib/brwslist.c gedlib/charmaps.c gedlib/choose.c
+	gedlib/editmap.c gedlib/editvtab.c gedlib/equaliso.c
+	gedlib/gedcom.c gedlib/gstrings.c gedlib/indiseq.c gedlib/init.c
+	gedlib/intrface.c gedlib/keytonod.c gedlib/misc.c gedlib/names.c
+	gedlib/node.c gedlib/nodeutls.c gedlib/place.c gedlib/refns.c
+	gedlib/replace.c gedlib/spltjoin.c gedlib/translat.c
+	gedlib/valid.c gedlib/valtable.c gedlib/xreffile.c tools/btedit.c
+	tools/wprintf.c: Convert from K&R to ANSI C.
+
 	* hdrs/interp.h hdrs/interpi.h interp/functab.c: Correct function
 	table prototypes and add new internal header file.  Keep all
 	prototypes inside the #ifdefs.

@@ -38,20 +38,21 @@ BOOLEAN value_to_list (STRING str,
 /*===================================================
  * place_to_list -- Convert place string to word list
  *=================================================*/
-BOOLEAN place_to_list (place, list, plen)
-STRING place;
-LIST list;
-INT *plen;
+BOOLEAN
+place_to_list (STRING place,
+               LIST list,
+               INT *plen)
 {
 	return value_to_list(place, list, plen, ",");
 }
 /*=============================================
  * value_to_list -- Convert string to word list
  *===========================================*/
-BOOLEAN value_to_list (STRING str,
-		       LIST list,
-		       INT *plen,
-		       STRING dlm)
+BOOLEAN
+value_to_list (STRING str,
+               LIST list,
+               INT *plen,
+               STRING dlm)
 {
 	static STRING buf = NULL;
 	static INT len0 = 0;
@@ -91,9 +92,9 @@ BOOLEAN value_to_list (STRING str,
 	return TRUE;
 }
 
-BOOLEAN in_string (chr, str)
-INT chr;
-STRING str;
+BOOLEAN
+in_string (INT chr,
+           STRING str)
 {
 	while (*str && chr != *str)
 		str++;

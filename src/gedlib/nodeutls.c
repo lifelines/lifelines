@@ -38,9 +38,9 @@
  * unique_nodes -- Remove duplicates from list of nodes -- original list
  *   is modified
  *====================================================================*/
-NODE unique_nodes (node, kids)
-NODE node;
-BOOLEAN kids;	/* children matter */
+NODE
+unique_nodes (NODE node,
+              BOOLEAN kids)     /* children matter */
 {
 	NODE node0 = node, prev, this, next;
 
@@ -66,10 +66,11 @@ BOOLEAN kids;	/* children matter */
 /*==============================================
  * union_nodes -- Return union of two node trees
  *============================================*/
-NODE union_nodes (node1, node2, kids, copy)
-NODE node1, node2;
-BOOLEAN kids;	/* children matter */
-BOOLEAN copy;	/* copy operands first */
+NODE
+union_nodes (NODE node1,
+             NODE node2,
+             BOOLEAN kids,      /* children matter */
+             BOOLEAN copy)      /* copy operands first */
 {
 	NODE curs1, next1, prev1, curs2, prev2;
 
@@ -105,9 +106,10 @@ BOOLEAN copy;	/* copy operands first */
 /*=========================================================
  * intersect_nodes -- Return intersection of two node trees
  *=======================================================*/
-NODE intersect_nodes (node1, node2, kids)
-NODE node1, node2;
-BOOLEAN kids;	/* children matter */
+NODE
+intersect_nodes (NODE node1,
+                 NODE node2,
+                 BOOLEAN kids)  /* children matter */
 {
 	NODE prev1, curs1, next1, prev2, curs2, next2;
 	NODE node3, curs3;
@@ -164,8 +166,10 @@ BOOLEAN kids;	/* children matter */
  *   original second list - third returned list holds all values that were
  *   in both original lists
  *======================================================================*/
-void classify_nodes (pnode1, pnode2, pnode3)
-NODE *pnode1, *pnode2, *pnode3;
+void
+classify_nodes (NODE *pnode1,
+                NODE *pnode2,
+                NODE *pnode3)
 {
 	NODE node1, node2, node3, curs1, curs2, curs3;
 	NODE prev1, prev2, next2;
@@ -214,9 +218,10 @@ NODE *pnode1, *pnode2, *pnode3;
  * difference_nodes -- Return difference of two node lists -- all in node1
  *   that are not in node2
  *======================================================================*/
-NODE difference_nodes (node1, node2, kids)
-NODE node1, node2;
-BOOLEAN kids;	/* children matter */
+NODE
+difference_nodes (NODE node1,
+                  NODE node2,
+                  BOOLEAN kids) /* children matter */
 {
 	NODE prev1, next1, curs1, curs2;
 	node1 = copy_nodes(node1, TRUE, TRUE);
@@ -245,9 +250,9 @@ BOOLEAN kids;	/* children matter */
 /*================================================================
  * value_in_nodes -- See if a list of nodes contains a given value
  *==============================================================*/
-BOOLEAN value_in_nodes (node, value)
-NODE node;
-STRING value;
+BOOLEAN
+value_in_nodes (NODE node,
+                STRING value)
 {
 	while (node) {
 		if (eqstr(value, nval(node))) return TRUE;

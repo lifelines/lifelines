@@ -44,16 +44,17 @@ typedef struct {
 /*=====================================================
  *  init_browse_lists -- Initialize named browse lists.
  *===================================================*/
-void init_browse_lists (void)
+void
+init_browse_lists (void)
 {
 	browse_lists = create_list();
 }
 /*===========================================
  *  add_browse_list -- Add named browse list.
  *=========================================*/
-void add_browse_list (name, seq)
-STRING name;
-INDISEQ seq;
+void
+add_browse_list (STRING name,
+                 INDISEQ seq)
 {
 	BLEL blel;
 	BOOLEAN done = FALSE;
@@ -84,9 +85,9 @@ INDISEQ seq;
 /*=================================================
  *  remove_browse_list -- Remove named browse list.
  *===============================================*/
-void remove_browse_list (name, seq)
-STRING name;
-INDISEQ seq;
+void
+remove_browse_list (STRING name,
+                    INDISEQ seq)
 {
 	BLEL blel;
 	remove_indiseq(seq, FALSE);
@@ -102,8 +103,8 @@ INDISEQ seq;
 /*===========================================
  *  find_named_seq -- Find named browse list.
  *=========================================*/
-INDISEQ find_named_seq (name)
-STRING name;
+INDISEQ
+find_named_seq (STRING name)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
@@ -116,8 +117,9 @@ STRING name;
 /*===================================================
  *  new_name_browse_list -- Rename named browse list.
  *=================================================*/
-void new_name_browse_list (old, new)
-STRING old, new;
+void
+new_name_browse_list (STRING old,
+                      STRING new)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
@@ -132,9 +134,9 @@ STRING old, new;
 /*===================================================
  *  update_browse_list -- Assign name to browse list.
  *=================================================*/
-void update_browse_list (name, seq)
-STRING name;
-INDISEQ seq;
+void
+update_browse_list (STRING name,
+                    INDISEQ seq)
 {
 	BLEL blel;
 	if (!name) {	/* remove anonymous lists */
@@ -150,8 +152,8 @@ INDISEQ seq;
 /*==============================================================
  * remove_from_browse_lists -- Remove stale elements from lists.
  *============================================================*/
-void remove_from_browse_lists (key)
-STRING key;
+void
+remove_from_browse_lists (STRING key)
 {
 	BLEL blel;
 	INDISEQ seq;
@@ -171,8 +173,8 @@ STRING key;
  * rename_from_browse_lists -- Re-figures name of possible element
  *   in browse lists.
  *==============================================================*/
-void rename_from_browse_lists (key)
-STRING key;
+void
+rename_from_browse_lists (STRING key)
 {
 	INDISEQ seq;
 	BLEL blel;

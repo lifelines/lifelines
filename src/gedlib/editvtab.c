@@ -46,11 +46,11 @@ extern STRING aredit;
 /*==============================================
  * edit_valtab -- Edit value table from database
  *============================================*/
-BOOLEAN edit_valtab (key, ptab, sep, ermsg)
-STRING key;	/* value table key */
-TABLE *ptab;	/* hash table for values */
-INT sep;	/* separator char */
-STRING ermsg;	/* error message */
+BOOLEAN
+edit_valtab (STRING key,        /* value table key */
+             TABLE *ptab,       /* hash table for values */
+             INT sep,           /* separator char */
+             STRING ermsg)      /* error message */
 {
 	TABLE tmptab = NULL;
 	STRING msg;

@@ -58,10 +58,10 @@ STRING badirf = SS "This person's REFN key is already in use.";
 /*===================================
  * valid_indi -- Validate person tree
  *=================================*/
-BOOLEAN valid_indi (indi1, pmsg, indi0)
-NODE indi1;	/* person to validate */
-STRING *pmsg;	/* error message, if any */
-NODE indi0;	/* person to match - may be NULL */
+BOOLEAN
+valid_indi (NODE indi1, /* person to validate */
+            STRING *pmsg,       /* error message, if any */
+            NODE indi0) /* person to match - may be NULL */
 {
 	NODE name1, refn1, sex1, body1, famc1, fams1, node;
 	NODE name0, refn0, sex0, body0, famc0, fams0;
@@ -134,10 +134,10 @@ bad2:
 /*===============================
  * valid_fam -- Validate FAM tree
  *=============================*/
-BOOLEAN valid_fam (fam1, pmsg, fam0)
-NODE fam1;	/* family to validate */
-STRING *pmsg;	/* error message, if any */
-NODE fam0;	/* family to match - may be NULL */
+BOOLEAN
+valid_fam (NODE fam1,           /* family to validate */
+           STRING *pmsg,        /* error message, if any */
+           NODE fam0)           /* family to match - may be NULL */
 {
 	NODE refn0, husb0, wife0, chil0, body0;
 	NODE refn1, husb1, wife1, chil1, body1;
@@ -189,8 +189,8 @@ bad3:
 /*============================
  * valid_name -- Validate name
  *==========================*/
-BOOLEAN valid_name (name)
-STRING name;
+BOOLEAN
+valid_name (STRING name)
 {
 	INT c, n = 0;
 	if (!name) return FALSE;
@@ -203,10 +203,10 @@ STRING name;
 /*======================================
  * valid_sour_tree -- Validate SOUR tree
  *====================================*/
-BOOLEAN valid_sour_tree (node, pmsg, node0)
-NODE node;	/* source to validate */
-STRING *pmsg;	/* error message, if any */
-NODE node0;	/* SOUR node to match */
+BOOLEAN
+valid_sour_tree (NODE node,     /* source to validate */
+                 STRING *pmsg,  /* error message, if any */
+                 NODE node0)    /* SOUR node to match */
 {
 	node0 = NULL;		/* keep compiler happy */
 	*pmsg = NULL;
@@ -223,10 +223,10 @@ NODE node0;	/* SOUR node to match */
 /*======================================
  * valid_even_tree -- Validate EVEN tree
  *====================================*/
-BOOLEAN valid_even_tree (node, pmsg, node0)
-NODE node;	/* source to validate */
-STRING *pmsg;	/* error message, if any */
-NODE node0;	/* EVEN node to match */
+BOOLEAN
+valid_even_tree (NODE node,     /* source to validate */
+                 STRING *pmsg,  /* error message, if any */
+                 NODE node0)    /* EVEN node to match */
 {
 	node0 = NULL;		/* keep compiler happy */
 	*pmsg = NULL;
@@ -243,10 +243,10 @@ NODE node0;	/* EVEN node to match */
 /*======================================
  * valid_othr_tree -- Validate OTHR tree
  *====================================*/
-BOOLEAN valid_othr_tree (node, pmsg, node0)
-NODE node;	/* source to validate */
-STRING *pmsg;	/* error message, if any */
-NODE node0;	/* OTHR node to match */
+BOOLEAN
+valid_othr_tree (NODE node,     /* source to validate */
+                 STRING *pmsg,  /* error message, if any */
+                 NODE node0)    /* OTHR node to match */
 {
 	node0 = NULL;			/* keep compiler happy */
 	*pmsg = NULL;

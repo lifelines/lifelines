@@ -39,9 +39,9 @@ int opt_finnish = 0;
 /*=========================================
  * main -- Main procedure of btedit command
  *=======================================*/
-int main (argc, argv)
-int argc;
-char **argv;
+int
+main (int argc,
+      char **argv)
 {
 	BTREE btree;
 	char cmdbuf[512];
@@ -81,10 +81,10 @@ char **argv;
 /*=========================================================
  * __allocate -- Allocate memory - called by stdalloc macro
  *========================================================*/
-void *__allocate (len, file, line)
-int len;    /* number of bytes to allocate */
-STRING file; /* not used */
-int line;   /* not used */
+void *
+__allocate (int len,     /* number of bytes to allocate */
+            STRING file, /* not used */
+            int line)    /* not used */
 {
 	char *p;
 	if ((p = malloc(len)) == NULL)  FATAL();
@@ -94,19 +94,19 @@ int line;   /* not used */
 /*=======================================================
  * __deallocate - Return memory - called by stdfree macro
  *=====================================================*/
-void __deallocate (ptr, file, line)
-void *ptr;  /* memory being returned */
-STRING file; /* not used */
-int line;   /* not used */
+void
+__deallocate (void *ptr,  /* memory being returned */
+              STRING file, /* not used */
+              int line)   /* not used */
 {
 	free(ptr);
 }
 /*=============================
  * fatal -- Fatal error routine
  *===========================*/
-void __fatal (file, line)
-STRING file;
-int line;
+void
+__fatal (STRING file,
+         int line)
 {
 	printf("FATAL ERROR: %s: line %d\n", file, line);
 	exit(1);

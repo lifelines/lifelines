@@ -104,8 +104,8 @@ static INT     LMmax = 0;
 /*====================================================
  * getnamerec -- Read name record and store in globals
  *==================================================*/
-BOOLEAN getnamerec (name)
-STRING name;
+BOOLEAN
+getnamerec (STRING name)
 {
 	STRING p;
 	INT i;
@@ -154,8 +154,8 @@ STRING name;
 /*============================================
  * name2rkey - Convert name to name record key
  *==========================================*/
-RKEY name2rkey (name)
-STRING name;
+RKEY
+name2rkey (STRING name)
 {
 	RKEY rkey;
 	STRING sdex = soundex(getsurname(name));
@@ -172,8 +172,8 @@ STRING name;
 /*=============================
  * getsurname -- Return surname
  *===========================*/
-STRING getsurname (name)
-STRING name;	/* GEDCOM name */
+STRING
+getsurname (STRING name)        /* GEDCOM name */
 {
 	INT c;
 	static unsigned char buffer[3][MAXLINELEN+1];
@@ -196,8 +196,8 @@ STRING name;	/* GEDCOM name */
 /*============================================
  * getfinitial -- Return first initial of name
  *==========================================*/
-INT getfinitial (name)
-STRING name;	/* GEDCOM name */
+INT
+getfinitial (STRING name)       /* GEDCOM name */
 {
 	INT c;
 	while (TRUE) {
@@ -215,8 +215,8 @@ STRING name;	/* GEDCOM name */
  * soundex -- Return SOUNDEX code of name; any case; return Z999 for
  *   problem names
  *================================================================*/
-STRING soundex (name)
-STRING name;	/* surname */
+STRING
+soundex (STRING name)   /* surname */
 {
 	static unsigned char scratch[MAXNAMELEN+2];
 	STRING p = name, q = scratch;
@@ -246,8 +246,8 @@ STRING name;	/* surname */
 /*========================================
  * codeof -- Return letter's SOUNDEX code.
  *======================================*/
-static INT codeof (letter)
-int letter;
+static INT
+codeof (int letter)
 {
 	int new = 0;
 
@@ -302,9 +302,9 @@ int letter;
 /*=========================================
  * add_name -- Add new entry to name record
  *=======================================*/
-BOOLEAN add_name (name, key)
-STRING name;	/* person's name */
-STRING key;	/* person's INDI key */
+BOOLEAN
+add_name (STRING name,  /* person's name */
+          STRING key)   /* person's INDI key */
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -349,9 +349,9 @@ STRING key;	/* person's INDI key */
 /*=============================================
  * remove_name -- Remove entry from name record
  *===========================================*/
-BOOLEAN remove_name (name, key)
-STRING name;	/* preson's name */
-STRING key;	/* person's INDI key */
+BOOLEAN
+remove_name (STRING name,       /* preson's name */
+             STRING key)        /* person's INDI key */
 {
 	STRING rec, p;
 	INT i, len, off;
@@ -403,10 +403,10 @@ STRING key;	/* person's INDI key */
 /*===============================================
  * replace_name -- Replace entry in name records.
  *=============================================*/
-BOOLEAN replace_name (old, new, key)
-STRING old;	/* person's old name */
-STRING new;	/* person's new name */
-STRING key;	/* person's INDI key */
+BOOLEAN
+replace_name (STRING old,       /* person's old name */
+              STRING new,       /* person's new name */
+              STRING key)       /* person's INDI key */
 {
 	remove_name(old, key);
 	add_name(new, key);
@@ -416,9 +416,9 @@ STRING key;	/* person's INDI key */
 /*=========================================================
  * exactmatch -- Check if first name is contained in second
  *=======================================================*/
-BOOLEAN exactmatch (partial, complete)
-STRING partial;		/* name from user */
-STRING complete;	/* GEDCOM name */
+BOOLEAN
+exactmatch (STRING partial,             /* name from user */
+            STRING complete)    /* GEDCOM name */
 {
 	char part[MAXNAMELEN+2], comp[MAXNAMELEN+2], *p, *q;
 	BOOLEAN okay;
@@ -442,8 +442,9 @@ STRING complete;	/* GEDCOM name */
  *   same letter; letters in partial must be in same order as in
  *   complete; case insensitive
  *==============================================================*/
-BOOLEAN piecematch (part, comp)
-STRING part, comp;
+BOOLEAN
+piecematch (STRING part,
+            STRING comp)
 {
 	if(opt_finnish) {
 	  if(my_chrcmp(*part++, *comp++) != 0) return FALSE;
@@ -464,9 +465,9 @@ STRING part, comp;
  *   0-terminated words, ending with another 0; non-letters not
  *   copied; eg., `Anna /Van Cott/' maps to `ANNA\0VANCOTT\0\0'.
  *=============================================================*/
-static void squeeze (in, out)
-STRING in;	/* string of words */
-STRING out;	/* superstring of words */
+static void
+squeeze (STRING in,     /* string of words */
+         STRING out)    /* superstring of words */
 {
 	INT c;
 	while ((c = *in++) && chartype(c) != LETTER)
@@ -497,11 +498,11 @@ STRING out;	/* superstring of words */
 /*====================================================
  * get_names -- Find all persons who match name or key
  *==================================================*/
-STRING *get_names (name, pnum, pkeys, exact)
-STRING name;
-INT *pnum;
-STRING **pkeys;
-BOOLEAN exact;	/* unused! */
+STRING *
+get_names (STRING name,
+           INT *pnum,
+           STRING **pkeys,
+           BOOLEAN exact)       /* unused! */
 {
 	INT i, n;
 	STRING *strs, *id_by_key();
@@ -553,8 +554,9 @@ BOOLEAN exact;	/* unused! */
 /*====================================
  * namecmp -- Compare two GEDCOM names
  *==================================*/
-int namecmp (name1, name2)
-STRING name1, name2;
+int
+namecmp (STRING name1,
+         STRING name2)
 {
 	unsigned char sqz1[MAXNAMELEN], sqz2[MAXNAMELEN];
 	STRING p1 = sqz1, p2 = sqz2;
@@ -581,8 +583,9 @@ STRING name1, name2;
 /*===========================================================
  * cmpsqueeze -- Squeeze GEDCOM name to superstring of givens
  *=========================================================*/
-void cmpsqueeze (in, out)
-STRING in, out;
+void
+cmpsqueeze (STRING in,
+            STRING out)
 {
 	INT c;
 	while ((in = nextpiece(in))) {
@@ -601,8 +604,8 @@ STRING in, out;
 /*=====================================
  * givens -- Return given names of name
  *===================================*/
-STRING givens (name)
-STRING name;
+STRING
+givens (STRING name)
 {
 	INT c;
 	static unsigned char scratch[MAXNAMELEN+1];
@@ -629,8 +632,8 @@ STRING name;
 /*========================================
  * nextpiece -- Return next word in string
  *======================================*/
-static STRING nextpiece (in)
-STRING in;
+static STRING
+nextpiece (STRING in)
 {
 	int c;
 	while (TRUE) {
@@ -648,9 +651,9 @@ STRING in;
  *   not shorter than first initial and surname
  *=================================================================*/
 #define MAXPARTS 100
-STRING trim_name (name, len)
-STRING name;
-INT len;
+STRING
+trim_name (STRING name,
+           INT len)
 {
 	STRING parts[MAXPARTS];
 	INT i, sdex = -1, nparts;
@@ -687,9 +690,9 @@ INT len;
 /*============================================================
  * name_to_parts -- Convert GEDCOM name to parts; keep slashes
  *==========================================================*/
-static void name_to_parts (name, parts)
-STRING name;	/* GEDCOM name */
-STRING *parts;
+static void
+name_to_parts (STRING name,     /* GEDCOM name */
+               STRING *parts)
 {
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING p = scratch;
@@ -722,8 +725,8 @@ STRING *parts;
 /*======================================================
  * parts_to_name -- Convert list of parts back to string
  *====================================================*/
-static STRING parts_to_name (parts)
-STRING *parts;
+static STRING
+parts_to_name (STRING *parts)
 {
 	INT i;
 	static unsigned char scratch[MAXNAMELEN+1];
@@ -743,8 +746,8 @@ STRING *parts;
 /*=======================================================
  * upsurname -- Convert GEDCOM surname name to upper case
  *=====================================================*/
-STRING upsurname (name)
-STRING name;
+STRING
+upsurname (STRING name)
 {
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING p = scratch;
@@ -763,12 +766,12 @@ STRING name;
 /*==================================================
  * manip_name - Convert GEDCOM name to various forms
  *================================================*/
-STRING manip_name (name, tt, caps, regorder, len)
-STRING name;	/* name */
-TRANTABLE tt;	/* translation table */
-BOOLEAN caps;	/* surname in caps? */
-BOOLEAN regorder;	/* regular order? (not surname first) */
-INT len;	/* max name length */
+STRING
+manip_name (STRING name,        /* name */
+            TRANTABLE tt,       /* translation table */
+            BOOLEAN caps,       /* surname in caps? */
+            BOOLEAN regorder,   /* regular order? (not surname first) */
+            INT len)            /* max name length */
 {
 	static unsigned char scratch[MAXNAMELEN+1];
 	if (!name || *name == 0) return NULL;
@@ -782,8 +785,8 @@ INT len;	/* max name length */
 /*===============================================
  * name_string -- Remove slashes from GEDCOM name
  *=============================================*/
-STRING name_string (name)
-STRING name;
+STRING
+name_string (STRING name)
 {
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING p = scratch;
@@ -799,8 +802,8 @@ STRING name;
 /*==========================================================
  * name_surfirst - Convert GEDCOM name to surname first form
  *========================================================*/
-STRING name_surfirst (name)
-STRING name;
+STRING
+name_surfirst (STRING name)
 {
 	static unsigned char scratch[MAXNAMELEN+1];
 	STRING p = scratch;
@@ -815,9 +818,9 @@ STRING name;
 /*================================
  * id_by_key -- Find name from key
  *==============================*/
-STRING *id_by_key (name, pkeys)
-STRING name;
-STRING **pkeys;
+STRING *
+id_by_key (STRING name,
+           STRING **pkeys)
 {
 	STRING rec, str, p = name;
 	static unsigned char kbuf[MAXNAMELEN];
@@ -857,11 +860,11 @@ STRING **pkeys;
 /*============================================
  * name_to_list -- Convert name to string list
  *==========================================*/
-BOOLEAN name_to_list (name, list, plen, psind)
-STRING name;	/* GEDCOM name */
-LIST list;	/* list (must exist) */
-INT *plen;	/* returned length */
-INT *psind;	/* index (rel 1) of surname in list */
+BOOLEAN
+name_to_list (STRING name,      /* GEDCOM name */
+              LIST list,        /* list (must exist) */
+              INT *plen,        /* returned length */
+              INT *psind)       /* index (rel 1) of surname in list */
 {
 	INT i;
 	STRING str;
