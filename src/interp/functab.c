@@ -207,6 +207,7 @@ BUILTINS builtins[] = {
 	{"roman",           1,    1,    __roman},
 	{"root",            1,    1,    __rot},
 	{"row",             1,    1,    __row},
+	{"rsort",           1,    2,    __rsort},
 	{"save",            1,    1,    __save},
 	{"savenode",        1,    1,    __savenode},
 	{"set",             2,    2,    __set},

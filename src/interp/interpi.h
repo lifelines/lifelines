@@ -217,6 +217,7 @@ extern PVALUE __rjustify(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __roman(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __rot(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __row(PNODE, SYMTAB, BOOLEAN *);
+extern PVALUE __rsort(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __save(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __savenode(PNODE, SYMTAB, BOOLEAN *);
 extern PVALUE __set(PNODE, SYMTAB, BOOLEAN *);

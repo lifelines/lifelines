@@ -4,6 +4,12 @@
 
 	Fix __sort to sort on keys not values. Add __rsort.
 
+	* ChangeLog reports/st/st_list.ll src/interp/functab.c
+	src/interp/interpi.h src/interp/more.c
+
+	Code cleanup. Expose __rsort to report language.
+	Add sort & rsort tests to list self-test.
+
 2003-03-01 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h

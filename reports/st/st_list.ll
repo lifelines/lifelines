@@ -1,5 +1,5 @@
 /*
- * @version        1.04 (2002-12-29)
+ * @version        1.10 (2003-03-02)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -101,7 +101,7 @@ proc testLists()
 		call reportfail("getel(,2)==2 FAILED")
 	}
 	else { incr(testok) }
-	setel(li, 4, 4)
+	setel(li, 4, 4) /* put a 4th element (3rd will be zero-filled) */
 /* forlist & length */
 	set(te2,0)
 	set(te3,0)
@@ -148,6 +148,43 @@ proc testLists()
 	enqueue(li, "harry")
 	enqueue(li, 3)
 	call testFreeList(li)
+/* sort & rsort */
+	list(li)
+	list(li2)
+	push(li, "bush")
+	push(li2, "hsub")
+	push(li, "grass")
+	push(li2, "ssarg")
+	push(li, "shrub")
+	push(li2, "burhs")
+	push(li, "tree")
+	push(li2, "eert")
+	push(li, "marsh")
+	push(li2, "hsram")
+	push(li, "benz")
+	push(li2, "zneb")
+	sort(li, li2)
+	if (or(
+		ne(getel(li, 1), "benz")
+		,ne(getel(li, 2), "grass")
+		,ne(getel(li, 3), "bush")
+		,ne(getel(li, 4), "marsh")
+		,ne(getel(li, 5), "tree")
+		,ne(getel(li, 6), "shrub")
+		)) {
+		call reportfail("sort FAILED")
+	} else { incr(testok) }
+	rsort(li,li2)
+	if (or(
+		ne(getel(li, 1), "shrub")
+		,ne(getel(li, 2), "tree")
+		,ne(getel(li, 3), "marsh")
+		,ne(getel(li, 4), "bush")
+		,ne(getel(li, 5), "grass")
+		,ne(getel(li, 6), "benz")
+		)) {
+		call reportfail("sort FAILED")
+	} else { incr(testok) }
 
 	call reportSubsection("list tests")
 }

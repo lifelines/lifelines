@@ -66,6 +66,8 @@ static INT ll_index(STRING str, STRING sub, INT num);
 static INT kmp_search(STRING pi, STRING str, STRING sub, INT num);
 static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
 static STRING rightjustify(STRING str, INT len);
+static PVALUE sortimpl(PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd);
+static INT sortpair_bin(const void * el1, const void * el2);
 
 /*********************************************
  * local variables
@@ -1154,44 +1156,6 @@ __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*========================================
- * list_share_to_array -- create array out of list
- *  but share pointers directly
- *======================================*/
-static ARRAY
-list_share_to_array (LIST list)
-{
-	ARRAY array = create_array_objval(length_list(list));
-	struct tag_list_iter listit;
-	if (begin_list_rev(list, &listit)) {
-		INT i=0;
-		VPTR vptr;
-		while (next_list_ptr(&listit, &vptr)) {
-			OBJECT obj = vptr;
-			/* share pointer directly */
-			set_array_obj(array, i++, obj);
-		}
-	}
-	return array;
-}
-/*========================================
- * list_steal_back_from_array -- Move array object pointers 
- *  directly over top of list object pointers
- *======================================*/
-static void
-list_steal_back_from_array (LIST list, ARRAY array)
-{
-	struct tag_list_iter listit;
-	INT i=0;
-	VPTR ptr=0;
-	if (begin_list_rev(list, &listit)) {
-		while (next_list_ptr(&listit, &ptr)) {
-			change_list_ptr(&listit, get_array_obj(array, i));
-			set_array_obj(array, i, 0);
-			++i;
-		}
-	}
-}
-/*========================================
  * sort_array_by_array -- sort first array of pvalues
  *  by comparing keys in second array of pvalues
  *======================================*/
@@ -1199,6 +1163,7 @@ struct array_by_pvarray_info {
 	ARRAY arr_vals;
 	ARRAY arr_keys;
 };
+#if UNUSED_CODE
 static INT
 obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
 {
@@ -1215,6 +1180,7 @@ obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
 		return pvalues_collate(val1, val2);
 	}
 }
+#endif
 /*========================================
  * sortimpl -- sort first container [using second container as keys]
  * This implements __sort and __rsort.
@@ -1223,6 +1189,7 @@ typedef struct tag_sortpair {
 	PVALUE value;
 	PVALUE key;
 } *SORTPAIR;
+#if UNUSED_CODE
 static INT
 sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 {
@@ -1230,18 +1197,19 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 	SORTPAIR sp2 = (SORTPAIR)el2;
 	return pvalues_collate(sp1->key, sp2->key);
 }
-static int
+#endif
+static INT
 sortpair_bin (const void * el1, const void * el2)
 {
 	SORTPAIR sp1 = *(SORTPAIR *)el1;
 	SORTPAIR sp2 = *(SORTPAIR *)el2;
 	return pvalues_collate(sp1->key, sp2->key);
 }
-PVALUE
-sortimpl(PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
+static PVALUE
+sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 {
 	PNODE arg = (PNODE) iargs(node);
-	PVALUE val1 = eval_without_coerce(arg, stab, eflg), val2;
+	PVALUE val1 = eval_without_coerce(arg, stab, eflg), val2=0;
 	LIST list_vals = 0, list_keys = 0;
 	ARRAY arr_vals = 0, arr_keys = 0;
 	INT nsort = 0; /* size of array & index */
@@ -1375,7 +1343,7 @@ exit_sort:
  *   usage: sort(LIST [, LIST]) -> VOID
  *======================================*/
 PVALUE
-__sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__sort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	return sortimpl(node, stab, eflg, TRUE);
 }
@@ -1384,7 +1352,7 @@ __sort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *   usage: rsort(LIST [, LIST]) -> VOID
  *======================================*/
 PVALUE
-__rsort(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__rsort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	return sortimpl(node, stab, eflg, FALSE);
 }
