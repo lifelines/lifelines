@@ -106,7 +106,7 @@ UIWINDOW extra_menu_win=NULL;
  *********************************************/
 
 extern BOOLEAN alldone, progrunning;
-extern STRING empstr, empstr71, readpath;
+extern STRING empstr, empstr71, empstr120, readpath;
 extern STRING abverr, uoperr;
 extern STRING mtitle,cright,plschs;
 extern STRING mn_unkcmd,ronlya,ronlyr;
@@ -198,6 +198,7 @@ static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
 static void refresh_main(void);
+static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
 static void repaint_scan_menu(UIWINDOW uiwin);
@@ -212,6 +213,7 @@ static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_menu(UIWINDOW wparent);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
+static void shw_array_of_strings(STRING *strings, listdisp *ld);
 static void shw_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(void);
@@ -474,7 +476,7 @@ create_windows (void)
 	scrollok(uiw_win(debug_win), TRUE);
 
 	MAINWIN_WIDTH = ll_cols;
-	LISTWIN_WIDTH = 73;
+	LISTWIN_WIDTH = ll_cols-7;
  	main_win = create_newwin2(ll_lines, MAINWIN_WIDTH);
 	tt_menu_win = create_newwin2(11,66);
 	ask_win = create_newwin2(4, 73);
@@ -1120,16 +1122,12 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 	WINDOW *win=0;
 	INT row, done;
 	char fulltitle[128];
-	char buffer[31];
-	char * ptr;
-	INT titlen;
-	INT elemwidth=68; /* TO DO - how wide can this be ? */
-	listdisp ld;
+	INT elemwidth;
+	listdisp ld; /* structure used in resizable list displays */
 	STRING menu, choices;
+	BOOLEAN first=TRUE;
 
 	ASSERT(seq);
-	if (length_indiseq(seq)<50)
-		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
 	
 	memset(&ld, 0, sizeof(ld));
 	ld.listlen = length_indiseq(seq);
@@ -1146,22 +1144,21 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 resize_win: /* we come back here if we resize the window */
 	activate_list_uiwin(&ld);
 	win = uiw_win(ld.uiwin);
+	if (first) {
+		elemwidth = uiw_cols(ld.uiwin)-5;
+		if (length_indiseq(seq)<50)
+			preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
+		first=FALSE;
+	}
 	werase(win);
 	BOX(win, 0, 0);
 	row = ld.height-3;
-	show_horz_line(ld.uiwin, row++, 0, 73);
+	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
 	mvwaddstr(win, row, 2, menu);
 	done = FALSE;
 	while (!done) {
 		INT code=0, ret=0;
-		fulltitle[0] = 0;
-		titlen = LISTWIN_WIDTH-1;
-		if (titlen > (INT)sizeof(fulltitle))
-			titlen = sizeof(fulltitle);
-		ptr = fulltitle;
-		llstrcatn(&ptr, ttl, &titlen);
-		sprintf(buffer, " (%d/%d)", ld.cur+1, ld.listlen);
-		llstrcatn(&ptr, buffer, &titlen);
+		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
 		mvwaddstr(win, 1, 1, fulltitle);
 		shw_list(seq, &ld);
 		wmove(win, row, 11);
@@ -1169,7 +1166,8 @@ resize_win: /* we come back here if we resize the window */
 		code = interact(ld.uiwin, choices, -1);
 		ret = handle_list_cmds(&ld, code);
 		if (ret == -1) {
-			deactivate_uiwin(); /* we're going to repick window & activate */
+			deactivate_uiwin();
+			/* we're going to repick window & activate */
 			goto resize_win;
 		}
 		if (ret == 0) { /* not handled yet */
@@ -1192,7 +1190,7 @@ resize_win: /* we come back here if we resize the window */
 			case 'q':
 			default:
 				done=TRUE;
-				ld.cur = -1; /* ld.cur == -1 as flag for cancelled */
+				ld.cur = -1; /* ld.cur == -1 means cancelled */
 				break;
 			}
 		}
@@ -1821,16 +1819,17 @@ shw_list (INDISEQ seq, listdisp * ld)
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i, j, row, lines;
 	INT mode = 'n';
-	INT width = LISTWIN_WIDTH;
-	/* TO DO - how big can we make buffer ?
-	ie, how wide can print element be ? */
-	char buffer[60];
+	INT width = uiw_cols(ld->uiwin);
+	char buffer[120];
+	if (width > (INT)sizeof(buffer)-1)
+		width = sizeof(buffer)-1;
 	ASSERT(ld->listlen == length_indiseq(seq));
 	/* clear current lines */
 	lines = ld->rows + (ld->details ? ld->details+2 : 0);
 	for (i=0; i<lines; ++i) {
 		row = i+2;
-		mvwaddstr(win, row, 1, empstr71);
+		llstrncpy(buffer, empstr120, width-1);
+		mvwaddstr(win, row, 1, buffer);
 	}
 	row=2;
 	if (ld->details) {
@@ -1869,41 +1868,97 @@ shw_list (INDISEQ seq, listdisp * ld)
 }
 /*================================================================
  * shw_array_of_strings -- Show string list in list interact window
- *  uiwin:   [IN]  curses window to use
  *  strings: [IN]  array (of choices) to be listed
- *  len,:    [IN]  size of array
- *  top:     [IN]  show items starting with this one
- *  cur:     [IN]  currently selected item
+ *  ld:      [IN]  structure of info for variable-sized list
  *==============================================================*/
-void
-shw_array_of_strings (UIWINDOW uiwin, STRING *strings, INT len, INT top, INT cur)
+static void
+shw_array_of_strings (STRING *strings, listdisp * ld)
 {
-	WINDOW *win = uiw_win(uiwin);
-	INT i, j, row = len > VIEWABLE ? VIEWABLE + 1 : len + 1;
+	WINDOW *win = uiw_win(ld->uiwin);
+	INT i, j, row, lines;
+	INT overflag=FALSE;
 	char buffer[120];
-	INT width = uiw_cols(uiwin);
-	for (i = 2; i <= row; i++)
-		mvwaddstr(win, i, 1, empstr71);
+	INT width = uiw_cols(ld->uiwin);
+	if (width > sizeof(buffer)-1)
+		width = sizeof(buffer)-1;
+	/* clear current lines */
+	lines = ld->rows + (ld->details ? ld->details+2 : 0);
+	for (i = 0; i<lines; ++i) {
+		row = i+2;
+		llstrncpy(buffer, empstr120, width-1);
+		mvwaddstr(win, row, 1, buffer);
+	}
 	row = 2;
-	for (i = top, j = 0; j < VIEWABLE && i < len; i++, j++) {
+	if (ld->details) {
+		row = 3+ld->details;
+		mvwaddstr(win, row++, 2, "--- LIST ---");
+	}
+	for (j=0; j<ld->rows;++j) {
 		INT nlen=0,temp;
+		i = ld->top + j;
+		if (i>=ld->listlen)
+			break;
 		/* for short lists, we show leading numbers */
-		if (len<10) {
+		if (ld->rows<10) {
 			char numstr[12]="";
 			snprintf(numstr, sizeof(numstr), "%d: ", i+1);
-			if (i == cur) mvwaddch(win, row, 3, '>');
+			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);
 		} else {
-			if (i == cur) mvwaddch(win, row, 3, '>');
+			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 		}
 		temp = width-6-nlen;
 		llstrncpy(buffer, strings[i], temp);
-		if ((INT)strlen(buffer) > temp-2)
+		if ((INT)strlen(buffer) > temp-2) {
+			if (i==ld->cur)
+				overflag=TRUE;
 			strcpy(&buffer[temp-3], "...");
+		}
 		mvwaddstr(win, row, 4+nlen, buffer);
 		row++;
 	}
+	if (ld->details) {
+		STRING ptr = strings[ld->cur];
+		row = 2;
+		mvwaddstr(win, row++, 2, "-- CURRENT SELECTION --");
+		for (i=0; i<ld->details; ++i) {
+			if (!ptr[0]) break;
+			llstrncpy(buffer, ptr, width-5);
+			mvwaddstr(win, row++, 4, buffer);
+			ptr += strlen(buffer);
+		}
+	}
+}
+/*==================================
+ * print_list_title -- Print title line of an array list
+ * Adds suffix such as (5/11)
+ * Truncates title if necessary (leaving room for suffix)
+ *  buffer:  [OUT] output string
+ *  len:     [IN]  size of buffer
+ *  ld:      [IN]  list display structure
+ *  ttl:     [IN]  title to print
+ *================================*/
+static void
+print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
+{
+	STRING ptr = buffer;
+	char suffix[30];
+	if (len > uiw_cols(ld->uiwin)-2)
+		len = uiw_cols(ld->uiwin)-2;
+	sprintf(suffix, " (%d/%d)", ld->cur+1, ld->listlen);
+	len -= strlen(suffix)+1; /* reserve room for suffix */
+	ptr[0] = 0;
+	if ((INT)strlen(ttl)>len-1) {
+		len -= 4;
+		llstrcatn(&ptr, ttl, &len);
+		len += 4;
+		llstrcatn(&ptr, "...", &len);
+	} else {
+		llstrcatn(&ptr, ttl, &len);
+	}
+	len += strlen(suffix)+1; /* we reserved this room above */
+	llstrcatn(&ptr, suffix, &len);
 }
 /*==============================================
  * array_interact -- Interact with user over list
@@ -1914,54 +1969,70 @@ shw_array_of_strings (UIWINDOW uiwin, STRING *strings, INT len, INT top, INT cur
  *  selectable: [IN]  FALSE for view-only
  *============================================*/
 INT
-array_interact (UIWINDOW uiwin, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
+array_interact (UIWINDOW uiwinx, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
 {
-	WINDOW *win = uiw_win(uiwin);
-	INT top = 0, cur = 0, row;
-	STRING responses = len<10 ? "jkiq123456789" : "jkiq";
+	WINDOW *win=0;
+	INT row, done;
+	char fulltitle[128];
+	STRING responses = len<10 ? "jkiq123456789[]()" : "jkiq[]()";
 	STRING promptline = selectable ? chlist : vwlist;
-	char c;
-	while (TRUE) {
-		werase(win);
-		BOX(win, 0, 0);
-		mvwaddstr(win, 1, 1, ttl);
-		row = len > VIEWABLE ? VIEWABLE + 2 : len + 2;
-		show_horz_line(uiwin, row++, 0, 73);
-		mvwaddstr(win, row, 2, promptline);
-		shw_array_of_strings(uiwin, strings, len, top, cur);
+	listdisp ld; /* structure used in resizable list displays */
+
+	memset(&ld, 0, sizeof(ld));
+	ld.listlen = len;
+
+resize_win: /* we come back here if we resize the window */
+	activate_list_uiwin(&ld);
+	win = uiw_win(ld.uiwin);
+	werase(win);
+	BOX(win, 0, 0);
+	row = ld.height-3;
+	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
+	mvwaddstr(win, row, 2, promptline);
+	done = FALSE;
+	while (!done) {
+		INT code=0, ret=0;
+		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
+		mvwaddstr(win, 1, 1, fulltitle);
+		shw_array_of_strings(strings, &ld);
 		wrefresh(win);
-		switch (c=interact(uiwin, responses, -1)) {
-		case 'j':
-			if (cur >= len - 1) break;
-			cur++;
-			if (cur >= top + VIEWABLE) top++;
-			break;
-		case 'k':
-			if (cur <= 0) break;
-			cur--;
-			if (cur + 1 == top) top--;
-			break;
-		case 'i':
-			if (selectable)
-				return cur;
-			break;
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-			if (c - '1' < len)
-				return c - '1';
-			break;
-		case 'q':
-		default:
-			return -1;
+		code = interact(ld.uiwin, responses, -1);
+		ret = handle_list_cmds(&ld, code);
+		if (ret == -1) {
+			deactivate_uiwin();
+			/* we're going to repick window & activate */
+			goto resize_win;
+		}
+		if (ret == 0) { /* not handled yet */
+			switch(code) {
+			case 'i':
+				if (selectable) {
+					done=TRUE;
+				}
+				break;
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				if (selectable && code - '1' < len) {
+					done=TRUE;
+					ld.cur = '1';
+				}
+				break;
+			case 'q':
+			default:
+				done=TRUE;
+				ld.cur = -1; /* ld.cur == -1 means cancelled */
+			}
 		}
 	}
+	deactivate_uiwin();
+	return ld.cur;
 }
 /*===================================================
  * message_string -- Return background message string

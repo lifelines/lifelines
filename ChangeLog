@@ -1,3 +1,13 @@
+2001-12-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/screen.c
+	liflines/show.c:
+
+	Modify array_interact to have detail_lines.
+	Added print_list_title function to handle both string & indi
+	list titles, and truncation.
+	Expand list window to cols-7, instead of fixed 73.
+
 2001-12-14 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/main.c

@@ -534,8 +534,8 @@ STRING
 indi_to_ped_fix (NODE indi, INT len)
 {
 	STRING bevt, devt, name, key;
-	static unsigned char scratch[100];
-	unsigned char tmp1[100];
+	static char scratch[100];
+	char tmp1[100];
 	TRANTABLE ttd = tran_tables[MINDS];
 
 /*	return person_display(indi, 0, len); */
@@ -693,14 +693,14 @@ max_keywidth (void)
 static STRING
 person_display (NODE indi, NODE fam, INT len)
 {
-	static unsigned char scratch1[120];
-	static unsigned char scratch2[100];
+	static char scratch1[120];
+	static char scratch2[100];
 	STRING p;
 	TRANTABLE ttd = tran_tables[MINDS];
 	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
-	if (len > ARRSIZE(scratch1)-1)
+	if (len > (INT)ARRSIZE(scratch1)-1)
 		len = ARRSIZE(scratch1)-1;
 
 	/* keywidth for key, 2 for comma space, and split between name & events */

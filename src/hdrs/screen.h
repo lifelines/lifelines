@@ -136,7 +136,6 @@ void show_indi(UIWINDOW uiwin, NODE indi, INT mode, INT row, INT hgt
 void show_indi_main(NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse);
 void show_indi_vitals(UIWINDOW uiwin, NODE, INT row, INT hgt, INT width, INT *scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
-void shw_array_of_strings(UIWINDOW, STRING*, INT, INT, INT);
 void term_screen(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);

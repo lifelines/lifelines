@@ -223,6 +223,7 @@ STRING gdxmod = SS "The record was modified in the database.";
 
 STRING empstr = SS "                                                ";
 STRING empstr71 = SS "                                                                       ";
+STRING empstr120 = SS "                                                                                                                        ";
 STRING nofopn = SS "Could not open file %s.";
 
 STRING mrkper = SS "Please mark a person first.";
