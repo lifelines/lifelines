@@ -258,7 +258,7 @@ alloc_nod0_wh (NOD0 nod0, INT isnew)
 	ASSERT(!nod0->mdwh);
 	if (!add_metadata)
 		return;
-	nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+	nod0->mdwh = (WAREHOUSE)stdalloc(sizeof(*(nod0->mdwh)));
 	wh_allocate(nod0->mdwh);
 	get_current_lldate(&creation);
 	wh_add_block_var(nod0->mdwh, MD_CREATE_DATE, &creation, sizeof(creation));
@@ -273,7 +273,7 @@ alloc_nod0_wh (NOD0 nod0, INT isnew)
 static void
 load_nod0_wh (NOD0 nod0, char * whptr, INT whlen)
 {
-	nod0->mdwh = (WAREHOUSE)malloc(sizeof(*(nod0->mdwh)));
+	nod0->mdwh = (WAREHOUSE)stdalloc(sizeof(*(nod0->mdwh)));
 	wh_assign_from_blob(nod0->mdwh, whptr, whlen);
 }
 /*===================================

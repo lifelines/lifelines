@@ -299,7 +299,7 @@ append_indiseq_pval (INDISEQ seq,    /* sequence */
 /*==================================================
  * append_indiseq_sval -- Append element to sequence
  *  with STRING value
- * (Should be malloc'd values, unless caller is using
+ * (Should be alloc'd values, unless caller is using
  *  a custom value vtable)
  * Created: 2001/01/05, Perry Rapp
  *================================================*/
