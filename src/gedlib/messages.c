@@ -275,8 +275,16 @@ STRING rerilv      = SS "Line %d: This line has an illegal level.";
 STRING rerwlv      = SS "The record begins at wrong level.";
 STRING nonnum      = SS "At least one argument to %s is not numeric";
 
+/* browse display stuff */
+STRING dspl_indi   = SS "person";
+STRING dspa_resi   = SS ", of ";
+STRING dspl_fath   = SS "father";
+STRING dspl_moth   = SS "mother";
+STRING dspl_spouse = SS "spouse";
+STRING dspl_child  = SS "child";
 /* display abbreviations */
 STRING dspa_mar    = SS "m. ";
+STRING dspa_div    = SS "div. ";
 STRING dspa_bir    = SS "b. ";
 STRING dspa_chr    = SS "bap. ";
 STRING dspa_dea    = SS "d. ";
@@ -357,6 +365,7 @@ STRING norwandro   = SS "Cannot combine immutable (-i) or read-only (-r) with re
 STRING nofandl     = SS "Cannot combine forceopen (-f) and lock (-l) flags.";
 STRING idrpt       = SS "Program";
 STRING iddefpath   = SS "Default path: ";
+STRING misskeys    = SS "WARNING: missing keys";
 
 /* translation table errors */
 STRING baddec      = SS "Bad decimal number format.";

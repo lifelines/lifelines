@@ -60,6 +60,9 @@ extern INT LIST_LINES;		/* person info display lines above list */
 extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
+extern STRING misskeys;
+extern STRING dspl_indi,dspl_fath,dspl_moth,dspl_spouse,dspl_child;
+extern STRING dspa_resi,dspa_div;
 extern STRING dspa_mar,dspa_bir,dspa_chr,dspa_dea,dspa_bur,dspa_chbr;
 extern STRING dspl_mar,dspl_bir,dspl_chr,dspl_dea,dspl_bur;
 
@@ -73,6 +76,8 @@ typedef char *LINESTRING;
  * local enums & defines
  *********************************************/
 
+/* to handle large families, this needs to be made a regular
+variable, and checked & resized at init_display_indi time */
 #define MAXOTHERS 30
 
 /*********************************************
@@ -109,6 +114,7 @@ static void wipe_window(UIWINDOW uiwin, INT row, INT hgt);
 static LINESTRING Spers, Sbirt, Sdeat, Sfath, Smoth, Smarr;
 static LINESTRING Shusb, Shbirt, Shdeat, Swife, Swbirt, Swdeat;
 static LINESTRING Sothers[MAXOTHERS];
+static INT liwidth;
 static INT Solen = 0;
 static INT Scroll2 = 0;
 static INT number_child_enable = 0;
@@ -125,22 +131,22 @@ void
 init_show_module (void)
 {
 	INT i;
-	INT width = ll_cols+1;
+	liwidth = ll_cols+1;
 
-	Spers = (LINESTRING)stdalloc(width);
-	Sbirt = (LINESTRING)stdalloc(width);
-	Sdeat = (LINESTRING)stdalloc(width);
-	Sfath = (LINESTRING)stdalloc(width);
-	Smoth = (LINESTRING)stdalloc(width);
-	Smarr = (LINESTRING)stdalloc(width);
-	Shusb = (LINESTRING)stdalloc(width);
-	Shbirt = (LINESTRING)stdalloc(width);
-	Shdeat = (LINESTRING)stdalloc(width);
-	Swife = (LINESTRING)stdalloc(width);
-	Swbirt = (LINESTRING)stdalloc(width);
-	Swdeat = (LINESTRING)stdalloc(width);
+	Spers = (LINESTRING)stdalloc(liwidth);
+	Sbirt = (LINESTRING)stdalloc(liwidth);
+	Sdeat = (LINESTRING)stdalloc(liwidth);
+	Sfath = (LINESTRING)stdalloc(liwidth);
+	Smoth = (LINESTRING)stdalloc(liwidth);
+	Smarr = (LINESTRING)stdalloc(liwidth);
+	Shusb = (LINESTRING)stdalloc(liwidth);
+	Shbirt = (LINESTRING)stdalloc(liwidth);
+	Shdeat = (LINESTRING)stdalloc(liwidth);
+	Swife = (LINESTRING)stdalloc(liwidth);
+	Swbirt = (LINESTRING)stdalloc(liwidth);
+	Swdeat = (LINESTRING)stdalloc(liwidth);
 	for (i=0; i<MAXOTHERS; i++)
-		Sothers[i] = (LINESTRING)stdalloc(width);
+		Sothers[i] = (LINESTRING)stdalloc(liwidth);
 	init_disp_reformat();
 }
 /*===============================================
@@ -187,7 +193,7 @@ init_display_indi (NODE pers, INT width)
 	fth = indi_to_fath(pers);
 	mth = indi_to_moth(pers);
 	s = indi_to_name(pers, ttd, width-20);
-	sprintf(Spers, "person: %s ", s);
+	snprintf(Spers, liwidth, "%s: %s ", dspl_indi, s);
 	if((num = strlen(s)) < width-30) {
 	    t = indi_to_title(pers, ttd, width-20 - num - 3);
 	    if(t) sprintf(Spers+strlen(Spers), "[%s] ", t);
@@ -203,7 +209,7 @@ init_display_indi (NODE pers, INT width)
 	if(strchr(Sbirt, ',') == 0) {
 		num = strlen(Sbirt);
 		if(num < width-30) {
-			s = sh_indi_to_event_long(pers, ttd, "RESI", ", of ", (width-3)-num-5);
+			s = sh_indi_to_event_long(pers, ttd, "RESI", dspa_resi, (width-3)-num-5);
 			if(s) {
 				if(num < 8) strcat(Sbirt, s+1);
 				else {
@@ -220,12 +226,12 @@ init_display_indi (NODE pers, INT width)
 	else sprintf(Sdeat, "  %s", dspl_dea);
 
 	s = person_display(fth, NULL, width-13);
-	if (s) sprintf(Sfath, "  father: %s", s);
-	else sprintf(Sfath, "  father:");
+	if (s) snprintf(Sfath, liwidth, "  %s: %s", dspl_fath, s);
+	else snprintf(Sfath, liwidth, "  %s:", dspl_fath);
 
 	s = person_display(mth, NULL, width-13);
-	if (s) sprintf(Smoth, "  mother: %s", s);
-	else sprintf(Smoth, "  mother:");
+	if (s) snprintf(Smoth, liwidth, "  %s: %s", dspl_moth, s);
+	else snprintf(Smoth, liwidth, "  %s:", dspl_moth);
 
 	Solen = 0;
 	nsp = nch = 0;
@@ -279,6 +285,8 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 		if (*scroll < 0)
 			*scroll = 0;
 	}
+	/* we keep putting lines out til we run out or exhaust our alloted
+	height */
 	localrow = row - *scroll;
 	mvwaddstr(win, row+0, 1, Spers);
 	if (hgt==1) return;
@@ -292,6 +300,9 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 	if (hgt==5) return;
 	for (i = *scroll; i < Solen && i < hgt-5+ *scroll; i++)
 	{
+		/* the other lines scroll are internally scrollable, and we
+		mark the top one displayed if not the actual top one, and the
+		bottom one displayed if not the actual bottom */
 		overflow = ((i+1 == hgt-5+ *scroll)&&(i+1 != Solen));
 		if (*scroll && (i == *scroll))
 			overflow = 1;
@@ -300,7 +311,7 @@ show_indi_vitals (UIWINDOW uiwin, NODE pers, INT row, INT hgt
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		char buf[132];
-		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
+		snprintf(buf, sizeof(buf), "%s: %.40s", misskeys, badkeylist);
 		message(buf);
 	}
 }
@@ -313,7 +324,7 @@ add_spouse_line (INT num, NODE indi, NODE fam, INT width)
 	STRING line;
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(indi, fam, width-14);
-	sprintf(Sothers[Solen], "  spouse: %s", line);
+	snprintf(Sothers[Solen], liwidth, "  %s: %s", dspl_spouse, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*===========================================
@@ -326,9 +337,9 @@ add_child_line (INT num, NODE indi, INT width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(indi, NULL, width-15);
 	if (number_child_enable)
-		sprintf(Sothers[Solen], "  %2dchild: %s", num, line);
+		snprintf(Sothers[Solen], liwidth, "  %2d%s: %s", num, dspl_child, line);
 	else
-		sprintf(Sothers[Solen], "    child: %s", line);
+		snprintf(Sothers[Solen], liwidth, "    %s: %s", dspl_child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -340,7 +351,7 @@ init_display_fam (NODE fam, INT width)
 	NODE husb;
 	NODE wife;
 	STRING s, ik, fk;
-	INT len, nch, nm;
+	INT len, nch, nm, wtemp;
 	TRANTABLE ttd = tran_tables[MINDS];
 	ASSERT(fam);
 	husb = fam_to_husb(fam);
@@ -348,11 +359,11 @@ init_display_fam (NODE fam, INT width)
 	fk = key_of_record(fam);
 	if (husb) {
 		ik = key_of_record(husb);
-		len = 64 - (strlen(ik) + strlen(fk));
+		len = liwidth - (10 + strlen(dspl_fath) + strlen(ik) + strlen(fk));
 		s = indi_to_name(husb, ttd, len);
-		sprintf(Shusb, "father: %s (%s) (%s)", s, ik, fk);
+		snprintf(Shusb, liwidth, "%s: %s (%s) (%s)", dspl_fath, s, ik, fk);
 	} else
-		sprintf(Shusb, "father: (%s)", fk);
+		snprintf(Shusb, liwidth, "%s: (%s)", dspl_fath, fk);
 
 	s = sh_indi_to_event_long(husb, ttd, "BIRT", dspl_bir, width-3);
 	if (!s) s = sh_indi_to_event_long(husb, ttd, "CHR", dspl_chr, width-3);
@@ -361,30 +372,38 @@ init_display_fam (NODE fam, INT width)
 
 	s = sh_indi_to_event_long(husb, ttd, "DEAT", dspl_dea, width-3);
 	if (!s) s = sh_indi_to_event_long(husb, ttd, "BURI", dspl_bur, width-3);
-	if (s) sprintf(Shdeat, "  %s", s);
-	else sprintf(Shdeat, "  %s", dspl_dea);
+	if (s) snprintf(Shdeat, liwidth, "  %s", s);
+	else snprintf(Shdeat, liwidth, "  %s", dspl_dea);
 
 	if (wife) {
 		ik = key_of_record(wife);
-		len = (width-13) - strlen(ik);
+		len = width - (7 + strlen(dspl_moth) + strlen(ik));
 		s = indi_to_name(wife, ttd, len);
-		sprintf(Swife, "mother: %s (%s)", s, ik);
+		snprintf(Swife, liwidth, "%s: %s (%s)", dspl_moth, s, ik);
 	} else
-		sprintf(Swife, "mother:");
+		snprintf(Swife, liwidth, "%s:", dspl_moth);
 
 	s = sh_indi_to_event_long(wife, ttd, "BIRT", dspl_bir, width-3);
 	if (!s) s = sh_indi_to_event_long(wife, ttd, "CHR", dspl_chr, width-3);
-	if (s) sprintf(Swbirt, "  %s", s);
-	else sprintf(Swbirt, "  %s", dspl_bir);
+	if (s) snprintf(Swbirt, liwidth, "  %s", s);
+	else snprintf(Swbirt, liwidth, "  %s", dspl_bir);
 
 	s = sh_indi_to_event_long(wife, ttd, "DEAT", dspl_dea, width-3);
 	if (!s) s = sh_indi_to_event_long(wife, ttd, "BURI", dspl_bur, width-3);
-	if (s) sprintf(Swdeat, "  %s", s);
-	else sprintf(Swdeat, "  %s", dspl_dea);
+	if (s) snprintf(Swdeat, liwidth, "  %s", s);
+	else snprintf(Swdeat, liwidth, "  %s", dspl_dea);
 
 	s = sh_indi_to_event_long(fam, ttd, "MARR", dspl_mar, width-3);
-	if (s) sprintf(Smarr, s);
-	else sprintf(Smarr, dspl_mar);
+	if (s) snprintf(Smarr, liwidth, s);
+	else snprintf(Smarr, liwidth, dspl_mar);
+	/* append divorce to marriage line, if room */
+	/* (Might be nicer to make it a separate, following line */
+	wtemp = width-5 - strlen(Smarr);
+	if (wtemp > 10) {
+		s = sh_indi_to_event_long(fam, ttd, "DIV", dspa_div, wtemp);
+		if (s)
+			snprintf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), ", %s", s);
+	}
 
 	Solen = 0;
 	nch = 0;
@@ -536,6 +555,10 @@ show_gedcom (UIWINDOW uiwin, NODE node, INT gdvw, INT row, INT hgt
 }
 /*================================================
  * switch_scrolls -- Interchange scroll1 & scroll2
+ * This is how the tandem modes do their drawing of
+ * the lower part -- they swap in the second set of
+ * scroll briefly for displaying the lower part, then
+ * swap back to normal as soon as finishing lower part.
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
