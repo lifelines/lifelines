@@ -106,6 +106,7 @@ lowyylex (void)
 			unreadchar(c);
 			return '/';
 		}
+		/* inside a comment -- advance til end */
 		while (TRUE) {
 			while ((c = inchar()) != '*' && c != EOF)
 				;
