@@ -29,8 +29,8 @@
  *   3.0.2 - 22 Dec 94
  *===========================================================*/
 
-#ifndef _TABLE_H
-#define _TABLE_H
+#ifndef TABLE_H_INCLUDED
+#define TABLE_H_INCLUDED
 
 #include "standard.h"
 
@@ -104,4 +104,4 @@ access_value_str can't be done because of type limitation in implementation
 (UNION doesn't have STRING inside it
 */
 
-#endif /* _TABLE_H */
+#endif /* TABLE_H_INCLUDED */

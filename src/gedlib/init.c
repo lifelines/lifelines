@@ -540,7 +540,7 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 BOOLEAN
 get_utf8_from_uopts (TABLE opttab)
 {
-	STRING str = getoptstr_dbonly("codeset", NULL);
+	STRING str = valueof_str(opttab, "codeset");
 	if (str && (eqstr("UTF-8", str)||eqstr("utf-8", str)||eqstr("65001", str)))
 		return TRUE;
 	return FALSE;

@@ -36,10 +36,12 @@
    then from fallback properties
 */
 
-#ifndef _OPTIONS_H
-#define _OPTIONS_H
+#ifndef LLOPTIONS_H_INCLUDED
+#define LLOPTIONS_H_INCLUDED
 
+#ifndef TABLE_H_INCLUDED
 typedef struct table_s *TABLE;
+#endif
 typedef void (*options_notify_fnc)(void);
 
 /* initialization & termination */
@@ -60,4 +62,4 @@ STRING getoptstr_rpt(STRING optname, STRING defval);
 
 
 
-#endif /* _OPTIONS_H */
+#endif /* OPTIONS_H_INCLUDED */

@@ -17,6 +17,11 @@
 	Change copyfile & nearby routines to call the right routine to
 	get report debugging.
 
+ 	* ChangeLog gedlib/init.c gedlib/lloptions.c hdrs/lloptions.h 
+ 	hdrs/table.h:
+
+	Fixes for gcc.
+
 2002-06-16 Perry Rapp <puddle@users.sourceforge.net>
 
 	*? .linesrc ChangeLog lines.cfg gedlib/init.c interp/builtin.c:

@@ -340,7 +340,7 @@ void
 register_notify (options_notify_fnc fncptr)
 {
 	create_notification_list_if_needed();
-	enqueue_list(f_notifications, fncptr);
+	enqueue_list(f_notifications, (VPTR)fncptr);
 }
 /*===============================================
  * unregister_notify -- Take notification off the callback list
@@ -358,8 +358,8 @@ unregister_notify (options_notify_fnc fncptr)
 	create_notification_list_if_needed();
 	while (!is_empty_list(lold)) {
 		VPTR vptr = pop_list(lold);
-		if (fncptr != vptr)
-			enqueue_list(f_notifications, fncptr);
+		if ((VPTR)fncptr != vptr)
+			enqueue_list(f_notifications, (VPTR)fncptr);
 	}
 	make_list_empty(lold);
 	remove_list(lold, 0);
