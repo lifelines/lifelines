@@ -22,16 +22,15 @@
    SOFTWARE.
 */
 
-
 #include "sys_inc.h"
 #include "llstdlib.h"
-
 
 /*====================================================
  * environ_figure_tempfile -- calculate temporary file
  *  (fully qualified path)
  *==================================================*/
-STRING environ_figure_tempfile ()
+STRING
+environ_figure_tempfile (void)
 {
 #ifdef WIN32
 	STRING e;
@@ -53,7 +52,8 @@ STRING environ_figure_tempfile ()
 /*=========================================================
  * environ_figure_editor -- calculate editor program to use
  *=======================================================*/
-STRING environ_figure_editor ()
+STRING
+environ_figure_editor (void)
 {
 	STRING e;
 
@@ -67,6 +67,20 @@ STRING environ_figure_editor ()
 	/* unix fallback is vi */
 	if (!e || *e == 0) e = (STRING) "vi";
 #endif
+	return e;
+}
+
+/*=========================================================
+ * environ_figure_database -- determine database location
+ *=======================================================*/
+STRING
+environ_figure_database (void)
+{
+	STRING e;
+
+	e = (STRING) getenv("LLDATABASES");
+	if (!e || *e == 0) e = (STRING) ".";
+
 	return e;
 }
 

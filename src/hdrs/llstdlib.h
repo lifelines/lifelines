@@ -50,8 +50,9 @@ void set_list_element(LIST, INT, WORD);
 void set_list_type(LIST, INT);
 
 /* environ.c */
-STRING environ_figure_editor();
-STRING environ_figure_tempfile();
+STRING environ_figure_editor(void);
+STRING environ_figure_tempfile(void);
+STRING environ_figure_database(void);
 
 /* llstrcmp.c */
 int ll_strcmp(char*, char*);
