@@ -1,6 +1,21 @@
-LifeLines Source Release, Version 3.0.14
+LifeLines Source Release, Version 3.0.17
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.17
+============================
+
+- Change history added (analogous to visit history). Both available off search menu,
+  or via commands in browse menus.
+- Option to quit current database added to main menu.
+- Iconv conversion between Internal (database) and Gui, Editor, Report, & Gedcom codesets.
+
+Bug fixes in 3.0.17
+===================
+
+- Browsing to a named list would crash.
+- Saving a record with blank REFN would crash.
+- Couldn't change the value of a top level other node (not INDI, FAM, EVEN, or SOUR).
 
 Bug fixes in 3.0.16
 ===================

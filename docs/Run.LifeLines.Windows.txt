@@ -66,7 +66,7 @@ person. Normally you respond y and add your new
 person.
 
 5)
-Note on menu items: LifeLines 3.0.16 has significantly
+Note on menu items: LifeLines now has significantly
 more menu choices in many screens than were present in
 LifeLines 3.0.2. Many screens cannot fit all choices
 on screen at one time. If you see the choice
