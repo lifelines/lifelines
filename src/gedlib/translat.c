@@ -28,7 +28,7 @@
  *   3.0.0 - 17 Jun 94    3.0.2 - 11 Nov 94
  *=========================================================*/
 
-#include "standard.h"
+#include "llstdlib.h"
 #include "translat.h"
 #include "liflines.h"
 #include "screen.h"

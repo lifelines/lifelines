@@ -6,7 +6,7 @@
 
 #include "sys_inc.h"
 #include <curses.h>
-#include "standard.h"
+#include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
