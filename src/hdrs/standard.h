@@ -153,4 +153,7 @@ typedef struct ltag {
 			_lnode = _lnode->l_prev;\
 		}\
 	}
+
+#define ISNULL(k)	(!k || *k == NULL)
+
 #endif
