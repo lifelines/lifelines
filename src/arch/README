@@ -7,7 +7,7 @@ functions.
 
 When using these functions, include <arch.h>.
 
-Currently, the following is implemented:
+Currently, the following functions are implemented:
 
 int sleep(int)
 
@@ -18,3 +18,8 @@ int scandir(const char *, struct dirent ***, int (*)(const struct dirent *),
             int (*)(const struct dirent **, const struct dirent **));
 
   BSD, implemented for Unix and Win32.
+
+int getopt(int argc, char **argv, char *optstring)
+
+  POSIX, implemented for Win32.
+
