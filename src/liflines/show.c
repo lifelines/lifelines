@@ -143,7 +143,7 @@ INT hgt;	/* avail rows */
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, 79, ACS_VLINE);
+		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
 	mvwaddstr(main_win, row+0, 1, Spers);
@@ -588,7 +588,7 @@ INT row, hgt;
 		wmove(main_win, row+i, 1);
 		wclrtoeol(main_win);
 #ifndef BSD
-		mvwaddch(main_win, row+i, 79, ACS_VLINE);
+		mvwaddch(main_win, row+i, ll_cols-1, ACS_VLINE);
 #endif
 	}
 	key = rmvat(nxref(node));
