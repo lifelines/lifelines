@@ -8,6 +8,10 @@
 
 	Fix builds.
 
+	* ChangeLog configure.in:
+
+	Test for wchar.h & wcscoll.
+
 2002-07-02 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog arch/vsnprintf.c build/msvc6/llines/config.h

@@ -134,6 +134,7 @@ echo Looking for header files
 AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h pwd.h locale.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h libintl.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
+AC_CHECK_HEADERS( wchar.h )
 
 dnl echo Looking for typedefs, structures, and compiler characteristics.
 dnl AC_C_CONST
@@ -145,6 +146,8 @@ AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk strcmpi strcasecmp \
 
 dnl gettext functions missing from 0.10.35
 AC_CHECK_FUNCS( bind_textdomain_codeset ngettext )
+
+AC_CHECK_FUNCS( wcscoll )
 
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf \
