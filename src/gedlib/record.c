@@ -11,6 +11,7 @@
 #include "gedcomi.h"
 #include "vtable.h"
 #include "cache.h"
+#include "lloptions.h"
 
 
 /*==============================
@@ -48,6 +49,7 @@ static struct tag_vtable vtable_for_record = {
 	, &generic_get_type_name
 };
 static int f_nrecs=0;
+
 /*===================================
  * alloc_new_record -- record allocator
  *  perhaps should use special allocator like nodes
@@ -324,4 +326,29 @@ record_destructor (VTABLE *obj)
 	RECORD rec = (RECORD)obj;
 	ASSERT((*obj) == &vtable_for_record);
 	free_rec(rec);
+}
+/*=================================================
+ * check_record_leaks -- Called when database closing
+ *  for debugging
+ *===============================================*/
+void
+check_record_leaks (void)
+{
+	if (f_nrecs) {
+		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		FILE * fp=0;
+		if (report_leak_path)
+			fp = fopen(report_leak_path, "at");
+		if (fp) {
+			LLDATE date;
+			get_current_lldate(&date);
+			fprintf(fp, _("Record memory leaks:"));
+			fprintf(fp, " %s", date.datestr);
+			fprintf(fp, "\n  ");
+			fprintf(fp, _pl("%d item leaked", "%d items leaked", f_nrecs), f_nrecs);
+			fprintf(fp, "\n");
+			fclose(fp);
+			fp = 0;
+		}
+	}
 }

@@ -24,6 +24,7 @@ void check_node_leaks(void);
 void set_record_key_info(RECORD rec, char ntype, INT keynum);
 
 /* record.c */
+void check_record_leaks(void);
 RECORD create_record_for_keyed_node(NODE node, CNSTRING key);
 RECORD create_record_for_unkeyed_node(NODE node);
 NODE is_record_temp(RECORD rec);

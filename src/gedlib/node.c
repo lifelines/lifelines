@@ -1157,7 +1157,7 @@ check_node_leaks (void)
 		if (fp) {
 			LLDATE date;
 			get_current_lldate(&date);
-			fprintf(fp, _("node memory leaks:"));
+			fprintf(fp, _("Node memory leaks:"));
 			fprintf(fp, " %s", date.datestr);
 			fprintf(fp, "\n  ");
 			fprintf(fp, _pl("%d item leaked", "%d items leaked", live_count), live_count);

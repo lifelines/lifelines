@@ -8,6 +8,11 @@
 
 	dbverify: convert tables to generic tables.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/lldatabase.c
+	src/gedlib/node.c src/gedlib/record.c
+
+	Add record leak count to leak log.
+
 2005-02-07 Perry Rapp
 
 	* ChangeLog lines.cfg src/interp/pvalue.c src/interp/symtab.c

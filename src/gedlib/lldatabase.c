@@ -171,6 +171,7 @@ void lldb_close (LLDATABASE *plldb)
 	}
 	free_caches();
 	check_node_leaks();
+	check_record_leaks();
 	closexref();
 	ASSERT(BTR == lldb->btree);
 	if (lldb->btree) {
