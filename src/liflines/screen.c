@@ -632,7 +632,8 @@ update_menu (INT screen)
 void
 show_indi_main (NODE indi, INT mode, INT row, INT hgt, BOOLEAN reuse)
 {
-	show_indi(main_win, indi, mode, row, hgt, MAINWIN_WIDTH, &Scroll1, reuse);
+	INT width = MAINWIN_WIDTH-2; /* box characters at start & end */
+	show_indi(main_win, indi, mode, row, hgt, width, &Scroll1, reuse);
 }
 /*=========================================
  * show_indi -- Show indi according to mode
@@ -2664,8 +2665,8 @@ display_status (STRING text)
 	INT row;
 	/* first store it */
 	llstrncpy(status_showing, text, sizeof(status_showing));
-	if ((INT)strlen(text)>ll_cols-10) {
-		status_showing[ll_cols-12] = 0;
+	if ((INT)strlen(text)>ll_cols-6) {
+		status_showing[ll_cols-8] = 0;
 		strcat(status_showing, "...");
 	}
 	/* then display it */
@@ -2735,7 +2736,7 @@ msg_output (MSG_LEVEL level, STRING fmt, ...)
 INT
 msg_width (void)
 {
-	return ll_cols-10;
+	return ll_cols-6;
 }
 /*=========================================
  * msg_outputv -- output message varargs style arguments

@@ -1,3 +1,9 @@
+2001-01-06 Perry Rapp <puddle@users.sourceforge.net>
+
+	Very minor fix for spouse lines at exactly maximum length.
+	Improvment to appendstr (don't require caller to init).
+	Give status line at bottom a few more characters on right.
+
 2001-01-05 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c hdrs/mystring.h hdrs/standard.h

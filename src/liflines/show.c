@@ -832,36 +832,33 @@ pedigree_line (CANVASDATA canvas, INT x, INT y, STRING string, INT overflow)
 }
 /*=====================================
  * put_out_line - move string to screen
- * but also append + at end if requested
+ * but also append ++ at end if flagged
  *====================================*/
 static void
 put_out_line (UIWINDOW uiwin, INT x, INT y, STRING string, INT width, INT flag)
 {
 	WINDOW * win = uiw_win(uiwin);
-	if (!flag)
-	{
-		mvwaddstr(win, x, y, string);
+	static LINESTRING buffer=0; /* local buffer resized when needed */
+	static INT buflen=0;
+	if (!buflen || buflen < width+1) {
+		if (buffer) stdfree(buffer);
+		buflen = width+1;
+		buffer = (LINESTRING)stdalloc(buflen);
 	}
-	else
-	{
-		INT i, pos;
-		LINESTRING linebuffer = (LINESTRING)stdalloc(width);
-		char * ptr = &linebuffer[0];
-		int mylen=width;
-		ptr[0] = 0;
-		llstrcatn(&ptr, string, &mylen);
-		i = strlen(linebuffer);
-		pos = width-4;
+	llstrncpy(buffer, string, width+1);
+	if (flag) {
+		INT i = strlen(buffer);
+		INT pos = width-3;
 		if (i>pos)
 			i = pos;
 		for (; i<pos; i++)
-			linebuffer[i] = ' ';
-		linebuffer[i++] = '+';
-		linebuffer[i++] = '+';
-		linebuffer[i++] = '\0';
-		mvwaddstr(win, x, y, linebuffer);
-		stdfree(linebuffer);
+			buffer[i] = ' ';
+		buffer[i++] = ' ';
+		buffer[i++] = '+';
+		buffer[i++] = '+';
+		buffer[i++] = '\0';
 	}
+	mvwaddstr(win, x, y, buffer);
 }
 /*==================================================================
  * show_childnumbers - toggle display of numbers for children
