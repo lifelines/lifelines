@@ -44,6 +44,7 @@ install  -m 755 -o 0 -g 0 reports/alllines.sgml.ll /usr/local/share/lifelines/re
 install  -m 755 -o 0 -g 0 reports/ancestors2.ll /usr/local/share/lifelines/reports/ancestors2.ll
 install  -m 755 -o 0 -g 0 reports/bias.ll /usr/local/share/lifelines/reports/bias.ll
 install  -m 755 -o 0 -g 0 reports/bkdes16-1.ll /usr/local/share/lifelines/reports/bkdes16-1.ll
+install  -m 755 -o 0 -g 0 reports/bkdes16-1.ll /usr/local/share/lifelines/reports/book-latex.ll
 install  -m 755 -o 0 -g 0 reports/cid.ll /usr/local/share/lifelines/reports/cid.ll
 install  -m 755 -o 0 -g 0 reports/connect2.ll /usr/local/share/lifelines/reports/connect2.ll
 install  -m 755 -o 0 -g 0 reports/count_anc.ll /usr/local/share/lifelines/reports/count_anc.ll
@@ -53,6 +54,7 @@ install  -m 755 -o 0 -g 0 reports/cousins.ll /usr/local/share/lifelines/reports/
 install  -m 755 -o 0 -g 0 reports/coverage.ll /usr/local/share/lifelines/reports/coverage.ll
 install  -m 755 -o 0 -g 0 reports/dates.ll /usr/local/share/lifelines/reports/dates.ll
 install  -m 755 -o 0 -g 0 reports/desc-henry.ll /usr/local/share/lifelines/reports/desc-henry.ll
+install  -m 755 -o 0 -g 0 reports/desc-henry.ll /usr/local/share/lifelines/reports/exercise.ll
 install  -m 755 -o 0 -g 0 reports/fam10c.ll /usr/local/share/lifelines/reports/fam10c.ll
 install  -m 755 -o 0 -g 0 reports/fam16rn1.ll /usr/local/share/lifelines/reports/fam16rn1.ll
 install  -m 755 -o 0 -g 0 reports/familyisfm1.ll /usr/local/share/lifelines/reports/familyisfm1.ll
@@ -119,6 +121,7 @@ install  -m 755 -o 0 -g 0 reports/timeline1.ll /usr/local/share/lifelines/report
 install  -m 755 -o 0 -g 0 reports/timeline2.ll /usr/local/share/lifelines/reports/timeline2.ll
 install  -m 755 -o 0 -g 0 reports/tinytafel1.ll /usr/local/share/lifelines/reports/tinytafel1.ll
 install  -m 755 -o 0 -g 0 reports/tinytafel2.ll /usr/local/share/lifelines/reports/tinytafel2.ll
+install  -m 755 -o 0 -g 0 reports/tinytafel2.ll /usr/local/share/lifelines/reports/tree.tex
 install  -m 755 -o 0 -g 0 reports/verify.ll /usr/local/share/lifelines/reports/verify.ll
 
 %files
@@ -137,6 +140,7 @@ install  -m 755 -o 0 -g 0 reports/verify.ll /usr/local/share/lifelines/reports/v
 /usr/local/share/lifelines/reports/ancestors2.ll
 /usr/local/share/lifelines/reports/bias.ll
 /usr/local/share/lifelines/reports/bkdes16-1.ll
+/usr/local/share/lifelines/reports/book-latex.ll
 /usr/local/share/lifelines/reports/cid.ll
 /usr/local/share/lifelines/reports/connect2.ll
 /usr/local/share/lifelines/reports/count_anc.ll
@@ -146,6 +150,7 @@ install  -m 755 -o 0 -g 0 reports/verify.ll /usr/local/share/lifelines/reports/v
 /usr/local/share/lifelines/reports/coverage.ll
 /usr/local/share/lifelines/reports/dates.ll
 /usr/local/share/lifelines/reports/desc-henry.ll
+/usr/local/share/lifelines/reports/exercise.ll
 /usr/local/share/lifelines/reports/fam10c.ll
 /usr/local/share/lifelines/reports/fam16rn1.ll
 /usr/local/share/lifelines/reports/familyisfm1.ll

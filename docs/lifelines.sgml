@@ -13,6 +13,19 @@
      
     This is lifelines.sgml. 
 
+    Marc Nozell <marc@nozell.com>  08-Jan-2002
+
+    ########################################################################
+    #                                                                      #
+    # NOTE: Consider this file frozen.  This document has been converted   #
+    #       to XML by Rafal T. Prinke (rafalp@amu.edu.pl).  There are      #
+    #       still some build integration that needs to be done before      #
+    #       checking in please coordinate with Rafal before making         #
+    #       changes.                                                       #
+    #                                                                      #
+    ########################################################################
+
+
     Marc Nozell <marc@nozell.com>  26-Jul-2001
     - Changed <simpara> to <para>.  Newer docbook likes it better.
     

@@ -1,3 +1,12 @@
+2002-01-08  Marc Nozell  <marc@nozell.com>
+
+	* lifelines.spec: Added book-latex.ll, exercise.ll, and tree.tex
+	to RPM
+
+	* docs/lifelines.sgml: Added note about Rafal converting the
+	document to XML and to hold off any updates until the build is
+	updated.
+
 2002-01-07 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/builtin.c interp/date.c reports/exercise.ll:
