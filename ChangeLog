@@ -49,6 +49,11 @@
 	console).
 	Start replacing snprintf with llstrncpy.
 
+	* ChangeLog
+	*NEW docs/ll-devguide.xml:
+
+	Started developer documentation.
+
 2002-06-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/init.c stdlib/stdstrng.c:

@@ -1,0 +1,148 @@
+<!--
+Outline for developer's guide to lifelines code.
+This is only an outline, not a parseable XML file.
+
+2002.06.23, Perry Rapp
+
+* btree module
+  The btree subdirectory contains the implementation for a btree
+  database, using fixed length 8 letter keys (RKEY).
+
+  Each node in the btree is a separate file on disk (named, eg, "aa"),
+  and the first 4096 (BUFLEN macro) bytes are the node header.
+
+  * index nodes
+  These are the interior index nodes of the btree; they contain pointers
+  to subordinate index or block nodes. The program performs binary
+  searches through index nodes to find a particular key.
+
+  * block nodes
+  These contain the actual data (keys & their associated records).
+
+  * keyfile
+  One special file on the disk, the keyfile, contains some meta information
+  and a pointer to the root of the btree (the master key). When the root
+  changes (splits), the master key in the keyfile is updated accordingly.
+
+  * traverse
+  There is a traversal function implemented at the btree level, which uses
+  a callback.
+
+  * bterrno
+  There is a global integer error variable, bterrno, which is set by this
+  module upon most failure conditions.
+
+  * NOTE: FUTURE DIRECTIONS
+  bterrno must be removed for multi-threading. Traversal is more elegantly
+  done via iterator style repeated calls in, instead of callback.
+
+* stdlib module
+The stdlib directory contains various utility functions not specifically
+related to LifeLines, GEDCOM, or even genealogy.
+
+  * string functions
+  There has built up, over time, quite an assortment of string functions,
+  split currently between mystring.c and stdstrng.c (and a few macros in
+  standard.h).
+
+    * llstrncpy, llstrncat
+    These are simple wrappers around the C RTL (run time library) functions.
+    The ANSI versions do not zero-terminate on overflow, which is greatly
+    inconvenient, os the wrapper versions do so. Also, the wrapper versions
+    are UTF-8 aware (they backtrack on overflow, to avoid leaving part of
+    a UTF-8 multibyte sequence at the end).
+
+    * llstrapp (string append)
+    This family of functions is one (thin) layer higher than llstrncpy,
+    providing an interface wherein the caller specified the buffer's start
+    and entire size. That is,
+      llstrncat(buffer, " more stuff", sizeof(buffer)-strlen(buffer));
+    may be replaced by
+      llstrapp(buffer, sizeof(buffer), " more stuff");
+    There are also varargs versions, so that
+      snprintf(buffer+strlen(buffer), sizeof(buffer)-strlen(buffer), ...
+    may be replaced by
+      llstrappf(buffer, sizeof(buffer), ...
+
+    * char functions
+    There are character classification functions, which have handling
+    particular to Latin-1 and to Finnish (if the Finnish compilation option
+    was set). 
+
+      * NOTE: FUTURE DIRECTIONS
+      It would be very nice to see wchar-based functions, which handle
+      unicode, replace these, and then we might be able to jettison the
+      Latin-1 & Finnish specific character code.
+
+* gedlib module
+This directory is a collection of routines for GEDCOM and for its use in
+a LifeLines btree database.
+
+  * names
+  This module implements indexing names.
+  TODO: Explain soundex indexing.
+
+  * refns
+  This module implements indexing references (REFNs).
+  TOD: Explain two character index.
+
+  * xreffile
+  This module stores lists of deleted record numbers for each type.
+  When a record is deleted, its number is added to the appropriate
+  deleted list in xreffile. When a record is added, first the
+  appropriate deleted list in xreffile is checked for a free record
+  number.
+
+  * messages
+  Traditionally all translatable strings have been stored in this file.
+  This is not necessary with the current gettext scheme, but it would
+  perhaps be helpful if a resource based scheme were adapted in the
+  future.
+
+    * FUTURE DIRECTIONS
+    When/If GUI versions are incorporated into the same codebase, how to
+    handle translate strings shared and not shared between versions needs
+    to be worked out.
+
+  * translation tables (charmaps.c & translat.c)
+  The implementation of codeset translation is stored here (not to be 
+  confused with language translation for the user interface, called
+  localization, and not associated with these files). Both custom
+  translation tables and delegation to the iconv codeset conversion 
+  library are done here.
+
+  * indiseq
+  The indiseq type is implemented here, a list of records (which no longer
+  need all be persons).
+
+  * brwslist
+  Named browse lists are implemented here (temporary record lists named by
+  user during this session).
+
+* interp module
+The lifelines reporting language parser and interpreter are stored here.
+A custom lexical analyzer is in lex.c, and a yacc parser generator is
+in yacc.y. 
+
+  * pvalues
+  All variable values in report language interpretation are stored in a
+  union type called pvalue.
+
+  * symtab
+  Symbol tables are a thin wrapper around the table type provided by
+  stdlib, specialized to hold pvalues.
+
+  * date
+  A fairly complete GEDCOM date parser is also located here. It actually
+  includes both a date parser, and a date formatter (which generates the
+  thousands of possible lifelines date formats).
+
+    * FUTURE DIRECTIONS
+    If a date type were added to the report language, it would be possible
+    to distinguish fully-parsed dates in the report language (so invalid or
+    illegal dates could be flagged & handled separately in a report). The
+    date module already implements a date type internally, and it is
+    exposed to the rest of the program (gdate & gdate_val, which correspond
+    to GEDCOM date types), but not to the report language.
+
+--!>
