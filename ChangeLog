@@ -64,6 +64,13 @@
 
 	Convert names.c to use generic tables.
 
+	* ChangeLog reports/st/st_db.li src/interp/intrpseq.c
+
+	Fix __parentset, __childset, __siblingset, __spouseset,
+	__ancestorset, __descendentset, __gengedcom, __gengedcomweak,
+	__gengedcomstrong to use prog_var_error.
+	Modify st_db.li to call gengedcom, gengedcomweak.
+
 2005-01-22 Perry Rapp
 
 	* ChangeLog src/stdlib/generic.c src/stdlib/table.c

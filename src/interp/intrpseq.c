@@ -419,19 +419,19 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to parentset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "parentset");
 		return NULL;
 	}
 	/* NULL indiseqs are possible, because of getindiset */
-	seq = pvalue_to_seq(val);
+	seq = pvalue_to_seq(val1);
 	/* do actual construction of parent set */
 	seq = parent_indiseq(seq);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*==========================================+
  * childset -- Create child set of an INDISEQ
@@ -440,18 +440,18 @@ __parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to childset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "childset");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
+	ASSERT(seq = pvalue_to_seq(val1));
 	/* do actual construction of child set */
 	seq = child_indiseq(seq);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*==============================================+
  * siblingset -- Create sibling set of an INDISEQ
@@ -460,17 +460,17 @@ __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to siblingset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "siblingset");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
+	ASSERT(seq = pvalue_to_seq(val1));
 	seq = sibling_indiseq(seq, FALSE);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*============================================+
  * spouseset -- Create spouse set of an INDISEQ
@@ -479,17 +479,17 @@ __siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to spouseset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "spouseset");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
+	ASSERT(seq = pvalue_to_seq(val1));
 	seq = spouse_indiseq(seq);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*================================================+
  * ancestorset -- Create ancestor set of an INDISEQ
@@ -498,17 +498,17 @@ __spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to ancestorset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "ancestorset");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
+	ASSERT(seq = pvalue_to_seq(val1));
 	seq = ancestor_indiseq(seq);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*====================================================+
  * descendentset -- Create descendent set of an INDISEQ
@@ -517,17 +517,17 @@ __ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to descendentset must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "descendentset");
 		return NULL;
 	}
-	ASSERT(seq = pvalue_to_seq(val));
+	ASSERT(seq = pvalue_to_seq(val1));
 	seq = descendent_indiseq(seq);
-	set_pvalue_seq(val, seq);
-	return val;
+	set_pvalue_seq(val1, seq);
+	return val1;
 }
 /*===================================================+
  * gengedcom -- Generate GEDCOM output from an INDISEQ
@@ -536,11 +536,11 @@ __descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to gengedcom must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcom");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
@@ -558,11 +558,11 @@ __gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *==================================================*/
 PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to gengedcomweak must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcomweak");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
@@ -580,11 +580,11 @@ PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *==================================================*/
 PVALUE __gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INDISEQ seq;
-	PVALUE val1 = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	INDISEQ seq=0;
+	PNODE arg1 = (PNODE) iargs(node);
+	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
-		/* TODO: convert to prog_var_error */
-		prog_error(node, "the arg to gengedcomstrong must be a set.");
+		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcomstrong");
 		return NULL;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));

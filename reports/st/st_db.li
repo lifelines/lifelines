@@ -1,6 +1,6 @@
 /*
  * @progname       st_db.li
- * @version        1.23 [of 2005-01-23]
+ * @version        1.24 [of 2005-01-23]
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -127,6 +127,10 @@ proc exerciseDb()
 		}
 	}
 
+	nl() nl() "*** GENGEDCOM *** " nl() nl()
+	gengedcom(iset)
+	nl() nl() "*** GENGEDCOMWEAK *** " nl() nl()
+	gengedcomweak(iset)
 	nl() nl() "*** GENGEDCOMSTRONG *** " nl() nl()
 	gengedcomstrong(iset)
 }
