@@ -1,3 +1,8 @@
+2001-01-03 Perry Rapp <puddle@users.sourceforge.net>
+
+	* gedlib/property.c liflines/askprogram.c tools/dbverify.c:
+	Hack property.c to compile on Win32. Leakfix in askprogram.
+
 2001-01-03  Marc Nozell <marc@nozell.com>
 
 	* tools/wprintf.c, interp/lex.c, stdlib/assert.c,
