@@ -24,6 +24,9 @@ Contents:
 This is the source distribution of the LifeLines system, a genealogy
 software system.
 
+(If you are building from cvs sources, you will not have a configure
+script, and you should be reading the README.DEVELOPERS instructions.)
+
 LifeLines should compile correctly using GNU gcc or any native C compiler.
 It also will build using the Cygnus tools on Windows (but see note in the
 platform notes section below).
