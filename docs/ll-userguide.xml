@@ -1125,9 +1125,9 @@ CODESET
 
 <para>
 
-     To actually specify a codeset, enter it via the u(ser) o(ptions) page (which is
+     To actually specify a codeset, enter it via the u(tility) o(ptions) page (which is
      documented below). From the main menu, in the English version, press u to reach
-     the user page, and then o to edit the user options. To set a codeset of, e.g.,
+     the utility page, and then o to edit the user options. To set a codeset of, e.g.,
      ISO-8859-1, enter this string on its own line, without the surrounding quotes:
      "codeset=ISO-8859-1". Or, to specify the use of UTF-8, "codeset=UTF-8".
 
