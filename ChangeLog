@@ -1,5 +1,7 @@
 2000-11-03  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* reports/.cvsignore: Ignore generated files.
+
 	* interp/builtin.c: Bugfix.  Add missing value in return
 	statements.
 
