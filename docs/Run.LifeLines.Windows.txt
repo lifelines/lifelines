@@ -1,0 +1,55 @@
+Running LifeLines for Windows
+
+(This presumes you have installed it, per the
+Install.LifeLines.Windows.txt document)
+
+1)
+Double-click on the shortcut on your desktop
+for LifeLines.
+A DOS window should open, with the title bar
+giving the LifeLines version, and with a prompt
+in the middle of the screen, asking
+What directory holds the LifeLines database ?
+enter path:
+
+2)
+Enter a name for your first LifeLines database.
+It must be a valid Windows directory name
+(no slashes, no colon, no quotation marks...).
+LifeLines will then create & open this brand new
+empty database for you.
+
+3)
+At this point, your best course of action is to
+connect to the Internet, browse to the LifeLines
+home page, and begin reading the LifeLines 3.0.2
+User's Manual, which explains how to proceed,
+adding data and so forth. (I do not know of a 
+newer version of the User's Manual at this time - 
+of course, if one is available, by all means 
+browse to it!)
+
+http://genealogy.org/~ttw/lines/userguide/qref.html
+
+(You are at the Main Menu section now, but you
+would be well-advised to read the previous
+Introduction to GEDCOM section as well.)
+
+
+ - Perry Rapp, 2001/03/03
+
+
+References:
+
+LifeLines on the web:
+  http://lifelines.sourceforge.net/
+
+Perry via email:
+  puddle@users.sourceforge.net
+
+Mailing list:
+  To subscribe to the list, send email to
+        listserv@listserv.nodak.edu
+    with the BODY of the mail containing
+        SUB LINES-L your full name
+

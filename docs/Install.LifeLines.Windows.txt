@@ -1,0 +1,56 @@
+LifeLines installation for Windows
+
+1)
+Choose & create your directories, eg:
+\Program Files\LifeLines (for the program)
+\My Documents\LifeLines\Archives (for ged files)
+\My Documents\LifeLines\Databases (for databases)
+\My Documents\LifeLines\Programs (for report programs)
+\My Documents\LifeLines\Outputs (for report outputs)
+
+2)
+Place the LifeLines program (Lines.exe) & 
+ configuration file (lines.cfg) into the
+ program directory (eg, \Program Files\LifeLines)
+
+3)
+Edit the configuration file (lines.cfg) to reflect your
+ directory choices from step (1)
+
+4)
+In a windows explorer window (eg, right-click on 
+ My Computer and choose Explore), browse to your program
+ directory of step (2) (eg, \Program Files\Lines),
+ right-click on the executable (Lines.exe) and choose
+ Copy, then move your cursor to a clear area on your
+ desktop (the background where My Computer sits), and
+ right-click and choose Paste Shortcut. This is your
+ desktop shortcut to run the program.
+
+5)
+Right-click on the new shortcut icon on your desktop,
+and choose Rename. Adjust the name as you like
+(eg, to LifeLines).
+
+Now you are ready to run LifeLines. 
+Refer to the Run.LifeLines.Windows.txt document.
+
+
+ - Perry Rapp, 2001/03/03
+
+
+References:
+
+LifeLines on the web:
+  http://lifelines.sourceforge.net/
+
+Perry via email:
+  puddle@users.sourceforge.net
+
+Mailing list:
+  To subscribe to the list, send email to
+        listserv@listserv.nodak.edu
+    with the BODY of the mail containing
+        SUB LINES-L your full name
+
+
