@@ -220,7 +220,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __gettoday -- Create today's event
  *   usage: gettoday() --> EVENT
  *=================================*/
-PVALUE __gettoday (void)
+PVALUE __gettoday (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	NODE prnt = create_node(NULL, "EVEN", NULL, NULL);
 	NODE chil = create_node(NULL, "DATE", get_date(), prnt);
@@ -2615,8 +2616,8 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
  * __nl -- Newline function
  *   usage: nl() -> STRING
  *=======================*/
-PVALUE __nl (eflg)
-BOOLEAN *eflg;
+PVALUE __nl (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\n");
@@ -2625,8 +2626,8 @@ BOOLEAN *eflg;
  * __space -- Space function
  *   usage: sp() -> STRING
  *========================*/
-PVALUE __space (eflg)
-BOOLEAN *eflg;
+PVALUE __space (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)" ");
@@ -2635,8 +2636,8 @@ BOOLEAN *eflg;
  * __qt -- Double quote function
  *   usage: qt() -> STRING
  *============================*/
-PVALUE __qt (eflg)
-BOOLEAN *eflg;
+PVALUE __qt (node, stab, eflg)
+PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 	*eflg = FALSE;
 	return create_pvalue(PSTRING, (WORD)"\"");
