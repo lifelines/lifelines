@@ -111,10 +111,14 @@ int endwin()
 	return(0);
 }
 
+void wtitle(chtype *title)
+{
+	SetConsoleTitle(title);
+}
+
 WINDOW	*initscr()
 {
 	_fmode = O_BINARY;	/* use binary mode for reading and writing */
-
 	/* open an error file for debugging */
 
 #ifdef DEBUG

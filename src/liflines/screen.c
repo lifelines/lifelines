@@ -60,9 +60,7 @@
 extern BOOLEAN alldone, progrunning;
 extern STRING version, empstr, empstr71, readpath;
 extern STRING abverr, uoperr;
-STRING mtitle = (STRING) "LifeLines %s - Genealogical Database and Programming System";
-STRING cright = (STRING) "Copyright(c) 1991 to 1996, by T. T. Wetmore IV";
-STRING plschs = (STRING) "Please choose an operation:";
+extern STRING mtitle, cright, plschs;
 BOOLEAN stdout_vis = FALSE;
 
 static INDISEQ indiseq_list_interact(WINDOW *win, STRING ttl, INDISEQ seq);

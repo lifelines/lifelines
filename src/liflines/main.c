@@ -53,6 +53,7 @@
 #endif /* HAVE_GETOPT */
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
+extern STRING mtitle;
 
 extern INT csz_indi, icsz_indi;
 extern INT csz_fam, icsz_fam;
@@ -75,14 +76,14 @@ extern INT winx, winy;
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntcuF] [database]   # Use -F for Finnish database";
+static STRING usage = (STRING) "lines [-akrwfmntcuFy] [database]   # Use -F for Finnish database";
 # else
 int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-akrwfmntcu] [database]   # Finnish database";
+static STRING usage = (STRING) "lines [-akrwfmntcuy] [database]   # Finnish database";
 # endif
 #else
 int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-akrwfmntcu] [database]";
+static STRING usage = (STRING) "lines [-akrwfmntcuy] [database]";
 #endif
 
 BOOLEAN opt_nocb  = FALSE;	/* no cb. data is displayed if TRUE */
@@ -96,6 +97,7 @@ BOOLEAN alldone   = FALSE;	/* completion flag */
 BOOLEAN progrunning = FALSE;	/* program is running */
 BOOLEAN traceprogram = FALSE;	/* trace program */
 BOOLEAN traditional = TRUE;	/* use traditional family rules */
+BOOLEAN selftest = FALSE; /* selftest rules (ignore paths) */
 BOOLEAN showusage = FALSE;	/* show usage */
 STRING btreepath;		/* database path given by user */
 STRING readpath;		/* database path used to open */
@@ -109,6 +111,7 @@ STRING lldatabases;
 
 static void show_open_error(void);
 static BOOLEAN trytocreate(STRING);
+static void platform_init(void);
 
 /*==================================
  * main -- Main routine of LifeLines
@@ -130,7 +133,7 @@ main (INT argc,
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "akrwfmntc:Fu:")) != -1) {
+	while ((c = getopt(argc, argv, "akrwfmntc:Fu:y")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -191,6 +194,9 @@ main (INT argc,
 		case 'u':
 			sscanf(optarg, "%d,%d", &winx, &winy);
 			break;
+		case 'y':
+			selftest = TRUE;
+			break;
 		case '?':
 			showusage = TRUE;
 			goto usage;
@@ -200,6 +206,7 @@ main (INT argc,
 
 	/* Initialize Curses UI */
 	initscr();
+	platform_init();
 	noecho();
 	set_displaykeys(keyflag);
 	if (!init_screen())
@@ -216,8 +223,10 @@ main (INT argc,
 		goto usage;
 	}
 
-	lldatabases = environ_determine_database();
-	lldatabases = strsave(lldatabases);
+	if (!selftest) {
+		lldatabases = environ_determine_database();
+		lldatabases = strsave(lldatabases);
+	}
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		btreepath = ask_for_lldb(idldir, "enter path: ", lldatabases);
@@ -279,8 +288,10 @@ main (INT argc,
 		switch (bterrno) {
 		case BTERRNOBTRE:
 		case BTERRKFILE:	{/*NEW*/
-				STRING llnewdbdir = environ_determine_newdbdir();
-				readpath = strsave(concat_path(llnewdbdir, btreepath));
+				if (!selftest) {
+					STRING llnewdbdir = environ_determine_newdbdir();
+					readpath = strsave(concat_path(llnewdbdir, btreepath));
+				}
 				if(!trytocreate(readpath)) {
 					show_open_error();
 					goto finish;
@@ -388,5 +399,18 @@ show_open_error (void)
 		llwprintf("Undefined database error -- This can't happen.");
 		break;
 	}
-        sleep(5);
+	sleep(5);
 }
+/*==================================================
+ * platform_init -- platform specific initialization
+ *================================================*/
+static void
+platform_init (void)
+{
+#ifdef WIN32
+	char title[128];
+	sprintf(title, mtitle, version);
+	wtitle(title);
+#endif
+}
+

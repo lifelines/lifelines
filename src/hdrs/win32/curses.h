@@ -70,6 +70,7 @@ int wgetstr(WINDOW *wp, char *cp);
 int wmove(WINDOW *wp, int x, int y);
 int wprintw(WINDOW *wp, ...);
 int wrefresh(WINDOW *wp);
+void wtitle(chtype * title); /* win32 add-on by Perry, 2001/01 */
 WINDOW  *initscr();
 WINDOW  *newwin(int nlines, int ncols, int begy, int begx);
 WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);
