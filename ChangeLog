@@ -1,3 +1,7 @@
+2001-01-27 Marc Nozell <marc@nozell.com>
+
+	* stdlib/Makefile.am: Fix UNIX build.
+
 2001-01-27 Perry Rapp <puddle@users.sourceforge.net>
 
 	* NEWS README.LAYOUT hdrs/screen.h liflines/browse.c

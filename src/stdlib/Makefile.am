@@ -36,5 +36,5 @@ stdstrng.o: ../hdrs/standard.h
 stdstrng.o: ../hdrs/mystring.h
 table.o: ../hdrs/standard.h
 table.o: ../hdrs/llstdlib.h ../hdrs/table.h
-warehouse.o: ../hdrs/stdlib.h ../hdrs/warehouse.h
+warehouse.o: ../hdrs/llstdlib.h ../hdrs/warehouse.h
 
