@@ -69,6 +69,7 @@
 /* upon directly to determine if there are sign problems */
 typedef char *STRING;
 typedef const char *CNSTRING;
+typedef unsigned char uchar;
 
 #ifndef BOOLEAN
 #	define BOOLEAN int

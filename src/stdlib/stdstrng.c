@@ -172,9 +172,8 @@ upper (STRING str)
 {
 	static unsigned char scratch[MAXLINELEN+1];
 	STRING p = scratch;
-	unsigned char * ustr = str; /* unsigned for ll_toupper */
 	INT c, i=0;
-	while ((c = *ustr++) && (++i < MAXLINELEN+1))
+	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1))
 		*p++ = ll_toupper(c);
 	*p = '\0';
 	return scratch;
@@ -241,8 +240,8 @@ trim (STRING str, INT len)
 void
 striptrail (STRING p)
 {
-	unsigned char *q = p + strlen(p) - 1;
-	while (q >= p && iswhite(*q))
+	STRING q = p + strlen(p) - 1;
+	while (q >= p && iswhite((uchar)*q))
 		*q-- = '\0';
 }
 #ifdef UNUSED_CODE
@@ -256,11 +255,11 @@ void
 striplead (STRING p)
 {
 	INT i = strlen(p);
-	unsigned char *e = p + i - 1;
-	unsigned char *b = p;
-	unsigned char *q = p;
+	STRING  e = p + i - 1;
+	STRING b = p;
+	STRING q = p;
 
-	while (iswhite(*q) && q <= e) {
+	while (iswhite((uchar)*q) && q <= e) {
 		++q;
 		--i; /* keep from copying past end of p */
 	}

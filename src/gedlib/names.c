@@ -233,18 +233,17 @@ getsurname_impl (STRING name, INT strict)
 	static unsigned char buffer[3][MAXLINELEN+1];
 	static INT dex = 0;
 	STRING p, surname;
-	unsigned char * uname = name; /* switch to unsigned char for isletter */
 	if (++dex > 2) dex = 0;
 	p = surname = buffer[dex];
-	while ((c = *uname++) && c != NAMESEP)
+	while ((c = (uchar)*name++) && c != NAMESEP)
 		;
 	if (c == 0) return (STRING) "____";
-	while (iswhite(c = *uname++))
+	while (iswhite(c = (uchar)*name++))
 		;
 	if (c == 0 || c == NAMESEP) return (STRING) "____";
 	if (strict && !isletter(c)) return (STRING) "____";
 	*p++ = c;
-	while ((c = *uname++) && c != NAMESEP)
+	while ((c = (uchar)*name++) && c != NAMESEP)
 		*p++ = c;
 	*p = 0;
 	return surname;
@@ -278,48 +277,39 @@ INT
 getfinitial (STRING name)
 {
 	INT c;
-	unsigned char * uname = name; /* switch to unsigned char for iswhite */
 	while (TRUE) {
-		while (iswhite(c = *uname++))
+		while (iswhite(c = (uchar)*name++))
 			;
 		if (isletter(c)) return ll_toupper(c);
 		if (c == 0) return '$';
 		if (c != NAMESEP) return '$';
-		while ((c = *uname++) && c != NAMESEP)
+		while ((c = (uchar)*name++) && c != NAMESEP)
 			;
 		if (c == 0) return '$';
 	}
 }
-/*==================================================================
- * soundex -- Return SOUNDEX code of name; any case; 
- *  return Z999 for problem names
- * returns static buffer (or constant string)
- * We assume ll_toupper is a function, not a macro.
- * This function depends on locale via ll_toupper.
- *================================================================*/
 STRING
 soundex (STRING name)   /* surname */
 {
 	static unsigned char scratch[6];
-	unsigned char * up = name; /* use unsigned char for ll_toupper */
-	unsigned char * uq = scratch;
+	STRING p = name, q = scratch;
 	INT c, i, j;
-	if (!name || eqstr(name, "____"))
+	if (!name || !name[0] || eqstr(name, "____"))
 		return (STRING) "Z999";
 	/* always copy first letter directly */
-	*uq++ = ll_toupper(*up++);
+	*q++ = ll_toupper((uchar)*p++);
 	i = 1;
 	oldsx = 0;
-	while ((c = ll_toupper(*up++)) && i < 4) {
+	while (*p && (c = ll_toupper((uchar)*p++)) && i < 4) {
 		if ((j = sxcodeof(c)) == 0) continue;
-		*uq++ = j;
+		*q++ = j;
 		i++;
 	}
 	while (i < 4) {
-		*uq++ = '0';
+		*q++ = '0';
 		i++;
 	}
-	*uq = 0;
+	*q = 0;
 	return scratch;
 }
 /*========================================
@@ -559,8 +549,7 @@ static void
 squeeze (STRING in, STRING out)
 {
 	INT c;
-	unsigned char * uin = in; /* unsigned for chartype etc */
-	while ((c = *uin++) && chartype(c) != LETTER)
+	while ((c = (uchar)*in++) && chartype(c) != LETTER)
 		;
 	if (c == 0) {
 		*out++ = 0; *out = 0;
@@ -568,7 +557,7 @@ squeeze (STRING in, STRING out)
 	}
 	while (TRUE) {
 		*out++ = ll_toupper(c);
-		while ((c = *uin++) && c != NAMESEP && chartype(c) != WHITE) {
+		while ((c = (uchar)*in++) && c != NAMESEP && chartype(c) != WHITE) {
 			if (chartype(c) == LETTER) *out++ = ll_toupper(c);
 		}
 		if (c == 0) {
@@ -576,7 +565,7 @@ squeeze (STRING in, STRING out)
 			return;
 		}
 		*out++ = 0;
-		while ((c = *uin++) && chartype(c) != LETTER)
+		while ((c = (uchar)*in++) && chartype(c) != LETTER)
 			;
 		if (c == 0) {
 			*out++ = 0; *out = 0;
@@ -677,13 +666,12 @@ void
 cmpsqueeze (STRING in, STRING out)
 {
 	INT c;
-	unsigned char * uin = in; /* unsigned for iswhite */
-	while ((uin = nextpiece(uin))) {
+	while ((in = nextpiece(in))) {
 		while (TRUE) {
-			c = *uin++;
+			c = (uchar)*in++;
 			if (iswhite(c) || c == NAMESEP || c == 0) {
 				*out++ = 0;
-				--uin;
+				--in;
 				break;
 			}
 			*out++ = c;
@@ -701,17 +689,16 @@ givens (STRING name)
 	INT c;
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING out = scratch;
-	unsigned char * uname = name; /* unsigned for iswhite */
-	while ((uname = nextpiece(uname))) {
+	while ((name = nextpiece(name))) {
 		while (TRUE) {
-			if ((c = *uname++) == 0) {
+			if ((c = (uchar)*name++) == 0) {
 				if (*(out-1) == ' ') --out;
 				*out = 0;
 				return scratch;
 			}
 			if (iswhite(c) || c == NAMESEP) {
 				*out++ = ' ';
-				--uname;
+				--name;
 				break;
 			}
 			*out++ = c;
@@ -728,13 +715,12 @@ static STRING
 nextpiece (STRING in)
 {
 	int c;
-	unsigned char * uin = in; /* unsigned for iswhite */
 	while (TRUE) {
-		while (iswhite(c = *uin++))
+		while (iswhite(c = (uchar)*in++))
 			;
 		if (c == 0) return NULL;
 		if (c != NAMESEP) return --in;
-		while ((c = *uin++) && c != NAMESEP)
+		while ((c = (uchar)*in++) && c != NAMESEP)
 			;
 		if (c == 0) return NULL;
 	}
@@ -792,25 +778,24 @@ name_to_parts (STRING name, STRING *parts)
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
 	INT c, i = 0;
-	unsigned char * uname = name; /* switch to unsigned char for iswhite */
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	for (i = 0; i < MAXPARTS; i++)
 		parts[i] = NULL;
 	i = 0;
 	while (TRUE) {
-		while (iswhite(c = *uname++))
+		while (iswhite(c = (uchar)*name++))
 			;
 		if (c == 0) return;
 		ASSERT(i < MAXPARTS);
 		parts[i++] = p;
 		*p++ = c;
 		if (c == NAMESEP) {
-			while ((c = *p++ = *uname++) && c != NAMESEP)
+			while ((c = *p++ = (uchar)*name++) && c != NAMESEP)
 				;
 			if (c == 0) return;
 			*p++ = 0;
 		} else {
-			while ((c = *uname++) && !iswhite(c) && c != NAMESEP)
+			while ((c = (uchar)*name++) && !iswhite(c) && c != NAMESEP)
 				*p++ = c;
 			*p++ = 0;
 			if (c == 0) return;
@@ -847,16 +832,15 @@ upsurname (STRING name)
 {
 	static unsigned char scratch[MAXGEDNAMELEN+1];
 	STRING p = scratch;
-	unsigned char * uname = name; /* unsigned for ll_toupper */
 	INT c;
-	while ((c = *p++ = *uname++) && c != NAMESEP)
+	while ((c = *p++ = (uchar)*name++) && c != NAMESEP)
 		;
 	if (c == 0) return scratch;
-	while ((c = *uname++) && c != NAMESEP)
+	while ((c = (uchar)*name++) && c != NAMESEP)
 		*p++ = ll_toupper(c);
 	*p++ = c;
 	if (c == 0) return scratch;
-	while ((c = *p++ = *uname++))
+	while ((c = *p++ = (uchar)*name++))
 		;
 	return scratch;
 }
@@ -923,21 +907,21 @@ STRING *
 id_by_key (STRING name, STRING **pkeys)
 {
 	STRING rec, str;
-	unsigned char * up = name; /* unsigned for chartype */
+	STRING p = name; /* unsigned for chartype */
 	static unsigned char kbuf[MAXGEDNAMELEN];
 	static unsigned char nbuf[MAXGEDNAMELEN];
 	static STRING kaddr, naddr;
 	INT i = 0, c, len;
 	NODE indi;
-	while ((c = *up++) && chartype(c) == WHITE)
+	while ((c = (uchar)*p++) && chartype(c) == WHITE)
 		;
 	if (c == 0) return NULL;
 	if (c != 'I' && c != 'i' && chartype(c) != DIGIT) return NULL;
-	if (chartype(c) != DIGIT) c = *up++;
+	if (chartype(c) != DIGIT) c = (uchar)*p++;
 	if (chartype(c) != DIGIT) return NULL;
 	kbuf[i++] = 'I';
 	kbuf[i++] = c;
-	while ((c = *up++) && chartype(c) == DIGIT)
+	while ((c = (uchar)*p++) && chartype(c) == DIGIT)
 		kbuf[i++] = c;
 	if (c != 0) return NULL;
 	kbuf[i] = 0;

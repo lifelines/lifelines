@@ -1,3 +1,11 @@
+2007-07-11 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/charmaps.c gedlib/misc.c gedlib/names.c
+	gedlib/node.c hdrs/standard.h stdlib/stdstrng.c:
+	Bugfix for unsigned char fixes on 2001-07-10. Reverted to previous
+	use of STRING pointers, and now cast to (uchar) before any conversion
+	to INT (to avoid unwanted sign extension).
+
 2001-07-10  David A. Bright <dabright@users.sourceforge.net>
 
         * reports/book-latex.ll: Added CREM (cremated) tag processing;

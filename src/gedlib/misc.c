@@ -112,14 +112,13 @@ INT
 xrefval (char ntype, STRING str)
 {
 	INT val, i, len;
-	unsigned char * ustr = str; /* unsigned for chartype */
 	if ((str == NULL) || (*str == '\0')) return 0;
 	len = strlen(str);
 	if (str[0] != '@' || str[len-1] != '@') return 0;
 	if (str[1] != ntype) return 0;
 	val=0;
 	for (i=2; i<len-1; i++) {
-		if (chartype(ustr[i]) != DIGIT) return 0;
+		if (chartype((uchar)str[i]) != DIGIT) return 0;
 		if (i>31) return 0;
 		val = val*10 + (str[i]-'0');
 	}
