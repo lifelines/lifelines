@@ -251,6 +251,11 @@ int wrefresh(WINDOW *wp)
 	return(0);
 }
 
+int redrawwin(WINDOW *wp)
+{
+	return wrefresh(wp);
+}
+
 /* refresh virtual image of screen (curscr) */
 int wnoutrefresh(WINDOW *wp)
 {

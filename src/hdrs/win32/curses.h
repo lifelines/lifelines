@@ -65,6 +65,7 @@ WINDOW  *newwin(int nlines, int ncols, int begy, int begx);
 int nocbreak();
 int nocrmode();
 int noecho();
+int redrawwin(WINDOW *wp);
 int scrollok(WINDOW *wp, int okay);
 WINDOW  *subwin(WINDOW *wp, int nlines, int ncols, int begy, int begx);
 int touchwin(WINDOW *wp);
