@@ -85,7 +85,7 @@ static void free_entire_tree(void);
 static STRING indi_lineprint(INT width, void * param);
 static STRING node_lineprint(INT width, void * param);
 static void print_to_screen(INT gen, INT * row, LINEPRINT_FNC, void *lpf_param, CANVASDATA canvas);
-static LIST text_to_list (STRING text, INT width);
+static LIST text_to_list (STRING text, INT width, INT whattofree);
 static STRING tn_lineprint(INT width, void * param);
 static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, CANVASDATA canvas);
 static void trav_pre_print_nd(NODE node, INT * row, INT gen, CANVASDATA canvas, INT gdvw);
@@ -178,9 +178,9 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
  *  each no more than width
  *=========================*/
 static LIST
-text_to_list (STRING text, INT width)
+text_to_list (STRING text, INT width, INT whattofree)
 {
-	LIST list = create_list();
+	LIST list = create_list2(whattofree);
 	append_to_text_list(list, text, width, TRUE);
 	return list;
 }
@@ -291,12 +291,11 @@ add_dnodes (NODE node, INT gen, INT maxgen, INT * count, CANVASDATA canvas)
 	mylen = sizeof(line) - strlen(line);
 	/* now output is available as scratch */
 
-	list = text_to_list("", width);
+	list = text_to_list("", width, LISTDOFREE);
 	if (nval(node)) {
 		translate_string(ttmd, nval(node), output, sizeof(output)-1);
 		append_to_text_list(list, output, width, FALSE); 
 	}
-	set_list_type(list, LISTDOFREE);
 
 	/* anode is first child */
 	anode = nchild(node);

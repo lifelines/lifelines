@@ -1,3 +1,12 @@
+2003-09-15 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/gedlib/xlat.c src/hdrs/list.h
+	src/interp/interp.c src/liflines/llexec.c src/liflines/main.c
+	src/liflines/pedigree.c src/liflines/screen.c
+	src/stdlib/list.c
+
+	New create_list2 to specify what to free whilst creating list.
+
 2003-09-14 Perry Rapp
 
 	* src/gedlib/intrface.c src/hdrs/icvt.h src/hdrs/table.h

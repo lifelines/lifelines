@@ -236,8 +236,7 @@ main (INT argc, char **argv)
 			break;
 		case 'x': /* execute program */
 			if (!exprogs) {
-				exprogs = create_list();
-				set_list_type(exprogs, LISTDOFREE);
+				exprogs = create_list2(LISTDOFREE);
 			}
 			push_list(exprogs, strdup(optarg ? optarg : ""));
 			break;

@@ -36,6 +36,16 @@ create_list (void)
 	validate_list(list);
 	return list;
 }
+/*===========================
+ * create_list2 -- Create list, with free type
+ *=========================*/
+LIST
+create_list2 (INT whattofree)
+{
+	LIST list = create_list();
+	ltype(list) = whattofree;
+	return list;
+}
 /*===============================
  * set_list_type -- Set list type
  *  list: [I/O] list to change

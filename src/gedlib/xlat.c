@@ -95,9 +95,8 @@ create_null_xlat (void)
 	/* create & initialize new xlat */
 	XLAT xlat = (XLAT)stdalloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
-	xlat->steps = create_list();
+	xlat->steps = create_list2(LISTDOFREE);
 	xlat->valid = TRUE;
-	set_list_type(xlat->steps, LISTDOFREE);
 	if (!f_xlats) {
 		f_xlats = create_list();
 	}
@@ -493,8 +492,7 @@ xl_free_adhoc_xlats (void)
 		return;
 	/* we don't have a way to delete items from a list,
 	so just copy the ones we want to a new list */
-	newlist = create_list();
-	set_list_type(newlist, LISTDOFREE);
+	newlist = create_list2(LISTDOFREE);
 	FORLIST(f_xlats, el)
 		xlattemp = (XLAT)el;
 		if (xlattemp->adhoc) {
@@ -582,8 +580,7 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 				if (subcodes) {
 					ZSTR ztemp=0;
 					if (!*subcodes) {
-						*subcodes = create_list();
-						set_list_type(*subcodes, LISTDOFREE);
+						*subcodes = create_list2(LISTDOFREE);
 					}
 					ztemp = zs_newsubs(prev, p-prev);
 					enqueue_list(*subcodes, strsave(zs_str(ztemp)));

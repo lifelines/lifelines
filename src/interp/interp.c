@@ -2166,8 +2166,7 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	/* add to global proc table */
 	list = (LIST)valueof_ptr(gproctab, procname);
 	if (!list) {
-		list = create_list();
-		set_list_type(list, LISTNOFREE);
+		list = create_list2(LISTNOFREE);
 		insert_table_ptr(gproctab, procname, list);
 	}
 	enqueue_list(list, procnode);
@@ -2195,8 +2194,7 @@ pa_handle_func (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 	/* add to global proc table */
 	list = (LIST)valueof_ptr(gfunctab, procname);
 	if (!list) {
-		list = create_list();
-		set_list_type(list, LISTNOFREE);
+		list = create_list2(LISTNOFREE);
 		insert_table_ptr(gfunctab, procname, list);
 	}
 	enqueue_list(list, procnode);
@@ -2271,8 +2269,7 @@ enqueue_parse_error (const char * fmt, ...)
 	va_start(args, fmt);
 
 	if (!outstanding_parse_errors) {
-		outstanding_parse_errors = create_list();
-		set_list_type(outstanding_parse_errors, LISTDOFREE);
+		outstanding_parse_errors = create_list2(LISTDOFREE);
 	}
 	llstrsetvf(buffer, sizeof(buffer), 0, fmt, args);
 	va_end(args);

@@ -704,10 +704,8 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	INT ndirs=0;
 	STRING p=0;
 	ASSERT(!(*dblist) && !(*dbdesclist));
-	*dblist = create_list();
-	*dbdesclist = create_list();
-	set_list_type(*dblist, LISTDOFREE);
-	set_list_type(*dbdesclist, LISTDOFREE);
+	*dblist = create_list2(LISTDOFREE);
+	*dbdesclist = create_list2(LISTDOFREE);
 	if (!path || !path[0])
 		return 0;
 	dirs = (STRING)stdalloc(strlen(path)+2);

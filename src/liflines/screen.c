@@ -1796,10 +1796,8 @@ invoke_del_menu (void)
 static void
 invoke_cset_display (void)
 {
-	LIST list = create_list();
+	LIST list = create_list2(LISTDOFREE);
 	ZSTR zstr=zs_newn(80);
-
-	set_list_type(list, LISTDOFREE);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
 	enqueue_list(list, strsave(zs_str(zstr)));
