@@ -60,7 +60,7 @@ remove_child (NODE indi,
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!indi) indi = ask_for_indi(idcrmv, FALSE, FALSE);
+	if (!indi) indi = ask_for_indi(idcrmv, NOCONFIRM, FALSE);
 	if (!indi) return FALSE;
 	if (!FAMC(indi)) {
 		message(ntchld);
@@ -120,7 +120,7 @@ remove_spouse (NODE indi,
 	}
 
 /* Identify spouse to remove */
-	if (!indi) indi = ask_for_indi(idsrmv, FALSE, FALSE);
+	if (!indi) indi = ask_for_indi(idsrmv, NOCONFIRM, FALSE);
 	if (!indi) return FALSE;
 	if (!FAMS(indi)) {
 		message(ntprnt);

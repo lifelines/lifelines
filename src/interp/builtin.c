@@ -141,7 +141,7 @@ __getindi (PNODE node,
 		msg = (STRING) pvalue(val);
 	}
 	assign_iden(stab, iident(arg), create_pvalue(PINDI, NULL));
-	key = ask_for_indi_key(msg, FALSE, TRUE);
+	key = ask_for_indi_key(msg, NOCONFIRM, TRUE);
 	if (!key) return NULL;
 	cel = key_to_indi_cacheel(key);
 	assign_iden(stab, iident(arg), create_pvalue(PINDI, (WORD)cel));
@@ -169,7 +169,7 @@ __getindidate (PNODE node,
 	if (*eflg) return NULL;
 	if (inext(arg)) ttl = (STRING) evaluate(inext(arg), stab, eflg);
 	if (*eflg) return NULL;
-	cel = key_to_indi_cacheel(ask_for_indi_key(ttl, FALSE, TRUE));
+	cel = key_to_indi_cacheel(ask_for_indi_key(ttl, NOCONFIRM, TRUE));
 	assign_iden(stab, iident(arg), (WORD) cel);
 	return NULL;
 }

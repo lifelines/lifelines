@@ -82,20 +82,21 @@ INT
 nod0_to_keynum(NODE nod, char ntype)
 {
 	if (!nod) return 0;
-	return xrefval(nxref(nod));
+	return xrefval(nxref(nod), ntype);
 }
 /*=============================================
  * xrefval -- numeric value after removing @'s at both ends
  *===========================================*/
 INT
-xrefval (STRING str)
+xrefval (STRING str, char ntype)
 {
-	INT val, i;
+	INT val, i, len;
 	if ((str == NULL) || (*str == '\0')) return 0;
-	if (str[0] != '@') return 0;
-	i=1;
+	len = strlen(str);
+	if (str[0] != '@' || str[len-1] != '@') return 0;
+	if (str[1] != ntype) return 0;
 	val=0;
-	while (str[i]) {
+	for (i=2; i<len-1; i++) {
 		if (chartype(str[i]) != DIGIT) return 0;
 		if (i>31) return 0;
 		val = val*10 + (str[i]-'0');

@@ -1,3 +1,16 @@
+2000-11-28 Perry Rapp <prapp@users.sourceforge.net>
+
+	* gedlib/misc.c
+	hdrs/gedcom.h hdrs/liflines.h
+	interp/builtin.c
+	liflines/add.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/llinesi.h
+	liflines/miscutls.c liflines/remove.c liflines/swap.c:
+	Fixed xrefval (I originally checked in wrong version).
+	Changed second arg of ask_indi & ask_indi_key to CONFIRMQ
+	typedef and added DOCONFIRM/NOCONFIRM values. 
+	
+
 2000-11-28  Marc Nozell  <marc@nozell.com>
 
 	* Added @progname, @version, @author, @output info to all reports.
@@ -11,7 +24,7 @@
 
 	* hdrs/gedcom.h: Fixed nod0_to_keynum prototype
 
-2000-11-28 Perry Rapp (puddle@users.sourceforge.net)
+2000-11-28 Perry Rapp <puddle@users.sourceforge.net>
 
 	* Reformatted all my ChangeLog entries to match others.
 

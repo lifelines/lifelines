@@ -173,7 +173,7 @@ browse_indi (NODE *pindi1,
 			}
 			break;
 		case 'z':	/* Zip browse another person */
-			node = ask_for_indi(idpnxt, FALSE, FALSE);
+			node = ask_for_indi(idpnxt, NOCONFIRM, FALSE);
 			if (node) indi = node;
 			break;
 		case 's':	/* Browse to person's spouse */
@@ -280,7 +280,7 @@ browse_indi (NODE *pindi1,
 			*pfam1 = node;
 			return BROWSE_FAM;
 		case 't':	/* Switch to tandem browsing */
-			node = ask_for_indi(idp2br, FALSE, FALSE);
+			node = ask_for_indi(idp2br, NOCONFIRM, FALSE);
 			if (node) {
 				*pindi1 = indi;
 				*pindi2 = node;
@@ -518,7 +518,7 @@ browse_fam (NODE *pindi,
 			return BROWSE_LIST;
 			break;
 		case 'z':	/* Zip browse to new person */
-			*pindi = ask_for_indi(idpnxt, FALSE, FALSE);
+			*pindi = ask_for_indi(idpnxt, NOCONFIRM, FALSE);
 			if (*pindi) return BROWSE_INDI;
 			break;
 		case 't':	/* Enter family tandem mode */

@@ -8,12 +8,16 @@
 /* Function Prototypes */
 
 /* from ask.c */
+typedef INT CONFIRMQ;
+#define DOCONFIRM 1
+#define NOCONFIRM 0
+
 NODE ask_for_fam(STRING, STRING);
 FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
 FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING path, STRING ext);
 STRING ask_for_lldb (STRING ttl, STRING prmpt, STRING basedir);
 FILE *ask_for_program(STRING, STRING, STRING*, STRING, STRING);
-STRING ask_for_indi_key(STRING, BOOLEAN, BOOLEAN);
+STRING ask_for_indi_key(STRING, CONFIRMQ, BOOLEAN);
 INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
 BOOLEAN ask_yes_or_no_msg(STRING, STRING);

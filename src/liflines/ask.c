@@ -54,9 +54,9 @@ NODE
 ask_for_fam (STRING pttl,
              STRING sttl)
 {
-	NODE sib, fam, prn = ask_for_indi(pttl, FALSE, TRUE);
+	NODE sib, fam, prn = ask_for_indi(pttl, NOCONFIRM, TRUE);
 	if (!prn)  {
-		sib = ask_for_indi(sttl, FALSE, TRUE);
+		sib = ask_for_indi(sttl, NOCONFIRM, TRUE);
 		if (!sib) return NULL;
 		if (!(fam = FAMC(sib))) {
 			message(ntchld);
@@ -260,14 +260,14 @@ ask_for_indi_once (STRING ttl,
  *===============================================================*/
 NODE
 ask_for_indi (STRING ttl,
-              BOOLEAN reask,
+              CONFIRMQ confirmq,
               BOOLEAN ask1)
 {
 	while (TRUE) {
 		INT rc;
 		NODE indi = ask_for_indi_once(ttl, ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT) return indi;
-		if (!reask || !ask_yes_or_no(entnam)) return NULL;
+		if (confirmq != DOCONFIRM || !ask_yes_or_no(entnam)) return NULL;
 	}
 }
 /*===============================================================
@@ -305,10 +305,10 @@ ask_for_indi_list (STRING ttl,
  *========================================================*/
 STRING
 ask_for_indi_key (STRING ttl,
-                  BOOLEAN reask,
+                  CONFIRMQ confirmq,
                   BOOLEAN ask1)
 {
-	NODE indi = ask_for_indi(ttl, reask, ask1);
+	NODE indi = ask_for_indi(ttl, confirmq, ask1);
 	if (!indi) return NULL;
 	return rmvat(nxref(indi));
 }

@@ -48,7 +48,7 @@ void
 key_util (void)
 {
 	TRANTABLE ttd = tran_tables[MINDS];
-	NODE indi = ask_for_indi("Whose key value do you want?", FALSE, FALSE);
+	NODE indi = ask_for_indi("Whose key value do you want?", NOCONFIRM, FALSE);
 	if (!indi) return;
 	mprintf_info("%s - %s", rmvat(nxref(indi)), indi_to_name(indi, ttd, 70));
 }

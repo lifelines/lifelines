@@ -292,7 +292,7 @@ INT xref_prevf(INT);
 INT xref_nexts(INT);
 INT xref_nexte(INT);
 INT xref_nextx(INT);
-INT xrefval(STRING str);
+INT xrefval(STRING str, char ntype);
 
 #define fam_to_event indi_to_event
 
