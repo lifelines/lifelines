@@ -63,8 +63,6 @@ static NODE edit_add_record(STRING recstr, STRING redt, STRING redtopt
 static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt
 	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
 	, void (*todbase)(NODE), STRING gdmsg);
-static BOOLEAN ntagdiff(NODE node1, NODE node2);
-static BOOLEAN nvaldiff(NODE node1, NODE node2);
 
 
 /*********************************************
@@ -369,62 +367,6 @@ edit_record (NODE root1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	free_nodes(refnn);
 	free_nodes(refn1n);
 	msg_info(gdmsg);
-
-/* Change database */
-
-#if OLDCODE
-	/* BUG 2002.06.02 -- this assumes only one REFN */
-	refn = REFN(root2);
-	newr = refn ? nval(refn) : NULL;
-	if (newr && oldr && eqstr(newr, oldr)) {
-		newr = oldr = NULL;
-	}
-	key = rmvat(nxref(root1));
-	if (oldr) remove_refn(oldr, key);
-	if (newr) add_refn(newr, key);
-	/* did value of top node change ? */
-	if (nvaldiff(root1, root2)) {
-		/* swap value of root2 into root1, which is the one we keep */
-		str = nval(root1);
-		nval(root1) = nval(root2);
-		nval(root2) = str;
-	}
-	if (ntagdiff(root1, root2)) {
-		/* swap tag of root2 into root1, which is the one we keep */
-		str = ntag(root1);
-		ntag(root1) = ntag(root2);
-		ntag(root2) = str;
-	}
-	temp = nchild(root1);
-	nchild(root1) = nchild(root2);
-	nchild(root2) = temp;
-	(*todbase)(root1);
-	free_nodes(root2);
-#endif
-}
-/*===============================================
- * nvaldiff -- Do nodes have different values ?
- *  handles NULLs in either
- * Created: 2001/04/08, Perry Rapp
- *=============================================*/
-static BOOLEAN
-nvaldiff (NODE node1, NODE node2)
-{
-	if (!nval(node1) && !nval(node2)) return FALSE;
-	if (!nval(node1) || !nval(node2)) return TRUE;
-	return strcmp(nval(node1), nval(node2));
-}
-/*===============================================
- * ntagdiff -- Do nodes have different tags ?
- *  handles NULLs in either
- * Created: 2001/12/30, Perry Rapp
- *=============================================*/
-static BOOLEAN
-ntagdiff (NODE node1, NODE node2)
-{
-	if (!ntag(node1) && !ntag(node2)) return FALSE;
-	if (!ntag(node1) || !ntag(node2)) return TRUE;
-	return !eqstr(ntag(node1), ntag(node2));
 }
 /*===============================================
  * ask_for_record -- Ask user to identify record

@@ -83,7 +83,6 @@ static UIWINDOW choose_from_list_win=NULL;
 static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
 static UIWINDOW scan_menu_win=NULL;
 static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
-static UIWINDOW trans_menu_win=NULL;
 static UIWINDOW extra_menu_win=NULL;
 
 /*********************************************
@@ -185,20 +184,16 @@ static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, STRING men
 static void display_status(STRING text);
 static void edit_tt_menu(void);
 static void end_action(void);
-static void export_tts(void);
 static STRING get_answer(UIWINDOW uiwin, INT row, INT col);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
-static void import_tts(void);
 static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static NODE invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(void);
 static RECORD invoke_scan_menu(void);
-static void invoke_trans_menu(void);
 static void invoke_utils_menu(void);
-static void load_tt_action(void);
 static void output_menu(UIWINDOW uiwin, INT screen, INT bottom, INT width);
 void place_cursor(void);
 static void place_std_msg(void);
@@ -209,14 +204,11 @@ static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
 static void repaint_scan_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
-static void repaint_trans_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_footer_menu(INT screen);
 static void repaint_main_menu(UIWINDOW uiwin);
-static void rpt_cset_menu(void);
 static void run_report(BOOLEAN picklist);
-static void save_tt_action(void);
 static void show_fam (UIWINDOW uiwin, NODE fam, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static void show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
@@ -554,7 +546,6 @@ create_windows (void)
 	ask_msg_win = create_newwin2(5, 73);
 	choose_from_list_win = create_newwin2(15, 73);
 
-	/* trans_menu_win is drawn dynamically */
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
 	draw_win_box(uiw_win(ask_msg_win));
@@ -1135,7 +1126,7 @@ choose_from_array (STRING ttl, INT no, STRING *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-display_from_list (STRING ttl, LIST list)
+display_list (STRING ttl, LIST list)
 {
 	/* TODO: Need to set some flag to suppress i & <enter> */
 	return choose_from_list(ttl, list);
@@ -1775,7 +1766,7 @@ invoke_cset_display (void)
 		, get_current_locale_msgs());
 	push_list(list, strsave(buffer));
 	
-	choose_from_list(_("Codeset information"), list);
+	display_list(_("Codeset information"), list);
 	remove_heapstring_list(list);
 }
 /*======================================
@@ -1784,6 +1775,7 @@ invoke_cset_display (void)
 static void
 add_shims_info (LIST list)
 {
+	list=list; /* only used on MS-Windows */
 #ifdef WIN32_INTL_SHIM
 	{
 		char buffer[80];
@@ -1835,7 +1827,9 @@ add_shims_info (LIST list)
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
+ * TODO: decide whether to bring this back or not
  *====================================*/
+#ifdef UNUSED_CODE
 static void
 invoke_trans_menu (void)
 {
@@ -1868,6 +1862,7 @@ invoke_trans_menu (void)
 	}
 	deactivate_uiwin_and_touch_all();
 }
+#endif
 /*======================================
  * edit_tt_menu -- menu for "Edit translation table"
  *====================================*/
@@ -1883,6 +1878,7 @@ edit_tt_menu (void)
 /*======================================
  * load_tt_action -- menu for "Load translation table"
  *====================================*/
+#ifdef UNUSED_CODE
 static void
 load_tt_action (void)
 {
@@ -1953,22 +1949,7 @@ save_tt_action (void)
 	if (fname)
 		stdfree(fname);
 }
-/*======================================
- * import_tts -- import translation tables
- *====================================*/
-static void
-import_tts (void)
-{
-	msg_error(_(qSmn_notimpl));
-}
-/*======================================
- * export_tts -- export translation tables
- *====================================*/
-static void
-export_tts (void)
-{
-	msg_error(_(qSmn_notimpl));
-}
+#endif
 /*======================================
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
@@ -3311,6 +3292,7 @@ repaint_tt_menu (UIWINDOW uiwin)
  * repaint_trans_menu -- 
  * Created: 2001/11/24, Perry Rapp
  *===================================*/
+#ifdef UNUSED_CODE
 static void
 repaint_trans_menu (UIWINDOW uiwin)
 {
@@ -3334,6 +3316,7 @@ repaint_trans_menu (UIWINDOW uiwin)
 	mvwaddstr(win, row++, 4, line);
 	mvwaddstr(win, row++, 4, _(qSmn_ret));
 }
+#endif
 /*=====================================
  * repaint_utils_menu -- 
  * Created: 2001/11/24, Perry Rapp

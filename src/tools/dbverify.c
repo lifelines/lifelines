@@ -902,7 +902,7 @@ main (int argc,
 	alloclog  = FALSE;
 
 	/* initialize options & misc. stuff */
-	if (!init_lifelines_global(&msg)) {
+	if (!init_lifelines_global(0, &msg, 0)) {
 		printf("%s\n", msg);
 		goto done;
 	}

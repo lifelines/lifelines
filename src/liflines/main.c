@@ -561,3 +561,4 @@ main_db_notify (STRING db, BOOLEAN opening)
 	else
 		crash_setdb("");
 }
+

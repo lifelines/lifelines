@@ -911,3 +911,4 @@ set_import_log (STRING logpath)
 		logpath = "";
 	llstrncpy(f_logpath, logpath, sizeof(f_logpath));
 }
+
