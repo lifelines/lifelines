@@ -1,3 +1,9 @@
+2003-12-27 Perry Rapp
+
+	* ChangeLog src/gedlib/xreffile.c
+
+	Improve comment.
+
 2003-12-10 Perry Rapp
 
 	* ChangeLog src/hdrs/pvalue.h src/interp/pvalalloc.c

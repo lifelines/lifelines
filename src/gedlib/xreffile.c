@@ -614,6 +614,7 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
 /*=======================================
  * xrefs_get_counts_from_unopened_db --
  *  read record counts out of file on disk
+ * returns FALSE if specified path is not the root of a traditional lifelines database
  *=====================================*/
 BOOLEAN
 xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
