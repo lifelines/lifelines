@@ -270,7 +270,7 @@ main (INT argc, char **argv)
 		changeoptstr("LLDATABASES", strsave("."));
 		changeoptstr("LLNEWDBDIR", strsave("."));
 	}
-	error_seterrorlog(getoptstr("ErrorLog", NULL));
+	crash_setcrashlog(getoptstr("CrashLog", NULL));
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */

@@ -209,6 +209,7 @@ STRING mklast = SS "Place the child last in the family.";
 STRING abverr = SS "Error in abbreviations file.";
 STRING uoperr = SS "Error in user options file.";
 STRING cmperr = SS "Error in character mapping file.";
+STRING sepch  = SS "(Separator is %s)";
 STRING aredit = SS "Do you want to re-edit it?";
 
 STRING gdpadd = SS "%s was added to the database.";

@@ -15,10 +15,9 @@
 #include "feedback.h"
 #include "gedcomi.h"
 
-/* TO DO - should this be moved to liflines ? 2001/11/08 Perry */
 
 extern STRING map_keys[];
-extern STRING cmperr, aredit, ronlye, dataerr;
+extern STRING cmperr,aredit,ronlye,dataerr,sepch;
 
 /*==============================================
  * edit_mapping -- Edit character mapping record
@@ -53,6 +52,9 @@ edit_mapping (INT code)
 	}
 	do_edit();
 	while (TRUE) {
+		char buffer[128], temp[64];
+		STRING ptr=buffer;
+		INT mylen = sizeof(buffer);
 		tt = init_map_from_file(editfile, code, &err);
 		if (!err) {
 			TRANSLFNC transfnc = NULL; /* don't translate translation tables ! */
@@ -62,7 +64,12 @@ edit_mapping (INT code)
 			store_text_file_to_db(map_keys[code], editfile, transfnc);
 			return TRUE;
 		}
-		if (ask_yes_or_no_msg(cmperr, aredit))
+		ptr[0] = 0;
+		llstrcatn(&ptr, cmperr, &mylen);
+		llstrcatn(&ptr, " ", &mylen);
+		snprintf(temp, sizeof(temp), sepch, "<tab>"); /* (separator is %s) */
+		llstrcatn(&ptr, temp, &mylen);
+		if (ask_yes_or_no_msg(buffer, aredit))
 			do_edit();
 		else {
 			remove_trantable(tt);

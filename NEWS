@@ -23,10 +23,20 @@ New Features Added in 3.0.7
    13- dd/mo yr
    14- as in GEDCOM (truncated to 50 chars)
 
+- A preferred date mode may be selected for use in LifeLines curses UI.
+
 - Variable column menus. Menus at bottom of screen (ie, browse modes)
   may be more than 3 column, and this may be changed on the fly. At
   startup the current width of the screen is used to initialize number
   of menu columns (80 characters gets 3 columns, 120 get 5 columns).
+
+- Msg list. Output messages are buffered & can be reviewed in list, if
+  if more than one occurs during a given command.
+
+- UTF-8 support added to report substr & trimname commands. This is
+  enabled by setting the useroption "codeset" to "UTF-8".
+
+- Detail area in popup lists (accessible via [ and ] keys).
 
 Bug fixes in 3.0.7
 ==================

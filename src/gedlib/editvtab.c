@@ -25,6 +25,7 @@
 /*=============================================================
  * editvtab.c -- Handle value tables in LifeLines
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
+ * pre-SourceForge version information:
  *   3.0.0 - 12 Sep 94    3.0.2 - 22 Dec 94
  *===========================================================*/
 
@@ -37,17 +38,17 @@
 #include "feedback.h"
 #include "bfs.h"
 
-extern STRING aredit, dataerr;
+extern STRING aredit,dataerr,sepch;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
 
 /*==============================================
  * edit_valtab -- Edit value table from database
- *  key:   [in] db key where record to edit is stored
- *  ptab:  [in,out] hash table for key/value strings
- *  sep:   [in] separator char between key & value on each line
- *  ermsg: [in] error message to print in retry prompt if parse fails
+ *  key:   [IN]  db key where record to edit is stored
+ *  ptab:  [I/O] hash table for key/value strings
+ *  sep:   [IN]  separator char between key & value on each line
+ *  ermsg: [IN]  error message to print in retry prompt if parse fails
  * Looks up key in db, gets record, puts it in temp file
  * and allows user to interactively edit it.
  * key/value pairs are separated by \n, and their is a
@@ -60,7 +61,7 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 	STRING msg;
 	char fullerr[78];
 	STRING ptr;
-	char temp[25];
+	char temp[64], chardesc[8];
 	INT mylen;
 	TRANTABLE tti = tran_tables[MEDIN];
 	endwin();
@@ -86,7 +87,9 @@ edit_valtab (STRING key, TABLE *ptab, INT sep, STRING ermsg)
 		llstrcatn(&ptr, ermsg, &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
-		snprintf(temp, sizeof(temp), " (Separator is %c)", (uchar)sep);
+		llstrcatn(&ptr, " ", &mylen);
+		snprintf(chardesc, sizeof(chardesc), "%c", (uchar)sep);
+		snprintf(temp, sizeof(temp), sepch, chardesc); /* (separator is %s) */
 		llstrcatn(&ptr, temp, &mylen);
 		if (ask_yes_or_no_msg(fullerr, aredit))
 			do_edit();

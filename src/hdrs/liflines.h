@@ -23,8 +23,21 @@ INDISEQ ask_for_indi_list(STRING, BOOLEAN);
 INT ask_for_int(STRING);
 RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 
-/* screen.c */
+/* screen.c types */
+/* data used in choose_from_array_x */
+typedef struct array_details_s {
+  STRING * list; /* original array of choices */
+  INT cur; /* currently selected choice */
+  STRING * lines; /* lines of details */
+  INT count; /* how many lines */
+  INT maxlen; /* size of each line */
+  INT scroll; /* scroll offset in details */
+} *ARRAY_DETAILS;
+typedef void (*DETAILFNC)(ARRAY_DETAILS, void *);
+
+/* screen.c functions */
 INT choose_from_array(STRING, INT, STRING*);
+INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
 INT choose_list_from_indiseq(STRING, INDISEQ);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void view_array(STRING ttl, INT no, STRING *pstrngs);

@@ -45,8 +45,8 @@
 # Log file for report errors (default none)
 # ReportLog=/home/user/LifeLines/reporterrs.log
 
-# Log file for fatal errors (default none)
-# ErrorLog=/home/user/LifeLines/errors.log
+# Log file for crashes (default none)
+# CrashLog=/home/user/LifeLines/crashes.log
 
 # Delay (secs) between each report error on screen (default 0)
 # PerErrorDelay=4

@@ -35,7 +35,7 @@
 #include "arch.h"
 #include "llstdlib.h"
 
-char errorfile[MAXPATHLEN]="";
+char crashfile[MAXPATHLEN]="";
 
 /*===============================
  * __fatal -- Fatal error routine
@@ -47,8 +47,8 @@ void
 __fatal (STRING file, int line, STRING details)
 {
 	/* send to error log if one is specified */
-	if (errorfile[0]) {
-		FILE * fp = fopen(errorfile, LLAPPENDTEXT);
+	if (crashfile[0]) {
+		FILE * fp = fopen(crashfile, LLAPPENDTEXT);
 		if (fp) {
 			LLDATE creation;
 			get_current_lldate(&creation);
@@ -79,24 +79,31 @@ __fatal (STRING file, int line, STRING details)
 void
 crashlog (STRING fmt, ...)
 {
-	/*
-	TO DO - there ought to be a configuration option
-	to log this to a file
-	*/
-
+	char buffer[2048];
 	va_list args;
 	va_start(args, fmt);
-	llvwprintf(fmt, args);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
+	if (crashfile[0]) {
+		FILE * fp = fopen(crashfile, LLAPPENDTEXT);
+		if (fp) {
+			LLDATE creation;
+			get_current_lldate(&creation);
+			fprintf(fp, "%s: %s\n", creation.datestr, buffer);
+			fclose(fp);
+		}
+	}
+
+	llwprintf(buffer);
 }
 /*===============================
- * error_seterrorlog -- specify where to log alloc messages
+ * crash_setcrashlog -- specify where to log alloc messages
  * Creatd: 2001/10/28, Perry Rapp
  *=============================*/
 void
-error_seterrorlog(STRING errorlog)
+crash_setcrashlog (STRING crashlog)
 {
-	if (errorlog)
-		llstrncpy(errorfile, errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
+	if (crashlog)
+		llstrncpy(crashfile, crashlog, sizeof(crashfile)/sizeof(crashfile[0]));
 }
 

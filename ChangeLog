@@ -1,3 +1,16 @@
+2001-12-16 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog NEWS lines.cfg gedlib/charmaps.c
+	gedlib/editmap.c gedlib/editvtab.c gedlib/messages.c
+	hdrs/liflines.h hdrs/llstdlib.h interp/interp.c
+	liflines/askprogram.c liflines/error.c liflines/main.c
+	liflines/screen.c:
+
+	Add "(separator is <tab>)" to charmap failure msgs (as I did
+	to user options & place abbrevs last summer). Moved this string
+	into messages.c.
+	Changed option "ErrorLog" to "CrashLog".
+
 2001-12-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/screen.c

@@ -129,9 +129,12 @@ progmessage (char *msg)
 	int len;
 	char *dotdotdot;
 	if(progname && *progname) {
+		INT limit = 40;
+	/* TODO: The correct limit for curses is llcols-2-strlen(msg),
+	but that is curses-specific, so how do we do this ? */
 		len = strlen(progname);
-		if(len > 40) {
-			len -= 40;
+		if(len > limit) {
+			len -= limit;
 			dotdotdot = "...";
 		} else {
 			len = 0;

@@ -106,8 +106,8 @@ init_mapping (void)
 }
 /*===================================================
  * init_map_from_rec -- Init single translation table
- *  indx:  [in] which translation table (see defn of map_keys)
- *  perr:  [out] flag set to TRUE if error
+ *  indx:  [IN]  which translation table (see defn of map_keys)
+ *  perr:  [OUT] flag set to TRUE if error
  *=================================================*/
 TRANTABLE
 init_map_from_rec (INT indx, BOOLEAN *perr)
@@ -125,9 +125,9 @@ init_map_from_rec (INT indx, BOOLEAN *perr)
 }
 /*====================================================
  * init_map_from_file -- Init single translation table
- *  file: [in] file from which to read translation table
- *  indx: [in] which translation table (see defn of map_keys)
- *  perr: [out] flag set to TRUE if error
+ *  file: [IN]  file from which to read translation table
+ *  indx: [IN]  which translation table (see defn of map_keys)
+ *  perr: [OUT] flag set to TRUE if error
  *==================================================*/
 TRANTABLE
 init_map_from_file (STRING file, INT indx, BOOLEAN *perr)

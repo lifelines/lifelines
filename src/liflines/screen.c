@@ -159,11 +159,13 @@ typedef struct listdisp_s
 /* alphabetical */
 static void activate_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(STRING msg);
-static INT array_interact(UIWINDOW win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
+static INT array_interact(UIWINDOW win, STRING ttl, INT len, STRING *strings
+	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 static void begin_action(void);
 static INT calculate_screen_lines(INT screen);
 static INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi);
-static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting);
+static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
+	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 #ifdef HAVE_SETLOCALE
 static void choose_sort(STRING optname);
 #endif
@@ -213,7 +215,8 @@ static void rpt_cset_menu(UIWINDOW wparent);
 static void run_report(BOOLEAN picklist);
 static void save_tt_menu(UIWINDOW wparent);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
-static void shw_array_of_strings(STRING *strings, listdisp *ld);
+static void shw_array_of_strings(STRING *strings, listdisp *ld
+	, DETAILFNC detfnc, void * param);
 static void shw_list(INDISEQ seq, listdisp * ld);
 static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(void);
@@ -967,7 +970,23 @@ choose_from_array (STRING ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = TRUE;
 	if (!ttl) ttl=defttl;
-	return choose_or_view_array(ttl, no, pstrngs, selecting);
+	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
+}
+/*============================================
+ * choose_from_array_x -- Choose from string list
+ *  ttl:      [IN]  title for choice display
+ *  no:       [IN]  number of choices
+ *  pstrngs:  [IN]  array of choices
+ *  detfnc:   [IN]  callback for details about items
+ *  param:    [IN]  opaque type for callback
+ *==========================================*/
+INT
+choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
+	, void *param)
+{
+	BOOLEAN selecting = TRUE;
+	if (!ttl) ttl=defttl;
+	return choose_or_view_array(ttl, no, pstrngs, selecting, detfnc, param);
 }
 /*============================================
  * view_array -- Choose from string list
@@ -979,17 +998,20 @@ void
 view_array (STRING ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = FALSE;
-	choose_or_view_array(ttl, no, pstrngs, selecting);
+	choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
  * choose_or_view_array -- Implement choose/view from array
- *  ttl:       [IN] title for choice display
- *  no:        [IN] number of choices
- *  pstrngs:   [IN] array of choices
- *  selecting: [IN] if FALSE then view-only
+ *  ttl:       [IN]  title for choice display
+ *  no:        [IN]  number of choices
+ *  pstrngs:   [IN]  array of choices
+ *  selecting: [IN]  if FALSE then view-only
+ *  detfnc:    [IN]  callback for details about items
+ *  param:     [IN]  opaque type for callback
  *==========================================*/
 static INT
-choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting)
+choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
+	, DETAILFNC detfnc, void *param)
 {
 	INT hgt=no+6;
 	UIWINDOW uiwin = choose_win(hgt, NULL);
@@ -998,7 +1020,7 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting)
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
-	rv = array_interact(uiwin, ttl, no, pstrngs, selecting);
+	rv = array_interact(uiwin, ttl, no, pstrngs, selecting, detfnc, param);
 	refresh_main();
 	return rv;
 }
@@ -1870,9 +1892,12 @@ shw_list (INDISEQ seq, listdisp * ld)
  * shw_array_of_strings -- Show string list in list interact window
  *  strings: [IN]  array (of choices) to be listed
  *  ld:      [IN]  structure of info for variable-sized list
+ *  detfnc:  [IN]  callback for detail area
+ *  param:   [IN]  opaque data for callback
  *==============================================================*/
 static void
-shw_array_of_strings (STRING *strings, listdisp * ld)
+shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
+	, void * param)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i, j, row, lines;
@@ -1920,13 +1945,41 @@ shw_array_of_strings (STRING *strings, listdisp * ld)
 	}
 	if (ld->details) {
 		STRING ptr = strings[ld->cur];
+		INT count;
 		row = 2;
 		mvwaddstr(win, row++, 2, "-- CURRENT SELECTION --");
 		for (i=0; i<ld->details; ++i) {
+			/* TODO: scroll */
 			if (!ptr[0]) break;
 			llstrncpy(buffer, ptr, width-5);
 			mvwaddstr(win, row++, 4, buffer);
 			ptr += strlen(buffer);
+		}
+		count = ld->details-i;
+		if (count && detfnc) {
+			/* caller gave us a detail callback, so we set up the
+			data needed & call it */
+			STRING * linestr = (STRING *)stdalloc(count * sizeof(STRING));
+			struct array_details_s dets;
+			for (j=0; j<count; ++j) {
+				linestr[j] = stdalloc(width);
+				linestr[j][0] = 0;
+			}
+			memset(&dets, 0, sizeof(dets));
+			dets.list = strings;
+			dets.cur = ld->cur;
+			dets.lines = linestr;
+			dets.count = 4;
+			if (dets.count > ld->details-i)
+				dets.count = ld->details-i;
+			dets.maxlen = width;
+			(*detfnc)(&dets, param);
+			for (j=0 ; j<count; ++j) {
+				mvwaddstr(win, row++, 4, linestr[j]);
+			}
+			for (j=0; j<count; ++j)
+				stdfree(linestr[j]);
+			stdfree(linestr);
 		}
 	}
 }
@@ -1967,9 +2020,12 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
  *  len:        [IN]  number of choices
  *  strings:    [IN]  array of choices
  *  selectable: [IN]  FALSE for view-only
+ *  detfnc:     [IN]  callback for details about items
+ *  param:      [IN]  opaque type for callback
  *============================================*/
 INT
-array_interact (UIWINDOW uiwinx, STRING ttl, INT len, STRING *strings, BOOLEAN selectable)
+array_interact (UIWINDOW uiwinx, STRING ttl, INT len, STRING *strings
+	, BOOLEAN selectable, DETAILFNC detfnc, void * param)
 {
 	WINDOW *win=0;
 	INT row, done;
@@ -1994,7 +2050,7 @@ resize_win: /* we come back here if we resize the window */
 		INT code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
 		mvwaddstr(win, 1, 1, fulltitle);
-		shw_array_of_strings(strings, &ld);
+		shw_array_of_strings(strings, &ld, detfnc, param);
 		wrefresh(win);
 		code = interact(ld.uiwin, responses, -1);
 		ret = handle_list_cmds(&ld, code);
