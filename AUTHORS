@@ -8,5 +8,5 @@ Matt Emmerton (matt@gsicomp.on.ca) - bug fixes & code cleaning
 Rob Fugina (robf@geekthing.com) - added autoconfig support
 Paul B. McBride (pbmcbride@rcn.com) - added win32 related bug fixes and features
 Marc Nozell (marc@nozell.com) - misc, project coordination
-Perry Rapp (prapp@erols.com) - win32 development, bug fixes and features
+Perry Rapp (prapp@erols.com) - win32 development, bug fixes and features, paging&resizing menus, config file, desc view, gedcom views, cross-referencing, pvalue memory issues
 Petter Reinholdtsen (pere@hungry.com) - code cleaning, insulation layer
