@@ -660,9 +660,6 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	RECORD rec=0;
 	int i, j;
 
-#ifdef DEBUG
-	llwprintf("add_to_direct: key == %s\n", key);
-#endif
 	ASSERT(cache && key);
 	rec = NULL;
 	if ((rawrec = retrieve_raw_record(key, &len))) 
@@ -700,6 +697,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	/* our new rec above has one reference, which is held by cel */
 	crecord(cel) = rec;
 	stdfree(rawrec);
+	ASSERT(cel->c_magic == cel_magic);
 	return cel;
 }
 /*======================================================
@@ -716,6 +714,7 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 	if(keyidx >= 10) keyidx = 0;
 	if ((cel = (CACHEEL) valueof_ptr(cacdata(cache), key))) {
 		ASSERT(cnode(cel));
+		ASSERT(cel->c_magic == cel_magic);
 		direct_to_first(cache, cel);
 		if (tag) {
 			ASSERT(eqstr(tag, ntag(cnode(cel))));
@@ -999,6 +998,8 @@ node_to_cache (CACHE cache, NODE top)
 	}
 	key = node_to_key(top);
 	ASSERT(key);
+	/* ASSERT that record is not in cache */
+	/* We're not supposed to be called if record in cache */
 	ASSERT(!valueof_ptr(cacdata(cache), key));
 	cel = get_free_cacheel(cache);
 	put_node_in_cache(cache, cel, top, key);
@@ -1032,10 +1033,8 @@ get_free_cacheel (CACHE cache)
 	cacfree(cache) = celnext;
 	if (celnext)
 		cprev(celnext) = 0;
-	/* clear entry */
-	cnext(cel) = 0;
-	cprev(cel) = 0;
-	ckey(cel) = 0;
+	/* reinitialize entry */
+	init_cel(cel);
 
 	return cel;
 }
@@ -1075,7 +1074,7 @@ put_node_in_cache (CACHE cache, CACHEEL cel, NODE node, STRING key)
 	BOOLEAN travdone = FALSE;
 	ASSERT(cache && node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
-	memset(cel, 0, sizeof(*cel));
+	init_cel(cel);
 	insert_table_ptr(cacdata(cache), keynew=strsave(key), cel);
 	cnode(cel) = node;
 	ckey(cel) = keynew;
@@ -1440,7 +1439,5 @@ cel_remove_record (CACHEEL cel, RECORD rec)
 	ASSERT(rec);
 	if (crecord(cel) == rec) {
 		crecord(cel) = 0;
-	} else {
-		ASSERT(0);
 	}
 }
