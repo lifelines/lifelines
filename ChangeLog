@@ -1,3 +1,8 @@
+2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
+
+	* Changelog.usermap: Correct username prapp -> puddle to match the
+	CVS repository username.  Sorted list.
+
 2000-12-27 Petter Reinholdtsen <pere@td.org.uit.no>
 
  	* tools/btedit.c: Track changes to environ_figure_editor() to
