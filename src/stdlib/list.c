@@ -1,32 +1,14 @@
 /* 
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-   SOFTWARE.
+   "The MIT license"
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * double.c -- Doubly-linked list data type
  * Copyright(c) 1991-94 by T.T. Wetmore IV; all rights reserved
- *   2.3.4 - 24 Jun 93    2.3.5 - 01 Sep 93
- *   3.0.0 - 18 May 94
  *===========================================================*/
 
 #include "standard.h"
@@ -49,7 +31,7 @@ create_list (void)
 	LIST list = (LIST) stdalloc(sizeof(*list));
 	memset(list, 0, sizeof(*list));
 	ltype(list) = LISTNOFREE;
-	lfirst(list) = llast(list) = NULL;
+	lhead(list) = ltail(list) = NULL;
 	llen(list) = 0;
 	lrefcnt(list) = 1;
 	validate_list(list);
@@ -75,7 +57,7 @@ remove_list (LIST list, void (*func)(VPTR))
 {
 	LNODE lnode0, lnode;
 	if (!list) return;
-	lnode0 = lfirst(list);
+	lnode0 = lhead(list);
 	while (lnode0) {
 		lnode = lnext(lnode0);
 		if (func) (*func)(lelement(lnode0));
@@ -98,7 +80,7 @@ in_list (LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el))
 	LNODE lnode;
 	INT index=0;
 	if (!list) return FALSE;
-	lnode = lfirst(list);
+	lnode = lhead(list);
 	while (lnode) {
 		if((*func)(param, lelement(lnode))) return index;
 		lnode = lnext(lnode);
@@ -116,14 +98,14 @@ make_list_empty (LIST list)
 	BOOLEAN free;
 	if (!list) return;
 	free = (ltype(list) == LISTDOFREE);
-	lnode0 = lfirst(list);
+	lnode0 = lhead(list);
 	while (lnode0) {
 		lnode = lnext(lnode0);
 		if (free && lelement(lnode0)) stdfree(lelement(lnode0));
 		stdfree(lnode0);
 		lnode0 = lnode;
 	}
-	lfirst(list) = llast(list) = NULL;
+	lhead(list) = ltail(list) = NULL;
 	ltype(list) = LISTNOFREE;
 	llen(list) = 0;
 	/* no effect on refcount */
@@ -140,7 +122,7 @@ is_empty_list (const LIST list)
 	return !list || !llen(list);
 }
 /*==================================
- * push_list -- Push element on list
+ * push_list -- Push element on head of list
  *  list:  [I/O]  list
  *  el:    [IN]   new element
  *================================*/
@@ -154,18 +136,18 @@ push_list (LIST list, VPTR el)
 	lelement(node) = el;
 	if (is_empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
-		lfirst(list) = llast(list) = node;
+		lhead(list) = ltail(list) = node;
 	} else {
-		lnext(node) = lfirst(list);
-		lprev(lfirst(list)) = node;
+		lnext(node) = lhead(list);
+		lprev(lhead(list)) = node;
 		lprev(node) = NULL;
-		lfirst(list) = node;
+		lhead(list) = node;
 	}
 	++llen(list);
 	validate_list(list);
 }
 /*=========================================
- * back_list -- Put element on back of list
+ * back_list -- Put element on tail of list
  *  list:  [I/O]  list
  *  el:    [IN]   new element
  *=======================================*/
@@ -179,18 +161,18 @@ back_list (LIST list, VPTR el)
 	lelement(node) = el;
 	if (is_empty_list(list)) {
 		lprev(node) = lnext(node) = NULL;
-		lfirst(list) = llast(list) = node;
+		lhead(list) = ltail(list) = node;
 	} else {
-		lprev(node) = llast(list);
-		lnext(llast(list)) = node;
+		lprev(node) = ltail(list);
+		lnext(ltail(list)) = node;
 		lnext(node) = NULL;
-		llast(list) = node;
+		ltail(list) = node;
 	}
 	++llen(list);
 	validate_list(list);
 }
 /*==================================
- * pop_list -- Pop element from list
+ * pop_list -- Pop element from head of list
  *  list:  [I/O]  list
  *================================*/
 VPTR
@@ -199,12 +181,12 @@ pop_list (LIST list)
 	LNODE node;
 	VPTR el;
 	if (is_empty_list(list)) return NULL;
-	node = lfirst(list);
-	lfirst(list) = lnext(node);
-	if (!lfirst(list))
-		llast(list) = NULL;
+	node = lhead(list);
+	lhead(list) = lnext(node);
+	if (!lhead(list))
+		ltail(list) = NULL;
 	else
-		lprev(lfirst(list)) = NULL;
+		lprev(lhead(list)) = NULL;
 	el = lelement(node);
 	stdfree(node);
 	--llen(list);
@@ -218,34 +200,42 @@ static void
 validate_list (LIST list)
 {
 #ifdef LIST_ASSERTS
-	ASSERT(!list || (lfirst(list)&&llast(list)) || (!lfirst(list)&&!llast(list)));
+	ASSERT(!list || (lhead(list)&&ltail(list)) || (!lhead(list)&&!ltail(list)));
 #else
 	list=list; /* unused */
 #endif
 }
 /*========================================
- * enqueue_list -- Enqueue element on list
+ * enqueue_list -- Enqueue element on tail of list
  *======================================*/
 void
 enqueue_list (LIST list, VPTR el)
 {
-	push_list(list, el);
+	back_list(list, el);
 }
 /*==========================================
- * dequeue_list -- Dequeue element from list
+ * dequeue_list -- Dequeue element from head of list
  *========================================*/
 VPTR
 dequeue_list (LIST list)
 {
+	return pop_list(list);
+}
+/*==========================================
+ * pop_list_tail -- Pop element from tail of list
+ *========================================*/
+VPTR
+pop_list_tail (LIST list)
+{
 	LNODE node;
 	VPTR el;
 	if (is_empty_list(list)) return NULL;
-	node = llast(list);
-	llast(list) = lprev(node);
-	if (!llast(list))
-		lfirst(list) = NULL;
+	node = ltail(list);
+	ltail(list) = lprev(node);
+	if (!ltail(list))
+		lhead(list) = NULL;
 	else
-		lnext(llast(list)) = NULL;
+		lnext(ltail(list)) = NULL;
 	el = lelement(node);
 	stdfree(node);
 	--llen(list);
@@ -261,7 +251,7 @@ nth_in_list (LIST list, INT index1b)
 	INT i = 1;
 	LNODE node = NULL;
 	if (!list) return NULL;
-	node = llast(list);
+	node = ltail(list);
 	while (i < index1b && node) {
 		i++;
 		node = lprev(node);
@@ -271,7 +261,7 @@ nth_in_list (LIST list, INT index1b)
 	while (i++ <= index1b)
 		push_list(list, NULL);
 	validate_list(list);
-	return lfirst(list);
+	return lhead(list);
 }
 /*==================================================
  * set_list_element - Set element using array access

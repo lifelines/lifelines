@@ -125,10 +125,6 @@ SOURCE=..\..\..\src\liflines\askprogram.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\bfs.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
@@ -170,10 +166,6 @@ SOURCE=..\..\..\src\stdlib\dirs.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\dispfmt.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File
 
@@ -298,6 +290,10 @@ SOURCE=..\..\..\src\liflines\lbrowse.c
 # Begin Source File
 
 SOURCE=..\..\..\src\interp\lex.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\list.c
 # End Source File
 # Begin Source File
 
@@ -485,6 +481,10 @@ SOURCE=..\..\..\src\stdlib\strcvt.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\strset.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
@@ -577,10 +577,6 @@ SOURCE=..\..\..\src\hdrs\arch.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\bfs.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\hdrs\btree.h
 # End Source File
 # Begin Source File
@@ -670,6 +666,10 @@ SOURCE=..\..\..\src\hdrs\langinfz.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\liflines.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\list.h
 # End Source File
 # Begin Source File
 

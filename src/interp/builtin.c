@@ -470,7 +470,7 @@ __utf8 (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 static ZSTR
 utf8cvt (STRING str, INT * offset)
 {
-	ZSTR zstr = zs_newn((strlen(str)*1.3+2));
+	ZSTR zstr = zs_newn((unsigned int)((strlen(str)*1.3+2)));
 	INT i, bufloc=0;
 	STRING ptr = str;
 	char buffer[7];

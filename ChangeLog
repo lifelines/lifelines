@@ -1,3 +1,16 @@
+2002-11-25 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/hdrs/Makefile.am src/hdrs/standard.h src/hdrs/version.h
+	src/interp/builtin.c src/liflines/screen.c
+	*NEW src/hdrs/list.h
+	*NEW src/stdlib/list.c
+	*DELETED src/stdlib/double.c:
+
+	Renamed double.c to list.c and moved list declarations from standard.h
+	to list.h. Changed enqueue, dequeue, requeue to work with head-to-tail
+	FORLIST.
+
 2002-11-24 Perry Rapp
 
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/date.c

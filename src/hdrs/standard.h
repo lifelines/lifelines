@@ -146,44 +146,8 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 #define DIGIT  '0'
 #define ZERO    0
 
-/* types for lists */
-typedef struct lntag *LNODE;
-struct lntag {
-	VPTR l_element;
-	LNODE l_prev;
-	LNODE l_next;
-};
-#define lelement(n) ((n)->l_element)
-#define lprev(n) ((n)->l_prev)
-#define lnext(n) ((n)->l_next)
+#include "list.h"
 
-typedef struct ltag {
-	INT l_type;
-	LNODE l_first;
-	LNODE l_last;
-	INT l_len;
-	INT l_refcnt;
-} *LIST;
-#define ltype(l) ((l)->l_type)
-#define lfirst(l) ((l)->l_first)
-#define llast(l) ((l)->l_last)
-#define llen(l) ((l)->l_len)
-#define lrefcnt(l) ((l)->l_refcnt)
-
-#define LISTNOFREE 0
-#define LISTDOFREE 1
-
-/* cycle through list from front to back */
-#define FORLIST(l,e)\
-	{\
-		LNODE _lnode = l->l_first;\
-		VPTR e;\
-		while (_lnode) {\
-			e = _lnode->l_element;
-#define ENDLIST\
-			_lnode = _lnode->l_next;\
-		}\
-	}
 
 #define ISNULL(k)	(!k || *k == 0)
 

@@ -44,6 +44,7 @@
 #include "llinesi.h"
 #include "menuitem.h"
 #include "screen.h"
+#include "zstr.h"
 #ifdef WIN32_ICONV_SHIM
 #include "iconvshim.h"
 #endif
@@ -1763,88 +1764,80 @@ static void
 invoke_cset_display (void)
 {
 	LIST list = create_list();
-	char buffer[80];
+	ZSTR zstr=zs_newn(80);
 	INT i;
 
 	set_list_type(list, LISTDOFREE);
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, "%s: %s", _("Internal codeset")
+	zs_setf(&zstr, "%s: %s", _("Internal codeset")
 		, int_codeset ? int_codeset : "");
-	push_list(list, strsave(buffer));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
 	if (are_locales_supported())
-		push_list(list, strsave(_("Locales are enabled.")));
+		enqueue_list(list, strsave(_("Locales are enabled.")));
 	else
-		push_list(list, strsave(_("Locales are disabled.")));
+		enqueue_list(list, strsave(_("Locales are disabled.")));
 	
 	if (is_nls_supported()) {
-		push_list(list, strsave(_("NLS (National Language Support) is enabled.")));
-		llstrncpyf(buffer, sizeof(buffer), uu8, "LOCALEDIR: %s", LOCALEDIR);
-		push_list(list, strsave(buffer));
-		llstrncpyf(buffer, sizeof(buffer), uu8, "LocaleDir: %s", getoptstr("LocaleDir", ""));
-		push_list(list, strsave(buffer));
+		enqueue_list(list, strsave(_("NLS (National Language Support) is enabled.")));
+		zs_setf(&zstr, "LOCALEDIR: %s", LOCALEDIR);
+		enqueue_list(list, strsave(zs_str(zstr)));
+		zs_setf(&zstr,  "LocaleDir: %s", getoptstr("LocaleDir", ""));
+		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
-		push_list(list, strsave(_("NLS (National Language Support) is disabled.")));
+		enqueue_list(list, strsave(_("NLS (National Language Support) is disabled.")));
 	}
 
 	add_shims_info(list);
 
 	if (is_iconv_supported())
-		push_list(list, strsave(_("iconv (codeset conversion) is enabled.")));
+		enqueue_list(list, strsave(_("iconv (codeset conversion) is enabled.")));
 	else
-		push_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
+		enqueue_list(list, strsave(_("iconv (codeset conversion) is disabled.")));
 	
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Startup collate locale: %s")
-		, get_original_locale_collate());
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Startup collate locale: %s"), get_original_locale_collate());
+	enqueue_list(list, strsave(zs_str(zstr)));
 	
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Startup messages locale: %s")
-		, get_original_locale_msgs());
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Startup messages locale: %s")	, get_original_locale_msgs());
+	enqueue_list(list, strsave(zs_str(zstr)));
 	
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Current collate locale: %s")
-		, get_current_locale_collate());
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Current collate locale: %s"), get_current_locale_collate());
+	enqueue_list(list, strsave(zs_str(zstr)));
 	
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Current messages locale: %s")
-		, get_current_locale_msgs());
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Current messages locale: %s"), get_current_locale_msgs());
+	enqueue_list(list, strsave(zs_str(zstr)));
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Collation routine: %s")
-		, ll_what_collation());
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Collation routine: %s"), ll_what_collation());
+	enqueue_list(list, strsave(zs_str(zstr)));
 	
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("GUI codeset: %s")
-		, getoptstr("GuiCodeset",""));
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("GUI codeset: %s"), getoptstr("GuiCodeset",""));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Editor codeset: %s")
-		, getoptstr("EditorCodeset",""));
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Editor codeset: %s"), getoptstr("EditorCodeset",""));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("Report codeset: %s")
-		, getoptstr("ReportCodeset",""));
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("Report codeset: %s"), getoptstr("ReportCodeset",""));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, _("GEDCOM codeset: %s")
-		, getoptstr("GedcomCodeset",""));
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, _("GEDCOM codeset: %s"), getoptstr("GedcomCodeset",""));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
-	llstrncpyf(buffer, sizeof(buffer), uu8, "TTDIR: %s", getoptstr("TTDIR", ""));
-	push_list(list, strsave(buffer));
+	zs_setf(&zstr, "TTDIR: %s", getoptstr("TTDIR", ""));
+	enqueue_list(list, strsave(zs_str(zstr)));
 
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		TRANMAPPING ttm = get_tranmapping(i);
 		if (!ttm->global_trans)
 			continue;
-		llstrncpyf(buffer, sizeof(buffer), uu8, "%s: %d global tts"
+		zs_setf(&zstr, "%s: %d global tts"
 			, get_map_name(i), length_list(ttm->global_trans));
-		push_list(list, strsave(buffer));
+		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
 	display_list(_("Codeset information"), list);
 	make_list_empty(list);
 	remove_list(list, 0);
+	zs_free(&zstr);
 }
 /*======================================
  * add_shims_info -- Add information about gettext and iconv dlls
@@ -1852,55 +1845,55 @@ invoke_cset_display (void)
 static void
 add_shims_info (LIST list)
 {
+	ZSTR zstr=zs_newn(80);
 	list=list; /* only used on MS-Windows */
 #ifdef WIN32_INTL_SHIM
 	{
-		char buffer[80];
 		char value[MAXPATHLEN];
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
 		{
-			llstrncpyf(buffer, sizeof(buffer), uu8, _("gettext dll: %s"), value);
-			push_list(list, strsave(buffer));
+			zs_setf(&zstr, _("gettext dll: %s"), value);
+			enqueue_list(list, strsave(zs_str(zstr)));
 			if (intlshim_get_property("dll_version", value, sizeof(value)))
 			{
-				llstrncpyf(buffer, sizeof(buffer), uu8, _("gettext dll version: %s"), value);
-				push_list(list, strsave(buffer));
+				zs_setf(&zstr, _("gettext dll version: %s"), value);
+				enqueue_list(list, strsave(zs_str(zstr)));
 			}
 			else
 			{
-				push_list(list, strsave(_("gettext dll had no version")));
+				enqueue_list(list, strsave(_("gettext dll had no version")));
 			}
 		}
 		else
 		{
-			push_list(list, strsave(_("no gettext dll found")));
+			enqueue_list(list, strsave(_("no gettext dll found")));
 		}
 	}
 #endif
 #ifdef WIN32_ICONV_SHIM
 	{
-		char buffer[80];
 		char value[MAXPATHLEN];
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
 		{
-			llstrncpyf(buffer, sizeof(buffer), uu8, _("iconv dll: %s"), value);
-			push_list(list, strsave(buffer));
+			zs_setf(&zstr, _("iconv dll: %s"), value);
+			enqueue_list(list, strsave(zs_str(zstr)));
 			if (iconvshim_get_property("dll_version", value, sizeof(value)))
 			{
-				llstrncpyf(buffer, sizeof(buffer), uu8, _("iconv dll version: %s"), value);
-				push_list(list, strsave(buffer));
+				zs_setf(&zstr, _("iconv dll version: %s"), value);
+				enqueue_list(list, strsave(zs_str(zstr)));
 			}
 			else
 			{
-				push_list(list, strsave(_("iconv dll had no version")));
+				enqueue_list(list, strsave(_("iconv dll had no version")));
 			}
 		}
 		else
 		{
-			push_list(list, strsave(_("no iconv dll found")));
+			enqueue_list(list, strsave(_("no iconv dll found")));
 		}
 	}
 #endif
+	zs_free(&zstr);
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
