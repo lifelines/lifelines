@@ -87,7 +87,7 @@ BEGIN
             VALUE "LegalCopyright", "Copyright © 2001\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Lines.exe\0"
-            VALUE "PrivateBuild", "3.0.24b6 beta (2003-01-16)\0"
+            VALUE "PrivateBuild", "3.0.24b7 beta (2003-01-30)\0"
             VALUE "ProductName", "LifeLines Genealogical DB and Programming System\0"
             VALUE "ProductVersion", "3, 0, 24, 13030\0"
             VALUE "SpecialBuild", "Win32 version by Perry Rapp\0"
