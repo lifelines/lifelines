@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern STRING nofath, nomoth, nospse, nocofp;
 extern STRING twohsb, twowif, idsbrs, idplst, idcbrs;

@@ -40,6 +40,7 @@
 #include "interp.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 STRING nonnum = (STRING) "At least one argument to %s is not numeric";
 

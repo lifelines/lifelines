@@ -35,6 +35,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "liflines.h"
+#include "screen.h"
 
 static char *ptypes[] = {
 	"PNONE", "PANY", "PINT", "PLONG", "PFLOAT", "PBOOL", "PSTRING",

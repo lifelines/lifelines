@@ -33,6 +33,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 /*=================================================
  * choose_child -- Choose child of person or family

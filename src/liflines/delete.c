@@ -37,6 +37,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern STRING idpdel, cfpdel, haslnk;
 static void del_in_dbase(STRING);

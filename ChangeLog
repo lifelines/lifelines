@@ -1,5 +1,16 @@
 2000-11-06  Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* btree/opnbtree.c gedlib/charmaps.c gedlib/choose.c
+	gedlib/editmap.c gedlib/gedcom.c gedlib/keytonod.c gedlib/node.c
+	gedlib/translat.c interp/alloc.c interp/builtin.c interp/eval.c
+	interp/interp.c interp/pvalue.c interp/rassa.c interp/write.c
+	interp/yacc.y liflines/add.c liflines/ask.c liflines/browse.c
+	liflines/delete.c liflines/edit.c liflines/export.c
+	liflines/lbrowse.c liflines/merge.c liflines/miscutls.c
+	liflines/newrecs.c liflines/remove.c liflines/swap.c
+	liflines/tandem.c stdlib/assert.c stdlib/signals.c: Include
+	"screen.h" to find prototypes for output functions.
+
 	* hdrs/screen.h tools/wprintf.c liflines/screen.c
 	liflines/valgdcom.c: Convert vararg functions to use ANSI
 	<stdarg.h>, and correct those functions already using it.

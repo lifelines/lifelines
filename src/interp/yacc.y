@@ -43,6 +43,7 @@
 #include "indiseq.h"
 #include "interp.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern TABLE proctab, functab;
 static PNODE this, prev;

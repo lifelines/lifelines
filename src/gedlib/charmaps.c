@@ -34,6 +34,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "screen.h"
 
 TRANTABLE tran_tables[] = {
 	NULL, NULL, NULL, NULL, NULL, NULL,

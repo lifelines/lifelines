@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern STRING iredit, fredit, cfpupt, cffupt, idpedt, idspse, idfbys;
 extern STRING ntprnt, gdpmod, gdfmod, ronlye;

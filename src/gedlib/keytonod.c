@@ -36,6 +36,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "liflines.h"
+#include "screen.h"
 
 INT csz_indi = 200;		/* cache size for indi */
 INT icsz_indi = 3000;		/* indirect cache size for indi */

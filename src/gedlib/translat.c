@@ -31,6 +31,7 @@
 #include "standard.h"
 #include "translat.h"
 #include "liflines.h"
+#include "screen.h"
 
 #ifdef max
 #	undef max

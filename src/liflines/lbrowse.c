@@ -35,6 +35,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 #define VIEWABLE 13
 

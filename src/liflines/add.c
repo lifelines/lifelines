@@ -37,6 +37,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern STRING idcfam, fredit, cffadd, idprnt, unksex, idsbln, mklast;
 extern STRING idsadd, idsinf, kchild, iscinf, notopp, idsps1, idsps2;

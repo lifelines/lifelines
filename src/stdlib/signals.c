@@ -38,6 +38,7 @@
 #include "cache.h"
 #include "interp.h"
 #include "liflines.h"
+#include "screen.h"
 
 char *sig_msgs[] = {
 	"SIGNAL 0",

@@ -35,6 +35,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "liflines.h"
+#include "screen.h"
 
 INT lineno = 0;
 

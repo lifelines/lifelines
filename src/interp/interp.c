@@ -38,6 +38,7 @@
 #include "interp.h"
 #include "indiseq.h"
 #include "liflines.h"
+#include "screen.h"
 
 extern STRING llprograms;
 extern BOOLEAN progrunning;
