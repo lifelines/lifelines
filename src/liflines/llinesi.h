@@ -23,8 +23,6 @@ void browse(NODE, INT code);
 RECORD choose_any_event(void);
 RECORD choose_any_other(void);
 RECORD choose_any_source(void);
-INT display_2fam(NODE fam1, NODE fam2, INT mode);
-INT display_2indi(NODE indi1, NODE indi2, INT mode);
 BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
@@ -98,6 +96,14 @@ RECORD refn_scan(void);
 /* screen.c */
 void adjust_menu_height(INT delta);
 void cycle_menu(void);
+void display_2fam(NODE fam1, NODE fam2, INT mode);
+void display_2indi(NODE indi1, NODE indi2, INT mode);
+void display_fam(NODE, INT mode, BOOLEAN reuse);
+void display_indi(NODE, INT mode, BOOLEAN reuse);
+INT interact_2fam(void);
+INT interact_2indi(void);
+INT interact_fam(void);
+INT interact_indi(void);
 void lock_status_msg(BOOLEAN lock);
 void toggle_menu(void);
 

@@ -83,7 +83,8 @@ INT browse_tandem (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		c = display_2indi(indi1, indi2, mode);
+		display_2indi(indi1, indi2, mode);
+		c = interact_2indi();
 		/* last keynum & mode, so can tell if changed */
 		nkey1p = indi_to_keynum(indi1);
 		nkey2p = indi_to_keynum(indi2);
@@ -187,7 +188,8 @@ INT browse_2fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2, INDISEQ *
 			|| mode != modep) {
 			show_reset_scroll();
 		}
-		c = display_2fam(fam1, fam2, mode);
+		display_2fam(fam1, fam2, mode);
+		c = interact_2fam();
 		/* last keynum & mode, so can tell if changed */
 		nkey1p = fam_to_keynum(fam1);
 		nkey2p = fam_to_keynum(fam2);

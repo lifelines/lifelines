@@ -361,6 +361,7 @@ STRING mn_mmrpt    = SS "r  Generate report by entering report name";
 STRING mn_mmprpt   = SS "p  Pick a report from list and run";
 STRING mn_mmcset   = SS "c  Character set options";
 /* utility menu */
+STRING mn_uttl     = SS "What utility do you want to perform?";
 STRING mn_utsave   = SS "s  Save the database in a GEDCOM file";
 STRING mn_utread   = SS "r  Read in data from a GEDCOM file";
 STRING mn_utkey    = SS "k  Find a person's key value";
@@ -370,6 +371,7 @@ STRING mn_utmemsta = SS "m  Show memory statistics";
 STRING mn_utplaces = SS "e  Edit the place abbreviation file";
 STRING mn_utusropt = SS "o  Edit the user options file";
 /* extra menu */
+STRING mn_xttl     = SS "What activity do you want to perform?";
 STRING mn_xxbsour  = SS "s  Browse source records";
 STRING mn_xxbeven  = SS "e  Browse event records";
 STRING mn_xxbothr  = SS "x  Browse other records";
@@ -399,26 +401,39 @@ STRING mn_csrptcs  = SS "Report code set: ";
 STRING mn_csrptloc = SS "Report locale: ";
 STRING mn_csnrloc  = SS "L  Select report locale";
 /* menu for translation tables */
-STRING mn_ttttl    = SS "Translation Tables";
-STRING mn_ttedit   = SS "e  edit individual tables (in db)";
-STRING mn_ttload   = SS "l  load a table from a file (into db)";
-STRING mn_ttsave   = SS "s  save a table to a file (from db)";
-STRING mn_ttexport = SS "x  export all tables (from db to files)";
-STRING mn_ttimport = SS "i  import all tables (from files into db)";
-STRING mn_ttexpdir = SS "export/import directory:";
-/* menu for edit translation table (these looks best if choices padded to same length)*/
+STRING mn_tt_ttl   = SS "Translation Tables";
+STRING mn_tt_edit  = SS "e  edit individual tables (in db)";
+STRING mn_tt_load  = SS "l  load a table from a file (into db)";
+STRING mn_tt_save  = SS "s  save a table to a file (from db)";
+STRING mn_tt_exp   = SS "x  export all tables (from db to files)";
+STRING mn_tt_imp   = SS "i  import all tables (from files into db)";
+STRING mn_tt_dir   = SS "export/import directory:";
+/* menu for edit translation table */
 STRING mn_edttttl  = SS "Which character mapping do you want to edit?";
 /* strings for choosing translation table (these looks best if choices padded to same length)*/
-STRING mn_ttedin   = SS "e  Editor to Internal mapping ";
-STRING mn_ttined   = SS "m  Internal to Editor mapping ";
-STRING mn_ttgdin   = SS "i  GEDCOM to Internal mapping ";
-STRING mn_ttingd   = SS "x  Internal to GEDCOM mapping ";
-STRING mn_ttdsin   = SS "g  Display to Internal mapping";
-STRING mn_ttinds   = SS "d  Internal to Display mapping";
-STRING mn_ttinrp   = SS "r  Internal to Report mapping ";
-/* utility menu */
-STRING mn_uttl     = SS "What utility do you want to perform?";
-/* extra menu */
-STRING mn_xttl     = SS "What activity do you want to perform?";
+STRING mn_tt_edin   = SS "e  Editor to Internal mapping ";
+STRING mn_tt_ined   = SS "m  Internal to Editor mapping ";
+STRING mn_tt_gdin   = SS "i  GEDCOM to Internal mapping ";
+STRING mn_tt_ingd   = SS "x  Internal to GEDCOM mapping ";
+STRING mn_tt_dsin   = SS "g  Display to Internal mapping";
+STRING mn_tt_inds   = SS "d  Internal to Display mapping";
+STRING mn_tt_inrp   = SS "r  Internal to Report mapping ";
 /* not yet implemented choices */
 STRING mn_notimpl  = SS "Not implemented yet";
+/* add menu */
+STRING mn_add_ttl  = SS "What do you want to add?";
+STRING mn_add_indi = SS "p  Person - add new person to the database";
+STRING mn_add_fam  = SS "f  Family - create family record from one or two spouses";
+STRING mn_add_chil = SS "c  Child - add a child to an existing family";
+STRING mn_add_spou = SS "s  Spouse - add a spouse to an existing family";
+/* delete menu */
+STRING mn_del_ttl  = SS "What do you want to remove?";
+STRING mn_del_chil = SS "c  Child - remove a child from his/her family";
+STRING mn_del_spou = SS "s  Spouse - remove a spouse from a family";
+STRING mn_del_indi = SS "i  Individual - remove a person completely";
+STRING mn_del_fam  = SS "f  Family - remove a family completely";
+/* scan menu */
+STRING mn_sca_ttl  = SS "What scan type?";
+STRING mn_sca_nmfu = SS "f  Full name scan";
+STRING mn_sca_nmfr = SS "n  Name fragment (whitespace-delimited) scan";
+STRING mn_sca_refn = SS "r  Refn scan";

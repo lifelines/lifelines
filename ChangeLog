@@ -1,3 +1,11 @@
+2001-11-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/messages.c hdrs/screen.h liflines/browse.c
+	liflines/import.c liflines/llinesi.h liflines/screen.c
+	liflines/show.c liflines/tandem.c:
+
+	Revising & simplifying menu code.
+
 2001-11-23 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/liflines.h hdrs/screen.h interp/interp.c

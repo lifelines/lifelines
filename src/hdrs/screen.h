@@ -84,15 +84,16 @@
 /*=========================================
  * UIWINDOWs -- Main screen, menus and popups
  *=======================================*/
+typedef struct uiwindow_s UIWINDOW;
 /* wrapper for WINDOW */
 typedef struct uiwindow_s {
-	WINDOW * win;
-	struct uiwindow_s * parent;
-	BOOLEAN permsub; /* TRUE if a fixed subwindow */
+	WINDOW * win;      /* curses window */
+	UIWINDOW * parent; /* fixed or dynamic parent */
+	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
 } UIWINDOW;
-#define uiw_win(x) (x->win)
-#define uiw_parent(x) (x->parent)
-#define uiw_permsub(x) (x->permsub)
+#define uiw_win(x)      (x->win)
+#define uiw_parent(x)   (x->parent)
+#define uiw_permsub(x)  (x->permsub)
 
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
@@ -118,9 +119,7 @@ STRING ask_for_output_filename (STRING ttl, STRING path, STRING prmpt);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void display_screen(INT);
 void dbprintf(STRING, ...);
-INT fam_browse(NODE, INT mode, BOOLEAN reuse);
 STRING get_answer (UIWINDOW*, STRING);
-INT indi_browse(NODE, INT mode, BOOLEAN reuse);
 int init_screen(void);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark, NODE * pindi);
 void llvwprintf(STRING fmt, va_list args);

@@ -89,8 +89,6 @@ static INT browse_indi_modes(NODE *pindi1, NODE *pindi2, NODE *pfam1,
 	NODE *pfam2, INDISEQ *pseq, INT indimode);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT display_aux(NODE node, INT mode, BOOLEAN reuse);
-static INT display_fam(NODE fam, INT fammode, BOOLEAN reuse);
-static INT display_indi(NODE indi, INT mode, BOOLEAN reuse);
 static NODE goto_fam_child(NODE fam, int childno);
 static NODE goto_indi_child(NODE indi, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
@@ -283,38 +281,6 @@ pick_create_new_family (NODE indi, NODE save, STRING * addstrings)
 		node = add_family(indi, NULL, NULL);
 	return node;
 }
-/*==========================================
- * display_indi -- Show indi in current mode
- *  preserving indi in cache
- *========================================*/
-static INT
-display_indi (NODE indi, INT mode, BOOLEAN reuse)
-{
-	CACHEEL icel;
-	INT c;
-	icel = indi_to_cacheel_old(indi);
-	lock_cache(icel);
-	c = indi_browse(indi, mode, reuse);
-	unlock_cache(icel);
-	return c;
-}
-/*==========================================
- * display_2indi -- Show two indi in current mode
- *========================================*/
-INT
-display_2indi (NODE indi1, NODE indi2, INT mode)
-{
-	CACHEEL icel1, icel2;
-	INT c;
-	icel1 = indi_to_cacheel_old(indi1);
-	icel2 = indi_to_cacheel_old(indi2);
-	lock_cache(icel1);
-	lock_cache(icel2);
-	c = twoindi_browse(indi1, indi2, mode);
-	unlock_cache(icel1);
-	unlock_cache(icel2);
-	return c;
-}
 /*====================================================
  * browse_indi_modes -- Handle person/pedigree browse.
  *==================================================*/
@@ -351,7 +317,8 @@ browse_indi_modes (NODE *pindi1,
 		}
 		history_record(indi);
 			/* display & get input, preserving INDI in cache */
-		c = display_indi(indi, indimode, reuse);
+		display_indi(indi, indimode, reuse);
+		c = interact_indi();
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
@@ -869,46 +836,12 @@ pick_add_child_to_fam (NODE fam, NODE save)
 	}
 	add_child(NULL, fam);
 }
-/*===========================================
- * display_fam -- Show family in current mode
- *=========================================*/
-static INT
-display_fam (NODE fam, INT mode, BOOLEAN reuse)
-{
-	CACHEEL icel;
-	INT c=0;
-	icel = fam_to_cacheel(fam);
-	lock_cache(icel);
-	c = fam_browse(fam, mode, reuse);
-	unlock_cache(icel);
-	return c;
-}
-/*==========================================
- * display_2fam -- Show two fam in current mode
- *========================================*/
-INT
-display_2fam (NODE fam1, NODE fam2, INT mode)
-{
-	CACHEEL icel1, icel2;
-	INT c;
-	icel1 = fam_to_cacheel(fam1);
-	icel2 = fam_to_cacheel(fam2);
-	lock_cache(icel1);
-	lock_cache(icel2);
-	c = twofam_browse(fam1, fam2, mode);
-	unlock_cache(icel1);
-	unlock_cache(icel2);
-	return c;
-}
 /*===============================================
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static INT
-browse_fam (NODE *pindi1,
-            NODE *pindi2,
-            NODE *pfam1,
-            NODE *pfam2,
-            INDISEQ *pseq)
+browse_fam (NODE *pindi1, NODE *pindi2, NODE *pfam1, NODE *pfam2
+	, INDISEQ *pseq)
 {
 	INT i, c, rc;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
@@ -932,7 +865,8 @@ browse_fam (NODE *pindi1,
 			show_reset_scroll();
 		}
 		history_record(fam);
-		c = display_fam(fam, fammode, reuse);
+		display_fam(fam, fammode, reuse);
+		c = interact_fam();
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
