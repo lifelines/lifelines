@@ -31,8 +31,9 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
+#ifndef WIN32
 #include <unistd.h>
-#ifdef WIN32
+#else
 #include <dir.h>
 #endif
 #include "standard.h"

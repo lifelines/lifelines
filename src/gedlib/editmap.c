@@ -6,7 +6,11 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef WIN32
 #include <unistd.h>
+#else
+#include <dir.h>
+#endif
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

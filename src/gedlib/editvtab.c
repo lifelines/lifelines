@@ -30,8 +30,13 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef WIN32
 #include <unistd.h>
 #include <curses.h>
+#else
+#include <dir.h>
+#include "mycurses.h"
+#endif
 #include "standard.h"
 #include "table.h"
 #include "translat.h"

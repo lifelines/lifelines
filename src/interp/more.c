@@ -676,7 +676,6 @@ PVALUE __lastindi (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
-
 /*===========================================+
  * firstfam -- Return first family in database
  *   usage: firstfam() -> FAM
@@ -778,7 +777,6 @@ WORD __lastfam (node, stab, eflg)
 PNODE node; TABLE stab; BOOLEAN *eflg;
 {
 }
-
 /*=============================================+
  * getrecord -- Read GEDCOM record from database
  *  usage: getrecord(STRING) -> NODE

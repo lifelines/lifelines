@@ -35,8 +35,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#ifndef WIN32
 #include <unistd.h>
-#ifdef WIN32
+#else
 #include <dir.h>
 #include <io.h>
 #endif
