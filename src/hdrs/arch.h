@@ -119,6 +119,15 @@ int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
 #ifndef S_IXUSR
 #define S_IXUSR _S_IEXEC
 #endif
+#ifndef X_OK
+#define X_OK 0x01
+#endif
+#ifndef R_OK
+#define R_OK 0x02
+#endif
+#ifndef W_OK
+#define W_OK 0x04
+#endif
 #endif /* _MSC_VER */
 #endif /* WIN32 */
 

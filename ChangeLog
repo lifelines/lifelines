@@ -1,3 +1,10 @@
+2005-01-01 Perry Rapp
+
+	* ChangeLog src/hdrs/arch.h src/interp/builtin.c
+
+	Fixes to make newest changes to __test(...) compile on MS-Windows.
+	Adjust tabs to match surrounding code in three lines in _test().
+
 2005-01-01 Stephen Dum
 
         *Changelog po/fr.po reports/anniver.ll, reports/cron.ll
