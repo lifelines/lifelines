@@ -160,7 +160,7 @@ init_display_indi (NODE pers, INT width)
  * show_person -- Display person
  *============================*/
 void
-show_person(WINDOW * win,
+show_person (WINDOW * win,
             NODE pers, /* person */
             INT row,   /* start row */
             INT hgt,   /* avail rows */
@@ -435,12 +435,12 @@ show_pedigree (NODE indi)
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 void
-show_gedcom (NODE node, INT menuht)
+show_gedcom (NODE node, INT hgt)
 {
 	WINDOW *w = main_win;
 	int i;
 
-	for (i = 1; i <= ll_lines-menuht; i++) {
+	for (i = 1; i <= hgt; i++) {
 		wmove(w, i, 1);
 		wclrtoeol(w);
 #ifndef BSD
@@ -448,7 +448,7 @@ show_gedcom (NODE node, INT menuht)
 #endif
 	}
 
-	pedigree_draw_gedcom(node, menuht);
+	pedigree_draw_gedcom(node, ll_lines-hgt);
 }
 /*===============================================================
  * indi_to_ped_fix -- Construct person STRING for pedigree screen
@@ -580,7 +580,7 @@ show_list (INDISEQ seq,
 void
 show_aux_display (NODE node)
 {
-	show_gedcom(node, 9);
+	show_gedcom(node, ll_lines-9);
 /*
 	STRING key;
 	INT i;

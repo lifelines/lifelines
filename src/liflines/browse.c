@@ -74,6 +74,7 @@ extern STRING id1hbr, id2hbr, id1wbr, id2wbr;
 static INT browse_indi(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_fam(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
 static INT browse_pedigree(NODE*, NODE*, NODE*, NODE*, INDISEQ*);
+static BOOLEAN handle_menu_commands(INT c);
 static NODE goto_indi_child(NODE indi, int childno);
 static NODE goto_fam_child(NODE fam, int childno);
 static INT display_indi(NODE indi, INT mode);
@@ -228,7 +229,9 @@ browse_indi_modes (NODE *pindi1,
 		nkeyp = indi_to_keynum(indi);
 		indimodep = indimode;
 		if (c != 'a') save = NULL;
-		switch (c) {
+		if (!handle_menu_commands(c))
+			switch (c)
+		{
 		case 'e':	/* Edit this person */
 			node = edit_indi(indi);
 			if (node)
@@ -697,7 +700,9 @@ browse_fam (NODE *pindi,
 		nkeyp = fam_to_keynum(fam);
 		fammodep = fammode;
 		if (c != 'a' && c != 's') save = NULL;
-		switch (c) {
+		if (!handle_menu_commands(c))
+			switch (c) 
+		{
 		case 'A':	/* Advanced family edit */
 			advanced_family_edit(fam);
 			break;
@@ -928,20 +933,26 @@ browse_fam (NODE *pindi,
 			gedcom_mode = !gedcom_mode;
 			fammodep = 0; /* force redraw */
 			break;
-		case '<':
-			adjust_menu_height(+1);
-			break;
-		case '>':
-			adjust_menu_height(-1);
-			break;
-		case '?':
-			cycle_menu();
-			break;
 		case 'q':
 		default:
 			return BROWSE_QUIT;
 		}
 	}
+}
+/*======================================================
+ * handle_menu_commands -- Handle menuing commands
+ * Created: 2001/01/31, Perry Rapp
+ *====================================================*/
+static BOOLEAN
+handle_menu_commands (INT c)
+{
+	switch(c) {
+		case '<': adjust_menu_height(+1); return TRUE;
+		case '>': adjust_menu_height(-1); return TRUE;
+		case '?': cycle_menu(); return TRUE;
+		case '*': toggle_menu(); return TRUE;
+	}
+	return FALSE;
 }
 /*======================================================
  * browse_pedigree -- Handle pedigree browse selections.

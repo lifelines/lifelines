@@ -332,9 +332,10 @@ draw_descendants (NODE indi, INT menuht)
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (NODE node, INT menuht)
+pedigree_draw_gedcom (NODE node, INT hgt)
 {
-	int count, row, gen;
+	INT count, row, gen;
+	INT menuht = ll_lines-hgt;
 	count=0;
 	count_nodes(node, 1, Gens, &count);
 	SetScrollMax(count, menuht);

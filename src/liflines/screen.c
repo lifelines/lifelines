@@ -237,47 +237,10 @@ paint_one_per_screen (void)
 	WINDOW *win = main_win;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, LINESTOTAL-3,  0, COLSREQ);
+	show_horz_line(win, ll_lines-3,  0, ll_cols);
 	if (!menu_enabled)
 		return;
 	output_menu(win, ONE_PER_SCREEN);
-
-	/*
-	WINDOW *win = main_win;
-	INT row, col;
-	werase(win);
-	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-12, 0, ll_cols);
-	show_horz_line(win, ll_lines-3,  0, ll_cols);
-	row = ll_lines - 11;
-	mvwaddstr(win, row, 2, plschs);
-	mvwaddstr(win, row++, 2+strlen(plschs)+3,
-		 "[Advanced View: A, Tandem Browse: C,F,G,M,S,U]");
-	col = 3;
-	mvwaddstr(win, row++, col, "e  Edit the person");
-	mvwaddstr(win, row++, col, "f  Browse to father(s)");
-	mvwaddstr(win, row++, col, "m  Browse to mother(s)");
-	mvwaddstr(win, row++, col, "s  Browse to spouse/s");
-	mvwaddstr(win, row++, col, "c  Browse to children");
-	mvwaddstr(win, row++, col, "o  Browse to older sib");
-	mvwaddstr(win, row++, col, "y  Browse to younger sib");
-	row = ll_lines - 10; col = 3 + BAND;
-	mvwaddstr(win, row++, col, "g  Browse to family");
-	mvwaddstr(win, row++, col, "u  Browse to parents");
-	mvwaddstr(win, row++, col, "b  Browse to persons");
-	mvwaddstr(win, row++, col, "h  Add as spouse");
-	mvwaddstr(win, row++, col, "i  Add as child");
-	mvwaddstr(win, row++, col, "r  Remove as spouse");
-	mvwaddstr(win, row++, col, "d  Remove as child");
-	row = ll_lines - 10; col = 3 + 2*BAND;
-	mvwaddstr(win, row++, col, "p  Show pedigree");
-	mvwaddstr(win, row++, col, "n  Create new person");
-	mvwaddstr(win, row++, col, "a  Create new family");
-	mvwaddstr(win, row++, col, "x  Swap two families");
-	mvwaddstr(win, row++, col, "t  Enter tandem mode");
-	mvwaddstr(win, row++, col, "z  Browse to person");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
-	*/
 }
 /*================================================
  * paint_one_fam_screen -- Paint one family screen
@@ -286,32 +249,13 @@ void
 paint_one_fam_screen (void)
 {
 	WINDOW *win = main_win;
-	INT row, col;
 	werase(win);
 	BOX(win, 0, 0);
-	show_horz_line(win, ll_lines-10, 0, ll_cols);
 	show_horz_line(win, ll_lines-3, 0, ll_cols);
-	row = ll_lines - 9;
-	mvwaddstr(win, row, 2, plschs);
-	mvwaddstr(win, row++, 2+strlen(plschs)+6,
-		 "[Advanced View: A, Tandem Browse: C,F,M]");
-	col = 3;
-	mvwaddstr(win, row++, col, "e  Edit the family");
-	mvwaddstr(win, row++, col, "f  Browse to father");
-	mvwaddstr(win, row++, col, "m  Browse to mother");
-	mvwaddstr(win, row++, col, "c  Browse to children");
-	mvwaddstr(win, row++, col, "n  Create new person");
-	row = ll_lines - 8; col = 3 + BAND;
-	mvwaddstr(win, row++, col, "s  Add spouse to family");
-	mvwaddstr(win, row++, col, "a  Add child to family");
-	mvwaddstr(win, row++, col, "r  Remove spouse from");
-	mvwaddstr(win, row++, col, "d  Remove child from");
-	mvwaddstr(win, row++, col, "x  Swap two children");
-	row = ll_lines - 8; col = 3 + 2*BAND;
-	mvwaddstr(win, row++, col, "t  Enter family tandem");
-	mvwaddstr(win, row++, col, "b  Browse to persons");
-	mvwaddstr(win, row++, col, "z  Browse to person");
-	mvwaddstr(win, row++, col, "q  Return to main menu");
+
+	if (!menu_enabled)
+		return;
+	output_menu(win, ONE_FAM_SCREEN);
 }
 /*================================================
  * paint_two_per_screen -- Paint two person screen
@@ -622,7 +566,7 @@ static INT
 indi_interact (void)
 {
 	return interact(main_win,
-		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-<>?!");
+		"efmscoygubhirdpnaxtzqACFGMSU()$#123456789+-<>*?!");
 }
 /*=========================================
  * indi_browse -- Handle indi_browse screen
@@ -633,10 +577,10 @@ indi_browse (NODE indi)
 	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
 	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
 		paint_one_per_screen();
-	menu_dirty = 0;
+	menu_dirty = FALSE;
 	show_person_main1(indi, 1, lines);
 	display_screen(ONE_PER_SCREEN);
-//	return interact_screen(main_win, ONE_PER_SCREEN);
+/*	return interact_screen(main_win, ONE_PER_SCREEN); */
 	return indi_interact();
 }
 /*=========================================
@@ -646,8 +590,11 @@ indi_browse (NODE indi)
 INT
 indi_ged_browse (NODE indi)
 {
-	if (cur_screen != ONE_PER_SCREEN) paint_one_per_screen();
-	show_gedcom(indi, 13);
+	INT lines = calculate_screen_lines(ONE_PER_SCREEN);
+	if (menu_dirty || (cur_screen != ONE_PER_SCREEN))
+		paint_one_per_screen();
+	menu_dirty = FALSE;
+	show_gedcom(indi, lines);
 	display_screen(ONE_PER_SCREEN);
 	return indi_interact();
 }
@@ -659,7 +606,7 @@ static INT
 fam_interact (void)
 {
 	return interact(main_win, 
-		"efmcnsardxtbzqABCFM()$#123456789+-!");
+		"efmcnsardxtbzqABCFM()$#123456789+-<>*?!");
 }
 /*=======================================
  * fam_browse -- Handle fam_browse screen
@@ -667,8 +614,11 @@ fam_interact (void)
 INT
 fam_browse (NODE fam)
 {
-	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
-	show_long_family(fam, 1, FAM_LINES, MAINWIN_WIDTH);
+	INT lines = calculate_screen_lines(ONE_FAM_SCREEN);
+	if (menu_dirty || (cur_screen != ONE_FAM_SCREEN))
+		paint_one_fam_screen();
+	menu_dirty = FALSE;
+	show_long_family(fam, 1, lines, MAINWIN_WIDTH);
 	display_screen(ONE_FAM_SCREEN);
 	return fam_interact();
 }
@@ -679,7 +629,7 @@ INT
 fam_ged_browse (NODE fam)
 {
 	if (cur_screen != ONE_FAM_SCREEN) paint_one_fam_screen();
-	show_gedcom(fam, 11);
+	show_gedcom(fam, ll_lines-11);
 	display_screen(ONE_FAM_SCREEN);
 	return fam_interact();
 }
@@ -1542,26 +1492,8 @@ message (STRING s)
 STRING
 message_string (void)
 {
-	switch (cur_screen) {
-	case MAIN_SCREEN:
-		return (STRING) "LifeLines -- Main Menu";
-	case ONE_PER_SCREEN:
-		return (STRING) "LifeLines -- Person Browse Screen";
-	case ONE_FAM_SCREEN:
-		return (STRING) "LifeLines -- Family Browse Screen";
-	case PED_SCREEN:
-		return (STRING) "LifeLines -- Pedigree Browse Screen";
-	case AUX_SCREEN:
-		return (STRING) "LifeLines -- Auxiliary Browse Screen";
-	case TWO_PER_SCREEN:
-		return (STRING) "LifeLines -- Tandem Browse Screen";
-	case TWO_FAM_SCREEN:
-		return (STRING) "LifeLines -- Two Family Browse Screen";
-	case LIST_SCREEN:
-		return (STRING) "LifeLines -- List Browse Screen";
-	default:
-		return (STRING) "";
-	}
+	if (!cur_screen) return "";
+	return f_ScreenInfo[cur_screen].Title;
 }
 /*=================================================
  * place_std_msg - Place standard message on screen

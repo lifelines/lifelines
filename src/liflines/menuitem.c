@@ -45,11 +45,12 @@ MenuItem g_MenuItemOther = { "?  Other menu choices", "?", CMD_MORE };
 MenuItem g_MenuItemQuit = { "q  Return to main menu", "q", CMD_QUIT };
 MenuItem g_MenuItemOptions = { "$  View options", "$", CMD_OPTIONS };
 static MenuItem f_MenuItemEdit = { "e  Edit the person", "e", CMD_EDIT };
+static MenuItem f_MenuItemEditFamily = { "e  Edit the family", "e", CMD_EDIT };
 static MenuItem f_MenuItemEditTop = { "e  Edit top person", "e", CMD_EDIT };
 static MenuItem f_MenuItemPerson = { "i  Browse to person", "i", CMD_PERSON };
-static MenuItem f_MenuItemFather = { "f  Browse to father(s)", "f", CMD_FATHER };
+static MenuItem f_MenuItemFather = { "f  Browse to father", "f", CMD_FATHER };
 static MenuItem f_MenuItemFatherTop = { "f  Browse top father", "f", CMD_FATHER };
-static MenuItem f_MenuItemMother = { "m  Browse to mother(s)", "m", CMD_MOTHER };
+static MenuItem f_MenuItemMother = { "m  Browse to mother", "m", CMD_MOTHER };
 static MenuItem f_MenuItemMotherTop = { "m  Browse top mother", "m", CMD_MOTHER };
 static MenuItem f_MenuItemSpouse = { "s  Browse to spouse/s", "s", CMD_SPOUSE };
 static MenuItem f_MenuItemSpouseTop = { "s  Browse top spouse/s", "s", CMD_SPOUSE };
@@ -76,6 +77,7 @@ static MenuItem f_MenuItemSwitchTopBottom = { "x  Switch top/bottom", "x", CMD_S
 static MenuItem f_MenuItemNewPerson = { "n  Create new person", "n", CMD_NEWPERSON };
 static MenuItem f_MenuItemNewFamily = { "a  Create new family", "a", CMD_NEWFAMILY };
 static MenuItem f_MenuItemTandem = { "t  Enter tandem mode", "t", CMD_TANDEM };
+static MenuItem f_MenuItemTandemFamily = { "t  Enter family tandem", "t", CMD_TANDEM };
 static MenuItem f_MenuItemZipBrowse = { "z  Browse to person", "z", CMD_BROWSE };
 static MenuItem f_MenuItemRemoveAsSpouse = { "r  Remove as spouse", "r", CMD_REMOVEASSPOUSE };
 static MenuItem f_MenuItemRemoveAsChild = { "d  Remove as child", "d", CMD_REMOVEASCHILD };
@@ -124,6 +126,7 @@ static MenuItemOption f_MenuItemOptionSources =
 	{ "$s  show sources", "$s  hide sources", "$S", CMD_SHOWSOURCES };
 
 
+
 static MenuItem * f_MenuPerson[] =
 {
 	&f_MenuItemEdit,
@@ -170,20 +173,19 @@ static MenuItemOption * f_MenuPersonOptions[] =
 };
 static MenuItem * f_MenuFamily[] =
 {
-	&f_MenuItemEdit,
+	&f_MenuItemEditFamily,
 	&f_MenuItemFather,
 	&f_MenuItemMother,
 	&f_MenuItemChildren,
-	&f_MenuItemBrowse,
+	&f_MenuItemNewPerson,
 	&f_MenuItemAddSpouse,
 	&f_MenuItemAddChild,
-	&f_MenuItemSwapFamilies,
-	&f_MenuItemNewPerson,
-	&f_MenuItemNewFamily,
-	&f_MenuItemTandem,
-	&f_MenuItemZipBrowse,
 	&f_MenuItemRemoveSpouseFrom,
 	&f_MenuItemRemoveChildFrom,
+	&f_MenuItemSwapChildren,
+	&f_MenuItemTandemFamily,
+	&f_MenuItemBrowse,
+	&f_MenuItemZipBrowse,
 	&f_MenuItemScrollUp,
 	&f_MenuItemScrollDown,
 	&f_MenuItemToggleChildNos,
@@ -378,7 +380,7 @@ menuitem_initialize (void)
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = TWO_PER_SCREEN;
-	Title = (STRING)"LifeLines -- Tandem Browse Screen (* toggles menu)";
+	Title = (STRING)"LifeLines -- Tandem Browse Screen";
 	MenuRows = 5;
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Person)/ItemSize-1;
@@ -386,7 +388,7 @@ menuitem_initialize (void)
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = TWO_FAM_SCREEN;
-	Title = (STRING)"LifeLines -- Two Family Browse Screen (* toggles menu)";
+	Title = (STRING)"LifeLines -- Two Family Browse Screen";
 	MenuRows = 5;
 	MenuCols = 3;
 	MenuSize = sizeof(f_Menu2Family)/ItemSize-1;
@@ -394,7 +396,7 @@ menuitem_initialize (void)
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = PED_SCREEN;
-	Title = (STRING)"LifeLines -- Pedigree Browse Screen (* toggles menu)";
+	Title = (STRING)"LifeLines -- Pedigree Browse Screen";
 	MenuRows = 5;
 	MenuCols = 3;
 	MenuSize = sizeof(f_MenuPedigree)/ItemSize-1;
@@ -402,14 +404,14 @@ menuitem_initialize (void)
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
 	scr = LIST_SCREEN;
-	Title = (STRING)"LifeLines -- List Browse Screen (* toggles menu)";
+	Title = (STRING)"LifeLines -- List Browse Screen";
 	MenuRows = 13;
 	MenuCols = 1;
 	MenuSize = sizeof(f_MenuListPersons)/ItemSize-1;
 	Menu = f_MenuListPersons;
 	setup_menu(scr, Title, MenuRows, MenuCols, MenuSize, Menu, MenuOpts);
 
-	f_ScreenInfo[AUX_SCREEN].Title = (STRING)"LifeLines -- Auxilliary Browse Screen";
+	f_ScreenInfo[AUX_SCREEN].Title = (STRING)"LifeLines -- Auxiliary Browse Screen";
 	strcpy(f_ScreenInfo[AUX_SCREEN].Commands, "eq");
 
 	for (i=1; i<MAX_SCREEN; i++)
