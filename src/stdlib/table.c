@@ -129,7 +129,7 @@ static struct tag_vtable vtable_for_table = {
 	, &table_destructor
 	, &refcountable_isref
 	, &refcountable_addref
-	, &refcountable_delref
+	, &refcountable_release
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };
@@ -139,7 +139,7 @@ static struct tag_vtable vtable_for_tabit = {
 	, &tabit_destructor
 	, &refcountable_isref
 	, &refcountable_addref
-	, &refcountable_delref
+	, &refcountable_release
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };
@@ -928,15 +928,17 @@ tabit_destructor (VTABLE *obj)
 void
 addref_table (TABLE tab)
 {
+	ASSERT(tab->vtable == &vtable_for_table);
 	++tab->refcnt;
 }
 /*=================================================
- * delref_table -- decrement reference count of table
+ * release_table -- decrement reference count of table
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void
-delref_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
+release_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
 {
+	ASSERT(tab->vtable == &vtable_for_table);
 	--tab->refcnt;
 	if (!tab->refcnt) {
 		traverse_table(tab, tproc);

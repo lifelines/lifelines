@@ -18,7 +18,7 @@ void delete_obj(OBJECT obj);
 OBJECT copy_or_addref_obj(OBJECT obj, int deep);
 
 /* for refcounted objects */
-int addref_obj(OBJECT obj);
-int delref_obj(OBJECT obj);
+int addref_object(OBJECT obj);
+int release_object(OBJECT obj);
 
 #endif /* object_h_included */

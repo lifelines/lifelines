@@ -15,7 +15,7 @@
 
 
 /*=================================================
- * delete_obj -- delref or delete object as appropriate
+ * delete_obj -- release or delete object as appropriate
  * obj may be null
  *===============================================*/
 void
@@ -30,7 +30,7 @@ delete_obj (OBJECT obj)
 
 	if ((*vtable->isref_fnc)(obj)) {
 		/* refcounted */
-		(*vtable->delref_fnc)(obj);
+		(*vtable->release_fnc)(obj);
 	} else {
 		/* non-refcounted */
 		(*vtable->destroy_fnc)(obj);
@@ -64,11 +64,11 @@ copy_or_addref_obj (OBJECT obj, int deep)
 	}
 }
 /*=================================================
- * addref_obj -- addref object
+ * addref_object -- addref object
  * Must be valid object with addref method
  *===============================================*/
 int
-addref_obj (OBJECT obj)
+addref_object (OBJECT obj)
 {
 	VTABLE vtable;
 
@@ -81,11 +81,11 @@ addref_obj (OBJECT obj)
 	return (*vtable->addref_fnc)(obj);
 }
 /*=================================================
- * delref_obj -- delref object
- * Must be valid object with delref method
+ * release_object -- release a reference on an object
+ * Must be valid object with release method
  *===============================================*/
 int
-delref_obj (OBJECT obj)
+release_object (OBJECT obj)
 {
 	VTABLE vtable;
 
@@ -94,7 +94,7 @@ delref_obj (OBJECT obj)
 	vtable = (*obj);
 	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
 
-	ASSERT(vtable->isref_fnc && vtable->delref_fnc);
-	return (*vtable->delref_fnc)(obj);
+	ASSERT(vtable->isref_fnc && vtable->release_fnc);
+	return (*vtable->release_fnc)(obj);
 }
 

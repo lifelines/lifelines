@@ -29,7 +29,7 @@ static struct tag_vtable testvtable = {
 	, 0 /* destroy_fnc */
 	, &refcountable_isref
 	, &refcountable_addref
-	, &refcountable_delref
+	, &refcountable_release
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };
@@ -74,10 +74,10 @@ refcountable_addref (OBJECT obj)
 	return ++rob->ref;
 }
 /*=================================================
- * refcountable_delref -- simple delref for generic refcountable object
+ * refcountable_release -- simple release for generic refcountable object
  *===============================================*/
 int
-refcountable_delref (OBJECT obj)
+refcountable_release (OBJECT obj)
 {
 	GENERIC_REF_OBJECT rob = (GENERIC_REF_OBJECT)obj;
 	int ref = --rob->ref;

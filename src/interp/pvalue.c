@@ -270,13 +270,13 @@ clear_pvalue (PVALUE val)
 	case PLIST:
 		{
 			LIST list = pvalue_to_list(val);
-			delref_list(list, delete_vptr_pvalue);
+			release_list(list, delete_vptr_pvalue);
 		}
 		return;
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
-			delref_table(table, table_pvcleaner);
+			release_table(table, table_pvcleaner);
 		}
 		return;
 	case PSET:
@@ -1187,7 +1187,7 @@ create_new_pvalue_table (void)
 {
 	TABLE tab = create_table_old2(FREEKEY);
 	PVALUE val = create_pvalue_from_table(tab);
-	delref_table(tab, table_pvcleaner); /* release our ref to table */
+	release_table(tab, table_pvcleaner); /* release our ref to table */
 	return val;
 }
 /*=============================================
@@ -1198,6 +1198,6 @@ create_new_pvalue_list (void)
 {
 	LIST list = create_list();
 	PVALUE val = create_pvalue_from_list(list);
-	delref_list(list, delete_vptr_pvalue); /* release our ref to list */
+	release_list(list, delete_vptr_pvalue); /* release our ref to list */
 	return val;
 }

@@ -31,7 +31,7 @@ struct tag_vtable {
 	int (*addref_fnc)(OBJECT obj);
 		/* decrement refcount & delete if 0 */
 		/* returns new refcount, or -1 if not refcounted */
-	int (*delref_fnc)(OBJECT obj);
+	int (*release_fnc)(OBJECT obj);
 		/* returns a copy of object */
 	OBJECT (*copy_fnc)(OBJECT obj, int deep);
 		/* returns name of object type (doesn't need to be freed) */
@@ -59,7 +59,7 @@ int nonrefcountable_isref(OBJECT obj);
 /* for refcountable object (with refcount right after vtable) */
 int refcountable_isref(OBJECT obj);
 int refcountable_addref(OBJECT obj);
-int refcountable_delref(OBJECT obj);
+int refcountable_release(OBJECT obj);
 
 #endif /* vtable_h_included */
 

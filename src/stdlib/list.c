@@ -58,7 +58,7 @@ static struct tag_vtable vtable_for_list = {
 	, &list_destructor
 	, &refcountable_isref
 	, &refcountable_addref
-	, &refcountable_delref
+	, &refcountable_release
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };
@@ -550,12 +550,22 @@ list_destructor (VTABLE *obj)
 	remove_list(list, 0);
 }
 /*=================================================
- * delref_list -- decrement reference count of list
+ * addref_list -- increment reference count of list
+ *===============================================*/
+void
+addref_list (LIST list)
+{
+	ASSERT(list->vtable == &vtable_for_list);
+	++list->l_refcnt;
+}
+/*=================================================
+ * release_list -- decrement reference count of list
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void
-delref_list (LIST list, void (*func)(VPTR))
+release_list (LIST list, void (*func)(VPTR))
 {
+	ASSERT(list->vtable == &vtable_for_list);
 	--list->l_refcnt;
 	if (!list->l_refcnt) {
 		remove_list(list, func);

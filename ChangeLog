@@ -27,6 +27,16 @@
 	Change pactx->filetab from old table to generic table. Also
 	fix leak of its elements (which are tables).
 
+	* ChangeLog src/gedlib/node.c src/gedlib/record.c src/hdrs/list.h
+	src/hdrs/object.h src/hdrs/table.h src/hdrs/vtable.h
+	src/interp/alloc.c src/interp/interp.c src/interp/pvalue.c
+	src/interp/symtab.c src/stdlib/array.c src/stdlib/generic.c
+	src/stdlib/list.c src/stdlib/object.c src/stdlib/table.c
+	src/stdlib/vtable.c
+
+	Rename addref_obj to addref_object, and delref_obj to release_object.
+	Rename delref_table to release_table, and delref_list to release_list.
+
 2005-02-02 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

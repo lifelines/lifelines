@@ -105,7 +105,7 @@ init_generic_object (GENERIC *gen, VPTR oval)
 	gen->selector = GENERIC_OBJECT;
 	gen->data.oval = obj;
 	if (obj)
-		addref_obj(obj);
+		addref_object(obj);
 }
 /*=================================================
  * set_generic_null -- populate gen with null generic

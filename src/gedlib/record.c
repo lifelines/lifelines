@@ -43,7 +43,7 @@ static struct tag_vtable vtable_for_record = {
 	, &record_destructor
 	, &refcountable_isref
 	, &refcountable_addref
-	, &refcountable_delref
+	, &refcountable_release
 	, 0 /* copy_fnc */
 	, &generic_get_type_name
 };

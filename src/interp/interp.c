@@ -2130,7 +2130,7 @@ pa_handle_require (PACTX pactx, PNODE node)
 	if (!tab) {
 		tab = create_table();
 		table_insert_object(pactx->filetab, cur_pathinfo->fullpath, tab);
-		delref_table(tab, NULL); /* release our reference, pactx->filetab owns now */
+		release_table(tab, NULL); /* release our reference, pactx->filetab owns now */
 	}
 
 	str = pvalue_to_string(pval);

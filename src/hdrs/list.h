@@ -72,9 +72,9 @@ typedef VPTR (*LIST_CREATE_VALUE)(LIST);
 		}\
 	}
 
-#define addref_list(list) addref_obj((OBJECT)list)
 
 /* list.c */
+void addref_list(LIST list);
 void back_list(LIST, VPTR);
 BOOLEAN begin_list(LIST list, LIST_ITER listit);
 BOOLEAN begin_list_rev(LIST list, LIST_ITER listit);
@@ -82,7 +82,7 @@ BOOLEAN change_list_ptr(LIST_ITER listit, VPTR newptr);
 LIST create_list(void);
 LIST create_list2(INT whattofree);
 BOOLEAN delete_list_element(LIST list, INT index1b, void (*func)(VPTR));
-void delref_list(LIST list, void (*func)(VPTR));
+void release_list(LIST list, void (*func)(VPTR));
 VPTR dequeue_list(LIST);
 BOOLEAN is_empty_list(const LIST);
 void enqueue_list(LIST, VPTR);
