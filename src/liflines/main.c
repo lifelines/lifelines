@@ -44,9 +44,11 @@
 #include "liflines.h"
 #include "arch.h"
 
+#ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
-#endif
+#endif /* HAVE_GETOPT_H */
+#endif /* HAVE_GETOPT */
 
 extern STRING idldir, nodbse, crdbse, nocrdb, iddbse, usage;
 
