@@ -35,17 +35,12 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "sys_inc.h"
-#include <stdarg.h>
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
+#include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "interp.h"
 #include "liflines.h"
 #include "arch.h"
 #include "screen.h"
@@ -1206,6 +1201,7 @@ activate_popup_list_uiwin (listdisp * ld)
 	if (hgt>POPUP_LINES)
 		hgt = POPUP_LINES;
 	ld->uiwin = create_newwin2(hgt, LISTWIN_WIDTH);
+	uiw_dynamic(ld->uiwin) = TRUE; /* delete when finished */
 	/* list is below details to nearly bottom */
 	ld->rectList.left = 1;
 	ld->rectList.right = LISTWIN_WIDTH-2;
@@ -1282,7 +1278,7 @@ choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 	ld.listlen = length_indiseq(seq);
 	ld.mode = 'n';
 
-	/* TO DO: need to deal with new commands, and move text into messages.c */
+	/* TO DO: connect this to menuitem system */
 	if (multi) {
 		menu = "Commands:  j Move down   k Move up  d Delete   i Select   q Quit";
 		choices = "jkiq123456789()[]";
@@ -2386,6 +2382,9 @@ STRING
 message_string (void)
 {
 	if (!cur_screen) return "";
+	if (cur_screen == MAIN_SCREEN)
+		return "LifeLines -- Main Menu";
+	ASSERT(cur_screen >= 1 && cur_screen <= MAX_SCREEN);
 	return g_ScreenInfo[cur_screen].Title;
 }
 /*=================================================
