@@ -150,6 +150,7 @@ main (INT argc, char **argv)
 	BOOLEAN forceopen=FALSE, lockchange=FALSE;
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
+	STRING dbdir = 0;
 
 #ifdef HAVE_SETLOCALE
 	setlocale(LC_ALL, "");
@@ -257,12 +258,19 @@ main (INT argc, char **argv)
 	/* initialize curses interface */
 	if (!init_screen())
 		goto finish;
-	/* initialize non-db dependent options (environment stuff) */
+	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
-	error_seterrorlog(lloptions.errorlog);
+	if (selftest) {
+		/* need to always find test stuff locally */
+		changeoptstr("LLPROGRAMS", strsave("."));
+		changeoptstr("LLREPORTS", strsave("."));
+		changeoptstr("LLDATABASES", strsave("."));
+		changeoptstr("LLNEWDBDIR", strsave("."));
+	}
+	error_seterrorlog(getoptstr("ErrorLog", NULL));
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
@@ -292,11 +300,11 @@ main (INT argc, char **argv)
 		goto usage;
 	}
 
+	dbdir = getoptstr("LLDATABASES", ".");
 	/* Get Database Name (Prompt or Command-Line) */
 	if (c <= 0) {
 		/* ask_for_db_filename returns static buffer, we save it below */
-		dbrequested = ask_for_db_filename(idldir, "enter path: "
-			, lloptions.lldatabases);
+		dbrequested = ask_for_db_filename(idldir, "enter path: ", dbdir);
 		if (ISNULL(dbrequested)) {
 			llwprintf(iddbse);
 			goto finish;
@@ -313,7 +321,7 @@ main (INT argc, char **argv)
 
 	/* search for database */
 	/* search for file in lifelines path */
-	dbused = filepath(dbrequested, "r", lloptions.lldatabases, NULL);
+	dbused = filepath(dbrequested, "r", dbdir, NULL);
 	if (!dbused) dbused = dbrequested;
 
 	if (!open_or_create_database(alteration, dbrequested, dbused))
@@ -321,7 +329,6 @@ main (INT argc, char **argv)
 
 	/* Start Program */
 	init_lifelines_db();
-	read_lloptions_from_db();
 	init_show_module();
 	while (!alldone)
 		main_menu();
@@ -428,8 +435,9 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING dbused)
 	If no database directory specified, add prefix llnewdbdir
 	*/
 	if (!selftest && is_unadorned_directory(dbused)) {
+		STRING newdbdir = getoptstr("LLNEWDBDIR", ".");
 		STRING temp = dbused;
-		dbused = strsave(concat_path(lloptions.llnewdbdir, dbused));
+		dbused = strsave(concat_path(newdbdir, dbused));
 		stdfree(temp);
 	}
 

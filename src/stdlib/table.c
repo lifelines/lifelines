@@ -53,8 +53,10 @@ enum TB_VALTYPE
 /* alphabetical */
 static UNION* access_value_impl (TABLE tab, STRING key);
 static ENTRY fndentry(TABLE, STRING);
+static void free_contents(ENTRY ent, INT whattofree);
 static void insert_table_impl(TABLE tab, STRING key, UNION uval);
 static INT hash(STRING);
+static void replace_table_impl(TABLE tab, STRING key, UNION uval, INT whattofree);
 static UNION* valueofbool_impl(TABLE tab, STRING key);
 
 /*********************************************
@@ -129,6 +131,29 @@ insert_table_impl (TABLE tab, STRING key, UNION uval)
 	}
 }
 /*======================================
+ * replace_table_impl -- Insert key & value into table
+ *  replacing existing key & value if key already present
+ * Created: 2001/11/23, Perry Rapp
+ *====================================*/
+static void
+replace_table_impl (TABLE tab, STRING key, UNION uval, INT whattofree)
+{
+	ENTRY entry = fndentry(tab, key);
+	if (entry) {
+		free_contents(entry, whattofree);
+		entry->ekey = key;
+		entry->uval = uval;
+	} else {
+		INT hval = hash(key);
+		entry = (ENTRY) stdalloc(sizeof(*entry));
+		entry->ekey = key;
+		entry->uval = uval;
+		entry->enext = tab->entries[hval];
+		tab->entries[hval] = entry;
+		++tab->count;
+	}
+}
+/*======================================
  * insert_table_ptr -- Insert key & pointer value into table
  * Created: 2001/06/03 (Perry Rapp)
  *====================================*/
@@ -172,6 +197,22 @@ insert_table_str (TABLE tab, STRING key, STRING str)
 	/* table must be homogenous, not mixed-type */
 	ASSERT(tab->valtype == TB_STR);
 	insert_table_impl(tab, key, uval);
+}
+/*======================================
+ * replace_table_str -- Insert or replace
+ *  key & value
+ * Created: 2001/11/23, Perry Rapp
+ *====================================*/
+void
+replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
+{
+	UNION uval;
+	uval.w = str;
+	if (tab->valtype == TB_NULL)
+		tab->valtype = TB_STR;
+	/* table must be homogenous, not mixed-type */
+	ASSERT(tab->valtype == TB_STR);
+	replace_table_impl(tab, key, uval, whattofree);
 }
 /*==========================================
  * delete_table -- Remove element from table
@@ -381,22 +422,23 @@ remove_table (TABLE tab, INT whattofree)
 		nxt = tab->entries[i];
 		while ((ent = nxt)) {
 			nxt = ent->enext;
-			switch (whattofree) {
-			case FREEBOTH:
-				stdfree(ent->uval.w);
-				/* fall thru to next case & free key also */
-			case FREEKEY:
-				stdfree(ent->ekey);
-				break;
-			case FREEVALUE:
-				stdfree(ent->uval.w);
-				break;
-			}
+			free_contents(ent, whattofree);
 			stdfree(ent);
 		}
 	}
 	stdfree(tab->entries);
 	stdfree(tab);
+}
+/*=================================================
+ * free_contents -- Free key and/or value as appropriate
+ *===============================================*/
+static void
+free_contents (ENTRY ent, INT whattofree)
+{
+	if (whattofree==FREEBOTH || whattofree==FREEKEY)
+		stdfree(ent->ekey);
+	if (whattofree==FREEBOTH || whattofree==FREEVALUE)
+		stdfree(ent->uval.w);
 }
 /*=================================================
  * traverse_table -- Traverse table doing something

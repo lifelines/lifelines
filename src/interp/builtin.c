@@ -2699,12 +2699,14 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING fname;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	char buffer[1024];
+	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	if (*eflg)  {
 		prog_error(node, "the arg to copyfile is not a string");
 		return NULL;
 	}
 	fname = (STRING) pvalue(val);
-	if (!(cfp = fopenpath(fname, LLREADTEXT, lloptions.llprograms, (STRING)NULL, (STRING *)NULL))) {
+	if (!(cfp = fopenpath(fname, LLREADTEXT, programsdir
+		, (STRING)NULL, (STRING *)NULL))) {
 		*eflg = TRUE;
 		prog_error(node, "the arg to copyfile is not a file name");
 		return NULL;

@@ -35,59 +35,16 @@
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-/*
-  strings might be strsave'd("")
-   but they are never NULL, and are always in heap
-   after read_lloptions has been called
-  To change a string value in the options structure, do like so:
-   changeoptstr(&lloptions.llarchives, strsave("."));
-  This will take care of freeing the previous value.
-*/
-struct lloptions_s {
-  /* options set by either user's config or db user options */
-	INT list_detail_lines;
-	INT add_metadata;
-	STRING email_addr;
-	/* options only set by user's config */
-	STRING lleditor;
-	STRING llprograms;
-	STRING llreports;
-	STRING llarchives;
-	STRING lldatabases;
-	STRING llnewdbdir; /* location for new unqualified databases */
-	STRING llttref; /* location for reference translation tables */
-	STRING llttexport; /* location for export & import of translation tables to/from db */
-	STRING inputpath; /* prefix for unqualified utility/read paths */
-	INT deny_system_calls; /* from within reports */
-	STRING reportlog; /* report errors appended to this file if non-blank */
-	STRING errorlog; /* fatal errors appended to this file if non-blank */
-	INT per_error_delay; /* sec delay for each report error */
-	INT report_error_callstack; /* full call stack for report errors */
-	STRING disp_long_date_fmts; /* customized long date display format */
-	STRING disp_shrt_date_fmts; /* customized short date display format */
-	STRING shrt_omit; /* eg, "..." or "&tc", for truncated short events */
-	STRING uilocale; /* locale used for GUI */
-	STRING rptlocale; /* locale used in reports */
-	STRING indirec; /* template for new indi */
-	STRING famrecbody; /* template for body of new fam */
-	STRING sourrec; /* template for new source */
-	STRING evenrec; /* template for new event */
-	STRING othrrec; /* template for new other */
-	STRING hdr_gedc; /* GEDC block for export header */
-	STRING hdr_char; /* CHAR block for export header */
-	STRING hdr_subm; /* SUBM block for export header */
-};
 
-extern struct lloptions_s lloptions;
-
-void changeoptstr(STRING * str, STRING newval);
-void cleanup_lloptions(void);
-void read_lloptions_from_config(void);
-void read_lloptions_from_db(void);
+/* initialization & termination */
+BOOLEAN init_lifelines_options(STRING configfile, STRING * pmsg);
 void term_lloptions(void);
 
-BOOLEAN init_lifelines_global(STRING * pmsg);
+/* use */
+void changeoptstr(STRING optname, STRING newval);
+STRING getoptstr(STRING optname, STRING defval);
+INT getoptint(STRING optname, INT defval);
 
-STRING getoptstr(STRING optname, STRING lloptstr, STRING defval);
+
 
 #endif /* _OPTIONS_H */

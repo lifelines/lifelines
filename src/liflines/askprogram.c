@@ -385,6 +385,7 @@ ask_for_program (STRING mode,
   int len, choice;
   struct program_info *head;
   STRING *list = NULL;
+  STRING programsdir = getoptstr("LLPROGRAMS", ".");
 
   if (!picklist)
     goto AskForString;
@@ -421,6 +422,6 @@ ask_for_program (STRING mode,
   return fp;
 
 AskForString:
-  fp = ask_for_input_file(LLREADTEXT, whatrpt, pfname, lloptions.llprograms, ".ll");
+  fp = ask_for_input_file(LLREADTEXT, whatrpt, pfname, programsdir, ".ll");
   return fp;
 }

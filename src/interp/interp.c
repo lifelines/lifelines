@@ -179,9 +179,10 @@ interp_program (STRING proc, INT nargs, VPTR *args, INT nifiles
 			enqueue_list(plist, strsave(ifiles[i]));
 		}
 	} else {
+		STRING programsdir = getoptstr("LLPROGRAMS", ".");
 		ifile = NULL;
 		fp = ask_for_program(LLREADTEXT, whatrpt, &ifile,
-			lloptions.llprograms, ".ll", picklist);
+			programsdir, ".ll", picklist);
 		if (fp == NULL) {
 			if (ifile != NULL)  {
 				/* tried & failed to open file */
@@ -306,10 +307,11 @@ static void
 parse_file (STRING ifile,
             LIST plist)
 {
+	STRING programsdir = getoptstr("LLPROGRAMS", ".");
 	Pfname = ifile;
 	if (!ifile || *ifile == 0) return;
 	Plist = plist;
-	Pinfp = fopenpath(ifile, LLREADTEXT, lloptions.llprograms, ".ll", (STRING *)NULL);
+	Pinfp = fopenpath(ifile, LLREADTEXT, programsdir, ".ll", (STRING *)NULL);
 	if (!Pinfp) {
 		llwprintf("Error: file \"%s\" not found.\n", ifile);
 		Perrors++;
@@ -397,7 +399,7 @@ if (prog_debug) {
 		case IFCALL:
 			val = evaluate_ufunc(node, stab, &eflg);
 			if (eflg) {
-				if (lloptions.report_error_callstack)
+				if (getoptint("FullReportCallStack", 0) > 0)
 					prog_error(node, "In user function");
 				goto interp_fail;
 			}
@@ -416,7 +418,7 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (lloptions.report_error_callstack)
+				if (getoptint("FullReportCallStack", 0) > 0)
 					prog_error(node, "In children loop");
 				goto interp_fail;
 			default:
@@ -428,7 +430,7 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (lloptions.report_error_callstack)
+				if (getoptint("FullReportCallStack", 0) > 0)
 					prog_error(node, "In spouses loop");
 				goto interp_fail;
 			default:
@@ -650,7 +652,7 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (lloptions.report_error_callstack)
+				if (getoptint("FullReportCallStack", 0) > 0)
 					prog_error(node, "in while statement");
 				goto interp_fail;
 			default:
@@ -662,7 +664,7 @@ if (prog_debug) {
 			case INTOKAY:
 				break;
 			case INTERROR:
-				if (lloptions.report_error_callstack)
+				if (getoptint("FullReportCallStack", 0) > 0)
 					prog_error(node, "in procedure call %s()", iname(node));
 				goto interp_fail;
 			default:
@@ -676,7 +678,7 @@ if (prog_debug) {
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
-			if (eflg && lloptions.report_error_callstack)
+			if (eflg && getoptint("FullReportCallStack", 0) > 0)
 				prog_error(node, "in return statement");
 			return INTRETURN;
 		default:
@@ -1149,7 +1151,6 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 			goto ileave;
 		}
 		ival = create_pvalue_from_indi_keynum(count);
-// MTE - we're getting NULL here
 		icel = get_cel_from_pvalue(ival);
 		icount++;
 		lock_cache(icel); /* keep current indi in cache during loop body */
@@ -1628,6 +1629,8 @@ traverse_leave:
 void
 prog_error (PNODE node, STRING fmt, ...)
 {
+	INT num;
+	STRING rptfile = getoptstr("ReportLog", NULL);
 	va_list args;
 	va_start(args, fmt);
 	llwprintf(progparsing ? "\nParsing " : "\nRuntime ");
@@ -1640,8 +1643,8 @@ prog_error (PNODE node, STRING fmt, ...)
 	va_end(args);
 	llwprintf(".\n");
 	++progerror;
-	if (lloptions.reportlog[0]) {
-		FILE * fp = fopen(lloptions.reportlog, LLAPPENDTEXT);
+	if (rptfile && rptfile[0]) {
+		FILE * fp = fopen(rptfile, LLAPPENDTEXT);
 		if (fp) {
 			if (progerror == 1) {
 				LLDATE creation;
@@ -1660,8 +1663,8 @@ prog_error (PNODE node, STRING fmt, ...)
 			fclose(fp);
 		}
 	}
-	if (lloptions.per_error_delay)
-		sleep(lloptions.per_error_delay);
+	if (num = getoptint("PerErrorDelay", 0))
+		sleep(num);
 }
 /*=============================================+
  * handle_option -- process option specified in report

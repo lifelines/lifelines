@@ -1201,11 +1201,11 @@ indi_to_event (NODE node, TRANTABLE tt, STRING tag, STRING head
 	event = event_to_string(node, tt, rfmt);
 	if (!event) return NULL;
 	/* need at least room for head + 1 character + "..." or no point */
-	if (strlen(head)+4>len) return NULL;
+	if ((INT)strlen(head)+4>len) return NULL;
 	p[0] = 0;
 	llstrcatn(&p, head, &mylen);
-	if (mylen<strlen(event)+1) {
-		omit = getoptstr("ShortOmitString", lloptions.shrt_omit, NULL);
+	if (mylen<(INT)strlen(event)+1) {
+		omit = getoptstr("ShortOmitString", NULL);
 		if (omit) {
 			mylen -= strlen(omit)+1; /* plus trailing 0 */
 			llstrcatn(&p, event, &mylen);

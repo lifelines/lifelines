@@ -71,6 +71,7 @@ TABLE create_table(void);
 void insert_table_ptr(TABLE, STRING key, VPTR);
 void insert_table_int(TABLE, STRING key, INT);
 void insert_table_str(TABLE, STRING key, STRING);
+void replace_table_str(TABLE tab, STRING key, STRING str, INT whattofree);
 void delete_table(TABLE, STRING);
 void remove_table(TABLE, INT whattofree);
 void traverse_table(TABLE, void (*proc)(ENTRY));

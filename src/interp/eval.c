@@ -197,7 +197,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		BOOLEAN eflg=TRUE;
 		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) {
-			if (lloptions.report_error_callstack)
+			if (getoptint("FullReportCallStack", 0) > 0)
 				prog_error(node, "In user function %s()", iname(node));
 			return INTERROR;
 		}
@@ -225,7 +225,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	case INTERROR:
 		break;
 	}
-	if (lloptions.report_error_callstack)
+	if (getoptint("FullReportCallStack", 0) > 0)
 		prog_error(node, "In user function %s()", iname(node));
 	*eflg = TRUE;
 	delete_pvalue(val);

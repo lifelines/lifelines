@@ -1,3 +1,18 @@
+2001-11-22 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ChangeLog gedlib/init.c gedlib/messages.c gedlib/node.c
+	gedlib/translat.c hdrs/gedcom.h hdrs/lloptions.h hdrs/table.h
+	interp/builtin.c interp/eval.c interp/interp.c interp/more.c
+	interp/rassa.c liflines/add.c liflines/askprogram.c
+	liflines/error.c liflines/export.c liflines/import.c
+	liflines/main.c liflines/newrecs.c liflines/screen.c
+	liflines/show.c stdlib/lloptions.c stdlib/table.c
+	tools/dbverify.c:
+
+	Rewrite of lloptions module. Pushed lifelines specific code up into init.c.
+	Made all config options overridable via useroptions. Eliminated complete 
+	listing of options in code.
+
 2001-11-21 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/pedigree.c liflines/show.c tools/dbverify.c:

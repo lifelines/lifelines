@@ -867,6 +867,7 @@ main (int argc,
 	/* This is unnecessary -- it is off anyway, Perry, 2001/10/28 */
 	alloclog  = FALSE;
 
+	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(&msg)) {
 		printf("%s\n", msg);
 		return (1);

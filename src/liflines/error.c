@@ -95,6 +95,7 @@ crashlog (STRING fmt, ...)
 void
 error_seterrorlog(STRING errorlog)
 {
-	llstrncpy(errorfile, errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
+	if (errorlog)
+		llstrncpy(errorfile, errorlog, sizeof(errorfile)/sizeof(errorfile[0]));
 }
 

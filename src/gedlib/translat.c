@@ -594,8 +594,9 @@ void
 uilocale (void)
 {
 #ifdef HAVE_SETLOCALE
-	if (lloptions.uilocale[0])
-		setlocale(LC_COLLATE, lloptions.uilocale);
+	STRING str = getoptstr("UiLocale", "C");
+	if (str)
+		setlocale(LC_COLLATE, str);
 #endif
 }
 /*==========================================
@@ -607,7 +608,8 @@ void
 rptlocale (void)
 {
 #ifdef HAVE_SETLOCALE
-	if (lloptions.rptlocale[0])
-		setlocale(LC_COLLATE, lloptions.rptlocale);
+	STRING str = getoptstr("RptLocale", "C");
+	if (str)
+		setlocale(LC_COLLATE, str);
 #endif
 }

@@ -737,7 +737,7 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #ifndef WIN32
 	system("clear");
 #endif
-	if (!lloptions.deny_system_calls) {
+	if (!getoptint("DenySystemCalls", 0)) {
 		system(cmd);
 	} else {
 		/* llwprintf("Suppressing system(%s) call", cmd); */

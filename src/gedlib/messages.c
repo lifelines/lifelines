@@ -251,10 +251,14 @@ STRING outfin = SS "Database `%s' has been saved in `%s'.";
 STRING extrpt      = SS "<Choose outside this list>";
 STRING whatrpt     = SS "What is the name of the program?";
 
-STRING norpt       =  SS "No report was generated.";
+STRING norpt       = SS "No report was generated.";
 STRING whtout      = SS "What is the name of the output file?";
 STRING opt2long    = SS "Malformed configuration file: line too long.";
 
+/* new records */
+STRING defsour     = SS "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
+STRING defeven     = SS "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
+STRING defothr     = SS "0 XXXX\n1 REFN";
 
 /* node.c errors */
 STRING fileof      = SS "The file is as positioned at EOF.";

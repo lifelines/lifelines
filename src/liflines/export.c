@@ -81,9 +81,9 @@ archive_in_file (void)
 	struct tm *pt;
 	time_t curtime;
 	STRING fname, str;
+	STRING archivesdir = getoptstr("LLARCHIVES", ".");
 
-	fn = ask_for_output_file(LLWRITETEXT, outarc,
-	    &fname, lloptions.llarchives, ".ged");
+	fn = ask_for_output_file(LLWRITETEXT, outarc, &fname, archivesdir, ".ged");
 	if (!fn) {
 		msg_error("The database was not saved.");
 		return FALSE; 
@@ -98,14 +98,13 @@ archive_in_file (void)
 	/* header date & time */
 	fprintf(fn, "1 DATE %s\n2 TIME %s\n", dat, tim);
 	/* header submitter entry */
-	str = getoptstr("HDR_SUBM", lloptions.hdr_subm, "1 SUBM");
+	str = getoptstr("HDR_SUBM", "1 SUBM");
 	fprintf(fn, "%s\n", str);
 	/* header gedcom version info */
-	str = getoptstr("HDR_GEDC", lloptions.hdr_gedc
-		, "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
+	str = getoptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
 	fprintf(fn, "%s\n", str);
 	/* header character set info */
-	str = getoptstr("HDR_CHAR", lloptions.hdr_char, "1 CHAR ASCII");
+	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
 	fprintf(fn, "%s\n", str);
 	/* finished header */
 	tran_gedout = tran_tables[MINGD];

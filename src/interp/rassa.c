@@ -147,6 +147,7 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	BOOLEAN aflag;
 	STRING name;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	STRING rptdir=NULL;
 	if (*eflg) {
 		prog_error(node, "1st arg to newfile must be a string.");
 		return NULL;
@@ -171,8 +172,9 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		fclose(Poutfp);
 		Poutfp = NULL;
 	}
+	rptdir = getoptstr("LLREPORTS", ".");
 	if (!(Poutfp = fopenpath(outfilename,
-			 aflag?LLAPPENDTEXT:LLWRITETEXT, lloptions.llreports, NULL, (STRING *)NULL))) {
+			 aflag?LLAPPENDTEXT:LLWRITETEXT, rptdir, NULL, (STRING *)NULL))) {
 		msg_error("Could not open file %s", outfilename);
 		return NULL;
 	}
@@ -185,9 +187,10 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 __outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
+	STRING rptdir = getoptstr("LLREPORTS", ".");
 	if (!Poutfp) {
-		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
-			lloptions.llreports, NULL);
+		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename
+			, rptdir, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(norpt);
@@ -302,8 +305,9 @@ __pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {
+		STRING rptdir = getoptstr("LLREPORTS", ".");
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &outfilename,
-			lloptions.llreports, NULL);
+			rptdir, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(norpt);
@@ -343,8 +347,9 @@ poutput (STRING str, BOOLEAN *eflg)
 	str = bfStr(bfs);
 	if ((len = strlen(str)) <= 0) return;
 	if (!Poutfp) {
+		STRING rptdir = getoptstr("LLREPORTS", ".");
 		Poutfp = ask_for_output_file(LLWRITETEXT, whtout, &name,
-			lloptions.llreports, NULL);
+			rptdir, NULL);
 		if (!Poutfp)  {
 			*eflg = TRUE;
 			message(norpt);

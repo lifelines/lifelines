@@ -50,6 +50,7 @@ extern STRING cfradd, cfeadd, cfxadd, rredit, eredit, xredit;
 extern STRING cfrupt, cfeupt, cfxupt, gdrmod, gdemod, gdxmod;
 extern STRING idredt, ideedt, idxedt, duprfn, ronlya, ronlye;
 extern STRING nofopn;
+extern STRING defsour,defeven,defothr;
 
 /*********************************************
  * local function prototypes
@@ -62,15 +63,6 @@ static void edit_record(NODE node1, STRING idedt, INT letr, STRING redt,
                          STRING tag, void (*todbase)(NODE), STRING gdmsg);
 static BOOLEAN nvaldiff(NODE node1, NODE node2);
 
-/*********************************************
- * local variables
- *********************************************/
-
-#define SS static STRING
-
-SS rstr = (STRING) "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author";
-SS estr = (STRING) "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR";
-SS xstr = (STRING) "0 XXXX\n1 REFN";
 
 /*********************************************
  * local function definitions
@@ -88,11 +80,7 @@ add_source (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = valueof_str(useropts, "SOURREC");
-	if (!str || !str[0])
-		str = lloptions.sourrec;
-	if (!str || !str[0])
-		str = rstr;
+	str = getoptstr("SOURREC", defsour);
 	return add_record(str, rredit, 'S', cfradd);
 }
 /*==============================================
@@ -106,11 +94,7 @@ add_event (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = valueof_str(useropts, "EVENREC");
-	if (!str || !str[0])
-		str = lloptions.evenrec;
-	if (!str || !str[0])
-		str = estr;
+	str = getoptstr("EVENREC", defeven);
 	return add_record(str, eredit, 'E', cfeadd);
 }
 /*====================================================
@@ -124,11 +108,7 @@ add_other (void)
 		message(ronlya);
 		return NULL;
 	}
-	str = valueof_str(useropts, "OTHRREC");
-	if (!str || !str[0])
-		str = lloptions.othrrec;
-	if (!str || !str[0])
-		str = xstr;
+	str = getoptstr("OTHR", defothr);
 	return add_record(str, xredit, 'X', cfxadd);
 }
 /*================================================

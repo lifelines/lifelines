@@ -58,7 +58,7 @@
 #define OVERHEAD_MENU 5
 INT LISTWIN_WIDTH=0;
 INT MAINWIN_WIDTH=0;
-static INT list_detail_lines = 0;
+static INT cur_list_detail_lines = 0;
 
 /* center windows on real physical screen (LINES x COLS) */
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
@@ -129,7 +129,7 @@ static NODE add_menu(void);
 static INT array_interact(WINDOW *win, STRING ttl, INT len, STRING *strings, BOOLEAN selecting);
 static INT calculate_screen_lines(INT screen);
 static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting);
-static void choose_sort(STRING * localestr);
+static void choose_sort(STRING optname);
 static INT choose_tt(WINDOW *wparent, STRING prompt);
 static WINDOW *choose_win(INT desiredlen, INT *actuallen);
 static void clear_msgs(void);
@@ -951,22 +951,22 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 	minlen = len;
 	top = cur = 0;
 resize_win:
-	asklen = len+list_detail_lines;
+	asklen = len+cur_list_detail_lines;
 	if (asklen < minlen)
 		asklen = minlen;
 	win = choose_win(asklen, &actlen);
 	if (actlen > minlen)
 		minlen = actlen;
 	/* check in case we pushed current offscreen */
-	if (cur-scroll>actlen-1-list_detail_lines)
-		cur=actlen-1-list_detail_lines+scroll;
+	if (cur-scroll>actlen-1-cur_list_detail_lines)
+		cur=actlen-1-cur_list_detail_lines+scroll;
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
 	len = length_indiseq(seq);
 	werase(win);
 	BOX(win, 0, 0);
-	row = len + list_detail_lines + 2;
+	row = len + cur_list_detail_lines + 2;
 	if (row > VIEWABLE + 2)
 		row = VIEWABLE + 2;
 	show_horz_line(win, row++, 0, 73);
@@ -989,7 +989,7 @@ resize_win:
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
-			if (cur >= top + VIEWABLE - list_detail_lines)
+			if (cur >= top + VIEWABLE - cur_list_detail_lines)
 				top++;
 			break;
 		case 'k':
@@ -1009,14 +1009,14 @@ resize_win:
 				scroll++;
 			break;
 		case '[':
-			if (list_detail_lines) {
-				list_detail_lines--;
+			if (cur_list_detail_lines) {
+				cur_list_detail_lines--;
 				goto resize_win;
 			}
 			break;
 		case ']':
-			if (list_detail_lines < 8) {
-				list_detail_lines++;
+			if (cur_list_detail_lines < 8) {
+				cur_list_detail_lines++;
 				goto resize_win;
 			}
 			break;
@@ -1053,7 +1053,7 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	len = length_indiseq(seq);
 	if (len<50)
 		preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
-	win = choose_win(len+list_detail_lines, NULL);
+	win = choose_win(len+cur_list_detail_lines, NULL);
 	werase(win);
 	BOX(win, 0, 0);
 	wrefresh(win);
@@ -1069,14 +1069,17 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
  * Created: 2001/07/21 (Perry Rapp)
  *====================================*/
 static void
-choose_sort (STRING * localestr)
+choose_sort (STRING optname)
 {
-	STRING sort;
+	STRING str;
 	STRING result = 0;
 	while (!result) {
-		sort = ask_for_string(idsortttl, idloc);
-		if (!sort || !sort[0]) return;
-		changeoptstr(localestr, strsave(sort));
+		str = ask_for_string(idsortttl, idloc);
+		if (!str || !str[0]) return;
+		result = setlocale(LC_COLLATE, str);
+		if (result) {
+			changeoptstr(optname, strsave(result));
+		}
 	}
 }
 #endif
@@ -1149,8 +1152,8 @@ draw_trans_win (void)
 	mvwaddstr(win, row++, 4, mn_ttexport);
 	mvwaddstr(win, row++, 4, mn_ttimport);
 	ptr[0] = 0;
-	llstrcatn(&ptr, mn_ttexpdir, &mylen);
-	llstrcatn(&ptr, lloptions.llttexport, &mylen);
+/*	llstrcatn(&ptr, mn_ttexpdir, &mylen); */
+/*	llstrcatn(&ptr, lloptions.llttexport, &mylen); */
 	mvwaddstr(win, row++, 4, line);
 	mvwaddstr(win, row++, 4, mn_ret);
 }
@@ -1341,7 +1344,7 @@ cset_menu (WINDOW * wparent)
 		wrefresh(wparent);
 		switch (code) {
 #ifdef HAVE_SETLOCALE
-		case 'L': choose_sort(&lloptions.uilocale); uilocale(); break;
+		case 'L': choose_sort("UiLocale"); uilocale(); break;
 #endif
 		case 's': edit_mapping(MSORT); break;
 		case 'c': edit_mapping(MCHAR); break;
@@ -1374,7 +1377,7 @@ rpt_cset_menu (WINDOW * wparent)
 		wrefresh(wparent);
 		switch (code) {
 #ifdef HAVE_SETLOCALE
-		case 'L': choose_sort(&lloptions.rptlocale); break;
+		case 'L': choose_sort("RptLocale"); break;
 #endif
 		case 'r': edit_mapping(MINRP); break;
 		case 'q': return;
@@ -1700,7 +1703,7 @@ indiseq_list_interact (WINDOW *win,
 	werase(win);
 	BOX(win, 0, 0);
 	mvwaddstr(win, 1, 1, ttl);
-	row = len0 + list_detail_lines + 2;
+	row = len0 + cur_list_detail_lines + 2;
 	if (row > VIEWABLE + 2)
 		row = VIEWABLE + 2;
 	show_horz_line(win, row++, 0, 73);
@@ -1713,7 +1716,7 @@ indiseq_list_interact (WINDOW *win,
 		case 'j':
 			if (cur >= len - 1) break;
 			cur++;
-			if (cur >= top + VIEWABLE - list_detail_lines)
+			if (cur >= top + VIEWABLE - cur_list_detail_lines)
 				top++;
 			break;
 		case 'k':
@@ -1758,7 +1761,7 @@ shw_list (WINDOW *win,
 	ie, how wide can print element be ? */
 	char buffer[60];
 	len = length_indiseq(seq);
-	numdet = list_detail_lines;
+	numdet = cur_list_detail_lines;
 	nrows = numdet + len0;
 	if (nrows>VIEWABLE)
 		nrows=VIEWABLE;

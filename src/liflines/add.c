@@ -74,13 +74,9 @@ add_indi_by_edit (void)
 
 	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
 	/* prefer useroption in this db */
-	if ((str = valueof_str(useropts, "INDIREC")))
+	if ((str = getoptstr("INDIREC", NULL)))
 		fprintf(fp, "%s\n", str);
-	/* or user option from config file */
-	else if ((str = lloptions.indirec)[0])
-		fprintf(fp, "%s\n", str);
-	/* fallback to default */
-	else {
+	else { /* default */
 		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");
 		fprintf(fp, "1 BIRT\n  2 DATE\n  2 PLAC\n");
 		fprintf(fp, "1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n");
@@ -532,13 +528,9 @@ editfam:
 	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);
 	/* prefer user option in db */
-	if ((str = valueof_str(useropts, "FAMRECBODY")))
+	if ((str = getoptstr("FAMRECBODY", NULL)))
 		fprintf(fp, "%s\n", str);
-	/* or user option from config file */
-	else if ((str = lloptions.famrecbody)[0])
-		fprintf(fp, "%s\n", str);
-	/* fallback to default */
-	else
+	else /* default */
 		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
 	write_nodes(1, fp, tto, chil, TRUE, TRUE, TRUE);
 	fclose(fp);

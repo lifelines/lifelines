@@ -789,7 +789,7 @@ person_display (NODE indi, NODE fam, INT len)
 	}
 
 	/* give name any unused space events left */
-	if (strlen(scratch2)<evlen)
+	if ((INT)strlen(scratch2)<evlen)
 		namelen += evlen-strlen(scratch2);
 	p = scratch1;
 	strcpy(p, indi_to_name(indi, ttd, namelen));
@@ -965,15 +965,16 @@ disp_long_format_date (STRING date)
 {
 	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
 	INT n;
+	STRING fmts;
 
 	if (!date) return NULL;
 
-	/* if we were cleverer, we wouldn't be doing this sscanf
-	every time thru here -- but it can't be done too early,
-	as it needs options to have been read */
-
-	/* did user specify optional long date display format ? */
-	n = sscanf(lloptions.disp_long_date_fmts, "%d,%d,%d,%d,%d"
+	fmts = getoptstr("LongDisplayDate", NULL);
+	if (!fmts)
+		return date;
+	
+	/* try to use user-specified format */
+	n = sscanf(fmts, "%d,%d,%d,%d,%d"
 		, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
 	if (n != 5) return date;
 	
@@ -990,21 +991,23 @@ disp_shrt_format_date (STRING date)
 {
 	INT dfmt=0,mfmt=0,yfmt=0,sfmt=0, cmplx;
 	INT n;
+	STRING fmts;
 
 	if (!date) return NULL;
 
-	/* see note about being cleverer in long version above */
-
-	/* did user specify optional short date display format ? */
-	n = sscanf(lloptions.disp_shrt_date_fmts, "%d,%d,%d,%d,%d"
-		, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
+	n = 0;
+	fmts = getoptstr("ShortDisplayDate", NULL);
+	if (fmts) {
+		/* try to use user-specified format */
+		n = sscanf(fmts, "%d,%d,%d,%d,%d"
+			, &dfmt, &mfmt, &yfmt, &sfmt, &cmplx);
+	}
 	if (n != 5) {
 		dfmt=mfmt=yfmt=sfmt=cmplx=0;
 		sfmt=12; /* old style short form -- year only */
 	}
 
 	return do_format_date(date, dfmt, mfmt, yfmt, sfmt, cmplx);
-	/*return shorten_date(date);*/
 }
 /*================================================================
  * disp_shrt_format_plac -- short form of place for display

@@ -72,6 +72,55 @@ static int rdr_count = 0;
  *********************************************/
 
 /*=================================
+ * init_lifelines_global -- Initialization options & misc. stuff
+ *  This is before database opened
+ *===============================*/
+BOOLEAN
+init_lifelines_global (STRING * pmsg)
+{
+	STRING e;
+	STRING configfile = environ_determine_config_file();
+	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
+		, "LLDATABASES", "LLNEWDBDIR" };
+	INT i;
+	*pmsg = NULL;
+	if (!init_lifelines_options(configfile, pmsg))
+		return FALSE;
+	/* check if any directories not specified, and try environment
+	variables, and default to "." */
+	for (i=0; i<ARRSIZE(dirvars); ++i) {
+		if (!getoptstr(dirvars[i], NULL)) {
+			STRING str = getenv(dirvars[i]);
+			if (str)
+				changeoptstr(dirvars[i], strsave(str));
+			else
+				changeoptstr(dirvars[i], strsave("."));
+		}
+	}
+	/* also check environment variable for editor */
+	if (!getoptstr("LLEDITOR", NULL)) {
+		STRING str = getenv("LLEDITOR");
+		if (str)
+			changeoptstr("LLEDITOR", strsave(str));
+	}
+	/* editor falls back to platform-specific default */
+	e = getoptstr("LLEDITOR", NULL);
+	if (!e || !e[0])
+		e = environ_determine_editor(PROGRAM_LIFELINES);
+	/* configure tempfile & edit command */
+	editfile = environ_determine_tempfile();
+	if (!editfile) {
+		*pmsg = strsave("Error creating temp file");
+		return FALSE;
+	}
+	editfile = strsave(editfile );
+	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
+	sprintf(editstr, "%s %s", e, editfile);
+	set_usersort(custom_sort);
+	return TRUE;
+}
+
+/*=================================
  * init_lifelines_db -- Initialization after db opened
  *===============================*/
 void
@@ -123,7 +172,7 @@ close_lifelines (void)
 		stdfree(editstr);
 		editstr=NULL;
 	}
-	cleanup_lloptions();
+	term_lloptions();
 }
 /*===================================
  * close_lldb -- Close current database
