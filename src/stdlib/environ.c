@@ -52,9 +52,9 @@ environ_determine_tempfile (void)
 	if (ISNULL(e)) e = "\\temp"; /* fallback is \temp */
 	strcpy(win32_tempfile, e);
 /* limit to 8.3 for edit.com, in case someone uses it */
-	strcat(win32_tempfile, "\\lltXXXXX");
+/* also use .txt extension, otherwise notepad SaveAs UTF-8 is problematic */
+	strcat(win32_tempfile, "\\lltXXXXX.txt");
 	mktemp(win32_tempfile);
-	strcat(win32_tempfile, "."); /* so notepad doesn't add .txt */
 	return win32_tempfile;
 #else
 	static char template[] = "/tmp/lltmpXXXXXX";

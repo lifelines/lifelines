@@ -4,7 +4,12 @@
 	src/liflines/cscurses.c win32/mycurses.c
 
 	Bugfix for sign-extension bug in win32 curses.
-	Change version to 3.0.27p5.
+	Change version to 3.0.27p5. Release beta 3.0.27p5.
+
+	* ChangeLog src/stdlib/environ.c
+
+	Change temp file on Win32 to end in .txt extension (so SaveAs UTF-8
+	works in notepad).
 
 2003-04-20 Perry Rapp
 
@@ -18,7 +23,7 @@
 
 	* ChangeLog build/msvc6/llines/llines.rc src/hdrs/version.h
 
-	Update for version 3.0.27p4.
+	Update for version 3.0.27p4. Release beta 3.0.27p4.
 
 2003-04-19 Perry Rapp
 
