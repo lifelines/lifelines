@@ -5,6 +5,10 @@
 
 	I18n ordinals, cardinals, and personal pronouns in builtin fncs.
 
+	* ChangeLog po/fr.po:
+
+	Update to Patrick Texier's newest fr.po (added plural header).
+
 2002-09-23 Perry Rapp
 
 	* ChangeLog src/gedlib/names.c:
