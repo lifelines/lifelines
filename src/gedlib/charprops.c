@@ -15,15 +15,24 @@
 #include "gedcom.h"
 #include "gedcomi.h"
 #include "lloptions.h"
+#include "mychar.h"
+#include "zstr.h"
 
 /* 763 upper case letters, and 754 lower case letters, 2003-11-13 */
 #define MAXCASES 1024
+
+/*********************************************
+ * external/imported variables
+ *********************************************/
+extern BOOLEAN opt_mychar;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 static ZSTR convert_utf8(TRANTABLE uppers, CNSTRING s);
+static ZSTR charprops_toupperz(CNSTRING s);
+static ZSTR charprops_tolowerz(CNSTRING s);
 
 /*********************************************
  * local variables
@@ -34,7 +43,7 @@ static int loaded_codepage = 0;
 static TRANTABLE uppers = 0;
 static TRANTABLE lowers = 0;
 static STRING charset_name = 0; /* what charset is currently in charset_info */
-static struct my_charset_info_tag * charset_info = 0;
+static struct my_charset_info_tag charset_info[256];
 
 /*********************************************
  * local & exported function definitions
@@ -115,6 +124,7 @@ charprops_load_utf8 (void)
 	for (i=0; i<locount; ++i)
 		stdfree(loleft[i]);
 	loaded_utf8 = 1;
+	set_utf8_casing(charprops_toupperz, charprops_tolowerz);
 	return TRUE;
 }
 /*==========================================
@@ -132,10 +142,6 @@ charprops_free_all (void)
 		lowers = 0;
 	}
 	loaded_utf8 = 0;
-	if (charset_info) {
-		free(charset_info);
-		charset_info = 0;
-	}
 	strfree(&charset_name);
 	loaded_codepage = 0;
 }
@@ -145,59 +151,96 @@ charprops_free_all (void)
 BOOLEAN
 charprops_load (const char * codepage)
 {
+	XLAT tt8=0, ttback = 0;
+	INT ch;
+	char src[2];
+
 	/* check if already loaded */
 	if (eqstr_ex(charset_name, codepage)) 
 		return TRUE;
 
+	/* assume that we don't have a table, in case we bail */
 	loaded_codepage = -1;
+	opt_mychar = 0;
+
+	/* check that we have UTF-8 */
 	if (!loaded_utf8)
 		charprops_load_utf8();
 	if (loaded_utf8 != 1)
 		return FALSE;
-	/*
-	#1) Check that we have UTF-8 charprops
-	#2) See if we can convert to UTF-8
-	#3) build the charset_info table
-	#4) set loaded_codepage
-	*/
+
+	/* can we get from desired codepage to UTF-8 ? */
+	tt8 = transl_get_xlat(codepage, "UTF-8");
+	if (!tt8)
+		return FALSE;
+	/* and back ? */
+	ttback = transl_get_xlat("UTF-8", codepage);
+	if (!ttback)
+		return FALSE;
+
+	src[1] = 0;
+	for (ch=0; ch<256; ++ch) {
+		ZSTR zsrc, zup;
+
+		/* set default as noncased */
+		charset_info[ch].toup = ch;
+		charset_info[ch].tolow = ch;
+		charset_info[ch].iscntrl = 0;
+		charset_info[ch].isup = 0;
+		charset_info[ch].islow = 0;
+		src[0] = ch;
+		/*
+		Convert to UTF-8, do casing, check if it changed
+		if so, convert back, check that result is single char
+		different from ch, if so, save it
+		*/
+		zsrc = translate_string_to_zstring(tt8, src);
+		/* zstr is UTF-8 version of ch */
+		zup = custom_translate(zs_str(zsrc), uppers);
+		/* zup is uppercased zstr */
+		if (!eqstr(zs_str(zsrc), zs_str(zup))) {
+			transl_xlat(ttback, zup);
+			/* zup is now uppercased in original codepage */
+			if (zs_len(zup) == 1 && zs_str(zup)[0] != ch) {
+				charset_info[ch].islow = 1;
+				charset_info[ch].toup = zs_str(zup)[0];
+			}
+		}
+		zs_free(&zsrc);
+		zs_free(&zup);
+
+	}
+
+	/* activate new table of character properties */
+	mych_set_table(charset_info);
+	opt_mychar = 1;
+
 	strupdate(&charset_name, codepage);
-	return FALSE;
+	return TRUE;
 }
 /*==========================================
  * charprops_toupperz -- Return uppercase version of string
+ * Only used when internal codeset is UTF-8
+ * This is called as a plugin from ll_toupperz
  *========================================*/
-ZSTR
-charprops_toupperz (CNSTRING s, INT utf8)
+static ZSTR
+charprops_toupperz (CNSTRING s)
 {
 	ZSTR zstr = 0;
-	if (utf8) {
-		if (loaded_utf8==1) {
-			return convert_utf8(uppers, s);
-		}
-	} else {
-		if (loaded_codepage==1) {
-			/* TODO */
-		}
-	}
-	return ll_toupperz(s, utf8);
+	ASSERT(uu8 && loaded_utf8==1);
+	return convert_utf8(uppers, s);
 }
 /*==========================================
  * charprops_tolowerz -- Return lowercase version of string
+ * Only used when internal codeset is UTF-8
+ * This is called as a plugin from ll_toupperz
  *========================================*/
-ZSTR
-charprops_tolowerz (CNSTRING s, INT utf8)
+static ZSTR
+charprops_tolowerz (CNSTRING s)
 {
 	ZSTR zstr = 0;
-	if (utf8) {
-		if (loaded_utf8==1) {
-			return convert_utf8(lowers, s);
-		}
-	} else {
-		if (loaded_codepage==1) {
-			/* TODO */
-		}
-	}
-	return ll_tolowerz(s, utf8);
+	ASSERT(uu8 && loaded_utf8==1);
+	return convert_utf8(lowers, s);
 }
 /*==========================================
  * convert_utf8 -- translate string using specified trantable

@@ -37,6 +37,8 @@
 #include "stdlibi.h"
 
 static const char * get_wchar_codeset_name(void);
+static ZSTR (*upperfunc)(CNSTRING) = 0;
+static ZSTR (*lowerfunc)(CNSTRING) = 0;
 
 /*===================================================
  * get_wchar_codeset_name -- name of wchar_t codeset
@@ -171,8 +173,10 @@ ZSTR
 ll_tolowerz (CNSTRING s, int utf8)
 {
 	ZSTR zstr=0;
-#ifdef HAVE_TOWLOWER
 	if (utf8) {
+		if (lowerfunc)
+			return (*lowerfunc)(s);
+#ifdef HAVE_TOWLOWER
 		zstr = makewide(s);
 		if (zstr) {
 			/* Now zstr holds a string of wchar_t characters */
@@ -180,8 +184,8 @@ ll_tolowerz (CNSTRING s, int utf8)
 			wz_makelower(zstr);
 			wz_makenarrow(zstr);
 		}
-	}
 #endif
+	}
 
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
@@ -196,14 +200,27 @@ ll_tolowerz (CNSTRING s, int utf8)
 	return zstr;
 }
 /*==========================================
+ * set_utf8_casing -- Set plugin functions for UTF-8 casing
+ *========================================*/
+void
+set_utf8_casing (ZSTR (*ufnc)(CNSTRING), ZSTR (*lfnc)(CNSTRING))
+{
+	upperfunc = ufnc;
+	lowerfunc = lfnc;
+}
+/*==========================================
  * ll_toupperz -- Return uppercase version of string
  *========================================*/
 ZSTR
 ll_toupperz (CNSTRING s, INT utf8)
 {
 	ZSTR zstr=0;
-#ifdef HAVE_TOWUPPER
 	if (utf8) {
+		if (upperfunc)
+			return (*upperfunc)(s);
+#ifdef HAVE_TOWUPPER
+		/* This should not normally be used.
+		There should be a plugin (upperfunc) */
 		zstr = makewide(s);
 		if (zstr) {
 			/* Now zstr holds a string of wchar_t characters */
@@ -211,8 +228,8 @@ ll_toupperz (CNSTRING s, INT utf8)
 			wz_makeupper(zstr);
 			wz_makenarrow(zstr);
 		}
-	}
 #endif
+	}
 
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));

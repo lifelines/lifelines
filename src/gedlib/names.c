@@ -37,7 +37,6 @@
 #include "gedcomi.h"
 #include "mystring.h" /* fi_chrcmp */
 #include "zstr.h"
-#include "charprops.h"
 
 
 /*********************************************
@@ -950,7 +949,7 @@ upsurname (STRING name)
 		*q++ = c;
 	*q++ = 0;
 	/* uppercase surname */
-	zstr = charprops_toupperz(surnam, uu8);
+	zstr = ll_toupperz(surnam, uu8);
 	*p = 0;
 	/* append surnam to our output we're building */
 	strcat(p, zs_str(zstr));

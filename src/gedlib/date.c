@@ -36,7 +36,6 @@
 #include "table.h"
 #include "date.h"
 #include "zstr.h"
-#include "charprops.h"
 
 
 /*********************************************
@@ -1449,7 +1448,7 @@ init_keywordtbl (void)
 static STRING
 upper_dup (STRING s)
 {
-	ZSTR zstr = charprops_toupperz(s, uu8);
+	ZSTR zstr = ll_toupperz(s, uu8);
 	STRING str = strdup(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
@@ -1460,7 +1459,7 @@ upper_dup (STRING s)
 static STRING
 lower_dup (STRING s)
 {
-	ZSTR zstr = charprops_tolowerz(s, uu8);
+	ZSTR zstr = ll_tolowerz(s, uu8);
 	STRING str = strdup(zs_str(zstr));
 	zs_free(&zstr);
 	return str;

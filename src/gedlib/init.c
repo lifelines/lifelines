@@ -210,12 +210,6 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	if (opt_finnish ) {
 		opt_mychar = TRUE;
 		mych_set_table(ISO_Latin1);
-	} else {
-		CNSTRING charprops = getoptstr("CustomCharacterProperties", "");
-		if (eqstr(charprops, "ISO-8859-1")) {
-			opt_mychar = TRUE;
-			mych_set_table(ISO_Latin1);
-		}
 	}
 	
 	

@@ -4,6 +4,13 @@
 
 	Fix llexec compilation under MSVC6.
 
+	* ChangeLog src/gedlib/charprops.c src/gedlib/date.c
+	src/gedlib/init.c src/gedlib/names.c src/hdrs/charprops.h
+	src/hdrs/llstdlib.h src/interp/builtin.c src/stdlib/strcvt.c
+
+	Implement char props for any codepage convertible to UTF-8.
+	Change UTF-8 uppercasing into a plugin behind ll_toupperz.
+
 2003-11-14 Robert Simms
 
 	* ChangeLog tt/UTF-8_ISO-8859-8.tt
