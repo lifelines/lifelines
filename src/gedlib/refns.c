@@ -411,7 +411,7 @@ resolve_node (NODE node, BOOLEAN annotate_pointers)
 		INT i=0,len=0;
 		if (is_annotated_xref(nval(node), &len)) {
 			char newval[20];
-			ASSERT(len < sizeof(newval));
+			ASSERT(len < (INT)sizeof(newval));
 			for (i=0; i<len; ++i) {
 				newval[i] = nval(node)[i];
 			}

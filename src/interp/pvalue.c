@@ -215,6 +215,9 @@ set_pvalue (PVALUE val, INT type, VPTR value)
 void
 dolock_node_in_cache (NODE node, BOOLEAN lock)
 {
+	node = node;	/* NOTUSED */
+	lock = lock;	/* NOTUSED */
+
 #if NOT_WORKING_ON_LARGE_DATA_SETS
 /* This leads to cache overflow, so there is something
 wrong here - Perry, 2003-03-07 */
@@ -1092,6 +1095,7 @@ pvalue_to_cel (PVALUE val)
 	RECORD rec = pvalue_to_rec(val);
 	NODE root = nztop(rec); /* force record into cache */
 	CACHEEL cel = rec ? rec->rec_cel : 0;
+	root = root;	/* NOTUSED */
 	return cel;
 }
 /*==================================

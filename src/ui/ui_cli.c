@@ -140,6 +140,14 @@ ask_for_program (STRING mode,
                  STRING ext,
                  BOOLEAN picklist)
 {
+	mode = mode;		/* NOTUSED */
+	ttl = ttl;		/* NOTUSED */
+	pfname = pfname;	/* NOTUSED */
+	pfullpath = pfullpath;	/* NOTUSED */
+	path = path;		/* NOTUSED */
+	ext = ext;		/* NOTUSED */
+	picklist = picklist;	/* NOTUSED */
+
 	/* TODO: We probably want to use the real implementation in askprogram.c */
 	return FALSE;
 }
@@ -188,6 +196,7 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 BOOLEAN
 ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
 {
+	basedir = basedir;	/* NOTUSED */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
 BOOLEAN
@@ -266,6 +275,9 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 INT
 choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
 {
+	ttl = ttl;	/* NOTUSED */
+	multi = multi;	/* NOTUSED */
+
 	calc_indiseq_names(seq); /* we certainly need the names */
 
 	/* TODO: imitate choose_from_list & delegate to array chooser */
@@ -283,6 +295,9 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	STRING responses = selectable ? "0123456789udq" : "udq";
 	INT i=0;
+
+	ttl = ttl;	/* NOTUSED */
+
 	while (1) {
 		INT j;
 		INT rv;

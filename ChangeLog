@@ -1,5 +1,14 @@
 2004-10-15 Matt Emmerton
 
+	* ChangeLog src/ui/ui_cli.c src/tools/dbverify.c
+	  src/interp/pvalue.c src/gedlib/refns.c
+
+	Silence compiler warnings from unused parameters.
+	Fix comments on freecache routine.
+	Add cast to avoid compiler warning.
+	
+2004-10-15 Matt Emmerton
+
 	* ChangeLog src/btree/addkey.c src/btree/btreei.h
 	  src/btree/index.c src/btree/opnbtree.c src/btree/record.c
 	  src/btree/traverse.c src/hdrs/btree.h

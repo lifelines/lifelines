@@ -564,7 +564,7 @@ check_indi (CNSTRING key, RECORD rec)
 	}
 	/* check refns */
 	for (node1 = refn1; node1; node1 = nsibling(node1)) {
-		STRING refn=nval(node1);
+		/* STRING refn=nval(node1); */
 		/* TO DO: verify that refn is in db */
 	}
 	/* check parents */
@@ -621,7 +621,7 @@ check_fam (CNSTRING key, RECORD rec)
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
 	/* check refns */
 	for (node1 = fref1; node1; node1 = nsibling(node1)) {
-		STRING refn=nval(node1);
+		/* STRING refn=nval(node1); */
 		/* TO DO: verify that refn is in db */
 	}
 	/* check husbs */
