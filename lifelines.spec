@@ -5,12 +5,12 @@
 # then "rpm -ba lifelines.spec"
 #
 
-%define lifelines_version       3.0.6
+%define lifelines_version       3.0.7
 
 Name: lifelines
 Summary: lifelines genealogy program
 Version: %{lifelines_version}
-Release: 2
+Release: 1
 Copyright: MIT
 Group: Utilities/System
 Source:         http://download.sourceforge.net/lifelines/lifelines-%{lifelines_version}.tar.gz
@@ -30,6 +30,7 @@ sh -c ./configure
 make 
 
 %install
+mkdir -p /usr/local/share/lifelines/reports
 install -s -m 755 -o 0 -g 0 liflines/llines /usr/local/bin/llines
 install  -m 755 -o 0 -g 0 reports/CREDIT /usr/local/share/lifelines/reports/CREDIT
 install  -m 755 -o 0 -g 0 reports/2ppage.ll /usr/local/share/lifelines/reports/2ppage.ll

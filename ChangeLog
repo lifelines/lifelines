@@ -1,5 +1,10 @@
-2001-11-03  Marc Nozell  <marc@localhost.localdomain>
+2001-11-03  Marc Nozell  <marc@nozell.com>
 
+	* configure.in, hdrs/version.h, lifelines.spec: bump version to 3.0.7.
+	
+	* lifelines.spec: ensure /usr/local/share/lifelines/reports is
+	created during install.
+	
 	* hdrs/Makefile.am (EXTRA_DIST): Added new bfs.h and fpattern.h
 
 2001-10-29 Perry Rapp <puddle@users.sourceforge.net>

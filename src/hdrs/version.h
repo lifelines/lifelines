@@ -6,6 +6,6 @@
 	a private build version
 */
 
-#define LIFELINES_VERSION "3.0.6.1-dev"
+#define LIFELINES_VERSION "3.0.7"
 
 #endif /* _VERSION_H */
