@@ -131,7 +131,7 @@ struct ptag {
 	WORD value;	/* value */
 };
 
-typedef PVALUE (*PFUNC)();
+typedef PVALUE (*PFUNC)(PNODE, TABLE, BOOLEAN *);
 
 #define ptype(p)	((p)->type)	/* type of expression */
 #define pvalue(p)	((p)->value)	/* value of expression */

@@ -1,5 +1,7 @@
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* hdrs/interp.h: Correct prototype for type PFUNC.
+
 	* Changelog.usermap: Correct username prapp -> puddle to match the
 	CVS repository username.  Sorted list.
 
