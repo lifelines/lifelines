@@ -921,13 +921,10 @@ resize_win:
 	}
 	rv = cur;
 	
-	if (stdout_vis) {
-		touchwin(stdout_win);
-		wrefresh(stdout_win);
-	} else {
-		touchwin(main_win);
-		wrefresh(main_win);
-	}
+	win = stdout_vis ? stdout_win : main_win;
+	touchwin(win);
+	wrefresh(win);
+
 	return rv;
 }
 /*==========================================================
@@ -949,8 +946,9 @@ choose_list_from_indiseq (STRING ttl,
 	BOX(win, 0, 0);
 	wrefresh(win);
 	seq = indiseq_list_interact(win, ttl, seq);
-	touchwin(main_win);
-	wrefresh(main_win);
+	win = stdout_vis ? stdout_win : main_win;
+	touchwin(win);
+	wrefresh(win);
 	return seq;
 }
 /*==============================
