@@ -36,8 +36,7 @@
 
 #define LIFELINES_REPORTS_VERSION "1.3"
 
-
-#include "cache.h"
+#include "pvalue.h"
 
 struct tag_rptinfo {
 	STRING fullpath; /* fully qualified path to file */
@@ -146,19 +145,12 @@ struct tag_pnode {
 #define PFREED    99  /* returned to free list */
 #define PUNINT   100  /* just allocated */
 
-/*
- * ptag should be using a UNION not a VPTR
- * First I'm removing the zillions of casts using PVALUE->value tho
- * so the compiler will help find any misuse
- * Then, this declaration should, I think, move into a source file
- * Perry, 2003-06-14
- */
 typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
 	struct tag_vtable * vtable;
 	unsigned char type;	/* type of value */
-	VPTR value;	/* value */
-/*	UNION uval;*/
+	VPTR value;
+	/* PVALUE_DATA value; */
 };
 
 /* symbol table data is just table data */

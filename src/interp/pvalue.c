@@ -40,7 +40,7 @@
 #include "feedback.h"
 #include "zstr.h"
 #include "vtable.h"
-
+#include "array.h"
 
 /*********************************************
  * local function prototypes
@@ -852,7 +852,6 @@ ZSTR
 describe_pvalue (PVALUE val)
 {
 	INT type;
-	UNION u;
 	ZSTR zstr = zs_new();
 
 	if (!val) {
@@ -871,10 +870,9 @@ describe_pvalue (PVALUE val)
 		zs_apps(zstr, "NULL>");
 		return zstr;
 	}
-	u.w = pvalue(val);
 	switch (type) {
 	case PINT:
-		zs_appf(zstr, "%d", u.i);
+		zs_appf(zstr, "%d", pvalue_to_int(val));
 		break;
 	case PFLOAT:
 		zs_appf(zstr, "%f", pvalue_to_float(val));
@@ -1022,10 +1020,10 @@ pvalue_to_pint (PVALUE val)
 /*==================================
  * ARRAY: pvalue containing an array
  *================================*/
-struct tag_array *
+ARRAY
 pvalue_to_array (PVALUE val)
 {
-	return (struct tag_array *)pvalue(val);
+	return (ARRAY)pvalue(val);
 }
 /*==================================
  * LIST: pvalue containing a list

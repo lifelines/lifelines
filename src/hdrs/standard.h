@@ -95,7 +95,8 @@ typedef union {
         BOOLEAN b;
         INT     i;
         FLOAT   f;
-        VPTR    w;
+        STRING  s;
+        VPTR    w;      /* Try not to use this! */
 } UNION;
 
 #define MAXLINELEN 512

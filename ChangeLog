@@ -1,3 +1,18 @@
+2003-06-18 Matt Emmerton
+
+	* ChangeLog src/interp/pvalue.c
+
+	Use ARRAY instead of struct tag_array*, use pvalue_to_int()
+
+	*  src/gedlib/gengedc.c src/gedlib/indiseq.c src/liflines/scan.c
+
+	Remove unneccessary #includes of interp.h
+
+	* src/hdrs/standard.h src/hdrs/interp.h src/hdrs/pvalue.h
+	src/hdrs/Makefile.am
+
+	Add STRING to UNION, introduce (but not use) PVALUE_DATA structure
+
 2003-06-17 Matt Emmerton
 
 	* ChangeLog src/interp/interp.c src/interp/pvalmath.c

@@ -41,7 +41,6 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "indiseq.h"
-#include "interp.h"
 #include "gedcomi.h"
 #include "mystring.h" /* lat1_xx */
 

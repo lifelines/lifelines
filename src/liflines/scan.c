@@ -32,7 +32,6 @@
 #include "llstdlib.h"
 #include "table.h"
 #include "indiseq.h"
-#include "interp.h"
 #include "feedback.h"
 #include "liflines.h"
 #include "fpattern.h"
