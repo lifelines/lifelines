@@ -77,7 +77,7 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN addxref_impl(CNSTRING key, BOOLEAN silent);
+static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
 static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);

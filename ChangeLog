@@ -9,6 +9,10 @@
 
 	Fix leak of pvalues in ivaluex in pnodes.
 
+	* ChangeLog src/gedlib/xreffile.c
+
+	Fix prototype for addxref_impl to fix gcc compilation.
+
 2005-02-06 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c
