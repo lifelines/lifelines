@@ -1,5 +1,8 @@
 2000-12-30 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* arch/_llnull.c: Make dummy function static to avoid exporting
+	unused symbol _llnull.  Fix typo in comment.
+
 	* interp/yacc.c interp/yacc.h: Generated from yacc.y using GNU
 	bison 1.28.
 
