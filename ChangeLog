@@ -35,6 +35,12 @@
 
 	Fix record leaks in browse_aux.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c
+	src/gedlib/nodeio.c src/gedlib/record.c src/liflines/add.c
+
+	Fix record leak in add_indi_by_edit.
+	Fix set_record_cache_info to hook cel & record together completely.
+
 2005-01-26, Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml docs/ll-userguide.sv.xml
 	docs/ll-userguide.xml

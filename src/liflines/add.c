@@ -99,6 +99,10 @@ add_indi_by_edit (RFMT rfmt)
 	do_edit();
 	while (TRUE) {
 		INT cnt;
+		if (indi0) {
+			delref_record(indi0);
+			indi0=0;
+		}
 		indi0 = file_to_record(editfile, ttmi, &msg, &emp);
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {

@@ -1394,3 +1394,17 @@ cel_remove_record (CACHEEL cel, RECORD rec)
 	ASSERT(crecord(cel) == rec);
 	crecord(cel) = 0;
 }
+/*==============================================
+ * cel_set_record -- Link to specified record
+ *  Requires non-null inputs
+ *============================================*/
+void
+cel_set_record (CACHEEL cel, RECORD rec)
+{
+	ASSERT(cel);
+	ASSERT(rec);
+	if (crecord(cel) != rec) {
+		ASSERT(!crecord(cel));
+		crecord(cel) = rec;
+	}
+}

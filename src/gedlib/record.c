@@ -167,9 +167,11 @@ set_record_cache_info (RECORD rec, CACHEEL cel)
 	ASSERT(rec && cel);
 	rec->rec_top = 0;
 	rec->rec_cel = cel;
+	cel_set_record(rec->rec_cel, rec);
 }
 /*===================================
  * set_record_key_info -- put key info into record
+ * Also set the xref of the root node correctly
  * Created: 2001/02/04, Perry Rapp
  *=================================*/
 void
@@ -268,6 +270,7 @@ create_record_for_keyed_node (NODE node, CNSTRING key)
 /*===================================
  * create_record_for_unkeyed_node -- 
  *  Given a new node tree with no key, wrap it in an uncached record
+ * returns addref'd record
  *=================================*/
 RECORD
 create_record_for_unkeyed_node (NODE node)

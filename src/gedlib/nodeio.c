@@ -205,6 +205,7 @@ gettag:
  * ttm:  [IN]  character translation table
  * pmsg: [OUT] possible error message
  * pemp: [OUT] set true if file is empty
+ * returns addref'd record
  *===============================================*/
 RECORD
 file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)

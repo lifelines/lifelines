@@ -11,6 +11,8 @@ void dbnotify_close(void);
 
 /* keytonod.c */
 void cel_remove_record(CACHEEL cel, RECORD rec);
+void cel_set_record(CACHEEL cel, RECORD rec);
+
 NODE is_cel_loaded(CACHEEL cel);
 
 /* names.c */
