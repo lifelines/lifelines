@@ -1,14 +1,13 @@
 /*
  * @progname       exercise
- * @version        0.89 (2001/12/31)
+ * @version        0.91 (2002/01/09)
  * @author         Perry Rapp
-
+ 
  * @category       test
 
  * @output         mixed
 
  * @description    Perry's test program.
-
 
 Exercises some report language functions,
 and optionally does a gengedcomstrong dump of
@@ -16,38 +15,36 @@ the first few of each type of record.
 
 It has routines to exercise strings & dates.
 
-TODO: numeric & logic functions could have tests added
+TODO: logic tests
 
 I run this report before checking in code changes.
 
-
 */
-
 
 
 option("explicitvars") /* Disallow use of undefined variables */
 
 global(dead)
-
 global(cutoff_yr)
-
 global(true)
-
 global(undef) /* variable with no set value, used in string tests */
-
 global(dbuse)
-global(dategood)
-global(datebad)
+global(testok)
+global(testfail)
 
 
 proc main()
 {
-	getint(dbuse, "Exercise db functions ? (0=no)")
 	set(true,1)
+	set(testok,0)
+	set(testfail,0)
+
+	getint(dbuse, "Exercise db functions ? (0=no)")
 	set(cutoff_yr, 1900) /* assume anyone born before this is dead */
 
 
 	call testStrings()
+	call testNums()
 	call testDates()
 
 	if (dbuse) 
@@ -329,28 +326,42 @@ proc reportfail(str)
 	if (dbuse) {
 		str nl()
 	}
+	incr(testfail)
 }
 
-/* test some string functions against defined & undefined strings */
+/*
+ test some string functions against defined & undefined strings
+  */
 proc testStrings()
 {
+	set(testok, 0)
+	set(testfail, 0)
+
 	set(str,"hey")
 	set(str2,upper(str))
 	if (ne(str2,"HEY")) {
 		call reportfail("upper FAILED")
 	}
+	else { incr(testok) }
+
 	set(str4,capitalize(str))
 	if (ne(str4,"Hey")) {
 		call reportfail("capitalize FAILED")
 	}
+	else { incr(testok) }
+
 	set(str4,titlecase(str))
 	if (ne(str4,"Hey")) {
 		call reportfail("titlecase FAILED")
 	}
+	else { incr(testok) }
+
 	set(str6,concat(str2,str4))
 	if (ne(str6,"HEYHey")) {
 		call reportfail("concat FAILED")
 	}
+	else { incr(testok) }
+
 	set(str3,upper(undef))
 	set(str5,capitalize(undef))
 	set(str5,titlecase(undef))
@@ -358,131 +369,337 @@ proc testStrings()
 	if (ne(str7,undef)) {
 		call reportfail("concat FAILED on undefs")
 	}
+	else { incr(testok) }
+
 	set(str7,strconcat(str3,str5))
 	if (ne(str7,undef)) {
 		call reportfail("strconcat FAILED on undefs")
 	}
+	else { incr(testok) }
+
 	set(str8,lower(str4))
 	if (ne(str8,"hey")) {
 		call reportfail("lower FAILED")
 	}
+	else { incr(testok) }
+
 	set(str9,lower(undef))
 	if (ne(str9,undef)) {
 		call reportfail("lower FAILED on undef")
 	}
+	else { incr(testok) }
+
 	set(str10,alpha(3))
 	if(ne(str10,"c")) {
 		call reportfail("alpha(3) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str10,roman(4))
 	if(ne(str10,"iv")) {
 		call reportfail("roman(4) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str11,d(43))
 	if(ne(str11,"43")) {
 		call reportfail("d(43) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str12,card(4))
 	if(ne(str12,"four")) {
 		call reportfail("card(4) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str13,ord(5))
 	if(ne(str13,"fifth")) {
 		call reportfail("ord(5) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str14,titlecase("big  brown 1mean horse"))
 	if(ne(str14,"Big  Brown 1mean Horse")) {
 		call reportfail("titlecase FAILED")
 	}
+	else { incr(testok) }
+
 	if (ge(strcmp("alpha","beta"),0)) {
 		call reportfail("strcmp(alpha,beta) FAILED")
 	}
+	else { incr(testok) }
+
 	if (le(strcmp("gamma","delta"),0)) {
 		call reportfail("strcmp(gamma,delta) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strcmp("zeta","zeta"),0)) {
 		call reportfail("strcmp(zeta,zeta) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strcmp(undef,""),0)) {
 		call reportfail("strcmp(undef,) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(substring("considerable",2,4),"ons")) {
 		call reportfail("substring(considerable,2,4) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(substring(undef,2,4),0)) {
 		call reportfail("substring(undef,2,4) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(rjustify("hey",5), "  hey")) {
 		call reportfail("rjustify(hey,5) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(rjustify("heymon",5), "heymo")) {
 		call reportfail("rjustify(heymon,5) FAILED")
 	}
+	else { incr(testok) }
+
 	/* eqstr returns bool, which may be compared to 0 but no other number */
 	if (ne(eqstr("alpha","beta"),0)) {
 		call reportfail("eqstr(alpha,beta) FAILED")
 	}
+	else { incr(testok) }
+
 	if (not(eqstr("alpha","alpha"))) {
-	call reportfail("eqstr(alpha,alpha) FAILED")
+		call reportfail("eqstr(alpha,alpha) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strtoint("4"), 4)) {
-	call reportfail("strtoint(4) FAILED")
+		call reportfail("strtoint(4) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strsoundex("pat"),strsoundex("pet"))) {
 		call reportfail("soundex(pat) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strlen("pitch"),5)) {
 		call reportfail("strlen(pitch) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str14,"the cat in the hat put the sack on the rat and the hat on the bat ")
 	if (ne(index(str14,"at",1),6)) {
 		call reportfail("index(str14,at,1) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str14,"at",2),17)) 
 	{
 		call reportfail("index(str14,at,2) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str14,"at",3),41)) 
 	{
 		call reportfail("index(str14,at,3) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str14,"at",4),53)) 
 	{
 		call reportfail("index(str14,at,4) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str14,"at",5),64)) 
 	{
 		call reportfail("index(str14,at,5) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(strlen(str14),66)) 
 	{
 		call reportfail("strlen(str14) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str15,strconcat(str14,str14))
 	if (ne(strlen(str15),132)) 
 	{
 		call reportfail("strlen(str15) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str15,"at",10),130)) 
 	{
 		call reportfail("index(str15,at,10) FAILED")
 	}
+	else { incr(testok) }
+
 	set(str16,strconcat(str15,str15))
 	if (ne(strlen(str16),264)) 
 	{
 		call reportfail("strlen(str16) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(index(str16,"at",20),262)) 
 	{
 		call reportfail("index(str16,at,20) FAILED")
 	}
+	else { incr(testok) }
+
 	if (ne(substring(str16,260,262)," ba")) 
 	{
 		call reportfail("substring(str16,260,262) FAILED")
 	}
+	else { incr(testok) }
+
+    call reportSubsection("string tests")
+}
+
+/*
+ test some numeric functions 
+ */
+proc testNums()
+{
+	set(testok, 0)
+	set(testfail, 0)
+
+	set(one,1)
+	set(two,add(one,one))
+	if (ne(two,2)) {
+		call reportfail("1+1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (eq(two,one)) {
+		call reportfail("1==2 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(add(two,two,two,two,two),10)) {
+		call reportfail("2+2+2+2+2 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(sub(two,one),1)) {
+		call reportfail("2-1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(sub(890,30),860)) {
+		call reportfail("890-30 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(3,4),12)) {
+		call reportfail("3*4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(3,-4),-12)) {
+		call reportfail("3*(-4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(-3,-4),12)) {
+		call reportfail("(-3)*(-4) FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mul(.5,.5),.25)) {
+		call reportfail(".5*.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (gt(.5, .7)) {
+		call reportfail(".5>.7 FAILED")
+	}
+	else { incr(testok) }
+
+	if (lt(-.4,-.5)) {
+		call reportfail("-.4<-.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ge(15,18)) {
+		call reportfail("15>=18 FAILED")
+	}
+	else { incr(testok) }
+
+	if (le(-.4,-.5)) {
+		call reportfail("-.4<=-.5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (not(le(-.4,-.4))) {
+		call reportfail("-.4<=-.4 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(div(20, 4), 5)) {
+		call reportfail("20/4==5 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(mod(22, 7), 1)) {
+		call reportfail("22 % 7==1 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(exp(2, 10), 1024)) {
+		call reportfail("2 ^10 ==1024 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(exp(.5, 2), .25)) {
+		call reportfail(".5 ^2 ==.25 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,34)
+	incr(bubba)
+	if (ne(bubba,35)) {
+		call reportfail("incr(34) == 35 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45)
+	decr(bubba)
+	if (ne(bubba,44)) {
+		call reportfail("decr(45) == 44 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,34.3)
+	incr(bubba)
+	if (ne(bubba,35.3)) {
+		call reportfail("incr(34.3) == 35.3 FAILED")
+	}
+	else { incr(testok) }
+
+	set(bubba,45.6)
+	decr(bubba)
+	if (ne(bubba,44.6)) {
+		call reportfail("decr(45.6) == 44.6 FAILED")
+	}
+	else { incr(testok) }
+
+	if (ne(neg(52), -52)) {
+		call reportfail("neg(52) == -52 FAILED")
+	}
+	else { incr(testok) }
+
+    call reportSubsection("number tests")
 }
 
 /* 
+  (Worker routine for testDates)
   Using specified formats, check stddate(src) against dests
   and complexdate(src) against destc
   tdfb = test date format both (simple & complex)
@@ -502,9 +719,8 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 		set(orig, concat(orig, ", ", d(yrfmt), ", ",d(sfmt)))
 		set(orig, concat(orig, ", ", d(ofmt)))
 		call reportfail(concat("stddate failure: '", dests, "'<>'", result, "'", " from ", orig))
-		incr(datebad)
 	} else {
-		incr(dategood)
+		incr(testok)
 	}
 	complexformat(cfmt)
 	if (eq(destc,"*"))
@@ -518,18 +734,18 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 		set(orig, concat(orig, ", ", d(yrfmt), ", ",d(sfmt)))
 		set(orig, concat(orig, ", ", d(ofmt)))
 		call reportfail(concat("complexdate failure: '", destc, "'<>'", result, "'", " from ", orig))
-		incr(datebad)
 	} else {
-		incr(dategood)
+		incr(testok)
 	}
 }
 
-/* test some date functions with various GEDCOM dates */
-/* These assume English output */
+/* 
+  test some date functions with various GEDCOM dates
+  */
 proc testDates()
 {
-	set(dategood, 0)
-	set(datebad, 0)
+	set(testok, 0)
+	set(testfail, 0)
 
 
 /* NB: We do not test all possible combinations, as there are quite a lot
@@ -538,31 +754,29 @@ proc testDates()
   and times 6 cmplx formats for each complex date) */
 
 	datepic(0)
-/* test simple 4 digit years dates */
+/* test simple 4 digit year dates */
+	/* test different day formats */
 	call tdfb("2 JAN 1953", 0, 0, 0, 0, 0, 1, " 2  1 1953", "*")
 	call tdfb("2 JAN 1953", 1, 0, 0, 0, 0, 1, "02  1 1953", "*")
 	call tdfb("2 JAN 1953", 2, 0, 0, 0, 0, 1, "2  1 1953", "*")
+	/* test different month formats */
 	call tdfb("2 JAN 1953", 2, 1, 0, 0, 0, 1, "2 01 1953", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 0, 0, 1, "2 1 1953", "*")
 	call tdfb("2 JAN 1953", 2, 3, 0, 0, 0, 1, "2 JAN 1953", "*")
 	call tdfb("2 JAN 1953", 2, 4, 0, 0, 0, 1, "2 Jan 1953", "*")
 	call tdfb("2 JAN 1953", 2, 5, 0, 0, 0, 1, "2 JANUARY 1953", "*")
 	call tdfb("2 JAN 1953", 2, 6, 0, 0, 0, 1, "2 January 1953", "*")
-	call tdfb("2 JAN 1953", 2, 6, 0, 0, 2, 1, "2 January 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 7, 0, 0, 2, 1, "2 jan 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 8, 0, 0, 2, 1, "2 january 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 9, 0, 0, 2, 1, "2 JAN 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 10, 0, 0, 2, 1, "2 i 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 11, 0, 0, 2, 1, "2 I 1953 A.D.", "*")
-	call tdfb("2 FEB 1953", 2, 11, 0, 0, 2, 1, "2 II 1953 A.D.", "*")
-	call tdfb("2 MAR 1953", 2, 11, 0, 0, 2, 1, "2 III 1953 A.D.", "*")
-	call tdfb("2 APR 1953", 2, 11, 0, 0, 2, 1, "2 IV 1953 A.D.", "*")
-	call tdfb("2 MAY 1953", 2, 10, 0, 0, 2, 1, "2 v 1953 A.D.", "*")
-	call tdfb("2 JUN 1953", 2, 10, 0, 0, 2, 1, "2 vi 1953 A.D.", "*")
-	call tdfb("2 JUL 1953", 2, 10, 0, 0, 2, 1, "2 vii 1953 A.D.", "*")
-	call tdfb("2 JAN 1953", 2, 6, 0, 0, 12, 1, "2 January 1953 AD", "*")
-	call tdfb("2 JAN 1953", 2, 6, 0, 0, 22, 1, "2 January 1953 C.E.", "*")
-	call tdfb("2 JAN 1953", 2, 6, 0, 0, 32, 1, "2 January 1953 CE", "*")
+	call tdfb("2 JAN 1953", 2, 7, 0, 0, 0, 1, "2 jan 1953", "*")
+	call tdfb("2 JAN 1953", 2, 8, 0, 0, 0, 1, "2 january 1953", "*")
+	call tdfb("2 JAN 1953", 2, 9, 0, 0, 0, 1, "2 JAN 1953", "*")
+	call tdfb("2 JAN 1953", 2,10, 0, 0, 0, 1, "2 i 1953", "*")
+	call tdfb("2 JAN 1953", 2,11, 0, 0, 0, 1, "2 I 1953", "*")
+	/* test different origin formats */
+	call tdfb("2 JAN 1953", 2, 2, 0, 0, 2, 1, "2 1 1953 A.D.", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 0, 12, 1, "2 1 1953 AD", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 0, 22, 1, "2 1 1953 C.E.", "*")
+	call tdfb("2 JAN 1953", 2, 2, 0, 0, 32, 1, "2 1 1953 CE", "*")
+	/* test different date (ymd) formats */
 	call tdfb("2 JAN 1953", 2, 2, 0, 1, 32, 1, "1 2, 1953 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 2, 32, 1, "1/2/1953 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 3, 32, 1, "2/1/1953 CE", "*")
@@ -573,44 +787,89 @@ proc testDates()
 	call tdfb("2 JAN 1953", 2, 2, 0, 8, 32, 1, "1953 1 2 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 9, 32, 1, "1953/1/2 CE", "*")
 	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, 1, "1953-1-2 CE", "*")
+	/* test custom date pic */
 	datepic("%d.%m.%y")
 	call tdfb("2 JAN 1953", 2, 2, 0, 10, 32, 1, "2.1.1953 CE", "*")
 	datepic("%d of %m, %y")
 	call tdfb("2 JAN 1953", 2, 4, 0, 10, 1, 1, "2 of Jan, 1953", "*")
 	datepic(0)
+	/* test missing day or month (legal in GEDCOM) */
+	call tdfb("2 JAN 1953", 1, 1, 1, 2, 2, 1, "01/02/1953 A.D.", "*")
+	call tdfb("JAN 1953", 1, 1, 1, 2, 2, 1, "01/  /1953 A.D.", "*")
+	call tdfb("1953", 1, 1, 1, 2, 2, 1, "  /  /1953 A.D.", "*")
 
-/* test simple 3 digit years dates */
-	call tdfb("11 MAY 812", 0, 0, 0, 0, 0, 1, "11  5  812", "11  5  812")
-	call tdfb("11 MAY 812", 0, 1, 0, 0, 0, 1, "11 05  812", "11 05  812")
-	call tdfb("11 MAY 812", 0, 2, 0, 0, 0, 1, "11 5  812", "11 5  812")
-	call tdfb("11 MAY 812", 0, 3, 0, 0, 0, 1, "11 MAY  812", "11 MAY  812")
-	call tdfb("11 MAY 812", 0, 4, 0, 0, 0, 1, "11 May  812", "11 May  812")
-	call tdfb("11 MAY 812", 0, 5, 0, 0, 0, 1, "11 MAY  812", "11 MAY  812" )
-	call tdfb("11 MAY 812", 0, 6, 0, 0, 0, 1, "11 May  812", "11 May  812")
-	call tdfb("11 MAY 812", 1, 6, 0, 0, 0, 1, "11 May  812", "11 May  812")
-	call tdfb("11 MAY 812", 2, 6, 0, 0, 0, 1, "11 May  812", "11 May  812")
+/* test roman numeral months */
+	call tdfb("2 JAN 1953", 2,10, 0, 0, 0, 1, "2 i 1953", "*")
+	call tdfb("2 JAN 1953", 2,11, 0, 0, 0, 1, "2 I 1953", "*")
+	call tdfb("2 FEB 1953", 2,10, 0, 0, 0, 1, "2 ii 1953", "*")
+	call tdfb("2 FEB 1953", 2,11, 0, 0, 0, 1, "2 II 1953", "*")
+	call tdfb("2 MAR 1953", 2,10, 0, 0, 0, 1, "2 iii 1953", "*")
+	call tdfb("2 MAR 1953", 2,11, 0, 0, 0, 1, "2 III 1953", "*")
+	call tdfb("2 APR 1953", 2,10, 0, 0, 0, 1, "2 iv 1953", "*")
+	call tdfb("2 APR 1953", 2,11, 0, 0, 0, 1, "2 IV 1953", "*")
+	call tdfb("2 MAY 1953", 2,10, 0, 0, 0, 1, "2 v 1953", "*")
+	call tdfb("2 MAY 1953", 2,11, 0, 0, 0, 1, "2 V 1953", "*")
+	call tdfb("2 JUN 1953", 2,10, 0, 0, 0, 1, "2 vi 1953", "*")
+	call tdfb("2 JUN 1953", 2,11, 0, 0, 0, 1, "2 VI 1953", "*")
+	call tdfb("2 JUL 1953", 2,10, 0, 0, 0, 1, "2 vii 1953", "*")
+	call tdfb("2 JUL 1953", 2,11, 0, 0, 0, 1, "2 VII 1953", "*")
+	call tdfb("2 AUG 1953", 2,10, 0, 0, 0, 1, "2 viii 1953", "*")
+	call tdfb("2 AUG 1953", 2,11, 0, 0, 0, 1, "2 VIII 1953", "*")
+	call tdfb("2 SEP 1953", 2,10, 0, 0, 0, 1, "2 ix 1953", "*")
+	call tdfb("2 SEP 1953", 2,11, 0, 0, 0, 1, "2 IX 1953", "*")
+	call tdfb("2 OCT 1953", 2,10, 0, 0, 0, 1, "2 x 1953", "*")
+	call tdfb("2 OCT 1953", 2,11, 0, 0, 0, 1, "2 X 1953", "*")
+	call tdfb("2 NOV 1953", 2,10, 0, 0, 0, 1, "2 xi 1953", "*")
+	call tdfb("2 NOV 1953", 2,11, 0, 0, 0, 1, "2 XI 1953", "*")
+	call tdfb("2 DEC 1953", 2,10, 0, 0, 0, 1, "2 xii 1953", "*")
+	call tdfb("2 DEC 1953", 2,11, 0, 0, 0, 1, "2 XII 1953", "*")
+	call tdfb("@#DHEBREW@ 2 ELL 1953", 2,10, 0, 0, 0, 1, "2 xiii 1953 HEB", "*")
+	call tdfb("@#DHEBREW@ 2 ELL 1953", 2,11, 0, 0, 0, 1, "2 XIII 1953 HEB", "*")
 
-/* test simple 2 digit years dates */
-	call tdfb("2 JAN 53", 0, 0, 0, 0, 0, 1, " 2  1   53", " 2  1   53")
-	call tdfb("2 JAN 53", 1, 0, 0, 0, 0, 1, "02  1   53", "02  1   53")
-	call tdfb("2 JAN 53", 2, 0, 0, 0, 0, 1, "2  1   53", "2  1   53")
-	call tdfb("2 JAN 53", 2, 1, 0, 0, 0, 1, "2 01   53", "2 01   53")
-	call tdfb("2 JAN 53", 2, 1, 1, 0, 0, 1, "2 01 0053", "2 01 0053")
-	call tdfb("2 JAN 53", 2, 1, 2, 0, 0, 1, "2 01 53", "2 01 53")
+/* test simple 3 digit year dates */
+	call tdfb("11 MAY 812", 0, 0, 0, 0, 0, 1, "11  5  812", "*")
+	call tdfb("11 MAY 812", 0, 1, 0, 0, 0, 1, "11 05  812", "*")
+	call tdfb("11 MAY 812", 0, 2, 0, 0, 0, 1, "11 5  812", "*")
+	call tdfb("11 MAY 812", 0, 3, 0, 0, 0, 1, "11 MAY  812", "*")
+	call tdfb("11 MAY 812", 0, 4, 0, 0, 0, 1, "11 May  812", "*")
+	call tdfb("11 MAY 812", 0, 5, 0, 0, 0, 1, "11 MAY  812", "*" )
+	call tdfb("11 MAY 812", 0, 6, 0, 0, 0, 1, "11 May  812", "*")
+	call tdfb("11 MAY 812", 1, 6, 0, 0, 0, 1, "11 May  812", "*")
+	call tdfb("11 MAY 812", 2, 6, 0, 0, 0, 1, "11 May  812", "*")
+	/* test missing day or month (legal in GEDCOM) */
+	call tdfb("11 MAY 812", 1, 1, 1, 2, 2, 1, "05/11/0812 A.D.", "*")
+	call tdfb("MAY 812", 1, 1, 1, 2, 2, 1, "05/  /0812 A.D.", "*")
+	call tdfb("812", 1, 1, 1, 2, 2, 1, "  /  /0812 A.D.", "*")
 
-/* test simple 1 digit years dates */
-	call tdfb("2 JAN 3", 0, 0, 0, 0, 0, 1, " 2  1    3", " 2  1    3")
-	call tdfb("2 JAN 3", 1, 0, 0, 0, 0, 1, "02  1    3", "02  1    3")
-	call tdfb("2 JAN 3", 2, 0, 0, 0, 0, 1, "2  1    3", "2  1    3")
-	call tdfb("2 JAN 3", 2, 1, 0, 0, 0, 1, "2 01    3", "2 01    3")
-	call tdfb("2 JAN 3", 2, 1, 1, 0, 0, 1, "2 01 0003", "2 01 0003")
-	call tdfb("2 JAN 3", 2, 1, 2, 0, 0, 1, "2 01 3", "2 01 3")
+/* test simple 2 digit year dates */
+	call tdfb("2 JAN 53", 0, 0, 0, 0, 0, 1, " 2  1   53", "*")
+	call tdfb("2 JAN 53", 1, 0, 0, 0, 0, 1, "02  1   53", "*")
+	call tdfb("2 JAN 53", 2, 0, 0, 0, 0, 1, "2  1   53", "*")
+	call tdfb("2 JAN 53", 2, 1, 0, 0, 0, 1, "2 01   53", "*")
+	call tdfb("2 JAN 53", 2, 1, 1, 0, 0, 1, "2 01 0053", "*")
+	call tdfb("2 JAN 53", 2, 1, 2, 0, 0, 1, "2 01 53", "*")
+	/* test missing day or month (legal in GEDCOM) */
+	call tdfb("2 JAN 53", 1, 1, 1, 2, 2, 1, "01/02/0053 A.D.", "*")
+	call tdfb("JAN 53", 1, 1, 1, 2, 2, 1, "01/  /0053 A.D.", "*")
+	call tdfb("53", 1, 1, 1, 2, 2, 1, "  /  /0053 A.D.", "*")
+
+/* test simple 1 digit year dates */
+	call tdfb("2 JAN 3", 0, 0, 0, 0, 0, 1, " 2  1    3", "*")
+	call tdfb("2 JAN 3", 1, 0, 0, 0, 0, 1, "02  1    3", "*")
+	call tdfb("2 JAN 3", 2, 0, 0, 0, 0, 1, "2  1    3", "*")
+	call tdfb("2 JAN 3", 2, 1, 0, 0, 0, 1, "2 01    3", "*")
+	call tdfb("2 JAN 3", 2, 1, 1, 0, 0, 1, "2 01 0003", "*")
+	call tdfb("2 JAN 3", 2, 1, 2, 0, 0, 1, "2 01 3", "*")
+	/* test missing day or month (legal in GEDCOM) */
+	call tdfb("2 JAN 3", 1, 1, 1, 2, 2, 1, "01/02/0003 A.D.", "*")
+	call tdfb("JAN 3", 1, 1, 1, 2, 2, 1, "01/  /0003 A.D.", "*")
+	call tdfb("3", 1, 1, 1, 2, 2, 1, "  /  /0003 A.D.", "*")
 
 /* test slash years */
-	call tdfb("24 FEB 1956/7", 2, 2, 0, 10, 0, 0, "1956-2-24", "1956-2-24")
-	call tdfb("24 FEB 1956/57", 2, 2, 0, 10, 0, 0, "1956-2-24", "1956-2-24")
-	call tdfb("24 FEB 1956/957", 2, 2, 0, 10, 0, 0, "1956-2-24", "1956-2-24")
-	call tdfb("24 FEB 1956/1957", 2, 2, 0, 10, 0, 0, "1956-2-24", "1956-2-24")
+	call tdfb("24 FEB 1956/7", 2, 2, 0, 10, 0, 0, "1956-2-24", "*")
+	call tdfb("24 FEB 1956/57", 2, 2, 0, 10, 0, 0, "1956-2-24", "*")
+	call tdfb("24 FEB 1956/957", 2, 2, 0, 10, 0, 0, "1956-2-24", "*")
+	call tdfb("24 FEB 1956/1957", 2, 2, 0, 10, 0, 0, "1956-2-24", "*")
 
 /* test simple BC dates */
 	call tdfb("15 MAR 30 B.C.", 0, 0, 0, 0, 0, 1, "15  3   30", "*")
@@ -661,8 +920,9 @@ proc testDates()
 	call tdfb("AFT 3 SEP 1630", 0, 0, 0, 0, 0, 7, " 3  9 1630", "aft  3  9 1630")
 	call tdfb("AFT 3 SEP 1630", 0, 0, 0, 0, 0, 8, " 3  9 1630", "after  3  9 1630")
 	complexpic(4, ">%1")
-	complexpic(3, 0)
 	call tdfb("AFT 3 SEP 1630", 0, 0, 0, 0, 0, 8, " 3  9 1630", "> 3  9 1630")
+	complexpic(4, 0)
+	complexpic(3, 0)
 	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, 1, " 3  9 1630", "before  3  9 1630")
 	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, 3, " 3  9 1630", "BEF  3  9 1630")
 	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, 4, " 3  9 1630", "Bef  3  9 1630")
@@ -672,6 +932,7 @@ proc testDates()
 	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, 8, " 3  9 1630", "before  3  9 1630")
 	complexpic(3, "<%1")
 	call tdfb("BEF 3 SEP 1630", 0, 0, 0, 0, 0, 8, " 3  9 1630", "< 3  9 1630")
+	complexpic(3, 0)
 	complexpic(5, 0)
 	call tdfb("BET 3 SEP 1630 AND OCT 1900", 0, 0, 0, 0, 0, 1, " 3  9 1630", "between  3  9 1630 and    10 1900")
 	complexpic(5, "%1/%2")
@@ -770,8 +1031,27 @@ proc testDates()
 	call tdfb("@#DHEBREW@ 1 ADS 3011", 2, 6, 0, 0, 0, 1, "1 Adar Sheni 3011 HEB", "*")
 	call tdfb("@#DHEBREW@ 1 ADS 3011", 2, 7, 0, 0, 0, 1, "1 ads 3011 HEB", "*")
 	call tdfb("@#DHEBREW@ 1 ADS 3011", 2, 8, 0, 0, 0, 1, "1 adar sheni 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 CSH 3011", 2, 1, 0, 0, 0, 1, "1 02 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 KSL 3011", 2, 1, 0, 0, 0, 1, "1 03 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 TVT 3011", 2, 1, 0, 0, 0, 1, "1 04 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 SHV 3011", 2, 1, 0, 0, 0, 1, "1 05 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 ADR 3011", 2, 1, 0, 0, 0, 1, "1 06 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 ADS 3011", 2, 1, 0, 0, 0, 1, "1 07 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 NSN 3011", 2, 1, 0, 0, 0, 1, "1 08 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 IYR 3011", 2, 1, 0, 0, 0, 1, "1 09 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 SVN 3011", 2, 1, 0, 0, 0, 1, "1 10 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 TMZ 3011", 2, 1, 0, 0, 0, 1, "1 11 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 AAV 3011", 2, 1, 0, 0, 0, 1, "1 12 3011 HEB", "*")
+	call tdfb("@#DHEBREW@ 1 ELL 3011", 2, 1, 0, 0, 0, 1, "1 13 3011 HEB", "*")
+
 	/* ROMAN would presumably be in AUC, and days counted before K,N,I */
 
-	print(concat("Failed ", d(datebad), "/", d(add(dategood,datebad)), " date tests"))
+    call reportSubsection("date tests")
 }
 
+proc reportSubsection(title)
+{
+	print(concat("Passed ", d(testok), "/", d(add(testok,testfail)), " ", title, "\n"))
+	set(testok, 0)
+	set(testfail, 0)
+}

@@ -1,7 +1,7 @@
 2002-01-09 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/interp.h interp/alloc.c interp/more.c
-	interp/pvalue.c:
+	interp/pvalue.c reports/exercise.ll:
 
 	Fix report language float type (PFLOAT). Remove (unused) report
 	language long type (PLONG). Added numeric tests & test of partial
