@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd"
-[<!ENTITY llversion '3.0.38'>]>
+[<!ENTITY llversion '3.0.39'>]>
 <book id="docbook">
 
   <bookinfo>
@@ -18,7 +18,7 @@
 _________________________________________________________
 
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.37"> 
+	<!entity llversion	"3.0.39"> 
 ]>	
 	
 <book id="docbook">
@@ -729,11 +729,10 @@ The <type>option</type> statement allows the report writer to specify options. T
 interpreter no older than that specified.
 The <type>include</type> statement includes the contents of another file into the current file; its <parameter>string</parameter> expression is
 the name of another <application>LifeLines</application> program file. It is described in more detail below. The <type>global</type> statement
-must be used outside the scope of any <type>procedure</type> or <type>function</type>; it declares a <parameter>variable</parameter> to have global scope.
+must be used outside the scope of any <type>procedure</type> or <type>function</type>; it declares a <parameter>variable</parameter> to have global scope.  The 
+<parameter>variable</parameter> is initialized to 0.
 
 </para>
-
-
 
 <para>
 

@@ -1,4 +1,12 @@
 2005-01-06 Stephen Dum
+        * ChangeLog INSTALL configure.in build/msvc6/llines/llines.rc 
+	  build/rpm/lifelines.spec docs/ll-devguide.xml docs/ll-reportmanual.html 
+	  docs/ll-reportmanual.pdf docs/ll-reportmanual.txt docs/ll-reportmanual.xml 
+	  docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt 
+	  docs/ll-userguide.xml src/hdrs/version.h
+
+	Updated all version numbers from 3.0.38 to 3.0.39.
+
         * ChangeLog src/liflines/show.c
 
 	make family screen show mother in mother slot if only one parent.
