@@ -27,6 +27,9 @@
  *   3.0.0 - 29 May 1994
  *=========================================================*/
 
+#ifndef _TRANSLAT_H
+#define _TRANSLAT_H
+
 typedef struct xnode *XNODE;
 struct xnode {
 	XNODE parent;	/* parent node */
@@ -45,3 +48,5 @@ extern TRANTABLE create_trantable();
 extern TRANTABLE init_map_from_str();
 extern BOOLEAN translate_string();
 extern TRANTABLE tran_tables[];
+
+#endif /* _TRANSLAT_H */

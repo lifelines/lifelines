@@ -30,6 +30,9 @@
  *  3.0.3 - 07 Aug 95
  *===========================================================*/
 
+#ifndef _INTERP_H
+#define _INTERP_H
+
 typedef struct itag *PNODE;
 struct itag {
 	char   i_type;	/* type of node */
@@ -198,3 +201,5 @@ extern INT nobuiltins;
 		*eflg = TRUE;\
 		return NULL;\
 	}
+
+#endif /* _INTERP_H */

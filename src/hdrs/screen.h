@@ -28,6 +28,9 @@
  *   3.0.0 - 26 Jul 94    3.0.2 - 16 Dec 94
  *============================================================*/
 
+#ifndef _SCREEN_H
+#define _SCREEN_H
+
 #undef TRUE
 #undef FALSE
 
@@ -91,3 +94,5 @@ extern WINDOW *start_menu_win;
 extern WINDOW *add_menu_win;
 extern WINDOW *del_menu_win;
 extern WINDOW *utils_menu_win;
+
+#endif /* _SCREEN_H */

@@ -28,6 +28,10 @@
  *   Version 2.3.5 - 20 Aug 93 - modified
  *==================================================================
  */
+
+#ifndef _SEQUENCE_H
+#define _SEQUENCE_H
+
 #ifndef BOOLEAN
 #	define BOOLEAN int
 #endif
@@ -71,3 +75,5 @@ extern void rmvseq();
 		for (i = 0, _n = Size(s); i < _n; i++) {\
 			e = Data(s)[i];
 #define ENDLOOP }}
+
+#endif /* _SEQUENCE_H */

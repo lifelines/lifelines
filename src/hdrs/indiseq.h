@@ -28,6 +28,9 @@
  *   3.0.2 - 06 Dec 94    3.0.3 - 08 Aug 95
  *===========================================================*/
 
+#ifndef _INDISEQ_H
+#define _INDISEQ_H
+
 #ifndef BOOLEAN
 #	define BOOLEAN int
 #	define TRUE 1
@@ -96,3 +99,5 @@ INDISEQ refn_to_indiseq();
 		for (i = 0, _n = ISize((INDISEQ)s); i < _n; i++) {\
 			e = _d[i];
 #define ENDINDISEQ }}
+
+#endif /* _INDISEQ_H */

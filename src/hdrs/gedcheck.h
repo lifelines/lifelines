@@ -27,6 +27,9 @@
  *   3.0.0 - 28 May 94
  *========================================================*/
 
+#ifndef _GEDCHECK_H
+#define _GEDCHECK_H
+
 #define INDI_REC 0
 #define FAM_REC  1
 #define SOUR_REC 2
@@ -66,3 +69,5 @@ typedef struct {
 
 extern ELMNT *index_data;
 extern INT xref_to_index();
+
+#endif /* _GEDCHECK_H */

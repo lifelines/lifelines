@@ -29,6 +29,10 @@
  *   Version 2.3.5 - 19 Aug 93 - modified
  *================================================================
  */
+
+#ifndef _CACHE_H
+#define _CACHE_H
+
 /*===============================
  * CACHEEL -- Cache element type.
  *=============================*/
@@ -73,3 +77,5 @@ extern CACHEEL key_to_indi_cacheel();
 extern CACHEEL key_to_fam_cacheel();
 extern CACHEEL indi_to_cacheel();
 extern CACHEEL fam_to_cacheel();
+
+#endif /* _CACHE_H */

@@ -30,6 +30,8 @@
  *   3.0.3 - 17 Jan 96
  *===========================================================*/
 
+#ifndef _GEDCOM_H
+#define _GEDCOM_H
 
 #define MAXNAMELEN 512
 
@@ -349,3 +351,5 @@ STRING value_to_xref();
 		if (__value) stdfree(__value);/*RELEASE*/\
 		 __node = nsibling(__node);\
 	}}
+
+#endif /* _GEDCOM_H */
