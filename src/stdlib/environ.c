@@ -42,7 +42,10 @@ environ_determine_tempfile (void)
 {
 #ifdef WIN32
 	STRING e;
-	/* NB: this string must be modifiable - ie, in data segment */
+	/*
+	NB: This string must be modifiable - eg, on the stack.
+	Do not use a string constant, as the unix code below does.
+	*/
 	static char win32_tempfile[_MAX_PATH];
 	/* windows has per-user temporary directory, depending on version */
 	e = (STRING)getenv("TEMP");

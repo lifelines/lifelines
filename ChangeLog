@@ -2,6 +2,9 @@
 	* gedlib/indiseq.c interp/date.c
 	Fix memory leak of indiseq elements.
 
+	* liflines/askprogram.c stdlib/environ.c
+	Added include for stdfree.
+
 2001-05-02 Matt Emmerton <memmerto@users.sourceforge.net>
 	* ChangeLog gedlib/node.c gedlib/indiseq.c gedlib/gedcom.c
 	* gedlib/lloptions.c gedlib/names.c btree/record.c
