@@ -14,6 +14,12 @@
 
 	Releasing 3.0.18.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	docs/Install.LifeLines.Windows.txt:
+
+	Update win32 install instructions to refer to win32 gettext/iconv
+	at sourceforge. Update msvc6 project to new paths for release mode.
+
 2002-09-22 Perry Rapp
 
 	* ChangeLog configure.in po/POTFILES.in po/de.po po/el.po

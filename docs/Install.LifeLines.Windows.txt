@@ -1,5 +1,5 @@
 LifeLines installation for Windows
-  Edited: 2002/06/27 by Perry Rapp
+  Edited: 2002/09/22 by Perry Rapp
 
 1)
 Choose & create your directories, eg:
@@ -16,8 +16,11 @@ Place the LifeLines program (Lines.exe) &
  program directory (eg, \Program Files\LifeLines)
 2b)
 Install the gettext & iconv dlls in the same location.
-(They may be obtained from the LifeLines/Windows web page:
-http://lifelines.sourceforge.net/Ethel/index.html)
+You can get the set which I built from
+  http://sourceforge.net/projects/gettext/
+Rename the libintl.dll to gettext.dll, and put all three dlls
+(gettext.dll, iconv.dll, and libcharset.dll) into the directory
+with your Lines.exe.
 
 3)
 Unzip the translation files under the program directory
