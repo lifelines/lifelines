@@ -31,6 +31,7 @@ Thomas T. Wetmore , IV
         DELETE OPERATION
         CODESET CONVERSION
         MISCELLANEOUS UTILITIES
+        IMPORT ERRORS
         HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
         FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES
         LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
@@ -501,7 +502,7 @@ CODESET
    lifelines  screens  run  in the console, but you are likely to use
    MS-Windows  applications either for editing or for viewing output,
    and   the   MS-Windows  console  uses  a  different  codeset  from
-   MS-Windows  application. Also, if you use lifelines in a different
+   MS-Windows applications. Also, if you use lifelines in a different
    language  than  English,  this  may  not  be suitable, because the
    gettext  message  catalogs (for non-English interface) will not be
    converted into your codeset.
@@ -1786,6 +1787,44 @@ option=value
 
    q Return to main menu.
           This command returns you to the main menu.
+     _____________________________________________________________
+
+IMPORT ERRORS
+
+   Errors  generated  during a GEDCOM import are logged to a file, by
+   default named errs.log.
+
+   Bad NAME syntax.
+          A level 1 NAME record must have a value, and the value must
+          not be a pointer, may have no more than two slashes.
+
+   Family %s has an incorrect key.
+          Each  FAM record must have an XREF value beginning with the
+          letter F. (The XREF is the letters between "0" and "INDI".)
+
+   Person defined here has no name.
+          Each  INDI  record  must  have  at  least  one level 1 NAME
+          record,   if   the  configuration  option  RequireNames  is
+          non-zero.
+
+   Person %s has an incorrect key: skipped.
+          Each INDI record must have an XREF value beginning with the
+          letter I. (The XREF is the letters between "0" and "INDI".)
+
+   Person %s is multiply defined: skipped.
+          No  XREF  value  of an INDI may be reused. (The XREF is the
+          letters between "0" and "INDI".)
+
+   The family defined here has no key.
+          Each  FAM  record must have an XREF value. (The XREF is the
+          letters between "0" and "INDI".)
+
+   The person defined here has no key: skipped.
+          Each  INDI record must have an XREF value. (The XREF is the
+          letters between "0" and "INDI".)
+
+   This line has a level number that is too large.
+          A child level must be one higher than its parent level.
      _____________________________________________________________
 
 HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS

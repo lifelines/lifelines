@@ -178,21 +178,26 @@ HREF="#AEN1255"
 ><DT
 ><A
 HREF="#AEN1353"
+>IMPORT ERRORS</A
+></DT
+><DT
+><A
+HREF="#AEN1389"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1518"
+HREF="#AEN1554"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1527"
+HREF="#AEN1563"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1576"
+HREF="#AEN1612"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2094,7 +2099,7 @@ NAME="AEN351"
      be suitable, because the lifelines screens run in the console, but 
      you are likely to use MS-Windows applications either for editing or 
      for viewing output, and the MS-Windows console uses a different 
-     codeset from MS-Windows application. Also, if you use lifelines in a
+     codeset from MS-Windows applications. Also, if you use lifelines in a
      different language than English, this may not be suitable, because 
      the gettext message catalogs (for non-English interface) will not 
      be converted into your codeset.
@@ -6218,6 +6223,117 @@ CLASS="sect1"
 ><A
 NAME="AEN1353"
 ></A
+>IMPORT ERRORS</H2
+><P
+>&#13;Errors generated during a GEDCOM import are logged to a file, by default named errs.log. 
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+>Bad NAME syntax.</B
+></DT
+><DD
+><P
+>&#13;
+     A level 1 NAME record must have a value, and the value must not be a pointer, may 
+     have no more than two slashes.
+</P
+></DD
+><DT
+><B
+>Family %s has an incorrect key.</B
+></DT
+><DD
+><P
+>&#13;
+     Each FAM record must have an XREF value beginning with the letter F.
+     (The XREF is the letters between "0" and "INDI".)
+
+</P
+></DD
+><DT
+><B
+>Person defined here has no name.</B
+></DT
+><DD
+><P
+>&#13;
+     Each INDI record must have at least one level 1 NAME record, if the 
+     configuration option RequireNames is non-zero.
+
+</P
+></DD
+><DT
+><B
+>Person %s has an incorrect key: skipped.</B
+></DT
+><DD
+><P
+>&#13;
+     Each INDI record must have an XREF value beginning with the letter I.
+     (The XREF is the letters between "0" and "INDI".)
+
+</P
+></DD
+><DT
+><B
+>Person %s is multiply defined: skipped.</B
+></DT
+><DD
+><P
+>&#13;
+     No XREF value of an INDI may be reused.
+     (The XREF is the letters between "0" and "INDI".)
+
+</P
+></DD
+><DT
+><B
+>The family defined here has no key.</B
+></DT
+><DD
+><P
+>&#13;
+     Each FAM record must have an XREF value.
+     (The XREF is the letters between "0" and "INDI".)
+
+</P
+></DD
+><DT
+><B
+>The person defined here has no key: skipped.</B
+></DT
+><DD
+><P
+>&#13;
+     Each INDI record must have an XREF value.
+     (The XREF is the letters between "0" and "INDI".)
+
+</P
+></DD
+><DT
+><B
+>This line has a level number that is too large.</B
+></DT
+><DD
+><P
+>&#13;
+     A child level must be one higher than its parent level.
+
+</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN1389"
+></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
 >&#13;
@@ -6475,7 +6591,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1398"
+NAME="AEN1434"
 ></A
 ><P
 ><B
@@ -7196,7 +7312,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1518"
+NAME="AEN1554"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -7270,7 +7386,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1527"
+NAME="AEN1563"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -7357,7 +7473,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1542"
+NAME="AEN1578"
 ></A
 ><P
 ><B
@@ -7480,7 +7596,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1560"
+NAME="AEN1596"
 ></A
 ><P
 ><B
@@ -7591,7 +7707,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1576"
+NAME="AEN1612"
 ></A
 >System and User Properties</H2
 ><P

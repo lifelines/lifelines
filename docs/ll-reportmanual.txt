@@ -632,8 +632,8 @@ Arithmetic and Logic Functions
    by the second. If the second argument to div or mod is zero, these
    functions  return  0  and  generate a run time error. Exp performs
    integer  exponentiation.  Neg  negates its argument. The functions
-   function>float  and function>int can be used to explicitly convert
-   a value to float or int where needed.
+   float  and  int can be used to explicitly convert a value to float
+   or int where needed.
 
    Incr and decr increment by one and decrement by one, respectively,
    the  value of a variable. The argument to both functions must be a
