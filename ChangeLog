@@ -1,3 +1,12 @@
+2001-11-15 Perry Rapp <puddle@users.sourceforge.net>
+
+	* .linesrc ChangeLog lines.cfg docs/lifelines.sgml
+	gedlib/messages.c gedlib/node.c hdrs/gedcom.h interp/date.c
+	liflines/export.c liflines/main.c liflines/show.c:
+
+	New dateformats 13 & 14. Fix wrong prototype in show.c.
+	Updated some of lifelines.sgml.
+
 2001-11-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/show.c:

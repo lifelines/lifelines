@@ -92,14 +92,14 @@ extern BTREE BTR;
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 int opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwfmntcuFy] [database]   # Use -F for Finnish database";
+static STRING usage = (STRING) "lines [-adkrwifmntcuFy] [database]   # Use -F for Finnish database";
 # else
 int opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]   # Finnish database";
+static STRING usage = (STRING) "lines [-adkrwifmntcuy] [database]   # Finnish database";
 # endif
 #else
 int opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-static STRING usage = (STRING) "lines [-adkrwfmntcuy] [database]";
+static STRING usage = (STRING) "lines [-adkrwifmntcuy] [database]";
 #endif
 
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */

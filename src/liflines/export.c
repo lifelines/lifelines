@@ -41,9 +41,18 @@
 
 #include "llinesi.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
+
 extern STRING btreepath;
 extern BTREE BTR;
 extern TRANTABLE tran_tables[];
+extern STRING outarc,outfin;
+
+/*********************************************
+ * local variables
+ *********************************************/
 
 static TRANTABLE tran_gedout;
 static char *mabbv[] = {
@@ -57,6 +66,11 @@ static FILE *fn = NULL;
 static void copy_and_translate (FILE*, INT, FILE*, INT, TRANTABLE);
 static BOOLEAN archive(BTREE, BLOCK);
 
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
 /*===================================================
  * archive_in_file -- Archive database in GEDCOM file
  *=================================================*/
@@ -68,7 +82,7 @@ archive_in_file (void)
 	time_t curtime;
 	STRING fname, str;
 
-	fn = ask_for_output_file(LLWRITETEXT, "Enter name of output archive file.",
+	fn = ask_for_output_file(LLWRITETEXT, outarc,
 	    &fname, lloptions.llarchives, ".ged");
 	if (!fn) {
 		msg_error("The database was not saved.");
@@ -117,7 +131,7 @@ archive_in_file (void)
 	fprintf(fn, "0 TRLR\n");
 	fclose(fn);
 	wpos(7,0);
-	msg_info("Database `%s' has been saved in `%s'.", btreepath, fname);
+	msg_info(outfin, btreepath, fname);
 	return TRUE;
 }
 /*========================================================

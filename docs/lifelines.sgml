@@ -1,5 +1,5 @@
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.5">    
+	<!entity llversion	"3.0.6.1">    
 ]>	
 	
 <BOOK ID="DOCBOOK">
@@ -167,7 +167,8 @@ INSTALLATION
 
 	You may be installing <APPLICATION>LifeLines</APPLICATION>
 	from a source distribution package or as an executable program
-	already prepared for your <ACRONYM>UNIX</ACRONYM> system. The
+	already prepared for your <ACRONYM>UNIX</ACRONYM>
+	(or <ACRONYM>MS-Windows</ACRONYM>) system. The
 	source distribution comes with the readme, build script and
 	make files necessary to build
 	<APPLICATION>LifeLines</APPLICATION>. Follow the instructions
@@ -229,7 +230,7 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 	<APPLICATION>LifeLines</APPLICATION> is:
 	
 	<SYNOPSIS>
-	   <COMMAND>lines</COMMAND> <OPTION>[-rwfkam]</OPTION><REPLACEABLE CLASS="PARAMETER">[database]</REPLACEABLE>
+	   <COMMAND>lines</COMMAND> <OPTION>[-adkrwilfmntcuFy]</OPTION><REPLACEABLE CLASS="PARAMETER">[database]</REPLACEABLE>
 	</SYNOPSIS>
 
 </PARA>
@@ -239,11 +240,37 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 <PARA>
 
 	The options mean the following:
-	<GLOSSLIST><GLOSSENTRY><GLOSSTERM>-r</GLOSSTERM><GLOSSDEF>
+
+	<GLOSSLIST><GLOSSENTRY><GLOSSTERM>-a</GLOSSTERM><GLOSSDEF>
 
 <PARA>
 
-	open database with read only access
+	log dynamic memory operation (for debugging)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-d</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	debug mode (signal protection disabled for convenience with breakpoints)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-k</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	always show keys (normally keys are suppressed if REFN available)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-r</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	open database with read-only access (protect against other
+	writer access)
 
 </PARA>
 
@@ -251,7 +278,26 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 
 <PARA>
 
-	open database with writeable access
+	open database with writeable access (protect against other
+	writer or reader access)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-i</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	open database with immutable access (no protection against other
+	access -- for use on read-only media) 
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-l</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	lock (-ly) or unlock (-ln) a database for use with read only media
+	(access to a locked database is treated as immutable)
 
 </PARA>
 
@@ -260,6 +306,47 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 <PARA>
 
 	force open the database - use only in emergency
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-n</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	do not use traditional family rules
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-t</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	trace function calls in report programs (for debugging)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-c</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	supply cache values (eg, -ci400,4000f400,4000 sets direct indi & fam
+	caches to 400, and indirect indi & fam caches to 4000)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-u</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+
+</PARA>
+
+</GLOSSDEF></GLOSSENTRY><GLOSSENTRY><GLOSSTERM>-F</GLOSSTERM><GLOSSDEF>
+
+<PARA>
+
+	Finnish option (only available if so compiled)
 
 </PARA>
 
@@ -279,8 +366,8 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 
 <PARA>
 
-	The <OPTION>-r</OPTION> option opens the database with read
-	only access. When in this mode
+	The <OPTION>-r</OPTION> option opens the database with read-only
+	access. When in this mode
 	<APPLICATION>LifeLines</APPLICATION> will not let you modify
 	the database; no other operations are affected. The
 	<OPTION>-w</OPTION> option opens the database with writeable
@@ -315,14 +402,24 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 
 </PARA>
 
+<PARA>
 
+	The multiuser protection supplied by this reader/writer access
+	mechanism is provided via a flag setting in the database, so both
+	read-only and writeable access actually alter the database (read-only
+	access only alters the value of this flag). For truly read-only
+	access, e.g., for use with read-only media, the best solution is to
+	lock (-ly) the 	database before copying it to the read-only media. This
+	annotates the database itself as being for immutable access.
+	Alternatively, to use a database already on read-only media and not
+	so annotated, use the immutable (-i) flag.
 
 <PARA>
 
 	If you don't give the name of a database on the command line,
 	<APPLICATION>LifeLines</APPLICATION> will prompt you for
 	it. If you do not use the <ENVAR>LLDATABASES</ENVAR> shell
-	variable (described later), the name you enter must be the
+	variable or user options (described later), the name you enter must be the
 	name of a <APPLICATION>LifeLines</APPLICATION> database
 	directory expressed using normal <ACRONYM>UNIX</ACRONYM>
 	absolute or relative path naming. If you do use the
@@ -1055,8 +1152,8 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	other genealogical programs where screens or forms are used to
 	gather the data.The default screen editor for
 	<APPLICATION>LifeLines</APPLICATION> is
-	<APPLICATION>vi</APPLICATION>. (The DOS/Windows version defaults
-	instead to notepad.exe.) This can be overridden by the
+	<APPLICATION>vi</APPLICATION>. (The <ACRONYM>MS-Windows</ACRONYM>
+	version defaults instead to notepad.exe.) This can be overridden by the
 	<ENVAR>ED</ENVAR>, <ENVAR>EDITOR</ENVAR> or
 	<ENVAR>LLEDITOR</ENVAR> environment variables. For example, if
 	you prefer the emacs screen editor, and if you use a bourne-compatible
@@ -1087,8 +1184,9 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	As of version 3.0.6, there is also a configuration file, and
 	entries in it may be used in lieu of environment variables.
 	It is ordinarily named .linesrc under UNIX, and lines.cfg under
-	DOS/Windows. A sample configuration file should have been
-	included in the distribution. 
+	<ACRONYM>MS-Windows</ACRONYM>.
+	A sample configuration file should have been included
+	in the distribution. 
 </PARA>
 
 
@@ -1168,8 +1266,8 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 
 	With version 3.0.6 or later, you may use the configuration file in
 	lieu of environment variables. This is especially oriented towards
-	users on MS-Windows systems, on which environment variables are not
-	as common a configuration technique.
+	users on <ACRONYM>MS-Windows</ACRONYM> systems, on which
+	environment variables are not as common a configuration technique.
 
 </PARA>
 
@@ -1179,7 +1277,8 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
 	<APPLICATION>LifeLines</APPLICATION> uses the curses library
 	for terminal independent I/O. This requires you to specify
 	your terminal type with the <ENVAR>TERM</ENVAR> environment
-	variable. (This is not relevant in the DOS/Windows version.)
+	variable. (This is not relevant in the <ACRONYM>MS-Windows</ACRONYM>
+	version.)
 
 </PARA>
 
@@ -3185,8 +3284,7 @@ Person record edit template
 
 <PARA>
 
-Family record body edit template (NB: Unlike the others, this should not
-include the 0 level FAM tag.)
+Event record edit template
 
 </PARA>
 
@@ -3194,7 +3292,8 @@ include the 0 level FAM tag.)
 
 <PARA>
 
-Event record edit template
+Family record body edit template (NB: Unlike the others, this should not
+include the 0 level FAM tag.)
 
 </PARA>
 
@@ -6347,6 +6446,22 @@ yrmoda
 <PARA>
 
 yr  (year only, omitting all else)
+
+</PARA>
+
+</LISTITEM></VARLISTENTRY><VARLISTENTRY><TERM>13</TERM><LISTITEM>
+
+<PARA>
+
+da/mo yr
+
+</PARA>
+
+</LISTITEM></VARLISTENTRY><VARLISTENTRY><TERM>14</TERM><LISTITEM>
+
+<PARA>
+
+(As in GEDCOM)
 
 </PARA>
 

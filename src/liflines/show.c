@@ -91,7 +91,7 @@ static void init_display_indi(NODE, INT width);
 static void init_display_fam(NODE, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
-void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
+static void put_out_line(WINDOW * win, INT x, INT y, STRING string, INT width, INT flag);
 static STRING sh_fam_to_event_shrt(NODE node, TRANTABLE tt, STRING tag, STRING head
 	, INT len);
 static STRING sh_indi_to_event_long(NODE node, TRANTABLE tt, STRING tag
@@ -219,7 +219,7 @@ init_display_indi (NODE pers, INT width)
 }
 /*==============================
  * show_person -- Display person
- *  win:    [in] which curses window (usually MAIN_WIN)
+ *  winptr: [in] which curses window (usually MAIN_WIN)
  *  pers:   [in] whom to display
  *  row:    [in] starting row to draw upon
  *  hgt:    [in] how many rows to use
@@ -230,12 +230,14 @@ init_display_indi (NODE pers, INT width)
  * person displayed last.
  *============================*/
 void
-show_person (WINDOW * win, NODE pers, INT row, INT hgt
+show_person (void * winptr, NODE pers, INT row, INT hgt
 	, INT width, INT *scroll, BOOLEAN reuse)
 {
 	INT i;
 	INT localrow;
 	INT overflow;
+	WINDOW * win = (WINDOW *)winptr;
+
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
 	if (!hgt) return;

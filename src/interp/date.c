@@ -42,7 +42,7 @@
 #define WORD_TOK  3
 #define ICONS_TOK 4
 
-static void format_ymd(STRING, STRING, STRING, INT, INT, STRING*);
+static void format_ymd(STRING, STRING, STRING, INT, INT, STRING*, INT *len);
 static void format_mod(INT, STRING*);
 static STRING format_day(INT, INT);
 static STRING format_month(INT, INT);
@@ -108,8 +108,11 @@ static TABLE monthtbl = NULL;
  *                     10- yr-mo-da
  *                     11- yrmoda
  *                     12- yr   (year only, old short form)
+ *                     13- dd/mo yr
+ *                     14- as in GEDCOM (truncated to 50 chars)
  * cmplx - 0 is year only, 1 is complex, including
  *         date modifiers, ranges, and/or double-dating
+ * Returns static buffer
  *========================================*/
 STRING
 do_format_date (STRING str, INT dfmt, INT mfmt,
@@ -119,245 +122,186 @@ do_format_date (STRING str, INT dfmt, INT mfmt,
 	STRING sda, smo, syr;
 	static unsigned char scratch[50], daystr[4];
 	STRING p = scratch;
+	INT len = sizeof(scratch);
 	if (!str) return NULL;
 	if (sfmt==12) {
 		/* This is what used to be the shrt flag */
 		return shorten_date(str);
 	}
+	if (sfmt==14) {
+		llstrncpy(scratch, str, sizeof(scratch));
+		return scratch;
+	}
+	*p = 0;
 	extract_date(str, &mod, &da, &mo, &yr, &syr);
 	if ((sda = format_day(da, dfmt))) sda = strcpy(daystr, sda);
 	smo = format_month(mo, mfmt);
 	if (!cmplx) syr = format_year(yr, yfmt);
 	else format_mod(mod%100, &p);
-	format_ymd(syr, smo, sda, sfmt, mod, &p);
+	format_ymd(syr, smo, sda, sfmt, mod, &p, &len);
 	if (cmplx && (mod%100 == 4 || mod%100 == 6)) {
 		*p++ = ' ';
 		format_mod(mod%100 + 1, &p);
 		extract_date(NULL, &mod, &da, &mo, &yr, &syr);
 		if ((sda = format_day(da, dfmt))) sda = strcpy(daystr, sda);
 		smo = format_month(mo, mfmt);
-		format_ymd(syr, smo, sda, sfmt, mod, &p);
+		format_ymd(syr, smo, sda, sfmt, mod, &p, &len);
 	}
 	return scratch;
 }
 /*===================================================
  * format_ymd -- Assembles date according to dateformat
+ *  syr:    [IN]   year string
+ *  smo:    [IN]   month string
+ *  sda:    [IN]   day string
+ *  sfmt:   [IN]   format code (see do_format_date)
+ *  mod:    [IN]   modifier code (in bottom of monthstrs array)
+ *  output: [I/O]  output string (is advanced)
+ *  len:    [I/O]  length remaining in output string buffer (is decremented)
  *=================================================*/
 static void
-format_ymd (STRING syr,
-            STRING smo,
-            STRING sda,
-            INT sfmt,           /* format code */
-            INT mod,
-            STRING *output)
+format_ymd (STRING syr, STRING smo, STRING sda, INT sfmt, INT mod
+	, STRING *output, INT * len)
 {
 	STRING p = *output;
 
 	switch (sfmt) {
 	case 0:		/* da mo yr */
 		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-			*p++ = ' ';
+			llstrcatn(&p, sda, len);
+			llstrcatn(&p, " ", len);
 		}
 		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-			*p++ = ' ';
+			llstrcatn(&p, smo, len);
+			llstrcatn(&p, " ", len);
 		}
 		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
+			llstrcatn(&p, syr, len);
 		}
-		*p = 0;
 		break;
 	case 1:		/* mo da, yr */
 		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-			*p++ = ' ';
+			llstrcatn(&p, smo, len);
+			llstrcatn(&p, " ", len);
 		}
 		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-			*p++ = ',';
-			*p++ = ' ';
+			llstrcatn(&p, sda, len);
+			llstrcatn(&p, ", ", len);
 		}
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 2:		/* mo/da/yr */
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		*p++ = '/';
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		*p++ = '/';
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "/", len);
+		if (sda)
+			llstrcatn(&p, sda, len);
+		llstrcatn(&p, "/", len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 3:		/* da/mo/yr */
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		*p++ = '/';
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		*p++ = '/';
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (sda)
+			llstrcatn(&p, sda, len);
+		llstrcatn(&p, "/", len);
+		if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "/", len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 4:		/* mo-da-yr */
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		*p++ = '-';
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		*p++ = '-';
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "-", len);
+		if (sda)
+			llstrcatn(&p, sda, len);
+		llstrcatn(&p, "-", len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 5:		/* da-mo-yr */
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		*p++ = '-';
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		*p++ = '-';
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (sda)
+			llstrcatn(&p, sda, len);
+		llstrcatn(&p, "-", len);
+		if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "-", len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 6:		/* modayr */
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (smo)
+			llstrcatn(&p, smo, len);
+		if (sda)
+			llstrcatn(&p, sda, len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
 	case 7:		/* damoyr */
-		if (sda) {
-			strcpy(p, sda);
-			p += strlen(p);
-		}
-		if (smo) {
-			strcpy(p, smo);
-			p += strlen(p);
-		}
-		if (syr) {
-			strcpy(p, syr);
-			p += strlen(p);
-		}
-		*p = 0;
+		if (sda)
+			llstrcatn(&p, sda, len);
+		if (smo)
+			llstrcatn(&p, smo, len);
+		if (syr)
+			llstrcatn(&p, syr, len);
 		break;
         case 8:         /* yr mo da */
-                if (syr) {
-                        strcpy(p, syr);
-                        p += strlen(p);
-                }
+                if (syr)
+			llstrcatn(&p, syr, len);
                 if (smo) {
-                        *p++ = ' ';
-                        strcpy(p, smo);
-                        p += strlen(p);
-                }
+			llstrcatn(&p, " ", len);
+			llstrcatn(&p, smo, len);
+		}
                 if (sda) {
-                        *p++ = ' ';
-                        strcpy(p, sda);
-                        p += strlen(p);
-                }
-                *p = 0;
+			llstrcatn(&p, " ", len);
+			llstrcatn(&p, sda, len);
+		}
                 break;
         case 9:         /* yr/mo/da */
-                if (syr) {
-                        strcpy(p, syr);
-                        p += strlen(p);
-                }
-                *p++ = '/';
-                if (smo) {
-                        strcpy(p, smo);
-                        p += strlen(p);
-                }
-                *p++ = '/';
-                if (sda) {
-                        strcpy(p, sda);
-                        p += strlen(p);
-                }
-                *p = 0;
+                if (syr)
+			llstrcatn(&p, syr, len);
+		llstrcatn(&p, "/", len);
+                if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "/", len);
+                if (sda)
+			llstrcatn(&p, sda, len);
                 break;
         case 10:        /* yr-mo-da */
-                if (syr) {
-                        strcpy(p, syr);
-                        p += strlen(p);
-                }
-                *p++ = '-';
-                if (smo) {
-                        strcpy(p, smo);
-                        p += strlen(p);
-                }
-                *p++ = '-';
-                if (sda) {
-                        strcpy(p, sda);
-                        p += strlen(p);
-                }
-                *p = 0;
+                if (syr)
+			llstrcatn(&p, syr, len);
+		llstrcatn(&p, "-", len);
+                if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, "-", len);
+                if (sda)
+			llstrcatn(&p, sda, len);
                 break;
         case 11:        /* yrmoda */
-                if (syr) {
-                        strcpy(p, syr);
-                        p += strlen(p);
-                }
-                if (smo) {
-                        strcpy(p, smo);
-                        p += strlen(p);
-                }
-                if (sda) {
-                        strcpy(p, sda);
-                        p += strlen(p);
-                }
-                *p = 0;
+                if (syr)
+                        llstrcatn(&p, syr, len);
+                if (smo)
+			llstrcatn(&p, smo, len);
+                if (sda)
+			llstrcatn(&p, sda, len);
                 break;
+	/* 12 (year only) was handled directly in do_format_date */
+	case 13:      /* mo/da yr */
+		if (sda)
+			llstrcatn(&p, sda, len);
+		llstrcatn(&p, "/", len);
+		if (smo)
+			llstrcatn(&p, smo, len);
+		llstrcatn(&p, " ", len);
+		if (syr)
+			llstrcatn(&p, syr, len);
+		break;
+	/* 14 (as GEDCOM) was handled directly in do_format_date */
         }
-	if (mod >= 100) {
-		strcpy(p, " BC");
-		p += 3;
-	}
+	if (mod >= 100)
+		llstrcatn(&p, " BC", len);
 	*output = p;
         return;
 }

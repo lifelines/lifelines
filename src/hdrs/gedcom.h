@@ -49,6 +49,19 @@
 /*=====================================
  * NODE -- Internal form of GEDCOM line
  *===================================*/
+/*
+ A NODE is a struct ntag which holds the in-memory
+ representation of one line of a GEDCOM record.
+ For example, a NODE may hold the in-memory representation
+ of the GEDCOM line "2 DATE ABT 1900". The NODE actually contains
+ the "DATE" part of the string in its n_tag field, and
+ the "ABT 1900" portion of the string in its n_val field.
+ The level is not explicitly given, but is implicit in the
+ NODEs location in the NODE tree in which it lives (it has
+ fields n_parent, n_child, n_sibling which connect it into
+ its NODE tree). (E.g., its parent might be a NODE representing
+ "1 BIRT".)
+*/
 typedef struct ntag *NODE, NODE_struct;
 struct ntag {
 	STRING n_xref;		/* cross ref */
@@ -68,8 +81,19 @@ struct ntag {
 struct nkeytag { char ntype; INT keynum; STRING key; };
 typedef struct nkeytag NKEY;
 
-typedef struct ntag0 *RECORD;
-struct ntag0 {
+/*=====================================
+ * RECORD -- Internal form of GEDCOM record
+ *===================================*/
+/*
+ A RECORD is a struct nrec0 which holds the in-memory representation
+ of an entire GEDCOM record, such as an INDI. It has a pointer to the
+ root NODE of the INDI (which is of course a NODE representing a line
+ such as "0 @I43@ INDI"), and it also contains some additional data.
+ A RECORD will in the future contain a pointer to its cache element.
+ LifeLines is very RECORD-oriented.
+*/
+typedef struct nrec0 *RECORD;
+struct nrec0 {
 	NODE top;
 	NKEY nkey;
 	WAREHOUSE mdwh; /* metadata */

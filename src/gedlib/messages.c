@@ -245,12 +245,14 @@ STRING dbodel = SS "Using original keys, %d deleted records will be in the datab
 STRING cfoldk = SS "Use original keys from GEDCOM file?";
 STRING dbdelk = SS "Adding unused keys as deleted keys...";
 STRING dbrdon = SS "The database is read-only; loading has been canceled.";
+STRING outarc = SS "Enter name of output archive file.";
+STRING outfin = SS "Database `%s' has been saved in `%s'.";
 
-STRING extrpt = SS "<Choose outside this list>";
-STRING qrpt   = SS "What is the name of the program?";
+STRING extrpt      = SS "<Choose outside this list>";
+STRING qrpt        = SS "What is the name of the program?";
 
-STRING norpt =  SS "No report was generated.";
-STRING whtout = SS "What is the name of the output file?";
+STRING norpt       =  SS "No report was generated.";
+STRING whtout      = SS "What is the name of the output file?";
 STRING opt2long    = SS "Malformed configuration file: line too long.";
 
 

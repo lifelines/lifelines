@@ -4,7 +4,7 @@
 # As are blank lines
 # So all these lines are commented out...
 #
-# 2001/11/12
+# 2001/11/15
 
 # Email address available to report programs
 #EmailAddr=user@mailhost.org
@@ -54,7 +54,7 @@
 # Print more detailed call stack for each report error
 # FullReportCallStack=1
 
-# day-mode,month-mode,year-mode,combining-mode,complex-mode
+# dayfmt,monthfmt,yearfmt,datefmt,complexfmt
 # see programmers reference for stddate for these
 # 2,3,0,0,1 is GEDCOM style (1 AUG 1945) with complex dates
 # 2,5,0,1,1 is American style (AUGUST 1, 1945) with complex dates

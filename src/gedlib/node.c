@@ -1317,6 +1317,7 @@ length_nodes (NODE node)
 }
 /*================================================
  * shorten_date -- Return short form of date value
+ * Returns static buffer.
  *==============================================*/
 STRING
 shorten_date (STRING date)
@@ -1352,6 +1353,7 @@ shorten_date (STRING date)
 }
 /*=================================================
  * shorten_plac -- Return short form of place value
+ * Returns modified input string, or value from placabbr table
  *===============================================*/
 STRING
 shorten_plac (STRING plac)
