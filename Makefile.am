@@ -17,3 +17,13 @@ CVS2CL = cvs2cl.pl
 ChangeLog.new: ChangeLog.usermap
 	$(CVS2CL) -b --gmt --log-opts "-d'1999-12-31< now'" --window 7200 \
 		--usermap ChangeLog.usermap --ignore ChangeLog -f $@
+
+#
+# Keep the .cvsignore files sorted, and use this target to do it.
+#
+PERL=perl
+sort-cvsignore:
+	for f in `find . -name .cvsignore`; do \
+		$(PERL) -e 'print sort <>;' < $$f > $$f.tmptmp; \
+		mv $$f.tmptmp $$f; \
+	done
