@@ -249,7 +249,6 @@ STRING newxxref(STRING, BOOLEAN);
 void new_name_browse_list(STRING, STRING);
 NODE next_fp_to_node(FILE*, BOOLEAN, TRANTABLE, STRING*, BOOLEAN*);
 INT nod0_to_keynum(NODE nod, char ntype);
-INT node_strlen(INT, NODE);
 void node_to_dbase(NODE, STRING);
 BOOLEAN node_to_file(INT, NODE, STRING, BOOLEAN, TRANTABLE);
 NODE node_to_node(NODE, INT*);

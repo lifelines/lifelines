@@ -54,10 +54,33 @@ STRING rernwt = (STRING) "Line %d: This line needs white space before tag.";
 STRING rerilv = (STRING) "Line %d: This line has an illegal level.";
 STRING rerwlv = (STRING) "The record begins at wrong level.";
 
+static STRING fixup (STRING str);
+static STRING fixtag (STRING tag);
+static BOOLEAN string_to_line (STRING *ps,     /* string ptr - modified */
+			       INT *plev,      /* level ptr */
+			       STRING *pxref,  /* cross-ref ptr */
+			       STRING *ptag,   /* tag ptr */
+			       STRING *pval,   /* value ptr */
+			       STRING *pmsg);   /* error msg ptr */
+static void write_node (INT levl,       /* level */
+			FILE *fp,       /* file */
+			TRANTABLE tt,   /* char map */
+			NODE node,      /* node */
+			BOOLEAN indent); /* indent? */
+
+static STRING swrite_node (INT levl,	/* level */
+			   NODE node,	/* node */
+			   STRING p);	/* write string */
+static INT node_strlen (INT levl,       /* level */
+			NODE node);	/* node */
+static STRING swrite_nodes (INT levl,	/* level */
+			    NODE node,	/* root */
+			    STRING p);	/* write string */
+
 /*==============================
  * fixup -- Save non-tag strings
  *============================*/
-STRING
+static STRING
 fixup (STRING str)
 {
 	if (!str || *str == 0) return NULL;
@@ -66,7 +89,7 @@ fixup (STRING str)
 /*=============================
  * fixtag -- Keep tags in table
  *===========================*/
-STRING
+static STRING
 fixtag (STRING tag)
 {
 	STRING str;
@@ -183,7 +206,7 @@ file_to_line (FILE *fp,
 /*==============================================
  * string_to_line -- Get GEDCOM line from string
  *============================================*/
-BOOLEAN
+static BOOLEAN
 string_to_line (STRING *ps,     /* string ptr - modified */
                 INT *plev,      /* level ptr */
                 STRING *pxref,  /* cross-ref ptr */
@@ -527,7 +550,7 @@ node_to_file (INT levl,       /* top level */
 /*========================================
  * write_node -- Write NODE to GEDCOM file
  *======================================*/
-void
+static void
 write_node (INT levl,       /* level */
             FILE *fp,       /* file */
             TRANTABLE tt,   /* char map */
@@ -575,7 +598,7 @@ write_nodes (INT levl,       /* level */
 /*====================================
  * swrite_node -- Write NODE to string
  *==================================*/
-STRING
+static STRING
 swrite_node (INT levl,       /* level */
              NODE node,      /* node */
              STRING p)       /* write string */
@@ -604,7 +627,7 @@ swrite_node (INT levl,       /* level */
 /*=====================================
  * swrite_nodes -- Write tree to string
  *===================================*/
-STRING
+static STRING
 swrite_nodes (INT levl,       /* level */
               NODE node,      /* root */
               STRING p)       /* write string */
@@ -649,7 +672,7 @@ tree_strlen (INT levl,       /* level */
 /*================================================================
  * node_strlen -- Compute NODE string length -- count \n but not 0
  *==============================================================*/
-INT
+static INT
 node_strlen (INT levl,       /* level */
              NODE node)      /* node */
 {
@@ -1192,6 +1215,8 @@ find_node (NODE prnt,      /* parent node */
 	}
 	return NULL;
 }
+
+#ifdef UNUSED_CODE
 /*=======================================================================
  * father_nodes -- Given list of FAMS or FAMC nodes, returns list of HUSB
  *   lines they contain
@@ -1279,3 +1304,4 @@ parents_nodes (NODE faml)      /* list of FAMC and/or FAMS nodes */
 	}
 	return new;
 }
+#endif /* UNUSED_CODE */

@@ -1,3 +1,8 @@
+2001-01-02    <marc@nozell.com>
+
+	* hdrs/gedcom.h, gedlib/node.c: More compiler prototype warning
+	cleanups, #ifdef'd UNUSED_CODE
+
 2001-01-01 Petter Reinholdtsen <pere@td.org.uit.no>
 
 	* interp/more.c interp/intrpseq.c interp/write.c
