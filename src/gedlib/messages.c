@@ -223,3 +223,6 @@ STRING dbodel = SS "Using original keys, %d deleted records will be in the datab
 STRING cfoldk = SS "Use original keys from GEDCOM file?";
 STRING dbdelk = SS "Adding unused keys as deleted keys...";
 STRING dbrdon = SS "The database is read-only; loading has been canceled.";
+
+STRING extrpt = SS "<Choose outside this list>";
+STRING qrpt   = SS "What is the name of the program?";

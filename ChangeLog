@@ -1,4 +1,9 @@
 2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
+	gedlib/messages.c liflines/askprogram.c:
+	Added choice to type in program.
+	Fixed to prompt for program if no files found.
+
+2000-11-19 Perry Rapp <puddle@users.sourceforge.net>
 	interp/interp.c liflines/askprogram.c:
 	Fixed bug in askprogram. It was saying File "" not found
 	if the user pressed Q to cancel the report menu.

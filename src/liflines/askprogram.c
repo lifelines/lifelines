@@ -23,6 +23,10 @@
 #include "llinesi.h"
 
 #define PATHSEPARATOR ':'
+extern STRING llprograms;
+
+/* messages used */
+extern STRING extrpt, qrpt;
 
 /*=========================
  * The supported meta-tags.
@@ -252,9 +256,13 @@ free_program_list(struct program_info *head,
 
 /*=====================================================================
  * make_program_list -- convert program list to menu (array of strings)
+ * head is the linked list of programs
+ * leader is an optional special first line (NULL if not desired)
+ * list is the output - newly created list
  *===================================================================*/
 int
 make_program_list(struct program_info *head,
+                  STRING leader,
                   STRING **list)
 {
   int i;
@@ -262,24 +270,27 @@ make_program_list(struct program_info *head,
   struct program_info *cur;
   STRING *newlist;
 
-  if (NULL != *list || NULL == head || NULL == head->next)
-    return 0;
+  if (!list || *list || !head)
+    return 0; /* error by caller */
 
   /* How many do we have.. */
   cur = head->next;
+  len = leader ? 1 : 0;
   while (NULL != cur)
     {
       len++;
       cur = cur->next;
     }
 
-  if (0 >= len)
+  if (!len)
     return 0;
 
   newlist = malloc(sizeof(char*)*len);
   assert(NULL != newlist);
   cur = head->next;
   i = 0;
+  if (leader)
+    newlist[i++] = strdup(leader);
   while (NULL != cur)
     {
       unsigned char buf[MAXLINELEN];
@@ -355,20 +366,30 @@ ask_for_program (STRING mode,
   int len, choice;
   struct program_info *head = find_all_programs(path, ext);
   STRING *list = NULL;
-  len = make_program_list(head, &list);
-  if (0 == len)
-    message("No scripts found in LLPROGRAMS path");
+  STRING ifile;
+  if (!head || !head->next)
+    goto AskForString;
+  len = make_program_list(head, extrpt, &list);
+  if (!len)
+    goto AskForString; /* note - can this happen at all ? */
   else
     {
       choice = choose_from_list(ttl, len, list);
-      if (choice < 0)
+      if (choice == -1)
         {
           message("Cancelled.");
           return NULL;
         }
+      if (choice == 0)
+        goto AskForString;
+		choice--;
       fp = get_choice(head, choice, pfname);
       /* note that fp may be null now */
       free_program_list(head, list, len);
     }
+  return fp;
+
+AskForString:
+  fp = ask_for_file(LLREADTEXT, qrpt, &ifile, llprograms, ".ll");
   return fp;
 }
