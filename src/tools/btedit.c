@@ -39,6 +39,7 @@
  *********************************************/
 STRING readpath_file = NULL;	/* normally defined in liflines/main.c */
 STRING readpath = NULL;		/* normally defined in liflines/main.c */
+BOOLEAN uu8=0;                  /* normally defined in gedlib/codesets.c */
 int opt_finnish = 0;
 
 /*********************************************

@@ -92,11 +92,11 @@ SOURCE=..\..\..\src\btree\addkey.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\appendstr.c
+SOURCE=..\..\..\src\arch\alphasort.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\stdlib\bfs.c
+SOURCE=..\..\..\src\stdlib\appendstr.c
 # End Source File
 # Begin Source File
 
@@ -109,6 +109,10 @@ SOURCE=..\..\..\src\gedlib\brwslist.c
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\charmaps.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\codesets.c
 # End Source File
 # Begin Source File
 
@@ -125,10 +129,6 @@ SOURCE=.\dbVerify.rc
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\dirs.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\stdlib\double.c
 # End Source File
 # Begin Source File
 
@@ -196,6 +196,10 @@ SOURCE=..\..\..\src\arch\langinfo.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\list.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\listener.c
 # End Source File
 # Begin Source File
@@ -256,6 +260,10 @@ SOURCE=..\..\..\src\gedlib\place.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\arch\platform.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\property.c
 # End Source File
 # Begin Source File
@@ -308,6 +316,10 @@ SOURCE=..\..\..\src\stdlib\strcvt.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\strset.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
@@ -352,7 +364,15 @@ SOURCE=..\..\..\src\tools\wprintf.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\xlat.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\xreffile.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\zstr.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -377,10 +397,6 @@ SOURCE=.\resource.h
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\stdlibi.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\stdlib\stdlibi.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

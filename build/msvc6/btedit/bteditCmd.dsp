@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\hdrs" /I "..\..\..\hdrs\win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\src\hdrs" /I "..\..\..\src\hdrs\win32" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\hdrs" /I "..\..\..\hdrs\win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\src\hdrs" /I "..\..\..\src\hdrs\win32" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE__VSNPRINTF" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -87,19 +87,15 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\btree\addkey.c
+SOURCE=..\..\..\src\btree\addkey.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\bfs.c
+SOURCE=..\..\..\src\btree\block.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\block.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\tools\btedit.c
+SOURCE=..\..\..\src\tools\btedit.c
 # End Source File
 # Begin Source File
 
@@ -107,67 +103,67 @@ SOURCE=.\btedit.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\dirs.c
+SOURCE=..\..\..\src\stdlib\dirs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\environ.c
+SOURCE=..\..\..\src\stdlib\environ.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\file.c
+SOURCE=..\..\..\src\btree\file.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\index.c
+SOURCE=..\..\..\src\btree\index.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\llstrcmp.c
+SOURCE=..\..\..\src\stdlib\llstrcmp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\memalloc.c
+SOURCE=..\..\..\src\stdlib\memalloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\mystring.c
+SOURCE=..\..\..\src\stdlib\mystring.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\opnbtree.c
+SOURCE=..\..\..\src\btree\opnbtree.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\path.c
+SOURCE=..\..\..\src\stdlib\path.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\record.c
+SOURCE=..\..\..\src\btree\record.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stdstrng.c
+SOURCE=..\..\..\src\stdlib\stdstrng.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\stralloc.c
+SOURCE=..\..\..\src\stdlib\stralloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strapp.c
+SOURCE=..\..\..\src\stdlib\strapp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\stdlib\strutf8.c
+SOURCE=..\..\..\src\stdlib\strutf8.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\utils.c
+SOURCE=..\..\..\src\btree\utils.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\arch\vsnprintf.c
+SOURCE=..\..\..\src\arch\vsnprintf.c
 # End Source File
 # Begin Source File
 
@@ -175,7 +171,11 @@ SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\tools\wprintf.c
+SOURCE=..\..\..\src\tools\wprintf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\zstr.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -183,39 +183,47 @@ SOURCE=..\..\..\tools\wprintf.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\arch.h
+SOURCE=..\..\..\src\hdrs\arch.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\btree.h
+SOURCE=..\..\..\src\hdrs\btree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\btree\btreei.h
+SOURCE=..\..\..\src\btree\btreei.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\cache.h
+SOURCE=..\..\..\src\hdrs\cache.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\gedcom.h
+SOURCE=..\..\..\src\hdrs\feedback.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\interp.h
+SOURCE=..\..\..\src\hdrs\gedcom.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\llstdlib.h
+SOURCE=..\..\..\src\hdrs\interp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\msvc.h
+SOURCE=..\..\..\src\hdrs\llnls.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\mystring.h
+SOURCE=..\..\..\src\hdrs\llstdlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\msvc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
 
@@ -223,15 +231,27 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\standard.h
+SOURCE=..\..\..\src\hdrs\standard.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\sys_inc.h
+SOURCE=..\..\..\src\hdrs\sys_inc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\hdrs\table.h
+SOURCE=..\..\..\src\hdrs\table.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\translat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\uiprompts.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\zstr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
