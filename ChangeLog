@@ -1,5 +1,14 @@
 2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
 
+	* ChangeLog 
+
+	NEW:     build/rpm/lifelines.spec
+	DELETED: liflines.spec
+
+	Move lifelines.spec from root directory into build hierarchy
+
+2002-06-24 Matt Emmerton <memmerto@users.sourceforge.net>
+
 	* ChangeLog configure.in build/msvc6/Makefile.am
 
 	DELETED: win32/msvc6/llines win32/msvc6/libintl
