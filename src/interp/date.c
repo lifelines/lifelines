@@ -240,7 +240,7 @@ static struct gedcom_keywords_s gedkeys[] = {
 };
 
 
-static STRING sstr = NULL;
+static STRING sstr=NULL, sstr_start=NULL;
 static TABLE keywordtbl = NULL;
 
 /*==========================================
@@ -1289,6 +1289,7 @@ static void
 set_date_string (STRING str)
 {
 	sstr = str;
+	sstr_start = str;
 	if (!keywordtbl) {
 		init_keywordtbl();
 		load_lang();
@@ -1308,11 +1309,14 @@ get_date_tok (struct dnum_s *pdnum)
 	static char scratch[90];
 	STRING p = scratch;
 	INT c;
+	/* flag if token preceded by whitespace (or at start of buffer) */
+	BOOLEAN white_before = FALSE;
 	if (!sstr) return 0;
 	if (strlen(sstr) > sizeof(scratch)-1) return 0;
 	while (iswhite((uchar)*sstr++))
 		;
 	sstr--;
+	white_before = (sstr==sstr_start || iswhite((uchar)sstr[-1]));
 	if (sstr[0]=='@' && sstr[1]=='#' && sstr[2]=='D') {
 		INT i;
 		/* collect calendar escape to closing @ (or end of string) */
@@ -1362,7 +1366,8 @@ get_date_tok (struct dnum_s *pdnum)
 		return WORD_TOK;
 	}
 	if (chartype(*sstr) == DIGIT) {
-		INT j=BAD_YEAR, i=0; /* i is numeric value, j is 2nd value */
+		INT i=0; /* primary numeric value */
+		INT j=BAD_YEAR; /* secondary numeric value (for compound number) */
 		while (chartype(c = (uchar)(*p++ = *sstr++)) == DIGIT)
 			i = i*10 + c - '0';
 		if (i > 9999) {
@@ -1371,7 +1376,8 @@ get_date_tok (struct dnum_s *pdnum)
 		}
 		/* c is the char after the last digit,
 		and sstr is the next char after that */
-		if (c=='/' || c=='-') {
+		/* check for compound number, if preceding whitespace */
+		if ((c=='/' || c=='-') && white_before) {
 			INT modnum=1;
 			signed int delta;
 			STRING saves = sstr, savep = p;

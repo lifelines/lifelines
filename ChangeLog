@@ -19,6 +19,11 @@
 
 	Move last three C sources into alphabetized order.
 
+	* ChangeLog interp/date.c reports/exercise.ll:
+
+	Fix date parser to require whitespace before compound numbers,
+	so 1930-11-24 is recognized as three different numbers.
+
 2002-01-31 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog INSTALL hdrs/interp.h hdrs/screen.h

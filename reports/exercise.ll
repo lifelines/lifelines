@@ -1,6 +1,6 @@
 /*
  * @progname       exercise
- * @version        0.93 (2002/02/03)
+ * @version        0.94 (2002/02/03)
  * @author         Perry Rapp
  
  * @category       test
@@ -740,7 +740,12 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
 	}
 }
 
-/* Test parsing only, using year(), month(), and day() functions */
+/*
+ Test parsing only, using year(), month(), and day() functions 
+ src is the string to parse
+ yr,mo,da is the correct output against which to test
+*/
+
 proc tdparse(src, yr, mo, da)
 {
 	set(result, strtoint(year(src)))
@@ -778,7 +783,6 @@ proc testDates()
 {
 	set(testok, 0)
 	set(testfail, 0)
-call tdparse("2 JAN 1950s", 1950, 1, 2)
 
 /* Test parsing only */
 	call tdparse("2 JAN 1953", 1953, 1, 2)
@@ -804,6 +808,8 @@ call tdparse("2 JAN 1950s", 1950, 1, 2)
 	call tdparse("FROM 2/3 JAN 1953/954 TO 2004", 1953, 1, 2)
 	call tdparse("2 JAN 1950s", 1950, 1, 2)
 	call tdparse("2-5 JAN 1950-1970", 1950, 1, 2)
+	call tdparse("2-13 OCT 1880-87", 1880, 10, 2)
+	call tdparse("1930-11-24", 1930, 11, 24)
 
 
 /* NB: We do not test all possible format combinations, as there are quite a lot
