@@ -415,8 +415,6 @@ BUILTINS builtins[] = {
 	{"xref",		1,	1,	__xref},
 	{"year",		1,	1,	__year},
 };
-#ifdef WIN32
-INT nobuiltins = 188;
-#else
-INT nobuiltins = 187;
-#endif
+
+#define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
+INT nobuiltins = ARRAYSIZE(builtins);
