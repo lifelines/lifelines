@@ -8,6 +8,12 @@
 	* hdrs/llstdlib.h liflines/main.c stdlib/environ.c stdlib/path.c:
 	Finish newdbdir stuff (& newdbs -> newdbdir name change).
 
+	* btree/utils.c gedlib/gengedc.c gedlib/indiseq.c hdrs/indiseq.h
+	interp/alloc.c interp/builtin.c interp/lex.c liflines/edit.c
+	liflines/merge.c win32/getopt.c:
+	Split up append_indiseq calls by value type.
+	Initialized some local variables to make compiler happy.
+
 2001-01-04  Marc Nozell  <marc@nozell.com>
 
 	* configure.in: Fix UNIX build, Add check for pwd.h.
