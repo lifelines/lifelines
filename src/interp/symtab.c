@@ -58,9 +58,8 @@ insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
 }
 /*======================================================
  * delete_symtab -- Delete a value from a symbol table
- * SYMTAB stab:  symbol table
- * STRING iden: variable in symbol table
- * Created: 2001/03/17, Perry Rapp
+ *  @stab:  symbol table
+ *  @iden: variable in symbol table
  *====================================================*/
 void
 delete_symtab (SYMTAB stab, STRING iden)
@@ -71,7 +70,6 @@ delete_symtab (SYMTAB stab, STRING iden)
 }
 /*========================================
  * null_symtab -- Return null symbol table 
- * Created: 2001/03/24, Perry Rapp
  *======================================*/
 SYMTAB
 null_symtab (void)
@@ -82,8 +80,7 @@ null_symtab (void)
 }
 /*========================================
  * remove_symtab -- Remove symbol table 
- * TABLE stab:  symbol table
- * Created: 2001/03/22, Perry Rapp
+ *  @stab:  symbol table
  *======================================*/
 void
 remove_symtab (SYMTAB * stab)
@@ -109,7 +106,7 @@ remove_symtab (SYMTAB * stab)
 }
 /*======================================================
  * create_symtab -- Create a symbol table
- * Created: 2001/03/22, Perry Rapp
+ *  @stab: [I/O] symbol table deleted (if appropriate) & recreated
  *====================================================*/
 void
 create_symtab (SYMTAB * stab)
@@ -119,7 +116,8 @@ create_symtab (SYMTAB * stab)
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?
- * Created: 2001/03/23, Perry Rapp
+ *  @stab: [IN]  symbol table
+ *  @key:  [IN]  key sought
  *====================================================*/
 BOOLEAN
 in_symtab (SYMTAB stab, STRING key)
@@ -128,11 +126,10 @@ in_symtab (SYMTAB stab, STRING key)
 }
 /*======================================================
  * symtab_valueofbool -- Convert pvalue to boolean if present
- *  stab:   [IN]  symbol table
- *  key:    [IN] key desired
- *  there:  [OUT] whether or not key was found
+ *  @stab:   [IN]  symbol table
+ *  @key:    [IN] key desired
+ *  @there:  [OUT] whether or not key was found
  *  returns PVALUE assigned to key in symbol table, if found
- * Created: 2001/03/22, Perry Rapp
  *====================================================*/
 PVALUE
 symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
@@ -141,7 +138,8 @@ symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
 }
 /*======================================================
  * begin_symtab -- Begin iterating a symbol table
- * Created: 2002/06/17, Perry Rapp
+ *  @stab:   [IN]  symbol table to iterate
+ *  @stabit: [I/O] iterator to use (wiped & populated)
  *====================================================*/
 BOOLEAN
 begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
@@ -151,7 +149,9 @@ begin_symtab (SYMTAB stab, SYMTAB_ITER stabit)
 }
 /*======================================================
  * next_symtab_entry -- Continue iterating a symbol table
- * Created: 2002/06/17, Perry Rapp
+ *  @tabit: [I/O]  symbol table iterator
+ *  @pkey:  [OUT]  key of next value
+ *  @ppval: [OUT]  next value
  *====================================================*/
 BOOLEAN
 next_symtab_entry (SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval)

@@ -180,7 +180,6 @@ keynum_to_srecord (int keynum)
 /*================================================
  * keynum_to_even -- Convert a numeric key to a even node
  *  assert if failed (ie, no sour with that number)
- * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 NODE
 keynum_to_even (int keynum)
@@ -199,7 +198,6 @@ keynum_to_erecord (int keynum)
 /*================================================
  * keynum_to_othr -- Convert a numeric key to an other node
  *  assert if failed (ie, no sour with that number)
- * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 NODE
 keynum_to_othr (int keynum)
@@ -217,7 +215,6 @@ keynum_to_orecord (int keynum)
 }
 /*=====================================
  * keynum_to_node -- Convert keynum to node
- * Created: 2001/01/27, Perry Rapp
  *===================================*/
 NODE
 keynum_to_node (char ntype, int keynum)
@@ -264,7 +261,6 @@ key_to_type (STRING key, INT reportmode)
 /*=====================================
  * qkey_to_type -- Convert key to node
  * quiet -- that is, returns NULL if record not in database
- * Created: 2001/02/11, Perry Rapp
  *===================================*/
 NODE
 qkey_to_type (STRING key)
@@ -298,7 +294,6 @@ key_to_record (STRING key)
 /*=====================================
  * qkey_to_record -- Convert key (any type) to RECORD
  * quiet -- that is, returns NULL if record not in database
- * Created: 2002/06/24, Perry Rapp
  *===================================*/
 RECORD
 qkey_to_record (STRING key)
@@ -410,7 +405,6 @@ RECORD qkey_to_orecord (STRING key)
 }
 /*=====================================================
  * key_to_unknown_cacheel -- Convert any key to cacheel
- * Created: 2001/04/13, Perry Rapp
  *===================================================*/
 CACHEEL
 key_to_unknown_cacheel (STRING key)
@@ -736,7 +730,6 @@ key_to_cacheel (CACHE cache,
 /*===============================================================
  * prepare_direct_space -- Make space in direct
  *  Moves a direct entry to indirect if necessary
- * Created: 2001/03/19, Perry Rapp
  *=============================================================*/
 static void
 prepare_direct_space (CACHE cache)
@@ -805,7 +798,6 @@ qkey_typed_to_record (CACHE cache, STRING key, STRING tag)
  * load_cacheel -- Load CACHEEL into direct cache
  *  if needed & valid
  * (ie, this handles null input, or input already in cache)
- * Created: 2001/03/24, Perry Rapp
  *====================================*/
 void
 load_cacheel (CACHEEL cel)
@@ -841,8 +833,7 @@ unlock_cache (CACHEEL cel)
 	cclock(cel)--;
 }
 /*======================================
- * semilock_cache -- Lock CACHEEL into cache (either part)
- * Created: 2001/03/17, Perry Rapp
+ * semilock_cache -- Lock CACHEEL into cache (indirect is ok)
  *====================================*/
 void
 semilock_cache (CACHEEL cel)
@@ -850,8 +841,7 @@ semilock_cache (CACHEEL cel)
 	csemilock(cel)++;
 }
 /*==========================================
- * unsemilock_cache -- Unlock CACHEEL from cache (either part)
- * Created: 2001/03/17, Perry Rapp
+ * unsemilock_cache -- Unlock CACHEEL from cache (indirect is ok)
  *========================================*/
 void
 unsemilock_cache (CACHEEL cel)

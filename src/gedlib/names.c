@@ -1036,7 +1036,6 @@ free_name_list (LIST list)
 }
 /*====================================================
  * free_string_list -- free list of alloc'd strings
- * Created: 2001/11/11, Perry Rapp
  *==================================================*/
 void
 free_string_list(LIST list)
