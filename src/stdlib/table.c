@@ -182,6 +182,7 @@ fndentry (TABLE tab, CNSTRING key)
 }
 /*=============================
  * create_table_impl -- Create table
+ * returns addref'd table
  *===========================*/
 static TABLE
 create_table_impl (INT whattofree)
@@ -191,7 +192,7 @@ create_table_impl (INT whattofree)
 
 	memset(tab, 0, sizeof(*tab));
 	tab->vtable = &vtable_for_table;
-	/* refcount zero */
+	tab->refcnt = 1;
 	tab->maxhash = MAXHASH_DEF;
 	tab->entries = (ENTRY *)stdalloc(tab->maxhash*sizeof(ENTRY));
 	tab->count = 0;
@@ -208,6 +209,7 @@ create_table_impl (INT whattofree)
  * Caller specifies allocation strategy
  * Will be obsoleted by using generics
  * (in which entries themselves control their allocation)
+ * returns addref'd table
  *===========================*/
 TABLE
 create_table_old2 (INT whattofree)
@@ -218,6 +220,7 @@ create_table_old2 (INT whattofree)
  * create_table_old -- Create table
  * Caller will specify whether keys or values are to be freed
  * at remove_table time
+ * returns addref'd table
  *===========================*/
 TABLE
 create_table_old (void)
@@ -228,6 +231,7 @@ create_table_old (void)
  * create_table -- Create table
  * Will only use new generic elements (manage their own memory)
  * All keys will be heap-allocated (to be freed by table)
+ * returns addref'd table
  *===========================*/
 TABLE
 create_table (void)

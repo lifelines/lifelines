@@ -51,6 +51,7 @@ static FLOAT bool_to_float(BOOLEAN);
 static INT bool_to_int(BOOLEAN);
 static void clear_pv_indiseq(INDISEQ seq);
 static void clear_pvalue(PVALUE val);
+
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(CNSTRING key, INT ptype);
 static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
@@ -1178,4 +1179,14 @@ pvalues_collate (PVALUE val1, PVALUE val2)
 	}
 	return 0; /* TODO: what about other types ? */
 }
-
+/*=============================================
+ * create_new_pvalue_table -- Create new table inside new pvalue
+ *============================================*/
+PVALUE
+create_new_pvalue_table (void)
+{
+	TABLE tab = create_table_old2(FREEKEY);
+	PVALUE val = create_pvalue_from_table(tab);
+	delref_table(tab, table_pvcleaner); /* release our ref to table */
+	return val;
+}

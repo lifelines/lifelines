@@ -107,6 +107,7 @@ void eq_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
 void bad_type_error(CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2);
 void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
+PVALUE create_new_pvalue_table(void);
 PVALUE create_pvalue(INT, VPTR);
 PVALUE create_pvalue_any(void);
 PVALUE create_pvalue_from_bool(BOOLEAN bval);

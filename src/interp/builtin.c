@@ -2625,8 +2625,7 @@ __table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, var, NULL, nonvar1, "table");
 		return NULL;
 	}
-	newtab = create_table_old2(FREEKEY);
-	newval = create_pvalue_from_table(newtab);
+	newval = create_new_pvalue_table();
 
 	assign_iden(stab, iident(var), newval);
 	return NULL;
