@@ -28,7 +28,7 @@
  *   3.0.2 - 16 Oct 94
  *===========================================================*/
 
-#include <stdlib.h>
+#include "sys_inc.h"
 #include "standard.h"
 
 static BOOLEAN logopen = FALSE;

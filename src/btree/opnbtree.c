@@ -32,14 +32,7 @@
 /* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /* modified 2000-01-20 J.F.Chandler */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
+#include "sys_inc.h"
 #include "standard.h"
 #include "btree.h"
 #include "liflines.h"

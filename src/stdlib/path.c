@@ -29,12 +29,7 @@
  *   3.0.3 - 06 Sep 95
  *=====================================================*/
 
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-#include <string.h>
+#include "sys_inc.h"
 #include "standard.h"
 
 /*===========================================

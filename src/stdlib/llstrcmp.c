@@ -21,7 +21,7 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-#include <string.h>
+#include "sys_inc.h"
 #include "mystring.h"
 
 extern int opt_finnish;

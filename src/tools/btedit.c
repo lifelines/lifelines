@@ -30,11 +30,7 @@
  *   3.0.2 - 10 Dec 94
  *===============================================================*/
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "btree.h"
 

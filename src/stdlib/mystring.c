@@ -26,7 +26,7 @@
  * Copyright(c) 1996 Hannu Väisänen; all rights reserved.
 */
 
-#include <string.h>
+#include "sys_inc.h"
 #include "mystring.h"
 
 extern int opt_finnish;	/* use standard strcmp, strncmp if this is FALSE */

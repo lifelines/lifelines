@@ -30,12 +30,7 @@
  *   3.0.3 - 07 May 95
  *===========================================================*/
 
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <dir.h>
-#include <io.h>
-#endif
+#include "sys_inc.h"
 #include "standard.h"
 #include "btree.h"
 

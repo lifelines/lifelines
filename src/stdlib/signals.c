@@ -29,6 +29,7 @@
  *   3.0.3 - 19 Sep 95
  *===========================================================*/
 
+#include "sys_inc.h"
 #include <signal.h>
 #include "standard.h"
 #include "table.h"
@@ -36,6 +37,7 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interp.h"
+#include "liflines.h"
 
 char *sig_msgs[] = {
 	"SIGNAL 0",

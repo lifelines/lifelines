@@ -28,9 +28,7 @@
  *   2.3.4 - 24 Jun 93    3.0.0 - 24 Sep 94
  *===========================================================*/
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
+#include "sys_inc.h"
 #include "standard.h"
 #include "btree.h"
 
