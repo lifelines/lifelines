@@ -30,7 +30,7 @@ dnl Internationalization (gettext)
 dnl ALL_LINGUAS is not needed with latest autotools
 dnl but debian maintainer still needs it
 dnl These languages should be a copy of po/LINGUAS
-ALL_LINGUAS="da de el fr it nl pl sv"
+ALL_LINGUAS="da de el fr it nl pl rw sv"
 AM_GNU_GETTEXT(,need-ngettext)
 dnl codeset conversion library
 AM_ICONV

@@ -1,6 +1,10 @@
-2005-04-03 Perry Rapp
+2005-04-06 Perry Rapp
 
-      * test
+	* ChangeLog configure.in po/LINGUAS
+	*NEW po/rw.po
+
+	Add Kinyarwanda (rw) translation from Translation
+	Project, courtesy of Steve Murphy.
 
 2005-03-12 Perry Rapp
 

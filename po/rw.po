@@ -1,0 +1,4825 @@
+# Kinyarwanda translations for lifelines package.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# This file is distributed under the same license as the lifelines package.
+# Steve Murphy <murf@e-tools.com>, 2005.
+# Steve performed initial rough translation from compendium built from translations provided by the following translators:
+# Philibert Ndandali  <ndandali@yahoo.fr>, 2005.
+# Viateur MUGENZI <muvia1@yahoo.fr>, 2005.
+# Noëlla Mupole <s24211045@tuks.co.za>, 2005.
+# Carole Karema <karemacarole@hotmail.com>, 2005.
+# JEAN BAPTISTE NGENDAHAYO <ngenda_denis@yahoo.co.uk>, 2005.
+# Augustin KIBERWA  <akiberwa@yahoo.co.uk>, 2005.
+# Donatien NSENGIYUMVA <ndonatienuk@yahoo.co.uk>, 2005.
+# Antoine Bigirimana <antoine@e-tools.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: lifelines 3.0.29\n"
+"POT-Creation-Date: 2003-08-14 18:23-0400\n"
+"PO-Revision-Date: 2005-04-04 10:55-0700\n"
+"Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
+"Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/gedlib/charmaps.c:756
+#, fuzzy
+msgid "<unnamed>"
+msgstr "<kitiswe-"
+
+#: src/gedlib/gedcom.c:112
+#, fuzzy
+msgid "Missing NAME line in INDI record; record ignored.\n"
+msgstr "Umurongo in Icyabitswe Icyabitswe"
+
+#: src/gedlib/init.c:565
+#, fuzzy
+msgid "Database error: -- "
+msgstr "Ikosa"
+
+#: src/gedlib/init.c:569
+#, fuzzy
+msgid "requested database does not exist."
+msgstr "Ububikoshingiro OYA"
+
+#: src/gedlib/init.c:572
+#, fuzzy
+msgid "db directory is file, not directory."
+msgstr "DB bushyinguro ni IDOSIYE OYA bushyinguro"
+
+#: src/gedlib/init.c:575
+#, fuzzy
+msgid "creation of new database failed."
+msgstr "Bya Gishya Ububikoshingiro Byanze"
+
+#: src/gedlib/init.c:578
+#, fuzzy
+msgid "error accessing database directory."
+msgstr "Ikosa Ububikoshingiro bushyinguro"
+
+#: src/gedlib/init.c:581
+#, fuzzy
+msgid "no keyfile (directory does not appear to be a database)."
+msgstr "Oya bushyinguro OYA Kugaragara Kuri a Ububikoshingiro"
+
+#: src/gedlib/init.c:584
+#, fuzzy
+msgid "could not open, read or write an index file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika Umubarendanga IDOSIYE"
+
+#: src/gedlib/init.c:587
+#, fuzzy
+msgid "could not open, read or write the key file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE"
+
+#: src/gedlib/init.c:590
+#, fuzzy
+msgid "could not open, read or write the key file (to alter database)."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE Kuri Ububikoshingiro"
+
+#: src/gedlib/init.c:593
+#, fuzzy
+msgid "could not open, read or write a block file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika a Funga IDOSIYE"
+
+#: src/gedlib/init.c:596
+#, fuzzy
+msgid "name of database is too long."
+msgstr "Izina: Bya Ububikoshingiro ni"
+
+#: src/gedlib/init.c:599
+#, fuzzy
+msgid "The database is already open for writing."
+msgstr "Ububikoshingiro ni Gufungura kugirango"
+
+#: src/gedlib/init.c:602
+#, fuzzy
+msgid "The database is locked (no readwrite access)."
+msgstr "Ububikoshingiro ni Gifunze Oya"
+
+#: src/gedlib/init.c:605
+#, fuzzy
+msgid "The database is unlocked."
+msgstr "Ububikoshingiro ni"
+
+#: src/gedlib/init.c:608
+#, fuzzy
+msgid "keyfile is corrupt."
+msgstr "ni"
+
+#: src/gedlib/init.c:611
+#, fuzzy
+msgid "keyfile is wrong alignment."
+msgstr "ni Itunganya"
+
+#: src/gedlib/init.c:614
+#, fuzzy
+msgid "keyfile is wrong version."
+msgstr "ni Verisiyo"
+
+#: src/gedlib/init.c:617
+#, fuzzy
+msgid "Existing database found."
+msgstr "Ububikoshingiro Byabonetse"
+
+#: src/gedlib/init.c:621
+#, fuzzy, c-format
+msgid ""
+"The database is already opened for read access by %d users.\n"
+"  "
+msgstr "Ububikoshingiro ni kugirango Gusoma ku"
+
+#: src/gedlib/init.c:625
+#, fuzzy
+msgid "Invalid properties set for new database"
+msgstr "Indangakintu... Gushyiraho kugirango Gishya Ububikoshingiro"
+
+#: src/gedlib/init.c:628
+#, fuzzy
+msgid "Undefined database error -- fix program."
+msgstr "Ububikoshingiro Ikosa Porogaramu"
+
+#: src/gedlib/messages.c:45
+#, fuzzy
+msgid "You must identify a database."
+msgstr "a Ububikoshingiro"
+
+#: src/gedlib/messages.c:46
+#, fuzzy
+msgid "What directory holds (or will hold) the LifeLines database? (? to list)"
+msgstr ""
+"Project- Id- Version: basctl\n"
+"POT- Creation- Date: 2003- 12- 07 17: 13+ 02\n"
+"PO- Revision- Date: 2004- 11- 04 10: 13- 0700\n"
+"Last- Translator: Language- Team:< en@ li. org> MIME- Version: 1. 0\n"
+"Content- Type: text/ plain; charset= UTF- 8\n"
+"Content- Transfer- Encoding: 8bit\n"
+"X- Generator: KBabel 1. 0\n"
+"."
+
+#: src/gedlib/messages.c:47
+#, fuzzy
+msgid "enter path: "
+msgstr "Injiza Inzira"
+
+#: src/gedlib/messages.c:48
+#, fuzzy
+msgid "There is no LifeLines database in that directory."
+msgstr "ni Oya Ububikoshingiro in bushyinguro"
+
+#: src/gedlib/messages.c:49
+#, fuzzy
+msgid "Do you want to create a database there?"
+msgstr "Kuri Kurema a Ububikoshingiro"
+
+#: src/gedlib/messages.c:50
+#, fuzzy
+msgid "Argument to lock (-l) must be y or n."
+msgstr "Kuri L Y Cyangwa N"
+
+#: src/gedlib/messages.c:51
+#, fuzzy
+msgid "Cannot remove last person from family."
+msgstr "Gukuraho... Iheruka Bivuye"
+
+#: src/gedlib/messages.c:53
+#, fuzzy
+msgid "lines [-adkrwiflntcuFxoC] [database]   # Use -F for Finnish database"
+msgstr "Imirongo Ububikoshingiro kugirango Ububikoshingiro"
+
+#: src/gedlib/messages.c:55
+#, fuzzy
+msgid "lines [-adkrwiflntcuxoC] [database]   # Finnish database"
+msgstr "Imirongo Ububikoshingiro Ububikoshingiro"
+
+#: src/gedlib/messages.c:57
+#, fuzzy
+msgid "lines [-adkrwiflntcuxoC] [database]"
+msgstr "Imirongo Ububikoshingiro"
+
+#: src/gedlib/messages.c:59
+#, fuzzy
+msgid "The database is read only; you may not add records."
+msgstr "Ububikoshingiro ni Gusoma Gicurasi OYA Kongeramo Ibyabitswe"
+
+#: src/gedlib/messages.c:60
+#, fuzzy
+msgid "The database is read only; you may not change records."
+msgstr "Ububikoshingiro ni Gusoma Gicurasi OYA Guhindura>> Ibyabitswe"
+
+#: src/gedlib/messages.c:61
+#, fuzzy
+msgid "The database is read only; you may not merge records."
+msgstr "Ububikoshingiro ni Gusoma Gicurasi OYA Gukomatanya Ibyabitswe"
+
+#: src/gedlib/messages.c:62
+#, fuzzy
+msgid "The database is read only; you may not remove records."
+msgstr "Ububikoshingiro ni Gusoma Gicurasi OYA Gukuraho... Ibyabitswe"
+
+#: src/gedlib/messages.c:63
+#, fuzzy
+msgid "The database is read only."
+msgstr "Ububikoshingiro ni Gusoma"
+
+#: src/gedlib/messages.c:65
+#, fuzzy
+msgid "enter name, key, refn or list:"
+msgstr "Injiza Izina: Urufunguzo Cyangwa Urutonde"
+
+#: src/gedlib/messages.c:66
+#, fuzzy
+msgid "enter key or refn: "
+msgstr "Injiza Urufunguzo Cyangwa"
+
+#: src/gedlib/messages.c:67
+#, fuzzy
+msgid "Please choose the child to remove from the family."
+msgstr "Guhitamo i Kuri Gukuraho... Bivuye i"
+
+#: src/gedlib/messages.c:68
+#, fuzzy
+msgid "Please choose the spouse/parent to remove from the family."
+msgstr "Guhitamo i Kuri Gukuraho... Bivuye i"
+
+#: src/gedlib/messages.c:69
+#, fuzzy
+msgid "From which family is the child to be removed?"
+msgstr "ni i Kuri Cyavanyweho"
+
+#: src/gedlib/messages.c:70
+#, fuzzy
+msgid "From which family is the spouse/parent to be removed?"
+msgstr "ni i Kuri Cyavanyweho"
+
+#: src/gedlib/messages.c:71
+#, fuzzy
+msgid "Identify family (enter nothing to identify by individual members)."
+msgstr "Injiza Kuri ku"
+
+#: src/gedlib/messages.c:72
+#, fuzzy
+msgid "Identify a spouse of the family, if known."
+msgstr "a Bya i NIBA"
+
+#: src/gedlib/messages.c:73
+#, fuzzy
+msgid "Identify a child of the family, if known."
+msgstr "a Bya i NIBA"
+
+#: src/gedlib/messages.c:74
+#, fuzzy
+msgid "Identify the first child to swap."
+msgstr "i Itangira Kuri"
+
+#: src/gedlib/messages.c:75
+#, fuzzy
+msgid "Identify the second child to swap."
+msgstr "i ISEGONDA Kuri"
+
+#: src/gedlib/messages.c:76
+#, fuzzy
+msgid "Identify the child to reorder."
+msgstr "i Kuri Kwongera gupanga"
+
+#: src/gedlib/messages.c:77
+#, fuzzy
+msgid "Identify the first family/spouse to swap."
+msgstr "i Itangira Kuri"
+
+#: src/gedlib/messages.c:78
+#, fuzzy
+msgid "Identify the second family/spouse to swap."
+msgstr "i ISEGONDA Kuri"
+
+#: src/gedlib/messages.c:79
+#, fuzzy
+msgid "Please choose the spouse/parent to browse to."
+msgstr "Guhitamo i Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:80
+#, fuzzy
+msgid "Please choose the first spouse/parent to browse to."
+msgstr "Guhitamo i Itangira Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:81
+#, fuzzy
+msgid "Please choose the second spouse/parent to browse to."
+msgstr "Guhitamo i ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:82
+#, fuzzy
+msgid "Please choose the child to browse to."
+msgstr "Guhitamo i Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:83
+#, fuzzy
+msgid "Please choose the first child to browse to."
+msgstr "Guhitamo i Itangira Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:84
+#, fuzzy
+msgid "Please choose the second child to browse to."
+msgstr "Guhitamo i ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:85
+#, fuzzy
+msgid "Please choose the family to browse to."
+msgstr "Guhitamo i Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:86
+#, fuzzy
+msgid "Enter Family Number to Browse to"
+msgstr "Kuri Kuri"
+
+#: src/gedlib/messages.c:87
+#, fuzzy
+msgid "Please choose the first family to browse to."
+msgstr "Guhitamo i Itangira Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:88
+#, fuzzy
+msgid "Please choose the second family to browse to."
+msgstr "Guhitamo i ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:89
+#, fuzzy
+msgid "Please choose the father/husband to browse to."
+msgstr "Guhitamo i Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:90
+#, fuzzy
+msgid "Please choose the first father/husband to browse to."
+msgstr "Guhitamo i Itangira Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:91
+#, fuzzy
+msgid "Please choose the second father/husband to browse to."
+msgstr "Guhitamo i ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:92
+#, fuzzy
+msgid "Please choose the mother/wife to browse to."
+msgstr "Guhitamo i Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:93
+#, fuzzy
+msgid "Please choose the first mother/wife to browse to."
+msgstr "Guhitamo i Itangira Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:94
+#, fuzzy
+msgid "Please choose the second mother/wife to browse to."
+msgstr "Guhitamo i ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:95
+#, fuzzy
+msgid "Identify a parent in the family having children swapped."
+msgstr "a in i"
+
+#: src/gedlib/messages.c:96
+#, fuzzy
+msgid "Whose families/spouses are to be swapped?"
+msgstr "Kuri"
+
+#: src/gedlib/messages.c:97
+#, fuzzy
+msgid "Identify one of the child's parents, if known."
+msgstr "Bya i NIBA"
+
+#: src/gedlib/messages.c:99
+#, fuzzy
+msgid "Scan results:"
+msgstr "Ibisubizo ku"
+
+#: src/gedlib/messages.c:100
+#, fuzzy
+msgid "Enter pattern to match against single surname or given name."
+msgstr "Ishusho Kuri BIHUYE UMWE Cyangwa Izina:"
+
+#: src/gedlib/messages.c:101
+#, fuzzy
+msgid "Enter pattern to match against full name."
+msgstr "Ishusho Kuri BIHUYE Izina:"
+
+#: src/gedlib/messages.c:102
+#, fuzzy
+msgid "Enter pattern to match against refn."
+msgstr "Ishusho Kuri BIHUYE"
+
+# sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.BTN_PATTERN.text
+#: src/gedlib/messages.c:103
+#, fuzzy
+msgid "pattern: "
+msgstr "Ishusho"
+
+#: src/gedlib/messages.c:105
+#, fuzzy
+msgid "Please choose from among these records."
+msgstr "Guhitamo Bivuye Ibyabitswe"
+
+#: src/gedlib/messages.c:106
+#, fuzzy
+msgid "Is this the new child? "
+msgstr "iyi i Gishya"
+
+#: src/gedlib/messages.c:107
+#, fuzzy
+msgid "Is this the new spouse? "
+msgstr "iyi i Gishya"
+
+#: src/gedlib/messages.c:108
+#, fuzzy
+msgid "Is this the person?  Select if so."
+msgstr "iyi i NIBA"
+
+#: src/gedlib/messages.c:109
+#, fuzzy
+msgid "Select the child the new child precedes or select last."
+msgstr "i i Gishya Cyangwa Guhitamo Iheruka"
+
+#: src/gedlib/messages.c:110
+#, fuzzy
+msgid "Please identify next person to browse to."
+msgstr "Komeza>> Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:111
+#, fuzzy
+msgid "Please identify record to browse to."
+msgstr "Icyabitswe Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:112
+#, fuzzy
+msgid "Please identify one of the spouses."
+msgstr "Bya i"
+
+#: src/gedlib/messages.c:113
+#, fuzzy
+msgid "Please identify person or persons to browse to."
+msgstr "Cyangwa Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:114
+#, fuzzy
+msgid "Please choose family create operation."
+msgstr "Guhitamo Kurema"
+
+#: src/gedlib/messages.c:115
+#, fuzzy
+msgid "Do you want to enter another name?"
+msgstr "Kuri Injiza Izina:"
+
+#: src/gedlib/messages.c:117
+#, fuzzy
+msgid "This person is not a spouse or parent in any family."
+msgstr "ni OYA a Cyangwa in"
+
+#: src/gedlib/messages.c:118
+#, fuzzy
+msgid "This person is not a child in any family."
+msgstr "ni OYA a in"
+
+#: src/gedlib/messages.c:119
+#, fuzzy
+msgid "There is no one in the database with that name or key."
+msgstr "ni Oya in i Ububikoshingiro Na: Izina: Cyangwa Urufunguzo"
+
+#: src/gedlib/messages.c:121
+#, fuzzy
+msgid "This person's father is not in the database."
+msgstr "ni OYA in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:122
+#, fuzzy
+msgid "This person's mother is not in the database."
+msgstr "ni OYA in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:123
+#, fuzzy
+msgid "This person has no spouse in the database."
+msgstr "Oya in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:124
+#, fuzzy
+msgid "This person has no younger sibling in the database."
+msgstr "Oya in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:125
+#, fuzzy
+msgid "This person has no older sibling in the database."
+msgstr "Oya in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:126
+#, fuzzy
+msgid "This person's parents are not in the database."
+msgstr "OYA in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:127
+#, fuzzy
+msgid "This family has no male spouse/parent in the database."
+msgstr "Oya Gabo in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:128
+#, fuzzy
+msgid "This family has no female spouse/parent in the database."
+msgstr "Oya Gore in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:129
+#, fuzzy
+msgid "There are no children in the database for this family."
+msgstr "Oya in i Ububikoshingiro kugirango iyi"
+
+#: src/gedlib/messages.c:130
+#, fuzzy
+msgid "This person has no children in the database."
+msgstr "Oya in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:131
+msgid "No such child."
+msgstr ""
+
+#: src/gedlib/messages.c:132
+msgid "No such person."
+msgstr ""
+
+#: src/gedlib/messages.c:133
+#, fuzzy
+msgid "No such record."
+msgstr "Icyabitswe"
+
+#: src/gedlib/messages.c:134
+msgid "No such family."
+msgstr ""
+
+#: src/gedlib/messages.c:135
+msgid "No sources present."
+msgstr ""
+
+#: src/gedlib/messages.c:136
+#, fuzzy
+msgid "Please choose the source to view."
+msgstr "Guhitamo i Inkomoko Kuri Kureba"
+
+#: src/gedlib/messages.c:137
+#, fuzzy
+msgid "No events present."
+msgstr "Ibyabaye"
+
+#: src/gedlib/messages.c:138
+#, fuzzy
+msgid "Please choose the event to view."
+msgstr "Guhitamo i Icyabaye Kuri Kureba"
+
+#: src/gedlib/messages.c:139
+#, fuzzy
+msgid "No others present."
+msgstr "Ibindi"
+
+#: src/gedlib/messages.c:140
+#, fuzzy
+msgid "Please choose the other to view."
+msgstr "Guhitamo i Ikindi Kuri Kureba"
+
+#: src/gedlib/messages.c:141
+#, fuzzy
+msgid "No notes present."
+msgstr "Ibisobanuro"
+
+#: src/gedlib/messages.c:142
+#, fuzzy
+msgid "Please choose the note to view."
+msgstr "Guhitamo i Impugukirwa Kuri Kureba"
+
+#: src/gedlib/messages.c:143
+#, fuzzy
+msgid "No references present."
+msgstr "Indango"
+
+#: src/gedlib/messages.c:144
+#, fuzzy
+msgid "Please choose the reference to view."
+msgstr "Guhitamo i Indango Kuri Kureba"
+
+#: src/gedlib/messages.c:145
+#, fuzzy
+msgid "Duplicated REFN - please choose."
+msgstr "Guhitamo"
+
+#: src/gedlib/messages.c:147
+#, fuzzy
+msgid "New spouse/parent has unknown sex; can't add to family."
+msgstr "Kitazwi Kongeramo Kuri"
+
+#: src/gedlib/messages.c:148
+#, fuzzy
+msgid "The persons are not of opposite sex; can't make family."
+msgstr "OYA Bya Ubwoko"
+
+#: src/gedlib/messages.c:149
+#, fuzzy
+msgid "This person is not a spouse in the family; can't remove."
+msgstr "ni OYA a in i Gukuraho..."
+
+#: src/gedlib/messages.c:150
+#, fuzzy
+msgid "This person is not a child in the family; can't remove."
+msgstr "ni OYA a in i Gukuraho..."
+
+#: src/gedlib/messages.c:151
+#, fuzzy
+msgid "This person's sex is not known; can't make family."
+msgstr "ni OYA Ubwoko"
+
+#: src/gedlib/messages.c:152
+#, fuzzy
+msgid "This family already has a husband/male parent."
+msgstr "a Gabo"
+
+#: src/gedlib/messages.c:153
+#, fuzzy
+msgid "This family already has a wife/female parent."
+msgstr "a Gore"
+
+#: src/gedlib/messages.c:154
+#, fuzzy
+msgid "This family has both spouses/parents; can't add another."
+msgstr "Byombi Kongeramo"
+
+#: src/gedlib/messages.c:155
+#, fuzzy
+msgid "This family has neither spouse/parent; can't remove."
+msgstr "Gukuraho..."
+
+#: src/gedlib/messages.c:156
+#, fuzzy
+msgid "This family still has links; not removed."
+msgstr "amahuza OYA Cyavanyweho"
+
+#: src/gedlib/messages.c:158
+#, fuzzy
+msgid "Choose a family by selecting a spouse/parent."
+msgstr "a ku a"
+
+#: src/gedlib/messages.c:159
+#, fuzzy
+msgid "Do you want to edit the person again? (Otherwise changes will be discarded.)"
+msgstr "Kuri Guhindura i Amahinduka"
+
+#: src/gedlib/messages.c:160
+#, fuzzy
+msgid "Do you want to edit the person again?"
+msgstr "Kuri Guhindura i"
+
+#: src/gedlib/messages.c:161
+#, fuzzy
+msgid "Do you want to edit the family again? (Otherwise changes will be discarded.)"
+msgstr "Kuri Guhindura i Amahinduka"
+
+#: src/gedlib/messages.c:162
+#, fuzzy
+msgid "Do you want to edit the family again?"
+msgstr "Kuri Guhindura i"
+
+#: src/gedlib/messages.c:163
+#, fuzzy
+msgid "Do you want to edit the source again? (Otherwise changes will be discarded.)"
+msgstr "Kuri Guhindura i Inkomoko Amahinduka"
+
+#: src/gedlib/messages.c:164
+#, fuzzy
+msgid "Do you want to edit the source again?"
+msgstr "Kuri Guhindura i Inkomoko"
+
+#: src/gedlib/messages.c:165
+#, fuzzy
+msgid "Do you want to edit the event again? (Otherwise changes will be discarded.)"
+msgstr "Kuri Guhindura i Icyabaye Amahinduka"
+
+#: src/gedlib/messages.c:166
+#, fuzzy
+msgid "Do you want to edit the event again?"
+msgstr "Kuri Guhindura i Icyabaye"
+
+#: src/gedlib/messages.c:167
+#, fuzzy
+msgid "Do you want to edit the record again? (Otherwise changes will be discarded.)"
+msgstr "Kuri Guhindura i Icyabitswe Amahinduka"
+
+#: src/gedlib/messages.c:168
+#, fuzzy
+msgid "Do you want to edit the record again?"
+msgstr "Kuri Guhindura i Icyabitswe"
+
+#: src/gedlib/messages.c:169
+#, fuzzy
+msgid "Whom do you want to edit?"
+msgstr "Kuri Guhindura"
+
+#: src/gedlib/messages.c:170
+#, fuzzy
+msgid "Which source record do you want to edit?"
+msgstr "Inkomoko Icyabitswe Kuri Guhindura"
+
+#: src/gedlib/messages.c:171
+#, fuzzy
+msgid "Which event record do you want to edit?"
+msgstr "Icyabaye Icyabitswe Kuri Guhindura"
+
+#: src/gedlib/messages.c:172
+#, fuzzy
+msgid "What record do you want to edit?"
+msgstr "Icyabitswe Kuri Guhindura"
+
+#: src/gedlib/messages.c:174
+#, fuzzy
+msgid "Do you really want to add this person to the database?"
+msgstr "Kuri Kongeramo iyi Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:175
+#, fuzzy
+msgid "Do you really want to add this family to the database?"
+msgstr "Kuri Kongeramo iyi Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:176
+#, fuzzy
+msgid "Do you really want to add this child to the family?"
+msgstr "Kuri Kongeramo iyi Kuri i"
+
+#: src/gedlib/messages.c:177
+#, fuzzy
+msgid "Do you really want to add this spouse/parent to the family?"
+msgstr "Kuri Kongeramo iyi Kuri i"
+
+#: src/gedlib/messages.c:178
+#, fuzzy
+msgid "Do you really want to add this source to the database?"
+msgstr "Kuri Kongeramo iyi Inkomoko Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:179
+#, fuzzy
+msgid "Do you really want to add this event to the database?"
+msgstr "Kuri Kongeramo iyi Icyabaye Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:180
+#, fuzzy
+msgid "Do you really want to add this record to the database?"
+msgstr "Kuri Kongeramo iyi Icyabitswe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:181
+#, fuzzy
+msgid "Do you really want to update this person?"
+msgstr "Kuri Kuvugurura iyi"
+
+#: src/gedlib/messages.c:182
+#, fuzzy
+msgid "Do you really want to update this family?"
+msgstr "Kuri Kuvugurura iyi"
+
+#: src/gedlib/messages.c:183
+#, fuzzy
+msgid "Do you really want to update this source?"
+msgstr "Kuri Kuvugurura iyi Inkomoko"
+
+#: src/gedlib/messages.c:184
+#, fuzzy
+msgid "Do you really want to update this event?"
+msgstr "Kuri Kuvugurura iyi Icyabaye"
+
+#: src/gedlib/messages.c:185
+#, fuzzy
+msgid "Do you really want to update this record?"
+msgstr "Kuri Kuvugurura iyi Icyabitswe"
+
+#: src/gedlib/messages.c:186
+#, fuzzy
+msgid "Are you sure you want to remove the person from the database?"
+msgstr "Kuri Gukuraho... i Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:187
+#, fuzzy
+msgid "Remove this family record ?"
+msgstr "iyi Icyabitswe"
+
+#: src/gedlib/messages.c:188
+#, c-format
+msgid "(Family %s (%s, %s)"
+msgstr ""
+
+#: src/gedlib/messages.c:189
+#, fuzzy
+msgid "Do you really want to merge these two persons?"
+msgstr "Kuri Gukomatanya"
+
+#: src/gedlib/messages.c:190
+#, fuzzy
+msgid "Do you really want to merge these two families?"
+msgstr "Kuri Gukomatanya"
+
+#: src/gedlib/messages.c:191
+#, fuzzy
+msgid "Do you really want to remove this child from his/her family?"
+msgstr "Kuri Gukuraho... iyi Bivuye"
+
+#: src/gedlib/messages.c:192
+#, fuzzy
+msgid "Do you really want to remove this spouse from his/her family?"
+msgstr "Kuri Gukuraho... iyi Bivuye"
+
+#: src/gedlib/messages.c:193
+#, fuzzy
+msgid "Too many spouses to display full list"
+msgstr "Kuri Kugaragaza Urutonde"
+
+#: src/gedlib/messages.c:194
+#, fuzzy
+msgid "These persons are children in different families."
+msgstr "in"
+
+#: src/gedlib/messages.c:195
+#, fuzzy
+msgid "Are you sure you want to merge them?"
+msgstr "Kuri Gukomatanya"
+
+#: src/gedlib/messages.c:197
+#, fuzzy
+msgid "There is something wrong with the data."
+msgstr "ni Na: i Ibyatanzwe"
+
+#: src/gedlib/messages.c:198
+#, fuzzy
+msgid "Please identify the child."
+msgstr "i"
+
+#: src/gedlib/messages.c:199
+#, fuzzy
+msgid "Please identify one of the child's siblings."
+msgstr "Bya i"
+
+#: src/gedlib/messages.c:200
+#, fuzzy
+msgid "Identify spouse/parent to add to an existing family."
+msgstr "Kuri Kongeramo Kuri"
+
+#: src/gedlib/messages.c:201
+#, fuzzy
+msgid "Identify spouse/parent already in family, if known."
+msgstr "in NIBA"
+
+#: src/gedlib/messages.c:202
+#, fuzzy
+msgid "Identify child already in family."
+msgstr "in"
+
+#: src/gedlib/messages.c:204
+#, fuzzy
+msgid "This person is already a child in a family."
+msgstr "ni a in a"
+
+#: src/gedlib/messages.c:205
+#, fuzzy
+msgid "Identify a spouse/parent for the new family."
+msgstr "a kugirango i Gishya"
+
+#: src/gedlib/messages.c:206
+#, fuzzy
+msgid "Identify the second spouse/parent, if known."
+msgstr "i ISEGONDA NIBA"
+
+#: src/gedlib/messages.c:207
+msgid "Both families must have husbands/fathers."
+msgstr ""
+
+#: src/gedlib/messages.c:208
+msgid "Both families must have wives/mothers."
+msgstr ""
+
+#: src/gedlib/messages.c:210
+#, fuzzy
+msgid "Identify spouse/parent in second family, if known."
+msgstr "in ISEGONDA NIBA"
+
+#: src/gedlib/messages.c:211
+#, fuzzy
+msgid "Identify child in second family."
+msgstr "in ISEGONDA"
+
+#: src/gedlib/messages.c:212
+#, fuzzy
+msgid "Identify second person to browse to."
+msgstr "ISEGONDA Kuri Gushakisha... Kuri"
+
+#: src/gedlib/messages.c:214
+#, fuzzy
+msgid "Create a family with this person as a child."
+msgstr "a Na: iyi Nka a"
+
+#: src/gedlib/messages.c:215
+#, fuzzy
+msgid "Create a family with this person as a spouse/parent."
+msgstr "a Na: iyi Nka a"
+
+#: src/gedlib/messages.c:216
+#, fuzzy
+msgid "This family has less than two children; can't swap."
+msgstr "Birutwa"
+
+#: src/gedlib/messages.c:217
+#, fuzzy
+msgid "This person is a spouse/parent in less than two families."
+msgstr "ni a in Birutwa"
+
+#: src/gedlib/messages.c:218
+#, fuzzy
+msgid "Something impossible happened. Contact tech support."
+msgstr "Gushigikira"
+
+#: src/gedlib/messages.c:220
+msgid "The two children were swapped."
+msgstr ""
+
+#: src/gedlib/messages.c:221
+msgid "The two families were swapped."
+msgstr ""
+
+#: src/gedlib/messages.c:222
+#, fuzzy
+msgid "The child was removed from his/her family."
+msgstr "Cyavanyweho Bivuye"
+
+#: src/gedlib/messages.c:223
+#, fuzzy
+msgid "The spouse was removed from his/her family."
+msgstr "Cyavanyweho Bivuye"
+
+#: src/gedlib/messages.c:225
+#, fuzzy
+msgid "A person cannot be merged with him/herself."
+msgstr "A Na:"
+
+#: src/gedlib/messages.c:226
+#, fuzzy
+msgid "A family cannot be merged with itself."
+msgstr "A Na:"
+
+#: src/gedlib/messages.c:227
+#, fuzzy
+msgid "Two persons with different parents cannot be merged."
+msgstr "Na:"
+
+#: src/gedlib/messages.c:228
+#, fuzzy
+msgid "Two parents of different sexes cannot be merged."
+msgstr "Bya"
+
+#: src/gedlib/messages.c:229
+#, fuzzy
+msgid "The families have different fathers/husbands; cannot merge."
+msgstr "Gukomatanya"
+
+#: src/gedlib/messages.c:230
+#, fuzzy
+msgid "The families have different wives/mothers; cannot merge."
+msgstr "Gukomatanya"
+
+#: src/gedlib/messages.c:231
+#, fuzzy
+msgid "Who do you want to remove from the database?"
+msgstr "Kuri Gukuraho... Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:232
+#, fuzzy
+msgid "Place the child last in the family."
+msgstr "i Iheruka in i"
+
+#: src/gedlib/messages.c:233
+#, fuzzy
+msgid "Error in abbreviations file."
+msgstr "in IDOSIYE"
+
+#: src/gedlib/messages.c:234
+#, fuzzy
+msgid "Error in user options file."
+msgstr "in Ukoresha: Amahitamo IDOSIYE"
+
+#: src/gedlib/messages.c:235
+#, fuzzy
+msgid "Error in character mapping file."
+msgstr "in Inyuguti Igereranya IDOSIYE"
+
+#: src/gedlib/messages.c:236
+#, fuzzy, c-format
+msgid "(Separator is %s)"
+msgstr "(ni"
+
+#: src/gedlib/messages.c:237
+#, fuzzy
+msgid "Do you want to re-edit it?"
+msgstr "Kuri Guhindura"
+
+#: src/gedlib/messages.c:239
+#, fuzzy, c-format
+msgid "%s was added to the database."
+msgstr "%sKyongewe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:240
+#, fuzzy, c-format
+msgid "%s was added as a child."
+msgstr "%sKyongewe Nka a"
+
+#: src/gedlib/messages.c:241
+#, fuzzy, c-format
+msgid "%s was added as a spouse and/or parent."
+msgstr "%sKyongewe Nka a Na Cyangwa"
+
+#: src/gedlib/messages.c:242
+#, fuzzy
+msgid "The new family was added to the database."
+msgstr "Gishya Kyongewe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:243
+#, fuzzy, c-format
+msgid "%s was modified in the database."
+msgstr "%sByahinduwe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:244
+#, fuzzy
+msgid "The family was modified in the database."
+msgstr "Byahinduwe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:245
+#, fuzzy
+msgid "The source was modified in the database."
+msgstr "Inkomoko Byahinduwe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:246
+#, fuzzy
+msgid "The event was modified in the database."
+msgstr "Icyabaye Byahinduwe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:247
+#, fuzzy
+msgid "The record was modified in the database."
+msgstr "Icyabitswe Byahinduwe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:249
+#, fuzzy, c-format
+msgid "Could not open file %s."
+msgstr "OYA Gufungura IDOSIYE"
+
+#: src/gedlib/messages.c:250
+msgid "Filepath too long."
+msgstr ""
+
+#: src/gedlib/messages.c:252
+#, fuzzy
+msgid "Please mark a person first."
+msgstr "Ikimenyetso a Itangira"
+
+#: src/gedlib/messages.c:254
+#, fuzzy, c-format
+msgid "The current list is now named %s."
+msgstr "KIGEZWEHO Urutonde ni NONEAHA"
+
+#: src/gedlib/messages.c:255
+#, fuzzy
+msgid "The current list is not named."
+msgstr "KIGEZWEHO Urutonde ni OYA"
+
+#: src/gedlib/messages.c:256
+#, fuzzy
+msgid "What should the name of this list be?"
+msgstr "i Izina: Bya iyi Urutonde"
+
+#: src/gedlib/messages.c:257
+#, fuzzy
+msgid "No persons were added to the current list."
+msgstr "Kyongewe Kuri i KIGEZWEHO Urutonde"
+
+#: src/gedlib/messages.c:258
+#, fuzzy
+msgid "What persons or list do you want to add to the current list?"
+msgstr "Cyangwa Urutonde Kuri Kongeramo Kuri i KIGEZWEHO Urutonde"
+
+#: src/gedlib/messages.c:259
+#, fuzzy
+msgid "You are at the bottom of the list."
+msgstr "ku i Hasi: Bya i Urutonde"
+
+#: src/gedlib/messages.c:260
+#, fuzzy
+msgid "You are at the top of the list."
+msgstr "ku i Hejuru: Bya i Urutonde"
+
+#: src/gedlib/messages.c:261
+#, fuzzy
+msgid "New persons were added to the current list."
+msgstr "Kyongewe Kuri i KIGEZWEHO Urutonde"
+
+#: src/gedlib/messages.c:263
+#, fuzzy
+msgid "System error: illegal map code"
+msgstr "Ikosa ITEGEKONGENGA"
+
+#: src/gedlib/messages.c:264
+#, fuzzy
+msgid "No such translation table in this database"
+msgstr "Umwandiko wahinduwe ururimi imbonerahamwe# in iyi Ububikoshingiro"
+
+#: src/gedlib/messages.c:267
+#, fuzzy
+msgid "Because of errors the GEDCOM file was not loaded.\n"
+msgstr "Bya Amakosa i IDOSIYE OYA"
+
+#: src/gedlib/messages.c:268
+#, fuzzy
+msgid "No errors; adding records with original keys..."
+msgstr "Amakosa Wongera Ibyabitswe Na: Umwimerere Utubuto"
+
+#: src/gedlib/messages.c:269
+#, fuzzy
+msgid "No errors; adding records with new keys..."
+msgstr "Amakosa Wongera Ibyabitswe Na: Gishya Utubuto"
+
+#: src/gedlib/messages.c:270
+#, fuzzy, c-format
+msgid "Using original keys, %d deleted records will be in the database."
+msgstr "Umwimerere Utubuto Cyasibwe Ibyabitswe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:271
+#, fuzzy
+msgid "Use original keys from GEDCOM file?"
+msgstr "Umwimerere Utubuto Bivuye IDOSIYE"
+
+#: src/gedlib/messages.c:272
+msgid "Proceed ?"
+msgstr ""
+
+#: src/gedlib/messages.c:273
+#, fuzzy
+msgid "Enter name of output archive file."
+msgstr "Izina: Bya Ibisohoka IDOSIYE"
+
+#: src/gedlib/messages.c:274
+#, fuzzy, c-format
+msgid "Database `%s' has been saved in `%s'."
+msgstr "in"
+
+#: src/gedlib/messages.c:275
+#, fuzzy
+msgid "Enter name of translation table file to write"
+msgstr "Izina: Bya Umwandiko wahinduwe ururimi imbonerahamwe# IDOSIYE Kuri Kwandika"
+
+#: src/gedlib/messages.c:276
+#, fuzzy
+msgid "Enter name of translation table file to read"
+msgstr "Izina: Bya Umwandiko wahinduwe ururimi imbonerahamwe# IDOSIYE Kuri Gusoma"
+
+#: src/gedlib/messages.c:277
+#, fuzzy, c-format
+msgid "Line %d: The person defined here has no key: skipped."
+msgstr "Oya Urufunguzo"
+
+#: src/gedlib/messages.c:278
+#, fuzzy, c-format
+msgid "Line %d: The family defined here has no key."
+msgstr "Oya Urufunguzo"
+
+#: src/gedlib/messages.c:279
+#, fuzzy, c-format
+msgid "Lines %d and %d: Person %s is multiply defined: skipped."
+msgstr "Na ni Gukuba"
+
+#: src/gedlib/messages.c:280
+#, fuzzy, c-format
+msgid "Lines %d and %d: Family %s is multiply defined."
+msgstr "Na ni Gukuba"
+
+#: src/gedlib/messages.c:281
+#, fuzzy, c-format
+msgid "Line %d: Person %s has an incorrect key: skipped."
+msgstr "Urufunguzo"
+
+#: src/gedlib/messages.c:282
+#, fuzzy, c-format
+msgid "Line %d: Family %s has an incorrect key."
+msgstr "Urufunguzo"
+
+#: src/gedlib/messages.c:283
+#, fuzzy, c-format
+msgid "Person %s is referred to but not defined."
+msgstr "ni Kuri OYA"
+
+#: src/gedlib/messages.c:284
+#, fuzzy, c-format
+msgid "Family %s is referred to but not defined."
+msgstr "ni Kuri OYA"
+
+#: src/gedlib/messages.c:285
+#, fuzzy, c-format
+msgid "Source %s is referred to but not defined."
+msgstr "ni Kuri OYA"
+
+#: src/gedlib/messages.c:286
+#, fuzzy, c-format
+msgid "Event %s is referred to but not defined."
+msgstr "ni Kuri OYA"
+
+#: src/gedlib/messages.c:287
+#, fuzzy, c-format
+msgid "Line %d: This line has a level number that is too large."
+msgstr "Umurongo a urwego Umubare ni Binini"
+
+#: src/gedlib/messages.c:288
+#, fuzzy, c-format
+msgid "Line %d: Person defined here has no name."
+msgstr "Oya Izina:"
+
+#: src/gedlib/messages.c:289
+#, fuzzy, c-format
+msgid "Line %d: Family has no members."
+msgstr "Oya"
+
+#: src/gedlib/messages.c:295
+#, fuzzy
+msgid "<Choose outside this list>"
+msgstr "<Hanze iyi Urutonde"
+
+#: src/gedlib/messages.c:297
+#, fuzzy
+msgid "What is the name of the program?"
+msgstr "ni i Izina: Bya i Porogaramu"
+
+#: src/gedlib/messages.c:298
+#, fuzzy
+msgid "Please enter the name of the GEDCOM file."
+msgstr "Injiza i Izina: Bya i IDOSIYE"
+
+#: src/gedlib/messages.c:300
+#, fuzzy
+msgid "What is the name of the output file?"
+msgstr "ni i Izina: Bya i Ibisohoka IDOSIYE"
+
+#: src/gedlib/messages.c:301
+#, fuzzy
+msgid "Malformed configuration file: line too long."
+msgstr "Iboneza IDOSIYE Umurongo"
+
+#: src/gedlib/messages.c:302
+#, fuzzy
+msgid "Unsupported file encoding (no multibyte encodings except UTF-8)."
+msgstr "IDOSIYE Imisobekere: Oya 8"
+
+#: src/gedlib/messages.c:303
+#, fuzzy, c-format
+msgid "Unsupported file encoding: %s."
+msgstr "IDOSIYE Imisobekere:"
+
+#: src/gedlib/messages.c:306
+#, fuzzy
+msgid "Enter string for program"
+msgstr "Ikurikiranyanyuguti kugirango Porogaramu"
+
+#: src/gedlib/messages.c:307
+#, fuzzy
+msgid "enter string: "
+msgstr "Injiza Ikurikiranyanyuguti"
+
+#: src/gedlib/messages.c:308
+#, fuzzy
+msgid "enter integer:"
+msgstr "Injiza Umubare wuzuye"
+
+#: src/gedlib/messages.c:309
+#, fuzzy
+msgid "enter name: "
+msgstr "Injiza Izina:"
+
+#: src/gedlib/messages.c:310
+#, fuzzy
+msgid "Strike any key to continue."
+msgstr "Urufunguzo Kuri urifuzagukomeza"
+
+#: src/gedlib/messages.c:314
+#, fuzzy
+msgid ""
+"0 SOUR\n"
+"1 REFN\n"
+"1 TITL Title\n"
+"1 AUTH Author"
+msgstr "0"
+
+#: src/gedlib/messages.c:315
+#, fuzzy
+msgid ""
+"0 EVEN\n"
+"1 REFN\n"
+"1 DATE\n"
+"1 PLAC\n"
+"1 INDI\n"
+"  2 NAME\n"
+"  2 ROLE\n"
+"1 SOUR"
+msgstr "0 2. 2."
+
+#: src/gedlib/messages.c:316
+#, fuzzy
+msgid ""
+"0 XXXX\n"
+"1 REFN"
+msgstr "0"
+
+#: src/gedlib/messages.c:320
+#, fuzzy
+msgid "The file is as positioned at EOF."
+msgstr "IDOSIYE ni Nka ku"
+
+#: src/gedlib/messages.c:321
+#, fuzzy, c-format
+msgid "Line %d: This line is empty; EOF?"
+msgstr "Umurongo ni ubusa"
+
+#: src/gedlib/messages.c:322
+#, fuzzy, c-format
+msgid "Line %d: This line is too long."
+msgstr "Umurongo ni"
+
+#: src/gedlib/messages.c:323
+#, fuzzy, c-format
+msgid "Line %d: This line has no level number."
+msgstr "Umurongo Oya urwego Umubare"
+
+#: src/gedlib/messages.c:324
+#, fuzzy, c-format
+msgid "Line %d: This line is incomplete."
+msgstr "Umurongo ni"
+
+#: src/gedlib/messages.c:325
+#, fuzzy, c-format
+msgid "Line %d: This line has a bad link."
+msgstr "Umurongo a Ihuza"
+
+#: src/gedlib/messages.c:326
+#, fuzzy, c-format
+msgid "Line %d: This line needs white space before tag."
+msgstr "Umurongo Umweru Umwanya Mbere Itagi:"
+
+#: src/gedlib/messages.c:327
+#, fuzzy, c-format
+msgid "Line %d: This line has an illegal level."
+msgstr "Umurongo urwego"
+
+#: src/gedlib/messages.c:328
+#, fuzzy
+msgid "The record begins at wrong level."
+msgstr "Icyabitswe ku urwego"
+
+#: src/gedlib/messages.c:331
+#, fuzzy
+msgid ""
+"\n"
+"Aborting now. Core dump? [y/n]"
+msgstr "NONEAHA Y N"
+
+#: src/gedlib/messages.c:332
+#, fuzzy
+msgid ""
+"Looks like a program was running.\n"
+"Check file %1 around line %2.\n"
+msgstr "nka a Porogaramu IDOSIYE Umurongo"
+
+#: src/gedlib/messages.c:333
+msgid "signal %1: %2"
+msgstr ""
+
+#: src/gedlib/messages.c:335
+#, fuzzy
+msgid "SIGNAL 0"
+msgstr "0"
+
+#: src/gedlib/messages.c:336
+msgid "HANGUP"
+msgstr ""
+
+# 3225
+#: src/gedlib/messages.c:337
+#, fuzzy
+msgid "INTERRUPT"
+msgstr "Hagarikira aho"
+
+#: src/gedlib/messages.c:338
+#, fuzzy
+msgid "QUIT"
+msgstr "Kuvamo"
+
+#: src/gedlib/messages.c:339
+msgid "ILLEGAL INSTRUCTION"
+msgstr ""
+
+#: src/gedlib/messages.c:340
+msgid "TRACE TRAP"
+msgstr ""
+
+# vcl/source\src\btntext.src:SV_BUTTONTEXT_ABORT.text
+#: src/gedlib/messages.c:341
+#, fuzzy
+msgid "ABORT"
+msgstr "Kureka"
+
+#: src/gedlib/messages.c:342
+msgid "EMT INST"
+msgstr ""
+
+#: src/gedlib/messages.c:343
+msgid "FLOATING POINT EXCEPTION"
+msgstr ""
+
+#: src/gedlib/messages.c:344
+msgid "KILL"
+msgstr ""
+
+#: src/gedlib/messages.c:345
+msgid "BUS ERROR"
+msgstr ""
+
+#: src/gedlib/messages.c:346
+msgid "SEGMENTATION ERROR"
+msgstr ""
+
+#: src/gedlib/messages.c:347
+msgid "SYSTEM CALL ERROR"
+msgstr ""
+
+#: src/gedlib/messages.c:348
+msgid "PIPE WRITE"
+msgstr ""
+
+#: src/gedlib/messages.c:349
+msgid "ALARM CLOCK"
+msgstr ""
+
+#: src/gedlib/messages.c:351
+msgid "TERMINATE FROM KILL"
+msgstr ""
+
+#: src/gedlib/messages.c:352
+#, fuzzy
+msgid "USER SIGNAL 1"
+msgstr "1."
+
+#: src/gedlib/messages.c:353
+#, fuzzy
+msgid "USER SIGNAL 2"
+msgstr "2."
+
+#: src/gedlib/messages.c:354
+msgid "DEATH OF CHILD"
+msgstr ""
+
+#: src/gedlib/messages.c:355
+msgid "POWER-FAIL RESTART"
+msgstr ""
+
+#: src/gedlib/messages.c:356
+msgid "WINDOW CHANGE"
+msgstr ""
+
+#: src/gedlib/messages.c:357
+msgid "Unknown signal"
+msgstr ""
+
+#: src/gedlib/messages.c:361
+msgid "person"
+msgstr ""
+
+# sfx2/source\bastyp\bastyp.src:STR_DOWNLOAD_STATEFORMAT.text
+#: src/gedlib/messages.c:362
+#, fuzzy
+msgid ", of "
+msgstr ",Gusoma) cya$( IGITERANYO)[ IGIHE]"
+
+#: src/gedlib/messages.c:363
+msgid "father"
+msgstr ""
+
+#: src/gedlib/messages.c:364
+msgid "mother"
+msgstr ""
+
+#: src/gedlib/messages.c:365
+msgid "spouse"
+msgstr ""
+
+#: src/gedlib/messages.c:366
+msgid "child"
+msgstr ""
+
+# scaddins/source\analysis\analysis.src:RID_ANALYSIS_FUNCTION_DESCRIPTIONS.ANALYSIS_Seriessum.6.text
+#: src/gedlib/messages.c:369
+#, fuzzy
+msgid "m. "
+msgstr "M"
+
+#: src/gedlib/messages.c:371
+msgid "div. "
+msgstr ""
+
+# svx/source\engine3d\float3d.src:RID_SVXFLOAT3D_FIX_B.text
+#: src/gedlib/messages.c:373
+#, fuzzy
+msgid "b. "
+msgstr "B:"
+
+#: src/gedlib/messages.c:375
+msgid "bap. "
+msgstr ""
+
+#: src/gedlib/messages.c:377
+#, fuzzy
+msgid "d. "
+msgstr "D"
+
+#: src/gedlib/messages.c:379
+msgid "bur. "
+msgstr ""
+
+#: src/gedlib/messages.c:381
+msgid "cb. "
+msgstr ""
+
+#: src/gedlib/messages.c:383
+msgid "married: "
+msgstr ""
+
+#: src/gedlib/messages.c:384
+msgid "born: "
+msgstr ""
+
+#: src/gedlib/messages.c:385
+msgid "bapt: "
+msgstr ""
+
+#: src/gedlib/messages.c:386
+msgid "died: "
+msgstr ""
+
+#: src/gedlib/messages.c:387
+msgid "buri: "
+msgstr ""
+
+#: src/gedlib/messages.c:391
+#, fuzzy
+msgid "You cannot edit the INDI line in a person record."
+msgstr "Guhindura i Umurongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:392
+#, fuzzy
+msgid "You cannot edit the FAMC line in a person record."
+msgstr "Guhindura i Umurongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:393
+#, fuzzy
+msgid "You cannot edit the FAMS lines in a person record."
+msgstr "Guhindura i Imirongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:394
+#, fuzzy
+msgid "You cannot edit the FAM line in a family record."
+msgstr "Guhindura i Umurongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:395
+#, fuzzy
+msgid "You cannot edit the HUSB line in a family record."
+msgstr "Guhindura i Umurongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:396
+#, fuzzy
+msgid "You cannot edit the WIFE line in a family record."
+msgstr "Guhindura i Umurongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:397
+#, fuzzy
+msgid "You cannot edit the CHIL lines in a family record."
+msgstr "Guhindura i Imirongo in a Icyabitswe"
+
+#: src/gedlib/messages.c:398
+#, fuzzy
+msgid "The record is empty."
+msgstr "Icyabitswe ni ubusa"
+
+#: src/gedlib/messages.c:399
+#, fuzzy
+msgid "The record does not begin with an INDI line."
+msgstr "Icyabitswe OYA Na: Umurongo"
+
+#: src/gedlib/messages.c:400
+#, fuzzy
+msgid "The record does not begin with a FAM line."
+msgstr "Icyabitswe OYA Na: a Umurongo"
+
+#: src/gedlib/messages.c:401
+#, fuzzy
+msgid "The record does not begin with a SOUR line."
+msgstr "Icyabitswe OYA Na: a Umurongo"
+
+#: src/gedlib/messages.c:402
+#, fuzzy
+msgid "The record does not begin with an EVEN line."
+msgstr "Icyabitswe OYA Na: Umurongo"
+
+#: src/gedlib/messages.c:403
+#, fuzzy
+msgid "INDI, FAM, SOUR, EVEN records may not be other records."
+msgstr "Ibyabitswe Gicurasi OYA Ikindi Ibyabitswe"
+
+#: src/gedlib/messages.c:404
+#, fuzzy
+msgid "The record contains multiple level 0 lines."
+msgstr "Icyabitswe Kirimo Igikubo urwego 0 Imirongo"
+
+#: src/gedlib/messages.c:405
+#, fuzzy
+msgid "This person record has bad GEDCOM name syntax."
+msgstr "Icyabitswe Izina:"
+
+#: src/gedlib/messages.c:406
+#, fuzzy
+msgid "You cannot change the sex of a parent."
+msgstr "Guhindura>> i Bya a"
+
+#: src/gedlib/messages.c:407
+#, fuzzy
+msgid "REFN key is already in use."
+msgstr "Urufunguzo ni in Gukoresha"
+
+#: src/gedlib/messages.c:409
+#, fuzzy
+msgid "Tag is too long to connect automatically."
+msgstr "ni Kuri Kwihuza ku buryo bwikora"
+
+#: src/gedlib/messages.c:411
+#, fuzzy
+msgid "Database records"
+msgstr "Ibyabitswe"
+
+#: src/gedlib/messages.c:412
+#, c-format
+msgid "%dI, %dF, %dS, %dE, %dX"
+msgstr ""
+
+#: src/gedlib/messages.c:415
+#, fuzzy, c-format
+msgid "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
+msgstr "Idirishya Ingano ni Binini kugirango"
+
+#: src/gedlib/messages.c:416
+#, fuzzy, c-format
+msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
+msgstr "Idirishya Ingano ni Gitoya kugirango"
+
+#: src/gedlib/messages.c:419
+#, fuzzy, c-format
+msgid "LifeLines %s - Genealogical DB and Programming System"
+msgstr "Na"
+
+#: src/gedlib/messages.c:420
+#, fuzzy
+msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
+msgstr "C Kuri ku"
+
+# 1305
+#: src/gedlib/messages.c:421
+#, fuzzy, c-format
+msgid "Current Database - %s"
+msgstr "ibyibanze bihari"
+
+#: src/gedlib/messages.c:423
+msgid " (immutable)"
+msgstr ""
+
+# sfx2/source\view\view.src:STR_READONLY.text
+#: src/gedlib/messages.c:425
+#, fuzzy
+msgid " (read only)"
+msgstr "(gusoma gusa)"
+
+#: src/gedlib/messages.c:426
+#, fuzzy
+msgid "Please choose an operation:"
+msgstr "Guhitamo"
+
+#: src/gedlib/messages.c:427
+#, fuzzy
+msgid "Not valid command"
+msgstr "Byemewe Komandi:"
+
+#: src/gedlib/messages.c:430
+#, fuzzy
+msgid "enter y (yes) or n (no): "
+msgstr "Injiza Y Yego Cyangwa N Oya"
+
+#: src/gedlib/messages.c:431
+msgid "yYnN"
+msgstr ""
+
+#: src/gedlib/messages.c:432
+msgid "yY"
+msgstr ""
+
+#: src/gedlib/messages.c:435
+#, fuzzy
+msgid "LifeLines -- Person Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:436
+#, fuzzy
+msgid "LifeLines -- Family Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:437
+#, fuzzy
+msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:438
+#, fuzzy
+msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:439
+#, fuzzy
+msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:440
+#, fuzzy
+msgid "LifeLines -- List Browse Screen (* toggles menu)"
+msgstr "Ibikubiyemo"
+
+#: src/gedlib/messages.c:443 src/liflines/screen.c:1484
+#, fuzzy
+msgid "Commands:   j Move down     k Move up    i Select     q Quit"
+msgstr "j Hasi K Hejuru i Q"
+
+#: src/gedlib/messages.c:444
+#, fuzzy
+msgid "Commands:   j Move down     k Move up    q Quit"
+msgstr "j Hasi K Hejuru Q"
+
+#: src/gedlib/messages.c:445
+#, fuzzy
+msgid "Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit"
+msgstr "ku Umubare u D i Q"
+
+#: src/gedlib/messages.c:446
+#, fuzzy
+msgid "Commands:   u Page Up, d Page Down, q Quit"
+msgstr "u D Q"
+
+#: src/gedlib/messages.c:447
+#, fuzzy
+msgid "Messages:"
+msgstr "Ubutumwa"
+
+#: src/gedlib/messages.c:450
+#, fuzzy
+msgid "Please choose from the following options:"
+msgstr "Guhitamo Bivuye i Amahitamo"
+
+#: src/gedlib/messages.c:451
+#, fuzzy, c-format
+msgid "New record is %s"
+msgstr "Icyabitswe ni"
+
+#: src/gedlib/messages.c:452
+#, fuzzy
+msgid "Insert xref automatically at bottom of current record."
+msgstr "X- Ngenderwaho ku buryo bwikora ku Hasi: Bya KIGEZWEHO Icyabitswe"
+
+#: src/gedlib/messages.c:453
+#, fuzzy
+msgid "Edit current record now to add xref manually."
+msgstr "KIGEZWEHO Icyabitswe NONEAHA Kuri Kongeramo X- Ngenderwaho"
+
+#: src/gedlib/messages.c:454
+#, fuzzy
+msgid "Browse new record (without adding xref)."
+msgstr "Gishya Icyabitswe Wongera X- Ngenderwaho"
+
+#: src/gedlib/messages.c:455
+#, fuzzy
+msgid "Return to current record (without adding xref)."
+msgstr "Kuri KIGEZWEHO Icyabitswe Wongera X- Ngenderwaho"
+
+#: src/gedlib/messages.c:458
+#, fuzzy
+msgid "Spouse unknown"
+msgstr "Kitazwi"
+
+#: src/gedlib/messages.c:459
+#, fuzzy
+msgid "No more history"
+msgstr "Birenzeho Urutonde"
+
+#: src/gedlib/messages.c:460
+#, fuzzy
+msgid "Bad history count"
+msgstr "Urutonde IBARA"
+
+#: src/gedlib/messages.c:461
+#, fuzzy
+msgid "Bad backup history count"
+msgstr "Inyibutsa Urutonde IBARA"
+
+#: src/gedlib/messages.c:462
+#, fuzzy
+msgid "Bad history length"
+msgstr "Urutonde Uburebure"
+
+#: src/gedlib/messages.c:463
+#, fuzzy, c-format
+msgid "Delete history (%d entries) ?"
+msgstr "Urutonde Ibyinjijwe"
+
+#: src/gedlib/messages.c:464
+#, fuzzy
+msgid "Error accessing data"
+msgstr "Ibyatanzwe"
+
+#: src/gedlib/messages.c:465
+#, fuzzy
+msgid "Choose from history"
+msgstr "Bivuye Urutonde"
+
+#: src/gedlib/messages.c:466
+#, fuzzy
+msgid "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
+msgstr "Kuvanga i Cyangwa Gusoma R Na: Gusoma Kwandika W"
+
+#: src/gedlib/messages.c:467
+#, fuzzy
+msgid "Cannot combine forceopen (-f) and lock (-l) flags."
+msgstr "Kuvanga F Na L Amabendera"
+
+#: src/gedlib/messages.c:468
+msgid "Program"
+msgstr "Porogaramu"
+
+#: src/gedlib/messages.c:469
+#, fuzzy
+msgid "Default path: "
+msgstr "Inzira"
+
+#: src/gedlib/messages.c:470
+#, fuzzy
+msgid "WARNING: missing keys"
+msgstr "Ibuze Utubuto"
+
+#: src/gedlib/messages.c:471
+#, fuzzy
+msgid "This does not point to another record in the database!"
+msgstr "OYA Akadomo Kuri Icyabitswe in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:472
+#, fuzzy
+msgid "enter file name"
+msgstr "Injiza IDOSIYE Izina:"
+
+#: src/gedlib/messages.c:473
+#, fuzzy, c-format
+msgid "enter file name (*%s)"
+msgstr "Injiza IDOSIYE Izina:"
+
+#: src/gedlib/messages.c:474
+#, fuzzy
+msgid "There is no record with that key or reference."
+msgstr "ni Oya Icyabitswe Na: Urufunguzo Cyangwa Indango"
+
+#: src/gedlib/messages.c:475
+msgid "Database was corrupt."
+msgstr ""
+
+#: src/gedlib/messages.c:478
+#, fuzzy
+msgid "Bad decimal number format."
+msgstr "NYACUMI Umubare Imiterere"
+
+#: src/gedlib/messages.c:479
+#, fuzzy
+msgid "Bad hexidecimal number format."
+msgstr "Umubare Imiterere"
+
+#: src/gedlib/messages.c:480
+#, fuzzy
+msgid "No replacement string on line."
+msgstr "Ikurikiranyanyuguti ku Umurongo"
+
+#: src/gedlib/messages.c:481
+#, fuzzy
+msgid "No original string on line."
+msgstr "Umwimerere Ikurikiranyanyuguti ku Umurongo"
+
+#: src/gedlib/messages.c:482
+#, fuzzy
+msgid "Bad escape format."
+msgstr "Imiterere"
+
+#: src/gedlib/messages.c:483
+#, fuzzy, c-format
+msgid "%s: line %d (entry %d): %s"
+msgstr "%s:Umurongo Icyinjijwe"
+
+#: src/gedlib/messages.c:486 src/liflines/brwsmenu.c:26
+#, fuzzy
+msgid "q  Return to main menu"
+msgstr "Q Kuri Ibikubiyemo"
+
+#: src/gedlib/messages.c:487
+#, fuzzy
+msgid "q  Return to previous menu"
+msgstr "Q Kuri Ibanjirije Ibikubiyemo"
+
+#: src/gedlib/messages.c:488
+#, fuzzy
+msgid "q  Quit program"
+msgstr "Q Porogaramu"
+
+#: src/gedlib/messages.c:489
+#, fuzzy
+msgid "Q  Quit current database"
+msgstr "KIGEZWEHO Ububikoshingiro"
+
+#: src/gedlib/messages.c:492
+#, fuzzy
+msgid "b  Browse the persons in the database"
+msgstr "B i in i Ububikoshingiro"
+
+#: src/gedlib/messages.c:493
+#, fuzzy
+msgid "s  Search database"
+msgstr "S Ububikoshingiro"
+
+#: src/gedlib/messages.c:494
+#, fuzzy
+msgid "a  Add information to the database"
+msgstr "a Ibisobanuro Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:495
+#, fuzzy
+msgid "d  Delete information from the database"
+msgstr "D Ibisobanuro Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:496
+#, fuzzy
+msgid "r  Generate report by entering report name"
+msgstr "R Icyegeranyo ku Icyegeranyo Izina:"
+
+#: src/gedlib/messages.c:497
+#, fuzzy
+msgid "p  Pick a report from list and run"
+msgstr "P a Icyegeranyo Bivuye Urutonde Na Gukoresha"
+
+#: src/gedlib/messages.c:498
+#, fuzzy
+msgid "c  Character set options"
+msgstr "C Gushyiraho Amahitamo"
+
+#: src/gedlib/messages.c:499
+#, fuzzy
+msgid "t  Modify character translation tables"
+msgstr "T Inyuguti Umwandiko wahinduwe ururimi Imbonerahamwe"
+
+#: src/gedlib/messages.c:500
+#, fuzzy
+msgid "u  Miscellaneous utilities"
+msgstr "u"
+
+#: src/gedlib/messages.c:501
+#, fuzzy
+msgid "x  Handle source, event and other records"
+msgstr "X Inkomoko Icyabaye Na Ikindi Ibyabitswe"
+
+#: src/gedlib/messages.c:504
+#, fuzzy
+msgid "What utility do you want to perform?"
+msgstr "Kuri"
+
+#: src/gedlib/messages.c:505
+#, fuzzy
+msgid "s  Save the database in a GEDCOM file"
+msgstr "S Kubika i Ububikoshingiro in a IDOSIYE"
+
+#: src/gedlib/messages.c:506
+#, fuzzy
+msgid "r  Read in data from a GEDCOM file"
+msgstr "R in Ibyatanzwe Bivuye a IDOSIYE"
+
+#: src/gedlib/messages.c:507
+#, fuzzy
+msgid "R  Pick a GEDCOM file and read in"
+msgstr "a IDOSIYE Na Gusoma in"
+
+#: src/gedlib/messages.c:508
+#, fuzzy
+msgid "k  Find a person's key value"
+msgstr "K a Urufunguzo Agaciro"
+
+#: src/gedlib/messages.c:509
+#, fuzzy
+msgid "i  Identify a person from key value"
+msgstr "i a Bivuye Urufunguzo Agaciro"
+
+#: src/gedlib/messages.c:510
+#, fuzzy
+msgid "d  Show database statistics"
+msgstr "D Ububikoshingiro Sitatisitiki"
+
+#: src/gedlib/messages.c:511
+#, fuzzy
+msgid "m  Show memory statistics"
+msgstr "M Ububiko Sitatisitiki"
+
+#: src/gedlib/messages.c:512
+#, fuzzy
+msgid "e  Edit the place abbreviation file"
+msgstr "E i Impine IDOSIYE"
+
+#: src/gedlib/messages.c:513
+#, fuzzy
+msgid "o  Edit the user options file"
+msgstr "o i Ukoresha: Amahitamo IDOSIYE"
+
+#: src/gedlib/messages.c:516
+#, fuzzy
+msgid "What activity do you want to perform?"
+msgstr "Umurimo Kuri"
+
+#: src/gedlib/messages.c:517
+#, fuzzy
+msgid "s  Browse source records"
+msgstr "S Inkomoko Ibyabitswe"
+
+#: src/gedlib/messages.c:518
+#, fuzzy
+msgid "e  Browse event records"
+msgstr "E Icyabaye Ibyabitswe"
+
+#: src/gedlib/messages.c:519
+#, fuzzy
+msgid "x  Browse other records"
+msgstr "X Ikindi Ibyabitswe"
+
+#: src/gedlib/messages.c:520
+#, fuzzy
+msgid "1  Add a source record to the database"
+msgstr "1. a Inkomoko Icyabitswe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:521
+#, fuzzy
+msgid "2  Edit source record from the database"
+msgstr "2. Inkomoko Icyabitswe Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:522
+#, fuzzy
+msgid "3  Add an event record to the database"
+msgstr "3. Icyabaye Icyabitswe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:523
+#, fuzzy
+msgid "4  Edit event record from the database"
+msgstr "4. Icyabaye Icyabitswe Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:524
+#, fuzzy
+msgid "5  Add an other record to the database"
+msgstr "5 Ikindi Icyabitswe Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:525
+#, fuzzy
+msgid "6  Edit other record from the database"
+msgstr "6 Ikindi Icyabitswe Bivuye i Ububikoshingiro"
+
+#: src/gedlib/messages.c:528
+msgid "Translation Tables"
+msgstr ""
+
+#: src/gedlib/messages.c:529
+#, fuzzy
+msgid "e  edit individual tables (in db)"
+msgstr "E Guhindura Imbonerahamwe in DB"
+
+#: src/gedlib/messages.c:530
+#, fuzzy
+msgid "l  load a table from a file (into db)"
+msgstr "L Ibirimo a imbonerahamwe# Bivuye a IDOSIYE DB"
+
+#: src/gedlib/messages.c:531
+#, fuzzy
+msgid "s  save a table to a file (from db)"
+msgstr "S Kubika a imbonerahamwe# Kuri a IDOSIYE Bivuye DB"
+
+#: src/gedlib/messages.c:532
+#, fuzzy
+msgid "x  export all tables (from db to files)"
+msgstr "X Kohereza Byose Imbonerahamwe Bivuye DB Kuri Idosiye"
+
+#: src/gedlib/messages.c:533
+#, fuzzy
+msgid "i  import all tables (from files into db)"
+msgstr "i Kuzana Byose Imbonerahamwe Bivuye Idosiye DB"
+
+#: src/gedlib/messages.c:534
+#, fuzzy
+msgid "export/import directory:"
+msgstr "Kohereza Kuzana bushyinguro"
+
+#: src/gedlib/messages.c:537
+#, fuzzy
+msgid "Which character mapping do you want to edit?"
+msgstr "Inyuguti Igereranya Kuri Guhindura"
+
+#: src/gedlib/messages.c:538
+#, fuzzy
+msgid "Which character mapping do you want to save?"
+msgstr "Inyuguti Igereranya Kuri Kubika"
+
+#: src/gedlib/messages.c:540
+#, fuzzy
+msgid "e  Editor to Internal mapping "
+msgstr "E Kuri Igereranya"
+
+#: src/gedlib/messages.c:541
+#, fuzzy
+msgid "m  Internal to Editor mapping "
+msgstr "M Kuri Igereranya"
+
+#: src/gedlib/messages.c:542
+#, fuzzy
+msgid "i  GEDCOM to Internal mapping "
+msgstr "i Kuri Igereranya"
+
+#: src/gedlib/messages.c:543
+#, fuzzy
+msgid "x  Internal to GEDCOM mapping "
+msgstr "X Kuri Igereranya"
+
+#: src/gedlib/messages.c:544
+#, fuzzy
+msgid "g  Display to Internal mapping"
+msgstr "g Kuri Igereranya"
+
+#: src/gedlib/messages.c:545
+#, fuzzy
+msgid "d  Internal to Display mapping"
+msgstr "D Kuri Igereranya"
+
+#: src/gedlib/messages.c:546
+#, fuzzy
+msgid "r  Internal to Report mapping "
+msgstr "R Kuri Igereranya"
+
+#: src/gedlib/messages.c:548
+msgid "Not implemented yet"
+msgstr ""
+
+#: src/gedlib/messages.c:551
+#, fuzzy
+msgid "What do you want to add?"
+msgstr "Kuri Kongeramo"
+
+#: src/gedlib/messages.c:552
+#, fuzzy
+msgid "p  Person - add new person to the database"
+msgstr "P Kongeramo Gishya Kuri i Ububikoshingiro"
+
+#: src/gedlib/messages.c:553
+#, fuzzy
+msgid "f  Family - create family record from one or two spouses"
+msgstr "F Kurema Icyabitswe Bivuye Cyangwa"
+
+#: src/gedlib/messages.c:554
+#, fuzzy
+msgid "c  Child - add a child to an existing family"
+msgstr "C Kongeramo a Kuri"
+
+#: src/gedlib/messages.c:555
+#, fuzzy
+msgid "s  Spouse - add a spouse to an existing family"
+msgstr "S Kongeramo a Kuri"
+
+#: src/gedlib/messages.c:558
+#, fuzzy
+msgid "What do you want to remove?"
+msgstr "Kuri Gukuraho..."
+
+#: src/gedlib/messages.c:559
+#, fuzzy
+msgid "c  Child - remove a child from his/her family"
+msgstr "C Gukuraho... a Bivuye"
+
+#: src/gedlib/messages.c:560
+#, fuzzy
+msgid "s  Spouse - remove a spouse from a family"
+msgstr "S Gukuraho... a Bivuye a"
+
+#: src/gedlib/messages.c:561
+#, fuzzy
+msgid "i  Individual - remove a person completely"
+msgstr "i Gukuraho... a"
+
+#: src/gedlib/messages.c:562
+#, fuzzy
+msgid "f  Family - remove a family completely"
+msgstr "F Gukuraho... a"
+
+#: src/gedlib/messages.c:565
+#, fuzzy
+msgid "How would you like to find a record?"
+msgstr "nka Kuri Gushaka a Icyabitswe"
+
+#: src/gedlib/messages.c:566
+#, fuzzy
+msgid "f  Full database scan"
+msgstr "F Ububikoshingiro Gusikana"
+
+#: src/gedlib/messages.c:569
+#, fuzzy
+msgid "What scan type?"
+msgstr "Gusikana Ubwoko"
+
+#: src/gedlib/messages.c:570
+#, fuzzy
+msgid "f  Full name scan"
+msgstr "F Izina: Gusikana"
+
+#: src/gedlib/messages.c:571
+#, fuzzy
+msgid "n  Name fragment (whitespace-delimited) scan"
+msgstr "N Gusikana"
+
+#: src/gedlib/messages.c:572
+#, fuzzy
+msgid "r  Refn scan"
+msgstr "R Gusikana"
+
+#: src/gedlib/messages.c:573
+#, fuzzy
+msgid "Performing full name scan"
+msgstr "Izina: Gusikana"
+
+#: src/gedlib/messages.c:574
+#, fuzzy
+msgid "Performing name fragment scan"
+msgstr "Izina: Gusikana"
+
+#: src/gedlib/messages.c:575
+#, fuzzy
+msgid "Performing refn scan"
+msgstr "Gusikana"
+
+#: src/gedlib/messages.c:576
+#, fuzzy
+msgid "No records found in scan"
+msgstr "Ibyabitswe Byabonetse in Gusikana"
+
+#: src/gedlib/messages.c:579
+msgid "abt %1"
+msgstr ""
+
+# offmgr/source\offapp\intro\intro.hrc:TEXT_DEFAULTABOUT.text
+#: src/gedlib/messages.c:580
+#, fuzzy
+msgid "about %1"
+msgstr "Ibyerekeye %1"
+
+#: src/gedlib/messages.c:581
+msgid "est %1"
+msgstr ""
+
+#: src/gedlib/messages.c:582
+msgid "estimated %1"
+msgstr ""
+
+#: src/gedlib/messages.c:583
+msgid "cal %1"
+msgstr ""
+
+#: src/gedlib/messages.c:584
+msgid "calculated %1"
+msgstr ""
+
+#: src/gedlib/messages.c:585
+msgid "fr %1"
+msgstr ""
+
+#: src/gedlib/messages.c:586
+#, fuzzy
+msgid "from %1"
+msgstr "Kuva:"
+
+# sw/source\ui\envelp\mailmrge.src:DLG_MAILMERGE.FT_BIS.text
+#: src/gedlib/messages.c:587 src/gedlib/messages.c:588
+#, fuzzy
+msgid "to %1"
+msgstr "Kuri:"
+
+#: src/gedlib/messages.c:589
+#, fuzzy
+msgid "fr %1 to %2"
+msgstr "Kuri"
+
+#: src/gedlib/messages.c:590
+#, fuzzy
+msgid "from %1 to %2"
+msgstr "Bivuye Kuri"
+
+#: src/gedlib/messages.c:591
+msgid "bef %1"
+msgstr ""
+
+#: src/gedlib/messages.c:592
+#, fuzzy
+msgid "before %1"
+msgstr "Mbere"
+
+#: src/gedlib/messages.c:593
+msgid "aft %1"
+msgstr ""
+
+#: src/gedlib/messages.c:594
+#, fuzzy
+msgid "after %1"
+msgstr "Nyuma"
+
+#: src/gedlib/messages.c:595
+#, fuzzy
+msgid "bet %1 and %2"
+msgstr "Na"
+
+#: src/gedlib/messages.c:596
+#, fuzzy
+msgid "between %1 and %2"
+msgstr "hagati Na"
+
+#: src/gedlib/messages.c:599
+#, fuzzy
+msgid "B.C."
+msgstr "C."
+
+#: src/gedlib/messages.c:601
+msgid "BC"
+msgstr ""
+
+#: src/gedlib/messages.c:603
+#, fuzzy
+msgid "B.C.E."
+msgstr "C. E."
+
+#: src/gedlib/messages.c:605
+msgid "BCE"
+msgstr ""
+
+#: src/gedlib/messages.c:607
+#, fuzzy
+msgid "A.D."
+msgstr "A."
+
+#: src/gedlib/messages.c:609
+msgid "AD"
+msgstr ""
+
+#: src/gedlib/messages.c:611
+#, fuzzy
+msgid "C.E."
+msgstr "C. E."
+
+#: src/gedlib/messages.c:613
+msgid "CE"
+msgstr ""
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/gedlib/messages.c:616
+#, fuzzy
+msgid "%1J"
+msgstr "%1J"
+
+#: src/gedlib/messages.c:618
+msgid "%1 HEB"
+msgstr ""
+
+#: src/gedlib/messages.c:620
+msgid "%1 FR"
+msgstr ""
+
+#: src/gedlib/messages.c:622
+msgid "%1 AUC"
+msgstr ""
+
+# sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.STR_JAN.text
+#: src/gedlib/messages.c:624
+#, fuzzy
+msgid "jan"
+msgstr "Mutarama"
+
+# wizards/source\schedule\schedule.src:dlgMonth.text
+#: src/gedlib/messages.c:625
+#, fuzzy
+msgid "january"
+msgstr "Mutarama"
+
+# sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.STR_FEB.text
+#: src/gedlib/messages.c:626
+#, fuzzy
+msgid "feb"
+msgstr "Gashyantare"
+
+# wizards/source\schedule\schedule.src:dlgMonth+1.text
+#: src/gedlib/messages.c:627
+#, fuzzy
+msgid "february"
+msgstr "Gashyantare"
+
+# sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.STR_MAR.text
+#: src/gedlib/messages.c:628
+#, fuzzy
+msgid "mar"
+msgstr "Werurwe"
+
+# wizards/source\schedule\schedule.src:dlgMonth+2.text
+#: src/gedlib/messages.c:629
+#, fuzzy
+msgid "march"
+msgstr "Werurwe"
+
+# 246
+#: src/gedlib/messages.c:630
+#, fuzzy
+msgid "apr"
+msgstr "Mat"
+
+# wizards/source\schedule\schedule.src:dlgMonth+3.text
+#: src/gedlib/messages.c:631
+#, fuzzy
+msgid "april"
+msgstr "Mata"
+
+#: src/gedlib/messages.c:633
+#, fuzzy
+msgid "**may"
+msgstr "**Gic"
+
+# wizards/source\schedule\schedule.src:dlgMonth+4.text
+#: src/gedlib/messages.c:634
+#, fuzzy
+msgid "may"
+msgstr "Gicurasi"
+
+# 3329
+#: src/gedlib/messages.c:635
+#, fuzzy
+msgid "jun"
+msgstr "Kam"
+
+# wizards/source\schedule\schedule.src:dlgMonth+5.text
+#: src/gedlib/messages.c:636
+#, fuzzy
+msgid "june"
+msgstr "Kamena"
+
+# 3327
+#: src/gedlib/messages.c:637
+#, fuzzy
+msgid "jul"
+msgstr "Nyak.( anga)"
+
+# wizards/source\schedule\schedule.src:dlgMonth+6.text
+#: src/gedlib/messages.c:638
+#, fuzzy
+msgid "july"
+msgstr "Nyakanga"
+
+# 366
+#: src/gedlib/messages.c:639
+#, fuzzy
+msgid "aug"
+msgstr "kan."
+
+# wizards/source\schedule\schedule.src:dlgMonth+7.text
+#: src/gedlib/messages.c:640
+#, fuzzy
+msgid "august"
+msgstr "Kanama"
+
+# 5480
+#: src/gedlib/messages.c:641
+#, fuzzy
+msgid "sep"
+msgstr "Itandukanya"
+
+# wizards/source\schedule\schedule.src:dlgMonth+8.text
+#: src/gedlib/messages.c:642
+#, fuzzy
+msgid "september"
+msgstr "Nzeri"
+
+# 4370
+#: src/gedlib/messages.c:643
+#, fuzzy
+msgid "oct"
+msgstr "ukw."
+
+# wizards/source\schedule\schedule.src:dlgMonth+9.text
+#: src/gedlib/messages.c:644
+#, fuzzy
+msgid "october"
+msgstr "Ukwakira"
+
+# 4262
+#: src/gedlib/messages.c:645
+#, fuzzy
+msgid "nov"
+msgstr "ugushyingo"
+
+# wizards/source\schedule\schedule.src:dlgMonth+10.text
+#: src/gedlib/messages.c:646
+#, fuzzy
+msgid "november"
+msgstr "Ugushyingo"
+
+# 1483
+#: src/gedlib/messages.c:647
+#, fuzzy
+msgid "dec"
+msgstr "Ukub.( Ukuboza)"
+
+# wizards/source\schedule\schedule.src:dlgMonth+11.text
+#: src/gedlib/messages.c:648
+#, fuzzy
+msgid "december"
+msgstr "Ukuboza"
+
+#: src/gedlib/messages.c:650
+msgid "tsh"
+msgstr ""
+
+#: src/gedlib/messages.c:651
+msgid "tishri"
+msgstr ""
+
+#: src/gedlib/messages.c:652
+msgid "csh"
+msgstr ""
+
+#: src/gedlib/messages.c:653
+msgid "cheshvan"
+msgstr ""
+
+#: src/gedlib/messages.c:654
+msgid "ksl"
+msgstr ""
+
+#: src/gedlib/messages.c:655
+msgid "kislev"
+msgstr ""
+
+#: src/gedlib/messages.c:656
+msgid "tvt"
+msgstr ""
+
+#: src/gedlib/messages.c:657
+msgid "tevet"
+msgstr ""
+
+#: src/gedlib/messages.c:658
+msgid "shv"
+msgstr ""
+
+#: src/gedlib/messages.c:659
+msgid "shevat"
+msgstr ""
+
+#: src/gedlib/messages.c:660
+msgid "adr"
+msgstr ""
+
+#: src/gedlib/messages.c:661
+msgid "adar"
+msgstr ""
+
+#: src/gedlib/messages.c:662
+msgid "ads"
+msgstr ""
+
+#: src/gedlib/messages.c:663
+msgid "adar sheni"
+msgstr ""
+
+#: src/gedlib/messages.c:664
+msgid "nsn"
+msgstr ""
+
+#: src/gedlib/messages.c:665
+msgid "nisan"
+msgstr ""
+
+#: src/gedlib/messages.c:666
+msgid "iyr"
+msgstr ""
+
+#: src/gedlib/messages.c:667
+msgid "iyar"
+msgstr ""
+
+#: src/gedlib/messages.c:668
+msgid "svn"
+msgstr ""
+
+#: src/gedlib/messages.c:669
+msgid "sivan"
+msgstr ""
+
+#: src/gedlib/messages.c:670
+msgid "tmz"
+msgstr ""
+
+#: src/gedlib/messages.c:671
+msgid "tamuz"
+msgstr ""
+
+#: src/gedlib/messages.c:672
+msgid "aav"
+msgstr ""
+
+#: src/gedlib/messages.c:673
+msgid "av"
+msgstr ""
+
+#: src/gedlib/messages.c:674
+msgid "ell"
+msgstr ""
+
+#: src/gedlib/messages.c:675
+msgid "elul"
+msgstr ""
+
+#: src/gedlib/messages.c:677
+msgid "vend"
+msgstr ""
+
+#: src/gedlib/messages.c:678
+msgid "vendemiaire"
+msgstr ""
+
+#: src/gedlib/messages.c:679
+msgid "brum"
+msgstr ""
+
+#: src/gedlib/messages.c:680
+msgid "brumaire"
+msgstr ""
+
+#: src/gedlib/messages.c:681
+msgid "frim"
+msgstr ""
+
+#: src/gedlib/messages.c:682
+msgid "frimaire"
+msgstr ""
+
+#: src/gedlib/messages.c:683
+msgid "nivo"
+msgstr ""
+
+#: src/gedlib/messages.c:684
+msgid "nivose"
+msgstr ""
+
+#: src/gedlib/messages.c:685
+msgid "pluv"
+msgstr ""
+
+#: src/gedlib/messages.c:686
+msgid "pluviose"
+msgstr ""
+
+#: src/gedlib/messages.c:687
+msgid "vent"
+msgstr ""
+
+#: src/gedlib/messages.c:688
+msgid "ventose"
+msgstr ""
+
+#: src/gedlib/messages.c:689
+msgid "germ"
+msgstr ""
+
+#: src/gedlib/messages.c:690
+msgid "germinal"
+msgstr ""
+
+#: src/gedlib/messages.c:691
+msgid "flor"
+msgstr ""
+
+#: src/gedlib/messages.c:692
+msgid "floreal"
+msgstr ""
+
+#: src/gedlib/messages.c:693
+msgid "prai"
+msgstr ""
+
+#: src/gedlib/messages.c:694
+msgid "prairial"
+msgstr ""
+
+#: src/gedlib/messages.c:695
+msgid "mess"
+msgstr ""
+
+#: src/gedlib/messages.c:696
+msgid "messidor"
+msgstr ""
+
+#: src/gedlib/messages.c:697
+msgid "ther"
+msgstr ""
+
+#: src/gedlib/messages.c:698
+msgid "thermidor"
+msgstr ""
+
+#: src/gedlib/messages.c:699
+msgid "fruc"
+msgstr ""
+
+#: src/gedlib/messages.c:700
+msgid "fructidor"
+msgstr ""
+
+#: src/gedlib/messages.c:701
+msgid "comp"
+msgstr ""
+
+#: src/gedlib/messages.c:702
+msgid "jour_complementairs"
+msgstr ""
+
+#: src/gedlib/node.c:686
+msgid "NO NAME"
+msgstr ""
+
+#: src/gedlib/valid.c:75
+#, fuzzy
+msgid "This person record does not have a name line."
+msgstr "Icyabitswe OYA a Izina: Umurongo"
+
+#: src/interp/alloc.c:673
+#, fuzzy, c-format
+msgid "Error: file \"%s\": line %d: "
+msgstr "IDOSIYE Umurongo"
+
+#: src/interp/alloc.c:774
+#, fuzzy, c-format
+msgid "%s: the arg must be an integer."
+msgstr "%s:i Umubare wuzuye"
+
+#: src/interp/alloc.c:775
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be an integer."
+msgstr "%s:i Umubare wuzuye"
+
+#: src/interp/alloc.c:776
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a float."
+msgstr "%s:i a Kureremba"
+
+#: src/interp/alloc.c:777
+#, fuzzy, c-format
+msgid "%s: the arg must be a string."
+msgstr "%s:i a Ikurikiranyanyuguti"
+
+#: src/interp/alloc.c:778
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a string."
+msgstr "%s:i a Ikurikiranyanyuguti"
+
+#: src/interp/alloc.c:779
+#, fuzzy, c-format
+msgid "%s: null arg not permissible."
+msgstr "%s:NTAGIHARI OYA"
+
+#: src/interp/alloc.c:780
+#, fuzzy, c-format
+msgid "%s: the arg must be a filename."
+msgstr "%s:i a Izina ry'idosiye:"
+
+#: src/interp/alloc.c:781
+#, fuzzy, c-format
+msgid "%s: the arg must be a node or string."
+msgstr "%s:i a Cyangwa Ikurikiranyanyuguti"
+
+#: src/interp/alloc.c:782
+#, fuzzy, c-format
+msgid "%s: the arg must be a person."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:783
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a person."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:784
+#, fuzzy, c-format
+msgid "%s: the arg must be a family."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:785
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a family."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:786
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a record."
+msgstr "%s:i a Icyabitswe"
+
+#: src/interp/alloc.c:787
+#, fuzzy, c-format
+msgid "%s: the arg must be a node."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:788
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a node."
+msgstr "%s:i a"
+
+#: src/interp/alloc.c:789
+#, fuzzy, c-format
+msgid "%s: the arg must be a variable."
+msgstr "%s:i a IMPINDURAGACIRO"
+
+#: src/interp/alloc.c:790
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a variable."
+msgstr "%s:i a IMPINDURAGACIRO"
+
+#: src/interp/alloc.c:791
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a boolean."
+msgstr "%s:i a Icyungo"
+
+#: src/interp/alloc.c:792
+#, fuzzy, c-format
+msgid "%s: the arg must be a list."
+msgstr "%s:i a Urutonde"
+
+#: src/interp/alloc.c:793
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a list."
+msgstr "%s:i a Urutonde"
+
+#: src/interp/alloc.c:794
+#, fuzzy, c-format
+msgid "%s: the arg #%s must be a table."
+msgstr "%s:i a imbonerahamwe#"
+
+#: src/interp/alloc.c:795
+#, fuzzy, c-format
+msgid "%s: Bad arguments"
+msgstr "%s:ingingo"
+
+#: src/interp/alloc.c:796
+#, fuzzy, c-format
+msgid "%s: the arg had a major error."
+msgstr "%s:i a Ikosa"
+
+#: src/interp/alloc.c:797
+#, fuzzy, c-format
+msgid "%s: the arg #%s had a major error."
+msgstr "%s:i a Ikosa"
+
+#: src/interp/builtin.c:110
+#, fuzzy
+msgid "Enter integer for program"
+msgstr "Umubare wuzuye kugirango Porogaramu"
+
+#: src/interp/builtin.c:180
+#, fuzzy
+msgid "Identify person for program:"
+msgstr "kugirango Porogaramu"
+
+#: src/interp/builtin.c:205
+#, fuzzy
+msgid "Enter a spouse from family."
+msgstr "a Bivuye"
+
+#: src/interp/builtin.c:206
+#, fuzzy
+msgid "Enter a sibling from family."
+msgstr "a Bivuye"
+
+#: src/interp/builtin.c:239
+#, fuzzy
+msgid "Identify list of persons for program:"
+msgstr "Urutonde Bya kugirango Porogaramu"
+
+#: src/interp/builtin.c:323
+#, fuzzy
+msgid "name: person does not have a name"
+msgstr "Izina: OYA a Izina:"
+
+#: src/interp/builtin.c:379
+#, fuzzy
+msgid "fullname: person does not have a name"
+msgstr "OYA a Izina:"
+
+#: src/interp/builtin.c:406
+#, fuzzy
+msgid "surname: person does not have a name"
+msgstr "OYA a Izina:"
+
+#: src/interp/builtin.c:431
+#, fuzzy
+msgid "soundex: person does not have a name"
+msgstr "OYA a Izina:"
+
+#: src/interp/builtin.c:494
+#, fuzzy, c-format
+msgid "Bad escape code at offset %d in bytecode string <%s>"
+msgstr "ITEGEKONGENGA ku Nta- boneza in Ikurikiranyanyuguti"
+
+#: src/interp/builtin.c:637
+#, fuzzy
+msgid "(givens) person does not have a name"
+msgstr "(OYA a Izina:"
+
+#: src/interp/builtin.c:664
+#, fuzzy, c-format
+msgid "set(%s, <Null>) is invalid"
+msgstr "Gushyiraho ni Sibyo"
+
+#: src/interp/builtin.c:1104
+#, fuzzy
+msgid "first"
+msgstr "Itangira"
+
+#: src/interp/builtin.c:1104
+msgid "second"
+msgstr "isegonda"
+
+#: src/interp/builtin.c:1104
+msgid "third"
+msgstr ""
+
+#: src/interp/builtin.c:1104
+msgid "fourth"
+msgstr ""
+
+#: src/interp/builtin.c:1104
+msgid "fifth"
+msgstr ""
+
+#: src/interp/builtin.c:1105
+msgid "sixth"
+msgstr ""
+
+#: src/interp/builtin.c:1105
+msgid "seventh"
+msgstr ""
+
+#: src/interp/builtin.c:1105
+msgid "eighth"
+msgstr ""
+
+#: src/interp/builtin.c:1105
+msgid "ninth"
+msgstr ""
+
+#: src/interp/builtin.c:1105
+msgid "tenth"
+msgstr ""
+
+#: src/interp/builtin.c:1106
+msgid "eleventh"
+msgstr ""
+
+#: src/interp/builtin.c:1106
+msgid "twelfth"
+msgstr ""
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/interp/builtin.c:1123
+#, fuzzy, c-format
+msgid "%dth"
+msgstr "%dth"
+
+# officecfg/registry\schema\org\openoffice\Office\Writer.xcs:....AlignmentType.Position..0.text
+#: src/interp/builtin.c:1133
+#, fuzzy
+msgid "zero"
+msgstr "Zeru"
+
+#: src/interp/builtin.c:1133
+msgid "one"
+msgstr ""
+
+#: src/interp/builtin.c:1133
+msgid "two"
+msgstr ""
+
+#: src/interp/builtin.c:1133
+msgid "three"
+msgstr ""
+
+#: src/interp/builtin.c:1133
+msgid "four"
+msgstr ""
+
+#: src/interp/builtin.c:1133
+msgid "five"
+msgstr ""
+
+#: src/interp/builtin.c:1134
+msgid "six"
+msgstr ""
+
+#: src/interp/builtin.c:1134
+msgid "seven"
+msgstr ""
+
+#: src/interp/builtin.c:1134
+msgid "eight"
+msgstr ""
+
+#: src/interp/builtin.c:1134
+msgid "nine"
+msgstr ""
+
+#: src/interp/builtin.c:1134
+msgid "ten"
+msgstr ""
+
+#: src/interp/builtin.c:1135
+msgid "eleven"
+msgstr ""
+
+#: src/interp/builtin.c:1135
+msgid "twelve"
+msgstr ""
+
+#: src/interp/builtin.c:2276
+msgid "He"
+msgstr ""
+
+#: src/interp/builtin.c:2276
+msgid "he"
+msgstr ""
+
+#: src/interp/builtin.c:2276
+msgid "His"
+msgstr ""
+
+#: src/interp/builtin.c:2276
+msgid "his"
+msgstr ""
+
+#: src/interp/builtin.c:2276
+msgid "him"
+msgstr ""
+
+#: src/interp/builtin.c:2278
+msgid "She"
+msgstr ""
+
+#: src/interp/builtin.c:2278
+msgid "she"
+msgstr ""
+
+#: src/interp/builtin.c:2278
+msgid "Her"
+msgstr ""
+
+#: src/interp/builtin.c:2278
+msgid "her"
+msgstr ""
+
+#: src/interp/builtin.c:2278
+msgid "her_"
+msgstr ""
+
+#: src/interp/builtin.c:2656
+#, fuzzy
+msgid "(trimname) person does not have a name"
+msgstr "(OYA a Izina:"
+
+#: src/interp/interp.c:254
+#, fuzzy, c-format
+msgid "Report not found: %s "
+msgstr "OYA Byabonetse"
+
+#: src/interp/interp.c:265
+#, fuzzy, c-format
+msgid "Error: file <%s> not found"
+msgstr "IDOSIYE OYA Byabonetse"
+
+#: src/interp/interp.c:324
+#, fuzzy
+msgid "contains errors.\n"
+msgstr "Kirimo Amakosa"
+
+#: src/interp/interp.c:331
+#, fuzzy
+msgid "needs a starting procedure.\n"
+msgstr "a"
+
+#: src/interp/interp.c:338
+#, fuzzy, c-format
+msgid "Error: output file <%s> could not be created.\n"
+msgstr "Ibisohoka IDOSIYE OYA Byaremwe"
+
+#: src/interp/interp.c:348
+#, fuzzy, c-format
+msgid "Proc %s must be called with %d (not %d) parameters."
+msgstr "Na: OYA Ibigenga"
+
+#: src/interp/interp.c:363
+#, fuzzy
+msgid "is running..."
+msgstr "ni"
+
+#: src/interp/interp.c:367
+#, fuzzy
+msgid "was run successfully.\n"
+msgstr "Gukoresha"
+
+#: src/interp/interp.c:371
+#, fuzzy
+msgid "was cancelled.\n"
+msgstr "Kureka"
+
+#: src/interp/interp.c:373
+#, fuzzy
+msgid "was not run because of errors.\n"
+msgstr "OYA Gukoresha Bya Amakosa"
+
+#: src/interp/interp.c:498
+#, fuzzy, c-format
+msgid "Error: file <%s> not found: %s\n"
+msgstr "IDOSIYE OYA Byabonetse"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: src/interp/interp.c:540
+#, fuzzy, c-format
+msgid "%dy%03dd"
+msgstr "%dy%03dd"
+
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  dbaccess.pot (PACKAGE VERSION)  #-#-#-#-#
+#: src/interp/interp.c:546
+#, fuzzy, c-format
+msgid "%dm%03ds"
+msgstr "%dm%03ds"
+
+# basctl/source\basicide\basidesh.src:RID_IMGBTN_REMOVEWATCH.text
+#: src/interp/interp.c:548
+#, fuzzy, c-format
+msgid "%02ds"
+msgstr "%02ds"
+
+#: src/interp/interp.c:559
+#, fuzzy, c-format
+msgid ""
+"\n"
+"Report duration %s (ui duration %s)\n"
+msgstr "Igihe- ngombwa Igihe- ngombwa"
+
+#: src/interp/interp.c:631
+#, fuzzy, c-format
+msgid "identifier: %s should be a string\n"
+msgstr "Ikiranga a"
+
+#: src/interp/interp.c:1720
+#, c-format
+msgid "Undefined proc: %s"
+msgstr ""
+
+#: src/interp/interp.c:1722
+#, fuzzy, c-format
+msgid "Ambiguous call to proc: %s"
+msgstr "Kuri"
+
+#: src/interp/interp.c:1863
+#, fuzzy
+msgid "Enter d for debugger, q to quit"
+msgstr "D kugirango Q Kuri Kuvamo"
+
+#: src/interp/interp.c:1873
+#, c-format
+msgid "Display locals (%d)"
+msgstr ""
+
+#: src/interp/interp.c:1876
+#, c-format
+msgid "Display globals (%d)"
+msgstr ""
+
+#: src/interp/interp.c:1878
+#, fuzzy
+msgid "Pop one level"
+msgstr "urwego"
+
+#: src/interp/interp.c:1879
+msgid "Quit debugger"
+msgstr ""
+
+#: src/interp/interp.c:1882
+msgid "Report debugger"
+msgstr ""
+
+#: src/interp/interp.c:1886
+#, fuzzy
+msgid "Local variables"
+msgstr "Ibihinduka"
+
+#: src/interp/interp.c:1890
+#, fuzzy
+msgid "Global variables"
+msgstr "Ibihinduka"
+
+#: src/interp/interp.c:1980
+#, fuzzy
+msgid "Report cancelled"
+msgstr "Kureka"
+
+#: src/interp/interp.c:1988
+#, fuzzy
+msgid "Report file: "
+msgstr "IDOSIYE"
+
+#: src/interp/interp.c:1997
+#, fuzzy, c-format
+msgid "Parsing Error at line %d: "
+msgstr "ku Umurongo"
+
+#: src/interp/interp.c:1999
+#, fuzzy, c-format
+msgid "Runtime Error at line %d: "
+msgstr "ku Umurongo"
+
+#: src/interp/interp.c:2002
+msgid "Aborting: "
+msgstr ""
+
+#: src/interp/interp.c:2160
+#, fuzzy, c-format
+msgid "Duplicate proc %s (lines %d and %d) in report: %s"
+msgstr "Imirongo Na in Icyegeranyo"
+
+#: src/interp/interp.c:2189
+#, fuzzy, c-format
+msgid "Duplicate func %s (lines %d and %d) in report: %s"
+msgstr "Imirongo Na in Icyegeranyo"
+
+#: src/interp/interp.c:2251
+#, fuzzy
+msgid "This report requires a newer program to run\n"
+msgstr "Icyegeranyo a Porogaramu Kuri"
+
+#: src/interp/more.c:659
+#, fuzzy
+msgid "Please choose from the following list."
+msgstr "Guhitamo Bivuye i Urutonde"
+
+#: src/interp/more.c:696
+#, fuzzy
+msgid "Illegal type found in list in menuchoose"
+msgstr "Ubwoko Byabonetse in Urutonde in"
+
+#: src/interp/more.c:986
+#, fuzzy
+msgid "the arg to lock must be a person or family"
+msgstr "i Kuri a Cyangwa"
+
+#: src/interp/more.c:1009
+#, fuzzy
+msgid "the arg to unlock must be a person or family"
+msgstr "i Kuri a Cyangwa"
+
+#: src/interp/more.c:1223
+#, fuzzy
+msgid "First argument to (r)sort must be list or array"
+msgstr "Kuri R Ishungura Urutonde Cyangwa Imbonerahamwe"
+
+#: src/interp/more.c:1233 src/interp/more.c:1244
+#, fuzzy
+msgid "Arguments to (r)sort must be of same size"
+msgstr "Kuri R Ishungura Bya Ingano"
+
+#: src/interp/more.c:1253
+#, fuzzy
+msgid "Second argument to (r)sort must be list or array"
+msgstr "Kuri R Ishungura Urutonde Cyangwa Imbonerahamwe"
+
+#: src/interp/rassa.c:221
+#, fuzzy, c-format
+msgid "Could not open file %s"
+msgstr "OYA Gufungura IDOSIYE"
+
+#: src/interp/rassa.c:241
+#, fuzzy
+msgid "Report stopping due to error opening output file"
+msgstr "Kuri Ikosa Gufungura%S Ibisohoka IDOSIYE"
+
+#: src/interp/rassa.c:243
+#, fuzzy
+msgid "Report stopping due to lack of output file"
+msgstr "Kuri Bya Ibisohoka IDOSIYE"
+
+#: src/interp/rassa.c:299
+#, fuzzy
+msgid "illegal call to pos."
+msgstr "Kuri"
+
+#: src/liflines/add.c:62
+#, fuzzy, c-format
+msgid "There was %d unresolved reference."
+msgid_plural "There were %d unresolved references."
+msgstr[0] "Indango"
+
+#: src/liflines/brwsmenu.c:25
+#, fuzzy
+msgid "?  Other menu choices"
+msgstr ""
+"Project- Id- Version: basctl\n"
+"POT- Creation- Date: 2003- 12- 07 17: 13+ 02\n"
+"PO- Revision- Date: 2004- 11- 04 10: 13- 0700\n"
+"Last- Translator: Language- Team:< en@ li. org> MIME- Version: 1. 0\n"
+"Content- Type: text/ plain; charset= UTF- 8\n"
+"Content- Transfer- Encoding: 8bit\n"
+"X- Generator: KBabel 1. 0\n"
+"."
+
+#: src/liflines/brwsmenu.c:68
+#, fuzzy
+msgid "e  Edit the person"
+msgstr "E i"
+
+#: src/liflines/brwsmenu.c:69
+#, fuzzy
+msgid "e  Edit the family"
+msgstr "E i"
+
+#: src/liflines/brwsmenu.c:70
+#, fuzzy
+msgid "e  Edit record"
+msgstr "E Icyabitswe"
+
+#: src/liflines/brwsmenu.c:71
+#, fuzzy
+msgid "e  Edit top person"
+msgstr "E Hejuru:"
+
+#: src/liflines/brwsmenu.c:72
+#, fuzzy
+msgid "f  Browse to father"
+msgstr "F Kuri"
+
+#: src/liflines/brwsmenu.c:73
+#, fuzzy
+msgid "f  Browse top father"
+msgstr "F Hejuru:"
+
+#: src/liflines/brwsmenu.c:74
+#, fuzzy
+msgid "m  Browse to mother"
+msgstr "M Kuri"
+
+#: src/liflines/brwsmenu.c:75
+#, fuzzy
+msgid "m  Browse top mother"
+msgstr "M Hejuru:"
+
+#: src/liflines/brwsmenu.c:76
+#, fuzzy
+msgid "s  Browse to spouse/s"
+msgstr "S Kuri S"
+
+#: src/liflines/brwsmenu.c:77
+#, fuzzy
+msgid "s  Browse top spouse/s"
+msgstr "S Hejuru: S"
+
+#: src/liflines/brwsmenu.c:78
+#, fuzzy
+msgid "c  Browse to children"
+msgstr "C Kuri"
+
+#: src/liflines/brwsmenu.c:79
+#, fuzzy
+msgid "c  Browse top children"
+msgstr "C Hejuru:"
+
+#: src/liflines/brwsmenu.c:80
+#, fuzzy
+msgid "o  Browse to older sib"
+msgstr "o Kuri"
+
+#: src/liflines/brwsmenu.c:81
+#, fuzzy
+msgid "y  Browse to younger sib"
+msgstr "Y Kuri"
+
+#: src/liflines/brwsmenu.c:82
+#, fuzzy
+msgid "g  Browse to family"
+msgstr "g Kuri"
+
+#: src/liflines/brwsmenu.c:83
+#, fuzzy
+msgid "u  Browse to parents"
+msgstr "u Kuri"
+
+#: src/liflines/brwsmenu.c:84
+#, fuzzy
+msgid "b  Browse to persons"
+msgstr "B Kuri"
+
+#: src/liflines/brwsmenu.c:85
+#, fuzzy
+msgid "t  Browse to top"
+msgstr "T Kuri Hejuru:"
+
+#: src/liflines/brwsmenu.c:86
+#, fuzzy
+msgid "b  Browse to bottom"
+msgstr "B Kuri Hasi:"
+
+#: src/liflines/brwsmenu.c:87
+#, fuzzy
+msgid "h  Add as spouse"
+msgstr "h Nka"
+
+#: src/liflines/brwsmenu.c:88
+#, fuzzy
+msgid "i  Add as child"
+msgstr "i Nka"
+
+#: src/liflines/brwsmenu.c:89
+#, fuzzy
+msgid "s  Add spouse to family"
+msgstr "S Kuri"
+
+#: src/liflines/brwsmenu.c:90
+#, fuzzy
+msgid "a  Add child to family"
+msgstr "a Kuri"
+
+#: src/liflines/brwsmenu.c:91
+#, fuzzy
+msgid "a  Add family"
+msgstr "a"
+
+#: src/liflines/brwsmenu.c:92
+#, fuzzy
+msgid "x  Swap two families"
+msgstr "X"
+
+#: src/liflines/brwsmenu.c:93
+#, fuzzy
+msgid "x  Swap two children"
+msgstr "X"
+
+#: src/liflines/brwsmenu.c:95
+#, no-c-format
+msgid "%c  Reorder child"
+msgstr ""
+
+#: src/liflines/brwsmenu.c:96
+#, fuzzy
+msgid "x  Switch top/bottom"
+msgstr "X Hejuru: Hasi:"
+
+#: src/liflines/brwsmenu.c:97
+#, fuzzy
+msgid "n  Create new person"
+msgstr "N Gishya"
+
+#: src/liflines/brwsmenu.c:98
+#, fuzzy
+msgid "a  Create new family"
+msgstr "a Gishya"
+
+#: src/liflines/brwsmenu.c:99
+#, fuzzy
+msgid "tt Enter tandem mode"
+msgstr "Ubwoko"
+
+#: src/liflines/brwsmenu.c:100
+msgid "tt Enter family tandem"
+msgstr ""
+
+#: src/liflines/brwsmenu.c:101
+#, fuzzy
+msgid "zi Browse to indi"
+msgstr "Kuri"
+
+#: src/liflines/brwsmenu.c:102
+#, fuzzy
+msgid "zz Browse to any"
+msgstr "Kuri"
+
+#: src/liflines/brwsmenu.c:103
+#, fuzzy
+msgid "r  Remove as spouse"
+msgstr "R Nka"
+
+#: src/liflines/brwsmenu.c:104
+#, fuzzy
+msgid "d  Remove as child"
+msgstr "D Nka"
+
+#: src/liflines/brwsmenu.c:105
+#, fuzzy
+msgid "r  Remove spouse from"
+msgstr "R Bivuye"
+
+#: src/liflines/brwsmenu.c:106
+#, fuzzy
+msgid "d  Remove child from"
+msgstr "D Bivuye"
+
+#: src/liflines/brwsmenu.c:107
+#, fuzzy
+msgid "(  Scroll up"
+msgstr "(Hejuru"
+
+#: src/liflines/brwsmenu.c:108
+#, fuzzy
+msgid ")  Scroll down"
+msgstr ")Hasi"
+
+#: src/liflines/brwsmenu.c:109
+#, fuzzy
+msgid "]  Increase tree depth"
+msgstr "]Ubujyakuzimu"
+
+#: src/liflines/brwsmenu.c:110
+#, fuzzy
+msgid "[  Decrease tree depth"
+msgstr "[Ubujyakuzimu"
+
+#: src/liflines/brwsmenu.c:111
+#, fuzzy
+msgid "(t Scroll top up"
+msgstr "(T Hejuru: Hejuru"
+
+#: src/liflines/brwsmenu.c:112
+#, fuzzy
+msgid ")t Scroll top down"
+msgstr ")T Hejuru: Hasi"
+
+#: src/liflines/brwsmenu.c:113
+#, fuzzy
+msgid "(b Scroll bottom up"
+msgstr "(B Hasi: Hejuru"
+
+#: src/liflines/brwsmenu.c:114
+#, fuzzy
+msgid ")b Scroll bottom down"
+msgstr ")B Hasi: Hasi"
+
+#: src/liflines/brwsmenu.c:115
+#, fuzzy
+msgid "(( Scroll both up"
+msgstr "((Byombi Hejuru"
+
+#: src/liflines/brwsmenu.c:116
+#, fuzzy
+msgid ")) Scroll both down"
+msgstr "))Byombi Hasi"
+
+#: src/liflines/brwsmenu.c:117
+msgid "#  Toggle childnos"
+msgstr ""
+
+#: src/liflines/brwsmenu.c:118
+#, fuzzy
+msgid "!g GEDCOM mode"
+msgstr "!g Ubwoko"
+
+#: src/liflines/brwsmenu.c:119
+#, fuzzy
+msgid "!x GEDCOMX mode"
+msgstr "!X Ubwoko"
+
+#: src/liflines/brwsmenu.c:120
+#, fuzzy
+msgid "!t GEDCOMT mode"
+msgstr "!T Ubwoko"
+
+#: src/liflines/brwsmenu.c:121
+#, fuzzy
+msgid "!a Ancestors mode"
+msgstr "!a Ubwoko"
+
+#: src/liflines/brwsmenu.c:122
+#, fuzzy
+msgid "!d Descendants mode"
+msgstr "!D Ubwoko"
+
+#: src/liflines/brwsmenu.c:123
+#, fuzzy
+msgid "!n Normal mode"
+msgstr "!N Ubwoko"
+
+#: src/liflines/brwsmenu.c:124
+#, fuzzy
+msgid "p  Pedigree mode"
+msgstr "P Ubwoko"
+
+#: src/liflines/brwsmenu.c:125
+#, fuzzy
+msgid "!! Cycle mode"
+msgstr "!!Ubwoko"
+
+#: src/liflines/brwsmenu.c:127
+#, fuzzy
+msgid "(1-9)  Browse to child"
+msgstr "(1. 9 Kuri"
+
+#: src/liflines/brwsmenu.c:128
+#, fuzzy
+msgid "y  Turn on sync"
+msgstr "Y ku"
+
+#: src/liflines/brwsmenu.c:129
+#, fuzzy
+msgid "A  Advanced view"
+msgstr "A Kureba"
+
+#: src/liflines/brwsmenu.c:130
+#, fuzzy
+msgid "tc Tandem to children"
+msgstr "Kuri"
+
+#: src/liflines/brwsmenu.c:131
+#, fuzzy
+msgid "tf Tandem to father/s"
+msgstr "Kuri S"
+
+#: src/liflines/brwsmenu.c:132
+#, fuzzy
+msgid "tg Tandem to family/s"
+msgstr "Kuri S"
+
+#: src/liflines/brwsmenu.c:133
+#, fuzzy
+msgid "f  Browse to fathers"
+msgstr "F Kuri"
+
+#: src/liflines/brwsmenu.c:134
+#, fuzzy
+msgid "m  Browse to mothers"
+msgstr "M Kuri"
+
+#: src/liflines/brwsmenu.c:135
+#, fuzzy
+msgid "tm Tandem to mother/s"
+msgstr "Kuri S"
+
+#: src/liflines/brwsmenu.c:136
+#, fuzzy
+msgid "ts Tandem to spouse/s"
+msgstr "Kuri S"
+
+#: src/liflines/brwsmenu.c:137
+#, fuzzy
+msgid "tu Tandem to parents"
+msgstr "Kuri"
+
+#: src/liflines/brwsmenu.c:138
+#, fuzzy
+msgid "<  Enlarge menu area"
+msgstr "<Ibikubiyemo Ubuso"
+
+#: src/liflines/brwsmenu.c:139
+#, fuzzy
+msgid ">  Shrink menu area"
+msgstr ">Ibikubiyemo Ubuso"
+
+#: src/liflines/brwsmenu.c:140
+#, fuzzy
+msgid "M> More menu cols"
+msgstr "Ibikubiyemo"
+
+#: src/liflines/brwsmenu.c:141
+#, fuzzy
+msgid "M< Less menu cols"
+msgstr "Ibikubiyemo"
+
+#: src/liflines/brwsmenu.c:142
+#, fuzzy
+msgid "+  Next in db"
+msgstr "+in DB"
+
+#: src/liflines/brwsmenu.c:143
+#, fuzzy
+msgid "-  Prev in db"
+msgstr "-in DB"
+
+#: src/liflines/brwsmenu.c:144
+#, fuzzy
+msgid "d  Copy top to bottom"
+msgstr "D Hejuru: Kuri Hasi:"
+
+#: src/liflines/brwsmenu.c:145
+#, fuzzy
+msgid "j  Merge bottom to top"
+msgstr "j Hasi: Kuri Hejuru:"
+
+#: src/liflines/brwsmenu.c:146 src/liflines/screen.c:417
+#, fuzzy
+msgid "j  Move down list"
+msgstr "j Hasi Urutonde"
+
+#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:418
+#, fuzzy
+msgid "k  Move up list"
+msgstr "K Hejuru Urutonde"
+
+#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:419
+#, fuzzy
+msgid "e  Edit this person"
+msgstr "E iyi"
+
+#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:420
+#, fuzzy
+msgid "i  Browse this person"
+msgstr "i iyi"
+
+#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:421
+#, fuzzy
+msgid "m  Mark this person"
+msgstr "M iyi"
+
+#: src/liflines/brwsmenu.c:151
+#, fuzzy
+msgid "d  Delete from list"
+msgstr "D Bivuye Urutonde"
+
+#: src/liflines/brwsmenu.c:152 src/liflines/screen.c:424
+#, fuzzy
+msgid "n  Name this list"
+msgstr "N iyi Urutonde"
+
+#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:425
+#, fuzzy
+msgid "b  Browse new persons"
+msgstr "B Gishya"
+
+#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:426
+#, fuzzy
+msgid "a  Add to this list"
+msgstr "a Kuri iyi Urutonde"
+
+#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:427
+#, fuzzy
+msgid "x  Swap mark/current"
+msgstr "X Ikimenyetso KIGEZWEHO"
+
+#: src/liflines/brwsmenu.c:156
+#, fuzzy
+msgid "$s  List sources"
+msgstr "$S"
+
+#: src/liflines/brwsmenu.c:157
+#, fuzzy
+msgid "$n  List notes"
+msgstr "$N Ibisobanuro"
+
+#: src/liflines/brwsmenu.c:158
+#, fuzzy
+msgid "$$  List references"
+msgstr "$$Indango"
+
+#: src/liflines/brwsmenu.c:159
+#, fuzzy
+msgid "^b  History/back"
+msgstr "^B Inyuma"
+
+#: src/liflines/brwsmenu.c:160
+#, fuzzy
+msgid "^f  History/fwd"
+msgstr "^F"
+
+#: src/liflines/brwsmenu.c:161
+#, fuzzy
+msgid "^l  History list"
+msgstr "^L Urutonde"
+
+#: src/liflines/brwsmenu.c:162
+#, fuzzy
+msgid "^c Clear history"
+msgstr "^C Urutonde"
+
+#: src/liflines/brwsmenu.c:163
+#, fuzzy
+msgid "^xb  ChngHist/back"
+msgstr "^Inyuma"
+
+#: src/liflines/brwsmenu.c:164
+msgid "^xf  ChngHist/fwd"
+msgstr ""
+
+#: src/liflines/brwsmenu.c:165
+#, fuzzy
+msgid "^xl  ChngHist list"
+msgstr "^xl Urutonde"
+
+#: src/liflines/brwsmenu.c:166
+msgid "^xc Clear ChngHist"
+msgstr ""
+
+#: src/liflines/brwsmenu.c:168
+#, fuzzy, no-c-format
+msgid "%s  Add source"
+msgstr "%sInkomoko"
+
+#: src/liflines/brwsmenu.c:170
+#, fuzzy, no-c-format
+msgid "%e  Add event"
+msgstr "%eIcyabaye"
+
+#: src/liflines/brwsmenu.c:172
+#, fuzzy, no-c-format
+msgid "%o  Add other"
+msgstr "%oIkindi"
+
+#: src/liflines/brwsmenu.c:175
+#, fuzzy
+msgid "B  Browse new family"
+msgstr "Gishya"
+
+#: src/liflines/brwsmenu.c:488
+#, fuzzy
+msgid "Missing title"
+msgstr "Umutwe"
+
+#: src/liflines/delete.c:85
+#, c-format
+msgid "%d spouse"
+msgid_plural "%d spouses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/liflines/delete.c:88
+#, c-format
+msgid "%d child"
+msgid_plural "%d children"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/liflines/error.c:63
+msgid "Fatal Error"
+msgstr ""
+
+#: src/liflines/error.c:70
+#, fuzzy, c-format
+msgid "    in file <%s> at line %d\n"
+msgstr "in IDOSIYE ku Umurongo"
+
+# 1305
+#: src/liflines/error.c:72 src/liflines/error.c:83
+#, fuzzy
+msgid "Current database"
+msgstr "ibyibanze bihari"
+
+#: src/liflines/error.c:77
+msgid "FATAL ERROR"
+msgstr ""
+
+#: src/liflines/error.c:81
+#, fuzzy, c-format
+msgid "  in file <%s> at line %d\n"
+msgstr "in IDOSIYE ku Umurongo"
+
+#: src/liflines/error.c:86
+msgid "ASSERT failure"
+msgstr ""
+
+#: src/liflines/import.c:168
+#, fuzzy
+msgid "This is not a lineage linked GEDCOM file."
+msgstr "ni OYA a IDOSIYE"
+
+#: src/liflines/import.c:169
+#, fuzzy
+msgid "Proceed anyway ?"
+msgstr "Komeza ibyarbyo byose"
+
+#: src/liflines/import.c:184
+#, fuzzy
+msgid "No current internal codeset, so no codeset conversion can be done"
+msgstr "KIGEZWEHO By'imbere Oya Ihindurangero Byakozwe"
+
+#: src/liflines/import.c:185
+#, fuzzy
+msgid "Proceed without codeset conversion ?"
+msgstr "Ihindurangero"
+
+#: src/liflines/import.c:202
+#, fuzzy, c-format
+msgid "%d warning during import"
+msgid_plural "%d warnings during import"
+msgstr[0] "%dIburira Kuzana"
+
+#: src/liflines/import.c:218
+#, fuzzy, c-format
+msgid "Cannot convert codeset (from <%s> to <%s>)"
+msgstr "GUHINDURA Bivuye Kuri"
+
+#: src/liflines/import.c:221
+#, fuzzy
+msgid "Enter codeset to assume (* for none)"
+msgstr "Kuri kugirango Ntacyo"
+
+#: src/liflines/loadsave.c:91
+msgid "Person"
+msgid_plural "Persons"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/liflines/loadsave.c:95
+msgid "Family"
+msgid_plural "Families"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/liflines/loadsave.c:99
+#, fuzzy
+msgid "Source"
+msgid_plural "Sources"
+msgstr[0] "Inkomoko"
+msgstr[1] "Inkomoko"
+
+# #-#-#-#-#  sfx2.pot (PACKAGE VERSION)  #-#-#-#-#
+# sfx2/source\dialog\eventdlg.src:TP_CONFIG_EVENT.STR_EVENT.text
+# #-#-#-#-#  sfx2.pot (PACKAGE VERSION)  #-#-#-#-#
+# sfx2/source\dialog\macropg.src:RID_SFX_TP_MACROASSIGN.STR_EVENT.text
+#: src/liflines/loadsave.c:103
+#, fuzzy
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Icyabaye"
+msgstr[1] "Icyabaye"
+
+# framework/source\classes\fltdlg.src:STR_FILTER_OTHERS.text
+#: src/liflines/loadsave.c:107
+#, fuzzy
+msgid "Other"
+msgid_plural "Others"
+msgstr[0] "Ikindi"
+msgstr[1] "Ikindi"
+
+#: src/liflines/loadsave.c:149
+#, fuzzy
+msgid "Checking GEDCOM file for errors.\n"
+msgstr "IDOSIYE kugirango Amakosa"
+
+#: src/liflines/loadsave.c:164
+#, fuzzy
+msgid "The database is read-only; loading has been canceled."
+msgstr "Ububikoshingiro ni Gusoma Itangira..."
+
+#: src/liflines/loadsave.c:170
+#, fuzzy
+msgid "Adding unused keys as deleted keys..."
+msgstr "Kidakoreshwa Utubuto Nka Cyasibwe Utubuto"
+
+#: src/liflines/loadsave.c:176
+#, fuzzy, c-format
+msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
+msgstr "Ibyabitswe"
+
+#: src/liflines/loadsave.c:250
+#, fuzzy
+msgid "The database was not saved."
+msgstr "Ububikoshingiro OYA"
+
+#: src/liflines/main.c:345
+#, fuzzy
+msgid "Choose database to open"
+msgstr "Ububikoshingiro Kuri Gufungura"
+
+#: src/liflines/main.c:353
+#, fuzzy
+msgid "No databases found in database path"
+msgstr "Ububikoshingiro Byabonetse in Ububikoshingiro Inzira"
+
+#: src/liflines/main.c:380
+#, fuzzy
+msgid "Warning: database codeset unspecified"
+msgstr "Ububikoshingiro"
+
+#: src/liflines/main.c:382
+#, fuzzy
+msgid "Warning: not all conversions available"
+msgstr "OYA Byose Bihari"
+
+#: src/liflines/menuset.c:154
+#, c-format
+msgid "Menu (%s) choice sequence too long: %s"
+msgstr ""
+
+#: src/liflines/menuset.c:158
+#, fuzzy, c-format
+msgid "Menu (%s) item lacked choice sequence: %s"
+msgstr "Ikintu"
+
+#: src/liflines/menuset.c:241 src/liflines/menuset.c:253
+#, fuzzy, c-format
+msgid "In menu: %s"
+msgstr "Ibikubiyemo"
+
+#: src/liflines/menuset.c:243
+#, fuzzy, c-format
+msgid "Duplicate hotkey for item: %s"
+msgstr "kugirango Ikintu"
+
+#: src/liflines/menuset.c:246
+#, fuzzy, c-format
+msgid "Clash  with longer hotkey in item: %s"
+msgstr "Na: in Ikintu"
+
+#: src/liflines/menuset.c:254
+#, fuzzy, c-format
+msgid "Clash with shorter hotkey in item: %s"
+msgstr "Na: in Ikintu"
+
+#: src/liflines/miscutls.c:51
+#, fuzzy
+msgid "Whose key value do you want?"
+msgstr "Urufunguzo Agaciro"
+
+#: src/liflines/miscutls.c:67
+#, fuzzy
+msgid "Please enter person's internal key value."
+msgstr "Injiza By'imbere Urufunguzo Agaciro"
+
+#: src/liflines/miscutls.c:68
+#, fuzzy
+msgid "enter key:"
+msgstr "Injiza Urufunguzo"
+
+#: src/liflines/miscutls.c:78 src/liflines/miscutls.c:82
+#: src/liflines/miscutls.c:87
+#, fuzzy, c-format
+msgid "No one in database has key value %s."
+msgstr "in Ububikoshingiro Urufunguzo Agaciro"
+
+#: src/liflines/screen.c:415
+msgid "Choose an operation:"
+msgstr ""
+
+#: src/liflines/screen.c:422
+#, fuzzy
+msgid "r  Remove from list"
+msgstr "R Bivuye Urutonde"
+
+#: src/liflines/screen.c:423
+#, fuzzy
+msgid "t  Enter tandem mode"
+msgstr "T Ubwoko"
+
+#: src/liflines/screen.c:721
+#, c-format
+msgid "(pg %d/%d)"
+msgstr ""
+
+#: src/liflines/screen.c:1481
+#, fuzzy
+msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
+msgstr "j Hasi K Hejuru D i Q"
+
+#: src/liflines/screen.c:1616
+#, fuzzy
+msgid "No conversion"
+msgstr "Ihindurangero"
+
+#: src/liflines/screen.c:1793
+msgid "Internal codeset"
+msgstr ""
+
+#: src/liflines/screen.c:1797
+#, fuzzy
+msgid "Locales are enabled."
+msgstr "Bikora"
+
+#: src/liflines/screen.c:1799
+#, fuzzy
+msgid "Locales are disabled."
+msgstr "Yahagaritswe"
+
+#: src/liflines/screen.c:1802
+#, fuzzy
+msgid "NLS (National Language Support) is enabled."
+msgstr "ni Bikora"
+
+#: src/liflines/screen.c:1808
+#, fuzzy
+msgid "NLS (National Language Support) is disabled."
+msgstr "ni Yahagaritswe"
+
+#: src/liflines/screen.c:1814
+#, fuzzy
+msgid "iconv (codeset conversion) is enabled."
+msgstr "Ihindurangero ni Bikora"
+
+#: src/liflines/screen.c:1816
+#, fuzzy
+msgid "iconv (codeset conversion) is disabled."
+msgstr "Ihindurangero ni Yahagaritswe"
+
+#: src/liflines/screen.c:1818
+#, fuzzy, c-format
+msgid "Startup collate locale: %s"
+msgstr "Guteranya Umwanya"
+
+#: src/liflines/screen.c:1821
+#, fuzzy, c-format
+msgid "Startup messages locale: %s"
+msgstr "Ubutumwa Umwanya"
+
+#: src/liflines/screen.c:1824
+#, fuzzy, c-format
+msgid "Current collate locale: %s"
+msgstr "Guteranya Umwanya"
+
+#: src/liflines/screen.c:1827
+#, fuzzy, c-format
+msgid "Current messages locale: %s"
+msgstr "Ubutumwa Umwanya"
+
+#: src/liflines/screen.c:1830
+#, c-format
+msgid "Collation routine: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1834
+#, c-format
+msgid "GUI codeset: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1837
+#, fuzzy, c-format
+msgid "GUI output codeset: %s"
+msgstr "Ibisohoka"
+
+#: src/liflines/screen.c:1839
+#, fuzzy, c-format
+msgid "GUI input codeset: %s"
+msgstr "Iyinjiza"
+
+#: src/liflines/screen.c:1844
+#, fuzzy, c-format
+msgid "editor codeset: %s"
+msgstr "Muhinduzi"
+
+#: src/liflines/screen.c:1847
+#, fuzzy, c-format
+msgid "editor output codeset: %s"
+msgstr "Muhinduzi Ibisohoka"
+
+#: src/liflines/screen.c:1849
+#, fuzzy, c-format
+msgid "editor input codeset: %s"
+msgstr "Muhinduzi Iyinjiza"
+
+#: src/liflines/screen.c:1854
+#, fuzzy, c-format
+msgid "report codeset: %s"
+msgstr "Icyegeranyo"
+
+#: src/liflines/screen.c:1857
+#, fuzzy, c-format
+msgid "report output codeset: %s"
+msgstr "Icyegeranyo Ibisohoka"
+
+#: src/liflines/screen.c:1859
+#, fuzzy, c-format
+msgid "report input codeset: %s"
+msgstr "Icyegeranyo Iyinjiza"
+
+#: src/liflines/screen.c:1864
+#, c-format
+msgid "GEDCOM codeset: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1867
+#, fuzzy, c-format
+msgid "gedcom output codeset: %s"
+msgstr "Ibisohoka"
+
+#: src/liflines/screen.c:1869
+#, fuzzy, c-format
+msgid "gedcom input codeset: %s"
+msgstr "Iyinjiza"
+
+#: src/liflines/screen.c:1876
+#, fuzzy
+msgid "Codeset information"
+msgstr "Ibisobanuro"
+
+#: src/liflines/screen.c:1894
+#, c-format
+msgid "gettext dll: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1898
+#, fuzzy, c-format
+msgid "gettext dll version: %s"
+msgstr "Verisiyo"
+
+#: src/liflines/screen.c:1903
+#, fuzzy
+msgid "gettext dll had no version"
+msgstr "Oya Verisiyo"
+
+#: src/liflines/screen.c:1908
+#, fuzzy
+msgid "no gettext dll found"
+msgstr "Oya Byabonetse"
+
+#: src/liflines/screen.c:1917
+#, c-format
+msgid "iconv dll: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1921
+#, fuzzy, c-format
+msgid "iconv dll version: %s"
+msgstr "Verisiyo"
+
+#: src/liflines/screen.c:1926
+#, fuzzy
+msgid "iconv dll had no version"
+msgstr "Oya Verisiyo"
+
+#: src/liflines/screen.c:1931
+#, fuzzy
+msgid "no iconv dll found"
+msgstr "Oya Byabonetse"
+
+#: src/liflines/screen.c:2182
+#, fuzzy
+msgid "Impermissible to change codeset in a populated database"
+msgstr "Kuri Guhindura>> in a Ububikoshingiro"
+
+#: src/liflines/screen.c:2346
+msgid "--- CURRENT SELECTION ---"
+msgstr ""
+
+#: src/liflines/screen.c:2349 src/liflines/screen.c:2575
+msgid "--- LIST ---"
+msgstr ""
+
+#: src/liflines/screen.c:2606
+msgid "-- CURRENT SELECTION --"
+msgstr ""
+
+#: src/liflines/screen.c:2756
+msgid "LifeLines -- Main Menu"
+msgstr ""
+
+#: src/liflines/screen.c:3456
+#, fuzzy, c-format
+msgid "v  Review visit history (%d record)"
+msgid_plural "v  Review visit history (%d records)"
+msgstr[0] "v Urutonde Icyabitswe"
+
+#: src/liflines/screen.c:3460
+#, fuzzy
+msgid "(visit history is empty)"
+msgstr "(Urutonde ni ubusa"
+
+#: src/liflines/screen.c:3466
+#, fuzzy, c-format
+msgid "c  Review change history (%d record)"
+msgid_plural "c  Review change history (%d records)"
+msgstr[0] "C Guhindura>> Urutonde Icyabitswe"
+
+#: src/liflines/screen.c:3470
+#, fuzzy
+msgid "(change history is empty)"
+msgstr "(Guhindura>> Urutonde ni ubusa"
+
+#: src/liflines/show.c:125
+msgid "born"
+msgstr ""
+
+#: src/liflines/show.c:126 src/liflines/show.c:127 src/liflines/show.c:128
+#: src/liflines/show.c:129
+msgid "bapt"
+msgstr ""
+
+#: src/liflines/show.c:130
+msgid "bles"
+msgstr ""
+
+#: src/liflines/show.c:131
+msgid "adop"
+msgstr ""
+
+#: src/liflines/show.c:132
+msgid "resi"
+msgstr ""
+
+#: src/liflines/show.c:136
+msgid "died"
+msgstr ""
+
+#: src/liflines/show.c:137
+msgid "buri"
+msgstr ""
+
+#: src/liflines/show.c:138
+msgid "crem"
+msgstr ""
+
+#: src/liflines/show.c:955
+#, c-format
+msgid "Cached: I:%s; F:%s"
+msgstr ""
+
+#: src/liflines/valgdcom.c:90
+#, fuzzy, c-format
+msgid "Line %d: This %s line is missing a value field."
+msgstr "Umurongo ni Ibuze a Agaciro Umwanya"
+
+#: src/liflines/valgdcom.c:91
+#, fuzzy, c-format
+msgid "Record %s is referred to but not defined."
+msgstr "ni Kuri OYA"
+
+#: src/liflines/valgdcom.c:352
+#, fuzzy, c-format
+msgid "Line %d: The source defined here has no key."
+msgstr "Inkomoko Oya Urufunguzo"
+
+#: src/liflines/valgdcom.c:367
+#, fuzzy, c-format
+msgid "Line %d: Source %s has an incorrect key."
+msgstr "Urufunguzo"
+
+#: src/liflines/valgdcom.c:374
+#, fuzzy, c-format
+msgid "Lines %d and %d: Source %s is multiply defined."
+msgstr "Na ni Gukuba"
+
+#: src/liflines/valgdcom.c:397
+#, fuzzy, c-format
+msgid "Line %d: The event defined here has no key."
+msgstr "Icyabaye Oya Urufunguzo"
+
+#: src/liflines/valgdcom.c:412
+#, fuzzy, c-format
+msgid "Line %d: Event %s has an incorrect key."
+msgstr "Urufunguzo"
+
+#: src/liflines/valgdcom.c:419
+#, fuzzy, c-format
+msgid "Lines %d and %d: Event %s is multiply defined."
+msgstr "Na ni Gukuba"
+
+#: src/liflines/valgdcom.c:442
+#, fuzzy, c-format
+msgid "Line %d: The record defined here has no key."
+msgstr "Icyabitswe Oya Urufunguzo"
+
+#: src/liflines/valgdcom.c:457
+#, fuzzy, c-format
+msgid "Line %d: Record %s has an incorrect key."
+msgstr "Urufunguzo"
+
+#: src/liflines/valgdcom.c:464
+#, fuzzy, c-format
+msgid "Lines %d and %d: Record %s is multiply defined."
+msgstr "Na ni Gukuba"
+
+#: src/liflines/valgdcom.c:548
+#, c-format
+msgid "Line %d: Bad NAME syntax."
+msgstr ""
+
+#: src/liflines/valgdcom.c:735
+#, fuzzy, c-format
+msgid "Line %d: Person %s has multiple father links."
+msgstr "Igikubo amahuza"
+
+#: src/liflines/valgdcom.c:739
+#, fuzzy, c-format
+msgid "Line %d: Person %s has multiple mother links."
+msgstr "Igikubo amahuza"
+
+#: src/liflines/valgdcom.c:751
+#, fuzzy, c-format
+msgid "Line %d: Person %s is both male and female."
+msgstr "ni Byombi Gabo Na Gore"
+
+#: src/liflines/valgdcom.c:755
+#, fuzzy, c-format
+msgid "Line %d: Person %s is male but must be female."
+msgstr "ni Gabo Gore"
+
+#: src/liflines/valgdcom.c:759
+#, fuzzy, c-format
+msgid "Line %d: Person %s is female but must be male."
+msgstr "ni Gore Gabo"
+
+#: src/liflines/valgdcom.c:763
+#, fuzzy, c-format
+msgid "Line %d: Person %s is implied to be both male and female."
+msgstr "ni Kuri Byombi Gabo Na Gore"
+
+#: src/liflines/valgdcom.c:775
+#, fuzzy, c-format
+msgid "Line %d: Family %s has multiple husband links."
+msgstr "Igikubo amahuza"
+
+#: src/liflines/valgdcom.c:779
+#, fuzzy, c-format
+msgid "Line %d: Family %s has multiple wife links."
+msgstr "Igikubo amahuza"
+
+#: src/liflines/valgdcom.c:837
+#, fuzzy
+msgid "error"
+msgstr "Ikosa"
+
+#: src/liflines/valgdcom.c:845
+#, fuzzy, c-format
+msgid "%6d Error"
+msgid_plural "%6d Errors"
+msgstr[0] "%6dIkosa rya"
+msgstr[1] "%6dIkosa rya"
+
+#: src/liflines/valgdcom.c:847 src/liflines/valgdcom.c:875
+#, fuzzy, c-format
+msgid " (see log file <%s>)"
+msgstr "(LOG IDOSIYE"
+
+#: src/liflines/valgdcom.c:849 src/liflines/valgdcom.c:877
+#, fuzzy
+msgid " (no log file)"
+msgstr "(Oya LOG IDOSIYE"
+
+#: src/liflines/valgdcom.c:865
+#, fuzzy
+msgid "warning"
+msgstr "Iburira"
+
+#: src/liflines/valgdcom.c:873
+#, fuzzy, c-format
+msgid "%6d Warning"
+msgid_plural "%6d Warnings"
+msgstr[0] "%6dIburira"
+msgstr[1] "%6dIburira"
+
+#: src/liflines/valgdcom.c:980
+#, fuzzy, c-format
+msgid "Processed %d lines without finding end of HEAD"
+msgstr "Imirongo Impera Bya"
+
+#: src/liflines/valgdcom.c:985
+#, fuzzy, c-format
+msgid "End of file at line %d"
+msgstr "Impera Bya IDOSIYE ku Umurongo"
+
+#: src/liflines/valgdcom.c:989
+#, fuzzy, c-format
+msgid "Error at line %d: %s"
+msgstr "ku Umurongo"
+
+#: src/liflines/valgdcom.c:993
+#, fuzzy, c-format
+msgid "Bad level at line %d"
+msgstr "urwego ku Umurongo"
+
+#: src/liflines/valgdcom.c:999
+#, fuzzy, c-format
+msgid "Duplicate HEAD line at line %d"
+msgstr "Umurongo ku Umurongo"
+
+#: src/liflines/valgdcom.c:1005
+#, fuzzy, c-format
+msgid "Missing HEAD line at line %d"
+msgstr "Umurongo ku Umurongo"
+
+#: src/tools/dbverify.c:153
+#, fuzzy
+msgid "Orphan names"
+msgstr "Amazina"
+
+#: src/tools/dbverify.c:154
+#, fuzzy
+msgid "Ghost names"
+msgstr "Amazina"
+
+#: src/tools/dbverify.c:155 src/tools/dbverify.c:156
+#, fuzzy
+msgid "Duplicate names"
+msgstr "Amazina"
+
+#: src/tools/dbverify.c:157
+#, fuzzy
+msgid "Non-indi names"
+msgstr "Amazina"
+
+#: src/tools/dbverify.c:158
+msgid "Duplicate individuals"
+msgstr ""
+
+#: src/tools/dbverify.c:159
+msgid "Duplicate families"
+msgstr ""
+
+#: src/tools/dbverify.c:160
+msgid "Duplicate sources"
+msgstr ""
+
+#: src/tools/dbverify.c:161
+#, fuzzy
+msgid "Duplicate events"
+msgstr "Ibyabaye"
+
+#: src/tools/dbverify.c:162
+#, fuzzy
+msgid "Duplicate others"
+msgstr "Ibindi"
+
+#: src/tools/dbverify.c:163
+#, fuzzy
+msgid "Missing records"
+msgstr "Ibyabitswe"
+
+#: src/tools/dbverify.c:164
+#, fuzzy
+msgid "Deleted records"
+msgstr "Ibyabitswe"
+
+#: src/tools/dbverify.c:165
+#, fuzzy
+msgid "Bad name"
+msgstr "Izina:"
+
+#: src/tools/dbverify.c:166
+#, fuzzy
+msgid "Bad family reference"
+msgstr "Indango"
+
+#: src/tools/dbverify.c:167
+msgid "Missing child"
+msgstr ""
+
+#: src/tools/dbverify.c:168
+msgid "Missing spouse"
+msgstr ""
+
+#: src/tools/dbverify.c:169
+#, fuzzy
+msgid "Bad HUSB reference"
+msgstr "Indango"
+
+#: src/tools/dbverify.c:170
+#, fuzzy
+msgid "Bad WIFE reference"
+msgstr "Indango"
+
+#: src/tools/dbverify.c:171
+#, fuzzy
+msgid "Bad CHIL reference"
+msgstr "Indango"
+
+#: src/tools/dbverify.c:172
+msgid "Improper HUSB"
+msgstr ""
+
+#: src/tools/dbverify.c:173
+msgid "Improper WIFE"
+msgstr ""
+
+#: src/tools/dbverify.c:174
+msgid "Improper child"
+msgstr ""
+
+#: src/tools/dbverify.c:175
+msgid "Empty family"
+msgstr ""
+
+#: src/tools/dbverify.c:176
+msgid "Single person family"
+msgstr ""
+
+#: src/tools/dbverify.c:177
+#, fuzzy
+msgid "Bad pointer"
+msgstr "Mweretsi"
+
+#: src/tools/dbverify.c:206
+#, fuzzy
+msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
+msgstr "\\MY"
+
+#: src/tools/dbverify.c:208
+#, fuzzy
+msgid "/home/users/myname/lifelines/databases/myfamily"
+msgstr "/Ku Ntangiriro Ububikoshingiro"
+
+#: src/tools/dbverify.c:213
+#, fuzzy
+msgid ""
+"usage: dbverify -(flags) <btree>\n"
+"flags:\n"
+"\t-a = Perform all checks (does not include fixes)\n"
+"\t-g = Check for ghosts (names/refns)\n"
+"\t-G = Check for & fix ghosts (names/refns)\n"
+"\t-i = Check individuals\n"
+"\t-f = Check families\n"
+"\t-s = Check sours\n"
+"\t-e = Check events\n"
+"\t-x = Check others\n"
+"\t-n = Noisy (echo every record processed)\n"
+msgstr "Ikoresha: Amabendera Amabendera a Byose OYA Gushyiramo g kugirango Amazina kugirango Amazina i F S E X N buri Icyabitswe"
+
+#: src/tools/dbverify.c:225
+#, fuzzy, c-format
+msgid "example: dbverify -ifsex \"%s\"\n"
+msgstr "Urugero"
+
+#: src/tools/dbverify.c:341
+#, fuzzy, c-format
+msgid "Non-indi name, key=%s, name=%s"
+msgstr "Izina: Urufunguzo Izina:"
+
+#: src/tools/dbverify.c:355
+#, fuzzy, c-format
+msgid "Orphaned name: %s"
+msgstr "Izina:"
+
+#: src/tools/dbverify.c:369
+#, fuzzy, c-format
+msgid "Ghost name: %s -> %s"
+msgstr "Izina:"
+
+#: src/tools/dbverify.c:401
+#, c-format
+msgid "Orphaned refn: %s"
+msgstr ""
+
+#: src/tools/dbverify.c:439
+#, fuzzy, c-format
+msgid "Duplicate name for %s (%s)"
+msgstr "Izina: kugirango"
+
+#: src/tools/dbverify.c:472
+#, fuzzy, c-format
+msgid "Duplicate refn for %s (%s)"
+msgstr "kugirango"
+
+#: src/tools/dbverify.c:543
+#, fuzzy, c-format
+msgid "Duplicate individual for %s"
+msgstr "kugirango"
+
+#: src/tools/dbverify.c:553
+#, fuzzy, c-format
+msgid "Bad name for individual %s: %s"
+msgstr "Izina: kugirango"
+
+#: src/tools/dbverify.c:568 src/tools/dbverify.c:581
+#, fuzzy, c-format
+msgid "Bad family reference (%s) individual %s"
+msgstr "Indango"
+
+#: src/tools/dbverify.c:572
+#, fuzzy, c-format
+msgid "Missing child (%s) in family (%s)"
+msgstr "in"
+
+#: src/tools/dbverify.c:585
+#, fuzzy, c-format
+msgid "Missing spouse (%s) in family (%s)"
+msgstr "in"
+
+#: src/tools/dbverify.c:609
+#, fuzzy, c-format
+msgid "Duplicate family for %s"
+msgstr "kugirango"
+
+#: src/tools/dbverify.c:627
+#, fuzzy, c-format
+msgid "Bad HUSB reference (%s) in family %s"
+msgstr "Indango in"
+
+#: src/tools/dbverify.c:633
+#, fuzzy, c-format
+msgid "Improper HUSB (%s) in family (%s)"
+msgstr "in"
+
+#: src/tools/dbverify.c:645
+#, fuzzy, c-format
+msgid "Bad wife reference (%s) in family %s"
+msgstr "Indango in"
+
+#: src/tools/dbverify.c:651
+#, fuzzy, c-format
+msgid "Improper wife (%s) in family (%s)"
+msgstr "in"
+
+#: src/tools/dbverify.c:663
+#, fuzzy, c-format
+msgid "Bad child reference (%s) in family %s"
+msgstr "Indango in"
+
+#: src/tools/dbverify.c:669
+#, fuzzy, c-format
+msgid "Improper child (%s) in family (%s)"
+msgstr "in"
+
+#: src/tools/dbverify.c:677
+#, c-format
+msgid "Empty family (%s)"
+msgstr ""
+
+#: src/tools/dbverify.c:679
+#, c-format
+msgid "Single person family (%s)"
+msgstr ""
+
+#: src/tools/dbverify.c:696
+#, fuzzy, c-format
+msgid "Duplicate source for %s"
+msgstr "Inkomoko kugirango"
+
+#: src/tools/dbverify.c:712
+#, fuzzy, c-format
+msgid "Duplicate event for %s"
+msgstr "Icyabaye kugirango"
+
+#: src/tools/dbverify.c:728
+#, fuzzy, c-format
+msgid "Duplicate record for %s"
+msgstr "Icyabitswe kugirango"
+
+#: src/tools/dbverify.c:799
+#, fuzzy, c-format
+msgid "Bad pointer (in %s): %s"
+msgstr "Mweretsi in"
+
+#: src/tools/dbverify.c:822
+#, fuzzy, c-format
+msgid "Missing undeleted record %c%d"
+msgstr "Icyabitswe"
+
+#: src/tools/dbverify.c:831
+#, fuzzy, c-format
+msgid "Delete set contains valid record %s"
+msgstr "Gushyiraho Kirimo Byemewe Icyabitswe"
+
+#: src/tools/dbverify.c:848
+#, fuzzy, c-format
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
+msgstr "Imbonerahamwe in"
+
+#: src/tools/dbverify.c:979
+#, fuzzy, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%dIkosa rya"
+msgstr[1] "%dIkosa rya"
+
+# sw/source\ui\utlui\initui.src:RID_SW_SHELLRES.STR_FIELD_FIXED.text
+#: src/tools/dbverify.c:983
+#, fuzzy, c-format
+msgid "%d fixed"
+msgid_plural "%d fixed"
+msgstr[0] "%dbidahinduka)"
+msgstr[1] "%dbidahinduka)"
+
+#: src/tools/dbverify.c:990
+#, fuzzy
+msgid "No errors found"
+msgstr "Amakosa Byabonetse"
+
+#: src/tools/dbverify.c:1001
+msgid "FATAL ERROR: "
+msgstr ""
+
+#: src/tools/dbverify.c:1006
+#, fuzzy, c-format
+msgid "In file <%s> at line %d"
+msgstr "IDOSIYE ku Umurongo"
