@@ -33,6 +33,9 @@
 void __fatal(STRING, int);
 void __assert(BOOLEAN, STRING, int);
 
+/* dirs.c */
+BOOLEAN mkalldirs(STRING);
+
 /* double.c */
 void back_list(LIST, WORD);
 LIST create_list(void);

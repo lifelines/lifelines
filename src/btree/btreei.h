@@ -23,6 +23,5 @@ void writeindex(STRING, INDEX);
 BOOLEAN newmaster(BTREE, INDEX);
 FKEY path2fkey(STRING);
 void nextfkey(BTREE);
-BOOLEAN mkalldirs(char *);
 
 #endif /* _BTREE_PRIV_H */
