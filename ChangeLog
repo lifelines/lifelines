@@ -6,11 +6,16 @@
 	build/msvc6/dbverify/dbverifyCmd.dsp
 	build/msvc6/llines/llines.rc stdlib/llstrcmp.c tools/btedit.c:
 
-	Fix builds.
-
 	* ChangeLog configure.in:
 
 	Test for wchar.h & wcscoll.
+
+	Fix builds.
+
+	* ChangeLog gedlib/locales.c hdrs/llstdlib.h stdlib/strapp.c:
+
+	More work on converting standard locale names to Windows names.
+
 
 2002-07-02 Perry Rapp <puddle@users.sourceforge.net>
 

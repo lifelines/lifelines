@@ -34,10 +34,12 @@
 /* alphabetical */
 static void customlocale(STRING prefix);
 static STRING get_current_locale(INT category);
-static BOOLEAN ismsgcategory(int category);
+static BOOLEAN is_locale_delim(char ch);
+static BOOLEAN is_msgcategory(int category);
 static STRING llsetenv(STRING name, STRING value);
 static void notify_gettext_language_changed(void);
 static STRING setmsgs(STRING localename);
+static char * win32_setlocale(int category, char * locale);
 
 /*********************************************
  * local variables
@@ -405,24 +407,11 @@ llsetlocale (int category, char * locale)
 	char * rtn = "C";
 #ifdef HAVE_SETLOCALE
 	rtn = setlocale(category, locale);
-#ifdef _WIN32
-	/* TODO: Obviously this is a quick hack */
-	if (!rtn && locale) {
-		if (eqstr(locale, "fi_FI"))
-			rtn = setlocale(LC_ALL, "Finnish_FINLAND");
-		else if (eqstr(locale, "pl_PL"))
-			rtn = setlocale(LC_ALL, "Polish_POLAND");
-		else if (eqstr(locale, "es"))
-			rtn = setlocale(LC_ALL, "Spanish");
-		else if (eqstr(locale, "en_US"))
-			rtn = setlocale(LC_ALL, "English_United States");
-		else if (eqstr(locale, "sv"))
-			rtn = setlocale(LC_ALL, "Swedish");
-	}
-#endif /* _WIN32 */
+	if (!rtn && locale)
+		rtn = win32_setlocale(category, locale);
 #endif /* HAVE_SETLOCALE */
 #ifdef ENABLE_NLS
-	if (rtn && ismsgcategory(category)) {
+	if (rtn && is_msgcategory(category)) {
 		/* use original locale, not corrupted by MS-Windows hack */
 		setmsgs(locale);
 	}
@@ -430,14 +419,109 @@ llsetlocale (int category, char * locale)
 	return rtn;
 }
 /*==========================================
- * ismsgcategory -- check for LC_ALL or LC_MESSAGES
+ * is_msgcategory -- check for LC_ALL or LC_MESSAGES
  *========================================*/
 static BOOLEAN
-ismsgcategory (int category)
+is_msgcategory (int category)
 {
 #ifdef LC_MESSAGES
 	return category==LC_ALL || category==LC_MESSAGES;
 #else
 	return category==LC_ALL;
 #endif
+}
+/*==========================================
+ * win32_setlocale -- handle MS-Windows goofed up locale names
+ *========================================*/
+static char *
+win32_setlocale (int category, char * locale)
+{
+	char * rtn = 0;
+#ifdef _WIN32
+	/* TODO: Obviously this needs work -- and move to win32 subdir ? */
+	if (locale) {
+		/* TODO: This is a first guess, not tested. I don't
+		even know if it only works on English Windows :( */
+		static const char * langs[] = {
+			"ar", "Arabic"
+			, "bg", "Bulgarian"
+			, "bg", "Bulgarian"
+			, "cs", "Czech"
+			, "da", "Danish"
+			, "de", "German"
+			, "el", "Greek"
+			, "de", "German"
+			, "en", "English"
+			, "es", "Spanish"
+			, "fi", "Finnish"
+			, "fr", "French"
+			, "hr", "Croation"
+			, "hu", "Hungarian"
+			, "is", "Icelandic"
+			, "it", "Italian"
+			, "iw", "Hebrew"
+			, "ja", "Japanese"
+			, "ko", "Korean"
+			, "mk", "Macedonian"
+			, "nl", "Dutch"
+			, "no", "Norwegian"
+			, "pl", "Polish"
+			, "pt", "Portuguese"
+			, "ro", "Romanian"
+			, "ru", "Russian"
+			/*, "sh", "Serbian Latin" */
+			, "sl", "Slovene"
+			, "sk", "Slovak"
+			/* , "sr", "Serbian Cyrillic" */
+			/*, "sh", "Serbian Latin" */
+			, "sv", "Swedish"
+			, "tr", "Turkish"
+			, "zh", "Chinese"
+			, 0, 0
+		};
+		static const char * countries[] = {
+			/* TODO: Obviously this isn't even close to complete */
+			"FI", "FINLAND"
+			, "PL", "POLAND"
+			, "US", "United States"
+			, 0, 0
+		};
+		char w32loc[30]="";
+		char * ptr;
+		int i;
+		for (i=0; langs[i]; i += 2) {
+			if (eqstrn(locale, langs[i], 2)) {
+				llstrapp(w32loc, sizeof(w32loc), langs[i+1]);
+				break;
+			}
+		}
+		if (!langs[i])
+			return 0;
+		ptr = locale+strlen(langs[i]);
+		if (ptr[0]=='_') {
+			llstrappc(w32loc, sizeof(w32loc), ptr[0]);
+			for (i=0; countries[i]; i += 2) {
+				if (eqstrn(ptr+1, countries[i], 2)) {
+					llstrapp(w32loc, sizeof(w32loc), countries[i+1]);
+					break;
+				}
+			}
+		}
+		/* TODO: strip off codeset, because we don't want user's codeset anyway,
+		at least unless int_codeset == 0 */
+		rtn = setlocale(category, w32loc);
+	}
+#else
+	category=category; /* unused */
+	locale=locale; /* unused */
+#endif /* _WIN32 */
+	return rtn;
+}
+/*==========================================
+ * is_locale_delim -- Does this character end a segment of the locale ?
+ *========================================*/
+static BOOLEAN
+is_locale_delim (char ch)
+{
+	return ch=='_' || ch=='.' || ch=='@';
 }

@@ -37,7 +37,6 @@
  *  ie, strncat except it always terminates, it handles UTF-8,
  *  and the limit is inclusive of existing contents
  * handles UTF-8
- * Created: 2002/06/13, Perry Rapp
  *================================*/
 char *
 llstrapp (char *dest, size_t limit, const char *src)
@@ -55,10 +54,20 @@ llstrapp (char *dest, size_t limit, const char *src)
 	return dest;
 }
 /*==================================
+ * llstrappc -- llstrapp with a character argument
+ *================================*/
+char *
+llstrappc (char *dest, size_t limit, char ch)
+{
+	char src[2];
+	src[0] = ch;
+	src[1] = 0;
+	return llstrapp(dest, limit, src);
+}
+/*==================================
  * llstrappf -- snprintf style append to string,
  * subject to length limit (including current contents)
  * handles UTF-8
- * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
 llstrappf (char * dest, int limit, const char * fmt, ...)
@@ -73,7 +82,6 @@ llstrappf (char * dest, int limit, const char * fmt, ...)
  * llstrappvf -- vsnprintf style append to string,
  * subject to length limit (including current contents)
  * handles UTF-8
- * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
 llstrappvf (char * dest, int limit, const char * fmt, va_list args)

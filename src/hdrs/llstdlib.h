@@ -153,6 +153,7 @@ void strupdate(STRING * str, CNSTRING value);
 
 /* strapp.c */
 char *llstrapp(char *dest, size_t limit, const char *src);
+char *llstrappc(char *dest, size_t limit, char ch);
 char *llstrappf(char *dest, int limit, const char *fmt, ...);
 char *llstrappvf(char *dest, int limit, const char *fmt, va_list args);
 
