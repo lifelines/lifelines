@@ -432,8 +432,11 @@ create_pvalue_from_fam_key (STRING key)
 PVALUE
 create_pvalue_from_cel (int type, CACHEEL cel)
 {
+	PVALUE val=0;
 	RECORD rec = cel ? get_record_for_cel(cel) : 0;
-	return create_pvalue(type, rec);
+	val = create_pvalue(type, rec);
+	release_record(rec); /* ownership transferred to pvalue */
+	return val;
 }
 /*=====================================================
  * create_pvalue_from_indi_keynum -- Return indi as pvalue

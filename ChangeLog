@@ -1,3 +1,9 @@
+2005-02-09 Perry Rapp
+
+	* ChangeLog src/interp/pvalue.c
+
+	Fix leak of record in create_pvalue_from_cel.
+
 2005-02-08 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c
