@@ -46,6 +46,9 @@ extern STRING notone, ifone, progname;
 
 static INT ll_index(STRING, STRING, INT);
 static void compute_pi(STRING);
+static STRING substring (STRING s, INT i, INT j);
+static STRING rightjustify (STRING str, INT len);
+
 BOOLEAN prog_debug = FALSE;
 
 /*=============================================================+
