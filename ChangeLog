@@ -11,6 +11,11 @@
 	Ensure stdarg included for arch.h compiling wcslen.c (affects MacOS).
 	Little bit of clean up in include lines.
 
+	* ChangeLog configure.in build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec src/hdrs/version.h
+
+	Bump version to 3.0.32 preparatory to release.
+
 2003-09-12 Stephen Dum
 
         * docs/Makefile.am docs/ll-reportmanual.html docs/ll-reportmanual.pdf
