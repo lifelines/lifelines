@@ -1163,8 +1163,8 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 		crecord(cel) = 0;
 	}
 	cacfree(cache) = cel;
-	/* delete_table doesn't free the key or value */
-	delete_table(cacdata(cache), key);
+	/* delete_table_element doesn't free the key or value */
+	delete_table_element(cacdata(cache), key);
 	stdfree(key);
 }
 /*================================================================

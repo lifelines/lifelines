@@ -449,12 +449,12 @@ replace_table_str (TABLE tab, STRING key, STRING str, INT whattofree)
 	replace_table_impl(tab, key, uval, whattofree);
 }
 /*==========================================
- * delete_table -- Remove element from table
+ * delete_table_element -- Remove element from table
  *  tab: [I/O]  table from which to remove element
  *  key: [IN]   key to find element to remove
  *========================================*/
 void
-delete_table (TABLE tab, CNSTRING key)
+delete_table_element (TABLE tab, CNSTRING key)
 {
 	INT hval = hash(tab, key);
 	ENTRY preve = NULL;

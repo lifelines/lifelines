@@ -82,6 +82,11 @@
 	Make in_string a local function in place.c. Delete now unused
 	function set_list_type. Add extractplaces to st_db.li.
 
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/table.h
+	src/interp/symtab.c src/stdlib/table.c
+
+	Rename delete_table to delete_table_element.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
