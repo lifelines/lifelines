@@ -219,7 +219,7 @@ add_child (NODE child,
  * (no user interaction)
  *======================================*/
 void
-add_child_to_fam(NODE child, NODE fam, INT i)
+add_child_to_fam (NODE child, NODE fam, INT i)
 {
 	NODE node, new, name, sex, body, famc, fams;
 	INT j;
@@ -334,7 +334,7 @@ add_spouse (NODE spouse,
  * (no user interaction)
  *=================================*/
 void
-add_spouse_to_fam(NODE spouse, NODE fam, INT sex)
+add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 {
 /* Add HUSB or WIFE node to family */
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
@@ -393,7 +393,7 @@ add_spouse_to_fam(NODE spouse, NODE fam, INT sex)
  * (no user interaction)
  *=======================================*/
 static void
-add_members_to_family(STRING xref, NODE spouse1, NODE spouse2, NODE child)
+add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
 {
 	NODE refn, body;
 	NODE name, sex, famc, fams, node, prev, new, this;
