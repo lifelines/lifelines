@@ -1,3 +1,14 @@
+2005-02-13 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-userguide.html docs/ll-userguide.pdf reports/Makefile.am 
+	src/gedlib/brwslist.c src/gedlib/lloptions.c src/gedlib/nodeio.c 
+	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h 
+	src/interp/pvalue.c src/interp/symtab.c src/stdlib/icvt.c 
+	src/stdlib/stack.c src/stdlib/stdlib.c src/stdlib/table.c 
+	src/stdlib/vtable.c
+
+	Update docs to 3.0.43, clean up compiler warnings on linux
+
 2005-02-12 Perry Rapp
 
 	* ChangeLog docs/ll-devguide.xml

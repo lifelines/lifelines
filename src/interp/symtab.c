@@ -198,6 +198,7 @@ symbol_tables_end (void)
 {
 	/* for debugging check that no symbol tables leaked */
 	INT leaked_symtabs = length_list(live_symtabs);
+	leaked_symtabs = leaked_symtabs; /* remove unused warning */
 	/* 2005-02-06, 2200Z, Perry: No leaks here */
 }
 /*======================================================
@@ -244,7 +245,7 @@ begin_symtab_iter (SYMTAB stab)
  *  @ppval: [OUT]  next value
  *====================================================*/
 BOOLEAN
-next_symtab_entry (SYMTAB_ITER symtabit, STRING *pkey, PVALUE *ppval)
+next_symtab_entry (SYMTAB_ITER symtabit, CNSTRING *pkey, PVALUE *ppval)
 {
 	VPTR vptr=0;
 	*pkey=0;

@@ -674,7 +674,7 @@ free_contents (ENTRY ent, INT whattofree)
  * callback is passed a pointer into memory owned by table
  * so callback must not free data received
  *===============================================*/
-void
+static void
 traverse_table (TABLE tab, void (*tproc)(CNSTRING key, UNION uval))
 {
 	INT i;

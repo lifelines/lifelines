@@ -58,7 +58,9 @@ typedef struct tag_blel *BLEL;
 
 static void blel_destructor(VTABLE *obj);
 static BLEL create_new_blel(void);
+/* unused
 static void destroy_blel(BLEL blel);
+*/
 
 /*********************************************
  * local variables
@@ -258,6 +260,7 @@ blel_destructor (VTABLE *obj)
  * destroy_blel -- destroy and free blel (browse list element)
  * All blels are destroyed in this function
  *===============================================*/
+/* not used
 static void
 destroy_blel (BLEL blel)
 {
@@ -265,3 +268,4 @@ destroy_blel (BLEL blel)
 	remove_indiseq(blel->bl_seq);	
 	stdfree(blel);
 }
+*/

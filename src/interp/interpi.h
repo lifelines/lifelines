@@ -91,7 +91,7 @@ PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
 /* symbol table iteration */
 typedef struct tag_symtab_iter *SYMTAB_ITER;
 SYMTAB_ITER begin_symtab_iter(SYMTAB stab);
-BOOLEAN next_symtab_entry(SYMTAB_ITER tabit, STRING *pkey, PVALUE *ppval);
+BOOLEAN next_symtab_entry(SYMTAB_ITER tabit, CNSTRING *pkey, PVALUE *ppval);
 void end_symtab_iter(SYMTAB_ITER * psymtabit);
 
 /************************************************************************/

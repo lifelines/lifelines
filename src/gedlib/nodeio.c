@@ -714,6 +714,7 @@ write_fam_to_file (NODE fam, CNSTRING file, BOOLEAN bom)
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE refn, husb, wife, chil, body;
+	bom = bom; /* unused */
 
 	ASSERT(fp = fopen(file, LLWRITETEXT));
 	split_fam(fam, &refn, &husb, &wife, &chil, &body);

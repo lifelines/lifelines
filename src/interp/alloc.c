@@ -1082,7 +1082,7 @@ debug_show_one_pnode (PNODE node)     /* node to print */
  * create_rptinfo -- Create new empty report info object
  * returns addref'd rptinfo
  *========================================================*/
-RPTINFO
+static RPTINFO
 create_rptinfo (void)
 {
 	RPTINFO rptinfo = (RPTINFO)stdalloc(sizeof(*rptinfo));

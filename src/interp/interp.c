@@ -407,7 +407,6 @@ interpret_prog (PNODE begin, SYMTAB stab)
 {
 	PVALUE dummy=0;
 	INT rtn = interpret(begin, stab, &dummy);
-	INT ranit=0;
 
 	delete_pvalue(dummy);
 	dummy=0;
@@ -1925,7 +1924,7 @@ disp_symtab (STRING title, SYMTAB stab)
 	if (symtabit) {
 		STRING key=0;
 		PVALUE pval=0;
-		while (next_symtab_entry(symtabit, &key, &pval)) {
+		while (next_symtab_entry(symtabit, (CNSTRING *)&key, &pval)) {
 			disp_symtab_cb(key, pval, &sdata.locals);
 		}
 		end_symtab_iter(&symtabit);

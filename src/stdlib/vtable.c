@@ -23,6 +23,7 @@ typedef struct tag_generic_ref_object * GENERIC_REF_OBJECT;
  *********************************************/
 
 /* have compiler check types */
+#ifdef not_used /* functions not used */
 static struct tag_vtable testvtable = {
 	VTABLE_MAGIC
 	, "test"
@@ -37,6 +38,7 @@ static struct tag_generic_ref_object testobj = {
 	&testvtable
 	, 0
 };
+#endif
 
 /*=================================================
  * generic_get_type_name -- simple get_type_name for any object

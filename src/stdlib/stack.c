@@ -34,7 +34,9 @@ struct stk_stack {
  * Internal functions
  ***********************************************************************/
 
+/* unused
 static void Assert(int assertion, char* error);
+*/
 static void * SafeMalloc(size_t size);
 
 /***********************************************************************
@@ -136,11 +138,13 @@ void StackDestroy(STKSTACK theStack,void DestFunc(void * a))
  * Wrappers to call the client-supplied utility functions
  ***********************************************************************/
 
+/* unused
 static void Assert(int assertion, char* error)
 {
 	if (!f_AssertFnc) return;
 	(*f_AssertFnc)(assertion, error);
 }
+*/
 static void * SafeMalloc(size_t size)
 {
 	return (*f_SafeMallocFnc)(size);
