@@ -1,5 +1,8 @@
 2000-11-02 Petter Reinholdtsen <pere@td.org.uit.no>
 
+	* interp/eval.c: Print undefined function name on call to
+	undefined function.
+
 	* configure.in: Add '-g -W -Wall' to CFLAGS when compiling using
 	GNU C.  This generates a lot of new warnings.
 

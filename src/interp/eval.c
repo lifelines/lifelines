@@ -155,7 +155,9 @@ PNODE node; TABLE stab; BOOLEAN *eflg;
 
 	*eflg = TRUE;
 	if ((func = (PNODE) valueof(functab, nam)) == NULL) {
-		prog_error(node, "undefined function");
+		unsigned char s[1024];
+		snprintf(s, sizeof(s), "undefined function %s()", nam);
+		prog_error(node, s);
 		return NULL;
 	}
 	newtab = create_table();
