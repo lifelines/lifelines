@@ -1,6 +1,10 @@
+2001-02-24 Perry Rapp <puddle@users.sourceforge.net>
+
+	gedlib/indiseq.c: Filter out duplicates in indi_to_children.
+
 2001-02-21 Matt Emmerton <memmerto@users.sourceforge.net>
 
-	btree/utils.c;
+	btree/utils.c:
 	Removed llmkdir() function and exists() macro since they
 	were moved to stdlib/dirs.c some time ago.
 

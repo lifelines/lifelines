@@ -891,6 +891,7 @@ child_indiseq (INDISEQ seq)
 }
 /*=========================================================
  * indi_to_children -- Create sequence of person's children
+ *  (filters out duplicates)
  *=======================================================*/
 INDISEQ
 indi_to_children (NODE indi)
@@ -904,7 +905,7 @@ indi_to_children (NODE indi)
 		FORCHILDREN(fam, chil, num2)
 			len++;
 			key = indi_to_key(chil);
-			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+			append_indiseq_null(seq, key, NULL, FALSE, FALSE);
 		ENDCHILDREN
 	ENDFAMSS
 	if (len) return seq;
