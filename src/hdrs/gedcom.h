@@ -33,13 +33,8 @@
 #ifndef _GEDCOM_H
 #define _GEDCOM_H
 
-#ifndef _TABLE_H
 #include "table.h"
-#endif
-
-#ifndef _TRANSLAT_H
 #include "translat.h"
-#endif
 
 #define MAXNAMELEN 512
 

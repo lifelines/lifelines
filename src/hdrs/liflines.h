@@ -1,15 +1,9 @@
+#ifndef _LIFLINES_H
+#define _LIFLINES_H
 
-#ifndef _STANDARD_H
 #include "standard.h"
-#endif
-
-#ifndef _GEDCOM_H
 #include "gedcom.h"
-#endif
-
-#ifndef _INDISEQ_H
 #include "indiseq.h"
-#endif
 
 /* Function Prototypes */
 
@@ -67,3 +61,5 @@ void final_cleanup(void);
 void do_edit(void);
 
 BOOLEAN pointer_value(STRING);
+
+#endif /* _LIFLINES_H */
