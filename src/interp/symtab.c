@@ -65,6 +65,8 @@ void
 delete_symtab (SYMTAB stab, STRING iden)
 {
 	PVALUE val = (PVALUE) valueof_ptr(stab->tab, iden);
+	/* delete_table doesn't free the key or value */
+	/* our key belongs to lexer, I think, but free our value */
 	if (val) delete_pvalue(val);
 	delete_table(stab->tab, iden);
 }

@@ -1141,7 +1141,9 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 		crecord(cel) = 0;
 	}
 	cacfree(cache) = cel;
+	/* delete_table doesn't free the key or value */
 	delete_table(cacdata(cache), key);
+	stdfree(key);
 }
 /*================================================================
  * value_to_xref -- Converts a string to a record key, if possible
