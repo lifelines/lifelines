@@ -115,6 +115,7 @@ void write_nonlink_indi(NODE);
 void write_family(STRING, TABLE);
 void new_write_node(INT, NODE, BOOLEAN);
 
+BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
 void namesort_indiseq(INDISEQ);
 void keysort_indiseq(INDISEQ);
 void valuesort_indiseq(INDISEQ, BOOLEAN*);
