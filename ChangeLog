@@ -14,6 +14,10 @@
 
 	Fix typo in include for libintl.h.
 
+	* ChangeLog sc/liflines/main.c
+
+	Cosmetic & comments.
+
 2005-01-08 lifelines beta 3.0.39 RELEASE
 
 2005-01-08 Perry Rapp

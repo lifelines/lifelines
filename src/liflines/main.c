@@ -138,7 +138,7 @@ main (INT argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
-        STRING crashlog=NULL;
+	STRING crashlog=NULL;
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
@@ -609,6 +609,7 @@ load_usage (void)
 static void
 main_db_notify (STRING db, BOOLEAN opening)
 {
+	/* store name away for reporting in case of crash later */
 	if (opening)
 		crash_setdb(db);
 	else
@@ -642,16 +643,16 @@ check_version_compat (void)
 static BOOLEAN
 init_curses_ui (void)
 {
-        WINDOW *win;
+	WINDOW *win;
 
 	/* check for curses version problem */
 	if (!check_version_compat())
 		return FALSE;
 
 	win = initscr();
-        if (!win) return FALSE;
-        noecho();
-        keypad(win, 1);
-        return TRUE;
+	if (!win) return FALSE;
+	noecho();
+	keypad(win, 1);
+	return TRUE;
 }
 
