@@ -108,7 +108,6 @@ static NODE history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
-static void pick_add_child_to_fam(NODE fam, NODE save);
 static void prompt_add_spouse_check_save(NODE fam, NODE save);
 static NODE pick_create_new_family(NODE indi, NODE save, STRING * addstrings);
 static void pick_remove_spouse_from_family(NODE fam);
