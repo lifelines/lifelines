@@ -8,6 +8,10 @@
 
 	i18n import_validating ("0 Warnings" and "0 Errors")
 
+	* ChangeLog reports/st/st_string.li
+
+	Fix strconcat and concat tests on undef (now return "" not null).
+
 2005-01-12 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c

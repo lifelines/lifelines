@@ -1,6 +1,6 @@
 /*
  * @progname       st_string.li
- * @version        1.1 of 2003-08-07
+ * @version        1.2 of 2005-01-12
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -57,13 +57,13 @@ proc testStrings()
 	set(str5,capitalize(undef))
 	set(str5,titlecase(undef))
 	set(str7,concat(str3,str5))
-	if (ne(str7,undef)) {
+	if (ne(str7,"")) {
 		call reportfail("concat FAILED on undefs")
 	}
 	else { incr(testok) }
 
 	set(str7,strconcat(str3,str5))
-	if (ne(str7,undef)) {
+	if (ne(str7,"")) {
 		call reportfail("strconcat FAILED on undefs")
 	}
 	else { incr(testok) }
