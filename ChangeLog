@@ -1,3 +1,33 @@
+2002-06-04 Perry Rapp <puddle@users.sourceforge.net>
+
+	* ABOUT-NLS ChangeLog Makefile.am README.DEVELOPERS configure.in
+	gedlib/charmaps.c intl/ChangeLog intl/Makefile.in intl/VERSION
+	intl/bindtextdom.c intl/config.charset intl/dcgettext.c
+	intl/dcigettext.c intl/dcngettext.c intl/dgettext.c
+	intl/dngettext.c intl/explodename.c intl/finddomain.c
+	intl/gettext.c intl/gettextP.h intl/hash-string.h
+	intl/intl-compat.c intl/l10nflist.c intl/libgnuintl.h
+	intl/loadinfo.h intl/loadmsgcat.c intl/localcharset.c
+	intl/locale.alias intl/localealias.c intl/ngettext.c
+	intl/plural.c intl/plural.y intl/ref-add.sin intl/ref-del.sin
+	intl/textdomain.c liflines/Makefile.am m4/codeset.m4
+	m4/gettext.m4 m4/glibc21.m4 m4/iconv.m4 m4/isc-posix.m4
+	m4/lcmessage.m4 m4/progtest.m4 po/ChangeLog po/Makefile.in.in
+	tools/Makefile.am
+	*NEW autogen.sh
+	*DELETED acconfig.sh:
+
+	Ran gettextize to upgrade included gettext from 0.10.40 to 0.11.2.
+	Removed acconfig.h & ALL_LINGUAS in configure.in (as recommended by
+	gettextize).
+	Added autogen.sh wrapper for autotools invocations.
+
+2002-06-04  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+	* configure.in (AC_OUTPUT): Add m4/Makefile.
+
 2002-06-04 Matt Emmerton <memmerto@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c

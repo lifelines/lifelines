@@ -5,15 +5,12 @@ dnl Process this file with autoconf to produce a configure script.
 
 
 AC_INIT(liflines/lbrowse.c)
-AC_PREREQ(2.13)
+AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(lifelines, 3.0.14)
 AM_CONFIG_HEADER(config.h)
-
-dnl Set of available languages (gettext)
-ALL_LINGUAS="de el it sv"
 
 AC_PREFIX_DEFAULT($HOME)
 
@@ -151,7 +148,7 @@ dnl AC_TYPE_SIGNAL
 dnl we only use this if we do not have strsignal
 dnl AC_DECL_SYS_SIGLIST
 
-AC_OUTPUT(Makefile \
+AC_OUTPUT(Makefile  m4/Makefile \
         arch/Makefile \
         btree/Makefile \
         interp/Makefile \

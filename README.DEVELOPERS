@@ -19,25 +19,9 @@ or dependencies changed).
 As long as you have autoconf and automake installed on your system, the
 Makefiles generated will be able to regenerate any file dependent on a
 Makefile.am or configure.in.  To regenerate the build system explicitly,
-if you have gettext & iconv installed on your system, you need to run
-the following four commands:
+ sh autogen.sh
 
-  aclocal; autoheader; automake; autoconf
-
-If you lack gettext or iconv, you need to use these four:
-
-  aclocal -I m4; autoheader; automake; autoconf
-
-(Note#1: If you lack gettext or iconv, then if configure.in changes, you
-must manually run "aclocal -I m4". If the Makefile runs it for you,
-it will fail -- obviously and with error messages -- because it will
-not include the -I m4 options.)
-
-(Note#2: This dichotomous use is supposedly solved with automake 1.5,
-in which case everybody uses aclocal -I m4, but I don't personally
-have automake 1.5.)
-
-This list of commands *must* be run after freshly checking a copy of the
+The autogen script *must* be run after freshly checking a copy of the
 project out of CVS -- the files generated automatically are no longer
 included in the CVS repository.
 
@@ -47,6 +31,7 @@ build system to suit your development needs...
 Rob Fugina
 robf@geekthing.com
 
+(Perry added autogen.sh, 2002.06.04)
 
 
 ***************************

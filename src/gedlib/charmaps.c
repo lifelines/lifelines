@@ -43,13 +43,13 @@
 
 TRANTABLE tran_tables[NUM_TT_MAPS] = {
 	NULL, NULL, NULL, NULL,
-    NULL, NULL, NULL, NULL,
-    NULL, NULL, NULL, NULL
+	NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL
 };
 char *map_keys[NUM_TT_MAPS] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
-    "MDSIN", "MINDS", "MINRP", "MSORT",
-    "MCHAR", "MLCAS", "MUCAS", "MPREF"
+	"MDSIN", "MINDS", "MINRP", "MSORT",
+	"MCHAR", "MLCAS", "MUCAS", "MPREF"
 };
 
 /*********************************************
