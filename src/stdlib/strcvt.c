@@ -29,6 +29,9 @@
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #endif
+#ifdef HAVE_WCTYPE_H
+#include <wctype.h>
+#endif
 #include "zstr.h"
 #include "icvt.h"
 #include "stdlibi.h"

@@ -15,6 +15,10 @@
 
 	Cleanup (& bump version for another beta release).
 
+	* ChangeLog configure.in src/stdlib/icvt.c src/stdlib/strcvt.c:
+
+	More portability cleanup.
+
 2003-01-02 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h:

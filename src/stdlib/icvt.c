@@ -9,7 +9,7 @@
  * icvt.c -- Module that handles iconv calls
  *==============================================================*/
 
-#include "llstdlib.h"
+#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
 #include <errno.h>
 #ifdef HAVE_ICONV
 # ifdef WIN32_ICONV_SHIM
@@ -17,6 +17,11 @@
 # else
 #  include <iconv.h>
 # endif
+#endif
+/* wcslen may be declared in "arch.h" or <wchar.h> */
+#include "arch.h"
+#ifdef HAVE_WCHAR_H
+#include <wchar.h>
 #endif
 #include "zstr.h"
 #include "icvt.h"
