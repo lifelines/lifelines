@@ -68,7 +68,7 @@ __indiset (PNODE node,
 		return NULL;
 	}
 	*eflg = FALSE;
-	seq = create_indiseq();
+	seq = create_indiseq_pval();
 	assign_iden(stab, iident(var), create_pvalue(PSET, (WORD) seq));
 	push_list(keysets, seq);
 	return NULL;
@@ -111,7 +111,7 @@ __addtoset (PNODE node,
 		prog_error(node, "3rd arg to addtoset is in error.");
 		return NULL;
 	}
-	append_indiseq(seq, key, NULL, val, FALSE, TRUE);
+	append_indiseq_pval(seq, key, NULL, val, FALSE, TRUE);
 	return NULL;
 }
 /*======================================+
@@ -422,6 +422,25 @@ __childset (PNODE node,
 	push_list(keysets, seq);
 	return val;
 }
+/*===================================================+
+ * create_value_pvalue -- Callback for creating values
+ *  in pvalue indiseqs
+ *==================================================*/
+static WORD
+create_value_pvalue (INT gen)
+{
+	return create_pvalue(PINT, (WORD)gen);
+}
+/*===================================================+
+ * copy_value_pvalue -- Callback for copy values
+ *  in pvalue indiseqs
+ *==================================================*/
+static WORD
+copy_value_pvalue (WORD pvalue)
+{
+	/* would incr if reference-counting */
+	return pvalue;
+}
 /*==============================================+
  * siblingset -- Create sibling set of an INDISEQ
  *   siblingset(SET) -> SET
@@ -458,18 +477,9 @@ __spouseset (PNODE node,
 		return NULL;
 	}
 	ASSERT(seq = (INDISEQ) pvalue(val));
-	set_pvalue(val, PSET, seq = spouse_indiseq(seq));
+	set_pvalue(val, PSET, seq = spouse_indiseq(seq, &copy_value_pvalue));
 	push_list(keysets, seq);
 	return val;
-}
-/*===================================================+
- * create_value_pvalue -- Callback for creating values
- *  with pvalue indiseqs
- *==================================================*/
-static WORD
-create_value_pvalue (INT gen)
-{
-	return create_pvalue(PINT, (WORD)gen);
 }
 /*================================================+
  * ancestorset -- Create ancestor set of an INDISEQ

@@ -41,7 +41,7 @@ typedef struct
 	char string[64];
 } SCAN_PATTERN;
 
-static INDISEQ seq;
+static INDISEQ results_seq;
 
 static INT NAMESCAN_FULL=0;
 static INT NAMESCAN_FRAG=1;
@@ -80,7 +80,7 @@ ns_callback (STRING key, STRING name, void *param)
 	if (patt->scantype == NAMESCAN_FULL) {
 		if (pattern_match(patt, name)) {
 			/* if we pass in name, append_indiseq won't check for dups */
-			append_indiseq(seq, key, NULL, 0, FALSE, FALSE);
+			append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
 		}
 	} else {
 		/* NAMESCAN_FRAG */
@@ -90,7 +90,7 @@ ns_callback (STRING key, STRING name, void *param)
 			piece = (STRING)el;
 			if (pattern_match(patt, piece)) {
 				/* if we pass in name, append_indiseq won't check for dups */
-				append_indiseq(seq, key, NULL, 0, FALSE, FALSE);
+				append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
 				break;
 			}
 		ENDLIST
@@ -109,7 +109,7 @@ rs_callback (STRING key, STRING refn, void *param)
 
 	if (pattern_match(patt, refn)) {
 		/* if we pass in name, append_indiseq won't check for dups */
-		append_indiseq(seq, key, NULL, 0, FALSE, FALSE);
+		append_indiseq_null(results_seq, key, NULL, FALSE, FALSE);
 	}
 	return TRUE;
 }
@@ -159,13 +159,13 @@ name_scan (INT scantype)
 	}
 
 
-	seq = create_indiseq();
+	results_seq = create_indiseq_null();
 	traverse_names(ns_callback, &patt);
 
-	if (length_indiseq(seq)) {
-		indi = choose_from_indiseq(seq, TRUE, scanrs, scanrs);
+	if (length_indiseq(results_seq)) {
+		indi = choose_from_indiseq(results_seq, TRUE, scanrs, scanrs);
 	}
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(results_seq, FALSE);
 	return indi;
 }
 /*==============================================
@@ -207,12 +207,12 @@ refn_scan(void)
 			break;
 	}
 
-	seq = create_indiseq();
+	results_seq = create_indiseq_null();
 	traverse_refns(rs_callback, &patt);
 
-	if (length_indiseq(seq)) {
-		nod0 = choose_from_indiseq(seq, TRUE, scanrs, scanrs);
+	if (length_indiseq(results_seq)) {
+		nod0 = choose_from_indiseq(results_seq, TRUE, scanrs, scanrs);
 	}
-	remove_indiseq(seq, FALSE);
+	remove_indiseq(results_seq, FALSE);
 	return nod0;
 }

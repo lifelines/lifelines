@@ -123,8 +123,8 @@ static void
 closure_init (CLOSURE * closure, int gengedcl)
 {
 	closure->tab = create_table();
-	closure->seq = create_indiseq();
-	closure->outseq = create_indiseq();
+	closure->seq = create_indiseq_sval();
+	closure->outseq = create_indiseq_sval();
 	closure->gengedcl = gengedcl;
 }
 /*======================================================
@@ -145,7 +145,7 @@ static void
 closure_wipe_processlist (CLOSURE * closure)
 {
 	remove_indiseq(closure->seq, FALSE);
-	closure->seq = create_indiseq();
+	closure->seq = create_indiseq_sval();
 }
 /*======================================================
  * closure_is_original -- is the closure in original mode ?
@@ -419,7 +419,7 @@ gen_gedcom (INDISEQ seq, int gengedcl)
 	 ones that get added during processing */
 	while (length_indiseq(closure.seq))
 	{
-		tempseq = create_indiseq();
+		tempseq = create_indiseq_sval();
 		/* move all from to-process list to
 		temporary processing list, because the
 		processing will add stuff to the to-process list */

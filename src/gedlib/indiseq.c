@@ -41,18 +41,22 @@
 #include "interp.h"
 #include "gedcomi.h"
 
-/* WARNING: append_indiseq allows an extra value to be stored.
- * this value must be a PVALUE if it is to be used in report programs.
- * However, internally when browsing, a family number is inserted as
- * an integer, not an integer (PINT) PVALUE. This may cause problems
- * if the value associated with an individual in a set is attempted
- * to be used in a report program - pbm 17-Feb-97
- */
 /*
-Perry is beginning a revision of indiseq
-to differentiate INT, WORD, and STRING value style
-indiseqs
-Perry, 2001/01/05
+	indiseqs are typed as to value
+	as of 2001/01/07 (Perry)
+	ival = ints
+	pval = pointers (caller determined
+	sval = strings
+	null = not yet specified
+
+	null indiseqs change type as soon as a fixed type value
+	is assigned to them, but as long as only nulls are attached
+	(append_indiseq_null) they remain uncommitted
+
+	NB: null values can be appended to any type (append_indiseq_null)
+
+	pointers are managed by the caller - in practice these are
+	all PVALUES for report commands
 */
 
 extern BOOLEAN opt_finnish;		/* Finnish language support */
@@ -66,22 +70,66 @@ extern BOOLEAN opt_finnish;		/* Finnish language support */
 #define ISPRN_FAMSEQ 1
 #define ISPRN_SPOUSESEQ 2
 
+/*====================
+ * indiseq val types
+ *  NULL means it has no values yet
+ *==================*/
+#define ISVAL_INT 1
+#define ISVAL_STR 2
+#define ISVAL_PTR 3
+#define ISVAL_NUL 4
+
 static STRING get_print_el (INDISEQ, INT);
 static void append_all_tags(INDISEQ, NODE, STRING, BOOLEAN);
 
-/* Matt 1/1/1 - should these be static, or will they be used elsewhere? */
 static INT name_compare (SORTEL, SORTEL);
 static INT key_compare (SORTEL, SORTEL);
 static INT canonkey_order(char c);
 static INT canonkey_compare(SORTEL el1, SORTEL el2);
-INT value_str_compare (SORTEL, SORTEL);
-INT value_compare (SORTEL, SORTEL);
+static INT value_str_compare (SORTEL, SORTEL);
+static INDISEQ create_indiseq_impl (INT valtype);
+static void append_indiseq_impl (INDISEQ seq, STRING key, 
+	STRING name, WORD val, BOOLEAN sure, BOOLEAN alloc);
+static void check_indiseq_valtype (INDISEQ seq, INT valtype);
 
-/*==================================
- * create_indiseq -- Create sequence
- *================================*/
+/*===============================================
+ * create_indiseq_ival -- Create sequence of INTs
+ *=============================================*/
 INDISEQ
-create_indiseq (void)
+create_indiseq_ival (void)
+{
+	return create_indiseq_impl(ISVAL_INT);
+}
+/*===================================================
+ * create_indiseq_null -- Create sequence of not yet
+ *  determined type of objects
+ *=================================================*/
+INDISEQ
+create_indiseq_null (void)
+{
+	return create_indiseq_impl(ISVAL_NUL);
+}
+/*===================================================
+ * create_indiseq_pval -- Create sequence of pointers
+ *=================================================*/
+INDISEQ
+create_indiseq_pval (void)
+{
+	return create_indiseq_impl(ISVAL_PTR);
+}
+/*==================================================
+ * create_indiseq_sval -- Create sequence of STRINGs
+ *================================================*/
+INDISEQ
+create_indiseq_sval (void)
+{
+	return create_indiseq_impl(ISVAL_STR);
+}
+/*=======================================
+ * create_indiseq_impl -- Create sequence
+ *=====================================*/
+static INDISEQ
+create_indiseq_impl (INT valtype)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
 	ISize(seq) = 0;
@@ -89,6 +137,7 @@ create_indiseq (void)
 	IData(seq) = (SORTEL *) stdalloc(20*sizeof(SORTEL));
 	IFlags(seq) = 0;
 	IPrntype(seq) = ISPRN_NORMALSEQ;
+	IValtype(seq) = valtype;
 	return seq;
 }
 /*==================================
@@ -117,12 +166,25 @@ copy_indiseq (INDISEQ seq)
 {
 	INDISEQ newseq;
 	if (!seq) return NULL;
-	newseq = create_indiseq();
+	newseq = create_indiseq_impl(IValtype(seq));
 	FORINDISEQ(seq, el, num)
-		append_indiseq(newseq, skey(el), snam(el), sval(el),
+		append_indiseq_impl(newseq, skey(el), snam(el), sval(el),
 		    TRUE, FALSE);
 	ENDINDISEQ
 	return newseq;
+}
+/*==================================================
+ * check_indiseq_valtype -- Check that value type
+ *  is as expected or null (in which case, convert)
+ *================================================*/
+static void
+check_indiseq_valtype (INDISEQ seq, INT valtype)
+{
+	if (IValtype(seq) == ISVAL_NUL) {
+		IValtype(seq) = valtype;
+	} else {
+		ASSERT(IValtype(seq) == valtype);
+	}
 }
 /*==================================================
  * append_indiseq_ival -- Append element to sequence
@@ -137,10 +199,23 @@ append_indiseq_ival (INDISEQ seq,    /* sequence */
                      BOOLEAN alloc)  /* key alloced? */
 {
 	WORD wval=(WORD)val;
-	/*
-	to do - verify that this is an ival indiseq
-	*/
-	append_indiseq(seq, key, name, wval, sure, alloc);
+	check_indiseq_valtype(seq, ISVAL_INT);
+	append_indiseq_impl(seq, key, name, wval, sure, alloc);
+}
+/*==================================================
+ * append_indiseq_pval -- Append element to sequence
+ *  with pointer value
+ *================================================*/
+void
+append_indiseq_pval (INDISEQ seq,    /* sequence */
+                     STRING key,     /* key - not NULL */
+                     STRING name,    /* name - may be NULL */
+                     WORD pval,       /* extra val */
+                     BOOLEAN sure,   /* no dupe check? */
+                     BOOLEAN alloc)  /* key alloced? */
+{
+	check_indiseq_valtype(seq, ISVAL_PTR);
+	append_indiseq_impl(seq, key, name, pval, sure, alloc);
 }
 /*==================================================
  * append_indiseq_sval -- Append element to sequence
@@ -155,22 +230,34 @@ append_indiseq_sval (INDISEQ seq,    /* sequence */
                      BOOLEAN alloc)  /* key alloced? */
 {
 	WORD wval=(WORD)sval;
-	/*
-	to do - verify that this is a sval indiseq
-	*/
-	append_indiseq(seq, key, name, wval, sure, alloc);
+	check_indiseq_valtype(seq, ISVAL_STR);
+	append_indiseq_impl(seq, key, name, wval, sure, alloc);
 }
-/*=============================================
- * append_indiseq -- Append element to sequence
- *  with pvalue
- *===========================================*/
+/*==================================================
+ * append_indiseq_null -- Append element to sequence
+ *  without value
+ *================================================*/
 void
-append_indiseq (INDISEQ seq,    /* sequence */
-                STRING key,     /* key - not NULL */
-                STRING name,    /* name - may be NULL */
-                WORD val,       /* extra val is pointer */
-                BOOLEAN sure,   /* no dupe check? */
-                BOOLEAN alloc)  /* key alloced? */
+append_indiseq_null (INDISEQ seq,    /* sequence */
+                     STRING key,     /* key - not NULL */
+                     STRING name,    /* name - may be NULL */
+                     BOOLEAN sure,   /* no dupe check? */
+                     BOOLEAN alloc)  /* key alloced? */
+{
+	/* no type check - valid for any seq */
+	append_indiseq_impl(seq, key, name, 0, sure, alloc);
+}
+/*==================================================
+ * append_indiseq_impl -- Append element to sequence
+ *  all type appends use this implementation
+ *================================================*/
+static void
+append_indiseq_impl (INDISEQ seq,    /* sequence */
+                     STRING key,     /* key - not NULL */
+                     STRING name,    /* name - may be NULL */
+                     WORD val,       /* extra val is pointer */
+                     BOOLEAN sure,   /* no dupe check? */
+                     BOOLEAN alloc)  /* key alloced? */
 {
 	INT i, m, n;
 	SORTEL el, *new, *old;
@@ -306,16 +393,18 @@ element_indiseq (INDISEQ seq,    /* sequence */
  * elementval_indiseq -- Return element & value from sequence
  *==============================================*/
 BOOLEAN
-elementval_indiseq (INDISEQ seq,    /* sequence */
-                    INT index,      /* index */
-                    STRING *pkey,   /* returned key */
-                    INT *pval,      /* returned val */
-                    STRING *pname)  /* returned name */
+element_indiseq_ival (INDISEQ seq,    /* sequence */
+                      INT index,      /* index */
+                      STRING *pkey,   /* returned key */
+                      INT *pval,      /* returned val */
+                      STRING *pname)  /* returned name */
 {
 	*pkey = *pname = NULL;
 	if (!seq || index < 0 || index > ISize(seq) - 1) return FALSE;
 	*pkey =  skey(IData(seq)[index]);
-	*pval = sval(IData(seq)[index]);
+	/* do we need to allow for NUL type here ? */
+	ASSERT(IValtype(seq) == ISVAL_INT || IValtype(seq) == ISVAL_NUL);
+	*pval = (INT)sval(IData(seq)[index]);
 	*pname = snam(IData(seq)[index]);
 	return TRUE;
 }
@@ -369,22 +458,13 @@ canonkey_compare (SORTEL el1, SORTEL el2)
 /*===================================================
  * value_str_compare -- Compare two values as strings
  *=================================================*/
-INT
+static INT
 value_str_compare (SORTEL el1, SORTEL el2)
 {
 	PVALUE val1, val2;
 	val1 = sval(el1);
 	val2 = sval(el2);
 	return ll_strcmp((STRING) pvalue(val1), (STRING) pvalue(val2));
-}
-/*====================================
- * value_compare -- Compare two values
- *==================================*/
-INT
-value_compare (SORTEL el1, SORTEL el2)
-{
-	/* WARNING: this is not correct as sval() is a PVALUE structure */
-	return (INT) sval(el1) - (INT) sval(el2);
 }
 /*==========================================
  * namesort_indiseq -- Sort sequence by name
@@ -431,6 +511,8 @@ canonkeysort_indiseq (INDISEQ seq)
 }
 /*============================================
  * valuesort_indiseq -- Sort sequence by value
+ *  This uses pvalues and ought to be moved out
+ *  of gedlib somehow - Perry, 2001/01/07
  *==========================================*/
 void
 valuesort_indiseq (INDISEQ seq,
@@ -451,9 +533,14 @@ valuesort_indiseq (INDISEQ seq,
 			*eflg = TRUE;
 			return;
 		}
+		/*
+		ugly hack: spri() is supposed to be keynum
+		but this is a hack to let us sort on value easily
+		if we got rid of this, we could set spri() to be
+		correct all the time, which would be more convenient
+		*/
 		if (settype == PINT) spri(el) = (INT)pvalue(val);
 	ENDINDISEQ
-  /* OLD: partition_sort(IData(seq), ISize(seq), value_compare); */
 	if (settype == PINT)
 		partition_sort(IData(seq), ISize(seq), key_compare);
 	else
@@ -548,17 +635,35 @@ unique_indiseq (INDISEQ seq)
 	ISize(seq) = j + 1;
 	IFlags(seq) |= UNIQUED;
 }
+/*================================================
+ * get_combined_valtype -- What valtype should the
+ *  new, combined seq be ?
+ *==============================================*/
+static INT
+get_combined_valtype (INDISEQ one, INDISEQ two)
+{
+	if (length_indiseq(one)) {
+		if (length_indiseq(two)) {
+			ASSERT(IValtype(one) == IValtype(two));
+			return IValtype(one);
+		} else {
+			return IValtype(one);
+		}
+	} else {
+		return IValtype(two);
+	}
+}
 /*===============================================
  * union_indiseq -- Create union of two sequences
  *=============================================*/
 INDISEQ
-union_indiseq (INDISEQ one,
-               INDISEQ two)
+union_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
+	INT valtype;
 	if (!one || !two) return NULL;
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
@@ -566,36 +671,37 @@ union_indiseq (INDISEQ one,
 	if (!(IFlags(two) & UNIQUED)) unique_indiseq(two);
 	n = length_indiseq(one);
 	m = length_indiseq(two);
-	three = create_indiseq();
+	valtype = get_combined_valtype(one, two);
+	three = create_indiseq_impl(valtype);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, sval(u[i]),
+			append_indiseq_impl(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
 			key = strsave(skey(v[j]));
-			append_indiseq(three, key, NULL, sval(v[j]),
+			append_indiseq_impl(three, key, NULL, sval(v[j]),
 			    TRUE, TRUE);
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, sval(u[i]),
+			append_indiseq_impl(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++, j++;
 		}
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq(three, key, NULL, sval(u[i]), TRUE, TRUE);
+		append_indiseq_impl(three, key, NULL, sval(u[i]), TRUE, TRUE);
 		i++;
 	}
 	while (j < m) {
 		key = strsave(skey(v[j]));
-		append_indiseq(three, key, NULL, sval(v[j]), TRUE, TRUE);
+		append_indiseq_impl(three, key, NULL, sval(v[j]), TRUE, TRUE);
 		j++;
 	}
 	FORINDISEQ(three, el, num)
@@ -608,13 +714,13 @@ union_indiseq (INDISEQ one,
  * intersect_indiseq -- Create intersection of two sequences
  *========================================================*/
 INDISEQ
-intersect_indiseq (INDISEQ one,
-                   INDISEQ two)
+intersect_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
+	INT valtype;
 	if (!one || !two) return NULL;
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
@@ -622,7 +728,8 @@ intersect_indiseq (INDISEQ one,
 	if (!(IFlags(two) & UNIQUED)) unique_indiseq(two);
 	n = length_indiseq(one);
 	m = length_indiseq(two);
-	three = create_indiseq();
+	valtype = get_combined_valtype(one, two);
+	three = create_indiseq_impl(valtype);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
@@ -633,7 +740,7 @@ intersect_indiseq (INDISEQ one,
 			j++;
 		} else {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, sval(u[i]),
+			append_indiseq_impl(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++, j++;
 		}
@@ -655,6 +762,7 @@ difference_indiseq (INDISEQ one,
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
+	INT valtype;
 	if (!one || !two) return NULL;
 	if (!(IFlags(one) & KEYSORT)) keysort_indiseq(one);
 	if (!(IFlags(one) & UNIQUED)) unique_indiseq(one);
@@ -662,14 +770,15 @@ difference_indiseq (INDISEQ one,
 	if (!(IFlags(two) & UNIQUED)) unique_indiseq(two);
 	n = length_indiseq(one);
 	m = length_indiseq(two);
-	three = create_indiseq();
+	valtype = get_combined_valtype(one, two);
+	three = create_indiseq_impl(valtype);
 	i = j = 0;
 	u = IData(one);
 	v = IData(two);
 	while (i < n && j < m) {
 		if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			key = strsave(skey(u[i]));
-			append_indiseq(three, key, NULL, sval(u[i]),
+			append_indiseq_impl(three, key, NULL, sval(u[i]),
 			    TRUE, TRUE);
 			i++;
 		} else if (rel > 0) {
@@ -680,7 +789,7 @@ difference_indiseq (INDISEQ one,
 	}
 	while (i < n) {
 		key = strsave(skey(u[i]));
-		append_indiseq(three, key, NULL, sval(u[i]), TRUE, TRUE);
+		append_indiseq_impl(three, key, NULL, sval(u[i]), TRUE, TRUE);
 		i++;
 	}
 	FORINDISEQ(three, el, num)
@@ -701,19 +810,19 @@ parent_indiseq (INDISEQ seq)
 	STRING key;
 	if (!seq) return NULL;
 	tab = create_table();
-	par = create_indiseq();
+	par = create_indiseq_impl(IValtype(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		fath = indi_to_fath(indi);
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, key = indi_to_key(fath))) {
 			key = strsave(key);
-			append_indiseq(par, key, NULL, sval(el), TRUE, TRUE);
+			append_indiseq_impl(par, key, NULL, sval(el), TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 		if (moth && !in_table(tab, key = indi_to_key(moth))) {
 			key = strsave(key);
-			append_indiseq(par, key, NULL, sval(el), TRUE, TRUE);
+			append_indiseq_impl(par, key, NULL, sval(el), TRUE, TRUE);
 			insert_table(tab, key, NULL);
 		}
 	ENDINDISEQ
@@ -733,7 +842,7 @@ child_indiseq (INDISEQ seq)
 	STRING key;
 	if (!seq) return NULL;
 	tab = create_table();
-	cseq = create_indiseq();
+	cseq = create_indiseq_impl(IValtype(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORFAMSS(indi, fam, spouse, num1)
@@ -741,7 +850,7 @@ child_indiseq (INDISEQ seq)
 				key = indi_to_key(chil);
 				if (!in_table(tab, key)) {
 					key = strsave(key);
-					append_indiseq(cseq, key, NULL,
+					append_indiseq_impl(cseq, key, NULL,
 					    sval(el), TRUE, TRUE);
 					insert_table(tab, key, NULL);
 				}
@@ -761,12 +870,12 @@ indi_to_children (NODE indi)
 	INT num1, num2, len = 0;
 	STRING key;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORFAMSS(indi, fam, spouse, num1)
 		FORCHILDREN(fam, chil, num2)
 			len++;
 			key = indi_to_key(chil);
-			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		ENDCHILDREN
 	ENDFAMSS
 	if (len) return seq;
@@ -785,22 +894,22 @@ indi_to_spouses (NODE indi)
 	INT num, num1, val, len = 0;
 	STRING key;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
 	FORFAMSS(indi, fam, spouse, num)
 #if 0
 		if (spouse) {
 			len++;
 			key = indi_to_key(spouse);
-			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
-			append_indiseq(seq, key, NULL, val, TRUE, FALSE);
+			val = atoi(fam_to_key(fam) + 1);
+			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		}
 #else
 		FORHUSBS(fam, husb, num1)
 		    if(husb != indi) {
 			len++;
 			key = indi_to_key(husb);
-			val = atoi(fam_to_key(fam) + 1); /* PVALUE NEEDED */
+			val = atoi(fam_to_key(fam) + 1);
 			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		    }
 		ENDHUSBS
@@ -830,12 +939,12 @@ indi_to_fathers (NODE indi)
 	INT num1, num2, len = 0;
 	STRING key;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORFAMCS(indi, fam, fath, moth, num1)
 		FORHUSBS(fam, husb, num2)
 			len++;
 			key = indi_to_key(husb);
-			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		ENDHUSBS
 	ENDFAMCS
 	if (len) return seq;
@@ -852,12 +961,12 @@ indi_to_mothers (NODE indi)
 	INT num1, num2, len = 0;
 	STRING key;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORFAMCS(indi, fam, fath, moth, num1)
 		FORWIFES(fam, wife, num2)
 			len++;
 			key = indi_to_key(wife);
-			append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		ENDWIFES
 	ENDFAMCS
 	if (len) return seq;
@@ -877,7 +986,7 @@ indi_to_families (NODE indi,      /* person */
 	INT num, val;
 	STRING key;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_FAMSEQ;
 	if (fams) {
 		FORFAMSS(indi, fam, spouse, num)
@@ -906,10 +1015,10 @@ fam_to_children (NODE fam)
 	INT num;
 	STRING key;
 	if (!fam) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORCHILDREN(fam, chil, num)
 		key = indi_to_key(chil);
-		append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDCHILDREN
 	if (num) return seq;
 	remove_indiseq(seq, FALSE);
@@ -925,10 +1034,10 @@ fam_to_fathers (NODE fam)
 	INT num;
 	STRING key;
 	if (!fam) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORHUSBS(fam, husb, num)
 		key = indi_to_key(husb);
-		append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDHUSBS
 	if (num) return seq;
 	remove_indiseq(seq, FALSE);
@@ -944,10 +1053,10 @@ fam_to_mothers (NODE fam)
 	INT num;
 	STRING key;
 	if (!fam) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	FORWIFES(fam, wife, num)
 		key = indi_to_key(wife);
-		append_indiseq(seq, key, NULL, NULL, TRUE, FALSE);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDWIFES
 	if (num) return seq;
 	remove_indiseq(seq, FALSE);
@@ -965,13 +1074,13 @@ sibling_indiseq (INDISEQ seq,
 	STRING key, fkey;
 	INT num2;
 	TABLE tab = create_table();
-	fseq = create_indiseq();
-	sseq = create_indiseq();
+	fseq = create_indiseq_null(); /* temporary */
+	sseq = create_indiseq_null();
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		if ((fam = indi_to_famc(indi))) {
 			fkey = fam_to_key(fam);
-			append_indiseq(fseq, fkey, NULL, NULL, FALSE, FALSE);
+			append_indiseq_null(fseq, fkey, NULL, FALSE, FALSE);
 		}
 		if (!close) insert_table(tab, skey(el), NULL);
 	ENDINDISEQ
@@ -981,8 +1090,7 @@ sibling_indiseq (INDISEQ seq,
 			key = indi_to_key(chil);
 			if (!in_table(tab, key)) {
 				key = strsave(key);
-				append_indiseq(sseq, key, NULL, NULL,
-				    TRUE, TRUE);
+				append_indiseq_null(sseq, key, NULL, TRUE, TRUE);
 				insert_table(tab, key, NULL);
 			}
 		ENDCHILDREN
@@ -1009,7 +1117,7 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 	tab = create_table();
 	anclist = create_list();
 	genlist = create_list();
-	anc = create_indiseq();
+	anc = create_indiseq_pval();
 	FORINDISEQ(seq, el, num)
 		enqueue_list(anclist, (WORD)skey(el));
 		enqueue_list(genlist, (WORD)0);
@@ -1022,7 +1130,7 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 		moth = indi_to_moth(indi);
 		if (fath && !in_table(tab, pkey = indi_to_key(fath))) {
 			pkey = strsave(pkey);
-			append_indiseq(anc, pkey, NULL,
+			append_indiseq_pval(anc, pkey, NULL,
 				(*create_value_fnc)(gen), TRUE, TRUE);
 			enqueue_list(anclist, (WORD)pkey);
 			enqueue_list(genlist, (WORD)gen);
@@ -1030,7 +1138,7 @@ ancestor_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 		}
 		if (moth && !in_table(tab, pkey = indi_to_key(moth))) {
 			pkey = strsave(pkey);
-			append_indiseq(anc, pkey, NULL,
+			append_indiseq_pval(anc, pkey, NULL,
 				(*create_value_fnc)(gen), TRUE, TRUE);
 			enqueue_list(anclist, (WORD)pkey);
 			enqueue_list(genlist, (WORD)gen);
@@ -1061,7 +1169,7 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 	ftab = create_table();
 	deslist = create_list();
 	genlist = create_list();
-	des = create_indiseq();
+	des = create_indiseq_pval();
 	FORINDISEQ(seq, el, num)
 		enqueue_list(deslist, (WORD)skey(el));
 		enqueue_list(genlist, (WORD)0);
@@ -1079,7 +1187,7 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
 				if (!in_table(itab,
 				    dkey = indi_to_key(child))) {
 					dkey = strsave(dkey);
-					append_indiseq(des, dkey, NULL, 
+					append_indiseq_pval(des, dkey, NULL, 
 					    (*create_value_fnc)(gen),
 					    TRUE, TRUE);
 					enqueue_list(deslist, (WORD)dkey);
@@ -1098,24 +1206,26 @@ descendent_indiseq (INDISEQ seq, WORD (*create_value_fnc)(INT gen))
  * spouse_indiseq -- Create spouses sequence of a sequence
  *======================================================*/
 INDISEQ
-spouse_indiseq (INDISEQ seq)
+spouse_indiseq (INDISEQ seq, WORD (*copy_value_fnc)(WORD val))
 {
 	TABLE tab;
 	INDISEQ sps;
 	STRING spkey;
 	NODE indi;
 	INT num1;
+	WORD newval;
 	if (!seq) return NULL;
 	tab = create_table();
-	sps = create_indiseq();
+	sps = create_indiseq_impl(IValtype(seq));
 	FORINDISEQ(seq, el, num)
 		indi = key_to_indi(skey(el));
 		FORSPOUSES(indi, spouse, fam, num1)
 			spkey = indi_to_key(spouse);
 			if (!in_table(tab, spkey)) {
 				spkey = strsave(spkey);
-				append_indiseq(sps, spkey, NULL,
-				    (WORD)sval(el), TRUE, TRUE);
+				newval = (*copy_value_fnc)(sval(el));
+				append_indiseq_impl(sps, spkey, NULL,
+				    newval, TRUE, TRUE);
 				insert_table(tab, spkey, NULL);
 			}
 		ENDSPOUSES
@@ -1138,10 +1248,9 @@ name_to_indiseq (STRING name)
 	if (*name != '*') {
 		names = get_names(name, &num, &keys, TRUE);
 		if (num == 0) return NULL;
-		seq = create_indiseq();
+		seq = create_indiseq_null();
 		for (i = 0; i < num; i++)
-			append_indiseq(seq, keys[i], NULL, NULL, FALSE,
-			    FALSE);
+			append_indiseq_null(seq, keys[i], NULL, FALSE, FALSE);
 		namesort_indiseq(seq);
 		return seq;
 	}
@@ -1154,24 +1263,22 @@ name_to_indiseq (STRING name)
 		names = get_names(scratch, &num, &keys, TRUE);
 		if (num == 0) continue;
 		if (!made) {
-			seq = create_indiseq();
+			seq = create_indiseq_null();
 			made = TRUE;
 		}
 		for (i = 0; i < num; i++) {
-			append_indiseq(seq, keys[i], NULL, NULL, TRUE,
-			    FALSE);
+			append_indiseq_null(seq, keys[i], NULL, TRUE, FALSE);
 		}
 	}
 	scratch[0] = '$';
 	names = get_names(scratch, &num, &keys, TRUE);
 	if (num) {
 		if (!made) {
-			seq = create_indiseq();
+			seq = create_indiseq_null();
 			made = TRUE;
 		}
 		for (i = 0; i < num; i++) {
-			append_indiseq(seq, keys[i], NULL, NULL, TRUE,
-			    FALSE);
+			append_indiseq_null(seq, keys[i], NULL, TRUE, FALSE);
 		}
 	}
 	if (seq) {
@@ -1241,7 +1348,7 @@ spouseseq_print_el (INDISEQ seq, INT i)
 	NODE indi, fam;
 	STRING key, name, str;
 	INT val;
-	elementval_indiseq(seq, i, &key, &val, &name);
+	element_indiseq_ival(seq, i, &key, &val, &name);
 	indi = key_to_indi(key);
 	fam = keynum_to_fam(val);
 	str = indi_to_list_string(indi, fam, 68);
@@ -1258,7 +1365,7 @@ famseq_print_el (INDISEQ seq, INT i)
 	NODE fam, spouse;
 	STRING key, name, str;
 	INT val;
-	elementval_indiseq(seq, i, &key, &val, &name);
+	element_indiseq_ival(seq, i, &key, &val, &name);
 	fam = key_to_fam(key);
 	spouse = ( val ? keynum_to_indi(val) : NULL);
 	str = indi_to_list_string(spouse, fam, 68);
@@ -1330,9 +1437,9 @@ refn_to_indiseq (STRING ukey, INT letr, INT sort)
 	if (!ukey || *ukey == 0) return NULL;
 	get_refns(ukey, &num, &keys, letr);
 	if (num == 0) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_null();
 	for (i = 0; i < num; i++) {
-		append_indiseq(seq, keys[i], NULL, NULL, FALSE, FALSE);
+		append_indiseq_null(seq, keys[i], NULL, FALSE, FALSE);
 	}
 	if (sort == NAMESORT)
 		namesort_indiseq(seq);
@@ -1350,8 +1457,8 @@ key_to_indiseq (STRING name)
 	INDISEQ seq = NULL;
 	if (!name) return NULL;
 	if (!(id_by_key(name, &keys))) return NULL;
-	seq = create_indiseq();
-	append_indiseq(seq, keys[0], NULL, NULL, FALSE, FALSE);
+	seq = create_indiseq_null();
+	append_indiseq_null(seq, keys[0], NULL, FALSE, FALSE);
 	return seq;
 }
 /*===========================================================
@@ -1388,10 +1495,11 @@ append_all_tags(INDISEQ seq, NODE node, STRING tagname, BOOLEAN recurse)
 		{
 			STRING skey = rmvat(key);
 			if (skey)
-				val = atoi(skey+1); /* PVALUE NEEDED */
+				val = atoi(skey+1);
 			else
 			{
-				skey = key; /* leave invalid sources alone, but mark invalid with val==-1 */
+				/* list invalid sources, but mark invalid with val==-1 */
+				skey = key;
 				val = -1;
 			}
 			append_indiseq_ival(seq, skey, NULL, val, FALSE, FALSE);
@@ -1411,7 +1519,7 @@ INDISEQ node_to_sources (NODE indi)
 {
 	INDISEQ seq;
 	if (!indi) return NULL;
-	seq = create_indiseq();
+	seq = create_indiseq_ival();
 	append_all_tags(seq, indi, "SOUR", TRUE);
 	if (!length_indiseq(seq))
 	{
@@ -1431,7 +1539,7 @@ INDISEQ get_all_sour (void)
 	{
 		static char skey[10];
 		if (!seq)
-			seq = create_indiseq();
+			seq = create_indiseq_ival();
 		sprintf(skey, "S%d", i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
@@ -1448,7 +1556,7 @@ INDISEQ get_all_even (void)
 	{
 		static char skey[10];
 		if (!seq)
-			seq = create_indiseq();
+			seq = create_indiseq_ival();
 		sprintf(skey, "E%d", i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
@@ -1465,7 +1573,7 @@ INDISEQ get_all_othe (void)
 	{
 		static char skey[10];
 		if (!seq)
-			seq = create_indiseq();
+			seq = create_indiseq_ival();
 		sprintf(skey, "X%d", i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}

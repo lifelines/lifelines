@@ -70,7 +70,7 @@ struct ntag0 {
 	NKEY nkey;
 	/* metadata will be here */
 };
-NODE nztop(NOD0); /* handles NULL */
+NODE nztop(NOD0); /* function so it can handle NULL input */
 #define nznkey(n)   ((n)->nkey)
 #define nzkeynum(n) ((n)->nkey.keynum)
 #define nztype(n)   ((n)->nkey.ntype)
@@ -321,7 +321,7 @@ BOOLEAN store_record(STRING, STRING, INT);
 NOD0 string_to_nod0(STRING, STRING key);
 NODE string_to_node(STRING);
 BOOLEAN symbolic_link(STRING);
-void traverse_db_rec_keys(STRING lo, STRING hi, BOOLEAN(*func)(STRING key, STRING, INT, void *), void * data);
+void traverse_db_rec_keys(STRING lo, STRING hi, BOOLEAN(*func)(STRING key, STRING, INT, void *param), void * param);
 void traverse_names(BOOLEAN(*func)(STRING key, STRING name, void *param), void *param);
 BOOLEAN traverse_nodes(NODE, BOOLEAN(*func)(NODE));
 void traverse_refns(BOOLEAN(*func)(STRING key, STRING refn, void *param), void *param);

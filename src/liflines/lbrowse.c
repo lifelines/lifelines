@@ -161,8 +161,7 @@ browse_list (NODE *pindi1,
 				break;
 			}
 			FORINDISEQ(newseq, e, i)
-				append_indiseq(seq, skey(e), snam(e), NULL,
-				    FALSE, FALSE);
+				append_indiseq_null(seq, skey(e), snam(e), FALSE, FALSE);
 			ENDINDISEQ
 			namesort_indiseq(seq);
 			cur = top = 0;
