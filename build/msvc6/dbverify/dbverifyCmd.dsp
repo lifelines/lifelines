@@ -296,6 +296,10 @@ SOURCE=..\..\..\src\stdlib\sequence.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\soundex.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\spltjoin.c
 # End Source File
 # Begin Source File
