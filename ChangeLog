@@ -1,3 +1,10 @@
+2003-11-23 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c
+
+	add_to_direct was getting called twice (per each element
+	added)
+
 2003-11-22 Perry Rapp
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/keytonod.c

@@ -662,9 +662,9 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	}
 	ASSERT(rec && rec->rec_top);
 	cel = node_to_cache(cache, rec->rec_top);
+	/* node_to_cache did a first_direct call */
 	rec->rec_top = 0;
 	rec->rec_cel = cel;
-	first_direct(cache, cel);
 	stdfree(rawrec);
 	return cel;
 }
@@ -889,6 +889,7 @@ othr_to_cache (NODE node)
  *  and delegates the work
  *  node tree must be valid, and of the correct type
  *  (INDI node trees may only be added to INDI cache, etc)
+ *  This puts node into cache (first_direct)
  *======================================*/
 static CACHEEL
 node_to_cache (CACHE cache, NODE top)
@@ -907,14 +908,14 @@ node_to_cache (CACHE cache, NODE top)
 	key = node_to_key(top);
 	ASSERT(key);
 	ASSERT(!valueof_ptr(cacdata(cache), key));
-	if (!cacsizedir(cache) >= cacmaxdir(cache)) {
+	if (cacsizedir(cache) >= cacmaxdir(cache)) {
 		llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
 		ASSERT(0);
 	}
 	return put_node_in_cache(cache, top, key);
 }
 /*=======================================================
- * put_node_in_cache -- Low-level work of creating new cacheel
+ * put_node_in_cache -- Low-level work of creating new cacheel (& putting in cache)
  *=====================================================*/
 static CACHEEL
 put_node_in_cache (CACHE cache, NODE node, STRING key)
