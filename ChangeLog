@@ -106,6 +106,10 @@
 	Fix free_all_pvalues (was not handling leaked pvalues
 	cross-linked between blocks).
 
+	* ChangeLog src/hdrs/table.h src/stdlib/table.c
+
+	Remove no longer used function create_table_old.
+
 2005-02-05 Perry Rapp
 
 	* ChangeLog NEWS src/gedlib/xreffile.c
