@@ -1,3 +1,10 @@
+2001-06-30 Matt Emmerton <memmerto@users.sourceforge.net>
+
+	* ChangeLog btree/opnbtree.c
+	Made open_btree() honour the readonly flag.  (Previously it would
+	attempt to open the keyfiles in R/W mode and update them (!) without
+	checking the readonly flag.)
+
 2001-06-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog liflines/swap.c:

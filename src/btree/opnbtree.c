@@ -128,7 +128,7 @@ openbtree (STRING dir,          /* btree base dir */
 	/* See if base directory exists */
 	if (stat(dir, &sbuf)) {
 		/* db directory not found */
-		if (!cflag) {
+		if (!cflag || readonly) {
 			bterrno = BTERR_NODB;
 			return NULL;
 		}
@@ -153,7 +153,7 @@ openbtree (STRING dir,          /* btree base dir */
 	sprintf(scratch, "%s/key", dir);
 	if (stat(scratch, &sbuf)) {
 		/* no keyfile */
-		if (!cflag) {
+		if (!cflag || readonly) {
 			bterrno = BTERR_NOKEY;
 			return NULL;
 		}
@@ -176,12 +176,23 @@ openbtree (STRING dir,          /* btree base dir */
 		return NULL;
 	}
 
-/* Open and read key file (KEYFILE1) */
-	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
-	    fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+/* Open key file (KEYFILE1)  */
+	if (readonly) {
+		fp = fopen(scratch, LLREADBINARY);
+	} else {
+		fp = fopen(scratch, LLREADBINARYUPDATE);
+	}
+	if (fp == NULL) {
 		bterrno = BTERR_KFILE;
 		return NULL;
 	}
+
+/* Read key file (KEYFILE1)  */
+	if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		bterrno = BTERR_KFILE;
+		return NULL;
+	}
+
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
 		if (!validate_keyfile2(&kfile2))
@@ -200,17 +211,22 @@ openbtree (STRING dir,          /* btree base dir */
 	else
 		kfile1.k_ostat++;
 	rewind(fp);
-	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
-		fclose(fp);
-		return NULL;
+	if (!readonly) {
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+			bterrno = BTERR_KFILE;
+			fclose(fp);
+			return NULL;
+		}
 	}
 	if (!keyed2) {
 		/* add KEYFILE2 structure */
 		init_keyfile2(&kfile2);
-		if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
-		bterrno = BTERR_KFILE;
-		fclose(fp);
+		if (!readonly) {
+			if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
+				bterrno = BTERR_KFILE;
+				fclose(fp);
+				return NULL;
+			}
 		}
 	}
 	fflush(fp);
