@@ -1,3 +1,8 @@
+2004-07-21 Stephen Dum
+        * removed ps-circ/ps-circ.ll ps-circ/ps-circ.ps
+	These turned out to be earlier versions of ps-circle.ll (which
+	has the ps file imbeded.)
+
 2004-07-20 Stephen Dum
         * ChangeLog docs/ll-userguide.html docs/ll-userguide.pdf
 	docs/ll-userguide.sv.html docs/ll-userguide.sv.xml
