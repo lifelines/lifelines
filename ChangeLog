@@ -1,6 +1,10 @@
-2002-01-04 Matt Emmerton <memmerto@users.sourceforge.net>
+2002-01-05 Matt Emmerton <memmerto@users.sourceforge.net>
 
-	* ChangeLog INSTALL
+	* ChangeLog hdrs/screen.h
+
+	Generalized the check for missing ACS_ #defines.
+
+
 
 	Added blurb about compiling --with-cygnus.
 	Reworded various sections.

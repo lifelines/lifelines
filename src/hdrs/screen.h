@@ -56,28 +56,20 @@
 /* must be at bottom of list */
 #define MAX_SCREEN        10
 
-#if defined(__CYGWIN__)
-/* add BSD if necessary, if it defines them but linker can't find them */
-/*
-hack because cygwin has these, but we aren't linking to get them
-they are in libncurses.dll
-so pretend we don't have them
-until we figure out how to fix it to link to them
-*/
-#undef ACS_TTEE
-#undef ACS_RTEE
-#undef ACS_LTEE
-#undef ACS_BTEE
-#undef ACS_VLINE
-#undef ACS_HLINE
-#endif
-
+/* Support for 'broken' curses implementations */
+/* That don't define ACS_xxx constants */
 #ifndef ACS_TTEE
+#   undef ACS_TTEE
 #	define ACS_TTEE '+'
+#   undef ACS_RTEE
 #	define ACS_RTEE '+'
+#   undef ACS_LTEE
 #	define ACS_LTEE '+'
+#   undef ACS_BTEE
 #	define ACS_BTEE '+'
+#   undef ACS_VLINE 
 #	define ACS_VLINE '|'
+#   undef ACS_HLINE
 #	define ACS_HLINE '-'
 #endif
 
