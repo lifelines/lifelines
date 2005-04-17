@@ -5,17 +5,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.29\n"
+"Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-13 17:40-0500\n"
-"PO-Revision-Date: 2004-03-16 21:35+0100\n"
+"PO-Revision-Date: 2005-04-15 17:56+0200\n"
 "Last-Translator: Piotr Bolek <piotr.bolek@7bulls.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/gedlib/charmaps.c:767
 msgid "<unnamed>"
@@ -29,21 +28,21 @@ msgstr "%02ds"
 
 #. TRANSLATORS: minutes & seconds time interval
 #: src/gedlib/date.c:1893
-#, fuzzy, c-format
+#, c-format
 msgid "%dm%02ds"
-msgstr "%dm%03ds"
+msgstr "%dm%02ds"
 
 #. TRANSLATORS: hours & minutes time interval
 #: src/gedlib/date.c:1899
-#, fuzzy, c-format
+#, c-format
 msgid "%dh%02dm"
-msgstr "%dl%03dd"
+msgstr "%dg%02dm"
 
 #. TRANSLATORS: days & hours time interval
 #: src/gedlib/date.c:1905
-#, fuzzy, c-format
+#, c-format
 msgid "%dd%02dh"
-msgstr "%dl%03dd"
+msgstr "%dd%02dg"
 
 #. TRANSLATORS: years & days time interval
 #: src/gedlib/date.c:1909
@@ -89,9 +88,7 @@ msgstr "nie mo¿na otworzyæ, przeczytaæ albo zapisaæ pliku z kluczami."
 
 #: src/gedlib/init.c:597
 msgid "could not open, read or write the key file (to alter database)."
-msgstr ""
-"nie mo¿na otworzyæ, przeczytaæ albo zapisaæ pliku z kluczami (przy dostêpie "
-"do bazy danych)."
+msgstr "nie mo¿na otworzyæ, przeczytaæ albo zapisaæ pliku z kluczami (przy dostêpie do bazy danych)."
 
 #: src/gedlib/init.c:600
 msgid "could not open, read or write a block file."
@@ -359,9 +356,8 @@ msgid "pattern: "
 msgstr "wzorzec:"
 
 #: src/gedlib/messages.c:105
-#, fuzzy
 msgid "Please choose from among these people."
-msgstr "Wybierz z poni¿szych rekordów."
+msgstr "Wybierz z poni¿szych osób."
 
 #: src/gedlib/messages.c:106
 msgid "Please choose from among these records."
@@ -380,9 +376,8 @@ msgid "Is this the person?  Select if so."
 msgstr "Czy to jest osoba? Wybierz je¶li tak."
 
 #: src/gedlib/messages.c:110
-#, fuzzy
 msgid "Is this the record?  Select if so."
-msgstr "Czy to jest osoba? Wybierz je¶li tak."
+msgstr "Czy to jest rekord? Wybierz je¶li tak."
 
 #: src/gedlib/messages.c:111
 msgid "Select the child the new child precedes or select last."
@@ -569,8 +564,7 @@ msgid "Choose a family by selecting a spouse/parent."
 msgstr "Wybierz rodzinê wybieraj±c ma³¿onka/rodzica."
 
 #: src/gedlib/messages.c:161
-msgid ""
-"Do you want to edit the person again? (Otherwise changes will be discarded.)"
+msgid "Do you want to edit the person again? (Otherwise changes will be discarded.)"
 msgstr "Czy edytujesz osobê ponownie? (Je¶li nie, to zmiany bêd± odrzucone)."
 
 #: src/gedlib/messages.c:162
@@ -578,8 +572,7 @@ msgid "Do you want to edit the person again?"
 msgstr "Czy chcesz edytowaæ osobê ponownie?"
 
 #: src/gedlib/messages.c:163
-msgid ""
-"Do you want to edit the family again? (Otherwise changes will be discarded.)"
+msgid "Do you want to edit the family again? (Otherwise changes will be discarded.)"
 msgstr "Czy edytujesz rodzinê ponownie? (Je¶li nie, to zmiany bêd± odrzucone)."
 
 #: src/gedlib/messages.c:164
@@ -587,8 +580,7 @@ msgid "Do you want to edit the family again?"
 msgstr "Czy chcesz edytowaæ rodzinê ponownie?"
 
 #: src/gedlib/messages.c:165
-msgid ""
-"Do you want to edit the source again? (Otherwise changes will be discarded.)"
+msgid "Do you want to edit the source again? (Otherwise changes will be discarded.)"
 msgstr "Czy edytujesz ¼ród³o ponownie? (Je¶li nie, to zmiany bêd± odrzucone)."
 
 #: src/gedlib/messages.c:166
@@ -596,8 +588,7 @@ msgid "Do you want to edit the source again?"
 msgstr "Czy chcesz ¼ród³o rodzinê ponownie?"
 
 #: src/gedlib/messages.c:167
-msgid ""
-"Do you want to edit the event again? (Otherwise changes will be discarded.)"
+msgid "Do you want to edit the event again? (Otherwise changes will be discarded.)"
 msgstr "Czy edujesz zdarzenie ponownie? (Je¶li nie, to zmiany bêd± odrzucone)."
 
 #: src/gedlib/messages.c:168
@@ -605,8 +596,7 @@ msgid "Do you want to edit the event again?"
 msgstr "Czy chcesz edytowaæ zdarzenie ponownie?"
 
 #: src/gedlib/messages.c:169
-msgid ""
-"Do you want to edit the record again? (Otherwise changes will be discarded.)"
+msgid "Do you want to edit the record again? (Otherwise changes will be discarded.)"
 msgstr "Czy edytujesz rekord ponownie? (Je¶li nie, to zmiany bêd± odrzucone)."
 
 #: src/gedlib/messages.c:170
@@ -682,12 +672,10 @@ msgid "Are you sure you want to remove the person from the database?"
 msgstr "Czy na pewno chcesz usun±æ tê osobê z bazy danych?"
 
 #: src/gedlib/messages.c:189
-#, fuzzy
 msgid "Are you sure you want to remove this record from the database?"
-msgstr "Czy na pewno chcesz usun±æ tê osobê z bazy danych?"
+msgstr "Czy na pewno chcesz usun±æ ten rekord z bazy danych?"
 
 #: src/gedlib/messages.c:190
-#, fuzzy
 msgid "Remove this family record?"
 msgstr "Usun±æ ten rekord rodziny?"
 
@@ -845,9 +833,8 @@ msgid "Who do you want to remove from the database?"
 msgstr "Kogo chcesz usun±æ z bazy danych?"
 
 #: src/gedlib/messages.c:235
-#, fuzzy
 msgid "What record do you want to remove from the database?"
-msgstr "Kogo chcesz usun±æ z bazy danych?"
+msgstr "Który rekord chcesz usun±æ z bazy danych?"
 
 #: src/gedlib/messages.c:236
 msgid "Place the child last in the family."
@@ -983,15 +970,13 @@ msgstr "Nie ma b³êdów; dodajê rekordy z nowymi kluczami..."
 #: src/gedlib/messages.c:274
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
-msgstr ""
-"U¿ywam oryginalnych kluczy, %d usuniêtych rekordów bêdzie w bazie danych."
+msgstr "U¿ywam oryginalnych kluczy, %d usuniêtych rekordów bêdzie w bazie danych."
 
 #: src/gedlib/messages.c:275
 msgid "Use original keys from GEDCOM file?"
 msgstr "U¿yæ oryginalnych kluczy z pliku GEDCOM?"
 
 #: src/gedlib/messages.c:276
-#, fuzzy
 msgid "Proceed?"
 msgstr "Kontynuujemy?"
 
@@ -1099,9 +1084,7 @@ msgstr "B³êdny plik konfiguracyjny: za d³ugi wiersz."
 
 #: src/gedlib/messages.c:306
 msgid "Unsupported file encoding (no multibyte encodings except UTF-8)."
-msgstr ""
-"Nieobs³ugiwane kodowanie pliku (z kodowañ wielobajtowych - mo¿na tylko UTF-"
-"8)."
+msgstr "Nieobs³ugiwane kodowanie pliku (z kodowañ wielobajtowych - mo¿na tylko UTF-8)."
 
 #: src/gedlib/messages.c:307
 #, c-format
@@ -1474,10 +1457,8 @@ msgstr "osób: %d, rodzin: %d, ¼róde³: %d, zdarzeñ: %d, innych: %d"
 
 #: src/gedlib/messages.c:419
 #, c-format
-msgid ""
-"The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
-msgstr ""
-"¯±dana wielko¶æ okna (%d,%d) jest za du¿a dla twojego terminala (%d,%d).\n"
+msgid "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
+msgstr "¯±dana wielko¶æ okna (%d,%d) jest za du¿a dla twojego terminala (%d,%d).\n"
 
 #: src/gedlib/messages.c:420
 #, c-format
@@ -1544,9 +1525,7 @@ msgstr "LifeLines -- Ekran przegl±dania dwóch rodzin (* w³±cza/wy³±cza menu)"
 
 #: src/gedlib/messages.c:443
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
-msgstr ""
-"LifeLines -- Ekran przegl±dania dodarkowych informacji (* w³±cza/wy³±cza "
-"menu)"
+msgstr "LifeLines -- Ekran przegl±dania dodarkowych informacji (* w³±cza/wy³±cza menu)"
 
 #: src/gedlib/messages.c:444
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
@@ -1562,8 +1541,7 @@ msgstr "Polecenia:   j Do do³u     k Do góry    q Wyjd¼"
 
 #: src/gedlib/messages.c:449
 msgid "Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit"
-msgstr ""
-"Polecenia: Wybierz numer, u Str. w górê, d Str. w dó³, i Wybór, q Wyj¶cie"
+msgstr "Polecenia: Wybierz numer, u Str. w górê, d Str. w dó³, i Wybór, q Wyj¶cie"
 
 #: src/gedlib/messages.c:450
 msgid "Commands:   u Page Up, d Page Down, q Quit"
@@ -1619,7 +1597,7 @@ msgid "Bad history length"
 msgstr "Z³a d³ugo¶æ historii"
 
 #: src/gedlib/messages.c:467
-#, fuzzy, c-format
+#, c-format
 msgid "Delete history (%d entries)?"
 msgstr "Skasowaæ historiê (%d pozycji)?"
 
@@ -1632,16 +1610,14 @@ msgid "Choose from history"
 msgstr "Wybierz z historii"
 
 #: src/gedlib/messages.c:470
-msgid ""
-"Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
+msgid "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 "Nie mo¿na ³±czyæ trybu niemodyfikowalnego (-i) albo tylko do czytania (-r) \n"
 "z dostêpem do odczytu-zapisu (-w)."
 
 #: src/gedlib/messages.c:471
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
-msgstr ""
-"Nie mo¿na ³±czyæ opcji bezwarunkowego otwarcia (-f) z opcj± blokady (-l)."
+msgstr "Nie mo¿na ³±czyæ opcji bezwarunkowego otwarcia (-f) z opcj± blokady (-l)."
 
 #: src/gedlib/messages.c:472
 msgid "Program"
@@ -1918,9 +1894,8 @@ msgid "f  Family - remove a family completely"
 msgstr "f  Rodzina - usuñ rodzinê zupe³nie"
 
 #: src/gedlib/messages.c:560
-#, fuzzy
 msgid "o  Other - remove other record completely"
-msgstr "i  Osoba - usuñ osobê zupe³nie"
+msgstr "o  Inne - usuñ rekord zupe³nie"
 
 #: src/gedlib/messages.c:563
 msgid "How would you like to find a record?"
@@ -2389,114 +2364,107 @@ msgstr "BRAK NAZWISKA"
 #: src/gedlib/node.c:1167
 #, c-format
 msgid "Node memory leaks:"
-msgstr ""
+msgstr "Wycieki pamiêci w wê¼le:"
 
 #: src/gedlib/node.c:1170
 #, c-format
 msgid "%d item leaked"
 msgid_plural "%d items leaked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Wyciek³ %d element"
+msgstr[1] "Wyciek³y %d elementy"
+msgstr[2] "Wyciek³o %d elementów"
 
 #: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
-msgstr ""
+msgstr "Nie mo¿na usuwaæ rodzin w ten sposób."
 
 #. TRANSLATORS: Character set conversion from external editor to database internal
 #: src/gedlib/translat.c:100
-#, fuzzy
 msgid "Editor to Internal"
-msgstr "e Mapowanie Edytor->wewnêtrzne"
+msgstr "Edytor->Wewnêtrzne"
 
 #. TRANSLATORS: Character set conversion from database internal to external editor
 #: src/gedlib/translat.c:102
-#, fuzzy
 msgid "Internal to Editor"
-msgstr "m Mapowanie wewnêtrzne->edytor"
+msgstr "Wewnêtrzne->Edytor"
 
 #: src/gedlib/translat.c:103
-#, fuzzy
 msgid "GEDCOM to Internal"
-msgstr "i Mapowanie GEDCOM->wewnêtrzne"
+msgstr "GEDCOM->Wewnêtrzne"
 
 #: src/gedlib/translat.c:104
-#, fuzzy
 msgid "Internal to GEDCOM"
-msgstr "x Mapowanie wewnêtrzne->GEDCOM"
+msgstr "Wewnêtrzne->GEDCOM"
 
 #: src/gedlib/translat.c:105
-#, fuzzy
 msgid "Display to Internal"
-msgstr "g Mapowanie ekran->wewnêtrzne"
+msgstr "Ekran->Wewnêtrzne"
 
 #: src/gedlib/translat.c:106
-#, fuzzy
 msgid "Internal to Display"
-msgstr "d Mapowanie wewnêtrzne->ekran"
+msgstr "Wewnêtrzne->Ekran"
 
 #: src/gedlib/translat.c:107
-#, fuzzy
 msgid "Report to Internal"
-msgstr "e Mapowanie Edytor->wewnêtrzne"
+msgstr "Raport->Wewnêtrzne"
 
 #: src/gedlib/translat.c:108
-#, fuzzy
 msgid "Internal to Report"
-msgstr "r Mapowanie wewnêtrzne->raport"
+msgstr "Wewnêtrzne->Raport"
 
 #. TRANSLATORS: key for "Editor to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:119
 msgid "menu|trantable|e"
-msgstr ""
+msgstr "e"
 
 #. TRANSLATORS: key for "Internal to Editor" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:122
 msgid "menu|trantable|m"
-msgstr ""
+msgstr "m"
 
 #. TRANSLATORS: key for "GEDCOM to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:125
 msgid "menu|trantable|i"
-msgstr ""
+msgstr "i"
 
 #. TRANSLATORS: key for "Internal to GEDCOM" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:128
 msgid "menu|trantable|x"
-msgstr ""
+msgstr "x"
 
 #. TRANSLATORS: key for "Display to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:131
 msgid "menu|trantable|g"
-msgstr ""
+msgstr "g"
 
 #. TRANSLATORS: key for "Internal to Display" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:134
 msgid "menu|trantable|d"
-msgstr ""
+msgstr "d"
 
 #. TRANSLATORS: key for "Report to Internal" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:137
 msgid "menu|trantable|p"
-msgstr ""
+msgstr "p"
 
 #. TRANSLATORS: key for "Internal to Report" on translation table menu
 #. Omit everything up to and including final |
 #: src/gedlib/translat.c:140
 msgid "menu|trantable|r"
-msgstr ""
+msgstr "r"
 
 #. TRANSLATORS: db internal translation table note for tt menu
 #: src/gedlib/translat.c:472
 #, c-format
 msgid " (dbint tt: %s)"
-msgstr ""
+msgstr " (dbint tt: %s)"
 
 #: src/gedlib/valid.c:75
 msgid "This person record does not have a name line."
@@ -2613,14 +2581,14 @@ msgid "%s: the arg #%s must be a table."
 msgstr "%s: argument #%s musi byæ tabel±."
 
 #: src/interp/alloc.c:901
-#, fuzzy, c-format
+#, c-format
 msgid "%s: the arg must be a set."
-msgstr "%s: argument musi byæ list±."
+msgstr "%s: argument musi byæ zbiorem."
 
 #: src/interp/alloc.c:902
-#, fuzzy, c-format
+#, c-format
 msgid "%s: the arg #%s must be a set."
-msgstr "%s: argument #%s musi byæ list±."
+msgstr "%s: argument #%s musi byæ zbiorem."
 
 #: src/interp/alloc.c:903
 #, c-format
@@ -2794,11 +2762,11 @@ msgstr "dwana¶cie"
 
 #: src/interp/builtin.c:2090
 msgid "the arg to empty is not a list, table or set"
-msgstr ""
+msgstr "argument polecenie empty nie jest list±, tabel± ani zbiorem"
 
 #: src/interp/builtin.c:2204
 msgid "the arg to length is not a list, table or set"
-msgstr ""
+msgstr "argument polecenia length nie jest list±, tabel± ani zbiorem"
 
 #: src/interp/builtin.c:2392
 msgid "He"
@@ -3061,7 +3029,6 @@ msgid "e  Edit top person"
 msgstr "e  Edycja najwy¿szej osoby"
 
 #: src/liflines/brwsmenu.c:72
-#, fuzzy
 msgid "e  Edit top family"
 msgstr "e  Edycja rodziny"
 
@@ -3508,18 +3475,14 @@ msgid "This is not a lineage linked GEDCOM file."
 msgstr "To nie jest plik  GEDCOM typu 'lineage linked'."
 
 #: src/liflines/import.c:172
-#, fuzzy
 msgid "Proceed anyway?"
 msgstr "Kontynuowaæ mimo wszystko?"
 
 #: src/liflines/import.c:187
 msgid "No current internal codeset, so no codeset conversion can be done"
-msgstr ""
-"Bie¿±cy kod wewnêtrzny niezdefiniowany, nie da siê wiêc wykonaæ konwersji "
-"kodów"
+msgstr "Bie¿±cy kod wewnêtrzny niezdefiniowany, nie da siê wiêc wykonaæ konwersji kodów"
 
 #: src/liflines/import.c:188
-#, fuzzy
 msgid "Proceed without codeset conversion?"
 msgstr "Kontynuowaæ bez konwersji kodów?"
 
@@ -3580,20 +3543,18 @@ msgid "Checking GEDCOM file for errors.\n"
 msgstr "Sprawdzanie czy w pliku GEDCOM nie ma b³êdów.\n"
 
 #: src/liflines/loadsave.c:163
-#, fuzzy
 msgid "Error"
 msgid_plural "Errors"
 msgstr[0] "b³±d"
-msgstr[1] "b³±d"
-msgstr[2] "b³±d"
+msgstr[1] "b³êdy"
+msgstr[2] "b³êdów"
 
 #: src/liflines/loadsave.c:169
-#, fuzzy
 msgid "Warning"
 msgid_plural "Warnings"
 msgstr[0] "ostrze¿enie"
-msgstr[1] "ostrze¿enie"
-msgstr[2] "ostrze¿enie"
+msgstr[1] "ostrze¿enia"
+msgstr[2] "ostrze¿eñ"
 
 #: src/liflines/loadsave.c:184
 msgid "The database is read-only; loading has been canceled."
@@ -3605,11 +3566,9 @@ msgstr "Dodano nieu¿ywane klucze jako klucze usuniête..."
 
 #. TRANSLATORS: how long Import ran, and how much of that was UI delay
 #: src/liflines/loadsave.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "Import time %s (ui %s)\n"
-msgstr ""
-"\n"
-"Czas wykonania raportu %s (czas interfejsu %s)\n"
+msgstr "Czas importu %s (czas interfejsu %s)\n"
 
 #: src/liflines/loadsave.c:282
 msgid "The database was not saved."
@@ -3717,24 +3676,20 @@ msgid "Locales are disabled."
 msgstr "Locale wy³±czone."
 
 #: src/liflines/screen.c:1821
-#, fuzzy
 msgid "NLS (National Language Support) is compiled in."
-msgstr "NLS (National Language Support) wy³±czony."
+msgstr "NLS (National Language Support) w³±czone."
 
 #: src/liflines/screen.c:1827
-#, fuzzy
 msgid "NLS (National Language Support) is not compiled in."
-msgstr "NLS (National Language Support) w³±czony."
+msgstr "NLS (National Language Support) wy³±czone."
 
 #: src/liflines/screen.c:1833
-#, fuzzy
 msgid "iconv (codeset conversion) is compiled in."
-msgstr "iconv (konwersja kodowania) wy³±czona."
+msgstr "iconv (konwersja kodowania) w³±czona."
 
 #: src/liflines/screen.c:1835
-#, fuzzy
 msgid "iconv (codeset conversion) is not compiled in."
-msgstr "iconv (konwersja kodowania) w³±czona."
+msgstr "iconv (konwersja kodowania) wy³±czona."
 
 #: src/liflines/screen.c:1837
 #, c-format
@@ -3914,13 +3869,12 @@ msgid "bapt"
 msgstr "chrz."
 
 #: src/liflines/show.c:128
-#, fuzzy
 msgid "barm"
-msgstr "brum"
+msgstr "barm"
 
 #: src/liflines/show.c:129
 msgid "basm"
-msgstr ""
+msgstr "basm"
 
 #: src/liflines/show.c:130
 msgid "bles"
@@ -4039,8 +3993,7 @@ msgstr "Wiersz %d: Osoba %s jest kobiet± a musi byæ mê¿czyzn±."
 #: src/liflines/valgdcom.c:773
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
-msgstr ""
-"Wiersz %d: Osoba %s domy¶lnie powinna byæ jednocze¶nie kobiet± i mê¿czyzn±."
+msgstr "Wiersz %d: Osoba %s domy¶lnie powinna byæ jednocze¶nie kobiet± i mê¿czyzn±."
 
 #: src/liflines/valgdcom.c:785
 #, c-format
@@ -4152,9 +4105,8 @@ msgid "Duplicate others"
 msgstr "Zduplikowane inne"
 
 #: src/tools/dbverify.c:181
-#, fuzzy
 msgid "Missing records (from deleteset)"
-msgstr "Brakuj±ce rekordy"
+msgstr "Brakuj±ce rekordy (z deleteset)"
 
 #: src/tools/dbverify.c:182
 msgid "Deleted records"
@@ -4213,9 +4165,8 @@ msgid "Bad pointer"
 msgstr "B³êdny wska¼nik"
 
 #: src/tools/dbverify.c:196
-#, fuzzy
 msgid "Missing data records"
-msgstr "Brakuj±ce rekordy"
+msgstr "Brakuj±ce rekordy danych"
 
 #: src/tools/dbverify.c:226
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
@@ -4228,82 +4179,82 @@ msgstr "/home/users/myname/lifelines/databases/myfamily"
 #: src/tools/dbverify.c:232
 #, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
-msgstr ""
+msgstr "u¿ycie: dbverify -(opcje) <btree>\n"
 
 #: src/tools/dbverify.c:233
 #, c-format
 msgid "flags:\n"
-msgstr ""
+msgstr "opcje:\n"
 
 #: src/tools/dbverify.c:234
 #, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
-msgstr ""
+msgstr "\t-a = Wykonaj wszystkie testy (bez poprawek)\n"
 
 #: src/tools/dbverify.c:235
 #, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
-msgstr ""
+msgstr "\t-g = Znajd¼ duchy (nazwiska/refn-y)\n"
 
 #: src/tools/dbverify.c:236
 #, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
-msgstr ""
+msgstr "\t-G = Znajd¼ i popraw duchy (nazwiska/refn-y)\n"
 
 #: src/tools/dbverify.c:237
-#, fuzzy, c-format
+#, c-format
 msgid "\t-i = Check individuals\n"
-msgstr "Zduplikowane osoby"
+msgstr "\t-i = Sprawd¼ osoby\n"
 
 #: src/tools/dbverify.c:238
 #, c-format
 msgid "\t-f = Check families\n"
-msgstr ""
+msgstr "\t-f = Sprawd¼ rodziny\n"
 
 #: src/tools/dbverify.c:239
 #, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
-msgstr ""
+msgstr "\t-F = Popraw wszystkie b³êdne odsy³acze do rodzin (na _badptr)\n"
 
 #: src/tools/dbverify.c:240
 #, c-format
 msgid "\t-s = Check sours\n"
-msgstr ""
+msgstr "\t-s = sprawd¼ ¼ród³a\n"
 
 #: src/tools/dbverify.c:241
 #, c-format
 msgid "\t-e = Check events\n"
-msgstr ""
+msgstr "\t-e = Sprawd¼ wydarzenia\n"
 
 #: src/tools/dbverify.c:242
 #, c-format
 msgid "\t-x = Check others\n"
-msgstr ""
+msgstr "\t-x = Sprawd¼ inne\n"
 
 #: src/tools/dbverify.c:243
 #, c-format
 msgid "\t-l = Check database structure\n"
-msgstr ""
+msgstr "\t-l = Sprawd¼ strukturê bazy danych\n"
 
 #: src/tools/dbverify.c:244
 #, c-format
 msgid "\t-m = Check for records missing data entries\n"
-msgstr ""
+msgstr "\t-m = Znajd¼ rekordy z brakuj±cymi pozycjami danych\n"
 
 #: src/tools/dbverify.c:245
 #, c-format
 msgid "\t-M = Fix records missing data entries\n"
-msgstr ""
+msgstr "\t-M = Popraw rekordy z brakuj±cymi pozycjami danych\n"
 
 #: src/tools/dbverify.c:246
 #, c-format
 msgid "\t-D = Fix bad delete entries\n"
-msgstr ""
+msgstr "\t-D = Popraw nieprawid³owo usuniête pozycje\n"
 
 #: src/tools/dbverify.c:247
 #, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
-msgstr ""
+msgstr "\t-n = Ha³a¶liwie (wy¶wietlaj przetwarzane rekordy)\n"
 
 #: src/tools/dbverify.c:248
 #, c-format
@@ -4361,9 +4312,9 @@ msgid "Missing child (%s) in family (%s)"
 msgstr "Brak dziecka (%s) w rodzinie (%s)"
 
 #: src/tools/dbverify.c:698
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed missing child (%s) in family (%s)"
-msgstr "Brak dziecka (%s) w rodzinie (%s)"
+msgstr "Poprawiono brakuj±ce dziecko (%s) w rodzinie (%s)"
 
 #: src/tools/dbverify.c:718
 #, c-format
@@ -4371,9 +4322,9 @@ msgid "Missing spouse (%s) in family (%s)"
 msgstr "Brak ma³¿onka (%s) w rodzinie (%s)"
 
 #: src/tools/dbverify.c:722
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed missing spouse (%s) in family (%s)"
-msgstr "Brak ma³¿onka (%s) w rodzinie (%s)"
+msgstr "Poprawiono brakuj±cego ma³¿onka (%s) w rodzinie (%s)"
 
 #: src/tools/dbverify.c:756
 #, c-format
@@ -4386,9 +4337,9 @@ msgid "Bad HUSB reference (%s) in family %s"
 msgstr "B³êdny odno¶nik HUSB (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed Bad HUSB reference (%s) in family %s"
-msgstr "B³êdny odno¶nik HUSB (%s) w rodzinie %s"
+msgstr "Poprawiono b³êdny odno¶nik HUSB (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:822
 #, c-format
@@ -4401,9 +4352,9 @@ msgid "Bad wife reference (%s) in family %s"
 msgstr "B³êdny odno¶nik WIFE (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:841
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed Bad wife reference (%s) in family %s"
-msgstr "B³êdny odno¶nik WIFE (%s) w rodzinie %s"
+msgstr "Poprawiono b³êdny odno¶nik WIFE (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:850
 #, c-format
@@ -4416,9 +4367,9 @@ msgid "Bad child reference (%s) in family %s"
 msgstr "B³êdny odno¶nik dziecka (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:869
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed bad child reference (%s) in family %s"
-msgstr "B³êdny odno¶nik dziecka (%s) w rodzinie %s"
+msgstr "Poprawiono b³êdny odno¶nik dziecka (%s) w rodzinie %s"
 
 #: src/tools/dbverify.c:878
 #, c-format
@@ -4461,14 +4412,14 @@ msgid "Missing undeleted record %c%d"
 msgstr "Brakuj±cy nieusuniêty rekord %c%d"
 
 #: src/tools/dbverify.c:1062
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed missing undeleted record %c%d"
-msgstr "Brakuj±cy nieusuniêty rekord %c%d"
+msgstr "Poprawiono brakuj±cy nieusuniêty rekord %c%d"
 
 #: src/tools/dbverify.c:1066
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to fix missing undeleted record %c%d"
-msgstr "Brakuj±cy nieusuniêty rekord %c%d"
+msgstr "Nie uda³o siê poprawiæ brakuj±cego nieusuniêtego rekordu %c%d"
 
 #: src/tools/dbverify.c:1078
 #, c-format
@@ -4476,53 +4427,53 @@ msgid "Delete set contains valid record %s"
 msgstr "Usuniêty zbiór zawiera wa¿ne rekordy %s"
 
 #: src/tools/dbverify.c:1083
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed delete set contains valid record %s"
-msgstr "Usuniêty zbiór zawiera wa¿ne rekordy %s"
+msgstr "Poprawiony usuniêty zbiór zawiera poprawne rekordy %s"
 
 #: src/tools/dbverify.c:1087
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to fix missing undeleted record %s"
-msgstr "Brakuj±cy nieusuniêty rekord %c%d"
+msgstr "Nie uda³o siê poprawiæ brakuj±cego nieusuniêtego rekord %s"
 
 #: src/tools/dbverify.c:1108
 #, c-format
 msgid "Master fkey misaligned (%d != %d)\n"
-msgstr ""
+msgstr "G³ówny fkey uszkodzony (%d != %d)\n"
 
 #: src/tools/dbverify.c:1134
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
-msgstr ""
+msgstr "Cykl w indeksach, plik %s znaleziony ponownie!\n"
 
 #: src/tools/dbverify.c:1141
 #, c-format
 msgid "Error loading index at key %d\n"
-msgstr ""
+msgstr "B³±d ³adowania indeksu przy kluczu %d\n"
 
 #: src/tools/dbverify.c:1188
 #, c-format
 msgid "First key in block below parent's limit\n"
-msgstr ""
+msgstr "Pierwszy klucz w bloku poni¿ej limitu rodziców\n"
 
 #: src/tools/dbverify.c:1196
 #, c-format
 msgid "Last key in block above parent's limit\n"
-msgstr ""
+msgstr "Ostatni klucz w bloku powy¿ej limitu rodziców\n"
 
 #: src/tools/dbverify.c:1204
 #, c-format
 msgid "Key %d not below next key\n"
-msgstr ""
+msgstr "Klucz %d nie jest ni¿ej ni¿ nastêpny klucz\n"
 
 #: src/tools/dbverify.c:1220 src/tools/dbverify.c:1222
 msgid "data block"
-msgstr ""
+msgstr "blok danych"
 
 #: src/tools/dbverify.c:1223
 #, c-format
 msgid "%s fkey=%d, file=%s"
-msgstr ""
+msgstr "%s fkey=%d, plik=%s"
 
 #: src/tools/dbverify.c:1236
 #, c-format
@@ -4530,14 +4481,14 @@ msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "B³êdna tablica b³êdów[%d] w dbverify - popraw program\n"
 
 #: src/tools/dbverify.c:1272
-#, fuzzy, c-format
+#, c-format
 msgid "Missing data record (%s)"
-msgstr "Brakuj±ce rekordy"
+msgstr "Brakuj±cy rekord danych (%s)"
 
 #: src/tools/dbverify.c:1276
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed missing data record (%s)"
-msgstr "Brakuj±ce rekordy"
+msgstr "Poprawiono brakuj±cy rekord danych (%s)"
 
 #: src/tools/dbverify.c:1425
 #, c-format
@@ -4568,33 +4519,3 @@ msgstr "B£¡D KRYTYCZNY: "
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "W pliku <%s> w wierszu %d"
-
-#~ msgid ""
-#~ "usage: dbverify -(flags) <btree>\n"
-#~ "flags:\n"
-#~ "\t-a = Perform all checks (does not include fixes)\n"
-#~ "\t-g = Check for ghosts (names/refns)\n"
-#~ "\t-G = Check for & fix ghosts (names/refns)\n"
-#~ "\t-i = Check individuals\n"
-#~ "\t-f = Check families\n"
-#~ "\t-s = Check sours\n"
-#~ "\t-e = Check events\n"
-#~ "\t-x = Check others\n"
-#~ "\t-n = Noisy (echo every record processed)\n"
-#~ msgstr ""
-#~ "wywo³anie: dbverify -(opcje) <btree>\n"
-#~ "opcje:\n"
-#~ "\t-a = Wykonaj wszystkie testy (bez poprawiania)\n"
-#~ "\t-g = Sprawd¼ duchy (names/refns)\n"
-#~ "\t-G = Sprawd¼ i popraw duchy (names/refns)\n"
-#~ "\t-i = Sprawd¼ osoby\n"
-#~ "\t-f = Sprawd¼ rodziny\n"
-#~ "\t-s = Sprawd¼ ma³¿eñstwa\n"
-#~ "\t-e = Sprawd¼ zdarzenia\n"
-#~ "\t-x = Sprawd¼ inne\n"
-#~ "\t-n = Ha³a¶liwie (wypisz ka¿dy przetwarzany rekord)\n"
-
-#~ msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
-#~ msgstr ""
-#~ "Dodano (osób: %d, rodzin: %d, ¼róde³: %d, zdarzeñ: %d, innych: %d) "
-#~ "rekordów"
