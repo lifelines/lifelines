@@ -1770,7 +1770,10 @@ not a <type>NODE</type> value. If you want to process the nodes within a person 
 </para>
 
 <para>
-<function>Indi</function> returns the person who's key is passed as an argument; if no person has the key <function>indi</function> returns <returnvalue>null</returnvalue>.
+<function>Indi</function> returns the person who's key is passed as an argument;
+if no person has the key <function>indi</function> returns
+<returnvalue>null</returnvalue>.
+INDI  keys are accepted either as Innn or @Innn@.
 </para>
 
 <para>
@@ -1832,6 +1835,14 @@ the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
 parameter is an integer counter
 variable that counts the persons starting at one.
+</para>
+
+<para>
+<function>fathers</function> and
+<function>mothers</function> are iterators that loop through each family
+the specified individual is in returns each father or mother found.
+If a non-traditional family is processed, there will be separate iterations
+for each father or mother found.
 </para>
 
 </sect1>
@@ -2030,7 +2041,10 @@ wife/mother of the family, if any. Each returns <returnvalue>null</returnvalue> 
 </para>
 
 <para>
-<function>Fam</function> returns the family who's key is passed as an argument; if no family has the key <function>fam</function> returns <returnvalue>null</returnvalue>.
+<function>Fam</function> returns the family who's key is passed as an argument;
+if no family has the key <function>fam</function> 
+returns <returnvalue>null</returnvalue>.  Family keys are accepted
+either as Fnnn or @Fnnn@.
 </para>
 
 <para>

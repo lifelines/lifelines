@@ -881,7 +881,8 @@ Parents (INDI, FAM, INT) { commands }
    tree. Root and inode are synonyms.
 
    Indi  returns the person who's key is passed as an argument; if no
-   person has the key indi returns null.
+   person  has  the  key  indi  returns  null. INDI keys are accepted
+   either as Innn or @Innn@.
 
    Firstindi,  nextindi and previndi allow you to iterate through all
    persons in the database. Firstindi returns the first person in the
@@ -930,6 +931,11 @@ Parents (INDI, FAM, INT) { commands }
    database in ascending key order. Its first parameter is a variable
    that  iterates  through  the  persons;  its second parameter is an
    integer counter variable that counts the persons starting at one.
+
+   fathers  and  mothers  are iterators that loop through each family
+   the  specified  individual  is  in  returns  each father or mother
+   found.  If  a  non-traditional  family is processed, there will be
+   separate iterations for each father or mother found.
      _____________________________________________________________
 
 Family Functions
@@ -1022,7 +1028,8 @@ forfam (FAM_V, INT_V) { commands }
    fnode are synonyms.
 
    Fam  returns  the family who's key is passed as an argument; if no
-   family has the key fam returns null.
+   family  has  the  key  fam  returns null. Family keys are accepted
+   either as Fnnn or @Fnnn@.
 
    Firstfam,  nextfam  and  prevfam  allow you to iterate through all
    families in the database. Firstfam returns the first family in the

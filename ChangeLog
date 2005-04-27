@@ -1,3 +1,14 @@
+2005-04-26 Stephen Dum
+        * ChangeLog src/hdrs/gedcom.h src/interp/builtin.c
+	  docs/ll-reportmanuel.xml docs/ll-reportmanuel.html
+	  docs/ll-reportmanuel.pdf docs/ll-reportmanuel.txt
+
+	Fix bug 1190528 failure to display child if only 1 parent in
+	normal Person display screen.  Tighten what fam() and indi()
+	will accept as a valid key.  Now requires a valid key, ie Fnnn
+	or Innn.  Functions will also accept @Fnnn@ and @Innn@.
+	Update docs.
+
 2005-04-17 Perry Rapp
 
 	* ChangeLog po/pl.po

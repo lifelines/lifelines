@@ -777,13 +777,15 @@ INT xref_prevx(INT);
 			while (__node1) {\
 				NODE spouse=0;\
 				INT __hits=0;\
-				if (eqstr("HUSB", ntag(__node1)) || eqstr("WIFE", ntag(__node1))) ++__hits;\
-				else if (__hits) break;\
-				__key = rmvat(nval(__node1));\
-				__node1 = nsibling(__node1);\
-				if (!__hits || !__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
-					if (__hits) ++num;\
+				if (eqstr("HUSB", ntag(__node1)) || eqstr("WIFE", ntag(__node1))) { \
+				    __key = rmvat(nval(__node1));\
+				    __node1 = nsibling(__node1);\
+				    if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi) {\
 					continue;\
+				    }\
+				} else {\
+				    __node1 = nsibling(__node1);\
+				    if (__node1 || first_sp) continue;\
 				}\
 				++num;\
 				{

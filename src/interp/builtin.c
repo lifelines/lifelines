@@ -46,6 +46,7 @@
 #include "zstr.h"
 #include "codesets.h"
 #include "arch.h"
+#include "pvalue.h"
 
 #include "interpi.h"
 
@@ -3476,6 +3477,7 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str;
 	char scratch[200], *p, *q = scratch;
+	int strip_at = 0;
 	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -3483,23 +3485,23 @@ __indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	p = str = pvalue_to_string(val);
-	if (!p) {
-		delete_pvalue(val);
-		return NULL;
+	if (p && *p == '@') {
+	    strip_at = 1;
+	    p++;
 	}
-	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
-		;
-	if (c == 0) {
+	if (!p || *p++ != 'I' || *p == 0) {
 		delete_pvalue(val);
-		return NULL;
+		return create_pvalue(PINDI,0);
 	}
 	*q++ = 'I';
-	*q++ = c;
 	while (chartype(c = (uchar)*p++) == DIGIT)
 		*q++ = c;
 	*q = 0;
 	delete_pvalue(val);
-	if (strlen(scratch) == 1) return NULL;
+	if (c != 0 && (strip_at == 0 || c != '@')) {
+		return create_pvalue(PINDI,0);
+	}
+	if (strlen(scratch) == 1) return create_pvalue(PINDI,0);
 
 	val = create_pvalue_from_indi_key(scratch);
 	return val;
@@ -3513,6 +3515,7 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str;
 	char scratch[200], *p, *q = scratch;
+	int strip_at = 0;
 	INT c;
 	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
 	if (*eflg) {
@@ -3520,19 +3523,23 @@ __fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	p = str = pvalue_to_string(val);
-	while ((c = (uchar)*p++) && chartype(c) != DIGIT)
-		;
-	if (c == 0) {
+	if (p && *p == '@') {
+	    strip_at = 1;
+	    p++;
+	}
+	if (!p || *p++ != 'F' || *p == 0) {
 		delete_pvalue(val);
-		return NULL;
+		return create_pvalue(PFAM,0);
 	}
 	*q++ = 'F';
-	*q++ = c;
 	while (chartype(c = (uchar)*p++) == DIGIT)
 		*q++ = c;
 	*q = 0;
 	delete_pvalue(val);
-	if (strlen(scratch) == 1) return NULL;
+	if (c != 0 && (strip_at == 0 || c != '@')) {
+		return create_pvalue(PFAM,0);
+	}
+	if (strlen(scratch) == 1) return create_pvalue(PFAM,0);
 
 	val = create_pvalue_from_fam_key(scratch);
 	return val;
