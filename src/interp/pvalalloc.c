@@ -20,6 +20,11 @@
 #include "zstr.h"
 #include "lloptions.h"
 
+/* define following to disable block allocator for pvalues
+   this is useful to find sources of leaks with valgrind
+ */
+/* #define NOBLOCKALLOCATOR 1 */
+
 /*********************************************
  * local types
  *********************************************/
@@ -44,18 +49,22 @@ static BOOLEAN is_pvalue_or_freed(PVALUE pval);
  * local variables
  *********************************************/
 
+#ifndef NOBLOCKALLOCATOR
 static PVALUE free_list = 0;
 static INT live_pvalues = 0;
 static PV_BLOCK block_list = 0;
+#endif
 static BOOLEAN reports_time = FALSE;
 static BOOLEAN cleaning_time = FALSE;
 #ifdef DEBUG_REPORT_MEMORY_DETAIL
 static BOOLEAN alloclog_save = FALSE;
 #endif
+#ifndef NOBLOCKALLOCATOR
 #ifdef DEBUG_PVALUES
 static INT debugging_pvalues = TRUE;
 #else
 static INT debugging_pvalues = FALSE;
+#endif
 #endif
 
 /*********************************************
@@ -71,15 +80,17 @@ static INT debugging_pvalues = FALSE;
  * corruption bug.
  * Created: 2001/03, Perry Rapp
  *======================================*/
+#ifndef NOBLOCKALLOCATOR
 static void
 debug_check (void)
 {
 	PVALUE val;
 	for (val=free_list; val; val=val->value)
 	{
-		ASSERT(val->type == 99 && val->value != val);
+		ASSERT(val->type == PFREED && val->value != val);
 	}
 }
+#endif
 /*========================================
  * alloc_pvalue_memory -- return new pvalue memory
  * We use a custom allocator, which lowers our overhead
@@ -100,6 +111,9 @@ alloc_pvalue_memory (void)
 	PVALUE val;
 	
 	ASSERT(reports_time);
+#ifdef NOBLOCKALLOCATOR
+	val = stdalloc(sizeof(*val));
+#else 
 	/*
 	We assume that all pvalues are scoped
 	within report processing. If this ceases to
@@ -130,6 +144,7 @@ alloc_pvalue_memory (void)
 	if (debugging_pvalues)
 		debug_check();
 	live_pvalues++;
+#endif
 	/* set type to uninitialized - caller ought to set type */
 	ptype(val) = PNULL;
 	pvalvv(val) = 0;
@@ -145,6 +160,9 @@ free_pvalue_memory (PVALUE val)
 {
 	/* see alloc_pvalue_memory for discussion of this ASSERT */
 	ASSERT(reports_time);
+#ifdef NOBLOCKALLOCATOR
+	stdfree(val);
+#else
 	if (ptype(val)==PFREED) {
 		/*
 		this can happen during cleaning - eg, if we find
@@ -162,6 +180,7 @@ free_pvalue_memory (PVALUE val)
 		debug_check();
 	live_pvalues--;
 	ASSERT(live_pvalues>=0);
+#endif
 }
 /*======================================
  * pvalues_begin -- Start of programs
@@ -211,6 +230,8 @@ pvalues_end (void)
 static void
 free_all_pvalues (void)
 {
+#ifdef NOBLOCKALLOCATOR
+#else
 	PV_BLOCK block;
 	INT found_leaks=0;
 	INT orig_leaks = live_pvalues;
@@ -223,26 +244,30 @@ free_all_pvalues (void)
 	cross-link between blocks (ie, a list on one block could
 	contain pointers to pvalues on other blocks)
 	*/
-	/* First pass, free all leaked pvalues */
+	/* First check out all leaked pvalues for consistency
+	 * in numbers - this has to be done first, since when we
+	 * delete a set,list, etc. other pvalues get deleted as well */
 	for (block = block_list; block; block = block->next) {
-		/*
-		As we free the blocks, all their pvalues go back to CRT heap
-		so we must not touch them again - so keep zeroing out free_list
-		for each block
-		*/
-		free_list = 0;
+		INT i;
+		for (i=0; i<(INT)BLOCK_VALUES; i++) {
+			PVALUE val1=&block->values[i];
+			CNSTRING typestr = get_pvalue_type_name(val1->type);
+			if (val1->type != PFREED) {
+				increment_table_int(leaktab, typestr);
+				++found_leaks;
+			}
+		}
+	}
+	for (block = block_list; block; block = block->next) {
 		if (live_pvalues) {
 			INT i;
 			for (i=0; i<(INT)BLOCK_VALUES; i++) {
 				PVALUE val1=&block->values[i];
 				if (val1->type != PFREED) {
 					/* leaked */
-					CNSTRING typestr = get_pvalue_type_name(val1->type);
 					ZSTR zstr = describe_pvalue(val1);
 					/* zstr is just for debugging, we don't record it */
-					increment_table_int(leaktab, typestr);
 					delete_pvalue(val1);
-					++found_leaks;
 					zs_free(&zstr);
 				}
 			}
@@ -250,7 +275,7 @@ free_all_pvalues (void)
 	}
 	ASSERT(orig_leaks == found_leaks);
 	ASSERT(live_pvalues == 0);
-	/* Second pass, free the blocks */
+	/* finally, free the blocks */
 	while ((block = block_list)) {
 		PV_BLOCK next = block->next;
 		stdfree(block);
@@ -282,6 +307,7 @@ free_all_pvalues (void)
 		}
 	}
 	destroy_table(leaktab);
+#endif
 }
 /*======================================
  * check_pvalue_validity -- ASSERT that pvalue is valid
@@ -302,7 +328,7 @@ BOOLEAN
 is_pvalue (PVALUE pval)
 {
 	if (!pval) return FALSE;
-	return (ptype(pval) <= PSET);
+	return (ptype(pval) <= PMAXLIVE);
 }
 /*===========================================================
  * is_pvalue_or_freed -- Checks that PVALUE is a valid type

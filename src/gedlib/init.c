@@ -684,7 +684,7 @@ update_db_options (void)
 	if (!int_codeset)
 		strupdate(&int_codeset, "");
 	if (!eqstr_ex(int_codeset, str)) {
-		strupdate(&int_codeset, strsave(str));
+		strupdate(&int_codeset, str);
 		uu8 = is_codeset_utf8(int_codeset);
 		/* always translate to internal codeset */
 #ifdef ENABLE_NLS

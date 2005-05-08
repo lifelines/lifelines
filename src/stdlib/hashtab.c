@@ -119,6 +119,7 @@ destroy_hashtab (HASHTAB tab, DELFUNC func)
 			if (func)
 				(*func)(entry->val);
 			entry->val = 0;
+			strfree((STRING *)&entry->ekey);
 			stdfree(entry);
 			entry = next;
 		}
@@ -207,6 +208,7 @@ remove_hashtab (HASHTAB tab, CNSTRING key)
 		tab->entries[hval] = thise->enext;
 
 	val = thise->val;
+	strfree((STRING *)&thise->ekey);
 	thise->val = 0;
 	stdfree(thise);
 	--tab->count;

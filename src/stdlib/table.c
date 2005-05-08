@@ -611,6 +611,9 @@ free_table_iter (TABLE_ITER tabit)
 {
 	if (!tabit) return;
 	ASSERT(!tabit->refcnt);
+        if (!tabit->rbit) {
+                end_hashtab(&tabit->hashtab_iter);
+	}
 	memset(tabit, 0, sizeof(*tabit));
 	stdfree(tabit);
 }

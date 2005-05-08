@@ -123,6 +123,7 @@ import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 	rtn = do_import(ifeed, fp);
 
 	strupdate(&gedcom_codeset_in, geddef);
+	strfree(&geddef);
 
 	return rtn;
 }

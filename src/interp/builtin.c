@@ -697,13 +697,14 @@ __dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	/* traverse and copy */
 	list = pvalue_to_list(val);
 	delete_pvalue(val);
-	newlist = create_list();
+	newlist = create_list3(delete_vptr_pvalue);
 	for (i=0; i<length_list(list); i++) {
 		newval = (PVALUE) get_list_element(list, i+1, NULL);
 		enqueue_list(newlist, copy_pvalue(newval));
 	}
 	/* assign new list */
 	newval = create_pvalue_from_list(newlist);
+	release_list(newlist); /* release our ref to newlist */
 	return newval;
 }
 /*=========================================+
@@ -2665,6 +2666,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || !val) {
 		*eflg = TRUE;
 		prog_error(node, "3rd arg to insert is in error");
+		strfree(&str);
 		return NULL;
 	}
 
@@ -2676,6 +2678,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (there) stdfree(str);	/* key is already in table. free this one */
 #endif
 	delete_pvalue(valtab); /* finished with our copy of table */
+	strfree(&str);
 	return NULL;
 }
 /*====================================+

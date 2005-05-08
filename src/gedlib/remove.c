@@ -153,8 +153,9 @@ remove_empty_fam (NODE fam)
 	del_in_dbase(key);
 
 /* Reassemble & delete the in-memory record we're holding (fam) */
+	/*
 	join_fam(fam, refn, husb, wife, chil, rest);
-	free_nodes(fam);
+	free_nodes(fam);  remove_fam_cache removed fam node*/
 
 	return TRUE;
 }

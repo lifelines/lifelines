@@ -1,3 +1,11 @@
+2005-05-07 Stephen Dum
+        * ChangeLog src/gedlib/init.c src/gedlib/remove.c src/interp/builtin.c
+	  src/interp/intrpseq.c src/interp/pvalalloc.c src/liflines/import.c
+	  src/stdlib/table.c src/liflines/valgdcom.c src/stdlib/hashtab.c
+
+        fix crash on merging two families - double free of fam record
+	clean up lots of memory and pvalue leaks 
+
 2005-04-26 Stephen Dum
         * ChangeLog src/hdrs/gedcom.h src/interp/builtin.c
 	  docs/ll-reportmanuel.xml docs/ll-reportmanuel.html

@@ -113,26 +113,27 @@ __addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
-		prog_var_error(node, stab, arg2, NULL, nonindx, "addtoset", "2");
-		return NULL;
+		prog_var_error(node, stab, arg2, NULL, nonindx, "addtoset","2");
+		goto ats_exit;
 	}
-	if (!indi) return NULL;
+	if (!indi) goto ats_exit;
 	*eflg = TRUE;
 	if (!(key = strsave(rmvat(nxref(indi))))) {
 		prog_error(node, "major error in addtoset.");
-		return NULL;
+		goto ats_exit;
 	}
 	*eflg = FALSE;
 	val2 = evaluate(arg3, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "3rd arg to addtoset is in error.");
-		return NULL;
+		goto ats_exit;
 	}
 	append_indiseq_pval(seq, key, NULL, val2, FALSE);
-	strfree(&key); /* append made its own copy */
-	/* delay to last minute lest it is a temp owning seq,
-	eg, addtoset(ancestorset(i),j) */
-	delete_pvalue(val1);
+ats_exit:
+	if (key) strfree(&key); /* append made its own copy */
+	/* delay to last minute val1 cleanup lest it is a temp owning seq,
+	    eg, addtoset(ancestorset(i),j) */
+	if (val1) delete_pvalue(val1);
 	return NULL;
 }
 /*======================================+
@@ -166,24 +167,29 @@ __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg ||!val1 || !(seq = pvalue_to_seq(val1))) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg1, val1, nonsetx, "inset", "1");
-		return NULL;
+		goto inset_exit;
 	}
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
 		prog_var_error(node, stab, arg2, NULL, nonindx, "inset", "2");
-		return NULL;
+		goto inset_exit;
 	}
-	if (!indi) return create_pvalue_from_bool(FALSE);
-	if (!(key = strsave(rmvat(nxref(indi))))) {
-		*eflg = TRUE;
-		prog_error(node, "major error in inset.");
-		return NULL;
+	if (!indi) {
+		rel = FALSE;
+        } else { 
+		if (!(key = strsave(rmvat(nxref(indi))))) {
+			*eflg = TRUE;
+			prog_error(node, "major error in inset.");
+			goto inset_exit;
+		}
+		rel = in_indiseq(seq, key);
 	}
-	rel = in_indiseq(seq, key);
 	valr = create_pvalue_from_bool(rel);
-	/* delay to last minute lest it is a temp owning seq,
-	eg, inset(ancestorset(i),j) */
-	delete_pvalue(val1);
+inset_exit:
+	/* delay delete of val1 to last minute lest it is a temp owning seq,
+	    eg, inset(ancestorset(i),j) */
+	if (val1) delete_pvalue(val1);
+	if (key) strfree(&key);
 	return valr;
 }
 /*===========================================+
@@ -203,34 +209,36 @@ __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val3=0;
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonsetx, "deletefromset", "1");
-		return NULL;
+		goto dfs_exit;
 	}
 	ASSERT(seq = pvalue_to_seq(val1));
 	indi = eval_indi(arg2, stab, eflg, NULL);
 	if (*eflg) {
 		prog_var_error(node, stab, arg2, NULL, nonindx, "deletefromset", "2");
-		return NULL;
+		goto dfs_exit;
 	}
-	if (!indi) return NULL;
+	if (!indi) goto dfs_exit;
 	*eflg = TRUE;
 	if (!(key = strsave(rmvat(nxref(indi))))) {
 		prog_error(node, "major error in deletefromset.");
-		return NULL;
+		goto dfs_exit;
 	}
 	*eflg = FALSE;
 	val3 = eval_and_coerce(PBOOL, arg3, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg2, NULL, nonboox, "deletefromset", "3");
-		return NULL;
+		goto dfs_exit;
 	}
 	all = pvalue_to_bool(val3);
 	delete_pvalue(val3);
 	do {
 		rc = delete_indiseq(seq, key, NULL, 0);
 	} while (rc && all);
-	/* delay to last minute lest it is a temp owning seq,
-	eg, deletefromset(ancestorset(i),j) */
-	delete_pvalue(val1);
+dfs_exit:
+	/* delay delete of val1 to last minute lest it is a temp owning seq,
+	    eg, deletefromset(ancestorset(i),j) */
+	if (val1) delete_pvalue(val1);
+	if (key) strfree(&key);
 	return NULL;
 }
 /*================================+

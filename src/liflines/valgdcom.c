@@ -974,13 +974,13 @@ BOOLEAN
 scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 {
 	STRING parents[2] = { 0, 0 };
-	INT linno, head=0, lev=-1, curlev;
+	INT linno, head=0, lev=-1, curlev,i;
 	INT lastoff=0;
 	ZSTR zpath = zs_new();
 	*zerr = 0;
 	for (linno=1; 1; ++linno) {
 		XLAT xlat=0; /* no codeset translation yet */
-		INT rc, i;
+		INT rc;
 		STRING xref, tag, val, msg;
 		lastoff = ftell(fp);
 		curlev = lev;
@@ -1034,6 +1034,9 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		}
 	}
 
+	for (i=0; i<ARRSIZE(parents); ++i) {
+		strupdate(&parents[i], 0);
+	}
 	zs_free(&zpath);
 	return !(*zerr);
 }
