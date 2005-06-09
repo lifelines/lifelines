@@ -4,6 +4,10 @@
 
     Cosmetic (added more comments inside remove_empty_fam)
 
+    * ChangeLog src/interp/builtin.c
+    
+    Improved clean up of __insert in error cases.
+
 2005-05-07 Stephen Dum
         * ChangeLog src/gedlib/init.c src/gedlib/remove.c src/interp/builtin.c
 	  src/interp/intrpseq.c src/interp/pvalalloc.c src/liflines/import.c

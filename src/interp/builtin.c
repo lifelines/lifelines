@@ -2642,13 +2642,13 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val=NULL;
 	PVALUE valtab = eval_and_coerce(PTABLE, arg, stab, eflg);
-	TABLE tab;
-	STRING str;
+	TABLE tab=0;
+	STRING str=0;
 
 	if (*eflg || !valtab) {
         *eflg = TRUE;
 		prog_var_error(node, stab, arg, valtab, nontabx, "insert", "1");
-		return NULL;
+		goto exit_insert;
 	}
 	tab = pvalue_to_table(valtab);
 
@@ -2657,7 +2657,7 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || !val || !pvalue_to_string(val)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg, val, nonstrx, "insert", "2");
-		return NULL;
+		goto exit_insert;
 	}
 	str = strsave(pvalue_to_string(val));
 	delete_pvalue(val);
@@ -2666,17 +2666,13 @@ __insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || !val) {
 		*eflg = TRUE;
 		prog_error(node, "3rd arg to insert is in error");
-		strfree(&str);
-		return NULL;
+		goto exit_insert;
 	}
 
 	insert_table_ptr(tab, str, val);
-#if 0
-	old = valueofbool_ptr(tab, str, &there);
-	if (there && old) delete_pvalue(old);
-	insert_table_ptr(tab, str, val);
-	if (there) stdfree(str);	/* key is already in table. free this one */
-#endif
+
+exit_insert: /* free memory and leave */
+
 	delete_pvalue(valtab); /* finished with our copy of table */
 	strfree(&str);
 	return NULL;
