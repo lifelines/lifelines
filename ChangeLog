@@ -8,6 +8,10 @@
     
     Improved clean up of __insert in error cases.
 
+    * ChangeLog src/hdrs/gedcom.h
+    
+    Fix FORSPOUSES to not count self (& add more comments)
+
 2005-05-07 Stephen Dum
         * ChangeLog src/gedlib/init.c src/gedlib/remove.c src/interp/builtin.c
 	  src/interp/intrpseq.c src/interp/pvalalloc.c src/liflines/import.c

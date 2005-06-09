@@ -709,18 +709,23 @@ INT xref_prevx(INT);
 			continue;\
 		}\
 		__node1 = nchild(fam);\
-		/* inline find_tag here to search for either husb or wife */\
+		/* Now loop through fam node tree looking for spouses */\
 		while (__node1) {\
 			NODE spouse=0;\
 			INT __hits=0;\
 			if (eqstr(ntag(__node1), "HUSB")||eqstr(ntag(__node1), "WIFE")) ++__hits;\
-			else if (__hits) break;\
+			else if (__hits)\
+				/* Its not HUSB or WIFE, and we've seen a HUSB or WIFE before */ \
+				/* So we must be out of the HUSB & WIFE section of the node tree */ \
+				break;\
 			__key = rmvat(nval(__node1));\
 			__node1 = nsibling(__node1);\
 			if (!__hits || !__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
-				if (__hits) ++num;\
+				/* If it was a valid HUSB or WIFE tag, count it */\
+				if (__hits && spouse!=indi) ++num;\
 				continue;\
 			}\
+			/* It is a valid HUSB or WIFE, not self, has key, and in database */\
 			++num;\
 			{
 
