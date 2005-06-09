@@ -1,3 +1,9 @@
+2005-06-09 Perry Rapp
+
+    * ChangeLog src/gedlib/remove.c
+
+    Cosmetic (added more comments inside remove_empty_fam)
+
 2005-05-07 Stephen Dum
         * ChangeLog src/gedlib/init.c src/gedlib/remove.c src/interp/builtin.c
 	  src/interp/intrpseq.c src/interp/pvalalloc.c src/liflines/import.c

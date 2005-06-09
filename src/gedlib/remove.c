@@ -145,6 +145,9 @@ remove_empty_fam (NODE fam)
 
 /* Remove fam from cache */
 	remove_fam_cache(key);
+	/* this call leads to remove_cel_from_cache, which 
+	deletes the whole fam node tree, as the cache owned the nodes */
+	fam = 0; /* clear pointer to vanished nodes */
 
 /* Remove any refn entries */
 	remove_refn_list(refn, key);
