@@ -1799,6 +1799,16 @@ argument is an integer variable that counts the iterations.
 </para>
 
 <para>
+<function>Families</function> and <function>Spouses</function> behave the same
+except for one situation.  If the person is a spouse in a family that only has
+one spouse identified,  that family does not show up with the 
+<function>spouses</function> iterator, but it does show up with the
+<function>families</function> iterator.  One caution, this situation causes
+the 3rd argument of the <function>families</function> iterator to be set to
+null.  You must check for this.
+</para>
+
+<para>
 <function>Forindi</function> is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 

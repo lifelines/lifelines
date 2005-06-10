@@ -1,3 +1,12 @@
+2005-06-09 Stephen Dum
+        * ChangeLog src/gedlib/remove.c 
+	Cosmetic (added more comments inside remove_empty_fam)
+
+	* src/hdrs/gedcom.h docs/ll-reportmanual.xml
+	Fix FORFAMSS to handle case of a family with only 1 spouse
+	and no other records.  Also add documentation clarifying difference
+	between families and spouses iterators.
+
 2005-06-09 Perry Rapp
 
 	* ChangeLog src/gedlib/remove.c

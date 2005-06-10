@@ -156,7 +156,8 @@ remove_empty_fam (NODE fam)
 	del_in_dbase(key);
 
 /* Reassemble & delete the in-memory record we're holding (fam) */
-	/*
+	/*  is rest empty or does it need to be removed also?
+	 *  fam  is deleted by del_in_dbase() above so can't do it here
 	join_fam(fam, refn, husb, wife, chil, rest);
 	free_nodes(fam);  remove_fam_cache removed fam node*/
 
