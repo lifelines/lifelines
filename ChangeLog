@@ -1,16 +1,21 @@
 2005-06-09 Perry Rapp
 
-    * ChangeLog src/gedlib/remove.c
+	* ChangeLog src/gedlib/remove.c
 
-    Cosmetic (added more comments inside remove_empty_fam)
+	Cosmetic (added more comments inside remove_empty_fam)
 
-    * ChangeLog src/interp/builtin.c
-    
-    Improved clean up of __insert in error cases.
+	* ChangeLog src/interp/builtin.c
 
-    * ChangeLog src/hdrs/gedcom.h
-    
-    Fix FORSPOUSES to not count self (& add more comments)
+	Improved clean up of __insert in error cases.
+
+	* ChangeLog src/hdrs/gedcom.h
+
+	Fix FORSPOUSES to not count self (& add more comments)
+
+	* ChangeLog src/hdrs/gedcom.h
+
+	Fix FORFAMSS to only fall through at end of family for 
+	unreported families (fix handling first_sp).
 
 2005-05-07 Stephen Dum
         * ChangeLog src/gedlib/init.c src/gedlib/remove.c src/interp/builtin.c
