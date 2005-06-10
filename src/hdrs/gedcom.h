@@ -779,24 +779,28 @@ INT xref_prevx(INT);
 	    if (__key && (frec=qkey_to_frecord(__key)) && (fam=nztop(frec))) {\
 			first_sp=0; /* not yet reported this family */\
 			__node1 = nchild(fam);\
-			while (__node1) {\
+			while (__node1 || !first_sp) {\
 				NODE spouse=0;\
-				if (eqstr("HUSB", ntag(__node1)) || eqstr("WIFE", ntag(__node1))) { \
-				    __key = rmvat(nval(__node1));\
-				    __node1 = nsibling(__node1);\
-				    if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi) {\
-						/* invalid spouse, or self */\
-						continue;\
-				    }\
-				} else {\
-					/* Not a spouse (not HUSB or WIFE) */\
-					if (first_sp)\
-						break; /* finished HUSB/WIFE section & reported already */\
-				    __node1 = nsibling(__node1);\
-				    if (__node1) continue;\
-					/* fall through here for end of family not yet reported */\
+				if (__node1) { \
+				    if (eqstr("HUSB", ntag(__node1)) || eqstr("WIFE", ntag(__node1))) { \
+					__key = rmvat(nval(__node1));\
+					__node1 = nsibling(__node1);\
+					if (!__key || !(spouse = qkey_to_indi(__key))||spouse==indi) {\
+						    /* invalid spouse, or self */\
+						    continue;\
+					}\
+				    } else {\
+					    /* Not a spouse (not HUSB or WIFE) */\
+					    if (first_sp)\
+						    break; /* finished HUSB/WIFE section & reported already */\
+						__node1 = nsibling(__node1);\
+					    if (__node1) continue;\
+						/* fall through here for end of family not yet reported */\
+					}\
+				/* } else { \
+				 * !__node1 && !first_sp fall thru to report * fam*/ \
 				}\
-				++num;\
+				++num; \
 				++first_sp; /* reporting this family */\
 				{
 
