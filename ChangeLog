@@ -1,3 +1,5 @@
+2005-06-12 lifelines beta 3.0.45 RELEASE
+
 2005-06-09 Stephen Dum
         * ChangeLog src/gedlib/remove.c 
 	Cosmetic (added more comments inside remove_empty_fam)

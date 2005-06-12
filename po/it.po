@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-13 17:40-0500\n"
+"POT-Creation-Date: 2005-06-12 12:40-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -54,90 +54,90 @@ msgstr ""
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr ""
 
-#: src/gedlib/init.c:572
+#: src/gedlib/init.c:569
 msgid "Database error: -- "
 msgstr ""
 
-#: src/gedlib/init.c:576
+#: src/gedlib/init.c:573
 msgid "requested database does not exist."
 msgstr ""
 
-#: src/gedlib/init.c:579
+#: src/gedlib/init.c:576
 msgid "db directory is file, not directory."
 msgstr ""
 
-#: src/gedlib/init.c:582
+#: src/gedlib/init.c:579
 msgid "creation of new database failed."
 msgstr ""
 
-#: src/gedlib/init.c:585
+#: src/gedlib/init.c:582
 msgid "error accessing database directory."
 msgstr ""
 
-#: src/gedlib/init.c:588
+#: src/gedlib/init.c:585
 msgid "no keyfile (directory does not appear to be a database)."
 msgstr ""
 
-#: src/gedlib/init.c:591
+#: src/gedlib/init.c:588
 msgid "could not open, read or write an index file."
 msgstr ""
 
-#: src/gedlib/init.c:594
+#: src/gedlib/init.c:591
 msgid "could not open, read or write the key file."
 msgstr ""
 
-#: src/gedlib/init.c:597
+#: src/gedlib/init.c:594
 msgid "could not open, read or write the key file (to alter database)."
 msgstr ""
 
-#: src/gedlib/init.c:600
+#: src/gedlib/init.c:597
 msgid "could not open, read or write a block file."
 msgstr ""
 
-#: src/gedlib/init.c:603
+#: src/gedlib/init.c:600
 msgid "name of database is too long."
 msgstr ""
 
-#: src/gedlib/init.c:606
+#: src/gedlib/init.c:603
 msgid "The database is already open for writing."
 msgstr ""
 
-#: src/gedlib/init.c:609
+#: src/gedlib/init.c:606
 msgid "The database is locked (no readwrite access)."
 msgstr ""
 
-#: src/gedlib/init.c:612
+#: src/gedlib/init.c:609
 msgid "The database is unlocked."
 msgstr ""
 
-#: src/gedlib/init.c:615
+#: src/gedlib/init.c:612
 msgid "keyfile is corrupt."
 msgstr ""
 
-#: src/gedlib/init.c:618
+#: src/gedlib/init.c:615
 msgid "keyfile is wrong alignment."
 msgstr ""
 
-#: src/gedlib/init.c:621
+#: src/gedlib/init.c:618
 msgid "keyfile is wrong version."
 msgstr ""
 
-#: src/gedlib/init.c:624
+#: src/gedlib/init.c:621
 msgid "Existing database found."
 msgstr ""
 
-#: src/gedlib/init.c:628
+#: src/gedlib/init.c:625
 #, c-format
 msgid ""
 "The database is already opened for read access by %d users.\n"
 "  "
 msgstr ""
 
-#: src/gedlib/init.c:632
+#: src/gedlib/init.c:629
 msgid "Invalid properties set for new database"
 msgstr ""
 
-#: src/gedlib/init.c:635
+#: src/gedlib/init.c:632
 msgid "Undefined database error -- fix program."
 msgstr ""
 
@@ -2361,7 +2361,7 @@ msgid_plural "%d items leaked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/gedlib/remove.c:249
+#: src/gedlib/remove.c:254
 msgid "Families may not yet be removed in this fashion."
 msgstr ""
 
@@ -2592,211 +2592,211 @@ msgstr ""
 msgid "%s: the arg #%s had a major error."
 msgstr ""
 
-#: src/interp/builtin.c:111
+#: src/interp/builtin.c:112
 msgid "Enter integer for program"
 msgstr ""
 
-#: src/interp/builtin.c:181
+#: src/interp/builtin.c:182
 msgid "Identify person for program:"
 msgstr ""
 
-#: src/interp/builtin.c:206
+#: src/interp/builtin.c:207
 msgid "Enter a spouse from family."
 msgstr ""
 
-#: src/interp/builtin.c:207
+#: src/interp/builtin.c:208
 msgid "Enter a sibling from family."
 msgstr ""
 
-#: src/interp/builtin.c:240
+#: src/interp/builtin.c:241
 msgid "Identify list of persons for program:"
 msgstr ""
 
-#: src/interp/builtin.c:327
+#: src/interp/builtin.c:328
 msgid "name: person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:383
+#: src/interp/builtin.c:384
 msgid "fullname: person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:410
+#: src/interp/builtin.c:411
 msgid "surname: person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:435
+#: src/interp/builtin.c:436
 msgid "soundex: person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:498
+#: src/interp/builtin.c:499
 #, c-format
 msgid "Bad escape code at offset %d in bytecode string <%s>"
 msgstr ""
 
-#: src/interp/builtin.c:641
+#: src/interp/builtin.c:642
 msgid "(givens) person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:668
+#: src/interp/builtin.c:669
 #, c-format
 msgid "set(%s, <Null>) is invalid"
 msgstr ""
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "first"
 msgstr ""
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "second"
 msgstr ""
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "third"
 msgstr ""
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "fourth"
 msgstr ""
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "fifth"
 msgstr ""
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "sixth"
 msgstr ""
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "seventh"
 msgstr ""
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "eighth"
 msgstr ""
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "ninth"
 msgstr ""
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "tenth"
 msgstr ""
 
-#: src/interp/builtin.c:1140
+#: src/interp/builtin.c:1142
 msgid "eleventh"
 msgstr ""
 
-#: src/interp/builtin.c:1140
+#: src/interp/builtin.c:1142
 msgid "twelfth"
 msgstr ""
 
-#: src/interp/builtin.c:1157
+#: src/interp/builtin.c:1159
 #, c-format
 msgid "%dth"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "zero"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "one"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "two"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "three"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "four"
 msgstr ""
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "five"
 msgstr ""
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "six"
 msgstr ""
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "seven"
 msgstr ""
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "eight"
 msgstr ""
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "nine"
 msgstr ""
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "ten"
 msgstr ""
 
-#: src/interp/builtin.c:1169
+#: src/interp/builtin.c:1171
 msgid "eleven"
 msgstr ""
 
-#: src/interp/builtin.c:1169
+#: src/interp/builtin.c:1171
 msgid "twelve"
 msgstr ""
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2092
 msgid "the arg to empty is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2204
+#: src/interp/builtin.c:2206
 msgid "the arg to length is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "He"
 msgstr ""
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "he"
 msgstr ""
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "His"
 msgstr ""
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "his"
 msgstr ""
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "him"
 msgstr ""
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "She"
 msgstr ""
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 #, fuzzy
 msgid "she"
 msgstr "set"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "Her"
 msgstr ""
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "her"
 msgstr ""
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "her_"
 msgstr ""
 
-#: src/interp/builtin.c:2770
+#: src/interp/builtin.c:2772
 msgid "(trimname) person does not have a name"
 msgstr ""
 
@@ -3454,35 +3454,35 @@ msgstr ""
 msgid "ASSERT failure"
 msgstr ""
 
-#: src/liflines/import.c:171
+#: src/liflines/import.c:172
 msgid "This is not a lineage linked GEDCOM file."
 msgstr ""
 
-#: src/liflines/import.c:172
+#: src/liflines/import.c:173
 msgid "Proceed anyway?"
 msgstr ""
 
-#: src/liflines/import.c:187
+#: src/liflines/import.c:188
 msgid "No current internal codeset, so no codeset conversion can be done"
 msgstr ""
 
-#: src/liflines/import.c:188
+#: src/liflines/import.c:189
 msgid "Proceed without codeset conversion?"
 msgstr ""
 
-#: src/liflines/import.c:205
+#: src/liflines/import.c:206
 #, c-format
 msgid "%d warning during import"
 msgid_plural "%d warnings during import"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/import.c:221
+#: src/liflines/import.c:222
 #, c-format
 msgid "Cannot convert codeset (from <%s> to <%s>)"
 msgstr ""
 
-#: src/liflines/import.c:224
+#: src/liflines/import.c:225
 msgid "Enter codeset to assume (* for none)"
 msgstr ""
 
@@ -4044,452 +4044,452 @@ msgstr ""
 msgid "Missing HEAD line at line %d"
 msgstr ""
 
-#: src/tools/dbverify.c:171
+#: src/tools/dbverify.c:174
 msgid "Orphan names"
 msgstr ""
 
-#: src/tools/dbverify.c:172
+#: src/tools/dbverify.c:175
 msgid "Ghost names"
 msgstr ""
 
-#: src/tools/dbverify.c:173 src/tools/dbverify.c:174
+#: src/tools/dbverify.c:176 src/tools/dbverify.c:177
 msgid "Duplicate names"
 msgstr ""
 
-#: src/tools/dbverify.c:175
+#: src/tools/dbverify.c:178
 msgid "Non-indi names"
 msgstr ""
 
-#: src/tools/dbverify.c:176
+#: src/tools/dbverify.c:179
 msgid "Duplicate individuals"
 msgstr ""
 
-#: src/tools/dbverify.c:177
+#: src/tools/dbverify.c:180
 msgid "Duplicate families"
 msgstr ""
 
-#: src/tools/dbverify.c:178
+#: src/tools/dbverify.c:181
 msgid "Duplicate sources"
 msgstr ""
 
-#: src/tools/dbverify.c:179
+#: src/tools/dbverify.c:182
 msgid "Duplicate events"
 msgstr ""
 
-#: src/tools/dbverify.c:180
+#: src/tools/dbverify.c:183
 msgid "Duplicate others"
 msgstr ""
 
-#: src/tools/dbverify.c:181
+#: src/tools/dbverify.c:184
 msgid "Missing records (from deleteset)"
 msgstr ""
 
-#: src/tools/dbverify.c:182
+#: src/tools/dbverify.c:185
 msgid "Deleted records"
 msgstr ""
 
-#: src/tools/dbverify.c:183
+#: src/tools/dbverify.c:186
 msgid "Bad name"
 msgstr ""
 
-#: src/tools/dbverify.c:184
+#: src/tools/dbverify.c:187
 msgid "Bad family reference"
 msgstr ""
 
-#: src/tools/dbverify.c:185
+#: src/tools/dbverify.c:188
 msgid "Missing child"
 msgstr ""
 
-#: src/tools/dbverify.c:186
+#: src/tools/dbverify.c:189
 msgid "Missing spouse"
 msgstr ""
 
-#: src/tools/dbverify.c:187
+#: src/tools/dbverify.c:190
 msgid "Bad HUSB reference"
 msgstr ""
 
-#: src/tools/dbverify.c:188
+#: src/tools/dbverify.c:191
 msgid "Bad WIFE reference"
 msgstr ""
 
-#: src/tools/dbverify.c:189
+#: src/tools/dbverify.c:192
 msgid "Bad CHIL reference"
 msgstr ""
 
-#: src/tools/dbverify.c:190
+#: src/tools/dbverify.c:193
 msgid "Improper HUSB"
 msgstr ""
 
-#: src/tools/dbverify.c:191
+#: src/tools/dbverify.c:194
 msgid "Improper WIFE"
 msgstr ""
 
-#: src/tools/dbverify.c:192
+#: src/tools/dbverify.c:195
 msgid "Improper child"
 msgstr ""
 
-#: src/tools/dbverify.c:193
+#: src/tools/dbverify.c:196
 msgid "Empty family"
 msgstr ""
 
-#: src/tools/dbverify.c:194
+#: src/tools/dbverify.c:197
 msgid "Single person family"
 msgstr ""
 
-#: src/tools/dbverify.c:195
+#: src/tools/dbverify.c:198
 msgid "Bad pointer"
 msgstr ""
 
-#: src/tools/dbverify.c:196
+#: src/tools/dbverify.c:199
 msgid "Missing data records"
 msgstr ""
 
-#: src/tools/dbverify.c:226
+#: src/tools/dbverify.c:229
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr ""
 
-#: src/tools/dbverify.c:228
+#: src/tools/dbverify.c:231
 msgid "/home/users/myname/lifelines/databases/myfamily"
-msgstr ""
-
-#: src/tools/dbverify.c:232
-#, c-format
-msgid "usage: dbverify -(flags) <btree>\n"
-msgstr ""
-
-#: src/tools/dbverify.c:233
-#, c-format
-msgid "flags:\n"
-msgstr ""
-
-#: src/tools/dbverify.c:234
-#, c-format
-msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr ""
 
 #: src/tools/dbverify.c:235
 #, c-format
-msgid "\t-g = Check for ghosts (names/refns)\n"
+msgid "usage: dbverify -(flags) <btree>\n"
 msgstr ""
 
 #: src/tools/dbverify.c:236
 #, c-format
-msgid "\t-G = Check for & fix ghosts (names/refns)\n"
+msgid "flags:\n"
 msgstr ""
 
 #: src/tools/dbverify.c:237
 #, c-format
-msgid "\t-i = Check individuals\n"
+msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr ""
 
 #: src/tools/dbverify.c:238
 #, c-format
-msgid "\t-f = Check families\n"
+msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr ""
 
 #: src/tools/dbverify.c:239
 #, c-format
-msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
+msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr ""
 
 #: src/tools/dbverify.c:240
 #, c-format
-msgid "\t-s = Check sours\n"
+msgid "\t-i = Check individuals\n"
 msgstr ""
 
 #: src/tools/dbverify.c:241
 #, c-format
-msgid "\t-e = Check events\n"
+msgid "\t-f = Check families\n"
 msgstr ""
 
 #: src/tools/dbverify.c:242
 #, c-format
-msgid "\t-x = Check others\n"
+msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 
 #: src/tools/dbverify.c:243
 #, c-format
-msgid "\t-l = Check database structure\n"
+msgid "\t-s = Check sours\n"
 msgstr ""
 
 #: src/tools/dbverify.c:244
 #, c-format
-msgid "\t-m = Check for records missing data entries\n"
+msgid "\t-e = Check events\n"
 msgstr ""
 
 #: src/tools/dbverify.c:245
 #, c-format
-msgid "\t-M = Fix records missing data entries\n"
+msgid "\t-x = Check others\n"
 msgstr ""
 
 #: src/tools/dbverify.c:246
 #, c-format
-msgid "\t-D = Fix bad delete entries\n"
+msgid "\t-l = Check database structure\n"
 msgstr ""
 
 #: src/tools/dbverify.c:247
 #, c-format
-msgid "\t-n = Noisy (echo every record processed)\n"
+msgid "\t-m = Check for records missing data entries\n"
 msgstr ""
 
 #: src/tools/dbverify.c:248
 #, c-format
+msgid "\t-M = Fix records missing data entries\n"
+msgstr ""
+
+#: src/tools/dbverify.c:249
+#, c-format
+msgid "\t-D = Fix bad delete entries\n"
+msgstr ""
+
+#: src/tools/dbverify.c:250
+#, c-format
+msgid "\t-n = Noisy (echo every record processed)\n"
+msgstr ""
+
+#: src/tools/dbverify.c:251
+#, c-format
 msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr ""
 
-#: src/tools/dbverify.c:380
+#: src/tools/dbverify.c:383
 #, c-format
 msgid "Non-indi name, key=%s, name=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:394
+#: src/tools/dbverify.c:397
 #, c-format
 msgid "Orphaned name: %s"
 msgstr ""
 
-#: src/tools/dbverify.c:408
+#: src/tools/dbverify.c:411
 #, c-format
 msgid "Ghost name: %s -> %s"
 msgstr ""
 
-#: src/tools/dbverify.c:440
+#: src/tools/dbverify.c:443
 #, c-format
 msgid "Orphaned refn: %s"
 msgstr ""
 
-#: src/tools/dbverify.c:480
+#: src/tools/dbverify.c:483
 #, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:515
+#: src/tools/dbverify.c:518
 #, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:628
+#: src/tools/dbverify.c:631
 #, c-format
 msgid "Duplicate individual for %s"
 msgstr ""
 
-#: src/tools/dbverify.c:670
+#: src/tools/dbverify.c:673
 #, c-format
 msgid "Bad name for individual %s: %s"
 msgstr ""
 
-#: src/tools/dbverify.c:688 src/tools/dbverify.c:712
+#: src/tools/dbverify.c:691 src/tools/dbverify.c:715
 #, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr ""
 
-#: src/tools/dbverify.c:694
+#: src/tools/dbverify.c:697
 #, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:698
+#: src/tools/dbverify.c:701
 #, c-format
 msgid "Fixed missing child (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:718
+#: src/tools/dbverify.c:721
 #, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:722
+#: src/tools/dbverify.c:725
 #, c-format
 msgid "Fixed missing spouse (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:756
+#: src/tools/dbverify.c:759
 #, c-format
 msgid "Duplicate family for %s"
 msgstr ""
 
-#: src/tools/dbverify.c:807
+#: src/tools/dbverify.c:810
 #, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:813
+#: src/tools/dbverify.c:816
 #, c-format
 msgid "Fixed Bad HUSB reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:822
+#: src/tools/dbverify.c:825
 #, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:835
+#: src/tools/dbverify.c:838
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:841
+#: src/tools/dbverify.c:844
 #, c-format
 msgid "Fixed Bad wife reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:850
+#: src/tools/dbverify.c:853
 #, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:863
+#: src/tools/dbverify.c:866
 #, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:869
+#: src/tools/dbverify.c:872
 #, c-format
 msgid "Fixed bad child reference (%s) in family %s"
 msgstr ""
 
-#: src/tools/dbverify.c:878
+#: src/tools/dbverify.c:881
 #, c-format
 msgid "Improper child (%s) in family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:886
+#: src/tools/dbverify.c:889
 #, c-format
 msgid "Empty family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:888
+#: src/tools/dbverify.c:891
 #, c-format
 msgid "Single person family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:914
+#: src/tools/dbverify.c:917
 #, c-format
 msgid "Duplicate source for %s"
 msgstr ""
 
-#: src/tools/dbverify.c:930
+#: src/tools/dbverify.c:933
 #, c-format
 msgid "Duplicate event for %s"
 msgstr ""
 
-#: src/tools/dbverify.c:946
+#: src/tools/dbverify.c:949
 #, c-format
 msgid "Duplicate record for %s"
 msgstr ""
 
-#: src/tools/dbverify.c:1017
+#: src/tools/dbverify.c:1020
 #, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr ""
 
-#: src/tools/dbverify.c:1055
+#: src/tools/dbverify.c:1058
 #, c-format
 msgid "Missing undeleted record %c%d"
 msgstr ""
 
-#: src/tools/dbverify.c:1062
+#: src/tools/dbverify.c:1065
 #, c-format
 msgid "Fixed missing undeleted record %c%d"
 msgstr ""
 
-#: src/tools/dbverify.c:1066
+#: src/tools/dbverify.c:1069
 #, c-format
 msgid "Failed to fix missing undeleted record %c%d"
 msgstr ""
 
-#: src/tools/dbverify.c:1078
+#: src/tools/dbverify.c:1081
 #, c-format
 msgid "Delete set contains valid record %s"
 msgstr ""
 
-#: src/tools/dbverify.c:1083
+#: src/tools/dbverify.c:1086
 #, c-format
 msgid "Fixed delete set contains valid record %s"
 msgstr ""
 
-#: src/tools/dbverify.c:1087
+#: src/tools/dbverify.c:1090
 #, c-format
 msgid "Failed to fix missing undeleted record %s"
 msgstr ""
 
-#: src/tools/dbverify.c:1108
+#: src/tools/dbverify.c:1111
 #, c-format
 msgid "Master fkey misaligned (%d != %d)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1134
+#: src/tools/dbverify.c:1137
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1141
+#: src/tools/dbverify.c:1144
 #, c-format
 msgid "Error loading index at key %d\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1188
+#: src/tools/dbverify.c:1191
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1199
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1207
 #, c-format
 msgid "Key %d not below next key\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1220 src/tools/dbverify.c:1222
+#: src/tools/dbverify.c:1223 src/tools/dbverify.c:1225
 msgid "data block"
 msgstr ""
 
-#: src/tools/dbverify.c:1223
+#: src/tools/dbverify.c:1226
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:1236
+#: src/tools/dbverify.c:1239
 #, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1272
+#: src/tools/dbverify.c:1275
 #, c-format
 msgid "Missing data record (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:1276
+#: src/tools/dbverify.c:1279
 #, c-format
 msgid "Fixed missing data record (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:1425
+#: src/tools/dbverify.c:1436
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/tools/dbverify.c:1429
+#: src/tools/dbverify.c:1440
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/tools/dbverify.c:1436
+#: src/tools/dbverify.c:1447
 msgid "No errors found"
 msgstr ""
 
-#: src/tools/dbverify.c:1447
+#: src/tools/dbverify.c:1458
 #, c-format
 msgid "FATAL ERROR: "
 msgstr ""
 
-#: src/tools/dbverify.c:1452
+#: src/tools/dbverify.c:1463
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr ""

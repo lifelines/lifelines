@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-11 14:39+0100\n"
+"POT-Creation-Date: 2005-06-12 12:40-0400\n"
 "PO-Revision-Date: 2005-03-11 16:06+0100\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2398,7 +2398,7 @@ msgid_plural "%d items leaked"
 msgstr[0] "%d post läckte"
 msgstr[1] "%d poster läckte"
 
-#: src/gedlib/remove.c:249
+#: src/gedlib/remove.c:254
 msgid "Families may not yet be removed in this fashion."
 msgstr "Familjer får ännu inte tas bort på detta sätt."
 
@@ -2629,206 +2629,206 @@ msgstr "%s: argumentet hade ett allvarligt fel."
 msgid "%s: the arg #%s had a major error."
 msgstr "%s: argument nr. %s hade ett större fel."
 
-#: src/interp/builtin.c:111
+#: src/interp/builtin.c:112
 msgid "Enter integer for program"
 msgstr "Skriv in heltal för program"
 
-#: src/interp/builtin.c:181
+#: src/interp/builtin.c:182
 msgid "Identify person for program:"
 msgstr "Skriv in sträng för program"
 
-#: src/interp/builtin.c:206
+#: src/interp/builtin.c:207
 msgid "Enter a spouse from family."
 msgstr "Lägg till en maka/make från familj."
 
-#: src/interp/builtin.c:207
+#: src/interp/builtin.c:208
 msgid "Enter a sibling from family."
 msgstr "Lägg till ett syskon från familj."
 
-#: src/interp/builtin.c:240
+#: src/interp/builtin.c:241
 msgid "Identify list of persons for program:"
 msgstr "Identifiera lista över personer för programmet:"
 
-#: src/interp/builtin.c:327
+#: src/interp/builtin.c:328
 msgid "name: person does not have a name"
 msgstr "name: personen har inget namn."
 
-#: src/interp/builtin.c:383
+#: src/interp/builtin.c:384
 msgid "fullname: person does not have a name"
 msgstr "fullname: personen har inget namn"
 
-#: src/interp/builtin.c:410
+#: src/interp/builtin.c:411
 msgid "surname: person does not have a name"
 msgstr "surname: personen har inget namn"
 
-#: src/interp/builtin.c:435
+#: src/interp/builtin.c:436
 msgid "soundex: person does not have a name"
 msgstr "soundex: personen har inget namn"
 
-#: src/interp/builtin.c:498
+#: src/interp/builtin.c:499
 #, c-format
 msgid "Bad escape code at offset %d in bytecode string <%s>"
 msgstr "Ogiltig kontrollsekvenskod vid position %d i bytekodssträng <%s>"
 
-#: src/interp/builtin.c:641
+#: src/interp/builtin.c:642
 msgid "(givens) person does not have a name"
 msgstr "(givens) personen har inget namn"
 
-#: src/interp/builtin.c:668
+#: src/interp/builtin.c:669
 #, c-format
 msgid "set(%s, <Null>) is invalid"
 msgstr "set(%s, <Null>) är ogiltigt"
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "first"
 msgstr "första"
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "second"
 msgstr "andra"
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "third"
 msgstr "tredje"
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "fourth"
 msgstr "fjärde"
 
-#: src/interp/builtin.c:1138
+#: src/interp/builtin.c:1140
 msgid "fifth"
 msgstr "femte"
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "sixth"
 msgstr "sjätte"
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "seventh"
 msgstr "sjunde"
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "eighth"
 msgstr "åttonde"
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "ninth"
 msgstr "nionde"
 
-#: src/interp/builtin.c:1139
+#: src/interp/builtin.c:1141
 msgid "tenth"
 msgstr "tionde"
 
-#: src/interp/builtin.c:1140
+#: src/interp/builtin.c:1142
 msgid "eleventh"
 msgstr "elfte"
 
-#: src/interp/builtin.c:1140
+#: src/interp/builtin.c:1142
 msgid "twelfth"
 msgstr "tolfte"
 
-#: src/interp/builtin.c:1157
+#: src/interp/builtin.c:1159
 #, c-format
 msgid "%dth"
 msgstr "%d:e"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "zero"
 msgstr "noll"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "one"
 msgstr "en"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "two"
 msgstr "två"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "three"
 msgstr "tre"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "four"
 msgstr "fyra"
 
-#: src/interp/builtin.c:1167
+#: src/interp/builtin.c:1169
 msgid "five"
 msgstr "fem"
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "six"
 msgstr "sex"
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "seven"
 msgstr "sju"
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "eight"
 msgstr "åtta"
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "nine"
 msgstr "nio"
 
-#: src/interp/builtin.c:1168
+#: src/interp/builtin.c:1170
 msgid "ten"
 msgstr "tio"
 
-#: src/interp/builtin.c:1169
+#: src/interp/builtin.c:1171
 msgid "eleven"
 msgstr "elva"
 
-#: src/interp/builtin.c:1169
+#: src/interp/builtin.c:1171
 msgid "twelve"
 msgstr "tolv"
 
-#: src/interp/builtin.c:2090
+#: src/interp/builtin.c:2092
 msgid "the arg to empty is not a list, table or set"
 msgstr "argumentet till empty är inte en lista, tabell eller uppsättning"
 
-#: src/interp/builtin.c:2204
+#: src/interp/builtin.c:2206
 msgid "the arg to length is not a list, table or set"
 msgstr "argumentet till length är inte en lista, tabell eller uppsättning"
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "He"
 msgstr "Han"
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "he"
 msgstr "han"
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "His"
 msgstr "Hans"
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "his"
 msgstr "hans"
 
-#: src/interp/builtin.c:2392
+#: src/interp/builtin.c:2394
 msgid "him"
 msgstr "honom"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "She"
 msgstr "Hon"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "she"
 msgstr "hon"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "Her"
 msgstr "Hennes"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "her"
 msgstr "hennes"
 
-#: src/interp/builtin.c:2394
+#: src/interp/builtin.c:2396
 msgid "her_"
 msgstr "henne"
 
@@ -3491,36 +3491,36 @@ msgstr "  i filen <%s> vid rad %d\n"
 msgid "ASSERT failure"
 msgstr "ASSERT-misslyckande"
 
-#: src/liflines/import.c:171
+#: src/liflines/import.c:172
 msgid "This is not a lineage linked GEDCOM file."
 msgstr "Detta är inte en anlänkad GEDCOM-fil."
 
-#: src/liflines/import.c:172
+#: src/liflines/import.c:173
 msgid "Proceed anyway?"
 msgstr "Vill du fortsätta ändå?"
 
-#: src/liflines/import.c:187
+#: src/liflines/import.c:188
 msgid "No current internal codeset, so no codeset conversion can be done"
 msgstr ""
 "Ingen aktuell intern teckenkodning, så ingen kodkonvertering kan utföras"
 
-#: src/liflines/import.c:188
+#: src/liflines/import.c:189
 msgid "Proceed without codeset conversion?"
 msgstr "Vill du fortsätta utan konvertering av teckenkodning?"
 
-#: src/liflines/import.c:205
+#: src/liflines/import.c:206
 #, c-format
 msgid "%d warning during import"
 msgid_plural "%d warnings during import"
 msgstr[0] "%d varning under import"
 msgstr[1] "%d varningar under import"
 
-#: src/liflines/import.c:221
+#: src/liflines/import.c:222
 #, c-format
 msgid "Cannot convert codeset (from <%s> to <%s>)"
 msgstr "Kan inte konvertera teckenkodning (från <%s> till <%s>)"
 
-#: src/liflines/import.c:224
+#: src/liflines/import.c:225
 msgid "Enter codeset to assume (* for none)"
 msgstr "Skriv in teckenkodning att anta (* för ingen)"
 
