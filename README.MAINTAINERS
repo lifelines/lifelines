@@ -26,7 +26,7 @@ Build local copy in ./bld subdirectory:
   $ mkdir bld
   $ cd bld
   $ ../configure
-  $ ../make
+  $ make
 
 Update master message catalog template (for i18n):
   $ mv ../po/lifelines.pot ../po/lifelines.old.pot
