@@ -2,6 +2,16 @@ LifeLines Source Release, Version 3.0.44
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.45
+============================
+ - Fixed count variable in spouses and families report iterations
+ - Fixed crash upon merging two families
+ - Fixed memory leaks
+
+New features added in 3.0.45
+============================
+ - Kinyarwanda translation
+
 Bug fixes in 3.0.44
 ============================
  - Fixed browing to family (for empty & non-traditional families)
