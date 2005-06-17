@@ -7,6 +7,12 @@
 	(instead of normalize_irec), to handle when auto adding to 
 	non-individuals.
 
+	* ChangeLog INSTALL NEWS configure.in build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml src/hdrs/version.h
+
+	Set most version numbers to 3.0.46 in preparation for next beta.
+
 2005-06-15 Perry Rapp
 
 	* ChangeLog po/fr.po
