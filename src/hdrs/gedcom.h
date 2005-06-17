@@ -380,6 +380,7 @@ STRING node_to_tag(NODE node, STRING tag, INT len);
 void normalize_fam(NODE fam);
 void normalize_irec(RECORD irec);
 void normalize_indi(NODE indi);
+void normalize_rec(RECORD rec);
 INT num_evens(void);
 INT num_fam_xrefs(NODE fam);
 INT num_fams(void);

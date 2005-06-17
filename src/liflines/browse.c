@@ -1959,7 +1959,7 @@ autoadd_xref (RECORD rec, NODE newnode)
 		nsibling(prev) = xref;
 	}
 
-	normalize_irec(rec);
+	normalize_rec(rec);
 	
 	unknown_node_to_dbase(node);
 }

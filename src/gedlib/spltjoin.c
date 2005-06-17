@@ -347,7 +347,22 @@ join_othr (NODE root, NODE refn, NODE rest)
 	}
 }
 /*==================================================
- * normalize_indi -- ensure nodes are in lifelines order
+ * normalize_rec -- ensure nodes are in lifelines order
+ * for any record
+ *================================================*/
+void
+normalize_rec (RECORD irec)
+{
+	NODE root = nztop(irec);
+	if (!root) return;
+	if (eqstr(ntag(root), "INDI"))
+		normalize_indi(root);
+	else if (eqstr(ntag(root), "FAM"))
+		normalize_fam(root);
+}
+/*==================================================
+ * normalize_irec -- ensure nodes are in lifelines order
+ * for individual record
  *================================================*/
 void
 normalize_irec (RECORD irec)
@@ -358,6 +373,7 @@ normalize_irec (RECORD irec)
 }
 /*==================================================
  * normalize_indi -- ensure nodes are in lifelines order
+ * for individual root node
  *================================================*/
 void
 normalize_indi (NODE indi)

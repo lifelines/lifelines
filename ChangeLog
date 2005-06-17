@@ -1,3 +1,12 @@
+2005-06-17 Perry Rapp
+
+	* ChangeLog src/gedlib/spltjoin.c src/hdrs/gedcom.h
+	src/liflines/browse.c
+
+	Add new normalize_rec function, and call it from autoadd_xref
+	(instead of normalize_irec), to handle when auto adding to 
+	non-individuals.
+
 2005-06-15 Perry Rapp
 
 	* ChangeLog po/fr.po
