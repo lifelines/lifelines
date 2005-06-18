@@ -204,6 +204,11 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	return NULL;
 }
+/*======================================+
+ * set_output_file -- Open specified output file
+ *  (Closes any previously open output file)
+ * Calls msg_error & returns FALSE, if problem
+ *=====================================*/
 static BOOLEAN
 set_output_file (STRING outfname, BOOLEAN append)
 {

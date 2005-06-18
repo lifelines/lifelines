@@ -22,6 +22,10 @@
 
 	Cosmetic: Fix indents in main in llexec.c.
 
+	* ChangeLog src/interp/rassa.c
+
+	Cosmetic: Add function header comment for set_output_file
+
 2005-06-17 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 
