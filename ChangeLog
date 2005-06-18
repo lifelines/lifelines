@@ -9,6 +9,11 @@
 
 	Add latest bugfix to NEWS, and annotate bugfixes with sf bug numbers.
 
+    * ChangeLog src/liflines/valgdcom.c
+
+    New function check_level1_tag, to warn of weird lineage-linking tags
+    (eg, level-1 FAMS pointer inside of FAM record).
+
 2005-06-17 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 

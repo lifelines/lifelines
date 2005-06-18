@@ -91,6 +91,7 @@ static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSmisval      = N_("Line %d: This %s line is missing a value field.");
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
+static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s.");
 
 ELMNT *index_data = NULL;
 
@@ -111,6 +112,7 @@ static int check_akey (int firstchar, STRING keyp, INT *maxp);
 static void check_even_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_fam_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_indi_links(IMPORT_FEEDBACK ifeed, ELMNT per);
+static void check_level1_tag(IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING val, INT line);
 static void check_othr_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_references(IMPORT_FEEDBACK ifeed);
 static void check_sour_links(IMPORT_FEEDBACK ifeed, ELMNT src);
@@ -136,6 +138,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	ELMNT el;
 	XLAT xlat = transl_get_predefined_xlat(MGDIN);
 	STRING xref, tag, val, msg;
+	STRING tag0=0;
 
 	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
@@ -184,6 +187,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 				}
 			}
 			defline = flineno;
+			strupdate(&tag0, tag); /* store current level 0 tag */
 			if (eqstr("HEAD", tag))  {
 				rec_type = (nhead==0 ? HEAD_REC : IGNR_REC);
 			} else if (eqstr("TRLR", tag)) {
@@ -219,6 +223,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 					ifeed->validated_rec_fnc(tag[0], tag, count);
 			}
 		} else {
+			/* specific handling for specific record types */
 			if (rec_type == HEAD_REC)
 				handle_head_lev1(ifeed, tag, val, flineno);
 			else if (rec_type == TRLR_REC)
@@ -229,6 +234,8 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 				handle_fam_lev1(ifeed, tag, val, flineno);
 			else
 				handle_value(val, flineno);
+			/* specific handling for specific tag types */
+			check_level1_tag(ifeed, tag0, tag, val, flineno);
 		}
 		curlev = lev;
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
@@ -587,6 +594,37 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 		(void) add_indi_defn(ifeed, rmvat(val), 0, &pers);
 	} else
 		handle_value(val, line);
+}
+/*==========================================================
+ * check_level1_tag -- Warnings for specific tags at level 1
+ *========================================================*/
+static void
+check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING val, INT line)
+{
+	/*
+	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
+	to be correct, so warn if any of them occur in unusual locations
+	*/
+	if (eqstr(tag, "FAMS")) {
+		if (!eqstr(tag0, "INDI"))
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+		return;
+	}
+	if (eqstr(tag, "FAMC")) {
+		if (!eqstr(tag0, "INDI"))
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+		return;
+	}
+	if (eqstr(tag, "HUSB")) {
+		if (!eqstr(tag0, "FAM"))
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+		return;
+	}
+	if (eqstr(tag, "WIFE")) {
+		if (!eqstr(tag0, "FAM"))
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+		return;
+	}
 }
 /*=================================================
  * check_akey -- Check for a standard format key
