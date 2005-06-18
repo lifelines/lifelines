@@ -1,9 +1,13 @@
 2005-06-18 Perry Rapp
 
-    * ChangeLog src/gedlib/refns.c
+	* ChangeLog src/gedlib/refns.c
 
-    Fix key_possible_to_record to call qkey_ functions, not key_ functions,
-    to avoid assert if key is not found.
+	Fix key_possible_to_record to call qkey_ functions, not key_ functions,
+	to avoid assert if key is not found.
+
+	* ChangeLog NEWS
+
+	Add latest bugfix to NEWS, and annotate bugfixes with sf bug numbers.
 
 2005-06-17 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 

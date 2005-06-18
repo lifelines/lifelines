@@ -4,12 +4,13 @@ http://lifelines.sourceforge.net
 
 Bug fixes in 3.0.46
 ============================
- - ASSERT crash if automatically add source to family record
+ - ASSERT crash if automatically add source to family record (sf#1222702)
+ - ASSERT crash due to FAMS pointer in FAM record (sf#1223357)
 
 Bug fixes in 3.0.45
 ============================
- - Fixed count variable in spouses and families report iterations
- - Fixed crash upon merging two families
+ - Fixed count variable in spouses and families report iterations (sf#1219200)
+ - Fixed crash upon merging two families (sf#1219209)
  - Fixed memory leaks
 
 New features added in 3.0.45
