@@ -334,10 +334,10 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
    /* Open output file if name is provided */
 
-	if (ofile && !(Poutfp = fopen(ofile, LLWRITETEXT))) {
-		msg_error(_("Error: output file <%s> could not be created.\n")
-			, ofile);
-		goto interp_program_exit;
+	if (ofile) {
+		if (!start_output_file(ofile)) {
+			goto interp_program_exit;
+		}
 	}
 	if (Poutfp) setbuf(Poutfp, NULL);
 

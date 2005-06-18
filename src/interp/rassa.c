@@ -205,6 +205,22 @@ __newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*======================================+
+ * start_output_file -- Start outputing to specified file
+ *  (Closes any previously open output file)
+ * Calls msg_error & returns FALSE, if problem
+ *=====================================*/
+BOOLEAN
+start_output_file (STRING outfname)
+{
+	BOOLEAN append=FALSE;
+	if (set_output_file(outfname, append)) {
+		strupdate(&outfilename, outfname);
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+/*======================================+
  * set_output_file -- Open specified output file
  *  (Closes any previously open output file)
  * Calls msg_error & returns FALSE, if problem

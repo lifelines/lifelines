@@ -538,6 +538,7 @@ void set_rptfile_prop(PACTX pactx, STRING fname, STRING key, STRING value);
 void show_pnode(PNODE);
 void show_pnodes(PNODE);
 PNODE spouses_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+BOOLEAN start_output_file (STRING outfname);
 PNODE string_node(PACTX pactx, STRING);
 void trace_endl(void);
 void trace_out(STRING fmt, ...);

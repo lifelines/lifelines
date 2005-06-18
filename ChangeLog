@@ -26,6 +26,10 @@
 
 	Cosmetic: Add function header comment for set_output_file
 
+	* ChangeLog src/interp/interp.c src/interp/interpi.h src/interp/rassa.c
+
+	Fix interp_program_list to set outputfile, so outfile works for llexec.
+
 2005-06-17 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 
