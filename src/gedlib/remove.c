@@ -144,6 +144,7 @@ remove_empty_fam (NODE fam)
 	}
 
 /* Remove fam from cache */
+	join_fam(fam, refn, husb, wife, chil, rest);
 	remove_fam_cache(key);
 	/* this call leads to remove_cel_from_cache, which 
 	deletes the whole fam node tree, as the cache owned the nodes */
@@ -154,12 +155,6 @@ remove_empty_fam (NODE fam)
 
 /* Remove from on-disk database */
 	del_in_dbase(key);
-
-/* Reassemble & delete the in-memory record we're holding (fam) */
-	/*  is rest empty or does it need to be removed also?
-	 *  fam  is deleted by del_in_dbase() above so can't do it here
-	join_fam(fam, refn, husb, wife, chil, rest);
-	free_nodes(fam);  remove_fam_cache removed fam node*/
 
 	return TRUE;
 }

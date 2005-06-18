@@ -15,6 +15,9 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.12  2005/06/18 00:29:39  dr_doom
+** Update formatted docs, minor cleanup in merge families
+**
 ** Revision 1.11  2004/09/02 23:11:04  rsimms
 **         Enhanced book-latex.ll to filter text to render harmless those
 **         characters meaningful to the LaTeX system.  Also added an option
@@ -2313,7 +2316,7 @@ proc vitalEvent(event, reset) {
     if(not(eventName)) {
       call getValue(event, "TYPE")
       if(gotValue) {
-        " " strlat(tex_xlat, gottenValue)
+        " " strxlat(tex_xlat, gottenValue)
       }
     }
     if(not(strcmp(tag(event), "DEAT"))) {

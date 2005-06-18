@@ -1,3 +1,11 @@
+2005-06-17 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 
+	docs/ll-userguide.txt reports/book-latex.ll src/gedlib/remove.c 
+
+	Update docs for 3.0.46. fix typo in book-latex.ll and cleanup
+	code in merge families.
+
 2005-06-17 Perry Rapp
 
 	* ChangeLog src/gedlib/spltjoin.c src/hdrs/gedcom.h
