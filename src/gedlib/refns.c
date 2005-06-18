@@ -584,6 +584,9 @@ record_letter (CNSTRING tag)
 }
 /*=========================================
  * key_possible_to_record -- Returns record with key
+ *  str:  string that may be a key
+ *  let:  if string starts with a letter, it must be this (eg, 'I' for indi)
+ * This returns NULL upon failure
  *=======================================*/
 RECORD key_possible_to_record (STRING str, /* string that may be a key */
                     INT let)    /* if string starts with letter it
@@ -603,11 +606,11 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
 	kbuf[i] = 0;
 	if (!isrecord(BTR, str2rkey(kbuf))) return NULL;
 	switch (let) {
-	case 'I': return key_to_irecord(kbuf);
-	case 'F': return key_to_frecord(kbuf);
-	case 'S': return key_to_srecord(kbuf);
-	case 'E': return key_to_erecord(kbuf);
-	case 'X': return key_to_orecord(kbuf);
+	case 'I': return qkey_to_irecord(kbuf);
+	case 'F': return qkey_to_frecord(kbuf);
+	case 'S': return qkey_to_srecord(kbuf);
+	case 'E': return qkey_to_erecord(kbuf);
+	case 'X': return qkey_to_orecord(kbuf);
 	default:  FATAL();
 	}
 	FATAL();
