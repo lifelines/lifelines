@@ -18,6 +18,10 @@
 
 	Note import check for unusual FAMS, FAMC, HUSB, WIFE in NEWS.
 
+	* ChangeLog src/liflines/llexec.c
+
+	Cosmetic: Fix indents in main in llexec.c.
+
 2005-06-17 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf 

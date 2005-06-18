@@ -274,8 +274,8 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-        crashlog = getoptstr("CrashLog_llexec", NULL);
-        if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
+	crashlog = getoptstr("CrashLog_llexec", NULL);
+	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
 	init_interpreter(); /* give interpreter its turn at initialization */
 
