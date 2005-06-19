@@ -10,6 +10,7 @@ Bug fixes in 3.0.46
 ============================
  - ASSERT crash if automatically add source to family record (sf#1222702)
  - ASSERT crash due to FAMS pointer in FAM record (sf#1223357)
+ - outfile doesn't work in llexec (sf#1223390)
 
 New features added in 3.0.45
 ============================
