@@ -116,8 +116,10 @@ Many unix systems should be supported out-of-the-box with the tarball
 
 Reported successes include:
  lifelines-3.0.46:
+   Fedora Core 3
    FreeBSD 4.11-STABLE
    OS X 10.3.9
+ 
 
 *********************
 2b) Microsoft Windows
