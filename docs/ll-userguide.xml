@@ -366,7 +366,7 @@ do not use traditional family rules
 <row>
 <entry>-o</entry>
 <entry>
-Specify program output directory (eg, -o/tmp/mytests)
+Specify program output filename (eg, -o/tmp/mytests)
 </entry>
 </row>
 
@@ -418,6 +418,13 @@ than the vt100 special characters.
 </tbody>
 </tgroup>
 </informaltable>
+
+<para>
+the <option>-o</option> option specifies the initial filename to use for
+output when running reports.  It only applies to reports run with the 
+<option>-x</option> option.  This option has no effect on interactively run
+programs.
+</para>
 
 <para>
 

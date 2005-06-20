@@ -160,7 +160,7 @@ STARTING LIFELINES AND CREATING DATABASES
    -l  lock  (-ly)  or unlock (-ln) a database for use with read only
    media (access to a locked database is treated as immutable)
    -n do not use traditional family rules
-   -o Specify program output directory (eg, -o/tmp/mytests)
+   -o Specify program output filename (eg, -o/tmp/mytests)
    -r  open  database  with  read-only  access (protect against other
    writer access)
    -t trace function calls in report programs (for debugging)
@@ -171,6 +171,10 @@ STARTING LIFELINES AND CREATING DATABASES
    -x execute a single lifelines report program directly
    -z Use normal ASCII characters for drawing lines in user interface
    rather than the vt100 special characters.
+
+   the  -o  option  specifies  the initial filename to use for output
+   when  running  reports. It only applies to reports run with the -x
+   option. This option has no effect on interactively run programs.
 
    The  -r  option  opens the database with read-only access. When in
    this mode LifeLines will not let you modify the database; no other

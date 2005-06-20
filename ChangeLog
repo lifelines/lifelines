@@ -1,3 +1,9 @@
+2005-06-20 Stephen Dum
+	* ChangeLog docs/ll-userguide.html  docs/ll-userguide.pdf 
+	docs/ll-userguide.txt  docs/ll-userguide.xml
+
+	clarify behavior of -o option.
+
 2005-06-20 lifelines beta 3.0.46 RELEASE
 
 2005-06-20 Perry Rapp
