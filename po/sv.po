@@ -4,10 +4,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.44\n"
+"Project-Id-Version: lifelines 3.0.46\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-19 21:41-0400\n"
-"PO-Revision-Date: 2005-03-11 16:06+0100\n"
+"POT-Creation-Date: 2005-06-20 15:52+0200\n"
+"PO-Revision-Date: 2005-06-20 15:57+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3924,9 +3924,9 @@ msgid "Record %s is referred to but not defined."
 msgstr "Referens till posten %s, som inte är definierad."
 
 #: src/liflines/valgdcom.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "Line %d: Tag %s found in unexpected record: %s."
-msgstr "Misslyckades med att laga saknad återskapad post %s"
+msgstr "Rad %d: Etikett %s hittades i oväntad post: %s."
 
 #: src/liflines/valgdcom.c:360
 #, c-format
@@ -4528,31 +4528,3 @@ msgstr "ÖDESDIGERT FEL"
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"
-
-#~ msgid "Error: output file <%s> could not be created.\n"
-#~ msgstr "Fel: utmatningsfilen <%s> kunde inte skapas.\n"
-
-#~ msgid ""
-#~ "usage: dbverify -(flags) <btree>\n"
-#~ "flags:\n"
-#~ "\t-a = Perform all checks (does not include fixes)\n"
-#~ "\t-g = Check for ghosts (names/refns)\n"
-#~ "\t-G = Check for & fix ghosts (names/refns)\n"
-#~ "\t-i = Check individuals\n"
-#~ "\t-f = Check families\n"
-#~ "\t-s = Check sours\n"
-#~ "\t-e = Check events\n"
-#~ "\t-x = Check others\n"
-#~ "\t-n = Noisy (echo every record processed)\n"
-#~ msgstr ""
-#~ "användning: dbverify -(flaggor) <btree>\n"
-#~ "flaggor:\n"
-#~ "\t-a = Genomför alla kontroller (inkluderar ej lagningar)\n"
-#~ "\t-g = Sök efter spöken (namn/refno)\n"
-#~ "\t-G = Sök efter och laga spöken (namn/refno)\n"
-#~ "\t-i = Kontrollera individer\n"
-#~ "\t-f = Kontrollera familjer\n"
-#~ "\t-s = Kontrollera källor\n"
-#~ "\t-e = Kontrollera händelser\n"
-#~ "\t-x = Kontrollera övriga\n"
-#~ "\t-n = Bullrigt (eka alla behandlade poster)\n"
