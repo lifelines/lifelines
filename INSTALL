@@ -7,11 +7,14 @@ Contents:
 1. General (UNIX) installation
  1a) Dependencies
 2. Platform specific notes
- 2a) Microsoft Windows
- 2b) cygwin
- 2c) gcc 2.7.2.1
- 2d) curses
- 2e) Mac OS X
+ 2a) Platforms supported out-of-the-box
+ 2b) Microsoft Windows
+ 2c) cygwin
+ 2d) rpm packages
+ 2e) Debian binaries
+ 2f) gcc 2.7.2.1
+ 2g) curses
+ 2h) Mac OS X
 ********************************
 
 
@@ -104,9 +107,18 @@ DarwinPorts has xercesc, xalanc, docbook-xml, and docbook-xsl.
 2. Platform specific notes
 **************************
 
+*********************
+2a) Platforms supported out-of-the-box
+*********************
+
+Many unix systems should be supported out-of-the-box with the tarball
+(lifelines-x.y.z.tar.gz) distribution.
+
+Reported successes include:
+ lifelines-3.0.46 on FreeBSD 4.11-STABLE
 
 *********************
-2a) Microsoft Windows
+2b) Microsoft Windows
 *********************
 
 For installing the binary distribution on MS-Windows, refer to the
@@ -123,7 +135,7 @@ binary distribution).
 
 
 **********
-2b) Cygwin
+2c) Cygwin
 **********
 
 Cygwin is a UNIX environment for MS-Windows. 
@@ -145,7 +157,23 @@ To compile libiconv on cygwin, I had to compile it statically, eg,
 
 
 ***************
-2c) gcc 2.7.2.1
+2d) rpm packages
+***************
+
+The source distribution includes the spec file to create rpm
+packages.
+
+***************
+2e) Debian packages
+***************
+
+Christian Perrier maintains a Debian port of linux.
+See:
+http://packages.debian.org/cgi-bin/search_packages.pl?searchon=names&version=all&exact=1&keywords=lifelines
+
+
+***************
+2f) gcc 2.7.2.1
 ***************
 
 gcc 2.7.2.1 does not understand -Wreturn-type, so this
@@ -156,7 +184,7 @@ because it causes configure tests to fail spuriously.
 
 
 **********
-2d) curses
+2g) curses
 **********
 
 Compiling with curses (lacking ncurses) on a BSDI 3.1 box,
@@ -170,7 +198,7 @@ what is going on.
 
 
 ************
-2e) Mac OS X
+2h) Mac OS X
 ************
 
 Please see the following page about LifeLines on Mac OS X:
