@@ -1690,7 +1690,7 @@ __neg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*===========================+
  * __incr -- Increment variable
- *   usage: incr(VARB) -> VOID
+ *   usage: incr(VARB [, number]) -> VOID
  *==========================*/
 PVALUE
 __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1731,7 +1731,7 @@ __incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*============================+
  * __decr -- Decrement variable
- *   usage: decr(VARB) -> VOID
+ *   usage: decr(VARB [, number]) -> VOID
  *===========================*/
 PVALUE
 __decr (PNODE node, SYMTAB stab, BOOLEAN *eflg)

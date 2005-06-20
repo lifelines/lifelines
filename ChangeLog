@@ -1,12 +1,19 @@
+2005-06-20 Perry Rapp
+
+	* ChangeLog INSTALL
+
+	More extensive platform notes in INSTALL file.
+
+	* ChangeLog src/interp/builtin.c
+
+	Cosmetic: Document optional 2nd arg to __incr & __decr
+	in function header comments.
+
 2005-06-20 Jens Arvidsson
 
 	* ChangeLog po/sv.po
 
 	Update Swedish translation for 3.0.46.
-
-	* ChangeLog INSTALL
-
-	More extensive platform notes in INSTALL file.
 
 2005-06-20 Stephen Dum
 	* ChangeLog docs/ll-userguide.html  docs/ll-userguide.pdf 
