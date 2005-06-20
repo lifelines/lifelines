@@ -1,3 +1,5 @@
+2005-06-20 lifelines beta 3.0.46 RELEASE
+
 2005-06-20 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
@@ -6,6 +8,11 @@
 	build/msvc6/llines/llines.rc  
 
 	Set version strings in Windows resource files.
+
+	* po/da.po po/de.po po/el.po po/fr.po po/it.po po/nl.po po/pl.po
+	po/rw.po po/sv.po
+
+	Updated message catalogs (3.0.46 release).
 
 2005-06-19 Perry Rapp
 
