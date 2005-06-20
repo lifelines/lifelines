@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-12 12:40-0400\n"
+"POT-Creation-Date: 2005-06-19 21:41-0400\n"
 "PO-Revision-Date: 2003-06-19 06:32+0200\n"
 "Last-Translator: Frank Ellebrecht <ellebrecht-edv@gmx.de>\n"
 "Language-Team: None\n"
@@ -2423,7 +2423,7 @@ msgid_plural "%d items leaked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/gedlib/remove.c:254
+#: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
 msgstr ""
 
@@ -2889,11 +2889,6 @@ msgstr "enthält Fehler.\n"
 msgid "needs a starting procedure.\n"
 msgstr "benötigt Startargument.\n"
 
-#: src/interp/interp.c:338
-#, c-format
-msgid "Error: output file <%s> could not be created.\n"
-msgstr "Fehler: Ausgabedatei <%s> konnte nicht erstellt werden.\n"
-
 #: src/interp/interp.c:348
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
@@ -3040,20 +3035,20 @@ msgstr "Parameter für (r)sort müssen gleiche Größe haben"
 msgid "Second argument to (r)sort must be list or array"
 msgstr "Zweites Argument für (r)sort muß eine Liste oder ein Bereich sein"
 
-#: src/interp/rassa.c:221
+#: src/interp/rassa.c:242
 #, fuzzy, c-format
 msgid "Could not open file %s"
 msgstr "Kann die Datei %s nicht öffnen."
 
-#: src/interp/rassa.c:241
+#: src/interp/rassa.c:262
 msgid "Report stopping due to error opening output file"
 msgstr ""
 
-#: src/interp/rassa.c:243
+#: src/interp/rassa.c:264
 msgid "Report stopping due to lack of output file"
 msgstr ""
 
-#: src/interp/rassa.c:299
+#: src/interp/rassa.c:320
 #, fuzzy
 msgid "illegal call to pos."
 msgstr "Unklarer Aufruf in Prozedur: %s"
@@ -3973,153 +3968,158 @@ msgstr "Zeile %d: In der %s. Zeile fehlt der Wert."
 msgid "Record %s is referred to but not defined."
 msgstr "Datensatz %s existiert nicht, obwohl auf ihn verwiesen wird."
 
-#: src/liflines/valgdcom.c:353
+#: src/liflines/valgdcom.c:94
+#, fuzzy, c-format
+msgid "Line %d: Tag %s found in unexpected record: %s."
+msgstr "Wiederhergestellter Datensatz %c%d fehlt"
+
+#: src/liflines/valgdcom.c:360
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Zeile %d: Dieser Quelle ist kein Schlüssel zugewiesen."
 
-#: src/liflines/valgdcom.c:368
+#: src/liflines/valgdcom.c:375
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Zeile %d: Der Schlüssel für die Quelle %s ist falsch."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:382
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Zeilen %d und %d: Die Quelle %s existiert mehrfach."
 
-#: src/liflines/valgdcom.c:398
+#: src/liflines/valgdcom.c:405
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Zeile %d: Diesem Ereignis ist kein Schlüssel zugewiesen."
 
-#: src/liflines/valgdcom.c:413
+#: src/liflines/valgdcom.c:420
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Zeile %d: Der Schlüsel für das Ereignis %s ist falsch."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:427
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Zeilen %d und %d: Das Ereignis %s existiert mehrfach."
 
-#: src/liflines/valgdcom.c:443
+#: src/liflines/valgdcom.c:450
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Zeile %d: Diesem Datensatz ist kein Schlüssel zugewiesen."
 
-#: src/liflines/valgdcom.c:458
+#: src/liflines/valgdcom.c:465
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Zeile %d: Der Schlüssel für den Datensatz %s ist falsch."
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:472
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Zeilen %d und %d: Der Datensatz %s existiert mehrfach."
 
-#: src/liflines/valgdcom.c:549
+#: src/liflines/valgdcom.c:556
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Zeile %d: Name hat falsche Form."
 
-#: src/liflines/valgdcom.c:745
+#: src/liflines/valgdcom.c:783
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Zeile %d: %s sind mehrere Väter zugewiesen."
 
-#: src/liflines/valgdcom.c:749
+#: src/liflines/valgdcom.c:787
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Zeile %d: %s sind mehrere Mütter zugewiesen."
 
-#: src/liflines/valgdcom.c:761
+#: src/liflines/valgdcom.c:799
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Zeile %d: %s ist sowohl männlich als auch weiblich."
 
-#: src/liflines/valgdcom.c:765
+#: src/liflines/valgdcom.c:803
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Zeile %d: %s sollte weiblich sein, ist aber männlich."
 
-#: src/liflines/valgdcom.c:769
+#: src/liflines/valgdcom.c:807
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Zeile %d: %s sollte männlich sein, ist aber weiblich."
 
-#: src/liflines/valgdcom.c:773
+#: src/liflines/valgdcom.c:811
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr "Zeile %d: %s müßte sowohl weiblich als auch männlich sein."
 
-#: src/liflines/valgdcom.c:785
+#: src/liflines/valgdcom.c:823
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Zeile %d: Der Familie %s sind mehrere Ehemänner zugewiesen."
 
-#: src/liflines/valgdcom.c:789
+#: src/liflines/valgdcom.c:827
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Zeile %d: Der Familie %s sind mehrere Ehefrauen zugewiesen."
 
-#: src/liflines/valgdcom.c:847
+#: src/liflines/valgdcom.c:885
 msgid "error"
 msgstr "Fehler"
 
-#: src/liflines/valgdcom.c:855
+#: src/liflines/valgdcom.c:893
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d Fehler"
 msgstr[1] "%6d Fehler"
 
-#: src/liflines/valgdcom.c:857 src/liflines/valgdcom.c:885
+#: src/liflines/valgdcom.c:895 src/liflines/valgdcom.c:923
 #, c-format
 msgid " (see log file <%s>)"
 msgstr "(Logbuch: <%s>)"
 
-#: src/liflines/valgdcom.c:859 src/liflines/valgdcom.c:887
+#: src/liflines/valgdcom.c:897 src/liflines/valgdcom.c:925
 msgid " (no log file)"
 msgstr "(kein Logbuch)"
 
-#: src/liflines/valgdcom.c:875
+#: src/liflines/valgdcom.c:913
 msgid "warning"
 msgstr "Achtung"
 
-#: src/liflines/valgdcom.c:883
+#: src/liflines/valgdcom.c:921
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6d Warnung"
 msgstr[1] "%6d Warnungen"
 
-#: src/liflines/valgdcom.c:988
+#: src/liflines/valgdcom.c:1026
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "%d Zeilen bearbeitet ohne HEAD-Ende"
 
-#: src/liflines/valgdcom.c:993
+#: src/liflines/valgdcom.c:1031
 #, c-format
 msgid "End of file at line %d"
 msgstr "Ende der Datei in Zeile %d"
 
-#: src/liflines/valgdcom.c:997
+#: src/liflines/valgdcom.c:1035
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fehler in Zeile %d: %s"
 
-#: src/liflines/valgdcom.c:1001
+#: src/liflines/valgdcom.c:1039
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Gliederung in Zeile %d falsch"
 
-#: src/liflines/valgdcom.c:1007
+#: src/liflines/valgdcom.c:1045
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "HEAD-Eintrag doppelt in Zeile %d"
 
-#: src/liflines/valgdcom.c:1013
+#: src/liflines/valgdcom.c:1051
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-Eintrag fehlt in Zeile %d"
@@ -4575,6 +4575,9 @@ msgstr "Verhängnisvoller Fehler: "
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In Datei <%s> in Zeile %d"
+
+#~ msgid "Error: output file <%s> could not be created.\n"
+#~ msgstr "Fehler: Ausgabedatei <%s> konnte nicht erstellt werden.\n"
 
 #~ msgid ""
 #~ "usage: dbverify -(flags) <btree>\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-12 12:40-0400\n"
+"POT-Creation-Date: 2005-06-19 21:41-0400\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -2427,7 +2427,7 @@ msgid_plural "%d items leaked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/gedlib/remove.c:254
+#: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
 msgstr ""
 
@@ -2891,11 +2891,6 @@ msgstr "bevat fouten.\n"
 msgid "needs a starting procedure.\n"
 msgstr "heeft een startprocedure nodig.\n"
 
-#: src/interp/interp.c:338
-#, c-format
-msgid "Error: output file <%s> could not be created.\n"
-msgstr "Fout: uitvoerbestand <%s> kon niet worden gemaakt.\n"
-
 #: src/interp/interp.c:348
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
@@ -3043,22 +3038,22 @@ msgstr ""
 msgid "Second argument to (r)sort must be list or array"
 msgstr ""
 
-#: src/interp/rassa.c:221
+#: src/interp/rassa.c:242
 #, c-format
 msgid "Could not open file %s"
 msgstr "Kon bestand %s niet openen"
 
-#: src/interp/rassa.c:241
+#: src/interp/rassa.c:262
 msgid "Report stopping due to error opening output file"
 msgstr ""
 "Bezig met stoppen van melding wegens fout bij het openen van het "
 "uitvoerbestand"
 
-#: src/interp/rassa.c:243
+#: src/interp/rassa.c:264
 msgid "Report stopping due to lack of output file"
 msgstr "Bezig met stoppen van melden wegens gebrek aan uitvoerbestand"
 
-#: src/interp/rassa.c:299
+#: src/interp/rassa.c:320
 msgid "illegal call to pos."
 msgstr ""
 
@@ -3978,155 +3973,160 @@ msgstr "Regel %d: Deze %s regel mist een veldwaarde."
 msgid "Record %s is referred to but not defined."
 msgstr "Naar opgave %s wordt verwezen maar is niet gedefinieerd."
 
-#: src/liflines/valgdcom.c:353
+#: src/liflines/valgdcom.c:94
+#, fuzzy, c-format
+msgid "Line %d: Tag %s found in unexpected record: %s."
+msgstr "Ontbrekende niet-verwijderde opgave %c%d"
+
+#: src/liflines/valgdcom.c:360
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Regel %d: De bron hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:368
+#: src/liflines/valgdcom.c:375
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Regel %d: Bron %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:382
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Regels %d en %d: Bron %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:398
+#: src/liflines/valgdcom.c:405
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Regel %d: De gebeurtenis hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:413
+#: src/liflines/valgdcom.c:420
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Regel %d: Gebeurtenis %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:427
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Regels %d en %d: Gebeurtenis %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:443
+#: src/liflines/valgdcom.c:450
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Regel %d: De opgave hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:458
+#: src/liflines/valgdcom.c:465
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Regel %d: Opgave %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:472
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Regels %d en %d: Opgave %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:549
+#: src/liflines/valgdcom.c:556
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Regel %d: Slechte NAAM-schrijfwijze"
 
-#: src/liflines/valgdcom.c:745
+#: src/liflines/valgdcom.c:783
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Regel %d: Persoon %s heeft meerdere vaderkoppelingen."
 
-#: src/liflines/valgdcom.c:749
+#: src/liflines/valgdcom.c:787
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Regel %d: Persoon %s heeft meerdere moederkoppelingen."
 
-#: src/liflines/valgdcom.c:761
+#: src/liflines/valgdcom.c:799
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Regel %d: Persoon %s is zowel mannelijk als vrouwelijk."
 
-#: src/liflines/valgdcom.c:765
+#: src/liflines/valgdcom.c:803
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Regel %d: Persoon %s is mannelijk maar moet vrouwelijk zijn."
 
-#: src/liflines/valgdcom.c:769
+#: src/liflines/valgdcom.c:807
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Regel %d: Persoon %s is vrouwelijk maar moet mannelijk zijn."
 
-#: src/liflines/valgdcom.c:773
+#: src/liflines/valgdcom.c:811
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr ""
 "Regel %d: Persoon %s is geïmpliceerd om zowel mannelijk als vrouwelijk te "
 "zijn."
 
-#: src/liflines/valgdcom.c:785
+#: src/liflines/valgdcom.c:823
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Regel %d: Familie %s heeft meerdere echtgenootbanden."
 
-#: src/liflines/valgdcom.c:789
+#: src/liflines/valgdcom.c:827
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Regel %d: Familie %s heeft meerdere echtgenotebanden."
 
-#: src/liflines/valgdcom.c:847
+#: src/liflines/valgdcom.c:885
 msgid "error"
 msgstr "fout"
 
-#: src/liflines/valgdcom.c:855
+#: src/liflines/valgdcom.c:893
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d Fout"
 msgstr[1] "%6d Fouten"
 
-#: src/liflines/valgdcom.c:857 src/liflines/valgdcom.c:885
+#: src/liflines/valgdcom.c:895 src/liflines/valgdcom.c:923
 #, c-format
 msgid " (see log file <%s>)"
 msgstr " (zie logbestand <%s>)"
 
-#: src/liflines/valgdcom.c:859 src/liflines/valgdcom.c:887
+#: src/liflines/valgdcom.c:897 src/liflines/valgdcom.c:925
 msgid " (no log file)"
 msgstr " (geen logbestand)"
 
-#: src/liflines/valgdcom.c:875
+#: src/liflines/valgdcom.c:913
 msgid "warning"
 msgstr "waarschuwing"
 
-#: src/liflines/valgdcom.c:883
+#: src/liflines/valgdcom.c:921
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6d Waarschuwing"
 msgstr[1] "%6d Waarschuwingen"
 
-#: src/liflines/valgdcom.c:988
+#: src/liflines/valgdcom.c:1026
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "%d regels behandeld zonder het einde van HOOFD te vinden"
 
-#: src/liflines/valgdcom.c:993
+#: src/liflines/valgdcom.c:1031
 #, c-format
 msgid "End of file at line %d"
 msgstr "Einde van bestand op regel %d"
 
-#: src/liflines/valgdcom.c:997
+#: src/liflines/valgdcom.c:1035
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fout op regel %d: %s"
 
-#: src/liflines/valgdcom.c:1001
+#: src/liflines/valgdcom.c:1039
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Slecht niveau op regel %d"
 
-#: src/liflines/valgdcom.c:1007
+#: src/liflines/valgdcom.c:1045
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "HOOFD-regel op regel %d kopiëren"
 
-#: src/liflines/valgdcom.c:1013
+#: src/liflines/valgdcom.c:1051
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "Ontbrekende HOOFD-regel op regel %d"
@@ -4583,6 +4583,9 @@ msgstr "FATALE FOUT"
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In bestand <%s> op regel %d"
+
+#~ msgid "Error: output file <%s> could not be created.\n"
+#~ msgstr "Fout: uitvoerbestand <%s> kon niet worden gemaakt.\n"
 
 #~ msgid ""
 #~ "usage: dbverify -(flags) <btree>\n"

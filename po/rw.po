@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-12 12:40-0400\n"
+"POT-Creation-Date: 2005-06-19 21:41-0400\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -2827,7 +2827,7 @@ msgid_plural "%d items leaked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/gedlib/remove.c:254
+#: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
 msgstr ""
 
@@ -3309,11 +3309,6 @@ msgstr "Kirimo Amakosa"
 msgid "needs a starting procedure.\n"
 msgstr "a"
 
-#: src/interp/interp.c:338
-#, fuzzy, c-format
-msgid "Error: output file <%s> could not be created.\n"
-msgstr "Ibisohoka IDOSIYE OYA Byaremwe"
-
 #: src/interp/interp.c:348
 #, fuzzy, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
@@ -3478,22 +3473,22 @@ msgstr "Kuri R Ishungura Bya Ingano"
 msgid "Second argument to (r)sort must be list or array"
 msgstr "Kuri R Ishungura Urutonde Cyangwa Imbonerahamwe"
 
-#: src/interp/rassa.c:221
+#: src/interp/rassa.c:242
 #, fuzzy, c-format
 msgid "Could not open file %s"
 msgstr "OYA Gufungura IDOSIYE"
 
-#: src/interp/rassa.c:241
+#: src/interp/rassa.c:262
 #, fuzzy
 msgid "Report stopping due to error opening output file"
 msgstr "Kuri Ikosa Gufungura%S Ibisohoka IDOSIYE"
 
-#: src/interp/rassa.c:243
+#: src/interp/rassa.c:264
 #, fuzzy
 msgid "Report stopping due to lack of output file"
 msgstr "Kuri Bya Ibisohoka IDOSIYE"
 
-#: src/interp/rassa.c:299
+#: src/interp/rassa.c:320
 #, fuzzy
 msgid "illegal call to pos."
 msgstr "Kuri"
@@ -4546,156 +4541,161 @@ msgstr "Umurongo ni Ibuze a Agaciro Umwanya"
 msgid "Record %s is referred to but not defined."
 msgstr "ni Kuri OYA"
 
-#: src/liflines/valgdcom.c:353
+#: src/liflines/valgdcom.c:94
+#, fuzzy, c-format
+msgid "Line %d: Tag %s found in unexpected record: %s."
+msgstr "Icyabitswe"
+
+#: src/liflines/valgdcom.c:360
 #, fuzzy, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Inkomoko Oya Urufunguzo"
 
-#: src/liflines/valgdcom.c:368
+#: src/liflines/valgdcom.c:375
 #, fuzzy, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Urufunguzo"
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:382
 #, fuzzy, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Na ni Gukuba"
 
-#: src/liflines/valgdcom.c:398
+#: src/liflines/valgdcom.c:405
 #, fuzzy, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Icyabaye Oya Urufunguzo"
 
-#: src/liflines/valgdcom.c:413
+#: src/liflines/valgdcom.c:420
 #, fuzzy, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Urufunguzo"
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:427
 #, fuzzy, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Na ni Gukuba"
 
-#: src/liflines/valgdcom.c:443
+#: src/liflines/valgdcom.c:450
 #, fuzzy, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Icyabitswe Oya Urufunguzo"
 
-#: src/liflines/valgdcom.c:458
+#: src/liflines/valgdcom.c:465
 #, fuzzy, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Urufunguzo"
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:472
 #, fuzzy, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Na ni Gukuba"
 
-#: src/liflines/valgdcom.c:549
+#: src/liflines/valgdcom.c:556
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr ""
 
-#: src/liflines/valgdcom.c:745
+#: src/liflines/valgdcom.c:783
 #, fuzzy, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Igikubo amahuza"
 
-#: src/liflines/valgdcom.c:749
+#: src/liflines/valgdcom.c:787
 #, fuzzy, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Igikubo amahuza"
 
-#: src/liflines/valgdcom.c:761
+#: src/liflines/valgdcom.c:799
 #, fuzzy, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "ni Byombi Gabo Na Gore"
 
-#: src/liflines/valgdcom.c:765
+#: src/liflines/valgdcom.c:803
 #, fuzzy, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "ni Gabo Gore"
 
-#: src/liflines/valgdcom.c:769
+#: src/liflines/valgdcom.c:807
 #, fuzzy, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "ni Gore Gabo"
 
-#: src/liflines/valgdcom.c:773
+#: src/liflines/valgdcom.c:811
 #, fuzzy, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr "ni Kuri Byombi Gabo Na Gore"
 
-#: src/liflines/valgdcom.c:785
+#: src/liflines/valgdcom.c:823
 #, fuzzy, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Igikubo amahuza"
 
-#: src/liflines/valgdcom.c:789
+#: src/liflines/valgdcom.c:827
 #, fuzzy, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Igikubo amahuza"
 
-#: src/liflines/valgdcom.c:847
+#: src/liflines/valgdcom.c:885
 #, fuzzy
 msgid "error"
 msgstr "Ikosa"
 
-#: src/liflines/valgdcom.c:855
+#: src/liflines/valgdcom.c:893
 #, fuzzy, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6dIkosa rya"
 msgstr[1] "%6dIkosa rya"
 
-#: src/liflines/valgdcom.c:857 src/liflines/valgdcom.c:885
+#: src/liflines/valgdcom.c:895 src/liflines/valgdcom.c:923
 #, fuzzy, c-format
 msgid " (see log file <%s>)"
 msgstr "(LOG IDOSIYE"
 
-#: src/liflines/valgdcom.c:859 src/liflines/valgdcom.c:887
+#: src/liflines/valgdcom.c:897 src/liflines/valgdcom.c:925
 #, fuzzy
 msgid " (no log file)"
 msgstr "(Oya LOG IDOSIYE"
 
-#: src/liflines/valgdcom.c:875
+#: src/liflines/valgdcom.c:913
 #, fuzzy
 msgid "warning"
 msgstr "Iburira"
 
-#: src/liflines/valgdcom.c:883
+#: src/liflines/valgdcom.c:921
 #, fuzzy, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6dIburira"
 msgstr[1] "%6dIburira"
 
-#: src/liflines/valgdcom.c:988
+#: src/liflines/valgdcom.c:1026
 #, fuzzy, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "Imirongo Impera Bya"
 
-#: src/liflines/valgdcom.c:993
+#: src/liflines/valgdcom.c:1031
 #, fuzzy, c-format
 msgid "End of file at line %d"
 msgstr "Impera Bya IDOSIYE ku Umurongo"
 
-#: src/liflines/valgdcom.c:997
+#: src/liflines/valgdcom.c:1035
 #, fuzzy, c-format
 msgid "Error at line %d: %s"
 msgstr "ku Umurongo"
 
-#: src/liflines/valgdcom.c:1001
+#: src/liflines/valgdcom.c:1039
 #, fuzzy, c-format
 msgid "Bad level at line %d"
 msgstr "urwego ku Umurongo"
 
-#: src/liflines/valgdcom.c:1007
+#: src/liflines/valgdcom.c:1045
 #, fuzzy, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "Umurongo ku Umurongo"
 
-#: src/liflines/valgdcom.c:1013
+#: src/liflines/valgdcom.c:1051
 #, fuzzy, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "Umurongo ku Umurongo"
@@ -5168,6 +5168,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "In file <%s> at line %d"
 msgstr "IDOSIYE ku Umurongo"
+
+#, fuzzy
+#~ msgid "Error: output file <%s> could not be created.\n"
+#~ msgstr "Ibisohoka IDOSIYE OYA Byaremwe"
 
 #, fuzzy
 #~ msgid "Added (%dP, %dF, %dS, %dE, %dX) records"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-12 12:40-0400\n"
+"POT-Creation-Date: 2005-06-19 21:41-0400\n"
 "PO-Revision-Date: 2005-03-11 16:06+0100\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2398,7 +2398,7 @@ msgid_plural "%d items leaked"
 msgstr[0] "%d post läckte"
 msgstr[1] "%d poster läckte"
 
-#: src/gedlib/remove.c:254
+#: src/gedlib/remove.c:249
 msgid "Families may not yet be removed in this fashion."
 msgstr "Familjer får ännu inte tas bort på detta sätt."
 
@@ -2854,11 +2854,6 @@ msgstr "innehåller fel.\n"
 msgid "needs a starting procedure.\n"
 msgstr "behöver en startprocedur.\n"
 
-#: src/interp/interp.c:338
-#, c-format
-msgid "Error: output file <%s> could not be created.\n"
-msgstr "Fel: utmatningsfilen <%s> kunde inte skapas.\n"
-
 #: src/interp/interp.c:348
 #, c-format
 msgid "Proc %s must be called with %d (not %d) parameters."
@@ -3007,20 +3002,20 @@ msgstr "Argument till (r)sort måste vara av samma storlek"
 msgid "Second argument to (r)sort must be list or array"
 msgstr "Andra argumentet till (r)sort måste vara lista eller vektor"
 
-#: src/interp/rassa.c:221
+#: src/interp/rassa.c:242
 #, c-format
 msgid "Could not open file %s"
 msgstr "Kunde inte öppna filen %s"
 
-#: src/interp/rassa.c:241
+#: src/interp/rassa.c:262
 msgid "Report stopping due to error opening output file"
 msgstr "Rapport stoppar på grund av fel vid öppning av utmatningsfil"
 
-#: src/interp/rassa.c:243
+#: src/interp/rassa.c:264
 msgid "Report stopping due to lack of output file"
 msgstr "Rapport stoppar på grund av saknad utmatningsfil"
 
-#: src/interp/rassa.c:299
+#: src/interp/rassa.c:320
 msgid "illegal call to pos."
 msgstr "otillåtet anrop till pos."
 
@@ -3928,153 +3923,158 @@ msgstr "Rad %d: Denna %s-rad saknar ett fält med ett värde."
 msgid "Record %s is referred to but not defined."
 msgstr "Referens till posten %s, som inte är definierad."
 
-#: src/liflines/valgdcom.c:353
+#: src/liflines/valgdcom.c:94
+#, fuzzy, c-format
+msgid "Line %d: Tag %s found in unexpected record: %s."
+msgstr "Misslyckades med att laga saknad återskapad post %s"
+
+#: src/liflines/valgdcom.c:360
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Rad %d: Källan som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:368
+#: src/liflines/valgdcom.c:375
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Rad %d: Källan %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:382
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Raderna %d och %d: Källan %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:398
+#: src/liflines/valgdcom.c:405
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Rad %d: Händelsen som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:413
+#: src/liflines/valgdcom.c:420
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Rad %d: Händelsen %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:427
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Raderna %d och %d: Händelsen %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:443
+#: src/liflines/valgdcom.c:450
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Rad %d: Posten som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:458
+#: src/liflines/valgdcom.c:465
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Rad %d: Posten %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:472
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Raderna %d och %d: Posten %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:549
+#: src/liflines/valgdcom.c:556
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Rad %d: Ogiltig NAME-syntax."
 
-#: src/liflines/valgdcom.c:745
+#: src/liflines/valgdcom.c:783
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Rad %d: Personen %s är länkad till mer än en fader."
 
-#: src/liflines/valgdcom.c:749
+#: src/liflines/valgdcom.c:787
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Rad %d: Personen %s är länkad till mer än en moder."
 
-#: src/liflines/valgdcom.c:761
+#: src/liflines/valgdcom.c:799
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Rad %d: Personen %s är både man och kvinna."
 
-#: src/liflines/valgdcom.c:765
+#: src/liflines/valgdcom.c:803
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Rad %d: Personen %s är man, men måste vara kvinna."
 
-#: src/liflines/valgdcom.c:769
+#: src/liflines/valgdcom.c:807
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Rad %d: Personen %s är kvinna, men måste vara man."
 
-#: src/liflines/valgdcom.c:773
+#: src/liflines/valgdcom.c:811
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr "Rad %d: Personen %s förutsätts vara både man och kvinna."
 
-#: src/liflines/valgdcom.c:785
+#: src/liflines/valgdcom.c:823
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en make."
 
-#: src/liflines/valgdcom.c:789
+#: src/liflines/valgdcom.c:827
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en maka."
 
-#: src/liflines/valgdcom.c:847
+#: src/liflines/valgdcom.c:885
 msgid "error"
 msgstr "fel"
 
-#: src/liflines/valgdcom.c:855
+#: src/liflines/valgdcom.c:893
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d fel"
 msgstr[1] "%6d fel"
 
-#: src/liflines/valgdcom.c:857 src/liflines/valgdcom.c:885
+#: src/liflines/valgdcom.c:895 src/liflines/valgdcom.c:923
 #, c-format
 msgid " (see log file <%s>)"
 msgstr " (se loggfil <%s>)"
 
-#: src/liflines/valgdcom.c:859 src/liflines/valgdcom.c:887
+#: src/liflines/valgdcom.c:897 src/liflines/valgdcom.c:925
 msgid " (no log file)"
 msgstr " (ingen loggfil)"
 
-#: src/liflines/valgdcom.c:875
+#: src/liflines/valgdcom.c:913
 msgid "warning"
 msgstr "varning"
 
-#: src/liflines/valgdcom.c:883
+#: src/liflines/valgdcom.c:921
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6d varning"
 msgstr[1] "%6d varningar"
 
-#: src/liflines/valgdcom.c:988
+#: src/liflines/valgdcom.c:1026
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "Behandlade %d rader utan att hitta slutet av HEAD"
 
-#: src/liflines/valgdcom.c:993
+#: src/liflines/valgdcom.c:1031
 #, c-format
 msgid "End of file at line %d"
 msgstr "Filslut vid rad %d"
 
-#: src/liflines/valgdcom.c:997
+#: src/liflines/valgdcom.c:1035
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fel vid rad %d: %s"
 
-#: src/liflines/valgdcom.c:1001
+#: src/liflines/valgdcom.c:1039
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Ogiltig nivå vid rad %d"
 
-#: src/liflines/valgdcom.c:1007
+#: src/liflines/valgdcom.c:1045
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "Dubblerad HEAD-rad vid rad %d"
 
-#: src/liflines/valgdcom.c:1013
+#: src/liflines/valgdcom.c:1051
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-rad saknas vid rad %d"
@@ -4528,6 +4528,9 @@ msgstr "ÖDESDIGERT FEL"
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"
+
+#~ msgid "Error: output file <%s> could not be created.\n"
+#~ msgstr "Fel: utmatningsfilen <%s> kunde inte skapas.\n"
 
 #~ msgid ""
 #~ "usage: dbverify -(flags) <btree>\n"
