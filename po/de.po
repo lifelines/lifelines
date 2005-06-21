@@ -3996,7 +3996,7 @@ msgstr "Zeile %d: Diesem Ereignis ist kein Schlüssel zugewiesen."
 #: src/liflines/valgdcom.c:420
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
-msgstr "Zeile %d: Der Schlüsel für das Ereignis %s ist falsch."
+msgstr "Zeile %d: Der Schlüssel für das Ereignis %s ist falsch."
 
 #: src/liflines/valgdcom.c:427
 #, c-format
