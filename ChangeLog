@@ -4,6 +4,11 @@
 
 	Remove spurious carriage return
 
+	* ChangeLog .linesrc src/liflines/pedigree.c
+
+	Customizable indent in ancestor/descendent/gedcom views
+	(new function get_indent). New option GedcomDisplayIndent.
+
 2005-06-21 Perry Rapp
 
 	* ChangeLog po/de.po

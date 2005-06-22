@@ -4,7 +4,7 @@
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2005-02-06
+# 2005-06-22
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -105,6 +105,10 @@
 # Trailing string to append when truncating events in short display
 #  (eg, to see "b. 1995-5-3, Miss..." instead of "b. 1995-5-3, Missour")
 #ShortOmitString=...
+
+# Width to indent pedigree ancestor & descendent views, and gedcom view
+#GedcomDisplayIndent=2
+# default is 6
 
 # Set the default data for new persons
 #INDIREC=0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n1 BIRT\n  2 DATE\n  2 PLAC\n1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR
