@@ -41,6 +41,8 @@
 
 2005-06-20 lifelines beta 3.0.46 RELEASE
 
+Branch point for v3_0_46_branch
+
 2005-06-20 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
