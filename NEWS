@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.46
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.0.47
+============================
+ - Adjustable indent (GedcomDisplayIndent) in pedigree (sf#1224300)
+ - Confirm message before switching spouses or children (sf#1094751)
+
 New features added in 3.0.46
 ============================
  - Import warns if FAMS, FAMC, HUSB, or WIFE occur where not expected. 
