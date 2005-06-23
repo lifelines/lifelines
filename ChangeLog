@@ -5,6 +5,11 @@
 	Confirm swap families (spouse orders), new message qScffswp.
 	Confirm for CMD_SWAPFAMILIES.
 
+	*
+
+	Confirm swap children. New function confirm_and_swap_children_impl.
+	New message qScfchswp.
+
 2005-06-22 Perry Rapp
 
 	* ChangeLog .linesrc
