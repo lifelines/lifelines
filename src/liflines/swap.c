@@ -47,12 +47,13 @@
 extern STRING qSidcswp, qSid1csw, qSid2csw, qSid1fsw, qSid2fsw, qSidfbys, qSntprnt;
 extern STRING qSless2c, qSokcswp, qSless2f, qSokfswp, qSidfswp, qSronlye;
 extern STRING qSidcrdr, qSntchld, qSparadox;
-extern STRING qScffswp;
+extern STRING qScffswp, qScfchswp;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 static INT child_index(NODE child, NODE fam);
+static BOOLEAN confirm_and_swap_children_impl(NODE fam, NODE one, NODE two);
 static void swap_children_impl(NODE fam, NODE one, NODE two);
 
 /*=============================================
@@ -123,8 +124,25 @@ gotfam:
 		}
 	}
 
-	swap_children_impl(fam, one, two);
+	if (!confirm_and_swap_children_impl(fam, one, two))
+		return FALSE;
 	message(_(qSokcswp));
+	return TRUE;
+}
+/*=============================================
+ * confirm_and_swap_children_impl -- Swap input children in input family
+ *  fam:     [in] family of interest
+ *  one,two: [in] children to swap
+ * inputs assumed valie
+ * confirm then call worker
+ *===========================================*/
+static BOOLEAN
+confirm_and_swap_children_impl (NODE fam, NODE one, NODE two)
+{
+	if (!ask_yes_or_no(_(qScfchswp)))
+		return FALSE;
+
+	swap_children_impl(fam, one, two);
 	return TRUE;
 }
 /*=============================================
@@ -195,7 +213,8 @@ gotfam:
 		/* swap the two existing ones */
 		NODE one = CHIL(fam);
 		NODE two = nsibling(one);
-		swap_children_impl(fam, one, two);
+		if (!confirm_and_swap_children_impl(fam, one, two))
+			return FALSE;
 		message(_(qSokcswp));
 		return TRUE;
 	}
@@ -210,7 +229,7 @@ gotfam:
 	remove_child(child, fam);
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
-	if (i == -1) {
+	if (i == -1 || !ask_yes_or_no(_(qScfchswp))) {
 		/* must put child back if cancel */
 		add_child_to_fam(child, fam, prevorder);
 		return FALSE;

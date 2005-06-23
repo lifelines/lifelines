@@ -192,6 +192,7 @@ ZST qScffdeld     = N_("(Family %s (%s, %s)");
 ZST qScfpmrg      = N_("Do you really want to merge these two persons?");
 ZST qScffmrg      = N_("Do you really want to merge these two families?");
 ZST qScffswp      = N_("Do you really want to swap spouse orders?");
+ZST qScfchswp     = N_("Do you really want to reorder children?");
 ZST qScfcrmv      = N_("Do you really want to remove this child from his/her family?");
 ZST qScfsrmv      = N_("Do you really want to remove this spouse from his/her family?");
 ZST qSspover      = N_("Too many spouses to display full list");
