@@ -1,3 +1,10 @@
+2005-06-23 Perry Rapp
+
+	* ChangeLog src/gedlib/messages.c src/liflines/swap.c
+
+	Confirm swap families (spouse orders), new message qScffswp.
+	Confirm for CMD_SWAPFAMILIES.
+
 2005-06-22 Perry Rapp
 
 	* ChangeLog .linesrc

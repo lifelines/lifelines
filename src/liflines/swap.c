@@ -47,6 +47,7 @@
 extern STRING qSidcswp, qSid1csw, qSid2csw, qSid1fsw, qSid2fsw, qSidfbys, qSntprnt;
 extern STRING qSless2c, qSokcswp, qSless2f, qSokfswp, qSidfswp, qSronlye;
 extern STRING qSidcrdr, qSntchld, qSparadox;
+extern STRING qScffswp;
 
 /*********************************************
  * local function prototypes
@@ -248,6 +249,7 @@ child_index (NODE child, NODE fam)
  *  indi:  [in] person
  *  prompt for indi if NULL
  *  prompt for families if person chosen has >2
+ *  Ask for yes/no confirm
  *===========================================*/
 BOOLEAN
 swap_families (RECORD irec)
@@ -302,6 +304,11 @@ swap_families (RECORD irec)
 
 	ASSERT(one && two);
 	ASSERT(eqstr(ntag(one), "FAMS") && eqstr(ntag(two), "FAMS"));
+
+/* Ask user to confirm */
+	if (!ask_yes_or_no(_(qScffswp)))
+		return FALSE;
+
 /* Swap FAMS nodes and update database */
 	str = nval(one);
 	nval(one) = nval(two);
