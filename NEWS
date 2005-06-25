@@ -1,78 +1,78 @@
-LifeLines Source Release, Version 3.0.46
+LifeLines Source Release, Version 3.0.47
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
-New features added in 3.0.47
+New features added in 3.0.47 (beta)
 ============================
  - Adjustable indent (GedcomDisplayIndent) in pedigree (sf#1224300)
  - Confirm message before switching spouses or children (sf#1094751)
 
-New features added in 3.0.46
+New features added in 3.0.46 (beta)
 ============================
  - Import warns if FAMS, FAMC, HUSB, or WIFE occur where not expected. 
 
-Bug fixes in 3.0.46
+Bug fixes in 3.0.46 (beta)
 ============================
  - ASSERT crash if automatically add source to family record (sf#1222702)
  - ASSERT crash due to FAMS pointer in FAM record (sf#1223357)
  - outfile doesn't work in llexec (sf#1223390)
 
-New features added in 3.0.45
+New features added in 3.0.45 (beta)
 ============================
  - Kinyarwanda translation
 
-Bug fixes in 3.0.45
+Bug fixes in 3.0.45 (beta)
 ============================
  - Fixed count variable in spouses and families report iterations (sf#1219200)
  - Fixed crash upon merging two families (sf#1219209)
  - Fixed memory leaks
 
-Bug fixes in 3.0.44
+Bug fixes in 3.0.44 (beta)
 ============================
  - Fixed browing to family (for empty & non-traditional families)
  - Remove keytonod record ASSERT which is firing
  - Fixed some memory leaks
 
-Bug fixes in 3.0.43
+Bug fixes in 3.0.43 (beta)
 ============================
  - Fixed some memory leaks
  - ASSERT failures browsing from family to indi
 
-New features added in 3.0.42
+New features added in 3.0.42 (beta)
 ============================
 - empty() report function can also be used on tables and sets
 - dbverify can fix bad family linking references
 - dbverify can fix bad deleted/undeleted record status
 
-Bug fixes in 3.0.42
+Bug fixes in 3.0.42 (beta)
 ============================
 - Fixed ASSERT failure adding 65th skipped key at import
 - Fixed some memory leaks
 
-New features added in 3.0.41
+New features added in 3.0.41 (beta)
 ============================
 - ancestorset and parentset now support non-traditional families
 
-Bug fixes in 3.0.41
+Bug fixes in 3.0.41 (beta)
 ============================
 - Crash on some systems with ncurses 5.4
 - ASSERT failure if report calls undefined function
 
-New features added in 3.0.40
+New features added in 3.0.40 (beta)
 ============================
 - Delete any record menu choice
 - length(SET/TABLE/LIST) report function
 
-Bug fixes in 3.0.40
+Bug fixes in 3.0.40 (beta)
 ============================
 - Fixed bug in src/liflines/Makefile.am failing compilation (finding libintl.h)
 - Fixed merge function, which locked up in infinite loop in 3.0.39
 
-New features added in 3.0.39
+New features added in 3.0.39 (beta)
 ============================
 - New report function test(mode, file)
 
-Bug fixes in 3.0.39
+Bug fixes in 3.0.39 (beta)
 ============================
 - Cache bug causes people to be confused intermittently (sf#1015745)
 - Add source/event/other could lead to corruption (sf#1059724)
@@ -82,7 +82,7 @@ Bug fixes in 3.0.39
 - Removing unsexed spouse led to ASSERT (sf#1097583,sf#1097608)
 - Removing empty child led to ASSERT (sf#1097629)
 
-New features added in 3.0.38
+New features added in 3.0.38 (beta)
 ============================
 - Two-stage tt conversion via UTF-8
 - No more indirect cache
@@ -90,46 +90,46 @@ New features added in 3.0.38
 - Polish translation
 - Dutch translation
 
-Bug fixes in 3.0.38
+Bug fixes in 3.0.38 (beta)
 ============================
 - Fix nspouses
 - Fix display of TTPATH in u/c
 - Fix uppercasing of non-ASCII in non-UTF-8 case
 
-Bug fixes in 3.0.37
+Bug fixes in 3.0.37 (stable & beta)
 ============================
 - AnnotatePointers and ExpandRefnsDuringEdit work together
 
-New features added in 3.0.36
+New features added in 3.0.36 (beta)
 ============================
 - New option AnnotatePointers
 - New option DisplayKeyTags
 
-Bug fixes in 3.0.36
+Bug fixes in 3.0.36 (beta)
 ============================
 - Fix extra .ged appended to short archives
 
-Bug fixes in 3.0.35
+Bug fixes in 3.0.35 (beta)
 ============================
 - Fix name corruption bug in 3.0.33 and 3.0.34.
 
-Bug fixes in 3.0.34
+Bug fixes in 3.0.34 (beta)
 ============================
 - Fix internal translation tables.
 
-Bug fixes in 3.0.33
+Bug fixes in 3.0.33 (beta)
 ============================
 - Fix crash when opening second database in same session.
 - Fix browsing */surname for non-ASCII first initials.
 - Fix all edits of indi to expand refns (not all were doing it).
 - Prepend UTF-8 BOM for file passed to editor on Windows (when appropriate).
 
-New features added in 3.0.32
+New features added in 3.0.32 (beta)
 ============================
 - Added the dup() function, which does a "deep" copy of a list.
 - New directories created in first directory in LLDATABASES path.
 
-Bug fixes in 3.0.32
+Bug fixes in 3.0.32 (beta)
 ============================
 - Fix translation table menu to show menu keys.
 - Fix basm and barm to not say "bapt" in birth display.
@@ -137,21 +137,21 @@ Bug fixes in 3.0.32
 - Bugfix for set functions deleting temporary values too early (causing ASSERT).
 - Compile fix in wcslen.c (to fix compile on MacOS, re: va_list in arch.h).
 
-Bug fixes in 3.0.31
+Bug fixes in 3.0.31 (beta)
 ============================
 - Bugfix for crash if one argument passed to (r)sort.
 - Call legacy (built-in) translation tables
 
-New features added in 3.0.30
+New features added in 3.0.30 (beta)
 ============================
 - Some low-level btree validation in dbverify
 
-Bug fixes in 3.0.29
+Bug fixes in 3.0.29 (stable)
 ============================
 - Import will strip out empty families, and browse will ASSERT
 - Import will not import GEDCOMs with more than 50 lines HEAD
 
-Bug fixes in 3.0.28
+Bug fixes in 3.0.28 (stable)
 ============================
 Fix tandem mode to not default to quit (bug#717421).
 Change Greek sigma lowercasing, as recommended by Georg Skillas.
@@ -160,27 +160,27 @@ Bugfix for illegal character handling in iconv wrapper for Win32.
 Change temp file on Win32 to end in .txt extension (so SaveAs UTF-8 works in notepad).
 Fix pronouns in German message catalog.
 
-Bug fixes in 3.0.27
+Bug fixes in 3.0.27 (stable)
 ============================
 - ASSERT failure searching by name
 - Cache overflow 
 
-New features added in 3.0.26
+New features added in 3.0.26 (stable)
 ============================
 - New report functions sort & rsort.
 
-Bug fixes in 3.0.26
+Bug fixes in 3.0.26 (stable)
 ============================
 - Codeset translation incorrect in menu items
 
-New features added in 3.0.25
+New features added in 3.0.25 (stable)
 ============================
 - Tries harder to diplay info on birth & death
 - HTML & TEX subcodings added to translation tables
 - Regularized report summaries (in report subdir)
 - Reports elapsed time during report execution
 
-Bug fixes in 3.0.25
+Bug fixes in 3.0.25 (stable)
 ============================
 - Report NODE references lock person in cache
 - keypad fix to prevent crash on Solaris
@@ -191,13 +191,13 @@ Bug fixes in 3.0.25
 - Fix crash editing place abbrev table
 - Switch to uilocale for ui functions during report interpretation
 
-Bug fixes in 3.0.24
+Bug fixes in 3.0.24 (stable)
 ============================
 - Fixed broken use of last person for add child
 - Fixed compilation on Darwin
 - Fixed list functions
 
-New features added in 3.0.23
+New features added in 3.0.23 (stable)
 ============================
 
 - internal use of UTF-8 has significant improvements
@@ -205,12 +205,12 @@ New features added in 3.0.23
 - ANSEL GEDCOMs may be read (using UTF-8)
 - HTML reports using character entities may be written (using UTF-8)
 
-Bug fixes in 3.0.23
+Bug fixes in 3.0.23 (stable)
 ============================
 
 - Fixed crash when using $$ to browse to references
 
-New features added in 3.0.22
+New features added in 3.0.22 (stable)
 ============================
 
 - Redirected input works on Win32 version
@@ -220,37 +220,37 @@ New features added in 3.0.22
 - Simpler win32 binary package (includes gettext & iconv dlls, and
   translations unzip into place)
 
-New features added in 3.0.21
+New features added in 3.0.21 (stable)
 ============================
 
 - New commandline option -I to set property name & value
 
-Bug fixes in 3.0.21
+Bug fixes in 3.0.21 (stable)
 ============================
 
 - Fix to handle bad system comparison without ASSERT in indiseq.c
 - Fix broken -x option (run report directly)
 
-Bug fixes in 3.0.20
+Bug fixes in 3.0.20 (stable)
 ============================
 
 - Fix initialization of locale
 
-New features added in 3.0.19
+New features added in 3.0.19 (stable)
 ============================
 
 - binary rpm includes message files
 - More complete French translation
 - Fix for menu item translation in browse screens
 
-New features added in 3.0.18
+New features added in 3.0.18 (stable)
 ============================
 
 - Directory structure changes to group sources in src and build stuff in build
 - Some improvements in collation & partial UTF-8 support
 - French translation (po file)
 
-New features added in 3.0.17
+New features added in 3.0.17 (stable)
 ============================
 
 - Change history added (analogous to visit history). Both available off search menu,
@@ -258,36 +258,36 @@ New features added in 3.0.17
 - Option to quit current database added to main menu.
 - Iconv conversion between Internal (database) and Gui, Editor, Report, & Gedcom codesets.
 
-Bug fixes in 3.0.17
+Bug fixes in 3.0.17 (stable)
 ===================
 
 - Browsing to a named list would crash.
 - Saving a record with blank REFN would crash.
 - Couldn't change the value of a top level other node (not INDI, FAM, EVEN, or SOUR).
 
-Bug fixes in 3.0.16
+Bug fixes in 3.0.16 (stable)
 ===================
 
 - A fatal crash was triggered if last item was popped off a list in a report.
 
-New features added in 3.0.15
+New features added in 3.0.15 (stable)
 ============================
 
 - Option to list all databases at startup
 - Shift page keys to move quickly through long lists
 - Prompt after edit if unresolved references
 
-Bug fixes in 3.0.15
+Bug fixes in 3.0.15 (stable)
 ===================
 
 - Import was validing but not importing from UTF-8 files with UTF-8 BOM.
 
-New features added in 3.0.13
+New features added in 3.0.13 (stable)
 ============================
 
 - Arrow keys, page keys, home/end keys supported in lists & list browse.
 
-New Features Added in 3.0.11
+New Features Added in 3.0.11 (stable)
 ============================
 
 - INDIs without NAMEs are now allowed.
@@ -389,7 +389,7 @@ Bug fixes in 3.0.7
 - (GEDCOM compliant) French Republic & Hebrew dates were not parsed correctly.
 
 
-New Features Added in 3.0.6
+New Features Added in 3.0.6 (stable)
 ===========================
 
 - New data in keyfile detects database from platform of wrong alignment
@@ -444,7 +444,7 @@ New Features Added in 3.0.6
 - New config file
 
 
-Bug fixes in 3.0.6
+Bug fixes in 3.0.6 (stable)
 ==================
 
 - Merge code would produce ghost REFNs & NAMEs if they were edited
