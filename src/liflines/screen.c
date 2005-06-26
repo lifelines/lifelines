@@ -2745,7 +2745,8 @@ resize_win: /* we come back here if we resize the window */
 		}
 		if (ret == 0) { /* not handled yet */
 			switch(code) {
-			case 'i':
+			case 'i': /* select current item */
+			case CMD_KY_ENTER:
 				if (selectable) {
 					done=TRUE;
 				}

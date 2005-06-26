@@ -1,3 +1,10 @@
+2005-06-26 Perry Rapp
+
+	* ChangeLog NEWS src/liflines/screen.c
+
+	Handle CMD_KY_ENTER in array_interact, so enter key works
+	for database list.
+
 2005-06-25 Perry Rapp
 
 	* ChangeLog NEWS
