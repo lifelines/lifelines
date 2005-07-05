@@ -1,5 +1,5 @@
 .\" Placeholder man page for LifeLines
-.TH LLINES 1 "2002 Jan" "Lifelines 3.0.27"
+.TH LLINES 1 "200% Jun" "Lifelines 3.0.46"
 .SH NAME
 llines
 .SH SYNOPSIS
@@ -8,19 +8,27 @@ llines
 .br
 .B llines
 [\fIOPTION\fR]... \fIDatabase\fR
+.br
+.B llexec
+[\fIOPTION\fR]... \fIDatabase\fR
+.br
+.B dbverify
+[\fIOPTION\fR]... \fIDatabase\fR
 .SH DESCRIPTION
 .PP
-Invokes the LifeLines genealogy program.
+llines invokes the LifeLines genealogy program.
 .PP
-For up to date documentation, please see the LifeLines reference
-manual, or visit the project site online at:
-http://lifelines.sourceforge.net
+For up to date documentation please refer to the Documentation 
+section of this man page.
 .PP
 LifeLines is a program to manipulate genealogical information in
 GEDCOM format. It has a curses interface, and a built-in interpreter
 for its own genealogical report language.
 .SH OPTIONS
+The following options are some of the options available for \fIllines\fR.
 .TP
+.BI \-C
+Specify configuration file location.
 .BI \-F
 Finnish option (only available if compiled with Finnish flag)
 .TP
@@ -47,9 +55,28 @@ specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
 open database with writeable access (protecte against other reader
 or writer access)
 .TP
+.BI \-x
+execute a single lifelines report program directly.
+.TP
 .BI \-?
-display options summary
+display options summary, (on UNIX or Linux use the \-h option)
+.PP
+\fIllexec\fR is a version of \fIllines\fR without the user interface for
+non-interactive processing of report programs. (Typically used with the -x
+option.)
+.PP
+\fIdbverify\fR is a utility program to verify Lifelines databases.
+For information about options, run \fdbverify\fR with th \-h option.
+.SH FILES
+Lifelines looks for a configuration file for various settings. See description
+in the userguide for details.
 .SH DOCUMENTATION
-The LifeLines documentation is generated as part of the installation,
+The LifeLines documentation should be installed as part of the installation,
 and may also be viewed at the project site:
 http://lifelines.sourceforge.net.
+Look for ll-userguide and ll-reportmanual (with appropriate extensions for
+text, html and pdf formats).
+The normal installation process includes a large number of sample report
+programs that you can customize to suit your needs.  In the directory
+containing these reports you should file a file named index.html which gives a
+very brief summary of each report.

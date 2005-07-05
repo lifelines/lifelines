@@ -1,3 +1,8 @@
+2005-07-05 Stephen Dum
+        * ChangeLog AUTHORS docs/llines.1
+
+	Updated the llines man page and AUTHORS.  
+
 2005-06-26 Perry Rapp
 
 	* ChangeLog NEWS src/liflines/screen.c
