@@ -1128,7 +1128,7 @@ convert float to int
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>incr</function></funcdef>
-<paramdef><parameter>NUMBER</parameter></paramdef>
+<paramdef><parameter>NUMBER</parameter>,<parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1140,7 +1140,7 @@ increment variable by one
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>decr</function></funcdef>
-<paramdef><parameter>NUMBER</parameter></paramdef>
+<paramdef><parameter>NUMBER</parameter>,<parameter>NUMBER</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
@@ -1296,7 +1296,9 @@ can be used to explicitly convert a value to float or int where needed.
 
 <para>
 <function>Incr</function> and <function>decr</function> increment by one and decrement by one, respectively, the value of a variable. The
-argument to both functions must be a variable.
+argument to both functions must be a variable.  These functions take an
+optional second argument which is the amount to increment or decrement the
+variable by. 
 </para>
 
 

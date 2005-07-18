@@ -1,3 +1,9 @@
+2005-07-17 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.xml src/interp/intrpseq.c
+	fix bug 1224303 - document optional second argument to incr and decr
+	fix bug 1239997 - bad free of pointer in inset() - free of
+	uninitialized data.
+
 2005-07-05 Stephen Dum
         * ChangeLog AUTHORS docs/llines.1
 

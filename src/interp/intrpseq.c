@@ -158,7 +158,7 @@ PVALUE
 __inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
-	STRING key;
+	STRING key=0;
 	INDISEQ seq;
 	BOOLEAN rel;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
@@ -200,7 +200,7 @@ PVALUE
 __deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
-	STRING key;
+	STRING key=0;
 	BOOLEAN all, rc;
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
