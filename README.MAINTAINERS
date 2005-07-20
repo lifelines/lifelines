@@ -8,6 +8,7 @@ Fetch latest cvs if desired, eg
 Edit the version number, setting it to the new release:
   NEWS
   INSTALL
+  README
   configure.in
   build/rpm/lifelines.spec
   src/hdrs/version.h
@@ -17,6 +18,7 @@ Edit the version number, setting it to the new release:
   docs/ll-devguide.xml (1 occurrence)
   docs/ll-reportmanual.xml (2 occurrences)
   docs/ll-userguide.xml (2 occurrences)
+  docs/llines.1
 
 Run autotools:
   $ sh autogen.sh

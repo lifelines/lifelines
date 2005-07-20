@@ -1,3 +1,9 @@
+2005-07-20 Stephen Dum
+        * ChangeLog  README.MAINTAINERS  src/gedlib/remove.c
+
+        update README.MAINTAINERS
+	fix bug 1241731 - double free when joining two indi's
+
 2005-07-17 Stephen Dum
         * ChangeLog docs/ll-reportmanual.xml src/interp/intrpseq.c
 	fix bug 1224303 - document optional second argument to incr and decr

@@ -99,12 +99,16 @@ remove_indi_by_root (NODE indi)
 	}
 
 
-/* Remove indi from cache */
-	remove_indi_cache(key);
-
 /* Remove any name and refn entries */
 	remove_name_list(name, key);
 	remove_refn_list(refn, key);
+
+/* Reassemble & delete the in-memory record we're holding (indi) */
+	join_indi(indi, name, refn, sex, body, famc, fams);
+	/* free_nodes(indi);*/
+
+/* Remove indi from cache */
+	remove_indi_cache(key);
 
 /* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
@@ -112,9 +116,6 @@ remove_indi_by_root (NODE indi)
 /* Remove from on-disk database */
 	del_in_dbase(key);
 
-/* Reassemble & delete the in-memory record we're holding (indi) */
-	join_indi(indi, name, refn, sex, body, famc, fams);
-	free_nodes(indi);
 }
 /*==========================================
  * remove_empty_fam -- Delete family from database
