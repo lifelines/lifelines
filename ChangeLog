@@ -1,17 +1,24 @@
-2005-07-20 Stephen Dum
-        * ChangeLog  README.MAINTAINERS  src/gedlib/remove.c
+2005-07-20 Perry Rapp
 
-        update README.MAINTAINERS
+	* ChangeLog src/gedlib/lloptions.c
+
+	Minor changes to help debugging option parsing
+	(Store line length into local, skip blank lines)
+
+2005-07-20 Stephen Dum
+	* ChangeLog  README.MAINTAINERS  src/gedlib/remove.c
+
+	update README.MAINTAINERS
 	fix bug 1241731 - double free when joining two indi's
 
 2005-07-17 Stephen Dum
-        * ChangeLog docs/ll-reportmanual.xml src/interp/intrpseq.c
+	* ChangeLog docs/ll-reportmanual.xml src/interp/intrpseq.c
 	fix bug 1224303 - document optional second argument to incr and decr
 	fix bug 1239997 - bad free of pointer in inset() - free of
 	uninitialized data.
 
 2005-07-05 Stephen Dum
-        * ChangeLog AUTHORS docs/llines.1
+	* ChangeLog AUTHORS docs/llines.1
 
 	Updated the llines man page and AUTHORS.  
 

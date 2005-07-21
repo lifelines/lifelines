@@ -149,6 +149,7 @@ load_config_file (STRING file, STRING * pmsg)
 	STRING thisdir = dir_from_file(file);
 	BOOLEAN failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
+	INT len;
 	fp = fopen(file, LLREADTEXT);
 	if (!fp) {
 	        free(thisdir);
@@ -161,9 +162,12 @@ load_config_file (STRING file, STRING * pmsg)
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
 		noesc = FALSE;
+		len = strlen(buffer);
+		if (len == 0)
+			continue; /* ignore blank lines */
 		if (buffer[0] == '#')
 			continue; /* ignore lines starting with # */
-		if (!feof(fp) && buffer[strlen(buffer)-1] != '\n') {
+		if (!feof(fp) && buffer[len-1] != '\n') {
 			/* bail out if line too long */
 			break;
 		}
