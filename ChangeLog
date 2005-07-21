@@ -1,5 +1,12 @@
 2005-07-20 Perry Rapp
 
+	* ChangeLog src/liflines/delete.c
+
+	Initialize local buffer confirm in choose_and_remove_family to avoid
+	ASSERT crash. sf# 1242080
+
+2005-07-20 Perry Rapp
+
 	* ChangeLog src/gedlib/lloptions.c
 
 	Minor changes to help debugging option parsing

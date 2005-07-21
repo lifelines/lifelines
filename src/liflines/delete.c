@@ -57,7 +57,7 @@ choose_and_remove_family (void)
 	NODE fam, node, indi;
 	INDISEQ spseq, chseq;
 	STRING tag, key;
-	char confirm[512], members[64];
+	char confirm[512]="", members[64];
 	char spouses[32], children[32];
 	INT n;
 
