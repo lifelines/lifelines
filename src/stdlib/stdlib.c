@@ -2,6 +2,7 @@
 #include "table.h"
 
 
+#ifdef UNUSED_CODE
 /*=================================================
  * stdlib_assert -- if first value is zero, abort program
  *  with informative message as specified
@@ -23,6 +24,7 @@ stdlib_alloc (size_t numbytes)
 	ASSERT(mem);
 	return mem;
 }
+#endif /* UNUSED_CODE */
 /*=================================================
  * init_stdlib -- do appropriate module initialization
  *  for entire stdlib module

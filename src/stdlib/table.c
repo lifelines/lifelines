@@ -565,7 +565,7 @@ BOOLEAN
 next_table_ptr (TABLE_ITER tabit, CNSTRING *pkey, VPTR *pptr)
 {
 	if (tabit->rbit)
-		return RbNext(tabit->rbit, pkey, pptr);
+		return RbNext(tabit->rbit, (RBKEY *)pkey, pptr);
 	else
 		return next_hashtab(tabit->hashtab_iter, pkey, pptr);
 }
@@ -579,7 +579,7 @@ next_table_int (TABLE_ITER tabit, CNSTRING *pkey, INT * pival)
 {
 	VPTR val=0;
 	if (tabit->rbit) {
-		if (!RbNext(tabit->rbit, pkey, &val))
+		if (!RbNext(tabit->rbit, (RBKEY *)pkey, &val))
 			return FALSE;
 	} else {
 		if (!next_hashtab(tabit->hashtab_iter, pkey, &val))
@@ -783,6 +783,9 @@ rbdestroy_value (TABLE tab, RBVALUE info)
 		break;
 	case TB_OBJ:
 		table_element_obj_destructor(info);
+	case TB_NULL:
+	case TB_VPTR:
+	        ;
 	}
 }
 /*=================================================

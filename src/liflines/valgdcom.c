@@ -605,6 +605,7 @@ check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING v
 	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
 	to be correct, so warn if any of them occur in unusual locations
 	*/
+	val = val;    /* unused */
 	if (eqstr(tag, "FAMS")) {
 		if (!eqstr(tag0, "INDI"))
 			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
