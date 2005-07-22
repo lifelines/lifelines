@@ -105,7 +105,6 @@ remove_indi_by_root (NODE indi)
 
 /* Reassemble & delete the in-memory record we're holding (indi) */
 	join_indi(indi, name, refn, sex, body, famc, fams);
-	/* free_nodes(indi);*/
 
 /* Remove indi from cache */
 	remove_indi_cache(key);

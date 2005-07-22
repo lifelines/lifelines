@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -9,8 +9,7 @@ RAPPORTGENERATOR
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -29,12 +28,12 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
 ><TT
 CLASS="application"
 >LIFELINES</TT
 > PROGRAMMERINGSSYSTEM OCH
-RAPPORTGENERATOR</H1
+RAPPORTGENERATOR</A
+></H1
 ><H2
 CLASS="subtitle"
 ><TT
@@ -220,8 +219,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
-></A
->INTRODUKTION</H2
+>INTRODUKTION</A
+></H2
 ><P
 >&#13;
 	Med <TT
@@ -240,13 +239,13 @@ CLASS="application"
 	<TT
 CLASS="application"
 >TeX</TT
->, <SPAN
+>, <ACRONYM
 CLASS="acronym"
->SGML</SPAN
+>SGML</ACRONYM
 >, eller
-	annat valfritt <SPAN
+	annat valfritt <ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 >-baserat format för
 	ytterligare textbehandling och utskrifter. Du kommer åt
 	rapportgeneratorn genom att välja kommandot r från huvudmenyn.
@@ -427,14 +426,12 @@ skriv in filnamn (*.ll)
 ><P
 >&#13;
 	Du skriver in
-	<TT
+	<KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="literal"
 >anor</TT
-></B
-></TT
+></KBD
 >. Eftersom
 	programmet genererar en rapport, så frågar
 	<TT
@@ -464,14 +461,12 @@ skriv in filnamn:
 ><P
 >&#13;
 	Du skriver in ett filnamn, till exempel
-	<TT
+	<KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="literal"
 >mina.anor</TT
-></B
-></TT
+></KBD
 >.
 	<TT
 CLASS="application"
@@ -610,9 +605,9 @@ skriv in namn, nyckel, refn eller lista:
 ><P
 >&#13;
 	Efter att du har identifierat en person, så tilldelas han
-	eller hon variabeln <TT
+	eller hon variabeln <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. De följande två
 	<SPAN
 CLASS="type"
@@ -621,13 +616,13 @@ CLASS="type"
 	<SPAN
 CLASS="type"
 >listvariabler</SPAN
->, <TT
+>, <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > och
-	<TT
+	<CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. <SPAN
 CLASS="type"
 >Listor</SPAN
@@ -635,13 +630,13 @@ CLASS="type"
 	sekvenser av saker; det finns operationer för att placera
 	saker i listor, plocka bort saker därifrån, och för att
 	iterera genom listelementen. I exemplet innehåller
-	<TT
+	<CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > en lista med anor i antavelordning
-	som ännu inte rapporterats, och <TT
+	som ännu inte rapporterats, och <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >
 	innehåller deras respektive annummer.
 
@@ -661,14 +656,14 @@ CLASS="function"
 CLASS="function"
 >getindi</TT
 > blir
-	den första medlemmen i <TT
+	den första medlemmen i <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, och numret
 	ett, denna persons antavelnummer, blir den första medlemmen i
-	<TT
+	<CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >.
 
 </P
@@ -741,17 +736,17 @@ CLASS="programlisting"
 CLASS="function"
 >dequeue</TT
 >) en person från
-	<TT
+	<CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, och tilldelar personen till
-	variabeln <TT
+	variabeln <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. Så länge som det finns
-	personer i <TT
+	personer i <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, så följer ytterligare en
 	iteration av loopen.
 
@@ -781,17 +776,17 @@ CLASS="type"
 >. Det andra
 	argumentet utvärderas; Dess värde tilldelas till det första
 	argumentet, som måste vara en variabel. Här tas nästa nummer i
-	<TT
+	<CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 > bort, och tilldelas till variabeln
-	<TT
+	<CODE
 CLASS="varname"
->ahnen</TT
+>ahnen</CODE
 >. Detta är antavelnumret på personen
-	som just togs bort från <TT
+	som just togs bort från <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >.
 
 </P
@@ -870,9 +865,9 @@ CLASS="type"
 >-deklarationen anropar födelsefunktionen ,
 	varvid den första födelseposten i en personpost returneras. Om
 	födelseposten finns så tilldelas den variabeln
-	<TT
+	<CODE
 CLASS="varname"
->e</TT
+>e</CODE
 >, och <SPAN
 CLASS="type"
 >kroppen</SPAN
@@ -904,17 +899,13 @@ CLASS="function"
 CLASS="type"
 >händelse</SPAN
 > och skickar tillbaka värdet på den
-	första <TT
+	första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raden i
 	<SPAN
 CLASS="type"
@@ -953,13 +944,13 @@ enqueue(alist,add(1,mul(2,ahnen)))
 >&#13;
 	De här raderna lägger till fadern och modern till den aktuella
 	personen, om endera av dem, eller båda, finns i databasen, i
-	<TT
+	<CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >. De beräknar också och lägger till
-	föräldrarnas antavelnummer i <TT
+	föräldrarnas antavelnummer i <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. En fars
 	annummer är det dubbla jämfört med sitt barns. En mors
 	annummer är det dubbla jämfört med sitt barns plus ett. Dessa
@@ -1006,9 +997,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 >databaser.
-	Du kan sätta skalvariabeln <TT
+	Du kan sätta skalvariabeln <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > till att
 	innehålla ett antal kataloger som
 	<TT
@@ -1024,8 +1015,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN147"
-></A
->Procedurer och Funktioner</H2
+>Procedurer och Funktioner</A
+></H2
 ><P
 >&#13;
 	Ett <TT
@@ -1250,8 +1241,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN200"
-></A
->Kommentarer</H2
+>Kommentarer</A
+></H2
 ><P
 >&#13;
 	Du kan lägga in kommentarer i dina
@@ -1299,8 +1290,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN208"
-></A
->Deklarationer</H2
+>Deklarationer</A
+></H2
 ><P
 >&#13;
 	Det finns ett antal typer av <SPAN
@@ -1371,13 +1362,13 @@ CLASS="synopsis"
 ></TR
 ></TABLE
 > å andra sidan
-	tilldelar variabeln <TT
+	tilldelar variabeln <CODE
 CLASS="varname"
->n</TT
+>n</CODE
 > det antal makar som
-	personen <TT
+	personen <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 > har haft, men eftersom
 	<TT
 CLASS="function"
@@ -1955,8 +1946,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN320"
-></A
->Uttryck</H2
+>Uttryck</A
+></H2
 ><P
 >&#13;
 	Det finns fyra typer av uttryck: <SPAN
@@ -2025,8 +2016,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN336"
-></A
->Egenskapen Include</H2
+>Egenskapen Include</A
+></H2
 ><P
 >&#13;
 	Programmeringsspråket i <TT
@@ -2085,9 +2076,9 @@ CLASS="type"
 CLASS="application"
 >LifeLines</TT
 > använder skalvariabeln
-	<TT
+	<CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 >, om den är inställd, för att söka
 	efter inkluderade filer. De filer som inkluderats med en
 	<SPAN
@@ -2119,8 +2110,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN353"
-></A
->Inbyggda funktioner</H2
+>Inbyggda funktioner</A
+></H2
 ><P
 >&#13;
 	Det finns en lång rad med <SPAN
@@ -2159,8 +2150,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN362"
-></A
->Typer av värden</H2
+>Typer av värden</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2201,9 +2192,9 @@ CLASS="type"
 ><P
 >&#13;
 händelse; referens till understruktur av noder i en
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-post (referens)
 
 </P
@@ -2218,9 +2209,9 @@ CLASS="type"
 ><DD
 ><P
 >&#13;
-familj; referens till en FAM-post i <SPAN
+familj; referens till en FAM-post i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 (referens)
 </P
@@ -2247,9 +2238,9 @@ CLASS="type"
 ><DD
 ><P
 >&#13;
-person; referens till en INDI-post i <SPAN
+person; referens till en INDI-post i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 (referens)
 </P
@@ -2288,13 +2279,13 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;<SPAN
+>&#13;<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod; referens till en rad i ett
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-träd/post (referens)
 </P
 ></DD
@@ -2395,9 +2386,9 @@ CLASS="type"
 CLASS="type"
 >variabel</SPAN
 >; när detta är fallet anges dess typ med
-	<TT
+	<CODE
 CLASS="varname"
->XXX_V</TT
+>XXX_V</CODE
 >, där <SPAN
 CLASS="symbol"
 >XXX</SPAN
@@ -2457,8 +2448,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN458"
-></A
->Aritmetiska och logiska funktioner</H2
+>Aritmetiska och logiska funktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2466,11 +2457,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN463"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2514,11 +2505,11 @@ addition - två till 32 argument
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN475"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2556,11 +2547,11 @@ subtraktion
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN486"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2604,11 +2595,11 @@ multiplikation - två till 32 argument
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN498"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2646,11 +2637,11 @@ division
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN509"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2688,11 +2679,11 @@ modulus (rest)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN520"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2730,11 +2721,11 @@ exponentiering
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN531"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2766,11 +2757,11 @@ negering
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN541"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2802,11 +2793,11 @@ konvertera heltal till flyttal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN551"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2838,11 +2829,11 @@ konvertera flyttal till heltal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN561"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2874,11 +2865,11 @@ addera ett till variabel
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN571"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2910,11 +2901,11 @@ subtrahera ett från variabel
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN581"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2958,11 +2949,11 @@ logiskt och - från två till 32 argument
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN593"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3006,11 +2997,11 @@ logiskt eller - från två till 32 argument
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN605"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3042,11 +3033,11 @@ logiskt inte
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN615"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3084,11 +3075,11 @@ likhet (ej strängar)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN626"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3126,11 +3117,11 @@ olikhet
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN637"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3168,11 +3159,11 @@ mindre än
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN648"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3211,11 +3202,11 @@ större än
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN659"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3253,11 +3244,11 @@ mindre än eller lika med
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN670"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3433,8 +3424,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN711"
-></A
->Personfunktioner</H2
+>Personfunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -3442,11 +3433,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN716"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3490,11 +3481,11 @@ förvald namntyp för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN728"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3544,11 +3535,11 @@ många namnformer för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN741"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3580,11 +3571,11 @@ efternamn för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN751"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3616,11 +3607,11 @@ förnamn för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN761"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3658,11 +3649,11 @@ förkortat namn för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN772"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3694,11 +3685,11 @@ första födelsehändelse för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN782"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3730,11 +3721,11 @@ första dödshändelse för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN792"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3766,11 +3757,11 @@ första dophändelse för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN802"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3802,11 +3793,11 @@ första begravningshändelse för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN812"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3838,11 +3829,11 @@ första fader till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN822"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3874,11 +3865,11 @@ första moder till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN832"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3910,11 +3901,11 @@ nästa (yngre) syskon till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN842"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3946,11 +3937,11 @@ föregående (äldre) syskon till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN852"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -3982,11 +3973,11 @@ kön för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN862"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4018,11 +4009,11 @@ sant om argumentet är man, falskt annars
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN872"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4055,11 +4046,11 @@ sant om argumentet är kvinna, falskt annars
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN882"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4097,11 +4088,11 @@ pronomen hänvisande till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN893"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4133,11 +4124,11 @@ antal makar till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN903"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4169,11 +4160,11 @@ antal familjer (som maka/make/förälder) för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN913"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4205,11 +4196,11 @@ första föräldrarnas familj för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN923"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4241,11 +4232,11 @@ första titel för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN933"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4288,11 +4279,11 @@ intern nyckel för (fungerar också för familjer)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN945"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4324,11 +4315,11 @@ SOUNDEX-kod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN955"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4360,11 +4351,11 @@ GEDCOM-rotnod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN965"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4396,11 +4387,11 @@ GEDCOM-rotnod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN975"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4432,11 +4423,11 @@ finn person med nyckelvärde
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN985"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4463,11 +4454,11 @@ första personen i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN994"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4494,11 +4485,11 @@ sista personen i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1003"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4530,11 +4521,11 @@ nästa person i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1013"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -4868,11 +4859,9 @@ CLASS="function"
 >Name</TT
 > returnerar det förvalda namnet för
 	en person; detta är det namn som återfinns på den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 >-raden i personens post;
 	snedstrecken tas bort och efternamnet sätts i versaler;
 	<TT
@@ -4923,23 +4912,19 @@ CLASS="returnvalue"
 CLASS="function"
 >Surname</TT
 > returnerar efternamnet för
-	personen, som det ser ut på den första <TT
+	personen, som det ser ut på den första <CODE
 CLASS="structfield"
-><I
 >1
-	NAME</I
-></TT
+	NAME</CODE
 >-raden; snedstrecken tas
 	bort. <TT
 CLASS="function"
 >Givens</TT
 > returnerar förnamnen för
 	personen i samma ordning och format som det står skrivet i den
-	första <TT
+	första <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 >-raden i
 	posten. <TT
 CLASS="function"
@@ -5059,11 +5044,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN1126"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -5073,57 +5058,32 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Han/Hon</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >han/hon</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Hans/Hennes</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >hans/hennes</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >honom/henne</TD
 ></TR
 ></TBODY
@@ -5156,11 +5116,9 @@ CLASS="function"
 CLASS="function"
 >Title</TT
 > returnerar värdet på den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 TITL</I
-></TT
+>1 TITL</CODE
 >-raden i posten.
 	<TT
 CLASS="function"
@@ -5192,9 +5150,9 @@ CLASS="function"
 >Inode</TT
 >
 	returnerar rotnoden i personens
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nodträd. Lägg märke till att ett
 	<SPAN
 CLASS="type"
@@ -5348,8 +5306,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1187"
-></A
->Familjefunktioner</H2
+>Familjefunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -5357,11 +5315,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1192"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5393,11 +5351,11 @@ första giftermålshändelse för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1202"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5429,11 +5387,11 @@ första make/fader till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1212"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5465,11 +5423,11 @@ första maka/moder till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1222"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5501,11 +5459,11 @@ antal barn i
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1232"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5537,11 +5495,11 @@ första barn till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1242"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5573,11 +5531,11 @@ sista barn till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1252"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5620,11 +5578,11 @@ internt nyckelvärde för (fungerar också för personer)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1264"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5656,11 +5614,11 @@ GEDCOM-rotnod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1274"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5692,11 +5650,11 @@ GEDCOM-rotnod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1284"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5728,11 +5686,11 @@ finn familj via nyckel
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1294"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5759,11 +5717,11 @@ första familjen i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1303"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5790,11 +5748,11 @@ sista familjen i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1312"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -5826,11 +5784,11 @@ nästa familj i databasen i nyckelordning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1322"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6033,9 +5991,9 @@ CLASS="function"
 CLASS="function"
 >fnode</TT
 >
-	returnerar rotnoden i <SPAN
+	returnerar rotnoden i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nodträdet för
 	en familj. Lägg märke till att ett <SPAN
 CLASS="type"
@@ -6146,8 +6104,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1389"
-></A
->Andra typer av poster</H2
+>Andra typer av poster</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6305,8 +6263,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1423"
-></A
->Listfunktioner</H2
+>Listfunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6314,11 +6272,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1428"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6350,11 +6308,11 @@ deklarera en lista
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1438"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6386,11 +6344,11 @@ kontrollera om listan är tom
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1448"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6420,11 +6378,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1458"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6462,11 +6420,11 @@ köa element i lista
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1469"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6498,11 +6456,11 @@ avköa och returnera element från listan
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1479"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6540,11 +6498,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1490"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6582,11 +6540,11 @@ lägg på element i lista
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1501"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6618,11 +6576,11 @@ ta bort och returnera element från lista
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1511"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6666,11 +6624,11 @@ vektorelementstilldelning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1523"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6708,11 +6666,11 @@ välj vektorelement
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1534"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6748,11 +6706,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1545"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6788,11 +6746,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1556"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -6828,11 +6786,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1567"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7160,8 +7118,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1640"
-></A
->Tabellfunktioner</H2
+>Tabellfunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7169,11 +7127,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1645"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7205,11 +7163,11 @@ deklarera en tabell
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1655"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7253,11 +7211,11 @@ lägg in objekt i en tabell
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1667"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7339,8 +7297,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1683"
-></A
->Funktioner för GEDCOM-noder</H2
+>Funktioner för GEDCOM-noder</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7348,11 +7306,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1688"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7384,11 +7342,11 @@ korsreferensvärde för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1698"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7420,11 +7378,11 @@ etikett för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1708"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7456,11 +7414,11 @@ värde för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1718"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7492,11 +7450,11 @@ föräldranod för
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1728"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7528,11 +7486,11 @@ första barnnod till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1738"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7564,11 +7522,11 @@ nästa syskonnod till
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1748"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7600,11 +7558,11 @@ kopiera en nodstruktur
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1758"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7764,13 +7722,13 @@ loopa igenom alla ättlinganoder
 ><P
 >&#13;
 	Dessa funktioner ger tillgång till komponenterna i en
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod. Alla tar en
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod som enda parameter, och alla
 	returnerar ett annat värde med anknytning till noden.
 
@@ -7826,9 +7784,9 @@ CLASS="returnvalue"
 >noll</SPAN
 >. Dessa tre funktioner
 	möjliggör enkel navigation genom ett
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nodträd.
 
 </P
@@ -7858,9 +7816,9 @@ CLASS="function"
 CLASS="function"
 >Fornodes</TT
 > är en iterator som loopar igenom
-	barnnoderna i en <SPAN
+	barnnoderna i en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod. Dess första
 	argument är ett noduttryck, och dess andra parameter är en
 	variabel som itererar igenom varje direkt barnnod till den
@@ -7872,9 +7830,9 @@ CLASS="acronym"
 CLASS="function"
 >Fornotes</TT
 > är en iterator som loopar igenom
-	NOTE-noderna i en <SPAN
+	NOTE-noderna i en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod. Dess första
 	argument är ett noduttryck, och dess andra argument är en
 	variabel som returnerar värdet för NOTE-noden. Värdet
@@ -7888,9 +7846,9 @@ CLASS="function"
 >Traverse</TT
 > är en iterator som tillhandahåller
 	en allmän metod för att gå igenom
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-träd. Dess första parameter är ett
 	noduttryck; dess andra parameter är en variabel som itererar
 	genom alla noder under den valda noden, i riktning uppifrån
@@ -7906,8 +7864,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1823"
-></A
->Händelse- och datumfunktioner</H2
+>Händelse- och datumfunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7915,11 +7873,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1828"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7943,11 +7901,9 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-datum för, värde för den första <TT
+datum för, värde för den första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden
 
 </P
@@ -7956,11 +7912,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1839"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -7984,11 +7940,9 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-plats för, värde för den första <TT
+plats för, värde för den första <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raden
 
 </P
@@ -7997,11 +7951,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1850"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8026,11 +7980,9 @@ CLASS="parameter"
 ><P
 >&#13;
 år, eller första sträng med 3-4 siffror i första
-<TT
+<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden
 
 </P
@@ -8039,11 +7991,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1861"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8067,17 +8019,13 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-datum och plats, värden för första <TT
+datum och plats, värden för första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-
-och <TT
+och <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raderna
 
 </P
@@ -8086,11 +8034,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1873"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8122,11 +8070,11 @@ datum och plats för, förkortad form
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1883"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8153,11 +8101,11 @@ returnerar "händelsen" dagens datum
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1892"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8189,11 +8137,11 @@ ställ in dagformat för anrop till stddate
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1902"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8225,11 +8173,11 @@ ställ in månadsformat för anrop till stddate
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1912"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8259,11 +8207,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1922"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8293,11 +8241,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1932"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8329,11 +8277,11 @@ ställ in datumformat för anrop till stddate
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1942"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8363,11 +8311,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1952"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8399,11 +8347,11 @@ datum för, i aktuellt format
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1962"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8433,11 +8381,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1972"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8473,11 +8421,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1983"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -8517,47 +8465,39 @@ händelser.
 CLASS="function"
 >Date</TT
 > returnerar värdet för den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden i en händelse, en nod i
-	trädet för en <SPAN
+	trädet för en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-post.
 	<TT
 CLASS="function"
 >Date</TT
 > letar upp den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden som ligger en nivå
 	djupare än händelsenoden. <TT
 CLASS="function"
 >Place</TT
 >
 	returnerar värdet för den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raden i en händelse.
 	<TT
 CLASS="function"
 >Year</TT
 > returnerar det första tre- eller
 	fyrsiffriga numret i värdet för den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden i en händelse; detta
 	nummer antas vara året för händelsen.
 
@@ -8568,34 +8508,26 @@ CLASS="structfield"
 CLASS="function"
 >Long</TT
 > returnerar det bokstavliga värdet på
-	de första <TT
+	de första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >- och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raderna i en händelse,
 	sammanlänkade, avdelade med ett komma.
 	<TT
 CLASS="function"
 >Short</TT
 > förkortar information från de
-	första <TT
+	första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >- och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >raderna, sammanlänkar den
 	förkortade informationen, avdelad med ett komma, och
 	returnerar den. Ett förkortat datum är dess år; en förkortad
@@ -8610,11 +8542,9 @@ CLASS="structfield"
 CLASS="function"
 >Gettoday</TT
 > skapar en händelse som har
-	dagens datum i <TT
+	dagens datum i <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden.
 
 
@@ -8708,11 +8638,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2029"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8722,37 +8652,22 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >sätt in blanksteg före ensiffriga dagar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;sätt in 0 före ensiffriga dagar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;varken blanksteg eller 0 före ensiffriga dagar
 </TD
 ></TR
@@ -8771,11 +8686,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2044"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8785,146 +8700,86 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;numrera med blanksteg före ensiffriga månader
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;numrera med nolla före ensiffriga månader
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;numrera utan varken blanksteg eller 0 före ensiffriga månader
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;förkortning med versaler (t. ex. JAN, FEB) (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;förkortning med inledande versal (t, ex. Jan, Feb) (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;hela ordet i versaler (tex., JANUARI, FEBRUARI) (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;hela ordet med inledande stor bokstav (tex., Januari, Februari)
 (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;förkortning med gemener (t. ex. jan, feb) (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;hela ordet med gemener (t. ex. januari, februari) (lokaliserad)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;förkortning med versaler på engelska som i GEDCOM (t. ex. JAN, FEB)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;romerska siffror med gemener (t. ex. i, ii)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;romerska siffror med versaler (t. ex. I, II)
 </TD
 ></TR
@@ -8941,11 +8796,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2086"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8955,37 +8810,22 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd inledande blanksteg före år med mindre än fyra siffror
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd inledande 0 före år med mindre än fyra siffror
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;varken blanksteg eller inledande 0 före år
 </TD
 ></TR
@@ -9002,11 +8842,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2101"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -9016,109 +8856,64 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;inga markörer för f. kr./e. kr.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande e. kr. där det passar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande e. kr. eller f. kr.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande f. kr. där det passar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande e. kr. eller f. kr.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >21</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande B. C. E (before common era) om det passar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >22</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande C. E. eller B. C. E.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >31</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande BC om det passar
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >32</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efterföljande CE eller BCE
 </TD
 ></TR
@@ -9136,11 +8931,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2134"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -9150,181 +8945,106 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da må år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;må da, år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;må/da/år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/må/år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;må-da-år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da-må-år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mådaår
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;damåår
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;år må da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;år/må/da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;år-må-da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;årmåda
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;år (endast år, utelämnar allt annat)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >13</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/må år
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >14</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;(Som i GEDCOM)
 </TD
 ></TR
@@ -9346,11 +9066,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2186"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -9360,120 +9080,71 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Typ
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Exempel
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd förkortningar med versaler
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;UNG  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd förkortningar med inledande versal
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Ung  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd fullständiga ord med versaler
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;UNGEFÄR  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd fullständiga ord med inledande versal
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Ungefär  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd förkortningar med gemener
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ung  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd fullständiga ord med gemener
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ungefär  1 JAN 2002
 </TD
 ></TR
@@ -9491,11 +9162,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2220"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -9505,171 +9176,101 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Förkortning
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Fullständigt ord
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ung %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ungefär %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upp %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;uppskattat %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ber %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;beräknat %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;för %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;före %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;eft %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;efter %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mel %1 och %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mellan %1 och %2
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;från %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;till %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;t %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1 t %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;från %1 till $2
 </TD
 ></TR
@@ -9685,8 +9286,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2264"
-></A
->Funktioner för värdeextrahering</H2
+>Funktioner för värdeextrahering</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -9694,11 +9295,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2269"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -9748,11 +9349,11 @@ extrahera ett datum
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2282"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -9802,11 +9403,11 @@ extrahera ett namn
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2295"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -9850,11 +9451,11 @@ extrahera en plats
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2307"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -9904,11 +9505,11 @@ extrahera objekt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2320"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -9981,31 +9582,23 @@ CLASS="function"
 >Extractdate</TT
 > extraherar datumvärden från
 	antingen en händelse- eller en
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-nod. Den första parametern
 	måste vara en nod; om dess etikett är
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >, så extraheras datumet från
 	värdet på noden; om dess etikett inte är
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >, så extraheras datumet från
-	den första <TT
+	den första <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-raden en nivå
 	nedanför argumentnoden. De återstående tre argumenten är
 	variabler. Den första tilldelas heltalsvärdet för den
@@ -10020,43 +9613,31 @@ CLASS="structfield"
 CLASS="function"
 >Extractnames</TT
 > extraherar namnkomponenter
-	från en <TT
+	från en <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 >-rad. Dess första
-	argument är antingen en <TT
+	argument är antingen en <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >- eller
-	en <TT
+	en <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 >-nod. Om det är en
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 >-rad, så extraheras
 	komponenterna från värdet av den noden; om det är en
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >-rad, så extraheras
 	komponenterna från värdet av den första
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 >-raden i personposten. Det
 	andra argumentet är en lista som kommer att innehålla de
 	extraherade komponenterna. Det tredje argumentet är en
@@ -10077,42 +9658,32 @@ CLASS="literal"
 CLASS="function"
 >Extractplaces</TT
 > extraherar platskomponenter
-	från en <TT
+	från en <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-nod. Det första
 	argumentet är en nod; om dess etikett är
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, så extraheras dessa från
 	nodens värde; om dess etikett inte är
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, så extraheras platser från
-	den första <TT
+	den första <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-raden en nivå
 	nedanför noden för argumentet. Den andra parametern är en
 	lista som ska innehålla de extraherade komponenterna. Det
 	tredje argumentet är en heltalsvariabel som sätts till antalet
 	extraherade komponenter. Platskomponenter definieras av de
 	komma-separerade bitarna av värdet för
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >; inledande och efterföljande
 	blanksteg tas bort från komponenterna, medan alla blanksteg
 	inom etiketten bibehålls.
@@ -10143,8 +9714,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2359"
-></A
->Funktioner för interaktion med användaren</H2
+>Funktioner för interaktion med användaren</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10152,11 +9723,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2364"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10199,11 +9770,11 @@ identifiera person via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2376"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10246,11 +9817,11 @@ identifiera uppsättning med personer via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2388"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10282,11 +9853,11 @@ identifiera familj via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2398"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10329,11 +9900,11 @@ hämta heltal via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2410"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10376,11 +9947,11 @@ hämta sträng via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2422"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10412,11 +9983,11 @@ välj barn till person/i familj via användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2432"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10448,11 +10019,11 @@ välj familj som person finns i som maka/make
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2442"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10484,11 +10055,11 @@ välj person från uppsättning med personer
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2452"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10520,11 +10091,11 @@ välj maka/make till person
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2462"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10556,11 +10127,11 @@ välj en delmängd av en uppsättning med personer
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2472"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10698,8 +10269,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2499"
-></A
->Strängfunktioner</H2
+>Strängfunktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10707,11 +10278,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2504"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10743,11 +10314,11 @@ konvertera till gemener
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2514"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10779,11 +10350,11 @@ konvertera till versaler
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2524"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10815,11 +10386,11 @@ sätt inledande versal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2534"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10849,11 +10420,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2544"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10891,11 +10462,11 @@ korta av till viss längd
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2555"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10933,11 +10504,11 @@ högerjustera i fält
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2566"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -10989,11 +10560,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2580"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11045,11 +10616,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2594"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11081,11 +10652,11 @@ antal tecken i sträng
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2604"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11129,11 +10700,11 @@ delsträngsfunktion
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2616"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11177,11 +10748,11 @@ positionsfunktion
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2628"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11213,11 +10784,11 @@ tal som heltalssträng
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2638"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11253,11 +10824,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2649"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11292,11 +10863,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2660"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11331,11 +10902,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2671"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11370,11 +10941,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2682"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11409,11 +10980,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2693"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11445,11 +11016,11 @@ finn SOUNDEX-värde för godtycklig sträng
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2703"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11481,11 +11052,11 @@ konvertera talsträng till heltal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2713"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11517,11 +11088,11 @@ konvertera talsträng till heltal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2723"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11559,11 +11130,11 @@ allmän jämförelse av strängar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2734"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11601,11 +11172,11 @@ jämför om likhet mellan strängar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2745"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11910,8 +11481,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2808"
-></A
->Funktioner för utmatningsläge</H2
+>Funktioner för utmatningsläge</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -11919,11 +11490,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2813"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11950,11 +11521,11 @@ använd radutmatningsläge
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2822"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -11992,11 +11563,11 @@ använd sidutmatningsläge med angiven sidstorlek
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2833"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12028,11 +11599,11 @@ positionera till kolumn i utmatning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2843"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12057,11 +11628,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2852"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12093,11 +11664,11 @@ positionera till rad i utmatning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2862"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12135,11 +11706,11 @@ positionera till (rad, kol)-koordinat i utmatning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2873"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12166,11 +11737,11 @@ mata ut sidbuffert
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2882"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12197,11 +11768,11 @@ nyradstecken
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2891"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12228,11 +11799,11 @@ blankstegstecken
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2900"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12259,11 +11830,11 @@ citationstecken
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2909"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12301,11 +11872,11 @@ skicka programutmatning till denna fil
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2920"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12332,11 +11903,11 @@ returnera namnet på aktuell programutmatningsfil
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2929"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12368,11 +11939,11 @@ kopiera filinnehållet till programutmatningsfilen
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2939"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12571,9 +12142,9 @@ CLASS="function"
 	till utmatningsfilen för rapporten; dess argument är en sträng
 	vars värde är namnet på en fil; om filnamnet inte är angivet
 	med vare sig absolut eller relativ sökväg, så används
-	miljövariabeln <TT
+	miljövariabeln <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 >, om den är inställd,
 	för att söka efter filen; filen öppnas och dess innehåll
 	kopieras till utmatningsfilen för rapporten.
@@ -12599,8 +12170,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2985"
-></A
->Funktioner för personuppsättningar och GEDCOM-extrahering</H2
+>Funktioner för personuppsättningar och GEDCOM-extrahering</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -12608,11 +12179,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2990"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12644,11 +12215,11 @@ deklarera en uppsättningsvariabel
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3000"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12692,11 +12263,11 @@ lägg till en person till en uppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3012"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12740,11 +12311,11 @@ ta bort en person från en uppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3024"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12776,11 +12347,11 @@ storlek på en uppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3034"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12818,11 +12389,11 @@ union av två uppsättningar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3045"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12860,11 +12431,11 @@ skärningspunkter mellan två uppsättningar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3056"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12902,11 +12473,11 @@ skillnad mellan två uppsättningar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3067"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12938,11 +12509,11 @@ uppsättning med alla föräldrar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3077"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -12974,11 +12545,11 @@ uppsättning med alla barn
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3087"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13010,11 +12581,11 @@ uppsättning med alla makar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3097"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13046,11 +12617,11 @@ uppsättning med alla syskon
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3107"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13082,11 +12653,11 @@ uppsättning med alla anor
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3117"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13118,11 +12689,11 @@ uppsättning av alla ättlingar
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3127"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13154,11 +12725,11 @@ samma som descendentset; stavning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3137"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13190,11 +12761,11 @@ ta bort dubbletter från uppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3147"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13226,11 +12797,11 @@ sortera indiset efter namn
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3157"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13262,11 +12833,11 @@ sortera indiset efter nyckelvärden
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3167"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13298,11 +12869,11 @@ sortera indiset efter hjälpvärden
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3177"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13339,11 +12910,11 @@ skapa indiset från namnsträng i GEDCOM-form
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3188"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13650,9 +13221,9 @@ CLASS="function"
 >Genindiset</TT
 > genererar den
 	personuppsättning som matchar en sträng vars värde är ett namn
-	i <SPAN
+	i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-format.
 	<TT
 CLASS="function"
@@ -13700,8 +13271,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3260"
-></A
->Funktioner för postuppdatering</H2
+>Funktioner för postuppdatering</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -13709,11 +13280,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3265"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13751,11 +13322,11 @@ skapa en GEDCOM-nod
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3276"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13799,11 +13370,11 @@ lägg till en nod till ett GEDCOM-träd
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3288"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13835,11 +13406,11 @@ ta bort en nod från ett GEDCOM-träd
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3298"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13871,11 +13442,11 @@ skriv en person tillbaka till databasen
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3308"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -13908,9 +13479,9 @@ skriv en familj tillbaka till databasen
 ><P
 >&#13;
 	Dessa funktioner låter dig modifiera ett internt
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nodträd.
 
 </P
@@ -13920,9 +13491,9 @@ CLASS="acronym"
 CLASS="function"
 >Createnode</TT
 > skapar en
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-nod; de två argumenten är etikett-
 	respektive värdesträngar; värdesträngen kan vara
 	<SPAN
@@ -13980,8 +13551,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3330"
-></A
->Länkningsfunktioner för poster</H2
+>Länkningsfunktioner för poster</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -13989,11 +13560,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3335"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14025,11 +13596,11 @@ avgör om en sträng är en korsreferens
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3345"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14061,11 +13632,11 @@ referera korsreferens eller nyckel till nodträd
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3355"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14131,8 +13702,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3369"
-></A
->Diverse funktioner</H2
+>Diverse funktioner</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -14140,11 +13711,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3374"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14176,11 +13747,11 @@ lås en person eller familj i minnet
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3384"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14212,11 +13783,11 @@ lås upp en person eller familj från minnet
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3394"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14243,11 +13814,11 @@ returnera namnet på den aktuella databasen
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3403"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14274,11 +13845,11 @@ returnera namnet på det aktuella programmet
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3412"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14308,11 +13879,11 @@ CLASS="application"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3422"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14344,11 +13915,11 @@ exekvera sträng som ett skalkommando i UNIX
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3432"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14375,11 +13946,11 @@ storlek på "heap" använd för windows
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3441"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14412,11 +13983,11 @@ v3.0.5.
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3451"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14448,11 +14019,11 @@ ställ in lokal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3461"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14490,11 +14061,11 @@ koda en sträng i en teckenkodning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3472"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14538,11 +14109,11 @@ konvertera sträng från en teckenkodning till en annan
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3484"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14574,11 +14145,11 @@ ställ in avbuggningsläge för tolk
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3494"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14610,11 +14181,11 @@ visa information om en pvalue
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3504"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14654,13 +14225,13 @@ CLASS="function"
 >unlock</TT
 >
 	används för att låsa en person eller family i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 >-minnet, respektive för att låsa upp en
-	person eller familj från <SPAN
+	person eller familj från <ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 >-minnet.
 
 </P
@@ -14691,13 +14262,13 @@ CLASS="literal"
 CLASS="function"
 >System</TT
 > exekverar sitt strängargument som
-	ett skalkommando i <SPAN
+	ett skalkommando i <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > (eller
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >, om så är aktuellt), genom att
 	invokera systemskalet. Detta händer inte om användaren har
 	valt att inte tillåta systemanrop från rapporter (via
@@ -14805,8 +14376,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3543"
-></A
->Föråldrade funktioner</H2
+>Föråldrade funktioner</A
+></H2
 ><P
 >&#13;
 	Funktionaliteten i de följande tre funktionerna,
@@ -14848,11 +14419,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3556"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14895,11 +14466,11 @@ identifiera person genom användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3568"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14942,11 +14513,11 @@ hämta heltal genom användargränssnitt
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3580"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -14990,9 +14561,9 @@ hämta sträng genom användargränssnitt
 ><P
 >&#13;
 	Tre funktioner finns tillgängliga för att generera utdata
-	i <SPAN
+	i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-format till rapportutmatningsfilen
 	över alla personer i personuppsättningen i argumentet. Dessa
 	funktioner genererar i de flesta fall inte konsistent och
@@ -15036,11 +14607,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3600"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -15072,11 +14643,11 @@ generera GEDCOM-fil från personuppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3610"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -15108,11 +14679,11 @@ generera GEDCOM-fil från personuppsättning
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3620"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -15177,11 +14748,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3637"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -15213,11 +14784,11 @@ spara och returnera kopia av sträng
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3647"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -15266,11 +14837,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3661"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE

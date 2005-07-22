@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -8,8 +8,7 @@ THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -28,11 +27,11 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
 >THE <TT
 CLASS="application"
 >LIFELINES</TT
-> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR</H1
+> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR</A
+></H1
 ><H2
 CLASS="subtitle"
 ><TT
@@ -119,82 +118,82 @@ HREF="#AEN456"
 ></DT
 ><DT
 ><A
-HREF="#AEN709"
+HREF="#AEN711"
 >Person Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1197"
+HREF="#AEN1199"
 >Family Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1399"
+HREF="#AEN1401"
 >Other types of records</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1433"
+HREF="#AEN1435"
 >List Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1661"
+HREF="#AEN1663"
 >Table Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1725"
+HREF="#AEN1727"
 >GEDCOM Node Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1865"
+HREF="#AEN1867"
 >Event and Date Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2306"
+HREF="#AEN2308"
 >Value Extraction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2404"
+HREF="#AEN2406"
 >User Interaction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2544"
+HREF="#AEN2546"
 >String Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2853"
+HREF="#AEN2855"
 >Output Mode Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3044"
+HREF="#AEN3046"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3319"
+HREF="#AEN3321"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3389"
+HREF="#AEN3391"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3428"
+HREF="#AEN3430"
 >Miscellaneous Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3603"
+HREF="#AEN3605"
 >Deprecated Functions</A
 ></DT
 ></DL
@@ -218,8 +217,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
-></A
->INTRODUCTION</H2
+>INTRODUCTION</A
+></H2
 ><P
 >&#13;
      The <TT
@@ -238,13 +237,13 @@ CLASS="application"
      <TT
 CLASS="application"
 >TeX</TT
->, <SPAN
+>, <ACRONYM
 CLASS="acronym"
->SGML</SPAN
+>SGML</ACRONYM
 > or any
-     other <SPAN
+     other <ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 >-based format, for further text
      processing and printing. You access the report generator by
      choosing the r command from the main menu. You may also use
@@ -421,14 +420,12 @@ enter string:
 ><P
 >&#13;
      You enter
-     <TT
+     <KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="literal"
 >ahnen</TT
-></B
-></TT
+></KBD
 >. Since the
      program generates a report,
      <TT
@@ -457,14 +454,12 @@ enter file name:
 ><P
 >&#13;
      You enter a file name, say
-     <TT
+     <KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="filename"
 >my.ahnen</TT
-></B
-></TT
+></KBD
 >.
      <TT
 CLASS="application"
@@ -603,9 +598,9 @@ enter name:
 ><P
 >&#13;
      After you identify a person, he or she is assigned to the
-     variable <TT
+     variable <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. The next two
      <SPAN
 CLASS="type"
@@ -614,27 +609,27 @@ CLASS="type"
 CLASS="type"
 >list
      variables</SPAN
->, <TT
+>, <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > and
-     <TT
+     <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. <SPAN
 CLASS="type"
 >Lists</SPAN
 > hold sequences of
      things; there are operations for placing things on lists,
      taking things off, and iterating through the list elements. In
-     the example, <TT
+     the example, <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > holds a list of
      ancestors, in ahnentafel order, who have not yet been reported
-     on, and <TT
+     on, and <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 > holds their respective
      ahnentafel numbers.
 
@@ -651,14 +646,14 @@ CLASS="function"
 CLASS="function"
 >getindi</TT
 > function is
-     made the first member of <TT
+     made the first member of <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, and the
      number one, this person's ahnentafel number, is made the first
-     member of <TT
+     member of <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >.
 
 </P
@@ -728,16 +723,16 @@ CLASS="programlisting"
 removes (via <TT
 CLASS="function"
 >dequeue</TT
->) a person from <TT
+>) a person from <CODE
 CLASS="varname"
->ilist</TT
->, and assigns the person to variable <TT
+>ilist</CODE
+>, and assigns the person to variable <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. As long as there
-are persons on <TT
+are persons on <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, another iteration of the loop follows.
 
 </P
@@ -760,16 +755,16 @@ set(ahnen, dequeue(alist))</PRE
 CLASS="type"
 >assignment</SPAN
 > statement. The second argument is evaluated; its value is assigned to the first
-argument, which must be a variable. Here the next number in <TT
+argument, which must be a variable. Here the next number in <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 > is removed and assigned to variable
-<TT
+<CODE
 CLASS="varname"
->ahnen</TT
->. This is the ahnentafel number of the person just removed from <TT
+>ahnen</CODE
+>. This is the ahnentafel number of the person just removed from <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >.
 
 </P
@@ -838,9 +833,9 @@ CLASS="type"
 > statement calls the
 birth function, returning the first birth event in a person's
 record. If the event exists it is assigned to variable
-<TT
+<CODE
 CLASS="varname"
->e</TT
+>e</CODE
 >, and the <SPAN
 CLASS="type"
 >body</SPAN
@@ -873,17 +868,13 @@ CLASS="parameter"
 >event</I
 ></TT
 > and returns the values of
-the first <TT
+the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > and
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines in the <SPAN
 CLASS="type"
 >event</SPAN
@@ -918,12 +909,12 @@ enqueue(alist,add(1,mul(2,ahnen)))
 ><P
 >&#13;
 These lines add the father and mother of the current person, if either or both are in the database, to
-<TT
+<CODE
 CLASS="varname"
->ilist</TT
->. They also compute and add the parents' ahnentafel numbers to <TT
+>ilist</CODE
+>. They also compute and add the parents' ahnentafel numbers to <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. A father's ahnentafel
 number is twice that of his child. A mother's ahnentafel number is twice that of her child plus one.
 These values are computed with the <TT
@@ -965,9 +956,9 @@ directories; they do not have to be kept in or associated with <TT
 CLASS="application"
 >LifeLines</TT
 > databases. You may set the
-<TT
+<CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > shell variable to hold a list of directories that <TT
 CLASS="application"
 >LifeLines</TT
@@ -981,8 +972,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN145"
-></A
->Procedures and Functions</H2
+>Procedures and Functions</A
+></H2
 ><P
 >&#13;
 A <TT
@@ -1184,8 +1175,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN199"
-></A
->Comments</H2
+>Comments</A
+></H2
 ><P
 >&#13;
 You may comment your <TT
@@ -1226,8 +1217,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN207"
-></A
->Statements</H2
+>Statements</A
+></H2
 ><P
 >&#13;
      There are a number of <SPAN
@@ -1299,13 +1290,13 @@ CLASS="synopsis"
 ></TR
 ></TABLE
 > assigns the
-     variable <TT
+     variable <CODE
 CLASS="varname"
->n</TT
+>n</CODE
 > the number of spouses that
-     person <TT
+     person <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 > has, but since
      <TT
 CLASS="function"
@@ -1826,8 +1817,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN318"
-></A
->Expressions</H2
+>Expressions</A
+></H2
 ><P
 >&#13;
 There are four types of expressions: <SPAN
@@ -1889,8 +1880,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN334"
-></A
->Include Feature</H2
+>Include Feature</A
+></H2
 ><P
 >&#13;
 The <TT
@@ -1937,9 +1928,9 @@ CLASS="type"
 statements, and so on to any depth. <TT
 CLASS="application"
 >LifeLines</TT
-> will use the <TT
+> will use the <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > shell variable, if set, to
 search for the <SPAN
 CLASS="type"
@@ -1964,8 +1955,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN350"
-></A
->Built-in Functions</H2
+>Built-in Functions</A
+></H2
 ><P
 >&#13;
 There is a long list of <SPAN
@@ -1999,8 +1990,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN359"
-></A
->Value Types</H2
+>Value Types</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2037,9 +2028,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;event; reference to substructure of nodes in a <SPAN
+>&#13;event; reference to substructure of nodes in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > record (reference)
 </P
 ></DD
@@ -2052,9 +2043,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;family; reference to a <SPAN
+>&#13;family; reference to a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > FAM record (reference)
 </P
 ></DD
@@ -2079,9 +2070,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;person; reference to a <SPAN
+>&#13;person; reference to a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > INDI record (reference)
 </P
 ></DD
@@ -2118,12 +2109,12 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;<SPAN
+>&#13;<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
-> node; reference to a line in a <SPAN
+>GEDCOM</ACRONYM
+> node; reference to a line in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > tree/record (reference)
 </P
 ></DD
@@ -2212,9 +2203,9 @@ CLASS="type"
 CLASS="type"
 >variable</SPAN
 >; when this is so its type is given as
-<TT
+<CODE
 CLASS="varname"
->XXX_V</TT
+>XXX_V</CODE
 >, where <SPAN
 CLASS="symbol"
 >XXX</SPAN
@@ -2268,8 +2259,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN456"
-></A
->Arithmetic and Logic Functions</H2
+>Arithmetic and Logic Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2277,11 +2268,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN461"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2323,11 +2314,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN473"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2365,11 +2356,11 @@ subtraction
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN484"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2413,11 +2404,11 @@ multiplication - two to 32 arguments
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN496"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2455,11 +2446,11 @@ division
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN507"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2497,11 +2488,11 @@ modulus (remainder)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN518"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2539,11 +2530,11 @@ exponentiation
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN529"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2575,11 +2566,11 @@ negation
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN539"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2611,11 +2602,11 @@ convert int to float
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN549"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2647,11 +2638,11 @@ convert float to int
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN559"
 ></A
-><P
-></P
 ><P
 ><CODE
 ><CODE
@@ -2661,6 +2652,11 @@ CLASS="function"
 >incr</TT
 ></CODE
 >(<TT
+CLASS="parameter"
+><I
+>NUMBER</I
+></TT
+>,<TT
 CLASS="parameter"
 ><I
 >NUMBER</I
@@ -2683,11 +2679,11 @@ increment variable by one
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN569"
-></A
 ><P
 ></P
+><A
+NAME="AEN570"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2697,6 +2693,11 @@ CLASS="function"
 >decr</TT
 ></CODE
 >(<TT
+CLASS="parameter"
+><I
+>NUMBER</I
+></TT
+>,<TT
 CLASS="parameter"
 ><I
 >NUMBER</I
@@ -2719,11 +2720,11 @@ decrement variable by one
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN579"
-></A
 ><P
 ></P
+><A
+NAME="AEN581"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2767,11 +2768,11 @@ logical and - two to 32 arguments
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN591"
-></A
 ><P
 ></P
+><A
+NAME="AEN593"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2815,11 +2816,11 @@ logical or - two to 32 arguments
 ><B
 > <DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN603"
-></A
 ><P
 ></P
+><A
+NAME="AEN605"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2851,11 +2852,11 @@ logical not
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN613"
-></A
 ><P
 ></P
+><A
+NAME="AEN615"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2893,11 +2894,11 @@ equality (not strings)
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN624"
-></A
 ><P
 ></P
+><A
+NAME="AEN626"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2935,11 +2936,11 @@ non-equality
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN635"
-></A
 ><P
 ></P
+><A
+NAME="AEN637"
+></A
 ><P
 ><CODE
 ><CODE
@@ -2977,11 +2978,11 @@ less than
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN646"
-></A
 ><P
 ></P
+><A
+NAME="AEN648"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3020,11 +3021,11 @@ greater than
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN657"
-></A
 ><P
 ></P
+><A
+NAME="AEN659"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3062,11 +3063,11 @@ less than or equal
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN668"
-></A
 ><P
 ></P
+><A
+NAME="AEN670"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3182,7 +3183,9 @@ CLASS="function"
 CLASS="function"
 >decr</TT
 > increment by one and decrement by one, respectively, the value of a variable. The
-argument to both functions must be a variable.
+argument to both functions must be a variable.  These functions take an
+optional second argument which is the amount to increment or decrement the
+variable by. 
 </P
 ><P
 >&#13;<TT
@@ -3225,9 +3228,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN709"
-></A
->Person Functions</H2
+NAME="AEN711"
+>Person Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -3235,11 +3238,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN714"
-></A
 ><P
 ></P
+><A
+NAME="AEN716"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3281,11 +3284,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN726"
-></A
 ><P
 ></P
+><A
+NAME="AEN728"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3333,11 +3336,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN739"
-></A
 ><P
 ></P
+><A
+NAME="AEN741"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3367,11 +3370,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN749"
-></A
 ><P
 ></P
+><A
+NAME="AEN751"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3401,11 +3404,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN759"
-></A
 ><P
 ></P
+><A
+NAME="AEN761"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3441,11 +3444,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN770"
-></A
 ><P
 ></P
+><A
+NAME="AEN772"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3475,11 +3478,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN780"
-></A
 ><P
 ></P
+><A
+NAME="AEN782"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3509,11 +3512,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN790"
-></A
 ><P
 ></P
+><A
+NAME="AEN792"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3543,11 +3546,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN800"
-></A
 ><P
 ></P
+><A
+NAME="AEN802"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3577,11 +3580,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN810"
-></A
 ><P
 ></P
+><A
+NAME="AEN812"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3611,11 +3614,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN820"
-></A
 ><P
 ></P
+><A
+NAME="AEN822"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3645,11 +3648,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN830"
-></A
 ><P
 ></P
+><A
+NAME="AEN832"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3679,11 +3682,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN840"
-></A
 ><P
 ></P
+><A
+NAME="AEN842"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3713,11 +3716,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN850"
-></A
 ><P
 ></P
+><A
+NAME="AEN852"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3747,11 +3750,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN860"
-></A
 ><P
 ></P
+><A
+NAME="AEN862"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3781,11 +3784,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN870"
-></A
 ><P
 ></P
+><A
+NAME="AEN872"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3815,11 +3818,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN880"
-></A
 ><P
 ></P
+><A
+NAME="AEN882"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3855,11 +3858,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN891"
-></A
 ><P
 ></P
+><A
+NAME="AEN893"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3889,11 +3892,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN901"
-></A
 ><P
 ></P
+><A
+NAME="AEN903"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3923,11 +3926,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN911"
-></A
 ><P
 ></P
+><A
+NAME="AEN913"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3957,11 +3960,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN921"
-></A
 ><P
 ></P
+><A
+NAME="AEN923"
+></A
 ><P
 ><CODE
 ><CODE
@@ -3991,11 +3994,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN931"
-></A
 ><P
 ></P
+><A
+NAME="AEN933"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4036,11 +4039,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN943"
-></A
 ><P
 ></P
+><A
+NAME="AEN945"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4070,11 +4073,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN953"
-></A
 ><P
 ></P
+><A
+NAME="AEN955"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4104,11 +4107,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN963"
-></A
 ><P
 ></P
+><A
+NAME="AEN965"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4138,11 +4141,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN973"
-></A
 ><P
 ></P
+><A
+NAME="AEN975"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4172,11 +4175,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN983"
-></A
 ><P
 ></P
+><A
+NAME="AEN985"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4201,11 +4204,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN992"
-></A
 ><P
 ></P
+><A
+NAME="AEN994"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4230,11 +4233,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1001"
-></A
 ><P
 ></P
+><A
+NAME="AEN1003"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4264,11 +4267,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1011"
-></A
 ><P
 ></P
+><A
+NAME="AEN1013"
+></A
 ><P
 ><CODE
 ><CODE
@@ -4583,11 +4586,9 @@ CLASS="replaceable"
 >&#13;<TT
 CLASS="function"
 >Name</TT
-> returns the default name of a person; this is the name found on the first <TT
+> returns the default name of a person; this is the name found on the first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > line in the
 person's record; the slashes are removed and the surname is made all capitals; <TT
 CLASS="function"
@@ -4623,21 +4624,17 @@ shorten the name to fit this length.
 >&#13;<TT
 CLASS="function"
 >Surname</TT
-> returns the surname of the person, as found in the first <TT
+> returns the surname of the person, as found in the first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > line; the slashes are
 removed. <TT
 CLASS="function"
 >Givens</TT
 > returns the given names of the person in the same order and format as found in the
-first <TT
+first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > line of the record. <TT
 CLASS="function"
 >Trimname</TT
@@ -4658,11 +4655,9 @@ CLASS="function"
 CLASS="function"
 >burial</TT
 > return the first birth, death, baptism and burial event in the
-person's record, respectively. An event is a level <TT
+person's record, respectively. An event is a level <CODE
 CLASS="structfield"
-><I
->1 GEDCOM</I
-></TT
+>1 GEDCOM</CODE
 > node. If there is no matching event these
 functions return <SPAN
 CLASS="returnvalue"
@@ -4733,11 +4728,11 @@ the second parameter selects the type of pronoun:
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN1125"
-></A
 ><P
 ></P
+><A
+NAME="AEN1127"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -4747,57 +4742,32 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >He/She</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >he/she</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >His/Her</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >his/her</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >him/her</TD
 ></TR
 ></TBODY
@@ -4823,11 +4793,9 @@ CLASS="function"
 >&#13;<TT
 CLASS="function"
 >Title</TT
-> returns the value of the first <TT
+> returns the value of the first <CODE
 CLASS="structfield"
-><I
->1 TITL</I
-></TT
+>1 TITL</CODE
 > line in the record. <TT
 CLASS="function"
 >Key</TT
@@ -4851,9 +4819,9 @@ CLASS="function"
 > and <TT
 CLASS="function"
 >Inode</TT
-> return the root node of the person's <SPAN
+> return the root node of the person's <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree. Note that an <SPAN
 CLASS="type"
 >INDI</SPAN
@@ -5023,9 +4991,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1197"
-></A
->Family Functions</H2
+NAME="AEN1199"
+>Family Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -5033,11 +5001,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1202"
-></A
 ><P
 ></P
+><A
+NAME="AEN1204"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5067,11 +5035,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1212"
-></A
 ><P
 ></P
+><A
+NAME="AEN1214"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5101,11 +5069,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1222"
-></A
 ><P
 ></P
+><A
+NAME="AEN1224"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5135,11 +5103,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1232"
-></A
 ><P
 ></P
+><A
+NAME="AEN1234"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5169,11 +5137,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1242"
-></A
 ><P
 ></P
+><A
+NAME="AEN1244"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5203,11 +5171,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1252"
-></A
 ><P
 ></P
+><A
+NAME="AEN1254"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5237,11 +5205,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1262"
-></A
 ><P
 ></P
+><A
+NAME="AEN1264"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5282,11 +5250,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1274"
-></A
 ><P
 ></P
+><A
+NAME="AEN1276"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5316,11 +5284,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1284"
-></A
 ><P
 ></P
+><A
+NAME="AEN1286"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5350,11 +5318,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1294"
-></A
 ><P
 ></P
+><A
+NAME="AEN1296"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5384,11 +5352,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1304"
-></A
 ><P
 ></P
+><A
+NAME="AEN1306"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5413,11 +5381,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1313"
-></A
 ><P
 ></P
+><A
+NAME="AEN1315"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5442,11 +5410,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1322"
-></A
 ><P
 ></P
+><A
+NAME="AEN1324"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5476,11 +5444,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1332"
-></A
 ><P
 ></P
+><A
+NAME="AEN1334"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5645,9 +5613,9 @@ CLASS="function"
 > and <TT
 CLASS="function"
 >fnode</TT
-> return the root node of a family <SPAN
+> return the root node of a family <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree. Note that a <SPAN
 CLASS="type"
 >FAM</SPAN
@@ -5732,9 +5700,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1399"
-></A
->Other types of records</H2
+NAME="AEN1401"
+>Other types of records</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -5886,9 +5854,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1433"
-></A
->List Functions</H2
+NAME="AEN1435"
+>List Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -5896,11 +5864,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1438"
-></A
 ><P
 ></P
+><A
+NAME="AEN1440"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5930,11 +5898,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1448"
-></A
 ><P
 ></P
+><A
+NAME="AEN1450"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5964,11 +5932,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1458"
-></A
 ><P
 ></P
+><A
+NAME="AEN1460"
+></A
 ><P
 ><CODE
 ><CODE
@@ -5998,11 +5966,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1468"
-></A
 ><P
 ></P
+><A
+NAME="AEN1470"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6032,11 +6000,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1478"
-></A
 ><P
 ></P
+><A
+NAME="AEN1480"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6072,11 +6040,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1489"
-></A
 ><P
 ></P
+><A
+NAME="AEN1491"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6106,11 +6074,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1499"
-></A
 ><P
 ></P
+><A
+NAME="AEN1501"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6146,11 +6114,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1510"
-></A
 ><P
 ></P
+><A
+NAME="AEN1512"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6186,11 +6154,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1521"
-></A
 ><P
 ></P
+><A
+NAME="AEN1523"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6220,11 +6188,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1531"
-></A
 ><P
 ></P
+><A
+NAME="AEN1533"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6266,11 +6234,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1543"
-></A
 ><P
 ></P
+><A
+NAME="AEN1545"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6306,11 +6274,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1554"
-></A
 ><P
 ></P
+><A
+NAME="AEN1556"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6346,11 +6314,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1565"
-></A
 ><P
 ></P
+><A
+NAME="AEN1567"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6386,11 +6354,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1576"
-></A
 ><P
 ></P
+><A
+NAME="AEN1578"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6426,11 +6394,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1587"
-></A
 ><P
 ></P
+><A
+NAME="AEN1589"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6706,9 +6674,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1661"
-></A
->Table Functions</H2
+NAME="AEN1663"
+>Table Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6716,11 +6684,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1666"
-></A
 ><P
 ></P
+><A
+NAME="AEN1668"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6750,11 +6718,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1676"
-></A
 ><P
 ></P
+><A
+NAME="AEN1678"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6796,11 +6764,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1688"
-></A
 ><P
 ></P
+><A
+NAME="AEN1690"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6836,11 +6804,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1699"
-></A
 ><P
 ></P
+><A
+NAME="AEN1701"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6870,11 +6838,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1709"
-></A
 ><P
 ></P
+><A
+NAME="AEN1711"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6938,9 +6906,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1725"
-></A
->GEDCOM Node Functions</H2
+NAME="AEN1727"
+>GEDCOM Node Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6948,11 +6916,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1730"
-></A
 ><P
 ></P
+><A
+NAME="AEN1732"
+></A
 ><P
 ><CODE
 ><CODE
@@ -6982,11 +6950,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1740"
-></A
 ><P
 ></P
+><A
+NAME="AEN1742"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7016,11 +6984,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1750"
-></A
 ><P
 ></P
+><A
+NAME="AEN1752"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7050,11 +7018,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1760"
-></A
 ><P
 ></P
+><A
+NAME="AEN1762"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7084,11 +7052,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1770"
-></A
 ><P
 ></P
+><A
+NAME="AEN1772"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7118,11 +7086,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1780"
-></A
 ><P
 ></P
+><A
+NAME="AEN1782"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7152,11 +7120,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1790"
-></A
 ><P
 ></P
+><A
+NAME="AEN1792"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7186,11 +7154,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1800"
-></A
 ><P
 ></P
+><A
+NAME="AEN1802"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7342,12 +7310,12 @@ CLASS="replaceable"
 ></DIV
 ><P
 >&#13;
-These functions provide access to the components of a <SPAN
+These functions provide access to the components of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
-> node. All take a <SPAN
+>GEDCOM</ACRONYM
+> node. All take a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node as their
 only parameter, and each returns a different value associated with the node.
 
@@ -7390,9 +7358,9 @@ CLASS="function"
 these functions return <SPAN
 CLASS="returnvalue"
 >null</SPAN
->. These three functions allow simple navigation through a <SPAN
+>. These three functions allow simple navigation through a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node
 tree.
 </P
@@ -7413,9 +7381,9 @@ CLASS="function"
 >&#13;<TT
 CLASS="function"
 >Fornodes</TT
-> is an iterator that loops through the child nodes of a <SPAN
+> is an iterator that loops through the child nodes of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node. Its first argument is a
 node expression, and its second parameter is a variable that iterates through each direct child node of
 the first node.
@@ -7425,9 +7393,9 @@ the first node.
 CLASS="function"
 >Fornotes</TT
 > is an iterator that loops through the NOTE nodes 
-of a <SPAN
+of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node. Its first argument is a
 node expression, and its second parameter is a variable that returns the
 value of the NOTE.  The value includes processed sub CONC and CONT records.
@@ -7436,9 +7404,9 @@ value of the NOTE.  The value includes processed sub CONC and CONT records.
 >&#13;<TT
 CLASS="function"
 >Traverse</TT
-> is an iterator providing a general method for traversing <SPAN
+> is an iterator providing a general method for traversing <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > trees. Its first parameter is
 a node expression; its second parameter is a variable that iterates over every node under the first node
 in a top down, left to right manner; and its third parameter is a variable that is set to the level of the
@@ -7450,9 +7418,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1865"
-></A
->Event and Date Functions</H2
+NAME="AEN1867"
+>Event and Date Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7460,11 +7428,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1870"
-></A
 ><P
 ></P
+><A
+NAME="AEN1872"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7487,11 +7455,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;date of, value of first <TT
+>&#13;date of, value of first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line
 </P
 ></DD
@@ -7499,11 +7465,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1881"
-></A
 ><P
 ></P
+><A
+NAME="AEN1883"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7526,11 +7492,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;place of, value of first <TT
+>&#13;place of, value of first <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line
 </P
 ></DD
@@ -7538,11 +7502,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1892"
-></A
 ><P
 ></P
+><A
+NAME="AEN1894"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7565,11 +7529,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;year or, 1st string of 3-4 digits in 1st <TT
+>&#13;year or, 1st string of 3-4 digits in 1st <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line
 </P
 ></DD
@@ -7577,11 +7539,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1903"
-></A
 ><P
 ></P
+><A
+NAME="AEN1905"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7604,16 +7566,12 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;date and place, values of 1st <TT
+>&#13;date and place, values of 1st <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines
 </P
 ></DD
@@ -7621,11 +7579,11 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1915"
-></A
 ><P
 ></P
+><A
+NAME="AEN1917"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7655,11 +7613,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1925"
-></A
 ><P
 ></P
+><A
+NAME="AEN1927"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7684,11 +7642,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1934"
-></A
 ><P
 ></P
+><A
+NAME="AEN1936"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7718,11 +7676,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1944"
-></A
 ><P
 ></P
+><A
+NAME="AEN1946"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7752,11 +7710,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1954"
-></A
 ><P
 ></P
+><A
+NAME="AEN1956"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7786,11 +7744,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1964"
-></A
 ><P
 ></P
+><A
+NAME="AEN1966"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7820,11 +7778,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1974"
-></A
 ><P
 ></P
+><A
+NAME="AEN1976"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7854,11 +7812,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1984"
-></A
 ><P
 ></P
+><A
+NAME="AEN1986"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7888,11 +7846,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN1994"
-></A
 ><P
 ></P
+><A
+NAME="AEN1996"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7922,11 +7880,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2004"
-></A
 ><P
 ></P
+><A
+NAME="AEN2006"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7956,11 +7914,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2014"
-></A
 ><P
 ></P
+><A
+NAME="AEN2016"
+></A
 ><P
 ><CODE
 ><CODE
@@ -7996,11 +7954,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2025"
-></A
 ><P
 ></P
+><A
+NAME="AEN2027"
+></A
 ><P
 ><CODE
 ><CODE
@@ -8035,40 +7993,32 @@ CLASS="parameter"
 >&#13;<TT
 CLASS="function"
 >Date</TT
-> returns the value of the first <TT
+> returns the value of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> line in an event, a node in a <SPAN
+>DATE</CODE
+> line in an event, a node in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > record tree. <TT
 CLASS="function"
 >Date</TT
 >
-finds the first <TT
+finds the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line one level deeper than the event node. <TT
 CLASS="function"
 >Place</TT
 > returns the value of the first
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line in an event. <TT
 CLASS="function"
 >Year</TT
-> returns the first three or four digit number in the value of the first <TT
+> returns the first three or four digit number in the value of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >
 line in an event; this number is assumed to be the year of the event.
 </P
@@ -8076,30 +8026,22 @@ line in an event; this number is assumed to be the year of the event.
 >&#13;<TT
 CLASS="function"
 >Long</TT
-> returns the verbatim values of the first <TT
+> returns the verbatim values of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines in an event, concatenated together
 and separated by a comma. <TT
 CLASS="function"
 >Short</TT
-> abbreviates information from the first <TT
+> abbreviates information from the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines, concatenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
@@ -8108,11 +8050,9 @@ component has an entry in the place abbreviation table.
 >&#13;<TT
 CLASS="function"
 >Gettoday</TT
-> creates an event that has today's date in the <TT
+> creates an event that has today's date in the <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line.
 </P
 ><P
@@ -8191,11 +8131,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2071"
-></A
 ><P
 ></P
+><A
+NAME="AEN2073"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8205,36 +8145,21 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >leave space before single digit days</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading 0 before single digit days
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no space or leading 0 before single digit days
 </TD
 ></TR
@@ -8252,11 +8177,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2086"
-></A
 ><P
 ></P
+><A
+NAME="AEN2088"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8266,145 +8191,85 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with space before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with leading zero before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with no space or zero before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case abbreviation (eg, JAN, FEB) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;capitalized abbreviation (eg, Jan, Feb) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case full word (eg, JANUARY, FEBRUARY) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;capitalized full word (eg, January, February) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case abbreviation (eg, jan, feb) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case full word (eg, january, february) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case abbreviation in English per GEDCOM (eg, JAN, FEB)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case roman letter (eg, i, ii)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case roman letter (eg, I, II)
 </TD
 ></TR
@@ -8421,11 +8286,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2128"
-></A
 ><P
 ></P
+><A
+NAME="AEN2130"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8435,37 +8300,22 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading spaces before years with less than four digits
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading 0 before years with less than four digits
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no space or leading 0 before years
 </TD
 ></TR
@@ -8482,11 +8332,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2143"
-></A
 ><P
 ></P
+><A
+NAME="AEN2145"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8496,109 +8346,64 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no AD/BC markers
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing B.C. if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing A.D. or B.C.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing BC if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing AD or BC
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >21</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing B.C.E. if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >22</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing C.E. or B.C.E.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >31</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing BC if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >32</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing CE or BCE
 </TD
 ></TR
@@ -8615,11 +8420,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2176"
-></A
 ><P
 ></P
+><A
+NAME="AEN2178"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8629,181 +8434,106 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da mo yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo da, yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo/da/yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/mo/yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo-da-yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da-mo-yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;modayr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;damoyr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr mo da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr/mo/da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr-mo-da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yrmoda
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr  (year only, omitting all else)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >13</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/mo yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >14</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;(As in GEDCOM)
 </TD
 ></TR
@@ -8824,11 +8554,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2228"
-></A
 ><P
 ></P
+><A
+NAME="AEN2230"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8838,120 +8568,71 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Mode
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Example
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in uppercase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ABT  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in titlecase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Abt  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use uppercased full words 
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ABOUT  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use titlecased full words
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;About  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in lowercase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;abt  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use lowercase full words
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;about  1 JAN 2002
 </TD
 ></TR
@@ -8969,11 +8650,11 @@ CLASS="function"
 </P
 ><DIV
 CLASS="informaltable"
-><A
-NAME="AEN2262"
-></A
 ><P
 ></P
+><A
+NAME="AEN2264"
+></A
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -8983,171 +8664,101 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Abbreviation
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Full word
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;abt %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;about %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;est %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;estimated %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;cal %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;calculated %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;bef %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;before %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;aft %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;after %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;bet %1 and %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;between %1 and %2
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;from %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;to %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;to %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1 to %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;from %1 to $2
 </TD
 ></TR
@@ -9162,9 +8773,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2306"
-></A
->Value Extraction Functions</H2
+NAME="AEN2308"
+>Value Extraction Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -9172,11 +8783,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2311"
-></A
 ><P
 ></P
+><A
+NAME="AEN2313"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9224,11 +8835,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2324"
-></A
 ><P
 ></P
+><A
+NAME="AEN2326"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9276,11 +8887,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2337"
-></A
 ><P
 ></P
+><A
+NAME="AEN2339"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9322,11 +8933,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2349"
-></A
 ><P
 ></P
+><A
+NAME="AEN2351"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9374,11 +8985,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2362"
-></A
 ><P
 ></P
+><A
+NAME="AEN2364"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9444,29 +9055,21 @@ CLASS="parameter"
 CLASS="function"
 >Extractdate</TT
 > extracts date values from either an event node
-or <TT
+or <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > node. The first parameter must be
-a node; if its tag is <TT
+a node; if its tag is <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >, the date is extracted 
-from the value of that node; if its tag is not <TT
+from the value of that node; if its tag is not <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >,
-the date is extracted from the first <TT
+the date is extracted from the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line one 
 level below the argument node. The remaining three arguments are variables.
 The first is assigned the integer value of the extracted day; the second is
@@ -9477,38 +9080,26 @@ the integer value of the extracted year.
 >&#13;<TT
 CLASS="function"
 >Extractnames</TT
-> extracts name components from a <TT
+> extracts name components from a <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
-> line. Its first argument is either an <TT
+>NAME</CODE
+> line. Its first argument is either an <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 > or a
-<TT
+<CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
-> node. If it is a <TT
+>NAME</CODE
+> node. If it is a <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 > line, the components are extracted from the value of that node; if it is an
-<TT
+<CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
-> line, the components are extracted from the value of the first <TT
+>INDI</CODE
+> line, the components are extracted from the value of the first <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 > line in the person record.
 The second argument is a list that will hold the extracted components. The third argument is an integer
 variable that is set to the number of extracted components. The fourth argument is a variable that is set
@@ -9523,42 +9114,32 @@ surname component. If there is no surname this argument variable is set to zero.
 CLASS="function"
 >Extractplaces</TT
 > extracts place components
-from a <TT
+from a <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > node. The first
 argument is a node; if its tag is
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, the places are extracted from
 the value of the node; if its tag is not
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, places are extracted from the
-first <TT
+first <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line one level below the
 argument node. The second parameter is a list that will hold
 the extracted components. The third argument is an integer
 variable that is set to the number of extracted
 components. Place components are defined by the
 comma-separated portions of the
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > value; leading and trailing
 white space is removed from the components, while all internal
 white space is retained.
@@ -9584,11 +9165,9 @@ string into tokens.
 CLASS="function"
 >extractdatestr</TT
 > extracts date values from a .
-<TT
+<CODE
 CLASS="structfield"
-><I
->STRING</I
-></TT
+>STRING</CODE
 >.  It is intended for internal verification
 of date extraction code.
 The remaining five arguments are variables.
@@ -9602,9 +9181,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2404"
-></A
->User Interaction Functions</H2
+NAME="AEN2406"
+>User Interaction Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -9612,11 +9191,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2409"
-></A
 ><P
 ></P
+><A
+NAME="AEN2411"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9657,11 +9236,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2421"
-></A
 ><P
 ></P
+><A
+NAME="AEN2423"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9702,11 +9281,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2433"
-></A
 ><P
 ></P
+><A
+NAME="AEN2435"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9736,11 +9315,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2443"
-></A
 ><P
 ></P
+><A
+NAME="AEN2445"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9781,11 +9360,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2455"
-></A
 ><P
 ></P
+><A
+NAME="AEN2457"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9826,11 +9405,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2467"
-></A
 ><P
 ></P
+><A
+NAME="AEN2469"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9860,11 +9439,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2477"
-></A
 ><P
 ></P
+><A
+NAME="AEN2479"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9894,11 +9473,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2487"
-></A
 ><P
 ></P
+><A
+NAME="AEN2489"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9928,11 +9507,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2497"
-></A
 ><P
 ></P
+><A
+NAME="AEN2499"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9962,11 +9541,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2507"
-></A
 ><P
 ></P
+><A
+NAME="AEN2509"
+></A
 ><P
 ><CODE
 ><CODE
@@ -9996,11 +9575,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2517"
-></A
 ><P
 ></P
+><A
+NAME="AEN2519"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10107,9 +9686,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2544"
-></A
->String Functions</H2
+NAME="AEN2546"
+>String Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10117,11 +9696,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2549"
-></A
 ><P
 ></P
+><A
+NAME="AEN2551"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10151,11 +9730,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2559"
-></A
 ><P
 ></P
+><A
+NAME="AEN2561"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10185,11 +9764,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2569"
-></A
 ><P
 ></P
+><A
+NAME="AEN2571"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10219,11 +9798,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2579"
-></A
 ><P
 ></P
+><A
+NAME="AEN2581"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10253,11 +9832,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2589"
-></A
 ><P
 ></P
+><A
+NAME="AEN2591"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10293,11 +9872,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2600"
-></A
 ><P
 ></P
+><A
+NAME="AEN2602"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10333,11 +9912,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2611"
-></A
 ><P
 ></P
+><A
+NAME="AEN2613"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10389,11 +9968,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2625"
-></A
 ><P
 ></P
+><A
+NAME="AEN2627"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10445,11 +10024,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2639"
-></A
 ><P
 ></P
+><A
+NAME="AEN2641"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10479,11 +10058,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2649"
-></A
 ><P
 ></P
+><A
+NAME="AEN2651"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10525,11 +10104,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2661"
-></A
 ><P
 ></P
+><A
+NAME="AEN2663"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10571,11 +10150,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2673"
-></A
 ><P
 ></P
+><A
+NAME="AEN2675"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10605,11 +10184,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2683"
-></A
 ><P
 ></P
+><A
+NAME="AEN2685"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10645,11 +10224,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2694"
-></A
 ><P
 ></P
+><A
+NAME="AEN2696"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10682,11 +10261,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2705"
-></A
 ><P
 ></P
+><A
+NAME="AEN2707"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10719,11 +10298,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2716"
-></A
 ><P
 ></P
+><A
+NAME="AEN2718"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10756,11 +10335,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2727"
-></A
 ><P
 ></P
+><A
+NAME="AEN2729"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10793,11 +10372,11 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2738"
-></A
 ><P
 ></P
+><A
+NAME="AEN2740"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10827,11 +10406,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2748"
-></A
 ><P
 ></P
+><A
+NAME="AEN2750"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10861,11 +10440,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2758"
-></A
 ><P
 ></P
+><A
+NAME="AEN2760"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10895,11 +10474,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2768"
-></A
 ><P
 ></P
+><A
+NAME="AEN2770"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10935,11 +10514,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2779"
-></A
 ><P
 ></P
+><A
+NAME="AEN2781"
+></A
 ><P
 ><CODE
 ><CODE
@@ -10975,11 +10554,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2790"
-></A
 ><P
 ></P
+><A
+NAME="AEN2792"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11218,9 +10797,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2853"
-></A
->Output Mode Functions</H2
+NAME="AEN2855"
+>Output Mode Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -11228,11 +10807,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2858"
-></A
 ><P
 ></P
+><A
+NAME="AEN2860"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11257,11 +10836,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2867"
-></A
 ><P
 ></P
+><A
+NAME="AEN2869"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11297,11 +10876,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2878"
-></A
 ><P
 ></P
+><A
+NAME="AEN2880"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11331,11 +10910,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2888"
-></A
 ><P
 ></P
+><A
+NAME="AEN2890"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11360,11 +10939,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2897"
-></A
 ><P
 ></P
+><A
+NAME="AEN2899"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11394,11 +10973,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2907"
-></A
 ><P
 ></P
+><A
+NAME="AEN2909"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11434,11 +11013,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2918"
-></A
 ><P
 ></P
+><A
+NAME="AEN2920"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11463,11 +11042,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2927"
-></A
 ><P
 ></P
+><A
+NAME="AEN2929"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11492,11 +11071,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2936"
-></A
 ><P
 ></P
+><A
+NAME="AEN2938"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11521,11 +11100,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2945"
-></A
 ><P
 ></P
+><A
+NAME="AEN2947"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11550,11 +11129,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2954"
-></A
 ><P
 ></P
+><A
+NAME="AEN2956"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11590,11 +11169,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2965"
-></A
 ><P
 ></P
+><A
+NAME="AEN2967"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11619,11 +11198,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2974"
-></A
 ><P
 ></P
+><A
+NAME="AEN2976"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11653,11 +11232,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2984"
-></A
 ><P
 ></P
+><A
+NAME="AEN2986"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11692,11 +11271,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN2996"
-></A
 ><P
 ></P
+><A
+NAME="AEN2998"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11851,9 +11430,9 @@ CLASS="function"
 CLASS="function"
 >Copyfile</TT
 > copies the contents of a file to the report output file; its argument is a string whose value is
-the name of a file; if the file name is not absolute nor relative, then the <TT
+the name of a file; if the file name is not absolute nor relative, then the <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > environment
 variable, if set, will be used to search for the file; the file is opened and its contents copied to the report
 output file.
@@ -11890,9 +11469,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3044"
-></A
->Person Set Functions and GEDCOM Extraction</H2
+NAME="AEN3046"
+>Person Set Functions and GEDCOM Extraction</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -11900,11 +11479,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3049"
-></A
 ><P
 ></P
+><A
+NAME="AEN3051"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11934,11 +11513,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3059"
-></A
 ><P
 ></P
+><A
+NAME="AEN3061"
+></A
 ><P
 ><CODE
 ><CODE
@@ -11980,11 +11559,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3071"
-></A
 ><P
 ></P
+><A
+NAME="AEN3073"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12026,11 +11605,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3083"
-></A
 ><P
 ></P
+><A
+NAME="AEN3085"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12060,11 +11639,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3093"
-></A
 ><P
 ></P
+><A
+NAME="AEN3095"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12100,11 +11679,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3104"
-></A
 ><P
 ></P
+><A
+NAME="AEN3106"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12140,11 +11719,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3115"
-></A
 ><P
 ></P
+><A
+NAME="AEN3117"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12180,11 +11759,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3126"
-></A
 ><P
 ></P
+><A
+NAME="AEN3128"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12214,11 +11793,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3136"
-></A
 ><P
 ></P
+><A
+NAME="AEN3138"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12248,11 +11827,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3146"
-></A
 ><P
 ></P
+><A
+NAME="AEN3148"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12282,11 +11861,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3156"
-></A
 ><P
 ></P
+><A
+NAME="AEN3158"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12316,11 +11895,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3166"
-></A
 ><P
 ></P
+><A
+NAME="AEN3168"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12350,11 +11929,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3176"
-></A
 ><P
 ></P
+><A
+NAME="AEN3178"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12384,11 +11963,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3186"
-></A
 ><P
 ></P
+><A
+NAME="AEN3188"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12418,11 +11997,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3196"
-></A
 ><P
 ></P
+><A
+NAME="AEN3198"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12452,11 +12031,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3206"
-></A
 ><P
 ></P
+><A
+NAME="AEN3208"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12486,11 +12065,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3216"
-></A
 ><P
 ></P
+><A
+NAME="AEN3218"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12520,11 +12099,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3226"
-></A
 ><P
 ></P
+><A
+NAME="AEN3228"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12554,11 +12133,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3236"
-></A
 ><P
 ></P
+><A
+NAME="AEN3238"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12594,11 +12173,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3247"
-></A
 ><P
 ></P
+><A
+NAME="AEN3249"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12838,9 +12417,9 @@ auxiliary values.
 >&#13;<TT
 CLASS="function"
 >Genindiset</TT
-> generates the set of persons that matches a string whose value is a name in <SPAN
+> generates the set of persons that matches a string whose value is a name in <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 format. <TT
 CLASS="function"
@@ -12876,9 +12455,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3319"
-></A
->Record Update Functions</H2
+NAME="AEN3321"
+>Record Update Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -12886,11 +12465,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3324"
-></A
 ><P
 ></P
+><A
+NAME="AEN3326"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12926,11 +12505,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3335"
-></A
 ><P
 ></P
+><A
+NAME="AEN3337"
+></A
 ><P
 ><CODE
 ><CODE
@@ -12972,11 +12551,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3347"
-></A
 ><P
 ></P
+><A
+NAME="AEN3349"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13006,11 +12585,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3357"
-></A
 ><P
 ></P
+><A
+NAME="AEN3359"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13040,11 +12619,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3367"
-></A
 ><P
 ></P
+><A
+NAME="AEN3369"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13073,18 +12652,18 @@ CLASS="parameter"
 ></DL
 ></DIV
 ><P
->&#13;These functions allow you to modify an internal <SPAN
+>&#13;These functions allow you to modify an internal <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree.
 </P
 ><P
 >&#13;<TT
 CLASS="function"
 >Createnode</TT
-> creates a <SPAN
+> creates a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node; the two arguments are tag and value strings,
 respectively; the value string can be <SPAN
 CLASS="returnvalue"
@@ -13128,9 +12707,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3389"
-></A
->Record Linking Functions</H2
+NAME="AEN3391"
+>Record Linking Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -13138,11 +12717,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3394"
-></A
 ><P
 ></P
+><A
+NAME="AEN3396"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13172,11 +12751,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3404"
-></A
 ><P
 ></P
+><A
+NAME="AEN3406"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13206,11 +12785,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3414"
-></A
 ><P
 ></P
+><A
+NAME="AEN3416"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13265,9 +12844,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3428"
-></A
->Miscellaneous Functions</H2
+NAME="AEN3430"
+>Miscellaneous Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -13275,11 +12854,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3433"
-></A
 ><P
 ></P
+><A
+NAME="AEN3435"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13309,11 +12888,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3443"
-></A
 ><P
 ></P
+><A
+NAME="AEN3445"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13343,11 +12922,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3453"
-></A
 ><P
 ></P
+><A
+NAME="AEN3455"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13372,11 +12951,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3462"
-></A
 ><P
 ></P
+><A
+NAME="AEN3464"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13401,11 +12980,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3471"
-></A
 ><P
 ></P
+><A
+NAME="AEN3473"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13433,11 +13012,11 @@ CLASS="application"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3481"
-></A
 ><P
 ></P
+><A
+NAME="AEN3483"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13467,11 +13046,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3491"
-></A
 ><P
 ></P
+><A
+NAME="AEN3493"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13496,11 +13075,11 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3500"
-></A
 ><P
 ></P
+><A
+NAME="AEN3502"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13530,11 +13109,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3510"
-></A
 ><P
 ></P
+><A
+NAME="AEN3512"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13564,11 +13143,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3520"
-></A
 ><P
 ></P
+><A
+NAME="AEN3522"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13604,11 +13183,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3531"
-></A
 ><P
 ></P
+><A
+NAME="AEN3533"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13650,11 +13229,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3543"
-></A
 ><P
 ></P
+><A
+NAME="AEN3545"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13684,11 +13263,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3553"
-></A
 ><P
 ></P
+><A
+NAME="AEN3555"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13718,11 +13297,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3563"
-></A
 ><P
 ></P
+><A
+NAME="AEN3565"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13759,13 +13338,13 @@ CLASS="function"
 CLASS="function"
 >unlock</TT
 > are used to lock a
-person or family into <SPAN
+person or family into <ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 > memory, and to unlock a person or family
-from <SPAN
+from <ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 > memory, respectively.
 
 </P
@@ -13795,12 +13374,12 @@ CLASS="literal"
 CLASS="function"
 >System</TT
 > executes its string argument as a
-<SPAN
+<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
-> (or <SPAN
+>UNIX</ACRONYM
+> (or <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 > as appropriate) shell
 command, by invoking the system shell. This will not occur if the user has
 chosen to disallow report system calls (via the DenySystemCalls user option).
@@ -13882,9 +13461,9 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3603"
-></A
->Deprecated Functions</H2
+NAME="AEN3605"
+>Deprecated Functions</A
+></H2
 ><P
 >&#13;The functionality of the following three functions,
 <TT
@@ -13925,11 +13504,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3616"
-></A
 ><P
 ></P
+><A
+NAME="AEN3618"
+></A
 ><P
 ><CODE
 ><CODE
@@ -13970,11 +13549,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3628"
-></A
 ><P
 ></P
+><A
+NAME="AEN3630"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14015,11 +13594,11 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3640"
-></A
 ><P
 ></P
+><A
+NAME="AEN3642"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14059,9 +13638,9 @@ CLASS="replaceable"
 ></DL
 ></DIV
 ><P
->&#13;Three functions are available for to generate <SPAN
+>&#13;Three functions are available for to generate <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 format output to the report output file of all persons in the argument
 person set.  These functions do not in most cases generate consistent
@@ -14101,11 +13680,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3660"
-></A
 ><P
 ></P
+><A
+NAME="AEN3662"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14135,11 +13714,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3670"
-></A
 ><P
 ></P
+><A
+NAME="AEN3672"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14169,11 +13748,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3680"
-></A
 ><P
 ></P
+><A
+NAME="AEN3682"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14230,11 +13809,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3697"
-></A
 ><P
 ></P
+><A
+NAME="AEN3699"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14264,11 +13843,11 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3707"
-></A
 ><P
 ></P
+><A
+NAME="AEN3709"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14313,11 +13892,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3721"
-></A
 ><P
 ></P
+><A
+NAME="AEN3723"
+></A
 ><P
 ><CODE
 ><CODE
@@ -14373,11 +13952,11 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
-><A
-NAME="AEN3738"
-></A
 ><P
 ></P
+><A
+NAME="AEN3740"
+></A
 ><P
 ><CODE
 ><CODE

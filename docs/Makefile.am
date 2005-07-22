@@ -20,11 +20,12 @@ MANPAGES =   btedit.1 dbverify.1 llines.1
 OLDGENFILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt
 
 EXTRA_DIST = $(MANUALSSRC) $(MANUALS) $(MANPAGES)
+man1_MANS = $(MANPAGES)
 
 CONFIG_CLEAN_FILES = $(OLDGENFILES) $(MANUALS)
 
 docdir = $(datadir)/doc/lifelines
-doc_DATA = $(EXTRA_DIST)
+doc_DATA = $(MANUALSSRC) $(MANUALS) 
 dist_pkgdata_DATA = $(MANUALS)
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,8 +7,7 @@ LifeLines Documentation
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -27,11 +26,11 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Documentation</H1
+> Documentation</A
+></H1
 ><H2
 CLASS="subtitle"
 ><TT
@@ -80,9 +79,9 @@ CLASS="application"
 ><DT
 ><A
 HREF="#AEN175"
->INTRODUCTION TO <SPAN
+>INTRODUCTION TO <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 ></A
 ></DT
 ><DT
@@ -235,17 +234,17 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
-></A
->INTRODUCTION</H2
+>INTRODUCTION</A
+></H2
 ><P
 >&#13;
      <TT
 CLASS="application"
 >LifeLines</TT
 > is a genealogy program
-     that runs on <SPAN
+     that runs on <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > systems. It maintains
      genealogical records (persons, families, sources, events and
      others) in a database, and generates reports from those
@@ -268,9 +267,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > uses the terminal
-     independent features of <SPAN
+     independent features of <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > to provide a
      screen and menu based user interface.
 
@@ -387,21 +386,21 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN36"
-></A
->INSTALLATION</H2
+>INSTALLATION</A
+></H2
 ><P
 >&#13;You may be installing <TT
 CLASS="application"
 >LifeLines</TT
 >
 from a source distribution package or as an executable program
-already prepared for your <SPAN
+already prepared for your <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >
-(or <SPAN
+(or <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >) system. The
 source distribution comes with the readme, build script and
 make files necessary to build
@@ -482,20 +481,19 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN64"
-></A
 >STARTING <TT
 CLASS="application"
 >LIFELINES</TT
-> AND CREATING DATABASES</H2
+> AND CREATING DATABASES</A
+></H2
 ><P
 >&#13;
      You normally start <TT
 CLASS="application"
 >LifeLines</TT
 > with
-     the command: <TT
+     the command: <KBD
 CLASS="userinput"
-><B
 ><B
 CLASS="command"
 >lines</B
@@ -504,8 +502,7 @@ CLASS="replaceable"
 ><I
 >database</I
 ></TT
-></B
-></TT
+></KBD
 > where
      database is the name of a <TT
 CLASS="application"
@@ -572,9 +569,9 @@ CLASS="synopsis"
 >&#13;        <B
 CLASS="command"
 >lines</B
-> <TT
+> <CODE
 CLASS="option"
->[-acdfiklnortuwxzCFI]</TT
+>[-acdfiklnortuwxzCFI]</CODE
 ><TT
 CLASS="replaceable"
 ><I
@@ -595,11 +592,11 @@ CLASS="replaceable"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN89"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -609,221 +606,131 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-C</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Specify configuration file location (e.g.
 -C/home/bill/lifelines/.linesrc2 )</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-F</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Finnish option (only available if so compiled)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-I</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Specify a user property (e.g. -ILLEDITOR=gvim )
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-a</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >log dynamic memory operation (for debugging)</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-c</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >supply cache values (eg, -ci400,4000f400,4000 sets direct indi &#38; fam
 caches to 400, and indirect indi &#38; fam caches to 4000)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-d</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;debug mode (signal protection disabled for convenience with breakpoints)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-f</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;force open the database - use only in emergency
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-i</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;open database with immutable access (no protection against other
 access -- for use on read-only media)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-k</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;always show keys (normally keys are suppressed if REFN available)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-l</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lock (-ly) or unlock (-ln) a database for use with read only media
 (access to a locked database is treated as immutable)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-n</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;do not use traditional family rules
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-o</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Specify program output filename (eg, -o/tmp/mytests)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-r</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;open database with read-only access (protect against other
 writer access)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-t</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trace function calls in report programs (for debugging)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-u</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-w</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;open database with writeable access (protect against other
 writer or reader access)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-x</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;execute a single lifelines report program directly
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-z</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Use normal ASCII characters for drawing lines in user interface rather
 than the vt100 special characters.
 </TD
@@ -834,22 +741,22 @@ than the vt100 special characters.
 ></P
 ></DIV
 ><P
->&#13;the <TT
+>&#13;the <CODE
 CLASS="option"
->-o</TT
+>-o</CODE
 > option specifies the initial filename to use for
 output when running reports.  It only applies to reports run with the 
-<TT
+<CODE
 CLASS="option"
->-x</TT
+>-x</CODE
 > option.  This option has no effect on interactively run
 programs.
 </P
 ><P
 >&#13;
-     The <TT
+     The <CODE
 CLASS="option"
->-r</TT
+>-r</CODE
 > option opens the database with read-only
      access. When in this mode
      <TT
@@ -857,9 +764,9 @@ CLASS="application"
 >LifeLines</TT
 > will not let you modify
      the database; no other operations are affected. The
-     <TT
+     <CODE
 CLASS="option"
->-w</TT
+>-w</CODE
 > option opens the database with writeable
      access. If the database cannot be opened with the requested
      mode <TT
@@ -867,12 +774,12 @@ CLASS="application"
 >LifeLines</TT
 > quits
      immediately. When you open a database with neither the
-     <TT
+     <CODE
 CLASS="option"
->-r</TT
-> or <TT
+>-r</CODE
+> or <CODE
 CLASS="option"
->-w</TT
+>-w</CODE
 > options,
      <TT
 CLASS="application"
@@ -902,9 +809,9 @@ CLASS="application"
 >&#13;
      In rare situations the read/write mode mechanism can fail;
      when this happens a database may appear unopenable. If this
-     happens use the <TT
+     happens use the <CODE
 CLASS="option"
->-f</TT
+>-f</CODE
 > option to force open the
      database; this will open the database and reset the mode
      mechanism. This is a dangerous feature; you can use it to open
@@ -940,23 +847,23 @@ family you can see all the data.
 CLASS="application"
 >LifeLines</TT
 > will prompt you for
-     it. If you do not use the <TT
+     it. If you do not use the <CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > shell
      variable or user options (described later), the name you enter must be the
      name of a <TT
 CLASS="application"
 >LifeLines</TT
 > database
-     directory expressed using normal <SPAN
+     directory expressed using normal <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >
      absolute or relative path naming. If you do use the
-     <TT
+     <CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > variable,
      <TT
 CLASS="application"
@@ -988,10 +895,10 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN175"
-></A
->INTRODUCTION TO <SPAN
+>INTRODUCTION TO <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
+></A
 ></H2
 ><P
 >&#13;
@@ -999,13 +906,13 @@ CLASS="acronym"
 CLASS="application"
 >LifeLines</TT
 > records are stored in
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > format; you organize, edit and
-     maintain your data in this format. <SPAN
+     maintain your data in this format. <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
      is a standard that defines a file format for moving
      genealogical data between computer
@@ -1025,37 +932,37 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > is defined at two levels. At the
-     syntactic level <SPAN
+     syntactic level <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > is a simple set of
      rules for organizing and structuring data into records, with
      no concern about the types of records, types or formats of
      information in the records, or the relationships between
-     records. At the semantic level <SPAN
+     records. At the semantic level <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > adds
      an additional set of rules that specify what record types are
      allowed, how records must be structured, how data within the
      records must be identified and formatted, and what specific
      relationships between the record types are allowed. In
      principle there can be multiple semantic versions of
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >, though in practice there is only
-     one, lineage-linked <SPAN
+     one, lineage-linked <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >. Unfortunately
-     this semantic version of <SPAN
+     this semantic version of <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > is poorly
      defined, and every genealogical system has interpreted it in
      different ways.
@@ -1067,9 +974,9 @@ CLASS="acronym"
 CLASS="application"
 >LifeLines</TT
 > uses
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > primarily at the syntactic level,
      though it does impose a few of the generally accepted
      lineage-linked semantic restrictions. This means some
@@ -1088,9 +995,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > users. My recommendation
-     is to use <SPAN
+     is to use <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > lineage-linking
      conventions wherever possible.
 
@@ -1104,26 +1011,26 @@ CLASS="application"
      screens to guide you through entering or changing
      data. Instead you use a screen editor and directly edit the
      data records. This requires you to understand the
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > format, and be able to edit data in
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > format, before you can use
      <TT
 CLASS="application"
 >LifeLines</TT
 >. The
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > format is quite simple; this
      introduction will provide all you need to know about
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > in order to use
      <TT
 CLASS="application"
@@ -1133,9 +1040,9 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     Here is an example <SPAN
+     Here is an example <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > person record:
 
 <DIV
@@ -1147,9 +1054,9 @@ NAME="AEN207"
 ><B
 >Example 1. 
 
- <SPAN
+ <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > person record
 
 </B
@@ -1163,116 +1070,80 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;  0 @I25@ INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask /Wetmore/ Sr</B
-></TT
+>Thomas Trask /Wetmore/ Sr</KBD
 >
-  1 SEX <TT
+  1 SEX <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->13 March 1866</B
-></TT
+>13 March 1866</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->St. Mary's Bay, Digby, Nova Scotia</B
-></TT
+>St. Mary's Bay, Digby, Nova Scotia</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->Social Security application</B
-></TT
+>Social Security application</KBD
 >
   1 NATU
-    2 NAME <TT
+    2 NAME <KBD
 CLASS="userinput"
-><B
->Thomas T. Wetmore</B
-></TT
+>Thomas T. Wetmore</KBD
 >
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->26 October 1888</B
-></TT
+>26 October 1888</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Norwich, New London, Connecticut</B
-></TT
+>Norwich, New London, Connecticut</KBD
 >
-    2 AGE <TT
+    2 AGE <KBD
 CLASS="userinput"
-><B
->22 years</B
-></TT
+>22 years</KBD
 >
-    2 COUR <TT
+    2 COUR <KBD
 CLASS="userinput"
-><B
->New London County Court of Common Pleas</B
-></TT
+>New London County Court of Common Pleas</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->court record from National Archives</B
-></TT
+>court record from National Archives</KBD
 >
-  1 OCCU <TT
+  1 OCCU <KBD
 CLASS="userinput"
-><B
->Antiques Dealer</B
-></TT
+>Antiques Dealer</KBD
 >
   1 DEAT
-    2 NAME <TT
+    2 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask Wetmore</B
-></TT
+>Thomas Trask Wetmore</KBD
 >
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->17 February 1947</B
-></TT
+>17 February 1947</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 AGE <TT
+    2 AGE <KBD
 CLASS="userinput"
-><B
->80 years, 11 months, 4 days</B
-></TT
+>80 years, 11 months, 4 days</KBD
 >
-    2 CAUS <TT
+    2 CAUS <KBD
 CLASS="userinput"
-><B
->Heart Attack</B
-></TT
+>Heart Attack</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->New London Death Records</B
-></TT
+>New London Death Records</KBD
 >
   1 FAMC @F11@
   1 FAMS @F6@
@@ -1288,9 +1159,9 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-     A <SPAN
+     A <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > record is made up of lines. Each
      line has a level number and a tag, and most lines have a value
      following the tag. The first line in every record has a
@@ -1322,20 +1193,20 @@ CLASS="application"
 >
      databases: person, family, source and event. The first, 0
      level line in these records have tags
-     <SPAN
+     <CODE
 CLASS="structname"
->INDI</SPAN
->, <SPAN
+>INDI</CODE
+>, <CODE
 CLASS="structname"
->FAM</SPAN
+>FAM</CODE
 >,
-     <SPAN
+     <CODE
 CLASS="structname"
->SOUR</SPAN
+>SOUR</CODE
 > and
-     <SPAN
+     <CODE
 CLASS="structname"
->EVEN</SPAN
+>EVEN</CODE
 >, respectively. Besides these
      record types, you may create your own record types by using
      any other tag on the 0 level line of a record. The lines that
@@ -1353,9 +1224,9 @@ CLASS="application"
 ><P
 >&#13;
      The first line in the example record has the
-     <SPAN
+     <CODE
 CLASS="structname"
->INDI</SPAN
+>INDI</CODE
 > tag, identifying it as a
      person. The cross-reference index value, I25, can be used by
      other records to refer to this record.
@@ -1368,16 +1239,14 @@ CLASS="structname"
 CLASS="application"
 >LifeLines</TT
 >
-     database must have at least one <TT
+     database must have at least one <CODE
 CLASS="structfield"
-><I
 >1
-     NAME</I
-></TT
+     NAME</CODE
 > line, and its value must be in
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > name format. This format allows
      names to be as long as needed, but the surname, which may be
      placed anywhere in the name, must be separated from the rest
@@ -1403,23 +1272,17 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;1 NAME <TT
+>&#13;1 NAME <KBD
 CLASS="userinput"
-><B
->John/Smith</B
-></TT
+>John/Smith</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->John /Smith/</B
-></TT
+>John /Smith/</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->John/Smith/Jr.</B
-></TT
+>John/Smith/Jr.</KBD
 >
 </PRE
 ></TD
@@ -1457,23 +1320,17 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary//</B
-></TT
+>Mary//</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary/</B
-></TT
+>Mary/</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary</B
-></TT
+>Mary</KBD
 >
 </PRE
 ></TD
@@ -1488,12 +1345,10 @@ CLASS="userinput"
 CLASS="application"
 >LifeLines</TT
 >
-     person record may have any number of <TT
+     person record may have any number of <CODE
 CLASS="structfield"
-><I
 >1
-     NAME</I
-></TT
+     NAME</CODE
 > lines, though the person will be displayed
      with the first name value only. Persons are indexed under all
      their names, however, so you will be able to search for
@@ -1506,52 +1361,36 @@ CLASS="structfield"
 CLASS="application"
 >LifeLines</TT
 > doesn't require a
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 SEX</I
-></TT
+>1 SEX</CODE
 > line, but you should include
-     it. The value of the line should be <TT
+     it. The value of the line should be <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 >
-     or <TT
+     or <KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 > if the sex is known; it can be
-     left blank or set to <TT
+     left blank or set to <KBD
 CLASS="userinput"
-><B
->U</B
-></TT
+>U</KBD
 > or
-     <TT
+     <KBD
 CLASS="userinput"
-><B
->?</B
-></TT
+>?</KBD
 >, say, if not known. A person must
-     have a <TT
+     have a <CODE
 CLASS="structfield"
-><I
->1 SEX</I
-></TT
+>1 SEX</CODE
 > line with a value of
-     either <TT
+     either <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
-> or <TT
+>M</KBD
+> or <KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 >
      before he or she can be made a spouse or parent in a family.
 
@@ -1561,89 +1400,67 @@ CLASS="userinput"
      The example record also contains three events: birth,
      naturalization, and death. An event begins with a level 1 line
      whose tag indicates the event type. For example,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->BIRT</I
-></TT
+>BIRT</CODE
 > is the tag for a birth event.
 
 </P
 ><P
 >&#13;
-     Events usually have at least a <TT
+     Events usually have at least a <CODE
 CLASS="structfield"
-><I
 >2
-     DATE</I
-></TT
-> and a <TT
+     DATE</CODE
+> and a <CODE
 CLASS="structfield"
-><I
->2 PLAC</I
-></TT
+>2 PLAC</CODE
 >
-     line and often a <TT
+     line and often a <CODE
 CLASS="structfield"
-><I
->2 SOUR</I
-></TT
+>2 SOUR</CODE
 > line. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > and
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines give the date and place
      of the event. The value of a
      <TT
 CLASS="application"
 >LifeLines</TT
 >
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line is free format, though
      <TT
 CLASS="application"
 >LifeLines</TT
 > will try to parse it for
      specific day, month and year information. The value of a
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line is usually a
      comma-separated list of geopolitical units, starting with the
      most specific, ending with the most general. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > line indicates the source of
      information about the event. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > line can be the root of a full
      description of the source, or the value of the
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > line can be a cross-reference
      key that refers to the source record that describes the
      source.
@@ -1652,40 +1469,30 @@ CLASS="structfield"
 ><P
 >&#13;
      The naturalization event (with tag
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->NATU</I
-></TT
+>NATU</CODE
 >) shows a few other lines. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->2 NAME</I
-></TT
+>2 NAME</CODE
 > line gives the person's name
-     as recorded in the source (only <TT
+     as recorded in the source (only <CODE
 CLASS="structfield"
-><I
 >1
-     NAME</I
-></TT
-> lines must follow <SPAN
+     NAME</CODE
+> lines must follow <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
-     format). The <TT
+     format). The <CODE
 CLASS="structfield"
-><I
->2 AGE</I
-></TT
+>2 AGE</CODE
 > line gives the
-     person's age at the time of the event. The <TT
+     person's age at the time of the event. The <CODE
 CLASS="structfield"
-><I
 >2
-     COUR</I
-></TT
+     COUR</CODE
 > line indicates the court where
      naturalization occurred.
 
@@ -1693,36 +1500,28 @@ CLASS="structfield"
 ><P
 >&#13;
      The final event is a death event (tag
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->DEAT</I
-></TT
->). The <TT
+>DEAT</CODE
+>). The <CODE
 CLASS="structfield"
-><I
 >2
-     CAUS</I
-></TT
+     CAUS</CODE
 > line gives the cause of death.
 
 </P
 ><P
 >&#13;
      At the end of the record are three lines that refer to family
-     records. A <TT
+     records. A <CODE
 CLASS="structfield"
-><I
->1 FAMC</I
-></TT
+>1 FAMC</CODE
 > line refers to a
      family record that the person belongs to as a child; its value
      is the cross-reference index value of that family.  A
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 > line refers to a family
      record that the person belongs to as a spouse or parent.
 
@@ -1734,23 +1533,17 @@ CLASS="application"
 >LifeLines</TT
 > to edit a
      person, you will not be able to edit the cross reference
-     values on the <TT
+     values on the <CODE
 CLASS="structfield"
-><I
->0 INDI</I
-></TT
+>0 INDI</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 FAMC</I
-></TT
-> or <TT
+>1 FAMC</CODE
+> or <CODE
 CLASS="structfield"
-><I
 >1
-     FAMS</I
-></TT
+     FAMS</CODE
 > lines; these are maintained by
      <TT
 CLASS="application"
@@ -1786,23 +1579,17 @@ CLASS="programlisting"
   1 HUSB @I25@
   1 WIFE @I26@
   1 MARR
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->31 March 1891</B
-></TT
+>31 March 1891</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->New London Vital Records</B
-></TT
+>New London Vital Records</KBD
 >
   1 CHIL @I27@
   1 CHIL @I17@</PRE
@@ -1815,61 +1602,43 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-     The <TT
+     The <CODE
 CLASS="structfield"
-><I
->0 FAM</I
-></TT
+>0 FAM</CODE
 > line assigns the family
      the cross-reference index of F6. The record contains
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
-> and <TT
+>1 HUSB</CODE
+> and <CODE
 CLASS="structfield"
-><I
 >1
-     WIFE</I
-></TT
+     WIFE</CODE
 > lines that refer to the two
      spouses/parents. The record also holds a marriage event (tag
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->MARR</I
-></TT
->) and two <TT
+>MARR</CODE
+>) and two <CODE
 CLASS="structfield"
-><I
 >1
-     CHIL</I
-></TT
+     CHIL</CODE
 > lines that refer to two children in the
      family. When editing family records, you cannot edit the
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->0 FAM</I
-></TT
->, <TT
+>0 FAM</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-     HUSB</I
-></TT
->, <TT
+     HUSB</CODE
+>, <CODE
 CLASS="structfield"
-><I
->1 WIFE</I
-></TT
+>1 WIFE</CODE
 >, or
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 CHIL</I
-></TT
+>1 CHIL</CODE
 > lines; these are maintained
      by <TT
 CLASS="application"
@@ -1882,9 +1651,9 @@ CLASS="application"
      When you create new records for your database, you are free to
      invent tags and structure your data in any way you see
      fit. However, it is good practice to use standard
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > tags and value formats.
      <TT
 CLASS="application"
@@ -1895,108 +1664,80 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > requires that you use
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
-> and <TT
+>1 NAME</CODE
+> and <CODE
 CLASS="structfield"
-><I
 >1
-     SEX</I
-></TT
+     SEX</CODE
 > lines with their special meanings and value
      formats. Though not required,
      <TT
 CLASS="application"
 >LifeLines</TT
 > assumes that you will use
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 BIRT</I
-></TT
->, <TT
+>1 BIRT</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-     DEAT</I
-></TT
->, <TT
+     DEAT</CODE
+>, <CODE
 CLASS="structfield"
-><I
->1 CHR</I
-></TT
+>1 CHR</CODE
 >, and
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 BURI</I
-></TT
+>1 BURI</CODE
 > lines for birth, death,
      baptism and burial events, respectively. In family records,
      <TT
 CLASS="application"
 >LifeLines</TT
 > assumes you will use the
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 MARR</I
-></TT
+>1 MARR</CODE
 > event for marriage
      events. Within person records, you are not allowed to use
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->0 INDI</I
-></TT
->, <TT
+>0 INDI</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-     FAMC</I
-></TT
-> or <TT
+     FAMC</CODE
+> or <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 > lines,
      since these are used to maintain linkage information. Within
-     family records, you are not allowed to use <TT
+     family records, you are not allowed to use <CODE
 CLASS="structfield"
-><I
 >0
-     FAM</I
-></TT
->, <TT
+     FAM</CODE
+>, <CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
+>1 HUSB</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 WIFE</I
-></TT
-> or <TT
+>1 WIFE</CODE
+> or <CODE
 CLASS="structfield"
-><I
 >1
-     CHIL</I
-></TT
+     CHIL</CODE
 > lines.
 
 </P
 ><P
 >&#13;
      The indentation shown in the examples is not part of
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > format. When
      <TT
 CLASS="application"
@@ -2015,8 +1756,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN346"
-></A
->MAIN MENU</H2
+>MAIN MENU</A
+></H2
 ><P
 >&#13;
      After <TT
@@ -2072,9 +1813,9 @@ CLASS="screen"
      things as backup and restore. The handle source, event and
      other records operation gives you access to these three record
      types. The quit operation closes the database and returns to
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >.
 
 </P
@@ -2095,8 +1836,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN355"
-></A
->CODESET</H2
+>CODESET</A
+></H2
 ><P
 >&#13;
      After you have created a new database, and before you actually
@@ -2184,8 +1925,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN365"
-></A
->ENTERING THE FIRST PERSON</H2
+>ENTERING THE FIRST PERSON</A
+></H2
 ><P
 >&#13;
      Note: Before you add the first person to your database, you
@@ -2208,9 +1949,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > creates a
-     template of a <SPAN
+     template of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > person record, and
      puts you in a screen editor to edit the template. The default
      template is:
@@ -2267,30 +2008,22 @@ CLASS="replaceable"
 >&#13;
      Edit the template to create the new person's record. Change
      the name to the person's name. Assign the person's sex by
-     deleting either <TT
+     deleting either <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 > or
-     <TT
+     <KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 >. Fill out the birth and death events
      as best you can. If the person is alive, remove the death
-     event. Remove any <TT
+     event. Remove any <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > and
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines you do not have the
      information for.
 
@@ -2302,9 +2035,9 @@ CLASS="structfield"
      more birth or death events) and lines. Indentation makes it
      easier to read and edit the record, but isn't necessary. You
      may change the default edit template by defining the user
-     option <TT
+     option <CODE
 CLASS="option"
->INDIREC</TT
+>INDIREC</CODE
 > (described later).
 
 </P
@@ -2334,61 +2067,43 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask /Wetmore/ IV</B
-></TT
+>Thomas Trask /Wetmore/ IV</KBD
 >
-  1 SEX <TT
+  1 SEX <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->18 December 1949</B
-></TT
+>18 December 1949</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->Birth Certificate</B
-></TT
+>Birth Certificate</KBD
 >
-  1 OCCU <TT
+  1 OCCU <KBD
 CLASS="userinput"
-><B
->Software Engineer</B
-></TT
+>Software Engineer</KBD
 >
   1 RESI
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->1982 to 1995</B
-></TT
+>1982 to 1995</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Newburyport, Essex, Massachusetts</B
-></TT
+>Newburyport, Essex, Massachusetts</KBD
 >
-    2 ADDR <TT
+    2 ADDR <KBD
 CLASS="userinput"
-><B
->2 Barton Street, Newburyport, MA 01950</B
-></TT
+>2 Barton Street, Newburyport, MA 01950</KBD
 >
 
 ... lots of other events and facts
@@ -2403,23 +2118,17 @@ CLASS="userinput"
 ><P
 >&#13;
      When you edit a person record, don't add or modify
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->FAMC</I
-></TT
+>FAMC</CODE
 > or
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->FAMS</I
-></TT
+>FAMS</CODE
 >
      lines. <TT
 CLASS="application"
@@ -2472,8 +2181,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN409"
-></A
->SCREEN EDITORS AND ENVIRONMENT VARIABLES</H2
+>SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
+></H2
 ><P
 >&#13;
      With <TT
@@ -2490,37 +2199,35 @@ CLASS="application"
      <TT
 CLASS="application"
 >vi</TT
->. (The <SPAN
+>. (The <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >
      version defaults instead to notepad.exe.) This can be overridden by the
-     <TT
+     <CODE
 CLASS="envar"
->ED</TT
->, <TT
+>ED</CODE
+>, <CODE
 CLASS="envar"
->EDITOR</TT
+>EDITOR</CODE
 > or
-     <TT
+     <CODE
 CLASS="envar"
->LLEDITOR</TT
+>LLEDITOR</CODE
 > environment variables. For example, if
      you prefer the emacs screen editor, and if you use a bourne-compatible
      shell, you may add the line:
-     <TT
+     <KBD
 CLASS="userinput"
-><B
-><TT
+><CODE
 CLASS="envar"
->ED</TT
+>ED</CODE
 >=<TT
 CLASS="replaceable"
 ><I
 >emacs</I
 ></TT
-></B
-></TT
+></KBD
 >
      to your login profile file, and
      <TT
@@ -2540,30 +2247,30 @@ CLASS="application"
 >LifeLines</TT
 >
      specific environment variables. They are
-     <TT
+     <CODE
 CLASS="envar"
->LLDATABASES</TT
->, <TT
+>LLDATABASES</CODE
+>, <CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 >,
-     <TT
+     <CODE
 CLASS="envar"
->LLPROGRAMS</TT
-> and <TT
+>LLPROGRAMS</CODE
+> and <CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 >.
-     <TT
+     <CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > and
-     <TT
+     <CODE
 CLASS="envar"
->LLPROGRAMS</TT
-> are <SPAN
+>LLPROGRAMS</CODE
+> are <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > path
      list variables.  
 
@@ -2571,13 +2278,13 @@ CLASS="acronym"
 ><P
 >&#13;     There is also a configuration file, and
      entries in it may be used in lieu of environment variables.
-     It is ordinarily named .linesrc under <SPAN
+     It is ordinarily named .linesrc under <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >,
-     and lines.cfg under <SPAN
+     and lines.cfg under <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >.
      A sample configuration file should have been included
      in the distribution.
@@ -2588,9 +2295,9 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-     <TT
+     <CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > can be set to a list of directories
      that hold <TT
 CLASS="application"
@@ -2602,19 +2309,17 @@ CLASS="application"
 > program,
      these directories will be searched in turn for the database
      mentioned on the command line. For example,
-     <TT
+     <KBD
 CLASS="userinput"
-><B
-><TT
+><CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 >=<TT
 CLASS="replaceable"
 ><I
 >.:/home/ttw4/LifeLines/Databases</I
 ></TT
-></B
-></TT
+></KBD
 >
      indicates that databases should be searched for in the current
      directory first, and if not found there, then searched for in:
@@ -2631,9 +2336,9 @@ CLASS="application"
 >LifeLines</TT
 > database is
      implemented as a directory with specific contents. The
-     <TT
+     <CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > variable should be set to a list of
      directories that contain these database directories, not to a
      list of database directories themselves.
@@ -2641,9 +2346,9 @@ CLASS="envar"
 </P
 ><P
 >&#13;
-     The environment variable <TT
+     The environment variable <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > is used in
      the same way, but to specify the search path for
      <TT
@@ -2655,22 +2360,22 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     <TT
+     <CODE
 CLASS="envar"
->LLARCHIVES</TT
-> and <TT
+>LLARCHIVES</CODE
+> and <CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > can
      each be set to specify a single
-     directory. <TT
+     directory. <CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 > is used to select a
      directory where all database backup files will be stored, and
-     <TT
+     <CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > is used to select a directory where
      all generated reports and program outputs will be placed.
 
@@ -2700,9 +2405,9 @@ CLASS="application"
 >&#13;
      You may use the configuration file in
      lieu of environment variables. This is especially oriented towards
-     users on <SPAN
+     users on <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 > systems, on which
      environment variables are not as common a configuration technique.
 
@@ -2714,13 +2419,13 @@ CLASS="application"
 >LifeLines</TT
 > uses the curses library
      for terminal independent I/O. This requires you to specify
-     your terminal type with the <TT
+     your terminal type with the <CODE
 CLASS="envar"
->TERM</TT
+>TERM</CODE
 > environment
-     variable. (This is not relevant in the <SPAN
+     variable. (This is not relevant in the <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >
      version.)
 
@@ -2732,8 +2437,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN465"
-></A
->BASICS OF BROWSING</H2
+>BASICS OF BROWSING</A
+></H2
 ><P
 >&#13;
      You will use the browsing screens of
@@ -2803,8 +2508,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN476"
-></A
->IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
+>IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
+></H2
 ><P
 >&#13;
      To enter the browsing modes from the main menu strike
@@ -2987,8 +2692,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN502"
-></A
->ZIP IDENTIFYING A NEW PERSON</H2
+>ZIP IDENTIFYING A NEW PERSON</A
+></H2
 ><P
 >&#13;
      Some <TT
@@ -3096,8 +2801,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN517"
-></A
->BROWSE DISPLAY BASICS</H2
+>BROWSE DISPLAY BASICS</A
+></H2
 ><P
 >&#13;
      The screen display for each browsing screen is made up of
@@ -3114,8 +2819,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN520"
-></A
->PERSON BROWSE SCREEN</H2
+>PERSON BROWSE SCREEN</A
+></H2
 ><P
 >&#13;
      After you identify a person to browse to,
@@ -3726,8 +3431,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN689"
-></A
->LIST BROWSE SCREEN</H2
+>LIST BROWSE SCREEN</A
+></H2
 ><P
 >&#13;
      This browse screen handles lists of persons. The top panel shows
@@ -4056,8 +3761,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN777"
-></A
->FAMILY BROWSE SCREEN</H2
+>FAMILY BROWSE SCREEN</A
+></H2
 ><P
 >&#13;
      This browse screen displays information about a family. The top
@@ -4468,8 +4173,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN887"
-></A
->TANDEM PERSON BROWSE MODE</H2
+>TANDEM PERSON BROWSE MODE</A
+></H2
 ><P
 >&#13;
      The tandem person browse screen displays information about two
@@ -4779,8 +4484,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN974"
-></A
->TANDEM FAMILY BROWSE MODE</H2
+>TANDEM FAMILY BROWSE MODE</A
+></H2
 ><P
 >&#13;
 The tandem family browse screen displays information about two families. Its main use it to support the
@@ -5139,8 +4844,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1082"
-></A
->PEDIGREE BROWSE MODE</H2
+>PEDIGREE BROWSE MODE</A
+></H2
 ><P
 >&#13;
 The pedigree browse screen displays a four-generation pedigree for the current person. The top panel
@@ -5370,8 +5075,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1145"
-></A
->SEARCH MENU</H2
+>SEARCH MENU</A
+></H2
 ><P
 >&#13;If you choose Search database from the main menu, <TT
 CLASS="application"
@@ -5458,19 +5163,19 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN1157"
-></A
->Search Patterns</H3
+>Search Patterns</A
+></H3
 ><P
 >&#13;The pattern supplied to the search commands is used to match against
 the names in the database.  The following characters have special meaning
 when used in a pattern:
 <DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN1160"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -5480,36 +5185,21 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >?</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Matches any single character</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >*</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Matches zero or more occurrences of any character
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >SUB</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;a control Z (^Z) is similar to '*', this matches zero
 or more occurences of any characters other than '.'.
 (of course you probably can't type this on unix)
@@ -5517,13 +5207,8 @@ or more occurences of any characters other than '.'.
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >[ab]</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;A set of characters enclosed in square brackets
 matches the single characters listed between the
 brackets.  If the dash '-' character is to be included,
@@ -5534,13 +5219,8 @@ it must be preceded by a quote '`'.
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >[a-z]</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Matches a single character in the range 'a' to 'z'.
 Ranges and sets may be combined within the same set of
 brackets.
@@ -5548,13 +5228,8 @@ brackets.
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >!R</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Matches a single character not in the range 'R'.
 If range 'R' includes the dash '-' character, the dash
 must immediately follow the '!'.
@@ -5562,26 +5237,16 @@ must immediately follow the '!'.
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >!</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Makes the following pattern match
 any string except those what it would normally match.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >QUOTE</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;(On DOS this is `, on UNIX it is \)
 Makes the next character a regular (nonspecial)
 character.
@@ -5618,11 +5283,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;1 NAME <TT
+>&#13;1 NAME <KBD
 CLASS="userinput"
-><B
->John /Smith/</B
-></TT
+>John /Smith/</KBD
 >
 </PRE
 ></TD
@@ -5695,8 +5358,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1197"
-></A
->ADD OPERATION</H2
+>ADD OPERATION</A
+></H2
 ><P
 >&#13;
 If you choose the add operation from the main menu, <TT
@@ -5742,8 +5405,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1204"
-></A
->DELETE OPERATION</H2
+>DELETE OPERATION</A
+></H2
 ><P
 >&#13;
 If you choose the delete operation at the main menu, <TT
@@ -5806,8 +5469,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1214"
-></A
->CODESET CONVERSION</H2
+>CODESET CONVERSION</A
+></H2
 ><P
 >&#13;
      (This section was previously entitled CHARACTER TRANSLATION.)
@@ -5998,32 +5661,32 @@ CLASS="glosslist"
 ></DD
 ><DT
 ><B
-><SPAN
+><ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > to internal</B
 ></DT
 ><DD
 ><P
->&#13;when reading <SPAN
+>&#13;when reading <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > input records and writing them to 
 database
 </P
 ></DD
 ><DT
 ><B
->internal to <SPAN
+>internal to <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 ></B
 ></DT
 ><DD
 ><P
->&#13;when writing internal database records to external <SPAN
+>&#13;when writing internal database records to external <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file
 </P
 ></DD
@@ -6074,9 +5737,9 @@ CLASS="replaceable"
 ></TR
 ></TABLE
 >
-where a tab separates the patterns. Each pattern is an arbitrary sequence of verbatim <SPAN
+where a tab separates the patterns. Each pattern is an arbitrary sequence of verbatim <ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 > characters
 and escape sequences. Translation occurs by finding all occurrences that match left patterns and
 replacing them with the corresponding right patterns.
@@ -6225,8 +5888,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1315"
-></A
->MISCELLANEOUS UTILITIES</H2
+>MISCELLANEOUS UTILITIES</A
+></H2
 ><P
 >&#13;
 If you choose the miscellaneous utilities operation,
@@ -6280,17 +5943,17 @@ This command saves the complete <TT
 CLASS="application"
 >LifeLines</TT
 > database in a
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file. All person, family, event, source and user-defined records are stored. This command
 may be used to periodically back up your database. When you use this command, <TT
 CLASS="application"
 >LifeLines</TT
 > asks you
-for the name of the file. If you have defined the <TT
+for the name of the file. If you have defined the <CODE
 CLASS="envar"
->LLARCHIVE</TT
+>LLARCHIVE</CODE
 > shell variable, <TT
 CLASS="application"
 >LifeLines</TT
@@ -6313,26 +5976,26 @@ CLASS="action"
 ><P
 >&#13;
 This command allows you restore a complete database from a
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file. When you select this command, <TT
 CLASS="application"
 >LifeLines</TT
-> asks you for the name of the <SPAN
+> asks you for the name of the <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file.
-This command can also be used to import data from a <SPAN
+This command can also be used to import data from a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file to an existing database. When
 <TT
 CLASS="application"
 >LifeLines</TT
-> performs this command, it first reads the entire <SPAN
+> performs this command, it first reads the entire <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > file and checks it for validity.
 If there are problems in the file, <TT
 CLASS="application"
@@ -6488,11 +6151,9 @@ When <TT
 CLASS="application"
 >LifeLines</TT
 > constructs lists of persons for you to select from, it looks up the last component of
-certain <TT
+certain <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines in this file, and if it finds that component, replaces it with its abbreviation.
 
 </P
@@ -6654,8 +6315,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1413"
-></A
->IMPORT ERRORS</H2
+>IMPORT ERRORS</A
+></H2
 ><P
 >&#13;Errors generated during a GEDCOM import are logged to a file, by default named errs.log. 
 </P
@@ -6765,8 +6426,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1449"
-></A
->HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
+>HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
+></H2
 ><P
 >&#13;
      <TT
@@ -6993,26 +6654,20 @@ CLASS="replaceable"
 </P
 ><P
 >&#13;
-     Do not change the <TT
+     Do not change the <CODE
 CLASS="structfield"
-><I
->0 SOUR</I
-></TT
+>0 SOUR</CODE
 >
      line. Otherwise you may edit this record any way you like. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > line is a special line you
      can use to give the source a symbolic name that can be used in
      other records to refer to the source record. See the section
-     on using <TT
+     on using <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > values. Because many
      sources have a title and an author, the default template has
      these lines. You may adjust the source template via the
@@ -7041,54 +6696,38 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 SOUR
-  1 REFN <TT
+  1 REFN <KBD
 CLASS="userinput"
-><B
->jcw</B
-></TT
+>jcw</KBD
 >
-  1 TITL <TT
+  1 TITL <KBD
 CLASS="userinput"
-><B
->The Wetmore Family of America, and its Collateral Branches: with</B
-></TT
+>The Wetmore Family of America, and its Collateral Branches: with</KBD
 >
-    2 CONT <TT
+    2 CONT <KBD
 CLASS="userinput"
-><B
->Genealogical, Biographical, and Historical Notices</B
-></TT
+>Genealogical, Biographical, and Historical Notices</KBD
 >
-  1 AUTH <TT
+  1 AUTH <KBD
 CLASS="userinput"
-><B
->James Carnahan Wetmore</B
-></TT
+>James Carnahan Wetmore</KBD
 >
   1 PUBL
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->1861</B
-></TT
+>1861</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Albany, New York</B
-></TT
+>Albany, New York</KBD
 >
-    2 INST <TT
+    2 INST <KBD
 CLASS="userinput"
-><B
->Munsell and Rowland</B
-></TT
+>Munsell and Rowland</KBD
 >
-    2 ADDR <TT
+    2 ADDR <KBD
 CLASS="userinput"
-><B
->78 State Street</B
-></TT
+>78 State Street</KBD
 ></PRE
 ></TD
 ></TR
@@ -7205,11 +6844,9 @@ enter key or refn:
 </P
 ><P
 >&#13;
-Identify a source by entering its key value, with or without the leading S, or by entering its <TT
+Identify a source by entering its key value, with or without the leading S, or by entering its <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >
 value. <TT
 CLASS="application"
@@ -7273,37 +6910,31 @@ CLASS="programlisting"
 </P
 ><P
 >&#13;
-     Do not change the <TT
+     Do not change the <CODE
 CLASS="structfield"
-><I
->0 EVEN</I
-></TT
+>0 EVEN</CODE
 >
      line. Otherwise you may edit this record any way you like. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > line allows you to give this
      event a symbolic name you can use when you want to refer to
      this event from other records. See the section on using
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > values. The default template
      suggests that an event has a date, a place, and refers to
      persons in roles with respect to the event. There is far less
-     experience with event-based <SPAN
+     experience with event-based <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > than
      there is with simple person and family
-     <SPAN
+     <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >. You may even be wondering why you
      would need event records when you can simply tuck events away
      in person and family records. This is a topic that may get
@@ -7421,11 +7052,9 @@ enter key or refn:
 >&#13;
      You identify a event by entering its key value, with or
      without the leading E, or by entering its
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >
      value. <TT
 CLASS="application"
@@ -7486,52 +7115,38 @@ CLASS="replaceable"
 ></TT
 > with the tag string
      you select for the type of the new record. You are free to
-     choose any tag value except <TT
+     choose any tag value except <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->FAM</I
-></TT
+>FAM</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > and
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->EVEN</I
-></TT
+>EVEN</CODE
 >. For example, if you keep
      record information about the ships that your North American
      immigrant ancestors arrived on, you would keep records about
      those ships in your database; the tag
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->SHIP</I
-></TT
+>SHIP</CODE
 > suggests itself for such
-     records. The <TT
+     records. The <CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > line allows you
      to give this record a symbolic name you can use when you want
      to refer to it from other records. See the section on using
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > values. You may adjust the
      other template via the OTHR user option (either at the database
      level, via the user options, or globally, via the configuration
@@ -7650,11 +7265,9 @@ enter key or refn:
 >&#13;
      You identify a record by entering its key value, with or
      without the leading X, or by entering its
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >
      value. <TT
 CLASS="application"
@@ -7745,8 +7358,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1614"
-></A
->FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
+>FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
+></H2
 ><P
 >&#13;
      <TT
@@ -7819,8 +7432,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1623"
-></A
->LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
+>LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
+></H2
 ><P
 >&#13;
      Records in a <TT
@@ -7834,35 +7447,25 @@ CLASS="application"
 >LifeLines</TT
 > through operations found
      in the browsing mode menus.  These references are the links
-     from a person to families (<TT
+     from a person to families (<CODE
 CLASS="structfield"
-><I
->1 FAMC</I
-></TT
+>1 FAMC</CODE
 >
-     and <TT
+     and <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 >), and the links from a
-     family to persons (<TT
+     family to persons (<CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
+>1 HUSB</CODE
 >,
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->1 WIFE</I
-></TT
-> and <TT
+>1 WIFE</CODE
+> and <CODE
 CLASS="structfield"
-><I
 >1
-     CHIL</I
-></TT
+     CHIL</CODE
 >). Because
      <TT
 CLASS="application"
@@ -7870,19 +7473,15 @@ CLASS="application"
 > maintains these links you
      are not allowed to change these lines when you are editing
      records. There are a couple of seeming exceptions to this
-     rule. For example, you may change the order of <TT
+     rule. For example, you may change the order of <CODE
 CLASS="structfield"
-><I
 >1
-     CHIL</I
-></TT
+     CHIL</CODE
 > lines in a family record in order to change
      the order of children in a family, and you may change the
-     order of <TT
+     order of <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 > lines in a person
      record to change the order of families the person was a spouse
      or parent in. These operations are allowed because they don't
@@ -7923,45 +7522,33 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
 0 @I23@ INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas/Whitmore/</B
-></TT
+>Thomas/Whitmore/</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->about 1615</B
-></TT
+>about 1615</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->England</B
-></TT
+>England</KBD
 >
     2 SOUR @S3@
 ...
 0 @S3@ SOUR
-  1 REFN <TT
+  1 REFN <KBD
 CLASS="userinput"
-><B
->cat</B
-></TT
+>cat</KBD
 >
-  1 TITL <TT
+  1 TITL <KBD
 CLASS="userinput"
-><B
->New England Marriages Prior to 1700</B
-></TT
+>New England Marriages Prior to 1700</KBD
 >
-  1 AUTH <TT
+  1 AUTH <KBD
 CLASS="userinput"
-><B
->Clarence Almon Torrey</B
-></TT
+>Clarence Almon Torrey</KBD
 >
 ...</PRE
 ></TD
@@ -7973,11 +7560,9 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-The <TT
+The <CODE
 CLASS="structfield"
-><I
->2 SOUR</I
-></TT
+>2 SOUR</CODE
 > <TT
 CLASS="replaceable"
 ><I
@@ -8007,19 +7592,15 @@ CLASS="application"
 >LifeLines</TT
 > allows you to assign a
      permanent user-defined key to any record in the database using
-     the <TT
+     the <CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > line. The value of this
      line is a string that you choose as your permanent key value
      for the record. When adding a link to a record that has a user
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > key value, you may use that
      value instead of the internal key value. For example, when
      adding the person in the previous example you could edit the
@@ -8046,30 +7627,22 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas/Whitmore/</B
-></TT
+>Thomas/Whitmore/</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->about 1615</B
-></TT
+>about 1615</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->England</B
-></TT
+>England</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->&#60;cat&#62;</B
-></TT
+>&#60;cat&#62;</KBD
 ></PRE
 ></TD
 ></TR
@@ -8081,28 +7654,22 @@ CLASS="userinput"
 ><P
 >&#13;
      Instead of using the actual key value of the source, S3, the
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > value cat was used. The
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > value must be enclosed by
      angle brackets when used this
      way. <TT
 CLASS="application"
 >LifeLines</TT
 > automatically
-     replaces the <TT
+     replaces the <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > link with the
      proper internal key value when the record is stored in the
      database.
@@ -8111,25 +7678,19 @@ CLASS="structfield"
 </P
 ><P
 >&#13;
-     The <TT
+     The <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > value may also be used
      when searching for person, source, event and user-defined
      records.  You should not add more than one
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > line to a record, and every
-     <TT
+     <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 > value should be unique.
 
 </P
@@ -8140,8 +7701,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1672"
-></A
->System and User Properties</H2
+>System and User Properties</A
+></H2
 ><P
 >&#13;There are a number of properties that can be specified to customize
 the behavior of <TT
@@ -8165,9 +7726,9 @@ CLASS="application"
 > configuration files are look for 
 first in the directory specified by the HOME environment variable, assuming
 that it is set, and then in the current directory.  The name of the 
-configuration file is .linesrc on <SPAN
+configuration file is .linesrc on <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > or linux systems 
 and lines.cfg on windows systems.
 
@@ -8276,9 +7837,9 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > is the search path for
 <TT
 CLASS="application"
@@ -8293,9 +7854,9 @@ other programs.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > is used to select a directory where
 all generated reports and program outputs will be placed.
 </P
@@ -8306,9 +7867,9 @@ all generated reports and program outputs will be placed.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 > is used to select a
 directory where all database backup files will be stored
 </P
@@ -8319,9 +7880,9 @@ directory where all database backup files will be stored
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > is a list of
 directories that contain database directories used to locate
 database directories themselves
@@ -8333,9 +7894,9 @@ database directories themselves
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLNEWDBDIR</TT
+>LLNEWDBDIR</CODE
 > a single directory where new databases
 specified without paths will be created.
 This is a convenience for users

@@ -1,3 +1,13 @@
+2005-07-22 Stephen Dum
+	* ChangeLog docs/Makefile.am docs/ll-reportmanual.html 
+	docs/ll-reportmanual.pdf docs/ll-reportmanual.sv.html 
+	docs/ll-reportmanual.sv.xml docs/ll-reportmanual.txt 
+	docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+	src/gedlib/remove.c 
+
+	Move installed man page location to man/man1.  Update
+	ll-reportmanual.sv.xml to use dtd 4.2.  Release formatted docs.
+
 2005-07-21 Perry Rapp
 
 	* ChangeLog configure.in po/LINGUAS
