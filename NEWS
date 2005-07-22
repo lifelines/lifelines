@@ -7,6 +7,17 @@ New features added in 3.0.47 (beta)
  - Adjustable indent (GedcomDisplayIndent) in pedigree (sf#1224300)
  - Confirm message before switching spouses or children (sf#1094751)
  - Enter key works in database list (sf#1227607 bug)
+ - Esperanto translation
+
+Bug fixes in 3.0.47 (beta)
+============================
+ - ASSERT crash trying to delete family (sf#1242080 bug)
+
+Changes for 3.0.46.1 (stable)
+============================
+ - Updated Swedish translation.
+ - Fixed German translation
+ - Improved INSTALL doc
 
 New features added in 3.0.46 (beta)
 ============================

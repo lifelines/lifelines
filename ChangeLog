@@ -5,6 +5,11 @@
 
 	New Esperanto translation from Dave Eaton.
 
+	* ChangeLog NEWS
+
+	Update NEWS file with Esperanto translation and also
+	3.0.46.1 branch notes.
+
 2005-07-20 Perry Rapp
 
 	* ChangeLog src/liflines/delete.c
