@@ -22,7 +22,7 @@
 /* alphabetical */
 static void check_node(NODE node, NODE parent, INT level, CNSTRING key, CNSTRING scope);
 static void check_node_recursively(NODE node, NODE parent, INT level, CNSTRING key, CNSTRING scope);
-static void failreport(CNSTRING msg, INT level, CNSTRING key);
+static void failreport(CNSTRING msg, INT level, CNSTRING key, CNSTRING scope);
 
 /*********************************************
  * local variables
@@ -81,11 +81,11 @@ static void
 check_node (NODE node, NODE parent, INT level, CNSTRING key, CNSTRING scope)
 {
 	if (nparent(node) != parent) {
-		failreport("bad parent link", level, key);
+		failreport("bad parent link", level, key, scope);
 	}
 	if (parent) {
 		if (node->n_cel != parent->n_cel) {
-			failreport("bad cel", level, key);
+			failreport("bad cel", level, key, scope);
 		}
 	}
 }
@@ -93,9 +93,9 @@ check_node (NODE node, NODE parent, INT level, CNSTRING key, CNSTRING scope)
  * failreport -- Report fatal error via FATAL
  *============================================*/
 static void
-failreport (CNSTRING msg, INT level, CNSTRING key)
+failreport (CNSTRING msg, INT level, CNSTRING key, CNSTRING scope)
 {
 	char buffer[512];
-	snprintf(buffer, 512, "(%s level %d) %s", key, level, msg);
+	snprintf(buffer, 512, "(%s:%s level %d) %s", scope, key, level, msg);
 	FATAL2(buffer);
 }

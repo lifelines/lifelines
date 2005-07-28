@@ -9,6 +9,10 @@
 
 	Add nodechk.c to Makefile.am.
 
+	* ChangeLog src/gedlib/nodechk.c
+
+	Pass scope (caller name) through to FATAL message.
+
 2005-07-27 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
