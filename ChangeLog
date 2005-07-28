@@ -1,10 +1,16 @@
+2005-07-28 Perry Rapp
+
+      * ChangeLog
+      *NEW src/gedlib/nodechk.c
+
+	Add new nodechk.c source file which was missed yesterday.
+
 2005-07-27 Perry Rapp
 
       * ChangeLog build/msvc6/llines/llinesprj.dsp
       build/msvc6/llexec/llexec.dsp
       src/gedlib/init.c src/gedlib/nodeio.c
       src/hdrs/gedcom.h
-      *NEW src/gedlib/nodechk.c
 
       New function to sanity check node tree, and new option ("nodecheck")
       to enable node checking.
