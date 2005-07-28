@@ -1,19 +1,23 @@
 2005-07-28 Perry Rapp
 
-      * ChangeLog
-      *NEW src/gedlib/nodechk.c
+	* ChangeLog
+	*NEW src/gedlib/nodechk.c
 
 	Add new nodechk.c source file which was missed yesterday.
 
+	* ChangeLog src/gedlib/Makefile.am
+
+	Add nodechk.c to Makefile.am.
+
 2005-07-27 Perry Rapp
 
-      * ChangeLog build/msvc6/llines/llinesprj.dsp
-      build/msvc6/llexec/llexec.dsp
-      src/gedlib/init.c src/gedlib/nodeio.c
-      src/hdrs/gedcom.h
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	build/msvc6/llexec/llexec.dsp
+	src/gedlib/init.c src/gedlib/nodeio.c
+	src/hdrs/gedcom.h
 
-      New function to sanity check node tree, and new option ("nodecheck")
-      to enable node checking.
+	New function to sanity check node tree, and new option ("nodecheck")
+	to enable node checking.
 
 2005-07-22 Stephen Dum
 	* ChangeLog docs/Makefile.am docs/ll-reportmanual.html 
