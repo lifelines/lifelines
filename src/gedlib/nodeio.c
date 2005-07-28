@@ -274,6 +274,7 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	STRING *pmsg,  BOOLEAN *peof)
 {
 	STRING unitype = check_file_for_unicode(fp);
+	NODE node=0;
 	if (unitype && !eqstr(unitype, "UTF-8")) {
 		char msg[120];
 		llstrncpyf(msg, sizeof(msg), uu8, _(qSunsupuniv), unitype);
@@ -281,7 +282,9 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 		*pmsg = _(qSunsupunix);
 		return NULL;
 	}
-	return do_first_fp_to_node(fp, list, ttm, pmsg, peof);
+	node = do_first_fp_to_node(fp, list, ttm, pmsg, peof);
+	nodechk(node, "convert_first_fp_to_node");
+	return node;
 }
 /*================================================================
  * do_first_fp_to_node -- Convert first GEDCOM record in file to tree
@@ -502,8 +505,10 @@ string_to_node (STRING str)
 			goto string_to_node_fail;
 		}
 	}
-	if (!msg)
+	if (!msg) {
+		nodechk(root, "string_to_node");
 		return root;
+	}
 string_to_node_fail:
 	free_nodes(root);
 	return NULL;

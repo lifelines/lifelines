@@ -537,6 +537,10 @@ INT fam_to_wife(RECORD frec, RECORD * prec);
 NODE fam_to_wife_node(NODE);
 NODE next_node_it_ptr(NODE_ITER nodeit);
 
+/* nodechk.c */
+void nodechk(NODE node, CNSTRING scope);
+void nodechk_enable(BOOLEAN enable);
+
 /* nodeio.c */
 STRING node_to_string(NODE);
 NODE string_to_node(STRING);

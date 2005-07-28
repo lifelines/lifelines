@@ -667,6 +667,8 @@ update_useropts (VPTR uparm)
 	transl_load_xlats();
 
 	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
+
+	nodechk_enable(!!getoptint("nodecheck", 0));
 }
 /*==================================================
  * update_db_options -- 
