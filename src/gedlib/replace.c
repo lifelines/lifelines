@@ -60,6 +60,7 @@ replace_indi (NODE indi1, NODE indi2)
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2);
+	nodechk(indi1, "replace_indi");
 
 	/* Write data to database */
 

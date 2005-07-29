@@ -67,6 +67,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
+	nodechk(indi1, "edit_indi");
 	write_indi_to_file_for_edit(indi1, editfile, rfmt);
 
 /* Have user edit file */
