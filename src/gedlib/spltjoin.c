@@ -33,6 +33,15 @@
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "cache.h"
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void fix_cel(NODE root);
+static void fix_children(NODE root);
 
 /*======================================
  * split_indi -- Split person into parts
@@ -165,9 +174,11 @@ join_indi (NODE indi,
 			nchild(indi) = fams;
 	}
 	/* fix parenthood of all children of indi */
-	for (node = nchild(indi); node; node = nsibling(node)) {
-		nparent(node) = indi;
-	}
+	fix_children(indi);
+	/* fix cache pointers of entire node tree */
+	fix_cel(indi);
+	/* validate entire node tree (if nodechecking on) */
+	nodechk(indi, "join_indi");
 }
 /*=======================================
  * split_fam -- Split a family into parts
@@ -284,9 +295,11 @@ join_fam (NODE fam, NODE refn, NODE husb, NODE wife, NODE chil, NODE rest)
 			nchild(fam) = chil;
 	}
 	/* fix parenthood of all children of fam */
-	for (node = nchild(fam); node; node = nsibling(node)) {
-		nparent(node) = fam;
-	}
+	fix_children(fam);
+	/* fix cache pointers of entire node tree */
+	fix_cel(fam);
+	/* validate entire node tree (if nodechecking on) */
+	nodechk(fam, "join_fam");
 }
 /*=======================================
  * split_othr -- Split a misc node tree into parts
@@ -403,4 +416,23 @@ normalize_fam (NODE fam)
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	ASSERT(eqstr(ntag(fam), "FAM"));
 	join_fam(fam, fref, husb, wife, chil, rest);
+}
+/*=======================================
+ * fix_children -- Set parent pointers of all immediate children
+ *=====================================*/
+static void
+fix_children (NODE root)
+{
+	NODE node=0;
+	for (node = nchild(root); node; node = nsibling(node)) {
+		nparent(node) = root;
+	}
+}
+/*=======================================
+ * fix_cel -- Set cel of all descendants to agree with root
+ *=====================================*/
+static void
+fix_cel (NODE root)
+{
+	set_all_nodetree_to_root_cel(root);
 }

@@ -8,6 +8,13 @@
 
 	Fix parenthood of first level children in join_indi & join_fam.
 
+	* ChangeLog  src/gedlib/keytonod.c src/gedlib/replace.c
+	src/gedlib/splitjoin.c src/hdrs/cache.h
+
+	New functions fix_children & fix_cel in spltjoin.c.
+	New function set_all_nodetree_to_root_cel in keytonod.c.
+	Call nodechk from end of join_indi and end of join_fam.
+
 2005-07-28 Perry Rapp
 
 	* ChangeLog

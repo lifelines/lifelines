@@ -1439,3 +1439,11 @@ cel_remove_record (CACHEEL cel, RECORD rec)
 		crecord(cel) = 0;
 	}
 }
+/*=======================================================
+ * set_all_nodetree_to_root_cel -- Propagate cel from root to all descendants
+ *=====================================================*/
+void
+set_all_nodetree_to_root_cel (NODE root)
+{
+	set_all_nodetree_to_cel(root, root->n_cel);
+}

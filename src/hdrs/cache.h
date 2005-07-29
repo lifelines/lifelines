@@ -63,4 +63,6 @@ void unlock_record_from_cache(RECORD rec);
 CNSTRING cacheel_to_key(CACHEEL cel);
 NODE cacheel_to_node(CACHEEL cel);
 
+void set_all_nodetree_to_root_cel(NODE root);
+
 #endif /* _CACHE_H */
