@@ -4,6 +4,10 @@
 
 	More nodechk calls, for sanity checking in-memory node tree.
 
+	* ChangeLog src/gedlib/spltjoin.c
+
+	Fix parenthood of first level children in join_indi & join_fam.
+
 2005-07-28 Perry Rapp
 
 	* ChangeLog

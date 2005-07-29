@@ -164,6 +164,10 @@ join_indi (NODE indi,
 		else
 			nchild(indi) = fams;
 	}
+	/* fix parenthood of all children of indi */
+	for (node = nchild(indi); node; node = nsibling(node)) {
+		nparent(node) = indi;
+	}
 }
 /*=======================================
  * split_fam -- Split a family into parts
@@ -278,6 +282,10 @@ join_fam (NODE fam, NODE refn, NODE husb, NODE wife, NODE chil, NODE rest)
 			nsibling(node) = chil;
 		else
 			nchild(fam) = chil;
+	}
+	/* fix parenthood of all children of fam */
+	for (node = nchild(fam); node; node = nsibling(node)) {
+		nparent(node) = fam;
 	}
 }
 /*=======================================
