@@ -1,3 +1,10 @@
+2005-07-30 Perry Rapp
+
+	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/fr.po po/it.po
+	po/nl.po po/pl.po po/rw.po po/sv.po src/liflines/menuset.c
+
+	Cosmetic typo: Remove spurious extra space in "Clash  with longer hotkey"
+
 2005-07-29 Perry Rapp
 
 	* ChangeLog src/gedlib/replace.c src/liflines/edit.c

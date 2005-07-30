@@ -3689,7 +3689,7 @@ msgstr "Dubleret hurtignøgle for post: %s"
 
 #: src/liflines/menuset.c:247
 #, fuzzy, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Sammenstød med længere hurtignøgle i post: %s"
 
 #: src/liflines/menuset.c:255

@@ -3627,7 +3627,7 @@ msgstr "Raccourci en double pour entrée : %s"
 
 #: src/liflines/menuset.c:247
 #, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Collision avec raccourci plus long dans : %s"
 
 #: src/liflines/menuset.c:255

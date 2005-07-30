@@ -3627,7 +3627,7 @@ msgstr "Zduplikowany klawisz dla elementu: %s"
 
 #: src/liflines/menuset.c:247
 #, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Konflikt z d³u¿szym klawiszem w elemencie: %s"
 
 #: src/liflines/menuset.c:255

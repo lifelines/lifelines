@@ -4221,7 +4221,7 @@ msgstr "kugirango Ikintu"
 
 #: src/liflines/menuset.c:247
 #, fuzzy, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Na: in Ikintu"
 
 #: src/liflines/menuset.c:255

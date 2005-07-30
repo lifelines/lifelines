@@ -244,7 +244,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 				crashlog(_("Duplicate hotkey for item: %s")
 					, display);
 			} else {
-				crashlog(_("Clash  with longer hotkey in item: %s")
+				crashlog(_("Clash with longer hotkey in item: %s")
 					, display);
 				
 			}

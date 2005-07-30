@@ -3601,7 +3601,7 @@ msgstr "Multoble difinita klavkomando por ero: %s"
 
 #: src/liflines/menuset.c:247
 #, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Konflikto kun pli longa klavkomando en ero: %s"
 
 #: src/liflines/menuset.c:255

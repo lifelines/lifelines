@@ -3660,7 +3660,7 @@ msgstr "Buchstabe 2fach vergeben: %s"
 
 #: src/liflines/menuset.c:247
 #, c-format
-msgid "Clash  with longer hotkey in item: %s"
+msgid "Clash with longer hotkey in item: %s"
 msgstr "Buchstabe doppelt vergeben: %s"
 
 #: src/liflines/menuset.c:255
