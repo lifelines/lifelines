@@ -56,8 +56,8 @@ void do_edit(void);
 /* msg boxes */
 BOOLEAN ask_yes_or_no(STRING ttl);
 BOOLEAN ask_yes_or_no_msg(STRING msg, STRING ttl);
-BOOLEAN ask_for_string(STRING ttl, STRING prmpt, STRING buffer, INT buflen);
-BOOLEAN ask_for_string2(STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen);
+BOOLEAN ask_for_string(CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen);
+BOOLEAN ask_for_string2(CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen);
 
 /* called by interp when finished */
 void refresh_stdout(void);

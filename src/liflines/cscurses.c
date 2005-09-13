@@ -45,7 +45,7 @@ disp_to_int (ZSTR zstr)
  * Created: 2002/12/13 (Perry Rapp)
  *==========================*/
 int
-mvccuwaddstr (UIWINDOW uiw, int y, int x, char *cp)
+mvccuwaddstr (UIWINDOW uiw, int y, int x, const char *cp)
 {
 	return mvccwaddnstr(uiw_win(uiw), y, x, cp, uiw_cols(uiw));
 }
@@ -55,7 +55,7 @@ mvccuwaddstr (UIWINDOW uiw, int y, int x, char *cp)
  * TODO: Convert all calls of this to call mvccuwaddstr (or mvccwaddnstr) !
  *==========================*/
 int
-mvccwaddstr (WINDOW *wp, int y, int x, char *cp)
+mvccwaddstr (WINDOW *wp, int y, int x, const char *cp)
 {
 	ZSTR zstr = zs_news(cp);
 	int rtn;
@@ -69,7 +69,7 @@ mvccwaddstr (WINDOW *wp, int y, int x, char *cp)
  * Created: 2002/12/13 (Perry Rapp)
   *==========================*/
 int
-mvccwaddnstr (WINDOW *wp, int y, int x, char *cp, int n)
+mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 {
 	ZSTR zstr = zs_news(cp);
 	int rtn;
@@ -104,7 +104,7 @@ mvccwprintw (WINDOW *wp, int y, int x, ...)
  * Created: 2002/12/03 (Perry Rapp)
  *==========================*/
 int
-vccwprintw (WINDOW *wp, char *fmt, va_list args)
+vccwprintw (WINDOW *wp, const char *fmt, va_list args)
 {
 	ZSTR zstr = zs_newvf(fmt, args);
 	int rtn;
@@ -118,7 +118,7 @@ vccwprintw (WINDOW *wp, char *fmt, va_list args)
  * Created: 2002/12/03 (Perry Rapp)
  *==========================*/
 int
-vccprintf (char *fmt, va_list args)
+vccprintf (const char *fmt, va_list args)
 {
 	int rtn;
 	ZSTR zstr = zs_newvf(fmt, args);
@@ -136,7 +136,7 @@ wgetccnstr (WINDOW *wp, char *cp, int n)
 {
 	ZSTR zstr=0;
 /* TODO: Need Win32-specific code here to handle Unicode input on NT family */
-	int rtn = wgetnstr(wp, cp, n);
+	int rtn = wgetnstr(wp, (char *)cp, n);
 	zstr = zs_news(cp);
 	disp_to_int(zstr);
 	llstrsets(cp, n, uu8, zs_str(zstr));

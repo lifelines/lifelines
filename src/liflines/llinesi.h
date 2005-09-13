@@ -35,7 +35,7 @@ void advanced_family_edit(NODE);
 
 /* ask.c */
 RECORD ask_for_any(STRING ttl, CONFIRMQ, ASK1Q);
-INDISEQ ask_for_indiseq(STRING ttl, char ctype, INT *prc);
+INDISEQ ask_for_indiseq(CNSTRING ttl, char ctype, INT *prc);
 
 /* browse.c */
 RECORD choose_any_event(void);

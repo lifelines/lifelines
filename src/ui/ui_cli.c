@@ -152,7 +152,7 @@ ask_for_program (STRING mode,
 	return FALSE;
 }
 BOOLEAN
-ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
+ask_for_string (CNSTRING ttl, CNSTRING prmpt, CNSTRING buffer, INT buflen)
 {
 	outputln(ttl);
 	printf(prmpt);
@@ -161,18 +161,18 @@ ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
 	return strlen(buffer)>0;
 }
 BOOLEAN
-ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen)
+ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen)
 {
 	outputln(ttl1);
 	return ask_for_string(ttl2, prmpt, buffer, buflen);
 }
 INT
-ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
+ask_for_char (CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
 {
 	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
 }
 INT
-ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
+ask_for_char_msg (CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
 {
 	INT rv;
 	if (msg) outputln(msg);
@@ -194,7 +194,7 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 	return yes_no_value(c);
 }
 BOOLEAN
-ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
 {
 	basedir = basedir;	/* NOTUSED */
 	return ask_for_string(ttl, prmpt, buffer, buflen);

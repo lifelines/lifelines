@@ -13,10 +13,10 @@
 void disp_to_int(ZSTR zstr);
 void int_to_disp(ZSTR zstr);
 
-int mvccuwaddstr(UIWINDOW uiw, int y, int x, char *cp);
-int mvccwaddnstr(WINDOW *wp, int y, int x, char *cp, int n);
-int mvccwaddstr(WINDOW *wp, int y, int x, char *cp);
+int mvccuwaddstr(UIWINDOW uiw, int y, int x, const char *cp);
+int mvccwaddnstr(WINDOW *wp, int y, int x, const char *cp, int n);
+int mvccwaddstr(WINDOW *wp, int y, int x, const char *cp);
 int mvccwprintw(WINDOW *wp, int y, int x, ...);
-int vccprintf(char *fmt, va_list args);
-int vccwprintw(WINDOW *wp, char *fmt, va_list args);
+int vccprintf(const char *fmt, va_list args);
+int vccwprintw(WINDOW *wp, const char *fmt, va_list args);
 int wgetccnstr(WINDOW *wp, char *cp, int n);

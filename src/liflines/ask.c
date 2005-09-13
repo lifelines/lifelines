@@ -288,7 +288,7 @@ ask_for_output_file (STRING mode,
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 INDISEQ
-ask_for_indiseq (STRING ttl, char ctype, INT *prc)
+ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
 {
 	INDISEQ seq;
 	char name[MAXPATHLEN];

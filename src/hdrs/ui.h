@@ -33,16 +33,15 @@
 #include "feedback.h"
 
 /* Prototypes */
-INT ask_for_char(STRING ttl, STRING prmpt, STRING ptrn);
-INT ask_for_char_msg(STRING msg, STRING ttl, STRING prmpt, STRING ptrn);
-BOOLEAN ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen);
+INT ask_for_char(CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn);
+INT ask_for_char_msg(CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn);
+BOOLEAN ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen);
 BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_program (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext, BOOLEAN picklist);
-BOOLEAN ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen);
-BOOLEAN ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen);
-BOOLEAN ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen);
+BOOLEAN ask_for_string (CNSTRING ttl, CNSTRING prmpt, CNSTRING buffer, INT buflen);
+BOOLEAN ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_yes_or_no (STRING ttl);
 BOOLEAN ask_yes_or_no_msg (STRING msg, STRING ttl);
 void call_system_cmd (STRING cmd);

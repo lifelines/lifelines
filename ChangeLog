@@ -1,3 +1,11 @@
+2005-09-13, Perry
+
+	* ChangeLog src/hdrs/cscurses.h src/hdrs/feedback.h src/hdrs/screen.h
+	src/hdrs/ui.h src/liflines/ask.c src/liflines/cscurses.c
+	src/liflines/llinesi.h src/liflines/screen.c src/ui/ui_cli.c
+
+	const fix for ask_for_indiseq & ask_for_db_filename (& cascade)
+
 2005-07-30 Perry Rapp
 
 	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/fr.po po/it.po

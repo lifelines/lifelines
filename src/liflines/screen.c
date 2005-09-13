@@ -974,7 +974,7 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
 BOOLEAN
-ask_for_db_filename (STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
 {
 	basedir=basedir; /* unused */
 	/* This could have a list of existing ones like askprogram.c */
@@ -1050,7 +1050,7 @@ refresh_main (void)
  *  buflen:  [IN]  max size of response
  *====================================*/
 BOOLEAN
-ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
+ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1075,7 +1075,7 @@ ask_for_string (STRING ttl, STRING prmpt, STRING buffer, INT buflen)
  *  buflen:  [IN]  max size of response
  *====================================*/
 BOOLEAN
-ask_for_string2 (STRING ttl1, STRING ttl2, STRING prmpt, STRING buffer, INT buflen)
+ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);

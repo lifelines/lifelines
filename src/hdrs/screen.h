@@ -139,7 +139,7 @@ void adjust_browse_menu_cols(INT delta);
 void adjust_browse_menu_height(INT delta);
 INT ask_for_char(STRING, STRING, STRING);
 INT ask_for_char_msg(STRING, STRING, STRING, STRING);
-BOOLEAN ask_for_db_filename(STRING ttl, STRING prmpt, STRING basedir, STRING buffer, INT buflen);
+BOOLEAN ask_for_db_filename(CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen);
 INT aux_browse(RECORD rec, INT mode, BOOLEAN reuse);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
