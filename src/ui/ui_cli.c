@@ -42,9 +42,9 @@ extern INT screen_width;
 /*********************************************
  * local function prototypes
  *********************************************/
-static void outputln (const char * txt);
-static void output (const char * txt);
-static INT interact (STRING ptrn);
+static void outputln(const char * txt);
+static void output(const char * txt);
+static INT interact(CNSTRING ptrn);
 
 /*=============================================================
  * Xprintf() implementations
@@ -152,7 +152,7 @@ ask_for_program (STRING mode,
 	return FALSE;
 }
 BOOLEAN
-ask_for_string (CNSTRING ttl, CNSTRING prmpt, CNSTRING buffer, INT buflen)
+ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
 {
 	outputln(ttl);
 	printf(prmpt);
@@ -369,10 +369,10 @@ output (const char * txt)
 	printf(txt);
 }
 static INT
-interact (STRING ptrn)
+interact (CNSTRING ptrn)
 {
 	char buffer[8];
-	STRING t;
+	CNSTRING t=0;
 	while (1) {
 		fgets(buffer, sizeof(buffer), stdin);
 		if (!ptrn) return buffer[0];

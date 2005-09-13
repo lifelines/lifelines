@@ -6,6 +6,10 @@
 
 	const fix for ask_for_indiseq & ask_for_db_filename (& cascade)
 
+	* ChangeLog src\hdrs\ui.h src\liflines\llexec.h src\ui\ui_cli.c
+
+	some llexec ramifications of const fix
+
 2005-07-30 Perry Rapp
 
 	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/fr.po po/it.po

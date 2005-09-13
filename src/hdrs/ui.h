@@ -40,7 +40,7 @@ BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt, STRING buff
 BOOLEAN ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_program (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext, BOOLEAN picklist);
-BOOLEAN ask_for_string (CNSTRING ttl, CNSTRING prmpt, CNSTRING buffer, INT buflen);
+BOOLEAN ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_yes_or_no (STRING ttl);
 BOOLEAN ask_yes_or_no_msg (STRING msg, STRING ttl);
