@@ -1,3 +1,9 @@
+2005-09-14, Perry
+
+	* ChangeLog src/liflines/cscurses.c
+
+	Cosmetic: Add explanatory comments to existing TODO items (for UTF-8 GUI).
+
 2005-09-13, Perry
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/feedback.h src/hdrs/screen.h
