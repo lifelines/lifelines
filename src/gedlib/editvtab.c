@@ -102,7 +102,6 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 	static char fullerr[78]; /* TODO -- fix static usage */
 	STRING ptr;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	endwin();
 
 	do_edit();
 	while (TRUE) {

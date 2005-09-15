@@ -6,6 +6,11 @@
 	duplicating new declaration "HEAPINFO hi;". This has been
 	broken since heapused.c v1.3, 2000-11-09.
 
+	* ChangeLog src/gedlib/editvtab.c
+
+	Remove unneeded endwin call (right before calling do_edit,
+	which calls endwin first).
+
 2005-09-14, Perry
 
 	* ChangeLog src/liflines/cscurses.c
