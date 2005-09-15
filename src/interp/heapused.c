@@ -66,7 +66,6 @@ __heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 #if defined(WORKING_HEAPUSED)
 	HEAPINFO hi;
-	struct heapinfo hi;
 	long heapused;
 	long heapfree;
 	long heapcnt;
