@@ -30,7 +30,6 @@
  *===========================================================*/
 
 #include "sys_inc.h"
-#include <curses.h>
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -64,8 +63,6 @@ TODO
 BOOLEAN
 edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
 {
-	endwin();
-
 	unlink(editfile);
 
 	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
