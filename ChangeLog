@@ -10,6 +10,10 @@
 
 	New script to create win32 binary directory for distribution.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+
+	Fix msvc6 project for dbverify by adding file nodechk.c
+
 2005-09-15, Perry
 
 	* ChangeLog src/interp/heapused.c
