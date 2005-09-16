@@ -871,7 +871,6 @@ extract_date (STRING str)
 	struct tag_nums nums = { {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0} };
 	GDATEVAL gdv = create_gdateval();
 	struct tag_gdate * pdate = &gdv->date1;
-	BOOLEAN newdate;
 	if (!str)
 		return gdv;
 	set_date_string(str);
@@ -912,11 +911,14 @@ extract_date (STRING str)
 			mark_freeform(gdv);
 			continue;
 		case WORD_TOK:
-			analyze_word(gdv, pdate, &nums, dnum.val, &newdate);
-			if (newdate) {
-				analyze_numbers(gdv, pdate, &nums);
-				clear_numbers(&nums);
-				pdate = &gdv->date2;
+			{
+				BOOLEAN newdate=FALSE;
+				analyze_word(gdv, pdate, &nums, dnum.val, &newdate);
+				if (newdate) {
+					analyze_numbers(gdv, pdate, &nums);
+					clear_numbers(&nums);
+					pdate = &gdv->date2;
+				}
 			}
 			continue;
 		case ICONS_TOK:

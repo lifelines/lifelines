@@ -16,6 +16,10 @@
 	Remove unneeded endwin call (before edit_valtab_impl, which 
 	calls do_edit, which calls endwin). Remove curses include.
 
+	* ChangeLog src/gedlib/date.c
+
+	Cosmetic: scope newdate to use, in extract_date.
+
 2005-09-14, Perry
 
 	* ChangeLog src/liflines/cscurses.c
