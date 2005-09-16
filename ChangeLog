@@ -22,6 +22,10 @@
 
 	Add esperanto to list of languages.
 
+	* ChangeLog NEWS
+
+	Update NEWS (new day & month formats)
+
 2005-09-15, Perry
 
 	* ChangeLog src/interp/heapused.c

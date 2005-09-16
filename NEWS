@@ -8,6 +8,7 @@ New features added in 3.0.47 (beta)
  - Confirm message before switching spouses or children (sf#1094751)
  - Enter key works in database list (sf#1227607 bug)
  - Esperanto translation
+ - New day format & month format 21 (produces "00" if missing)
 
 Bug fixes in 3.0.47 (beta)
 ============================
