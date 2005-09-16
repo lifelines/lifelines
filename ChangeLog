@@ -14,6 +14,10 @@
 
 	Fix msvc6 project for dbverify by adding file nodechk.c
 
+	* ChangeLog build/msvc6/releaseScript/create_lifelines_release.vbs
+
+	Finish win32 package script.
+
 2005-09-15, Perry
 
 	* ChangeLog src/interp/heapused.c

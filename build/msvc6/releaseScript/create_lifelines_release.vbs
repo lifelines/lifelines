@@ -9,12 +9,19 @@
 
 Option Explicit
 
+'Globals
+Dim noisy
+Dim test
+
 Call Main
 
 Sub Main
 
   Dim fso
   Set fso = CreateObject("Scripting.FileSystemObject")
+
+  noisy = IsArgTrue(WScript.Arguments.Named("noisy"), "noisy")
+  test = IsArgTrue(WScript.Arguments.Named("test"), "test")
 
   ' We require a cygwin installation to have compiled a release tarball
 
@@ -40,35 +47,24 @@ Sub Main
     Exit Sub
   End If
 
-  If Not CheckRequiredFolder(fso, Win32LifelinesRoot, "Win32 lifelines cvs source") Then
-    Exit Sub
-  End If
+  Call CheckRequiredFolder(fso, Win32LifelinesRoot, "Win32 lifelines cvs source")
 
   Dim Win32binariesFolder
   Win32binariesFolder = fso.GetParentFolderName(Win32LifelinesRoot) + "\bin"
-  If Not CheckRequiredFolder(fso, Win32binariesFolder, "Win32 lifelines binaries folder root") Then
-    Exit Sub
-  End If
-  If Not CheckRequiredFile(fso, Win32binariesFolder + "\dbverify\release\dbverify.exe", "Win32 dbverify binary") Then
-    Exit Sub
-  End If
-  If Not CheckRequiredFolder(fso, Win32binariesFolder + "\llines\release", "Win32 llines binaries folder") Then
-    Exit Sub
-  End If
-  If Not CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\iconv.dll", "Win32 iconv binary") Then
-    Exit Sub
-  End If
-  If Not CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\libintl.dll", "Win32 gettext binary") Then
-    Exit Sub
-  End If
-  If Not CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\localcharset.dll", "Win32 localcharset binary") Then
-    Exit Sub
-  End If
+  Call CheckRequiredFolder(fso, Win32binariesFolder, "Win32 lifelines binaries folder root")
+  Call CheckRequiredFolder(fso, Win32binariesFolder + "\llines\release", "Win32 llines binaries folder")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\Lines.exe", "Win32 Lines binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\llexec.exe", "Win32 llexec binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\dbverify\release\dbverify.exe", "Win32 dbverify binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\btedit\release\btedit.exe", "Win32 dbverify binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\iconv.dll", "Win32 iconv binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\libintl.dll", "Win32 gettext binary")
+  Call CheckRequiredFile(fso, Win32binariesFolder + "\llines\release\localcharset.dll", "Win32 localcharset binary")
 
-  Dim release
-  release = InputBox("New release version")
+  Dim releaseNum
+  releaseNum = InputBox("New release version")
 
-  If Len(release)<3 Then
+  If Len(releaseNum)<3 Then
     Output "Aborting"
     Exit Sub
   End If
@@ -85,7 +81,7 @@ Sub Main
   End If
 
   Dim releaseName
-  releaseName = "lifelines-" & release
+  releaseName = "lifelines-" & releaseNum
 
   Dim tarball
   tarball = releaseName + ".tar.gz"
@@ -98,12 +94,20 @@ Sub Main
     Exit Sub
   End If
 
+  Dim SevenZipPath
+  SevenZipPath = Get7zipPath()
+  If Len(SevenZipPath)=0 Then
+    Fail "7-Zip Path not found in registry"
+    Exit Sub
+  End If
+
+
   Dim root
-  root = release
+  root = releaseNum
 
   If fso.FolderExists(root) Then
     Dim msg, rtn
-	msg = "Directory " & release & " already exists. Delete & recreate?"
+	msg = "Directory " & root & " already exists. Delete & recreate?"
     rtn = MsgBox(msg, MB_YESNO, "Release Already Exists")
 	If rtn = IDYES Then
 	  fso.DeleteFolder(root)
@@ -121,58 +125,77 @@ Sub Main
   root1 = root + "\" + releaseName & "-1.bin.win32"
   root2 = root + "\" + releaseName & "-1.bin.win32.exe_only"
 
-  CreateReleaseFolders fso, root1
-  CreateReleaseFolders fso, root2
+  CreateReleaseFolders fso, root1, False
+  CreateReleaseFolders fso, root2, True
 
   root1 = root1 + "\lifelines"
   root2 = root2 + "\lifelines"
 
+  NoisyMsg "Copying binaries"
   CopyExes fso, Win32binariesFolder, root1
   CopyExes fso, Win32binariesFolder, root2
 
+  NoisyMsg "Copying languages"
   CopyLangs fso, CygwinLifelinesRoot, langs, root1
   CopyLangs fso, CygwinLifelinesRoot, langs, root2
 
+  ' Extract distribution tarball (to copy docs & reports)
+
+  Extract SevenZipPath, root + "\" + tarball, root + "\" + releaseName
+  Dim tarfile
+  tarfile = root + "\" + releaseName + "\" + releaseName + ".tar"
+  Extract SevenZipPath, tarfile, root
+  fso.DeleteFile tarfile
+
+  NoisyMsg "Copying text files"
+  CopyTextFiles fso, root + "\" + releaseName, root1, False
+  CopyTextFiles fso, root + "\" + releaseName, root2, True
+  
   ' TODO:
-  '  Docs
-  '  reports
   '  config & readmes in root
 
+
+  Set fso = Nothing
 End Sub
 
+' Return path of installed 7-Zip, or empty string if not found
+Function Get7zipPath
+  Dim OShell
+  Set OShell = CreateObject("WScript.Shell")
+  Get7zipPath = OShell.RegRead("HKLM\Software\7-Zip\Path")
+  Set OShell = Nothing
+End Function
+
 ' Create all folders down through direct children of lifelines folder
-Sub CreateReleaseFolders(fso, rootFolder)
+Sub CreateReleaseFolders(fso, rootFolder, minimal)
   fso.CreateFolder rootFolder
   fso.CreateFolder rootFolder + "\lifelines"
+  fso.CreateFolder rootFolder + "\lifelines\locale"
+  If minimal = True Then Exit Sub
   fso.CreateFolder rootFolder + "\lifelines\Archives"
   fso.CreateFolder rootFolder + "\lifelines\Databases"
   fso.CreateFolder rootFolder + "\lifelines\Docs"
-  fso.CreateFolder rootFolder + "\lifelines\locale"
   fso.CreateFolder rootFolder + "\lifelines\Outputs"
   fso.CreateFolder rootFolder + "\lifelines\Programs"
   fso.CreateFolder rootFolder + "\lifelines\tt"
 End Sub
 
 
-' If specified folder does not exist, do msgbox & return false
-Function CheckRequiredFolder(fso, folder, folderDesc)
-  If fso.FolderExists(folder) Then
-    CheckRequiredFolder = True
-  Else
+' If specified folder does not exist, do msgbox & quit
+Sub CheckRequiredFolder(fso, folder, folderDesc)
+  If Not fso.FolderExists(folder) Then
     Fail "Required " + folderDesc + " does not exist: " + folder
-    CheckRequiredFolder = False
+    WScript.Quit(1)
   End If
-End Function
+End Sub
 
-' If specified folder does not exist, do msgbox & return false
-Function CheckRequiredFile(fso, file, fileDesc)
-  If fso.FileExists(file) Then
-    CheckRequiredFile = True
-  Else
+' If specified folder does not exist, do msgbox & quit
+Sub CheckRequiredFile(fso, file, fileDesc)
+  If Not fso.FileExists(file) Then
     Fail "Required " + fileDesc + " does not exist: " + file
-    CheckRequiredFile = False
+    WScript.Quit(1)
   End If
-End Function
+End Sub
 
 ' Dimension & populate array of language codes
 ' (for languages in which lifelines had translation)
@@ -213,7 +236,6 @@ Sub CopyLangs(fso, CygwinLifelinesRoot, langs, outputFolder)
   Dim i
   Dim target
   target = outputFolder + "\locale"
-  fso.CreateFolder target
   For i=0 To UBound(langs,1)
     Dim gmofile
     gmofile = CygwinLifelinesRoot + "\po\" + langs(i) + ".gmo"
@@ -231,9 +253,36 @@ End Sub
 Sub CopyExes(fso, Win32binariesFolder, outputFolder)
   Dim target
   target = outputFolder + "\"
-  fso.CopyFile Win32binariesFolder + "\dbverify\release\dbverify.exe", target
   fso.CopyFile Win32binariesFolder + "\llines\release\Lines.exe", target
-  fso.CopyFile Win32binariesFolder + "\dbverify\release\llexec.exe", target
+  fso.CopyFile Win32binariesFolder + "\llines\release\llexec.exe", target
+  fso.CopyFile Win32binariesFolder + "\dbverify\release\dbverify.exe", target
+  fso.CopyFile Win32binariesFolder + "\btedit\release\btedit.exe", target
+
+  fso.CopyFile Win32binariesFolder + "\llines\release\iconv.dll", target
+  fso.CopyFile Win32binariesFolder + "\llines\release\libintl.dll", target
+  fso.CopyFile Win32binariesFolder + "\llines\release\localcharset.dll", target
+End Sub
+
+' 7-Zip extraction of archive
+Sub Extract(SevenZipPath, archive, workingpath)
+  Dim exe7z
+  exe7z = Quote(SevenZipPath + "\7z.exe")
+  Dim cmd
+  cmd = exe7z & " x " & archive
+  cmd = cmd & " -y -o" & workingpath
+  RunCmd cmd
+End Sub
+
+' Copy docs & reports
+Sub CopyTextFiles(fso, DistRoot, TargetRoot, minimal)
+  fso.CopyFile DistRoot + "\NEWS", TargetRoot + "\"
+  If minimal = True Then Exit Sub
+  fso.CopyFile DistRoot + "\README", TargetRoot + "\"
+  fso.CopyFile DistRoot + "\LICENSE", TargetRoot + "\"
+  fso.CopyFile DistRoot + "\COPYING", TargetRoot + "\"
+  fso.CopyFolder DistRoot + "\docs", TargetRoot + "\Docs"
+  fso.CopyFolder DistRoot + "\reports", TargetRoot + "\Programs"
+  fso.CopyFolder DistRoot + "\tt", TargetRoot + "\tt"
 End Sub
 
 ' Bare wrapper for creating a directory
@@ -254,6 +303,46 @@ Sub ShowUsage
   Dim str
   str = "create_lifelines_release.vbs /CygwinLifelinesRoot:somepath"
   WScript.Echo str
+End Sub
+
+Function IsArgTrue(value, name)
+  Dim val2
+  val2 = UCase(value)
+  If val2 ="TRUE" or val2="YES" or val2="Y" or _
+    val2="1" or val2="-1" or val2=UCase(name) Then
+    IsArgTrue = True
+  else
+    IsArgTrue = False  
+  End If
+End Function
+
+' Echo message if noisy flag is set
+Sub NoisyMsg(message)
+  If noisy Then
+    Wscript.Echo message
+  End If
+End Sub
+
+' Return argument wrapped in double quotes
+Function Quote(text)
+  Quote = chr(34) + text + chr(34)
+End Function
+
+' Call via Shell the specified commandline, synchronously
+Sub RunCmd(cmd)
+  Dim oShell
+  Set oShell = WScript.CreateObject("WScript.Shell")
+  If test Then
+    NoisyMsg "Test, would run: " + cmd
+  Else
+    NoisyMsg "Running: " + cmd
+    Dim rtn
+    rtn = oShell.Run("%comspec% /c " + cmd, 0, True)
+    If rtn>0 Then
+      NoisyMsg "Error from run: " + CStr(rtn)
+      WScript.Quit rtn
+    End If
+  End If
 End Sub
 
 
