@@ -5,6 +5,10 @@
 	New day and month formats 21 (which give 00 for blank).
 	New functions is_valid_dayfmt, is_valid_monthfmt, is_valid_yearfmt.
 
+	* ChangeLog
+	*NEW build/msvc6/releaseScript/create_lifelines_release.vbs
+
+	New script to create win32 binary directory for distribution.
 
 2005-09-15, Perry
 
