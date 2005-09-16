@@ -18,6 +18,10 @@
 
 	Finish win32 package script.
 
+	* ChangeLog build/msvc6/releaseScript/create_lifelines_release.vbs
+
+	Add esperanto to list of languages.
+
 2005-09-15, Perry
 
 	* ChangeLog src/interp/heapused.c

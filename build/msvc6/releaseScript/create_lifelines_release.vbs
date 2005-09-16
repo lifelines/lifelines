@@ -202,7 +202,7 @@ End Sub
 Function PopulateLangs()
   Dim langs()
   Dim langString
-  langString = "da de el fr it nl pl rw sv"
+  langString = "da de el eo fr it nl pl rw sv"
   Dim nlangs
   nlangs = (Len(langString)+1)/3
   ReDim langs(nlangs-1)
