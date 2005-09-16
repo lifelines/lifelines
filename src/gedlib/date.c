@@ -538,7 +538,7 @@ format_complex (GDATEVAL gdv, INT cmplx	, STRING ymd2, STRING ymd3)
  *                 11- yrmoda
  *                 12- yr   (year only, old short form)
  *                 13- dd/mo yr
- *                 14- as in GEDCOM (truncated to 50 chars)
+ *                 14- as in GEDCOM
  * This routine applies the custom date pic if present (date_pic)
  *=================================================*/
 static void
@@ -692,8 +692,9 @@ format_ymd (ZSTR zstr, STRING syr, STRING smo, STRING sda, INT sfmt)
  * format_day -- Formats day part of date
  *  day:   [IN]  numeric day (0 for unknown)
  *  dfmt:  [IN]    0 - num, space
- *                 1 - num, lead 0
+ *                 1 - num, lead 0 (blank for blank)
  *                 2 - num, as is
+ *                21 - num, lead 0, and "00" for blank
  * output: [I/O] buffer in which to write
  *                must be at least 3 characters
  *=====================================*/
@@ -702,7 +703,7 @@ format_day (struct tag_dnum da, INT dfmt, STRING output)
 {
 	STRING p;
 	INT dayval = da.val; /* ignore complex days for now */
-	if (dayval < 0 || dayval > 99 || dfmt < 0 || dfmt > 2) {
+	if (dayval < 0 || dayval > 99 || !is_valid_dayfmt(dfmt)) {
 		output[0] = 0;
 		return;
 	}
@@ -714,14 +715,14 @@ format_day (struct tag_dnum da, INT dfmt, STRING output)
 		return;
 	}
 	p = output;
-	if (dayval == 0) {
+	if (dayval == 0 && dfmt != 21) {
 		if (dfmt == 2)
 			output[0] = 0;
 		return;
 	}
 	if (dfmt == 0)
 		p++; /* leading space */
-	else if (dfmt == 1)
+	else if (dfmt == 1 || dfmt == 21)
 		*p++ = '0'; /* leading 0 */
 	*p++ = dayval + '0';
 	*p = 0;
@@ -748,7 +749,7 @@ gedcom_month (INT cal, INT mo)
  *  cal:   [IN]  calendar code (for named months)
  *  mo:    [IN]  numeric month (0 for unknown)
  *  mfmt:  [IN]    0 - num, space
- *                 1 - num, lead 0
+ *                 1 - num, lead 0 (blank for blank)
  *                 2 - num, as is
  *                 3 - eg, MAR  (3-8 will be localized)
  *                 4 - eg, Mar
@@ -759,6 +760,7 @@ gedcom_month (INT cal, INT mo)
  *                 9 - eg, MAR (GEDCOM)
  *                10 - roman lowercase (eg, v for May)
  *                11 - roman uppercase (eg, V for May)
+ *                21 - num, lead 0, and "00" for blank
  *  TOD: Do we want space-extended roman ? Before or after ?
  *  returns static buffer or string constant or 0
  *=========================================*/
@@ -769,8 +771,8 @@ format_month (INT cal, struct tag_dnum mo, INT mfmt)
 	MONTH_NAMES * parr=0;
 	static char scratch[3];
 	INT moval = mo.val; /* ignore complex months for now */
-	if (moval < 0 || moval > 13 || mfmt < 0 || mfmt > 11) return NULL;
-	if (mfmt <= 2)  {
+	if (moval < 0 || moval > 13 || !is_valid_monthfmt(mfmt)) return NULL;
+	if (mfmt <= 2 || mfmt == 21)  {
 		format_day(mo, mfmt, scratch);
 		return scratch;
 	}
@@ -843,7 +845,8 @@ format_year (struct tag_dnum yr, INT yfmt)
 static void
 mark_invalid (GDATEVAL gdv)
 {
-	gdv->valid = -1;
+	if (gdv->valid != GDV_V_PHRASE)
+		gdv->valid = GDV_V_INVALID;
 }
 /*=====================================================
  * mark_freeform -- Set a gdate_val to freeform (unless invalid)
@@ -852,8 +855,8 @@ mark_invalid (GDATEVAL gdv)
 static void
 mark_freeform (GDATEVAL gdv)
 {
-	if (gdv->valid > 0)
-		gdv->valid = 0;
+	if (gdv->valid == GDV_V_GOOD)
+		gdv->valid = GDV_V_FREEFORM;
 }
 /*=====================================================
  * extract_date -- Extract date from free format string
@@ -871,8 +874,12 @@ extract_date (STRING str)
 	struct tag_nums nums = { {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0}, {BAD_YEAR, 0, 0} };
 	GDATEVAL gdv = create_gdateval();
 	struct tag_gdate * pdate = &gdv->date1;
-	if (!str)
+	if (!str || !str[0])
 		return gdv;
+	/* GEDCOM DATE PHRASE, eg, "(one 1srt January)" */
+	if (str[0] == '(' && str[strlen(str)-1] == ')') {
+		gdv->valid = GDV_V_PHRASE;
+	}
 	set_date_string(str);
 	while ((tok = get_date_tok(&dnum))) {
 		switch (tok) {
@@ -1245,7 +1252,7 @@ create_gdateval (void)
 	memset(gdv, 0, sizeof(*gdv));
 	gdv->date1.year.val = BAD_YEAR;
 	gdv->date2.year.val = BAD_YEAR;
-	gdv->valid = 1;
+	gdv->valid = GDV_V_GOOD;
 	return gdv;
 
 }
@@ -1909,4 +1916,35 @@ approx_time (INT seconds)
 	days = days - years*365.2425;
 	/* TRANSLATORS: years & days time interval */
 	return zs_newf( _("%dy%03dd"), years, days);
+}
+/*====================================+
+ * is_valid_dayfmt -- return FALSE if not a valid day format
+ * See format_day for format descriptions
+ *===================================*/
+BOOLEAN
+is_valid_dayfmt (INT dayfmt)
+{
+	if (dayfmt == 21) return TRUE;
+	if (dayfmt >=0 && dayfmt <= 2) return TRUE;
+	return FALSE;
+}
+/*====================================+
+ * is_valid_monthfmt -- return FALSE if not a valid month format
+ * See format_month for format descriptions
+ *===================================*/
+BOOLEAN
+is_valid_monthfmt (INT monthfmt)
+{
+	if (monthfmt == 21) return TRUE;
+	if (monthfmt >=0 && monthfmt <= 11) return TRUE;
+	return FALSE;
+}
+/*====================================+
+ * is_valid_yearfmt -- return FALSE if not a valid year format
+ *===================================*/
+BOOLEAN
+is_valid_yearfmt (INT yearfmt)
+{
+	if (yearfmt >=0 && yearfmt <= 2) return TRUE;
+	return FALSE;
 }

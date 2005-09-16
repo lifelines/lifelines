@@ -1,3 +1,11 @@
+2005-09-16, Perry
+
+	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/interp/builtin.c
+
+	New day and month formats 21 (which give 00 for blank).
+	New functions is_valid_dayfmt, is_valid_monthfmt, is_valid_yearfmt.
+
+
 2005-09-15, Perry
 
 	* ChangeLog src/interp/heapused.c
@@ -34,7 +42,7 @@
 
 	const fix for ask_for_indiseq & ask_for_db_filename (& cascade)
 
-	* ChangeLog src\hdrs\ui.h src\liflines\llexec.h src\ui\ui_cli.c
+	* ChangeLog src/hdrs/ui.h src/liflines/llexec.h src/ui/ui_cli.c
 
 	some llexec ramifications of const fix
 

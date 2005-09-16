@@ -3015,7 +3015,7 @@ __dayformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
-	if (value > 2) value = 2;
+	if (!is_valid_dayfmt(value)) value = 2;
 	daycode = value;
 	return NULL;
 }
@@ -3036,7 +3036,7 @@ __monthformat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	value = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (value < 0) value = 0;
-	if (value > 11) value = 8;
+	if (!is_valid_monthfmt(value)) value = 8;
 	monthcode = value;
 	return NULL;
 }
