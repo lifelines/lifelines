@@ -12,6 +12,12 @@
 	If bison not present, don't fail, but don't use yacc
 	(so end users can compile without bison).
 
+	* ChangeLog configure.in
+
+	If no (n)curses, display different message for win32
+	(using LifeLines version). No follow-on use of this test
+	yet.
+
 2005-09-16, Perry
 
 	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/interp/builtin.c

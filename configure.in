@@ -121,8 +121,16 @@ else
   if test "$ac_cv_lib_curses_main" = "yes"; then
     echo Using curses
   else
-    echo "Didn't find an up-to-date ncurses or curses library!"
-    echo "Link problems may result!"
+    case $host_os in
+      *win*)
+        echo "Didn't find an up-to-date ncurses or curses library!"
+        echo "Using LifeLines version of curses for Windows."
+      ;;
+      *)
+        echo "Didn't find an up-to-date ncurses or curses library!"
+        echo "Link problems may result!"
+      ;;
+    esac
   fi
 fi
 
