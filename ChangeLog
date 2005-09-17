@@ -1,3 +1,5 @@
+2005-09-17 lifelines beta 3.0.47 RELEASE
+
 2005-09-17, Perry
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
@@ -17,6 +19,13 @@
 	If no (n)curses, display different message for win32
 	(using LifeLines version). No follow-on use of this test
 	yet.
+
+	* ChangeLog INSTALL README configure.in build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml docs/llines.1 po/da.po po/de.po po/el.po
+	po/eo.po po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	Bump version to 3.0.47.
 
 2005-09-16, Perry
 

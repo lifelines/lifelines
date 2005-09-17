@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-19 21:41-0400\n"
+"POT-Creation-Date: 2005-09-16 20:23-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -21,31 +21,31 @@ msgid "<unnamed>"
 msgstr ""
 
 #. TRANSLATORS: seconds time interval
-#: src/gedlib/date.c:1887
+#: src/gedlib/date.c:1896
 #, c-format
 msgid "%02ds"
 msgstr ""
 
 #. TRANSLATORS: minutes & seconds time interval
-#: src/gedlib/date.c:1893
+#: src/gedlib/date.c:1902
 #, c-format
 msgid "%dm%02ds"
 msgstr ""
 
 #. TRANSLATORS: hours & minutes time interval
-#: src/gedlib/date.c:1899
+#: src/gedlib/date.c:1908
 #, c-format
 msgid "%dh%02dm"
 msgstr ""
 
 #. TRANSLATORS: days & hours time interval
-#: src/gedlib/date.c:1905
+#: src/gedlib/date.c:1914
 #, c-format
 msgid "%dd%02dh"
 msgstr ""
 
 #. TRANSLATORS: years & days time interval
-#: src/gedlib/date.c:1909
+#: src/gedlib/date.c:1918
 #, c-format
 msgid "%dy%03dd"
 msgstr ""
@@ -697,425 +697,433 @@ msgid "Do you really want to merge these two families?"
 msgstr ""
 
 #: src/gedlib/messages.c:194
-msgid "Do you really want to remove this child from his/her family?"
+msgid "Do you really want to swap spouse orders?"
 msgstr ""
 
 #: src/gedlib/messages.c:195
-msgid "Do you really want to remove this spouse from his/her family?"
+msgid "Do you really want to reorder children?"
 msgstr ""
 
 #: src/gedlib/messages.c:196
-msgid "Too many spouses to display full list"
+msgid "Do you really want to remove this child from his/her family?"
 msgstr ""
 
 #: src/gedlib/messages.c:197
-msgid "These persons are children in different families."
+msgid "Do you really want to remove this spouse from his/her family?"
 msgstr ""
 
 #: src/gedlib/messages.c:198
-msgid "Are you sure you want to merge them?"
+msgid "Too many spouses to display full list"
+msgstr ""
+
+#: src/gedlib/messages.c:199
+msgid "These persons are children in different families."
 msgstr ""
 
 #: src/gedlib/messages.c:200
-msgid "There is something wrong with the data."
-msgstr ""
-
-#: src/gedlib/messages.c:201
-msgid "Please identify the child."
+msgid "Are you sure you want to merge them?"
 msgstr ""
 
 #: src/gedlib/messages.c:202
-msgid "Please identify one of the child's siblings."
+msgid "There is something wrong with the data."
 msgstr ""
 
 #: src/gedlib/messages.c:203
-msgid "Identify spouse/parent to add to an existing family."
+msgid "Please identify the child."
 msgstr ""
 
 #: src/gedlib/messages.c:204
-msgid "Identify spouse/parent already in family, if known."
+msgid "Please identify one of the child's siblings."
 msgstr ""
 
 #: src/gedlib/messages.c:205
-msgid "Identify child already in family."
+msgid "Identify spouse/parent to add to an existing family."
+msgstr ""
+
+#: src/gedlib/messages.c:206
+msgid "Identify spouse/parent already in family, if known."
 msgstr ""
 
 #: src/gedlib/messages.c:207
-msgid "This person is already a child in a family."
-msgstr ""
-
-#: src/gedlib/messages.c:208
-msgid "Identify a spouse/parent for the new family."
+msgid "Identify child already in family."
 msgstr ""
 
 #: src/gedlib/messages.c:209
-msgid "Identify the second spouse/parent, if known."
+msgid "This person is already a child in a family."
 msgstr ""
 
 #: src/gedlib/messages.c:210
-msgid "Both families must have husbands/fathers."
+msgid "Identify a spouse/parent for the new family."
 msgstr ""
 
 #: src/gedlib/messages.c:211
-msgid "Both families must have wives/mothers."
+msgid "Identify the second spouse/parent, if known."
+msgstr ""
+
+#: src/gedlib/messages.c:212
+msgid "Both families must have husbands/fathers."
 msgstr ""
 
 #: src/gedlib/messages.c:213
-msgid "Identify spouse/parent in second family, if known."
-msgstr ""
-
-#: src/gedlib/messages.c:214
-msgid "Identify child in second family."
+msgid "Both families must have wives/mothers."
 msgstr ""
 
 #: src/gedlib/messages.c:215
-msgid "Identify second person to browse to."
+msgid "Identify spouse/parent in second family, if known."
+msgstr ""
+
+#: src/gedlib/messages.c:216
+msgid "Identify child in second family."
 msgstr ""
 
 #: src/gedlib/messages.c:217
-msgid "Create a family with this person as a child."
-msgstr ""
-
-#: src/gedlib/messages.c:218
-msgid "Create a family with this person as a spouse/parent."
+msgid "Identify second person to browse to."
 msgstr ""
 
 #: src/gedlib/messages.c:219
-msgid "This family has less than two children; can't swap."
+msgid "Create a family with this person as a child."
 msgstr ""
 
 #: src/gedlib/messages.c:220
-msgid "This person is a spouse/parent in less than two families."
+msgid "Create a family with this person as a spouse/parent."
 msgstr ""
 
 #: src/gedlib/messages.c:221
-msgid "Something impossible happened. Contact tech support."
+msgid "This family has less than two children; can't swap."
+msgstr ""
+
+#: src/gedlib/messages.c:222
+msgid "This person is a spouse/parent in less than two families."
 msgstr ""
 
 #: src/gedlib/messages.c:223
-msgid "The two children were swapped."
-msgstr ""
-
-#: src/gedlib/messages.c:224
-msgid "The two families were swapped."
+msgid "Something impossible happened. Contact tech support."
 msgstr ""
 
 #: src/gedlib/messages.c:225
-msgid "The child was removed from his/her family."
+msgid "The two children were swapped."
 msgstr ""
 
 #: src/gedlib/messages.c:226
-msgid "The spouse was removed from his/her family."
+msgid "The two families were swapped."
+msgstr ""
+
+#: src/gedlib/messages.c:227
+msgid "The child was removed from his/her family."
 msgstr ""
 
 #: src/gedlib/messages.c:228
-msgid "A person cannot be merged with him/herself."
-msgstr ""
-
-#: src/gedlib/messages.c:229
-msgid "A family cannot be merged with itself."
+msgid "The spouse was removed from his/her family."
 msgstr ""
 
 #: src/gedlib/messages.c:230
-msgid "Two persons with different parents cannot be merged."
+msgid "A person cannot be merged with him/herself."
 msgstr ""
 
 #: src/gedlib/messages.c:231
-msgid "Two parents of different sexes cannot be merged."
+msgid "A family cannot be merged with itself."
 msgstr ""
 
 #: src/gedlib/messages.c:232
-msgid "The families have different fathers/husbands; cannot merge."
+msgid "Two persons with different parents cannot be merged."
 msgstr ""
 
 #: src/gedlib/messages.c:233
-msgid "The families have different wives/mothers; cannot merge."
+msgid "Two parents of different sexes cannot be merged."
 msgstr ""
 
 #: src/gedlib/messages.c:234
-msgid "Who do you want to remove from the database?"
+msgid "The families have different fathers/husbands; cannot merge."
 msgstr ""
 
 #: src/gedlib/messages.c:235
-msgid "What record do you want to remove from the database?"
+msgid "The families have different wives/mothers; cannot merge."
 msgstr ""
 
 #: src/gedlib/messages.c:236
-msgid "Place the child last in the family."
+msgid "Who do you want to remove from the database?"
 msgstr ""
 
 #: src/gedlib/messages.c:237
-msgid "Error in abbreviations file."
+msgid "What record do you want to remove from the database?"
 msgstr ""
 
 #: src/gedlib/messages.c:238
-msgid "Error in user options file."
+msgid "Place the child last in the family."
 msgstr ""
 
 #: src/gedlib/messages.c:239
-msgid "Error in character mapping file."
+msgid "Error in abbreviations file."
 msgstr ""
 
 #: src/gedlib/messages.c:240
+msgid "Error in user options file."
+msgstr ""
+
+#: src/gedlib/messages.c:241
+msgid "Error in character mapping file."
+msgstr ""
+
+#: src/gedlib/messages.c:242
 #, c-format
 msgid "(Separator is %s)"
 msgstr ""
 
-#: src/gedlib/messages.c:241
-msgid "Do you want to re-edit it?"
-msgstr ""
-
 #: src/gedlib/messages.c:243
-#, c-format
-msgid "%s was added to the database."
-msgstr ""
-
-#: src/gedlib/messages.c:244
-#, c-format
-msgid "%s was added as a child."
+msgid "Do you want to re-edit it?"
 msgstr ""
 
 #: src/gedlib/messages.c:245
 #, c-format
-msgid "%s was added as a spouse and/or parent."
+msgid "%s was added to the database."
 msgstr ""
 
 #: src/gedlib/messages.c:246
-msgid "The new family was added to the database."
+#, c-format
+msgid "%s was added as a child."
 msgstr ""
 
 #: src/gedlib/messages.c:247
 #, c-format
-msgid "%s was modified in the database."
+msgid "%s was added as a spouse and/or parent."
 msgstr ""
 
 #: src/gedlib/messages.c:248
-msgid "The family was modified in the database."
+msgid "The new family was added to the database."
 msgstr ""
 
 #: src/gedlib/messages.c:249
-msgid "The source was modified in the database."
+#, c-format
+msgid "%s was modified in the database."
 msgstr ""
 
 #: src/gedlib/messages.c:250
-msgid "The event was modified in the database."
+msgid "The family was modified in the database."
 msgstr ""
 
 #: src/gedlib/messages.c:251
-msgid "The record was modified in the database."
+msgid "The source was modified in the database."
+msgstr ""
+
+#: src/gedlib/messages.c:252
+msgid "The event was modified in the database."
 msgstr ""
 
 #: src/gedlib/messages.c:253
+msgid "The record was modified in the database."
+msgstr ""
+
+#: src/gedlib/messages.c:255
 #, c-format
 msgid "Could not open file %s."
 msgstr ""
 
-#: src/gedlib/messages.c:254
+#: src/gedlib/messages.c:256
 msgid "Filepath too long."
 msgstr ""
 
-#: src/gedlib/messages.c:256
+#: src/gedlib/messages.c:258
 msgid "Please mark a person first."
 msgstr ""
 
-#: src/gedlib/messages.c:258
+#: src/gedlib/messages.c:260
 #, c-format
 msgid "The current list is now named %s."
 msgstr ""
 
-#: src/gedlib/messages.c:259
+#: src/gedlib/messages.c:261
 msgid "The current list is not named."
 msgstr ""
 
-#: src/gedlib/messages.c:260
+#: src/gedlib/messages.c:262
 msgid "What should the name of this list be?"
 msgstr ""
 
-#: src/gedlib/messages.c:261
+#: src/gedlib/messages.c:263
 msgid "No persons were added to the current list."
 msgstr ""
 
-#: src/gedlib/messages.c:262
+#: src/gedlib/messages.c:264
 msgid "What persons or list do you want to add to the current list?"
 msgstr ""
 
-#: src/gedlib/messages.c:263
+#: src/gedlib/messages.c:265
 msgid "You are at the bottom of the list."
 msgstr ""
 
-#: src/gedlib/messages.c:264
+#: src/gedlib/messages.c:266
 msgid "You are at the top of the list."
 msgstr ""
 
-#: src/gedlib/messages.c:265
+#: src/gedlib/messages.c:267
 msgid "New persons were added to the current list."
 msgstr ""
 
-#: src/gedlib/messages.c:267
+#: src/gedlib/messages.c:269
 msgid "System error: illegal map code"
 msgstr ""
 
-#: src/gedlib/messages.c:268
+#: src/gedlib/messages.c:270
 msgid "No such translation table in this database"
 msgstr ""
 
-#: src/gedlib/messages.c:271
+#: src/gedlib/messages.c:273
 msgid "Because of errors the GEDCOM file was not loaded.\n"
 msgstr ""
 
-#: src/gedlib/messages.c:272
+#: src/gedlib/messages.c:274
 msgid "No errors; adding records with original keys..."
 msgstr ""
 
-#: src/gedlib/messages.c:273
+#: src/gedlib/messages.c:275
 msgid "No errors; adding records with new keys..."
 msgstr ""
 
-#: src/gedlib/messages.c:274
+#: src/gedlib/messages.c:276
 #, c-format
 msgid "Using original keys, %d deleted records will be in the database."
 msgstr ""
 
-#: src/gedlib/messages.c:275
+#: src/gedlib/messages.c:277
 msgid "Use original keys from GEDCOM file?"
 msgstr ""
 
-#: src/gedlib/messages.c:276
+#: src/gedlib/messages.c:278
 msgid "Proceed?"
 msgstr ""
 
-#: src/gedlib/messages.c:277
+#: src/gedlib/messages.c:279
 msgid "Enter name of output archive file."
 msgstr ""
 
-#: src/gedlib/messages.c:278
+#: src/gedlib/messages.c:280
 #, c-format
 msgid "Database `%s' has been saved in `%s'."
 msgstr ""
 
-#: src/gedlib/messages.c:279
+#: src/gedlib/messages.c:281
 msgid "Enter name of translation table file to write"
 msgstr ""
 
-#: src/gedlib/messages.c:280
-msgid "Enter name of translation table file to read"
-msgstr ""
-
-#: src/gedlib/messages.c:281
-#, c-format
-msgid "Line %d: The person defined here has no key: skipped."
-msgstr ""
-
 #: src/gedlib/messages.c:282
-#, c-format
-msgid "Line %d: The family defined here has no key."
+msgid "Enter name of translation table file to read"
 msgstr ""
 
 #: src/gedlib/messages.c:283
 #, c-format
-msgid "Lines %d and %d: Person %s is multiply defined: skipped."
+msgid "Line %d: The person defined here has no key: skipped."
 msgstr ""
 
 #: src/gedlib/messages.c:284
 #, c-format
-msgid "Lines %d and %d: Family %s is multiply defined."
+msgid "Line %d: The family defined here has no key."
 msgstr ""
 
 #: src/gedlib/messages.c:285
 #, c-format
-msgid "Line %d: Person %s has an incorrect key: skipped."
+msgid "Lines %d and %d: Person %s is multiply defined: skipped."
 msgstr ""
 
 #: src/gedlib/messages.c:286
 #, c-format
-msgid "Line %d: Family %s has an incorrect key."
+msgid "Lines %d and %d: Family %s is multiply defined."
 msgstr ""
 
 #: src/gedlib/messages.c:287
 #, c-format
-msgid "Person %s is referred to but not defined."
+msgid "Line %d: Person %s has an incorrect key: skipped."
 msgstr ""
 
 #: src/gedlib/messages.c:288
 #, c-format
-msgid "Family %s is referred to but not defined."
+msgid "Line %d: Family %s has an incorrect key."
 msgstr ""
 
 #: src/gedlib/messages.c:289
 #, c-format
-msgid "Source %s is referred to but not defined."
+msgid "Person %s is referred to but not defined."
 msgstr ""
 
 #: src/gedlib/messages.c:290
 #, c-format
-msgid "Event %s is referred to but not defined."
+msgid "Family %s is referred to but not defined."
 msgstr ""
 
 #: src/gedlib/messages.c:291
 #, c-format
-msgid "Line %d: This line has a level number that is too large."
+msgid "Source %s is referred to but not defined."
 msgstr ""
 
 #: src/gedlib/messages.c:292
 #, c-format
-msgid "Line %d: Person defined here has no name."
+msgid "Event %s is referred to but not defined."
 msgstr ""
 
 #: src/gedlib/messages.c:293
 #, c-format
+msgid "Line %d: This line has a level number that is too large."
+msgstr ""
+
+#: src/gedlib/messages.c:294
+#, c-format
+msgid "Line %d: Person defined here has no name."
+msgstr ""
+
+#: src/gedlib/messages.c:295
+#, c-format
 msgid "Line %d: Family has no members."
 msgstr ""
 
-#: src/gedlib/messages.c:299
+#: src/gedlib/messages.c:301
 msgid "<Choose outside this list>"
 msgstr ""
 
-#: src/gedlib/messages.c:301
+#: src/gedlib/messages.c:303
 msgid "What is the name of the program?"
 msgstr ""
 
-#: src/gedlib/messages.c:302
+#: src/gedlib/messages.c:304
 msgid "Please enter the name of the GEDCOM file."
 msgstr ""
 
-#: src/gedlib/messages.c:304
+#: src/gedlib/messages.c:306
 msgid "What is the name of the output file?"
 msgstr ""
 
-#: src/gedlib/messages.c:305
+#: src/gedlib/messages.c:307
 msgid "Malformed configuration file: line too long."
 msgstr ""
 
-#: src/gedlib/messages.c:306
+#: src/gedlib/messages.c:308
 msgid "Unsupported file encoding (no multibyte encodings except UTF-8)."
 msgstr ""
 
-#: src/gedlib/messages.c:307
+#: src/gedlib/messages.c:309
 #, c-format
 msgid "Unsupported file encoding: %s."
 msgstr ""
 
-#: src/gedlib/messages.c:310
+#: src/gedlib/messages.c:312
 msgid "Enter string for program"
 msgstr ""
 
-#: src/gedlib/messages.c:311
+#: src/gedlib/messages.c:313
 msgid "enter string: "
 msgstr ""
 
-#: src/gedlib/messages.c:312
+#: src/gedlib/messages.c:314
 msgid "enter integer:"
 msgstr ""
 
-#: src/gedlib/messages.c:313
+#: src/gedlib/messages.c:315
 msgid "enter name: "
 msgstr ""
 
-#: src/gedlib/messages.c:314
+#: src/gedlib/messages.c:316
 msgid "Strike any key to continue."
 msgstr ""
 
-#: src/gedlib/messages.c:318
+#: src/gedlib/messages.c:320
 msgid ""
 "0 SOUR\n"
 "1 REFN\n"
@@ -1123,7 +1131,7 @@ msgid ""
 "1 AUTH Author"
 msgstr ""
 
-#: src/gedlib/messages.c:319
+#: src/gedlib/messages.c:321
 msgid ""
 "0 EVEN\n"
 "1 REFN\n"
@@ -1135,1213 +1143,1213 @@ msgid ""
 "1 SOUR"
 msgstr ""
 
-#: src/gedlib/messages.c:320
+#: src/gedlib/messages.c:322
 msgid ""
 "0 XXXX\n"
 "1 REFN"
 msgstr ""
 
-#: src/gedlib/messages.c:324
-msgid "The file is as positioned at EOF."
-msgstr ""
-
-#: src/gedlib/messages.c:325
-#, c-format
-msgid "Line %d: This line is empty; EOF?"
-msgstr ""
-
 #: src/gedlib/messages.c:326
-#, c-format
-msgid "Line %d: This line is too long."
+msgid "The file is as positioned at EOF."
 msgstr ""
 
 #: src/gedlib/messages.c:327
 #, c-format
-msgid "Line %d: This line has no level number."
+msgid "Line %d: This line is empty; EOF?"
 msgstr ""
 
 #: src/gedlib/messages.c:328
 #, c-format
-msgid "Line %d: This line is incomplete."
+msgid "Line %d: This line is too long."
 msgstr ""
 
 #: src/gedlib/messages.c:329
 #, c-format
-msgid "Line %d: This line has a bad link."
+msgid "Line %d: This line has no level number."
 msgstr ""
 
 #: src/gedlib/messages.c:330
 #, c-format
-msgid "Line %d: This line needs white space before tag."
+msgid "Line %d: This line is incomplete."
 msgstr ""
 
 #: src/gedlib/messages.c:331
 #, c-format
-msgid "Line %d: This line has an illegal level."
+msgid "Line %d: This line has a bad link."
 msgstr ""
 
 #: src/gedlib/messages.c:332
+#, c-format
+msgid "Line %d: This line needs white space before tag."
+msgstr ""
+
+#: src/gedlib/messages.c:333
+#, c-format
+msgid "Line %d: This line has an illegal level."
+msgstr ""
+
+#: src/gedlib/messages.c:334
 msgid "The record begins at wrong level."
 msgstr ""
 
-#: src/gedlib/messages.c:335
+#: src/gedlib/messages.c:337
 msgid ""
 "\n"
 "Aborting now. Core dump? [y/n]"
 msgstr ""
 
-#: src/gedlib/messages.c:336
+#: src/gedlib/messages.c:338
 msgid ""
 "Looks like a program was running.\n"
 "Check file %1 around line %2.\n"
 msgstr ""
 
-#: src/gedlib/messages.c:337
+#: src/gedlib/messages.c:339
 msgid "signal %1: %2"
 msgstr ""
 
-#: src/gedlib/messages.c:339
+#: src/gedlib/messages.c:341
 msgid "SIGNAL 0"
 msgstr ""
 
-#: src/gedlib/messages.c:340
+#: src/gedlib/messages.c:342
 msgid "HANGUP"
 msgstr ""
 
-#: src/gedlib/messages.c:341
+#: src/gedlib/messages.c:343
 msgid "INTERRUPT"
 msgstr ""
 
-#: src/gedlib/messages.c:342
+#: src/gedlib/messages.c:344
 msgid "QUIT"
 msgstr ""
 
-#: src/gedlib/messages.c:343
+#: src/gedlib/messages.c:345
 msgid "ILLEGAL INSTRUCTION"
 msgstr ""
 
-#: src/gedlib/messages.c:344
+#: src/gedlib/messages.c:346
 msgid "TRACE TRAP"
 msgstr ""
 
-#: src/gedlib/messages.c:345
+#: src/gedlib/messages.c:347
 msgid "ABORT"
 msgstr ""
 
-#: src/gedlib/messages.c:346
+#: src/gedlib/messages.c:348
 msgid "EMT INST"
 msgstr ""
 
-#: src/gedlib/messages.c:347
+#: src/gedlib/messages.c:349
 msgid "FLOATING POINT EXCEPTION"
 msgstr ""
 
-#: src/gedlib/messages.c:348
+#: src/gedlib/messages.c:350
 msgid "KILL"
 msgstr ""
 
-#: src/gedlib/messages.c:349
+#: src/gedlib/messages.c:351
 msgid "BUS ERROR"
 msgstr ""
 
-#: src/gedlib/messages.c:350
+#: src/gedlib/messages.c:352
 msgid "SEGMENTATION ERROR"
 msgstr ""
 
-#: src/gedlib/messages.c:351
+#: src/gedlib/messages.c:353
 msgid "SYSTEM CALL ERROR"
 msgstr ""
 
-#: src/gedlib/messages.c:352
+#: src/gedlib/messages.c:354
 msgid "PIPE WRITE"
 msgstr ""
 
-#: src/gedlib/messages.c:353
+#: src/gedlib/messages.c:355
 msgid "ALARM CLOCK"
 msgstr ""
 
-#: src/gedlib/messages.c:355
+#: src/gedlib/messages.c:357
 msgid "TERMINATE FROM KILL"
 msgstr ""
 
-#: src/gedlib/messages.c:356
+#: src/gedlib/messages.c:358
 msgid "USER SIGNAL 1"
 msgstr ""
 
-#: src/gedlib/messages.c:357
+#: src/gedlib/messages.c:359
 msgid "USER SIGNAL 2"
 msgstr ""
 
-#: src/gedlib/messages.c:358
+#: src/gedlib/messages.c:360
 msgid "DEATH OF CHILD"
 msgstr ""
 
-#: src/gedlib/messages.c:359
+#: src/gedlib/messages.c:361
 msgid "POWER-FAIL RESTART"
 msgstr ""
 
-#: src/gedlib/messages.c:360
+#: src/gedlib/messages.c:362
 msgid "WINDOW CHANGE"
 msgstr ""
 
-#: src/gedlib/messages.c:361
+#: src/gedlib/messages.c:363
 msgid "Unknown signal"
 msgstr ""
 
-#: src/gedlib/messages.c:365
+#: src/gedlib/messages.c:367
 msgid "person"
 msgstr ""
 
-#: src/gedlib/messages.c:366
+#: src/gedlib/messages.c:368
 msgid ", of "
 msgstr ""
 
-#: src/gedlib/messages.c:367
+#: src/gedlib/messages.c:369
 msgid "father"
 msgstr ""
 
-#: src/gedlib/messages.c:368
+#: src/gedlib/messages.c:370
 msgid "mother"
 msgstr ""
 
-#: src/gedlib/messages.c:369
+#: src/gedlib/messages.c:371
 msgid "spouse"
 msgstr ""
 
-#: src/gedlib/messages.c:370
+#: src/gedlib/messages.c:372
 msgid "child"
 msgstr ""
 
-#: src/gedlib/messages.c:373
+#: src/gedlib/messages.c:375
 msgid "m. "
 msgstr ""
 
-#: src/gedlib/messages.c:375
+#: src/gedlib/messages.c:377
 msgid "div. "
 msgstr ""
 
-#: src/gedlib/messages.c:377
+#: src/gedlib/messages.c:379
 msgid "b. "
 msgstr ""
 
-#: src/gedlib/messages.c:379
+#: src/gedlib/messages.c:381
 msgid "bap. "
 msgstr ""
 
-#: src/gedlib/messages.c:381
+#: src/gedlib/messages.c:383
 msgid "d. "
 msgstr ""
 
-#: src/gedlib/messages.c:383
+#: src/gedlib/messages.c:385
 msgid "bur. "
 msgstr "sepolto: "
 
-#: src/gedlib/messages.c:385
+#: src/gedlib/messages.c:387
 msgid "cb. "
 msgstr ""
 
-#: src/gedlib/messages.c:387
+#: src/gedlib/messages.c:389
 msgid "married: "
 msgstr ""
 
-#: src/gedlib/messages.c:388
+#: src/gedlib/messages.c:390
 msgid "born: "
 msgstr "nato: "
 
-#: src/gedlib/messages.c:389
+#: src/gedlib/messages.c:391
 msgid "bapt: "
 msgstr ""
 
-#: src/gedlib/messages.c:390
+#: src/gedlib/messages.c:392
 msgid "died: "
 msgstr "morto: "
 
-#: src/gedlib/messages.c:391
+#: src/gedlib/messages.c:393
 msgid "buri: "
 msgstr "sepolto: "
 
-#: src/gedlib/messages.c:395
+#: src/gedlib/messages.c:397
 msgid "You cannot edit the INDI line in a person record."
 msgstr ""
 
-#: src/gedlib/messages.c:396
+#: src/gedlib/messages.c:398
 msgid "You cannot edit the FAMC line in a person record."
 msgstr ""
 
-#: src/gedlib/messages.c:397
+#: src/gedlib/messages.c:399
 msgid "You cannot edit the FAMS lines in a person record."
 msgstr ""
 
-#: src/gedlib/messages.c:398
+#: src/gedlib/messages.c:400
 msgid "You cannot edit the FAM line in a family record."
 msgstr ""
 
-#: src/gedlib/messages.c:399
+#: src/gedlib/messages.c:401
 msgid "You cannot edit the HUSB line in a family record."
 msgstr ""
 
-#: src/gedlib/messages.c:400
+#: src/gedlib/messages.c:402
 msgid "You cannot edit the WIFE line in a family record."
 msgstr ""
 
-#: src/gedlib/messages.c:401
+#: src/gedlib/messages.c:403
 msgid "You cannot edit the CHIL lines in a family record."
 msgstr ""
 
-#: src/gedlib/messages.c:402
+#: src/gedlib/messages.c:404
 msgid "The record is empty."
 msgstr ""
 
-#: src/gedlib/messages.c:403
+#: src/gedlib/messages.c:405
 msgid "The record does not begin with an INDI line."
 msgstr ""
 
-#: src/gedlib/messages.c:404
+#: src/gedlib/messages.c:406
 msgid "The record does not begin with a FAM line."
 msgstr ""
 
-#: src/gedlib/messages.c:405
+#: src/gedlib/messages.c:407
 msgid "The record does not begin with a SOUR line."
 msgstr ""
 
-#: src/gedlib/messages.c:406
+#: src/gedlib/messages.c:408
 msgid "The record does not begin with an EVEN line."
 msgstr ""
 
-#: src/gedlib/messages.c:407
+#: src/gedlib/messages.c:409
 msgid "INDI, FAM, SOUR, EVEN records may not be other records."
 msgstr ""
 
-#: src/gedlib/messages.c:408
+#: src/gedlib/messages.c:410
 msgid "The record contains multiple level 0 lines."
 msgstr ""
 
-#: src/gedlib/messages.c:409
+#: src/gedlib/messages.c:411
 msgid "This person record has bad GEDCOM name syntax."
 msgstr ""
 
-#: src/gedlib/messages.c:410
+#: src/gedlib/messages.c:412
 msgid "You cannot change the sex of a parent."
 msgstr ""
 
-#: src/gedlib/messages.c:411
+#: src/gedlib/messages.c:413
 msgid "REFN key is already in use."
 msgstr ""
 
-#: src/gedlib/messages.c:413
+#: src/gedlib/messages.c:415
 msgid "Tag is too long to connect automatically."
 msgstr ""
 
-#: src/gedlib/messages.c:415
+#: src/gedlib/messages.c:417
 msgid "Database records"
 msgstr ""
 
-#: src/gedlib/messages.c:416
+#: src/gedlib/messages.c:418
 #, c-format
 msgid "%dI, %dF, %dS, %dE, %dX"
 msgstr ""
 
 # c-format
-#: src/gedlib/messages.c:419
+#: src/gedlib/messages.c:421
 #, c-format
 msgid ""
 "The requested window size (%d,%d) is too large for your terminal (%d,%d).\n"
 msgstr ""
 
-#: src/gedlib/messages.c:420
+#: src/gedlib/messages.c:422
 #, c-format
 msgid "The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 
-#: src/gedlib/messages.c:423
+#: src/gedlib/messages.c:425
 #, c-format
 msgid "LifeLines %s - Genealogical DB and Programming System"
 msgstr ""
 
-#: src/gedlib/messages.c:424
+#: src/gedlib/messages.c:426
 msgid "Copyright(c) 1991 to 1996, by T. T. Wetmore IV"
 msgstr ""
 
-#: src/gedlib/messages.c:425
+#: src/gedlib/messages.c:427
 #, c-format
 msgid "Current Database - %s"
 msgstr ""
 
-#: src/gedlib/messages.c:427
+#: src/gedlib/messages.c:429
 msgid " (immutable)"
 msgstr ""
 
-#: src/gedlib/messages.c:429
+#: src/gedlib/messages.c:431
 msgid " (read only)"
 msgstr ""
 
-#: src/gedlib/messages.c:430
+#: src/gedlib/messages.c:432
 msgid "Please choose an operation:"
 msgstr ""
 
-#: src/gedlib/messages.c:431
+#: src/gedlib/messages.c:433
 msgid "Not valid command"
 msgstr ""
 
-#: src/gedlib/messages.c:434
+#: src/gedlib/messages.c:436
 msgid "enter y (yes) or n (no): "
 msgstr ""
 
-#: src/gedlib/messages.c:435
+#: src/gedlib/messages.c:437
 msgid "yYnN"
 msgstr ""
 
-#: src/gedlib/messages.c:436
+#: src/gedlib/messages.c:438
 msgid "yY"
 msgstr ""
 
-#: src/gedlib/messages.c:439
+#: src/gedlib/messages.c:441
 msgid "LifeLines -- Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:440
+#: src/gedlib/messages.c:442
 msgid "LifeLines -- Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:441
+#: src/gedlib/messages.c:443
 msgid "LifeLines -- Two Person Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:442
+#: src/gedlib/messages.c:444
 msgid "LifeLines -- Two Family Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:443
+#: src/gedlib/messages.c:445
 msgid "LifeLines -- Auxiliary Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:444
+#: src/gedlib/messages.c:446
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr ""
 
-#: src/gedlib/messages.c:447 src/liflines/screen.c:1501
+#: src/gedlib/messages.c:449 src/liflines/screen.c:1501
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr ""
 
-#: src/gedlib/messages.c:448
+#: src/gedlib/messages.c:450
 msgid "Commands:   j Move down     k Move up    q Quit"
 msgstr ""
 
-#: src/gedlib/messages.c:449
+#: src/gedlib/messages.c:451
 msgid "Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit"
 msgstr ""
 
-#: src/gedlib/messages.c:450
+#: src/gedlib/messages.c:452
 msgid "Commands:   u Page Up, d Page Down, q Quit"
 msgstr ""
 
-#: src/gedlib/messages.c:451
+#: src/gedlib/messages.c:453
 msgid "Messages:"
 msgstr ""
 
-#: src/gedlib/messages.c:454
+#: src/gedlib/messages.c:456
 msgid "Please choose from the following options:"
 msgstr ""
 
-#: src/gedlib/messages.c:455
+#: src/gedlib/messages.c:457
 #, c-format
 msgid "New record is %s"
 msgstr ""
 
-#: src/gedlib/messages.c:456
+#: src/gedlib/messages.c:458
 msgid "Insert xref automatically at bottom of current record."
 msgstr ""
 
-#: src/gedlib/messages.c:457
+#: src/gedlib/messages.c:459
 msgid "Edit current record now to add xref manually."
 msgstr ""
 
-#: src/gedlib/messages.c:458
+#: src/gedlib/messages.c:460
 msgid "Browse new record (without adding xref)."
 msgstr ""
 
-#: src/gedlib/messages.c:459
+#: src/gedlib/messages.c:461
 msgid "Return to current record (without adding xref)."
 msgstr ""
 
-#: src/gedlib/messages.c:462
+#: src/gedlib/messages.c:464
 msgid "Spouse unknown"
 msgstr ""
 
-#: src/gedlib/messages.c:463
+#: src/gedlib/messages.c:465
 msgid "No more history"
 msgstr ""
 
-#: src/gedlib/messages.c:464
+#: src/gedlib/messages.c:466
 msgid "Bad history count"
 msgstr ""
 
-#: src/gedlib/messages.c:465
+#: src/gedlib/messages.c:467
 msgid "Bad backup history count"
 msgstr ""
 
-#: src/gedlib/messages.c:466
+#: src/gedlib/messages.c:468
 msgid "Bad history length"
 msgstr ""
 
-#: src/gedlib/messages.c:467
+#: src/gedlib/messages.c:469
 #, c-format
 msgid "Delete history (%d entries)?"
 msgstr ""
 
-#: src/gedlib/messages.c:468
+#: src/gedlib/messages.c:470
 msgid "Error accessing data"
 msgstr ""
 
-#: src/gedlib/messages.c:469
+#: src/gedlib/messages.c:471
 msgid "Choose from history"
 msgstr ""
 
-#: src/gedlib/messages.c:470
+#: src/gedlib/messages.c:472
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
 
-#: src/gedlib/messages.c:471
+#: src/gedlib/messages.c:473
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
 msgstr ""
 
-#: src/gedlib/messages.c:472
+#: src/gedlib/messages.c:474
 msgid "Program"
 msgstr ""
 
-#: src/gedlib/messages.c:473
+#: src/gedlib/messages.c:475
 msgid "Default path: "
 msgstr ""
 
-#: src/gedlib/messages.c:474
+#: src/gedlib/messages.c:476
 msgid "WARNING: missing keys"
 msgstr ""
 
-#: src/gedlib/messages.c:475
+#: src/gedlib/messages.c:477
 msgid "This does not point to another record in the database!"
 msgstr ""
 
-#: src/gedlib/messages.c:476
+#: src/gedlib/messages.c:478
 msgid "enter file name"
 msgstr ""
 
-#: src/gedlib/messages.c:477
+#: src/gedlib/messages.c:479
 #, c-format
 msgid "enter file name (*%s)"
 msgstr ""
 
-#: src/gedlib/messages.c:478
+#: src/gedlib/messages.c:480
 msgid "There is no record with that key or reference."
 msgstr ""
 
-#: src/gedlib/messages.c:479
+#: src/gedlib/messages.c:481
 msgid "Database was corrupt."
 msgstr ""
 
-#: src/gedlib/messages.c:482
+#: src/gedlib/messages.c:484
 msgid "Bad decimal number format."
 msgstr ""
 
-#: src/gedlib/messages.c:483
+#: src/gedlib/messages.c:485
 msgid "Bad hexidecimal number format."
 msgstr ""
 
-#: src/gedlib/messages.c:484
+#: src/gedlib/messages.c:486
 msgid "No replacement string on line."
 msgstr ""
 
-#: src/gedlib/messages.c:485
+#: src/gedlib/messages.c:487
 msgid "No original string on line."
 msgstr ""
 
-#: src/gedlib/messages.c:486
+#: src/gedlib/messages.c:488
 msgid "Bad escape format."
 msgstr ""
 
-#: src/gedlib/messages.c:487
+#: src/gedlib/messages.c:489
 #, c-format
 msgid "%s: line %d (entry %d): %s"
 msgstr ""
 
-#: src/gedlib/messages.c:490 src/liflines/brwsmenu.c:26
+#: src/gedlib/messages.c:492 src/liflines/brwsmenu.c:26
 msgid "q  Return to main menu"
 msgstr "q  Ritornare al menu principale"
 
-#: src/gedlib/messages.c:491
+#: src/gedlib/messages.c:493
 msgid "q  Return to previous menu"
 msgstr "q  Ritornare al menu precedente"
 
-#: src/gedlib/messages.c:492
+#: src/gedlib/messages.c:494
 msgid "q  Quit program"
 msgstr ""
 
-#: src/gedlib/messages.c:493
+#: src/gedlib/messages.c:495
 #, fuzzy
 msgid "Q  Quit current database"
 msgstr "Scegliere la base di dati"
 
-#: src/gedlib/messages.c:496
+#: src/gedlib/messages.c:498
 msgid "b  Browse the persons in the database"
 msgstr ""
 
-#: src/gedlib/messages.c:497
+#: src/gedlib/messages.c:499
 msgid "s  Search database"
 msgstr ""
 
-#: src/gedlib/messages.c:498
+#: src/gedlib/messages.c:500
 msgid "a  Add information to the database"
 msgstr ""
 
-#: src/gedlib/messages.c:499
+#: src/gedlib/messages.c:501
 msgid "d  Delete information from the database"
 msgstr ""
 
-#: src/gedlib/messages.c:500
+#: src/gedlib/messages.c:502
 msgid "r  Generate report by entering report name"
 msgstr ""
 
-#: src/gedlib/messages.c:501
+#: src/gedlib/messages.c:503
 msgid "p  Pick a report from list and run"
 msgstr ""
 
-#: src/gedlib/messages.c:502
+#: src/gedlib/messages.c:504
 msgid "c  Character set options"
 msgstr ""
 
-#: src/gedlib/messages.c:503
+#: src/gedlib/messages.c:505
 msgid "t  Modify character translation tables"
 msgstr ""
 
-#: src/gedlib/messages.c:504
+#: src/gedlib/messages.c:506
 msgid "u  Miscellaneous utilities"
 msgstr ""
 
-#: src/gedlib/messages.c:505
+#: src/gedlib/messages.c:507
 msgid "x  Handle source, event and other records"
 msgstr ""
 
-#: src/gedlib/messages.c:508
+#: src/gedlib/messages.c:510
 msgid "What utility do you want to perform?"
 msgstr ""
 
-#: src/gedlib/messages.c:509
+#: src/gedlib/messages.c:511
 msgid "s  Save the database in a GEDCOM file"
 msgstr ""
 
-#: src/gedlib/messages.c:510
+#: src/gedlib/messages.c:512
 msgid "r  Read in data from a GEDCOM file"
 msgstr ""
 
-#: src/gedlib/messages.c:511
+#: src/gedlib/messages.c:513
 msgid "R  Pick a GEDCOM file and read in"
 msgstr ""
 
-#: src/gedlib/messages.c:512
+#: src/gedlib/messages.c:514
 msgid "k  Find a person's key value"
 msgstr ""
 
-#: src/gedlib/messages.c:513
+#: src/gedlib/messages.c:515
 msgid "i  Identify a person from key value"
 msgstr ""
 
-#: src/gedlib/messages.c:514
+#: src/gedlib/messages.c:516
 msgid "d  Show database statistics"
 msgstr ""
 
-#: src/gedlib/messages.c:515
+#: src/gedlib/messages.c:517
 msgid "m  Show memory statistics"
 msgstr ""
 
-#: src/gedlib/messages.c:516
+#: src/gedlib/messages.c:518
 msgid "e  Edit the place abbreviation file"
 msgstr ""
 
-#: src/gedlib/messages.c:517
+#: src/gedlib/messages.c:519
 msgid "o  Edit the user options file"
 msgstr ""
 
-#: src/gedlib/messages.c:520
+#: src/gedlib/messages.c:522
 msgid "What activity do you want to perform?"
 msgstr ""
 
-#: src/gedlib/messages.c:521
+#: src/gedlib/messages.c:523
 msgid "s  Browse source records"
 msgstr ""
 
-#: src/gedlib/messages.c:522
+#: src/gedlib/messages.c:524
 msgid "e  Browse event records"
 msgstr ""
 
-#: src/gedlib/messages.c:523
+#: src/gedlib/messages.c:525
 msgid "x  Browse other records"
 msgstr ""
 
-#: src/gedlib/messages.c:524
+#: src/gedlib/messages.c:526
 msgid "1  Add a source record to the database"
 msgstr ""
 
-#: src/gedlib/messages.c:525
+#: src/gedlib/messages.c:527
 msgid "2  Edit source record from the database"
 msgstr ""
 
-#: src/gedlib/messages.c:526
+#: src/gedlib/messages.c:528
 msgid "3  Add an event record to the database"
 msgstr ""
 
-#: src/gedlib/messages.c:527
+#: src/gedlib/messages.c:529
 msgid "4  Edit event record from the database"
 msgstr ""
 
-#: src/gedlib/messages.c:528
+#: src/gedlib/messages.c:530
 msgid "5  Add an other record to the database"
 msgstr ""
 
-#: src/gedlib/messages.c:529
+#: src/gedlib/messages.c:531
 msgid "6  Edit other record from the database"
 msgstr ""
 
-#: src/gedlib/messages.c:532
+#: src/gedlib/messages.c:534
 msgid "Translation Tables"
 msgstr ""
 
-#: src/gedlib/messages.c:533
+#: src/gedlib/messages.c:535
 msgid "e  edit individual tables (in db)"
 msgstr ""
 
-#: src/gedlib/messages.c:534
+#: src/gedlib/messages.c:536
 msgid "l  load a table from a file (into db)"
 msgstr ""
 
-#: src/gedlib/messages.c:535
+#: src/gedlib/messages.c:537
 msgid "s  save a table to a file (from db)"
 msgstr ""
 
-#: src/gedlib/messages.c:536
+#: src/gedlib/messages.c:538
 msgid "x  export all tables (from db to files)"
 msgstr ""
 
-#: src/gedlib/messages.c:537
+#: src/gedlib/messages.c:539
 msgid "i  import all tables (from files into db)"
 msgstr ""
 
-#: src/gedlib/messages.c:538
+#: src/gedlib/messages.c:540
 msgid "export/import directory:"
 msgstr ""
 
-#: src/gedlib/messages.c:541
+#: src/gedlib/messages.c:543
 msgid "Which character mapping do you want to edit?"
 msgstr ""
 
-#: src/gedlib/messages.c:542
+#: src/gedlib/messages.c:544
 msgid "Which character mapping do you want to save?"
 msgstr ""
 
-#: src/gedlib/messages.c:545
+#: src/gedlib/messages.c:547
 msgid "Not implemented yet"
 msgstr ""
 
-#: src/gedlib/messages.c:548
+#: src/gedlib/messages.c:550
 msgid "What do you want to add?"
 msgstr ""
 
-#: src/gedlib/messages.c:549
+#: src/gedlib/messages.c:551
 msgid "p  Person - add new person to the database"
 msgstr ""
 
-#: src/gedlib/messages.c:550
+#: src/gedlib/messages.c:552
 msgid "f  Family - create family record from one or two spouses"
 msgstr ""
 
-#: src/gedlib/messages.c:551
+#: src/gedlib/messages.c:553
 msgid "c  Child - add a child to an existing family"
 msgstr ""
 
-#: src/gedlib/messages.c:552
+#: src/gedlib/messages.c:554
 msgid "s  Spouse - add a spouse to an existing family"
 msgstr ""
 
-#: src/gedlib/messages.c:555
+#: src/gedlib/messages.c:557
 msgid "What do you want to remove?"
 msgstr ""
 
-#: src/gedlib/messages.c:556
+#: src/gedlib/messages.c:558
 msgid "c  Child - remove a child from his/her family"
 msgstr ""
 
-#: src/gedlib/messages.c:557
+#: src/gedlib/messages.c:559
 msgid "s  Spouse - remove a spouse from a family"
 msgstr ""
 
-#: src/gedlib/messages.c:558
+#: src/gedlib/messages.c:560
 msgid "i  Individual - remove a person completely"
 msgstr ""
 
-#: src/gedlib/messages.c:559
+#: src/gedlib/messages.c:561
 msgid "f  Family - remove a family completely"
 msgstr ""
 
-#: src/gedlib/messages.c:560
+#: src/gedlib/messages.c:562
 msgid "o  Other - remove other record completely"
 msgstr ""
 
-#: src/gedlib/messages.c:563
+#: src/gedlib/messages.c:565
 msgid "How would you like to find a record?"
 msgstr ""
 
-#: src/gedlib/messages.c:564
+#: src/gedlib/messages.c:566
 msgid "f  Full database scan"
 msgstr ""
 
-#: src/gedlib/messages.c:567
+#: src/gedlib/messages.c:569
 msgid "What scan type?"
 msgstr ""
 
-#: src/gedlib/messages.c:568
+#: src/gedlib/messages.c:570
 msgid "f  Full name scan"
 msgstr ""
 
-#: src/gedlib/messages.c:569
+#: src/gedlib/messages.c:571
 msgid "n  Name fragment (whitespace-delimited) scan"
 msgstr ""
 
-#: src/gedlib/messages.c:570
+#: src/gedlib/messages.c:572
 msgid "r  Refn scan"
 msgstr ""
 
-#: src/gedlib/messages.c:571
+#: src/gedlib/messages.c:573
 msgid "Performing full name scan"
 msgstr ""
 
-#: src/gedlib/messages.c:572
+#: src/gedlib/messages.c:574
 msgid "Performing name fragment scan"
 msgstr ""
 
-#: src/gedlib/messages.c:573
+#: src/gedlib/messages.c:575
 msgid "Performing refn scan"
 msgstr ""
 
-#: src/gedlib/messages.c:574
+#: src/gedlib/messages.c:576
 msgid "No records found in scan"
 msgstr ""
 
-#: src/gedlib/messages.c:577
+#: src/gedlib/messages.c:579
 msgid "abt %1"
 msgstr ""
 
-#: src/gedlib/messages.c:578
+#: src/gedlib/messages.c:580
 msgid "about %1"
 msgstr ""
 
-#: src/gedlib/messages.c:579
+#: src/gedlib/messages.c:581
 msgid "est %1"
 msgstr ""
 
-#: src/gedlib/messages.c:580
+#: src/gedlib/messages.c:582
 msgid "estimated %1"
 msgstr ""
 
-#: src/gedlib/messages.c:581
+#: src/gedlib/messages.c:583
 msgid "cal %1"
 msgstr ""
 
-#: src/gedlib/messages.c:582
+#: src/gedlib/messages.c:584
 msgid "calculated %1"
 msgstr ""
 
-#: src/gedlib/messages.c:583
+#: src/gedlib/messages.c:585
 msgid "fr %1"
 msgstr ""
 
-#: src/gedlib/messages.c:584
+#: src/gedlib/messages.c:586
 msgid "from %1"
 msgstr ""
 
-#: src/gedlib/messages.c:585 src/gedlib/messages.c:586
+#: src/gedlib/messages.c:587 src/gedlib/messages.c:588
 msgid "to %1"
 msgstr ""
 
-#: src/gedlib/messages.c:587
+#: src/gedlib/messages.c:589
 msgid "fr %1 to %2"
 msgstr ""
 
-#: src/gedlib/messages.c:588
+#: src/gedlib/messages.c:590
 msgid "from %1 to %2"
 msgstr ""
 
-#: src/gedlib/messages.c:589
+#: src/gedlib/messages.c:591
 msgid "bef %1"
 msgstr ""
 
-#: src/gedlib/messages.c:590
+#: src/gedlib/messages.c:592
 msgid "before %1"
 msgstr ""
 
-#: src/gedlib/messages.c:591
+#: src/gedlib/messages.c:593
 msgid "aft %1"
 msgstr ""
 
-#: src/gedlib/messages.c:592
+#: src/gedlib/messages.c:594
 msgid "after %1"
 msgstr ""
 
-#: src/gedlib/messages.c:593
+#: src/gedlib/messages.c:595
 msgid "bet %1 and %2"
 msgstr ""
 
-#: src/gedlib/messages.c:594
+#: src/gedlib/messages.c:596
 msgid "between %1 and %2"
 msgstr ""
 
-#: src/gedlib/messages.c:597
+#: src/gedlib/messages.c:599
 msgid "B.C."
 msgstr ""
 
-#: src/gedlib/messages.c:599
+#: src/gedlib/messages.c:601
 msgid "BC"
 msgstr ""
 
-#: src/gedlib/messages.c:601
+#: src/gedlib/messages.c:603
 msgid "B.C.E."
 msgstr ""
 
-#: src/gedlib/messages.c:603
+#: src/gedlib/messages.c:605
 msgid "BCE"
 msgstr ""
 
-#: src/gedlib/messages.c:605
+#: src/gedlib/messages.c:607
 msgid "A.D."
 msgstr ""
 
-#: src/gedlib/messages.c:607
+#: src/gedlib/messages.c:609
 msgid "AD"
 msgstr ""
 
-#: src/gedlib/messages.c:609
+#: src/gedlib/messages.c:611
 msgid "C.E."
 msgstr ""
 
-#: src/gedlib/messages.c:611
+#: src/gedlib/messages.c:613
 msgid "CE"
 msgstr ""
 
-#: src/gedlib/messages.c:614
+#: src/gedlib/messages.c:616
 msgid "%1J"
 msgstr ""
 
-#: src/gedlib/messages.c:616
+#: src/gedlib/messages.c:618
 msgid "%1 HEB"
 msgstr ""
 
-#: src/gedlib/messages.c:618
+#: src/gedlib/messages.c:620
 msgid "%1 FR"
 msgstr ""
 
-#: src/gedlib/messages.c:620
+#: src/gedlib/messages.c:622
 msgid "%1 AUC"
 msgstr ""
 
-#: src/gedlib/messages.c:622
+#: src/gedlib/messages.c:624
 msgid "jan"
 msgstr "gen"
 
-#: src/gedlib/messages.c:623
+#: src/gedlib/messages.c:625
 msgid "january"
 msgstr "gennaio"
 
-#: src/gedlib/messages.c:624
+#: src/gedlib/messages.c:626
 msgid "feb"
 msgstr "feb"
 
-#: src/gedlib/messages.c:625
+#: src/gedlib/messages.c:627
 msgid "february"
 msgstr "febbraio"
 
-#: src/gedlib/messages.c:626
+#: src/gedlib/messages.c:628
 msgid "mar"
 msgstr "mar"
 
-#: src/gedlib/messages.c:627
+#: src/gedlib/messages.c:629
 msgid "march"
 msgstr "marzo"
 
-#: src/gedlib/messages.c:628
+#: src/gedlib/messages.c:630
 msgid "apr"
 msgstr "apr"
 
-#: src/gedlib/messages.c:629
+#: src/gedlib/messages.c:631
 msgid "april"
 msgstr "aprile"
 
-#: src/gedlib/messages.c:631
+#: src/gedlib/messages.c:633
 msgid "**may"
 msgstr "mag"
 
-#: src/gedlib/messages.c:632
+#: src/gedlib/messages.c:634
 msgid "may"
 msgstr "maggio"
 
-#: src/gedlib/messages.c:633
+#: src/gedlib/messages.c:635
 msgid "jun"
 msgstr "giu"
 
-#: src/gedlib/messages.c:634
+#: src/gedlib/messages.c:636
 msgid "june"
 msgstr "giugno"
 
-#: src/gedlib/messages.c:635
+#: src/gedlib/messages.c:637
 msgid "jul"
 msgstr "lug"
 
-#: src/gedlib/messages.c:636
+#: src/gedlib/messages.c:638
 msgid "july"
 msgstr "luglio"
 
-#: src/gedlib/messages.c:637
+#: src/gedlib/messages.c:639
 msgid "aug"
 msgstr "aug"
 
-#: src/gedlib/messages.c:638
+#: src/gedlib/messages.c:640
 msgid "august"
 msgstr "agosto"
 
-#: src/gedlib/messages.c:639
+#: src/gedlib/messages.c:641
 msgid "sep"
 msgstr "set"
 
-#: src/gedlib/messages.c:640
+#: src/gedlib/messages.c:642
 msgid "september"
 msgstr "settembre"
 
-#: src/gedlib/messages.c:641
+#: src/gedlib/messages.c:643
 msgid "oct"
 msgstr "ott"
 
-#: src/gedlib/messages.c:642
+#: src/gedlib/messages.c:644
 msgid "october"
 msgstr "ottobre"
 
-#: src/gedlib/messages.c:643
+#: src/gedlib/messages.c:645
 msgid "nov"
 msgstr "nov"
 
-#: src/gedlib/messages.c:644
+#: src/gedlib/messages.c:646
 msgid "november"
 msgstr "novembre"
 
-#: src/gedlib/messages.c:645
+#: src/gedlib/messages.c:647
 msgid "dec"
 msgstr "dic"
 
-#: src/gedlib/messages.c:646
+#: src/gedlib/messages.c:648
 msgid "december"
 msgstr "dicembre"
 
-#: src/gedlib/messages.c:648
+#: src/gedlib/messages.c:650
 msgid "tsh"
 msgstr ""
 
-#: src/gedlib/messages.c:649
+#: src/gedlib/messages.c:651
 msgid "tishri"
 msgstr ""
 
-#: src/gedlib/messages.c:650
+#: src/gedlib/messages.c:652
 msgid "csh"
 msgstr ""
 
-#: src/gedlib/messages.c:651
+#: src/gedlib/messages.c:653
 msgid "cheshvan"
 msgstr ""
 
-#: src/gedlib/messages.c:652
+#: src/gedlib/messages.c:654
 msgid "ksl"
 msgstr ""
 
-#: src/gedlib/messages.c:653
+#: src/gedlib/messages.c:655
 msgid "kislev"
 msgstr ""
 
-#: src/gedlib/messages.c:654
+#: src/gedlib/messages.c:656
 msgid "tvt"
 msgstr ""
 
-#: src/gedlib/messages.c:655
+#: src/gedlib/messages.c:657
 msgid "tevet"
 msgstr ""
 
-#: src/gedlib/messages.c:656
+#: src/gedlib/messages.c:658
 msgid "shv"
 msgstr ""
 
-#: src/gedlib/messages.c:657
+#: src/gedlib/messages.c:659
 msgid "shevat"
 msgstr ""
 
-#: src/gedlib/messages.c:658
+#: src/gedlib/messages.c:660
 msgid "adr"
 msgstr ""
 
-#: src/gedlib/messages.c:659
+#: src/gedlib/messages.c:661
 msgid "adar"
 msgstr ""
 
-#: src/gedlib/messages.c:660
+#: src/gedlib/messages.c:662
 msgid "ads"
 msgstr ""
 
-#: src/gedlib/messages.c:661
+#: src/gedlib/messages.c:663
 msgid "adar sheni"
 msgstr ""
 
-#: src/gedlib/messages.c:662
+#: src/gedlib/messages.c:664
 msgid "nsn"
 msgstr ""
 
-#: src/gedlib/messages.c:663
+#: src/gedlib/messages.c:665
 msgid "nisan"
 msgstr ""
 
-#: src/gedlib/messages.c:664
+#: src/gedlib/messages.c:666
 msgid "iyr"
 msgstr ""
 
-#: src/gedlib/messages.c:665
+#: src/gedlib/messages.c:667
 msgid "iyar"
 msgstr ""
 
-#: src/gedlib/messages.c:666
+#: src/gedlib/messages.c:668
 msgid "svn"
 msgstr ""
 
-#: src/gedlib/messages.c:667
+#: src/gedlib/messages.c:669
 msgid "sivan"
 msgstr ""
 
-#: src/gedlib/messages.c:668
+#: src/gedlib/messages.c:670
 msgid "tmz"
 msgstr ""
 
-#: src/gedlib/messages.c:669
+#: src/gedlib/messages.c:671
 msgid "tamuz"
 msgstr ""
 
-#: src/gedlib/messages.c:670
+#: src/gedlib/messages.c:672
 msgid "aav"
 msgstr ""
 
-#: src/gedlib/messages.c:671
+#: src/gedlib/messages.c:673
 msgid "av"
 msgstr ""
 
-#: src/gedlib/messages.c:672
+#: src/gedlib/messages.c:674
 msgid "ell"
 msgstr ""
 
-#: src/gedlib/messages.c:673
+#: src/gedlib/messages.c:675
 msgid "elul"
 msgstr ""
 
-#: src/gedlib/messages.c:675
+#: src/gedlib/messages.c:677
 msgid "vend"
 msgstr ""
 
-#: src/gedlib/messages.c:676
+#: src/gedlib/messages.c:678
 msgid "vendemiaire"
 msgstr ""
 
-#: src/gedlib/messages.c:677
+#: src/gedlib/messages.c:679
 msgid "brum"
 msgstr ""
 
-#: src/gedlib/messages.c:678
+#: src/gedlib/messages.c:680
 msgid "brumaire"
 msgstr ""
 
-#: src/gedlib/messages.c:679
+#: src/gedlib/messages.c:681
 msgid "frim"
 msgstr ""
 
-#: src/gedlib/messages.c:680
+#: src/gedlib/messages.c:682
 msgid "frimaire"
 msgstr ""
 
-#: src/gedlib/messages.c:681
+#: src/gedlib/messages.c:683
 msgid "nivo"
 msgstr ""
 
-#: src/gedlib/messages.c:682
+#: src/gedlib/messages.c:684
 msgid "nivose"
 msgstr ""
 
-#: src/gedlib/messages.c:683
+#: src/gedlib/messages.c:685
 msgid "pluv"
 msgstr ""
 
-#: src/gedlib/messages.c:684
+#: src/gedlib/messages.c:686
 msgid "pluviose"
 msgstr ""
 
-#: src/gedlib/messages.c:685
+#: src/gedlib/messages.c:687
 msgid "vent"
 msgstr ""
 
-#: src/gedlib/messages.c:686
+#: src/gedlib/messages.c:688
 msgid "ventose"
 msgstr ""
 
-#: src/gedlib/messages.c:687
+#: src/gedlib/messages.c:689
 msgid "germ"
 msgstr ""
 
-#: src/gedlib/messages.c:688
+#: src/gedlib/messages.c:690
 msgid "germinal"
 msgstr ""
 
-#: src/gedlib/messages.c:689
+#: src/gedlib/messages.c:691
 msgid "flor"
 msgstr ""
 
-#: src/gedlib/messages.c:690
+#: src/gedlib/messages.c:692
 msgid "floreal"
 msgstr ""
 
-#: src/gedlib/messages.c:691
+#: src/gedlib/messages.c:693
 msgid "prai"
 msgstr ""
 
-#: src/gedlib/messages.c:692
+#: src/gedlib/messages.c:694
 msgid "prairial"
 msgstr ""
 
-#: src/gedlib/messages.c:693
+#: src/gedlib/messages.c:695
 msgid "mess"
 msgstr ""
 
-#: src/gedlib/messages.c:694
+#: src/gedlib/messages.c:696
 msgid "messidor"
 msgstr ""
 
-#: src/gedlib/messages.c:695
+#: src/gedlib/messages.c:697
 msgid "ther"
 msgstr ""
 
-#: src/gedlib/messages.c:696
+#: src/gedlib/messages.c:698
 msgid "thermidor"
 msgstr ""
 
-#: src/gedlib/messages.c:697
+#: src/gedlib/messages.c:699
 msgid "fruc"
 msgstr ""
 
-#: src/gedlib/messages.c:698
+#: src/gedlib/messages.c:700
 msgid "fructidor"
 msgstr ""
 
-#: src/gedlib/messages.c:699
+#: src/gedlib/messages.c:701
 msgid "comp"
 msgstr ""
 
-#: src/gedlib/messages.c:700
+#: src/gedlib/messages.c:702
 msgid "jour_complementairs"
 msgstr ""
 
@@ -3804,29 +3812,29 @@ msgstr ""
 msgid "-- CURRENT SELECTION --"
 msgstr ""
 
-#: src/liflines/screen.c:2784
+#: src/liflines/screen.c:2785
 msgid "LifeLines -- Main Menu"
 msgstr ""
 
-#: src/liflines/screen.c:3485
+#: src/liflines/screen.c:3486
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/screen.c:3489
+#: src/liflines/screen.c:3490
 msgid "(visit history is empty)"
 msgstr ""
 
-#: src/liflines/screen.c:3495
+#: src/liflines/screen.c:3496
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/screen.c:3499
+#: src/liflines/screen.c:3500
 msgid "(change history is empty)"
 msgstr ""
 
@@ -3943,103 +3951,103 @@ msgstr ""
 msgid "Line %d: Bad NAME syntax."
 msgstr ""
 
-#: src/liflines/valgdcom.c:783
+#: src/liflines/valgdcom.c:784
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr ""
 
-#: src/liflines/valgdcom.c:787
+#: src/liflines/valgdcom.c:788
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr ""
 
-#: src/liflines/valgdcom.c:799
+#: src/liflines/valgdcom.c:800
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr ""
 
-#: src/liflines/valgdcom.c:803
+#: src/liflines/valgdcom.c:804
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr ""
 
-#: src/liflines/valgdcom.c:807
+#: src/liflines/valgdcom.c:808
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr ""
 
-#: src/liflines/valgdcom.c:811
+#: src/liflines/valgdcom.c:812
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr ""
 
-#: src/liflines/valgdcom.c:823
+#: src/liflines/valgdcom.c:824
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr ""
 
-#: src/liflines/valgdcom.c:827
+#: src/liflines/valgdcom.c:828
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr ""
 
-#: src/liflines/valgdcom.c:885
+#: src/liflines/valgdcom.c:886
 msgid "error"
 msgstr ""
 
-#: src/liflines/valgdcom.c:893
+#: src/liflines/valgdcom.c:894
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/valgdcom.c:895 src/liflines/valgdcom.c:923
+#: src/liflines/valgdcom.c:896 src/liflines/valgdcom.c:924
 #, c-format
 msgid " (see log file <%s>)"
 msgstr ""
 
-#: src/liflines/valgdcom.c:897 src/liflines/valgdcom.c:925
+#: src/liflines/valgdcom.c:898 src/liflines/valgdcom.c:926
 msgid " (no log file)"
 msgstr ""
 
-#: src/liflines/valgdcom.c:913
+#: src/liflines/valgdcom.c:914
 msgid "warning"
 msgstr ""
 
-#: src/liflines/valgdcom.c:921
+#: src/liflines/valgdcom.c:922
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/valgdcom.c:1026
+#: src/liflines/valgdcom.c:1027
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr ""
 
-#: src/liflines/valgdcom.c:1031
+#: src/liflines/valgdcom.c:1032
 #, c-format
 msgid "End of file at line %d"
 msgstr ""
 
-#: src/liflines/valgdcom.c:1035
+#: src/liflines/valgdcom.c:1036
 #, c-format
 msgid "Error at line %d: %s"
 msgstr ""
 
-#: src/liflines/valgdcom.c:1039
+#: src/liflines/valgdcom.c:1040
 #, c-format
 msgid "Bad level at line %d"
 msgstr ""
 
-#: src/liflines/valgdcom.c:1045
+#: src/liflines/valgdcom.c:1046
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr ""
 
-#: src/liflines/valgdcom.c:1051
+#: src/liflines/valgdcom.c:1052
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr ""
