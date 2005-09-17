@@ -1,3 +1,10 @@
+2005-09-17, Perry
+
+	* ChangeLog build/msvc6/btedit/btedit.rc build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc src/hdrs/version.h
+
+	Bumping version to 3.0.47.
+
 2005-09-16, Perry
 
 	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/interp/builtin.c
