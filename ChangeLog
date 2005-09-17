@@ -1,9 +1,16 @@
 2005-09-17, Perry
 
-	* ChangeLog build/msvc6/btedit/btedit.rc build/msvc6/dbverify/dbVerify.rc
-	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc src/hdrs/version.h
+	* ChangeLog build/msvc6/btedit/btedit.rc
+	build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
+	src/hdrs/version.h
 
 	Bumping version to 3.0.47.
+
+	* ChangeLog configure.in
+
+	If bison not present, don't fail, but don't use yacc
+	(so end users can compile without bison).
 
 2005-09-16, Perry
 
