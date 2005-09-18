@@ -1,10 +1,18 @@
+2005-09-18 Perry Rapp
+
+	* ChangeLog configure.in src/hdrs/arch.h
+
+	Fix logic for declaring sleep (only if windows and
+	don't already have it, not either).
+	Add configure.in test for windows.h.
+
 2005-09-18 Stephen Dum
+
 	* ChangeLog reports/d-rtf.ll reports/dump-ances.ll
 	* reports/est_life_span.ll
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-reportmanual.txt docs/ll-userguide.html
 	docs/ll-userguide.pdf docs/ll-userguide.txt
-
 
         Fixed two typo's in listed reports reported by Larry Hamilton
 	est_life_span had a number of truncated lines that were repaired.

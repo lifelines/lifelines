@@ -20,7 +20,7 @@
  * - there is no sleep() function available
  */
 
-#if defined(HAVE_WINDOWS_H) || !defined(HAVE_SLEEP)
+#if defined(HAVE_WINDOWS_H) && !defined(HAVE_SLEEP)
 extern int sleep(int seconds);
 #else
 #include <unistd.h>
