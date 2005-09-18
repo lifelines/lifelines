@@ -7,7 +7,7 @@
  * @description
  *	
  *  This report will produce a document in Rich Text Format modeled after some
- *  typwritten and typeset Henry format genealogies I've seen.
+ *  typewritten and typeset Henry format genealogies I've seen.
  *  All descendants of a selected person, their spouses and their spouses
  *  parents, event dates, and NOTEs are included. I generally reserve TEXT
  *  items for comments I would prefer not to export.

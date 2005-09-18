@@ -9,7 +9,7 @@
  *      Program walks thru one's ancestors and dumps information
  *      about each family. It prunes the tree so an individual is
  *      only output once. It is a simple program that is easy to
- *      make changes to, if you want more or less into printed. I
+ *      make changes to, if you want more or less info printed. I
  *      have included three date routines get_dates(), get_sdates(),
  *      and get_ldates for variations in the amount of event info that
  *      gets output to the file. The program lists all children of the
