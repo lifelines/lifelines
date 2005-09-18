@@ -48,7 +48,8 @@ proc life_span(someone)
                 if (ne(index(upper(date(bt)),"BEF",1),0)) {
                         set(year1,sub(year1,lookup(diffs,"bef_birt")))
                 }
-                if (and(ne(index(upper(date(bt)),"ABT",1),0),ne(index(upper(date(bt)),"EST",1)
+                if (and(ne(index(upper(date(bt)),"ABT",1),0),ne(index(upper(date(bt)),"EST",1),0)))
+		{
                         set(year1,sub(year1,lookup(diffs,"abt_birt")))
                 }
         }
@@ -58,7 +59,8 @@ proc life_span(someone)
                         if (ne(index(upper(date(bp)),"BEF",1),0)) {
                                 set(year1,sub(year1,lookup(diffs,"bef_birt")))
                         }
-                        if (and(ne(index(upper(date(bp)),"ABT",1),0),ne(index(upper(date(bp)),"EST",1
+                        if (and(ne(index(upper(date(bp)),"ABT",1),0),ne(index(upper(date(bp)),"EST",1),0)))
+			{
                                 set(year1,sub(year1,lookup(diffs,"abt_birt")))
                         }
                 }
@@ -87,7 +89,8 @@ proc life_span(someone)
                         if (ne(index(upper(date(mar)),"BEF",1),0)) {
                                 set(year1,sub(year1,lookup(diffs,"bef_marr")))
                         }
-                        if (and(ne(index(upper(date(mar)),"ABT",1),0),ne(index(upper(date(bp)),"EST",
+                        if (and(ne(index(upper(date(mar)),"ABT",1),0),ne(index(upper(date(bp)),"EST",1),0)))
+			{
                                 set(year1,sub(year1,lookup(diffs,"abt_marr")))
                         }
                 }
@@ -99,7 +102,8 @@ proc life_span(someone)
                 if (ne(index(upper(date(dt)),"AFT",1),0)) {
                         set(year2,add(year2,lookup(diffs,"aft_deat")))
                 }
-                if (and(ne(index(upper(date(dt)),"ABT",1),0),ne(index(upper(date(dt)),"EST",1)
+                if (and(ne(index(upper(date(dt)),"ABT",1),0),ne(index(upper(date(dt)),"EST",1),0)))
+		{
                         set(year2,add(year2,lookup(diffs,"abt_deat")))
                 }
         }
@@ -109,7 +113,8 @@ proc life_span(someone)
                         if (ne(index(upper(date(br)),"AFT",1),0)) {
                                 set(year2,add(year2,lookup(diffs,"aft_deat")))
                         }
-                        if (and(ne(index(upper(date(br)),"ABT",1),0),ne(index(upper(date(br)),"EST",1
+                        if (and(ne(index(upper(date(br)),"ABT",1),0),ne(index(upper(date(br)),"EST",1),0)))
+			{
                                 set(year2,add(year2,lookup(diffs,"abt_deat")))
                         }
                 }
@@ -138,7 +143,8 @@ proc life_span(someone)
                         if (ne(index(upper(date(mar)),"AFT",1),0)) {
                                 set(year2,add(year2,lookup(diffs,"aft_marr")))
                         }
-                        if (and(ne(index(upper(date(mar)),"ABT",1),0),ne(index(upper(date(mar)),"EST"
+                        if (and(ne(index(upper(date(mar)),"ABT",1),0),ne(index(upper(date(mar)),"EST",1),0)))
+			{
                                 set(year2,add(year2,lookup(diffs,"abt_marr")))
                         }
                 }

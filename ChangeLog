@@ -1,7 +1,9 @@
 2005-09-18 Stephen Dum
 	* ChangeLog reports/d-rtf.ll reports/dump-ances.ll
+	* reports/est_life_span.ll
 
         Fixed two typo's in listed reports reported by Larry Hamilton
+	est_life_span had a number of truncated lines that were repaired.
 
 2005-09-17 lifelines beta 3.0.47 RELEASE
 
