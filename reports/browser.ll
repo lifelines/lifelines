@@ -33,7 +33,7 @@ proc main()
 
                 traverse (i, node, x) {
                         if (reference(value(node))) {
-                                set (n, getrecord(value(node)))
+                                set (n, dereference(value(node)))
                                 enqueue(gto, savenode(n))
 
 if(eq(substring(value(node),1,2),"@I")) {

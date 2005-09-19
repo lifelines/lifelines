@@ -4616,23 +4616,12 @@ determine if string is a cross reference
 reference cross reference or key to node tree
 </para>
 
-</glossdef></glossentry>
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>NODE <function>getrecord</function></funcdef>
-<paramdef><parameter>STRING</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-same as dereference
-</para>
-
 </glossdef></glossentry></glosslist>
 
 <para>
 These functions allow you to recognize values that are cross references and to read the records they refer
 to. <function>Reference</function> returns <returnvalue>true</returnvalue> if its string argument is a cross reference value, that is, the internal key of
-one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross
-reference string argument. <function>Getrecord</function> is a synonym for <function>dereference</function>.
+one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross-reference string argument.
 </para>
 
 </sect1>

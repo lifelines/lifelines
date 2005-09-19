@@ -1,3 +1,10 @@
+2005-09-19 Matt Emmerton
+
+	* ChangeLog reports/browser.ll docs/ll-reportmanuals.xml
+
+	Remove all vestiges of the report function getrecord(),
+	which now exists as dereference().
+
 2005-09-18 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/arch.h
@@ -20,7 +27,7 @@
 
 2005-09-17 lifelines beta 3.0.47 RELEASE
 
-2005-09-17, Perry
+2005-09-17 Perry Rapp
 
 	* ChangeLog build/msvc6/btedit/btedit.rc
 	build/msvc6/dbverify/dbVerify.rc
@@ -47,7 +54,7 @@
 
 	Bump version to 3.0.47.
 
-2005-09-16, Perry
+2005-09-16 Perry Rapp
 
 	* ChangeLog src/gedlib/date.c src/hdrs/date.h src/interp/builtin.c
 
@@ -75,7 +82,7 @@
 
 	Update NEWS (new day & month formats)
 
-2005-09-15, Perry
+2005-09-15 Perry Rapp
 
 	* ChangeLog src/interp/heapused.c
 
@@ -97,13 +104,13 @@
 
 	Cosmetic: scope newdate to use, in extract_date.
 
-2005-09-14, Perry
+2005-09-14 Perry Rapp
 
 	* ChangeLog src/liflines/cscurses.c
 
 	Cosmetic: Add explanatory comments to existing TODO items (for UTF-8 GUI).
 
-2005-09-13, Perry
+2005-09-13 Perry Rapp
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/feedback.h src/hdrs/screen.h
 	src/hdrs/ui.h src/liflines/ask.c src/liflines/cscurses.c
@@ -120,7 +127,7 @@
 	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/fr.po po/it.po
 	po/nl.po po/pl.po po/rw.po po/sv.po src/liflines/menuset.c
 
-	Cosmetic typo: Remove spurious extra space in "Clash  with longer hotkey"
+	Cosmetic typo: Remove spurious extra space in "Clash with longer hotkey"
 
 2005-07-29 Perry Rapp
 
