@@ -132,6 +132,15 @@ charprops_load_utf8 (void)
 	return TRUE;
 }
 /*==========================================
+ * charprops_is_loaded -- Return 1 if UnicodeData.txt file was loaded
+ *  (meaning we have our own uppercasing translation tables)
+ *========================================*/
+BOOLEAN
+charprops_is_loaded (void)
+{
+	return !!loaded_utf8;
+}
+/*==========================================
  * charprops_free_all -- Free all allocated resources
  *========================================*/
 void

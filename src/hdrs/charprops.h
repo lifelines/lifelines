@@ -4,5 +4,6 @@
 BOOLEAN charprops_load_utf8(void);
 void charprops_free_all(void);
 BOOLEAN charprops_load(const char * codepage);
+BOOLEAN charprops_is_loaded(void);
 
 #endif /* charprops_h_included */

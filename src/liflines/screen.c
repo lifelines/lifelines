@@ -46,6 +46,7 @@
 #include "iconvshim.h"
 #endif
 #include "codesets.h"
+#include "charprops.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -1891,6 +1892,13 @@ invoke_cset_display (void)
 
 	zs_setf(zstr, "TTPATH: %s", getoptstr("TTPATH", "."));
 	enqueue_list(list, strsave(zs_str(zstr)));
+
+	if (charprops_is_loaded()) {
+		enqueue_list(list, strsave(_("UTF-8 charprops loaded" )));
+	} else {
+		enqueue_list(list, strsave(_("UTF-8 charprops not loaded" )));
+	}
+
 
 	display_list(_("Codeset information"), list);
 	destroy_list(list);

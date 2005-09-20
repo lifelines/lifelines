@@ -4,6 +4,12 @@
 
 	Bump version to 3.0.47post.
 
+	* ChangeLog src/gedlib/charprops.c src/hdrs/charprops.h
+	src/liflines/screen.c
+
+	New function charprops_is_loaded, and add line to cset 
+	output menu.
+
 2005-09-19 Matt Emmerton
 
 	* ChangeLog reports/browser.ll docs/ll-reportmanuals.xml
