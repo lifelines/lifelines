@@ -2328,6 +2328,7 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 
 			/* Get Menu Command */
 			cmdnum = menuset_check_cmd(get_screen_menuset(screen), buffer);
+
 			/* Act On Menu Command */
 			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL) {
 				return cmdnum;
@@ -2953,7 +2954,16 @@ static void
 place_cursor_main (void)
 {
 	INT row, col = 30;
+	DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 
+	/* Hide/Display Cursor */
+	if (dynmenu && dynmenu->hidden) {
+		curs_set(0);
+	} else {
+		curs_set(1);
+	}
+
+	/* Position Cursor */
 	switch (cur_screen) {
 	case MAIN_SCREEN:    
 		col = strlen(_(qSplschs))+3;
@@ -2973,18 +2983,11 @@ place_cursor_main (void)
 			all use dynamic menus, and the cursor position in dynamic
 			menus is controlled by the dynamic menu, because cursor
 			moves up & down with dynamic menu */
-			DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 			if (dynmenu->hidden) {
-				/* when dynamic menu hidden, show cursor 
-				at bottom after title */
-				STRING title = get_screen_title(cur_screen);
-				row = ll_lines-2;
-				col = strlen(title)+3;
-				curs_set(0);
+				/* no need to position cursor */
 			} else {
 				row = dynmenu->cur_y;
 				col = dynmenu->cur_x;
-				curs_set(1);
 			}
 		}
 		break;
