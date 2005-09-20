@@ -11,6 +11,7 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE(lifelines, 3.0.47post)
 AM_CONFIG_HEADER(config.h)
+AM_MAINTAINER_MODE
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -122,7 +123,7 @@ else
     echo Using curses
   else
     case $host_os in
-      *win*)
+      *mingw32*)
         echo "Didn't find an up-to-date ncurses or curses library!"
         echo "Using LifeLines version of curses for Windows."
       ;;
@@ -144,7 +145,7 @@ dnl AC_CHECK_LIB(bsd, revoke)
 dnl AC_CHECK_LIB(ucb, bzero)
 
 echo Looking for header files
-AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h pwd.h locale.h )
+AC_CHECK_HEADERS( getopt.h alloc.h malloc.h dirent.h pwd.h locale.h windows.h )
 dnl AC_HEADER_STDC
 dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h libintl.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
@@ -209,7 +210,7 @@ AC_OUTPUT(Makefile \
         src/stdlib/Makefile \
         src/liflines/Makefile \
         src/tools/Makefile \
-	src/ui/Makefile \
+        src/ui/Makefile \
         src/hdrs/Makefile \
         src/hdrs/win32/Makefile \
         docs/Makefile \

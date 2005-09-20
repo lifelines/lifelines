@@ -30,6 +30,7 @@
  *===========================================================*/
 
 #include "sys_inc.h"
+#include "mycurses.h"
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"

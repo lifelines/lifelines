@@ -1,3 +1,20 @@
+2005-09-19 Matt Emmerton
+
+	* ChangeLog configure.in src/hdrs/screen.h
+	src/hdrs/win32/curses.h src/gedlib/editvtab.c
+	* NEW: src/hdrs/mycurses.h
+
+	Introduce mycurses.h which will choose between <curses.h>
+	(standard library implementation) or "win32/curses.h"
+	(local Win32 implementation.) 
+
+	Update configure.in to detect <windows.h> and platforms
+	where local curses implementation can be used.
+
+	Update screen.h and editvtab.c to use mycurses.h.
+
+	Minor comment changes in src/win32/curses.h.
+
 2005-09-20 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/version.h

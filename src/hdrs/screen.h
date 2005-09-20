@@ -35,7 +35,7 @@
 #include "gedcom.h"
 #include "indiseq.h"
 
-#include <curses.h>
+#include "mycurses.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>

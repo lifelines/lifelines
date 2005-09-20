@@ -1,4 +1,4 @@
-/* curses.h - formerly mycurses.h */
+/* curses.h */
 /* header for windows implementation of curses library */
 
 #ifndef CURSES_H
