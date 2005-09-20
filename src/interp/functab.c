@@ -130,7 +130,6 @@ BUILTINS builtins[] = {
 	{"getint",          1,    2,    __getint},
 	{"getintmsg",       2,    2,    __getint},
 	{"getproperty",     1,    1,    __getproperty},
-	{"getrecord",       1,    1,    __dereference},
 	{"getstr",          1,    2,    __getstr},
 	{"getstrmsg",       2,    2,    __getstr},
 	{"gettext",         1,    1,    __gettext},
