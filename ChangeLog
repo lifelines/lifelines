@@ -1,3 +1,11 @@
+2005-09-20 Perry Rapp
+
+	* ChangeLog configure.in po/LINGUAS
+	*NEW po/es.po
+
+	Add untranslated Spanish message catalog (in order to 
+	add the minimal strings for reports).
+
 2005-09-19 Matt Emmerton
 
 	* ChangeLog src/liflines/screen.c
