@@ -1,5 +1,12 @@
 2005-09-19 Matt Emmerton
 
+	* ChangeLog src/liflines/screen.c
+
+	Improve cursor handling during external editing and
+	dynamic menus.
+
+2005-09-19 Matt Emmerton
+
 	* ChangeLog configure.in src/hdrs/screen.h
 	src/hdrs/win32/curses.h src/gedlib/editvtab.c
 	* NEW: src/hdrs/mycurses.h

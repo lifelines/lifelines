@@ -2286,7 +2286,10 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 	INT offset=0;
 	INT cmdnum;
 	INT c, i, n = str ? strlen(str) : 0;
-	while (TRUE) {
+
+	/* Menu Loop */
+	while (TRUE)
+	{
 		INT time_start=time(NULL);
 		crmode();
 		keypad(uiw_win(uiwin),1);
@@ -2322,9 +2325,13 @@ interact (UIWINDOW uiwin, STRING str, INT screen)
 				buffer[1] = 0;
 				offset = 1;
 			}
+
+			/* Get Menu Command */
 			cmdnum = menuset_check_cmd(get_screen_menuset(screen), buffer);
-			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL)
+			/* Act On Menu Command */
+			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL) {
 				return cmdnum;
+			}
 			if (cmdnum != CMD_PARTIAL) {
 				msg_error(_(qSmn_unkcmd));
 				offset = 0;
@@ -2973,9 +2980,11 @@ place_cursor_main (void)
 				STRING title = get_screen_title(cur_screen);
 				row = ll_lines-2;
 				col = strlen(title)+3;
+				curs_set(0);
 			} else {
 				row = dynmenu->cur_y;
 				col = dynmenu->cur_x;
+				curs_set(1);
 			}
 		}
 		break;
@@ -3016,6 +3025,7 @@ do_edit (void)
 	system(editstr);
 #endif
 	clearok(curscr, 1);
+	place_cursor_main();
 	wrefresh(curscr);
 	noecho();
 }
