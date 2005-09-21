@@ -62,6 +62,7 @@ int box(WINDOW *wp, chtype x, chtype y);
 int cbreak();
 int clearok(WINDOW *wp, int okay);
 int crmode();
+int curs_set(int mode);
 int delwin(WINDOW *wp);
 int doupdate(void);
 int echo();

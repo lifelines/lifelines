@@ -46,6 +46,7 @@ static HANDLE hStdout = INVALID_HANDLE_VALUE;
 static DWORD dwModeIn = 0;
 static DWORD dwModeOut = 0;
 static CONSOLE_SCREEN_BUFFER_INFO ConScreenBuffer = {0};
+static CONSOLE_CURSOR_INFO ConCursorInfo = {0};
 static COORD cOrigin = {0,0};
 static int redirected_in = 0;
 static int redirected_out = 0;
@@ -210,6 +211,14 @@ int cbreak()
 int nocbreak()
 {
 	SetConsoleMode(hStdin, dwModeIn);
+	return(0);
+}
+
+int curs_set(int mode)
+{
+	/* mode 0 = hide, 1 = show */
+	ConCursorInfo.bVisible = mode;
+	SetConsoleCursorInfo(win, &ConCursorInfo);
 	return(0);
 }
 
@@ -739,6 +748,14 @@ static int mycur_init(int fullscreen)
 			2002-10-19, Perry
 			*/
 		}
+
+		/* get info on cursor */
+		GetConsoleCursorInfo(hStdout, &ConCursorInfo);
+		/*
+		TODO: What to do with console cursor functions when output redirected?
+		2005-09-21, Matt
+		*/
+
 #ifdef DEBUG
 		fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
 			ConScreenBuffer.dwSize.X, ConScreenBuffer.dwSize.Y,
@@ -755,6 +772,7 @@ static int mycur_init(int fullscreen)
 		}
 		cStartPos.X = 0;
 		cStartPos.Y = 0;
+
 		/* clear console (fill with blanks) */
 		FillConsoleOutputCharacter(hStdout, (TCHAR)' ',
 			(DWORD)(ConScreenBuffer.dwSize.X*ConScreenBuffer.dwSize.Y),

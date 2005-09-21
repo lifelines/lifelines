@@ -1,3 +1,9 @@
+2005-09-21 Matt Emmerton
+
+	* ChangeLog src/hdrs/win32/curses.h win32/mycurses.c
+
+	Add implementation of curs_set().
+
 2005-09-21 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
@@ -14,6 +20,7 @@
 	Add untranslated Spanish message catalog (in order to 
 	add the minimal strings for reports).
 
+>>>>>>> 1.1611
 2005-09-19 Matt Emmerton
 
 	* ChangeLog src/liflines/screen.c
