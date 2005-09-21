@@ -1,3 +1,11 @@
+2005-09-21 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/hdrs/mycurses.h
+
+	Fix hdrs/mycurses.h to include existing win32/curses.h
+	(instead of nonexistent win32/mycurses.h).
+
 2005-09-20 Perry Rapp
 
 	* ChangeLog configure.in po/LINGUAS

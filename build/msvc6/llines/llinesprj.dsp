@@ -841,6 +841,10 @@ SOURCE=..\..\..\src\hdrs\mychar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\mycurses.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\mystring.h
 # End Source File
 # Begin Source File
