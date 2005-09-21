@@ -1,3 +1,9 @@
+2005-09-20 Perry Rapp
+
+	* ChangeLog win32/mycurses.c
+
+	Fix win32 impl. of curs_set (use hStdout for console handle).
+
 2005-09-21 Matt Emmerton
 
 	* ChangeLog src/hdrs/win32/curses.h win32/mycurses.c

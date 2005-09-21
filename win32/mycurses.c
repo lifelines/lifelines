@@ -218,7 +218,7 @@ int curs_set(int mode)
 {
 	/* mode 0 = hide, 1 = show */
 	ConCursorInfo.bVisible = mode;
-	SetConsoleCursorInfo(win, &ConCursorInfo);
+	SetConsoleCursorInfo(hStdout, &ConCursorInfo);
 	return(0);
 }
 
