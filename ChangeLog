@@ -1,9 +1,3 @@
-2005-09-21 matt Emmerton
-
-	* ChangeLog configure.in
-
-	Check for bison only when in maintainer mode.
-
 2005-09-21 Perry Rapp
 
 	* ChangeLog win32/mycurses.c

@@ -18,18 +18,14 @@ AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 
-dnl Checks for programs required in maintainer mode.
 dnl MTE: 01/11/04: Force the use of GNU Bison only.
 dnl MTE: AC_PROG_YACC will find any YACC, but only
 dnl MTE: Bison works for us.
-if test "$USE_MAINTAINER_MODE" != "no"
+AC_PROG_YACC
+if test "$YACC" != "bison -y";
 then
-  AC_PROG_YACC
-  if test "$YACC" != "bison -y";
-  then
-    echo "LifeLines requires GNU Bison to compile src/interp/yacc.y."
-    exit
-  fi
+  echo "LifeLines requires GNU Bison to compile src/interp/yacc.y."
+  exit
 fi
 
 dnl Internationalization (gettext)
