@@ -1,8 +1,12 @@
-2005-09-20 Perry Rapp
+2005-09-21 Perry Rapp
 
 	* ChangeLog win32/mycurses.c
 
 	Fix win32 impl. of curs_set (use hStdout for console handle).
+
+	* ChangeLog src/hdrs/log.h src/stdlib/log.c
+
+	New function log_bytecode to help developer work on encoding issues.
 
 2005-09-21 Matt Emmerton
 

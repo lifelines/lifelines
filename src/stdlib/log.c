@@ -25,17 +25,52 @@ log_outf (const char * filepath, const char * fmt, ...)
 	char buffer[4096];
 	LLDATE creation;
 
+	if (!filepath || !filepath[0]) return;
+
 	fp = fopen(filepath, LLAPPENDTEXT);
 	if (!fp) return;
 
 	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
-	
+
 	get_current_lldate(&creation);
 	fprintf(fp, "%s: %s\n", creation.datestr, buffer);
 
 	fclose(fp);
 
 	va_end(args);
+}
+/*===============================
+ * log_bytecode -- Append byte sequence in hexadecimal format, with leading string
+ *=============================*/
+void
+log_bytecode (const char * filepath, const char * intro, const char * bytes)
+{
+	FILE * fp = 0;
+	LLDATE creation;
+	const char * ptr=0;
+	int count=0;
+
+	if (!filepath || !filepath[0]) return;
+
+	fp = fopen(filepath, LLAPPENDTEXT);
+	if (!fp) return;
+
+	if (!intro) intro = "";
+
+	get_current_lldate(&creation);
+	fprintf(fp, "%s: %s ", creation.datestr, intro);
+	count = 8;
+
+	for (ptr = bytes; *ptr; ++ptr) {
+		fprintf(fp, " %02x", (unsigned int)(unsigned char)*ptr);
+		if (++count > 20) {
+			fprintf(fp, "\n   ");
+			count = 0;
+		}
+	}
+	fprintf(fp, "\n");
+
+	fclose(fp);
 }
 
