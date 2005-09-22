@@ -1,3 +1,9 @@
+2005-09-21 matt Emmerton
+
+	* ChangeLog configure.in
+
+	Check for bison only when in maintainer mode.
+
 2005-09-21 Perry Rapp
 
 	* ChangeLog win32/mycurses.c
@@ -30,7 +36,6 @@
 	Add untranslated Spanish message catalog (in order to 
 	add the minimal strings for reports).
 
->>>>>>> 1.1611
 2005-09-19 Matt Emmerton
 
 	* ChangeLog src/liflines/screen.c
