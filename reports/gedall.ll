@@ -11,6 +11,9 @@
  * submitter records. It also gives the option to keep or remove user defined
  * tags, and to remove any other tags.
  *
+ * modified Sep 2005 to use getproperties to automatically generate the header
+ * by Stephen Dum dr.doom@verizon.net
+ *
  * The default action is to remove all user defined tags. These are tags
  * which begin with an underscore, "_", character.
  *
@@ -19,8 +22,13 @@
  *
  * This report program may require LifeLines 3.0.3 or later.
  *
- * Required files:
- *   header.ged, submit.ged (see samples at end of this file)
+ *   The gedcom header is generated in main() using property's
+ *   obtained from the lifelines config file (~/.linesrc on unix else
+ *   lines.cfg - or from properties set in the database) with values from
+ *   the user defined properties
+ *   user.fullname
+ *   user.email
+ *   user.address
  *
  * This report program was tested on databases created from the Test Book
  * sample GEDCOM files at http://www.gentech.org
@@ -52,11 +60,26 @@ proc main ()
     else { break() }
   }
 
-  copyfile("header.ged")	/* header file (references @SM1@) */
-
+  /* header file  */
+  "0 HEAD " nl()
+  "1 SOUR LIFELINES" nl()
+  "2 VERS " version() nl()
+  "2 NAME LifeLines" nl()
+  /*
+  "2 CORP ... "  nl()
+  "3 ADDR .... " nl()
+  */
+  "1 SUBM @SM1@" nl()
+  "1 GEDC " nl()
+  "2 VERS 5.5" nl()
+  "2 FORM Lineage-Linked" nl()
+  "1 CHAR ASCII" nl()
   "1 DATE " stddate(gettoday()) nl()
-
-  copyfile("submit.ged")	/* submitter file (defines @SM1@) */
+  /* and referenced submitter */
+  "0 @SM1@ SUBM" nl()
+  "1 NAME " getproperty("user.fullname") nl()
+  "1 ADDR " getproperty("user.address") nl()
+  "2 CONT E-mail: " getproperty("user.email") nl()
 
   set(icnt, 0)
   forindi(p, n) {
@@ -152,25 +175,3 @@ func askyn(msg)
   }
   return(1)
 }
-
-/* same header.ged 
-0 HEAD 
-1 SOUR LIFELINES
-2 VERS 3.0.5
-2 NAME LifeLines
-2 CORP T. T. Wetmore
-3 ADDR ttw@shore.net
-1 SUBM @SM1@
-1 GEDC 
-2 VERS 5.5
-2 FORM Lineage-Linked
-1 CHAR ASCII
-* end of sample header.ged */
-
-/* sample submit.ged
-0 @SM1@ SUBM
-1 NAME Your Name Here
-1 ADDR Your Street Address
-2 CONT Your City, State and Zip Code
-2 CONT E-mail: your@email.address
-* end of sample submit.ged */
