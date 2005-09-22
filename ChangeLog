@@ -1,3 +1,8 @@
+2005-09-22 Stephen Dum
+        * ChangeLog reports/gedn.ll
+
+	gedn incorrectly tried to include ged_write.ll instead of ged_write.li
+
 2005-09-21 Perry Rapp
 
 	* ChangeLog win32/mycurses.c

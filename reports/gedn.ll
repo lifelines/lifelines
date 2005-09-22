@@ -14,7 +14,7 @@
  * as well as the person him/herself 
  */
 
-include("ged_write.ll")
+include("ged_write.li")
 
 proc main ()
 {
