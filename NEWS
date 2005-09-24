@@ -2,6 +2,10 @@ LifeLines Source Release, Version 3.0.47
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.48
+============================
+ - Use cursesw where available, to work correctly with UTF-8 locales
+
 New features added in 3.0.47 (beta)
 ============================
  - Adjustable indent (GedcomDisplayIndent) in pedigree (sf#1224300)

@@ -9,6 +9,10 @@
 
 	Fix bug in charprops_is_loaded.
 
+	* ChangeLog NEWS
+
+	Note fix to use cursesw for UTF-8 locales in NEWS.
+
 2005-09-22 Stephen Dum
 
 	* ChangeLog reports/gedn.ll reports/gedall.ll
