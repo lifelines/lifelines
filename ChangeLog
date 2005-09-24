@@ -5,8 +5,13 @@
 
 	Use libncursew if available (for full UTF-8 support).
 
+	* ChangeLog src/gedlib/charprops.c
+
+	Fix bug in charprops_is_loaded.
+
 2005-09-22 Stephen Dum
-        * ChangeLog reports/gedn.ll reports/gedall.ll
+
+	* ChangeLog reports/gedn.ll reports/gedall.ll
 
 	gedn incorrectly tried to include ged_write.ll instead of ged_write.li
 	Modified gedall.ll to generate gedcom header using properties,

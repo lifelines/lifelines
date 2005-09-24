@@ -138,7 +138,7 @@ charprops_load_utf8 (void)
 BOOLEAN
 charprops_is_loaded (void)
 {
-	return !!loaded_utf8;
+	return (loaded_utf8 > 0);
 }
 /*==========================================
  * charprops_free_all -- Free all allocated resources
