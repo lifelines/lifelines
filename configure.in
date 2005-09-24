@@ -114,6 +114,10 @@ AC_ARG_WITH(profiling,
 
 echo Looking for libraries
 echo Looking for ncurses
+AC_CHECK_LIB(ncursesw, tparm)
+if test "$ac_cv_lib_ncursesw_tparm" = "yes"; then
+  echo Using ncursesw
+else
 AC_CHECK_LIB(ncurses, tparm)
 if test "$ac_cv_lib_ncurses_tparm" = "yes"; then
   echo Using ncurses
@@ -134,6 +138,7 @@ else
       ;;
     esac
   fi
+fi
 fi
 
 dnl AC_CHECK_LIB(gdbm, gdbm_open)

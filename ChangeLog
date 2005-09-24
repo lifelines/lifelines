@@ -1,3 +1,10 @@
+2005-09-24 Perry Rapp
+
+	* ChangeLog configure.in src/hdrs/mycurses.h
+	src/lifelines/cscurses.c
+
+	Use libncursew if available (for full UTF-8 support).
+
 2005-09-22 Stephen Dum
         * ChangeLog reports/gedn.ll reports/gedall.ll
 

@@ -4,7 +4,9 @@
 
 #include "config.h"
 
-#if defined(HAVE_LIBNCURSES) || defined(HAVE_LIBCURSES)
+#if defined(HAVE_LIBNCURSESW)
+#include <ncursesw/curses.h>
+#elif defined(HAVE_LIBNCURSES) || defined(HAVE_LIBCURSES)
 #include <curses.h>
 #elif defined(HAVE_WINDOWS_H)
 #include "win32/curses.h"
