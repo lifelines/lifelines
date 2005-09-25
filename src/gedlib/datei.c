@@ -80,8 +80,6 @@ STRING date_pic;
 /* generated month names (for Gregorian/Julian months) */
 STRING calendar_pics[GDV_CALENDARS_IX];
 
-typedef STRING MONTH_NAMES[6];
-
 STRING roman_lower[] = { "i","ii","iii","iv","v","vi","vii","viii"
 	,"ix","x","xi","xii","xiii" };
 STRING roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"

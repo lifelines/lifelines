@@ -7,6 +7,11 @@
 	Split code for parsing dates, and code for printing dates,
 	into different files.
 
+	* ChangeLog src/gedlib/Makefile.am src/gedlib/datei.c
+
+	Fix Makefile.am for new date files. Fix a typedef incorrectly
+	in both datei.h and date.c.
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h

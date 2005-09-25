@@ -9,7 +9,8 @@ noinst_LIBRARIES = libgedcom.a
 
 libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 	choose.c codesets.c \
-	date.c dblist.c dispfmt.c editmap.c \
+	datei.c dateparse.c dateprint.c \
+	dblist.c dispfmt.c editmap.c \
 	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c \
 	indiseq.c init.c intrface.c keytonod.c lloptions.c \
 	lldatabase.c locales.c \
@@ -25,5 +26,5 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 # $(top_srcdir)/src/hdrs for headers
 INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
-EXTRA_DIST = gedcomi.h
+EXTRA_DIST = datei.h gedcomi.h
 
