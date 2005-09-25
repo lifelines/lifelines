@@ -67,7 +67,7 @@ extern STRING qSaskstr,qSchoostrttl;
  *********************************************/
 
 static VPTR create_list_value_pvalue(LIST list);
-static INT normalize_year(struct tag_dnum yr);
+static INT normalize_year(INT yr);
 static ZSTR decode(STRING str, INT * offset);
 
 /*********************************************
@@ -2809,12 +2809,9 @@ __date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * historical behavior is that 0 is the return for unknown year
  *====================================================*/
 static INT
-normalize_year (struct tag_dnum yr)
+normalize_year (INT yr)
 {
-	if (yr.val == BAD_YEAR)
-		return 0;
-	else
-		return yr.val;
+	return (yr == BAD_YEAR) ? 0 : yr;
 }
 /*=====================================================+
  * __extractdate -- Extract date from EVENT or DATE NODE
@@ -2825,7 +2822,7 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str;
 	NODE line;
-	INT mod, da = 0, mo = 0, yr = 0;
+	INT da = 0, mo = 0, yr = 0;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	PNODE dvar = inext(arg);
@@ -2861,10 +2858,10 @@ __extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue(val);
 	gdv = extract_date(str);
 	/* TODO: deal with date information */
-	mod = gdv->date1.mod;
-	da = gdv->date1.day.val;
-	mo = gdv->date1.month.val;
-	yr = normalize_year(gdv->date1.year);
+	da = date_get_day(gdv);
+	mo = date_get_month(gdv);
+	yr = date_get_year(gdv);
+	yr = normalize_year(yr);
 	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
 	assign_iden(stab, iident(mvar), create_pvalue_from_int(mo));
 	assign_iden(stab, iident(yvar), create_pvalue_from_int(yr));
@@ -2880,7 +2877,7 @@ PVALUE
 __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str = NULL, yrstr;
-	INT mod, da, mo, yr;
+	INT mod=0, da=0, mo=0, yr=0;
 	PVALUE val;
 	PNODE date;
 	PNODE modvar = (PNODE) iargs(node);
@@ -2926,11 +2923,12 @@ __extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	gdv = extract_date(str);
 	/* TODO: deal with date information */
-	mod = gdv->date1.mod;
-	da = gdv->date1.day.val;
-	mo = gdv->date1.month.val;
-	yr = normalize_year(gdv->date1.year);
-	yrstr = gdv->date1.year.str;
+	mod = date_get_mod(gdv);
+	da = date_get_day(gdv);
+	mo = date_get_month(gdv);
+	yr = date_get_year(gdv);
+	yr = normalize_year(yr);
+	yrstr = date_get_year_string(gdv);
 	if (!yrstr) yrstr="";
 	assign_iden(stab, iident(modvar), create_pvalue_from_int(mod));
 	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
@@ -3207,14 +3205,19 @@ __year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	gdv = extract_date(str);
 	/* prefer year's string if it has one */
-	if (gdv->date1.year.str && gdv->date1.year.str[0]) {
-		str = gdv->date1.year.str;
-	} else if (gdv->date1.year.val != BAD_YEAR) {
-		/* no year string, so must have been a simple number */
-		snprintf(buff, sizeof(buff), "%d", gdv->date1.year.val);
-		str = buff;
-	} else
-		str = 0;
+	str = date_get_year_string(gdv);
+	if (str && str[0]) {
+		/* we'll use year string, now in str */
+	} else {
+		INT yr = date_get_year(gdv);
+		if (yr != BAD_YEAR) {
+			/* no year string, so must have been a simple number */
+			snprintf(buff, sizeof(buff), "%d", yr);
+			str = buff;
+		} else {
+			str = 0;
+		}
+	}
 	set_pvalue_string(val, str);
 	free_gdateval(gdv);
 	return val;

@@ -455,3 +455,49 @@ title_dup (STRING s)
 	zs_free(&zstr);
 	return str;
 }
+/*=============================
+ * date_get_day -- Day number of first date
+ *===========================*/
+INT
+date_get_day (GDATEVAL gdv)
+{
+	ASSERT(gdv);
+	return gdv->date1.day.val;
+}
+/*=============================
+ * date_get_month -- Month number of first date
+ *===========================*/
+INT
+date_get_month (GDATEVAL gdv)
+{
+	ASSERT(gdv);
+	return gdv->date1.month.val;
+}
+/*=============================
+ * date_get_year -- Year number of first date
+ *===========================*/
+INT
+date_get_year (GDATEVAL gdv)
+{
+	ASSERT(gdv);
+	return gdv->date1.year.val;
+}
+/*=============================
+ * date_get_year_string -- Raw year string of first date
+ *===========================*/
+STRING
+date_get_year_string (GDATEVAL gdv)
+{
+	ASSERT(gdv);
+	return gdv->date1.year.str;
+}
+/*=============================
+ * date_get_mod -- Mod value of first date
+ * Perry, 2005-09-25, I don't think this is ever populated
+ *===========================*/
+INT
+date_get_mod (GDATEVAL gdv)
+{
+	ASSERT(gdv);
+	return gdv->date1.mod;
+}

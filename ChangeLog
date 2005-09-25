@@ -16,6 +16,12 @@
 
 	Move datei.h into headers folder in MSVC6 project.
 
+	* ChangeLog src/gedlib/datei.c src/gedlib/datei.h
+	src/hdrs/date.h src/interp/builtin.c
+
+	Move a bunch of date structures & enums from date.h into private datei.h.
+	Add accessors as needed for this move (date_get_day, date_get_month, etc).
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h
