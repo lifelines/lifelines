@@ -721,6 +721,10 @@ SOURCE=..\..\..\src\hdrs\date.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\datei.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\dbfuncs.h
 # End Source File
 # Begin Source File
@@ -943,10 +947,6 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\gedlib\datei.h
 # End Source File
 # End Target
 # End Project

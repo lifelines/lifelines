@@ -12,6 +12,10 @@
 	Fix Makefile.am for new date files. Fix a typedef incorrectly
 	in both datei.h and date.c.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+
+	Move datei.h into headers folder in MSVC6 project.
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h
