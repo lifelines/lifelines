@@ -26,6 +26,10 @@
 
 	Always format GEDCOM date phrases (parenthesized) using original text.
 
+	* ChangeLog NEWS
+
+	Note GEDCOM date phrase display feature in next release.
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h

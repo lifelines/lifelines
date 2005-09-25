@@ -1,6 +1,10 @@
-LifeLines Source Release, Version 3.0.47
+LifeLines Source Release, Version 3.0.47post
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+New features added in 3.0.48
+============================
+ - Formatted dates now display GEDCOM date phrases raw
 
 Bug fixes in 3.0.48
 ============================
