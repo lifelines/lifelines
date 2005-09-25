@@ -118,6 +118,10 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 	if (!cmplx) {
 		/* simple */
 		gdv = extract_date(str);
+		if (gdv->valid == GDV_V_PHRASE) {
+			/* GEDCOM date phrases (parenthesized) shown "as is" */
+			return zs_news(gdv->text);
+		}
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = format_year(gdv->date1.year, yfmt);
@@ -133,6 +137,10 @@ do_zformat_date (STRING str, INT dfmt, INT mfmt,
 		ZSTR zstr3=0;
 		/* complex (include modifier words) */
 		gdv = extract_date(str);
+		if (gdv->valid == GDV_V_PHRASE) {
+			/* GEDCOM date phrases (parenthesized) shown "as is" */
+			return zs_news(gdv->text);
+		}
 		format_day(gdv->date1.day, dfmt, daystr);
 		smo = format_month(gdv->date1.calendar, gdv->date1.month, mfmt);
 		syr = (gdv->date1.year.str ? gdv->date1.year.str 

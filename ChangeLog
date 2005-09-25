@@ -22,6 +22,10 @@
 	Move a bunch of date structures & enums from date.h into private datei.h.
 	Add accessors as needed for this move (date_get_day, date_get_month, etc).
 
+	* ChangeLog src/gedlib/dateprint.c
+
+	Always format GEDCOM date phrases (parenthesized) using original text.
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h
