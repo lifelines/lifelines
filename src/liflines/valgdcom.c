@@ -1099,4 +1099,11 @@ validate_get_warning_count (void)
 {
 	return num_warns;
 }
-
+/*===================================================
+ * validate_end_import -- Free any memory left after import finished
+ *=================================================*/
+void
+validate_end_import (void)
+{
+	clear_structures();
+}

@@ -132,6 +132,7 @@ void addmissingkeys (INT);
 int check_stdkeys (void);
 BOOLEAN scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
 BOOLEAN validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
+void validate_end_import(void);
 INT validate_get_warning_count(void);
 INT xref_to_index (STRING);
 

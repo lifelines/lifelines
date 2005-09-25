@@ -311,6 +311,7 @@ TODO: why were these here ?
 	succeeded = TRUE;
 
 end_import:
+	validate_end_import();
 	zs_free(&zerr);
 	destroy_table(metadatatab);
 	strfree(&gdcodeset);

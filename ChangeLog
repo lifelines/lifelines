@@ -30,6 +30,12 @@
 
 	Note GEDCOM date phrase display feature in next release.
 
+	* ChangeLog src/liflines/import.c src/liflines/llinesi.h
+	src/liflines/valgdcom.c
+
+	New function validate_end_import, called from do_import, to plug leaks.
+
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h
