@@ -1,3 +1,12 @@
+2005-09-25 Perry Rapp
+
+	* ChangeLong build/msvc6/llines/llinesprj.dsp
+	src/gedlib/datei.c src/gedlib/datei.h src/gedlib/dateparse.c
+	src/gedlib/dateprint.c src/gedlib/date.c
+
+	Split code for parsing dates, and code for printing dates,
+	into different files.
+
 2005-09-24 Perry Rapp
 
 	* ChangeLog configure.in src/hdrs/mycurses.h
