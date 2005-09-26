@@ -251,6 +251,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		f_logopen = FALSE;
 		f_flog = 0;
 	}
+	strfree(&tag0);
 	return num_errors == 0;
 }
 /*=======================================

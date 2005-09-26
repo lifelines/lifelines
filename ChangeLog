@@ -9,6 +9,10 @@
 
 	Leak fix in xlat call to scandir (in load_dynttlist_from_dir).
 
+	* src/liflines/valgdcom.c
+
+	Leak fix in validate_gedcom (tag0).
+
 2005-09-25 Perry Rapp
 
 	* ChangeLong build/msvc6/llines/llinesprj.dsp
