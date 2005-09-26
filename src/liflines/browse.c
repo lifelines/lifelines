@@ -170,6 +170,7 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
 			*prec = key_to_irecord(key);
+			/* leaking sequence here, Perry, 2005-09-25 */
 			*pseq = NULL;
 		} else {
 			*code = BROWSE_LIST;

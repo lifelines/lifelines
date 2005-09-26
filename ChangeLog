@@ -13,6 +13,10 @@
 
 	Leak fix in validate_gedcom (tag0).
 
+	* ChangeLog src/liflines/browse.c
+
+	Annotate location of a memory leak.
+
 2005-09-25 Perry Rapp
 
 	* ChangeLong build/msvc6/llines/llinesprj.dsp
