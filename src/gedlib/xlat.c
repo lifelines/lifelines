@@ -480,8 +480,12 @@ load_dynttlist_from_dir (STRING dir)
 		zs_free(&zsrc);
 		zs_free(&zdest);
 	}
-	if (n>0)
+	if (n>0) {
+		for (i=0; i<n; ++i) {
+			stdfree(programs[i]);
+		}
 		stdfree(programs);
+	}
 }
 /*===========================================================
  * check_tt_name -- Parse tt filename to see what codesets it does

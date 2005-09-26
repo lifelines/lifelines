@@ -5,6 +5,10 @@
 
 	More leak fix in import; new function free_elmnt.
 
+	* ChangeLog src/gedlib/xlat.c
+
+	Leak fix in xlat call to scandir (in load_dynttlist_from_dir).
+
 2005-09-25 Perry Rapp
 
 	* ChangeLong build/msvc6/llines/llinesprj.dsp
