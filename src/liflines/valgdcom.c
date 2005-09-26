@@ -117,6 +117,8 @@ static void check_othr_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_references(IMPORT_FEEDBACK ifeed);
 static void check_sour_links(IMPORT_FEEDBACK ifeed, ELMNT src);
 static void clear_structures(void);
+static ELMNT create_elmnt(CHAR eltype, CNSTRING xref);
+static void free_elmnt(ELMNT el);
 static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line);
 static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
@@ -250,6 +252,28 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		f_flog = 0;
 	}
 	return num_errors == 0;
+}
+/*=======================================
+ * create_elmnt -- Return newly alloc'd ELMNT
+ *=====================================*/
+static ELMNT
+create_elmnt (CHAR eltype, CNSTRING xref)
+{
+	ELMNT el = (ELMNT) stdalloc(sizeof(*el));
+	memset(el, 0, sizeof(*el));
+	Type(el) = eltype;
+	Key(el) = strsave(xref);
+	return el;
+}
+/*=======================================
+ * free_elmnt -- Free memory of element
+ *=====================================*/
+static void
+free_elmnt (ELMNT el)
+{
+	strfree(&el->key);
+	strfree(&el->newstr);
+	stdfree(el);
 }
 /*=======================================
  * add_indi_defn -- Add person definition
@@ -959,8 +983,7 @@ xref_to_index (STRING xref)
  * add_to_structures -- Add new elements to data structures
  *=======================================================*/
 static INT
-add_to_structures(STRING xref,
-                  ELMNT el)
+add_to_structures (STRING xref, ELMNT el)
 {
 	INT i, n;
 
@@ -986,13 +1009,18 @@ clear_structures (void)
 {
 	INT i;
 
-	for (i = 0; i < struct_len; i++)
-		stdfree(index_data[i]);
-	struct_len = 0;
 	if (convtab) {
+		/* elements are destroyed below, because
+		index_data points to them */
 		destroy_table(convtab);
 		convtab = NULL;
 	}
+	for (i = 0; i < struct_len; i++) {
+		ELMNT el = index_data[i];
+		index_data[i] = 0;
+		free_elmnt(el);
+	}
+	struct_len = 0;
 }
 /*=====================================
  * set_import_log -- Specify where import errors logged

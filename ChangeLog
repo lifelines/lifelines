@@ -1,3 +1,10 @@
+2005-09-26 Perry Rapp
+
+	* ChangeLog src/hdrs/gedcheck.h src/hdrs/standard.h
+	src/liflines/valgdcom.c
+
+	More leak fix in import; new function free_elmnt.
+
 2005-09-25 Perry Rapp
 
 	* ChangeLong build/msvc6/llines/llinesprj.dsp

@@ -122,8 +122,11 @@ typedef union {
 #endif
 
 extern BOOLEAN alloclog;
+/* "stdalloc (" -- see macro below */
 #define stdalloc(l)   __allocate(l, __FILE__, __LINE__)
+/* "stdfree (" -- see macro below */
 #define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
+/* "stdrealloc (" -- see macro below */
 #define stdrealloc(p, size) __reallocate(p, size, __FILE__, __LINE__)
 #define FATAL()       __fatal(__FILE__, __LINE__, NULL)
 #define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)

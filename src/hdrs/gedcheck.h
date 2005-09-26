@@ -52,12 +52,12 @@ typedef struct {
 	INT dex;
 	INT line;
 	STRING key;
-	STRING new;
+	STRING newstr;
 } *ELMNT;
 
 #define Type(e) ((e)->type)
 #define Key(e)  ((e)->key)
-#define New(e)  ((e)->new)
+#define New(e)  ((e)->newstr)
 #define Dex(e)  ((e)->dex)
 #define Line(e) ((e)->line)
 #define Sex(e)  ((e)->sex)
