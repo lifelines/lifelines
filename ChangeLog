@@ -4,6 +4,11 @@
 
 	Cosmetic: comment updates & formatting
 
+	* ChangeLog po/POTFILES.in
+
+	Fix filename list (date.c replaced by dateparse.c
+	and dateprint.c).
+
 2005-09-26 Perry Rapp
 
 	* ChangeLog src/hdrs/gedcheck.h src/hdrs/standard.h

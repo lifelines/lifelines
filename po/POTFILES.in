@@ -4,7 +4,8 @@
 # This list may not be complete.
 
 src/gedlib/charmaps.c
-src/gedlib/date.c
+src/gedlib/dateparse.c
+src/gedlib/dateprint.c
 src/gedlib/editmap.c
 src/gedlib/editvtab.c
 src/gedlib/gedcom.c
