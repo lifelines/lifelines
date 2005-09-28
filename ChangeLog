@@ -1,3 +1,9 @@
+2005-09-28 Perry Rapp
+
+	* ChangeLog src/btree/opnbtree. src/liflines/main.c
+
+	Cosmetic: comment updates & formatting
+
 2005-09-26 Perry Rapp
 
 	* ChangeLog src/hdrs/gedcheck.h src/hdrs/standard.h

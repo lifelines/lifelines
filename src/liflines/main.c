@@ -524,7 +524,6 @@ is_unadorned_directory (STRING path)
  * if fails, displays error (show_open_error) and returns 
  *  FALSE
  *  alteration:   [IN]  flags for locking, forcing open...
- *  dbrequested:  [IN]  database specified by user (usually relative)
  *  dbused:       [I/O] actual database path (may be relative)
  * If this routine creates new database, it will alter dbused
  * Created: 2001/04/29, Perry Rapp
