@@ -38,6 +38,10 @@
 
 	Remove cvs conflict markers in spec file.
 
+	* ChangeLog build/rpm/lifelines.spec
+
+	Fix path & filename bugs in lifelines.spec file.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c

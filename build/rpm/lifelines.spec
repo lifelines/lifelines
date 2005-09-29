@@ -79,11 +79,11 @@ install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
 install -m 644 reports/novel/novel* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
-install -m 644 reports/novel/pedtex* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
-install -m 644 reports/novel/*.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+install -m 644 reports/pedtex/pedtex* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+install -m 644 reports/pedtex/*.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
-install -m 644 reports/novel/ps-fan* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
+install -m 644 reports/ps-fan/ps-fan* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
