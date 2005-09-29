@@ -34,6 +34,10 @@
 	Add more translations, and include *.li files.
 	Add novel, pedtex, and ps-fan subdirs of reports.
 
+	* ChangeLog build/rpm/lifelines.spec
+
+	Remove cvs conflict markers in spec file.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c
