@@ -17,6 +17,14 @@
 
 	Ensure row is initialized in place_cursor_main.
 
+	* ChangeLog INSTALL NEWS README README.MAINTAINERS configure.in
+	build/rpm/lifelines.spec docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml docs/llines.1
+	src/hdrs/version.h
+
+	Bump version to 3.0.48, starting to get ready for
+	release.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c

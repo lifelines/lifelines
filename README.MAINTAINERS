@@ -18,7 +18,7 @@ Edit the version number, setting it to the new release:
   docs/ll-devguide.xml (1 occurrence)
   docs/ll-reportmanual.xml (2 occurrences)
   docs/ll-userguide.xml (2 occurrences)
-  docs/llines.1
+  docs/llines.1 (& year & month as well)
 
 Run autotools:
   $ sh autogen.sh
