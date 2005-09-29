@@ -46,15 +46,44 @@ install -m 644 po/da.gmo $RPM_BUILD_ROOT/usr/local/share/locale/da/LC_MESSAGES/l
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/de/LC_MESSAGES
 install -m 644 po/de.gmo $RPM_BUILD_ROOT/usr/local/share/locale/de/LC_MESSAGES/lifelines.mo
 
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/eo/LC_MESSAGES
+install -m 644 po/eo.gmo $RPM_BUILD_ROOT/usr/local/share/locale/eo/LC_MESSAGES/lifelines.mo
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/es/LC_MESSAGES
+install -m 644 po/es.gmo $RPM_BUILD_ROOT/usr/local/share/locale/es/LC_MESSAGES/lifelines.mo
+
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/fr/LC_MESSAGES
 install -m 644 po/fr.gmo $RPM_BUILD_ROOT/usr/local/share/locale/fr/LC_MESSAGES/lifelines.mo
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/nl/LC_MESSAGES
+install -m 644 po/nl.gmo $RPM_BUILD_ROOT/usr/local/share/locale/nl/LC_MESSAGES/lifelines.mo
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/pl/LC_MESSAGES
+install -m 644 po/pl.gmo $RPM_BUILD_ROOT/usr/local/share/locale/pl/LC_MESSAGES/lifelines.mo
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/rw/LC_MESSAGES
+install -m 644 po/rw.gmo $RPM_BUILD_ROOT/usr/local/share/locale/rw/LC_MESSAGES/lifelines.mo
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/sv/LC_MESSAGES
 install -m 644 po/sv.gmo $RPM_BUILD_ROOT/usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/CREDIT reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/index.html reports/boc.gif reports/ll.png $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/*.li $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/CREDIT reports/index.html $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/boc.gif reports/ll.png $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/*.c $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -m 644 reports/ps-pedigree.ps reports/tree.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
+install -m 644 reports/novel/novel* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+install -m 644 reports/novel/pedtex* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+install -m 644 reports/novel/*.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
+install -m 644 reports/novel/ps-fan* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
 
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
@@ -81,6 +110,8 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Thu Sep 29 2005 Perry Rapp
+- Add eo, es, nl, pl, rw translations. Add *.li files. Add novel, pedtex, ps-fan reports.
 * Sun Jan 30 2005 Perry Rapp
 - Add comment about using rpmbuild on newer systems, and instruction about adding comments down here.
 * Tue May 06 2003 Perry Rapp
