@@ -5,7 +5,8 @@
 
 SUBDIRS = win32
 
-EXTRA_DIST = arch.h array.h btree.h \
+EXTRA_DIST = \
+	arch.h array.h btree.h \
 	cache.h charprops.h codesets.h cscurses.h \
 	date.h dbfuncs.h dbfuncsi.h \
 	feedback.h fpattern.h \
@@ -15,10 +16,12 @@ EXTRA_DIST = arch.h array.h btree.h \
 	isolangs.h interp.h \
 	langinfz.h liflines.h list.h llnls.h lloptions.h llstdlib.h \
 	log.h \
-	menuitem.h metadata.h mychar.h mystring.h object.h \
+	menuitem.h metadata.h mychar.h mycurses.h mystring.h \
+	object.h \
 	proptbls.h pvalue.h \
 	screen.h sequence.h standard.h sys_inc.h \
-	table.h translat.h ui.h uiprompts.h \
+	table.h translat.h \
+	ui.h uiprompts.h \
 	version.h vtable.h xlat.h zstr.h
 
 

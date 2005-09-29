@@ -25,6 +25,10 @@
 	Bump version to 3.0.48, starting to get ready for
 	release.
 
+	* ChangeLog src/hdrs/Makefile.am
+
+	Add (fairly recent) mycurses.h to src/hdrs/Makefile.am.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c
