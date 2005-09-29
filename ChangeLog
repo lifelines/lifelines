@@ -1,3 +1,10 @@
+2005-09-29 Perry Rapp
+
+	* ChangeLog reports/Makefile.am
+
+	Add some mising reports to Makefile.am, split self-tests 
+	into own target, and reformat lists.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c

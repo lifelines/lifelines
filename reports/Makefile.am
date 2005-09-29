@@ -6,9 +6,9 @@ AUTOMAKE_OPTIONS = no-dependencies
 # (included files go in a different target below)
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
-	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll	\
-	all_anc_lines.ll allfam10c.ll alllines.ll alllines.sgml.ll	\
-	altern.ll anc2_ged.ll ancestors2.ll anniver.ll 			\
+	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll  \
+	all_anc_lines.ll allfam10c.ll alllines.ll alllines.sgml.ll      \
+	altern.ll anc2_ged.ll ancestors2.ll anniver.ll                  \
 	bday_cover.ll bias.ll  bkdes16-1.ll book-latex.ll 		\
 	browser.ll burial_index.ll BW_descendants.ll cid.ll connect2.ll	\
 	cgi_html.li common.ll cons.ll cont.ll count_dup.ll 		\
@@ -18,56 +18,78 @@ LL_REPORTS = \
 	drep2.ll d-rtf.ll dump-ances.ll dump_html.ll dump_html_sd.ll	\
 	eol.ll est_life_span.ll extract_gedcom.ll extract_html.ll	\
 	extract_set.li fam10c.ll fam16rn1.ll fam_ged.ll famgroup.ll	\
-	familycheck.ll familyisfm1.ll famrep.ll famtree1.ll fileindex.ll \
+	fami-grps.li                                                    \
+	familycheck.ll familyisfm1.ll famrep.ll famtree1.ll             \
+	fileindex.ll                                                    \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\
 	formatted_gedcom.ll gedall.ll gedlist.ll gedlod.ll gedn.ll	\
-	gedtags.ll ged_write.li genancc1.ll genancc2.ll gender_order.ll \
+	gedtags.ll ged_write.li genanc.ll                               \
+	genancc1.ll genancc2.ll gender_order.ll                         \
 	gendex.ll							\
-	genetics.ll genetics2.ll getbaptism.li givens_gender.ll		\
-	givens_gender_finder.ll hasnotes1.ll hp-anc.ll htmlahnen.ll	\
-	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll	\
-	igi-merge.ll igi-search.ll index1.ll index_html.ll index_mm.ll	\
-	interestset.li indiv.ll infant_mortality.ll ldsgedcom.li	\
-	least_related.ll line.ll listsour.ll ll2html4.ll ll2visio.ll	\
-	longlines.ll maritalinfo.ll marriages1.ll menu.ll name2html.ll	\
-	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll		\
-        novel/novel.ll nonpatronymics.ll outsources.li paf-export.ll 	\
-	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll 	\
-	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll 	\
-	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll 	\
-	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll reg_html.ll	\
+	genetics.ll genetics2.ll getbaptism.li givens_gender.ll         \
+	givens_gender_finder.ll                                         \
+	grand.ll                                                        \
+	hasnotes1.ll hp-anc.ll htmlahnen.ll                             \
+	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll       \
+	igi-merge.ll igi-search.ll index1.ll index_html.ll index_mm.ll  \
+	interestset.li indiv.ll infant_mortality.ll ldsgedcom.li        \
+	least_related.ll line.ll listsour.ll ll2html4.ll ll2visio.ll    \
+	lldb.ll                                                         \
+	longlines.ll maritalinfo.ll marriages1.ll menu.ll name2html.ll  \
+	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll            \
+        novel/novel.ll nonpatronymics.ll outsources.li paf-export.ll    \
+	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll         \
+	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll        \
+	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll      \
+	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll reg_html.ll        \
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
-	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll	\
-	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll	\
+	regvital.ll regvital1.ll                                        \
+	relate.ll related_spouses.ll relation.ll relink.ll              \
+	rfc.ll rllgen.ll rootset.ll rslgen.ll                           \
+	rtflib.li sealing_line.ll	                                \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
-	soundex1.ll soundex-isfm.ll sour2.li sources.ll sources_bib.ll	\
-	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll		\
-	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll    \
-	timeline1.ll timeline2.ll tinytafel1.ll tools.li         \
-	tree_density.ll ttable.ll upl2.li verify.ll wife.ll      \
+	soundex1.ll soundex-isfm.ll sour.li                             \
+	sour2.li sources.ll sources_bib.ll                              \
+	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll            \
+	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll           \
+	timeline1.ll timeline2.ll tinytafel1.ll tools.li                \
+	tree_density.ll ttable.ll upl2.li verify.ll wife.ll             \
 	xml-dtd.ll xmlize.ll zombies.ll
 
 # OTHER_REPORTS is to hold included files besides actual report files
 # (eg, supporting files, graphics, included files)
-OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c \
-        desc-tex2/drtree.tex desc-tex2/extree2.tex desc-tex2/poster2.tex \
-        desc-tex2/pstricks.con desc-tex2/README \
-        desc-tex2/ex1.tex desc-tex2/mysetup.tex desc-tex2/poster.doc \
-        desc-tex2/pstricks.pro desc-tex2/setup.tex \
-        desc-tex2/drsetup.tex desc-tex2/extree1.tex desc-tex2/poster1.tex \
-        desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex \
-        novel/novel.head novel/novel.intro novel/novel.README \
-        pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex \
-        ps-fan/ps-fan.ps \
-        ps-pedigree.ps tree.tex \
-	st/st_aux.li st/st_collate.li    \
-	st/st_collate_8859-1.li st/st_collate_UTF-8.li \
-	st/st_convert.li st/st_date.li st/st_db.li \
-	st/st_list.li st/st_name.li \
-	st/st_number.li st/st_string.li st/st_string_UTF-8.li \
+OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c              \
+        desc-tex2/drtree.tex desc-tex2/extree2.tex                      \
+	desc-tex2/poster2.tex                                           \
+        desc-tex2/pstricks.con desc-tex2/README                         \
+        desc-tex2/ex1.tex desc-tex2/mysetup.tex desc-tex2/poster.doc    \
+        desc-tex2/pstricks.pro desc-tex2/setup.tex                      \
+        desc-tex2/drsetup.tex desc-tex2/extree1.tex                     \
+	desc-tex2/poster1.tex                                           \
+        desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex  \
+	gen_index                                                       \
+        novel/novel.head novel/novel.intro novel/novel.README           \
+        pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex           \
+        ps-fan/ps-fan.ps                                                \
+        ps-pedigree.ps tree.tex
+
+# SELFTEST_REPORTS is to hold all parts of the self-test scripts
+SELFTEST_REPORTS = \
+	st/st_aux.li             \
+	st/st_collate.li         \
+	st/st_collate_8859-1.li  \
+	st/st_collate_UTF-8.li   \
+	st/st_convert.li         \
+	st/st_date.li            \
+	st/st_db.li              \
+	st/st_list.li            \
+	st/st_name.li            \
+	st/st_number.li          \
+	st/st_string.li          \
+	st/st_string_UTF-8.li    \
 	st/st_table.li
 
-pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
+pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(SELFTEST_REPORTS)
 pkg_REPORTS_MISC = index.html CREDIT README tree.tex
 
 EXTRA_DIST = $(pkg_REPORTS) \
