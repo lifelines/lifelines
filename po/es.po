@@ -420,15 +420,15 @@ msgstr ""
 
 #: src/gedlib/messages.c:123
 msgid "This person's father is not in the database."
-msgstr ""
+msgstr "No hay el padre de esta persona en el database."
 
 #: src/gedlib/messages.c:124
 msgid "This person's mother is not in the database."
-msgstr ""
+msgstr "No hay la madre de esta persona en el database."
 
 #: src/gedlib/messages.c:125
 msgid "This person has no spouse in the database."
-msgstr ""
+msgstr "No hay esposo de esta persona en el database."
 
 #: src/gedlib/messages.c:126
 msgid "This person has no younger sibling in the database."
@@ -1306,27 +1306,27 @@ msgstr ""
 
 #: src/gedlib/messages.c:369
 msgid "father"
-msgstr ""
+msgstr "padre"
 
 #: src/gedlib/messages.c:370
 msgid "mother"
-msgstr ""
+msgstr "madre"
 
 #: src/gedlib/messages.c:371
 msgid "spouse"
-msgstr ""
+msgstr "esposo"
 
 #: src/gedlib/messages.c:372
 msgid "child"
-msgstr ""
+msgstr "niño"
 
 #: src/gedlib/messages.c:375
 msgid "m. "
-msgstr ""
+msgstr "cas."
 
 #: src/gedlib/messages.c:377
 msgid "div. "
-msgstr ""
+msgstr "div."
 
 #: src/gedlib/messages.c:379
 msgid "b. "
@@ -1338,19 +1338,19 @@ msgstr ""
 
 #: src/gedlib/messages.c:383
 msgid "d. "
-msgstr ""
+msgstr "m."
 
 #: src/gedlib/messages.c:385
 msgid "bur. "
-msgstr ""
+msgstr "ent."
 
 #: src/gedlib/messages.c:387
 msgid "cb. "
-msgstr ""
+msgstr "nb."
 
 #: src/gedlib/messages.c:389
 msgid "married: "
-msgstr ""
+msgstr "casado:"
 
 #: src/gedlib/messages.c:390
 msgid "born: "
@@ -1358,15 +1358,15 @@ msgstr ""
 
 #: src/gedlib/messages.c:391
 msgid "bapt: "
-msgstr ""
+msgstr "bapt:"
 
 #: src/gedlib/messages.c:392
 msgid "died: "
-msgstr ""
+msgstr "muerto:"
 
 #: src/gedlib/messages.c:393
 msgid "buri: "
-msgstr ""
+msgstr "enterr:"
 
 #: src/gedlib/messages.c:397
 msgid "You cannot edit the INDI line in a person record."
@@ -2650,43 +2650,43 @@ msgstr ""
 
 #: src/interp/builtin.c:1140
 msgid "first"
-msgstr ""
+msgstr "primero"
 
 #: src/interp/builtin.c:1140
 msgid "second"
-msgstr ""
+msgstr "segundo"
 
 #: src/interp/builtin.c:1140
 msgid "third"
-msgstr ""
+msgstr "tercero"
 
 #: src/interp/builtin.c:1140
 msgid "fourth"
-msgstr ""
+msgstr "cuarto"
 
 #: src/interp/builtin.c:1140
 msgid "fifth"
-msgstr ""
+msgstr "quinto"
 
 #: src/interp/builtin.c:1141
 msgid "sixth"
-msgstr ""
+msgstr "sexto"
 
 #: src/interp/builtin.c:1141
 msgid "seventh"
-msgstr ""
+msgstr "séptimo"
 
 #: src/interp/builtin.c:1141
 msgid "eighth"
-msgstr ""
+msgstr "octavo"
 
 #: src/interp/builtin.c:1141
 msgid "ninth"
-msgstr ""
+msgstr "noveno"
 
 #: src/interp/builtin.c:1141
 msgid "tenth"
-msgstr ""
+msgstr "décimo"
 
 #: src/interp/builtin.c:1142
 msgid "eleventh"
@@ -2767,19 +2767,19 @@ msgstr "El"
 
 #: src/interp/builtin.c:2394
 msgid "he"
-msgstr ""
+msgstr "el"
 
 #: src/interp/builtin.c:2394
 msgid "His"
-msgstr ""
+msgstr "Suyo"
 
 #: src/interp/builtin.c:2394
 msgid "his"
-msgstr ""
+msgstr "suyo"
 
 #: src/interp/builtin.c:2394
 msgid "him"
-msgstr "lo"
+msgstr "el"
 
 #: src/interp/builtin.c:2396
 msgid "She"
@@ -2791,15 +2791,15 @@ msgstr "ella"
 
 #: src/interp/builtin.c:2396
 msgid "Her"
-msgstr ""
+msgstr "Suya"
 
 #: src/interp/builtin.c:2396
 msgid "her"
-msgstr ""
+msgstr "suya"
 
 #: src/interp/builtin.c:2396
 msgid "her_"
-msgstr ""
+msgstr "ella"
 
 #: src/interp/builtin.c:2772
 msgid "(trimname) person does not have a name"

@@ -42,6 +42,10 @@
 
 	Fix path & filename bugs in lifelines.spec file.
 
+	* ChangeLog po/es.po
+
+	A few Spanish translations, including ordinals for reports.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c
