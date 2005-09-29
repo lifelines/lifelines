@@ -18,7 +18,7 @@ LL_REPORTS = \
 	drep2.ll d-rtf.ll dump-ances.ll dump_html.ll dump_html_sd.ll	\
 	eol.ll est_life_span.ll extract_gedcom.ll extract_html.ll	\
 	extract_set.li fam10c.ll fam16rn1.ll fam_ged.ll famgroup.ll	\
-	fami-grps.li                                                    \
+	fami-grps.ll                                                    \
 	familycheck.ll familyisfm1.ll famrep.ll famtree1.ll             \
 	fileindex.ll                                                    \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\

@@ -5,6 +5,10 @@
 	Add some mising reports to Makefile.am, split self-tests 
 	into own target, and reformat lists.
 
+	* ChangeLog reports/Makefile.am
+
+	Fix typo (fami-grps.li => fami-grps.ll).
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c
