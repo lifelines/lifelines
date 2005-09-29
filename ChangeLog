@@ -9,6 +9,10 @@
 
 	Fix typo (fami-grps.li => fami-grps.ll).
 
+	* ChangeLog reports/Makefile.am
+
+	Fix typo (genanc.ll => genancc.ll)
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c
