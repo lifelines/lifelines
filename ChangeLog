@@ -13,6 +13,10 @@
 
 	Fix typo (genanc.ll => genancc.ll)
 
+	* ChangeLog src/liflines/screen.c
+
+	Ensure row is initialized in place_cursor_main.
+
 2005-09-28 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree. src/liflines/main.c

@@ -2953,7 +2953,7 @@ place_cursor_popup (UIWINDOW uiwin)
 static void
 place_cursor_main (void)
 {
-	INT row, col = 30;
+	INT row=0, col = 30;
 	DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 
 	/* Hide/Display Cursor */
@@ -2966,8 +2966,8 @@ place_cursor_main (void)
 	/* Position Cursor */
 	switch (cur_screen) {
 	case MAIN_SCREEN:    
-		col = strlen(_(qSplschs))+3;
 		row = 5;
+		col = strlen(_(qSplschs))+3;
 		break;
 	case LIST_SCREEN:
 		row = LIST_LINES+2;
