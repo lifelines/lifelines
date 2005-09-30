@@ -85,7 +85,7 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	get_index_file(scratch, btr, ikey);
 	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
 		if (robust) {
-			bterrno = BTERR_INDEX;
+			/* fall to end & return NULL */
 			goto readindex_end;
 		}
 		sprintf(scratch, "Missing index file: %s", fkey2path(ikey));
@@ -94,7 +94,6 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	index = (INDEX) stdalloc(BUFLEN);
 	if (fread(index, BUFLEN, 1, fp) != 1) {
 		if (robust) {
-			bterrno = BTERR_INDEX;
 			goto readindex_end;
 		}
 		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));

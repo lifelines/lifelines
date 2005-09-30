@@ -10,6 +10,10 @@
 	Fix newmaster to ASSERT on failure, and no return value (it was
 	anyway ignored).
 
+	* ChangeLog src/btree/index.c
+
+	Modify readindex to not set bterrno on robust error (wasn't used).
+
 2005-09-30 lifelines beta 3.0.48 RELEASE
 
 2005-09-30 Perry Rapp
