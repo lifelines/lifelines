@@ -128,8 +128,11 @@ extern BOOLEAN alloclog;
 #define stdfree(p)    __deallocate(p, __FILE__, __LINE__)
 /* "stdrealloc (" -- see macro below */
 #define stdrealloc(p, size) __reallocate(p, size, __FILE__, __LINE__)
+/* "FATAL (" -- see macro below */
 #define FATAL()       __fatal(__FILE__, __LINE__, NULL)
+/* "FATAL2 (" -- see macro below */
 #define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)
+/* "ASSERT (" -- see macro below */
 #define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__, NULL)
 /*
 eqstr does exact byte compare

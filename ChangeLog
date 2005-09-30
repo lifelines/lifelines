@@ -1,3 +1,9 @@
+2005-09-30 Perry Rapp
+
+	* ChangeLog src/hdrs/standard.h
+
+	Greppable definition-style comments for macro functions.
+
 2005-09-30 lifelines beta 3.0.48 RELEASE
 
 2005-09-30 Perry Rapp
