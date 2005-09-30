@@ -35,42 +35,8 @@ extern STRING readpath,readpath_file;
  * local types
  *********************************************/
 
-struct tag_errorinfo {
-	struct tag_vtable * vtable; /* generic object table (see vtable.h) */
-	INT errnum;
-	CNSTRING errstr; /* heap allocated */
-};
-typedef struct tag_errorinfo *ERRORINFO;
-
-
 struct tag_lldatabase {
 	BTREE btree;
-	LIST errorlist; /* LIST of ERRORINFOs */
-};
-
-/*********************************************
- * local function prototypes
- *********************************************/
-
-/* alphabetical */
-static void errorinfo_destructor(VTABLE *obj);
-static void init_errorinfo_vtable(ERRORINFO errorinfo);
-
-
-/*********************************************
- * local variables
- *********************************************/
-
-/* class vtable for ERRORINFO objects */
-static struct tag_vtable vtable_for_errorinfo = {
-	VTABLE_MAGIC
-	, "errorinfo"
-	, &errorinfo_destructor
-	, &nonrefcountable_isref
-	, 0
-	, 0
-	, 0 /* copy_fnc */
-	, &generic_get_type_name
 };
 
 /*********************************************
@@ -78,51 +44,6 @@ static struct tag_vtable vtable_for_errorinfo = {
  * body of module
  *********************************************/
 
-/*========================================
- * init_errorinfo_vtable -- set this errorinfo's vtable
- *======================================*/
-static void
-init_errorinfo_vtable (ERRORINFO errorinfo)
-{
-	errorinfo->vtable = &vtable_for_errorinfo;
-}
-/*=================================================
- * errorinfo_destructor -- destructor for zstr
- *===============================================*/
-static void
-errorinfo_destructor (VTABLE *obj)
-{
-	ERRORINFO errorinfo = (ERRORINFO)obj;
-	ASSERT((*obj)->vtable_class == vtable_for_errorinfo.vtable_class);
-	/* any error string was allocated with stdalloc */
-	if (errorinfo->errstr) {
-		stdfree((char *)(errorinfo->errstr));
-		errorinfo->errstr = 0;
-	}
-	/* errorinfo itself was allocated with stdalloc */
-	stdfree(obj);
-}
-
-/*========================================
- * lldb_adderror -- Add new error to stack for this database
- *  errstr must be heap-allocated
- *======================================*/
-void
-lldb_adderror (LLDATABASE lldb, int errnum, CNSTRING errstr)
-{
-	ERRORINFO errorinfo = 0;
-	ASSERT(lldb);
-	if (!lldb->errorlist) {
-		/* because object destructors aren't used by containers yet */
-		lldb->errorlist = create_list2(LISTNOFREE);
-	}
-	errorinfo = (ERRORINFO) malloc(sizeof(*errorinfo));
-	memset(errorinfo, 0, sizeof(*errorinfo));
-	init_errorinfo_vtable(errorinfo);
-	errorinfo->errnum = errnum;
-	errorinfo->errstr = errstr;
-	push_list(lldb->errorlist, errorinfo);
-}
 /*========================================
  * lldb_alloc -- Create lldb structure
  * This does not actually create or open a database.
@@ -178,9 +99,6 @@ void lldb_close (LLDATABASE *plldb)
 		closebtree(lldb->btree);
 		lldb->btree = 0;
 		BTR = 0;
-	}
-	if (lldb->errorlist) {
-		/* TODO: free list */
 	}
 	dbnotify_close();
 	transl_free_predefined_xlats(); /* clear any active legacy translation tables */

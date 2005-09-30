@@ -501,7 +501,6 @@ STRING *get_child_strings(NODE, RFMT, INT*, STRING**);
 STRING indi_to_list_string(NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey);
 
 /* lldatabase.c */
-void lldb_adderror(LLDATABASE lldb, int errnum, CNSTRING errstr);
 LLDATABASE lldb_alloc(void);
 void lldb_close(LLDATABASE *plldb);
 void lldb_set_btree(LLDATABASE lldb, void * btree);

@@ -14,6 +14,10 @@
 
 	Modify readindex to not set bterrno on robust error (wasn't used).
 
+	* ChangeLog src/gedlib/lldatabase.c src/hdrs/gedcom.h
+
+	Remove unused ERRORINFO type & list in LLDATABASE.
+
 2005-09-30 lifelines beta 3.0.48 RELEASE
 
 2005-09-30 Perry Rapp
