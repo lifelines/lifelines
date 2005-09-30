@@ -4,6 +4,12 @@
 
 	Greppable definition-style comments for macro functions.
 
+	* ChangeLog src/btree/btreei.h src/btree/index.c src/btree/utils.c
+
+	Remove "double-buffering" comments (that was never implemented).
+	Fix newmaster to ASSERT on failure, and no return value (it was
+	anyway ignored).
+
 2005-09-30 lifelines beta 3.0.48 RELEASE
 
 2005-09-30 Perry Rapp

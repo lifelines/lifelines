@@ -124,9 +124,8 @@ nextfkey (BTREE btree)
 /*==========================================
  * newmaster -- Change master index of BTREE
  *========================================*/
-BOOLEAN
-newmaster (BTREE btree,  /*btree handle*/
-           INDEX master)
+void
+newmaster (BTREE btree, INDEX master)
 {
 	/*
 	Assumes our keyfile is valid
@@ -135,10 +134,9 @@ newmaster (BTREE btree,  /*btree handle*/
 	btree->b_kfile.k_mkey = ixself(master);
 	rewind(btree->b_kfp);
 	if (fwrite(&btree->b_kfile, sizeof(btree->b_kfile), 1, btree->b_kfp) != 1) {
-		/* Needs to be revisited with double-buffering */
-		bterrno = BTERR_KFILE;
-		return FALSE;
+		char scratch[400];
+		sprintf(scratch, "Error rewriting master block: %s", fkey2path(ixself(master)));
+		FATAL2(scratch);
 	}
 	btree->b_master = master;
-	return TRUE;
 }

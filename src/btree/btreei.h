@@ -26,7 +26,7 @@ void putindex(BTREE, INDEX);
 void writeindex(BTREE, INDEX);
 
 /* utils.c */
-BOOLEAN newmaster(BTREE, INDEX);
+void newmaster(BTREE, INDEX);
 FKEY path2fkey(STRING);
 void nextfkey(BTREE);
 
