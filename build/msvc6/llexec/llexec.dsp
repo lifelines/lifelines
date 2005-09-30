@@ -144,7 +144,15 @@ SOURCE=..\..\..\src\gedlib\codesets.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\gedlib\date.c
+SOURCE=..\..\..\src\gedlib\datei.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\dateparse.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\dateprint.c
 # End Source File
 # Begin Source File
 
@@ -581,6 +589,10 @@ SOURCE=.\config.h
 # Begin Source File
 
 SOURCE=..\..\..\src\hdrs\date.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\gedlib\datei.h
 # End Source File
 # Begin Source File
 
