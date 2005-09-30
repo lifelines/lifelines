@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-16 20:23-0400\n"
+"POT-Creation-Date: 2005-09-29 20:57-0400\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -22,31 +22,31 @@ msgid "<unnamed>"
 msgstr "<niet benoemd>"
 
 #. TRANSLATORS: seconds time interval
-#: src/gedlib/date.c:1896
+#: src/gedlib/dateprint.c:779
 #, c-format
 msgid "%02ds"
 msgstr ""
 
 #. TRANSLATORS: minutes & seconds time interval
-#: src/gedlib/date.c:1902
+#: src/gedlib/dateprint.c:785
 #, c-format
 msgid "%dm%02ds"
 msgstr ""
 
 #. TRANSLATORS: hours & minutes time interval
-#: src/gedlib/date.c:1908
+#: src/gedlib/dateprint.c:791
 #, c-format
 msgid "%dh%02dm"
 msgstr ""
 
 #. TRANSLATORS: days & hours time interval
-#: src/gedlib/date.c:1914
+#: src/gedlib/dateprint.c:797
 #, c-format
 msgid "%dd%02dh"
 msgstr ""
 
 #. TRANSLATORS: years & days time interval
-#: src/gedlib/date.c:1918
+#: src/gedlib/dateprint.c:801
 #, c-format
 msgid "%dy%03dd"
 msgstr ""
@@ -1589,7 +1589,7 @@ msgstr "LifeLines - Hulpbladerscherm (* roept menu op)"
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr "LifeLines - Lijstbladerscherm (* roept menu op)"
 
-#: src/gedlib/messages.c:449 src/liflines/screen.c:1501
+#: src/gedlib/messages.c:449 src/liflines/screen.c:1502
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr ""
 "Opdrachten:   j Naar beneden verplaatsen     k Naar boven verplaatsen    i "
@@ -3388,23 +3388,23 @@ msgstr "d  Top naar onderzijde kopiëren"
 msgid "j  Merge bottom to top"
 msgstr "j  Onderzijde naar top samenvoegen"
 
-#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:430
+#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:431
 msgid "j  Move down list"
 msgstr "j  Lijst omlaag schuiven"
 
-#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:431
+#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:432
 msgid "k  Move up list"
 msgstr "k  Lijst omhoog schuiven"
 
-#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:432
+#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:433
 msgid "e  Edit this person"
 msgstr "e  Deze persoon bewerken"
 
-#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:433
+#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:434
 msgid "i  Browse this person"
 msgstr "i  Deze persoon bladeren"
 
-#: src/liflines/brwsmenu.c:151 src/liflines/screen.c:434
+#: src/liflines/brwsmenu.c:151 src/liflines/screen.c:435
 msgid "m  Mark this person"
 msgstr "m  Deze persoon markeren"
 
@@ -3412,19 +3412,19 @@ msgstr "m  Deze persoon markeren"
 msgid "d  Delete from list"
 msgstr "d  Uit lijst verwijderen"
 
-#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:437
+#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:438
 msgid "n  Name this list"
 msgstr "n  Deze lijst benoemen"
 
-#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:438
+#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:439
 msgid "b  Browse new persons"
 msgstr "b  Nieuwe personen bladeren"
 
-#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:439
+#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:440
 msgid "a  Add to this list"
 msgstr "a  Aan deze lijst toevoegen"
 
-#: src/liflines/brwsmenu.c:156 src/liflines/screen.c:440
+#: src/liflines/brwsmenu.c:156 src/liflines/screen.c:441
 msgid "x  Swap mark/current"
 msgstr "x  Gemarkeerde/huidige omwisselen"
 
@@ -3701,229 +3701,237 @@ msgstr "geef sleutel in:"
 msgid "No one in database has key value %s."
 msgstr "Niemand in gegevensbank heeft sleutelwaarde %s."
 
-#: src/liflines/screen.c:428
+#: src/liflines/screen.c:429
 msgid "Choose an operation:"
 msgstr "Kies een actie:"
 
-#: src/liflines/screen.c:435
+#: src/liflines/screen.c:436
 msgid "r  Remove from list"
 msgstr "r  Verwijderen uit lijst"
 
-#: src/liflines/screen.c:436
+#: src/liflines/screen.c:437
 msgid "t  Enter tandem mode"
 msgstr "t  Binnengaan in koppelmodus"
 
-#: src/liflines/screen.c:738
+#: src/liflines/screen.c:739
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(pg %d/%d)"
 
-#: src/liflines/screen.c:1498
+#: src/liflines/screen.c:1499
 msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
 msgstr ""
 "Opdrachten:  j Naar beneden verplaatsen   k Naar boven verplaatsen  d "
 "Verwijderen   i Selecteren   q Afsluiten"
 
-#: src/liflines/screen.c:1635
+#: src/liflines/screen.c:1636
 msgid "No conversion"
 msgstr "Geen omzetting"
 
-#: src/liflines/screen.c:1812
+#: src/liflines/screen.c:1813
 msgid "Internal codeset"
 msgstr "Interne codeset"
 
-#: src/liflines/screen.c:1816
+#: src/liflines/screen.c:1817
 msgid "Locales are enabled."
 msgstr "Taaldefinities zijn ingeschakeld."
 
-#: src/liflines/screen.c:1818
+#: src/liflines/screen.c:1819
 msgid "Locales are disabled."
 msgstr "Gebieden zijn uitgeschakeld."
 
-#: src/liflines/screen.c:1821
+#: src/liflines/screen.c:1822
 #, fuzzy
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Nationale Taalondersteuning) is uitgeschakeld."
 
-#: src/liflines/screen.c:1827
+#: src/liflines/screen.c:1828
 #, fuzzy
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Nationale Taalondersteuning) is ingeschakeld."
 
-#: src/liflines/screen.c:1833
+#: src/liflines/screen.c:1834
 #, fuzzy
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (codesetomzetting) is uitgeschakeld."
 
-#: src/liflines/screen.c:1835
+#: src/liflines/screen.c:1836
 #, fuzzy
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (codesetomzetting) is ingeschakeld."
 
-#: src/liflines/screen.c:1837
+#: src/liflines/screen.c:1838
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Opstartsorteergebied: %s"
 
-#: src/liflines/screen.c:1840
+#: src/liflines/screen.c:1841
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Opstartberichtengebied: %s"
 
-#: src/liflines/screen.c:1843
+#: src/liflines/screen.c:1844
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Huidig sorteergebied: %s"
 
-#: src/liflines/screen.c:1846
+#: src/liflines/screen.c:1847
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Huidig berichtengebied: %s"
 
-#: src/liflines/screen.c:1849
+#: src/liflines/screen.c:1850
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Sorteermethode: %s"
 
-#: src/liflines/screen.c:1853
+#: src/liflines/screen.c:1854
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "GUI codeset: %s"
 
-#: src/liflines/screen.c:1856
+#: src/liflines/screen.c:1857
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "GUI uitvoercodeset: %s"
 
-#: src/liflines/screen.c:1858
+#: src/liflines/screen.c:1859
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "GUI invoercodeset: %s"
 
-#: src/liflines/screen.c:1863
+#: src/liflines/screen.c:1864
 #, c-format
 msgid "editor codeset: %s"
 msgstr "editorcodeset: %s"
 
-#: src/liflines/screen.c:1866
+#: src/liflines/screen.c:1867
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "editoruitvoercodeset: %s"
 
-#: src/liflines/screen.c:1868
+#: src/liflines/screen.c:1869
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "editorinvoercodeset: %s"
 
-#: src/liflines/screen.c:1873
+#: src/liflines/screen.c:1874
 #, c-format
 msgid "report codeset: %s"
 msgstr "codeset melden: %s"
 
-#: src/liflines/screen.c:1876
+#: src/liflines/screen.c:1877
 #, c-format
 msgid "report output codeset: %s"
 msgstr "uitvoercodeset melden: %s"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1879
 #, c-format
 msgid "report input codeset: %s"
 msgstr "invoercodeset melden: %s"
 
-#: src/liflines/screen.c:1883
+#: src/liflines/screen.c:1884
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM codeset: %s"
 
-#: src/liflines/screen.c:1886
+#: src/liflines/screen.c:1887
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "gedcom uitvoercodeset: %s"
 
-#: src/liflines/screen.c:1888
+#: src/liflines/screen.c:1889
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "gedcom invoercodeset: %s"
 
-#: src/liflines/screen.c:1895
+#: src/liflines/screen.c:1897
+msgid "UTF-8 charprops loaded"
+msgstr ""
+
+#: src/liflines/screen.c:1899
+msgid "UTF-8 charprops not loaded"
+msgstr ""
+
+#: src/liflines/screen.c:1903
 msgid "Codeset information"
 msgstr "Codesetinformatie"
 
-#: src/liflines/screen.c:1912
+#: src/liflines/screen.c:1920
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext dll: %s"
 
-#: src/liflines/screen.c:1916
+#: src/liflines/screen.c:1924
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext dllversie: %s"
 
-#: src/liflines/screen.c:1921
+#: src/liflines/screen.c:1929
 msgid "gettext dll had no version"
 msgstr "gettext dll had geen versie"
 
-#: src/liflines/screen.c:1926
+#: src/liflines/screen.c:1934
 msgid "no gettext dll found"
 msgstr "geen gettext dll gevonden"
 
-#: src/liflines/screen.c:1935
+#: src/liflines/screen.c:1943
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv dll: %s"
 
-#: src/liflines/screen.c:1939
+#: src/liflines/screen.c:1947
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv dllversie: %s"
 
-#: src/liflines/screen.c:1944
+#: src/liflines/screen.c:1952
 msgid "iconv dll had no version"
 msgstr "iconv dll had geen versie"
 
-#: src/liflines/screen.c:1949
+#: src/liflines/screen.c:1957
 msgid "no iconv dll found"
 msgstr "geen iconv dll gevonden"
 
-#: src/liflines/screen.c:2201
+#: src/liflines/screen.c:2209
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Niet toegelaten om codeset te veranderen in een bevolkte gegevensbank"
 
-#: src/liflines/screen.c:2367
+#: src/liflines/screen.c:2383
 msgid "--- CURRENT SELECTION ---"
 msgstr "--- HUIDIGE SELECTIE ---"
 
-#: src/liflines/screen.c:2370 src/liflines/screen.c:2603
+#: src/liflines/screen.c:2386 src/liflines/screen.c:2619
 msgid "--- LIST ---"
 msgstr "--- LIJST ---"
 
-#: src/liflines/screen.c:2634
+#: src/liflines/screen.c:2650
 msgid "-- CURRENT SELECTION --"
 msgstr "-- HUIDIGE SELECTIE --"
 
-#: src/liflines/screen.c:2785
+#: src/liflines/screen.c:2801
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Hoofdmenu"
 
-#: src/liflines/screen.c:3486
+#: src/liflines/screen.c:3507
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Bezoekgeschiedenis herbekijken (%d opgave)"
 msgstr[1] "v  Bezoekgeschiedenis herbekijken (%d opgaven)"
 
-#: src/liflines/screen.c:3490
+#: src/liflines/screen.c:3511
 msgid "(visit history is empty)"
 msgstr "(bezoekgeschiedenis is leeg)"
 
-#: src/liflines/screen.c:3496
+#: src/liflines/screen.c:3517
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Wijzigingengeschiedenis herbekijken (%d opgave)"
 msgstr[1] "c  Wijzigingengeschiedenis herbekijken (%d opgaven)"
 
-#: src/liflines/screen.c:3500
+#: src/liflines/screen.c:3521
 msgid "(change history is empty)"
 msgstr "(wijzigingengeschiedenis is leeg)"
 
@@ -3988,155 +3996,155 @@ msgstr "Naar opgave %s wordt verwezen maar is niet gedefinieerd."
 msgid "Line %d: Tag %s found in unexpected record: %s."
 msgstr "Ontbrekende niet-verwijderde opgave %c%d"
 
-#: src/liflines/valgdcom.c:360
+#: src/liflines/valgdcom.c:385
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Regel %d: De bron hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:400
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Regel %d: Bron %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:382
+#: src/liflines/valgdcom.c:407
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Regels %d en %d: Bron %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:405
+#: src/liflines/valgdcom.c:430
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Regel %d: De gebeurtenis hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:445
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Regel %d: Gebeurtenis %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:427
+#: src/liflines/valgdcom.c:452
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Regels %d en %d: Gebeurtenis %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:450
+#: src/liflines/valgdcom.c:475
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Regel %d: De opgave hier gedefinieerd heeft geen sleutel."
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:490
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Regel %d: Opgave %s heeft een onjuiste sleutel."
 
-#: src/liflines/valgdcom.c:472
+#: src/liflines/valgdcom.c:497
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Regels %d en %d: Opgave %s is meermaals gedefinieerd."
 
-#: src/liflines/valgdcom.c:556
+#: src/liflines/valgdcom.c:581
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Regel %d: Slechte NAAM-schrijfwijze"
 
-#: src/liflines/valgdcom.c:784
+#: src/liflines/valgdcom.c:809
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Regel %d: Persoon %s heeft meerdere vaderkoppelingen."
 
-#: src/liflines/valgdcom.c:788
+#: src/liflines/valgdcom.c:813
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Regel %d: Persoon %s heeft meerdere moederkoppelingen."
 
-#: src/liflines/valgdcom.c:800
+#: src/liflines/valgdcom.c:825
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Regel %d: Persoon %s is zowel mannelijk als vrouwelijk."
 
-#: src/liflines/valgdcom.c:804
+#: src/liflines/valgdcom.c:829
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Regel %d: Persoon %s is mannelijk maar moet vrouwelijk zijn."
 
-#: src/liflines/valgdcom.c:808
+#: src/liflines/valgdcom.c:833
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Regel %d: Persoon %s is vrouwelijk maar moet mannelijk zijn."
 
-#: src/liflines/valgdcom.c:812
+#: src/liflines/valgdcom.c:837
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr ""
 "Regel %d: Persoon %s is geïmpliceerd om zowel mannelijk als vrouwelijk te "
 "zijn."
 
-#: src/liflines/valgdcom.c:824
+#: src/liflines/valgdcom.c:849
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Regel %d: Familie %s heeft meerdere echtgenootbanden."
 
-#: src/liflines/valgdcom.c:828
+#: src/liflines/valgdcom.c:853
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Regel %d: Familie %s heeft meerdere echtgenotebanden."
 
-#: src/liflines/valgdcom.c:886
+#: src/liflines/valgdcom.c:911
 msgid "error"
 msgstr "fout"
 
-#: src/liflines/valgdcom.c:894
+#: src/liflines/valgdcom.c:919
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d Fout"
 msgstr[1] "%6d Fouten"
 
-#: src/liflines/valgdcom.c:896 src/liflines/valgdcom.c:924
+#: src/liflines/valgdcom.c:921 src/liflines/valgdcom.c:949
 #, c-format
 msgid " (see log file <%s>)"
 msgstr " (zie logbestand <%s>)"
 
-#: src/liflines/valgdcom.c:898 src/liflines/valgdcom.c:926
+#: src/liflines/valgdcom.c:923 src/liflines/valgdcom.c:951
 msgid " (no log file)"
 msgstr " (geen logbestand)"
 
-#: src/liflines/valgdcom.c:914
+#: src/liflines/valgdcom.c:939
 msgid "warning"
 msgstr "waarschuwing"
 
-#: src/liflines/valgdcom.c:922
+#: src/liflines/valgdcom.c:947
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6d Waarschuwing"
 msgstr[1] "%6d Waarschuwingen"
 
-#: src/liflines/valgdcom.c:1027
+#: src/liflines/valgdcom.c:1056
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "%d regels behandeld zonder het einde van HOOFD te vinden"
 
-#: src/liflines/valgdcom.c:1032
+#: src/liflines/valgdcom.c:1061
 #, c-format
 msgid "End of file at line %d"
 msgstr "Einde van bestand op regel %d"
 
-#: src/liflines/valgdcom.c:1036
+#: src/liflines/valgdcom.c:1065
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fout op regel %d: %s"
 
-#: src/liflines/valgdcom.c:1040
+#: src/liflines/valgdcom.c:1069
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Slecht niveau op regel %d"
 
-#: src/liflines/valgdcom.c:1046
+#: src/liflines/valgdcom.c:1075
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "HOOFD-regel op regel %d kopiëren"
 
-#: src/liflines/valgdcom.c:1052
+#: src/liflines/valgdcom.c:1081
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "Ontbrekende HOOFD-regel op regel %d"

@@ -1,12 +1,23 @@
+2005-09-30 lifelines beta 3.0.48 RELEASE
+
 2005-09-30 Perry Rapp
 
-	* ChangeLog build/msvc6/btedit/btedit.rc build/msvc6/btedit/bteditCmd.dsp
-	build/msvc6/dbverify/dbVerify.rc build/msvc6/dbverify/dbverifyCmd.dsp
-	build/msvc6/llexec/llexec.dsp build/msvc6/llexec/llexec.rc
-	build/msvc6/llines/llines.rc build/msvc6/btedit/config.h
+	* ChangeLog build/msvc6/btedit/btedit.rc
+	build/msvc6/btedit/bteditCmd.dsp
+	build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp
+	build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc
+	build/msvc6/btedit/config.h
 
 	Bump Win32 versions to 3.0.48.15272.
 	Fix llexec, dbverify, and btedit project files to compile & link.
+
+	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/es.po
+	po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	Making 3.0.48 release
 
 2005-09-29 Perry Rapp
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.46\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-16 20:23-0400\n"
+"POT-Creation-Date: 2005-09-29 20:57-0400\n"
 "PO-Revision-Date: 2005-06-20 15:57+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -20,31 +20,31 @@ msgid "<unnamed>"
 msgstr "<namnlös>"
 
 #. TRANSLATORS: seconds time interval
-#: src/gedlib/date.c:1896
+#: src/gedlib/dateprint.c:779
 #, c-format
 msgid "%02ds"
 msgstr "%02ds"
 
 #. TRANSLATORS: minutes & seconds time interval
-#: src/gedlib/date.c:1902
+#: src/gedlib/dateprint.c:785
 #, c-format
 msgid "%dm%02ds"
 msgstr "%dm%02ds"
 
 #. TRANSLATORS: hours & minutes time interval
-#: src/gedlib/date.c:1908
+#: src/gedlib/dateprint.c:791
 #, c-format
 msgid "%dh%02dm"
 msgstr "%dt%02dm"
 
 #. TRANSLATORS: days & hours time interval
-#: src/gedlib/date.c:1914
+#: src/gedlib/dateprint.c:797
 #, c-format
 msgid "%dd%02dh"
 msgstr "%dd%02dt"
 
 #. TRANSLATORS: years & days time interval
-#: src/gedlib/date.c:1918
+#: src/gedlib/dateprint.c:801
 #, c-format
 msgid "%dy%03dd"
 msgstr "%då%03dd"
@@ -1564,7 +1564,7 @@ msgstr "LifeLines -- Assistentfönster (* visar/döljer meny)"
 msgid "LifeLines -- List Browse Screen (* toggles menu)"
 msgstr "LifeLines -- Listfönster (* visar/döljer meny)"
 
-#: src/gedlib/messages.c:449 src/liflines/screen.c:1501
+#: src/gedlib/messages.c:449 src/liflines/screen.c:1502
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
 msgstr "Kommandon:   j Flytta ned     k Flytta upp    i Välj     q Avsluta"
 
@@ -3349,23 +3349,23 @@ msgstr "d  Kopiera öv. t. ned."
 msgid "j  Merge bottom to top"
 msgstr "j  Sammanl. ned. - öv."
 
-#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:430
+#: src/liflines/brwsmenu.c:147 src/liflines/screen.c:431
 msgid "j  Move down list"
 msgstr "j  Gå nedåt i lista"
 
-#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:431
+#: src/liflines/brwsmenu.c:148 src/liflines/screen.c:432
 msgid "k  Move up list"
 msgstr "k  Gå uppåt i lista"
 
-#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:432
+#: src/liflines/brwsmenu.c:149 src/liflines/screen.c:433
 msgid "e  Edit this person"
 msgstr "e  Redigera denna person"
 
-#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:433
+#: src/liflines/brwsmenu.c:150 src/liflines/screen.c:434
 msgid "i  Browse this person"
 msgstr "i  Bl. till denna person"
 
-#: src/liflines/brwsmenu.c:151 src/liflines/screen.c:434
+#: src/liflines/brwsmenu.c:151 src/liflines/screen.c:435
 msgid "m  Mark this person"
 msgstr "m  Markera denna pers."
 
@@ -3373,19 +3373,19 @@ msgstr "m  Markera denna pers."
 msgid "d  Delete from list"
 msgstr "d  Ta bort från lista"
 
-#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:437
+#: src/liflines/brwsmenu.c:153 src/liflines/screen.c:438
 msgid "n  Name this list"
 msgstr "n  Ge denna lista namn"
 
-#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:438
+#: src/liflines/brwsmenu.c:154 src/liflines/screen.c:439
 msgid "b  Browse new persons"
 msgstr "b  Bläddra till nya pers."
 
-#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:439
+#: src/liflines/brwsmenu.c:155 src/liflines/screen.c:440
 msgid "a  Add to this list"
 msgstr "a  Lägg t. i denna lista"
 
-#: src/liflines/brwsmenu.c:156 src/liflines/screen.c:440
+#: src/liflines/brwsmenu.c:156 src/liflines/screen.c:441
 msgid "x  Swap mark/current"
 msgstr "x  Växla märke/aktuell"
 
@@ -3657,224 +3657,232 @@ msgstr "skriv in nyckel: "
 msgid "No one in database has key value %s."
 msgstr "Ingen i databasen har nyckelvärdet %s."
 
-#: src/liflines/screen.c:428
+#: src/liflines/screen.c:429
 msgid "Choose an operation:"
 msgstr "Välj ett kommando:"
 
-#: src/liflines/screen.c:435
+#: src/liflines/screen.c:436
 msgid "r  Remove from list"
 msgstr "d  Ta bort från lista"
 
-#: src/liflines/screen.c:436
+#: src/liflines/screen.c:437
 msgid "t  Enter tandem mode"
 msgstr "t  Växla t. tandemläge"
 
-#: src/liflines/screen.c:738
+#: src/liflines/screen.c:739
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(sid %d/%d)"
 
-#: src/liflines/screen.c:1498
+#: src/liflines/screen.c:1499
 msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
 msgstr ""
 "Kommandon:  j Flytta ned   k Flytta upp  d Ta bort   i Välj   q Avsluta"
 
-#: src/liflines/screen.c:1635
+#: src/liflines/screen.c:1636
 msgid "No conversion"
 msgstr "Ingen konvertering."
 
-#: src/liflines/screen.c:1812
+#: src/liflines/screen.c:1813
 msgid "Internal codeset"
 msgstr "Intern teckenkodning"
 
-#: src/liflines/screen.c:1816
+#: src/liflines/screen.c:1817
 msgid "Locales are enabled."
 msgstr "Lokaler är aktiverade."
 
-#: src/liflines/screen.c:1818
+#: src/liflines/screen.c:1819
 msgid "Locales are disabled."
 msgstr "Lokaler är avaktiverade."
 
-#: src/liflines/screen.c:1821
+#: src/liflines/screen.c:1822
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (nationellt språkstöd) är inkompilerat."
 
-#: src/liflines/screen.c:1827
+#: src/liflines/screen.c:1828
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (nationellt språkstöd) är inte inkompilerat."
 
-#: src/liflines/screen.c:1833
+#: src/liflines/screen.c:1834
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (konvertering av teckenkodning) är inkompilerad."
 
-#: src/liflines/screen.c:1835
+#: src/liflines/screen.c:1836
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (konvertering av teckenkodning) är inte inkompilerad."
 
-#: src/liflines/screen.c:1837
+#: src/liflines/screen.c:1838
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Sorteringslokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1840
+#: src/liflines/screen.c:1841
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Meddelandelokal vid uppstart: %s"
 
-#: src/liflines/screen.c:1843
+#: src/liflines/screen.c:1844
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Aktuell sorteringslokal: %s"
 
-#: src/liflines/screen.c:1846
+#: src/liflines/screen.c:1847
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Aktuell meddelandelokal: %s"
 
-#: src/liflines/screen.c:1849
+#: src/liflines/screen.c:1850
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Sorteringsrutin: %s"
 
-#: src/liflines/screen.c:1853
+#: src/liflines/screen.c:1854
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "Teckenkodning för grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1856
+#: src/liflines/screen.c:1857
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "Teckenkodning för utdata till grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1858
+#: src/liflines/screen.c:1859
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "Teckenkodning för indata till grafiskt användargränssnitt: %s"
 
-#: src/liflines/screen.c:1863
+#: src/liflines/screen.c:1864
 #, c-format
 msgid "editor codeset: %s"
 msgstr "teckenkodning för redigerare: %s"
 
-#: src/liflines/screen.c:1866
+#: src/liflines/screen.c:1867
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "teckenkodning för utdata från redigerare: %s"
 
-#: src/liflines/screen.c:1868
+#: src/liflines/screen.c:1869
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "teckenkodning för indata till redigerare: %s"
 
-#: src/liflines/screen.c:1873
+#: src/liflines/screen.c:1874
 #, c-format
 msgid "report codeset: %s"
 msgstr "teckenkodning för rapporter: %s"
 
-#: src/liflines/screen.c:1876
+#: src/liflines/screen.c:1877
 #, c-format
 msgid "report output codeset: %s"
 msgstr "teckenkodning för utdata från rapporter: %s"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1879
 #, c-format
 msgid "report input codeset: %s"
 msgstr "teckenkodning för indata till rapporter: %s"
 
-#: src/liflines/screen.c:1883
+#: src/liflines/screen.c:1884
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "Teckenkodning för GEDCOM: %s"
 
-#: src/liflines/screen.c:1886
+#: src/liflines/screen.c:1887
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "teckenkodning för utdata till gedcom: %s"
 
-#: src/liflines/screen.c:1888
+#: src/liflines/screen.c:1889
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "teckenkodning för indata från gedcom: %s"
 
-#: src/liflines/screen.c:1895
+#: src/liflines/screen.c:1897
+msgid "UTF-8 charprops loaded"
+msgstr ""
+
+#: src/liflines/screen.c:1899
+msgid "UTF-8 charprops not loaded"
+msgstr ""
+
+#: src/liflines/screen.c:1903
 msgid "Codeset information"
 msgstr "Information om teckenkodning"
 
-#: src/liflines/screen.c:1912
+#: src/liflines/screen.c:1920
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll för gettext: %s"
 
-#: src/liflines/screen.c:1916
+#: src/liflines/screen.c:1924
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version för gettext-dll: %s"
 
-#: src/liflines/screen.c:1921
+#: src/liflines/screen.c:1929
 msgid "gettext dll had no version"
 msgstr "gettext-dll hade ingen version"
 
-#: src/liflines/screen.c:1926
+#: src/liflines/screen.c:1934
 msgid "no gettext dll found"
 msgstr "ingen gettext-dll hittades"
 
-#: src/liflines/screen.c:1935
+#: src/liflines/screen.c:1943
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll för iconv: %s"
 
-#: src/liflines/screen.c:1939
+#: src/liflines/screen.c:1947
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version för iconv-dll: %s"
 
-#: src/liflines/screen.c:1944
+#: src/liflines/screen.c:1952
 msgid "iconv dll had no version"
 msgstr "iconv-dll hade ingen version"
 
-#: src/liflines/screen.c:1949
+#: src/liflines/screen.c:1957
 msgid "no iconv dll found"
 msgstr "ingen iconv-dll hittades"
 
-#: src/liflines/screen.c:2201
+#: src/liflines/screen.c:2209
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Otillåtet att ändra teckenkodning i en befolkad databas"
 
-#: src/liflines/screen.c:2367
+#: src/liflines/screen.c:2383
 msgid "--- CURRENT SELECTION ---"
 msgstr "--- AKTUELL MARKERING ---"
 
-#: src/liflines/screen.c:2370 src/liflines/screen.c:2603
+#: src/liflines/screen.c:2386 src/liflines/screen.c:2619
 msgid "--- LIST ---"
 msgstr "--- LISTA ---"
 
-#: src/liflines/screen.c:2634
+#: src/liflines/screen.c:2650
 msgid "-- CURRENT SELECTION --"
 msgstr "-- AKTUELL MARKERING --"
 
-#: src/liflines/screen.c:2785
+#: src/liflines/screen.c:2801
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Huvudmeny"
 
-#: src/liflines/screen.c:3486
+#: src/liflines/screen.c:3507
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Granska besökshistorik (%d post)"
 msgstr[1] "v  Granska besökshistorik (%d poster)"
 
-#: src/liflines/screen.c:3490
+#: src/liflines/screen.c:3511
 msgid "(visit history is empty)"
 msgstr "(besökshistoriken är tom)"
 
-#: src/liflines/screen.c:3496
+#: src/liflines/screen.c:3517
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Granska ändringshistorik (%d post)"
 msgstr[1] "c  Granska ändringshistorik (%d poster)"
 
-#: src/liflines/screen.c:3500
+#: src/liflines/screen.c:3521
 msgid "(change history is empty)"
 msgstr "(ändringshistoriken är tom)"
 
@@ -3938,153 +3946,153 @@ msgstr "Referens till posten %s, som inte är definierad."
 msgid "Line %d: Tag %s found in unexpected record: %s."
 msgstr "Rad %d: Etikett %s hittades i oväntad post: %s."
 
-#: src/liflines/valgdcom.c:360
+#: src/liflines/valgdcom.c:385
 #, c-format
 msgid "Line %d: The source defined here has no key."
 msgstr "Rad %d: Källan som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:375
+#: src/liflines/valgdcom.c:400
 #, c-format
 msgid "Line %d: Source %s has an incorrect key."
 msgstr "Rad %d: Källan %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:382
+#: src/liflines/valgdcom.c:407
 #, c-format
 msgid "Lines %d and %d: Source %s is multiply defined."
 msgstr "Raderna %d och %d: Källan %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:405
+#: src/liflines/valgdcom.c:430
 #, c-format
 msgid "Line %d: The event defined here has no key."
 msgstr "Rad %d: Händelsen som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:420
+#: src/liflines/valgdcom.c:445
 #, c-format
 msgid "Line %d: Event %s has an incorrect key."
 msgstr "Rad %d: Händelsen %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:427
+#: src/liflines/valgdcom.c:452
 #, c-format
 msgid "Lines %d and %d: Event %s is multiply defined."
 msgstr "Raderna %d och %d: Händelsen %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:450
+#: src/liflines/valgdcom.c:475
 #, c-format
 msgid "Line %d: The record defined here has no key."
 msgstr "Rad %d: Posten som definieras här har ingen nyckel."
 
-#: src/liflines/valgdcom.c:465
+#: src/liflines/valgdcom.c:490
 #, c-format
 msgid "Line %d: Record %s has an incorrect key."
 msgstr "Rad %d: Posten %s har en felaktig nyckel."
 
-#: src/liflines/valgdcom.c:472
+#: src/liflines/valgdcom.c:497
 #, c-format
 msgid "Lines %d and %d: Record %s is multiply defined."
 msgstr "Raderna %d och %d: Posten %s är definierad mer än en gång."
 
-#: src/liflines/valgdcom.c:556
+#: src/liflines/valgdcom.c:581
 #, c-format
 msgid "Line %d: Bad NAME syntax."
 msgstr "Rad %d: Ogiltig NAME-syntax."
 
-#: src/liflines/valgdcom.c:784
+#: src/liflines/valgdcom.c:809
 #, c-format
 msgid "Line %d: Person %s has multiple father links."
 msgstr "Rad %d: Personen %s är länkad till mer än en fader."
 
-#: src/liflines/valgdcom.c:788
+#: src/liflines/valgdcom.c:813
 #, c-format
 msgid "Line %d: Person %s has multiple mother links."
 msgstr "Rad %d: Personen %s är länkad till mer än en moder."
 
-#: src/liflines/valgdcom.c:800
+#: src/liflines/valgdcom.c:825
 #, c-format
 msgid "Line %d: Person %s is both male and female."
 msgstr "Rad %d: Personen %s är både man och kvinna."
 
-#: src/liflines/valgdcom.c:804
+#: src/liflines/valgdcom.c:829
 #, c-format
 msgid "Line %d: Person %s is male but must be female."
 msgstr "Rad %d: Personen %s är man, men måste vara kvinna."
 
-#: src/liflines/valgdcom.c:808
+#: src/liflines/valgdcom.c:833
 #, c-format
 msgid "Line %d: Person %s is female but must be male."
 msgstr "Rad %d: Personen %s är kvinna, men måste vara man."
 
-#: src/liflines/valgdcom.c:812
+#: src/liflines/valgdcom.c:837
 #, c-format
 msgid "Line %d: Person %s is implied to be both male and female."
 msgstr "Rad %d: Personen %s förutsätts vara både man och kvinna."
 
-#: src/liflines/valgdcom.c:824
+#: src/liflines/valgdcom.c:849
 #, c-format
 msgid "Line %d: Family %s has multiple husband links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en make."
 
-#: src/liflines/valgdcom.c:828
+#: src/liflines/valgdcom.c:853
 #, c-format
 msgid "Line %d: Family %s has multiple wife links."
 msgstr "Rad %d: Familjen %s har länkar till mer än en maka."
 
-#: src/liflines/valgdcom.c:886
+#: src/liflines/valgdcom.c:911
 msgid "error"
 msgstr "fel"
 
-#: src/liflines/valgdcom.c:894
+#: src/liflines/valgdcom.c:919
 #, c-format
 msgid "%6d Error"
 msgid_plural "%6d Errors"
 msgstr[0] "%6d fel"
 msgstr[1] "%6d fel"
 
-#: src/liflines/valgdcom.c:896 src/liflines/valgdcom.c:924
+#: src/liflines/valgdcom.c:921 src/liflines/valgdcom.c:949
 #, c-format
 msgid " (see log file <%s>)"
 msgstr " (se loggfil <%s>)"
 
-#: src/liflines/valgdcom.c:898 src/liflines/valgdcom.c:926
+#: src/liflines/valgdcom.c:923 src/liflines/valgdcom.c:951
 msgid " (no log file)"
 msgstr " (ingen loggfil)"
 
-#: src/liflines/valgdcom.c:914
+#: src/liflines/valgdcom.c:939
 msgid "warning"
 msgstr "varning"
 
-#: src/liflines/valgdcom.c:922
+#: src/liflines/valgdcom.c:947
 #, c-format
 msgid "%6d Warning"
 msgid_plural "%6d Warnings"
 msgstr[0] "%6d varning"
 msgstr[1] "%6d varningar"
 
-#: src/liflines/valgdcom.c:1027
+#: src/liflines/valgdcom.c:1056
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
 msgstr "Behandlade %d rader utan att hitta slutet av HEAD"
 
-#: src/liflines/valgdcom.c:1032
+#: src/liflines/valgdcom.c:1061
 #, c-format
 msgid "End of file at line %d"
 msgstr "Filslut vid rad %d"
 
-#: src/liflines/valgdcom.c:1036
+#: src/liflines/valgdcom.c:1065
 #, c-format
 msgid "Error at line %d: %s"
 msgstr "Fel vid rad %d: %s"
 
-#: src/liflines/valgdcom.c:1040
+#: src/liflines/valgdcom.c:1069
 #, c-format
 msgid "Bad level at line %d"
 msgstr "Ogiltig nivå vid rad %d"
 
-#: src/liflines/valgdcom.c:1046
+#: src/liflines/valgdcom.c:1075
 #, c-format
 msgid "Duplicate HEAD line at line %d"
 msgstr "Dubblerad HEAD-rad vid rad %d"
 
-#: src/liflines/valgdcom.c:1052
+#: src/liflines/valgdcom.c:1081
 #, c-format
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-rad saknas vid rad %d"
