@@ -17,6 +17,7 @@
 	Cosmetic: Add todo note for Win32.
 
 	* ChangeLog src/gedlib/gedcomi.h src/gedlib/init.c
+	build/msvc6/llines/llinesprj.dsp
 	*NEW src/gedlib/llgettext.c
 
 	Pull gettext code out of init.c into new file llgettext.c.

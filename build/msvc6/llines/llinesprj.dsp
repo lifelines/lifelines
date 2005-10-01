@@ -349,6 +349,10 @@ SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\llgettext.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\llines.rc
 # End Source File
 # Begin Source File
