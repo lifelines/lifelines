@@ -751,6 +751,7 @@ load_configs (STRING configfile, STRING * pmsg)
 
 			/* No config file found, so try $HOME/config_file */
 			char cfg_name[MAXPATHLEN];
+			/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
 			llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
 			llstrappc(cfg_name, sizeof(cfg_name), '/');
 			llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);

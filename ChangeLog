@@ -12,6 +12,10 @@
 	into new function load_configs, and allow local config file
 	to override, and allow chaining to second config file.
 
+	* ChangeLog src/gedlib/init.c
+
+	Cosmetic: Add todo note for Win32.
+
 2005-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/standard.h
