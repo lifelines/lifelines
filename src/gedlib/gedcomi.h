@@ -16,6 +16,10 @@ void dbnotify_close(void);
 void cel_remove_record(CACHEEL cel, RECORD rec);
 NODE is_cel_loaded(CACHEEL cel);
 
+/* llgettext.c */
+void init_win32_gettext_shim(void);
+void llgettext_init(CNSTRING domain, CNSTRING codeset);
+
 /* names.c */
 RECORD id_by_key(CNSTRING name, char ctype);
 
@@ -31,7 +35,6 @@ NODE is_record_temp(RECORD rec);
 RECORD make_new_record_with_info(CNSTRING key, CACHEEL cel);
 void record_remove_cel(RECORD rec, CACHEEL cel);
 void record_set_cel(RECORD rec, CACHEEL cel);
-
 
 /* xreffile.c */
 BOOLEAN xrefs_get_counts_from_unopened_db(CNSTRING path, INT *nindis, INT *nfams

@@ -16,6 +16,10 @@
 
 	Cosmetic: Add todo note for Win32.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/init.c
+
+	Pull gettext code out of init.c into new file llgettext.c.
+
 2005-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/standard.h
