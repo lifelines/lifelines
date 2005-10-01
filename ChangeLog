@@ -26,6 +26,11 @@
 
 	Add new llgettext.c file to makefile.
 
+	* ChangeLog src/arch/platform.c
+
+	Add some internal debugging code (error descriptions
+	for some Win32 console codepage functions).
+
 2005-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/standard.h

@@ -21,6 +21,9 @@
 #if defined(_WIN32) || defined(__CYGWIN__)
 /* Win32 code also needed by cygwin */
 #include <windows.h>
+
+static const char * GetWinSysError(INT nerr);
+
 /*=================================================
  * w_get_codepage -- get current Windows codeset
  * Created: 2002/11/27 (Perry Rapp)
@@ -55,7 +58,12 @@ w_get_oemin_codepage (void)
 void
 w_set_oemout_codepage (int codepage)
 {
-	SetConsoleOutputCP(codepage);
+	INT rtn = SetConsoleOutputCP(codepage);
+	if (!rtn) {
+		INT errnum = GetLastError();
+		const char * desc = GetWinSysError(errnum);
+		LocalFree((char *)desc);
+	}
 }
 /*=================================================
  * w_set_oemin_codepage -- set current input console codeset
@@ -64,7 +72,12 @@ w_set_oemout_codepage (int codepage)
 void
 w_set_oemin_codepage (int codepage)
 {
-	SetConsoleCP(codepage);
+	INT rtn = SetConsoleCP(codepage);
+	if (!rtn) {
+		INT errnum = GetLastError();
+		const char * desc = GetWinSysError(errnum);
+		LocalFree((char *)desc);
+	}
 }
 /*=================================================
  * w_get_has_console -- does process have a console ?
@@ -75,4 +88,32 @@ w_get_has_console (void)
 {
 	return (GetStdHandle(STD_INPUT_HANDLE) != 0);
 }
+/*=================================================
+ * GetWinSysError -- Get description of system error
+ * returned value must be freed with LocalAlloc
+ *===============================================*/
+static const char *
+GetWinSysError (INT nerr)
+{
+	const char * str = 0;
+/* Get user language description of error, if available */
+	LPVOID lpMsgBuf;
+	if (FormatMessage( 
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		FORMAT_MESSAGE_FROM_SYSTEM | 
+		FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		nerr,
+		0, // Default language
+		(LPTSTR) &lpMsgBuf,
+		0,
+		NULL 
+		))
+	{
+		str = (LPCTSTR)lpMsgBuf;
+	}
+	/* caller must call LocalFree on string */
+	return str;
+}
+
 #endif /* defined(_WIN32) || defined(__CYGWIN__) */
