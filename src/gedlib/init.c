@@ -71,7 +71,10 @@ extern INT opt_finnish, opt_mychar;
  *********************************************/
 
 static void init_win32_gettext_shim(void);
+static void llgettext_init(CNSTRING domain, CNSTRING codeset);
 static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
+static void post_codesets_hook(void);
+static void pre_codesets_hook(void);
 static void update_db_options(void);
 
 /*********************************************
@@ -134,39 +137,18 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		return FALSE;
 	}
 
-#ifdef WIN32
-	/* On MS-Windows, attempt to set any requested non-standard codepage */
-	/* Do this now, before init_codesets below */
-	i = getoptint("ConsoleCodepage", 0);
-	if (i) {
-		w_set_oemout_codepage(i);
-		w_set_oemin_codepage(i);
-	}
-#endif
+	pre_codesets_hook(); /* For MS-Windows user config of console codepages */
 
 	/* now that codeset variables are set from config file, lets initialize codesets */
 	/* although int_codeset can't be determined yet, we need GUI codeset for gettext */
 	init_codesets();
 
-	/* for Windows, link dynamically to gettext & iconv if available */
-	init_win32_gettext_shim();
-	init_win32_iconv_shim(getoptstr("iconv.path",""));
+	post_codesets_hook(); /* For Windows, link dynamically to gettext & iconv if available */
 
-#if ENABLE_NLS
 
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
-	set_gettext_codeset(PACKAGE, gui_codeset_out);
-
-	/* allow run-time specification of locale directory */
-	/* (LOCALEDIR is compile-time) */
-	e = getoptstr("LocaleDir", "");
-	if (e && *e) {
-		bindtextdomain(PACKAGE, e);
-		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
-	}
-
-#endif /* ENABLE_NLS */
+	llgettext_init(PACKAGE, gui_codeset_out);
 
 	/* read available translation tables */
 	transl_load_all_tts();
@@ -702,4 +684,58 @@ update_db_options (void)
 	}
 
 	destroy_table(opttab);
+}
+/*==================================================
+ * llgettext_init -- initialize gettext with initially
+ *  desired codeset
+ *================================================*/
+static void
+llgettext_init (CNSTRING domain, CNSTRING codeset)
+{
+#if ENABLE_NLS
+	STRING e;
+
+	/* until we have an internal codeset (which is until we open a database)
+	we want output in display codeset */
+	set_gettext_codeset(PACKAGE, gui_codeset_out);
+
+	/* allow run-time specification of locale directory */
+	/* (LOCALEDIR is compile-time) */
+	e = getoptstr("LocaleDir", "");
+	if (e && *e) {
+		bindtextdomain(PACKAGE, e);
+		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
+	}
+
+#else /* ENABLE_NLS */
+	domain = domain;
+	codeset = codeset;
+#endif /* ENABLE_NLS */
+}
+/*==================================================
+ * pre_codesets_hook -- code to run just before initializing codesets
+ * For MS-Windows user config of console codepages
+ *================================================*/
+static void
+pre_codesets_hook (void)
+{
+#ifdef WIN32
+	/* On MS-Windows, attempt to set any requested non-standard codepage */
+	/* Do this now, before init_codesets below */
+	INT i = getoptint("ConsoleCodepage", 0);
+	if (i) {
+		w_set_oemout_codepage(i);
+		w_set_oemin_codepage(i);
+	}
+#endif
+}
+/*==================================================
+ * post_codesets_hook -- code to run just after initializing codesets
+ * For Windows, link dynamically to gettext & iconv if available
+ *================================================*/
+static void
+post_codesets_hook (void)
+{
+	init_win32_gettext_shim();
+	init_win32_iconv_shim(getoptstr("iconv.path",""));
 }

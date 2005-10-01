@@ -1,3 +1,10 @@
+2005-10-01 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c
+
+	Break code out of init_lifelines_global into new functions
+	llgettext_init, pre_codesets_hook.
+
 2005-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/standard.h
