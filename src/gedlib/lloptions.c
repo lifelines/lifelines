@@ -33,7 +33,7 @@ extern STRING qSopt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static void expand_variables(STRING valbuf, INT max);
-static BOOLEAN load_config_file(STRING file, STRING * pmsg);
+static INT load_config_file(STRING file, STRING * pmsg);
 static void send_notifications(void);
 
 /*********************************************
@@ -139,9 +139,9 @@ dir_from_file (STRING file)
 /*==========================================
  * load_config_file -- read options in config file
  *  and load into table (f_global)
- * Created: 2001/02/04, Perry Rapp
+ * returns 1 for success, 0 for not found, -1 for error (with pmsg)
  *========================================*/
-static BOOLEAN
+static INT
 load_config_file (STRING file, STRING * pmsg)
 {
 	FILE * fp = 0;
@@ -152,9 +152,9 @@ load_config_file (STRING file, STRING * pmsg)
 	INT len;
 	fp = fopen(file, LLREADTEXT);
 	if (!fp) {
-	        free(thisdir);
-		return TRUE; /* no config file, that is ok */
-        }
+		free(thisdir);
+		return 0; /* 0 for not found */
+	}
 	f_predef = create_table_str();
 
 	insert_table_str(f_predef, "%thisdir%", thisdir);
@@ -204,26 +204,25 @@ load_config_file (STRING file, STRING * pmsg)
 	if (failed) {
 		/* error is in heap */
 		*pmsg = strsave(_(qSopt2long));
-		return FALSE;
+		return -1; /* -1 for error */
 	}
 	free_optable(&f_predef);
 	send_notifications();
-	return TRUE;
+	return 1; /* 1 for ok */
 }
 /*=================================
  * load_global_options -- 
  *  Load internal table of global options from caller-specified config file
  * STRING * pmsg: heap-alloc'd error string if fails
+ * returns 1 for ok, 0 for not found, -1 for error
  *===============================*/
-BOOLEAN
+INT
 load_global_options (STRING configfile, STRING * pmsg)
 {
 	*pmsg = NULL;
 	if (!f_global) 
 		f_global= create_table_str();
-	if (!load_config_file(configfile, pmsg))
-		return FALSE;
-	return TRUE;
+	return load_config_file(configfile, pmsg);
 }
 /*=================================
  * set_cmd_options -- Store cmdline options from caller

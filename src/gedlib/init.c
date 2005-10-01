@@ -72,6 +72,7 @@ extern INT opt_finnish, opt_mychar;
 
 static void init_win32_gettext_shim(void);
 static void llgettext_init(CNSTRING domain, CNSTRING codeset);
+static BOOLEAN load_configs(STRING configfile, STRING * pmsg);
 static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
 static void post_codesets_hook(void);
 static void pre_codesets_hook(void);
@@ -108,30 +109,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	f_dbnotify = notify;
 
-	if (!configfile)
-		configfile = getenv("LLCONFIGFILE");
-
-	*pmsg = NULL;
-
-
-	if (!configfile || !configfile[0]) {
-		STRING cfg_file;
-		char cfg_name[MAXPATHLEN];
-
-		cfg_file = environ_determine_config_file();
-		/* first try $HOME/config_file */
-		llstrncpy(cfg_name,getenv("HOME") , sizeof(cfg_name), 0);
-		llstrappc(cfg_name, sizeof(cfg_name), '/');
-		llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
-		if (!load_global_options(cfg_name, pmsg)) {
-			suppress_reload = FALSE;
-			update_useropts(NULL);
-			return FALSE;
-		}
-		configfile = cfg_file;
-		/* fall through to open config file */
-	}
-	if (!load_global_options(configfile, pmsg)) {
+	if (!load_configs(configfile, pmsg)) {
 		suppress_reload = FALSE;
 		update_useropts(NULL);
 		return FALSE;
@@ -738,4 +716,58 @@ post_codesets_hook (void)
 {
 	init_win32_gettext_shim();
 	init_win32_iconv_shim(getoptstr("iconv.path",""));
+}
+/*==================================================
+ * load_configs -- Load global config file(s)
+ * returns FALSE if error, with message in pmsg
+ *================================================*/
+static BOOLEAN
+load_configs (STRING configfile, STRING * pmsg)
+{
+	INT rtn=0;
+	STRING str=0;
+
+	/* TODO: Should read a system-wide config file */
+
+	if (!configfile)
+		configfile = getenv("LLCONFIGFILE");
+
+	*pmsg = NULL;
+
+
+	if (configfile && configfile[0]) {
+
+		rtn = load_global_options(configfile, pmsg);
+		if (rtn == -1) return FALSE;
+
+	} else {
+
+		/* No config file specified, so try local config_file */
+		STRING cfg_file = environ_determine_config_file();
+
+		rtn = load_global_options(cfg_file, pmsg);
+		if (rtn == -1) return FALSE;
+		if (rtn == 0) {
+
+			/* No config file found, so try $HOME/config_file */
+			char cfg_name[MAXPATHLEN];
+			llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
+			llstrappc(cfg_name, sizeof(cfg_name), '/');
+			llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
+
+			rtn = load_global_options(cfg_file, pmsg);
+			if (rtn == -1) return FALSE;
+
+		}
+	}
+	if (rtn == 0) return TRUE; /* no config file found */
+
+	/* allow chaining to one more config file */
+
+	str = getoptstr("LLCONFIGFILE", NULL);
+	if (str && str[0]) {
+		rtn = load_global_options(str, pmsg);
+		if (rtn == -1) return FALSE;
+	}
+	return TRUE;
 }
