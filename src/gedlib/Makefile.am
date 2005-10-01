@@ -13,7 +13,7 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 	dblist.c dispfmt.c editmap.c \
 	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c \
 	indiseq.c init.c intrface.c keytonod.c lloptions.c \
-	lldatabase.c locales.c \
+	lldatabase.c llgettext.c locales.c \
 	messages.c misc.c names.c node.c nodechk.c \
 	nodeio.c nodeutls.c place.c \
 	property.c record.c refns.c remove.c replace.c \

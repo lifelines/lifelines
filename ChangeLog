@@ -21,6 +21,10 @@
 
 	Pull gettext code out of init.c into new file llgettext.c.
 
+	* ChangeLog src/gedlib/Makefile.am
+
+	Add new llgettext.c file to makefile.
+
 2005-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/standard.h
