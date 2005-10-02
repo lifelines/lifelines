@@ -6,6 +6,11 @@
 	Add more diagnostics to u/c display (Internal UTF-8,
 	bind_textdomain_codeset).
 
+	* ChangeLog README.MAINTAINERS configure.in
+	src/hdrs/version.h
+
+	Bump version to 3.0.48p.
+
 2005-10-01 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c
