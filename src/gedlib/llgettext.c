@@ -16,6 +16,16 @@
 #include "zstr.h"
 
 
+/*********************************************
+ * local variables
+ *********************************************/
+
+static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*==================================================
  * llgettext_init -- initialize gettext with initially
@@ -86,8 +96,7 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 {
 #if ENABLE_NLS
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-	static STRING prevcodeset = 0;
-	if (eqstr_ex(prevcodeset, codeset))
+	if (eqstr_ex(gt_codeset, codeset))
 		return;
 	if (codeset && codeset[0]) {
 		ZSTR zcsname=zs_new();
@@ -95,11 +104,11 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 		/* eg, just "UTF-8" out of "UTF-8//TrGreekAscii//TrCyrillicAscii" */
 		transl_parse_codeset(codeset, zcsname, 0);
 		if (zs_str(zcsname)) {
-			strupdate(&prevcodeset, zs_str(zcsname));
+			strupdate(&gt_codeset, zs_str(zcsname));
 			/* gettext automatically appends //TRANSLIT */
 		} else {
 			/* what do we do if they gave us an empty one ? */
-			strupdate(&prevcodeset, "ASCII");
+			strupdate(&gt_codeset, "ASCII");
 		}
 		zs_free(&zcsname);
 	} else {
@@ -107,9 +116,9 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 		We need to set some codeset, in case it was set to 
 		UTF-8 in last db 
 		*/
-		strupdate(&prevcodeset, gui_codeset_out);
+		strupdate(&gt_codeset, gui_codeset_out);
 	}
-	bind_textdomain_codeset(domain, prevcodeset);
+	bind_textdomain_codeset(domain, gt_codeset);
 	if (eqstr(domain, PACKAGE))
 		locales_notify_uicodeset_changes();
 #else /* HAVE_BIND_TEXTDOMAIN_CODESET */
@@ -124,4 +133,13 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 	domain = domain; /* unused */
 	codeset = codeset; /* unused */
 #endif /* ENABLE_NLS */
+}
+/*=================================
+ * get_gettext_codeset -- Return last codeset passed to bind_textdomain_codeset
+ * (returns null if none, otherwise pointer to private string)
+ *===============================*/
+CNSTRING
+get_gettext_codeset (void)
+{
+	return gt_codeset;
 }

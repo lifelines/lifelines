@@ -1812,6 +1812,11 @@ invoke_cset_display (void)
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
 	enqueue_list(list, strsave(zs_str(zstr)));
+	if (uu8) {
+		enqueue_list(list, strsave(_("Internal UTF-8: Yes")));
+	} else {
+		enqueue_list(list, strsave(_("Internal UTF-8: No")));
+	}
 
 	if (are_locales_supported())
 		enqueue_list(list, strsave(_("Locales are enabled.")));
@@ -1826,6 +1831,13 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
 		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
+	}
+
+	if (1) {
+		CNSTRING str = get_gettext_codeset();
+		str = str ? str : "";
+		zs_setf(zstr, "bind_textdomain_codeset: %s", str);
+		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
 	add_shims_info(list);
