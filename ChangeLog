@@ -1,3 +1,9 @@
+2005-10-03 Perry Rapp
+
+	* ChangeLog configure.in
+
+	Restore AM_INIT_AUTOMAKE to configure.in (lost yesterday).
+
 2005-10-03 Stephen Dum
 	 * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
 	 docs/ll-reportmanual.txt  docs/ll-userguide.html docs/ll-userguide.pdf
