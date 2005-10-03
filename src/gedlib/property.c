@@ -62,7 +62,7 @@ get_user_email (void)
 
 /*===============================================================
  * get_property -- 
- * Try getoptstr_rpt, which tries user options table & config file
+ * Try getlloptstr_rpt, which tries user options table & config file
  * Then handle builtins
  *=============================================================*/
 STRING
@@ -73,7 +73,7 @@ get_property (STRING opt)
   if (NULL == opt)
     return NULL;
 
-  val = getoptstr_rpt(opt, NULL);
+  val = getlloptstr_rpt(opt, NULL);
   if (NULL == val)
     {
       if (eqstr(opt, "user.fullname"))

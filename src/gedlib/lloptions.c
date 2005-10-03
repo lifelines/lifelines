@@ -310,13 +310,13 @@ getlloptstr (CNSTRING optname, STRING defval)
 	return str;
 }
 /*===============================================
- * getoptstr_rpt -- get an option (checking report-local options first)
+ * getlloptstr_rpt -- get an option (checking report-local options first)
  * Example: 
- *  str = getoptstr_rpt("HDR_SUBM", "1 SUBM");
+ *  str = getlloptstr_rpt("HDR_SUBM", "1 SUBM");
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 STRING
-getoptstr_rpt (CNSTRING optname, STRING defval)
+getlloptstr_rpt (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (!str && f_rpt)
@@ -326,13 +326,13 @@ getoptstr_rpt (CNSTRING optname, STRING defval)
 	return str;
 }
 /*===============================================
- * getoptstr_dbonly -- get an option (but only look at db options)
+ * getlloptstr_dbonly -- get an option (but only look at db options)
  * Example: 
- *  str = getoptstr_dbonly("codeset", 0);
+ *  str = getlloptstr_dbonly("codeset", 0);
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 STRING
-getoptstr_dbonly (CNSTRING optname, STRING defval)
+getlloptstr_dbonly (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (f_db)

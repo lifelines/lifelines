@@ -10,7 +10,7 @@
  lloptions.h - handling for (opaque) string & numeric options
 
   Options are fetched on-the-fly when requested
-   first from report properties (if getoptstr_rpt or getoptint_rpt)
+   first from report properties (if getlloptstr_rpt or getoptint_rpt)
    then from db properties
    then from global properties
    then from fallback properties
@@ -39,8 +39,8 @@ void unregister_notify(CALLBACK_FNC fncptr);
 /* TODO: fix const-correctness */
 STRING getlloptstr(CNSTRING optname, STRING defval);
 INT getlloptint(CNSTRING optname, INT defval);
-STRING getoptstr_dbonly(CNSTRING optname, STRING defval);
-STRING getoptstr_rpt(CNSTRING optname, STRING defval);
+STRING getlloptstr_dbonly(CNSTRING optname, STRING defval);
+STRING getlloptstr_rpt(CNSTRING optname, STRING defval);
 
 
 
