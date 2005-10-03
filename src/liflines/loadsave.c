@@ -217,7 +217,7 @@ load_gedcom (BOOLEAN picklist)
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
-	srcdir = getoptstr("InputPath", ".");
+	srcdir = getlloptstr("InputPath", ".");
 	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
 		|| !(fp = fopen(fullpath, LLREADBINARY))) {
 		strfree(&fullpath);
@@ -275,7 +275,7 @@ save_gedcom (void)
 	struct tag_export_feedback efeed;
 	STRING srcdir=NULL, fname=0, fullpath=0;
 
-	srcdir = getoptstr("LLARCHIVES", ".");
+	srcdir = getlloptstr("LLARCHIVES", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);

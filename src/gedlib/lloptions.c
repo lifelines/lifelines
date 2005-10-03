@@ -288,13 +288,13 @@ term_lloptions (void)
 	remove_listeners(&f_notifications);
 }
 /*===============================================
- * getoptstr -- get an option (from db or from global)
+ * getlloptstr -- get an option (from db or from global)
  * Example: 
- *  str = getoptstr("HDR_SUBM", "1 SUBM");
+ *  str = getlloptstr("HDR_SUBM", "1 SUBM");
  * returns string belonging to table
  *=============================================*/
 STRING
-getoptstr (CNSTRING optname, STRING defval)
+getlloptstr (CNSTRING optname, STRING defval)
 {
 	STRING str = 0;
 	if (!str && f_cmd)
@@ -312,7 +312,7 @@ getoptstr (CNSTRING optname, STRING defval)
 /*===============================================
  * getoptstr_rpt -- get an option (checking report-local options first)
  * Example: 
- *  str = getoptstr("HDR_SUBM", "1 SUBM");
+ *  str = getoptstr_rpt("HDR_SUBM", "1 SUBM");
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 STRING
@@ -322,7 +322,7 @@ getoptstr_rpt (CNSTRING optname, STRING defval)
 	if (!str && f_rpt)
 		str = valueof_str(f_rpt, optname);
 	if (!str)
-		str = getoptstr(optname, defval);
+		str = getlloptstr(optname, defval);
 	return str;
 }
 /*===============================================
@@ -353,7 +353,7 @@ getoptstr_dbonly (CNSTRING optname, STRING defval)
 INT
 getoptint (CNSTRING optname, INT defval)
 {
-	STRING str = getoptstr(optname, 0);
+	STRING str = getlloptstr(optname, 0);
 	return str ? atoi(str) : defval;
 }
 /*===============================================

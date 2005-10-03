@@ -92,7 +92,7 @@ add_indi_by_edit (RFMT rfmt)
 
 	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
 	/* prefer useroption in this db */
-	if ((str = getoptstr("INDIREC", NULL)))
+	if ((str = getlloptstr("INDIREC", NULL)))
 		fprintf(fp, "%s\n", str);
 	else { /* default */
 		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");
@@ -587,7 +587,7 @@ editfam:
 	write_nodes(1, fp, ttmo, husb, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, wife, TRUE, TRUE, TRUE);
 	/* prefer user option in db */
-	if ((str = getoptstr("FAMRECBODY", NULL)))
+	if ((str = getlloptstr("FAMRECBODY", NULL)))
 		fprintf(fp, "%s\n", str);
 	else /* default */
 		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");

@@ -235,7 +235,7 @@ set_output_file (STRING outfname, BOOLEAN append)
 		fclose(Poutfp);
 		Poutfp = NULL;
 	}
-	rptdir = getoptstr("LLREPORTS", ".");
+	rptdir = getlloptstr("LLREPORTS", ".");
 	Poutfp = fopenpath(outfname, modestr, rptdir, NULL, uu8, NULL);
 	if (!Poutfp) {
 		/* TODO: need to forward this through rptui */
@@ -253,7 +253,7 @@ set_output_file (STRING outfname, BOOLEAN append)
 static BOOLEAN
 request_file (BOOLEAN *eflg)
 {
-	STRING rptdir = getoptstr("LLREPORTS", ".");
+	STRING rptdir = getlloptstr("LLREPORTS", ".");
 	STRING fname=0, fullpath=0;
 	Poutfp = rptui_ask_for_output_file(LLWRITETEXT, _(qSwhtout), &fname
 		, &fullpath, rptdir, NULL);

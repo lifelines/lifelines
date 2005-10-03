@@ -346,7 +346,7 @@ void
 check_record_leaks (void)
 {
 	if (f_nrecs) {
-		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
 		FILE * fp=0;
 		if (report_leak_path)
 			fp = fopen(report_leak_path, "at");

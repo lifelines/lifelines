@@ -3412,7 +3412,7 @@ __copyfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	char buffer[1024];
-	STRING programsdir = getoptstr("LLPROGRAMS", ".");
+	STRING programsdir = getlloptstr("LLPROGRAMS", ".");
 	if (*eflg)  {
 		prog_error(node, nonstr1, "copyfile");
 		goto copyfile_end;

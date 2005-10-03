@@ -57,7 +57,7 @@ BOOLEAN
 charprops_load_utf8 (void)
 {
 	FILE * fp=0;
-	CNSTRING ttpath = getoptstr("TTPATH", ".");
+	CNSTRING ttpath = getlloptstr("TTPATH", ".");
 	STRING upleft[MAXCASES], upright[MAXCASES], loleft[MAXCASES], loright[MAXCASES];
 	INT upcount=0, locount=0;
 	INT i;

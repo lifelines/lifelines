@@ -274,7 +274,7 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crashlog = getoptstr("CrashLog_llexec", NULL);
+	crashlog = getlloptstr("CrashLog_llexec", NULL);
 	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
 	init_interpreter(); /* give interpreter its turn at initialization */
@@ -306,7 +306,7 @@ prompt_for_db:
 		goto usage;
 	}
 
-	dbdir = getoptstr("LLDATABASES", ".");
+	dbdir = getlloptstr("LLDATABASES", ".");
 	/* Get Database Name (Prompt or Command-Line) */
 	if (alldone || c <= 0) {
 		char dbname[MAXPATHLEN];
@@ -509,7 +509,7 @@ open_or_create_database (INT alteration, STRING dbrequested, STRING *dbused)
 	If no database directory specified, add prefix llnewdbdir
 	*/
 	if (is_unadorned_directory(*dbused)) {
-		STRING dbpath = getoptstr("LLDATABASES", ".");
+		STRING dbpath = getlloptstr("LLDATABASES", ".");
 		CNSTRING newdbdir = get_first_path_entry(dbpath);
 		STRING temp = *dbused;
 		if (newdbdir) {

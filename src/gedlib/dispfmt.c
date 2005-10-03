@@ -69,7 +69,7 @@ disp_long_format_date (STRING date)
 	if (!date) return NULL;
 
 	n = 0;
-	fmts = getoptstr("LongDisplayDate", NULL);
+	fmts = getlloptstr("LongDisplayDate", NULL);
 	if (fmts) {
 		/* try to use user-specified format */
 		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d" 
@@ -80,7 +80,7 @@ disp_long_format_date (STRING date)
 		sfmt=14; /* GEDCOM as is */
 	}
 
-	pic = getoptstr("LongDisplayDatePic", NULL);
+	pic = getlloptstr("LongDisplayDatePic", NULL);
 	if (pic && pic[0])
 		set_date_pic(pic);
 	
@@ -102,7 +102,7 @@ disp_shrt_format_date (STRING date)
 	if (!date) return NULL;
 
 	n = 0;
-	fmts = getoptstr("ShortDisplayDate", NULL);
+	fmts = getlloptstr("ShortDisplayDate", NULL);
 	if (fmts) {
 		/* try to use user-specified format */
 		n = sscanf(fmts, "%d,%d,%d,%d,%d,%d"
@@ -113,7 +113,7 @@ disp_shrt_format_date (STRING date)
 		sfmt=12; /* old style short form -- year only */
 	}
 
-	pic = getoptstr("ShortDisplayDatePic", NULL);
+	pic = getlloptstr("ShortDisplayDatePic", NULL);
 	if (pic && pic[0])
 		set_date_pic(pic);
 

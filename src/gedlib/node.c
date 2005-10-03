@@ -723,7 +723,7 @@ indi_to_event (NODE node, STRING tag, STRING head
 	/* TODO: break out following code into a subroutine for disp_person_birth to call */
 	llstrcatn(&p, head, &mylen);
 	if (mylen<(INT)strlen(event)+1) {
-		omit = getoptstr("ShortOmitString", NULL);
+		omit = getlloptstr("ShortOmitString", NULL);
 		if (omit) {
 			mylen -= strlen(omit)+1; /* plus trailing 0 */
 			llstrcatn(&p, event, &mylen);
@@ -1157,7 +1157,7 @@ void
 check_node_leaks (void)
 {
 	if (live_count) {
-		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
 		FILE * fp=0;
 		if (report_leak_path)
 			fp = fopen(report_leak_path, "at");

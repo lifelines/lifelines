@@ -283,7 +283,7 @@ free_all_pvalues (void)
 	}
 	free_list = 0;
 	if (found_leaks) {
-		STRING report_leak_path = getoptstr("ReportLeakLog", NULL);
+		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
 		FILE * fp=0;
 		if (report_leak_path)
 			fp = fopen(report_leak_path, "at");

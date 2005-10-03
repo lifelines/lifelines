@@ -43,7 +43,7 @@ llgettext_init (CNSTRING domain, CNSTRING codeset)
 
 	/* allow run-time specification of locale directory */
 	/* (LOCALEDIR is compile-time) */
-	e = getoptstr("LocaleDir", "");
+	e = getlloptstr("LocaleDir", "");
 	if (e && *e) {
 		bindtextdomain(PACKAGE, e);
 		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
@@ -65,7 +65,7 @@ init_win32_gettext_shim (void)
 #ifdef WIN32_INTL_SHIM
 	STRING e;
 	/* (re)load gettext dll if specified */
-	e = getoptstr("gettext.path", "");
+	e = getlloptstr("gettext.path", "");
 	if (e && *e)
 	{
 		if (intlshim_set_property("dll_path", e))
@@ -74,7 +74,7 @@ init_win32_gettext_shim (void)
 			textdomain(PACKAGE);
 		}
 		/* tell gettext where to find iconv */
-		e = getoptstr("iconv.path", "");
+		e = getlloptstr("iconv.path", "");
 		if (e && *e)
 			gt_set_property("iconv_path", e);
 	}

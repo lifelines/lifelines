@@ -105,13 +105,14 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	/* header date & time */
 	fprintf(fp, "1 DATE %s\n2 TIME %s\n", dat, tim);
 	/* header submitter entry */
-	str = getoptstr("HDR_SUBM", "1 SUBM");
+	str = getlloptstr("HDR_SUBM", "1 SUBM");
 	fprintf(fp, "%s\n", str);
 	/* header gedcom version info */
-	str = getoptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
+	str = getlloptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
 	fprintf(fp, "%s\n", str);
 	/* header character set info */
-	str = getoptstr("HDR_CHAR", "1 CHAR ASCII");
+	/* TODO: Shouldn't this be taken from the report output codeset? Perry,2005-10-02 */
+	str = getlloptstr("HDR_CHAR", "1 CHAR ASCII");
 	fprintf(fp, "%s\n", str);
 	/* finished header */
 	xlat_gedout = transl_get_predefined_xlat(MINGD);

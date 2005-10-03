@@ -81,7 +81,7 @@ edit_add_source (void)
 		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("SOURREC", _(qSdefsour));
+	str = getlloptstr("SOURREC", _(qSdefsour));
 	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
 }
 /*==============================================
@@ -95,7 +95,7 @@ edit_add_event (void)
 		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("EVENREC", _(qSdefeven));
+	str = getlloptstr("EVENREC", _(qSdefeven));
 	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
 }
 /*====================================================
@@ -109,7 +109,7 @@ edit_add_other (void)
 		message(_(qSronlya));
 		return NULL;
 	}
-	str = getoptstr("OTHR", _(qSdefothr));
+	str = getlloptstr("OTHR", _(qSdefothr));
 	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
 }
 /*================================================

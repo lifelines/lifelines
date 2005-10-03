@@ -258,7 +258,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	} else {
 		PATHINFO pathinfo = 0;
 		STRING fname=0, fullpath=0;
-		STRING programsdir = getoptstr("LLPROGRAMS", ".");
+		STRING programsdir = getlloptstr("LLPROGRAMS", ".");
 		if (!rptui_ask_for_program(LLREADTEXT, _(qSwhatrpt), &fname, &fullpath
 			, programsdir, ".ll", picklist)) {
 			if (fname)  {
@@ -466,7 +466,7 @@ remove_tables (PACTX pactx)
 static BOOLEAN
 find_program (STRING fname, STRING localdir, STRING *pfull,BOOLEAN include)
 {
-	STRING programsdir = getoptstr("LLPROGRAMS", ".");
+	STRING programsdir = getlloptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
 	ZSTR zstr=zs_new();
 	BOOLEAN rtn=FALSE;
@@ -1989,7 +1989,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	static char msgbuff[100];
 	if (rpt_cancelled)
 		return _("Report cancelled");
-	rptfile = getoptstr("ReportLog", NULL);
+	rptfile = getlloptstr("ReportLog", NULL);
 	if (node) {
 		STRING fname = irptinfo(node)->fullpath;
 		INT lineno = iline(node)+1;

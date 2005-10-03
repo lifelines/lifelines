@@ -101,9 +101,9 @@ init_codesets (void)
 	*/
 
 /* GuiCodesetOut */
-	e = getoptstr("GuiCodesetOut", "");
+	e = getlloptstr("GuiCodesetOut", "");
 	if (!e[0])
-		e = getoptstr("GuiCodeset", "");
+		e = getlloptstr("GuiCodeset", "");
 	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
@@ -117,9 +117,9 @@ init_codesets (void)
 	strupdate(&gui_codeset_out, e);
 
 /* GuiCodesetIn */
-	e = getoptstr("GuiCodesetIn", "");
+	e = getlloptstr("GuiCodesetIn", "");
 	if (!e[0])
-		e = getoptstr("GuiCodeset", "");
+		e = getlloptstr("GuiCodeset", "");
 	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
@@ -149,18 +149,18 @@ set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
 	ZSTR zstr = zs_news(base);
 	CNSTRING e;
 	zs_apps(zstr, "Out");
-	e = getoptstr(zs_str(zstr), "");
+	e = getlloptstr(zs_str(zstr), "");
 	if (!e[0])
-		e = getoptstr(base, "");
+		e = getlloptstr(base, "");
 	if (!e[0])
 		e = defval;
 	strupdate(pcsout, e);
 
 	zs_sets(zstr, base);
 	zs_apps(zstr, "In");
-    e = getoptstr(zs_str(zstr), "");
+    e = getlloptstr(zs_str(zstr), "");
 	if (!e[0])
-		e = getoptstr(base, "");
+		e = getlloptstr(base, "");
 	if (!e[0])
 		e = defval;
 	strupdate(pcsin, e);

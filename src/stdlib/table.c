@@ -145,7 +145,7 @@ create_table_impl (enum TB_VALTYPE valtype, DELFUNC delfunc)
 	tab->vtable = &vtable_for_table;
 	tab->refcnt = 1;
 	tab->valtype = valtype;
-	if (getoptstr("rbtree", 0))
+	if (getlloptstr("rbtree", 0))
 		tab->rbtree = RbTreeCreate(tab, rbcompare, rbdestroy);
 	else
 		tab->hashtab = create_hashtab();

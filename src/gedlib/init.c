@@ -148,7 +148,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 		setoptstr_fallback("LLEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */
-	e = getoptstr("LLEDITOR", NULL);
+	e = getlloptstr("LLEDITOR", NULL);
 	/* configure tempfile & edit command */
 	editfile = environ_determine_tempfile();
 	if (!editfile) {
@@ -403,7 +403,7 @@ create_database (STRING dbpath)
 	BTREE btree = 0;
 
 	/* first test that newdb props are legal */
-	STRING props = getoptstr("NewDbProps", 0);
+	STRING props = getlloptstr("NewDbProps", 0);
 	if (props && props[0]) {
 		TABLE dbopts = create_table_str();
 		STRING msg=0;
@@ -546,7 +546,7 @@ update_useropts (VPTR uparm)
 	/* TODO: Isn't this superfluous, as it was called in update_db_options above ? */
 	transl_load_xlats();
 
-	strupdate(&illegal_char, getoptstr("IllegalChar", 0));
+	strupdate(&illegal_char, getlloptstr("IllegalChar", 0));
 
 	nodechk_enable(!!getoptint("nodecheck", 0));
 }
@@ -606,7 +606,7 @@ static void
 post_codesets_hook (void)
 {
 	init_win32_gettext_shim();
-	init_win32_iconv_shim(getoptstr("iconv.path",""));
+	init_win32_iconv_shim(getlloptstr("iconv.path",""));
 }
 /*==================================================
  * load_configs -- Load global config file(s)
@@ -656,7 +656,7 @@ load_configs (STRING configfile, STRING * pmsg)
 
 	/* allow chaining to one more config file */
 
-	str = getoptstr("LLCONFIGFILE", NULL);
+	str = getlloptstr("LLCONFIGFILE", NULL);
 	if (str && str[0]) {
 		rtn = load_global_options(str, pmsg);
 		if (rtn == -1) return FALSE;

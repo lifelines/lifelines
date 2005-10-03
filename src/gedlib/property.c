@@ -62,7 +62,7 @@ get_user_email (void)
 
 /*===============================================================
  * get_property -- 
- * Try getoptstr, which tries user options table & config file
+ * Try getoptstr_rpt, which tries user options table & config file
  * Then handle builtins
  *=============================================================*/
 STRING

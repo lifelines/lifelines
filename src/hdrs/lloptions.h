@@ -37,7 +37,7 @@ void unregister_notify(CALLBACK_FNC fncptr);
 
 /* routine use */
 /* TODO: fix const-correctness */
-STRING getoptstr(CNSTRING optname, STRING defval);
+STRING getlloptstr(CNSTRING optname, STRING defval);
 INT getoptint(CNSTRING optname, INT defval);
 STRING getoptstr_dbonly(CNSTRING optname, STRING defval);
 STRING getoptstr_rpt(CNSTRING optname, STRING defval);

@@ -307,7 +307,7 @@ transl_get_xlat (CNSTRING src, CNSTRING dest)
 void
 transl_load_all_tts (void)
 {
-	CNSTRING ttpath = getoptstr("TTPATH", ".");
+	CNSTRING ttpath = getlloptstr("TTPATH", ".");
 	if (!inited) local_init();
 	xl_load_all_dyntts(ttpath);
 }

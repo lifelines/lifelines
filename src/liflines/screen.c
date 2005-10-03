@@ -1827,7 +1827,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(_("NLS (National Language Support) is compiled in.")));
 		zs_setf(zstr, "LocaleDir (default): %s", LOCALEDIR);
 		enqueue_list(list, strsave(zs_str(zstr)));
-		zs_setf(zstr,  "LocaleDir (override): %s", getoptstr("LocaleDir", ""));
+		zs_setf(zstr,  "LocaleDir (override): %s", getlloptstr("LocaleDir", ""));
 		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
 		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
@@ -1902,7 +1902,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
-	zs_setf(zstr, "TTPATH: %s", getoptstr("TTPATH", "."));
+	zs_setf(zstr, "TTPATH: %s", getlloptstr("TTPATH", "."));
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	if (charprops_is_loaded()) {
@@ -2048,7 +2048,7 @@ load_tt_action (void)
 	}
 
 	/* Ask whence to load it */
-	ttimportdir = getoptstr("TTPATH", ".");
+	ttimportdir = getlloptstr("TTPATH", ".");
 	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
@@ -2082,7 +2082,7 @@ save_tt_action (void)
 		return;
 	}
 	/* Ask whither to save it */
-	ttexportdir = getoptstr("LLTTEXPORT", ".");
+	ttexportdir = getlloptstr("LLTTEXPORT", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSmouttt), &fname, ttexportdir, ".tt");
 	if (fp) {
 		fclose(fp);

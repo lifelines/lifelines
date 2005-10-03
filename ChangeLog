@@ -1,3 +1,17 @@
+2005-10-03 Perry
+
+	* ChangeLog src/gedlib/charprops.c src/gedlib/codesets.c
+	src/gedlib/dispfmt.c src/gedlib/init.c src/gedlib/llgettext.c
+	src/gedlib/lloptions.c src/gedlib/locales.c src/gedlib/node.c
+	src/gedlib/property.c src/gedlib/record.c src/gedlib/translat.c
+	src/hdrs/lloptions.h src/interp/builtin.c src/interp/interp.c
+	src/interp/pvalalloc.c src/interp/rassa.c src/liflines/add.c
+	src/liflines/export.c src/liflines/llexec.c src/liflines/loadsave.c
+	src/liflines/main.c src/liflines/newrecs.c src/liflines/screen.c
+	src/liflines/valgdcom.c src/stdlib/table.c
+
+	Rename getoptstr to getlloptstr.
+
 2005-10-02 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/llgettext.c

@@ -146,7 +146,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	num_errors = num_warns = 0;
 	f_logopen = FALSE;
 	f_flog = 0;
-	set_import_log(getoptstr("ImportLog", "errs.log"));
+	set_import_log(getlloptstr("ImportLog", "errs.log"));
 	defline = 0;
 	curlev = 0;
 	clear_structures();
