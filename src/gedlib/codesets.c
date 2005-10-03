@@ -25,7 +25,6 @@
 
 
 
-
 /*********************************************
  * global/exported variables
  *********************************************/
@@ -55,6 +54,10 @@ STRING report_codeset_in=0;  /* default for input from reports */
 /* alphabetical */
 static void set_codeset_pair(CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin);
 
+/*********************************************
+ * local variables
+ *********************************************/
+static STRING defcodeset=0;
 
 /*********************************************
  * local & exported function definitions
@@ -69,21 +72,25 @@ static void set_codeset_pair(CNSTRING base, CNSTRING defval, STRING *pcsout, STR
 void
 init_codesets (void)
 {
-	STRING e;
+	STRING e=0;
 #if defined(WIN32) && !defined(__CYGWIN__)
 	/*
 	The Win32 case is special because we care about both Windows & Console
 	codepages, at least when running in console mode.
 	*/
 	char wincs[32];
-	STRING defval = wincs;
 	int n = w_get_codepage();
 	sprintf(wincs, "CP%d", n);
+	strupdate(&defcodeset, wincs);
 #else
 	STRING defval = nl_langinfo (CODESET);
 	/* nl_langinfo giving 0 on linux glibc-2.2.4-19.3 (Perry, 2002-12-01) */
 	if (!defval)
 		defval="";
+	defval = norm_charmap(defval);
+	if (!defval || !defval[0])
+		defval = "ASCII";
+	strupdate(&defcodeset, defval);
 	/*
 	We are using Markus Kuhn's emulator for systems without nl_langinfo
 	see arch/langinfo.c
@@ -111,7 +118,7 @@ init_codesets (void)
 		sprintf(temp, "CP%d", cs);
 		e = temp;
 #else
-		e = defval;
+		e = defcodeset;
 #endif
 	}
 	strupdate(&gui_codeset_out, e);
@@ -127,15 +134,15 @@ init_codesets (void)
 		sprintf(temp, "CP%d", cs);
 		e = temp;
 #else
-		e = defval;
+		e = defcodeset;
 #endif
 	}
 	strupdate(&gui_codeset_in, e);
 
 	/* remaining codesets are all straightforward */
-	set_codeset_pair("GedcomCodeset", defval, &gedcom_codeset_out, &gedcom_codeset_in);
-	set_codeset_pair("EditorCodeset", defval, &editor_codeset_out, &editor_codeset_in);
-	set_codeset_pair("ReportCodeset", defval, &report_codeset_out, &report_codeset_in);
+	set_codeset_pair("GedcomCodeset", defcodeset, &gedcom_codeset_out, &gedcom_codeset_in);
+	set_codeset_pair("EditorCodeset", defcodeset, &editor_codeset_out, &editor_codeset_in);
+	set_codeset_pair("ReportCodeset", defcodeset, &report_codeset_out, &report_codeset_in);
 
 }
 /*=================================================
@@ -182,4 +189,11 @@ term_codesets (void)
 	strfree(&report_codeset_out);
 	strfree(&report_codeset_in);
 }
-
+/*=================================================
+ * get_defcodeset -- Return user's default codeset
+ *===============================================*/
+CNSTRING
+get_defcodeset (void)
+{
+	return defcodeset;
+}

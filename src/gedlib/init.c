@@ -558,11 +558,18 @@ static void
 update_db_options (void)
 {
 	TABLE opttab = create_table_str();
-	STRING str=0;
+	CNSTRING str=0;
 	get_db_options(opttab);
 
 	str = valueof_str(opttab, "codeset");
-	if (!str) str="";
+	if (!str || !str[0]) {
+		/*
+		no specified database/internal codeset
+		so default to user's default codeset, which
+		should be from locale
+		*/
+		str = get_defcodeset();
+	}
 	if (!int_codeset)
 		strupdate(&int_codeset, "");
 	if (!eqstr_ex(int_codeset, str)) {

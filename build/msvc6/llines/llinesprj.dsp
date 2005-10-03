@@ -453,6 +453,10 @@ SOURCE=..\..\..\src\gedlib\nodeutls.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\norm_charmap.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\object.c
 # End Source File
 # Begin Source File

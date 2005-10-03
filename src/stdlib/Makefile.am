@@ -9,7 +9,8 @@ libstdlib_a_SOURCES = appendstr.c array.c \
 	dirs.c environ.c fpattern.c generic.c \
 	icvt.c hashtab.c list.c \
 	listener.c lldate.c llstrcmp.c log.c memalloc.c \
-	mychar_funcs.c mychar_tables.c mystring.c object.c \
+	mychar_funcs.c mychar_tables.c mystring.c \
+	norm_charmap.c object.c \
 	path.c proptbls.c rbtree.c sequence.c \
 	signals.c sprintpic.c stack.c \
 	stdlib.c stdlibi.h stdstrng.c \

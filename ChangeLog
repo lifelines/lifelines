@@ -28,6 +28,14 @@
 	Rename getoptstr_rpt to getlloptstr_rpt, and getoptstr_dbonly
 	to getlloptstr_dbonly.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp src/gedlib/codesets.c
+	src/gedlib/init.c src/hdrs/codesets.h src/stdlib/Makefile.am
+	*NEW src/stdlib/norm_charmap.c
+
+	Added Marcus Kuhn's norm_charmap.c to stdlib.
+	Use user's default codeset (should be from locale) for databases
+	lacking a codeset specification.
+
 2005-10-02 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/llgettext.c

@@ -23,6 +23,7 @@ extern STRING gui_codeset_out;    /* writing characters to GUI */
 extern STRING report_codeset_out; /* default for report output */
 extern STRING report_codeset_in;  /* default for input from reports */
 
+CNSTRING get_defcodeset(void);
 void init_codesets(void);
 void term_codesets(void);
 
