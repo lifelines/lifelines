@@ -390,7 +390,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
-	str = getoptint("FullDbPath", 1) ? readpath : readpath_file;
+	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
 		wprintw(win, _(qSdbimmut));
@@ -2549,13 +2549,13 @@ manufacture a listdisp here
 		scratch[0] =0;
 		if (name) {
 			SURCAPTYPE surcaptype = DOSURCAP;
-			if (!getoptint("UppercaseSurnames", 1))
+			if (!getlloptint("UppercaseSurnames", 1))
 				surcaptype = NOSURCAP;
 			name = manip_name(name, surcaptype, REGORDER, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
-		if(getoptint("DisplayKeyTags", 0) > 0) {
+		if(getlloptint("DisplayKeyTags", 0) > 0) {
 			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(indi));
 		} else {
 			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
@@ -3199,7 +3199,7 @@ void
 clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
 {
 	/* workaround for curses bug with spacs */
-	if (getoptint("ForceScreenErase", 0) > 0) {
+	if (getlloptint("ForceScreenErase", 0) > 0) {
 		/* fill virtual output with dots */
 		color_hseg(win, row, x1, x2, '_');
 		wnoutrefresh(win);
@@ -3741,7 +3741,7 @@ wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 {
 	WINDOW * win = uiw_win(uiwin);
 	/* workaround for curses bug with spaces */
-	if (getoptint("ForceScreenErase", 0) > 0) {
+	if (getlloptint("ForceScreenErase", 0) > 0) {
 		/*
 		To fix the dirty output on a redhat 6 system
 		(with ncurses-5.2-8), required the call to

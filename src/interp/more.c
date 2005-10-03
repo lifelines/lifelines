@@ -718,7 +718,7 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 		return NULL;
 	}
-	if (!getoptint("DenySystemCalls", 0)) {
+	if (!getlloptint("DenySystemCalls", 0)) {
 		call_system_cmd(cmd);
 	} else {
 		/* llwprintf("Suppressing system(%s) call", cmd); */

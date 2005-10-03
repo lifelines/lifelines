@@ -608,7 +608,7 @@ indi_to_name (NODE node, INT len)
 		node = find_tag(nchild(node), "NAME");
 	if (!node)
 		return _("NO NAME");
-	if (!getoptint("UppercaseSurnames", 1))
+	if (!getlloptint("UppercaseSurnames", 1))
 		surcaptype = NOSURCAP;
 	return manip_name(nval(node), surcaptype, REGORDER, len);
 }

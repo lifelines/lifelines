@@ -978,7 +978,7 @@ prompt_add_child_check_save (NODE fam, NODE save)
 	}
 	if (save) {
 		if (keyflag)
-			if(getoptint("DisplayKeyTags", 0) > 0) {
+			if(getlloptint("DisplayKeyTags", 0) > 0) {
 				sprintf(scratch, "%s%s (i%s)", _(qSiscnew),
 				 	indi_to_name(save, 56),
 				 	rmvat(nxref(save))+1);
@@ -1480,12 +1480,12 @@ static void
 load_hist_lists (void)
 {
 	/* V for visit history, planning to also have a change history */
-	INT count = getoptint("HistorySize", 20);
+	INT count = getlloptint("HistorySize", 20);
 	if (count<0 || count > 9999)
 		count = 20;
 	init_hist(&vhist, count);
 	init_hist(&chist, count);
-	if (getoptint("SaveHistory", 0)) {
+	if (getlloptint("SaveHistory", 0)) {
 		load_nkey_list("HISTV", &vhist);
 		load_nkey_list("HISTC", &chist);
 	}
@@ -1497,7 +1497,7 @@ load_hist_lists (void)
 static void
 save_hist_lists (void)
 {
-	if (!getoptint("SaveHistory", 0)) return;
+	if (!getlloptint("SaveHistory", 0)) return;
 	if (readonly || immutable) return;
 	save_nkey_list("HISTV", &vhist);
 	save_nkey_list("HISTC", &chist);
@@ -1654,7 +1654,7 @@ history_record (RECORD rec, struct hist * histp)
 	NKEY nkey = nkey_zero();
 	INT prev, next, i;
 	INT count = get_hist_count(histp);
-	INT protect = getoptint("HistoryBounceSuppress", 0);
+	INT protect = getlloptint("HistoryBounceSuppress", 0);
 	if (!histp->size) return;
 	if (histp->start==-1) {
 		histp->start = histp->past_end;

@@ -342,16 +342,16 @@ getoptstr_dbonly (CNSTRING optname, STRING defval)
 	return str;
 }
 /*===============================================
- * getoptint -- get a numerical option
+ * getlloptint -- get a numerical option
  *  First tries user option table (looks up optname)
  *  Then tries config option table
  *  Finally defaults to defval
  * Example: 
-	if (getoptint("FullReportCallStack", 0) > 0)
+	if (getlloptint("FullReportCallStack", 0) > 0)
  * Created: 2001/11/22, Perry Rapp
  *=============================================*/
 INT
-getoptint (CNSTRING optname, INT defval)
+getlloptint (CNSTRING optname, INT defval)
 {
 	STRING str = getlloptstr(optname, 0);
 	return str ? atoi(str) : defval;

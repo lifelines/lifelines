@@ -323,7 +323,7 @@ PVALUE __name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val);
 	}
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_var_error(node, stab, arg, NULL, _("name: person does not have a name"));
 			return NULL;
@@ -379,7 +379,7 @@ __fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	len = pvalue_to_int(val);
 	delete_pvalue(val);
 	if (!(name = NAME(indi)) || !nval(name)) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_var_error(node, stab, NULL, NULL, _("fullname: person does not have a name"));
 			return NULL;
@@ -406,7 +406,7 @@ __surname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!indi) return create_pvalue_from_string("");
 	if (!(name = NAME(indi)) || !nval(name)) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_var_error(node, stab, arg, NULL, _("surname: person does not have a name"));
 			return NULL;
@@ -431,7 +431,7 @@ __soundex (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	if (!(name = NAME(indi)) || !nval(name)) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_var_error(node, stab, arg, NULL, _("soundex: person does not have a name"));
 			return NULL;
@@ -637,7 +637,7 @@ __givens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!indi) return create_pvalue_from_string("");
 	if (!(name = NAME(indi)) || !nval(name)) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_error(node, _("(givens) person does not have a name"));
 			return NULL;
@@ -2767,7 +2767,7 @@ __trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!indi) return create_pvalue_from_string("");
 	if (!(indi = NAME(indi)) || !nval(indi)) {
-		if (getoptint("RequireNames", 0)) {
+		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
 			prog_error(node, _("(trimname) person does not have a name"));
 			return NULL;

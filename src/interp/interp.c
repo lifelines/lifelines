@@ -875,7 +875,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IRETURN:
 			if (iargs(node))
 				*pval = evaluate(iargs(node), stab, &eflg);
-			if (eflg && getoptint("FullReportCallStack", 0) > 0)
+			if (eflg && getlloptint("FullReportCallStack", 0) > 0)
 				prog_error(node, "in return statement");
 			return INTRETURN;
 		default:
@@ -888,7 +888,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	return TRUE;
 
 interp_fail:
-	if (getoptint("FullReportCallStack", 0) > 0) {
+	if (getlloptint("FullReportCallStack", 0) > 0) {
 		llwprintf("e%d: ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
@@ -2030,7 +2030,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 			fclose(fp);
 		}
 	}
-	if ((num = getoptint("PerErrorDelay", 0)))
+	if ((num = getlloptint("PerErrorDelay", 0)))
 		sleep(num);
 	zs_free(&zstr);
 	return msgbuff;

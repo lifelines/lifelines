@@ -10,7 +10,17 @@
 	src/liflines/main.c src/liflines/newrecs.c src/liflines/screen.c
 	src/liflines/valgdcom.c src/stdlib/table.c
 
-	Rename getoptstr to getlloptstr.
+	Rename getoptstr to getlloptstr (to avoid clash with grep for getopt).
+
+	* ChangeLog src\gedlib\gedcom.c src\gedlib\gstrings.c
+	src\gedlib\init.c src\gedlib\lloptions.c src\gedlib\node.c
+	src\gedlib\refns.c src\gedlib\valid.c src\gedlib\xlat.c
+	src\hdrs\lloptions.h src\interp\builtin.c src\interp\eval.c
+	src\interp\interp.c src\interp\more.c src\liflines\browse.c
+	src\liflines\pedigree.c src\liflines\screen.c src\liflines\show.c
+	src\liflines\valgdcom.c
+
+	Rename getoptint to getlloptint.
 
 2005-10-02 Perry Rapp
 

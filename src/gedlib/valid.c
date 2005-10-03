@@ -71,7 +71,7 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 		return FALSE;
 	}
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	if (getoptint("RequireNames", 0) && !name1) {
+	if (getlloptint("RequireNames", 0) && !name1) {
 		*pmsg = _("This person record does not have a name line.");
 		goto bad2;
 	}

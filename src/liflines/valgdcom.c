@@ -179,7 +179,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		}
 		if (lev == 0) {
 			if (rec_type == INDI_REC) {
-				if (!named && getoptint("RequireNames", 0)) {
+				if (!named && getlloptint("RequireNames", 0)) {
 					handle_err(ifeed, qSnoname, defline);
 				}
 			}

@@ -338,7 +338,7 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
 	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
-	if (getoptint("TTPATH.debug", 0)) {
+	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath trying to convert from <%s> to <%s>: %s"),
 			src, dest,
@@ -419,7 +419,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 {
 	STRING dirs,p;
 	free_dyntts();
-	if (getoptint("TTPATH.debug", 0)) {
+	if (getlloptint("TTPATH.debug", 0)) {
 		if (!ttpath ||  !ttpath[0])
 			log_outf("ttpath.dbg", _("No TTPATH config variable"));
 		else
@@ -449,7 +449,7 @@ load_dynttlist_from_dir (STRING dir)
 	struct dirent **programs;
 	INT n = scandir(dir, &programs, select_tts, alphasort);
 	INT i;
-	if (getoptint("TTPATH.debug", 0)) {
+	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg", _("ttpath checking dir <%s>"), dir);
 	}
 	for (i=0; i<n; ++i) {
@@ -463,7 +463,7 @@ load_dynttlist_from_dir (STRING dir)
 			UTF-8_ISO-8859-1 (type 1; code conversion)
 			UTF-8__HTML (type 2; subcoding)
 		*/
-		if (getoptint("TTPATH.debug", 0)) {
+		if (getlloptint("TTPATH.debug", 0)) {
 			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {

@@ -548,7 +548,7 @@ update_useropts (VPTR uparm)
 
 	strupdate(&illegal_char, getlloptstr("IllegalChar", 0));
 
-	nodechk_enable(!!getoptint("nodecheck", 0));
+	nodechk_enable(!!getlloptint("nodecheck", 0));
 }
 /*==================================================
  * update_db_options -- 
@@ -591,7 +591,7 @@ pre_codesets_hook (void)
 #ifdef WIN32
 	/* On MS-Windows, attempt to set any requested non-standard codepage */
 	/* Do this now, before init_codesets below */
-	INT i = getoptint("ConsoleCodepage", 0);
+	INT i = getlloptint("ConsoleCodepage", 0);
 	if (i) {
 		w_set_oemout_codepage(i);
 		w_set_oemin_codepage(i);

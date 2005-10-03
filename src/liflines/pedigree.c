@@ -639,7 +639,7 @@ check_scroll_max( CANVASDATA canvas)
 static INT
 get_indent (void)
 {
-	INT indent = getoptint("GedcomDisplayIndent", 6);
+	INT indent = getlloptint("GedcomDisplayIndent", 6);
 	if (indent<0 || indent>9) indent = 6;
 	return indent;
 }

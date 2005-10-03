@@ -373,7 +373,7 @@ INT
 resolve_refn_links (NODE node)
 {
 	INT unresolved = 0;
-	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
+	BOOLEAN annotate_pointers = (getlloptint("AnnotatePointers", 0) > 0);
 	NODE child=0;
 	CACHEEL cel = node ? node->n_cel: 0;
 	struct tag_node_iter nodeit;
@@ -467,8 +467,8 @@ is_annotated_xref (CNSTRING val, INT * len)
 void
 annotate_with_supplemental (NODE node, RFMT rfmt)
 {
-	BOOLEAN expand_refns = (getoptint("ExpandRefnsDuringEdit", 0) > 0);
-	BOOLEAN annotate_pointers = (getoptint("AnnotatePointers", 0) > 0);
+	BOOLEAN expand_refns = (getlloptint("ExpandRefnsDuringEdit", 0) > 0);
+	BOOLEAN annotate_pointers = (getlloptint("AnnotatePointers", 0) > 0);
 	NODE child=0;
 	CACHEEL cel = node->n_cel;
 	struct tag_node_iter nodeit;
