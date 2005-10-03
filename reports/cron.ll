@@ -11,7 +11,7 @@ and day that they occured.  Generates a top level index by year, with actual
 events stored in a separate html file for each decade.
 Warning, this report requires lifelines version 3.0.27 or later.
 
-         by Stephen Dum (steve_dum@mentorg.com)
+         by Stephen Dum (stephen.dum@verizon.net)
          Version 1,  March 2003  
 
 This program was inspired by similar efforts by Mitch Blank (mitch@ctrpnt.com)

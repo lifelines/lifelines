@@ -17,7 +17,7 @@ the same rank. Thus numbering can appear to repeat.  I.E. you might see
 1., 2., 2., 4. ... if the second and third child were born on the same date.
 
 grand - a LifeLines database program
-    by Stephen Dum  steve_dum@mentor.com
+    by Stephen Dum  stephen.dum@verizon.net
     Version 1,  15 December 2002
 */
 

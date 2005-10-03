@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.47
+LifeLines Version 3.0.48
 
 Thomas T. Wetmore , IV
      _____________________________________________________________

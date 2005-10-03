@@ -50,7 +50,7 @@ LL_REPORTS = \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour.li                             \
 	sour2.li sources.ll sources_bib.ll                              \
-	sour.li src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll            \
+	sour.li span.ll src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll    \
 	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll           \
 	timeline1.ll timeline2.ll tinytafel1.ll tools.li                \
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll             \

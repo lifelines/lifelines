@@ -1,3 +1,15 @@
+2005-10-03 Stephen Dum
+	 * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	 docs/ll-reportmanual.txt  docs/ll-userguide.html docs/ll-userguide.pdf
+	 docs/ll-userguide.txt src/gedlib/init.c reports/anniver.ll 
+	 reports/CREDIT reports/cron.ll reports/dump_html_sd.ll 
+	 reports/gen_index reports/grand.ll reports/Makefile.am
+
+         Update formatted docs
+	 Fix typo in init.c
+	 Change my email address to one that works in a number of reports
+	 Add a new report span.ll
+
 2005-10-03 Matt Emmerton
 
 	* ChangeLog configure.in

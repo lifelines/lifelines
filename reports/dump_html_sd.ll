@@ -10,7 +10,7 @@ dump_html_sd.ll dumps an entire database to static HTML files.
 
 by Scott McGee (smcgee@microware.com)
                         1.4 13/06/02
-lots of modifications by Steve Dum (steve_dum@mentor.com)
+lots of modifications by Steve Dum (stephen.dum@verizon.net)
 
 This report basically generate a
 master index and write a series of html files for everyone in

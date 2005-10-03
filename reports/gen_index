@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 
 # Parse lifeline reports programs and generate a index
-# Written by Stephen Dum  steve_dum@mentorg.com
+# Written by Stephen Dum  stephen.dum@verizon.net
 # January 2003 
 
 use strict;

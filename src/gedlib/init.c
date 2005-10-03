@@ -654,7 +654,7 @@ load_configs (STRING configfile, STRING * pmsg)
 			llstrappc(cfg_name, sizeof(cfg_name), '/');
 			llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
 
-			rtn = load_global_options(cfg_file, pmsg);
+			rtn = load_global_options(cfg_name, pmsg);
 			if (rtn == -1) return FALSE;
 
 		}

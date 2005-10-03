@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.47
+LifeLines Version 3.0.48
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -2118,16 +2118,11 @@ Record Linking Functions
 
           reference cross reference or key to node tree
 
-   NODE getrecord(STRING);
-
-          same as dereference
-
    These functions allow you to recognize values that are cross references
    and to read the records they refer to. Reference returns true if its
    string argument is a cross reference value, that is, the internal key of
    one of the records in the database. Dereference returns the node tree of
-   the record referred to by its cross reference string argument. Getrecord
-   is a synonym for dereference.
+   the record referred to by its cross-reference string argument.
      _____________________________________________________________
 
 Miscellaneous Functions
@@ -2193,7 +2188,7 @@ Miscellaneous Functions
 
    Database returns the name of the current database, useful in titling
    reports. program returns the name of the current report program. Version
-   returns the version of the running LifeLines program, eg, 3.0.47.
+   returns the version of the running LifeLines program, eg, 3.0.48.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate) shell command, by invoking the system shell. This will not
