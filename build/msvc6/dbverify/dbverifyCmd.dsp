@@ -232,6 +232,10 @@ SOURCE=..\..\..\src\stdlib\lldate.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\llgettext.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\lloptions.c
 # End Source File
 # Begin Source File

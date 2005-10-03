@@ -1,3 +1,9 @@
+2005-10-03 Perry Rapp
+
+	* ChangeLog dbverify/dbverifyCmd.dsp llexec/llexec.dsp
+
+	Fix MSVC6 compilation (new llgettext.c file).
+
 2005-10-03 Stephen Dum
 
 	*NEW reports/span.ll
