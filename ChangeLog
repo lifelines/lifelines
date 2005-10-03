@@ -1,4 +1,10 @@
-2005-10-03 Perry
+2005-10-03 Matt Emmerton
+
+	* ChangeLog configure.in
+
+	Work around problems checking for <alloc.h> on OSX/Darwin.
+
+2005-10-03 Perry Rapp
 
 	* ChangeLog src/gedlib/charprops.c src/gedlib/codesets.c
 	src/gedlib/dispfmt.c src/gedlib/init.c src/gedlib/llgettext.c
