@@ -59,7 +59,7 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING qSidldir,qSidldrp,qSnodbse,qScrdbse,qSiddbse;
+extern STRING qSidldir,qSidldrp,qScrdbse,qSiddbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb;
@@ -102,13 +102,10 @@ STRING  readpath = NULL;       /* database path used to open */
 
 /* alphabetical */
 static BOOLEAN init_curses_ui(void);
-static BOOLEAN is_unadorned_directory(STRING path);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
-static BOOLEAN open_or_create_database(INT alteration, STRING *dbused);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_postcurses_init(void);
-static void show_open_error(INT dberr);
 
 /*********************************************
  * local function definitions
@@ -479,17 +476,6 @@ shutdown_ui (BOOLEAN pause)
 	/* Terminate Curses UI */
 	endwin();
 }
-/*===================================================
- * show_open_error -- Display database opening error
- *=================================================*/
-static void
-show_open_error (INT dberr)
-{
-	char buffer[256];
-	describe_dberror(dberr, buffer, ARRSIZE(buffer));
-	llwprintf(buffer);
-	sleep(5);
-}
 /*==================================================
  * platform_postcurses_init -- platform-specific code
  *  coming after curses initialized
@@ -504,79 +490,6 @@ platform_postcurses_init (void)
 	wtitle(buffer);
 #endif
 }
-/*==================================================
- * is_unadorned_directory -- is it a bare directory name,
- *  with no subdirectories ?
- * Created: 2001/01/24, Perry Rapp
- *================================================*/
-static BOOLEAN
-is_unadorned_directory (STRING path)
-{
-	for ( ; *path; path++) {
-		if (is_dir_sep(*path))
-			return FALSE;
-	}
-	return TRUE;
-}
-/*==================================================
- * open_or_create_database -- open database, prompt for
- *  creating new one if it doesn't exist
- * if fails, displays error (show_open_error) and returns 
- *  FALSE
- *  alteration:   [IN]  flags for locking, forcing open...
- *  dbused:       [I/O] actual database path (may be relative)
- * If this routine creates new database, it will alter dbused
- * Created: 2001/04/29, Perry Rapp
- *================================================*/
-static BOOLEAN
-open_or_create_database (INT alteration, STRING *dbused)
-{
-	/* Open Database */
-	if (open_database(alteration, *dbused)) {
-		return TRUE;
-	}
-	/* filter out real errors */
-	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
-	{
-		show_open_error(bterrno);
-		return FALSE;
-	}
-	if (readonly || immutable || alteration)
-	{
-		llwprintf("Cannot create new database with -r, -i, -l, or -f flags.");
-		return FALSE;
-	}
-	/*
-	error was only that db doesn't exist, so lets try
-	making a new one 
-	If no database directory specified, add prefix llnewdbdir
-	*/
-	if (is_unadorned_directory(*dbused)) {
-		STRING dbpath = getlloptstr("LLDATABASES", ".");
-		CNSTRING newdbdir = get_first_path_entry(dbpath);
-		STRING temp = *dbused;
-		if (newdbdir) {
-			char tempth[MAXPATHLEN];
-			newdbdir = strdup(newdbdir);
-			concat_path(newdbdir, *dbused, uu8, tempth, sizeof(tempth));
-			*dbused = strsave(tempth);
-			stdfree(temp);
-			stdfree((STRING)newdbdir);
-		}
-	}
-
-	/* Is user willing to make a new db ? */
-	if (!ask_yes_or_no_msg(_(qSnodbse), _(qScrdbse))) 
-		return FALSE;
-
-	/* try to make a new db */
-	if (create_database(*dbused))
-		return TRUE;
-
-	show_open_error(bterrno);
-	return FALSE;
-}
-
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
  * databases. 

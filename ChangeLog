@@ -1,3 +1,14 @@
+2005-10-04 Perry Rapp
+
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp src/hdrs/liflines.h
+	src/liflines/Makefile.am src/liflines/ask.c
+	src/liflines/llexec.c src/liflines/main.c
+	*NEW src/liflines/selectdb.c
+
+	Combine two copies of open_or_create_database code from
+	main.c & llexec.c into one copy in new selectdb.c.
+
 2005-10-03 Perry Rapp
 
 	* ChangeLog dbverify/dbverifyCmd.dsp llexec/llexec.dsp
@@ -15,16 +26,17 @@
 	Restore AM_INIT_AUTOMAKE to configure.in (lost yesterday).
 
 2005-10-03 Stephen Dum
-	 * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
-	 docs/ll-reportmanual.txt  docs/ll-userguide.html docs/ll-userguide.pdf
-	 docs/ll-userguide.txt src/gedlib/init.c reports/anniver.ll 
-	 reports/CREDIT reports/cron.ll reports/dump_html_sd.ll 
-	 reports/gen_index reports/grand.ll reports/Makefile.am
 
-         Update formatted docs
-	 Fix typo in init.c
-	 Change my email address to one that works in a number of reports
-	 Add a new report span.ll
+	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-reportmanual.txt  docs/ll-userguide.html docs/ll-userguide.pdf
+	docs/ll-userguide.txt src/gedlib/init.c reports/anniver.ll 
+	reports/CREDIT reports/cron.ll reports/dump_html_sd.ll 
+	reports/gen_index reports/grand.ll reports/Makefile.am
+
+	Update formatted docs
+	Fix typo in init.c
+	Change my email address to one that works in a number of reports
+	Add a new report span.ll
 
 2005-10-03 Matt Emmerton
 

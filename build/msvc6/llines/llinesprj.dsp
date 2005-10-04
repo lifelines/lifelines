@@ -541,6 +541,10 @@ SOURCE=..\..\..\src\liflines\screen.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\selectdb.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\sequence.c
 # End Source File
 # Begin Source File

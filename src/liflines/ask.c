@@ -63,6 +63,7 @@ extern STRING qSfn2long,qSidkyrfn,qSduprfn;
 
 static INDISEQ ask_for_indi_list_once(STRING, INT*);
 static RECORD ask_for_any_once(STRING ttl, char ctype, ASK1Q ask1, INT *prc);
+static void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by 
@@ -232,7 +233,7 @@ ask_for_file_try:
  *  for filename, depending on extension
  * Created: 2001/12/24, Perry Rapp
  *====================================*/
-void
+static void
 make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 {
 	if (ISNULL(ext)) {
