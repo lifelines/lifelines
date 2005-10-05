@@ -10,7 +10,7 @@ noinst_LIBRARIES = libgedcom.a
 libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 	choose.c codesets.c \
 	datei.c dateparse.c dateprint.c \
-	dblist.c dispfmt.c editmap.c \
+	dbcontext.c dblist.c dispfmt.c editmap.c \
 	editvtab.c equaliso.c gedcom.c gengedc.c gstrings.c \
 	indiseq.c init.c intrface.c keytonod.c lloptions.c \
 	lldatabase.c llgettext.c locales.c \

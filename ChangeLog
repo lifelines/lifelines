@@ -28,6 +28,10 @@
 	New files dbcontext.c & dbcontext.h, to start implementing
 	database interface layer.
 
+	* ChangeLog src/gedlib/Makefile.am src/hdrs/Makefile.am
+
+	Add files dbcontext.* to makefiles.
+
 2005-10-03 Perry Rapp
 
 	* ChangeLog dbverify/dbverifyCmd.dsp llexec/llexec.dsp
