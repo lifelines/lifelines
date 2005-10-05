@@ -16,6 +16,7 @@
 #include "gedcomi.h"
 #include "btree.h"
 #include "vtable.h"
+#include "dbcontext.h"
 
 
 /*********************************************

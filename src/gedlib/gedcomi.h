@@ -9,8 +9,6 @@ ZSTR custom_translate(CNSTRING str, TRANTABLE tt);
 void custom_translatez(ZSTR zstr, TRANTABLE tt);
 BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*, ZSTR zerr);
 
-/* init.c */
-void dbnotify_close(void);
 
 /* keytonod.c */
 void cel_remove_record(CACHEEL cel, RECORD rec);

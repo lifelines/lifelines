@@ -156,6 +156,10 @@ SOURCE=..\..\..\src\gedlib\dateprint.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\gedlib\dbcontext.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\dblist.c
 # End Source File
 # Begin Source File
@@ -601,6 +605,10 @@ SOURCE=..\..\..\src\hdrs\date.h
 # Begin Source File
 
 SOURCE=..\..\..\src\gedlib\datei.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\hdrs\dbcontext.h
 # End Source File
 # Begin Source File
 

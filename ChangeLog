@@ -19,6 +19,15 @@
 
 	Move macros from gedcom.h to new gedcom_macros.h.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp build/msvc6/llines/llinesprj.dsp
+	src/gedlib/gedcomi.h src/gedlib/init.c src/gedlib/lldatabase.c
+	*NEW src/hdrs/dbcontext.h
+	*NEW src/gedlib/dbcontext.c
+
+	New files dbcontext.c & dbcontext.h, to start implementing
+	database interface layer.
+
 2005-10-03 Perry Rapp
 
 	* ChangeLog dbverify/dbverifyCmd.dsp llexec/llexec.dsp
