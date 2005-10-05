@@ -9,6 +9,10 @@
 	Combine two copies of open_or_create_database code from
 	main.c & llexec.c into one copy in new selectdb.c.
 
+	* ChangeLog src/liflines/Makefile.am
+
+	Add new src/liflines/selectdb.c to makefile for llexec.
+
 2005-10-03 Perry Rapp
 
 	* ChangeLog dbverify/dbverifyCmd.dsp llexec/llexec.dsp
