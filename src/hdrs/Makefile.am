@@ -10,7 +10,7 @@ EXTRA_DIST = \
 	cache.h charprops.h codesets.h cscurses.h \
 	date.h dbfuncs.h dbfuncsi.h \
 	feedback.h fpattern.h \
-	gedcheck.h gedcom.h generic.h gengedc.h \
+	gedcheck.h gedcom.h gedcom_macros.h generic.h gengedc.h \
 	hashtab.h \
 	icvt.h impfeed.h indiseq.h \
 	isolangs.h interp.h \

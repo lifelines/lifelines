@@ -761,6 +761,10 @@ SOURCE=..\..\..\src\hdrs\gedcom.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\hdrs\gedcom_macros.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\gedcomi.h
 # End Source File
 # Begin Source File

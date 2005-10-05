@@ -1,4 +1,4 @@
-2005-10-04 Perry Rapp
+2005-10-05 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp
 	build/msvc6/llines/llinesprj.dsp src/hdrs/liflines.h
@@ -12,6 +12,12 @@
 	* ChangeLog src/liflines/Makefile.am
 
 	Add new src/liflines/selectdb.c to makefile for llexec.
+
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp build/msvc6/llines/llinesprj.dsp
+	src/hdrs/Makefile.am src/hdrs/gedcom.h 
+
+	Move macros from gedcom.h to new gedcom_macros.h.
 
 2005-10-03 Perry Rapp
 
