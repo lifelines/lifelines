@@ -291,7 +291,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 <row>
 <entry>-C</entry>
 <entry>Specify configuration file location (e.g.
--C/home/bill/lifelines/.linesrc2 )</entry>
+-C/home/bill/lifelines/.linesrc2 ) see the section on System and User Properties below</entry>
 </row>
 
 <row>
@@ -4834,32 +4834,76 @@ System and User Properties
 There are a number of properties that can be specified to customize
 the behavior of <application>LifeLines</application>.  These properties can 
 be specified in <application>LifeLines</application>
-customization files, in each <application>LifeLines</application> database 
+configuration files, in each <application>LifeLines</application> database 
 or in some cases by environment variables.
 </para>
 <para>
-<application>LifeLines</application> configuration files are look for 
-first in the directory specified by the HOME environment variable, assuming
-that it is set, and then in the current directory.  The name of the 
-configuration file is .linesrc on <acronym>UNIX</acronym> or linux systems 
-and lines.cfg on windows systems.
+When <application>LifeLines</application> begins execution, it reads any
+specified configuration files and extracts Properties from the files read.
+It is possible for multiple configuration files to be read.  Properties
+defined in these files will be stored in the global property table.  If
+multiple definitions of the same property are seen, the latest definition
+overrides prior definitions.  Configuration files are read as follows:
+</para>
 
-</para>
-<para>
-A configuration file can also be specified using the -C option to
-<application>LifeLines</application>
-or by defining the environment variable "LLCONFIGFILE" with a value containing
-the full pathname of the configuration file.  If either of these
-mechanisms is used, <application>LifeLines</application> does not look for a 
-configuration file anywhere else.
-If a -C option is provided, the LLCONFIGFILE environment variable, if defined,
-is ignored.  If neither the -C option nor the environment variable
-LLCONFIGFILE is set, the above mentioned configuration file names are used.
-A configuration file is looked for in your home directory and is read in,
-if it exists, and then if a configuration file exists in the current
-directory it is read.  The values in this second file are used to replace
-or supplement values found in the first file.  
-</para>
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>Note:</entry>
+<entry>
+If a configuration file defines LLCONFIGFILE, it is not entered in the global
+table, but the value of this parameter is read as a configuration file after
+completion of reading the current file.
+</entry>
+</row>
+<row>
+<entry>Note:</entry>
+<entry>
+In the following, the name of a user configuration file is listed as
+.linesrc.  On windows versions of lifelines this name is lines.cfg.
+</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>
+If a configuration file name is passed to the program with the -C option,
+or if LLCONFIGFILE is defined as an environment variable use the value
+supplied as the name of the configuration file.  Do not read configuration
+information from the files listed in 2a, 2b, 2c, or 2d.
+</entry>
+</row>
+<row>
+<entry>2a</entry>
+<entry>
+If the file /etc/lifelines.conf exists, read it.  '/etc' is a placeholder for
+the standard location for system configuration files as defined when 
+lifelines was built.  It is often /etc or /usr/local/etc.
+</entry>
+</row>
+<row>
+<entry>2b.</entry>
+<entry>
+If the file $HOME/.linesrc exists, load parameters from it.
+</entry>
+</row>
+<row>
+<entry>2c.</entry>
+<entry>
+If the file .linesrc exists in the current directory read parameters from it.
+</entry>
+</row>
+<row>
+<entry>2d</entry>
+<entry>
+If LLCONFIGFILE is defined in the command line or database table and it's 
+value is the name of a file, load parameters from that file.
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
 
 <para>
 When <application>LifeLines</application> searches for a property it looks for it as follows:
@@ -4893,14 +4937,12 @@ values found when reading in the configuration files.
 <glossentry><glossterm>environment table</glossterm><glossdef>
 
 <para>
-Finally, <application>LifeLines</application> looks in the environment table.  Only a handful of properties
-may be set from the environment, namely 
-LLARCHIVES, LLCONFIGFILE, LLDATABASES, LLEDITOR, 
-LLNEWDBDIR, LLPROGRAMS, and LLREPORTS.
+Finally, <application>LifeLines</application> looks in the environment table.
+Only a handful of properties may be set from the environment, namely 
+LLPROGRAMS, LLREPORTS, LLARCHIVES, LLDATABASES, and LLEDITOR.
 </para>
 </glossdef></glossentry>
 </glosslist>
-
 
 <para>
 Properties are named group.subgroup.property or group.property, or even

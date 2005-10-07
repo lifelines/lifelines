@@ -197,6 +197,15 @@ AC_TRY_LINK([#include <libintl.h>], [ngettext("","",0);],
     LIBS="$saved_libs"
   fi
 
+case $host_os in
+  *windows*)
+    AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
+    ;;
+  *)
+    AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
+    ;;
+esac
+
 dnl bind_textdomain_codeset function missing from 0.10.35
 saved_libs="$LIBS"
 LIBS="$LIBS $LIBINTL"

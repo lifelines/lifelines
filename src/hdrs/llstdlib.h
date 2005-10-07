@@ -72,7 +72,6 @@ BOOLEAN mkalldirs(STRING);
 /* environ.c */
 #define PROGRAM_LIFELINES 1
 #define PROGRAM_BTEDIT 2
-STRING environ_determine_config_file(void);
 STRING environ_determine_editor(INT program);
 STRING environ_determine_tempfile(void);
 

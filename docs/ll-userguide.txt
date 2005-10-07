@@ -137,7 +137,8 @@ STARTING LIFELINES AND CREATING DATABASES
    The following options are supported:
 
    -C Specify configuration file location (e.g.
-   -C/home/bill/lifelines/.linesrc2 )
+   -C/home/bill/lifelines/.linesrc2 ) see the section on System and User
+   Properties below
    -F Finnish option (only available if so compiled)
    -I Specify a user property (e.g. -ILLEDITOR=gvim )
    -a log dynamic memory operation (for debugging)
@@ -2336,26 +2337,33 @@ System and User Properties
 
    There are a number of properties that can be specified to customize the
    behavior of LifeLines. These properties can be specified in LifeLines
-   customization files, in each LifeLines database or in some cases by
+   configuration files, in each LifeLines database or in some cases by
    environment variables.
 
-   LifeLines  configuration files are look for first in the directory
-   specified by the HOME environment variable, assuming that it is set, and
-   then in the current directory. The name of the configuration file is
-   .linesrc on UNIX or linux systems and lines.cfg on windows systems.
+   When LifeLines begins execution, it reads any specified configuration
+   files and extracts Properties from the files read. It is possible for
+   multiple configuration files to be read. Properties defined in these
+   files  will  be  stored  in the global property table. If multiple
+   definitions  of  the same property are seen, the latest definition
+   overrides prior definitions. Configuration files are read as follows:
 
-   A  configuration file can also be specified using the -C option to
-   LifeLines or by defining the environment variable "LLCONFIGFILE" with a
-   value containing the full pathname of the configuration file. If either
-   of these mechanisms is used, LifeLines does not look for a configuration
-   file  anywhere  else. If a -C option is provided, the LLCONFIGFILE
-   environment variable, if defined, is ignored. If neither the -C option
-   nor the environment variable LLCONFIGFILE is set, the above mentioned
-   configuration file names are used. A configuration file is looked for in
-   your  home  directory  and is read in, if it exists, and then if a
-   configuration file exists in the current directory it is read. The
-   values in this second file are used to replace or supplement values
-   found in the first file.
+   Note: If a configuration file defines LLCONFIGFILE, it is not entered in
+   the global table, but the value of this parameter is read as a
+   configuration file after completion of reading the current file.
+   Note: In the following, the name of a user configuration file is listed
+   as .linesrc. On windows versions of lifelines this name is lines.cfg.
+   1 If a configuration file name is passed to the program with the -C
+   option, or if LLCONFIGFILE is defined as an environment variable use the
+   value  supplied as the name of the configuration file. Do not read
+   configuration information from the files listed in 2a, 2b, 2c, or 2d.
+   2a If the file /etc/lifelines.conf exists, read it. In fact, '/etc' is
+   the standard location for system configuration files as defined when
+   lifelines was built. It is often /etc or /usr/local/etc.
+   2b. If the file $HOME/.linesrc exists, load parameters from it.
+   2c. If the file .linesrc exists in the current directory read parameters
+   from it.
+   2d If LLCONFIGFILE is defined in the command line or database table and
+   it's value is the name of a file, load parameters from that file.
 
    When LifeLines searches for a property it looks for it as follows:
 
@@ -2374,9 +2382,8 @@ System and User Properties
 
    environment table
           Finally, LifeLines looks in the environment table. Only a handful
-          of properties may be set from the environment, namely LLARCHIVES,
-          LLCONFIGFILE, LLDATABASES, LLEDITOR, LLNEWDBDIR, LLPROGRAMS, and
-          LLREPORTS.
+          of properties may be set from the environment, namely LLPROGRAMS,
+          LLREPORTS, LLARCHIVES, LLDATABASES, and LLEDITOR.
 
    Properties are named group.subgroup.property or group.property, or even
    just property. The following keys are available at the moment:

@@ -33,7 +33,7 @@ extern STRING qSopt2long;
 /* alphabetical */
 static void copy_process(STRING dest, STRING src);
 static void expand_variables(STRING valbuf, INT max);
-static INT load_config_file(STRING file, STRING * pmsg);
+static INT load_config_file(STRING file, STRING * pmsg, STRING *chain);
 static void send_notifications(void);
 
 /*********************************************
@@ -142,7 +142,7 @@ dir_from_file (STRING file)
  * returns 1 for success, 0 for not found, -1 for error (with pmsg)
  *========================================*/
 static INT
-load_config_file (STRING file, STRING * pmsg)
+load_config_file (STRING file, STRING * pmsg, STRING *chain)
 {
 	FILE * fp = 0;
 	STRING ptr, val, key;
@@ -197,7 +197,14 @@ load_config_file (STRING file, STRING * pmsg)
 		expand_variables(valbuf, sizeof(valbuf));
 		key = buffer; /* key is in beginning of buffer, we zero-terminated it */
 		val = valbuf;
-		insert_table_str(f_global, buffer, val);
+		if (strcmp(buffer,"LLCONFIGFILE") == 0) {
+		    /* LLCONFIGFILE is not entered in table, only used to 
+		     * chain to another config file
+		     */
+		    *chain = strsave(val);
+		} else {
+		    insert_table_str(f_global, buffer, val);
+		}
 	}
 	failed = !feof(fp);
 	fclose(fp);
@@ -219,10 +226,25 @@ load_config_file (STRING file, STRING * pmsg)
 INT
 load_global_options (STRING configfile, STRING * pmsg)
 {
+	STRING chain = NULL;
+	INT rtn = 0;
+	INT cnt = 0;
 	*pmsg = NULL;
 	if (!f_global) 
 		f_global= create_table_str();
-	return load_config_file(configfile, pmsg);
+	do {
+	    if (chain) strfree(&chain);
+	    rtn = load_config_file(configfile, pmsg, &chain);
+	    if (rtn == -1) {
+		if (chain) strfree(&chain);
+		return rtn;
+	    }
+	    if (++cnt > 100) {
+	        return -1;  /* prevent infinite recursion */
+	    }
+	} while (chain);
+
+	return rtn;
 }
 /*=================================
  * set_cmd_options -- Store cmdline options from caller

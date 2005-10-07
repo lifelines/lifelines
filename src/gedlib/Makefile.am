@@ -19,6 +19,7 @@ libgedcom_a_SOURCES = brwslist.c charmaps.c charprops.c \
 	property.c record.c refns.c remove.c replace.c \
 	soundex.c spltjoin.c \
 	translat.c valid.c valtable.c xlat.c xreffile.c
+DEFS = -DSYS_CONF_DIR=\"$(sysconfdir)\" @DEFS@
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/intl     for intl headers

@@ -1,3 +1,11 @@
+2005-10-06 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	  docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf
+	  docs/ll-userguide.txt 
+
+	  Revise search process for configuration files.  Document process in
+	  ll-userguide.
+
 2005-10-05 Perry Rapp
 
 	* ChangeLog build/msvc6/llexec/llexec.dsp

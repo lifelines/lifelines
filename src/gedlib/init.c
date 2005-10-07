@@ -345,6 +345,7 @@ load_configs (STRING configfile, STRING * pmsg)
 {
 	INT rtn=0;
 	STRING str=0;
+	char cfg_name[MAXPATHLEN];
 
 	/* TODO: Should read a system-wide config file */
 
@@ -361,29 +362,29 @@ load_configs (STRING configfile, STRING * pmsg)
 
 	} else {
 
-		/* No config file specified, so try local config_file */
-		STRING cfg_file = environ_determine_config_file();
+		/* No config file specified, so load config_file(s) from
+		   the standard places */
 
-		rtn = load_global_options(cfg_file, pmsg);
+		/* look for global config file */
+                rtn = load_global_options(SYS_CONF_DIR "/lifelines.conf",pmsg);
 		if (rtn == -1) return FALSE;
-		if (rtn == 0) {
 
-			/* No config file found, so try $HOME/config_file */
-			char cfg_name[MAXPATHLEN];
-			/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
-			llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
-			llstrappc(cfg_name, sizeof(cfg_name), '/');
-			llstrapps(cfg_name, sizeof(cfg_name), 0, cfg_file);
+		/* look for one in user's home directory */
+		/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
+		llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
+		/*llstrappc(cfg_name, sizeof(cfg_name), '/');*/
+		llstrapps(cfg_name, sizeof(cfg_name), 0, "/" LINES_CONFIG_FILE);
 
-			rtn = load_global_options(cfg_name, pmsg);
-			if (rtn == -1) return FALSE;
+		rtn = load_global_options(cfg_name, pmsg);
+		if (rtn == -1) return FALSE;
 
-		}
+		rtn = load_global_options(LINES_CONFIG_FILE, pmsg);
+		if (rtn == -1) return FALSE;
 	}
-	if (rtn == 0) return TRUE; /* no config file found */
 
-	/* allow chaining to one more config file */
-
+	/* allow chaining to one more config file 
+	 * if one was defined for the database 
+	 */
 	str = getlloptstr("LLCONFIGFILE", NULL);
 	if (str && str[0]) {
 		rtn = load_global_options(str, pmsg);

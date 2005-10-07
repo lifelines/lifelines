@@ -96,17 +96,3 @@ environ_determine_editor (INT program)
 #endif
 	return e;
 }
-/*============================================================
- * environ_determine_config_file -- return name of config file
- * Created: 2001/02/04, Perry Rapp
- *==========================================================*/
-STRING
-environ_determine_config_file (void)
-{
-#ifdef WIN32
-	return "lines.cfg";
-#else
-	return ".linesrc";
-#endif
-}
-
