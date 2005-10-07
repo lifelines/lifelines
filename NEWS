@@ -1,13 +1,14 @@
-LifeLines Source Release, Version 3.0.48
+LifeLines Source Release, Version 3.0.48p
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+Bug fixes in 3.0.49
+============================
+ - Deleting an individual would remove younger siblings from family 
 
 New features added in 3.0.48
 ============================
  - Formatted dates now display GEDCOM date phrases raw
-
-Bug fixes in 3.0.48
-============================
  - Use cursesw where available, to work correctly with UTF-8 locales
 
 New features added in 3.0.47 (beta)
