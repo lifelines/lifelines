@@ -1,10 +1,20 @@
-2005-10-06 Stephen Dum
-        * ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
-	  docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf
-	  docs/ll-userguide.txt 
+2005-10-06 Perry Rapp
 
-	  Revise search process for configuration files.  Document process in
-	  ll-userguide.
+	* ChangeLog build/msvc6/dbverify/config.h
+	build/msvc6/llexec/config.h build/msvc6/llines/config.h
+	src/gedlib/init.c
+
+	Fix config file handling to work for Win32 also. New function
+	check_installation_path & variable global_conf_path in init.c.
+
+2005-10-06 Stephen Dum
+
+	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
+	docs/ll-reportmanual.txt docs/ll-userguide.html docs/ll-userguide.pdf
+	docs/ll-userguide.txt 
+
+	Revise search process for configuration files.  Document process in
+	ll-userguide.
 
 2005-10-05 Perry Rapp
 

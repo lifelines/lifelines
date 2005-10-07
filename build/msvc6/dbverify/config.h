@@ -20,3 +20,4 @@
 #define IN_LIBINTL 1
 #define WIN32_INTL_SHIM 1
 #define WIN32_ICONV_SHIM 1
+#define LINES_CONFIG_FILE "lines.cfg"

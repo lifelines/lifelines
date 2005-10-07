@@ -71,6 +71,7 @@ extern INT opt_finnish, opt_mychar;
  * local function prototypes
  *********************************************/
 
+static void check_installation_path(void);
 static BOOLEAN load_configs(STRING configfile, STRING * pmsg);
 static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
 static void post_codesets_hook(void);
@@ -82,6 +83,7 @@ static void update_db_options(void);
  *********************************************/
 
 static BOOLEAN suppress_reload=FALSE;
+static char global_conf_path[MAXPATHLEN]="";
 
 /*********************************************
  * local & exported function definitions
@@ -99,6 +101,8 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", };
 	INT i;
+
+	check_installation_path();
 
 	/* request notification when options change */
 	register_notify(&update_useropts);
@@ -366,7 +370,9 @@ load_configs (STRING configfile, STRING * pmsg)
 		   the standard places */
 
 		/* look for global config file */
-                rtn = load_global_options(SYS_CONF_DIR "/lifelines.conf",pmsg);
+		llstrncpy(cfg_name, global_conf_path, sizeof(cfg_name), 0);
+		llstrapps(cfg_name, sizeof(cfg_name), 0, "/lifelines.conf");
+		rtn = load_global_options(cfg_name, pmsg);
 		if (rtn == -1) return FALSE;
 
 		/* look for one in user's home directory */
@@ -391,4 +397,21 @@ load_configs (STRING configfile, STRING * pmsg)
 		if (rtn == -1) return FALSE;
 	}
 	return TRUE;
+}
+/*==================================================
+ * check_installation_path -- Figure out installed path
+ *================================================*/
+static void
+check_installation_path (void)
+{
+	INT maxlen = sizeof(global_conf_path)-1;
+#ifdef WIN32
+	/* TODO: Installation should set value in registry
+	and we should read it here */
+	strncpy(global_conf_path, "C:\\Program Files\\lifelines", maxlen);
+#else
+	/* SYS_CONF_DIR was set as a make variable from src/gedlib/Makefile.am */
+	strncpy(global_conf_path, SYS_CONF_PATH, maxlen);
+#endif
+	global_conf_path[maxlen] = 0;
 }
