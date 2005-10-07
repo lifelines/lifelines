@@ -11,6 +11,10 @@
 
 	Fix typo (SYS_CONF_PATH => SYS_CONF_DIR).
 
+	* ChangeLog src/gedlib/remove.c
+
+	Fix bug in remove_any_xrefs_node_list (prev was not getting set).
+
 2005-10-06 Stephen Dum
 
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 

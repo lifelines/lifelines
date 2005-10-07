@@ -335,6 +335,7 @@ remove_any_xrefs_node_list (STRING xref, NODE list)
 			nsibling(curr) = NULL;
 			free_nodes(curr);
 		}
+		prev = curr;
 		curr = next;
 	}
 	return rtn;
