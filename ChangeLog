@@ -7,6 +7,10 @@
 	Fix config file handling to work for Win32 also. New function
 	check_installation_path & variable global_conf_path in init.c.
 
+	* ChangeLog src/gedlib/init.c
+
+	Fix typo (SYS_CONF_PATH => SYS_CONF_DIR).
+
 2005-10-06 Stephen Dum
 
 	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf 
