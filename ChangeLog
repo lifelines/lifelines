@@ -8,6 +8,10 @@
 	Move duplicated database select & open code from main.c
 	and llexec.c into new function select_database.
 
+	* ChangeLog build/setversions.sh
+
+	New (incomplete) shell script to set version numbers.
+
 2005-10-07 Perry Rapp
 
 	* ChangeLog build/msvc6/dbverify/config.h
