@@ -1377,7 +1377,7 @@ main (int argc,
 			goto done;
 	}
 
-	if (!init_lifelines_db()) {
+	if (!init_lifelines_postdb()) {
 		printf(_(qSbaddb));
 		goto done;
 	}
@@ -1414,6 +1414,9 @@ main (int argc,
 	report_results();
 
 	closebtree(BTR);
+
+	/* TODO: probably should call lldb_close, Perry 2005-10-07 */
+
 	BTR = 0;
 	returnvalue = 0;
 

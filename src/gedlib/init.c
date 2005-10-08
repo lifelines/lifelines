@@ -175,10 +175,12 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	return TRUE;
 }
 /*=================================
- * init_lifelines_db -- Initialization after db opened
+ * init_lifelines_postdb -- 
+ * Initialize stuff maintained in-memory
+ *  which requires the database to already be opened
  *===============================*/
 BOOLEAN
-init_lifelines_db (void)
+init_lifelines_postdb (void)
 {
 	STRING emsg;
 	TABLE dbopts = create_table_str();

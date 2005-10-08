@@ -86,7 +86,7 @@ void lldb_close (LLDATABASE *plldb)
 	if (tagtable)
 		destroy_table(tagtable);
 	tagtable = 0;
-	/* TODO: reverse the rest of init_lifelines_db -- Perry, 2002.06.05 */
+	/* TODO: reverse the rest of init_lifelines_postdb -- Perry, 2002.06.05 */
 	if (placabbvs) {
 		destroy_table(placabbvs);
 		placabbvs = NULL;

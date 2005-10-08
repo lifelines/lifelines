@@ -1,4 +1,14 @@
-2005-10-06 Perry Rapp
+2005-10-08 Perry Rapp
+
+	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
+	src/hdrs/gedcom.h src/hdrs/liflines.h src/liflines/llexec.c
+	src/liflines/main.c src/liflines/selectdb.c
+	src/tools/dbverify.c
+
+	Move duplicated database select & open code from main.c
+	and llexec.c into new function select_database.
+
+2005-10-07 Perry Rapp
 
 	* ChangeLog build/msvc6/dbverify/config.h
 	build/msvc6/llexec/config.h build/msvc6/llines/config.h

@@ -48,6 +48,7 @@
  *********************************************/
 
 extern STRING qSnodbse,qScrdbse;
+extern STRING qSidldir,qSidldrp,qSiddbse;
 
 /*********************************************
  * local function prototypes
@@ -57,6 +58,70 @@ extern STRING qSnodbse,qScrdbse;
 static BOOLEAN is_unadorned_directory(STRING path);
 static void show_open_error(INT dberr);
 
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
+
+/*==================================================
+ * select_database -- open database (prompting if appropriate)
+ * if fail, return FALSE, and possibly a message to display
+ *  perrmsg - [OUT]  translated error message
+ *================================================*/
+BOOLEAN
+select_database (STRING dbrequested, INT alteration, STRING * perrmsg)
+{
+	STRING dbdir = getlloptstr("LLDATABASES", ".");
+	STRING dbused = 0;
+
+	/* Get Database Name (Prompt or Command-Line) */
+	if (!dbrequested || !dbrequested[0]) {
+		char dbname[MAXPATHLEN];
+		/* ask_for_db_filename returns static buffer, we save it below */
+		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
+			|| !dbname[0]) {
+			dbrequested = NULL;
+			*perrmsg = _(qSiddbse);
+			return FALSE;
+		}
+		dbrequested = strsave(dbname);
+		if (eqstr(dbrequested, "?")) {
+			INT n=0;
+			LIST dblist=0, dbdesclist=0;
+			strfree(&dbrequested);
+			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
+				INT i;
+				i = choose_from_list(
+					_("Choose database to open")
+					, dbdesclist);
+				if (i >= 0) {
+					dbrequested = strsave(get_list_element(dblist, i+1, NULL));
+				}
+				release_dblist(dblist);
+				release_dblist(dbdesclist);
+			} else {
+				*perrmsg = _("No databases found in database path");
+				return FALSE;
+			}
+			if (!dbrequested) {
+				*perrmsg = _(qSiddbse);
+				return FALSE;
+			}
+		}
+	}
+
+	/* search for database */
+	/* search for file in lifelines path */
+	dbused = filepath(dbrequested, "r", dbdir, NULL, uu8);
+	/* filepath returns alloc'd string */
+	if (!dbused) dbused = strsave(dbrequested);
+
+	if (!open_or_create_database(alteration, &dbused)) {
+		return FALSE;
+	}
+
+	return TRUE;
+}
 /*==================================================
  * open_or_create_database -- open database, prompt for
  *  creating new one if it doesn't exist

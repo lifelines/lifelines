@@ -36,7 +36,6 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING qSidldir,qSidldrp,qSiddbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb,qSdefttl,qSiddefpath;
@@ -303,58 +302,23 @@ prompt_for_db:
 		goto usage;
 	}
 
-	dbdir = getlloptstr("LLDATABASES", ".");
-	/* Get Database Name (Prompt or Command-Line) */
-	if (alldone || c <= 0) {
-		char dbname[MAXPATHLEN];
-		/* ask_for_db_filename returns static buffer, we save it below */
-		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
-			|| !dbname[0]) {
-			dbrequested = NULL;
-			llwprintf(_(qSiddbse));
+	/* Open database, prompting user if necessary */
+	if (1) {
+		STRING errmsg=0;
+		if (!alldone && c>0) {
+			dbrequested = strsave(argv[optind]);
+		} else {
+			strupdate(&dbrequested, "");
+		}
+		if (!select_database(dbrequested, alteration, &errmsg)) {
+			llwprintf(errmsg);
 			alldone = 0;
 			goto finish;
 		}
-		dbrequested = strsave(dbname);
-		if (eqstr(dbrequested, "?")) {
-			INT n=0;
-			LIST dblist=0, dbdesclist=0;
-			strfree(&dbrequested);
-			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
-				INT i;
-				i = choose_from_list(
-					_("Choose database to open")
-					, dbdesclist);
-				if (i >= 0) {
-					dbrequested = strsave(get_list_element(dblist, i+1, 0));
-				}
-				release_dblist(dblist);
-				release_dblist(dbdesclist);
-			} else {
-				llwprintf(_("No databases found in database path"));
-				goto finish;
-			}
-			if (!dbrequested) {
-				llwprintf(_(qSiddbse));
-				goto finish;
-			}
-		}
-	} else {
-		dbrequested = strsave(argv[optind]);
 	}
-
-	/* search for database */
-	/* search for file in lifelines path */
-	dbused = filepath(dbrequested, "r", dbdir, NULL, uu8);
-	if (!dbused) {
-	    dbused = strsave(dbrequested);
-	}
-
-	if (!open_or_create_database(alteration, &dbused))
-		goto finish;
 
 	/* Start Program */
-	if (!init_lifelines_db()) {
+	if (!init_lifelines_postdb()) {
 		llwprintf(_(qSbaddb));
 		goto finish;
 	}
