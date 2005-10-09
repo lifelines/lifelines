@@ -11,6 +11,10 @@
 	Add handling for build/rpm/lifelines.spec.
 	Add handling for src/hdrs/version.h.
 
+	* ChangeLog build/setversions.sh
+
+	Fix setversions.sh to set versions in Windows rc files.
+
 2005-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
