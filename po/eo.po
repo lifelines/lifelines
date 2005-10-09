@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-29 20:57-0400\n"
+"POT-Creation-Date: 2005-10-09 18:00-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -53,96 +53,6 @@ msgstr "%dj%03dt"
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Mankanta NOMO linio en INDI rikordo; rikordo ignorita.\n"
-
-#: src/gedlib/init.c:569
-msgid "Database error: -- "
-msgstr "Datumbaza eraro: -- "
-
-#: src/gedlib/init.c:573
-msgid "requested database does not exist."
-msgstr "petita datumbazo ne ekzistas."
-
-#: src/gedlib/init.c:576
-msgid "db directory is file, not directory."
-msgstr "db dosierujo estas dosiero, ne dosierujo."
-
-#: src/gedlib/init.c:579
-msgid "creation of new database failed."
-msgstr "kreo de nova datumbazo fiaskis."
-
-#: src/gedlib/init.c:582
-msgid "error accessing database directory."
-msgstr "eraro alirante datumbazon dosierujon."
-
-#: src/gedlib/init.c:585
-msgid "no keyfile (directory does not appear to be a database)."
-msgstr "neniu þlosildosiero (dosierujo ne þajnas esti datumbazo)."
-
-#: src/gedlib/init.c:588
-msgid "could not open, read or write an index file."
-msgstr "ne povas malfermi, legi, aý skribi indeksdosieron."
-
-#: src/gedlib/init.c:591
-msgid "could not open, read or write the key file."
-msgstr "ne povas malfermi, legi, aý skribi la þlosildosieron."
-
-#: src/gedlib/init.c:594
-msgid "could not open, read or write the key file (to alter database)."
-msgstr ""
-"ne povas malfermi, legi, aý skribi la þlosildosieron (por þanøi datumbazon)."
-
-#: src/gedlib/init.c:597
-msgid "could not open, read or write a block file."
-msgstr "ne povas malfermi, legi, aý skribi blokdosieron."
-
-#: src/gedlib/init.c:600
-msgid "name of database is too long."
-msgstr "nomo de datumbazo tro longas."
-
-#: src/gedlib/init.c:603
-msgid "The database is already open for writing."
-msgstr "La datumbazo jam malfermiøis por skribado."
-
-#: src/gedlib/init.c:606
-msgid "The database is locked (no readwrite access)."
-msgstr "La datumbazo estas þlosita (ne permesas skribi aý legi)."
-
-#: src/gedlib/init.c:609
-msgid "The database is unlocked."
-msgstr "La datumbazo estas malþlosita."
-
-#: src/gedlib/init.c:612
-msgid "keyfile is corrupt."
-msgstr "korputita þlosildosiero."
-
-#: src/gedlib/init.c:615
-msgid "keyfile is wrong alignment."
-msgstr "þlosildosiero havas maløustan aranøon."
-
-#: src/gedlib/init.c:618
-msgid "keyfile is wrong version."
-msgstr "þlosildosiero havas maløustan eldonon."
-
-#: src/gedlib/init.c:621
-msgid "Existing database found."
-msgstr "Ekzistantan datumbazon trovis."
-
-#: src/gedlib/init.c:625
-#, c-format
-msgid ""
-"The database is already opened for read access by %d users.\n"
-"  "
-msgstr ""
-"La datumbazo jam estas malfermita por nurlega alirado de %d uzantoj\n"
-"  "
-
-#: src/gedlib/init.c:629
-msgid "Invalid properties set for new database"
-msgstr "Malvalida proprecoj metita sur nova datumbazo"
-
-#: src/gedlib/init.c:632
-msgid "Undefined database error -- fix program."
-msgstr "Malkonita datumbaza eraro -- riparu programon."
 
 #: src/gedlib/messages.c:45
 msgid "You must identify a database."
@@ -3585,19 +3495,11 @@ msgstr "Importada daýro %s (ui %s)\n"
 msgid "The database was not saved."
 msgstr "La datumbazo ne estas registrita."
 
-#: src/liflines/main.c:356
-msgid "Choose database to open"
-msgstr "Elektu datumbazon por malfermi"
-
-#: src/liflines/main.c:364
-msgid "No databases found in database path"
-msgstr "Trovis neniujn datumbazojn en datumbaza dosierindiko"
-
-#: src/liflines/main.c:391
+#: src/liflines/main.c:354
 msgid "Warning: database codeset unspecified"
 msgstr "Averto: datumbaza kodpaøo ne estas indikita"
 
-#: src/liflines/main.c:393
+#: src/liflines/main.c:356
 msgid "Warning: not all conversions available"
 msgstr "Averto: ne æiuj þanøigoj estas haveblaj"
 
@@ -3678,202 +3580,212 @@ msgstr "Neniu þanøigo"
 msgid "Internal codeset"
 msgstr "Interna kodpaøo"
 
-#: src/liflines/screen.c:1817
+#: src/liflines/screen.c:1816
+#, fuzzy
+msgid "Internal UTF-8: Yes"
+msgstr "Interna kodpaøo"
+
+#: src/liflines/screen.c:1818
+#, fuzzy
+msgid "Internal UTF-8: No"
+msgstr "Interna al Redaktila"
+
+#: src/liflines/screen.c:1822
 msgid "Locales are enabled."
 msgstr "Loka¼aroj ebliøitaj"
 
-#: src/liflines/screen.c:1819
+#: src/liflines/screen.c:1824
 msgid "Locales are disabled."
 msgstr "Loka¼aroj malebliøitaj"
 
-#: src/liflines/screen.c:1822
+#: src/liflines/screen.c:1827
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) estas entradukigita"
 
-#: src/liflines/screen.c:1828
+#: src/liflines/screen.c:1833
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1834
+#: src/liflines/screen.c:1846
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (kodpaøa þanøigado) estas entradukigita"
 
-#: src/liflines/screen.c:1836
+#: src/liflines/screen.c:1848
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (kodpaøa þanøigado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1838
+#: src/liflines/screen.c:1850
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Komenca ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1841
+#: src/liflines/screen.c:1853
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Komenca mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1844
+#: src/liflines/screen.c:1856
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Nuna ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1847
+#: src/liflines/screen.c:1859
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Nuna mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1850
+#: src/liflines/screen.c:1862
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Ordizigada subprogramo: %s"
 
-#: src/liflines/screen.c:1854
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "GUI-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1857
+#: src/liflines/screen.c:1869
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "GUI-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1859
+#: src/liflines/screen.c:1871
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "GUI-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1864
+#: src/liflines/screen.c:1876
 #, c-format
 msgid "editor codeset: %s"
 msgstr "redaktila kodpaøo: %s"
 
-#: src/liflines/screen.c:1867
+#: src/liflines/screen.c:1879
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "redaktila eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1869
+#: src/liflines/screen.c:1881
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "redaktila eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1874
+#: src/liflines/screen.c:1886
 #, c-format
 msgid "report codeset: %s"
 msgstr "raporta kodpaøo: %s"
 
-#: src/liflines/screen.c:1877
+#: src/liflines/screen.c:1889
 #, c-format
 msgid "report output codeset: %s"
 msgstr "raporta eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1879
+#: src/liflines/screen.c:1891
 #, c-format
 msgid "report input codeset: %s"
 msgstr "raporta eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1884
+#: src/liflines/screen.c:1896
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1899
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "gedcom-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1889
+#: src/liflines/screen.c:1901
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "gedcom-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1897
+#: src/liflines/screen.c:1909
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1899
+#: src/liflines/screen.c:1911
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1903
+#: src/liflines/screen.c:1915
 msgid "Codeset information"
 msgstr "Kodpaøa informo"
 
-#: src/liflines/screen.c:1920
+#: src/liflines/screen.c:1932
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext (akirteksa¼a) dll: %s"
 
-#: src/liflines/screen.c:1924
+#: src/liflines/screen.c:1936
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext (akirteksa¼a) dll eldono: %s"
 
-#: src/liflines/screen.c:1929
+#: src/liflines/screen.c:1941
 msgid "gettext dll had no version"
 msgstr "gettext (akirteksa¼a) dll ne havis eldonon: %s"
 
-#: src/liflines/screen.c:1934
+#: src/liflines/screen.c:1946
 msgid "no gettext dll found"
 msgstr "trovis neniun gettext (akirteksa¼an) dll-on"
 
-#: src/liflines/screen.c:1943
+#: src/liflines/screen.c:1955
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv dll: %s"
 
-#: src/liflines/screen.c:1947
+#: src/liflines/screen.c:1959
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv dll eldono: %s"
 
-#: src/liflines/screen.c:1952
+#: src/liflines/screen.c:1964
 msgid "iconv dll had no version"
 msgstr "iconv dll ne havis eldonon"
 
-#: src/liflines/screen.c:1957
+#: src/liflines/screen.c:1969
 msgid "no iconv dll found"
 msgstr "trovis neniun iconv dll"
 
-#: src/liflines/screen.c:2209
+#: src/liflines/screen.c:2221
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Þanøante kodpaøon malpermesita en enhaviøita datumbazo"
 
-#: src/liflines/screen.c:2383
+#: src/liflines/screen.c:2395
 msgid "--- CURRENT SELECTION ---"
 msgstr "--- NUNA ELEKTO ---"
 
-#: src/liflines/screen.c:2386 src/liflines/screen.c:2619
+#: src/liflines/screen.c:2398 src/liflines/screen.c:2631
 msgid "--- LIST ---"
 msgstr "--- LISTO ---"
 
-#: src/liflines/screen.c:2650
+#: src/liflines/screen.c:2662
 msgid "-- CURRENT SELECTION --"
 msgstr "-- NUNA ELEKTO --"
 
-#: src/liflines/screen.c:2801
+#: src/liflines/screen.c:2813
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Æefa Menuo"
 
-#: src/liflines/screen.c:3507
+#: src/liflines/screen.c:3519
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Revizu vizitan historion (%d rikordo)"
 msgstr[1] "v  Revizu vizitan historion (%d rikordoj)"
 
-#: src/liflines/screen.c:3511
+#: src/liflines/screen.c:3523
 msgid "(visit history is empty)"
 msgstr "(vizita historio estas malplena)"
 
-#: src/liflines/screen.c:3517
+#: src/liflines/screen.c:3529
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Revizu þanøan historion (%d rikordo)"
 msgstr[1] "c  Revizu þanøan historion (%d rikordoj)"
 
-#: src/liflines/screen.c:3521
+#: src/liflines/screen.c:3533
 msgid "(change history is empty)"
 msgstr "(þanøa historio estas malplena)"
 
@@ -4510,33 +4422,108 @@ msgstr "Mankanta datuma rikordo (%s)"
 msgid "Fixed missing data record (%s)"
 msgstr "Riparis mankanta datuma rikordo (%s)"
 
-#: src/tools/dbverify.c:1436
+#: src/tools/dbverify.c:1439
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d eraro"
 msgstr[1] "%d eraroj"
 
-#: src/tools/dbverify.c:1440
+#: src/tools/dbverify.c:1443
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d riparita"
 msgstr[1] "%d riparitaj"
 
-#: src/tools/dbverify.c:1447
+#: src/tools/dbverify.c:1450
 msgid "No errors found"
 msgstr "Neniun eraron trovis"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "NERIPAREBLA ERARO"
 
-#: src/tools/dbverify.c:1463
+#: src/tools/dbverify.c:1466
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "En dosiero <%s> æe linio %d"
+
+#~ msgid "Database error: -- "
+#~ msgstr "Datumbaza eraro: -- "
+
+#~ msgid "requested database does not exist."
+#~ msgstr "petita datumbazo ne ekzistas."
+
+#~ msgid "db directory is file, not directory."
+#~ msgstr "db dosierujo estas dosiero, ne dosierujo."
+
+#~ msgid "creation of new database failed."
+#~ msgstr "kreo de nova datumbazo fiaskis."
+
+#~ msgid "error accessing database directory."
+#~ msgstr "eraro alirante datumbazon dosierujon."
+
+#~ msgid "no keyfile (directory does not appear to be a database)."
+#~ msgstr "neniu þlosildosiero (dosierujo ne þajnas esti datumbazo)."
+
+#~ msgid "could not open, read or write an index file."
+#~ msgstr "ne povas malfermi, legi, aý skribi indeksdosieron."
+
+#~ msgid "could not open, read or write the key file."
+#~ msgstr "ne povas malfermi, legi, aý skribi la þlosildosieron."
+
+#~ msgid "could not open, read or write the key file (to alter database)."
+#~ msgstr ""
+#~ "ne povas malfermi, legi, aý skribi la þlosildosieron (por þanøi "
+#~ "datumbazon)."
+
+#~ msgid "could not open, read or write a block file."
+#~ msgstr "ne povas malfermi, legi, aý skribi blokdosieron."
+
+#~ msgid "name of database is too long."
+#~ msgstr "nomo de datumbazo tro longas."
+
+#~ msgid "The database is already open for writing."
+#~ msgstr "La datumbazo jam malfermiøis por skribado."
+
+#~ msgid "The database is locked (no readwrite access)."
+#~ msgstr "La datumbazo estas þlosita (ne permesas skribi aý legi)."
+
+#~ msgid "The database is unlocked."
+#~ msgstr "La datumbazo estas malþlosita."
+
+#~ msgid "keyfile is corrupt."
+#~ msgstr "korputita þlosildosiero."
+
+#~ msgid "keyfile is wrong alignment."
+#~ msgstr "þlosildosiero havas maløustan aranøon."
+
+#~ msgid "keyfile is wrong version."
+#~ msgstr "þlosildosiero havas maløustan eldonon."
+
+#~ msgid "Existing database found."
+#~ msgstr "Ekzistantan datumbazon trovis."
+
+#~ msgid ""
+#~ "The database is already opened for read access by %d users.\n"
+#~ "  "
+#~ msgstr ""
+#~ "La datumbazo jam estas malfermita por nurlega alirado de %d uzantoj\n"
+#~ "  "
+
+#~ msgid "Invalid properties set for new database"
+#~ msgstr "Malvalida proprecoj metita sur nova datumbazo"
+
+#~ msgid "Undefined database error -- fix program."
+#~ msgstr "Malkonita datumbaza eraro -- riparu programon."
+
+#~ msgid "Choose database to open"
+#~ msgstr "Elektu datumbazon por malfermi"
+
+#~ msgid "No databases found in database path"
+#~ msgstr "Trovis neniujn datumbazojn en datumbaza dosierindiko"
 
 #~ msgid "Error: output file <%s> could not be created.\n"
 #~ msgstr "Eraro: ne povas krei celdosieron <%s>.\n"

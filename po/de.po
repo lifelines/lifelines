@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-29 20:57-0400\n"
+"POT-Creation-Date: 2005-10-09 18:00-0400\n"
 "PO-Revision-Date: 2003-06-19 06:32+0200\n"
 "Last-Translator: Frank Ellebrecht <ellebrecht-edv@gmx.de>\n"
 "Language-Team: None\n"
@@ -55,96 +55,6 @@ msgstr "%dJahr%03dTag"
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Dieser Person fehlt der Name; Datensatz ignoriert.\n"
-
-#: src/gedlib/init.c:569
-msgid "Database error: -- "
-msgstr "Fehler in der Datenbank: -- "
-
-#: src/gedlib/init.c:573
-msgid "requested database does not exist."
-msgstr "Gewünschte Datenbank existiert nicht."
-
-#: src/gedlib/init.c:576
-msgid "db directory is file, not directory."
-msgstr "DB ist eine Datei, kein Verzeichnis."
-
-#: src/gedlib/init.c:579
-msgid "creation of new database failed."
-msgstr "Anlegen der neuen Datenbank ist gescheitert."
-
-#: src/gedlib/init.c:582
-msgid "error accessing database directory."
-msgstr "Fehler beim Zugriff auf das Datenbankverzeichnis."
-
-#: src/gedlib/init.c:585
-msgid "no keyfile (directory does not appear to be a database)."
-msgstr "Dieses Verzeichnis scheint keine Datenbank zu sein."
-
-#: src/gedlib/init.c:588
-msgid "could not open, read or write an index file."
-msgstr "Öffnen, Lesen oder Schreiben des Index fehlgeschlagen."
-
-#: src/gedlib/init.c:591
-msgid "could not open, read or write the key file."
-msgstr "Öffnen, Lesen oder Schreiben der Indexdatei fehlgeschlagen."
-
-#: src/gedlib/init.c:594
-msgid "could not open, read or write the key file (to alter database)."
-msgstr ""
-"DB konnte nicht geändert werden: Fehler beim Öffnen, Lesen oder Schreiben."
-
-#: src/gedlib/init.c:597
-msgid "could not open, read or write a block file."
-msgstr "Öffnen, Lesen oder Schreiben der Blockdatei fehlgeschlagen."
-
-#: src/gedlib/init.c:600
-msgid "name of database is too long."
-msgstr "Name der Datenbank ist zu lang."
-
-#: src/gedlib/init.c:603
-msgid "The database is already open for writing."
-msgstr "Auf die Datenbank wird bereits zugegriffen."
-
-#: src/gedlib/init.c:606
-msgid "The database is locked (no readwrite access)."
-msgstr "Die Datenbank ist gesperrt (kein Schreibzugriff). "
-
-#: src/gedlib/init.c:609
-msgid "The database is unlocked."
-msgstr "Die Datenbank ist freigeschaltet."
-
-#: src/gedlib/init.c:612
-msgid "keyfile is corrupt."
-msgstr "Indexdatei ist fehlerhaft."
-
-#: src/gedlib/init.c:615
-msgid "keyfile is wrong alignment."
-msgstr "Indexdatei hat die falsche Ausrichtung."
-
-#: src/gedlib/init.c:618
-msgid "keyfile is wrong version."
-msgstr "Indexdatei hat falsche Version."
-
-#: src/gedlib/init.c:621
-msgid "Existing database found."
-msgstr "Vorhandene Datenbank gefunden."
-
-#: src/gedlib/init.c:625
-#, c-format
-msgid ""
-"The database is already opened for read access by %d users.\n"
-"  "
-msgstr ""
-"Auf die Datenbank wird bereits von %d Benutzern lesend zugegriffen.\n"
-"  "
-
-#: src/gedlib/init.c:629
-msgid "Invalid properties set for new database"
-msgstr "Ungültige Einstellungen für neue Datenbank."
-
-#: src/gedlib/init.c:632
-msgid "Undefined database error -- fix program."
-msgstr "Schwerer Datenbankfehler -- Programm reparieren."
 
 #: src/gedlib/messages.c:45
 msgid "You must identify a database."
@@ -3631,20 +3541,12 @@ msgstr "Verweis auf Ehefrau (%s) in Familie (%s) fehlerhaft"
 msgid "The database was not saved."
 msgstr "Datenbank wurde nicht gespeichert."
 
-#: src/liflines/main.c:356
-msgid "Choose database to open"
-msgstr "Wählen Sie die zu öffnende Datenbank"
-
-#: src/liflines/main.c:364
-msgid "No databases found in database path"
-msgstr "Im Datenbankverzeichnis wurde keine Datenbank gefunden."
-
-#: src/liflines/main.c:391
+#: src/liflines/main.c:354
 msgid "Warning: database codeset unspecified"
 msgstr ""
 "Achtung: Für die aktuelle Datenbank wurde keine Zeichentabelle angegeben"
 
-#: src/liflines/main.c:393
+#: src/liflines/main.c:356
 msgid "Warning: not all conversions available"
 msgstr "Achtung: nicht alle Umwandlungen möglich"
 
@@ -3727,206 +3629,216 @@ msgstr "Keine Umwandlung"
 msgid "Internal codeset"
 msgstr "Interne Zeichentabelle"
 
-#: src/liflines/screen.c:1817
+#: src/liflines/screen.c:1816
+#, fuzzy
+msgid "Internal UTF-8: Yes"
+msgstr "Interne Zeichentabelle"
+
+#: src/liflines/screen.c:1818
+#, fuzzy
+msgid "Internal UTF-8: No"
+msgstr "m  Umwandlung Intern  --> Editor "
+
+#: src/liflines/screen.c:1822
 msgid "Locales are enabled."
 msgstr "Nationale Einstellungen aktiviert."
 
-#: src/liflines/screen.c:1819
+#: src/liflines/screen.c:1824
 msgid "Locales are disabled."
 msgstr "Nationale Einstellungen deaktiviert."
 
-#: src/liflines/screen.c:1822
+#: src/liflines/screen.c:1827
 #, fuzzy
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Unterstützung nat. Sprachen) ist deaktiviert."
 
-#: src/liflines/screen.c:1828
+#: src/liflines/screen.c:1833
 #, fuzzy
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Unterstützung nat. Sprachen) ist aktiviert."
 
-#: src/liflines/screen.c:1834
+#: src/liflines/screen.c:1846
 #, fuzzy
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (Ländereinstellungen) sind deaktiviert."
 
-#: src/liflines/screen.c:1836
+#: src/liflines/screen.c:1848
 #, fuzzy
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (Ländereinstellungen) sind aktiviert."
 
-#: src/liflines/screen.c:1838
+#: src/liflines/screen.c:1850
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Sortiereinstellungen beim Start: %s"
 
-#: src/liflines/screen.c:1841
+#: src/liflines/screen.c:1853
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Nachrichteneinstellungen beim Start: %s"
 
-#: src/liflines/screen.c:1844
+#: src/liflines/screen.c:1856
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Gegenwärtige Sortiereinstellungen: %s"
 
-#: src/liflines/screen.c:1847
+#: src/liflines/screen.c:1859
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Gegenwärtige Nachrichteneinstellung: %s"
 
-#: src/liflines/screen.c:1850
+#: src/liflines/screen.c:1862
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Vergleichsroutine: %s"
 
-#: src/liflines/screen.c:1854
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "Ländereinstellung GUI: %s"
 
-#: src/liflines/screen.c:1857
+#: src/liflines/screen.c:1869
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "Ländereinstellung GUI-Ausgabe: %s"
 
-#: src/liflines/screen.c:1859
+#: src/liflines/screen.c:1871
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "Ländereinstellung GUI-Eingabe: %s"
 
-#: src/liflines/screen.c:1864
+#: src/liflines/screen.c:1876
 #, c-format
 msgid "editor codeset: %s"
 msgstr "Ländereinstellung Editor: %s"
 
-#: src/liflines/screen.c:1867
+#: src/liflines/screen.c:1879
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "Ländereinstellung Editor-Ausgabe: %s"
 
-#: src/liflines/screen.c:1869
+#: src/liflines/screen.c:1881
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "Ländereinstellung Editor-Eingabe: %s"
 
-#: src/liflines/screen.c:1874
+#: src/liflines/screen.c:1886
 #, c-format
 msgid "report codeset: %s"
 msgstr "Ländereinstellung Reporte: %s"
 
-#: src/liflines/screen.c:1877
+#: src/liflines/screen.c:1889
 #, c-format
 msgid "report output codeset: %s"
 msgstr "Ländereinstellung Reporte-Ausgabe: %s"
 
-#: src/liflines/screen.c:1879
+#: src/liflines/screen.c:1891
 #, c-format
 msgid "report input codeset: %s"
 msgstr "Ländereinstellung Reporte-Eingabe: %s"
 
-#: src/liflines/screen.c:1884
+#: src/liflines/screen.c:1896
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM Ländereinstellung: %s"
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1899
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "Ländereinstellung GEDCOM-Ausgabe: %s"
 
-#: src/liflines/screen.c:1889
+#: src/liflines/screen.c:1901
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "Ländereinstellung GEDCOM-Eingabe: %s"
 
-#: src/liflines/screen.c:1897
+#: src/liflines/screen.c:1909
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1899
+#: src/liflines/screen.c:1911
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1903
+#: src/liflines/screen.c:1915
 msgid "Codeset information"
 msgstr "Länderspezifische Einstellungen"
 
-#: src/liflines/screen.c:1920
+#: src/liflines/screen.c:1932
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext DLL: %s"
 
-#: src/liflines/screen.c:1924
+#: src/liflines/screen.c:1936
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext DLL-Version: %s"
 
-#: src/liflines/screen.c:1929
+#: src/liflines/screen.c:1941
 msgid "gettext dll had no version"
 msgstr "gettext DLL ohne Versionsangabe"
 
-#: src/liflines/screen.c:1934
+#: src/liflines/screen.c:1946
 msgid "no gettext dll found"
 msgstr "Keine DLL für gettext gefunden"
 
-#: src/liflines/screen.c:1943
+#: src/liflines/screen.c:1955
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv DLL: %s"
 
-#: src/liflines/screen.c:1947
+#: src/liflines/screen.c:1959
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv DLL-Version: %s"
 
-#: src/liflines/screen.c:1952
+#: src/liflines/screen.c:1964
 msgid "iconv dll had no version"
 msgstr "iconv DLL ohne Versionsangabe"
 
-#: src/liflines/screen.c:1957
+#: src/liflines/screen.c:1969
 msgid "no iconv dll found"
 msgstr "Keine DLL für iconv gefunden"
 
-#: src/liflines/screen.c:2209
+#: src/liflines/screen.c:2221
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Datenbankzeichensatz kann nicht nachträglich geändert werden"
 
-#: src/liflines/screen.c:2383
+#: src/liflines/screen.c:2395
 msgid "--- CURRENT SELECTION ---"
 msgstr "--- Aktuelle Auswahl ---"
 
-#: src/liflines/screen.c:2386 src/liflines/screen.c:2619
+#: src/liflines/screen.c:2398 src/liflines/screen.c:2631
 msgid "--- LIST ---"
 msgstr "--- Liste ---"
 
-#: src/liflines/screen.c:2650
+#: src/liflines/screen.c:2662
 msgid "-- CURRENT SELECTION --"
 msgstr "-- Aktuelle Auswahl --"
 
-#: src/liflines/screen.c:2801
+#: src/liflines/screen.c:2813
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Hauptmenü"
 
-#: src/liflines/screen.c:3507
+#: src/liflines/screen.c:3519
 #, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v  Liste zuletzt angezeigter Personen (%d Datensatz)"
 msgstr[1] "v  Liste zuletzt angezeigter Personen (%d Datensätze)"
 
-#: src/liflines/screen.c:3511
+#: src/liflines/screen.c:3523
 msgid "(visit history is empty)"
 msgstr "(Anzeigeliste ist leer)"
 
-#: src/liflines/screen.c:3517
+#: src/liflines/screen.c:3529
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "c  Liste letzter Veränderungen (%d Datensatz)"
 msgstr[1] "c  Liste letzter Veränderungen (%d Datensätze)"
 
-#: src/liflines/screen.c:3521
+#: src/liflines/screen.c:3533
 msgid "(change history is empty)"
 msgstr "(Keine Veränderungen)"
 
@@ -4566,33 +4478,107 @@ msgstr "Fehlende Datensätze"
 msgid "Fixed missing data record (%s)"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:1436
+#: src/tools/dbverify.c:1439
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d Fehler"
 msgstr[1] "%d Fehler"
 
-#: src/tools/dbverify.c:1440
+#: src/tools/dbverify.c:1443
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d repariert"
 msgstr[1] "%d repariert"
 
-#: src/tools/dbverify.c:1447
+#: src/tools/dbverify.c:1450
 msgid "No errors found"
 msgstr "Keine Fehler gefunden"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "Verhängnisvoller Fehler: "
 
-#: src/tools/dbverify.c:1463
+#: src/tools/dbverify.c:1466
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In Datei <%s> in Zeile %d"
+
+#~ msgid "Database error: -- "
+#~ msgstr "Fehler in der Datenbank: -- "
+
+#~ msgid "requested database does not exist."
+#~ msgstr "Gewünschte Datenbank existiert nicht."
+
+#~ msgid "db directory is file, not directory."
+#~ msgstr "DB ist eine Datei, kein Verzeichnis."
+
+#~ msgid "creation of new database failed."
+#~ msgstr "Anlegen der neuen Datenbank ist gescheitert."
+
+#~ msgid "error accessing database directory."
+#~ msgstr "Fehler beim Zugriff auf das Datenbankverzeichnis."
+
+#~ msgid "no keyfile (directory does not appear to be a database)."
+#~ msgstr "Dieses Verzeichnis scheint keine Datenbank zu sein."
+
+#~ msgid "could not open, read or write an index file."
+#~ msgstr "Öffnen, Lesen oder Schreiben des Index fehlgeschlagen."
+
+#~ msgid "could not open, read or write the key file."
+#~ msgstr "Öffnen, Lesen oder Schreiben der Indexdatei fehlgeschlagen."
+
+#~ msgid "could not open, read or write the key file (to alter database)."
+#~ msgstr ""
+#~ "DB konnte nicht geändert werden: Fehler beim Öffnen, Lesen oder Schreiben."
+
+#~ msgid "could not open, read or write a block file."
+#~ msgstr "Öffnen, Lesen oder Schreiben der Blockdatei fehlgeschlagen."
+
+#~ msgid "name of database is too long."
+#~ msgstr "Name der Datenbank ist zu lang."
+
+#~ msgid "The database is already open for writing."
+#~ msgstr "Auf die Datenbank wird bereits zugegriffen."
+
+#~ msgid "The database is locked (no readwrite access)."
+#~ msgstr "Die Datenbank ist gesperrt (kein Schreibzugriff). "
+
+#~ msgid "The database is unlocked."
+#~ msgstr "Die Datenbank ist freigeschaltet."
+
+#~ msgid "keyfile is corrupt."
+#~ msgstr "Indexdatei ist fehlerhaft."
+
+#~ msgid "keyfile is wrong alignment."
+#~ msgstr "Indexdatei hat die falsche Ausrichtung."
+
+#~ msgid "keyfile is wrong version."
+#~ msgstr "Indexdatei hat falsche Version."
+
+#~ msgid "Existing database found."
+#~ msgstr "Vorhandene Datenbank gefunden."
+
+#~ msgid ""
+#~ "The database is already opened for read access by %d users.\n"
+#~ "  "
+#~ msgstr ""
+#~ "Auf die Datenbank wird bereits von %d Benutzern lesend zugegriffen.\n"
+#~ "  "
+
+#~ msgid "Invalid properties set for new database"
+#~ msgstr "Ungültige Einstellungen für neue Datenbank."
+
+#~ msgid "Undefined database error -- fix program."
+#~ msgstr "Schwerer Datenbankfehler -- Programm reparieren."
+
+#~ msgid "Choose database to open"
+#~ msgstr "Wählen Sie die zu öffnende Datenbank"
+
+#~ msgid "No databases found in database path"
+#~ msgstr "Im Datenbankverzeichnis wurde keine Datenbank gefunden."
 
 #~ msgid "Error: output file <%s> could not be created.\n"
 #~ msgstr "Fehler: Ausgabedatei <%s> konnte nicht erstellt werden.\n"

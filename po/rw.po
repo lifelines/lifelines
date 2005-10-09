@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-29 20:57-0400\n"
+"POT-Creation-Date: 2005-10-09 18:00-0400\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -76,115 +76,6 @@ msgstr "%dy%03dd"
 #, fuzzy
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Umurongo in Icyabitswe Icyabitswe"
-
-#: src/gedlib/init.c:569
-#, fuzzy
-msgid "Database error: -- "
-msgstr "Ikosa"
-
-#: src/gedlib/init.c:573
-#, fuzzy
-msgid "requested database does not exist."
-msgstr "Ububikoshingiro OYA"
-
-#: src/gedlib/init.c:576
-#, fuzzy
-msgid "db directory is file, not directory."
-msgstr "DB bushyinguro ni IDOSIYE OYA bushyinguro"
-
-#: src/gedlib/init.c:579
-#, fuzzy
-msgid "creation of new database failed."
-msgstr "Bya Gishya Ububikoshingiro Byanze"
-
-#: src/gedlib/init.c:582
-#, fuzzy
-msgid "error accessing database directory."
-msgstr "Ikosa Ububikoshingiro bushyinguro"
-
-#: src/gedlib/init.c:585
-#, fuzzy
-msgid "no keyfile (directory does not appear to be a database)."
-msgstr "Oya bushyinguro OYA Kugaragara Kuri a Ububikoshingiro"
-
-#: src/gedlib/init.c:588
-#, fuzzy
-msgid "could not open, read or write an index file."
-msgstr "OYA Gufungura Gusoma Cyangwa Kwandika Umubarendanga IDOSIYE"
-
-#: src/gedlib/init.c:591
-#, fuzzy
-msgid "could not open, read or write the key file."
-msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE"
-
-#: src/gedlib/init.c:594
-#, fuzzy
-msgid "could not open, read or write the key file (to alter database)."
-msgstr ""
-"OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE Kuri "
-"Ububikoshingiro"
-
-#: src/gedlib/init.c:597
-#, fuzzy
-msgid "could not open, read or write a block file."
-msgstr "OYA Gufungura Gusoma Cyangwa Kwandika a Funga IDOSIYE"
-
-#: src/gedlib/init.c:600
-#, fuzzy
-msgid "name of database is too long."
-msgstr "Izina: Bya Ububikoshingiro ni"
-
-#: src/gedlib/init.c:603
-#, fuzzy
-msgid "The database is already open for writing."
-msgstr "Ububikoshingiro ni Gufungura kugirango"
-
-#: src/gedlib/init.c:606
-#, fuzzy
-msgid "The database is locked (no readwrite access)."
-msgstr "Ububikoshingiro ni Gifunze Oya"
-
-#: src/gedlib/init.c:609
-#, fuzzy
-msgid "The database is unlocked."
-msgstr "Ububikoshingiro ni"
-
-#: src/gedlib/init.c:612
-#, fuzzy
-msgid "keyfile is corrupt."
-msgstr "ni"
-
-#: src/gedlib/init.c:615
-#, fuzzy
-msgid "keyfile is wrong alignment."
-msgstr "ni Itunganya"
-
-#: src/gedlib/init.c:618
-#, fuzzy
-msgid "keyfile is wrong version."
-msgstr "ni Verisiyo"
-
-#: src/gedlib/init.c:621
-#, fuzzy
-msgid "Existing database found."
-msgstr "Ububikoshingiro Byabonetse"
-
-#: src/gedlib/init.c:625
-#, fuzzy, c-format
-msgid ""
-"The database is already opened for read access by %d users.\n"
-"  "
-msgstr "Ububikoshingiro ni kugirango Gusoma ku"
-
-#: src/gedlib/init.c:629
-#, fuzzy
-msgid "Invalid properties set for new database"
-msgstr "Indangakintu... Gushyiraho kugirango Gishya Ububikoshingiro"
-
-#: src/gedlib/init.c:632
-#, fuzzy
-msgid "Undefined database error -- fix program."
-msgstr "Ububikoshingiro Ikosa Porogaramu"
 
 #: src/gedlib/messages.c:45
 #, fuzzy
@@ -4189,22 +4080,12 @@ msgstr "Igihe- ngombwa Igihe- ngombwa"
 msgid "The database was not saved."
 msgstr "Ububikoshingiro OYA"
 
-#: src/liflines/main.c:356
-#, fuzzy
-msgid "Choose database to open"
-msgstr "Ububikoshingiro Kuri Gufungura"
-
-#: src/liflines/main.c:364
-#, fuzzy
-msgid "No databases found in database path"
-msgstr "Ububikoshingiro Byabonetse in Ububikoshingiro Inzira"
-
-#: src/liflines/main.c:391
+#: src/liflines/main.c:354
 #, fuzzy
 msgid "Warning: database codeset unspecified"
 msgstr "Ububikoshingiro"
 
-#: src/liflines/main.c:393
+#: src/liflines/main.c:356
 #, fuzzy
 msgid "Warning: not all conversions available"
 msgstr "OYA Byose Bihari"
@@ -4293,213 +4174,222 @@ msgstr "Ihindurangero"
 msgid "Internal codeset"
 msgstr ""
 
-#: src/liflines/screen.c:1817
+#: src/liflines/screen.c:1816
+msgid "Internal UTF-8: Yes"
+msgstr ""
+
+#: src/liflines/screen.c:1818
+#, fuzzy
+msgid "Internal UTF-8: No"
+msgstr "M Kuri Igereranya"
+
+#: src/liflines/screen.c:1822
 #, fuzzy
 msgid "Locales are enabled."
 msgstr "Bikora"
 
-#: src/liflines/screen.c:1819
+#: src/liflines/screen.c:1824
 #, fuzzy
 msgid "Locales are disabled."
 msgstr "Yahagaritswe"
 
-#: src/liflines/screen.c:1822
+#: src/liflines/screen.c:1827
 #, fuzzy
 msgid "NLS (National Language Support) is compiled in."
 msgstr "ni Yahagaritswe"
 
-#: src/liflines/screen.c:1828
+#: src/liflines/screen.c:1833
 #, fuzzy
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "ni Bikora"
 
-#: src/liflines/screen.c:1834
+#: src/liflines/screen.c:1846
 #, fuzzy
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "Ihindurangero ni Yahagaritswe"
 
-#: src/liflines/screen.c:1836
+#: src/liflines/screen.c:1848
 #, fuzzy
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "Ihindurangero ni Bikora"
 
-#: src/liflines/screen.c:1838
+#: src/liflines/screen.c:1850
 #, fuzzy, c-format
 msgid "Startup collate locale: %s"
 msgstr "Guteranya Umwanya"
 
-#: src/liflines/screen.c:1841
+#: src/liflines/screen.c:1853
 #, fuzzy, c-format
 msgid "Startup messages locale: %s"
 msgstr "Ubutumwa Umwanya"
 
-#: src/liflines/screen.c:1844
+#: src/liflines/screen.c:1856
 #, fuzzy, c-format
 msgid "Current collate locale: %s"
 msgstr "Guteranya Umwanya"
 
-#: src/liflines/screen.c:1847
+#: src/liflines/screen.c:1859
 #, fuzzy, c-format
 msgid "Current messages locale: %s"
 msgstr "Ubutumwa Umwanya"
 
-#: src/liflines/screen.c:1850
+#: src/liflines/screen.c:1862
 #, c-format
 msgid "Collation routine: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1854
+#: src/liflines/screen.c:1866
 #, c-format
 msgid "GUI codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1857
+#: src/liflines/screen.c:1869
 #, fuzzy, c-format
 msgid "GUI output codeset: %s"
 msgstr "Ibisohoka"
 
-#: src/liflines/screen.c:1859
+#: src/liflines/screen.c:1871
 #, fuzzy, c-format
 msgid "GUI input codeset: %s"
 msgstr "Iyinjiza"
 
-#: src/liflines/screen.c:1864
+#: src/liflines/screen.c:1876
 #, fuzzy, c-format
 msgid "editor codeset: %s"
 msgstr "Muhinduzi"
 
-#: src/liflines/screen.c:1867
+#: src/liflines/screen.c:1879
 #, fuzzy, c-format
 msgid "editor output codeset: %s"
 msgstr "Muhinduzi Ibisohoka"
 
-#: src/liflines/screen.c:1869
+#: src/liflines/screen.c:1881
 #, fuzzy, c-format
 msgid "editor input codeset: %s"
 msgstr "Muhinduzi Iyinjiza"
 
-#: src/liflines/screen.c:1874
+#: src/liflines/screen.c:1886
 #, fuzzy, c-format
 msgid "report codeset: %s"
 msgstr "Icyegeranyo"
 
-#: src/liflines/screen.c:1877
+#: src/liflines/screen.c:1889
 #, fuzzy, c-format
 msgid "report output codeset: %s"
 msgstr "Icyegeranyo Ibisohoka"
 
-#: src/liflines/screen.c:1879
+#: src/liflines/screen.c:1891
 #, fuzzy, c-format
 msgid "report input codeset: %s"
 msgstr "Icyegeranyo Iyinjiza"
 
-#: src/liflines/screen.c:1884
+#: src/liflines/screen.c:1896
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1887
+#: src/liflines/screen.c:1899
 #, fuzzy, c-format
 msgid "gedcom output codeset: %s"
 msgstr "Ibisohoka"
 
-#: src/liflines/screen.c:1889
+#: src/liflines/screen.c:1901
 #, fuzzy, c-format
 msgid "gedcom input codeset: %s"
 msgstr "Iyinjiza"
 
-#: src/liflines/screen.c:1897
+#: src/liflines/screen.c:1909
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1899
+#: src/liflines/screen.c:1911
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1903
+#: src/liflines/screen.c:1915
 #, fuzzy
 msgid "Codeset information"
 msgstr "Ibisobanuro"
 
-#: src/liflines/screen.c:1920
+#: src/liflines/screen.c:1932
 #, c-format
 msgid "gettext dll: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1924
+#: src/liflines/screen.c:1936
 #, fuzzy, c-format
 msgid "gettext dll version: %s"
 msgstr "Verisiyo"
 
-#: src/liflines/screen.c:1929
+#: src/liflines/screen.c:1941
 #, fuzzy
 msgid "gettext dll had no version"
 msgstr "Oya Verisiyo"
 
-#: src/liflines/screen.c:1934
+#: src/liflines/screen.c:1946
 #, fuzzy
 msgid "no gettext dll found"
 msgstr "Oya Byabonetse"
 
-#: src/liflines/screen.c:1943
+#: src/liflines/screen.c:1955
 #, c-format
 msgid "iconv dll: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1947
+#: src/liflines/screen.c:1959
 #, fuzzy, c-format
 msgid "iconv dll version: %s"
 msgstr "Verisiyo"
 
-#: src/liflines/screen.c:1952
+#: src/liflines/screen.c:1964
 #, fuzzy
 msgid "iconv dll had no version"
 msgstr "Oya Verisiyo"
 
-#: src/liflines/screen.c:1957
+#: src/liflines/screen.c:1969
 #, fuzzy
 msgid "no iconv dll found"
 msgstr "Oya Byabonetse"
 
-#: src/liflines/screen.c:2209
+#: src/liflines/screen.c:2221
 #, fuzzy
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Kuri Guhindura>> in a Ububikoshingiro"
 
-#: src/liflines/screen.c:2383
+#: src/liflines/screen.c:2395
 msgid "--- CURRENT SELECTION ---"
 msgstr ""
 
-#: src/liflines/screen.c:2386 src/liflines/screen.c:2619
+#: src/liflines/screen.c:2398 src/liflines/screen.c:2631
 msgid "--- LIST ---"
 msgstr ""
 
-#: src/liflines/screen.c:2650
+#: src/liflines/screen.c:2662
 msgid "-- CURRENT SELECTION --"
 msgstr ""
 
-#: src/liflines/screen.c:2801
+#: src/liflines/screen.c:2813
 msgid "LifeLines -- Main Menu"
 msgstr ""
 
-#: src/liflines/screen.c:3507
+#: src/liflines/screen.c:3519
 #, fuzzy, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
 msgstr[0] "v Urutonde Icyabitswe"
 
-#: src/liflines/screen.c:3511
+#: src/liflines/screen.c:3523
 #, fuzzy
 msgid "(visit history is empty)"
 msgstr "(Urutonde ni ubusa"
 
-#: src/liflines/screen.c:3517
+#: src/liflines/screen.c:3529
 #, fuzzy, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
 msgstr[0] "C Guhindura>> Urutonde Icyabitswe"
 
-#: src/liflines/screen.c:3521
+#: src/liflines/screen.c:3533
 #, fuzzy
 msgid "(change history is empty)"
 msgstr "(Guhindura>> Urutonde ni ubusa"
@@ -5157,7 +5047,7 @@ msgstr "Ibyabitswe"
 msgid "Fixed missing data record (%s)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:1436
+#: src/tools/dbverify.c:1439
 #, fuzzy, c-format
 msgid "%d error"
 msgid_plural "%d errors"
@@ -5165,27 +5055,123 @@ msgstr[0] "%dIkosa rya"
 msgstr[1] "%dIkosa rya"
 
 # sw/source\ui\utlui\initui.src:RID_SW_SHELLRES.STR_FIELD_FIXED.text
-#: src/tools/dbverify.c:1440
+#: src/tools/dbverify.c:1443
 #, fuzzy, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%dbidahinduka)"
 msgstr[1] "%dbidahinduka)"
 
-#: src/tools/dbverify.c:1447
+#: src/tools/dbverify.c:1450
 #, fuzzy
 msgid "No errors found"
 msgstr "Amakosa Byabonetse"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "FATAL ERROR: "
 msgstr ""
 
-#: src/tools/dbverify.c:1463
+#: src/tools/dbverify.c:1466
 #, fuzzy, c-format
 msgid "In file <%s> at line %d"
 msgstr "IDOSIYE ku Umurongo"
+
+#, fuzzy
+#~ msgid "Database error: -- "
+#~ msgstr "Ikosa"
+
+#, fuzzy
+#~ msgid "requested database does not exist."
+#~ msgstr "Ububikoshingiro OYA"
+
+#, fuzzy
+#~ msgid "db directory is file, not directory."
+#~ msgstr "DB bushyinguro ni IDOSIYE OYA bushyinguro"
+
+#, fuzzy
+#~ msgid "creation of new database failed."
+#~ msgstr "Bya Gishya Ububikoshingiro Byanze"
+
+#, fuzzy
+#~ msgid "error accessing database directory."
+#~ msgstr "Ikosa Ububikoshingiro bushyinguro"
+
+#, fuzzy
+#~ msgid "no keyfile (directory does not appear to be a database)."
+#~ msgstr "Oya bushyinguro OYA Kugaragara Kuri a Ububikoshingiro"
+
+#, fuzzy
+#~ msgid "could not open, read or write an index file."
+#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika Umubarendanga IDOSIYE"
+
+#, fuzzy
+#~ msgid "could not open, read or write the key file."
+#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE"
+
+#, fuzzy
+#~ msgid "could not open, read or write the key file (to alter database)."
+#~ msgstr ""
+#~ "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE Kuri "
+#~ "Ububikoshingiro"
+
+#, fuzzy
+#~ msgid "could not open, read or write a block file."
+#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika a Funga IDOSIYE"
+
+#, fuzzy
+#~ msgid "name of database is too long."
+#~ msgstr "Izina: Bya Ububikoshingiro ni"
+
+#, fuzzy
+#~ msgid "The database is already open for writing."
+#~ msgstr "Ububikoshingiro ni Gufungura kugirango"
+
+#, fuzzy
+#~ msgid "The database is locked (no readwrite access)."
+#~ msgstr "Ububikoshingiro ni Gifunze Oya"
+
+#, fuzzy
+#~ msgid "The database is unlocked."
+#~ msgstr "Ububikoshingiro ni"
+
+#, fuzzy
+#~ msgid "keyfile is corrupt."
+#~ msgstr "ni"
+
+#, fuzzy
+#~ msgid "keyfile is wrong alignment."
+#~ msgstr "ni Itunganya"
+
+#, fuzzy
+#~ msgid "keyfile is wrong version."
+#~ msgstr "ni Verisiyo"
+
+#, fuzzy
+#~ msgid "Existing database found."
+#~ msgstr "Ububikoshingiro Byabonetse"
+
+#, fuzzy
+#~ msgid ""
+#~ "The database is already opened for read access by %d users.\n"
+#~ "  "
+#~ msgstr "Ububikoshingiro ni kugirango Gusoma ku"
+
+#, fuzzy
+#~ msgid "Invalid properties set for new database"
+#~ msgstr "Indangakintu... Gushyiraho kugirango Gishya Ububikoshingiro"
+
+#, fuzzy
+#~ msgid "Undefined database error -- fix program."
+#~ msgstr "Ububikoshingiro Ikosa Porogaramu"
+
+#, fuzzy
+#~ msgid "Choose database to open"
+#~ msgstr "Ububikoshingiro Kuri Gufungura"
+
+#, fuzzy
+#~ msgid "No databases found in database path"
+#~ msgstr "Ububikoshingiro Byabonetse in Ububikoshingiro Inzira"
 
 #, fuzzy
 #~ msgid "Error: output file <%s> could not be created.\n"
