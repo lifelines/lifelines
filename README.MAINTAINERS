@@ -3,7 +3,7 @@ release, in your cvs working directory, and actually
 releasing it.
 
 Fetch latest cvs if desired, eg 
-  $ cvs -z3 up -a
+  $ cvs -z3 up -d
 
 Edit the version number, setting it to the new release:
 (Running, eg, "sh build/setversions.sh 3.0.19" does this)

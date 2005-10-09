@@ -24,6 +24,10 @@
 
 	Add use of setversions.sh to README.MAINTAINERS.
 
+	* ChangeLog README.MAINTAINERS
+
+	Fix incorrect cvs command shown.
+
 2005-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
