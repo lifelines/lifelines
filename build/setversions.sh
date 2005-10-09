@@ -49,7 +49,16 @@ checkparm $1
 function alterfile {
   cp $1 $1.bak || failexit "Error backing up file "$1
 #TODO: Should fail if we don't get exactly one match in sed
-  sed $1 -e "$2" > $1
+  sed $1 -e "$2" > $1.tmp
+  mv $1.tmp $1
+}
+
+# Function to restore file from last backup
+function restorefile {
+  if [ -e $1.bak ]
+  then
+    cp $1.bak $1
+  fi
 }
 
 # Main function
@@ -61,16 +70,29 @@ function applyversion {
   SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[[:alnum:].\-]*)$/\1$VERSION)/"
   alterfile ../configure.in "$SEDPAT"
 
-#TODO - rest of files listed in README.MAINTAINERS
+# TODO (remaining files from README.MAINTAINERS):
+# build/rpm/lifelines.spec
+# src/hdrs/version.h
+# build/msvc6/dbverify/dbVerify.rc (4 occurrences)
+# build/msvc6/llexec/llexec.rc (4 occurrences)
+# build/msvc6/llines/llines.rc (4 occurrences)
+# docs/ll-devguide.xml (1 occurrence)
+# docs/ll-reportmanual.xml (2 occurrences)
+# docs/ll-userguide.xml (2 occurrences)
+# docs/llines.1 (& year & month as well)
+
 }
 
 # Restore, for user to reverse last application
 function restore {
-  cp NEWS.bak NEWS
+  restorefile ../NEWS
+  restorefile ../INSTALL
+  restorefile ../README
+  restorefile ../configure.in
 }
 
 # Invoke whichever functionality was requested
-if [ -z "RESTORE" ]
+if [ -z "$RESTORE" ]
 then
   restore
 else

@@ -1,3 +1,10 @@
+2005-10-09 Perry Rapp
+
+	* ChangeLog build/setversions.sh
+
+	Fix bug in setversions.sh causing files to be emptied
+	(use .tmp files, instead of trying to override input).
+
 2005-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
