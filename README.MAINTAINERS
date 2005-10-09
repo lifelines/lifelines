@@ -6,6 +6,7 @@ Fetch latest cvs if desired, eg
   $ cvs -z3 up -a
 
 Edit the version number, setting it to the new release:
+(Running, eg, "sh build/setversions.sh 3.0.19" does this)
   NEWS
   INSTALL
   README

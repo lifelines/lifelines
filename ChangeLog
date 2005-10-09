@@ -16,8 +16,13 @@
 	Fix setversions.sh to set versions in Windows rc files.
 
 	* ChangeLog build/setversions.sh
+
 	Revise alterfile to handle multiple sed patterns.
 	Finish handling versions listed in README.MAINTAINERS.
+
+	* ChangeLog README.MAINTAINERS
+
+	Add use of setversions.sh to README.MAINTAINERS.
 
 2005-10-08 Perry Rapp
 
