@@ -42,19 +42,31 @@ function failexit {
 }
 
 # Parse argument (should be a version, or "restore")
+# (exits if failure)
 checkparm $1
 
 # Function to apply version to one file
-# First argument is filename (eg, "NEWS")
-# Second argument is sed pattern
+# Argument#1 is filename (eg, "NEWS")
+# Arguments#2-? sed patterns, applied one after another
 function alterfile {
-  cp $1 $1.bak || failexit "Error backing up file "$1
-#TODO: Should fail if we don't get exactly one match in sed
-  sed $1 -e "$2" > $1.tmp
-  mv $1.tmp $1
+  [ ! -z "$1" ] || failexit "Missing first argument to alterfile"
+  [ ! -z "$2" ] || failexit "Missing second argument to alterfile"
+  FILEPATH=$1
+  shift
+  cp $FILEPATH $FILEPATH.bak || failexit "Error backing up file "$FILEPATH
+  # Now apply each remaining argument as sed command
+  until [ -z "$1" ]
+  do
+    # sed doesn't seem to set its return value, so we don't check
+    # that it found its match, unfortunately
+    sed $FILEPATH -e "$1" > $FILEPATH.tmp
+    mv $FILEPATH.tmp $FILEPATH || failexit "mv failed in alterfile: $FILEPATH.tmp"
+    shift
+  done
 }
 
 # Function to restore file from last backup
+# Argument#1: file to restore (from .bak version)
 function restorefile {
   if [ -e $1.bak ]
   then
@@ -63,18 +75,14 @@ function restorefile {
 }
 
 # Fix versions in an MS-Windows resource (rc) file
+# Argument#1: file to change
 function alterwinversions {
   FILEPATH=$1
-  cp $1 $1.bak2
-  SEDPAT="s/\( FILEVERSION \)[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*/\1$VERSION1,$VERSION2,$VERSION3,$JULIANVERSION/"
-  alterfile $FILEPATH "$SEDPAT"
-  SEDPAT="s/\( PRODUCTVERSION \)[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*/\1$VERSION1,$VERSION2,$VERSION3,$JULIANVERSION/"
-  alterfile $FILEPATH "$SEDPAT"
-  SEDPAT="s/\([ ]*VALUE \"FileVersion\", \"\)[0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*/\1$VERSION1, $VERSION2, $VERSION3, $JULIANVERSION/"
-  alterfile $FILEPATH "$SEDPAT"
-  SEDPAT="s/\([ ]*VALUE \"ProductVersion\", \"\)[0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*/\1$VERSION1, $VERSION2, $VERSION3, $JULIANVERSION/"
-  alterfile $FILEPATH "$SEDPAT"
-  mv $1.bak2 $1.bak
+  SEDPAT1="s/\( FILEVERSION \)[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*/\1$VERSION1,$VERSION2,$VERSION3,$JULIANVERSION/"
+  SEDPAT2="s/\( PRODUCTVERSION \)[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*,[0-9][0-9]*/\1$VERSION1,$VERSION2,$VERSION3,$JULIANVERSION/"
+  SEDPAT3="s/\([ ]*VALUE \"FileVersion\", \"\)[0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*/\1$VERSION1, $VERSION2, $VERSION3, $JULIANVERSION/"
+  SEDPAT4="s/\([ ]*VALUE \"ProductVersion\", \"\)[0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*, [0-9][0-9]*/\1$VERSION1, $VERSION2, $VERSION3, $JULIANVERSION/"
+  alterfile $FILEPATH "$SEDPAT1" "$SEDPAT2" "$SEDPAT3" "$SEDPAT4"
 }
 
 # Main function
@@ -83,7 +91,7 @@ function applyversion {
   # Compute some numbers needed later
 
   YEAR=`date +%Y`
-  MONTH=`date +%m`
+  MONTHABBR=`date +%b`
   DAY=`date +%d`
   JULIANDAY=`date +%j`
   ((JULIANVERSION=($YEAR-1990)*1000+$JULIANDAY))
@@ -109,19 +117,21 @@ function applyversion {
   alterfile ../NEWS "$SEDPAT"
   alterfile ../INSTALL "$SEDPAT"
   alterfile ../README "$SEDPAT"
-  SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[[:alnum:].\-]*)$/\1$VERSION)/"
+  SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
   alterfile ../configure.in "$SEDPAT"
-  SEDPAT="s/\(%define lifelines_version [ ]*\)[[:alnum:].\-]*$/\1$VERSION/"
+  SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile ../build/rpm/lifelines.spec "$SEDPAT"
-  SEDPAT="s/\(#define LIFELINES_VERSION \"\)[[:alnum:].\-]*\"$/\1$VERSION\\\"/"
+  SEDPAT="s/\(#define LIFELINES_VERSION \"\)[0-9][[:alnum:].\-]*\"$/\1$VERSION\\\"/"
   alterfile ../src/hdrs/version.h "$SEDPAT"
-
-# TODO (remaining files from README.MAINTAINERS):
-# docs/ll-devguide.xml (1 occurrence)
-# docs/ll-reportmanual.xml (2 occurrences)
-# docs/ll-userguide.xml (2 occurrences)
-# docs/llines.1 (& year & month as well)
-
+  SEDPAT="s/\(\[<!ENTITY llversion '\)[0-9][[:alnum:].\-]*/\1$VERSION/"
+  alterfile ../docs/ll-devguide.xml "$SEDPAT"
+  SEDPAT2="s/\(<\!entity llversion[[:space:]]*\"\)[0-9][[:alnum:].\-]*/\1$VERSION/"
+  alterfile ../docs/ll-reportmanual.xml "$SEDPAT" "$SEDPAT2"
+  alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
+  SEDPAT="s/\(^\.TH LLINES 1 \"\)[0-9]\{4\}/\1$YEAR/"
+  SEDPAT2="s/\(^\.TH LLINES 1 \"$YEAR \)[[:alpha:]]\{3\}/\1$MONTHABBR/"
+  SEDPAT3="s/\(^\.TH LLINES 1 \"$YEAR $MONTHABBR\" \"Lifelines \)[0-9][[:alnum:].\-]*/\1$VERSION/"
+  alterfile ../docs/llines.1 "$SEDPAT" "$SEDPAT2" "$SEDPAT3"
   alterwinversions ../build/msvc6/dbverify/dbVerify.rc
   alterwinversions ../build/msvc6/llexec/llexec.rc
   alterwinversions ../build/msvc6/llines/llines.rc
@@ -135,7 +145,10 @@ function restore {
   restorefile ../configure.in
   restorefile ../build/rpm/lifelines.spec
   restorefile ../src/hdrs/version.h
-
+  restorefile ../docs/ll-devguide.xml
+  restorefile ../docs/ll-reportmanual.xml
+  restorefile ../docs/ll-userguide.xml
+  restorefile ../docs/llines.1
   restorefile ../build/msvc6/dbverify/dbVerify.rc
   restorefile ../build/msvc6/llexec/llexec.rc
   restorefile ../build/msvc6/llines/llines.rc
