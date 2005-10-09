@@ -9,7 +9,7 @@
 # Add comment to top of comments at bottom if you revise this file.
 #
 
-%define lifelines_version       3.0.48
+%define lifelines_version       3.0.49
 
 Name: lifelines
 Summary: lifelines genealogy program

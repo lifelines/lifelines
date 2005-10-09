@@ -28,6 +28,14 @@
 
 	Fix incorrect cvs command shown.
 
+	* ChangeLog INSTALL NEWS README configure.in
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml docs/llines.1 src/hdrs/version.h
+
+	Bump version to 3.0.49.
+
 2005-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c
