@@ -5,6 +5,12 @@
 	Fix bug in setversions.sh causing files to be emptied
 	(use .tmp files, instead of trying to override input).
 
+	* ChangeLog build/setversions.sh
+
+	Fix reversed resore/set version logic.
+	Add handling for build/rpm/lifelines.spec.
+	Add handling for src/hdrs/version.h.
+
 2005-10-08 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/gedlib/lldatabase.c

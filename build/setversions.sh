@@ -1,5 +1,6 @@
 #!/bin/bash
-# Perry Rapp, 2005-10-08
+# Created: 2005-10-08, Perry Rapp
+# Edited:  2005-10-09, Perry Rapp
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
@@ -69,10 +70,12 @@ function applyversion {
   alterfile ../README "$SEDPAT"
   SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[[:alnum:].\-]*)$/\1$VERSION)/"
   alterfile ../configure.in "$SEDPAT"
+  SEDPAT="s/\(%define lifelines_version [ ]*\)[[:alnum:].\-]*$/\1$VERSION/"
+  alterfile ../build/rpm/lifelines.spec "$SEDPAT"
+  SEDPAT="s/\(#define LIFELINES_VERSION \"\)[[:alnum:].\-]*\"$/\1$VERSION\\\"/"
+  alterfile ../src/hdrs/version.h "$SEDPAT"
 
 # TODO (remaining files from README.MAINTAINERS):
-# build/rpm/lifelines.spec
-# src/hdrs/version.h
 # build/msvc6/dbverify/dbVerify.rc (4 occurrences)
 # build/msvc6/llexec/llexec.rc (4 occurrences)
 # build/msvc6/llines/llines.rc (4 occurrences)
@@ -89,13 +92,15 @@ function restore {
   restorefile ../INSTALL
   restorefile ../README
   restorefile ../configure.in
+  restorefile ../build/rpm/lifelines.spec
+  restorefile ../src/hdrs/version.h
 }
 
 # Invoke whichever functionality was requested
 if [ -z "$RESTORE" ]
 then
-  restore
-else
   applyversion
+else
+  restore
 fi
 
