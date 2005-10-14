@@ -278,7 +278,6 @@ convert_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	if (unitype && !eqstr(unitype, "UTF-8")) {
 		char msg[120];
 		llstrncpyf(msg, sizeof(msg), uu8, _(qSunsupuniv), unitype);
-		/* TODO: need to pass msg up to caller somehow */
 		*pmsg = _(qSunsupunix);
 		return NULL;
 	}
