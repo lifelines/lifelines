@@ -311,7 +311,9 @@ prompt_for_db:
 			strupdate(&dbrequested, "");
 		}
 		if (!select_database(dbrequested, alteration, &errmsg)) {
-			llwprintf(errmsg);
+			if (errmsg) {
+				llwprintf(errmsg);
+			}
 			alldone = 0;
 			goto finish;
 		}
