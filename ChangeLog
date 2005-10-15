@@ -8,6 +8,10 @@
 
 	Cosmetic: remove obsolete TODO comment.
 
+	* ChangeLog src/liflines/main.c
+
+	Fix crashlog name.
+
 2005-10-09 lifelines beta 3.0.49 RELEASE
 
 2005-10-09 Perry Rapp

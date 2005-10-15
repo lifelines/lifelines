@@ -295,7 +295,7 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crashlog = getlloptstr("CrashLog_llexec", NULL);
+	crashlog = getlloptstr("CrashLog_llines", NULL);
 	if (!crashlog) { crashlog = "CrashLog_llines.log"; }
 	crash_setcrashlog(crashlog);
 	/* initialize curses interface */
