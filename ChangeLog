@@ -1,5 +1,11 @@
 2005-10-15 Matt Emmerton
 
+	* ChangeLog src/btree/btrec.c
+
+	Use LLFILETEMP fopen() flag for temporary files.
+
+2005-10-15 Matt Emmerton
+
 	* ChangeLog src/gedlib/charprops.c src/gedlib/node.c
 	src/gedlib/record.c src/interp/heapused.c src/interp/pvalalloc.c
 	src/liflines/askgedc.c src/liflines/askprogram.c

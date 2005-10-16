@@ -202,7 +202,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		FATAL2(msg);
 	}
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	if (!(fn1 = fopen(scratch1, LLWRITEBINARY))) {
+	if (!(fn1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP))) {
 		char msg[sizeof(scratch1)+64];
 		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s"
 			, rkey2str(rkey), scratch1);
@@ -249,7 +249,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 /* data block must be split for new record; open second temp file */
 splitting:
 	sprintf(scratch2, "%s/tmp2", bbasedir(btree));
-	ASSERT(fn2 = fopen(scratch2, LLWRITEBINARY));
+	ASSERT(fn2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP));
 
 /* write header and 1st half of records; don't worry where new record goes */
 	nkeys(newb) = n/2;	/* temporary */
