@@ -18,7 +18,7 @@ proc main ()
         if (not(indi)) { return() }
         "Ahnentafel of " name(indi) "\n\n"
         print("Computing ahnentafel of ", name(indi), "\n",
-                "  Dots show persons per generaion\n\n")
+                "  Dots show persons per generation\n\n")
         list(ilist)
         list(alist)
         list(glist)

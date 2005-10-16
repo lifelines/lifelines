@@ -7,7 +7,7 @@
  * @description    
 
 Generate calendar of birth, death, marriage events arranged by the month 
-and day that they occured.  Generates a top level index calendar, with actual
+and day that they occurred.  Generates a top level index calendar, with actual
 events stored in a separate html file for each month.
 Warning, this report requires lifelines version 3.0.27 or later.
 
@@ -97,7 +97,7 @@ proc main ()
     if (person) {
 	addtoset(thisgen, person, 0)
 	addtoset(allgen, person, 0)
-	print("Computing descendents ")
+	print("Computing descendants ")
 	set(thisgensize,1)
 	set(gen,neg(1))
 	while(thisgensize) {
@@ -223,8 +223,8 @@ proc main ()
 
     call openfile("annver","Calendar of Anniversary Dates")
     "This calendar of anniversary dates lists events arranged by the" nl()
-    "month and day that they occured." nl()
-    "<P>Click on the month name or any highlighed day to see the events" nl()
+    "month and day that they occurred." nl()
+    "<P>Click on the month name or any highlighted day to see the events" nl()
     "for that time." nl()
     "<hr>" nl()
     "<table border=4 width=\"99%\">" nl()
@@ -299,7 +299,7 @@ proc main ()
 		    incr(l)
 		    set(ind,div(ind,2))
 		}
-		if (ne(k,3)) {  /* add separater between months */
+		if (ne(k,3)) {  /* add separator between months */
 		    "<td></td>" nl()
 		}
 		setel(daymask,mon,ind) /* save away latest day mask */
@@ -401,7 +401,7 @@ proc add_indi(indi) {
 
 /* add another event to the appropriate lists
  * events  - contains the description of the event
- * dates   - contains the date the event occured the date is stored
+ * dates   - contains the date the event occurred the date is stored
  *           as a decimal number for sorting
  *           (mon * 100 + day) * 10000 + yr
  */

@@ -55,7 +55,7 @@ proc write_header(person) {
   if (html) { "</H1>" }
   sep "\n"
   bold "Proband:" unbold " " fullname(person,0,1,80) br
-  bold "Autor:" unbold "   James R. Eggert" par
+  bold "Autor:" unbold "   " getproperty("user.fullname") par
   bold "Inhalt:" unbold br
   if (html) { "   Erl&auml;uterungen," }
   else { "   Erl\"auterungen," }
@@ -66,10 +66,11 @@ proc write_header(person) {
   ", Berichtigungen, Anfragen oder Kommentare werden als\n"
   "eMail erbeten an:" br
   if (html) {
-    "<A HREF=\"MAILTO:EggertJ@crosswinds.net\">Jim Eggert</A>"
-    "(EggertJ@crosswinds.net)"
+    "<A HREF=\"MAILTO:" getproperty("user.email") "\"> " 
+    getproperty("user.fullname") " </A>"
+    "(" getproperty("user.email") ")"
   } else {
-    "Jim Eggert (EggertJ@crosswinds.net)"
+    getproperty("user.fullname") "(" getproperty("user.email") ")"
   }
   par
   dayformat(1)

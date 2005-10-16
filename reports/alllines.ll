@@ -1,20 +1,25 @@
 /*
- * @progname       allines.ll
- * @version        1.0
- * @author         Wetmore
+ * @progname       allines.sgml.ll
+ * @version        1.1
+ * @author         Wetmore, Nozell
  * @category       
- * @output         nroff
+ * @output         SGML, NROFF
  * @description    
-
+ *
  * This program shows all ancestral lines of a specified person
  * using a pseudo-Register format.
  *
- * Output is in nroff format.  This may change to something more generic.
+ * Output is in nroff or sgml format.  This may change to something
+ * more generic.
  *
  * Tom Wetmore, ttw@shore.net
  * beta version, 27 February 1997
+ *
+ * Marc Nozell, nozell@rootsweb.com
+ * Added sgmldoc (formerly known as linuxdoc), 3 March 1997
  */
 
+global(format_type)     /* what format? nroff or sgml? */
 global(CurID)           /* ID values assigned to ancestors */
 global(BOLK)            /* list of keys of persons who begin lines */
 global(BOLG)            /* generations of begin line persons */
@@ -116,7 +121,7 @@ proc DoIt (i)
  * will be an ancestor somewhere in the line who has more than one child
  * who are also ancestors (the essence of pedigree collapse).  This program
  * collapses all lines that begin with the same person but lead to
- * different descendents (who are still all ancestors of the starting
+ * different descendants (who are still all ancestors of the starting
  * person)
  */
 
@@ -137,6 +142,8 @@ proc DoIt (i)
 
 proc GetUserOptions ()
 {
+        getintmsg(format_type, "Enter 0 for nroff, 1 for sgml")
+
         set(OPat, 1)    /* this version only follows paternal lines */
         set(ORel, 1)    /* this version shows relationships */
 }
@@ -265,9 +272,9 @@ proc ProcessCurLine ()
  * Each table entry is a list with six elements:
  * 1 Key of person
  * 2 ID of person
- * 3 Number of appearences in pedigree
- * 4 List of generations relative to key person by appearence
- * 5 List of relationships to key person by appearence
+ * 3 Number of appearances in pedigree
+ * 4 List of generations relative to key person by appearance
+ * 5 List of relationships to key person by appearance
  * 6 List of children of this person who are also ancestors of key person
  */
 
@@ -293,7 +300,7 @@ proc AddToAncTable (k, g, r, f)
                 list(l)         /* create sub-list to hold relationships */
                 enqueue(l, r)   /* init sub-list to current relationship */
                 enqueue(e, l)   /* add sub-list to table entry */
-                list(l)         /* create sub-list to hold line descendents */
+                list(l)         /* create sub-list to hold line descendants */
                 enqueue(e, l)   /* add (empty) sub-list to table entry */
                 insert(AncT, k, e)  /* add new entry to ancestor table */
                 enqueue(AncL, k)  /* add key of person to ancestor list */
@@ -380,6 +387,7 @@ proc WriteReport ()
         forlist (TOLL, k, n) {
                 call WriteLine(k)
         }
+        call WriteTail()
 }
 
 /*
@@ -403,12 +411,50 @@ proc WriteLine (k)      /* k -- key of a line's top of line person */
         }
 }
 
-proc WriteHeading () { call nroffhead() }
+proc EmitPara () {
+        if (eq(format_type, 0)) { call nroffPara() }
+        else { call sgmlPara() }
+}
+
+proc EmitLeftSquareBracket () {
+        if (eq(format_type, 0)) { call nroffLeftSquareBracket() }
+        else { call sgmlLeftSquareBracket() }
+}
+
+proc EmitRightSquareBracket () {
+        if (eq(format_type, 0)) { call nroffRightSquareBracket() }
+        else { call sgmlRightSquareBracket() }
+}
+
+proc EmitStartList () {
+        if (eq(format_type, 0)) { call nroffStartList() }
+        else { call sgmlStartList() }
+}
+
+proc EmitEndList () {
+        if (eq(format_type, 0)) { call nroffEndList() }
+        else { call sgmlEndList() }
+}
+
+proc EmitChildItem () {
+        if (eq(format_type, 0)) { call nroffChildItem() }
+        else { call sgmlChildItem() }
+}
+
+proc WriteHeading () {
+        if (eq(format_type, 0)) { call nroffhead() }
+        else { call sgmlhead() }
+}
+
+proc WriteTail () {
+        if (eq(format_type, 0)) { call nrofftail() }
+        else { call sgmltail() }
+}
 
 proc LineTitle (k)
 {
-        ".P\n.sp 2\nANCESTRAL LINE FROM " upper(name(indi(k))) "\n"
-        ".br\n-----------------------------------------------------\n"
+        if (eq(format_type, 0)) { call nroffLineTitle(k) }
+        else { call sgmlLineTitle(k) }
 }
 
 proc nroffhead ()
@@ -427,6 +473,85 @@ proc nroffhead ()
     ".na\n"
 }
 
+proc sgmlhead ()
+{
+
+    "<!doctype linuxdoc system>" nl()
+    "<article>" nl()
+    "<title>All Lines</title>" nl()
+    "<author>by Marc Nozell</author>"
+        "<abstract> " nl()
+         "This shows all ancestral lines of a specified person  using a pseudo-Register format."
+        "</abstract>" nl()
+        "<toc>" nl()
+}
+
+proc nrofftail ()
+{
+        " " nl() /* pretty boring... */
+}
+
+proc sgmltail ()
+{
+        "  </article>" nl()
+}
+
+proc nroffLineTitle (k) {
+        ".P\n.sp 2\nANCESTRAL LINE FROM " upper(name(indi(k))) "\n"
+        ".br\n-----------------------------------------------------\n"
+}
+
+proc sgmlLineTitle (k) {
+         nl()"<sect>Ancestral line from " upper(name(indi(k))) "\n"
+}
+
+proc nroffPara () {
+        ".P\n"
+}
+
+proc sgmlPara () {
+         "<p>\n"
+}
+
+proc nroffLeftSquareBracket () {
+        "["
+}
+proc sgmlLeftSquareBracket () {
+        "&lsqb;"
+}
+
+proc nroffRightSquareBracket () {
+        "]"
+}
+proc sgmlRightSquareBracket () {
+        "&rsqb;"
+}
+
+proc nroffStartList () {
+        "\n"
+}
+
+proc sgmlStartList () {
+        "<enum>\n"
+}
+
+proc nroffEndList () {
+        "\n"
+}
+
+proc sgmlEndList () {
+        "</enum>\n"
+}
+
+proc nroffChildItem () {
+        " "
+}
+
+proc sgmlChildItem () {
+        "<item>\n"
+}
+
+
 /*
  * WriteChildren - This routine writes out the children for a person in an
  * ancestral line.
@@ -440,24 +565,28 @@ proc WriteChildren (e)
                 if (s) { set(u, save(name(s))) }
                 else   { set(u, "(_____)") }
                 if (lookup(FamT, key(f))) {
-                        ".P\n"
+                        call EmitPara()
                         "Children of " name(p) " and " u
                         " listed under " u ".\n"
                 } elsif (gt(nchildren(f), 0)) {
-                        ".P\n"
+                        call EmitPara()
                         "Children of " name(p) " and " u ":\n"
+                        call EmitStartList()
                         children(f, c, m) {
                                 if (inlist(cl, key(c))) {
                                         set(ce, lookup(AncT, key(c)))
-                                        ".CH " d(getel(ce, 2)) " "
+                                        call EmitChildItem()
+                                        d(getel(ce, 2)) " "
                                         roman(m) "\n"
                                         call shortvitals(c)
                                 } else {
-                                        ".CH \"\" " roman(m) "\n"
+                                        call EmitChildItem()
+                                        roman(m) "\n"
                                         call middlevitals(c)
                                 }
                         }
                         insert(FamT, savekey(key(f)), 1)
+                        call EmitEndList()
                 }
         }
 }
@@ -469,26 +598,33 @@ proc shortvitals (i)
         if (and(b, short(b))) { ", b. " short(b) }
         if (and(d, short(d))) { ", d. " short(d) }
         ".\n"
+        call EmitPara()
 }
 
 proc middlevitals (i)
 {
         name(i) ".\n"
         set(e, birth(i))
-        if(and(e,long(e))) { "Born " long(e) ".\n" }
+        if(and(e,long(e))) {
+                call EmitPara()
+                "Born " long(e) ".\n" }
         if (eq(1, nspouses(i))) {
                 spouses(i, s, f, n) {
+                        call EmitPara()
                         "Married"
                         call spousevitals(s, f)
                 }
         } else {
                 spouses(i, s, f, n) {
+                        call EmitPara()
                         "Married " ord(n) ","
                         call spousevitals(s, f)
                 }
         }
         set(e, death(i))
-        if(and(e, long(e))) { "Died " long(e) ".\n" }
+        if(and(e, long(e))) {
+                call EmitPara()
+                "Died " long(e) ".\n" }
         set(p, 0)
 }
 
@@ -504,17 +640,19 @@ proc middlevitals (i)
 proc WriteLinePerson (e)
 {
         set(p, indi(getel(e, 1)))
-        "\n.P\n"
+        call EmitPara()
         d(getel(e, 2)) "  "
         name(p)
         if (ORel) {
-                " [" set(c, "")
+                call EmitLeftSquareBracket()
+                set(c, "")
                 forlist (getel(e, 5), r, n) {
                         c call ShowRel(r) set(c, ", ")
                 }
-                "]"
+                call EmitRightSquareBracket()
         }
         ".\n"
+        call EmitPara()
         set(o, birth(p))
         if(and(o, long(o))) { "Born " long(o) ".\n" }
         if (eq(1, nspouses(p))) {
@@ -532,7 +670,9 @@ proc WriteLinePerson (e)
         if(and(o, long(o))) { "Died " long(o) ".\n" }
         set(b, 0)
         fornotes(root(p), n) {
-                if (not(b)) { ".P\n" set(b, 1) }
+                if (not(b)) {
+                        call EmitPara()
+                        set(b, 1) }
                 n "\n"
         }
 }

@@ -48,7 +48,7 @@ proc main ()
 
   "0 HEAD \n"
   "1 SOUR LIFELINES\n"
-  "2 VER 3.0.1\n"
+  "2 VER " version() "\n"
   "2 NAME AF-IMPORT REPORT\n"
   "1 DEST LIFELINES\n"
   "2 VER 3.0.1\n"

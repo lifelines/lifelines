@@ -1,11 +1,20 @@
 2005-10-16 Stephen Dum
         * ChangeLog docs/ll-reportmanual.{txt,pdf,html}
         docs/ll-userguide.{xml,txt,pdf,html} reports famtree1.ll
+	reports/af-import.ll reports/ahnenliste.ll reports/ahnentafel.ll
+        reports/alllines.ll reports/anc2_ged.ll reports/anniver.ll
+	reports/alllines.sgml.ll
+
 
 	Add user.phone to the list of mentioned user properties.
 	update famtree1.ll to use user properties by applying Larry Hamilton's
 	patch.
 	Regenerate formatted manuals.
+	Increase use of getproperty() and fix typos in some reports.
+	replaced reports/alllines.ll with  reports/alllines.sgml.ll
+	and removed reports/alllines.sgml.ll
+	as they are really the same report.  the sgml version does both
+	nroff and sgml.
 
 2005-10-15 Matt Emmerton
 
