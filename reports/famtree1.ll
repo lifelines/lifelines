@@ -72,10 +72,10 @@ proc main ()
          * yourself.
          */
         table(compiler)
-        insert(compiler,"name", "James Patton Jones")
-        insert(compiler,"addr", "619 West Remington Drive, Sunnyvale, CA 94087")
-        insert(compiler,"phone", "408.739.4556")
-        insert(compiler,"email", "jjones@nas.nasa.gov")
+	insert(compiler,"name", getproperty("user.fullname"))
+	insert(compiler,"addr", getproperty("user.address"))
+	insert(compiler,"phone", getproperty("user.phone"))
+	insert(compiler,"email", getproperty("user.email"))
 
         getindi(indi)
         if (eq(indi, NULL)) {

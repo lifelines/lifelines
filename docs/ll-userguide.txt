@@ -1,7 +1,7 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.48
+LifeLines Version 3.0.49
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -2340,6 +2340,18 @@ System and User Properties
    configuration files, in each LifeLines database or in some cases by
    environment variables.
 
+   System Properties are properties that have a predefined meaning to
+   lifelines, such as LLEDITOR (see its meaning below). User Properties
+   typically have no predefined meanings as they are simply a string that a
+   report  looks up in the property tables. It can be anything a user
+   desires. To simplify report writing a number of User Properties are
+   predefined with specific meanings. These User Property Names begin with
+   'user.' and are listed below. For example, many reports have abstracted
+   the  concept  of the user's name to the property user.fullname. By
+   defining this property in your llines startup file, it allows a report
+   to reference your name as the source of the data being printed without
+   having it hard-coded in the report.
+
    When LifeLines begins execution, it reads any specified configuration
    files and extracts Properties from the files read. It is possible for
    multiple configuration files to be read. Properties defined in these
@@ -2356,9 +2368,9 @@ System and User Properties
    option, or if LLCONFIGFILE is defined as an environment variable use the
    value  supplied as the name of the configuration file. Do not read
    configuration information from the files listed in 2a, 2b, 2c, or 2d.
-   2a If the file /etc/lifelines.conf exists, read it. In fact, '/etc' is
-   the standard location for system configuration files as defined when
-   lifelines was built. It is often /etc or /usr/local/etc.
+   2a  If  the  file /etc/lifelines.conf exists, read it. '/etc' is a
+   placeholder for the standard location for system configuration files as
+   defined when lifelines was built. It is often /etc or /usr/local/etc.
    2b. If the file $HOME/.linesrc exists, load parameters from it.
    2c. If the file .linesrc exists in the current directory read parameters
    from it.
@@ -2622,6 +2634,9 @@ System and User Properties
 
    user.address
           Postal address of the current user.
+
+   user.phone
+          The phone number of the current user.
 
    user.url
           URL to the users home page.

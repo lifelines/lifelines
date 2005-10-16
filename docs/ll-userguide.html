@@ -36,7 +36,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.48</H2
+> Version 3.0.49</H2
 ><H3
 CLASS="author"
 ><A
@@ -7720,6 +7720,18 @@ CLASS="application"
 or in some cases by environment variables.
 </P
 ><P
+>&#13;System Properties are properties that have a predefined meaning to lifelines,
+such as LLEDITOR (see its meaning below).  User Properties typically have no
+predefined meanings as they are simply a string that a report looks up in the
+property tables.  It can be anything a user desires.  To simplify report
+writing a number of User Properties are predefined with specific meanings.
+These User Property Names begin with 'user.' and are listed below.  For
+example, many reports have abstracted the concept of the user's name to
+the property user.fullname.  By defining this property in your llines startup
+file, it allows a report to reference your name as the source of the data
+being printed without having it hard-coded in the report.
+</P
+><P
 >&#13;When <TT
 CLASS="application"
 >LifeLines</TT
@@ -7735,7 +7747,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1680"
+NAME="AEN1681"
 ></A
 ><TABLE
 BORDER="0"
@@ -7775,9 +7787,9 @@ information from the files listed in 2a, 2b, 2c, or 2d.
 ><TD
 >2a</TD
 ><TD
->&#13;If the file /etc/lifelines.conf exists, read it.  In fact, '/etc' is the
-standard location for system configuration files as defined when lifelines was
-built.  It is often /etc or /usr/local/etc.
+>&#13;If the file /etc/lifelines.conf exists, read it.  '/etc' is a placeholder for
+the standard location for system configuration files as defined when 
+lifelines was built.  It is often /etc or /usr/local/etc.
 </TD
 ></TR
 ><TR
@@ -8587,6 +8599,15 @@ fetched from the system when possible.
 ><DD
 ><P
 >&#13;Postal address of the current user. 
+</P
+></DD
+><DT
+><B
+>user.phone</B
+></DT
+><DD
+><P
+>&#13;The phone number of the current user. 
 </P
 ></DD
 ><DT

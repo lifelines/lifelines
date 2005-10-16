@@ -1,3 +1,12 @@
+2005-10-16 Stephen Dum
+        * ChangeLog docs/ll-reportmanual.{txt,pdf,html}
+        docs/ll-userguide.{xml,txt,pdf,html} reports famtree1.ll
+
+	Add user.phone to the list of mentioned user properties.
+	update famtree1.ll to use user properties by applying Larry Hamilton's
+	patch.
+	Regenerate formatted manuals.
+
 2005-10-15 Matt Emmerton
 
 	* ChangeLog src/btree/btrec.c

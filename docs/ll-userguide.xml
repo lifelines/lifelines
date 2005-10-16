@@ -4838,6 +4838,18 @@ configuration files, in each <application>LifeLines</application> database
 or in some cases by environment variables.
 </para>
 <para>
+System Properties are properties that have a predefined meaning to lifelines,
+such as LLEDITOR (see its meaning below).  User Properties typically have no
+predefined meanings as they are simply a string that a report looks up in the
+property tables.  It can be anything a user desires.  To simplify report
+writing a number of User Properties are predefined with specific meanings.
+These User Property Names begin with 'user.' and are listed below.  For
+example, many reports have abstracted the concept of the user's name to
+the property user.fullname.  By defining this property in your llines startup
+file, it allows a report to reference your name as the source of the data
+being printed without having it hard-coded in the report.
+</para>
+<para>
 When <application>LifeLines</application> begins execution, it reads any
 specified configuration files and extracts Properties from the files read.
 It is possible for multiple configuration files to be read.  Properties
@@ -5380,6 +5392,13 @@ fetched from the system when possible.
 
 <para>
 Postal address of the current user. 
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm>user.phone</glossterm><glossdef>
+
+<para>
+The phone number of the current user. 
 </para>
 </glossdef></glossentry>
 
