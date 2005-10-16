@@ -1,3 +1,23 @@
+2005-10-15 Matt Emmerton
+
+	* ChangeLog src/gedlib/charprops.c src/gedlib/node.c
+	src/gedlib/record.c src/interp/heapused.c src/interp/pvalalloc.c
+	src/liflines/askgedc.c src/liflines/askprogram.c
+	src/liflines/browse.c src/tools/prettytt.c
+
+	Fix up instances where we were passing hard-coded mode strings
+	(such as "r" or "w") to fopen() instead of using the appropriate
+	LL macros (which map "r" to "rt" on Windows, as so on.)
+
+	src/gedlib/xreffile.c
+
+	Code cleanup/optimization.
+
+	src/hdrs/standard.h
+
+	Add new #defines for "random file I/O" and "temporary file"
+	fopen() flags.
+
 2005-10-15 Perry Rapp
 
 	* ChangeLog src/liflines/main.c

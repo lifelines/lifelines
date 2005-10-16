@@ -286,7 +286,7 @@ free_all_pvalues (void)
 		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
 		FILE * fp=0;
 		if (report_leak_path)
-			fp = fopen(report_leak_path, "at");
+			fp = fopen(report_leak_path, LLAPPENDTEXT);
 		if (fp) {
 			LLDATE date;
 			TABLE_ITER tabit = begin_table_iter(leaktab);

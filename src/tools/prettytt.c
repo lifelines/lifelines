@@ -68,7 +68,7 @@ prettytt (const char * f1, const char * f2)
 	FILE *fp1=stdin, *fp2=stdout;
 	int c;
 	if (f1) {
-		fp1 = fopen(f1, "r");
+		fp1 = fopen(f1, LLREADTEXT);
 		if (!fp1) {
 			fprintf(stderr, "Could not open input file: %s\n"
 				, f1);
@@ -76,7 +76,7 @@ prettytt (const char * f1, const char * f2)
 		}
 	}
 	if (f2) {
-		fp2 = fopen(f2, "w");
+		fp2 = fopen(f2, LLWRITETEXT);
 		if (!fp2) {
 			fprintf(stderr, "Could not open output file: %s\n"
 				, f2);

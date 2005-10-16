@@ -50,11 +50,16 @@
 #define LLWRITEBINARY "wb"
 #define LLAPPENDTEXT "at"
 
+#define LLFILERANDOM "R"
+#define LLFILETEMP "T"
+
 #define LLSTRPATHSEPARATOR ";"
 #define LLSTRDIRSEPARATOR "\\"
 #define LLCHRPATHSEPARATOR ';'
 #define LLCHRDIRSEPARATOR '\\'
+
 #else
+
 #define LLREADTEXT "r"
 #define LLREADBINARY "r"
 #define LLREADBINARYUPDATE "r+"
@@ -62,10 +67,14 @@
 #define LLWRITEBINARY "w"
 #define LLAPPENDTEXT "a"
 
+#define LLFILERANDOM ""
+#define LLFILETEMP ""
+
 #define LLSTRPATHSEPARATOR ":"
 #define LLSTRDIRSEPARATOR "/"
 #define LLCHRPATHSEPARATOR ':'
 #define LLCHRDIRSEPARATOR '/'
+
 #endif
 
 #ifndef INCLUDED_STDARG_H

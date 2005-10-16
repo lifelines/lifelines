@@ -74,7 +74,7 @@ __heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	node=node; /* unused */
 	stab=stab; /* unused */
 
-	if(errfp == NULL) errfp = fopen("pbm.err", "wt");
+	if(errfp == NULL) errfp = fopen("pbm.err", LLWRITETEXT);
 
 	repcnt = 4;
 	heapused = 0;

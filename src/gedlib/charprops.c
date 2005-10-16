@@ -67,7 +67,7 @@ charprops_load_utf8 (void)
 	
 	loaded_utf8 = -1;
 	concat_path(ttpath, "UnicodeDataExcerpt.txt", uu8, filepath, sizeof(filepath));
-	fp = fopen(filepath, "r");
+	fp = fopen(filepath, LLREADTEXT);
 	if (!fp)
 		return FALSE;
 	while (fgets(line, sizeof(line), fp)) {

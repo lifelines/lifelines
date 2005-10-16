@@ -85,7 +85,7 @@ add_program_props (TABLE fileprops)
 	STRING filepath = concat_path_alloc(dir, fname);
 	char enc_cmd[] = "char_encoding(\"";
 
-	if (NULL == (fp = fopen(filepath, "r")))
+	if (NULL == (fp = fopen(filepath, LLREADTEXT)))
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */

@@ -1610,7 +1610,7 @@ save_nkey_list (STRING key, struct hist * histp)
 
 	unlink(editfile);
 
-	fp = fopen(editfile, "w");
+	fp = fopen(editfile, LLWRITETEXT);
 	if (!fp) return;
 
 	/* write count first -- twice just to take up 8 bytes same as records */

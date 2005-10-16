@@ -759,15 +759,13 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 	, INT *nsours, INT *nevens, INT *nothrs)
 {
 	char scratch[100];
-	STRING fmode;
 	FILE * fp = 0;
 	INT i;
 	INT ndels[5], nmax[5];
 
 	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", path);
-	fmode = LLREADBINARY;
-	if (!(fp = fopen(scratch, fmode))) {
+	if (!(fp = fopen(scratch, LLREADBINARY))) {
 		return FALSE;
 	}
 	for (i=0; i<5; ++i) {

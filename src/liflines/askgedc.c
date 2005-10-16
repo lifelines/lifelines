@@ -90,7 +90,7 @@ add_gedcom_props (TABLE fileprops)
 		add_prop_dnum(fileprops, "bytes", str);
 	}
 
-	if (NULL == (fp = fopen(filepath, "r")))
+	if (NULL == (fp = fopen(filepath, LLREADTEXT)))
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
