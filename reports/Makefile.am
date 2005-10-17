@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
 	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll  \
-	all_anc_lines.ll allfam10c.ll alllines.ll alllines.sgml.ll      \
+	all_anc_lines.ll allfam10c.ll alllines.ll                       \
 	altern.ll anc2_ged.ll ancestors2.ll anniver.ll                  \
 	bday_cover.ll bias.ll  bkdes16-1.ll book-latex.ll 		\
 	browser.ll burial_index.ll BW_descendants.ll cid.ll connect2.ll	\

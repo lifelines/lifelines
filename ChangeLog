@@ -3,7 +3,7 @@
         docs/ll-userguide.{xml,txt,pdf,html} reports famtree1.ll
 	reports/af-import.ll reports/ahnenliste.ll reports/ahnentafel.ll
         reports/alllines.ll reports/anc2_ged.ll reports/anniver.ll
-	reports/alllines.sgml.ll
+	reports/alllines.sgml.ll  reports/Makefile.am
 
 
 	Add user.phone to the list of mentioned user properties.
