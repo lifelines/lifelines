@@ -1192,6 +1192,11 @@ __card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*==========================================+
  * __roman -- Convert integer to Roman numeral
  *   usage: roman(INT) -> STRING
+ * The roman system only expressed positive numbers (>0)
+ * numbers larger than 3000 were expressed by adding a bar
+ * above a symbol to indicate multiply by 1000.  This usage 
+ * no longer current, as the largest numbers usually expressed
+ * are dates.  So this code handles 1 thru 3999.
  *=========================================*/
 static char *rodigits[] = {
 	"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"
@@ -1199,10 +1204,16 @@ static char *rodigits[] = {
 static char *rotens[] = {
 	"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"
 };
+static char *rohuns[] = {
+	"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"
+};
+static char *rothou[] = {
+	"", "m", "mm", "mmm"
+};
 PVALUE
 __roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	static char scratch[10];
+	static char scratch[20];
 	INT i;
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val = eval_and_coerce(PINT, arg, stab, eflg);
@@ -1212,10 +1223,18 @@ __roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	i = pvalue_to_int(val);
 	delete_pvalue(val);
-	if (i < 1 || i >= 99)
+	if (i < 1 || i > 3999)
 		sprintf(scratch, "%d", i);
-	else
-		sprintf(scratch, "%s%s", rotens[i/10], rodigits[i%10]);
+	else {
+		int t;
+		int m = i/1000;
+		i =  i%1000;
+		t = i/100;
+		i = i%100;
+
+		sprintf(scratch, "%s%s%s%s", rothou[m], rohuns[t],
+		                             rotens[i/10], rodigits[i%10]);
+	}
 	return create_pvalue_from_string(scratch);
 }
 /*================================================+

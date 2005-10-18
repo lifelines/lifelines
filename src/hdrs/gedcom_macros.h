@@ -275,7 +275,6 @@
 		}\
 		fath = fam_to_husb_node(fam);\
 		moth = fam_to_wife_node(fam);\
-		++num;\
 		{
 
 #define ENDFAMCS \

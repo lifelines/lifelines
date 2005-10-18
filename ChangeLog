@@ -1,3 +1,13 @@
+2005-10-16 Stephen Dum
+        * ChangeLog src/hdrs/gedcom_macros.h src/interp/builtin.c
+
+	Parents iterator was returning counts of 2,4,...
+	FORFAMCS macro was incrementing count twice for each family.
+	roman() would only handle numbers less than 100.  Enhanced it
+	to handle numbers up to 3999, which reflect conventional use of roman
+	numbers (i.e. for years).  Numbers larger than this require special
+	symbols and are no longer used.
+
 2005-10-17 Matt Emmerton
 
 	* ChangeLog src/btree/opnbtree.c src/btree/index.c
