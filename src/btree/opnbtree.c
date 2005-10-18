@@ -116,7 +116,7 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 {
 	BTREE btree;
 	char scratch[200];
-	FILE *fp=NULL;
+	FILE *fk=NULL;
 	struct stat sbuf;
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
@@ -183,7 +183,7 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 /* Open and read key file (KEYFILE1) */
 immutretry:
 	dbmode = immut ? LLREADBINARY : LLREADBINARYUPDATE;
-	if (!(fp = fopen(scratch, dbmode))) {
+	if (!(fk = fopen(scratch, dbmode))) {
 		if (!immut && writ<2) {
 			/* maybe it is read-only media */
 			immut = TRUE;
@@ -192,13 +192,13 @@ immutretry:
 		bterrno = BTERR_KFILE;
 		goto failopenbtree;
 	}
-	if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+	if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
 		bterrno = BTERR_KFILE;
 		goto failopenbtree;
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
 	/* see btree.h for explanation of KEYFILE2 */
-	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
+	if (fread(&kfile2, sizeof(kfile2), 1, fk) == 1) {
 		if (!validate_keyfile2(&kfile2))
 			goto failopenbtree; /* validate set bterrno */
 		keyed2=TRUE;
@@ -221,20 +221,20 @@ immutretry:
 			kfile1.k_ostat = -1;
 		else
 			kfile1.k_ostat++;
-		rewind(fp);
-		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		rewind(fk);
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1) {
 			bterrno = BTERR_KFILE;
 			goto failopenbtree;
 		}
 		if (!keyed2) {
 			/* add KEYFILE2 structure */
 			init_keyfile2(&kfile2);
-			if (fwrite(&kfile2, sizeof(kfile2), 1, fp) != 1) {
+			if (fwrite(&kfile2, sizeof(kfile2), 1, fk) != 1) {
 				bterrno = BTERR_KFILE;
 				goto failopenbtree;
 			}
 		}
-		fflush(fp);
+		fflush(fk);
 	}
 
 /* Create BTREE structure */
@@ -250,7 +250,7 @@ immutretry:
 	
 	bwrite(btree) = !immut && writ && (kfile1.k_ostat == -1);
 	bimmut(btree) = immut; /* includes case that ostat is -2 */
-	bkfp(btree) = fp;
+	bkfp(btree) = fk;
 	btree->b_kfile.k_mkey = kfile1.k_mkey;
 	btree->b_kfile.k_fkey = kfile1.k_fkey;
 	btree->b_kfile.k_ostat = kfile1.k_ostat;
@@ -258,7 +258,7 @@ immutretry:
 	return btree;
 
 failopenbtree:
-	if (fp) fclose(fp);
+	if (fk) fclose(fk);
 	return NULL;
 }
 /*==================================
@@ -354,18 +354,18 @@ initbtree_exit:
 BOOLEAN
 closebtree (BTREE btree)
 {
-	FILE *fp=0;
+	FILE *fk=NULL;
 	KEYFILE1 kfile1;
 	BOOLEAN result=FALSE;
-	if (btree && ((fp = bkfp(btree)) != NULL) && !bimmut(btree)) {
+	if (btree && ((fk = bkfp(btree)) != NULL) && !bimmut(btree)) {
 		kfile1 = btree->b_kfile;
 		if (kfile1.k_ostat <= 0) {
 			/* writer-locked, should be -1 because we don't
 			cater for multiple writers */
 			kfile1.k_ostat = 0;
 		} else { /* read-only, get current shared status */
-			rewind(fp);
-			if (fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+			rewind(fk);
+			if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
 				bterrno = BTERR_KFILE;
 				goto exit_closebtree;
 			}
@@ -378,8 +378,8 @@ closebtree (BTREE btree)
 			}
 			kfile1.k_ostat--;
 		}
-		rewind(fp);
-		if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
+		rewind(fk);
+		if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1) {
 			bterrno = BTERR_KFILE;
 			goto exit_closebtree;
 		}
@@ -388,7 +388,7 @@ closebtree (BTREE btree)
 		result=TRUE;
 	}
 exit_closebtree:
-	if (fp) fclose(fp);
+	if (fk) fclose(fk);
 	if (btree) {
 		freecache(btree);
 		if(bmaster(btree)) {

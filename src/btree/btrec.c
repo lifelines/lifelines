@@ -100,7 +100,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	SHORT i, j, k, l, n, lo, hi;
 	BOOLEAN found = FALSE;
 	INT off = 0;
-	FILE *fo, *fn1, *fn2;
+	FILE *fo=NULL, *ft1=NULL, *ft2=NULL;
 	char scratch0[MAXPATHLEN], scratch1[MAXPATHLEN], scratch2[MAXPATHLEN];
 	char *p = rec;
 
@@ -202,7 +202,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		FATAL2(msg);
 	}
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	if (!(fn1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP))) {
+	if (!(ft1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP))) {
 		char msg[sizeof(scratch1)+64];
 		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s"
 			, rkey2str(rkey), scratch1);
@@ -213,32 +213,32 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	if (!found && n == NORECS - 1) goto splitting;
 
 /* no split; write new header and preceding records to temp file */
-	ASSERT(fwrite(newb, BUFLEN, 1, fn1) == 1);
+	ASSERT(fwrite(newb, BUFLEN, 1, ft1) == 1);
 	putheader(btree, newb);
 	for (i = 0; i < lo; i++) {
 		if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 			FATAL();
-		filecopy(fo, lens(old, i), fn1);
+		filecopy(fo, lens(old, i), ft1);
 	}
 
 /* write new record to temp file */
 	p = rec;
 	while (len >= BUFLEN) {
-		ASSERT(fwrite(p, BUFLEN, 1, fn1) == 1);
+		ASSERT(fwrite(p, BUFLEN, 1, ft1) == 1);
 		len -= BUFLEN;
 		p += BUFLEN;
 	}
-	if (len && fwrite(p, len, 1, fn1) != 1) FATAL();
+	if (len && fwrite(p, len, 1, ft1) != 1) FATAL();
 
 /* write rest of records to temp file */
 	if (found) i++;
 	for ( ; i < n; i++) {
 		if (fseek(fo, (long)(offs(old, i)+BUFLEN), 0)) FATAL();
-		filecopy(fo, lens(old, i), fn1);
+		filecopy(fo, lens(old, i), ft1);
 	}
 
 /* make changes permanent in database */
-	fclose(fn1);
+	fclose(ft1);
 	fclose(fo);
 	sprintf(scratch0, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
@@ -249,26 +249,26 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 /* data block must be split for new record; open second temp file */
 splitting:
 	sprintf(scratch2, "%s/tmp2", bbasedir(btree));
-	ASSERT(fn2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP));
+	ASSERT(ft2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP));
 
 /* write header and 1st half of records; don't worry where new record goes */
 	nkeys(newb) = n/2;	/* temporary */
-	ASSERT(fwrite(newb, BUFLEN, 1, fn1) == 1);
+	ASSERT(fwrite(newb, BUFLEN, 1, ft1) == 1);
 	putheader(btree, newb);
 	for (i = j = 0; j < n/2; j++) {
 		if (j == lo) {
 			p = rec;
 			while (len >= BUFLEN) {
-				ASSERT(fwrite(p, BUFLEN, 1, fn1) == 1);
+				ASSERT(fwrite(p, BUFLEN, 1, ft1) == 1);
 				len -= BUFLEN;
 				p += BUFLEN;
 			}
-			if (len && fwrite(p, len, 1, fn1) != 1)
+			if (len && fwrite(p, len, 1, ft1) != 1)
 				FATAL();
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, lens(old, i), fn1);
+			filecopy(fo, lens(old, i), ft1);
 			i++;
 		}
 	}
@@ -286,7 +286,7 @@ splitting:
 		off += lens(newb, l);
 	}
 	nkeys(xtra) = n - n/2 + 1;
-	ASSERT(fwrite(xtra, BUFLEN, 1, fn2) == 1);
+	ASSERT(fwrite(xtra, BUFLEN, 1, ft2) == 1);
 	putheader(btree, xtra);
 
 /* write second half of records to second temp file */
@@ -294,24 +294,24 @@ splitting:
 		if (j == lo) {
 			p = rec;
 			while (len >= BUFLEN) {
-				ASSERT(fwrite(p, BUFLEN, 1, fn2) == 1);
+				ASSERT(fwrite(p, BUFLEN, 1, ft2) == 1);
 				len -= BUFLEN;
 				p += BUFLEN;
 			}
-			if (len && fwrite(p, len, 1, fn2) != 1)
+			if (len && fwrite(p, len, 1, ft2) != 1)
 				FATAL();
 		} else {
 			if (fseek(fo, (long)(offs(old, i) + BUFLEN), 0))
 				FATAL();
-			filecopy(fo, lens(old, i), fn2);
+			filecopy(fo, lens(old, i), ft2);
 			i++;
 		}
 	}
 
 /* make changes permanent in database */
 	fclose(fo);
-	fclose(fn1);
-	fclose(fn2);
+	fclose(ft1);
+	fclose(ft2);
 	stdfree(old);
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(nfkey));
@@ -355,20 +355,20 @@ RAWRECORD
 readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 {
 	char scratch[MAXPATHLEN];
-	FILE *fr;
+	FILE *fd=NULL;
 	RAWRECORD rawrec;
 	INT len;
 
 	snprintf(scratch, sizeof(scratch)
 		, "%s%c%s"
 		, bbasedir(btree), LLCHRDIRSEPARATOR, fkey2path(ixself(block)));
-	if (!(fr = fopen(scratch, LLREADBINARY))) {
+	if (!(fd = fopen(scratch, LLREADBINARY))) {
 		char msg[sizeof(scratch)+64];
 		sprintf(msg, _("Failed (errno=%d) to open blockfile (rkey=%s): %s")
 			, errno, rkey2str(rkeys(block, i)), scratch);
 		FATAL2(msg);
 	}
-	if (fseek(fr, (long)(offs(block, i) + BUFLEN), 0)) {
+	if (fseek(fd, (long)(offs(block, i) + BUFLEN), 0)) {
 		char msg[sizeof(scratch)+64];
 		sprintf(msg, "Seek to offset (%d) failed for blockfile (rkey=%s)"
 			, offs(block,i), rkey2str(rkeys(block, i)));
@@ -376,7 +376,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	}
 	if ((len = lens(block, i)) == 0) {
 		*plen = 0;
-		fclose(fr);
+		fclose(fd);
 		return NULL;
 	}
 	if (len < 0) {
@@ -386,13 +386,13 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 		FATAL2(msg);
 	}
 	rawrec = (RAWRECORD) stdalloc(len + 1);
-	if (!(fread(rawrec, len, 1, fr) == 1)) {
+	if (!(fread(rawrec, len, 1, fd) == 1)) {
 		char msg[sizeof(scratch)+64];
 		sprintf(msg, "Read for %d bytes failed for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
-	fclose(fr);
+	fclose(fd);
 	rawrec[len] = 0;
 	*plen = len;
 	return rawrec;

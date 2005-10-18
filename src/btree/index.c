@@ -79,11 +79,11 @@ get_index_file (STRING path, BTREE btr, FKEY ikey)
 INDEX
 readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 {
-	FILE *fp=NULL;
+	FILE *fi=NULL;
 	INDEX index=NULL;
 	char scratch[400];
 	get_index_file(scratch, btr, ikey);
-	if ((fp = fopen(scratch, LLREADBINARY)) == NULL) {
+	if ((fi = fopen(scratch, LLREADBINARY)) == NULL) {
 		if (robust) {
 			/* fall to end & return NULL */
 			goto readindex_end;
@@ -92,14 +92,14 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 		FATAL2(scratch);
 	}
 	index = (INDEX) stdalloc(BUFLEN);
-	if (fread(index, BUFLEN, 1, fp) != 1) {
+	if (fread(index, BUFLEN, 1, fi) != 1) {
 		if (robust) {
 			goto readindex_end;
 		}
 		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
 		FATAL2(scratch);
 	}
-	if (fp) fclose(fp);
+	if (fi) fclose(fi);
 readindex_end:
 	return index;
 }
@@ -111,18 +111,18 @@ readindex_end:
 void
 writeindex (BTREE btr, INDEX index)
 {
-	FILE *fp;
+	FILE *fi=NULL;
 	char scratch[400];
 	get_index_file(scratch, btr, ixself(index));
-	if ((fp = fopen(scratch, LLWRITEBINARY)) == NULL) {
+	if ((fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));
 		FATAL2(scratch);
 	}
-	if (fwrite(index, BUFLEN, 1, fp) != 1) {
+	if (fwrite(index, BUFLEN, 1, fi) != 1) {
 		sprintf(scratch, "Error writing index file: %s", fkey2path(ixself(index)));
 		FATAL2(scratch);
 	}
-	fclose(fp);
+	fclose(fi);
 }
 /*==============================================
  * initcache -- Initialize index cache for btree
