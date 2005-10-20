@@ -19,9 +19,15 @@
 # example, the user email property (which is built-in under
 # UNIX), may be specified here like so:
 #user.email=user@domain.name
-# Similarly the user name property (also built-in under
+# Similarly the user fullname property (also built-in under
 # UNIX) may be specified like so:
-#user.name=myname
+#user.fullname=myname
+# the user address property is a one line version of your address
+#user.address=1234 Some Street, Some City, State 00000
+# the user phone property is your phone number
+#user.phone=(800)-555-1234
+# the user url property is for your url (if you have one)
+#user.url=http://mylifelines.genealogy.net
 
 # Set a variable for the lifelines root
 # Variables have % at start and end

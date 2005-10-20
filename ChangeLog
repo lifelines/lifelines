@@ -1,3 +1,9 @@
+2005-10-19 Stephen Dum
+        * ChangeLog .linesrc lines.cfg reports/anc2_ged.ll
+
+	Make use of user properties consistent.  name is user.fullname,
+	address is user.address.  Make lines.cfg and .linesrc more consistent.
+
 2005-10-16 Stephen Dum
         * ChangeLog src/hdrs/gedcom_macros.h src/interp/builtin.c
 

@@ -40,7 +40,7 @@ proc print_header()
   "1 DATE " stddate(gettoday()) nl()
   "0 @SM1@ SUBM\n"
   "1 NAME " getproperty("user.fullname") "\n"
-  "1 ADDR " getproperty("user.addr") "\n"
+  "1 ADDR " getproperty("user.address") "\n"
   "2 CONT " getproperty("user.email") "\n"
 }
 global(sour_list)
