@@ -1,5 +1,6 @@
-Running LifeLines for Windows
+Running LifeLines Genealogy Software for Windows
   Last Edited: 2003-03-05 by Perry Rapp
+  Updated:     2005-10-20 by Larry Hamilton
 
 (This presumes you have installed it, per the
 Install.LifeLines.Windows.txt document)
@@ -21,33 +22,28 @@ renaming the directory -- of course you should not do this
 whilst you have that database open in LifeLines.
 
 3) At this point, your best course of action is to begin
-reading the users manual portion of the documentation. This
-is available in the documentation download at the
-sourceforge site, and there are some older versions
-available for browsing directly on the web, from the
-sourceforge home site. This manual explains how to proceed,
-adding data and so forth.
+reading the users manual. This is available in the Documentation
+directory under the main Lifelines directory. The name of the
+manual is ll-userguide, and comes in text, PDF, HTML, and XML
+versions.
 
-Here is a URL to one version:
+This manual explains how to proceed, adding data, and general
+usage of the program.
 
-http://lifelines.sourceforge.net/manual307/index.html
-
-(You are at the Main Menu section now, but you would be
-well-advised to read the previous Introduction to GEDCOM
-section as well.)
+You would be well-advised to read the previous Introduction
+to GEDCOM section as well. See the References below for more 
+information on GEDCOM. 
 
 4) When adding a new record (eg, a new person to the
-database), LifeLines will cause Notepad to appear.  Enter
-your information in Notepad -- the following page of the
-online manual discusses entering your first person:
-
-http://lifelines.sourceforge.net/manual307/userguide/first.html
-
+database), LifeLines will cause Notepad (or the text editor
+specified in lines.cfg)  to appear.  Enter your information in
+Notepad -- page eight of the manual discusses entering your
+first person:
 
 After you have entered the information into Notepad, save
-the document by choose Save from the File menu, and then
-close Notepad (eg, Alt-F4). Switch back to LifeLines if
-necessary, and click on its titlebar if it is not
+the document by choosing Save from the File menu, and then
+close Notepad (eg, Alt-F4, or click the X). Switch back to 
+LifeLines if necessary, and click on its titlebar if it is not
 highlighted. It will have a prompt displayed, asking whether
 or not you really wish to add the new person. Normally you
 respond y and add your new person.
@@ -68,11 +64,18 @@ There is also an indication at the top of the menu such as
 to tell you that you are viewing the first page of three
 pages of menu choices for the current screen.
 
-6) If you wish to change the colors in the console window
-(the "dos" window), here is how. (This is actually not part
-of LifeLines, but is general DOS on Windows trivia).
+6) If you want to read in a GEDCOM file, the default configuration
+is to look for it in the lifelines directory. To specify a
+different directory, change the InputPath:= setting.
 
-Run the program.
+7) If you wish to change the colors in the console window
+(the "DOS" window), the following explains how. (This is 
+actually not part of LifeLines, but is general DOS on 
+Windows trivia).
+
+Run the program (This may also be done for the specific shortcut
+by right-clicking the shortcut and modifying the screen and 
+font colors on the Colors tab.).
 
 Left-click in the upper-left corner (the system menu, which
 is probably a little red box with LL in it).  You should get
@@ -87,6 +90,109 @@ change for this shortcut (ie, you'll see the new colors
 every time from now on). Choose permanent - you can always
 change them later the same way.
 
+8) If you do not want to have to specify the database to 
+use each time you start LifeLines, you can modify the 
+command used to start LifeLines. Using the example of 
+C:\lifelines, change the Target line of the shortcut tab from 
+c:\lifelines\Lines.exe to 
+c:\lifelines\Lines.exe c:\lifelines\Databases\database name. 
+Where database name is the name of the directory under the 
+Databases folder with the desired database.
+
+9) To use a text editor other than Windows Notepad, edit 
+the LLEDITOR:= property in the lines.cfg file to the path 
+and executable for the desired text editor. Please note 
+that a text editor is not the same as a word processor, 
+such as MS-Word(TM). A text editor does not add special 
+formatting, such as bold or underline, it just displays 
+it like you type it, like a typewriter.
+
+There are many good free text editors available on the internet. 
+One that has both Linux and Windows versions that functions 
+the same on both operating systems is Vim, http://www.vim.org/.
+Vim has built-in syntax highlighting for both the entry of 
+GEDCOM, and for the LifeLines Report language. Some Windows 
+users may find that Vim has a steep learning curve.
+The setting for Vim would be
+LLEDITOR:=
+
+Another good text editor with both a free and paid versions is 
+NoteTab, http:www.notetab.com/. It must be noted that while 
+this is an excellent text editor, it has a tabbed interface and 
+all text editors with a tabbed interface, on any operating 
+system, will not send back to LifeLines that it is finished 
+until the entire editor is closed, not just the tab with the 
+database entry.
+The setting for NoteTab Light that avoids issues with multiple 
+tabs is (Other tabbed editors would need to support a similar 
+command line.):
+LLEDITOR:=C:\NoteTab\NoteTab.exe /INI=LifeLines.ini
+
+10) LifeLines' Report Language is very powerful. While there 
+are many reports included with LifeLines, the Report Language 
+allows the user to create their own, or modify existing reports. 
+The report manual is in the Documentation directory. The name of 
+the manual is ll-reportmanual, and comes in text, PDF, HTML, 
+and XML versions. See the report newuser.ll in the Programs 
+directory for an example of a simple report. Run it from the 
+LifeLines menu to help verify that your lines.cfg settings 
+are correct.
+
+NOTE: When running LifeLines reports, you will be asked for 
+the filename to save the file. If you save all your reports to 
+the Outputs directory, be careful not to use the name of a 
+report you wish to keep. There is no warning if you are about 
+to overwrite an existing file.
+
+11) Suggested supporting programs. These are not supported by
+the LifeLines developers, but are included for completeness.
+
+On Linux/Unix, all of the supporting programs needed to process
+the various report data formats is usually included.
+
+For Windows users, additional free software may be needed to 
+easily access this data.
+
+Many of the reports, such as famtree.ll, and ps-anc.ll, or
+ps-circle.ll export in PostScript format. These are attractive
+reports and suitable for quality printing.
+
+To work with Postscript data, you will need to download the free 
+GhostScript program, http://www.ghostscript.com/. This allows you
+to print and/or convert Postscript files to PDF, that can be
+viewed in the Adobe Reader program,
+http://www.adobe.com/products/acrobat/readstep2.html.
+
+An additional program to simplify converting Postscript reports 
+to PDF using the Send to menu instead of the GhostScript command 
+line is MakePDF: http://www.lexacorp.com.pg/makepdf.html.
+
+The other report formats, LaTeX/TeX and NROFF, is included for
+those who want to know, and those who are interested in the
+challenge to make it work.
+
+LaTeX/TeX, pronounced "tek", is a text file with specialized markup
+language for printed documents. Some of the reports that export to
+LaTeX/TeX format, do not have any other options at this time.
+To work with TeX and LaTeX format you will need to download TeX,
+http://www.miktex.org/. A minimal installation is about 25 MB, a 
+large installation is 64 MB. and a full installation is 250 MB. 
+A NoteTab library for ease of working with MikTeX is available here:
+http://texlips.hypermart.net/index.html.
+
+There is a stand-alone LaTeX/TeX to RTF converter:
+http://sourceforge.net/projects/latex2rtf/. It is easy to use.
+
+Please note that any LaTeX/TeX conversion still requires some
+knowledge of LaTeX and editing of the file to get the desired end
+results.
+
+NROFF is specially formatted text used for man pages, the most
+common help system on Unix like operating systems. Most of the
+reports that output in NROFF format also have an RTF version
+To work with NROFF date, you will need the Perl script man2html:
+http://www.oac.uci.edu/indiv/ehood/man2html.html. This will require
+that you install Perl: http://www.activestate.com/Products/ActivePerl/.
 
 
 References:
@@ -101,3 +207,19 @@ Mailing list:
     with the BODY of the mail containing
         SUB LINES-L your full name
 
+  Archives:
+        http://listserv.nodak.edu/archives/lines-l.html
+
+GEDCOM:
+
+Version 5.5 is the last official version. 
+There is a draft version 5.5.1. 
+There is also a draft version of GEDCOM 6, which is an XML format, 
+that LifeLines will not support, except perhaps as export.
+
+Paul McBride's HTML version:
+http://homepages.rootsweb.com/~pmcbride/gedcom/55gctoc.htm
+
+Robert Simm's PDF versions:
+http://www.math.clemson.edu/~rsimms/genealogy/ll/gedcom55.pdf
+http://www.math.clemson.edu/~rsimms/genealogy/ll/ged551-5.pdf

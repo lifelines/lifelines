@@ -1,8 +1,13 @@
-LifeLines installation for Windows
+LifeLines Genealogy Software installation for Windows
   Last Edited: 2003-03-05 by Perry Rapp
+  Updated:     2005-10-20 by Larry Hamilton
 
 1) Extract the lifelines zip, eg, to c:\ which should result in all
-the lifelines programs & files appearing under c:\lifelines
+the lifelines programs & files appearing under c:\lifelines. If you
+do not have a program such as WinZip to work with zip files, a good
+free Open Source alternative is 7-Zip http://www.7-zip.org/.
+NOTE: Windows XP has the built-in capability to extract zip files,
+but cannot create them.
 
 2) If your root lifelines directory is not c:\lifelines, edit
 lines.cfg and adjust the variable %llroot% accordingly.  Also, make
@@ -23,19 +28,53 @@ for lifelines to do codeset conversion, and codeset conversion is
 fairly necessary on MS-Windows, because the Console mode window uses a
 different codeset than the rest of MS-Windows.
 
-5) To create a shortcut for Lifelines, open a windows explorer window
+5) The configuration file, lines.cfg, allows the user to specify
+values to use when the program is started. In addition to the
+configuration settings mentioned in items 2, 3, and 4 above, the
+user can enter any kind of value in this file for later retrieval
+by a report. There are five "standard" user properties that are
+consistent for all the reports included with LifeLines. For the
+reports that have a place for this information, it allows the
+configuration file to be edited once, rather than editing each report.
+
+Please note that if you change the lines.cfg file while LifeLines
+is open, you will need to quit and re-start for LifeLines to read
+the changes. See the ll-userguide in the Documentation folder, and
+the lines.cfg file itself for more information on configuration
+file settings.
+
+The "standard" lines.cfg settings are:
+
+user.fullname=Firstname Lastname
+user.address=123 My Street\nMy City, ST 12345
+user.phone=123-456-7890
+user.email=me@myemailaddress.com
+user.url=http://www.mywebsite.com/
+
+See item 10 in the Run.LifeLines.Windows.txt for a report to test
+these values.
+
+6) To create a shortcut for Lifelines, open a Windows explorer window
 (eg, right-click on "My Computer" and choose Explore), browse to your
-program directory of step (2) (eg, \Program Files\LifeLines),
-right-click on the executable (Lines.exe) and choose Copy, then move
-your cursor to a clear area on your desktop (the background where My
-Computer sits), and right-click and choose Paste Shortcut. This is
+program directory from step (2) (eg, \Program Files\LifeLines),
+right-click on the executable (Lines.exe) left-click Send To, another
+menu will appear, left-click Desktop (create shortcut). This creates
 your desktop shortcut to run the program.
 
-6) Right-click on the new shortcut icon on your desktop, and choose
+7) Right-click on the new shortcut icon on your desktop, and choose
 Rename. Adjust the name as you like (eg, to LifeLines).
 
+8) LifeLines on Windows does not always fit all the text on the
+visible part of the console window without scrolling. For example,
+on a 1024 x 768 screen resolution, right-click the shortcut then
+left-click properties and left-click the Layout tab and change the
+values of the window size to a width of 80 and a height of about 59
+allows all the menu options to fit in the console window without
+scrolling. For different resolutions, different values will be needed.
+
 Now you are ready to run LifeLines: refer to the
-Run.LifeLines.Windows.txt document.
+Run.LifeLines.Windows.txt document in the LifeLines Documentation
+directory.
 
 
 
@@ -50,4 +89,5 @@ Mailing list:
     with the BODY of the mail containing
         SUB LINES-L your full name
 
-
+  Archives:
+        http://listserv.nodak.edu/archives/lines-l.html
