@@ -122,7 +122,7 @@ writeindex (BTREE btr, INDEX index)
 		sprintf(scratch, "Error writing index file: %s", fkey2path(ixself(index)));
 		FATAL2(scratch);
 	}
-	fclose(fi);
+	if (fclose(fi) != 0) FATAL2(scratch);
 }
 /*==============================================
  * initcache -- Initialize index cache for btree

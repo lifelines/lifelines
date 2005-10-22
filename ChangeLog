@@ -12,6 +12,14 @@
 	sf Patch#1334873: Fix resource leaks
 	By Andreas Kirschbaum
 
+	* ChangeLog src/btree/btrec.c src/btree/file.c
+	src/btree/index.c src/btree/opnbtree.c
+
+	Check fclose & fflush return values.
+	Based on Andreas' patch, with wrapper checked_fclose added.
+	sf Patch#1334875: Check result values of file operations
+	By Andreas Kirschbaum
+
 2005-10-21 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt

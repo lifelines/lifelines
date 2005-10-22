@@ -191,6 +191,7 @@ write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 		return RECORD_ERROR;
 	}
 	stdfree(record);
-	fclose(fp);
+	if (fclose(fp) != 0)
+		return RECORD_ERROR;
 	return RECORD_SUCCESS;
 }

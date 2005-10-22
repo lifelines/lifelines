@@ -38,11 +38,18 @@
 #include "btreei.h"
 
 /*********************************************
+ * local enums & defines
+ *********************************************/
+
+#define CHECKED_FCLOSE(fp, qq) do_checked_fclose(fp, qq, __FILE__, __LINE__)
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
 static void check_offset(BLOCK block, RKEY rkey, INT i);
+static void do_checked_fclose(FILE * fp, CNSTRING info, STRING file, int line);
 static void filecopy(FILE*fpsrc, INT len, FILE*fpdest);
 static void movefiles(STRING, STRING);
 
@@ -238,8 +245,8 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	}
 
 /* make changes permanent in database */
-	fclose(ft1);
-	fclose(fo);
+	CHECKED_FCLOSE(ft1, scratch1);
+	fclose(fo); /* was opened read-only */
 	sprintf(scratch0, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	stdfree(old);
@@ -309,9 +316,9 @@ splitting:
 	}
 
 /* make changes permanent in database */
-	fclose(fo);
-	fclose(ft1);
-	fclose(ft2);
+	fclose(fo); /* was opened read-only */
+	CHECKED_FCLOSE(ft1, scratch1);
+	CHECKED_FCLOSE(ft2, scratch2);
 	stdfree(old);
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(nfkey));
@@ -376,7 +383,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	}
 	if ((len = lens(block, i)) == 0) {
 		*plen = 0;
-		fclose(fd);
+		fclose(fd); /* readonly */
 		return NULL;
 	}
 	if (len < 0) {
@@ -392,7 +399,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
-	fclose(fd);
+	fclose(fd); /* readonly */
 	rawrec[len] = 0;
 	*plen = len;
 	return rawrec;
@@ -467,13 +474,38 @@ bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 }
 /*=======================================
  * movefiles -- Move first file to second
+ * failure handled with FATAL2 macro, which exits
  *=====================================*/
 static void
-movefiles (STRING from,
-           STRING to)
+movefiles (STRING from_file, STRING to_file)
 {
-	unlink(to);
-	rename(from, to);
+	INT rtn;
+	unlink(to_file);
+	rtn = rename(from_file, to_file);
+	if (rtn) {
+		char temp[1024];
+		snprintf(temp, sizeof(temp),
+			"rename failed code %d, from <%s> to <%s>",
+			rtn, from_file, to_file);
+		FATAL2(temp);
+	}
+}
+/*=======================================
+ * do_checked_fclose -- fclose & check result
+ * failure handled with FATAL2 macro, which exits
+ *=====================================*/
+static void
+do_checked_fclose (FILE * fp, CNSTRING info, STRING file, int line)
+{
+	INT rtn;
+	rtn = fclose(fp);
+	if (rtn) {
+		char temp[1024];
+		snprintf(temp, sizeof(temp),
+			"fclose code %d, info: %s",
+			rtn, info);
+		__fatal(file, line, temp);
+	}
 }
 /*====================================================
  * isrecord -- See if there is a record with given key

@@ -234,7 +234,10 @@ immutretry:
 				goto failopenbtree;
 			}
 		}
-		fflush(fk);
+		if (fflush(fk) != 0) {
+			bterrno = BTERR_KFILE;
+			goto failopenbtree;
+		}
 	}
 
 /* Create BTREE structure */
@@ -305,7 +308,11 @@ initbtree (STRING basedir)
 		bterrno = BTERR_KFILE;
 		goto initbtree_exit;
 	}
-	fclose(fk);
+	if (fclose(fk) != 0) {
+		fk = NULL;
+		bterrno = BTERR_KFILE;
+		goto initbtree_exit;
+	}
 	fk=NULL;
 
 /* Write master index */
@@ -322,7 +329,11 @@ initbtree (STRING basedir)
 		bterrno = BTERR_INDEX;
 		goto initbtree_exit;
 	}
-	fclose(fi);
+	if (fclose(fi) != 0) {
+		fi = NULL;
+		bterrno = BTERR_INDEX;
+		goto initbtree_exit;
+	}
 	fi=NULL;
 
 /* Write first data block */
@@ -338,6 +349,13 @@ initbtree (STRING basedir)
 		bterrno = BTERR_BLOCK;
 		goto initbtree_exit;
 	}
+	if (fclose(fd) != 0) {
+		fd = NULL;
+		bterrno = BTERR_BLOCK;
+		goto initbtree_exit;
+	}
+	fd = NULL;
+
 	/* we can finally say everything is ok */
 	result=TRUE;
 
@@ -383,6 +401,13 @@ closebtree (BTREE btree)
 			bterrno = BTERR_KFILE;
 			goto exit_closebtree;
 		}
+		if (fclose(fk) != 0) {
+			fk = NULL;
+			bterrno = BTERR_KFILE;
+			goto exit_closebtree;
+		}
+		fk = NULL;
+
 		result=TRUE;
 	} else {
 		result=TRUE;
