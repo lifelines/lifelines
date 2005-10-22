@@ -455,8 +455,10 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 	FORINDISEQ(closure.outseq, el, num)
 		node = key_to_type(element_skey(el), FALSE);
 		output_top_node(&closure, node, eflg);
-		if (*eflg)
+		if (*eflg) {
+			closure_free(&closure);
 			return;
+		}
 	ENDINDISEQ
 	closure_free(&closure);
 }

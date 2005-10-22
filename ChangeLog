@@ -6,6 +6,12 @@
 	sf Patch#1334872: Fix off-by-one access to signal names list
 	By Andreas Kirschbaum
 
+	* ChangeLog src/gedlib/editmap.c src/gedlib/gengedc.c
+
+	Fix a resource leak in editmap.c and one in genged.c
+	sf Patch#1334873: Fix resource leaks
+	By Andreas Kirschbaum
+
 2005-10-21 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt

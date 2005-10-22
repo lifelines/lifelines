@@ -101,6 +101,7 @@ load_new_tt (CNSTRING filepath, INT trnum)
 			remove_trantable(tt);
 		return FALSE;
 	}
+	zs_free(&zerr);
 	/* change from old one to new one */
 	transl_set_legacy_tt(trnum, tt);
 	/* store new one in permanent record in database */
