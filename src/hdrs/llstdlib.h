@@ -75,6 +75,19 @@ BOOLEAN mkalldirs(STRING);
 STRING environ_determine_editor(INT program);
 STRING environ_determine_tempfile(void);
 
+/* fileops.c macros */
+/* (add source location to calls) */
+#define CHECKED_fclose(qfp, qfn) do_checked_fclose(qfp, qfn, __FILE__, __LINE__)
+#define CHECKED_fflush(qfp, qfn) do_checked_fflush(qfp, qfn, __FILE__, __LINE__)
+#define CHECKED_fseek(qfp, qoff, qwh, qfn) do_checked_fseek(qfp, qoff, qwh, qfn, qfn, __FILE__, __LINE__)
+#define CHECKED_fwrite(qbuf, qsz, qct, qfp, qfn) do_checked_fwrite(qbuf, qsz, qct, qfp, qfn, __FILE__, __LINE__)
+
+/* fileops.c functions */
+int do_checked_fclose(FILE *fp, STRING filename, STRING srcfile, int srcline);
+int do_checked_fflush(FILE *fp, STRING filename, STRING srcfile, int srcline);
+int do_checked_fseek(FILE *fp, long offset, int whence, STRING filename, STRING srcfile, int srcline);
+size_t do_checked_fwrite(const void *buf, size_t size, size_t count, FILE *fp, STRING filename, STRING srcfile, int srcline);
+
 /* listener.c */
 	/* callback for language change */
 typedef void (*CALLBACK_FNC)(VPTR);

@@ -38,18 +38,11 @@
 #include "btreei.h"
 
 /*********************************************
- * local enums & defines
- *********************************************/
-
-#define CHECKED_FCLOSE(fp, qq) do_checked_fclose(fp, qq, __FILE__, __LINE__)
-
-/*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
 static void check_offset(BLOCK block, RKEY rkey, INT i);
-static void do_checked_fclose(FILE * fp, CNSTRING info, STRING file, int line);
 static void filecopy(FILE*fpsrc, INT len, FILE*fpdest);
 static void movefiles(STRING, STRING);
 
@@ -235,7 +228,9 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 		len -= BUFLEN;
 		p += BUFLEN;
 	}
-	if (len && fwrite(p, len, 1, ft1) != 1) FATAL();
+	if (len) {
+		CHECKED_fwrite(p, len, 1, ft1, scratch1);
+	}
 
 /* write rest of records to temp file */
 	if (found) i++;
@@ -245,7 +240,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	}
 
 /* make changes permanent in database */
-	CHECKED_FCLOSE(ft1, scratch1);
+	CHECKED_fclose(ft1, scratch1);
 	fclose(fo); /* was opened read-only */
 	sprintf(scratch0, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
@@ -317,8 +312,8 @@ splitting:
 
 /* make changes permanent in database */
 	fclose(fo); /* was opened read-only */
-	CHECKED_FCLOSE(ft1, scratch1);
-	CHECKED_FCLOSE(ft2, scratch2);
+	CHECKED_fclose(ft1, scratch1);
+	CHECKED_fclose(ft2, scratch2);
 	stdfree(old);
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
 	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(nfkey));
@@ -488,23 +483,6 @@ movefiles (STRING from_file, STRING to_file)
 			"rename failed code %d, from <%s> to <%s>",
 			rtn, from_file, to_file);
 		FATAL2(temp);
-	}
-}
-/*=======================================
- * do_checked_fclose -- fclose & check result
- * failure handled with FATAL2 macro, which exits
- *=====================================*/
-static void
-do_checked_fclose (FILE * fp, CNSTRING info, STRING file, int line)
-{
-	INT rtn;
-	rtn = fclose(fp);
-	if (rtn) {
-		char temp[1024];
-		snprintf(temp, sizeof(temp),
-			"fclose code %d, info: %s",
-			rtn, info);
-		__fatal(file, line, temp);
 	}
 }
 /*====================================================

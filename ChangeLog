@@ -20,6 +20,12 @@
 	sf Patch#1334875: Check result values of file operations
 	By Andreas Kirschbaum
 
+	*ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/btree/btrec.c src/hdrs/llstdlib.h src/stdlib/Makefile.am
+	*NEW src/stdlib/fileops.c
+
+	Add wrappers for fclose, fflush, fseek, and fwrite, to check returns.
+
 2005-10-21 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt
