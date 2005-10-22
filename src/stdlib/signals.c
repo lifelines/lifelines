@@ -64,7 +64,7 @@ static void on_signals(int);
  * local variables
  *********************************************/
 
-static char *sig_msgs[20];
+static char *sig_msgs[21];
 
 /*********************************************
  * local & exported function definitions
@@ -156,7 +156,7 @@ on_signals (int sig)
 	/* now build description of signal (# and name) */
 	/* name is not translated til sprint'd into msg */
 	snprintf(signum, sizeof(signum), "%d", sig);
-	if (sig>=0 && sig<=ARRSIZE(sig_msgs))
+	if (sig>=0 && sig<ARRSIZE(sig_msgs))
 		signame = sig_msgs[sig];
 	else
 		signame = _(qSsigunk);

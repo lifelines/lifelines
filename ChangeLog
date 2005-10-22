@@ -1,3 +1,11 @@
+2005-10-22 Perry Rapp
+
+	* ChangeLog src/stdlib/signals.c
+
+	Fix signal name array size.
+	sf Patch#1334872: Fix off-by-one access to signal names list
+	By Andreas Kirschbaum
+
 2005-10-21 Perry Rapp
 
 	* ChangeLog docs/Install.LifeLines.Windows.txt
