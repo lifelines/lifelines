@@ -14,7 +14,7 @@
    connecting the two persons,
    an indented report on an individual and all families associated
    with that individual.  Details on individuals include NOTE lines.
-   Linewrapping is done with indenting maintained.
+   Line wrapping is done with indenting maintained.
 
    This program does not check to make sure that the descendant given is really
    a descendant of the ancestor.  An error will result if not.

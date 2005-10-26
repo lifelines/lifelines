@@ -123,7 +123,7 @@ proc main () {
 
         getintmsg(
                 language,
-                "Language for generated text (0=english, 1=norwegian)?"
+                "Language for generated text (0=English, 1=Norwegian)?"
         )
         if ( ne( init_strings(language), 0)) {
                 print("Couldn't initialize string table to selected language")

@@ -203,7 +203,7 @@ col(sub(20,strlen(d(totfems)))) d(totfems) "\n"
 d(nrecs) " birth combinations found\n"
 d(tot) " 'next' individuals (excluding firstborns)\n\n"
 
-/* Make approsimate corrections for roundoff errors */
+/* Make approximate corrections for roundoff errors */
 set(sqcorr,mul(50,sub(totmales,totfems)))
 set(sumnfract,mul(100,sub(totmales,totfems)))
 set(sumsqnfract,add(sumsqnfract,sqcorr))

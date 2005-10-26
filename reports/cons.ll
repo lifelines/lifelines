@@ -61,11 +61,11 @@ func coanc(A,B)
       }
     call iter(A,0,B)
     /*
-       At this point we have collected all pathes
+       At this point we have collected all paths
        leading from A to B on anc_line_stack
        Now we have to calculate f(J(i)) for all
        common ancestors that are in our list of
-       pathes (saved on common_stack), then we
+       paths (saved on common_stack), then we
        can sum up things.
     */
     while(pers,dequeue(common_stack)) {
@@ -88,10 +88,10 @@ func coanc(A,B)
 
 proc iter(current,common,target)
   /* Recursively traverses the tree (better hedge)
-     to find all pathes leading from current to
+     to find all paths leading from current to
      target. Makes use of precalculated sets
      common_anc and to_anc.
-     Fills up a list of pathes
+     Fills up a list of paths
   */
   {
   print (".")

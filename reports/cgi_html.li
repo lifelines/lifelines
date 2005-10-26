@@ -148,7 +148,7 @@ proc do_tail(indi){
 
 /***********************************************************************
  * href() - this function will return a string with an anchor of the   *
- * specified type. Currenly supported types are "Lookup", "Pedigree",  *
+ * specified type. Currently supported types are "Lookup", "Pedigree",  *
  * and "Descendant".                                                   *
  **********************************************************************/
 func href(indi, type){

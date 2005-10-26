@@ -1790,6 +1790,8 @@ order.
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
+The spouses iterator skips any family that has no spouse, whereas the
+families iterator does not.
 </para>
 
 <para>

@@ -88,7 +88,7 @@ proc main ()
 
         /* Write report to file - use Unix sort to sort output! */
         "Distribution of birth days\n\n"
-        "Month & day       Frequence\n\n"
+        "Month & day       Frequency\n\n"
         forlist(day_list, bday, num) {
                 bday
                 set(nmatch, lookup(day_counts, bday))
@@ -134,7 +134,7 @@ Total birthdays in database: 374
 Total days (out of 366)    : 236
 Total months (out of 12)   : 12
 
-Month & day       Frequence
+Month & day       Frequency
 
 AUG 12                 6
 SEP 12                 5

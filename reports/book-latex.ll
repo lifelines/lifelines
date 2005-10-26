@@ -15,13 +15,16 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.13  2005/10/26 04:40:45  dr_doom
+** make user property usage more consistent
+**
 ** Revision 1.12  2005/06/18 00:29:39  dr_doom
 ** Update formatted docs, minor cleanup in merge families
 **
 ** Revision 1.11  2004/09/02 23:11:04  rsimms
 **         Enhanced book-latex.ll to filter text to render harmless those
 **         characters meaningful to the LaTeX system.  Also added an option
-**         to supress e-mail addresses of source authors when they're specified
+**         to suppress e-mail addresses of source authors when they're specified
 **         as EMAI subnodes of AUTH nodes.  Also indented all of the code with
 **         spaces (instead of tabs/spaces mix) to make the code easier to follow.
 **
@@ -31,7 +34,7 @@
 ** Revision 1.9  2003/01/19 02:50:23  dr_doom
 **
 ** Revision 1.8  2001/10/03 02:58:55  dabright
-**  Restored some previous additionsto this report.
+**  Restored some previous additions to this report.
 **  The update from Dennis Nicklaus on 12 Aug 2001
 **  had deleted them and he asked me to re-add them. So:
 **  Add  CREM (cremated) tag processing;
@@ -119,7 +122,7 @@
 ** them, e.g. Forrest "Foggy" Morrison, not the nice Latex quotes style:
 ** Forrest ``Foggy'' Morrison, then the " marks will screw up the index.
 
-  If you'ld like to credit me & this program in your
+  If you'd like to credit me & this program in your
   introduction if it's something you're really going to publish
   that'd be nice (but not required).
   Something like this could be used:
@@ -167,7 +170,7 @@
     I try to make compound sentences using "and" whenever
     possible, and this makes for a lot of rules in the
     code to try to handle a lot of cases. I probably missed a 
-    few where the english will still come out poorly.
+    few where the English will still come out poorly.
   placename smarts:
     Also from book is the ability to recognize a place which
     is used multiple times. For instance, the first time
@@ -198,7 +201,7 @@
     something icky like "in near Mytown".
   many events:
     register-tex supported a lot more GEDCOM fields, so 
-    I tried to include all of thim.
+    I tried to include all of them.
     But I personally don't use all of them, so some may look ugly.
   charts: I added a feature that makes it draw 3 gen desc. tree charts
     for any indi who heads up a chapter.  I took code
@@ -297,7 +300,7 @@
      2 DATE ... - Date should be of format
                   [ABT|BEF|AFT|BET] [day] [JAN|...|DEC] [year] [-year for BET]
      2 PLAC ... - Comma separated list of localities appropriate for the
-                  expresstion ``in ...''.
+                  expression ``in ...''.
      3 ADDR ... - Location appropriate for the expression ``at ... in ...''.
      3 CEME ... - Location appropriate for the expression ``at ... in ...''.
      2 AGE  ... - Age appropriate for the expression ``at age ...''.
@@ -412,7 +415,7 @@
      +1 REPO ...   - library name
      +1 NOTE ...   - free form text
      +2 CONT ...
-     +1 SOUR @id@  - cite another source from bibligraphic entry
+     +1 SOUR @id@  - cite another source from bibliographic entry
      +1 TEXT ...   - free form text to print
      +2 CONT ...
 
@@ -472,7 +475,7 @@ FOR VERSION 2.2
        BOOKCHAPSPLIT note on the father, and it all comes out automatically.
        You should be careful not to have a BOOKCHAPSPLIT on anyone who
        is not the head of a line, or it'll probably come out ugly.
-       (It causes subsequenty members of the generation of the noted 
+       (It causes subsequently members of the generation of the noted 
        person to have separate chapters, as well as the children of 
        the noted person.)
 
@@ -1210,7 +1213,7 @@ proc ancestor_chapterproc(topguy) {
         call havehadchildren(indi, spouse)
       } elsif( and(female(indi), spouse, lookup(stab, key(spouse))) ) {
         /* note that the form of that if is different here than in
-           descendant reports.  It is different because we explicity
+           descendant reports.  It is different because we explicitly
            form the queue by adding the father before the mother.
            Thus, for the parent-set, the children will be printed 
            under the father. We don't check to see if the father's
@@ -1650,7 +1653,7 @@ proc longvitals(i, name_parents, name_type) {
  * 
  * d - DATE node(could be NIL)
  *
- * Returns: 1 if <d> is of the form "[BET] date1-date2"; 0 otgherwise
+ * Returns: 1 if <d> is of the form "[BET] date1-date2"; 0 otherwise
  *
  */
 func isRange(d) {
@@ -2263,7 +2266,7 @@ proc powIt(x, i) {
 
 /* print_sources(root)
    Prints all sources (SOUR lines) associated with the given GEDCOM line.  The
-   sources are formated as LaTeX footnotes.  This routine prints each SOUR line
+   sources are formatted as LaTeX footnotes.  This routine prints each SOUR line
    as a separate footnote, which is not correct.  This should be corrected so
    that all sources are combined into a single footnote.
 */

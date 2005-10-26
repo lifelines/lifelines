@@ -60,8 +60,8 @@ proc main()
   }
 
   if (eq(lengthset(common_ancestor_set), 0)) {
-    print ("Person's father and mother are not realated.")
-    "Person's father and mother are not realated.\n"
+    print ("Person's father and mother are not related.")
+    "Person's father and mother are not related.\n"
     return()
   }
 

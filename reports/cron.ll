@@ -7,7 +7,7 @@
  * @description    
 
 Generate calendar of birth, death, marriage events arranged by the year, month 
-and day that they occured.  Generates a top level index by year, with actual
+and day that they occurred.  Generates a top level index by year, with actual
 events stored in a separate html file for each decade.
 Warning, this report requires lifelines version 3.0.27 or later.
 
@@ -186,9 +186,9 @@ proc main ()
 
     /* Now print out the index page */
 
-    call openfile("cron","Cronological Event Calendar")
-    "This calendar indexes events by the year in which they occured.\n"
-	"<P>Click on the year to see the events that occured in that year.\n"
+    call openfile("cron","Chronological Event Calendar")
+    "This calendar indexes events by the year in which they occurred.\n"
+	"<P>Click on the year to see the events that occurred in that year.\n"
 	"<hr>\n"
 	"<table border=4 width=\"99%\">\n"
 
@@ -320,7 +320,7 @@ proc add_indi(indi) {
 
 /* add another event to the appropriate lists
  * events  - contains the description of the event
- * dates   - contains the date the event occured the date is stored
+ * dates   - contains the date the event occurred the date is stored
  *           as a decimal number for sorting
  *           (year * 100 + month) * 100 + day
  */

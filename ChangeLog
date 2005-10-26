@@ -1,3 +1,12 @@
+2005-10-25 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.xml reports/BW_descendants.ll
+	  reports/bday_cover.ll reports/bias.ll reports/book-latex.ll
+	  reports/cgi_html.li reports/common.ll reports/connect2.ll
+	  reports/cons.ll reports/cron.ll
+
+        Spelling corrections to reports from Larry Hamilton.
+	Minor clarification to reportmanual about families vs spouses iterator.
+
 2005-10-22 Perry Rapp
 
 	* ChangeLog src/stdlib/signals.c
