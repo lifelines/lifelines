@@ -5,7 +5,7 @@
 	src/liflines/screen.c
 
 	Allow main "browse persons" to accept any type
-	of keyed entry (eg, F1), but stills prefers persons.
+	of keyed entry (eg, F1), but still prefer persons.
 	Fix $$ browse pointers to go to person browse screen if
 	person chosen. Fix browse lists to check for types
 	before invoking tandem mode.
