@@ -164,14 +164,16 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 	*pseq =0;
 
 	if (*code == BROWSE_INDI) {
-		*pseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+		/* ctype of 'B' means any type but check persons first */
+		*pseq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 		if (!*pseq) return;
 		if ((len = length_indiseq(*pseq)) < 1) return;
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
-			*prec = key_to_irecord(key);
+			*prec = qkey_to_record(key);
 			/* leaking sequence here, Perry, 2005-09-25 */
 			*pseq = NULL;
+			*code = BROWSE_UNK; /* not sure what we got above */
 		} else {
 			*code = BROWSE_LIST;
 		}
@@ -197,13 +199,17 @@ main_browse (RECORD rec1, INT code)
 {
 	RECORD rec2=0;
 	INDISEQ seq = NULL;
-	STRING key=0;
 
 	if (!rec1)
 		prompt_for_browse(&rec1, &code, &seq);
 
 	if (!rec1 && !seq) return;
 
+	/*
+	loop here handle user browsing around through
+	persons, families, references, etc, without returning
+	to main menu
+	*/
 
 	while (code != BROWSE_QUIT) {
 		switch (code) {
@@ -219,16 +225,17 @@ main_browse (RECORD rec1, INT code)
 			code = browse_2fam(&rec1, &rec2, &seq); break;
 		case BROWSE_LIST:
 			code = browse_list(&rec1, &rec2, &seq); break;
-		case BROWSE_EVEN:
 		case BROWSE_SOUR:
+		case BROWSE_EVEN:
 		case BROWSE_AUX:
 			code = browse_aux(&rec1, &rec2, &seq); break;
 		case BROWSE_UNK:
 			ASSERT(rec1);
-			key = rmvat(nxref(nztop(rec1)));
-			switch(key[0]) {
+			switch(nztype(rec1)) {
 			case 'I': code=BROWSE_INDI; break;
 			case 'F': code=BROWSE_FAM; break;
+			case 'S': code=BROWSE_SOUR; break;
+			case 'E': code=BROWSE_EVEN; break;
 			default: code=BROWSE_AUX; break;
 			}
 		}
@@ -699,7 +706,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_POINTERS:	/* Browse to references */
 			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
 				setrecord(prec1, &tmp);
-				rtn = BROWSE_AUX;
+				rtn = BROWSE_UNK;
 				goto exitbrowse;
 			}
 			break;

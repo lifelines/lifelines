@@ -370,7 +370,8 @@ draw_win_box (WINDOW * win)
 	wborder(win, gr_vline, gr_vline, gr_hline, gr_hline, gr_ulx, gr_urx, gr_llx, gr_lrx);
 }
 /*=======================================
- * repaint_main_menu --
+ * repaint_main_menu -- Display choices for main menu
+ *  See function main_menu for actions
  *=====================================*/
 static void
 repaint_main_menu (UIWINDOW uiwin)
@@ -2517,7 +2518,7 @@ manufacture a listdisp here
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row, len = length_indiseq(seq);
 	STRING key, name;
-	NODE indi;
+	NODE recnode=0;
 	char scratch[200];
 	INT mode = 'n';
 	INT viewlines = 13;
@@ -2530,7 +2531,7 @@ manufacture a listdisp here
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
-		indi = key_to_indi(key);
+		recnode = key_to_type(key, 0);
 		if (i == 0 && scrollable) mvwaddch(win, row, 1, '^');
 		if (i == len-1 && scrollable) mvwaddch(win, row, 1, '$');
 		if (i == mark) mvwaddch(win, row, 2, 'x');
@@ -2556,9 +2557,9 @@ manufacture a listdisp here
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		if(getlloptint("DisplayKeyTags", 0) > 0) {
-			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(indi));
+			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(recnode));
 		} else {
-			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(indi));
+			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(recnode));
 		}
 		mvccwaddstr(win, row, 4, scratch);
 		row++;

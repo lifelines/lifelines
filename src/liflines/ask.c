@@ -309,7 +309,7 @@ ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
 /*============================================================
  * ask_for_any_once -- Have user identify sequence and select record
  *  ttl:   [IN]  title to present
- *  ctype: [IN]  type of record (eg, 'I') (0 for any)
+ *  ctype: [IN]  type of record (eg, 'I') (0 for any, 'B' for any preferring INDI)
  *  ask1:  [IN]  whether to present list if only one matches their desc.
  *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/

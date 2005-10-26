@@ -1,11 +1,24 @@
+2005-10-26 Perry Rapp
+
+	* ChangeLog src/gedlib/indiseq.c src/gedlib/messages.c
+	src/liflines/ask.c src/liflines/browse.c src/liflines/lbrowse.c
+	src/liflines/screen.c
+
+	Allow main "browse persons" to accept any type
+	of keyed entry (eg, F1), but stills prefers persons.
+	Fix $$ browse pointers to go to person browse screen if
+	person chosen. Fix browse lists to check for types
+	before invoking tandem mode.
+
 2005-10-25 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.xml reports/BW_descendants.ll
 	  reports/bday_cover.ll reports/bias.ll reports/book-latex.ll
 	  reports/cgi_html.li reports/common.ll reports/connect2.ll
 	  reports/cons.ll reports/cron.ll
 
-        Spelling corrections to reports from Larry Hamilton.
+	Spelling corrections to reports from Larry Hamilton.
 	Minor clarification to reportmanual about families vs spouses iterator.
+
 
 2005-10-22 Perry Rapp
 

@@ -46,7 +46,7 @@
 
 extern STRING qSlstnam, qSlstnon, qSlstwht, qSlstnad, qSlstpad, qSlstbot, qSlsttop;
 extern STRING qSasknam;
-extern STRING qSidplst, qSlstnew, qSmrkper;
+extern STRING qSidplst, qSlstnew, qSmrkrec;
 extern INDISEQ current_seq;
 
 static void name_the_list(INDISEQ seq);
@@ -172,7 +172,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			if (current_seq)
 				remove_indiseq(current_seq);
 			current_seq = NULL;
-			return BROWSE_INDI;
+			return BROWSE_UNK;
 		case 'm':        /* Mark current person */
 			mark = (cur == mark) ? -1: cur;
 			break;
@@ -192,15 +192,30 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			if (cur < top) top = cur;
 			break;
 		case 't':        /* Enter tandem mode */
+		{
+			RECORD cand1=0, cand2=0;
 			if (mark == -1 || cur == mark) {
-				message(_(qSmrkper));
+				message(_(qSmrkrec));
 				break;
 			}
-			*prec2 = rec;
+			cand2 = rec;
 			element_indiseq(seq, mark, &key, &name);
-			*prec1 = key_to_irecord(key);
-			current_seq = NULL;
-			return BROWSE_TAND;
+			cand1 = key_to_record(key);
+			if (nztype(cand1)=='I' && nztype(cand2)=='I') {
+				current_seq = NULL;
+				*prec1 = cand1;
+				*prec2 = cand2;
+				return BROWSE_TAND;
+			} else if (nztype(cand1)=='F' && nztype(cand2)=='F') {
+				current_seq = NULL;
+				*prec1 = cand1;
+				*prec2 = cand2;
+				return BROWSE_2FAM;
+			} else {
+				message(_("Tandom browse only compatible with persons or families."));
+				break;
+			}
+		}
 		case 'b':        /* Browse new persons */
 			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!newseq) break;

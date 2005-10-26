@@ -255,7 +255,7 @@ ZST qSgdxmod      = N_("The record was modified in the database.");
 ZST qSnofopn      = N_("Could not open file %s.");
 ZST qSfn2long     = N_("Filepath too long.");
 
-ZST qSmrkper      = N_("Please mark a person first.");
+ZST qSmrkrec      = N_("Please mark a record first.");
 
 ZST qSlstnam      = N_("The current list is now named %s.");
 ZST qSlstnon      = N_("The current list is not named.");
