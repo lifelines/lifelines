@@ -1,3 +1,10 @@
+2005-10-30 Matt Emmerton
+
+	* ChangeLog po/.cvsignore
+
+	Update .cvsignore to ignore .gmo files for recently-added
+	languages.
+
 2005-10-26 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/gedlib/messages.c
@@ -11,6 +18,7 @@
 	before invoking tandem mode.
 
 2005-10-25 Stephen Dum
+
 	* ChangeLog docs/ll-reportmanual.xml reports/BW_descendants.ll
 	  reports/bday_cover.ll reports/bias.ll reports/book-latex.ll
 	  reports/cgi_html.li reports/common.ll reports/connect2.ll
@@ -18,7 +26,6 @@
 
 	Spelling corrections to reports from Larry Hamilton.
 	Minor clarification to reportmanual about families vs spouses iterator.
-
 
 2005-10-22 Perry Rapp
 
@@ -43,6 +50,7 @@
 	By Andreas Kirschbaum
 
 	*ChangeLog build/msvc6/llines/llinesprj.dsp
+
 	src/btree/btrec.c src/hdrs/llstdlib.h src/stdlib/Makefile.am
 	*NEW src/stdlib/fileops.c
 
@@ -58,12 +66,14 @@
 	by Larry Hamilton.
 
 2005-10-19 Stephen Dum
+
 	* ChangeLog .linesrc lines.cfg reports/anc2_ged.ll
 
 	Make use of user properties consistent.  name is user.fullname,
 	address is user.address.  Make lines.cfg and .linesrc more consistent.
 
 2005-10-16 Stephen Dum
+
 	* ChangeLog src/hdrs/gedcom_macros.h src/interp/builtin.c
 
 	Parents iterator was returning counts of 2,4,...
@@ -83,6 +93,7 @@
 	This will make future maintenance simpler.
 
 2005-10-16 Stephen Dum
+
         * ChangeLog docs/ll-reportmanual.{txt,pdf,html}
         docs/ll-userguide.{xml,txt,pdf,html} reports famtree1.ll
 	reports/af-import.ll reports/ahnenliste.ll reports/ahnentafel.ll
