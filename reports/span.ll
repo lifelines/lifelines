@@ -1,17 +1,18 @@
 /*
  * @progname       span
- * @version        1.0
+ * @version        1.1
  * @author         Stephen Dum
  * @category       
  * @output         text
  * @description    
 
-Scan the database and report on the range of ages between birth to marriage
-and birth of parent to birth of child.  Generates a histogram of the results
-and reports minimum, maximum and average values.  Designed to be run with 
-llexec, with a command like 'llexec database -x span'.
+Scan the database and report on the range of ages between birth to marriage,
+birth of parent to birth of child, and age at death.  Generates a histogram
+of the results and reports minimum, maximum and average values.  Designed
+to be run with llexec, with a command like 'llexec database -x span'.
 
 Note, the resultant histogram will normally fit nicely in a 80 column window,
+(except death range, which could take more like 132 columns)
 if it doesn't it's usually because of some bogus dates (like seeing a mothers
 age as -8 or 70 at the birth of a child.)  This script contains added
 complexity to identify the min and max cases, however, the script verify.ll
@@ -40,6 +41,7 @@ proc main()
     list(wif_mar)      /* marriage age of wife */
     list(hus_child)    /* husbands age at birth of child */
     list(wif_child)    /* wifes age at birth of child */
+    list(death_ages)   /* age at death */
     /* to assist in identifing the unusual extreme situations, 
      * (like where it reports a husband was married at 192 years old
      * or at -46 years old
@@ -49,6 +51,7 @@ proc main()
     list(wif_mar_id)      /* Family and wife keys */
     list(hus_child_id)    /* Family, husband and child key */
     list(wif_child_id)    /* Family, wife and child key */
+    list(death_ages_id)    /* Family, husband and child key */
 
     forfam(fam, cnt) {
        list(hus_dates)    /* husband birth dates */
@@ -121,14 +124,23 @@ proc main()
 	     }
 	 }
     }
+    forindi(indi,cnt) {
+	if (val, get_birth_date(indi)) {
+	    if (val2,get_death_date(indi)) {
+		push(death_ages,sub(val2,val))
+		push(death_ages_id,key(indi))
+	    }
+	}
+    }
     print(nl())
     if (not(dohist)) {
 	print("                        min    ave     max pairs keys of match",nl())
     }
-    call output(hus_mar,hus_mar_id,    "Male Marriage Age  ")
-    call output(wif_mar,wif_mar_id,    "Female Marriage Age")
-    call output(hus_child,hus_child_id,"Husband-Child Age  ")
-    call output(wif_child,wif_child_id,"Wife-Child Age     ")
+    call output(hus_mar,hus_mar_id,     "Male Marriage Age  ")
+    call output(wif_mar,wif_mar_id,     "Female Marriage Age")
+    call output(hus_child,hus_child_id, "Husband-Child Age  ")
+    call output(wif_child,wif_child_id, "Wife-Child Age     ")
+    call output(death_ages,death_ages_id,"Death Age         ")
 }
 
 proc output(alist,idlist,title) 
@@ -264,6 +276,23 @@ func get_marriage_date(fam)
 func get_birth_date(indi)
 {
     if (b,birth(indi)) {
+       if (strlen(date(b))) {
+	  if (estdate) {
+	      if (index(date(b),"EST",1)) {
+		  return(0)
+	      }
+	  }
+	  extractdate(b,day,month,year)
+	  if (year) {
+	     return(julian(day,month,year))
+          }
+       }
+    }
+    return(0)
+}
+func get_death_date(indi)
+{
+    if (b,death(indi)) {
        if (strlen(date(b))) {
 	  if (estdate) {
 	      if (index(date(b),"EST",1)) {

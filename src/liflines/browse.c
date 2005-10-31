@@ -583,7 +583,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
-			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
@@ -1190,16 +1190,20 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			setrecord(&save, 0);
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
-			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				tmp = key_to_irecord(key);
-				setrecord(prec1, &tmp);
+				tmp = key_to_record(key);
+				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
-				rtn = BROWSE_INDI;
-				goto exitbrowse;
+				if (nztype(current) != 'F') {
+					setrecord(prec1, &current);
+					rtn = BROWSE_UNK;
+				    goto exitbrowse;
+				}
+				break;
 			}
 			*pseq = seq;
 			rtn = BROWSE_LIST;

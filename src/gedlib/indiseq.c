@@ -1840,16 +1840,11 @@ str_to_indiseq (STRING name, char ctype)
 {
 	INDISEQ seq;
 	/* 'B' is a code meaning try persons first, but allow any type */
-	char cmatch = (ctype == 'B' ? 'I' : ctype);
+	char cmatch = (ctype == 'B' ? 0 : ctype);
 	seq = find_named_seq(name);
 	if (!seq) seq = key_to_indiseq(name, cmatch);
 	if (!seq) seq = refn_to_indiseq(name, cmatch, NAMESORT);
 	if (!seq) seq = name_to_indiseq(name);
-	if (ctype=='B') {
-		cmatch = 0; /* now try any type */
-		if (!seq) seq = key_to_indiseq(name, cmatch);
-		if (!seq) seq = refn_to_indiseq(name, cmatch, NAMESORT);
-	}
 	return seq;
 }
 /*=======================================================

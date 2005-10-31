@@ -1,3 +1,11 @@
+2005-10-30 Stephen Dum
+        * ChangeLog src/gedlib/indiseq.c src/liflines/browse.c reports/span.ll
+	  docs/ll-userguide.xml
+
+	Update span.ll.
+	Enhance browse on Family, Individual and Main menu, to look
+	for keys first, then Individuals
+
 2005-10-30 Matt Emmerton
 
 	* ChangeLog po/.cvsignore

@@ -1664,9 +1664,9 @@ Example of using wildcard in browsing
      searches for all persons who match. There are three
      possibilities: no one matches; one person matches; or more
      than one person matches. In the first case
-     <application>LifeLines</application> writes: <screen>There is no
-     one in the database with that name or key.</screen> and leaves
-     you in the main menu.
+     <application>LifeLines</application> writes: 
+     <screen>There is no one in the database with that name or key.</screen>
+     and leaves you in the main menu.
 
 </para>
 
@@ -1688,17 +1688,19 @@ Example of using wildcard in browsing
 
      You may also identify a person by entering his or her
      internal, cross-reference key value. The internal key values
-     of all person records are an I followed by digits. In the
-     current version, when you enter a key value you must omit the
-     I. If <application>LifeLines</application> finds a person with
+     of all person records are an I followed by digits.
+     When you enter a key value you may omit the I.
+     If <application>LifeLines</application> finds a person with
      the key value you provide,
      <application>LifeLines</application> enters the person
-     browsing mode displaying that person.
+     browsing mode displaying that person.  You can also browse to
+     a Family, Source, or Note by entering it's key, but you must
+     include the letter identifing the key type, thus F11, S1, or N3
+     would browse to the family, source or note corresponding to the key
+     if it exists.
 
 </para>
-
-
-
+    
 <para>
 
      The browse command b is also available from most browsing
