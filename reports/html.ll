@@ -20,6 +20,9 @@ Permission is granted to anyone to use this code for any purpose.
 
 It does call the divorce() function which I added to my copy of
 Lifelines and posted to this list 2002 November 12.
+
+See:
+http://listserv.nodak.edu/cgi-bin/wa.exe?A2=ind0211b&L=lines-l&T=0&F=&S=&P=356
  */
 
 global ( page_width )
