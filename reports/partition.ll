@@ -1,6 +1,6 @@
 /*
  * @progname       partition.ll
- * @version        8
+ * @version        11
  * @author         Eggert
  * @category       
  * @output         GEDCOM
@@ -25,7 +25,10 @@ partition - a LifeLines database partitioning program
     Version 7,  21 September1994 (can partition about selected person)
     Version 8,  31 March    1995 (allow non-traditional families)
     Version 9,  23 February 1999 (changed to depth-first algorithm)
-    Version 10, 24 September2001 (use cumcount, not forindi loop variable)
+    Version 10, 24 September 2001(use cumcount, not forindi loop variable)
+    Version 11, 7 November 2005  (add header, switch to use gengedcomstrong
+                                  change output gedcom files to end in .ged
+				  changes by Stephen A. Dum)
 
 This program partitions individuals in a database into disjoint
 partitions.  A partition is composed of people related by one or more
@@ -111,14 +114,14 @@ proc main ()
     getintmsg(report_type,
     "Enter 0 for overview, 1 for full, 2 for GEDCOM report:")
     if (eq(report_type,2)) {
-    if (person_root) {
-        set(prompt,"Enter filename for GEDCOM partition:")
-    }
-    else {
-        set(prompt,"Enter root filename for GEDCOM partitions:")
-    }
-    getstrmsg(gedcom_root,prompt)
-    set(gedcom_root,save(concat(gedcom_root,".")))
+	if (person_root) {
+	    set(prompt,"Enter filename for GEDCOM partition:")
+	}
+	else {
+	    set(prompt,"Enter root filename for GEDCOM partitions:")
+	}
+	getstrmsg(gedcom_root,prompt)
+	set(gedcom_root,save(concat(gedcom_root,"_")))
     }
     else { set(gedcom_root,0) }
 
@@ -199,8 +202,19 @@ proc do_one_partition(person,report_type,gedcom_root) {
         "------------------------------------------------------------\n"
     }
     if (eq(report_type,2)) {
-        newfile(concat(gedcom_root,d(setcount)),0)
-        gengedcom(pset)
+        newfile(concat(gedcom_root,d(setcount),".ged"),0)
+	/* output a gedcom header */
+        "0 HEAD\n"
+        "1 SOUR Lifelines\n"
+	"2 VERS " version() "\n"
+        "1 DEST ANY\n"
+        "1 DATE " date(gettoday()) "\n"
+        "1 SUBM\n"
+        "1 GEDC\n"
+        "2 VERS 5.5\n"
+        "2 FORM LINEAGE-LINKED\n"
+        "1 CHAR ASCII\n"
+        gengedcomstrong(pset)
         "0 TRLR\n"
     }
     set(cumcount,add(cumcount,pcount))
