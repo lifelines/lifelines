@@ -195,22 +195,22 @@ HREF="#AEN1413"
 ></DT
 ><DT
 ><A
-HREF="#AEN1449"
+HREF="#AEN1474"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1614"
+HREF="#AEN1639"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1623"
+HREF="#AEN1648"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1672"
+HREF="#AEN1697"
 >System and User Properties</A
 ></DT
 ></DL
@@ -2628,7 +2628,8 @@ CLASS="application"
      <TT
 CLASS="application"
 >LifeLines</TT
-> writes: <TABLE
+> writes: 
+     <TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -2636,13 +2637,12 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="screen"
->There is no
-     one in the database with that name or key.</PRE
+>There is no one in the database with that name or key.</PRE
 ></TD
 ></TR
 ></TABLE
-> and leaves
-     you in the main menu.
+>
+     and leaves you in the main menu.
 
 </P
 ><P
@@ -2664,9 +2664,9 @@ CLASS="application"
 >&#13;
      You may also identify a person by entering his or her
      internal, cross-reference key value. The internal key values
-     of all person records are an I followed by digits. In the
-     current version, when you enter a key value you must omit the
-     I. If <TT
+     of all person records are an I followed by digits.
+     When you enter a key value you may omit the I.
+     If <TT
 CLASS="application"
 >LifeLines</TT
 > finds a person with
@@ -2675,7 +2675,11 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > enters the person
-     browsing mode displaying that person.
+     browsing mode displaying that person.  You can also browse to
+     a Family, Source, or Note by entering it's key, but you must
+     include the letter identifing the key type, thus F11, S1, or N3
+     would browse to the family, source or note corresponding to the key
+     if it exists.
 
 </P
 ><P
@@ -6330,9 +6334,35 @@ CLASS="glosslist"
 ><DD
 ><P
 >&#13;
-     A level 1 NAME record must have a value, and the value must not be a pointer, may 
+     A level 1 NAME record must have a value, and the value must not be a pointer, and may 
      have no more than two slashes.
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1421"
+></A
+><P
+><B
+>Example 13. 
+Example of bad NAME syntax (too many slashes in this case)
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @I99@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6369,6 +6399,32 @@ CLASS="glosslist"
      (The XREF is the letters between "0" and "INDI".)
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1436"
+></A
+><P
+><B
+>Example 14. 
+Example of person with incorrect key
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @P99@ INDI
+  1 NAME John /Smith/
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6381,6 +6437,34 @@ CLASS="glosslist"
      (The XREF is the letters between "0" and "INDI".)
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1443"
+></A
+><P
+><B
+>Example 15. 
+Example of person multiply defined
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @I99@ INDI
+  1 NAME John /Smith/
+  0 @I99@ INDI
+  1 NAME Jack /Smith/
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6393,6 +6477,32 @@ CLASS="glosslist"
      (The XREF is the letters between "0" and "FAM".)
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1450"
+></A
+><P
+><B
+>Example 16. 
+Example of family record missing key
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 FAM
+  1 HUSB @I1@
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6405,6 +6515,32 @@ CLASS="glosslist"
      (The XREF is the letters between "0" and "INDI".)
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1457"
+></A
+><P
+><B
+>Example 17. 
+Example of person record missing key
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 INDI
+  1 NAME John /Smith/
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6416,6 +6552,71 @@ CLASS="glosslist"
      A child level must be one higher than its parent level.
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1464"
+></A
+><P
+><B
+>Example 18. 
+Example of level number which is too high
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @I99@ INDI
+  1 NAME //
+  3 NOTE name is missing
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></DD
+><DT
+><B
+>This %s line is missing a value field (%s %s).</B
+></DT
+><DD
+><P
+>&#13;
+   Lineage-linking tags must have a value, including tags FAMC, FAMS, FATH, MOTH, HUSB, WIFE, CHIL.
+
+</P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1471"
+></A
+><P
+><B
+>Example 19. 
+Example of lineage-linking line which is missing required value
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;  0 @I99@ INDI
+  1 NAME John /Smith/
+  2 FAMS
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ></DL
 ></DIV
@@ -6425,7 +6626,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1449"
+NAME="AEN1474"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
@@ -6678,11 +6879,11 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1494"
+NAME="AEN1519"
 ></A
 ><P
 ><B
->Example 13. 
+>Example 20. 
 Example of a source record
 </B
 ></P
@@ -7357,7 +7558,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1614"
+NAME="AEN1639"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
@@ -7431,7 +7632,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1623"
+NAME="AEN1648"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
@@ -7504,11 +7705,11 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1638"
+NAME="AEN1663"
 ></A
 ><P
 ><B
->Example 14. 
+>Example 21. 
 Example of referring events from a person record
 </B
 ></P
@@ -7609,11 +7810,11 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1656"
+NAME="AEN1681"
 ></A
 ><P
 ><B
->Example 15. 
+>Example 22. 
 Example of adding a new person
 </B
 ></P
@@ -7700,7 +7901,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1672"
+NAME="AEN1697"
 >System and User Properties</A
 ></H2
 ><P
@@ -7747,7 +7948,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1681"
+NAME="AEN1706"
 ></A
 ><TABLE
 BORDER="0"

@@ -751,8 +751,7 @@ Enter name, key, refn or list:
    After you enter a name, LifeLines searches for all persons who match.
    There are three possibilities: no one matches; one person matches; or
    more than one person matches. In the first case LifeLines writes:
-There is no
-     one in the database with that name or key.
+   There is no one in the database with that name or key.
 
    and leaves you in the main menu.
 
@@ -763,10 +762,13 @@ There is no
 
    You  may  also  identify a person by entering his or her internal,
    cross-reference key value. The internal key values of all person records
-   are an I followed by digits. In the current version, when you enter a
-   key value you must omit the I. If LifeLines finds a person with the key
-   value you provide, LifeLines enters the person browsing mode displaying
-   that person.
+   are an I followed by digits. When you enter a key value you may omit the
+   I. If LifeLines finds a person with the key value you provide, LifeLines
+   enters the person browsing mode displaying that person. You can also
+   browse to a Family, Source, or Note by entering it's key, but you must
+   include the letter identifing the key type, thus F11, S1, or N3 would
+   browse to the family, source or note corresponding to the key if it
+   exists.
 
    The browse command b is also available from most browsing modes. The
    command works the same way from those modes as it does from the main
@@ -1874,7 +1876,13 @@ IMPORT ERRORS
 
    Bad NAME syntax.
           A level 1 NAME record must have a value, and the value must not
-          be a pointer, may have no more than two slashes.
+          be a pointer, and may have no more than two slashes.
+
+          Example 13. Example of bad NAME syntax (too many slashes in this
+          case) 
+
+  0 @I99@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
 
    Family %s has an incorrect key.
           Each FAM record must have an XREF value beginning with the letter
@@ -1888,20 +1896,59 @@ IMPORT ERRORS
           Each INDI record must have an XREF value beginning with the
           letter I. (The XREF is the letters between "0" and "INDI".)
 
+          Example 14. Example of person with incorrect key 
+
+  0 @P99@ INDI
+  1 NAME John /Smith/
+
    Person %s is multiply defined: skipped.
           No XREF value of an INDI may be reused. (The XREF is the letters
           between "0" and "INDI".)
+
+          Example 15. Example of person multiply defined 
+
+  0 @I99@ INDI
+  1 NAME John /Smith/
+  0 @I99@ INDI
+  1 NAME Jack /Smith/
 
    The family defined here has no key.
           Each FAM record must have an XREF value. (The XREF is the letters
           between "0" and "FAM".)
 
+          Example 16. Example of family record missing key 
+
+  0 FAM
+  1 HUSB @I1@
+
    The person defined here has no key: skipped.
           Each  INDI record must have an XREF value. (The XREF is the
           letters between "0" and "INDI".)
 
+          Example 17. Example of person record missing key 
+
+  0 INDI
+  1 NAME John /Smith/
+
    This line has a level number that is too large.
           A child level must be one higher than its parent level.
+
+          Example 18. Example of level number which is too high 
+
+  0 @I99@ INDI
+  1 NAME //
+  3 NOTE name is missing
+
+   This %s line is missing a value field (%s %s).
+          Lineage-linking tags must have a value, including tags FAMC,
+          FAMS, FATH, MOTH, HUSB, WIFE, CHIL.
+
+          Example 19. Example of lineage-linking line which is missing
+          required value 
+
+  0 @I99@ INDI
+  1 NAME John /Smith/
+  2 FAMS
      _____________________________________________________________
 
 HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
@@ -1986,7 +2033,7 @@ What activity do you want to perform?
           level, via the user options, or globally, via the configuration
           file). Here is how I recorded one of the sources in my database:
 
-          Example 13. Example of a source record 
+          Example 20. Example of a source record 
 
   0 SOUR
   1 REFN jcw
@@ -2282,7 +2329,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    this is referring events within a person record to the record of the
    information source for the event. For example:
 
-   Example 14. Example of referring events from a person record 
+   Example 21. Example of referring events from a person record 
 0 @I23@ INDI
   1 NAME Thomas/Whitmore/
   1 BIRT
@@ -2315,7 +2362,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    internal key value. For example, when adding the person in the previous
    example you could edit the new record as follows:
 
-   Example 15. Example of adding a new person 
+   Example 22. Example of adding a new person 
   0 INDI
   1 NAME Thomas/Whitmore/
   1 BIRT
