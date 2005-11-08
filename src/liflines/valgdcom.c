@@ -91,7 +91,7 @@ static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSmisval      = N_("Line %d: This %s line is missing a value field.");
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
-static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s.");
+static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s %s.");
 
 ELMNT *index_data = NULL;
 
@@ -112,15 +112,15 @@ static int check_akey (int firstchar, STRING keyp, INT *maxp);
 static void check_even_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_fam_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_indi_links(IMPORT_FEEDBACK ifeed, ELMNT per);
-static void check_level1_tag(IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING val, INT line);
+static void check_level1_tag(IMPORT_FEEDBACK ifeed, CNSTRING tag, CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0);
 static void check_othr_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_references(IMPORT_FEEDBACK ifeed);
 static void check_sour_links(IMPORT_FEEDBACK ifeed, ELMNT src);
 static void clear_structures(void);
 static ELMNT create_elmnt(CHAR eltype, CNSTRING xref);
 static void free_elmnt(ELMNT el);
-static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line);
-static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
+static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0);
+static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0);
 static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
@@ -128,6 +128,7 @@ static BOOLEAN openlog(void);
 static void handle_warn(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void handle_err(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void set_import_log(STRING logpath);
+static void report_missing_value(IMPORT_FEEDBACK ifeed, STRING tag, INT line, CNSTRING tag0, CNSTRING xref0);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
@@ -141,6 +142,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	XLAT xlat = transl_get_predefined_xlat(MGDIN);
 	STRING xref, tag, val, msg;
 	STRING tag0=0;
+	STRING xref0=0;
 
 	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
@@ -190,6 +192,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			}
 			defline = flineno;
 			strupdate(&tag0, tag); /* store current level 0 tag */
+			strupdate(&xref0, xref); /* store current level 0 xref (eg I15) */
 			if (eqstr("HEAD", tag))  {
 				rec_type = (nhead==0 ? HEAD_REC : IGNR_REC);
 			} else if (eqstr("TRLR", tag)) {
@@ -231,13 +234,13 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			else if (rec_type == TRLR_REC)
 				handle_trlr_lev1(ifeed, tag, val, flineno);
 			else if (rec_type == INDI_REC)
-				handle_indi_lev1(ifeed, tag, val, flineno);
+				handle_indi_lev1(ifeed, tag, val, flineno, tag0, xref0);
 			else if (rec_type == FAM_REC)
-				handle_fam_lev1(ifeed, tag, val, flineno);
+				handle_fam_lev1(ifeed, tag, val, flineno, tag0, xref0);
 			else
 				handle_value(val, flineno);
 			/* specific handling for specific tag types */
-			check_level1_tag(ifeed, tag0, tag, val, flineno);
+			check_level1_tag(ifeed, tag, val, flineno, tag0, xref0);
 		}
 		curlev = lev;
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
@@ -531,10 +534,19 @@ handle_trlr_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 	line=line; /* unused */
 }
 /*===========================================================
+ * report_missing_value -- Report line with incorrectly empty value
+ *=========================================================*/
+static void
+report_missing_value (IMPORT_FEEDBACK ifeed, STRING tag, INT line, CNSTRING tag0, CNSTRING xref0)
+{
+	handle_err(ifeed, _("Line %d: This %s line is missing a value field (%s %s).")
+		, line, tag, tag0, xref0);
+}
+/*===========================================================
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
 static void
-handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0)
 {
 	ELMNT indi, pers;
 	ASSERT(person != -1);
@@ -544,19 +556,19 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 	indi = index_data[person];
 	if (eqstr(tag, "FAMC")) {
 		if (!pointer_value(val)) {
-			handle_err(ifeed, qSmisval, line, "FAMC");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		(void) add_fam_defn(ifeed, rmvat(val), 0);
 	} else if (eqstr(tag, "FAMS")) {
 		if (!pointer_value(val)) {
-			handle_err(ifeed, qSmisval, line, "FAMS");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		(void) add_fam_defn(ifeed, rmvat(val), 0);
 	} else if (eqstr(tag, "FATH")) {
 		if (!pointer_value(val)) {
-			handle_warn(ifeed, qSmisval, line, "FATH");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		Male(indi) += 1;
@@ -564,7 +576,7 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
-			handle_warn(ifeed, qSmisval, line, "MOTH");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		Fmle(indi) += 1;
@@ -578,7 +590,8 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 	} else if (eqstr(tag, "NAME")) {
 		named = TRUE;
 		if (!val || *val == 0 || !valid_name(val)) {
-			handle_err(ifeed, _("Line %d: Bad NAME syntax."), line);
+			handle_err(ifeed, _("Line %d: Bad NAME syntax (%s %s)."),
+				line, tag0, xref0);
 			return;
 		}
 	} else
@@ -588,14 +601,14 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
 static void
-handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0)
 {
 	ELMNT fam, pers;
 	fam = (family != -1) ? index_data[family] : NULL;
 	if (eqstr(tag, "HUSB")) {
 		++members;
 		if (!pointer_value(val)) {
-			handle_err(ifeed, qSmisval, line, "HUSB");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		if (fam) Male(fam) += 1;
@@ -604,7 +617,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 	} else if (eqstr(tag, "WIFE")) {
 		++members;
 		if (!pointer_value(val)) {
-			handle_err(ifeed, qSmisval, line, "WIFE");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
@@ -613,7 +626,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
 	} else if (eqstr(tag, "CHIL")) {
 		++members;
 		if (!pointer_value(val)) {
-			handle_err(ifeed, qSmisval, line, "CHIL");
+			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		(void) add_indi_defn(ifeed, rmvat(val), 0, &pers);
@@ -624,7 +637,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
  * check_level1_tag -- Warnings for specific tags at level 1
  *========================================================*/
 static void
-check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING val, INT line)
+check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
 {
 	/*
 	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
@@ -633,22 +646,22 @@ check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag0, CNSTRING tag, CNSTRING v
 	val = val;    /* unused */
 	if (eqstr(tag, "FAMS")) {
 		if (!eqstr(tag0, "INDI"))
-			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
 		return;
 	}
 	if (eqstr(tag, "FAMC")) {
 		if (!eqstr(tag0, "INDI"))
-			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
 		return;
 	}
 	if (eqstr(tag, "HUSB")) {
 		if (!eqstr(tag0, "FAM"))
-			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
 		return;
 	}
 	if (eqstr(tag, "WIFE")) {
 		if (!eqstr(tag0, "FAM"))
-			handle_warn(ifeed, qSlinlev1, line, tag, tag0);
+			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
 		return;
 	}
 }
