@@ -3946,9 +3946,17 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 
 <para>
 
-     A level 1 NAME record must have a value, and the value must not be a pointer, may 
+     A level 1 NAME record must have a value, and the value must not be a pointer, and may 
      have no more than two slashes.
 </para>
+
+<example><title>
+Example of bad NAME syntax (too many slashes in this case)
+</title>
+<programlisting>
+  0 @I99@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
+</programlisting></example>
 
 </glossdef></glossentry><glossentry><glossterm>Family %s has an incorrect key.</glossterm><glossdef>
 
@@ -3977,6 +3985,14 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 
 </para>
 
+<example><title>
+Example of person with incorrect key
+</title>
+<programlisting>
+  0 @P99@ INDI
+  1 NAME John /Smith/
+</programlisting></example>
+
 </glossdef></glossentry><glossentry><glossterm>Person %s is multiply defined: skipped.</glossterm><glossdef>
 
 <para>
@@ -3985,6 +4001,16 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
      (The XREF is the letters between "0" and "INDI".)
 
 </para>
+
+<example><title>
+Example of person multiply defined
+</title>
+<programlisting>
+  0 @I99@ INDI
+  1 NAME John /Smith/
+  0 @I99@ INDI
+  1 NAME Jack /Smith/
+</programlisting></example>
 
 </glossdef></glossentry><glossentry><glossterm>The family defined here has no key.</glossterm><glossdef>
 
@@ -3995,6 +4021,14 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 
 </para>
 
+<example><title>
+Example of family record missing key
+</title>
+<programlisting>
+  0 FAM
+  1 HUSB @I1@
+</programlisting></example>
+
 </glossdef></glossentry><glossentry><glossterm>The person defined here has no key: skipped.</glossterm><glossdef>
 
 <para>
@@ -4004,6 +4038,14 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 
 </para>
 
+<example><title>
+Example of person record missing key
+</title>
+<programlisting>
+  0 INDI
+  1 NAME John /Smith/
+</programlisting></example>
+
 </glossdef></glossentry><glossentry><glossterm>This line has a level number that is too large.</glossterm><glossdef>
 
 <para>
@@ -4011,6 +4053,32 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
      A child level must be one higher than its parent level.
 
 </para>
+
+<example><title>
+Example of level number which is too high
+</title>
+<programlisting>
+  0 @I99@ INDI
+  1 NAME //
+  3 NOTE name is missing
+</programlisting></example>
+
+</glossdef></glossentry><glossentry><glossterm>This %s line is missing a value field (%s %s).</glossterm><glossdef>
+
+<para>
+
+   Lineage-linking tags must have a value, including tags FAMC, FAMS, FATH, MOTH, HUSB, WIFE, CHIL.
+
+</para>
+
+<example><title>
+Example of lineage-linking line which is missing required value
+</title>
+<programlisting>
+  0 @I99@ INDI
+  1 NAME John /Smith/
+  2 FAMS
+</programlisting></example>
 
 </glossdef></glossentry></glosslist>
 

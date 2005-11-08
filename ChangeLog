@@ -4,6 +4,10 @@
 
 	Report top-level key in warnings & errors.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Add examples to import errors, and add entry for missing values.
+
 2005-11-07 Stephen Dum
         * ChangeLog reports/partition.ll
 
