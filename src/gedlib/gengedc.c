@@ -191,6 +191,28 @@ closure_is_dump (CLOSURE * closure)
 	return closure->gengedcl==GENGEDCOM_WEAK_DUMP
 		|| closure->gengedcl==GENGEDCOM_STRONG_DUMP;
 }
+
+/*============================================================
+ * is_valid_key - verify that key points to a valid lifelines
+ * gedcom xref - @[IFSEX][1-9][0-9]*@
+ * note that number is not zero filled
+ * with @'s length of key can be MAXKEYWIDTH+2
+ *==========================================================*/
+static int 
+is_valid_key(CNSTRING key) {
+    CNSTRING ptr = key;
+    if (!ptr) return FALSE;
+    if (*ptr++ != '@') return FALSE;
+    if (*ptr != 'I' && *ptr != 'F' && *ptr != 'S' 
+		&& *ptr != 'E' && *ptr != 'X') return FALSE;
+    ptr++;
+    if (*ptr < '1' || *ptr > '9') return FALSE;
+    for (ptr++; isdigit(*ptr); ++ptr) ;
+    if (ptr > key+MAXKEYWIDTH+1) return FALSE;
+    if (*ptr != '@') return FALSE;
+    return TRUE;
+}
+
 /*============================================================
  * process_node_value -- process the node's value for pointers
  * add any pointers in the value to the closure
@@ -204,7 +226,7 @@ process_node_value (CLOSURE * closure, STRING v)
 		if (v[0]=='@' && v[1] && v[2])
 		{
 			int skeynum;
-			char skeybuff[20]; /* what should this be ? max key size */
+			char skeybuff[MAXKEYWIDTH+1];
 			skeynum = atoi(&v[2]);
 			sprintf(skeybuff, "%c%d", v[1], skeynum);
 			if (v[1]=='S')
@@ -242,7 +264,7 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 			int ispointer=0;
 			if (insidepointer && v[0]=='@')
 				insidepointer=0;
-			else if (v[0]=='@' && v[1] && v[2])
+			else if (v[0]=='@' && is_valid_key(v))
 			{
 				if (closure_is_original(closure))
 				{ /* original only suppressed family linking pointers */
@@ -263,7 +285,7 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 			if (ispointer)
 			{
 				int skeynum;
-				char skeybuff[32]; /* what should this be ? max key size */
+				char skeybuff[MAXKEYWIDTH+1];
 				skeynum = atoi(&v[2]);
 				sprintf(skeybuff, "%c%d", v[1], skeynum);
 				if (!closure_has_key(closure, skeybuff))
@@ -348,12 +370,13 @@ static void
 process_any_node (CLOSURE * closure, NODE node)
 {
 	STRING v;
+	CNSTRING w;
 	v = nval(node);
 
 	if (!closure_is_strong(closure))
 		return;
 
-	if (v && strchr(v, '@'))
+	if (v && (w=strchr(v, '@')) && is_valid_key(w))
 		process_node_value(closure, v);
 
 	if (nchild(node))
