@@ -1,3 +1,9 @@
+2005-11-07 Stephen Dum
+        * ChangeLog reports/partition.ll
+
+	Change report to use gengedcomstrong, print out a gedcom header
+	and output gedcom files, whose names end in .ged
+
 2005-11-06 Perry Rapp
 	
 	* ChangeLog reports/html.ll
