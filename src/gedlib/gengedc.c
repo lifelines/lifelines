@@ -207,7 +207,7 @@ is_valid_key(CNSTRING key) {
 		&& *ptr != 'E' && *ptr != 'X') return FALSE;
     ptr++;
     if (*ptr < '1' || *ptr > '9') return FALSE;
-    for (ptr++; isdigit(*ptr); ++ptr) ;
+    for (++ptr; isdigit(*ptr); ++ptr) ;
     if (ptr > key+MAXKEYWIDTH+1) return FALSE;
     if (*ptr != '@') return FALSE;
     return TRUE;
