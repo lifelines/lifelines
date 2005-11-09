@@ -60,7 +60,7 @@ static void join (PNODE list, PNODE last);
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
 %token  TRAVERSE FORNODES FORLIST_TOK FORFAM FORSOUR FOREVEN FOROTHR
-%token  BREAK CONTINUE RETURN FATHERS MOTHERS PARENTS FCONS
+%token  BREAK CONTINUE RETURN FATHERS MOTHERS PARENTUNITS PARENTS FCONS
 
 %%
 
@@ -129,6 +129,12 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = children_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
+			((PNODE)$$)->i_line = (INT)$2;
+		}
+       |        PARENTUNITS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
+		{
+			/* consumes $6 and $8 */
+			$$ = parentunit_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INT)$2;
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'

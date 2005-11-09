@@ -2,6 +2,8 @@
 	* ChangeLog src/gedlib/gengedc.c docs/ll-reportmanual.html 
 	  docs/ll-reportmanual.pdf docs/ll-reportmanual.txt 
 	  docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
+	  src/interp/alloc.c src/interp/interp.c src/interp/interpi.h
+	  src/interp/lex.c src/interp/yacc.y
 
 	Ignore @ signs in the value of a record if it is
 	not the start of a valid key when writing out gedcom's.

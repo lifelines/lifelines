@@ -2014,6 +2014,13 @@ loop through children of family
 </para>
 
 </glossdef></glossentry>
+<glossentry><glossterm><synopsis><command>parentunits</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+
+<para>
+loop through all parents of family
+</para>
+
+</glossdef></glossentry>
 <glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
@@ -2073,6 +2080,15 @@ order.
 expression; its second parameter is a variable that iterates through each child; its third parameter is
 an integer counter variable that counts the children starting at one. These two variables may be used
 within the loop body.
+</para>
+
+<para>
+<function>parentunits</function> is an iterator that loops through all the
+parents of a family.
+Its first parameter is a family expression; its second parameter is a
+variable that iterates through each parent; its third parameter is
+an integer counter variable that counts the parents starting at one.
+These two variables may be used within the loop body.
 </para>
 
 <para>

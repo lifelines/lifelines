@@ -672,6 +672,17 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				return irc;
 			}
 			break;
+		case IPARENTUNIT:
+			switch (irc = interp_parentunit(node, stab, pval)) {
+			case INTOKAY:
+			case INTBREAK:
+				break;
+			case INTERROR:
+				goto interp_fail;
+			default:
+				return irc;
+			}
+			break;
 		case ISPOUSES:
 			switch (irc = interp_spouses(node, stab, pval)) {
 			case INTOKAY:
@@ -936,6 +947,54 @@ interp_children (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 aloop:	;
 	ENDCHILDRENx
+	irc = INTOKAY;
+aleave:
+	delete_symtab_element(stab, ichild(node));
+	delete_symtab_element(stab, inum(node));
+	unlock_cache(fcel);
+	return irc;
+}
+/*========================================+
+ * interp_parentunit -- Interpret parentunit loop
+ *  usage: parentunit(FAM,INDI_V,INT_V) {...}
+ *=======================================*/
+INTERPTYPE
+interp_parentunit (PNODE node, SYMTAB stab, PVALUE *pval)
+{
+	BOOLEAN eflg = FALSE;
+	INT nspouse;
+	CACHEEL fcel, cel;
+	INTERPTYPE irc;
+	PVALUE val;
+	NODE fam = (NODE) eval_fam(iloopexp(node), stab, &eflg, &fcel);
+	if (eflg) {
+		prog_error(node, nonfamx, "parentunit", "1");
+		return INTERROR;
+	}
+	if (fam && nestr(ntag(fam), "FAM")) {
+		prog_error(node, badargx, "parentunit", "1");
+		return INTERROR;
+	}
+	if (!fam) return INTOKAY;
+	lock_cache(fcel);
+	FORFAMSPOUSES(fam, spouse, nspouse)
+		val = create_pvalue_from_indi(spouse);
+		insert_symtab(stab, ichild(node), val);
+		insert_symtab(stab, inum(node), create_pvalue_from_int(nspouse));
+		/* val should be real person, because it came from FORFAMSPOUSES */
+		cel = pvalue_to_cel(val);
+		lock_cache(cel);
+		irc = interpret((PNODE) ibody(node), stab, pval);
+		unlock_cache(cel);
+		switch (irc) {
+		case INTCONTINUE:
+		case INTOKAY:
+			goto aloop;
+		default:
+			goto aleave;
+		}
+aloop:	;
+	ENDFAMSPOUSES
 	irc = INTOKAY;
 aleave:
 	delete_symtab_element(stab, ichild(node));

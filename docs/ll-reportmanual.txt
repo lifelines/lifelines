@@ -981,6 +981,10 @@ children (FAM, INDI_V, INT_V) { commands }
 
           loop through children of family
 
+parentunits (FAM_V, INT_V) { commands }
+
+          loop through all parents of family
+
 forfam (FAM_V, INT_V) { commands }
 
           loop through all families in database
@@ -1022,6 +1026,12 @@ forfam (FAM_V, INT_V) { commands }
    variable that iterates through each child; its third parameter is an
    integer counter variable that counts the children starting at one. These
    two variables may be used within the loop body.
+
+   parentunits is an iterator that loops through all the parents of a
+   family. Its first parameter is a family expression; its second parameter
+   is a variable that iterates through each parent; its third parameter is
+   an integer counter variable that counts the parents starting at one.
+   These two variables may be used within the loop body.
 
    Forfam is an iterator that loops through every family in the database in
    ascending key order. Its first parameter is a variable that iterates
