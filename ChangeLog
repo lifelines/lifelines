@@ -1,5 +1,5 @@
 2005-11-08 Stephen Dum
-        * ChangeLog src/gedlib/gengedc.c docs/ll-reportmanual.html 
+	* ChangeLog src/gedlib/gengedc.c docs/ll-reportmanual.html 
 	  docs/ll-reportmanual.pdf docs/ll-reportmanual.txt 
 	  docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
 
@@ -7,6 +7,9 @@
 	not the start of a valid key when writing out gedcom's.
 	The prevents discarding any record with a random @ in it.
 	Update Formatted docs
+	Add parentunits iterator, that iterates over all parents in a family
+	(the name is less than desirable, but parents and Parents already
+	exist.)
 
 2005-11-08 Perry Rapp
 
