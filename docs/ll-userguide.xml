@@ -3940,7 +3940,29 @@ IMPORT ERRORS
 </title>
 
 <para>
-Errors generated during a GEDCOM import are logged to a file, by default named errs.log. 
+Errors generated during a GEDCOM import are logged to a file,
+by default named errs.log. 
+</para>
+<para>
+A number of errors are related to having an incorrect XREF value.
+An XREF is the internal name used to Identify a family, individual, note,
+source or other record.  An XREF is bracked by two @ signs.  As an example
+</para>
+<programlisting>  0 @F6@ FAM
+  1 HUSB @I25@
+  1 WIFE @I26@
+  1 CHIL @I17@</programlisting>
+<para>
+Here F6 is the internal name of this family.  The family refers
+to other individuals by specifing their XREF values.  Here I25, I26 and I17
+are XREF values of individuals. 
+</para>
+<para>
+XREF values used within lifelines are totally under the control of lifelines.
+The values that are used are always of the form, a single letter, followed by
+a number.  However, when importing a gedcom lifelines should accept almost
+anything as an XREF, converting it to what is needed for internal use.
+
 </para>
 <glosslist><glossentry><glossterm>Bad NAME syntax.</glossterm><glossdef>
 
@@ -3953,19 +3975,33 @@ Errors generated during a GEDCOM import are logged to a file, by default named e
 <example><title>
 Example of bad NAME syntax (too many slashes in this case)
 </title>
-<programlisting>
-  0 @I99@ INDI
+<programlisting>  0 @I99@ INDI
   1 NAME Mary /Smith/ nee /Jones/
 </programlisting></example>
 
-</glossdef></glossentry><glossentry><glossterm>Family %s has an incorrect key.</glossterm><glossdef>
+</glossdef></glossentry><glossentry>
+<glossterm>Family F13 has an incorrect key.</glossterm>
+<glossdef><para></para></glossdef></glossentry>
+<glossentry>
+<glossterm>Person XYZ has an incorrect key: skipped.</glossterm>
+<glossdef>
 
 <para>
 
-     Each FAM record must have an XREF value beginning with the letter F.
-     (The XREF is the letters between "0" and "FAM".)
+     The XREF values must be unique.  These error messages are
+     generated if a XREF is found to refer to two different records.
+     For example, the XREF for a family is the same as one for an individual.
 
 </para>
+
+<example><title>
+Example of XREF XYZ being defined twice
+</title>
+<programlisting>  0 @XYZ@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
+  0 @XYZ@ FAM
+  1 HUSB @I48@
+</programlisting></example>
 
 </glossdef></glossentry><glossentry><glossterm>Person defined here has no name.</glossterm><glossdef>
 
@@ -3976,39 +4012,21 @@ Example of bad NAME syntax (too many slashes in this case)
 
 </para>
 
-</glossdef></glossentry><glossentry><glossterm>Person %s has an incorrect key: skipped.</glossterm><glossdef>
+</glossdef></glossentry><glossentry><glossterm>Person INDI_XYZ is multiply defined: skipped.</glossterm><glossdef>
 
 <para>
 
-     Each INDI record must have an XREF value beginning with the letter I.
-     (The XREF is the letters between "0" and "INDI".)
-
-</para>
-
-<example><title>
-Example of person with incorrect key
-</title>
-<programlisting>
-  0 @P99@ INDI
-  1 NAME John /Smith/
-</programlisting></example>
-
-</glossdef></glossentry><glossentry><glossterm>Person %s is multiply defined: skipped.</glossterm><glossdef>
-
-<para>
-
-     No XREF value of an INDI may be reused.
-     (The XREF is the letters between "0" and "INDI".)
+     No XREF value of an INDI may be reused.  This message indicates that
+     INDI_XYZ has been used to identify two different persons.
 
 </para>
 
 <example><title>
 Example of person multiply defined
 </title>
-<programlisting>
-  0 @I99@ INDI
+<programlisting>  0 @INDI_XYZ@ INDI
   1 NAME John /Smith/
-  0 @I99@ INDI
+  0 @INDI_XYZ@ INDI
   1 NAME Jack /Smith/
 </programlisting></example>
 
@@ -4024,10 +4042,19 @@ Example of person multiply defined
 <example><title>
 Example of family record missing key
 </title>
-<programlisting>
-  0 FAM
+<programlisting>  0 FAM
   1 HUSB @I1@
 </programlisting></example>
+
+</glossdef></glossentry><glossentry><glossterm>Family F123 is referred to but
+not defined.</glossterm><glossdef>
+
+<para>
+
+     A FAMS or FAMC record on an Individual refers to a family
+     but there is no FAM record with that XREF.
+
+</para>
 
 </glossdef></glossentry><glossentry><glossterm>The person defined here has no key: skipped.</glossterm><glossdef>
 
@@ -4041,8 +4068,7 @@ Example of family record missing key
 <example><title>
 Example of person record missing key
 </title>
-<programlisting>
-  0 INDI
+<programlisting>  0 INDI
   1 NAME John /Smith/
 </programlisting></example>
 
@@ -4057,13 +4083,13 @@ Example of person record missing key
 <example><title>
 Example of level number which is too high
 </title>
-<programlisting>
-  0 @I99@ INDI
+<programlisting>  0 @I99@ INDI
   1 NAME //
   3 NOTE name is missing
 </programlisting></example>
 
-</glossdef></glossentry><glossentry><glossterm>This %s line is missing a value field (%s %s).</glossterm><glossdef>
+</glossdef></glossentry><glossentry><glossterm>This FAMS line is missing a
+value field (INDI I99).</glossterm><glossdef>
 
 <para>
 
@@ -4074,8 +4100,7 @@ Example of level number which is too high
 <example><title>
 Example of lineage-linking line which is missing required value
 </title>
-<programlisting>
-  0 @I99@ INDI
+<programlisting>  0 @I99@ INDI
   1 NAME John /Smith/
   2 FAMS
 </programlisting></example>
@@ -4207,9 +4232,7 @@ from this list to edit.
      and puts you in the screen editor to edit the template. The
      default template is:
 
-<programlisting>
-
-  0 SOUR
+<programlisting>  0 SOUR
   1 REFN
   1 TITL <replaceable>Title</replaceable>
   1 AUTH <replaceable>Author</replaceable>
@@ -4240,9 +4263,7 @@ from this list to edit.
 Example of a source record
 </title>
 
-<programlisting>
-
-  0 SOUR
+<programlisting>0 SOUR
   1 REFN <userinput>jcw</userinput>
   1 TITL <userinput>The Wetmore Family of America, and its Collateral Branches: with</userinput>
     2 CONT <userinput>Genealogical, Biographical, and Historical Notices</userinput>
@@ -4350,9 +4371,8 @@ This operation (or alternatively <keycap>%e</keycap> from the person,
 family or auxiliary browse screens) adds a new event record to the
 database.  <application>LifeLines</application> creates a template
 event and puts you in the screen editor to edit the template. The
-default template is:<programlisting>
-
-0 EVEN
+default template is:
+<programlisting>0 EVEN
   1 REFN
   1 DATE
   1 PLAC
@@ -4491,8 +4511,7 @@ enter key or refn:
      puts you in the screen editor to edit the template. The
      default template is
 
-<programlisting>
-0 XXXX
+<programlisting>0 XXXX
 1 REFN
 </programlisting>
 </para>
@@ -4789,9 +4808,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
 Example of referring events from a person record
 </title>
 
-<programlisting>
-
-0 @I23@ INDI
+<programlisting>0 @I23@ INDI
   1 NAME <userinput>Thomas/Whitmore/</userinput>
   1 BIRT
     2 DATE <userinput>about 1615</userinput>
@@ -4848,9 +4865,7 @@ records are exported from one database or imported to another.
 Example of adding a new person
 </title>
 
-<programlisting>
-
-  0 INDI
+<programlisting>0 INDI
   1 NAME <userinput>Thomas/Whitmore/</userinput>
   1 BIRT
     2 DATE <userinput>about 1615</userinput>
@@ -5484,4 +5499,3 @@ URL to the users home page.
 
 </chapter>
 </book>
-

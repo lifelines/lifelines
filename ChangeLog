@@ -1,3 +1,8 @@
+2005-11-10 Stephen Dum
+	* ChangeLog ll-userguide.{xml,html,pdf,txt}
+
+	Update userguide on causes of import errors and reformat docs.
+
 2005-11-08 Stephen Dum
 	* ChangeLog src/gedlib/gengedc.c docs/ll-reportmanual.html 
 	  docs/ll-reportmanual.pdf docs/ll-reportmanual.txt 

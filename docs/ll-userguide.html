@@ -195,22 +195,22 @@ HREF="#AEN1413"
 ></DT
 ><DT
 ><A
-HREF="#AEN1474"
+HREF="#AEN1482"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1639"
+HREF="#AEN1647"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1648"
+HREF="#AEN1656"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1697"
+HREF="#AEN1705"
 >System and User Properties</A
 ></DT
 ></DL
@@ -6322,7 +6322,40 @@ NAME="AEN1413"
 >IMPORT ERRORS</A
 ></H2
 ><P
->&#13;Errors generated during a GEDCOM import are logged to a file, by default named errs.log. 
+>&#13;Errors generated during a GEDCOM import are logged to a file,
+by default named errs.log. 
+</P
+><P
+>&#13;A number of errors are related to having an incorrect XREF value.
+An XREF is the internal name used to Identify a family, individual, note,
+source or other record.  An XREF is bracked by two @ signs.  As an example
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  0 @F6@ FAM
+  1 HUSB @I25@
+  1 WIFE @I26@
+  1 CHIL @I17@</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;Here F6 is the internal name of this family.  The family refers
+to other individuals by specifing their XREF values.  Here I25, I26 and I17
+are XREF values of individuals. 
+</P
+><P
+>&#13;XREF values used within lifelines are totally under the control of lifelines.
+The values that are used are always of the form, a single letter, followed by
+a number.  However, when importing a gedcom lifelines should accept almost
+anything as an XREF, converting it to what is needed for internal use.
+
 </P
 ><DIV
 CLASS="glosslist"
@@ -6340,7 +6373,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1421"
+NAME="AEN1425"
 ></A
 ><P
 ><B
@@ -6356,7 +6389,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 @I99@ INDI
+>  0 @I99@ INDI
   1 NAME Mary /Smith/ nee /Jones/
 </PRE
 ></TD
@@ -6366,15 +6399,52 @@ CLASS="programlisting"
 ></DD
 ><DT
 ><B
->Family %s has an incorrect key.</B
+>Family F13 has an incorrect key.</B
+></DT
+><DD
+><P
+></P
+></DD
+><DT
+><B
+>Person XYZ has an incorrect key: skipped.</B
 ></DT
 ><DD
 ><P
 >&#13;
-     Each FAM record must have an XREF value beginning with the letter F.
-     (The XREF is the letters between "0" and "FAM".)
+     The XREF values must be unique.  These error messages are
+     generated if a XREF is found to refer to two different records.
+     For example, the XREF for a family is the same as one for an individual.
 
 </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN1436"
+></A
+><P
+><B
+>Example 14. 
+Example of XREF XYZ being defined twice
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>  0 @XYZ@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
+  0 @XYZ@ FAM
+  1 HUSB @I48@
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
 ></DD
 ><DT
 ><B
@@ -6390,57 +6460,19 @@ CLASS="programlisting"
 ></DD
 ><DT
 ><B
->Person %s has an incorrect key: skipped.</B
+>Person INDI_XYZ is multiply defined: skipped.</B
 ></DT
 ><DD
 ><P
 >&#13;
-     Each INDI record must have an XREF value beginning with the letter I.
-     (The XREF is the letters between "0" and "INDI".)
+     No XREF value of an INDI may be reused.  This message indicates that
+     INDI_XYZ has been used to identify two different persons.
 
 </P
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1436"
-></A
-><P
-><B
->Example 14. 
-Example of person with incorrect key
-</B
-></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
-CLASS="programlisting"
->&#13;  0 @P99@ INDI
-  1 NAME John /Smith/
-</PRE
-></TD
-></TR
-></TABLE
-></DIV
-></DD
-><DT
-><B
->Person %s is multiply defined: skipped.</B
-></DT
-><DD
-><P
->&#13;
-     No XREF value of an INDI may be reused.
-     (The XREF is the letters between "0" and "INDI".)
-
-</P
-><DIV
-CLASS="example"
-><A
-NAME="AEN1443"
+NAME="AEN1447"
 ></A
 ><P
 ><B
@@ -6456,9 +6488,9 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 @I99@ INDI
+>  0 @INDI_XYZ@ INDI
   1 NAME John /Smith/
-  0 @I99@ INDI
+  0 @INDI_XYZ@ INDI
   1 NAME Jack /Smith/
 </PRE
 ></TD
@@ -6480,7 +6512,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1450"
+NAME="AEN1454"
 ></A
 ><P
 ><B
@@ -6496,13 +6528,26 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 FAM
+>  0 FAM
   1 HUSB @I1@
 </PRE
 ></TD
 ></TR
 ></TABLE
 ></DIV
+></DD
+><DT
+><B
+>Family F123 is referred to but
+not defined.</B
+></DT
+><DD
+><P
+>&#13;
+     A FAMS or FAMC record on an Individual refers to a family
+     but there is no FAM record with that XREF.
+
+</P
 ></DD
 ><DT
 ><B
@@ -6518,7 +6563,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1457"
+NAME="AEN1465"
 ></A
 ><P
 ><B
@@ -6534,7 +6579,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 INDI
+>  0 INDI
   1 NAME John /Smith/
 </PRE
 ></TD
@@ -6555,7 +6600,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1464"
+NAME="AEN1472"
 ></A
 ><P
 ><B
@@ -6571,7 +6616,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 @I99@ INDI
+>  0 @I99@ INDI
   1 NAME //
   3 NOTE name is missing
 </PRE
@@ -6582,7 +6627,8 @@ CLASS="programlisting"
 ></DD
 ><DT
 ><B
->This %s line is missing a value field (%s %s).</B
+>This FAMS line is missing a
+value field (INDI I99).</B
 ></DT
 ><DD
 ><P
@@ -6593,7 +6639,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1471"
+NAME="AEN1479"
 ></A
 ><P
 ><B
@@ -6609,7 +6655,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;  0 @I99@ INDI
+>  0 @I99@ INDI
   1 NAME John /Smith/
   2 FAMS
 </PRE
@@ -6626,7 +6672,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1474"
+NAME="AEN1482"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
@@ -6830,8 +6876,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;
-  0 SOUR
+>  0 SOUR
   1 REFN
   1 TITL <TT
 CLASS="replaceable"
@@ -6879,7 +6924,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1519"
+NAME="AEN1527"
 ></A
 ><P
 ><B
@@ -6895,8 +6940,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;
-  0 SOUR
+>0 SOUR
   1 REFN <KBD
 CLASS="userinput"
 >jcw</KBD
@@ -7079,7 +7123,8 @@ CLASS="application"
 >LifeLines</TT
 > creates a template
 event and puts you in the screen editor to edit the template. The
-default template is:<TABLE
+default template is:
+<TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
@@ -7087,8 +7132,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;
-0 EVEN
+>0 EVEN
   1 REFN
   1 DATE
   1 PLAC
@@ -7299,7 +7343,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;0 XXXX
+>0 XXXX
 1 REFN
 </PRE
 ></TD
@@ -7558,7 +7602,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1639"
+NAME="AEN1647"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
@@ -7632,7 +7676,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1648"
+NAME="AEN1656"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
@@ -7705,7 +7749,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1663"
+NAME="AEN1671"
 ></A
 ><P
 ><B
@@ -7721,8 +7765,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;
-0 @I23@ INDI
+>0 @I23@ INDI
   1 NAME <KBD
 CLASS="userinput"
 >Thomas/Whitmore/</KBD
@@ -7810,7 +7853,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1681"
+NAME="AEN1689"
 ></A
 ><P
 ><B
@@ -7826,8 +7869,7 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;
-  0 INDI
+>0 INDI
   1 NAME <KBD
 CLASS="userinput"
 >Thomas/Whitmore/</KBD
@@ -7901,7 +7943,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1697"
+NAME="AEN1705"
 >System and User Properties</A
 ></H2
 ><P
@@ -7948,7 +7990,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1706"
+NAME="AEN1714"
 ></A
 ><TABLE
 BORDER="0"

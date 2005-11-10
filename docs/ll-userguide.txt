@@ -1874,6 +1874,24 @@ IMPORT ERRORS
    Errors generated during a GEDCOM import are logged to a file, by default
    named errs.log.
 
+   A number of errors are related to having an incorrect XREF value. An
+   XREF is the internal name used to Identify a family, individual, note,
+   source or other record. An XREF is bracked by two @ signs. As an example
+  0 @F6@ FAM
+  1 HUSB @I25@
+  1 WIFE @I26@
+  1 CHIL @I17@
+
+   Here F6 is the internal name of this family. The family refers to other
+   individuals by specifing their XREF values. Here I25, I26 and I17 are
+   XREF values of individuals.
+
+   XREF values used within lifelines are totally under the control of
+   lifelines. The values that are used are always of the form, a single
+   letter, followed by a number. However, when importing a gedcom lifelines
+   should accept almost anything as an XREF, converting it to what is
+   needed for internal use.
+
    Bad NAME syntax.
           A level 1 NAME record must have a value, and the value must not
           be a pointer, and may have no more than two slashes.
@@ -1884,32 +1902,34 @@ IMPORT ERRORS
   0 @I99@ INDI
   1 NAME Mary /Smith/ nee /Jones/
 
-   Family %s has an incorrect key.
-          Each FAM record must have an XREF value beginning with the letter
-          F. (The XREF is the letters between "0" and "FAM".)
+   Family F13 has an incorrect key.
+
+   Person XYZ has an incorrect key: skipped.
+          The  XREF  values  must be unique. These error messages are
+          generated if a XREF is found to refer to two different records.
+          For example, the XREF for a family is the same as one for an
+          individual.
+
+          Example 14. Example of XREF XYZ being defined twice 
+
+  0 @XYZ@ INDI
+  1 NAME Mary /Smith/ nee /Jones/
+  0 @XYZ@ FAM
+  1 HUSB @I48@
 
    Person defined here has no name.
           Each INDI record must have at least one level 1 NAME record, if
           the configuration option RequireNames is non-zero.
 
-   Person %s has an incorrect key: skipped.
-          Each INDI record must have an XREF value beginning with the
-          letter I. (The XREF is the letters between "0" and "INDI".)
-
-          Example 14. Example of person with incorrect key 
-
-  0 @P99@ INDI
-  1 NAME John /Smith/
-
-   Person %s is multiply defined: skipped.
-          No XREF value of an INDI may be reused. (The XREF is the letters
-          between "0" and "INDI".)
+   Person INDI_XYZ is multiply defined: skipped.
+          No XREF value of an INDI may be reused. This message indicates
+          that INDI_XYZ has been used to identify two different persons.
 
           Example 15. Example of person multiply defined 
 
-  0 @I99@ INDI
+  0 @INDI_XYZ@ INDI
   1 NAME John /Smith/
-  0 @I99@ INDI
+  0 @INDI_XYZ@ INDI
   1 NAME Jack /Smith/
 
    The family defined here has no key.
@@ -1920,6 +1940,10 @@ IMPORT ERRORS
 
   0 FAM
   1 HUSB @I1@
+
+   Family F123 is referred to but not defined.
+          A FAMS or FAMC record on an Individual refers to a family but
+          there is no FAM record with that XREF.
 
    The person defined here has no key: skipped.
           Each  INDI record must have an XREF value. (The XREF is the
@@ -1939,7 +1963,7 @@ IMPORT ERRORS
   1 NAME //
   3 NOTE name is missing
 
-   This %s line is missing a value field (%s %s).
+   This FAMS line is missing a value field (INDI I99).
           Lineage-linking tags must have a value, including tags FAMC,
           FAMS, FATH, MOTH, HUSB, WIFE, CHIL.
 
@@ -2035,7 +2059,7 @@ What activity do you want to perform?
 
           Example 20. Example of a source record 
 
-  0 SOUR
+0 SOUR
   1 REFN jcw
   1 TITL The Wetmore Family of America, and its Collateral Branches: with
     2 CONT Genealogical, Biographical, and Historical Notices
@@ -2363,7 +2387,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    example you could edit the new record as follows:
 
    Example 22. Example of adding a new person 
-  0 INDI
+0 INDI
   1 NAME Thomas/Whitmore/
   1 BIRT
     2 DATE about 1615
