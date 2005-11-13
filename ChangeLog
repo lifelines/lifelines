@@ -1,3 +1,9 @@
+2005-11-13 Perry Rapp
+
+	* ChangeLog src/interp/lex.c
+
+	Cosmetic: fix alignment in rwordtable.
+
 2005-11-10 Stephen Dum
 	* ChangeLog ll-userguide.{xml,html,pdf,txt}
 
@@ -29,7 +35,8 @@
 	Add examples to import errors, and add entry for missing values.
 
 2005-11-07 Stephen Dum
-        * ChangeLog reports/partition.ll
+
+	* ChangeLog reports/partition.ll
 
 	Change report to use gengedcomstrong, print out a gedcom header
 	and output gedcom files, whose names end in .ged
