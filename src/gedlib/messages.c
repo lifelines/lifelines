@@ -292,7 +292,6 @@ ZST qSundsrc      = N_("Source %s is referred to but not defined.");
 ZST qSundevn      = N_("Event %s is referred to but not defined.");
 ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
 ZST qSnoname      = N_("Line %d: Person defined here has no name.");
-ZST qSnomems      = N_("Line %d: Family has no members.");
 #if 0
 STRING noxref = SS "Line %d: This record has no cross reference value.";
 #endif

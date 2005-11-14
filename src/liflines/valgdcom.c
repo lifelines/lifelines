@@ -56,7 +56,7 @@ extern STRING qSmisixr, qSmisfxr;
 extern STRING qSmulper, qSmulfam;
 extern STRING qSmatper, qSmatfam;
 extern STRING qSundper, qSundfam, qSundsrc;
-extern STRING qSundevn, qSbadlev, qSnoname, qSnomems;
+extern STRING qSundevn, qSbadlev, qSnoname;
 
 /* external data set by check_stdkeys() , used by addmissingkeys() */
 
@@ -186,7 +186,8 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			}
 			if (rec_type == FAM_REC) {
 				if (!members) {
-					handle_warn(ifeed, qSnomems, defline);
+					handle_warn(ifeed, _("Line %d: Family has no members (%s %s).")
+						, defline, tag0, xref0);
 				}
 			}
 			defline = flineno;

@@ -8,6 +8,10 @@
 
 	Remove no longer used global variable qSmisval.
 
+	* ChangeLog src/gedlib/messages.c src/liflines/valgdcom.c
+
+	Include tag0 key with import warning: "Family has no members"
+
 2005-11-13 Perry Rapp
 
 	* ChangeLog src/interp/lex.c
