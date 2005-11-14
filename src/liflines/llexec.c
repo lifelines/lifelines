@@ -109,7 +109,6 @@ main (INT argc, char **argv)
 	BOOLEAN forceopen=FALSE, lockchange=FALSE;
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
-	STRING dbdir = 0;
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
 	STRING progout=NULL;
