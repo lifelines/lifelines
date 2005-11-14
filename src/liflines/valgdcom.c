@@ -89,7 +89,6 @@ static BOOLEAN f_logopen = FALSE;
 static FILE *f_flog = 0;
 static char f_logpath[MAXPATHLEN] = "import.log";
 
-static STRING qSmisval      = N_("Line %d: This %s line is missing a value field.");
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
 static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s %s.");
 

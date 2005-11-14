@@ -4,6 +4,10 @@
 
 	Remove unused variable dbdir.
 
+	* ChangeLog src/liflines/valgdcom.c
+
+	Remove no longer used global variable qSmisval.
+
 2005-11-13 Perry Rapp
 
 	* ChangeLog src/interp/lex.c
