@@ -672,8 +672,8 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				return irc;
 			}
 			break;
-		case IPARENTUNIT:
-			switch (irc = interp_parentunit(node, stab, pval)) {
+		case IFAMILYSPOUSES:
+			switch (irc = interp_familyspouses(node, stab, pval)) {
 			case INTOKAY:
 			case INTBREAK:
 				break;
@@ -955,11 +955,11 @@ aleave:
 	return irc;
 }
 /*========================================+
- * interp_parentunit -- Interpret parentunit loop
- *  usage: parentunit(FAM,INDI_V,INT_V) {...}
+ * interp_familyspouses -- Interpret familyspouses loop
+ *  usage: familyspouses(FAM,INDI_V,INT_V) {...}
  *=======================================*/
 INTERPTYPE
-interp_parentunit (PNODE node, SYMTAB stab, PVALUE *pval)
+interp_familyspouses (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
 	INT nspouse;
@@ -968,11 +968,11 @@ interp_parentunit (PNODE node, SYMTAB stab, PVALUE *pval)
 	PVALUE val;
 	NODE fam = (NODE) eval_fam(iloopexp(node), stab, &eflg, &fcel);
 	if (eflg) {
-		prog_error(node, nonfamx, "parentunit", "1");
+		prog_error(node, nonfamx, "family spouses", "1");
 		return INTERROR;
 	}
 	if (fam && nestr(ntag(fam), "FAM")) {
-		prog_error(node, badargx, "parentunit", "1");
+		prog_error(node, badargx, "family spouses", "1");
 		return INTERROR;
 	}
 	if (!fam) return INTOKAY;

@@ -145,7 +145,7 @@ struct tag_pnode {
 #define IMOTHS      29   /* mothers loop */
 #define IFAMCS      30   /* parents loop */
 #define INOTES      31   /* notes loop */
-#define IPARENTUNIT 32   /* parentunit loop */
+#define IFAMILYSPOUSES 32   /* family spouses loop */
 #define IFREED      99   /* returned to free list */
 
 /* pnode flags */
@@ -221,7 +221,7 @@ INTERPTYPE interp_families(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_fathers(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_mothers(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_parents(PNODE, SYMTAB, PVALUE*);
-INTERPTYPE interp_parentunit(PNODE, SYMTAB, PVALUE*);
+INTERPTYPE interp_familyspouses(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_fornotes(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_fornodes(PNODE, SYMTAB, PVALUE*);
 INTERPTYPE interp_forindi(PNODE, SYMTAB, PVALUE*);
@@ -529,7 +529,7 @@ void pa_handle_global(STRING iden);
 void pa_handle_option(PVALUE optval);
 void pa_handle_proc(PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body);
 void pa_handle_require(PACTX pactx, PNODE node);
-PNODE parentunit_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE proc_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);

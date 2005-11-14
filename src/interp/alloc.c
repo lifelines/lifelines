@@ -357,7 +357,7 @@ children_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
 	return node;
 }
 /*========================================
- * parentunit_node -- Create parent loop node
+ * familyspouses_node -- Create parent loop node
  *  pactx: [I/O] pointer to parseinfo structure (parse globals)
  *  fexpr: [IN]  expr
  *  cvar:  [IN]  child
@@ -365,9 +365,9 @@ children_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
  *  body:  [IN]  loop body statements
  *======================================*/
 PNODE
-parentunit_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
+familyspouses_node (PACTX pactx, PNODE fexpr, STRING cvar, STRING nvar, PNODE body)
 {
-	PNODE node = create_pnode(pactx, IPARENTUNIT);
+	PNODE node = create_pnode(pactx, IFAMILYSPOUSES);
 	iloopexp(node) = (VPTR) fexpr;
 	iiparent(node) = (VPTR) cvar;
 	inum(node) = (VPTR) nvar;
@@ -1148,8 +1148,8 @@ debug_show_one_pnode (PNODE node)     /* node to print */
 	case ICHILDREN:
 		llwprintf("*ChildrenLoop *");
 		break;
-	case IPARENTUNIT:
-		llwprintf("*ParentUnitLoop *");
+	case IFAMILYSPOUSES:
+		llwprintf("*FamilySpousesLoop *");
 		break;
 	case IINDI:
 		llwprintf("*PersonLoop *");

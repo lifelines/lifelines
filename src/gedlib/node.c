@@ -1021,7 +1021,7 @@ num_spouses_of_indi (NODE indi)
 	INT nsp;
 	if (!indi) return 0;
 	FORSPOUSES(indi, spouse, fam, nsp) ENDSPOUSES
-	return nsp;
+	return nsp;  /* don't include self*/
 }
 /*===================================================
  * find_node -- Find node with specific tag and value

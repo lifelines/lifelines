@@ -137,6 +137,8 @@
 /* FORSPOUSES iterate over all FAMS nodes & all spouses of indi
  * if there are multiple spouses, user will see same fam with multiple spouses
  * if there are no spouses for a particular family the family is not returned.
+ * the counter, num, is only incremented for each spouse returned
+ *     i.e. it doesn't count indi as a spouse.
  */
 #define FORSPOUSES(indi,spouse,fam,num) \
 	{\
@@ -164,8 +166,6 @@
 			__key = rmvat(nval(__node1));\
 			__node1 = nsibling(__node1);\
 			if (!__hits || !__key || !(spouse = qkey_to_indi(__key))||spouse==indi){\
-				/* If it was a valid HUSB or WIFE tag, count it */\
-				if (__hits && spouse!=indi) ++num;\
 				continue;\
 			}\
 			/* It is a valid HUSB or WIFE, not self, has key, and in database */\
