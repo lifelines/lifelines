@@ -4,6 +4,10 @@
 
 	Fix MSVC6 project for dbverify to link.
 
+	* ChangeLog build/msvc6/btedit/bteditCmd.dsp
+
+	Fix MSVC6 project for btedit to link.
+
 2005-11-14 Stephen Dum
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom_macros.h
 	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h

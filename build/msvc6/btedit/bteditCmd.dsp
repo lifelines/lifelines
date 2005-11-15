@@ -119,6 +119,10 @@ SOURCE=..\..\..\src\btree\file.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\fileops.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\win32\iconvshim.c
 # End Source File
 # Begin Source File
