@@ -1,4 +1,10 @@
-2005-11-08 Stephen Dum
+2005-11-15 Perry Rapp
+
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+
+	Fix MSVC6 project for dbverify to link.
+
+2005-11-14 Stephen Dum
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom_macros.h
 	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h
 	src/interp/lex.c src/interp/yacc.y 

@@ -164,6 +164,10 @@ SOURCE=..\..\..\src\btree\file.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\fileops.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\fpattern.c
 # End Source File
 # Begin Source File
