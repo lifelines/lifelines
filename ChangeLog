@@ -24,6 +24,10 @@
 	optional abort for dbverify (by factoring optional abort into
 	new file src/stdlib/llabort.c).
 
+	* ChangeLog src/stdlib/Makefile.am
+
+	Fix unix compilation for new files errlog.c & llabort.c.
+
 2005-11-14 Stephen Dum
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom_macros.h
 	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h
