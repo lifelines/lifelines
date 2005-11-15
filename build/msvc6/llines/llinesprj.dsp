@@ -233,6 +233,10 @@ SOURCE=..\..\..\src\gedlib\equaliso.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\stdlib\errlog.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\error.c
 # End Source File
 # Begin Source File
@@ -346,6 +350,10 @@ SOURCE=..\..\..\src\stdlib\list.c
 # Begin Source File
 
 SOURCE=..\..\..\src\stdlib\listener.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\stdlib\llabort.c
 # End Source File
 # Begin Source File
 

@@ -61,19 +61,21 @@ should return.
 */
 void __fatal(STRING file, int line, CNSTRING details);
 void crashlog(STRING fmt, ...);
-void crash_setcrashlog(STRING crashlog);
-void crash_setdb(STRING dbname);
 
 
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);
-
 
 /* environ.c */
 #define PROGRAM_LIFELINES 1
 #define PROGRAM_BTEDIT 2
 STRING environ_determine_editor(INT program);
 STRING environ_determine_tempfile(void);
+
+/* errlog.c */
+void crash_setcrashlog(STRING crashlog);
+void crash_setdb(STRING dbname);
+void errlog_out(CNSTRING title, CNSTRING msg, CNSTRING file, int line);
 
 /* fileops.c macros */
 /* (add source location to calls) */
@@ -137,7 +139,7 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 /* signals.c */
 void set_signals(void);
-void ll_abort(STRING);
+void ll_optional_abort(STRING);
 
 /* sprintpic.c */
 void sprintpic0(STRING buffer, INT len, INT utf8, CNSTRING pic);

@@ -1286,8 +1286,7 @@ check_typed_missing_data_records (char ntype)
  * main -- Main procedure of dbverify command
  *=========================================*/
 int
-main (int argc,
-      char **argv)
+main (int argc, char **argv)
 {
 	char *flags, *dbname;
 	char *ptr;
@@ -1297,6 +1296,7 @@ main (int argc,
 	BOOLEAN immut=FALSE; /* immutable access to database */
 	BOOLEAN allchecks=FALSE; /* if user requested all checks */
 	INT returnvalue=1;
+	STRING crashlog=NULL;
 
 	/* initialize all the low-level library code */
 	init_stdlib();
@@ -1359,6 +1359,12 @@ main (int argc,
 		printf("%s\n", msg);
 		goto done;
 	}
+
+	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
+	crashlog = getlloptstr("CrashLog_dbverify", NULL);
+	if (!crashlog) { crashlog = "Crashlog_dbverify.log"; }
+	crash_setcrashlog(crashlog);
+	
 	if (!(BTR = bt_openbtree(dbname, cflag, writ, immut))) {
 		char buffer[256];
 		describe_dberror(bterrno, buffer, ARRSIZE(buffer));
@@ -1458,6 +1464,14 @@ report_results (void)
 void
 __fatal (STRING file, int line, CNSTRING details)
 {
+	/* avoid reentrancy */
+	static BOOLEAN failing=FALSE;
+	if (failing) return;
+	failing=TRUE;
+
+	/* send to error log if one is specified */
+	errlog_out(_("Fatal Error"), details, file, line);
+
 	printf(_("FATAL ERROR: "));
 	if (details && details[0]) {
 		printf(details);
@@ -1465,6 +1479,11 @@ __fatal (STRING file, int line, CNSTRING details)
 	printf("\n");
 	printf(_("In file <%s> at line %d"), file, line);
 	printf("\n");
+
+	/* offer crash dump before closing database */
+	ll_optional_abort(_("ASSERT failure"));
+
+	failing=FALSE;
 	exit(1);
 }
 /*===============================

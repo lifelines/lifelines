@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 /*=============================================================
  * error.c -- Standard error routines
  * Copyright(c) 1992-94 by T.T. Wetmore IV; all rights reserved
@@ -29,6 +28,7 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "liflines.h"
 #include "feedback.h"
 #include "arch.h"
@@ -38,8 +38,6 @@
 #define INCLUDED_STDARG_H
 #endif
 
-static char f_crashfile[MAXPATHLEN]="";
-static char f_currentdb[MAXPATHLEN]="";
 
 /*
  2002/10/05
@@ -60,34 +58,16 @@ __fatal (STRING file, int line, CNSTRING details)
 	failing=TRUE;
 
 	/* send to error log if one is specified */
-	if (f_crashfile[0]) {
-		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
-		if (fp) {
-			LLDATE creation;
-			get_current_lldate(&creation);
-			fprintf(fp, "\n%s: %s\n", _("Fatal Error")
-				, creation.datestr);
-			if (details && details[0]) {
-				fprintf(fp, "    %s\n", details);
-			}
-			if (!file || !file[0])
-				file = "?";
-			fprintf(fp, _("    in file <%s> at line %d\n"), file, line);
-			if (f_currentdb[0])
-				fprintf(fp, "    %s: %s\n", _("Current database"), f_currentdb);
-			fclose(fp);
-		}
-	}
+	errlog_out(_("Fatal Error"), details, file, line);
+
 	/* send to screen */
 	llwprintf("%s\n", _("FATAL ERROR"));
 	if (details && details[0]) {
 		llwprintf("  %s\n", details);
 	}
 	llwprintf(_("  in file <%s> at line %d\n"), file, line);
-	if (f_currentdb[0])
-		llwprintf("%s: %s\n", _("Current database"), f_currentdb);
 	/* offer crash dump before closing database */
-	ll_abort(_("ASSERT failure"));
+	ll_optional_abort(_("ASSERT failure"));
 	close_lifelines();
 	shutdown_ui(TRUE); /* pause */
 	failing=FALSE;
@@ -104,36 +84,10 @@ crashlog (STRING fmt, ...)
 	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
-	if (f_crashfile[0] && !allwhite(buffer)) {
-		FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
-		if (fp) {
-			LLDATE creation;
-			get_current_lldate(&creation);
-			fprintf(fp, "%s: %s\n", creation.datestr, buffer);
-			fclose(fp);
-		}
-	}
 
+	/* send to error log if one is specified */
+	errlog_out(NULL, buffer, NULL, -1);
+
+	/* send to screen */
 	llwprintf(buffer);
-}
-/*===============================
- * crash_setcrashlog -- specify where to log alloc messages
- *=============================*/
-void
-crash_setcrashlog (STRING crashlog)
-{
-	if (!crashlog)
-		crashlog = "";
-	llstrncpy(f_crashfile, crashlog, sizeof(f_crashfile), uu8);
-}
-/*===============================
- * crash_setdb -- record current database in case of a crash
- * Created: 2002/06/16, Perry Rapp
- *=============================*/
-void
-crash_setdb (STRING dbname)
-{
-	if (!dbname)
-		dbname = "";
-	llstrncpy(f_currentdb, dbname, sizeof(f_currentdb), 0);
 }

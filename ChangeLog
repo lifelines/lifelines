@@ -12,6 +12,18 @@
 
 	Fix MSVC6 project for llexec to link.
 
+	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp build/msvc6/llines/llinesprj.dsp
+	src/hdrs/llstdlib.h src/liflines/error.c src/stdlib/signals.c
+	src/tools/dbverify.c
+	*NEW src/stdlib/errlog.c
+	*NEW src/stdlib/llabort.c
+
+	Factor out crashlog reporting into new file src/stdlib/errlog.c,
+	and implement crashlog for dbverify as well. Also implement 
+	optional abort for dbverify (by factoring optional abort into
+	new file src/stdlib/llabort.c).
+
 2005-11-14 Stephen Dum
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom_macros.h
 	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h

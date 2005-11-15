@@ -43,20 +43,18 @@
 /*********************************************
  * external/imported variables
  *********************************************/
-extern STRING qScoredump, qSprogsig, qSsignal,qSsigunk;
+extern STRING qSprogsig, qSsignal,qSsigunk;
 extern STRING qSsig00, qSsig01, qSsig02, qSsig03, qSsig04;
 extern STRING qSsig05, qSsig06, qSsig07, qSsig08, qSsig09;
 extern STRING qSsig10, qSsig11, qSsig12, qSsig13, qSsig14;
 extern STRING qSsig15, qSsig16, qSsig17, qSsig18, qSsig19;
 extern STRING qSsig20;
-extern STRING qSaskyY;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN is_yes(INT ch);
 static void load_signames(void);
 static void on_signals(int);
 
@@ -161,41 +159,7 @@ on_signals (int sig)
 	else
 		signame = _(qSsigunk);
 	zstr = zprintpic2(_(qSsignal), signum, signame); 
-	ll_abort(zs_str(zstr));
+	ll_optional_abort(zs_str(zstr));
 	zs_free(&zstr);
 	exit(1);
-}
-/*================================
- * ll_abort -- print msg & stop if caller wants to abort
- * else return (& caller should exit)
- *  caller translated msg
- *===============================*/
-void
-ll_abort (STRING sigdesc)
-{
-	INT ch;
-	if (sigdesc)
-		printf(sigdesc);
-	printf(_(qScoredump));
-	fflush(stdout);
-
-	/* TODO: how do we i18n this ? This getchar assumes that 
-	the answer is one byte */
-
-	ch = getchar();
-	putchar(ch);
-	if (is_yes(ch))
-		abort();
-}
-/*==================================================
- * is_yes -- is this an abbreviated yes answer ?
- *=================================================*/
-static BOOLEAN
-is_yes (INT ch)
-{
-	STRING ptr;
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (ch == *ptr) return TRUE;
-	}
-	return FALSE;
 }
