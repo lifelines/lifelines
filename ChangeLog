@@ -28,6 +28,10 @@
 
 	Fix unix compilation for new files errlog.c & llabort.c.
 
+	* ChangeLog build/rpm/lifelines.spec
+
+	rpm changes from sf#1327474 by Karl DeBisschop
+
 2005-11-14 Stephen Dum
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom_macros.h
 	src/interp/alloc.c src/interp/interp.c src/interp/interpi.h

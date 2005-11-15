@@ -15,13 +15,15 @@ Name: lifelines
 Summary: lifelines genealogy program
 Version: %{lifelines_version}
 Release: 1
-Copyright: MIT
+License: X11
 Group: Utilities/System
 Source:         http://download.sourceforge.net/lifelines/lifelines-%{lifelines_version}.tar.gz
 URL:            http://lifelines.sourceforge.net/
 Packager:       Marc Nozell <marc@nozell.com>
 Provides:       lifelines
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRequires: ncurses-devel bison
+
 %description
 This program allows the tracking of genealogical information.  The lifelines
 reports are the power of the system.
@@ -110,6 +112,10 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Tue Nov 15 2005 Perry Rapp
+- Change "Copyright" to newer "License".
+- Fix license name to clearer "X11".
+- Add BuildRequires line.
 * Thu Sep 29 2005 Perry Rapp
 - Add eo, es, nl, pl, rw translations. Add *.li files. Add novel, pedtex, ps-fan reports.
 * Sun Jan 30 2005 Perry Rapp
