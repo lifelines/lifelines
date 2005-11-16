@@ -1,3 +1,10 @@
+2005-11-16 Perry Rapp
+
+	* ChangeLog docs/ll-userguide.xml
+
+	Update copy of main menu (lacked Q) & miscellaneous 
+	utilities (lacked R & c).
+
 2005-11-15 Perry Rapp
 
 	* ChangeLog build/msvc6/dbverify/dbverifyCmd.dsp

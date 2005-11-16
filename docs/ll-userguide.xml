@@ -1009,6 +1009,7 @@ Please choose an operation:
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
+   Q Quit current database
    q Quit program
 </screen>
 
@@ -3740,12 +3741,14 @@ If you choose the miscellaneous utilities operation,
 What utility do you want to perform?
   s Save the database in a GEDCOM file
   r Read in data from a GEDCOM file
+  R  Pick a GEDCOM file and read in
   k Find a person's key value
   i Identify a person from key value
   d Show database statistics
   m Show memory statistics
   e Edit the place abbreviation file
   o Edit the user options file
+  c  Character set options
   q Return to the main menu
 </screen>
 
