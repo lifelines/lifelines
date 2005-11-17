@@ -3781,6 +3781,18 @@ not add any records to the database. If there are no problems, <application>Life
 the file to the database (only header and trailer records are not stored in the database).
 
 </para>
+<para>
+Normally, <application>LifeLines</application> will replace the XREF's (the
+identifiers for individuals, families, sources, notes, etc.) in the
+<acronym>GEDCOM</acronym> with it's own.
+These identifiers are reserved by the <acronym>GEDCOM</acronym> for internal
+use of genealogy programs.  However, if the identifiers are compatible with
+<application>LifeLines</application> internal representation and there are no
+conflicts with existing identifiers, <application>LifeLines</application> will
+ask you if you want to perserve the identifiers in the 
+<acronym>GEDCOM</acronym> 
+file rather than assign new values.
+</para>
 </glossdef></glossentry>
 
 <glossentry><glossterm><keycap>k</keycap> <action>Find a person's key value.</action></glossterm><glossdef>

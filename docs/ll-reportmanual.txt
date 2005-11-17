@@ -20,6 +20,7 @@ Thomas T. Wetmore , IV
         Include Feature
         Built-in Functions
         Value Types
+        Iterators
         Arithmetic and Logic Functions
         Person Functions
         Family Functions
@@ -402,17 +403,6 @@ if ([varb,] expr) { statements }
    functions  have  return statements with expressions. None of these
    statements  return a value, so none has a direct effect on program
    output.
-
-   In addition to these conventional statements, the report generator
-   provides other iterator statements for looping through genealogical and
-   other  types of data. For example, the children statement iterates
-   through the children of a family, the spouses statement iterates through
-   the spouses of a person, and the families statement iterates through the
-   families that a person is a spouse or parent in. A number of arguments
-   to the iterator are set with values for each iteration. After completion
-   of the iteration, these variables have the value null. These iterators
-   and others are described in more detail later under the appropriate data
-   types.
      _____________________________________________________________
 
 Expressions
@@ -532,6 +522,38 @@ Value Types
    not see the change, because a string is not a reference type. On the
    other hand, if you pass a table to a function which alters the table,
    the caller does see the change, because a table is a reference type.
+     _____________________________________________________________
+
+Iterators
+
+   The  report generator provides a number of iterator statements for
+   looping through genealogical and other types of data. For example, the
+   children  statement iterates through the children of a family, the
+   spouses statement iterates through the spouses of a person, and the
+   families statement iterates through the families that a person is a
+   spouse or parent in.
+
+   Usually  the  first argument to the iterator is an expression that
+   evaluates to an individual or a family. The other arguments of the
+   iterator are variable names that are set with values for each iteration.
+   The last argument is often a variable name used as a counter. It starts
+   with the value of one and is increased by one for each iteration of the
+   loop. After completion of the iteration, these variables have the value
+   null.
+
+   children(afam,indi,cnt) { commands }
+
+   For example, the first argument to children is the family that the
+   iterator  will operate on. This iterator will execute the block of
+   commands for each child in the specified family. The second argument is
+   set to each child in the family in the order they are listed in the
+   family and the third argument is the loop counter which starts at one
+   and  is  incremented by one each time the the block of commands is
+   executed. The two variables indi and cnt will have the value null after
+   the iteration has completed.
+
+   All the iterators are described in more detail later in the section
+   where their definition occurs.
      _____________________________________________________________
 
 Arithmetic and Logic Functions
@@ -765,27 +787,27 @@ Person Functions
 
           previous person in database in key order
 
-spouses (INDI, INDI, FAM, INT) { commands }
+spouses (INDI, INDI_V, FAM_V, INT_V) { commands }
 
           loop through all spouses of
 
-families (INDI, FAM, INDI, INT) { commands }
+families (INDI, FAM_V, INDI_V, INT_V) { commands }
 
           loop through all families (as spouse) of
 
-forindi (INDI, INT) { commands }
+forindi (INDI_V, INT_V) { commands }
 
           loop through all persons in database
 
-mothers (INDI, INDI_V, FAM_V, INT) { commands }
+mothers (INDI, INDI_V, FAM_V, INT_V) { commands }
 
           loop through all female parents of a person
 
-fathers (INDI, INDI_V, FAM_V, INT) { commands }
+fathers (INDI, INDI_V, FAM_V, INT_V) { commands }
 
           loop through all male parents of a person
 
-Parents (INDI, FAM, INT) { commands }
+Parents (INDI, FAM, INT_V) { commands }
 
           loop through all familes a person is a child of
 
@@ -1041,15 +1063,15 @@ forfam (FAM_V, INT_V) { commands }
 
 Other types of records
 
-forsour (NODE_V, INT) { commands }
+forsour (NODE_V, INT_V) { commands }
 
           loop through all sources in database
 
-foreven (NODE_V, INT) { commands }
+foreven (NODE_V, INT_V) { commands }
 
           loop through all EVEN nodes in database
 
-forothr (NODE_V, INT) { commands }
+forothr (NODE_V, INT_V) { commands }
 
           loop through all other (notes, etc.) nodes in database
 
@@ -1264,7 +1286,7 @@ fornodes (NODE, NODE_V) { commands }
 
           loop through child nodes
 
-fornotes (NODE, STRING) { commands }
+fornotes (NODE, STRING_V) { commands }
 
           loop through notes on a node
 

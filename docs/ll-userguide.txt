@@ -443,6 +443,7 @@ Please choose an operation:
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
+   Q Quit current database
    q Quit program
 
    Select an operation by striking the proper selection letter.
@@ -1750,12 +1751,14 @@ MISCELLANEOUS UTILITIES
 What utility do you want to perform?
   s Save the database in a GEDCOM file
   r Read in data from a GEDCOM file
+  R  Pick a GEDCOM file and read in
   k Find a person's key value
   i Identify a person from key value
   d Show database statistics
   m Show memory statistics
   e Edit the place abbreviation file
   o Edit the user options file
+  c  Character set options
   q Return to the main menu
 
    s Save the database in a GEDCOM file.
@@ -1779,6 +1782,15 @@ What utility do you want to perform?
           problems, LifeLines adds all the records found in the file to the
           database (only header and trailer records are not stored in the
           database).
+
+          Normally, LifeLines will replace the XREF's (the identifiers for
+          individuals, families, sources, notes, etc.) in the GEDCOM with
+          it's  own. These identifiers are reserved by the GEDCOM for
+          internal use of genealogy programs. However, if the identifiers
+          are compatible with LifeLines internal representation and there
+          are no conflicts with existing identifiers, LifeLines will ask
+          you if you want to perserve the identifiers in the GEDCOM file
+          rather than assign new values.
 
    k Find a person's key value.
           This command finds the internal key value of a person.

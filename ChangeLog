@@ -1,3 +1,12 @@
+2005-11-16 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.{xml,html,pdf,txt}
+	docs/ll-userguide.{xml,html,pdf,txt}
+
+	Added some text to the user guide about importing gedcoms.
+	Added some text to report manual to clarify how iterators work.
+	Especially that the count argument, increments by 1 for each
+	iteration of the loop.
+
 2005-11-16 Perry Rapp
 
 	* ChangeLog docs/ll-userguide.xml

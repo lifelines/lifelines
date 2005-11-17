@@ -760,22 +760,6 @@ effect on program output.
 
 </para>
 
-
-
-<para>
-
-In addition to these conventional statements, the report generator provides other iterator statements
-for looping through genealogical and other types of data. For example, the <type>children</type> statement
-iterates through the children of a family, the <type>spouses</type> statement iterates through the spouses of a
-person, and the <type>families</type> statement iterates through the families that a person is a spouse or parent in.
-A number of arguments to the iterator are set with values for each iteration.
-After completion of the iteration, these variables have the value null.
-These iterators and others are described in more detail later under the appropriate data types.
-
-</para>
-
-
-
 </sect1>
 
 
@@ -1001,6 +985,48 @@ function which changes the string, the caller does not see the change, because a
 other hand, if you pass a table to a function which alters the table, the caller does see the change, because a table is
 a reference type.
 
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
+Iterators
+</title>
+
+<para>
+
+The report generator provides a number of iterator statements
+for looping through genealogical and other types of data.
+For example, the <type>children</type> statement
+iterates through the children of a family,
+the <type>spouses</type> statement iterates through the spouses of a
+person, and the <type>families</type> statement iterates through the families that a person is a spouse or parent in.
+</para>
+<para>
+Usually the first argument to the iterator is an expression that evaluates to an
+individual or a family.
+The other arguments of the iterator are variable names that are set with values for each iteration.
+The last argument is often a variable name used as a counter.
+It starts with the value of one and is
+increased by one for each iteration of the loop.  
+After completion of the iteration, these variables have the value null.
+</para>
+<para>
+     <synopsis>children(afam,indi,cnt) { commands }</synopsis>
+For example, the first argument to
+<type>children</type> is the family that the iterator will operate on.
+This iterator will execute the block of commands for each child in the
+specified family.  The second argument is set to each child in the family
+in the order they are listed in the family and the third argument is the
+loop counter which starts at one and is incremented by one each time the
+the block of commands is executed.  The two variables indi and cnt will
+have the value null after the iteration has completed.
+</para>
+<para>
+All the iterators are described in more detail later in the section where
+their definition occurs.
 </para>
 
 </sect1>
@@ -1630,7 +1656,7 @@ previous person in database in key order
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
+<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
 </glossterm><glossdef>
 
 <para>
@@ -1638,35 +1664,37 @@ loop through all spouses of
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all families (as spouse) of
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
+</glossterm><glossdef>
 
 <para>
 loop through all persons in database
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all female parents of a person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis>
+</glossterm><glossdef>
 
 <para>
 loop through all male parents of a person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all familes a person is a child of
@@ -2107,21 +2135,21 @@ Other types of records
 </title>
 
 <glosslist>
-<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all sources in database
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all EVEN nodes in database
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through all other (notes, etc.) nodes in database
@@ -2575,7 +2603,7 @@ loop through child nodes
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>NODE</replaceable>, <replaceable>STRING</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
+<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>NODE</replaceable>, <replaceable>STRING_V</replaceable>) { <replaceable>commands</replaceable> }</synopsis></glossterm><glossdef>
 
 <para>
 loop through notes on a node

@@ -190,27 +190,27 @@ HREF="#AEN1315"
 ></DT
 ><DT
 ><A
-HREF="#AEN1413"
+HREF="#AEN1420"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1482"
+HREF="#AEN1489"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1647"
+HREF="#AEN1654"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1656"
+HREF="#AEN1663"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1705"
+HREF="#AEN1712"
 >System and User Properties</A
 ></DT
 ></DL
@@ -1785,6 +1785,7 @@ CLASS="screen"
    t Modify character translation tables
    u Miscellaneous utilities
    x Handle source, event and other records
+   Q Quit current database
    q Quit program
 </PRE
 ></TD
@@ -5912,12 +5913,14 @@ CLASS="screen"
 >&#13;What utility do you want to perform?
   s Save the database in a GEDCOM file
   r Read in data from a GEDCOM file
+  R  Pick a GEDCOM file and read in
   k Find a person's key value
   i Identify a person from key value
   d Show database statistics
   m Show memory statistics
   e Edit the place abbreviation file
   o Edit the user options file
+  c  Character set options
   q Return to the main menu
 </PRE
 ></TD
@@ -6011,6 +6014,36 @@ CLASS="application"
 > adds all the records found in
 the file to the database (only header and trailer records are not stored in the database).
 
+</P
+><P
+>&#13;Normally, <TT
+CLASS="application"
+>LifeLines</TT
+> will replace the XREF's (the
+identifiers for individuals, families, sources, notes, etc.) in the
+<ACRONYM
+CLASS="acronym"
+>GEDCOM</ACRONYM
+> with it's own.
+These identifiers are reserved by the <ACRONYM
+CLASS="acronym"
+>GEDCOM</ACRONYM
+> for internal
+use of genealogy programs.  However, if the identifiers are compatible with
+<TT
+CLASS="application"
+>LifeLines</TT
+> internal representation and there are no
+conflicts with existing identifiers, <TT
+CLASS="application"
+>LifeLines</TT
+> will
+ask you if you want to perserve the identifiers in the 
+<ACRONYM
+CLASS="acronym"
+>GEDCOM</ACRONYM
+> 
+file rather than assign new values.
 </P
 ></DD
 ><DT
@@ -6132,7 +6165,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1380"
+NAME="AEN1387"
 ></A
 ><P
 ><B
@@ -6230,7 +6263,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1397"
+NAME="AEN1404"
 ></A
 ><P
 ><B
@@ -6258,7 +6291,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1400"
+NAME="AEN1407"
 ></A
 ><P
 ><B
@@ -6277,7 +6310,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1403"
+NAME="AEN1410"
 ></A
 ><P
 ><B
@@ -6318,7 +6351,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1413"
+NAME="AEN1420"
 >IMPORT ERRORS</A
 ></H2
 ><P
@@ -6373,7 +6406,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1425"
+NAME="AEN1432"
 ></A
 ><P
 ><B
@@ -6420,7 +6453,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1436"
+NAME="AEN1443"
 ></A
 ><P
 ><B
@@ -6472,7 +6505,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1447"
+NAME="AEN1454"
 ></A
 ><P
 ><B
@@ -6512,7 +6545,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1454"
+NAME="AEN1461"
 ></A
 ><P
 ><B
@@ -6563,7 +6596,7 @@ not defined.</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1465"
+NAME="AEN1472"
 ></A
 ><P
 ><B
@@ -6600,7 +6633,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1472"
+NAME="AEN1479"
 ></A
 ><P
 ><B
@@ -6639,7 +6672,7 @@ value field (INDI I99).</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1479"
+NAME="AEN1486"
 ></A
 ><P
 ><B
@@ -6672,7 +6705,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1482"
+NAME="AEN1489"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
@@ -6924,7 +6957,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1527"
+NAME="AEN1534"
 ></A
 ><P
 ><B
@@ -7602,7 +7635,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1647"
+NAME="AEN1654"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
@@ -7676,7 +7709,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1656"
+NAME="AEN1663"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
@@ -7749,7 +7782,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1671"
+NAME="AEN1678"
 ></A
 ><P
 ><B
@@ -7853,7 +7886,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1689"
+NAME="AEN1696"
 ></A
 ><P
 ><B
@@ -7943,7 +7976,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1705"
+NAME="AEN1712"
 >System and User Properties</A
 ></H2
 ><P
@@ -7990,7 +8023,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1714"
+NAME="AEN1721"
 ></A
 ><TABLE
 BORDER="0"
