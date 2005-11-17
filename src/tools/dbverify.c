@@ -374,7 +374,7 @@ cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
 	RECORD indi0 = NULL;
-	NODE indi = nztop(indi0);
+	NODE indi = NULL;
 	param=param; /* unused */
 
 	/* bail out immediately if not INDI */
@@ -386,6 +386,7 @@ cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 	}
 	
 	indi0 = qkey_to_irecord(key);
+	indi = nztop(indi0);
 
 	if (newset) {
 		finish_and_delete_nameset();

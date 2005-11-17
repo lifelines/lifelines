@@ -4,6 +4,10 @@
 
 	Fix cgn_callback in dbverify to avoid ASSERT on empty key.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Fix my previous fix to cgn_callback.
+
 2005-11-16 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.{xml,html,pdf,txt}
 	docs/ll-userguide.{xml,html,pdf,txt}
