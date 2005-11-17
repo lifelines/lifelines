@@ -1,3 +1,9 @@
+2005-11-17 Perry Rapp
+
+	* ChangeLog src/tools/dbverify.c
+
+	Fix cgn_callback in dbverify to avoid ASSERT on empty key.
+
 2005-11-16 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.{xml,html,pdf,txt}
 	docs/ll-userguide.{xml,html,pdf,txt}

@@ -373,7 +373,7 @@ static BOOLEAN
 cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 {
 	/* a name record which points at indi=key */
-	RECORD indi0 = qkey_to_irecord(key);
+	RECORD indi0 = NULL;
 	NODE indi = nztop(indi0);
 	param=param; /* unused */
 
@@ -384,6 +384,8 @@ cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 			, key, name);
 		return 1; /* continue traversal */
 	}
+	
+	indi0 = qkey_to_irecord(key);
 
 	if (newset) {
 		finish_and_delete_nameset();
