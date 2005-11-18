@@ -1,6 +1,13 @@
 LifeLines Source Release, Version 3.0.49
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+New features added in 3.0.50
+============================
+ - The spouses() iterator has been overloaded to iterate over teh
+   spouses of an individual if the first argument is an individual,
+   and to iterate over all the husbands/wives if the first argument is
+   a family.  The two uses also require a different number of arguments,
+   refer to the report manual for details.
 
 Bug fixes in 3.0.49
 ============================

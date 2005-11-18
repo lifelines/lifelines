@@ -1,3 +1,9 @@
+2005-11-17 Stephen Dum
+
+	* ChangeLog NEWS
+
+	Add a new in 3.0.50 note about overloading the spouses() iterator.
+
 2005-11-17 Matt Emmerton
 
 	* ChangeLog src/tools/dbverify.c docs/dbverify.1
