@@ -652,6 +652,8 @@ refn_to_record (STRING ukey,    /* user refn key */
 }
 /*===============================================
  * index_by_refn - Index node tree by REFN values
+ * Adds all REFN values in node tree to refn index
+ * Assumes all are new (only for use with brand new records)
  *=============================================*/
 void
 index_by_refn (NODE node,

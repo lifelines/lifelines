@@ -13,6 +13,10 @@
 
 	Add btedit.1 and dbverify.1 to setversions handling.
 
+	* ChangeLog src/gedlib/refns.c
+
+	Cosmetic: add more comments to header of index_by_refn.
+
 2005-11-17 Stephen Dum
 
 	* ChangeLog NEWS
