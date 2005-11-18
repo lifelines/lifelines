@@ -1,13 +1,14 @@
 #!/bin/bash
 # Created: 2005-10-08, Perry Rapp
-# Edited:  2005-10-09, Perry Rapp
+# Edited:  2005-11-18, Perry Rapp
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
 
 function showusage {
   script_parameters="3.0.xx (desired version number)"
-  echo "Usage: `basename $0` $script_parameters"
+  echo "Usage: sh `basename $0` $script_parameters"
+  echo "  or: sh `basename $0` restore (to undo versions just applied"
 }
 
 # Check that user passed exactly one parameter

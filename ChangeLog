@@ -4,6 +4,10 @@
 
 	Cosmetic: typo fix
 
+	* ChangeLog build/setversions.sh
+
+	Add 'restore' option to usage.
+
 2005-11-17 Stephen Dum
 
 	* ChangeLog NEWS
