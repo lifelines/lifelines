@@ -1,3 +1,10 @@
+2005-11-17 Matt Emmerton
+
+	* ChangeLog src/tools/dbverify.c docs/dbverify.1
+
+	Update dbverify to accept and display the -h option.
+	Update dbverify man page with all accepted options.
+
 2005-11-17 Perry Rapp
 
 	* ChangeLog src/tools/dbverify.c
@@ -9,6 +16,7 @@
 	Fix my previous fix to cgn_callback.
 
 2005-11-16 Stephen Dum
+
 	* ChangeLog docs/ll-reportmanual.{xml,html,pdf,txt}
 	docs/ll-userguide.{xml,html,pdf,txt}
 

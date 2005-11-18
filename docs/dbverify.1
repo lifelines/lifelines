@@ -20,11 +20,8 @@ database for errors.
 .PP
 .SH OPTIONS
 .PP
-.TP 8
-.B \-h
-command-line help
 .TP
-.B \-a
+.BI \-a
 Perform all checks (does not include fixes)
 .TP
 .BI \-g
@@ -39,6 +36,12 @@ Check individuals
 .BI \-f
 Check families
 .TP
+.BI \-F
+Alter any bad family lineage pointers (to _badptr)
+.TP
+.BI \-h
+command-line help
+.TP
 .BI \-s
 Check sours
 .TP
@@ -47,6 +50,18 @@ Check events
 .TP
 .BI \-x
 Check others
+.TP
+.BI \-l
+Check database structure
+.TP
+.BI \-m
+Check for records missing data entries
+.TP
+.BI \-M
+Fix records missing data entries
+.TP
+.BI \-D
+Fix bad delete entries
 .TP
 .BI \-n
 Noisy (echo every record processed)

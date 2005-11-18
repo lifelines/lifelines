@@ -240,6 +240,7 @@ print_usage (void)
 	printf(_("\t-i = Check individuals\n"));
 	printf(_("\t-f = Check families\n"));
 	printf(_("\t-F = Alter any bad family lineage pointers (to _badptr)\n"));
+	printf(_("\t-h = Display help text (this text)\n"));
 	printf(_("\t-s = Check sours\n"));
 	printf(_("\t-e = Check events\n"));
 	printf(_("\t-x = Check others\n"));
@@ -1345,6 +1346,7 @@ main (int argc, char **argv)
 		case 'm': todo.check_missing_data_records=TRUE; break;
 		case 'M': todo.fix_missing_data_records=TRUE; break;
 		case 'D': todo.fix_deletes=TRUE; break;
+		case 'h':
 		default: print_usage(); goto done;
 		}
 	}
