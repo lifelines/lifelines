@@ -129,13 +129,23 @@ function applyversion {
   SEDPAT2="s/\(<\!entity llversion[[:space:]]*\"\)[0-9][[:alnum:].\-]*/\1$VERSION/"
   alterfile ../docs/ll-reportmanual.xml "$SEDPAT" "$SEDPAT2"
   alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
-  SEDPAT="s/\(^\.TH LLINES 1 \"\)[0-9]\{4\}/\1$YEAR/"
-  SEDPAT2="s/\(^\.TH LLINES 1 \"$YEAR \)[[:alpha:]]\{3\}/\1$MONTHABBR/"
-  SEDPAT3="s/\(^\.TH LLINES 1 \"$YEAR $MONTHABBR\" \"Lifelines \)[0-9][[:alnum:].\-]*/\1$VERSION/"
-  alterfile ../docs/llines.1 "$SEDPAT" "$SEDPAT2" "$SEDPAT3"
+  altermansrc btedit.1 btedit
+  altermansrc dbverify.1 dbverify
+  altermansrc llines.1 LLINES
   alterwinversions ../build/msvc6/dbverify/dbVerify.rc
   alterwinversions ../build/msvc6/llexec/llexec.rc
   alterwinversions ../build/msvc6/llines/llines.rc
+}
+
+function altermansrc {
+  [ ! -z "$1" ] || failexit "Missing first argument to altermansrc"
+  [ ! -z "$2" ] || failexit "Missing first argument to altermansrc"
+  MANFILE=$1
+  PROGNAME=$2
+  SEDPAT="s/\(^\.TH $PROGNAME 1 \"\)[0-9]\{4\}/\1$YEAR/"
+  SEDPAT2="s/\(^\.TH $PROGNAME 1 \"$YEAR \)[[:alpha:]]\{3\}/\1$MONTHABBR/"
+  SEDPAT3="s/\(^\.TH $PROGNAME 1 \"$YEAR $MONTHABBR\" \"Lifelines \)[0-9][[:alnum:].\-]*/\1$VERSION/"
+  alterfile ../docs/$MANFILE "$SEDPAT" "$SEDPAT2" "$SEDPAT3"
 }
 
 # Restore, for user to reverse last application

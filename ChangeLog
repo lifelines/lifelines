@@ -8,6 +8,11 @@
 
 	Add 'restore' option to usage.
 
+	* ChangeLog build/setversions.sh docs/btedit.1
+	docs/dbverify.1
+
+	Add btedit.1 and dbverify.1 to setversions handling.
+
 2005-11-17 Stephen Dum
 
 	* ChangeLog NEWS
