@@ -83,7 +83,7 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	INDEX index=NULL;
 	char scratch[400];
 	get_index_file(scratch, btr, ikey);
-	if ((fi = fopen(scratch, LLREADBINARY)) == NULL) {
+	if ((fi = fopen(scratch, LLREADBINARY LLFILERANDOM)) == NULL) {
 		if (robust) {
 			/* fall to end & return NULL */
 			goto readindex_end;
@@ -114,7 +114,7 @@ writeindex (BTREE btr, INDEX index)
 	FILE *fi=NULL;
 	char scratch[400];
 	get_index_file(scratch, btr, ixself(index));
-	if ((fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
+	if ((fi = fopen(scratch, LLWRITEBINARY LLFILERANDOM)) == NULL) {
 		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));
 		FATAL2(scratch);
 	}

@@ -15,6 +15,13 @@
 ** SourceForge Versions:
 **
 ** $Log$
+** Revision 1.14  2005/11/19 05:30:30  memmerto
+** - Add missing </PARA> tags, as per SF Patch 551968.
+** - Add "usepackage{isolatin1}" to register-tex.ll, as per SF Patch # 402021.
+** - Add comments about how to change between A4/Letter paper.
+** - Add -v (version) option; clean up -h/-? (usage) options, as per SF Feature Request # 1310390.
+** - Add "temp" and "random" hints to more file operations.
+**
 ** Revision 1.13  2005/10/26 04:40:45  dr_doom
 ** make user property usage more consistent
 **
@@ -117,6 +124,19 @@
 **                       the desired final product >
 **
 ** I admit that this is lot of post-processing, but the results are worth it.
+**
+** NOTE ON PAPER SIZES:
+** Paper sizes (A4 or letter) can be specified within the LaTeX output,
+** but this requires editing by folks who don't like the default.
+**
+** Since dvips (a neccessary processing step) can take a paper-size
+** argument on the command line, it's much simpler to let the user
+** specify the desired page size when running dvips (outlined above)
+** instead of editing the report/LaTeX output.
+**
+** Example:
+**   dvips -t letter out [ for US Letter-sized paper, 8.5x11" ]
+**   dvips -t a4 out [ for ISO/European A4-sized paper, 8.3x11.7" ]
 **
 ** A special note about indexing.  If you have names with double quotes in
 ** them, e.g. Forrest "Foggy" Morrison, not the nice Latex quotes style:

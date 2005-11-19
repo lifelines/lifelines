@@ -52,6 +52,20 @@
 **                       the desired final product >
 **
 ** I admit that this is lot of post-processing, but the results are worth it.
+**
+** NOTE ON PAPER SIZES:
+** Paper sizes (A4 or letter) can be specified within the LaTeX output,
+** but this requires editing by folks who don't like the default.
+**
+** Since dvips (a neccessary processing step) can take a paper-size
+** argument on the command line, it's much simpler to let the user
+** specify the desired page size when running dvips (outlined above)
+** instead of editing the report/LaTeX output.
+** 
+** Example:
+**   dvips -t letter out [ for US Letter-sized paper, 8.5x11" ]
+**   dvips -t a4 out [ for ISO/European A4-sized paper, 8.3x11.7" ]
+**
 */
 
 global(opt_xlat)
@@ -63,6 +77,7 @@ proc main ()
 
     /* Print preamble.  Feel free to change this to suit your tastes. */
     "\\documentstyle[twocolumn]{article}\n"
+    "\\usepackage{isolatin1}\n\n"
     "\\pagestyle{myheadings}\n\n"
     "% Shrink the margins to use more of the page.\n"
     "% This is taken from fullpage.sty, which is on some systems.\n"

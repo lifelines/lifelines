@@ -195,14 +195,14 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 
 /* must rewrite data block with new record; open original and new */
 	sprintf(scratch0, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
-	if (!(fo = fopen(scratch0, LLREADBINARY))) {
+	if (!(fo = fopen(scratch0, LLREADBINARY LLFILERANDOM))) {
 		char msg[sizeof(scratch0)+64];
 		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open blockfile: %s"
 			, rkey2str(rkey), scratch0);
 		FATAL2(msg);
 	}
 	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	if (!(ft1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP))) {
+	if (!(ft1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP LLFILERANDOM))) {
 		char msg[sizeof(scratch1)+64];
 		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s"
 			, rkey2str(rkey), scratch1);
@@ -251,7 +251,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 /* data block must be split for new record; open second temp file */
 splitting:
 	sprintf(scratch2, "%s/tmp2", bbasedir(btree));
-	ASSERT(ft2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP));
+	ASSERT(ft2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP LLFILERANDOM));
 
 /* write header and 1st half of records; don't worry where new record goes */
 	nkeys(newb) = n/2;	/* temporary */
@@ -364,7 +364,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	snprintf(scratch, sizeof(scratch)
 		, "%s%c%s"
 		, bbasedir(btree), LLCHRDIRSEPARATOR, fkey2path(ixself(block)));
-	if (!(fd = fopen(scratch, LLREADBINARY))) {
+	if (!(fd = fopen(scratch, LLREADBINARY LLFILERANDOM))) {
 		char msg[sizeof(scratch)+64];
 		sprintf(msg, _("Failed (errno=%d) to open blockfile (rkey=%s): %s")
 			, errno, rkey2str(rkeys(block, i)), scratch);

@@ -426,6 +426,7 @@ STARTING <APPLICATION>LIFELINES</APPLICATION> AND CREATING DATABASES
 	annotates the database itself as being for immutable access.
 	Alternatively, to use a database already on read-only media and not
 	so annotated, use the immutable (-i) flag.
+</PARA>
 
 <PARA>
 
@@ -3616,6 +3617,8 @@ Please choose from the following options:
  Commands:   j Move down     k Move up    i Select     q Quit 
 </SCREEN>
 
+	</PARA>
+
 	<PARA>
 
 	The four options perform the following actions:
@@ -3749,6 +3752,8 @@ Please choose from the following options:
  Commands:   j Move down     k Move up    i Select     q Quit 
 </SCREEN>
 
+	</PARA>
+
 	<PARA>
 
 	The four options perform the following actions:
@@ -3878,6 +3883,8 @@ Please choose from the following options:
 
  Commands:   j Move down     k Move up    i Select     q Quit 
 </SCREEN>
+
+	</PARA>
 
 	<PARA>
 

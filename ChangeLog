@@ -1,3 +1,25 @@
+2005-11-19 Matt Emmerton
+
+	* ChangeLog docs/lifelines.sgml
+
+	Add missing </PARA> tags, as per SF Patch 551968.
+
+	* ChangeLog reports/book-latex.ll reports/register-tex.ll
+
+	Add "usepackage{isolatin1}" to register-tex.ll, as per
+	SF Patch # 402021.
+
+	Add comments about how to change between A4/Letter paper.
+
+	* ChangeLog src/liflines/main.c src/liflines/llexec.c
+
+	Add -v (version) option; clean up -h/-? (usage) options.
+	As per SF Feature Request # 1310390.
+
+	* ChangeLog src/btree/btrec.c src/btree/index.c
+
+	Add "temp" and "random" hints to more file operations.
+
 2005-11-18 Stephen Dum
 
 	* ChangeLog Makefile.am docs/ll-userguide.{xml,html,pdf,txt}

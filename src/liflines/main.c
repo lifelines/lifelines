@@ -79,6 +79,7 @@ extern int opterr;
 
 
 static STRING usage = "";      /* usage string */
+static STRING version = "";    /* version string */
 int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 int opt_mychar = FALSE;        /* Custom character set handling (bypass libc) */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
@@ -93,6 +94,7 @@ BOOLEAN progparsing = FALSE;   /* program is being parsed */
 INT     progerror = 0;         /* error count during report program */
 BOOLEAN traditional = TRUE;    /* use traditional family rules */
 BOOLEAN showusage = FALSE;     /* show usage */
+BOOLEAN showversion = FALSE;   /* show version */
 STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
 
@@ -103,6 +105,7 @@ STRING  readpath = NULL;       /* database path used to open */
 /* alphabetical */
 static BOOLEAN init_curses_ui(void);
 static void load_usage(void);
+static void load_version(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_postcurses_init(void);
@@ -151,11 +154,11 @@ main (INT argc, char **argv)
 
 	save_original_locales();
 	load_usage();
-
+	load_version();
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fntc:Fu:x:o:zC:I:")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fntc:Fu:x:o:zC:I:vh?")) != -1) {
 		switch (c) {
 		case 'c':	/* adjust cache sizes */
 			while(optarg && *optarg) {
@@ -268,8 +271,14 @@ main (INT argc, char **argv)
 		case 'C': /* specify config file */
 			configfile = optarg;
 			break;
-		case '?':
+		case 'v': /* show version */
+			showversion = TRUE;
+			goto usage;
+			break;
+		case 'h': /* show usage */
+		case '?': /* show usage */
 			showusage = TRUE;
+			showversion = TRUE;
 			goto usage;
 			break;
 		}
@@ -393,7 +402,8 @@ finish:
 	termlocale();
 
 usage:
-	/* Display Command-Line Usage Help */
+	/* Display Version and/or Command-Line Usage Help */
+	if (showversion) { puts(version); strfree(&version); }
 	if (showusage) puts(usage);
 
 	/* Exit */
@@ -484,6 +494,15 @@ load_usage (void)
 	usage = _(qSusgNorm);
 #endif
 }
+
+static void
+load_version (void)
+{
+	char verbuff[80];
+	llstrncpyf(verbuff, 80, uu8, _(qSmtitle), get_lifelines_version(80));
+	version = strsave(verbuff);
+}
+
 /*==================================================
  * main_db_notify -- callback called whenever a db is
  *  opened or closed
