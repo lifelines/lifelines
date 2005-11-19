@@ -23,6 +23,8 @@
            - no files for top persons without a parent
            - cross-links for related ancestors
            - nicer layout
+    v.2.2  - misc cleanup - tighten checking for non-existent persons
+           - make html slightly more readable -- by Stephen Dum.
 
     "proc vitals" code stolen from Tom Wetmore's "ahnentafel" 1995
     output uses some Polish specific abbreviations
@@ -51,12 +53,12 @@ table(fdupli)
 getindimsg(mindi, "Whose Ahnentafel do you want?")
 enqueue(toplist, mindi)
 set(t,1)
-set(t2,save(concat("t",d(t),".html")))
-enqueue(fillist, save(t2))
+set(t2,concat("t",d(t),".html"))
+enqueue(fillist, t2)
 set(t,add(t,1))
 
 while(indi, dequeue(toplist)) {
-        set(nf,save(dequeue(fillist)))
+        set(nf,dequeue(fillist))
         print("file: ") print(nf) print("\n")
         newfile(nf,0)
         call tafel(indi)
@@ -66,80 +68,85 @@ while(indi, dequeue(toplist)) {
 proc tafel(indi)
 {
 table(quart)
-insert(quart,save("1"),indi)
+insert(quart,"1",indi)
 set(a,1)
 while(lt(a,16)) {
-        set(person,lookup(quart,d(a)))
-                set(before, lookup(all, key(father(person))))
+        if(person,lookup(quart,d(a))) {
+	    if (par,father(person)) {
+                set(before, lookup(all, key(par)))
                 if (before) {
-                        insert(fdupli, save(key(person)),1)
+                        insert(fdupli, key(person),1)
                 } else {
-                        insert(all, save(key(father(person))), save(outfile()))
-                        insert(quart,save(d(mul(a,2))),father(person))
+                        insert(all, key(par), outfile())
+                        insert(quart,d(mul(a,2)),par)
                 }
-                set(before, lookup(all, key(mother(person))))
+	    }
+	    if (par,mother(person)) {
+                set(before, lookup(all, key(par)))
                 if (before) {
-                        insert(mdupli, save(key(person)),1)
+                        insert(mdupli, key(person),1)
                 } else {
-                        insert(all, save(key(mother(person))), save(outfile()))
-                        insert(quart,save(d(add(1,mul(a,2)))),mother(person))
+                        insert(all, key(par), outfile())
+                        insert(quart,d(add(1,mul(a,2))),par)
                 }
+	    }
+	}
         set(a,add(a,1))
         }
 
-"<html><body><table border>"
+"<html>\n<body>\n<table border>\n"
 set(a,16)
 "<tr>"
 while(lt(a,32)) {
         if (lookup(quart,d(a))) {
 if (or( father(lookup(quart,d(a))), mother(lookup(quart,d(a))) )) {
-                set(t2,save(concat("t",d(t),".html")))
+                set(t2,concat("t",d(t),".html"))
                 "<td valign=top>"
                 "<sup>" d(a) ".</sup> <p align=center>"
                 "<a href=" t2 ">"
-                call vitals(lookup(quart,d(a))) nl() "</a></td>"
+                call vitals(lookup(quart,d(a))) nl() "</a></td>\n"
                 enqueue(toplist,lookup(quart,d(a)))
-                enqueue(onelist,save(outfile()))
+                enqueue(onelist,outfile())
                 set(t,add(t,1))
-                enqueue(fillist, save(t2))
+                enqueue(fillist, t2)
 } else {
                 "<td valign=top>"
                 "<sup>" d(a) ".</sup> <p align=center>"
-                call vitals(lookup(quart,d(a))) nl() "</td>"
+                call vitals(lookup(quart,d(a))) nl() "</td>\n"
 }
 
 
 
-        } else { "<td valign=top><sup>" d(a) ".</sup></td>" }
+        } else { "<td valign=top><sup>" d(a) ".</sup></td>\n" }
         set(a,add(a,1))
-        } "</tr>"
+        } "</tr>\n"
 set(a,8)
 "<tr>"
 while(lt(a,16)) {
         "<td valign=top colspan=2>"
         "<sup>" d(a) ".</sup><p align=center>"
         call dup(lookup(quart,d(a)))
-        call vitals(lookup(quart,d(a))) nl() "</td>"
+        call vitals(lookup(quart,d(a))) nl() "</td>\n"
         set(a,add(a,1))
-        } "</tr>"
+        } "</tr>\n"
 set(a,4)
 "<tr>"
 while(lt(a,8)) {
         "<td valign=top colspan=4>"
         "<sup>" d(a) ".</sup><p align=center>"
         call dup(lookup(quart,d(a)))
-        call vitals(lookup(quart,d(a))) nl() "</td>"
+        call vitals(lookup(quart,d(a))) nl() "</td>\n"
         set(a,add(a,1))
-        } "</tr>"
+        } "</tr>\n"
 set(a,2)
 "<tr>"
 while(lt(a,4)) {
         "<td valign=top colspan=8>"
         "<sup>" d(a) ".</sup><p align=center>"
         call dup(lookup(quart,d(a)))
-        call vitals(lookup(quart,d(a))) nl() "</td>"
+        call vitals(lookup(quart,d(a))) nl() "</td>\n"
         set(a,add(a,1))
-        } "</tr>"
+        } "</tr>\n"
 
 if(nestr(key(lookup(quart,d(1))),key(mindi))) {
         "<tr><td valign=top colspan=16>"
@@ -147,27 +154,27 @@ if(nestr(key(lookup(quart,d(1))),key(mindi))) {
         call dup(lookup(quart,d(1)))
         call vitals(lookup(quart,d(1))) nl()
         "<hr><a href=" dequeue(onelist)
-        "><font color=FF0000><blink>BACK</blink></font></a></td></tr>"
+        "><font color=FF0000><blink>BACK</blink></font></a></td>\n</tr>\n"
 } else {
         "<tr><td valign=top colspan=16>"
         "<sup>" d(1) ".</sup><p align=center>"
-        call vitals(lookup(quart,d(1))) nl() "</td></tr>"
+        call vitals(lookup(quart,d(1))) nl() "</td>\n</tr>\n"
 }
 
 
-"</table></body></html>"
+"</table>\n</body>\n</html>\n"
 
 }
 
 proc vitals(persn) {
         set(e,marriage(fam))
         if (and(e,long(e))) { mylong(e) }
-        "<strong>" name(persn,0) "</strong><br><i>"
+        "<strong>" name(persn,0) "</strong><br>\n<i>"
 
         set(e,birth(persn))
-        if(and(e,long(e)))  { "*&nbsp;" mylong(e) "<br>" }
+        if(and(e,long(e)))  { "*&nbsp;" mylong(e) "<br>\n" }
         set(e,death(persn))
-        if(and(e,long(e)))  { "+&nbsp;" mylong(e) "</i><br>" }
+        if(and(e,long(e)))  { "+&nbsp;" mylong(e) "</i><br>\n" }
      "<small>"
        set(srd,0)
        if (gt(nspouses(persn),1)) {
@@ -208,16 +215,17 @@ proc vitals(persn) {
 }
 
 proc dup(persn) {
-
+if (persn) {
 if(lookup(fdupli,key(persn))) {
         set(yest,lookup(all,key(father(persn))))
-        "<small><a href=" yest "><font color=FF0000><blink>FATHER:</blink></font><font color=0000FF> " name(father(persn)) "</font></a></small><br>"
+        "<small><a href=" yest "><font color=FF0000><blink>FATHER:</blink></font><font color=0000FF> " name(father(persn)) "</font></a></small><br>\n"
         }
 
 if(lookup(mdupli,key(persn))) {
         set (yest,lookup(all,key(mother(persn))))
-        "<small><a href=" yest "><font color=FF0000><blink>MOTHER:</blink></font><font color=0000FF> " name(mother(persn)) "</font></a></small><br>"
+        "<small><a href=" yest "><font color=FF0000><blink>MOTHER:</blink></font><font color=0000FF> " name(mother(persn)) "</font></a></small><br>\n"
         }
+}
 }
 
 func mylong(ev) {
