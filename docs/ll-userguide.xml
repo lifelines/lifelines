@@ -3969,14 +3969,19 @@ source or other record.  An XREF is bracked by two @ signs.  As an example
   1 CHIL @I17@</programlisting>
 <para>
 Here F6 is the internal name of this family.  The family refers
-to other individuals by specifing their XREF values.  Here I25, I26 and I17
+to other individuals by specifing their XREF values.  Also I25, I26 and I17
 are XREF values of individuals. 
 </para>
 <para>
-XREF values used within lifelines are totally under the control of lifelines.
+XREF values used within <application>LifeLines</application> are totally under
+the control of <application>LifeLines</application>.
 The values that are used are always of the form, a single letter, followed by
-a number.  However, when importing a gedcom lifelines should accept almost
+a number.  However, when importing a gedcom
+<application>LifeLines</application> should accept almost
 anything as an XREF, converting it to what is needed for internal use.
+For the curious, the letters that <application>LifeLines</application> uses
+are I for Individual, F for Family, S for Source, E for Events, and X for
+other records.
 
 </para>
 <glosslist><glossentry><glossterm>Bad NAME syntax.</glossterm><glossdef>

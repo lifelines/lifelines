@@ -1,3 +1,10 @@
+2005-11-18 Stephen Dum
+
+	* ChangeLog Makefile.am docs/ll-userguide.{xml,html,pdf,txt}
+
+	fix Makefile so that 'make install' will install random readme's and
+	LICENSE file.  Add some more text about XREF's under import errors.
+
 2005-11-18 Perry Rapp
 
 	* ChangeLog NEWS

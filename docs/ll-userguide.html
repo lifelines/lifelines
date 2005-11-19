@@ -195,22 +195,22 @@ HREF="#AEN1420"
 ></DT
 ><DT
 ><A
-HREF="#AEN1489"
+HREF="#AEN1493"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1654"
+HREF="#AEN1658"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1663"
+HREF="#AEN1667"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1712"
+HREF="#AEN1716"
 >System and User Properties</A
 ></DT
 ></DL
@@ -6380,14 +6380,31 @@ CLASS="programlisting"
 ></TABLE
 ><P
 >&#13;Here F6 is the internal name of this family.  The family refers
-to other individuals by specifing their XREF values.  Here I25, I26 and I17
+to other individuals by specifing their XREF values.  Also I25, I26 and I17
 are XREF values of individuals. 
 </P
 ><P
->&#13;XREF values used within lifelines are totally under the control of lifelines.
+>&#13;XREF values used within <TT
+CLASS="application"
+>LifeLines</TT
+> are totally under
+the control of <TT
+CLASS="application"
+>LifeLines</TT
+>.
 The values that are used are always of the form, a single letter, followed by
-a number.  However, when importing a gedcom lifelines should accept almost
+a number.  However, when importing a gedcom
+<TT
+CLASS="application"
+>LifeLines</TT
+> should accept almost
 anything as an XREF, converting it to what is needed for internal use.
+For the curious, the letters that <TT
+CLASS="application"
+>LifeLines</TT
+> uses
+are I for Individual, F for Family, S for Source, E for Events, and X for
+other records.
 
 </P
 ><DIV
@@ -6406,7 +6423,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1432"
+NAME="AEN1436"
 ></A
 ><P
 ><B
@@ -6453,7 +6470,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1443"
+NAME="AEN1447"
 ></A
 ><P
 ><B
@@ -6505,7 +6522,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1454"
+NAME="AEN1458"
 ></A
 ><P
 ><B
@@ -6545,7 +6562,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1461"
+NAME="AEN1465"
 ></A
 ><P
 ><B
@@ -6596,7 +6613,7 @@ not defined.</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1472"
+NAME="AEN1476"
 ></A
 ><P
 ><B
@@ -6633,7 +6650,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1479"
+NAME="AEN1483"
 ></A
 ><P
 ><B
@@ -6672,7 +6689,7 @@ value field (INDI I99).</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1486"
+NAME="AEN1490"
 ></A
 ><P
 ><B
@@ -6705,7 +6722,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1489"
+NAME="AEN1493"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
@@ -6957,7 +6974,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1534"
+NAME="AEN1538"
 ></A
 ><P
 ><B
@@ -7635,7 +7652,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1654"
+NAME="AEN1658"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
@@ -7709,7 +7726,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1663"
+NAME="AEN1667"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
@@ -7782,7 +7799,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1678"
+NAME="AEN1682"
 ></A
 ><P
 ><B
@@ -7886,7 +7903,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1696"
+NAME="AEN1700"
 ></A
 ><P
 ><B
@@ -7976,7 +7993,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1712"
+NAME="AEN1716"
 >System and User Properties</A
 ></H2
 ><P
@@ -8023,7 +8040,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1721"
+NAME="AEN1725"
 ></A
 ><TABLE
 BORDER="0"

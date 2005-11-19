@@ -1895,14 +1895,16 @@ IMPORT ERRORS
   1 CHIL @I17@
 
    Here F6 is the internal name of this family. The family refers to other
-   individuals by specifing their XREF values. Here I25, I26 and I17 are
+   individuals by specifing their XREF values. Also I25, I26 and I17 are
    XREF values of individuals.
 
-   XREF values used within lifelines are totally under the control of
-   lifelines. The values that are used are always of the form, a single
-   letter, followed by a number. However, when importing a gedcom lifelines
+   XREF values used within LifeLines are totally under the control of
+   LifeLines. The values that are used are always of the form, a single
+   letter, followed by a number. However, when importing a gedcom LifeLines
    should accept almost anything as an XREF, converting it to what is
-   needed for internal use.
+   needed for internal use. For the curious, the letters that LifeLines
+   uses are I for Individual, F for Family, S for Source, E for Events, and
+   X for other records.
 
    Bad NAME syntax.
           A level 1 NAME record must have a value, and the value must not
