@@ -196,9 +196,16 @@ directory in your execution path. If you get the program in
 executable form, follow whatever instructions came with it.
 </para>
 <glosslist>
-<glossentry><glossterm><command>llines</command></glossterm><glossdef>
+
+<glossentry><glossterm><command>btedit</command></glossterm><glossdef>
 <para>
-the <application>LifeLines</application> program with full user interface
+a low-level editor for advanced debugging of broken <application>LifeLines</application> databases.
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><command>dbverify</command></glossterm><glossdef>
+<para>
+a utility program to verify <application>LifeLines</application> databases.
 </para>
 </glossdef></glossentry>
 
@@ -210,11 +217,13 @@ for non-interactive processing of report programs
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><command>dbverify</command></glossterm><glossdef>
+<glossentry><glossterm><command>llines</command></glossterm><glossdef>
 <para>
-a utility program to verify <application>LifeLines</application> databases.
+the <application>LifeLines</application> program with full user interface
 </para>
 </glossdef></glossentry>
+
+
 </glosslist>
 
 <para>

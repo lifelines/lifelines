@@ -8,6 +8,11 @@
 
 	Add options (I, a, c, l, n, o, z) to man page (sf#1360893).
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Add mention of btedit to user manual, and alphabetize tool list.
+	(sf#1360896)
+
 2005-11-19 Stephen Dum
 	* ChangeLog reports/net-ped.ll
 
