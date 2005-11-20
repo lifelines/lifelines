@@ -13,6 +13,10 @@
 	Add mention of btedit to user manual, and alphabetize tool list.
 	(sf#1360896)
 
+	*
+
+	Add z and I to the llines -h display (sf#1360885).
+
 2005-11-19 Stephen Dum
 	* ChangeLog reports/net-ped.ll
 

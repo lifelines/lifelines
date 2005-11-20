@@ -50,11 +50,11 @@ ZST qScrdbse      = N_("Do you want to create a database there?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
-ZST qSusgFinnOpt  = N_("lines [-adkrwiflntcuFxoC] [database]   # Use -F for Finnish database");
+ZST qSusgFinnOpt  = N_("lines [-adkrwiflntcuFxoCzI] [database]   # Use -F for Finnish database");
 	/* summary of options (compiled with Finnish as mandatory) */
-ZST qSusgFinnAlw  = N_("lines [-adkrwiflntcuxoC] [database]   # Finnish database");
+ZST qSusgFinnAlw  = N_("lines [-adkrwiflntcuxoCzI] [database]   # Finnish database");
 	/* summary of options (normal compile -- no Finnish support) */
-ZST qSusgNorm     = N_("lines [-adkrwiflntcuxoC] [database]");
+ZST qSusgNorm     = N_("lines [-adkrwiflntcuxoCzI] [database]");
 
 ZST qSronlya      = N_("The database is read only; you may not add records.");
 ZST qSronlye      = N_("The database is read only; you may not change records.");
