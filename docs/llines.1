@@ -29,37 +29,62 @@ The following options are some of the options available for \fIllines\fR.
 .TP
 .BI \-C
 Specify configuration file location.
+.TP
 .BI \-F
 Finnish option (only available if compiled with Finnish flag)
 .TP
+.BI \-I
+Specify a user property (e.g. -ILLEDITOR=gvim)
+.TP
+.BI \-a
+Log dynamic memory operation (for debugging)
+.TP
+.BI \-c
+Supply cache values (eg, -ci400,4000f400,4000 sets direct indi & fam 
+caches to 400, and indirect indi & fam caches to 4000)
+.TP
 .BI \-d
-developmental/debug mode (signals are not caught)
+Developmental/debug mode (signals are not caught)
 .TP
 .BI \-f
-force open a database (only for use if reader/writer count is wrong)
+Force open a database (only for use if reader/writer count is wrong)
 .TP
 .BI \-i
-open database with immutable access (no protection against other access --
-for use on read-only media)
+Open database with immutable access (no protection against other 
+access -- for use on read-only media)
 .TP
 .BI \-k
-always show key values (normally key is not shown if a REFN is shown)
+Always show key values (normally key is not shown if a REFN is shown)
+.TP
+.BI \-l
+Lock (-ly) or unlock (-ln) a database for use with read only media
+(access to a locked database is treated as immutable)
+.TP
+.BI \-n
+Do not use traditional family rules
+.TP
+.BI \-o
+Specify program output filename (eg, -o/tmp/mytests)
 .TP
 .BI \-r
-open database with read-only access (protect against other writer access)
+Open database with read-only access (protect against other writer access)
 .TP
 .BI \-u \fICOLS\fP,\fIROWS
-specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+Specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
 .TP
 .BI \-w
-open database with writeable access (protecte against other reader
+Open database with writeable access (protecte against other reader
 or writer access)
 .TP
 .BI \-x
-execute a single lifelines report program directly.
+Execute a single lifelines report program directly
+.TP
+.BI \-z
+Use normal ASCII characters for drawing lines in user
+interface rather than the vt100 special characters
 .TP
 .BI \-?
-display options summary, (on UNIX or Linux use the \-h option)
+Display options summary, (on UNIX or Linux use the \-h option)
 .PP
 \fIllexec\fR is a version of \fIllines\fR without the user interface for
 non-interactive processing of report programs. (Typically used with the -x

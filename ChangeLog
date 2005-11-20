@@ -4,6 +4,10 @@
 
 	Fix fragile handling of null val in __length (sf#1361865).
 
+	* ChangeLog docs/ll-userguide.xml docs/llines.1
+
+	Add options (I, a, c, l, n, o, z) to man page (sf#1360893).
+
 2005-11-19 Stephen Dum
 	* ChangeLog reports/net-ped.ll
 

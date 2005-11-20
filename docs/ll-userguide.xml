@@ -303,7 +303,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 <row>
 <entry>-I</entry>
 <entry>
-Specify a user property (e.g. -ILLEDITOR=gvim )
+Specify a user property (e.g. -ILLEDITOR=gvim)
 </entry>
 </row>
 
