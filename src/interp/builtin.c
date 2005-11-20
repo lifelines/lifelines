@@ -2202,26 +2202,22 @@ PVALUE
 __length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
-	int type = which_pvalue_type(val);
-	INT len=0;
+	INT len=-1;
 
-	if (val && (type == PLIST))
-	{
-		LIST list = pvalue_to_list(val);
-		len = length_list(list);
+	if (val) {
+		INT type = which_pvalue_type(val);
+		if (type == PLIST) {
+			LIST list = pvalue_to_list(val);
+			len = length_list(list);
+		} else if (type == PTABLE) {
+			TABLE table = pvalue_to_table(val);
+			len = get_table_count(table);
+		} else if (type == PSET) {
+			INDISEQ seq = pvalue_to_seq(val);
+			len = length_indiseq(seq);
+		}
 	}
-	else if (val && (type == PTABLE))
-	{
-		TABLE table = pvalue_to_table(val);
-		len = get_table_count(table);
-	}
-	else if (val && (type == PSET))
-	{
-		INDISEQ seq = pvalue_to_seq(val);
-		len = length_indiseq(seq);
-	}
-	else
-	{
+	if (len == -1) {
 		prog_error(node, _("the arg to length is not a list, table or set"));
 		*eflg = TRUE;
 		return NULL;

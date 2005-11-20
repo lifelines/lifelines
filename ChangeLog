@@ -1,3 +1,9 @@
+2005-11-20 Perry Rapp
+
+	* ChangeLog src/interp/builtin.c
+
+	Fix fragile handling of null val in __length (sf#1361865).
+
 2005-11-19 Stephen Dum
 	* ChangeLog reports/net-ped.ll
 
@@ -1054,7 +1060,7 @@
 	* ChangeLog src/liflines/delete.c
 
 	Initialize local buffer confirm in choose_and_remove_family to avoid
-	ASSERT crash. sf# 1242080
+	ASSERT crash. sf#1242080
 
 2005-07-20 Perry Rapp
 
