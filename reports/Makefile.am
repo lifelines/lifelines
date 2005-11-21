@@ -6,8 +6,8 @@ AUTOMAKE_OPTIONS = no-dependencies
 # (included files go in a different target below)
 LL_REPORTS = \
 	2ppage.ll 4gen1.ll 6gen1.ll 8gen1.ll \
-	af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll alive.ll  \
-	all_anc_lines.ll allfam10c.ll alllines.ll                       \
+	addsour.ll af-import.ll afn_match.ll ahnenliste.ll ahnentafel.ll\
+	alive.ll all_anc_lines.ll allfam10c.ll alllines.ll              \
 	altern.ll anc2_ged.ll ancestors2.ll anniver.ll                  \
 	bday_cover.ll bias.ll  bkdes16-1.ll book-latex.ll 		\
 	browser.ll burial_index.ll BW_descendants.ll cid.ll connect2.ll	\
@@ -24,11 +24,9 @@ LL_REPORTS = \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\
 	formatted_gedcom.ll gedall.ll gedlist.ll gedlod.ll gedn.ll	\
 	gedtags.ll ged_write.li genancc.ll                              \
-	genancc1.ll genancc2.ll gender_order.ll                         \
-	gendex.ll							\
+	genancc1.ll genancc2.ll gender_order.ll gendex.ll               \
 	genetics.ll genetics2.ll getbaptism.li givens_gender.ll         \
-	givens_gender_finder.ll                                         \
-	grand.ll                                                        \
+	givens_gender_finder.ll grand.ll                                \
 	hasnotes1.ll hp-anc.ll htmlahnen.ll                             \
 	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll       \
 	igi-merge.ll igi-search.ll index1.ll index_html.ll index_mm.ll  \
@@ -41,7 +39,7 @@ LL_REPORTS = \
 	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll         \
 	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll        \
 	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll      \
-	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll reg_html.ll        \
+	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll refn.ll reg_html.ll \
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
 	regvital.ll regvital1.ll                                        \
 	relate.ll related_spouses.ll relation.ll relink.ll              \
