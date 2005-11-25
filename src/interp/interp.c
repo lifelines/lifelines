@@ -1400,7 +1400,7 @@ interp_forindi (PNODE node, SYMTAB stab, PVALUE *pval)
 		lock_cache(icel); /* keep current indi in cache during loop body */
 		/* set loop variables */
 		insert_symtab(stab, ielement(node), ival);
-		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(icount));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(icel);
@@ -1449,7 +1449,7 @@ interp_forsour (PNODE node, SYMTAB stab, PVALUE *pval)
 		lock_cache(scel); /* keep current source in cache during loop body */
 		/* set loop variables */
 		insert_symtab(stab, ielement(node), sval);
-		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(scount));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(scel);
@@ -1496,7 +1496,7 @@ interp_foreven (PNODE node, SYMTAB stab, PVALUE *pval)
 		lock_cache(ecel); /* keep current event in cache during loop body */
 		/* set loop variables */
 		insert_symtab(stab, ielement(node), eval);
-		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(ecount));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(ecel);
@@ -1543,7 +1543,7 @@ interp_forothr (PNODE node, SYMTAB stab, PVALUE *pval)
 		lock_cache(xcel); /* keep current source in cache during loop body */
 		/* set loop variables */
 		insert_symtab(stab, ielement(node), xval);
-		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(xcount));
 		/* execute loop body */
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(xcel);
@@ -1588,7 +1588,7 @@ interp_forfam (PNODE node, SYMTAB stab, PVALUE *pval)
 		fcount++;
 		lock_cache(fcel);
 		insert_symtab(stab, ielement(node), fval);
-		insert_symtab(stab, inum(node), create_pvalue_from_int(count));
+		insert_symtab(stab, inum(node), create_pvalue_from_int(fcount));
 		irc = interpret((PNODE) ibody(node), stab, pval);
 		unlock_cache(fcel);
 		switch (irc) {
