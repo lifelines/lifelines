@@ -1,3 +1,8 @@
+dnl this file is processed by m4. 
+dnl to generate the windows version
+dnl m4 -D WINDOWS lines.cfg.input > lines.cfg 
+dnl to generate a linux/unix version
+dnl m4 lines.cfg.input > .linesrc
 # config file for LifeLines
 # .linesrc under UNIX, lines.cfg under Windows
 # Lines beginning with # are ignored (comments)
@@ -31,55 +36,113 @@
 
 # Set a variable for the lifelines root
 # Variables have % at start and end
-%llroot%:=\lifelines
+ifdef(`WINDOWS',%llroot%:=\lifelines,%llroot%=/home/user/LifeLines)
 
 # Root path for utility/read command
+ifdef(`WINDOWS',
 InputPath:=%llroot%
-
+,
+#InputPath=%llroot%
+)
 # Place to store output of utility/save
+ifdef(`WINDOWS',
 LLARCHIVES:=%llroot%\Archives
+,
+#LLARCHIVES=%llroot%/Archives
+)dnl
 
 # Path(s) to search for databases
+ifdef(`WINDOWS',
 LLDATABASES:=%llroot%\Databases
+,
+#LLDATABASES=%llroot%/Databases
+)dnl
 # (New databases will be created in first directory of this path.)
 
 # (LLNEWDBDIR {Path for new databases} is obsolete)
 
 # Path for report programs
+ifdef(`WINDOWS',
 LLPROGRAMS:=%llroot%\Programs
+,
+#LLPROGRAMS=%llroot%/Reports
+)dnl
 
 # Path for report output
+ifdef(`WINDOWS',
 LLREPORTS:=%llroot%\Outputs
+,
+#LLREPORTS=%llroot%/Outputs
+)dnl
 
+ifdef(`WINDOWS',
 # Editor (notepad by default)
 #LLEDITOR:=notepad.exe
 
 # Path for reference translation tables
 TTPATH:=%llroot%\tt
+,
+# Editor
+#LLEDITOR=/usr/local/vi
+
+# Path for global translation tables
+#TTPATH=%llroot%/tt
+)dnl
 
 # Path for exported translation tables (from a db)
+ifdef(`WINDOWS',
 LLTTEXPORT:=%llroot%\ttdb
+,
+#LLTTEXPORT=%llroot%/ttdb
+)dnl
 
 # Refuse to execute system calls from report programs (default allowed)
+ifdef(`WINDOWS',
 DenySystemCalls=1
+,
+#DenySystemCalls=1
+)dnl
 
 # Log file for report errors (default none)
+ifdef(`WINDOWS',
 #ReportLog:=%llroot%\rpterrs.log
+,
+#ReportLog=%llroot%/reporterrs.log
+)dnl
 
 # Log file for crashes for llines (default none)
+ifdef(`WINDOWS',
 #CrashLog_llines:=%llroot%\crashes_llines.log
+,
+#CrashLog_llines=%llroot%/crashes_llines.log
+)dnl
 
 # Log file for crashes for llexec (default none)
+ifdef(`WINDOWS',
 #CrashLog_llexec:=%llroot%\crashes_llexec.log
+,
+#CrashLog_llexec=%llroot%/crashes_llexec.log
+)dnl
 
 # Log file for import errors (default errs.log)
+ifdef(`WINDOWS',
 #ImportLog:=%llroot%\import.log
+,
+#ImportLog=%llroot%/import.log
+)dnl
 
 # Log file for report pvalue leaks (for debugging)
+ifdef(`WINDOWS',
 #ReportLeakLog:=%llroot%\reportleaks.log
+,
+#ReportLeakLog=%llroot%/reportleaks.log
+)dnl
 
 # Delay (secs) between each report error on screen (default 0)
 #PerErrorDelay=4
+ifdef(`WINDOWS',,
+# Default is 0
+)dnl
 
 # Print more detailed call stack for each report error
 #FullReportCallStack=1
@@ -224,7 +287,11 @@ DenySystemCalls=1
 
 # Add comment after pointers (during edit)
 # Eg, change 1 HUSB @I1@ to 1 HUSB @I1@ {{ John/SMITH }}
+ifdef(`WINDOWS',
 AnnotatePointers=1
+,
+#AnnotatePointers=1
+)dnl
 # Default is 0
 
 # Display surnames in all caps on screen
@@ -249,7 +316,11 @@ AnnotatePointers=1
 # Not needed if it is named gettext.dll & is on the path.
 
 # What locale directory to use
+ifdef(`WINDOWS',
 LocaleDir:=%llroot%\locale
+,
+#LocaleDir:=/usr/share/locale
+)dnl
 # default is depend on gettext's default
 
 # Global translation tables
@@ -272,6 +343,8 @@ LocaleDir:=%llroot%\locale
 #NewDbProps=codeset=UTF-8
 # Default is none
 
+ifdef(`WINDOWS',
 # (Windows) Set codepage to use when reading from console
 #ConsoleCodepage=1250
 
+)dnl
