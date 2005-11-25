@@ -12,6 +12,9 @@
 
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
+#ifndef WIN32
+#include <pwd.h>
+#endif
 
 /*********************************************
  * local function prototypes
@@ -42,16 +45,18 @@ is_dir_sep (char c)
 #endif
 }
 /*===============================================
- * is_absolute_path -- Is this an absolute path ?
+ * is_path -- Is this an absolute or relative path ?
  *  ie, does this begin with directory info
  *  handle WIN32 characters
  *=============================================*/
 BOOLEAN
-is_absolute_path (CNSTRING dir)
+is_path (CNSTRING dir)
 {
-	if (is_dir_sep(dir[0]) || dir[0] == '.') return TRUE;
-	if (dir[0] == '~') return TRUE;
+
+	if (strchr(dir,LLCHRDIRSEPARATOR)) return TRUE;
 #ifdef WIN32
+	/* windows \ or / is path separator. */
+	if (strchr(dir,'/')) return TRUE;
 	if (is_dir_sep(dir[0]) 
 		|| (dir[0] && dir[1]==':' && isasciiletter(dir[0]))) {
 		return TRUE;
@@ -197,7 +202,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
-	if (is_absolute_path(name)) return strsave(name);
+	if (is_path(name)) return strsave(name);
 	nlen = strlen(name);
 	if(ext && *ext) {
 		elen = strlen(ext);
@@ -483,6 +488,8 @@ get_home (void)
 BOOLEAN
 expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 {
+	char * sep;
+	struct passwd *pw;
 	if (buffer[0]=='~') {
 		if (is_dir_sep(buffer[1])) {
 			STRING home = get_home();
@@ -499,7 +506,31 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 				return TRUE;
 			}
 		}
-		/* TODO: handle other homes (eg, ~someone/) ? */
+#ifndef WIN32
+		/* check for ~name/... and resolve the ~name */
+		if ((sep = strchr(buffer,LLCHRDIRSEPARATOR))) {
+			setpwent();
+			/* loop through the password file/database
+			 * to see if the string following ~ matches
+			 * a login name - 
+			 */
+			while ((pw = getpwent())) {
+				if (strncmp(pw->pw_name,buffer,sep-buffer) &&
+				    pw->pw_name[sep-buffer+1] == 0) {
+					/* found user in passwd file */
+					STRING tmp;
+					tmp = strsave(buffer);
+					buffer[0] = 0;
+					llstrapps(buffer, buflen, utf8, pw->pw_dir);
+					llstrapps(buffer, buflen, utf8, tmp+(buffer-sep+1));
+					endpwent();
+					strfree(&tmp);
+					return TRUE;
+				}
+			}
+			endpwent();
+		}
+#endif
 	}
 	return TRUE;
 }

@@ -2175,7 +2175,7 @@ pa_handle_include (PACTX pactx, PNODE node)
 	newfname = pvalue_to_string(pval);
 	
 	/* if it is relative, get local path to give to find_program */
-	if (!is_absolute_path(newfname)) {
+	if (!is_path(newfname)) {
 		localpath = zs_str(irptinfo(node)->localpath);
 	}
 
