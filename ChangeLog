@@ -4,6 +4,11 @@
 
 	Add report header comments to sample ahnentafel in report manual.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add report template, and explanation of report header comments, to
+	report manual. sf#1362488.
+
 2005-11-25 Stephen Dum
 
 	* ChangeLog reports/anniver.ll reports/cron.ll

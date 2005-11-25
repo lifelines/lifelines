@@ -74,19 +74,14 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
 
   <chapter>
 
-    <title>
-
+<title>
 Report Programming Manual
-
 </title>
 
-    <sect1>
+<sect1>
     
-    
-      <title>
-
-INTRODUCTION
-
+<title>
+Introduction
 </title>
     
 
@@ -124,6 +119,11 @@ INTRODUCTION
 </para>
 
 
+</sect1><sect1>
+    
+<title>
+Tutorial Ahnentafel report
+</title>
 
 <para>
 
@@ -484,7 +484,34 @@ These values are computed with the <function>mul</function> and <function>add</f
 
 </para>
 
+</sect1><sect1>
 
+<title>
+Template for creating new reports
+</title>
+
+<para>
+The following is a good template to use when creating a new report from scratch.
+</para>
+
+<programlisting>
+/*
+* @progname reportname
+* @version Version Number.
+* @author report author & possible email address
+* @category ????
+* @output Format of Report Output
+* @description The following paragraph is used to
+populate index.html.
+
+This report ....
+*/
+
+proc main()
+{
+
+}
+</programlisting>
 
 </sect1>
 
@@ -595,6 +622,36 @@ You may comment your <application>LifeLines</application> programs using the fol
 /*...comment text including any characters except */... */</programlisting>
 
 </para>
+
+<para>
+These comments may be inserted anywhere in the program file.
+</para>
+
+<para>
+You should put in some report header comments, because they will provide useful text for your report
+when it is included in the report list seen by the user who uses the lifelines pick report menu
+function. Report header comments are some specific comments at the top of the report, with keywords
+preceded by @ signs. The following is an illustration of report header comments, with explanations
+inside them:
+<para>
+
+<programlisting>
+/*
+* @progname The name of the report without the
+extension. This shows in the pick report option.
+* @version Version Number of the report. This
+is stored here and not in the report name.
+* @author Name of the author of this report
+and email address if he/she desires.
+* @category ????
+* @output Modifies Database | text | HTML |
+GEDCOM | RTF | XML | PostScript | etc.
+* @description The first paragraph after this is
+used to generate the description in the index.html.
+
+This report ....
+*/
+</programlisting>
 
 
 
