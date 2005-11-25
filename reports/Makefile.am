@@ -33,7 +33,8 @@ LL_REPORTS = \
 	interestset.li indiv.ll infant_mortality.ll ldsgedcom.li        \
 	least_related.ll line.ll listsour.ll ll2html4.ll ll2visio.ll    \
 	lldb.ll                                                         \
-	longlines.ll maritalinfo.ll marriages1.ll menu.ll name2html.ll  \
+	longlines.ll maritalinfo.ll marriages.ll marriages1.ll menu.ll \
+	name2html.ll  \
 	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll            \
         novel/novel.ll nonpatronymics.ll outsources.li paf-export.ll    \
 	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll         \

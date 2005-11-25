@@ -5,6 +5,10 @@
 
 	New marriages report.
 
+	* ChangeLog reports/Makefile.am
+
+	Add new marriages report to Makefile.am.
+
 2005-11-20 Stephen Dum
 	* ChangeLog  reports/addsour.ll reports/refn.ll reports/Makefile.am
 
