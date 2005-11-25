@@ -1,3 +1,10 @@
+2005-11-25 Perry Rapp
+
+	* ChangeLog
+	*NEW reports/marriages.ll
+
+	New marriages report.
+
 2005-11-20 Stephen Dum
 	* ChangeLog  reports/addsour.ll reports/refn.ll reports/Makefile.am
 
