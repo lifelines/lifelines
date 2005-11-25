@@ -1,3 +1,15 @@
+2005-11-26 Stephen Dum
+	* ChangeLog reports/st/st_collate_8859-1.li
+	reports/st/st_collate_UTF-8.li reports/st/st_date.li
+	reports/st/Makefile.am reports/st/st_all_stdout.ref
+
+	Fix selftests to look for locales es_ES, it_IT, and sv_SE rather than
+	es,it,sv.
+
+	Change executions of llines and llexec in selftests to use full
+	pathnames, rather than rely on default search paths.  Add a clean
+	target.
+
 2005-11-25 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml
@@ -25,7 +37,7 @@
 
 	* configure.in reports/Makefile.am
 	*NEW  in reports/st
-	    Makefile.am st_all.out st_all.ref st_all.stdout
+	    Makefile.am st_all.out st_all.ref 
 	    st_all_stdout.ref test_fam_it.ll test_fam_it.ref test_forfam.ll
 	    test_forfam.out test_forfam.ref test_forindi.ll test_forindi.out
 	    test_forindi.ref test_indi_it.ll test_indi_it.out test_indi_it.ref
