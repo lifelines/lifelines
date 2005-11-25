@@ -23,12 +23,17 @@ TEST_ITER_REPORTS = test_forindi.ll test_forfam.ll test_indi_it.ll \
 TEST_ITER_REFERENCE = test_forindi.ref test_forfam.ref test_indi_it.ref \
                     test_fam_it.ref test_othr_it.ref
 TEST_ITER_DB = ti.ged
+TEST_OUTPUTS =test_forindi.out test_forfam.out test_indi_it.out \
+                    test_fam_it.out test_othr_it.out st_all.out \
+		    st_all.stdout
 
 TESTS = selftest
 pkg_REPORTS = $(SELFTEST_REPORTS) \
               $(TEST_ITER_REPORTS)
 EXTRA_DIST =  $(SELFTEST_REPORTS) $(SELFTEST_REFERENCE) \
               $(TEST_ITER_REPORTS) $(TEST_ITER_REFERENCE) $(TEST_ITER_DB)
+CLEANFILES =  $(SELFTEST_REPORTS) $(TEST_ITER_REPORTS) $(TEST_ITER_DB) \
+              $(TEST_OUTPUTS) errs.log llines.leak_log selftest
 
 LLEXEC = ../../src/liflines/llexec
 LLINES = ../../src/liflines/llines
@@ -47,13 +52,13 @@ local: $(TEST_ITER_DB) $(TEST_ITER_REPORTS) $(SELFTEST_REPORTS)
 
 ti: local ti.ged $(LLINES)
 	rm -rf ti
-	(echo yurti ; echo yyq) | $(LLINES) ti  > /dev/null
+	(echo yurti ; echo yyq) | $(LLINES) ./ti  > /dev/null
 
 test_iter: $(TEST_ITER_REPORTS) $(TEST_ITER_REFERENCE) $(TEST_ITER_DB) $(LLEXEC)
 	@for i in $(TEST_ITER_REPORTS) ; do \
 	    this=`basename $$i .ll` ;\
-	    echo "$(LLEXEC) ti -x  $$this.ll > $$this.out" ;\
-	    $(LLEXEC) ti -x  $$this.ll > $$this.out;\
+	    echo "$(LLEXEC) ./ti -x  ./$$this.ll > $$this.out" ;\
+	    $(LLEXEC) ./ti -x  ./$$this.ll > $$this.out;\
 	    if diff $$this.out $(srcdir)/$$this.ref >/dev/null ; then\
 	        : echo "ok" ; \
 	    else \
@@ -65,7 +70,7 @@ test_iter: $(TEST_ITER_REPORTS) $(TEST_ITER_REFERENCE) $(TEST_ITER_DB) $(LLEXEC)
 
 st_all: $(SELFTEST_REPORTS) $(LLEXEC)
 	(echo 1; echo 1 ;echo 0 ; echo st_all.out) | \
-	      $(LLEXEC) ti -x st_all >st_all.stdout
+	      $(LLEXEC) ./ti -x ./st_all.ll > st_all.stdout
 	@if diff st_all.out $(srcdir)/st_all.ref >/dev/null ; then\
 	        : echo "test st_all output ok" ; \
 	    else \

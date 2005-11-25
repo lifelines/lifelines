@@ -47,7 +47,7 @@ proc polish_UTF_8()
 }
 proc spanish_UTF_8()
 {
-	if (not(set_and_check_locale("es", "Spanish"))) {
+	if (not(set_and_check_locale("es_ES", "Spanish"))) {
 		return()
 	}
 	call set_section("spanish_UTF-8")

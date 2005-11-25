@@ -7,14 +7,17 @@ strcmp([udia],z) FAILED
 strcmp([eth],e) FAILED
 polish_UTF-8
 strcmp(L,[Lstroke]) FAILED
-Locale missing: es (Spanish)
+spanish_UTF-8
+strcmp([Ntilde],O) FAILED
 finnish_8859-1
 strcmp([ydia],z) FAILED
 strcmp([udia],z) FAILED
 strcmp([eth],e) FAILED
-Locale missing: es (Spanish)
-Passed 25/34 collate tests
-Passed 39/39 string tests
+spanish_8859-1
+strcmp([Ntilde],O) FAILED
+Passed 31/40 collate tests
+ord(5) FAILED
+Passed 38/39 string tests
 Passed 28/28 list tests
 Passed 9/9 table tests
 upper(oe) FAILED
@@ -22,9 +25,7 @@ lower(oe) FAILED
 Passed 20/22 string UTF-8 tests
 Passed 27/27 number tests
 Passed 10/10 name tests
-Locale missing: it (Italian)
-Locale missing: sv (Swedish)
-Passed 574/576 (skipped 12) date tests
+Passed 598/598 date tests
 convertcode(bytecode($C5$81,raw),UTF-8,ANSEL) <> bytecode($A1,raw) FAILURE
 convertcode(bytecode($A1,raw),ANSEL,UTF-8) <> bytecode($C5$81,raw) FAILURE
 convertcode(bytecode($C3$A6,raw),UTF-8,ANSEL) <> bytecode($B5,raw) FAILURE

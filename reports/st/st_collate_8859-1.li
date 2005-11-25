@@ -35,7 +35,7 @@ proc finnish_8859_1()
 }
 proc spanish_8859_1()
 {
-	if (not(set_and_check_locale("es", "Spanish"))) {
+	if (not(set_and_check_locale("es_ES", "Spanish"))) {
 		return()
 	}
 	call set_section("spanish_8859-1")

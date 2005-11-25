@@ -120,7 +120,7 @@ proc testDates()
 	call tdfb("1953", 1, 1, 1, 2, 2, 1, "  /  /1953 A.D.", "*")
 
 /* test Italian months */
-	if (not(set_and_check_locale("it", "Italian"))) {
+	if (not(set_and_check_locale("it_IT", "Italian"))) {
 	set(testskip, add(testskip, 6))
 	} else {
 	call tdfb("2 JAN 1953", 2, 3, 0, 0, 0, 1, "2 GEN 1953", "*")
@@ -133,7 +133,7 @@ proc testDates()
 	}
 
 /* test Swedish months */
-	if (not(set_and_check_locale("sv", "Swedish"))) {
+	if (not(set_and_check_locale("sv_SE", "Swedish"))) {
 	set(testskip, add(testskip, 6))
 	} else {
 	call tdfb("2 OCT 1953", 2, 3, 0, 0, 0, 1, "2 OKT 1953", "*")
