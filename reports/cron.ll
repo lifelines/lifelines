@@ -1,6 +1,6 @@
 /*
  * @progname       cron.ll
- * @version        1.0
+ * @version        2.0
  * @author         Stephen Dum
  * @category       
  * @output         HTML
@@ -10,47 +10,69 @@ Generate calendar of birth, death, marriage events arranged by the year, month
 and day that they occurred.  Generates a top level index by year, with actual
 events stored in a separate html file for each decade.
 Warning, this report requires lifelines version 3.0.27 or later.
+Some properties must be set in your lifelines configuration file for this
+report to run, see comments at beginning of the report for details.
 
          by Stephen Dum (stephen.dum@verizon.net)
-         Version 1,  March 2003  
+         Version 1   March    2003  
+         Version 2   November 2005
 
 This program was inspired by similar efforts by Mitch Blank (mitch@ctrpnt.com)
 but without ever seeing the code he used to do a similar thing.
 
-Before using, there are a few variables that need to be customized for your
-own environment.  The changes need to be made in set_static_html_globals() 
-below. Note: name and email address are obtained with getproperty() so add
-them to your .linesrc (or for windows lines.cfg) file.
-
-By default, program tries to write data files in the directory 
-./html/<name of database> -- you must create this directory before running
-the program.
+Before using, there are a few properties that need to be customized for your
+own environment so add them to your .linesrc ( or for windows lines.cfg) file.
+The properties that are looked up are:
+   user.fullname -- name of the database owner
+   user.email -- email address of the db owner
+   cron.htmldir -- path to the directory to store results in
+                     e.g. /home/joe/genealogy/html
+   cron.backgroundimage -- path to the background image, no image if not defined.
+                 e.g. ../../image/crink.jpg
+		 this places image at the same level as /home/joe/genealogy/html
 */
 
-/* customization globals - modify values in set_static_html_globals below */
+/* customization globals */
 char_encoding("ASCII")
-options("explicitvars")
+option("explicitvars")
+
 global(base_filename)	/* where to store the results */
 global(background)	/* path of background image relative to final html
 			 * location, or "" */
 global(hi_bg_color)	/* highlighted year background color */
 global(lo_bg_color)	/* non-highlighted year background color */
-global(db_owner)
-global(owner_email)
-global(events)
-global(dates)
-global(month_name)
 
-proc set_static_html_globals() {
-    /* customize these globals to customize the output to your taste */
-    set(background,"../images/crink2.jpg")  /* set to "" if you have none */
+global(db_owner)        /* name of database owner - from config file */
+global(owner_email)     /* email of database owner - from config file */
+global(privatize)       /* should we privatize the data */
+global(withkey)         /* should we include key's in the output */
+global(cutoff_year)     /* 100 years before today */
+                        /* birth >= cutoff_year  is about 101 years,
+			 * and we consider person living */
+
+global(month_name)      /* names of the months */
+global(events)          /* list of events to print */
+global(dates)           /* list of dates of the events */
+
+proc main ()
+{
+    /* initialization of globals */
+
     set(hi_bg_color,"\"#ddb99f\"")
     set(lo_bg_color,"\"#e5d3c5\"")
-    set(base_filename, concat("./html/",database(),"/"))  
 
-    /* other globals*/
     set(db_owner, getproperty("user.fullname"))
     set(owner_email, concat("mailto:",getproperty("user.email")))
+    set(background,getproperty("anniver.backgroundimage")) 
+    set(base_filename,concat(getproperty("anniver.htmldir"),"/",database(),"/"))  
+    if (not(test("d",base_filename))) {
+        print("Error, property anniver.htmldir=",base_filename,
+	      ", is not a directory,aborting\n")
+	print("Please read comments at beginning of report about setting properties\n")
+        return()
+    }
+
+    /* other globals*/
     list(month_name)
     enqueue(month_name,"January")
     enqueue(month_name,"February")
@@ -64,13 +86,14 @@ proc set_static_html_globals() {
     enqueue(month_name,"October")
     enqueue(month_name,"November")
     enqueue(month_name,"December")
-}
 
-/* end of customization globals - customize values assigned in main */
+    extractdate(gettoday(),day,mon,cutoff_year)
+    decr(cutoff_year,100)
 
-proc main ()
-{
-    call set_static_html_globals()
+    /* end of initialization of globals */
+
+    getint(privatize,"Enter 1 to privitize data, 0 otherwise")
+    getint(withkey,"Enter 1 to include keys, 0 otherwise")
     getindi(person,"Enter person to find descendants of (return for all)")
     indiset(thisgen)
     indiset(allgen)
@@ -84,7 +107,7 @@ proc main ()
     if (person) {
 	addtoset(thisgen, person, 0)
 	addtoset(allgen, person, 0)
-	print("Computing descendents ")
+	print("Computing descendants ")
 	set(thisgensize,1)
 	set(gen,neg(1))
 	while(thisgensize) {
@@ -285,21 +308,52 @@ proc write_tail() {
  * Additional events can be added here
  */
 proc add_indi(indi) {
-    if (e,birth(indi)) {
-	call add_event(e,concat(name(indi)," born"))
-    } else {
-	if (e, baptism(indi)) {
-	    call add_event(e,concat(name(indi)," baptized"))
+    set(birth_type,0)
+    if (birth,birth(indi)) {
+	set(birth,get_date(birth))
+	set(birth_type," born")
+    } elsif (birth, baptism(indi)) {
+	set(birth,get_date(birth))
+	set(birth_type," baptized")
+    }
+    set(death_type,0)
+    if (death,death(indi)) {
+	set(death,get_date(death))
+	set(death_type," died")
+    } elsif (death, burial(indi)) {
+	set(death,get_date(death))
+        set(death_type," buried")
+    }
+    if (privatize) {
+	/* skip confidential or living people */
+	if (confidential(indi)) { return() }
+	/* living - birth, no death, and birth < 101 years ago */
+	if (and(birth,not(death))) {
+	    if (ge(div(birth,10000),cutoff_year)) { return()}
 	}
     }
-    if (e,death(indi)) {
-	call add_event(e,concat(name(indi)," died"))
-    } else {
-       if (e, burial(indi)) {
-	   call add_event(e,concat(name(indi)," buried"))
-       }
-    } 
+    if (birth) {
+	if (withkey) {
+	    enqueue(events,concat(name(indi),"(",key(indi),")",birth_type))
+	} else {
+	    enqueue(events,concat(name(indi),birth_type))
+	}
+	enqueue(dates,birth)
+    }
+    if (death) {
+	if (withkey) {
+	    enqueue(events,concat(name(indi),"(",key(indi),")",death_type))
+	} else {
+	    enqueue(events,concat(name(indi),death_type))
+	}
+	enqueue(dates,death)
+    }
+
     families(indi,famly, spouse, cnt) {
+	if (privatize) {
+	    /* skip confidential families */
+	    if (confidential(famly)) { return() }
+	}
 	/* to avoid duplication, only enter data 
 	 * if indi is male, or there is no spouse
 	 */
@@ -311,24 +365,44 @@ proc add_indi(indi) {
 		    } else {
 			set(spo," married")
 		    }
-		    call add_event(node,concat(name(indi),spo))
+		    set(marr,get_date(node))
+		    if (marr) {
+			if (withkey) {
+			    enqueue(events,concat(name(indi),spo,
+				    "(",key(indi),",",key(spouse),")"))
+			} else {
+			    enqueue(events,concat(name(indi),spo))
+			}
+			enqueue(dates,marr)
+		    }
 		}
 	    }
 	}
     }
 }
 
-/* add another event to the appropriate lists
- * events  - contains the description of the event
- * dates   - contains the date the event occurred the date is stored
- *           as a decimal number for sorting
+/* get_date(node)
+ * if event node has a date associated with it return it encoded as
  *           (year * 100 + month) * 100 + day
+ *           These values facilitate sorting.
  */
-proc add_event(node,description) {
+func get_date(node)
+{
     extractdate(node,day,mon,yr)
     if (yr) {
-	set(dt,add(mul(add(mul(yr,100),mon),100),day))
-	enqueue(events,description)
-	enqueue(dates,dt)
+	return(add(mul(add(mul(yr,100),mon),100),day))
     }
+    return(0)
+}
+
+func confidential(n)
+{
+    fornodes(n,node) {
+        if (eqstr(tag(node),"RESN")) {
+	    if (eqstr(value(node),"confidential")) {
+	        return(1)
+	    }
+	}
+    }
+    return(0)
 }
