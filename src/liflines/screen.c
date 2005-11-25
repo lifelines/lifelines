@@ -2210,14 +2210,16 @@ invoke_extra_menu (RECORD *prec)
  *  returns descriptive string for failure, 0 for pass
  *=============================*/
 static STRING
-uopt_validate (TABLE tab)
+uopt_validate (TABLE tab, void * param)
 {
 	STRING codeset = valueof_str(tab, "codeset");
+	STRING original_codeset = (STRING)param;
 	/*
 	our only rule currently is that user may not change codeset
 	of a populated database
 	*/
-	if (!eqstr_ex(codeset, int_codeset)) {
+	if (!eqstr_ex(codeset, original_codeset)
+		&& !eqstr_ex(codeset, int_codeset)) {
 		if (num_indis()+num_fams()+num_sours()+num_evens()+num_othrs())
 			return _("Impermissible to change codeset in a populated database");
 	}
@@ -2229,7 +2231,7 @@ uopt_validate (TABLE tab)
 static void
 edit_place_table (void)
 {
-	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0);
+	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0, 0);
 }
 /*===============================
  * edit_user_options -- Allow user to edit options embedded in current db
@@ -2238,9 +2240,14 @@ static void
 edit_user_options (void)
 {
 	TABLE uopts = create_table_str();
+	STRING param=0;
 	get_db_options(uopts);
-	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate))
+	param = valueof_str(uopts, "codeset");
+	param = (param ? strsave(param) : 0);
+
+	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate, (void *)param))
 		set_db_options(uopts);
+	strfree(&param);
 	release_table(uopts);
 }
 /*===============================

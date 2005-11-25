@@ -42,7 +42,7 @@ extern STRING qSaredit,qSdataerr,qSsepch,qSronly;
 
 static STRING trans_edin(STRING input, INT len);
 static STRING trans_ined(STRING input, INT len);
-static BOOLEAN edit_valtab_impl(TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab));
+static BOOLEAN edit_valtab_impl(TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab, void * param), void * param);
 
 /*
 TODO
@@ -62,7 +62,7 @@ TODO
  * single character (the sep arg) between each key & value.
  *============================================*/
 BOOLEAN
-edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
+edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab, void * param), void * param)
 {
 	unlink(editfile);
 
@@ -70,7 +70,7 @@ edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*va
 		msg_error(_(qSdataerr));
 		return FALSE;
 	}
-	if (!edit_valtab_impl(ptab, sep, ermsg, validator))
+	if (!edit_valtab_impl(ptab, sep, ermsg, validator, param))
 		return FALSE;
 
 	if (readonly) {
@@ -93,7 +93,7 @@ edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*va
  * single character (the sep arg) between each key & value.
  *============================================*/
 static BOOLEAN
-edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab))
+edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE tab, void * param), void * param)
 {
 	TABLE tmptab = NULL;
 	STRING msg;
@@ -105,7 +105,7 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
 	while (TRUE) {
 		tmptab = create_table_str();
 		if (init_valtab_from_file(editfile, tmptab, ttmi, sep, &msg)) {
-			if (!validator || !(ptr = (*validator)(tmptab))) {
+			if (!validator || !(ptr = (*validator)(tmptab, param))) {
 				if (*ptab) destroy_table(*ptab);
 				*ptab = tmptab;
 				return TRUE;

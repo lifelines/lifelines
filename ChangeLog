@@ -9,7 +9,15 @@
 
 	Add new marriages report to Makefile.am.
 
+	* ChangeLog src\gedlib\editvtab.c src\hdrs\gedcom.h
+	src\liflines\screen.c
+
+	Fix user option validator to test before & after codeset
+	(test was failing when no preexisting option in user options).
+	Changed uopt_validate & edit_valtab_from_db etc.
+
 2005-11-20 Stephen Dum
+
 	* ChangeLog  reports/addsour.ll reports/refn.ll reports/Makefile.am
 
 	Add Larry Hamilton's refn script, and add my addsour report.
