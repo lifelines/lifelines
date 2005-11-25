@@ -500,15 +500,15 @@ family you can see all the data.
 
      If you don't give the name of a database on the command line,
      <application>LifeLines</application> will prompt you for
-     it. If you do not use the <envar>LLDATABASES</envar> shell
-     variable or user options (described later), the name you enter must be the
-     name of a <application>LifeLines</application> database
-     directory expressed using normal <acronym>UNIX</acronym>
-     absolute or relative path naming. If you do use the
-     <envar>LLDATABASES</envar> variable,
+     it.  If the name you supply is an absolute pathname or a
+     relative pathname it is used as the path to the database.
+     If you provided a simple filename and you use the
+     <envar>LLDATABASES</envar> variable or user options (described later),
      <application>LifeLines</application> will search for the
      database in the directories named in the variable; this can be
      very convenient.
+     If <envar>LLDATABASES</envar> is not set
+     the filename you enter is looked for in the current working directory.
 
 </para>
 

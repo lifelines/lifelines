@@ -9,7 +9,9 @@ Thomas T. Wetmore , IV
    Table of Contents
    Report Programming Manual
 
-        INTRODUCTION
+        Introduction
+        Tutorial Ahnentafel report
+        Template for creating new reports
 
    LIFELINES PROGRAMMING REFERENCE
 
@@ -42,7 +44,7 @@ Thomas T. Wetmore , IV
 
 Report Programming Manual
 
-INTRODUCTION
+Introduction
 
    The LifeLines programming subsystem lets you produce reports in any
    style or layout. You may generate files in troff, Postscript, TeX, SGML
@@ -57,6 +59,9 @@ INTRODUCTION
    and the programs are stored in normal files. When you direct LifeLines
    to run a program, it asks you for the name of the program file, asks you
    where you want the program's output written, and then runs the program.
+     _____________________________________________________________
+
+Tutorial Ahnentafel report
 
    For example, say you want LifeLines to generate an ahnentafel. Such a
    report might look like:
@@ -90,6 +95,17 @@ INTRODUCTION
    Here is a LifeLines program that generates this report:
 
    Example 2. Example of ahnentafel report script 
+/*
+ * @progname        ahnentafel_tutorial.ll
+ * @version         1.0
+ * @author          Wetmore
+ * @category        sample
+ * @output          text
+ * @description
+ *
+ * Generate an ahnentafel chart for the selected person (tutorial sample).
+ */
+
 proc main ()
   {
     getindi(indi)
@@ -113,13 +129,13 @@ proc main ()
     }
   }
 
-   Say this program is in the file ahnen. When you choose the r option from
-   the main menu, LifeLines asks:
+   Say this program is in the file ahnentafel_tutorial. When you choose the
+   r option from the main menu, LifeLines asks:
 What is the name of the report program?
 enter string:
 
-   You enter ahnen. Since the program generates a report, LifeLines asks
-   where to write that report:
+   You enter ahnentafel_tutorial. Since the program generates a report,
+   LifeLines asks where to write that report:
 What is the name of the output file?
 enter file name:
 
@@ -134,8 +150,12 @@ enter file name:
    built-in  functions.  In  the ahnentafel example there is only one
    procedure.
 
-   A procedure body is a sequence of statements. In the example program the
-   first five statements are:
+   In the example program, there are some comments at the top, to tell the
+   reader a bit about the program. The comments run from /* to */, and are
+   not necessary (but are suggested).
+
+   A procedure body is a sequence of statements. In the example program,
+   the first five statements are:
 getindi(indi)
 list(ilist)
 list(alist)
@@ -240,6 +260,28 @@ enqueue(alist,add(1,mul(2,ahnen)))
    functions.
      _____________________________________________________________
 
+Template for creating new reports
+
+   The following is a good template to use when creating a new report from
+   scratch.
+/*
+* @progname reportname
+* @version Version Number.
+* @author report author & possible email address
+* @category ????
+* @output Format of Report Output
+* @description The following paragraph is used to
+populate index.html.
+
+This report ....
+*/
+
+proc main()
+{
+
+}
+     _____________________________________________________________
+
 LIFELINES PROGRAMMING REFERENCE
 
    LifeLines programs are stored in files you edit with a screen editor.
@@ -286,6 +328,30 @@ Comments
 
    You may comment your LifeLines programs using the following notation:
    /*...comment text including any characters except */... */
+
+   These comments may be inserted anywhere in the program file.
+
+   You should put in some report header comments, because they will provide
+   useful text for your report when it is included in the report list seen
+   by the user who uses the lifelines pick report menu function. Report
+   header comments are some specific comments at the top of the report,
+   with keywords preceded by @ signs. The following is an illustration of
+   report header comments, with explanations inside them:
+/*
+* @progname The name of the report without the
+extension. This shows in the pick report option.
+* @version Version Number of the report. This
+is stored here and not in the report name.
+* @author Name of the author of this report
+and email address if he/she desires.
+* @category ????
+* @output Modifies Database | text | HTML |
+GEDCOM | RTF | XML | PostScript | etc.
+* @description The first paragraph after this is
+used to generate the description in the index.html.
+
+This report ....
+*/
 
    Comments begin with a /* and end with a */. Comments may appear on lines
    of their own or on lines that have program constructs. Comments may span

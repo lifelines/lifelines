@@ -633,7 +633,7 @@ when it is included in the report list seen by the user who uses the lifelines p
 function. Report header comments are some specific comments at the top of the report, with keywords
 preceded by @ signs. The following is an illustration of report header comments, with explanations
 inside them:
-<para>
+</para>
 
 <programlisting>
 /*

@@ -104,15 +104,19 @@ INSTALLATION
    directory in your execution path. If you get the program in executable
    form, follow whatever instructions came with it.
 
-   llines
-          the LifeLines program with full user interface
+   btedit
+          a low-level editor for advanced debugging of broken LifeLines
+          databases.
+
+   dbverify
+          a utility program to verify LifeLines databases.
 
    llexec
           a stripped down version of the LifeLines program, without the
           user interface for non-interactive processing of report programs
 
-   dbverify
-          a utility program to verify LifeLines databases.
+   llines
+          the LifeLines program with full user interface
 
    The source distribution package also contains documentation and some
    LifeLines programs. Included with these in the reports directory is a
@@ -140,7 +144,7 @@ STARTING LIFELINES AND CREATING DATABASES
    -C/home/bill/lifelines/.linesrc2 ) see the section on System and User
    Properties below
    -F Finnish option (only available if so compiled)
-   -I Specify a user property (e.g. -ILLEDITOR=gvim )
+   -I Specify a user property (e.g. -ILLEDITOR=gvim)
    -a log dynamic memory operation (for debugging)
    -c supply cache values (eg, -ci400,4000f400,4000 sets direct indi & fam
    caches to 400, and indirect indi & fam caches to 4000)
@@ -205,12 +209,13 @@ STARTING LIFELINES AND CREATING DATABASES
    displaying the family you can see all the data.
 
    If you don't give the name of a database on the command line, LifeLines
-   will prompt you for it. If you do not use the LLDATABASES shell variable
-   or user options (described later), the name you enter must be the name
-   of a LifeLines database directory expressed using normal UNIX absolute
-   or  relative  path naming. If you do use the LLDATABASES variable,
-   LifeLines will search for the database in the directories named in the
-   variable; this can be very convenient.
+   will prompt you for it. If the name you supply is an absolute pathname
+   or a relative pathname it is used as the path to the database. If you
+   provided a simple filename and you use the LLDATABASES variable or user
+   options (described later), LifeLines will search for the database in the
+   directories named in the variable; this can be very convenient. If
+   LLDATABASES is not set the filename you enter is looked for in the
+   current working directory.
 
    If you would like to choose a database from a list of existing ones,
    enter a single question mark and press return when LifeLines prompts you
