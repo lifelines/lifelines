@@ -10,6 +10,15 @@
 	pathnames, rather than rely on default search paths.  Add a clean
 	target.
 
+	* src/stdlib/path.c
+	Change Path resolution code to properly handle absolute and relative
+	unix paths.  Also to handle ~name/, in addition to ~/ on *nix.
+
+	* ll-reportmanual.{xml,txt,html,pdf}
+	* ll-userguide.{xml,txt,html,pdf}
+
+	Update formatted docs. Fix typo in report manual
+
 2005-11-25 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml
