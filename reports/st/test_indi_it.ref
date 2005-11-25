@@ -1,0 +1,93 @@
+Program is running...
+1: I1
+    Parents
+    1: F1
+    families
+    spouses
+    mothers
+    1: I3 F1
+    fathers
+    1: I2 F1
+2: I2
+    Parents
+    1: F7
+    families
+    1: F1 I3
+    spouses
+    1: I3 F1
+    mothers
+    1: I12 F7
+    fathers
+3: I3
+    Parents
+    families
+    1: F1 I2
+    spouses
+    1: I2 F1
+    mothers
+    fathers
+4: I4
+    Parents
+    1: F1
+    families
+    spouses
+    mothers
+    1: I3 F1
+    fathers
+    1: I2 F1
+5: I6
+    Parents
+    families
+    1: F2 I7
+    2: F2 I9
+    spouses
+    1: I7 F2
+    2: I9 F2
+    mothers
+    fathers
+6: I7
+    Parents
+    families
+    1: F2 I6
+    2: F2 I9
+    spouses
+    1: I6 F2
+    2: I9 F2
+    mothers
+    fathers
+7: I9
+    Parents
+    families
+    1: F2 I6
+    2: F2 I7
+    spouses
+    1: I6 F2
+    2: I7 F2
+    mothers
+    fathers
+8: I10
+    Parents
+    families
+    1: F5 I11
+    spouses
+    1: I11 F5
+    mothers
+    fathers
+9: I11
+    Parents
+    1: F2
+    families
+    1: F5 I10
+    spouses
+    1: I10 F5
+    mothers
+    1: I7 F2
+    fathers
+    1: I6 F2
+10: I12
+    Parents
+    families
+    spouses
+    mothers
+    fathers
+Program was run successfully.

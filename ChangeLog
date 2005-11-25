@@ -1,3 +1,28 @@
+2005-11-25 Stephen Dum
+	* ChangeLog reports/anniver.ll reports/cron.ll
+	Update cron.ll and anniver.ll to privatize data.
+
+	* src/interp/interp.c
+	Fix iterators forfam,forindi,forsour,fornotes and forothr so that
+	last argument - the count, increments by 1 each time thru the executed
+	loop.
+
+	* DELETE .linesrc lines.cfg 
+	* lines.cfg.input Makefile.am
+	Generate .linesrc and lines.cfg from lines.cfg.input using m4.
+
+	* configure.in reports/Makefile.am
+	* NEW  in reports/st
+	    Makefile.am st_all.out st_all.ref st_all.stdout
+	    st_all_stdout.ref test_fam_it.ll test_fam_it.ref test_forfam.ll
+	    test_forfam.out test_forfam.ref test_forindi.ll test_forindi.out
+	    test_forindi.ref test_indi_it.ll test_indi_it.out test_indi_it.ref
+	    test_othr_it.ll test_othr_it.ref ti.ged
+
+	Add a number of tests in the reports/st directory.  Add Makefile
+	for this directory, and utilize the check target in the makefiles 
+	to run the tests in this directory.
+
 2005-11-25 Perry Rapp
 
 	* ChangeLog

@@ -2,6 +2,8 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
+SUBDIRS = st
+
 # LL_REPORTS is to hold the actual report files
 # (included files go in a different target below)
 LL_REPORTS = \
@@ -72,23 +74,7 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c              \
         ps-fan/ps-fan.ps                                                \
         ps-pedigree.ps tree.tex
 
-# SELFTEST_REPORTS is to hold all parts of the self-test scripts
-SELFTEST_REPORTS = \
-	st/st_aux.li             \
-	st/st_collate.li         \
-	st/st_collate_8859-1.li  \
-	st/st_collate_UTF-8.li   \
-	st/st_convert.li         \
-	st/st_date.li            \
-	st/st_db.li              \
-	st/st_list.li            \
-	st/st_name.li            \
-	st/st_number.li          \
-	st/st_string.li          \
-	st/st_string_UTF-8.li    \
-	st/st_table.li
-
-pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) $(SELFTEST_REPORTS)
+pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) 
 pkg_REPORTS_MISC = index.html CREDIT README tree.tex
 
 EXTRA_DIST = $(pkg_REPORTS) \

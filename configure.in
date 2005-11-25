@@ -250,6 +250,7 @@ AC_OUTPUT(Makefile \
         src/hdrs/win32/Makefile \
         docs/Makefile \
         reports/Makefile \
+        reports/st/Makefile \
         tt/Makefile \
         win32/Makefile \
         build/Makefile \
