@@ -1,4 +1,11 @@
+2005-11-25 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add report header comments to sample ahnentafel in report manual.
+
 2005-11-25 Stephen Dum
+
 	* ChangeLog reports/anniver.ll reports/cron.ll
 	Update cron.ll and anniver.ll to privatize data.
 
@@ -12,7 +19,7 @@
 	Generate .linesrc and lines.cfg from lines.cfg.input using m4.
 
 	* configure.in reports/Makefile.am
-	* NEW  in reports/st
+	*NEW  in reports/st
 	    Makefile.am st_all.out st_all.ref st_all.stdout
 	    st_all_stdout.ref test_fam_it.ll test_fam_it.ref test_forfam.ll
 	    test_forfam.out test_forfam.ref test_forindi.ll test_forindi.out

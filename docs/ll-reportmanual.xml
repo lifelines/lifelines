@@ -179,6 +179,17 @@ Example of ahnentafel report script
 
 <programlisting>
 
+/*
+ * @progname        ahnentafel_tutorial.ll
+ * @version         1.0
+ * @author          Wetmore
+ * @category        sample
+ * @output          text
+ * @description
+ *
+ * Generate an ahnentafel chart for the selected person (tutorial sample).
+ */
+
 proc main ()
   {
     getindi(indi)
@@ -200,7 +211,9 @@ proc main ()
         enqueue(alist, add(1,mul(2,ahnen)))
       }
     }
-  }</programlisting></example>
+  }
+
+</programlisting></example>
 
 </para>
 
@@ -209,7 +222,7 @@ proc main ()
 <para>
 
      Say this program is in the file
-     <filename>ahnen</filename>. When you choose the
+     <filename>ahnentafel_tutorial</filename>. When you choose the
      <keycap>r</keycap> option from the main menu,
      <application>LifeLines</application> asks:
 
@@ -223,7 +236,7 @@ enter string:
 <para>
 
      You enter
-     <userinput><literal>ahnen</literal></userinput>. Since the
+     <userinput><literal>ahnentafel_tutorial</literal></userinput>. Since the
      program generates a report,
      <application>LifeLines</application> asks where to write that
      report:
@@ -265,12 +278,19 @@ enter file name:
 
 </para>
 
+<para>
+     In the example program, there are some comments at the top,
+     to tell the reader a bit about the program. The comments run
+     from <literal>/*</literal> to <literal>*/</literal>, and are
+     not necessary (but are suggested).
+
+</para>
 
 
 <para>
 
      A <type>procedure</type> body is a sequence of
-     <type>statements</type>. In the example program the first five
+     <type>statements</type>. In the example program, the first five
      <type>statements</type> are:
 
 <programlisting>
