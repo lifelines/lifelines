@@ -4,6 +4,10 @@
 
 	Add explanation of lynx use in developer tools.
 
+	* ChangeLog
+
+	Cosmetic: fix two typos in earlier ChangeLog entry.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
@@ -17,7 +21,7 @@
 	* Changelog Makefile.am src/stdlib/path.c README.DEVELOPERS
 
 	Remove use of unix2dos, which is not available everywhere.
-	All extention appending on pathnames, not just filenames.
+	Add extension appending on pathnames, not just filenames.
 	Add more data on required tools in README.DEVELOPERS
 
 2005-11-26 Perry Rapp
