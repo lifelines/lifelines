@@ -41,6 +41,10 @@
 
 	Add countries beginning with A or B to isolangs list.
 
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+
+	Add new source file rptsort.c to MSVC6 project.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
