@@ -1,3 +1,10 @@
+2005-11-26 Perry Rapp
+
+	* ChangeLog src/stdlib/path.c
+
+	New function get_user_homedir to encapsulate platform-specific
+	portion of expand_special_fname_chars.
+
 2005-11-26 Stephen Dum
 	* ChangeLog reports/st/st_collate_8859-1.li
 	reports/st/st_collate_UTF-8.li reports/st/st_date.li

@@ -19,6 +19,7 @@
 /*********************************************
  * local function prototypes
  *********************************************/
+static STRING get_user_homedir(STRING username);
 static INT zero_separate_path(STRING path);
 
 /*===========================================
@@ -488,14 +489,13 @@ get_home (void)
 BOOLEAN
 expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 {
-	char * sep;
-	struct passwd *pw;
+	char * sep=0;
 	if (buffer[0]=='~') {
 		if (is_dir_sep(buffer[1])) {
 			STRING home = get_home();
 			if (home && home[0]) {
 				STRING tmp;
-				if ((INT)strlen(buffer)+(INT)strlen(home)+1 > buflen) {
+				if ((INT)strlen(home) + 1 + (INT)strlen(buffer) > buflen) {
 					return FALSE;
 				}
 				tmp = strsave(buffer);
@@ -506,31 +506,59 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 				return TRUE;
 			}
 		}
-#ifndef WIN32
 		/* check for ~name/... and resolve the ~name */
 		if ((sep = strchr(buffer,LLCHRDIRSEPARATOR))) {
-			setpwent();
-			/* loop through the password file/database
-			 * to see if the string following ~ matches
-			 * a login name - 
-			 */
-			while ((pw = getpwent())) {
-				if (strncmp(pw->pw_name,buffer,sep-buffer) &&
-				    pw->pw_name[sep-buffer+1] == 0) {
-					/* found user in passwd file */
-					STRING tmp;
-					tmp = strsave(buffer);
-					buffer[0] = 0;
-					llstrapps(buffer, buflen, utf8, pw->pw_dir);
-					llstrapps(buffer, buflen, utf8, tmp+(buffer-sep+1));
-					endpwent();
-					strfree(&tmp);
-					return TRUE;
+			STRING username = strsave(buffer+1);
+			STRING homedir;
+			username[sep-buffer+1] = 0;
+			homedir = get_user_homedir(username);
+			strfree(&username);
+			if (homedir) {
+				STRING tmp=0;
+				if ((INT)strlen(homedir) + 1 + (INT)strlen(sep+1) > buflen) {
+					return FALSE;
 				}
+				tmp = strsave(sep+1);
+				buffer[0] = 0;
+				llstrapps(buffer, buflen, utf8, homedir);
+				llstrapps(buffer, buflen, utf8, tmp+(sep-buffer+1));
+				strfree(&tmp);
+				return TRUE;
 			}
-			endpwent();
 		}
-#endif
 	}
 	return TRUE;
+}
+/*============================================
+ * get_user_homedir -- Return home directory of specified user
+ *  returns 0 if unknown or error
+ *  returns alloc'd value
+ *==========================================*/
+static STRING
+get_user_homedir (STRING username)
+{
+	struct passwd *pw=0;
+	if (!username) return 0;
+#ifdef WIN32
+	/*
+	This could be implemented for NT+ class	using NetUserGetInfo,
+	but I doubt it's worth the trouble. Perry, 2005-11-25.
+	*/
+#else /* not WIN32 */
+	setpwent();
+	/* loop through the password file/database
+	 * to see if the string following ~ matches
+	 * a login name - 
+	 */
+	while ((pw = getpwent())) {
+		if (eqstr(pw->pw_name,username)) {
+			/* found user in passwd file */
+			STRING homedir = strsave(pw->pw_dir);
+			endpwent();
+			return homedir;
+		}
+	}
+	endpwent();
+#endif
+	return 0;
 }
