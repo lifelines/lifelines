@@ -28,6 +28,10 @@
 	Move sort & rsort implementations from end of more.c into new
 	file rptsort.c.
 
+	* ChangeLog src/interp/rptsort.c
+
+	Add some ASSERT calls in sortpair_bin.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 

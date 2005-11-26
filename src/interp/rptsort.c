@@ -63,8 +63,13 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 static INT
 sortpair_bin (const void * el1, const void * el2)
 {
-	SORTPAIR sp1 = *(SORTPAIR *)el1;
-	SORTPAIR sp2 = *(SORTPAIR *)el2;
+	SORTPAIR sp1, sp2;
+	ASSERT(el1);
+	ASSERT(el2);
+	sp1 = *(SORTPAIR *)el1;
+	sp2 = *(SORTPAIR *)el2;
+	ASSERT(sp1->key);
+	ASSERT(sp2->key);
 	return pvalues_collate(sp1->key, sp2->key);
 }
 static PVALUE
