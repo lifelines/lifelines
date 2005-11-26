@@ -16,6 +16,12 @@
 
 	Cosmetic: Fix some inconsistency in tabs in filepath.
 
+	* ChangeLog src/stdlib/path.c
+
+	Restore is_absolute_path so that relative paths work again.
+	Add more commenting to both is_path and is_absolute_path.
+	Remove a spurious test for isdirsep(dir[0]) in both functions.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 

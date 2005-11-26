@@ -46,9 +46,9 @@ is_dir_sep (char c)
 #endif
 }
 /*===============================================
- * is_path -- Is this an absolute or relative path ?
- *  ie, does this begin with directory info
- *  handle WIN32 characters
+ * is_path -- Is this a path (not a bare filename) ?
+ *  ie, does this have any slashes in it?
+ * (does not handle escaped slashes)
  *=============================================*/
 BOOLEAN
 is_path (CNSTRING dir)
@@ -58,13 +58,35 @@ is_path (CNSTRING dir)
 #ifdef WIN32
 	/* windows \ or / is path separator. */
 	if (strchr(dir,'/')) return TRUE;
-	if (is_dir_sep(dir[0]) 
-		|| (dir[0] && dir[1]==':' && isasciiletter(dir[0]))) {
+	if (dir[0] && dir[1]==':' && isasciiletter(dir[0])) {
 		return TRUE;
 	}
 #endif
 	return FALSE;
 }
+/*===============================================
+ * is_absolute_path -- Is this an absolute path ?
+ *  handle WIN32 characters, and ~ homedir references
+ *=============================================*/
+BOOLEAN
+is_absolute_path (CNSTRING dir)
+{
+	/* if it starts with a slash, it's absolute */
+	if (is_dir_sep(dir[0])) return TRUE;
+	/* if it starts with a dot, it's relative, but not relative
+	to search path, only to current directory -- as in shell logic 
+	so we say it is absolute */
+	if (dir[0] == '.') return TRUE;
+	/* if it starts with ~, it is a reference to an absolute home dir */
+	if (dir[0] == '~') return TRUE;
+#ifdef WIN32
+	/* if it starts with a drive letter, it's absolute */
+	if (dir[0] && dir[1]==':' && isasciiletter(dir[0])) {
+		return TRUE;
+	}
+#endif
+	return FALSE;
+}	
 /*=========================================
  * path_match -- are paths the same ?
  *  handle WIN32 filename case insensitivity
@@ -214,7 +236,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	}
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
-	if (is_path(name)) {
+	if (is_absolute_path(name)) {
 		if (ext) {
 			strcpy(buf1,name);
 			strcat(buf1, ext);
@@ -226,6 +248,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 			return strsave(name);
 		}
 	}
+	/* it is a relative path, so search for it in search path */
 	strcpy(buf1, path);
 	zero_separate_path(buf1);
 	p = buf1;
