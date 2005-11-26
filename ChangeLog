@@ -1,4 +1,9 @@
 2005-11-26 Stephen Dum
+        * ChangeLog lines.cfg.input
+
+	Minor cleanup on lines.cfg.input.  Remove a couple of 
+	inconsistent differences between *nix and windows ifdef's.
+
 	* Changelog Makefile.am src/stdlib/path.c README.DEVELOPERS
 
 	Remove use of unix2dos, which is not available everywhere.
