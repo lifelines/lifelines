@@ -86,8 +86,11 @@ static const char * langs[] = {
 };
 static const char * countries[] = {
 	/* TODO: Obviously this isn't even close to complete */
-	"FI", "FINLAND"
-	, "PL", "POLAND"
+	"ES", "Spain"
+	, "FI", "Finland"
+	, "IT", "Italy"
+	, "PL", "Poland"
+	, "SE", "Sweden"
 	, "US", "United States"
 	, 0, 0
 };

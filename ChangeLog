@@ -32,6 +32,11 @@
 
 	Add some ASSERT calls in sortpair_bin.
 
+	* ChangeLog src/hdrs/isolangs.h
+
+	Add Italy, Sweden, and Spain to isolangs.h, to pass self-tests
+	on MS-Windows.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
