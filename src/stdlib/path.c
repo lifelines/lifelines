@@ -203,7 +203,6 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
-	if (is_path(name)) return strsave(name);
 	nlen = strlen(name);
 	if(ext && *ext) {
 		elen = strlen(ext);
@@ -215,6 +214,18 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	}
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
+	if (is_path(name)) {
+	    if (ext) {
+		strcpy(buf1,name);
+		strcat(buf1, ext);
+		if(access(buf1, 0) == 0) return strsave(buf1);
+		nlen = strlen(buf1);
+		buf1[nlen-elen] = '\0'; /* remove extension */
+		return strsave(buf1);
+	    } else {
+		return strsave(name);
+	    }
+	}
 	strcpy(buf1, path);
 	zero_separate_path(buf1);
 	p = buf1;
