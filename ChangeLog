@@ -1,5 +1,9 @@
 2005-11-26 Stephen Dum
-        * ChangeLog lines.cfg.input
+	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
+
+	Deprecate baptism function, and offer two alternative solutions.
+
+	* ChangeLog lines.cfg.input
 
 	Minor cleanup on lines.cfg.input.  Remove a couple of 
 	inconsistent differences between *nix and windows ifdef's.

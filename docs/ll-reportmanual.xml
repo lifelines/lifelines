@@ -1504,16 +1504,6 @@ first death event of
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>EVENT <function>baptism</function></funcdef>
-<paramdef><parameter>INDI</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-first baptism event of
-</para>
-
-</glossdef></glossentry>
-<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>EVENT <function>burial</function></funcdef>
 <paramdef><parameter>INDI</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -1808,7 +1798,7 @@ maximum character length given in the second variable.
 </para>
 
 <para>
-<function>Birth</function>, <function>death</function>, <function>baptism</function> and <function>burial</function> return the first birth, death, baptism and burial event in the
+<function>Birth</function>, <function>death</function>, and <function>burial</function> return the first birth, death, and burial event in the
 person's record, respectively. An event is a level <structfield>1 GEDCOM</structfield> node. If there is no matching event these
 functions return <returnvalue>null</returnvalue>.
 </para>
@@ -4979,6 +4969,67 @@ effect the variable in the calling program.
 <title>
 Deprecated Functions
 </title>
+
+<para>
+The <function>baptism</function> finds christening (CHR) events.  The types of
+events desired to be found, depend on the nature of the report being written.
+It is recommended that custom access routines be used instead of 
+<function>baptism</function>.
+</para>
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>EVENT <function>baptism</function></funcdef>
+<paramdef><parameter>INDI</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+first baptism event of
+</para>
+
+<para>
+If you want a routine that returns the first event for an individual that is a
+baptism, LDS baptism, Christening or Adult Christening, the following routine
+can be used.
+
+    <synopsis>func get_baptism(indi) {
+    fornodes(indi,node) {
+        if (index(" BAPM BAPL CHR CHRA ",upper(tag(node)),1)) {
+            return(node)
+        }
+	return(0)
+    }
+}</synopsis>
+If you want to search for additional events or fewer events you can modify the
+string in the index call acccordingly.  Likewise, if you want the to prioritize
+the results, finding a christening event if one exists, else finding
+a baptism event if one exists, then finding an LDS baptism event, and finally
+a christening event, the following function is suggested.
+
+    <synopsis>/* get_baptism(indi) returns a baptism event if found
+   events CHR, BAPM, BAPL, and CHRA are considered, in that order
+*/
+func get_baptism(indi, prefs)
+{
+    set(chr, 0)
+    set(bapm, 0)
+    set(bapl, 0)
+    set(chra, 0)
+    fornodes(indi,node)
+    {
+	if (and(eq(upper(tag(node)), "CHR"), not(chr)) { set(chr, node) }
+	if (and(eq(upper(tag(node)), "BAPM"), not(bapm)) { set(bapm, node) }
+	if (and(eq(upper(tag(node)), "BAPL"), not(bapl)) { set(bapl, node) }
+	if (and(eq(upper(tag(node)), "CHRA"), not(chra)) { set(chra, node) }
+    }
+    if (chr) { return(chr) }
+    if (bapm) { return(bapm) }
+    if (bapl) { return(bapl) }
+    return(chra)
+}</synopsis>
+
+</para>
+</glossdef></glossentry>
+</glosslist>
 
 <para>
 The functionality of the following three functions,
