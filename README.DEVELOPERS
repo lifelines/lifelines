@@ -27,7 +27,8 @@ jw: Is used to compile the documentation.  It is at least
    only listing these lacks as warnings.  The generated
    documention is included in both the cvs and src distributions.
    This will only prevent regeneration of the documention.
-lynx: See jw above.
+lynx: Is used to compile text versions of documentation. See
+   jw above.
 
 Note: These requirements are for compiling from
 the cvs sources, not from a distribution tarball.

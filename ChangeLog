@@ -1,3 +1,9 @@
+2005-11-26 Perry Rapp
+
+	* ChangeLog README.DEVELOPERS
+
+	Add explanation of lynx use in developer tools.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
