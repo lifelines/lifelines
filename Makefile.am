@@ -9,6 +9,7 @@ EXTRA_DIST = .linesrc lines.cfg \
              COPYING LICENSE INSTALL NEWS README AUTHORS ABOUT-NLS \
              README.AUTOCONF README.DEVELOPERS README.INTERNATIONAL \
              README.LAYOUT README.MAINTAINERS
+CLEANFILES = .linesrc lines.cfg
 
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
