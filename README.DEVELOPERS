@@ -16,6 +16,15 @@ the m4 macro processor).
 The developer also must have bison (in order to
 properly compile lifelines/src/interp/yacc.y).
 
+In order to compile the documentation, the
+developer needs the jw program, which is at
+least available in the debian text/docbook-utils
+package, and also the lynx program (available
+in the debian package  web/lynx). Lack of these
+programs is not critical, however, and the
+make will continue, only listing these lacks
+as warnings.
+
 Note: These requirements are for compiling from
 the cvs sources, not from a distribution tarball.
 Distribution tarballs are built so as not to require
