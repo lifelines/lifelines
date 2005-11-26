@@ -12,6 +12,10 @@
 
 	Minor textual improvement to "which does what".
 
+	* ChangeLog src/stdlib/path.c
+
+	Cosmetic: Fix some inconsistency in tabs in filepath.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 

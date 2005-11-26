@@ -215,16 +215,16 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 	if (is_path(name)) {
-	    if (ext) {
-		strcpy(buf1,name);
-		strcat(buf1, ext);
-		if(access(buf1, 0) == 0) return strsave(buf1);
-		nlen = strlen(buf1);
-		buf1[nlen-elen] = '\0'; /* remove extension */
-		return strsave(buf1);
-	    } else {
-		return strsave(name);
-	    }
+		if (ext) {
+			strcpy(buf1,name);
+			strcat(buf1, ext);
+			if(access(buf1, 0) == 0) return strsave(buf1);
+			nlen = strlen(buf1);
+			buf1[nlen-elen] = '\0'; /* remove extension */
+			return strsave(buf1);
+		} else {
+			return strsave(name);
+		}
 	}
 	strcpy(buf1, path);
 	zero_separate_path(buf1);
@@ -240,10 +240,10 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		}
 		strcpy(q, name);
 		if(ext) {
-		    strcat(buf2, ext);
-		    if(access(buf2, 0) == 0) return strsave(buf2);
-		    nlen = strlen(buf2);
-		    buf2[nlen-elen] = '\0'; /* remove extension */
+			strcat(buf2, ext);
+			if(access(buf2, 0) == 0) return strsave(buf2);
+			nlen = strlen(buf2);
+			buf2[nlen-elen] = '\0'; /* remove extension */
 		}
 		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
