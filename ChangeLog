@@ -8,6 +8,10 @@
 
 	Cosmetic: fix two typos in earlier ChangeLog entry.
 
+	* ChangeLog README.DEVELOPERS
+
+	Minor textual improvement to "which does what".
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
