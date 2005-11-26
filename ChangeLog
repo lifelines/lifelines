@@ -37,6 +37,10 @@
 	Add Italy, Sweden, and Spain to isolangs.h, to pass self-tests
 	on MS-Windows.
 
+	* ChangeLog src/hdrs/isolangs.h
+
+	Add countries beginning with A or B to isolangs list.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 

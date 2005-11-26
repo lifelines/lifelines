@@ -1,6 +1,6 @@
 /* 
-   Copyright (c) 2001-2002 Perry Rapp
-   "The MIT license"
+   Copyright (c) 2001-2005 Perry Rapp
+   "The X11 license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -84,10 +84,49 @@ static const char * langs[] = {
 	, "zu", "Zulu"
 	, 0, 0
 };
+/*
+ http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html 
+*/
 static const char * countries[] = {
 	/* TODO: Obviously this isn't even close to complete */
-	"ES", "Spain"
+	"AD", "Andorra"
+	, "AF", "Afghanistan"
+	, "AG", "Antigua and Barbuda"
+	, "AI", "Anguilla"
+	, "AL", "Albania"
+	, "AM", "Armenia"
+	, "AO", "Angola"
+	, "AQ", "Antartica"
+	, "AR", "Argentina"
+	, "AS", "American Samoa"
+	, "AT", "Austria"
+	, "AU", "Australia"
+	, "AW", "Aruba"
+	, "AX", "Aland Islands"
+	, "AZ", "Azerbaijan"
+	, "BA", "Bosnia and Herzegovina"
+	, "BB", "Barbados"
+	, "BD", "Bangladesh"
+	, "BE", "Belgium"
+	, "BF", "Burkina Faso"
+	, "BG", "Bulgaria"
+	, "BH", "Bahrain"
+	, "BI", "Burundi"
+	, "BJ", "Benin"
+	, "BM", "Bermuda"
+	, "BN", "Brunei Darussalam"
+	, "BO", "Bolivia"
+	, "BR", "Brazil"
+	, "BS", "Bahamas"
+	, "BT", "Bhutan"
+	, "BV", "Bouvet Island"
+	, "BW", "Botswana"
+	, "BY", "Belarus"
+	, "BZ", "Belize"
+	, "DZ", "Algeria"
+	, "ES", "Spain"
 	, "FI", "Finland"
+	, "IO", "British Indian Ocean Territory"
 	, "IT", "Italy"
 	, "PL", "Poland"
 	, "SE", "Sweden"
