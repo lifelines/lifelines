@@ -22,6 +22,12 @@
 	Add more commenting to both is_path and is_absolute_path.
 	Remove a spurious test for isdirsep(dir[0]) in both functions.
 
+	* ChangeLog src/interp/Makefile.am src/interp/more.c
+	*NEW src/interp/rptsort.c
+
+	Move sort & rsort implementations from end of more.c into new
+	file rptsort.c.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 
@@ -4504,7 +4510,7 @@ Released 3.0.33 beta.
 	docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
 	reports/anniver.ll reports/cron.ll src/liflines/llexec.c ChangeLog
 
-        Update documentation for sort/rsort's change in sorting direction
+	Update documentation for sort/rsort's change in sorting direction
 	Update reports anniver and cron for same.  Add preliminary
 	documentation to reportmanual for the dup function.  And rebuild docs.
 

@@ -7,7 +7,7 @@ noinst_LIBRARIES = libinterp.a
 libinterp_a_SOURCES = alloc.c builtin.c eval.c functab.c heapused.c \
 	interp.c intrpseq.c lex.c more.c \
 	pvalalloc.c pvalue.c pvalmath.c \
-	rassa.c rptui.c symtab.c write.c yacc.y
+	rassa.c rptsort.c rptui.c symtab.c write.c yacc.y
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/intl     for intl headers
