@@ -13,8 +13,9 @@ EXTRA_DIST = .linesrc lines.cfg \
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
 
+PERL=perl
 lines.cfg: lines.cfg.input
-	m4 -D WINDOWS $^ | unix2dos > $@ 
+	m4 -D WINDOWS $^ | $(PERL) -p -e 's/\n/\r\n/' > $@ 
 .linesrc: lines.cfg.input
 	m4 -U WINDOWS $^ > $@ 
 
@@ -34,7 +35,6 @@ ChangeLog.new: ChangeLog.usermap
 #
 # Keep the .cvsignore files sorted, and use this target to do it.
 #
-PERL=perl
 sort-cvsignore:
 	for f in `find . -name .cvsignore`; do \
 		$(PERL) -e 'print sort <>;' < $$f > $$f.tmptmp; \
