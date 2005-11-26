@@ -45,6 +45,10 @@
 
 	Add new source file rptsort.c to MSVC6 project.
 
+	* ChangeLog README.DEVELOPERS
+
+	Add jadetex to software list.
+
 2005-11-26 Stephen Dum
 	* ChangeLog ll-reportmanual.{xml,html,pdf,txt}
 

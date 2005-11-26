@@ -27,6 +27,9 @@ jw: Is used to compile the documentation.  It is at least
    only listing these lacks as warnings.  The generated
    documention is included in both the cvs and src distributions.
    This will only prevent regeneration of the documention.
+jadetex: Is used to produce pdf versions of the documentation.
+   It is at least available in the Redhat jadetext package.
+   See jw above.
 lynx: Is used to compile text versions of documentation. See
    jw above.
 
