@@ -15,7 +15,7 @@ autotools suite: both autoconf and automake (which in turn
      require the m4 macro processor) are used to generate
      Makefiles and various build files.
 bison: Is required to compile lifelines/src/interp/yacc.y.
-m4: Is required by the atuotools suite as well as for
+m4: Is required by the autotools suite as well as for
     generation of the default lifelines configuration 
     prototypes.
 perl: Is required to generate the file index.html in the
