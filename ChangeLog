@@ -10,6 +10,10 @@
 	Fix find.ll report to optionally search all types of records,
 	and add menu option to print results to output file.
 
+	* ChangeLog README.DEVELOPERS
+
+	Add initial section on required software for developers.
+
 2005-11-26 Stephen Dum
 	* ChangeLog reports/st/st_collate_8859-1.li
 	reports/st/st_collate_UTF-8.li reports/st/st_date.li
