@@ -64,6 +64,7 @@ is_path (CNSTRING dir)
 #endif
 	return FALSE;
 }
+#ifdef NOTUSED
 /*===============================================
  * is_absolute_path -- Is this an absolute path ?
  *  handle WIN32 characters, and ~ homedir references
@@ -87,6 +88,7 @@ is_absolute_path (CNSTRING dir)
 #endif
 	return FALSE;
 }	
+#endif
 /*=========================================
  * path_match -- are paths the same ?
  *  handle WIN32 filename case insensitivity
@@ -252,9 +254,11 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		if (ext) {
 			strcpy(buf1,name);
 			strcat(buf1, ext);
-			if (access(buf1, 0) == 0) return strsave(buf1);
 			nlen = strlen(buf1);
-			buf1[nlen-elen] = '\0'; /* remove extension */
+			if (nlen > elen && strcmp(&buf1[nlen-elen],ext) != 0) {
+				if (access(buf1, 0) == 0) return strsave(buf1);
+				buf1[nlen] = '\0'; /* remove extension */
+			}
 			if (access(buf1, 0) == 0) return strsave(buf1);
 		} else {
 			if (access(name, 0) == 0) return strsave(name);
@@ -290,9 +294,11 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		strcpy(q, name);
 		if (ext) {
 			strcat(buf2, ext);
-			if (access(buf2, 0) == 0) return strsave(buf2);
 			nlen = strlen(buf2);
-			buf2[nlen-elen] = '\0'; /* remove extension */
+			if (nlen > elen && strcmp(&buf2[nlen-elen],ext) != 0) {
+				if (access(buf2, 0) == 0) return strsave(buf2);
+				buf2[nlen] = '\0'; /* remove extension */
+			}
 		}
 		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
