@@ -1,3 +1,9 @@
+2005-11-26 Stephen Dum
+	* ChangeLog src/stdlib/path.c
+
+	revise filepath() so that relative paths will be looked for in
+	current directory and then in path directories.
+
 2005-11-26 Perry Rapp
 
 	* ChangeLog README.DEVELOPERS

@@ -215,6 +215,10 @@ concat_path (CNSTRING dir, CNSTRING file, INT utf8, STRING buffer, INT buflen)
  * filepath -- Find file in sequence of paths
  *  handles NULL in either argument
  *  returns alloc'd buffer
+ * Warning: if called with mode other than "r" this may not 
+ *         do what you want, because 1) if file is not found, it appends ext.
+ *         and 2) file always goes in 1st specified directory of path unless
+ *         name is absolute or ./something
  *=========================================*/
 STRING
 filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
@@ -226,7 +230,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
 	nlen = strlen(name);
-	if(ext && *ext) {
+	if (ext && *ext) {
 		elen = strlen(ext);
 		if ((nlen > elen) && path_match(name+nlen-elen, ext)) {
 		/*  name has an explicit extension the same as this one */
@@ -236,18 +240,40 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	}
 	else { ext = NULL; elen = 0; }
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
-	if (is_absolute_path(name)) {
+
+	/* for absolute and relative path names we first check the
+	 * pathname for validity relative to the current directory
+	 */
+	if (is_path(name)) {
+		/* If this is a path, i.e. it has multiple path elements
+		 * use the name as is first.  So absolute paths don't
+		 * get resolved by appending search paths.
+		 */
 		if (ext) {
 			strcpy(buf1,name);
 			strcat(buf1, ext);
-			if(access(buf1, 0) == 0) return strsave(buf1);
+			if (access(buf1, 0) == 0) return strsave(buf1);
 			nlen = strlen(buf1);
 			buf1[nlen-elen] = '\0'; /* remove extension */
-			return strsave(buf1);
+			if (access(buf1, 0) == 0) return strsave(buf1);
 		} else {
+			if (access(name, 0) == 0) return strsave(name);
+		}
+		/* fail if get here and name begins with a / or ./
+		 * as we didn't find the file.
+		 * however let foo/bar sneak thru, so we allow access
+		 * to files in subdirectories of the search path if 
+		 * named in the filename.
+		 */
+		if (is_dir_sep(name[0]) || (name[0] == '.' && is_dir_sep(name[1])))
+			return strsave(name);
+#ifdef WIN32
+		if (name[0] && name[1]==':' && isasciiletter(name[0])) {
 			return strsave(name);
 		}
+#endif
 	}
+
 	/* it is a relative path, so search for it in search path */
 	strcpy(buf1, path);
 	zero_separate_path(buf1);
@@ -262,9 +288,9 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 			q++;
 		}
 		strcpy(q, name);
-		if(ext) {
+		if (ext) {
 			strcat(buf2, ext);
-			if(access(buf2, 0) == 0) return strsave(buf2);
+			if (access(buf2, 0) == 0) return strsave(buf2);
 			nlen = strlen(buf2);
 			buf2[nlen-elen] = '\0'; /* remove extension */
 		}
@@ -278,10 +304,12 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	strcpy(q, p);
 	expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 	q += strlen(q);
-	strcpy(q, LLSTRDIRSEPARATOR);
-	q++;
+	if (q>buf2 && !is_dir_sep(q[-1])) {
+		strcpy(q, LLSTRDIRSEPARATOR);
+		q++;
+	}
 	strcpy(q, name);
-	if(ext) strcat(q, ext);
+	if (ext) strcat(q, ext);
 	return strsave(buf2);
 }
 /*===========================================
