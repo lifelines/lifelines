@@ -71,22 +71,26 @@ static void
 copy_process (STRING dest, STRING src)
 {
 	STRING q=dest,p=src;
-	char c;
-	while ((*q++ = c = *p++)) {
-		if (c == '\\') {
-			if (!(c = *p++)) {
-				*q = 0;
+	while ((*q = *p++)) {
+		if (*q == '\\') {
+			switch (*p++) {
+			case 0:
+				*++q = 0;
 				break;
-			}
-			if (c == 'n')
-				q[-1] = '\n';
-			else if (c == 't')
-				q[-1] = '\t';
-			else if (c == '\\')
-				q[-1] = '\\';
-			else
+			case 'n':
+				*q = '\n';
+				break;
+			case 't':
+				*q  = '\t';
+				break;
+			case '\\':
+				*q = '\\';
+				break;
+			default:
 				--p;
+			}
 		}
+		++q;
 	}
 }
 /*==========================================

@@ -1,4 +1,12 @@
 2005-11-26 Stephen Dum
+	* ChangeLog src/gedlib/lloptions.c
+
+	See bug 1367863
+        copy_process() was not handling copying of strings correctly.
+	Looks like a compiler bug.  Code failed when compiled -O2, but
+	worked when compiled -O1.  Rearranged the code, and it now works with
+	-O2. (Let someone else debug gcc.)
+
 	* ChangeLog src/stdlib/path.c
 
 	revise filepath() so that relative paths will be looked for in
