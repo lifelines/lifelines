@@ -27,6 +27,8 @@ The properties that are looked up are:
    user.email -- email address of the db owner
    cron.htmldir -- path to the directory to store results in
                      e.g. /home/joe/genealogy/html
+		     (program expects a subdir in this directory with the name
+		     of the database in it.)
    cron.backgroundimage -- path to the background image, no image if not defined.
                  e.g. ../../image/crink.jpg
 		 this places image at the same level as /home/joe/genealogy/html
@@ -63,10 +65,10 @@ proc main ()
 
     set(db_owner, getproperty("user.fullname"))
     set(owner_email, concat("mailto:",getproperty("user.email")))
-    set(background,getproperty("anniver.backgroundimage")) 
-    set(base_filename,concat(getproperty("anniver.htmldir"),"/",database(),"/"))  
+    set(background,getproperty("cron.backgroundimage")) 
+    set(base_filename,concat(getproperty("cron.htmldir"),"/",database(),"/"))  
     if (not(test("d",base_filename))) {
-        print("Error, property anniver.htmldir=",base_filename,
+        print("Error, property cron.htmldir=",base_filename,
 	      ", is not a directory,aborting\n")
 	print("Please read comments at beginning of report about setting properties\n")
         return()

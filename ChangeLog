@@ -1,3 +1,12 @@
+2005-11-28 Stephen Dum
+	* ChangeLog reports/anniver.ll reports/cron.ll reports/find.ll
+	Remove reports/genancc2.ll
+
+	Remove genancc2.ll which was identical to genancc.ll.
+	add comment to anniver. fix typo in cron which was getting the wrong
+	property values.  move comment around in find.ll so that the 
+	description of the report is extracted for use in index.html.
+
 2005-11-26 Stephen Dum
 	* ChangeLog src/gedlib/lloptions.c
 

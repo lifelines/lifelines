@@ -6,10 +6,10 @@
  * @output         GUI
  * @description    Display menu of persons with TAG having matching VALUE
 
-   find.ll - Rafal Prinke, rafalp@plpuam11.amu.edu.pl, 7 OCT 1995
-
 This utility finds all persons whose records contain a specified
 TAG and VALUE and displays the resulting list as a menu.
+
+   find.ll - Rafal Prinke, rafalp@plpuam11.amu.edu.pl, 7 OCT 1995
 
 The options allow to:
 

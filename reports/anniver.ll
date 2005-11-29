@@ -36,6 +36,8 @@ The properties that are looked up are:
    user.email -- email address of the db owner
    anniver.htmldir -- path to the directory to store results in
                      e.g. /home/joe/genealogy/html
+		     (program expects a subdir in this directory with the name
+		      of the database in it.)
    anniver.backgroundimage -- path to the background image, no image if not defined.
 		     e.g. ../../image/crink.jpg
                      this places image at the same level as /home/joe/genealogy/html
