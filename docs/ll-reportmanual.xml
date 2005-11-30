@@ -1236,7 +1236,7 @@ convert float to int
 
 <para>
 
-increment variable by one
+increment variable by second argument (or by 1 if no second argument)
 
 </para>
 </glossdef></glossentry>
@@ -1248,7 +1248,7 @@ increment variable by one
 
 <para>
 
-decrement variable by one
+decrement variable by second argument (or by 1 if no second argument)
 
 </para>
 </glossdef></glossentry>

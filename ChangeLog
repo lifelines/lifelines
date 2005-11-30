@@ -1,3 +1,8 @@
+2005-11-29 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.xml
+	
+	Update behavior of incr and decr resolving defect 1361818
+
 2005-11-28 Stephen Dum
 	* ChangeLog reports/anniver.ll reports/cron.ll reports/find.ll
 	Remove reports/genancc2.ll
