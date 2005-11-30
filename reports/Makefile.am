@@ -26,7 +26,7 @@ LL_REPORTS = \
 	fdesc.ll find.ll findmissing.ll fix_nameplac.ll			\
 	formatted_gedcom.ll gedall.ll gedlist.ll gedlod.ll gedn.ll	\
 	gedtags.ll ged_write.li genancc.ll                              \
-	genancc1.ll genancc2.ll gender_order.ll gendex.ll               \
+	genancc1.ll gender_order.ll gendex.ll               \
 	genetics.ll genetics2.ll getbaptism.li givens_gender.ll         \
 	givens_gender_finder.ll grand.ll                                \
 	hasnotes1.ll hp-anc.ll htmlahnen.ll                             \
