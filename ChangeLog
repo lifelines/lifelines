@@ -1,3 +1,10 @@
+2005-11-30 Perry Rapp
+
+	* ChangeLog src/stdlib/strcvt.c
+
+	Fix unicode conversion bug on cygwin.
+	Fix get_wchar_codeset_name to test size of wchar_t.
+
 2005-11-29 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.xml
 	

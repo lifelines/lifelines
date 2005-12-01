@@ -47,12 +47,14 @@ static ZSTR (*lowerfunc)(CNSTRING) = 0;
 static const char *
 get_wchar_codeset_name (void)
 {
-#ifdef _WIN32
+	if (sizeof(wchar_t)==2) {
 	/* MS-Windows can't handle UCS-4; could we use UTF-16 ? */
-	return "UCS-2-INTERNAL";
-#else
-	return "UCS-4-INTERNAL";
-#endif
+		return "UCS-2-INTERNAL";
+	} else if (sizeof(wchar_t)==4) {
+		return "UCS-4-INTERNAL";
+	} else {
+		ASSERT(0);
+	}
 }
 /*===================================================
  * makewide -- convert internal to wchar_t *
