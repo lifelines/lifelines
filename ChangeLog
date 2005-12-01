@@ -10,6 +10,10 @@
 	
 	Update behavior of incr and decr resolving defect 1361818
 
+	* ChangeLog src/stdlib/path.c
+
+        Fix miscalculation of filenames being looked up.
+
 2005-11-28 Stephen Dum
 	* ChangeLog reports/anniver.ll reports/cron.ll reports/find.ll
 	Remove reports/genancc2.ll
