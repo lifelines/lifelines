@@ -1,3 +1,13 @@
+2005-12-05 Stephen Dum
+	* ChangeLog reports/novel/novel.{ll,intro,head}
+	
+	remove the external file dependency of novel.ll on novel.head by
+	moving novel.head into novel.ll.   It is ugly, but copyfile() didn't
+	know how to find the included file.  Also, remove the requirement that
+	novel.intro be available in the current directory.  Not it is
+	optional.  Fix a y2k bug that improperly interperted the year that
+	*nix returned.
+
 2005-11-30 Perry Rapp
 
 	* ChangeLog src/stdlib/strcvt.c

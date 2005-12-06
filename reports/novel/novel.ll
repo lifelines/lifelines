@@ -20,15 +20,17 @@
  *                 groff -mgm -Tascii filename >filename.out
  *                 groff -mgm filename >filename.ps       [PostScript output]
  *
- *  The report uses 2 additional files as input.
- *      novel.head contains nroff headers and macros in an attempt to
- *                 separate formatting from the ll reporting.
+ *  The report uses one additional file as input.
  *      novel.intro is included at the beginning of the report and is where
- *                 you can put a general intoductory text.
+ *                 you can put a general intoductory text.  If you don't
+ *                 provide this, it is skipped.  A prototype is provided
+ *                 along with this report.
  *
  *   Original code by Tom Wetmore, ttw@cbnewsl.att.com
  *   with modifications by Cliff Manis
  *   Extensively re-written by Phil Stringer P.Stringer@mcc.ac.uk
+ *   Modified by Stephen Dum to remove external file dependencies and
+ *        to fix a y2k bug.
  *
  *   This report works only with the LifeLines Genealogy program
  *
@@ -52,7 +54,7 @@ proc main () {
 	getindi(indi)
 	dayformat(2)
 	monthformat(6)
-	copyfile("novel.head")
+	output_head()
 	list(ilist)
 	list(glist)
 	list(stack)			/* To hold function return values */
@@ -69,7 +71,9 @@ proc main () {
 	".ds iN " name(indi) nl()
 	".PH " qt() "''\\s+3\\fB" name(indi) sp() call fromto(indi) "\\s-3\\fR" qt() nl()
 
-	copyfile("novel.intro")
+	if (test("f","novel.intro")) {
+	    copyfile("novel.intro")
+	}
 
 	print ("Descendants") print(nl())
 	".HU " qt() name(indi) " and " pn(indi,3) " descendants" qt() nl()
@@ -116,7 +120,7 @@ proc scan () {
 	if (enqp) {
 		call enqpar(indi)
 	}
-        ".IN" nl() d(out) "."
+        ".IN" nl() d(out) ". "
         call longvitals(indi,1,1)
         set(out,add(out,1))
     }
@@ -309,11 +313,15 @@ proc dobirth(i,showp) {
 		" was born" call wherewhen(e) "." nl()
 	}
 	if(showp) { call showparents(i) }
-        set(e,baptism(i))
+        set(e,get_baptism(i))
         if(and(e,long(e))) {
 		if(not(birth(i))) {".P" nl()}
 		call fn0(i)
-		" was christened" call wherewhen(e) "." nl()
+		if (eqstr(tag(e),"BAPM")) { " was baptized" }
+		elsif (eqstr(tag(e),"BAPL")) { " was baptized" }
+		elsif (eqstr(tag(e),"CHR")) { " was christened" }
+		elsif (eqstr(tag(e),"CHRA")) { " was christened" }
+		call wherewhen(e) "." nl()
 	}
 }
 
@@ -679,52 +687,13 @@ proc firstname(i) {
 
 proc othernodes(i) {
         fornodes(i, node) {
-                if (eq(0,strcmp("FILE", tag(node)))) {
+		if (index(" BAPM BAPL BIRT BURI CHIL CHR CHRA CNAM CONF DEAT DIVI EDUC FAMC FAMS HUSB MARR NAME NOTE RESI RETI OBJE OCCU SEX TEXT WIFE WITN ",
+		        concat(" ",upper(tag(node))," "),1)) {
+			set(null,0)  /* lifelines noop */
+                } elsif (eq(0,strcmp("FILE", tag(node)))) {
 			copyfile(value(node))
-		} elsif (eq(0,strcmp("BIRT", tag(node)))) {
-			set(null,0)
-		} elsif (eq(0,strcmp("BURI", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("CHIL", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("CHR", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("CNAM", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("CONF", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("DEAT", tag(node)))) {
-			set(null,0)
                 } elsif (eq(0,strcmp("DIVI", tag(node)))) {
 			"The marriage ended in divorce." nl()
-                } elsif (eq(0,strcmp("EDUC", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("FAMC", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("FAMS", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("HUSB", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("MARR", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("NAME", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("NOTE", tag(node)))) {
-			set(null,0)
-		} elsif (eq(0,strcmp("RESI", tag(node)))) {
-			set(null,0)
-		} elsif (eq(0,strcmp("RETI", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("OCCU", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("SEX", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("TEXT", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("WIFE", tag(node)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("WITN", tag(node)))) {
-			set(null,0)
 		} else {
 			".P" nl()
                         tag(node) sp() value(node)
@@ -736,19 +705,8 @@ proc othernodes(i) {
 
 proc subnode(i) {
 	fornodes(i, subn) {
-                if (eq(0,strcmp("ADDR", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("AGE", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("CORP", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("DATE", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("PERI", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("PLAC", tag(subn)))) {
-			set(null,0)
-                } elsif (eq(0,strcmp("SITE", tag(subn)))) {
+		if (index(" ADDR AGE CORP DATE PERI PLAC SITE ",
+		        concat(" ",upper(tag(subn))," "),1)) {
 			set(null,0)
 		} else {
 			".br" nl()
@@ -786,4 +744,101 @@ proc add_to_ix(i) {
 	} else {
 		insert(itab,key(i),save(d(out)))
 	}
+}
+
+func get_baptism(indi) {
+    list(ev)
+    fornodes(indi,node) {
+        if (index(" BAPM BAPL CHR CHRA ",concat(" ",upper(tag(node))," "),1)) {
+	    return(node)
+	}
+     }
+     return(0)
+}
+
+func get_tags(indi,str) {
+    list(ev)
+    fornodes(indi,node) {
+        if (index(str,concat(" ",upper(tag(node))," "),1)) {
+	    push(ev,node)
+	}
+     }
+     return(ev)
+}
+
+func output_head()
+{
+    /* this is really ugly.  back slash is already overused in *roff code
+     * but to include this here we have to escape the backslashs (that were
+     * already escaped in the *roff code.  However, it is better here,
+     * than the hassels of a separate file for the header info.
+     */
+    ".if t .pl 10.9i		\\\" Page length" nl()
+    ".if n .pl 10.7i" nl()
+    ".if t .ll 6.75i		\\\" Line length" nl()
+    ".if n .ll 7.25i" nl()
+    ".\\\".if t .lt 6.75i		\\\" Title length" nl()
+    ".\\\".if n .lt 7.25i" nl()
+    ".if t .lt 7.75i		\\\" Title length" nl()
+    ".if n .lt 9.25i" nl()
+    ".po 0.5i		\\\" Left margin" nl()
+    ".ls 1			\\\" Line spacing" nl()
+    ".\\\".nr Ej 1		\\\" New page before chapter headings" nl()
+    ".nr Hb 1		\\\" Line break after all headings" nl()
+    ".nr Hs 6		\\\" Blank line after all headings" nl()
+    ".\\\".nr Hc 1		\\\" Centre chapter headings" nl()
+    ".nr Hu 1		\\\" Un-numbered headings are at level 1" nl()
+    ".nr Hi 1		\\\" Indent after head same as paras" nl()
+    ".nr Pt 0		\\\" Don't indent paras" nl()
+    ".nr Cl 6		\\\" Heads in table of contents up to level 6" nl()
+    ".nr Yr \\n(yr+1900       \\\" the year for we are printing this" nl()
+    ".if t .ds HF 3 3 3 3 3 3 2         \\\" Heading fonts" nl()
+    ".ds HP +6 +6 +2 +2 +2 +2 +1  \\\" Heading point sizes" nl()
+    ".ds pB " getproperty("user.fullname") nl()
+    ".rm )k			\\\" Remove cut marks at top of page" nl()
+    ".if \"\\nd\"0\" .nr m \\n(mo-1" nl()
+    ".if \"\\nm\"0\" .ds mO January" nl()
+    ".if \"\\nm\"1\" .ds mO February" nl()
+    ".if \"\\nm\"2\" .ds mO March" nl()
+    ".if \"\\nm\"3\" .ds mO April" nl()
+    ".if \"\\nm\"4\" .ds mO May" nl()
+    ".if \"\\nm\"5\" .ds mO June" nl()
+    ".if \"\\nm\"6\" .ds mO July" nl()
+    ".if \"\\nm\"7\" .ds mO August" nl()
+    ".if \"\\nm\"8\" .ds mO September" nl()
+    ".if \"\\nm\"9\" .ds mO October" nl()
+    ".if \"\\nm\"10\" .ds mO November" nl()
+    ".if \"\\nm\"11\" .ds mO December" nl()
+    ".PF \"'\\fIProduced by \\*(pB\\fR'- \\\\\\\\nP -'\\fI\\n(dy \\*(mO \\n(Yr \\fR'\"" nl()
+    ".PH" nl()
+    ".de GN" nl()
+    ".br" nl()
+    ".ne 2i" nl()
+    ".sp 2" nl()
+    ".in 0" nl()
+    ".ce" nl()
+    ".if t \\s+3\\fHGENERATION \\\\$1\\fH\\s-3" nl()
+    ".if n GENERATION \\\\$1" nl()
+    ".." nl()
+    ".de CH" nl()
+    ".." nl()
+    ".de IN" nl()
+    ".sp" nl()
+    ".in 0" nl()
+    ".." nl()
+    ".de IX" nl()
+    ".SK" nl()
+    ".HU Index" nl()
+    "All the people mentioned in this report are given below. Please note that" nl()
+    "the numbers printed after the name are not page numbers. They are the section" nl()
+    "number(s) in which that person is mentioned. " nl()
+    ".if t .2C" nl()
+    ".." nl()
+    ".de .I" nl()
+    ".if t \\fI\\\\$1" nl()
+    ".if n \\\\$1" nl()
+    ".." nl()
+    ".de .R" nl()
+    ".if t \\fR" nl()
+    ".." nl()
 }
