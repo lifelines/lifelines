@@ -48,8 +48,8 @@
  *********************************************/
 
 extern STRING qSnotonei, qSifonei;
-extern STRING nonint1,nonintx,nonstr1,nonstrx,nonlstx,nonvarx,nonnodx;
-extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
+extern STRING nonint1,nonintx,nonflox,nonstr1,nonstrx,nonlstx,nonvarx;
+extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx,badtrig;
 
 /*********************************************
  * local function prototypes
@@ -58,12 +58,12 @@ extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
 /* alphabetical */
 static STRING allocsubstring(STRING s, INT i, INT j);
 static void compute_pi(STRING pi, STRING sub);
+static double deg2rad(double deg);
 static INT ll_index(STRING str, STRING sub, INT num);
 static INT kmp_search(STRING pi, STRING str, STRING sub, INT num);
 static void makestring(PVALUE val, STRING str, INT len, BOOLEAN *eflg);
+static double rad2deg(double rad);
 static STRING rightjustify(STRING str, INT len);
-static PVALUE sortimpl(PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd);
-static INT sortpair_bin(const void * el1, const void * el2);
 
 /*********************************************
  * local variables
@@ -1140,4 +1140,226 @@ __getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = str ? get_property(str) : 0;
 	set_pvalue_string(val, str);
 	return val;
+}
+/*========================================
+ * deg2rad -- trigonometric conversion: degrees to radians
+ * Helper function since C trig functions expect radians
+ *======================================*/
+static double
+deg2rad (double deg)
+{
+  return ((fmod(deg,360.0))/180.0*M_PI);
+}
+/*========================================
+ * rad2deg -- trigonometric conversion: radians to degrees
+ * Helper function since C trig functions return radians
+ *======================================*/
+static double
+rad2deg (double rad)
+{
+  return (fmod((rad/M_PI*180.0),360.0));
+}
+/*========================================
+ * __dms2deg -- convert degrees in DMS format to decimal degrees
+ *   usage: dms2deg(INT, INT, INT, VARB) -> VOID
+ *======================================*/
+PVALUE
+__dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg2 = inext(arg1);
+	PNODE arg3 = inext(arg2);
+	PNODE ret1 = inext(arg3);
+	FLOAT decdeg = 0.0;
+
+	PVALUE val = eval_and_coerce(PINT, arg1, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "dms2deg", "1");
+                return NULL;
+        }
+	decdeg += pvalue_to_int(val);
+
+	val = eval_and_coerce(PINT, arg2, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "dms2deg", "2");
+                return NULL;
+        }
+	decdeg += (pvalue_to_int(val) / 60.0);
+
+	val = eval_and_coerce(PINT, arg3, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "dms2deg", "3");
+                return NULL;
+        }
+	decdeg += (pvalue_to_int(val) / 3600.0);
+
+	insert_symtab(stab, iident(ret1), create_pvalue_from_float(decdeg));
+	return NULL;
+}
+/*========================================
+ * __deg2dms -- convert decimal degrees to DMS format
+ *   usage: deg2dms(FLOAT, VARB, VARB, VARB) -> VOID
+ *======================================*/
+PVALUE
+__deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg1 = (PNODE) iargs(node);
+	PNODE ret1 = inext(arg1);
+	PNODE ret2 = inext(ret1);
+	PNODE ret3 = inext(ret2);
+	FLOAT decdeg;
+	INT deg, min, sec;
+
+	PVALUE val = eval_and_coerce(PFLOAT, arg1, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, nonflox, "deg2dms", "1");
+                return NULL;
+        }
+
+	decdeg = pvalue_to_float(val);
+	deg = (int)(decdeg);
+        decdeg -= deg;
+	decdeg *= 60;
+	min = (int)(decdeg);
+	decdeg -= min;
+	decdeg *= 60;
+	sec = (int)(decdeg);
+
+	insert_symtab(stab, iident(ret1), create_pvalue_from_int(deg));
+	insert_symtab(stab, iident(ret2), create_pvalue_from_int(min));
+	insert_symtab(stab, iident(ret3), create_pvalue_from_int(sec));
+	return NULL;
+}
+/*========================================
+ * __sin -- trigonometric SINE function
+ *   usage: sin(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, nonflox, "sin", "1");
+                return NULL;
+        }
+
+        return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
+}
+/*========================================
+ * __cos -- trigonometric COSINE function
+ *   usage: cos(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+        PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+
+        if (*eflg) {
+                prog_error(node, nonflox, "cos", "1");
+                return NULL;
+        }
+
+        return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
+}
+/*========================================
+ * __tan -- trigonometric TANGENT function
+ *   usage: tan(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+        PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	FLOAT val2;
+
+        if (*eflg) {
+                prog_error(node, nonflox, "tan", "1");
+                return NULL;
+        }
+
+        val2 = pvalue_to_float(val);
+
+	/* avoid SIGFPE caused by invalid input */
+	if (fmod((val2-90),180) == 0) {
+		*eflg = 1;
+		prog_error(node, badtrig, "tan", "1");
+		return NULL;
+	}
+
+        return create_pvalue_from_float(tan(deg2rad(val2)));
+}
+/*========================================
+ * __arcsin -- trigonometric inverse SINE function
+ *   usage: arcsin(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	FLOAT val2;
+
+	if (*eflg) {
+		prog_error(node, nonflox, "arcsin", "1");
+		return NULL;
+	}
+
+	val2 = pvalue_to_float(val);
+
+	/* avoid SIGFPE caused by invalid input */
+	if (val2 > 1.0 || val2 < -1.0) {
+		*eflg = 1;
+		prog_error(node, badtrig, "arcsin", "1");
+		return NULL;
+	}
+
+        return create_pvalue_from_float(rad2deg(asin(val2)));
+}
+/*========================================
+ * __arccos -- trigonometric COSINE function
+ *   usage: arccos(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+        PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	FLOAT val2;
+
+        if (*eflg) {
+                prog_error(node, nonflox, "arccos", "1");
+                return NULL;
+        }
+
+	val2 = pvalue_to_float(val);
+
+	/* avoid SIGFPE caused by invalid input */
+	if (val2 > 1.0 || val2 < -1.0) {
+		*eflg = 1;
+		prog_error(node, badtrig, "arccos", "1");
+		return NULL;
+	}
+
+        return create_pvalue_from_float(rad2deg(acos(val2)));
+}
+/*========================================
+ * __arctan -- trigonometric TANGENT function
+ *   usage: arctan(FLOAT) -> FLOAT
+ *======================================*/
+PVALUE
+__arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+        PNODE arg = (PNODE) iargs(node);
+        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+
+        if (*eflg) {
+                prog_error(node, nonflox, "arctan", "1");
+                return NULL;
+        }
+
+        return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
 }

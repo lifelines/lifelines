@@ -77,6 +77,7 @@ STRING nonlstx     = 0;
 STRING badargs     = 0;
 STRING badarg1     = 0;
 STRING badargx     = 0;
+STRING badtrig     = 0;
 
 /*********************************************
  * external/imported variables
@@ -859,6 +860,7 @@ clear_error_strings (void)
 	strfree(&badargs);
 	strfree(&badarg1);
 	strfree(&badargx);
+	strfree(&badtrig);
 	strfree(&interp_locale);
 }
 /*=============================
@@ -923,6 +925,7 @@ interp_load_lang (void)
 	badargs     = strsave(_("%s: Bad arguments"));
 	badarg1     = strsave(_("%s: the arg had a major error."));
 	badargx     = strsave(_("%s: the arg #%s had a major error."));
+	badtrig     = strsave(_("%s: the arg #%s would cause an arithmetic exception."));
 }
 
 /*=============================

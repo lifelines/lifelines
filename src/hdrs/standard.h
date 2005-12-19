@@ -86,24 +86,33 @@
 /* 1800 compiler warnings.  We still need to investigate *every* */
 /* instance where a STRING is dereferenced and the contents acted */
 /* upon directly to determine if there are sign problems */
+
+/* STRING TYPES */
 typedef char *STRING;
 typedef const char *CNSTRING;
 typedef unsigned char uchar;
 
+/* BOOLEAN TYPES */
 #ifndef BOOLEAN
-#	define BOOLEAN int
+#define BOOLEAN int
 #endif
 #ifndef TRUE
-#       define TRUE 1
+#define TRUE 1
 #endif
 #ifndef FALSE
-#       define FALSE 0
+#define FALSE 0
 #endif
-#define INT int 
-#define SHORT short
-#define FLOAT double
 
+/* INTEGER AND FLOATING POINT TYPES */
+#define INT	int32_t 
+#define SHORT	int16_t
+#define FLOAT	double
+
+/* VOID TYPE */
 typedef void *VPTR;
+#define VPTRSIZE sizeof(VPTR)
+
+/* GENERIC TYPE */
 typedef union {
         BOOLEAN b;
         INT     i;
@@ -113,8 +122,6 @@ typedef union {
 } UNION;
 
 #define MAXLINELEN 512
-
-#define VPTRSIZE sizeof(VPTR)
 
 /*typedef VPTR (*FUNC)();*/
 

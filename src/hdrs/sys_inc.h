@@ -13,12 +13,11 @@
 
 /* WIN32 - COMMON INCLUDES */
 #include <io.h>
+#include <math.h>
 #ifndef _POSIX_
 #define MAXPATHLEN _MAX_PATH
+#define int32_t INT32
 #endif
-/* WIN32 implementation - where should this go ? Perry 2001/04/06 */
-extern int w32system(const char *cp);
-
 
 /* WIN32 - BORLAND INCLUDES */
 #ifdef __BORLANDC__
@@ -34,10 +33,15 @@ extern int w32system(const char *cp);
 #define snprintf _snprintf
 #endif
 
+/* WIN32 - NATIVE FUNCTION IMPLEMENTATIONS */
+extern int w32system(const char *cp);
+
 #else
 
 /* UNIX INCLUDES */
+#include <inttypes.h>
 #include <unistd.h>
+#include <math.h>
 #include <sys/param.h>
 
 #endif

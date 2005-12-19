@@ -1,4 +1,22 @@
+2005-12-19 Matt Emmerton
+
+	* ChangeLog configure.in
+
+	Add comments, re-arrange/group checks, general cleanup
+	Add checks for trig functions
+
+	* src/interp/interpi.h src/interp/alloc.c src/interp/functab.c
+	* src/interp/more.c reports/trigtest.ll
+
+	Add sin/cos/tan and arcsin/arccos/arctan report functions.
+	Add sample report.
+
+	* src/hdrs/standard.h src/hdrs/sys_inc.h 
+
+	Clean up headers.
+
 2005-12-05 Stephen Dum
+
 	* ChangeLog reports/novel/novel.{ll,intro,head}
 	
 	remove the external file dependency of novel.ll on novel.head by
@@ -16,6 +34,7 @@
 	Fix get_wchar_codeset_name to test size of wchar_t.
 
 2005-11-29 Stephen Dum
+
 	* ChangeLog docs/ll-reportmanual.xml
 	
 	Update behavior of incr and decr resolving defect 1361818
@@ -25,6 +44,7 @@
         Fix miscalculation of filenames being looked up.
 
 2005-11-28 Stephen Dum
+
 	* ChangeLog reports/anniver.ll reports/cron.ll reports/find.ll
 	Remove reports/genancc2.ll
 
@@ -34,6 +54,7 @@
 	description of the report is extracted for use in index.html.
 
 2005-11-26 Stephen Dum
+
 	* ChangeLog src/gedlib/lloptions.c
 
 	See bug 1367863
@@ -237,6 +258,7 @@
 	Add z and I to the llines -h display (sf#1360885).
 
 2005-11-19 Stephen Dum
+
 	* ChangeLog reports/net-ped.ll
 
 	fix net-ped.ll so it no longer crashes trying to deal with

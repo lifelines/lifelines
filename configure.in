@@ -3,6 +3,10 @@ dnl Configure script for lifelines software
 dnl
 dnl Process this file with autoconf to produce a configure script.
 
+dnl **************************************************************
+dnl Autoconf Preamble
+dnl **************************************************************
+
 AC_INIT(src/liflines/main.c)
 AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
@@ -13,6 +17,10 @@ AM_INIT_AUTOMAKE(lifelines, 3.0.49)
 
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
+
+dnl **************************************************************
+dnl Check for Compile-Chain Programs
+dnl **************************************************************
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -29,14 +37,23 @@ then
   exit
 fi
 
+dnl **************************************************************
+dnl Check for Internationalization Support (gettext and iconv)
+dnl **************************************************************
+
 dnl Internationalization (gettext)
 dnl ALL_LINGUAS is not needed with latest autotools
 dnl but debian maintainer still needs it
 dnl These languages should be a copy of po/LINGUAS
 ALL_LINGUAS="da de el eo es fr it nl pl rw sv"
 AM_GNU_GETTEXT(,need-ngettext)
+
 dnl codeset conversion library
 AM_ICONV
+
+dnl **************************************************************
+dnl Apply OS/Compiler-Specific Settings
+dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
@@ -71,6 +88,10 @@ case $host in
     ;;
 esac
 
+dnl **************************************************************
+dnl Handle Docs Target
+dnl **************************************************************
+
 # Shall we build the docs?
 AC_ARG_WITH(docs,
     [  --with-docs             Build the docs (requires sgmltools) ],
@@ -96,6 +117,10 @@ fi
 
 AC_SUBST(DOCS_TARGET)
 
+dnl **************************************************************
+dnl Handle Profiling Target
+dnl **************************************************************
+
 # Compile with profiling, to find bottlenecks
 AC_ARG_WITH(profiling,
   [  --with-profiling        Compile with profiling support],
@@ -113,8 +138,32 @@ AC_ARG_WITH(profiling,
   ]
 )
 
-echo Looking for libraries
-echo Looking for ncurses
+dnl **************************************************************
+dnl Check for Standard Headers/Structures/Libraries
+dnl **************************************************************
+
+echo Looking for header files
+AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
+AC_CHECK_HEADERS( wchar.h wctype.h )
+AC_CHECK_HEADERS( windows.h )
+AC_CHECK_HEADERS( math.h )
+
+echo Looking for library functions
+AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
+AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha)
+AC_CHECK_LIB( m, sin )
+AC_CHECK_LIB( m, cos )
+AC_CHECK_LIB( m, tan )
+AC_CHECK_LIB( m, asin )
+AC_CHECK_LIB( m, acos )
+AC_CHECK_LIB( m, atan )
+
+dnl Check for replacement functions
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
+AC_REPLACE_FUNCS( _llnull )
+
+echo Looking for curses-compatible screen output library
 AC_CHECK_LIB(ncursesw, tparm)
 if test "$ac_cv_lib_ncursesw_tparm" = "yes"; then
   echo Using ncursesw
@@ -142,14 +191,9 @@ else
 fi
 fi
 
-dnl AC_CHECK_LIB(gdbm, gdbm_open)
-dnl AC_CHECK_LIB(nsl, inet_ntoa)
-dnl AC_CHECK_LIB(socket, getpeername)
-dnl AC_CHECK_LIB(resolv, gethostname)
-dnl AC_CHECK_LIB(iberty, bzero)
-dnl AC_CHECK_LIB(gen, syslog)
-dnl AC_CHECK_LIB(bsd, revoke)
-dnl AC_CHECK_LIB(ucb, bzero)
+dnl **************************************************************
+dnl Platform/Version-Specific Checks
+dnl **************************************************************
 
 echo Looking for header files and libraries to support heap walking
 dnl We need to cheat on OSX/Darwin.  The standard configure
@@ -169,22 +213,8 @@ case $host in
     ;;
 esac
 
-echo Looking for header files
-AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
-AC_CHECK_HEADERS( wchar.h wctype.h )
-AC_CHECK_HEADERS( windows.h )
-
-dnl AC_HEADER_STDC
-dnl AC_CHECK_HEADERS( errno.h dirent.h fcntl.h getopt.h libgen.h libintl.h pwd.h siginfo.h signal.h statbuf.h stdio.h stdlib.h string.h strings.h sys/stat.h sys/time.h sys/types.h unistd.h )
-
-dnl echo Looking for typedefs, structures, and compiler characteristics.
-dnl AC_C_CONST
-dnl AC_HEADER_TIME
-
-echo Looking for library functions
-AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
-
 dnl ngettext function missing from 0.10.35
+echo Looking for ngettext
 saved_libs="$LIBS"
 LIBS="$LIBS $LIBINTL"
 AC_TRY_LINK([#include <libintl.h>], [ngettext("","",0);],
@@ -207,6 +237,7 @@ case $host_os in
 esac
 
 dnl bind_textdomain_codeset function missing from 0.10.35
+echo Looking for bind_textdomain_codeset
 saved_libs="$LIBS"
 LIBS="$LIBS $LIBINTL"
 AC_TRY_LINK([#include <libintl.h>], [bind_textdomain_codeset("","");],
@@ -219,22 +250,9 @@ AC_TRY_LINK([#include <libintl.h>], [bind_textdomain_codeset("","");],
     LIBS="$saved_libs"
   fi
 
-AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha)
-
-dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf \
-	_llnull nl_langinfo wcslen has_key )
-
-dnl AC_CHECK_FUNCS(strerror perror strsignal psignal getopt getopt_long random)
-dnl investigate using AC_MSG_ERROR for error reporting
-dnl echo Looking for OPTIONAL library functions
-dnl AC_REPLACE_FUNCS(dirname)
-
-dnl echo Examining library functions
-dnl AC_TYPE_SIGNAL
-
-dnl we only use this if we do not have strsignal
-dnl AC_DECL_SYS_SIGLIST
+dnl **************************************************************
+dnl Build Makefiles
+dnl **************************************************************
 
 AC_OUTPUT(Makefile \
         src/Makefile \
