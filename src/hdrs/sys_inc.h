@@ -16,13 +16,13 @@
 #include <math.h>
 #ifndef _POSIX_
 #define MAXPATHLEN _MAX_PATH
-#define int32_t INT32
 #endif
 
 /* WIN32 - BORLAND INCLUDES */
 #ifdef __BORLANDC__
 #include <dir.h>
 #include <dos.h>
+#define int32 INT32
 #endif
 
 /* WIN32 - MSVC INCLUDES */
@@ -31,6 +31,7 @@
 #include <fcntl.h> /* _O_BINARY */
 #include "msvc.h" /* pragmas to suppress warnings */
 #define snprintf _snprintf
+#define __int32 INT32
 #endif
 
 /* WIN32 - NATIVE FUNCTION IMPLEMENTATIONS */

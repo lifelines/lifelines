@@ -1,3 +1,9 @@
+2005-12-20 Matt Emmerton
+
+	* ChangeLog src/hdrs/sys_inc.h
+
+	Fix misplaced typedef on WIN32.
+
 2005-12-20 Perry Rapp
 
 	* ChangeLog src/hdrs/indiseq.h
