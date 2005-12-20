@@ -143,7 +143,7 @@ INDISEQ create_indiseq_sval(void);
 UNION default_copy_value(UNION uval, INT valtype);
 void default_delete_value(UNION uval, INT valtype);
 UNION default_create_gen_value(INT gen, INT * valtype);
-int default_compare_values(VPTR ptr1, VPTR ptr2, INT valtype);
+INT default_compare_values(VPTR ptr1, VPTR ptr2, INT valtype);
 BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);

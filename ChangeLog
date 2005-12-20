@@ -1,3 +1,9 @@
+2005-12-20 Perry Rapp
+
+	* ChangeLog src/hdrs/indiseq.h
+
+	Fix declaration of default_compare_values (return value).
+
 2005-12-19 Matt Emmerton
 
 	* ChangeLog reports/trigtest.ll reports/Makefile.am
