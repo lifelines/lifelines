@@ -1,5 +1,13 @@
 2005-12-19 Matt Emmerton
 
+	* ChangeLog reports/trigtest.ll reports/Makefile.am
+	src/interp/functab.c src/interp/more.c src/interp/interpi.h
+
+	Add spherical distance function.
+	Update sample report.
+
+2005-12-19 Matt Emmerton
+
 	* ChangeLog configure.in
 
 	Add comments, re-arrange/group checks, general cleanup

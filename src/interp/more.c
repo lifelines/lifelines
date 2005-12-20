@@ -1171,6 +1171,7 @@ __dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg3 = inext(arg2);
 	PNODE ret1 = inext(arg3);
 	FLOAT decdeg = 0.0;
+	INT neg=0;
 
 	PVALUE val = eval_and_coerce(PINT, arg1, stab, eflg);
 	if (*eflg) {
@@ -1178,6 +1179,10 @@ __dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
                 return NULL;
         }
 	decdeg += pvalue_to_int(val);
+	if (decdeg < 0) {
+		decdeg *= -1;
+		neg = 1;
+	}
 
 	val = eval_and_coerce(PINT, arg2, stab, eflg);
 	if (*eflg) {
@@ -1192,6 +1197,10 @@ __dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
                 return NULL;
         }
 	decdeg += (pvalue_to_int(val) / 3600.0);
+
+	if (neg == 1) {
+		decdeg *= -1;
+	}
 
 	insert_symtab(stab, iident(ret1), create_pvalue_from_float(decdeg));
 	return NULL;
@@ -1208,7 +1217,7 @@ __deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE ret2 = inext(ret1);
 	PNODE ret3 = inext(ret2);
 	FLOAT decdeg;
-	INT deg, min, sec;
+	INT deg, min, sec, neg=0;
 
 	PVALUE val = eval_and_coerce(PFLOAT, arg1, stab, eflg);
 
@@ -1218,6 +1227,11 @@ __deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         }
 
 	decdeg = pvalue_to_float(val);
+	if (decdeg < 0) {
+		decdeg *= -1;
+		neg = 1;
+	}
+	
 	deg = (int)(decdeg);
         decdeg -= deg;
 	decdeg *= 60;
@@ -1225,6 +1239,8 @@ __deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	decdeg -= min;
 	decdeg *= 60;
 	sec = (int)(decdeg);
+
+	if (neg == 1) { deg *= -1; }
 
 	insert_symtab(stab, iident(ret1), create_pvalue_from_int(deg));
 	insert_symtab(stab, iident(ret2), create_pvalue_from_int(min));
@@ -1362,4 +1378,60 @@ __arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         }
 
         return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
+}
+/*========================================
+ * __spdist -- spherical distance calculator
+ *   usage: spdist(FLOAT, FLOAT, FLOAT, FLOAT) -> FLOAT
+ *          (lat0, lon0, lat1, lon1) -> distance (in km)
+ *======================================*/
+PVALUE
+__spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+        PNODE arg1 = (PNODE) iargs(node);
+        PNODE arg2 = inext(arg1);
+        PNODE arg3 = inext(arg2);
+        PNODE arg4 = inext(arg3);
+	PVALUE val1, val2, val3, val4;
+	FLOAT lat0, lon0, lat1, lon1;
+	FLOAT dist, dist1, dist2;
+
+        val1 = eval_and_coerce(PFLOAT, arg1, stab, eflg);
+        if (*eflg) {
+                prog_error(node, nonflox, "spdist", "1");
+                return NULL;
+        }
+
+        val2 = eval_and_coerce(PFLOAT, arg2, stab, eflg);
+        if (*eflg) {
+                prog_error(node, nonflox, "spdist", "2");
+                return NULL;
+        }
+
+        val3 = eval_and_coerce(PFLOAT, arg3, stab, eflg);
+        if (*eflg) {
+                prog_error(node, nonflox, "spdist", "3");
+                return NULL;
+        }
+
+        val4 = eval_and_coerce(PFLOAT, arg4, stab, eflg);
+        if (*eflg) {
+                prog_error(node, nonflox, "spdist", "4");
+                return NULL;
+        }
+
+	lat0 = pvalue_to_float(val1);
+	lon0 = pvalue_to_float(val2);
+	lat1 = pvalue_to_float(val3);
+	lon1 = pvalue_to_float(val4);
+
+	/* Suggested by Patrick Texier, and verified by the following sites*/
+	/* 1) http://www.skimountaineer.com/CascadeSki/CascadeDistance.php */
+	/* 2) http://www.indo.com/distance/dist.pl */
+	/* NOTE: Must convert degrees to radians, since that's what the C */
+	/* library functions expect! */
+	dist1 = cos(deg2rad(lat0)) * cos(deg2rad(lat1)) * cos(deg2rad(lon0)-deg2rad(lon1));
+	dist2 = sin(deg2rad(lat0)) * sin(deg2rad(lat1));
+	dist = 6380.0 * acos(dist1 + dist2);
+
+        return create_pvalue_from_float(dist);
 }

@@ -231,6 +231,7 @@ BUILTINS builtins[] = {
 	{"sort",            1,    2,    __sort},
 	{"soundex",         1,    1,    __soundex},
 	{"sp",              0,    0,    __space},
+	{"spdist",          4,    4,    __spdist},
 	{"spouseset",       1,    1,    __spouseset},
 	{"stddate",         1,    1,    __stddate},
 	{"strcmp",          2,    2,    __strcmp},

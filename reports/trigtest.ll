@@ -88,13 +88,49 @@ proc main()
   print("Decimal Degrees to DMH Conversions", nl())
   print(nl())
 
-  set(deg1,50)		/* 50^47'36" is the northerly boundary of my cottage land */
-  set(min1,47)
-  set(sec1,36)
+  set(deg1,44)
+  set(min1,17)
+  set(sec1,29)
 
-  dms2deg(deg1,min1,sec1,dms1)
-  print(d(deg1), " degrees, ", d(min1), " minutes and ", d(sec1), " seconds = ", f(dms1), " degrees.", nl())
+  dms2deg(deg1,min1,sec1,dec1)
+  print(d(deg1), " degrees, ", d(min1), " minutes and ", d(sec1), " seconds = ", f(dec1), " degrees.", nl())
 
-  deg2dms(dms1,deg1,min1,sec1)
-  print(f(dms1), " degrees = ", d(deg1), " degrees, ", d(min1), " minutes and ", d(sec1), " seconds.", nl())
+  deg2dms(dec1,deg1,min1,sec1)
+  print(f(dec1), " degrees = ", d(deg1), " degrees, ", d(min1), " minutes and ", d(sec1), " seconds.", nl())
+  print(nl())
+
+  print("Spherical Distance Calculations", nl())
+  print(nl())
+
+  /* 43.410815 / 43^24'38" is my house (lat) */
+  set(deg1,43)
+  set(min1,24)
+  set(sec1,38)
+  dms2deg(deg1,min1,sec1,dec1)
+
+  /* -80.508982 / -80^30'32" is my house (lon) */
+  set(deg2,-80)
+  set(min2,30)
+  set(sec2,32)
+  dms2deg(deg2,min2,sec2,dec2)
+
+  /* 44.101825 / 44^06'06" is my cottage (lat) */
+  set(deg3,44)
+  set(min3,06)
+  set(sec3,06)
+  dms2deg(deg3,min3,sec3,dec3)
+
+  /* -81.721931 / -81^43'18" is my cottage (lon) */
+  set(deg4,-81)
+  set(min4,43)
+  set(sec4,18)
+  dms2deg(deg4,min4,sec4,dec4)
+
+  print("House Lat: ", d(deg1), " degrees, ", d(min1), " minutes and ", d(sec1), " seconds = ", f(dec1), " degrees.", nl())
+  print("House Lon: ", d(deg2), " degrees, ", d(min2), " minutes and ", d(sec2), " seconds = ", f(dec2), " degrees.", nl())
+  print("Cottage Lat: ", d(deg3), " degrees, ", d(min3), " minutes and ", d(sec3), " seconds = ", f(dec3), " degrees.", nl())
+  print("Cottage Lon: ", d(deg4), " degrees, ", d(min4), " minutes and ", d(sec4), " seconds = ", f(dec4), " degrees.", nl())
+
+  print("House to Cottage: ", f(spdist(dec1,dec2,dec3,dec4)), nl())
+  print("House to Cottage (via roads, suggested by Google Maps: ", f(138.2))
 }

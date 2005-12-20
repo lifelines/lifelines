@@ -54,6 +54,7 @@ LL_REPORTS = \
 	sour.li span.ll src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll    \
 	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll           \
 	timeline1.ll timeline2.ll tinytafel1.ll tools.li                \
+	trigtest.ll							\
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll             \
 	xml-dtd.ll xmlize.ll zombies.ll
 
