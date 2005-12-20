@@ -58,11 +58,11 @@
 #include "interpi.h"
 
 /*===============================================+
- * __heapused -- Return amount of heapspace in use
- *   usage: heapused() -> INT
+ * llrpt_heapused -- Return amount of heapspace in use
+ * usage: heapused() -> INT
  *==============================================*/
 PVALUE
-__heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 #if defined(WORKING_HEAPUSED)
 	HEAPINFO hi;

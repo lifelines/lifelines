@@ -44,7 +44,7 @@ obj_lookup_comparator (OBJECT *pobj1, OBJECT *pobj2, VPTR param)
 #endif
 /*========================================
  * sortimpl -- sort first container [using second container as keys]
- * This implements __sort and __rsort.
+ * This implements llrpt_sort and llrpt_rsort.
  *======================================*/
 typedef struct tag_sortpair {
 	PVALUE value;
@@ -217,20 +217,20 @@ exit_sort:
 	return NULL;
 }
 /*========================================
- * __sort -- sort first container [using second container as keys]
- *   usage: sort(LIST [, LIST]) -> VOID
+ * llrpt_sort -- sort first container [using second container as keys]
+ * usage: sort(LIST [, LIST]) -> VOID
  *======================================*/
 PVALUE
-__sort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_sort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	return sortimpl(node, stab, eflg, TRUE);
 }
 /*========================================
- * __rsort -- reverse sort first container [using second container as keys]
- *   usage: rsort(LIST [, LIST]) -> VOID
+ * llrpt_rsort -- reverse sort first container [using second container as keys]
+ * usage: rsort(LIST [, LIST]) -> VOID
  *======================================*/
 PVALUE
-__rsort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_rsort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	return sortimpl(node, stab, eflg, FALSE);
 }

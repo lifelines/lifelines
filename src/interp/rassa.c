@@ -117,11 +117,11 @@ finishrassa (void)
 	}
 }
 /*========================================+
- * __pagemode -- Switch output to page mode
- *   usage: pagemode(INT, INT) -> VOID
+ * llrpt_pagemode -- Switch output to page mode
+ * usage: pagemode(INT, INT) -> VOID
  *======================================*/
 PVALUE
-__pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT cols, rows;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -153,11 +153,11 @@ __pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================+
- * __linemode -- Switch output to line mode
- *   usage: linemode() -> VOID
+ * llrpt_linemode -- Switch output to line mode
+ * usage: linemode() -> VOID
  *=======================================*/
 PVALUE
-__linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -169,11 +169,11 @@ __linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*======================================+
- * __newfile -- Switch output to new file
- *   usage: newfile(STRING, BOOL) -> VOID
+ * llrpt_newfile -- Switch output to new file
+ * usage: newfile(STRING, BOOL) -> VOID
  *=====================================*/
 PVALUE
-__newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	BOOLEAN aflag;
@@ -276,11 +276,11 @@ request_file (BOOLEAN *eflg)
 	return TRUE;
 }
 /*====================================+
- * __outfile -- Return output file name
- *   usage: outfile() -> STRING
+ * llrpt_outfile -- Return output file name
+ * usage: outfile() -> STRING
  *===================================*/
 PVALUE
-__outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -293,11 +293,11 @@ __outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_string(outfilename);
 }
 /*===============================================+
- * __pos -- Position page output to row and column
- *   usage: pos(INT, INT) -> VOID
+ * llrpt_pos -- Position page output to row and column
+ * usage: pos(INT, INT) -> VOID
  *==============================================*/
 PVALUE
-__pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT col, row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -325,11 +325,11 @@ __pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================+
- * __row -- Position output to start of row
- *   usage: row(INT) -> VOID
+ * llrpt_row -- Position output to start of row
+ * usage: row(INT) -> VOID
  *=======================================*/
 PVALUE
-__row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT row;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -350,11 +350,11 @@ __row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==================================+
- * __col -- Position output to column
- *   usage: col(INT) -> VOID
+ * llrpt_col -- Position output to column
+ * usage: col(INT) -> VOID
  *=================================*/
 PVALUE
-__col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT newcol;
 	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
@@ -374,11 +374,11 @@ __col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*=================================+
- * __getcol -- Return current column
- *   usage: getcol() -> INT
+ * llrpt_getcol -- Return current column
+ * usage: getcol() -> INT
  *================================*/
 PVALUE
-__getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -386,11 +386,11 @@ __getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_int(curcol);
 }
 /*======================================================
- * __pageout -- Output current page and clear page buffer
- *   usage: pageout() -> VOID
+ * llrpt_pageout -- Output current page and clear page buffer
+ * usage: pageout() -> VOID
  *====================================================*/
 PVALUE
-__pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	char scratch[MAXCOLS+2];
 	STRING p;

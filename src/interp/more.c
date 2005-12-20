@@ -41,8 +41,6 @@
 #include "zstr.h"
 #include "array.h"
 
-
-
 /*********************************************
  * external/imported variables
  *********************************************/
@@ -77,11 +75,11 @@ BOOLEAN prog_trace = FALSE;
  *********************************************/
 
 /*=============================================================+
- * __extractnames -- Extract name parts from person or NAME node
- *   usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
+ * llrpt_extractnames -- Extract name parts from person or NAME node
+ * usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
  *============================================================*/
 PVALUE
-__extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list=0;
 	STRING str, str2;
@@ -143,11 +141,11 @@ __extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==============================================================+
- * __extractplaces -- Extract place parts from event or PLAC NODE
- *   usage: extractplaces(NODE, LIST, VARB) -> VOID
+ * llrpt_extractplaces -- Extract place parts from event or PLAC NODE
+ * usage: extractplaces(NODE, LIST, VARB) -> VOID
  *=============================================================*/
 PVALUE
-__extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list=0, temp=0;
 	STRING str, str2;
@@ -196,11 +194,11 @@ __extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==========================================================+
- * __extracttokens -- Extract tokens from a STRING value
- *   usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
+ * llrpt_extracttokens -- Extract tokens from a STRING value
+ * usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
  *=========================================================*/
 PVALUE
-__extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list=0, temp=0;
 	INT len;
@@ -250,11 +248,11 @@ __extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===================================+
- * __database -- Return database name
- *   usage: database([BOOL]) -> STRING
+ * llrpt_database -- Return database name
+ * usage: database([BOOL]) -> STRING
  *==================================*/
 PVALUE
-__database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	extern STRING readpath;
 	BOOLEAN full = FALSE;
@@ -273,11 +271,11 @@ __database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	    (full ? readpath : lastpathname(readpath)));
 }
 /*===========================================+
- * __index -- Find nth occurrence of substring
- *   usage: index(STRING, STRING, INT) -> INT
+ * llrpt_index -- Find nth occurrence of substring
+ * usage: index(STRING, STRING, INT) -> INT
  *==========================================*/
 PVALUE
-__index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT num;
 	PNODE arg = (PNODE) iargs(node);
@@ -308,11 +306,11 @@ __index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val3;
 }
 /*==============================================+
- * __substring -- Find substring of string.
- *   usage: substring(STRING, INT, INT) -> STRING
+ * llrpt_substring -- Find substring of string.
+ * usage: substring(STRING, INT, INT) -> STRING
  *=============================================*/
 PVALUE
-__substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT lo, hi;
 	PNODE arg = (PNODE) iargs(node);
@@ -450,11 +448,11 @@ allocsubstring (STRING s, INT i, INT j)
 	}
 }
 /*===============================================
- * chooseindi -- Have user choose person from set
- *   usage: chooseindi(SET) -> INDI
+ * llrpt_chooseindi -- Have user choose person from set
+ * usage: chooseindi(SET) -> INDI
  *=============================================*/
 PVALUE
-__chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
+llrpt_chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
 	NODE indi=0;
 	INDISEQ seq=0;
@@ -471,11 +469,11 @@ __chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 	return create_pvalue_from_indi(indi);
 }
 /*================================================+
- * choosesubset -- Have user choose subset from set
- *   usage: choosesubset(SET) -> SET
+ * llrpt_choosesubset -- Have user choose subset from set
+ * usage: choosesubset(SET) -> SET
  *===============================================*/
 PVALUE
-__choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
+llrpt_choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
 	STRING msg;
 	INDISEQ newseq, seq;
@@ -496,11 +494,11 @@ __choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 	return create_pvalue_from_seq(newseq);
 }
 /*=========================================================+
- * choosechild -- Have user choose child of person or family
- *   usage: choosechild(INDI|FAM) -> INDI
+ * llrpt_choosechild -- Have user choose child of person or family
+ * usage: choosechild(INDI|FAM) -> INDI
  *========================================================*/
 PVALUE
-__choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CNSTRING key=0;
@@ -538,11 +536,11 @@ __choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*=================================================+
- * choosespouse -- Have user choose spouse of person
- *   usage: choosespouse(INDI) -> INDI
+ * llrpt_choosespouse -- Have user choose spouse of person
+ * usage: choosespouse(INDI) -> INDI
  *================================================*/
 PVALUE
-__choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -558,11 +556,11 @@ __choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_indi(indi); /* indi may be NULL */
 }
 /*==============================================+
- * choosefam -- Have user choose family of person
- *   usage: choosefam (INDI) -> FAM
+ * llrpt_choosefam -- Have user choose family of person
+ * usage: choosefam (INDI) -> FAM
  *=============================================*/
 PVALUE
-__choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam, indi = eval_indi(iargs(node), stab, eflg, NULL);
 	INDISEQ seq;
@@ -639,11 +637,11 @@ makestring (PVALUE val, STRING str, INT len, BOOLEAN *eflg)
 	}
 }
 /*===================================================+
- * menuchoose -- Have user choose from list of options
- *   usage: menuchoose (LIST [,STRING]) -> INT
+ * llrpt_menuchoose -- Have user choose from list of options
+ * usage: menuchoose (LIST [,STRING]) -> INT
  *==================================================*/
 PVALUE
-__menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT i, j, len;
 	STRING msg, *strngs;
@@ -697,11 +695,11 @@ __menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_int(i + 1);
 }
 /*================================+
- * runsystem -- Run shell command
- *   usage: runsystem (STRING) -> VOID
+ * llrpt_runsystem -- Run shell command
+ * usage: runsystem (STRING) -> VOID
  *===============================*/
 PVALUE
-__runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING cmd;
 	PNODE arg = iargs(node);
@@ -724,11 +722,11 @@ __runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*============================================+
- * firstindi -- Return first person in database
- *   usage: firstindi() -> INDI
+ * llrpt_firstindi -- Return first person in database
+ * usage: firstindi() -> INDI
  *===========================================*/
 PVALUE
-__firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -736,11 +734,11 @@ __firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_indi_keynum(xref_firsti());
 }
 /*==========================================+
- * nextindi -- Return next person in database
- *   usage: nextindi(INDI) -> INDI
+ * llrpt_nextindi -- Return next person in database
+ * usage: nextindi(INDI) -> INDI
  *=========================================*/
 PVALUE
-__nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
@@ -758,11 +756,11 @@ __nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_indi_keynum(i);
 }
 /*==============================================+
- * previndi -- Return previous person in database
- *   usage: previndi(INDI) -> INDI
+ * llrpt_previndi -- Return previous person in database
+ * usage: previndi(INDI) -> INDI
  *=============================================*/
 PVALUE
-__previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE indi = eval_indi(arg, stab, eflg, NULL);
@@ -780,11 +778,11 @@ __previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_indi_keynum(i);
 }
 /*===========================================
- * lastindi -- Return last person in database
- *   usage: lastindi() -> INDI
+ * llrpt_lastindi -- Return last person in database
+ * usage: lastindi() -> INDI
  *=========================================*/
 PVALUE
-__lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -792,11 +790,11 @@ __lastindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_indi_keynum(xref_lasti());
 }
 /*===========================================+
- * firstfam -- Return first family in database
- *   usage: firstfam() -> FAM
+ * llrpt_firstfam -- Return first family in database
+ * usage: firstfam() -> FAM
  *==========================================*/
 PVALUE
-__firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -804,11 +802,11 @@ __firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam_keynum(xref_firstf());
 }
 /*=========================================+
- * nextfam -- Return next family in database
- *   usage: nextfam(FAM) -> FAM
+ * llrpt_nextfam -- Return next family in database
+ * usage: nextfam(FAM) -> FAM
  *========================================*/
 PVALUE
-__nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE fam = eval_fam(arg, stab, eflg, NULL);
@@ -826,11 +824,11 @@ __nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam_keynum(i);
 }
 /*=============================================+
- * prevfam -- Return previous family in database
- *   usage: prevfam(FAM) -> FAM
+ * llrpt_prevfam -- Return previous family in database
+ * usage: prevfam(FAM) -> FAM
  *============================================*/
 PVALUE
-__prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE fam = eval_fam(arg, stab, eflg, NULL);
@@ -848,11 +846,11 @@ __prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam_keynum(i);
 }
 /*=========================================+
- * lastfam -- Return last family in database
- *   usage: lastfam() -> FAM
+ * llrpt_lastfam -- Return last family in database
+ * usage: lastfam() -> FAM
  *========================================*/
 PVALUE
-__lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -860,13 +858,12 @@ __lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_fam_keynum(xref_lastf());
 }
 /*=============================================+
- * __dereference -- Read top node of GEDCOM record from database
- *  usage: dereference(STRING) -> NODE
- *  usage: dereference(STRING) -> NODE
- *  NOTE: persons and families NOT cached!
+ * llrpt_dereference -- Read top node of GEDCOM record from database
+ * usage: dereference(STRING) -> NODE
+ * NOTE: persons and families NOT cached!
  *============================================*/
 PVALUE
-__dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
 	PNODE arg = iargs(node);
@@ -893,11 +890,11 @@ __dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*================================================+
- * reference -- Check if STRING is record reference
- *  usage: reference(STRING) -> BOOLEAN
+ * llrpt_reference -- Check if STRING is record reference
+ * usage: reference(STRING) -> BOOLEAN
  *===============================================*/
 PVALUE
-__reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING key;
 	BOOLEAN rc;
@@ -914,11 +911,11 @@ __reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*========================================+
- * rjustify -- Right justify string value
- *   usage: rjustify(STRING, INT) -> STRING
+ * llrpt_rjustify -- Right justify string value
+ * usage: rjustify(STRING, INT) -> STRING
  *=======================================*/
 PVALUE
-__rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE sarg = (PNODE) iargs(node);
 	PNODE larg = inext(sarg);
@@ -965,11 +962,11 @@ rightjustify (STRING str, INT len)
 	return new;
 }
 /*=========================================+
- * __lock -- Lock person or family in memory
- *   usage: lock(INDI|FAM) -> VOID
+ * llrpt_lock -- Lock person or family in memory
+ * usage: lock(INDI|FAM) -> VOID
  *========================================*/
 PVALUE
-__lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -988,11 +985,11 @@ __lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===============================================+
- * __unlock -- Unlock person or family from memory
- *   usage: unlock(INDI|FAM) -> VOID
+ * llrpt_unlock -- Unlock person or family from memory
+ * usage: unlock(INDI|FAM) -> VOID
  *==============================================*/
 PVALUE
-__unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CACHEEL cel;
@@ -1010,11 +1007,11 @@ __unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==========================================+
- * __savenode -- Save GEDCOM tree permanently
- *   usage: savenode(NODE) -> NODE
+ * llrpt_savenode -- Save GEDCOM tree permanently
+ * usage: savenode(NODE) -> NODE
  *=========================================*/
 PVALUE
-__savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
 	PNODE arg = iargs(node);
@@ -1030,11 +1027,11 @@ __savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*===================================================+
- * __genindiset -- Generate set of persons from a name
- *   usage: genindiset(STRING, SET) -> VOID
+ * llrpt_genindiset -- Generate set of persons from a name
+ * usage: genindiset(STRING, SET) -> VOID
  *==================================================*/
 PVALUE
-__genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	STRING name;
@@ -1061,13 +1058,12 @@ __genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	assign_iden(stab, iident(arg), seqval);
 	return NULL;
 }
-/*POINT*/
 /*================================================+
- * __version -- Return the LifeLines version string
- *   usage: version() -> STRING
+ * llrpt_version -- Return the LifeLines version string
+ * usage: version() -> STRING
  *===============================================*/
 PVALUE
-__version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	node=node; /* unused */
 	stab=stab; /* unused */
@@ -1075,11 +1071,11 @@ __version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_string(get_lifelines_version(120));
 }
 /*========================================+
- * __pvalue -- Show a PVALUE -- Debug routine
- *   usage: pvalue(ANY) -> STRING
+ * llrpt_pvalue -- Show a PVALUE -- Debug routine
+ * usage: pvalue(ANY) -> STRING
  *=======================================*/
 PVALUE
-__pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = evaluate(iargs(node), stab, eflg);
 	ZSTR zstr;
@@ -1099,22 +1095,22 @@ __pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val;
 }
 /*============================================+
- * __program -- Returns name of current program
- *   usage: program() -> STRING
+ * llrpt_program -- Returns name of current program
+ * usage: program() -> STRING
  *===========================================*/
 PVALUE
-__program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	stab=stab; /* unused */
 	eflg=eflg; /* unused */
 	return create_pvalue_from_string(irptinfo(node)->fullpath);
 }
 /*============================================+
- * __debug -- Turn on/off programming debugging
- *   usage: debug(BOOLEAN) -> VOID
+ * llrpt_debug -- Turn on/off programming debugging
+ * usage: debug(BOOLEAN) -> VOID
  *===========================================*/
 PVALUE
-__debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
 	prog_trace = pvalue_to_bool(val);
@@ -1122,11 +1118,11 @@ __debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================
- * __getproperty -- Return property string
- *   usage: getproperty(STRING) -> STRING
+ * llrpt_getproperty -- Return property string
+ * usage: getproperty(STRING) -> STRING
  *======================================*/
 PVALUE
-__getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
@@ -1160,11 +1156,11 @@ rad2deg (double rad)
   return (fmod((rad/M_PI*180.0),360.0));
 }
 /*========================================
- * __dms2deg -- convert degrees in DMS format to decimal degrees
- *   usage: dms2deg(INT, INT, INT, VARB) -> VOID
+ * llrpt_dms2deg -- convert degrees in DMS format to decimal degrees
+ * usage: dms2deg(INT, INT, INT, VARB) -> VOID
  *======================================*/
 PVALUE
-__dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node);
 	PNODE arg2 = inext(arg1);
@@ -1206,11 +1202,11 @@ __dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================
- * __deg2dms -- convert decimal degrees to DMS format
- *   usage: deg2dms(FLOAT, VARB, VARB, VARB) -> VOID
+ * llrpt_deg2dms -- convert decimal degrees to DMS format
+ * usage: deg2dms(FLOAT, VARB, VARB, VARB) -> VOID
  *======================================*/
 PVALUE
-__deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node);
 	PNODE ret1 = inext(arg1);
@@ -1248,11 +1244,11 @@ __deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================
- * __llsin -- trigonometric SINE function
- *   usage: sin(FLOAT) -> FLOAT
+ * llrpt_sin -- trigonometric SINE function
+ * usage: sin(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__llsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1265,11 +1261,11 @@ __llsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
- * __llcos -- trigonometric COSINE function
- *   usage: cos(FLOAT) -> FLOAT
+ * llrpt_cos -- trigonometric COSINE function
+ * usage: cos(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__llcos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1282,11 +1278,11 @@ __llcos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
- * __lltan -- trigonometric TANGENT function
- *   usage: tan(FLOAT) -> FLOAT
+ * llrpt_tan -- trigonometric TANGENT function
+ * usage: tan(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__lltan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1309,11 +1305,11 @@ __lltan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(tan(deg2rad(val2)));
 }
 /*========================================
- * __llarcsin -- trigonometric inverse SINE function
- *   usage: arcsin(FLOAT) -> FLOAT
+ * llrpt_arcsin -- trigonometric inverse SINE function
+ * usage: arcsin(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__llarcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1336,11 +1332,11 @@ __llarcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(rad2deg(asin(val2)));
 }
 /*========================================
- * __llarccos -- trigonometric inverse COSINE function
- *   usage: arccos(FLOAT) -> FLOAT
+ * llrpt_arccos -- trigonometric inverse COSINE function
+ * usage: arccos(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__llarccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1363,11 +1359,11 @@ __llarccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(rad2deg(acos(val2)));
 }
 /*========================================
- * __llarctan -- trigonometric inverse TANGENT function
- *   usage: arctan(FLOAT) -> FLOAT
+ * llrpt_arctan -- trigonometric inverse TANGENT function
+ * usage: arctan(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__llarctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1380,12 +1376,12 @@ __llarctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
 }
 /*========================================
- * __spdist -- spherical distance calculator
- *   usage: spdist(FLOAT, FLOAT, FLOAT, FLOAT) -> FLOAT
+ * llrpt_spdist -- spherical distance calculator
+ * usage: spdist(FLOAT, FLOAT, FLOAT, FLOAT) -> FLOAT
  *          (lat0, lon0, lat1, lon1) -> distance (in km)
  *======================================*/
 PVALUE
-__spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg1 = (PNODE) iargs(node);
         PNODE arg2 = inext(arg1);

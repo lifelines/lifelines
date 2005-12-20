@@ -70,11 +70,11 @@ static struct tag_indiseq_value_fnctable pvseq_fnctbl =
  *********************************************/
 
 /*======================================+
- * indiset -- Declare an INDISEQ variable
- *   indiset(VARB) -> VOID
+ * llrpt_indiset -- Declare an INDISEQ variable
+ * usage: indiset(VARB) -> VOID
  *=====================================*/
 PVALUE
-__indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ newseq=0;
 	PVALUE newval=0;
@@ -93,11 +93,11 @@ __indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==================================+
- * addtoset -- Add person to INDISEQ
- *   addtoset(SET, INDI, ANY) -> VOID
+ * llrpt_addtoset -- Add person to INDISEQ
+ * usage: addtoset(SET, INDI, ANY) -> VOID
  *=================================*/
 PVALUE
-__addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi=0;
 	STRING key=0;
@@ -137,25 +137,25 @@ ats_exit:
 	return NULL;
 }
 /*======================================+
- * lengthset -- Find length of an INDISEQ
- *   lengthset(SET) -> INT
+ * llrpt_lengthset -- Find length of an INDISEQ
+ * usage: lengthset(SET) -> INT
  * Implementation Detail:
- * - implemented using __length(), which
+ * - implemented using llrpt_length(), which
  *   was changed to accept LISTs, SETs
  *   and TABLEs
  * - this function is DEPRECATED
  *=====================================*/
 PVALUE
-__lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_lengthset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	return __length(node, stab, eflg);
+	return llrpt_length(node, stab, eflg);
 }
 /*====================================+
- * inset -- See if person is in INDISEQ
- *   inset(SET, INDI) -> BOOL
+ * llrpt_inset -- See if person is in INDISEQ
+ * usage: inset(SET, INDI) -> BOOL
  *==========================================*/
 PVALUE
-__inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key=0;
@@ -193,11 +193,11 @@ inset_exit:
 	return valr;
 }
 /*===========================================+
- * deletefromset -- Remove person from INDISEQ
- *   deletefromset(SET, INDI, BOOL) -> VOID
+ * llrpt_deletefromset -- Remove person from INDISEQ
+ * usage: deletefromset(SET, INDI, BOOL) -> VOID
  *==========================================*/
 PVALUE
-__deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi;
 	STRING key=0;
@@ -242,11 +242,11 @@ dfs_exit:
 	return NULL;
 }
 /*================================+
- * namesort -- Sort INDISEQ by name
- *   namesort(SET) -> VOID
+ * llrpt_namesort -- Sort INDISEQ by name
+ * usage: namesort(SET) -> VOID
  *===============================*/
 PVALUE
-__namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -263,11 +263,11 @@ __namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*==============================+
- * keysort -- Sort INDISEQ by key
- *   keysort(SET) -> VOID
+ * llrpt_keysort -- Sort INDISEQ by key
+ * usage: keysort(SET) -> VOID
  *=============================*/
 PVALUE
-__keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -284,11 +284,11 @@ __keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*===================================
- * valuesort -- Sort INDISEQ by value
- *   valuesort(SET) -> VOID
+ * llrpt_valuesort -- Sort INDISEQ by value
+ * usage: valuesort(SET) -> VOID
  *=================================*/
 PVALUE
-__valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -309,11 +309,11 @@ __valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*=========================================+
- * uniqueset -- Eliminate dupes from INDISEQ
- *   uniqueset(SET) -> VOID
+ * llrpt_uniqueset -- Eliminate dupes from INDISEQ
+ * usage: uniqueset(SET) -> VOID
  *========================================*/
 PVALUE
-__uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -330,11 +330,11 @@ __uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*=====================================+
- * union -- Create union of two INDISEQs
- *   union(SET, SET) -> SET
+ * llrpt_union -- Create union of two INDISEQs
+ * usage: union(SET, SET) -> SET
  *====================================*/
 PVALUE
-__union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
@@ -360,11 +360,11 @@ __union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*================================================+
- * intersect -- Create intersection of two INDISEQs
- *   intersect(SET, SET) -> SET
+ * llrpt_intersect -- Create intersection of two INDISEQs
+ * usage: intersect(SET, SET) -> SET
  *===============================================*/
 PVALUE
-__intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
@@ -391,11 +391,11 @@ __intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*===============================================+
- * difference -- Create difference of two INDISEQs
- *   difference(SET, SET) -> SET
+ * llrpt_difference -- Create difference of two INDISEQs
+ * usage: difference(SET, SET) -> SET
  *==============================================*/
 PVALUE
-__difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
@@ -422,11 +422,11 @@ __difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*=========================================+
- * parentset -- Create parent set of INDISEQ
- *   parentset(SET) -> SET
+ * llrpt_parentset -- Create parent set of INDISEQ
+ * usage: parentset(SET) -> SET
  *========================================*/
 PVALUE
-__parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -443,11 +443,11 @@ __parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*==========================================+
- * childset -- Create child set of an INDISEQ
- *   childset(SET) -> SET
+ * llrpt_childset -- Create child set of an INDISEQ
+ * usage: childset(SET) -> SET
  *=========================================*/
 PVALUE
-__childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -463,11 +463,11 @@ __childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*==============================================+
- * siblingset -- Create sibling set of an INDISEQ
- *   siblingset(SET) -> SET
+ * llrpt_siblingset -- Create sibling set of an INDISEQ
+ * usage: siblingset(SET) -> SET
  *=============================================*/
 PVALUE
-__siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -482,11 +482,11 @@ __siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*============================================+
- * spouseset -- Create spouse set of an INDISEQ
- *   spouseset(SET) -> SET
+ * llrpt_spouseset -- Create spouse set of an INDISEQ
+ * usage: spouseset(SET) -> SET
  *===========================================*/
 PVALUE
-__spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -501,11 +501,11 @@ __spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*================================================+
- * ancestorset -- Create ancestor set of an INDISEQ
- *   ancestorset(SET) -> SET
+ * llrpt_ancestorset -- Create ancestor set of an INDISEQ
+ * usage: ancestorset(SET) -> SET
  *===============================================*/
 PVALUE
-__ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -520,11 +520,11 @@ __ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*====================================================+
- * descendentset -- Create descendent set of an INDISEQ
- *   descendantset(SET) -> SET
+ * llrpt_descendentset -- Create descendent set of an INDISEQ
+ * usage: descendantset(SET) -> SET
  *===================================================*/
 PVALUE
-__descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -539,11 +539,11 @@ __descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*===================================================+
- * gengedcom -- Generate GEDCOM output from an INDISEQ
- *   gengedcom(SET) -> VOID
+ * llrpt_gengedcom -- Generate GEDCOM output from an INDISEQ
+ * usage: gengedcom(SET) -> VOID
  *==================================================*/
 PVALUE
-__gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -561,11 +561,12 @@ __gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 
 /*===================================================+
- * gengedcomweak -- Generate GEDCOM output from an INDISEQ
- *   gengedcom(SET) -> VOID
+ * llrpt_gengedcomweak -- Generate GEDCOM output from an INDISEQ
+ * usage: gengedcom(SET) -> VOID
  * Perry 2000/11/03
  *==================================================*/
-PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+PVALUE
+llrpt_gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);
@@ -583,11 +584,12 @@ PVALUE __gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 
 /*===================================================+
- * gengedcomstrong -- Generate GEDCOM output from an INDISEQ
- *   gengedcom(SET) -> VOID
+ * llrpt_gengedcomstrong -- Generate GEDCOM output from an INDISEQ
+ * usage: gengedcom(SET) -> VOID
  * Perry 2000/11/03
  *==================================================*/
-PVALUE __gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+PVALUE
+llrpt_gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
 	PNODE arg1 = (PNODE) iargs(node);

@@ -1,5 +1,16 @@
 2005-12-20 Matt Emmerton
 
+	* ChangeLog src/interp/builtin.c src/interp/functab.c
+	src/interp/heapused.c src/interp/interpi.h src/interp/intrpseq.c
+	src/interp/more.c src/interp/rassa.c src/interp/rptsort.c
+	src/interp/write.c
+
+	Update function names (again!) to avoid conflicts after
+	linker fixups.  This is a generic solution that should
+	work for everyone, everywhere, evermore.
+
+2005-12-20 Matt Emmerton
+
 	* ChangeLog src/interp/interpi.h src/interp/more.c
 	src/interp/functab.c src/interp/builtin.c
 

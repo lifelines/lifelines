@@ -37,12 +37,12 @@
 extern STRING nonind1,nonstrx,nonnod1,nonnodx;
 
 /*=====================================
- * createnode -- Create GEDCOM node
- *   createnode(STRING, STRING) -> NODE
- *   args: (tag, value)
+ * llrpt_createnode -- Create GEDCOM node
+ * usage: createnode(STRING, STRING) -> NODE
+ * args: (tag, value)
  *===================================*/
 PVALUE
-__createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE newnode=0, prnt=NULL;
@@ -66,12 +66,12 @@ __createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return create_pvalue_from_node(newnode);
 }
 /*=======================================
- * addnode -- Add a node to a GEDCOM tree
- *   addnode(NODE, NODE, NODE) -> VOID
- *  args: (node being added, parent, previous child)
+ * llrpt_addnode -- Add a node to a GEDCOM tree
+ * usage: addnode(NODE, NODE, NODE) -> VOID
+ * args: (node being added, parent, previous child)
  *=====================================*/
 PVALUE
-__addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE newchild, next, prnt, prev;
@@ -136,12 +136,12 @@ __addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*============================================
- * detachnode -- Remove node from GEDCOM tree
- *   detachnode(NODE) -> VOID
+ * llrpt_detachnode -- Remove node from GEDCOM tree
+ * usage: detachnode(NODE) -> VOID
  * (This is the historic deletenode)
  *==========================================*/
 PVALUE
-__detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	NODE dead, prnt;
@@ -175,11 +175,11 @@ __detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*======================================
- * writeindi -- Write person to database
- *   writeindi(INDI) -> BOOLEAN
+ * llrpt_writeindi -- Write person to database
+ * usage: writeindi(INDI) -> BOOLEAN
  *====================================*/
 PVALUE
-__writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi1;
 	PNODE arg = iargs(node);
@@ -236,11 +236,11 @@ end_writeindi:
 	return create_pvalue_from_bool(rtn);
 }
 /*=====================================
- * writefam -- Write family to database
- *   writefam(FAM) -> BOOLEAN
+ * llrpt_writefam -- Write family to database
+ * usage: writefam(FAM) -> BOOLEAN
  *===================================*/
 PVALUE
-__writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE fam1;
 	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);
