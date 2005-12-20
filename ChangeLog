@@ -2,7 +2,11 @@
 
 	* ChangeLog src/hdrs/indiseq.h
 
-	Fix declaration of default_compare_values (return value).
+	Fix declaration of default_compare_values (int => INT).
+
+	* ChangeLog src/interp/pvalue.c
+
+	Fix definition of create_pvalue_from_cel (int => INT).
 
 2005-12-19 Matt Emmerton
 

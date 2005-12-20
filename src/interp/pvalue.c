@@ -430,7 +430,7 @@ create_pvalue_from_fam_key (STRING key)
  * Created: 2002/02/17, Perry Rapp
  *===================================================*/
 PVALUE
-create_pvalue_from_cel (int type, CACHEEL cel)
+create_pvalue_from_cel (INT type, CACHEEL cel)
 {
 	PVALUE val=0;
 	RECORD rec = cel ? get_record_for_cel(cel) : 0;
