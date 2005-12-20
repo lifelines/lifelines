@@ -1248,11 +1248,11 @@ __deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return NULL;
 }
 /*========================================
- * __sin -- trigonometric SINE function
+ * __llsin -- trigonometric SINE function
  *   usage: sin(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1265,11 +1265,11 @@ __sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
- * __cos -- trigonometric COSINE function
+ * __llcos -- trigonometric COSINE function
  *   usage: cos(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llcos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1282,11 +1282,11 @@ __cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
- * __tan -- trigonometric TANGENT function
+ * __lltan -- trigonometric TANGENT function
  *   usage: tan(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__lltan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1309,11 +1309,11 @@ __tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(tan(deg2rad(val2)));
 }
 /*========================================
- * __arcsin -- trigonometric inverse SINE function
+ * __llarcsin -- trigonometric inverse SINE function
  *   usage: arcsin(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llarcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1336,11 +1336,11 @@ __arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(rad2deg(asin(val2)));
 }
 /*========================================
- * __arccos -- trigonometric COSINE function
+ * __llarccos -- trigonometric inverse COSINE function
  *   usage: arccos(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llarccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
@@ -1363,11 +1363,11 @@ __arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
         return create_pvalue_from_float(rad2deg(acos(val2)));
 }
 /*========================================
- * __arctan -- trigonometric TANGENT function
+ * __llarctan -- trigonometric inverse TANGENT function
  *   usage: arctan(FLOAT) -> FLOAT
  *======================================*/
 PVALUE
-__arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llarctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
         PNODE arg = (PNODE) iargs(node);
         PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);

@@ -1658,11 +1658,11 @@ __mod (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	return val1;
 }
 /*=================================+
- * __exp -- Exponentiation operation
+ * __llexp -- Exponentiation operation
  *   usage: exp(INT, INT) -> INT
  *================================*/
 PVALUE
-__exp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+__llexp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
