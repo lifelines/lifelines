@@ -106,7 +106,7 @@ path_match (CNSTRING path1, CNSTRING path2)
  * path_cmp -- compare two paths as appropriate
  *  handle WIN32 filename case insensitivity
  *===============================*/
-int
+INT
 path_cmp (CNSTRING path1, CNSTRING path2)
 {
 /* Special case for Win32, which needs case-insensitive */
