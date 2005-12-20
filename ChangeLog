@@ -8,6 +8,10 @@
 
 	Fix definition of create_pvalue_from_cel (int => INT).
 
+	* ChangeLog src/hdrs/llstdlib.h
+
+	Fix declaration of __reallocate (int => INT).
+
 2005-12-19 Matt Emmerton
 
 	* ChangeLog reports/trigtest.ll reports/Makefile.am
