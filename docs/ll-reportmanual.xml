@@ -5050,7 +5050,8 @@ the previous setting of locale.
 
 <para>
 The <function>bytecode</function> function converts the supplied string
-with escape codes to the current codeset, or to the codeset specified by the
+with escape codes to the current codeset from the internal codeset or
+from the codeset specified by the
 optional second parameter if specified.  A escaped code is a dollar sign ($)
 followed by 2 hex characters, e.g. $C1.
 </para>

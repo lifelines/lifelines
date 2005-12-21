@@ -504,6 +504,7 @@ check_file_for_unicode (FILE * fp)
  *  path:  [IN]  path list to copy
  *  dirs:  [OUT] output buffer
  * NB: dirs should be one byte larger than path
+ *     ignore zero length paths
  *================================================*/
 INT
 chop_path (CNSTRING path, STRING dirs)

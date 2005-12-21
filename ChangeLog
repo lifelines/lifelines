@@ -1,3 +1,12 @@
+2005-12-21 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.xml src/gedlib/xlat.c
+	src/interp/builtin.c src/stdlib/path.c
+
+	fix llrpt_bytecode() function to actually process second argument
+	rather than 1st argument twice.
+	change bytecode docs to match code.
+	add some TTPATH.debug enabled debug statements
+	
 2005-12-21 Matt Emmerton
 
 	* ChangeLog reports/st/Makefile.am

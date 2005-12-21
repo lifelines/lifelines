@@ -340,7 +340,7 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
 	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
 	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
-			_("ttpath trying to convert from <%s> to <%s>: %s"),
+			_("ttpath get_conversion_dyntt:from <%s> to <%s>: %s"),
 			src, dest,
 			dyntt ? _("succeeded") : _("failed")
 			);
@@ -360,6 +360,13 @@ get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
 	zs_apps(zttname, "__");
 	zs_apps(zttname, subcoding);
 	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
+	if (getlloptint("TTPATH.debug", 0)) {
+		log_outf("ttpath.dbg",
+			_("ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"),
+			codeset,subcoding,
+			dyntt ? _("succeeded") : _("failed")
+			);
+	}
 	zs_free(&zttname);
 	return dyntt;
 }

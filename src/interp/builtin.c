@@ -483,7 +483,7 @@ llrpt_bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		goto bytecode_exit;
 	}
 	if (arg) {
-		PVALUE val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
+		PVALUE val2 = eval_and_coerce(PSTRING, arg = inext(arg), stab, eflg);
 		if (*eflg) {
 			prog_var_error(node, stab, arg, NULL, nonstrx, "bytecode", "2");
 			goto bytecode_exit;
