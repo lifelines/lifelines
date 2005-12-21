@@ -3,6 +3,10 @@
 
 	Update report manual for new trig functions.
 
+	* ChangeLog reports/Makefile.am
+
+	remove reference to novel.head from Makefile.am
+
 2005-12-20 Matt Emmerton
 
 	* ChangeLog src/interp/builtin.c src/interp/functab.c

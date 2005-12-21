@@ -70,7 +70,7 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c              \
 	desc-tex2/poster1.tex                                           \
         desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex  \
 	gen_index                                                       \
-        novel/novel.head novel/novel.intro novel/novel.README           \
+        novel/novel.intro novel/novel.README                            \
         pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex           \
         ps-fan/ps-fan.ps                                                \
         ps-pedigree.ps tree.tex
