@@ -1423,6 +1423,128 @@ where the final value of the function becomes known. <function>Not</function> do
 <sect1>
 
 <title>
+Trigonometric and Spherical Calculations
+</title>
+<glosslist>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>sin</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute sine of argument in degrees
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>cos</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute cosine of argument in degrees
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>tan</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute tangent of argument in degrees
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>arcsin</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute inverse sine of argument
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>arccos</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute inverse cosine of argument
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>arctan</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute inverse tangent of argument
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>dms2deg</function></funcdef>
+<paramdef><parameter>INT degree</parameter>,
+<parameter>INT minute</parameter>,
+<parameter>INT second</parameter>,
+<parameter>FLOAT_V decimal</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+convert (degree, minute, second) to decimal degrees
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>void <function>deg2dms</function></funcdef>
+<paramdef><parameter>FLOAT decimal</parameter>,
+<parameter>INT_V degree</parameter>,
+<parameter>INT_V minute</parameter>,
+<parameter>INT_V second</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+convert decimal degrees to (degree, minute, second)
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>spdist</function></funcdef>
+<paramdef><parameter>FLOAT lat0</parameter>,
+<parameter>FLOAT long0</parameter>,
+<parameter>FLOAT lat1</parameter>,
+<parameter>FLOAT long1</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+compute distance between two locations
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+The trigonometric functions specify angles using degrees.  The functions
+<function>deg2dms</function> and <function>dms2deg</function>
+are provided to convert between (degree,minute,second) notation and decimal
+degree representations for angles.
+</para>
+<para>
+<function>spdist</function> estimates the distance between two spherical
+coordinates.  The arguments provided are, in order, first latitude, first
+longitude, second latitude, second longitude.  The result is in kilometers.
+
+</para>
+
+</sect1>
+
+<sect1>
+
+<title>
 Person Functions
 </title>
 

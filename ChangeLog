@@ -1,3 +1,8 @@
+2005-12-20 Stephen Dum
+	* ChangeLog docs/ll-reportmanual.{xml,html,txt,pdf}
+
+	Update report manual for new trig functions.
+
 2005-12-20 Matt Emmerton
 
 	* ChangeLog src/interp/builtin.c src/interp/functab.c

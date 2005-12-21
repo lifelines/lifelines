@@ -24,6 +24,7 @@ Thomas T. Wetmore , IV
         Value Types
         Iterators
         Arithmetic and Logic Functions
+        Trigonometric and Spherical Calculations
         Person Functions
         Family Functions
         Other types of records
@@ -662,11 +663,13 @@ Arithmetic and Logic Functions
 
    VOID incr(NUMBER,NUMBER);
 
-          increment variable by one
+          increment variable by second argument (or by 1 if no second
+          argument)
 
    VOID decr(NUMBER,NUMBER);
 
-          decrement variable by one
+          decrement variable by second argument (or by 1 if no second
+          argument)
 
    BOOL and(BOOL, BOOL ...);
 
@@ -729,6 +732,54 @@ Arithmetic and Logic Functions
 
    Eq,  ne, lt, le, gt and ge evaluate the six ordering relationships
    between two integers.
+     _____________________________________________________________
+
+Trigonometric and Spherical Calculations
+
+   FLOAT sin(FLOAT);
+
+          compute sine of argument in degrees
+
+   FLOAT cos(FLOAT);
+
+          compute cosine of argument in degrees
+
+   FLOAT tan(FLOAT);
+
+          compute tangent of argument in degrees
+
+   FLOAT arcsin(FLOAT);
+
+          compute inverse sine of argument
+
+   FLOAT arccos(FLOAT);
+
+          compute inverse cosine of argument
+
+   FLOAT arctan(FLOAT);
+
+          compute inverse tangent of argument
+
+   VOID dms2deg(INT degree, INT minute, INT second, FLOAT_V decimal);
+
+          convert (degree, minute, second) to decimal degrees
+
+   void deg2dms(FLOAT decimal, INT_V degree, INT_V minute, INT_V second);
+
+          convert decimal degrees to (degree, minute, second)
+
+   FLOAT spdist(FLOAT lat0, FLOAT long0, FLOAT lat1, FLOAT long1);
+
+          compute distance between two locations
+
+   The trigonometric functions specify angles using degrees. The functions
+   deg2dms    and   dms2deg   are   provided   to   convert   between
+   (degree,minute,second) notation and decimal degree representations for
+   angles.
+
+   spdist estimates the distance between two spherical coordinates. The
+   arguments provided are, in order, first latitude, first longitude,
+   second latitude, second longitude. The result is in kilometers.
      _____________________________________________________________
 
 Person Functions
