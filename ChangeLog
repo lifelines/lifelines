@@ -1,3 +1,16 @@
+2005-12-21 Perry Rapp
+
+	* ChangeLog src/hdrs/sequence.h src/liflines/screen.c
+	src/liflines/tandem.c src/liflines/valgdcom.c
+	src/stdlib/sequence.c src/stdlib/strcvt.c
+
+	Fix declaration of seqerr (int => INT).
+	Fix definition of crtseq (int => INT).
+	Fix definition of ll_tolowerz (int => INT).
+	Fix definition of handle_list_commands (BOOLEAN => INT rtn).
+	Fix definition of variable reuse (INT => BOOLEAN).
+	Fix definition of validate_get_warning_count (BOOLEAN => INT rtn).
+
 2005-12-20 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.{xml,html,txt,pdf}
 

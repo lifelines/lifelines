@@ -1278,7 +1278,7 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
  *  @code:     [IN]  command to process
  * Returns -1 if resized window, 1 if handled, 0 if unhandled.
  *===========================================================*/
-static BOOLEAN
+static INT
 handle_list_cmds (listdisp * ld, INT code)
 {
 	INT rows = ld->rectList.bottom - ld->rectList.top + 1;

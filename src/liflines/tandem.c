@@ -74,7 +74,8 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	RECORD tmp=0;
 	STRING key, name;
 	INDISEQ seq;
-	INT c, rc, reuse;
+	INT c, rc;
+	BOOLEAN reuse=FALSE;
 	static INT mode = 'n';
 
 	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
@@ -191,7 +192,8 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	RECORD current1, current2;
 	INT nkey1p, nkey2p, modep;
 	RECORD tmp, tmp2;
-	INT c, reuse;
+	INT c;
+	BOOLEAN reuse=FALSE;
 	static INT mode = 'n';
 
 	ASSERT(prec1 && *prec1 && nztype(*prec1)=='F');

@@ -172,7 +172,7 @@ wz_makenarrow(ZSTR zstr)
  * ll_tolowerz -- Return lowercase version of string
  *====================================*/
 ZSTR
-ll_tolowerz (CNSTRING s, int utf8)
+ll_tolowerz (CNSTRING s, INT utf8)
 {
 	ZSTR zstr=0;
 	if (utf8) {

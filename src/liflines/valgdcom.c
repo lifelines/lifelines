@@ -1136,7 +1136,7 @@ append_path (ZSTR zstr, char delim, CNSTRING str)
 /*===================================================
  * validate_get_warning_count -- How many warnings were found ?
  *=================================================*/
-BOOLEAN
+INT
 validate_get_warning_count (void)
 {
 	return num_warns;

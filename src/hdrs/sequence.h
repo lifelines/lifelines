@@ -52,7 +52,7 @@ typedef struct  {
 #define RANGE   2
 #define EMPTY   3
 
-extern int seqerr;
+extern INT seqerr;
 
 #define lenseq(seq)  (Size(seq))
 

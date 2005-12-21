@@ -41,7 +41,7 @@ INT seqerr = NONE;
  * crtseq -- Create sequence
  *========================*/
 SEQUENCE
-crtseq (int inc) /* incr length */
+crtseq (INT inc) /* incr length */
 {
 	SEQUENCE seq = (SEQUENCE) stdalloc(sizeof *seq);
 	seqerr = NONE;
