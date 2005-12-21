@@ -32,8 +32,7 @@ pkg_REPORTS = $(SELFTEST_REPORTS) \
               $(TEST_ITER_REPORTS)
 EXTRA_DIST =  $(SELFTEST_REPORTS) $(SELFTEST_REFERENCE) \
               $(TEST_ITER_REPORTS) $(TEST_ITER_REFERENCE) $(TEST_ITER_DB)
-CLEANFILES =  $(SELFTEST_REPORTS) $(TEST_ITER_REPORTS) $(TEST_ITER_DB) \
-              $(TEST_OUTPUTS) errs.log llines.leak_log selftest
+CLEANFILES =  $(TEST_OUTPUTS) errs.log llines.leak_log selftest
 
 LLEXEC = ../../src/liflines/llexec
 LLINES = ../../src/liflines/llines
