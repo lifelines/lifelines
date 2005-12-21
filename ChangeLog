@@ -1,3 +1,9 @@
+2005-12-21 Matt Emmerton
+
+	* ChangeLog sys/hdrs/sys_inc.h
+
+	Fix INT-related ifdef problems on Windows.
+
 2005-12-21 Perry Rapp
 
 	* ChangeLog src/hdrs/sequence.h src/liflines/screen.c
@@ -12,6 +18,7 @@
 	Fix definition of validate_get_warning_count (BOOLEAN => INT rtn).
 
 2005-12-20 Stephen Dum
+
 	* ChangeLog docs/ll-reportmanual.{xml,html,txt,pdf}
 
 	Update report manual for new trig functions.

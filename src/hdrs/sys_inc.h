@@ -22,7 +22,8 @@
 #ifdef __BORLANDC__
 #include <dir.h>
 #include <dos.h>
-#define int32 INT32
+#define int32 int32_t
+#define int16 int32_t
 #endif
 
 /* WIN32 - MSVC INCLUDES */
@@ -31,7 +32,8 @@
 #include <fcntl.h> /* _O_BINARY */
 #include "msvc.h" /* pragmas to suppress warnings */
 #define snprintf _snprintf
-#define __int32 INT32
+#define __int32 int32_t
+#define __int16 int16_t
 #endif
 
 /* WIN32 - NATIVE FUNCTION IMPLEMENTATIONS */
