@@ -1,3 +1,9 @@
+2005-12-21 Perry Rapp
+
+	* ChangeLog sys/hdrs/sys_inc.h
+
+	Fix backward int32 & int16 defines.
+
 2005-12-21 Matt Emmerton
 
 	* ChangeLog sys/hdrs/sys_inc.h

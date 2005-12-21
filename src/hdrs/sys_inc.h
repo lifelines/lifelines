@@ -32,8 +32,8 @@
 #include <fcntl.h> /* _O_BINARY */
 #include "msvc.h" /* pragmas to suppress warnings */
 #define snprintf _snprintf
-#define __int32 int32_t
-#define __int16 int16_t
+#define int32_t __int32
+#define int16_t __int16
 #endif
 
 /* WIN32 - NATIVE FUNCTION IMPLEMENTATIONS */
