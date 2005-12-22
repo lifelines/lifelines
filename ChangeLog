@@ -9983,17 +9983,17 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* docs/lifelines.sgml: Allow newer docbook tool chains to process
 	manual into postscript/pdf.  Changed <SIMPARA> to <PARA>
 
-2007-07-26 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-26 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog stdlib/Makefile.am:
 	Bugfix - forgot to include new file bfs.c in stdlib/makefile source line.
 
-2007-07-24 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-24 Perry Rapp <puddle@users.sourceforge.net>
 
 	* btree/file.c stdlib/llstrcmp.c:
 	Bugfix - handle strcoll errors.
 
-2007-07-22 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-22 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog btree/file.c btree/opnbtree.c gedlib/brwslist.c
 	gedlib/charmaps.c gedlib/editmap.c gedlib/editvtab.c
@@ -10020,7 +10020,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	Bugfix for twice-declared typedef (bfptr) - change to single declaration
 	and only forward declaration of underlying struct.
 
-2007-07-18 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-18 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/names.c liflines/add.c
 	stdlib/llstrcmp.c stdlib/stdstrng.c:
@@ -10036,7 +10036,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* ChangeLog gedlib/editmap.c liflines/pedigree.c liflines/show.c:
 	Bugfix (NOMAPS was still 6 not 7, so couldn't edit internal-to-report).
 
-2007-07-15 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-15 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/editvtab.c gedlib/indiseq.c
 	gedlib/lloptions.c gedlib/messages.c gedlib/names.c
@@ -10059,7 +10059,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	(Also simplified creation code.)
 	Bugfix - translation table editing on MS-Windows has cr/lf bug.
 
-2007-07-13 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-13 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/translat.c:
 	Bugfix in translation table code.
@@ -10067,7 +10067,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	* ChangeLog gedlib/charmaps.c interp/builtin.c:
 	Apply internal-to-report trans for surname, givens, and trimname.
 
-2007-07-12 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/gstrings.c gedlib/indiseq.c
 	gedlib/init.c gedlib/node.c hdrs/gedcom.h hdrs/indiseq.h
@@ -10077,7 +10077,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	Created reformatting context so gedcom doesn't directly call
 	format_date. Plugged memory leak in init_map_from_str.
 
-2007-07-11 Perry Rapp <puddle@users.sourceforge.net>
+2001-07-11 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog gedlib/charmaps.c gedlib/misc.c gedlib/names.c
 	gedlib/node.c hdrs/standard.h stdlib/stdstrng.c:
@@ -10214,6 +10214,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 2001-06-12 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog interp/interp.c liflines/main.c:
+
 	Bugfix in interp_indisetloop & interp_forlist (temp values getting
 	deleted before used).
 	Added -d flag for debug mode (don't catch signals, so can coredump).
@@ -10221,6 +10222,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 2001-06-10 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog hdrs/interp.h interp/alloc.c liflines/main.c:
+
 	Added init code to check builtins array (& FATAL2 if not correct).
 
 	* ChangeLog btree/addkey.c btree/traverse.c btree/utils.c
@@ -10236,6 +10238,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	liflines/tandem.c liflines/valgdcom.c stdlib/sequence.c
 	stdlib/signals.c stdlib/stdstrng.c stdlib/table.c
 	stdlib/warehouse.c tools/dbverify.c win32/w32systm.c:
+
 	(Comment changes.)
 	Labelled version info in file headers as pre-Sourceforge.
 
@@ -10249,6 +10252,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 	interp/yacc.y liflines/add.c liflines/newrecs.c
 	liflines/pedigree.c liflines/valgdcom.c stdlib/table.c
 	tools/dbverify.c:
+
 	Changed TABLEs to hold UNION instead of VPTR (they were already
 	being used to store INTs sometimes anyway). This removed a lot of
 	casting.
@@ -10260,6 +10264,7 @@ interp/interpi.h liflines/show.c reports/exercise.ll:
 2001-05-29 Perry Rapp <puddle@users.sourceforge.net>
 
 	* ChangeLog docs/Run.LifeLines.Windows.txt docs/lifelines.sgml
+
 	Added notes about NULL vs. empty strings in string section, and 
 	under if operator. Revised notes about buffer return string functions,
 	to indicate this is historical and obsolete with 3.0.6.
