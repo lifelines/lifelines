@@ -87,6 +87,8 @@ install -m 644 reports/pedtex/*.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/re
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
 install -m 644 reports/ps-fan/ps-fan* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
 
+install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/tt
+install -m 644 tt/*.tt $RPM_BUILD_ROOT/usr/local/share/lifelines/tt
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
 install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
@@ -96,6 +98,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 %files
 %defattr(-,root,root)
 %doc README ChangeLog NEWS AUTHORS LICENSE
+%doc .linesrc
 %doc docs/ll-reportmanual.xml docs/ll-reportmanual.html docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
 %doc docs/ll-userguide.xml docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
 
@@ -106,12 +109,20 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/share/locale/de/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/fr/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
+/usr/local/share/locale/eo/LC_MESSAGES/lifelines.mo
+/usr/local/share/locale/es/LC_MESSAGES/lifelines.mo
+/usr/local/share/locale/nl/LC_MESSAGES/lifelines.mo
+/usr/local/share/locale/pl/LC_MESSAGES/lifelines.mo
+/usr/local/share/locale/rw/LC_MESSAGES/lifelines.mo
 /usr/local/share/lifelines/reports
+/usr/local/share/lifelines/tt
 /usr/local/man/man1/btedit.1
 /usr/local/man/man1/dbverify.1
 /usr/local/man/man1/llines.1
 
 %changelog
+* Dec 21 2005 Stephen Dum
+- add .tt files, .linesrc and new .mo files to release
 * Tue Nov 15 2005 Perry Rapp
 - Change "Copyright" to newer "License".
 - Fix license name to clearer "X11".
