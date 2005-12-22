@@ -121,7 +121,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/llines.1
 
 %changelog
-* Dec 21 2005 Stephen Dum
+* Wed Dec 21 2005 Stephen Dum
 - add .tt files, .linesrc and new .mo files to release
 * Tue Nov 15 2005 Perry Rapp
 - Change "Copyright" to newer "License".
