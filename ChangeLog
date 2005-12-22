@@ -1,3 +1,14 @@
+2005-12-21 Stephen Dum
+	* ChangeLog build/rpm/lifelines.spec src/stdlib/path.c
+	docs/ll-reportmanual.{xml,html,pdf,txt}
+	docs/ll-userguide.{xml,html,pdf,txt}
+
+	Update lifelines.spec file to include:
+	tt files, new .mo files and .linesrc file
+	export lines.cfg.input to source distribution
+	update docs with some codeset information.
+	Fix bug handling adding default extensions to short filenames
+ 
 2005-12-22 Perry Rapp
 
 	* ChangeLog src/hdrs/sys_inc.h

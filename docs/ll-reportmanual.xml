@@ -5061,7 +5061,16 @@ The <function>convertcode</function> function converts a string to another
 codeset.  In the two argument form, the second argument is the destination
 codeset, and the source codeset is the internal codeset.  In the 3 argument
 form, the second argument is the source codeset and the third argument is the
-destination codeset.
+destination codeset.  (See the section of the LifeLines User Guide on codeset
+conversions.)  If your internal codeset is UTF-8, and the report codeset is
+UTF-8, the following code,
+<programlisting>       "&lt;p&gt;\n"
+       convertcode(str,"UTF-8//html")
+</programlisting>
+writes the first line of output as it is written, but will apply the html
+sub-conversion to all the characters in the string str. The special
+html codes like the less than or greater than will be escaped when printing
+the second string, but not when printing the first string.
 </para>
 
 <para>
