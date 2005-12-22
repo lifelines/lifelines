@@ -2352,15 +2352,24 @@ Miscellaneous Functions
    of locale.
 
    The bytecode function converts the supplied string with escape codes to
-   the current codeset, or to the codeset specified by the optional second
-   parameter if specified. A escaped code is a dollar sign ($) followed by
-   2 hex characters, e.g. $C1.
+   the  current codeset from the internal codeset or from the codeset
+   specified by the optional second parameter if specified. A escaped code
+   is a dollar sign ($) followed by 2 hex characters, e.g. $C1.
 
    The convertcode function converts a string to another codeset. In the
    two argument form, the second argument is the destination codeset, and
    the source codeset is the internal codeset. In the 3 argument form, the
    second argument is the source codeset and the third argument is the
-   destination codeset.
+   destination codeset. (See the section of the LifeLines User Guide on
+   codeset conversions.) If your internal codeset is UTF-8, and the report
+   codeset is UTF-8, the following code,
+       "<p>\n"
+       convertcode(str,"UTF-8//html")
+
+   writes the first line of output as it is written, but will apply the
+   html sub-conversion to all the characters in the string str. The special
+   html codes like the less than or greater than will be escaped when
+   printing the second string, but not when printing the first string.
 
    The debug function turns on or off programming debugging. When enabled
    gobs of information is printed as a LifeLines program is run. This can

@@ -3527,9 +3527,35 @@ for records read in from or written out to GEDCOM
      <application>LifeLines</application> normally uses iconv conversion, and
      codesets specified in configuration variables. This may be augmented by
      codeset translation or extension using the text conversion (*.tt) files in
-     the tt subdirectory. For example, there is a file "UTF-8__html.tt" which
-     provides conversion to HTML (i.e., escaping HTML special codes, such as
-     less than).  If your system lacks iconv, or you need more specialized
+     the tt subdirectory. To use the tables in the tt subdirectory,
+     you need to set
+     the property "TTPATH" in your <application>LifeLines</application>
+     configuration file to the path of the tt directory.  There are two types
+     of files in this directory. 
+     
+</para>
+<para>
+     
+     Files of the form &lt;codeset&gt;_&lt;codeset1&gt;.tt convert from one 
+     codeset to another. For example, CP1250_UTF-8.tt can be used to convert
+     characters in codeset CP1250 to their representations in UTF-8.
+     
+</para>
+<para>
+
+     Files of the form &lt;codeset&gt;__&lt;subcodeset&gt;.tt apply a
+     conversion within the codeset, for example, UTF-8__html.tt is a
+     sub-conversion that converts UTF-8 characters that have special escape
+     codes within html to those special codes.  For example, specifing the
+     report codeset to be UTF-8//html will apply the html sub-conversion to
+     all the data being written.  Probably not what you really wanted.
+     See the report language function convertcode() in the reportmanual for
+     details.
+
+</para>
+<para>
+     
+     If your system lacks iconv, or you need more specialized
      conversion than provided with iconv, you may either write a text
      conversion file (a tt file), or you may edit one of the in-database
      translation tables.
@@ -3537,7 +3563,7 @@ for records read in from or written out to GEDCOM
 </para>
 <para>
 
-     There in-database translation tables convert between forms (as listed
+     The in-database translation tables convert between forms (as listed
      above). Every translation table converts either to the internal form, or
      from the internal form. That is, the internal form is used as an
      intermediate step in all operations. There are six supported translation

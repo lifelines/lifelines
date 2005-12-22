@@ -213,7 +213,7 @@ HREF="#AEN3545"
 ></DT
 ><DT
 ><A
-HREF="#AEN3720"
+HREF="#AEN3721"
 >Deprecated Functions</A
 ></DT
 ></DL
@@ -13964,7 +13964,8 @@ the previous setting of locale.
 CLASS="function"
 >bytecode</TT
 > function converts the supplied string
-with escape codes to the current codeset, or to the codeset specified by the
+with escape codes to the current codeset from the internal codeset or
+from the codeset specified by the
 optional second parameter if specified.  A escaped code is a dollar sign ($)
 followed by 2 hex characters, e.g. $C1.
 </P
@@ -13976,7 +13977,28 @@ CLASS="function"
 codeset.  In the two argument form, the second argument is the destination
 codeset, and the source codeset is the internal codeset.  In the 3 argument
 form, the second argument is the source codeset and the third argument is the
-destination codeset.
+destination codeset.  (See the section of the LifeLines User Guide on codeset
+conversions.)  If your internal codeset is UTF-8, and the report codeset is
+UTF-8, the following code,
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>       "&#60;p&#62;\n"
+       convertcode(str,"UTF-8//html")
+</PRE
+></TD
+></TR
+></TABLE
+>
+writes the first line of output as it is written, but will apply the html
+sub-conversion to all the characters in the string str. The special
+html codes like the less than or greater than will be escaped when printing
+the second string, but not when printing the first string.
 </P
 ><P
 >&#13;The <TT
@@ -14013,7 +14035,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3720"
+NAME="AEN3721"
 >Deprecated Functions</A
 ></H2
 ><P
@@ -14038,7 +14060,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3728"
+NAME="AEN3729"
 ></A
 ><P
 ><CODE
@@ -14176,7 +14198,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3750"
+NAME="AEN3751"
 ></A
 ><P
 ><CODE
@@ -14221,7 +14243,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3762"
+NAME="AEN3763"
 ></A
 ><P
 ><CODE
@@ -14266,7 +14288,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3774"
+NAME="AEN3775"
 ></A
 ><P
 ><CODE
@@ -14352,7 +14374,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3794"
+NAME="AEN3795"
 ></A
 ><P
 ><CODE
@@ -14386,7 +14408,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3804"
+NAME="AEN3805"
 ></A
 ><P
 ><CODE
@@ -14420,7 +14442,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3814"
+NAME="AEN3815"
 ></A
 ><P
 ><CODE
@@ -14481,7 +14503,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3831"
+NAME="AEN3832"
 ></A
 ><P
 ><CODE
@@ -14515,7 +14537,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3841"
+NAME="AEN3842"
 ></A
 ><P
 ><CODE
@@ -14564,7 +14586,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3855"
+NAME="AEN3856"
 ></A
 ><P
 ><CODE
@@ -14624,7 +14646,7 @@ CLASS="funcsynopsis"
 ><P
 ></P
 ><A
-NAME="AEN3872"
+NAME="AEN3873"
 ></A
 ><P
 ><CODE

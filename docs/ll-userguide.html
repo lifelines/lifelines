@@ -185,32 +185,32 @@ HREF="#AEN1218"
 ></DT
 ><DT
 ><A
-HREF="#AEN1319"
+HREF="#AEN1323"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1424"
+HREF="#AEN1428"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1497"
+HREF="#AEN1501"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1662"
+HREF="#AEN1666"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1671"
+HREF="#AEN1675"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1720"
+HREF="#AEN1724"
 >System and User Properties</A
 ></DT
 ></DL
@@ -5634,9 +5634,38 @@ CLASS="application"
 > normally uses iconv conversion, and
      codesets specified in configuration variables. This may be augmented by
      codeset translation or extension using the text conversion (*.tt) files in
-     the tt subdirectory. For example, there is a file "UTF-8__html.tt" which
-     provides conversion to HTML (i.e., escaping HTML special codes, such as
-     less than).  If your system lacks iconv, or you need more specialized
+     the tt subdirectory. To use the tables in the tt subdirectory,
+     you need to set
+     the property "TTPATH" in your <TT
+CLASS="application"
+>LifeLines</TT
+>
+     configuration file to the path of the tt directory.  There are two types
+     of files in this directory. 
+     
+</P
+><P
+>&#13;     
+     Files of the form &#60;codeset&#62;_&#60;codeset1&#62;.tt convert from one 
+     codeset to another. For example, CP1250_UTF-8.tt can be used to convert
+     characters in codeset CP1250 to their representations in UTF-8.
+     
+</P
+><P
+>&#13;
+     Files of the form &#60;codeset&#62;__&#60;subcodeset&#62;.tt apply a
+     conversion within the codeset, for example, UTF-8__html.tt is a
+     sub-conversion that converts UTF-8 characters that have special escape
+     codes within html to those special codes.  For example, specifing the
+     report codeset to be UTF-8//html will apply the html sub-conversion to
+     all the data being written.  Probably not what you really wanted.
+     See the report language function convertcode() in the reportmanual for
+     details.
+
+</P
+><P
+>&#13;     
+     If your system lacks iconv, or you need more specialized
      conversion than provided with iconv, you may either write a text
      conversion file (a tt file), or you may edit one of the in-database
      translation tables.
@@ -5644,7 +5673,7 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     There in-database translation tables convert between forms (as listed
+     The in-database translation tables convert between forms (as listed
      above). Every translation table converts either to the internal form, or
      from the internal form. That is, the internal form is used as an
      intermediate step in all operations. There are six supported translation
@@ -5901,7 +5930,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1319"
+NAME="AEN1323"
 >MISCELLANEOUS UTILITIES</A
 ></H2
 ><P
@@ -6174,7 +6203,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1391"
+NAME="AEN1395"
 ></A
 ><P
 ><B
@@ -6272,7 +6301,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1408"
+NAME="AEN1412"
 ></A
 ><P
 ><B
@@ -6300,7 +6329,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1411"
+NAME="AEN1415"
 ></A
 ><P
 ><B
@@ -6319,7 +6348,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1414"
+NAME="AEN1418"
 ></A
 ><P
 ><B
@@ -6360,7 +6389,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1424"
+NAME="AEN1428"
 >IMPORT ERRORS</A
 ></H2
 ><P
@@ -6432,7 +6461,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1440"
+NAME="AEN1444"
 ></A
 ><P
 ><B
@@ -6479,7 +6508,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1451"
+NAME="AEN1455"
 ></A
 ><P
 ><B
@@ -6531,7 +6560,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1462"
+NAME="AEN1466"
 ></A
 ><P
 ><B
@@ -6571,7 +6600,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1469"
+NAME="AEN1473"
 ></A
 ><P
 ><B
@@ -6622,7 +6651,7 @@ not defined.</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1480"
+NAME="AEN1484"
 ></A
 ><P
 ><B
@@ -6659,7 +6688,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1487"
+NAME="AEN1491"
 ></A
 ><P
 ><B
@@ -6698,7 +6727,7 @@ value field (INDI I99).</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1494"
+NAME="AEN1498"
 ></A
 ><P
 ><B
@@ -6731,7 +6760,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1497"
+NAME="AEN1501"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
@@ -6983,7 +7012,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1542"
+NAME="AEN1546"
 ></A
 ><P
 ><B
@@ -7661,7 +7690,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1662"
+NAME="AEN1666"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
@@ -7735,7 +7764,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1671"
+NAME="AEN1675"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
@@ -7808,7 +7837,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1686"
+NAME="AEN1690"
 ></A
 ><P
 ><B
@@ -7912,7 +7941,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1704"
+NAME="AEN1708"
 ></A
 ><P
 ><B
@@ -8002,7 +8031,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1720"
+NAME="AEN1724"
 >System and User Properties</A
 ></H2
 ><P
@@ -8049,7 +8078,7 @@ CLASS="informaltable"
 ><P
 ></P
 ><A
-NAME="AEN1729"
+NAME="AEN1733"
 ></A
 ><TABLE
 BORDER="0"
