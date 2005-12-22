@@ -2,6 +2,7 @@
 	* ChangeLog build/rpm/lifelines.spec src/stdlib/path.c
 	docs/ll-reportmanual.{xml,html,pdf,txt}
 	docs/ll-userguide.{xml,html,pdf,txt}
+	Makefile.am
 
 	Update lifelines.spec file to include:
 	tt files, new .mo files and .linesrc file
