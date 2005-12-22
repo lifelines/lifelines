@@ -1,3 +1,9 @@
+2005-12-22 Perry Rapp
+
+	* ChangeLog src/hdrs/sys_inc.h
+
+	Define M_PI if needed for WIN32/MSVC.
+
 2005-12-21 Stephen Dum
 	* ChangeLog docs/ll-reportmanual.xml src/gedlib/xlat.c
 	src/interp/builtin.c src/stdlib/path.c

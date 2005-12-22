@@ -24,7 +24,7 @@
 #include <dos.h>
 #define int32 int32_t
 #define int16 int32_t
-#endif
+#endif /* __BORLANDC__ */
 
 /* WIN32 - MSVC INCLUDES */
 #ifdef _MSC_VER
@@ -34,12 +34,15 @@
 #define snprintf _snprintf
 #define int32_t __int32
 #define int16_t __int16
+#ifndef M_PI
+#define M_PI 3.1459265
 #endif
+#endif /* _MSC_VER */
 
 /* WIN32 - NATIVE FUNCTION IMPLEMENTATIONS */
 extern int w32system(const char *cp);
 
-#else
+#else /* not WIN32 */
 
 /* UNIX INCLUDES */
 #include <inttypes.h>
