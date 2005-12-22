@@ -498,7 +498,7 @@ The following is a good template to use when creating a new report from scratch.
 /*
 * @progname reportname
 * @version Version Number.
-* @author report author & possible email address
+* @author report author and possible email address
 * @category ????
 * @output Format of Report Output
 * @description The following paragraph is used to

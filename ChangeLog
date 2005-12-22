@@ -1,3 +1,9 @@
+2005-12-22 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Fix invalid xml ("&" => "and").
+
 2005-12-21 Stephen Dum
 	* ChangeLog build/rpm/lifelines.spec src/stdlib/path.c
 	docs/ll-reportmanual.{xml,html,pdf,txt}
