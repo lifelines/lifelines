@@ -496,15 +496,20 @@ The following is a good template to use when creating a new report from scratch.
 
 <programlisting>
 /*
-* @progname reportname
-* @version Version Number.
-* @author report author and possible email address
-* @category ????
-* @output Format of Report Output
-* @description The following paragraph is used to
-populate index.html.
-
-This report ....
+ * @progname reportname
+ * @version Version Number.
+ * @author report author and possible email address
+ * @category ????
+ * @output Format of Report Output
+ * @description The following paragraph is used to populate index.html.
+ *
+ * This report .... (Note, the text in the 1st paragraph following the @keyword
+ * lines is used as a description in the automatically generated index.html 
+ * file. The text following the @description is not used for this purpose.)
+ * The description lines can be written with or without the *'s on the left
+ * they will be removed when generating index.html.
+ * 
+ * Additional descriptive text
 */
 
 proc main()
@@ -5062,14 +5067,14 @@ codeset.  In the two argument form, the second argument is the destination
 codeset, and the source codeset is the internal codeset.  In the 3 argument
 form, the second argument is the source codeset and the third argument is the
 destination codeset.  (See the section of the LifeLines User Guide on codeset
-conversions.)  If your internal codeset is UTF-8, and the report codeset is
-UTF-8, the following code,
+conversions.)  For example, if your internal codeset is UTF-8, and the report 
+codeset is UTF-8, the following code,
 <programlisting>       "&lt;p&gt;\n"
        convertcode(str,"UTF-8//html")
 </programlisting>
 writes the first line of output as it is written, but will apply the html
 sub-conversion to all the characters in the string str. The special
-html codes like the less than or greater than will be escaped when printing
+html codes, like the less than or greater than, will be escaped when printing
 the second string, but not when printing the first string.
 </para>
 

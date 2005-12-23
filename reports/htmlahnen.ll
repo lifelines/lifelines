@@ -6,7 +6,7 @@
  * @output         HTML
  * @description
  *
- * Generate an ahnentafel chart in HTML format */
+ * Generate an ahnentafel chart in HTML format
  */
 /* Version 2, 12/31/95 */
 

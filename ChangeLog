@@ -4,6 +4,11 @@
 	has_key function was not being properly detected in config file.
 	moved check for it below check for curses libraries.
 
+	* ChangeLog docs/ll-reportmanual.xml reports/htmlahnen.ll
+
+	Add some text to the report template about how the description is 
+	extracted for index.html.  Fix a syntax error in htmlahnen.ll
+
 2005-12-22 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml
