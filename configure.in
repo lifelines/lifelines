@@ -158,11 +158,6 @@ AC_CHECK_LIB( m, asin )
 AC_CHECK_LIB( m, acos )
 AC_CHECK_LIB( m, atan )
 
-dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
-AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
-AC_REPLACE_FUNCS( _llnull )
-
 echo Looking for curses-compatible screen output library
 AC_CHECK_LIB(ncursesw, tparm)
 if test "$ac_cv_lib_ncursesw_tparm" = "yes"; then
@@ -190,6 +185,12 @@ else
   fi
 fi
 fi
+
+dnl Check for replacement functions
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
+AC_REPLACE_FUNCS( _llnull )
+
 
 dnl **************************************************************
 dnl Platform/Version-Specific Checks
