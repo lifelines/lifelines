@@ -1,3 +1,9 @@
+2005-12-24 Perry Rapp
+
+	* ChangeLog README.MAINTAINERS
+
+	Fix path of invocation example for setversions.sh.
+
 2005-12-22 Stephen Dum
 	* ChangeLog configure.in
 
