@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -26,17 +26,17 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-><TT
+><SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > Documentation</A
 ></H1
 ><H2
 CLASS="subtitle"
-><TT
+><SPAN
 CLASS="application"
->LifeLines</TT
-> Version 3.0.49</H2
+>LifeLines</SPAN
+> Version 3.0.50</H2
 ><H3
 CLASS="author"
 ><A
@@ -52,32 +52,32 @@ CLASS="TOC"
 >Table of Contents</B
 ></DT
 ><DT
-><A
+>1. <A
 HREF="#AEN12"
 >Users' Manual</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
+>1.1. <A
 HREF="#AEN14"
 >INTRODUCTION</A
 ></DT
 ><DT
-><A
+>1.2. <A
 HREF="#AEN36"
 >INSTALLATION</A
 ></DT
 ><DT
-><A
+>1.3. <A
 HREF="#AEN70"
->STARTING <TT
+>STARTING <SPAN
 CLASS="application"
->LIFELINES</TT
+>LIFELINES</SPAN
 > AND CREATING DATABASES</A
 ></DT
 ><DT
-><A
+>1.4. <A
 HREF="#AEN179"
 >INTRODUCTION TO <ACRONYM
 CLASS="acronym"
@@ -85,131 +85,131 @@ CLASS="acronym"
 ></A
 ></DT
 ><DT
-><A
+>1.5. <A
 HREF="#AEN350"
 >MAIN MENU</A
 ></DT
 ><DT
-><A
+>1.6. <A
 HREF="#AEN359"
 >CODESET</A
 ></DT
 ><DT
-><A
+>1.7. <A
 HREF="#AEN369"
 >ENTERING THE FIRST PERSON</A
 ></DT
 ><DT
-><A
+>1.8. <A
 HREF="#AEN413"
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></DT
 ><DT
-><A
+>1.9. <A
 HREF="#AEN469"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
-><A
+>1.10. <A
 HREF="#AEN480"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
-><A
+>1.11. <A
 HREF="#AEN506"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
-><A
+>1.12. <A
 HREF="#AEN521"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
-><A
+>1.13. <A
 HREF="#AEN524"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
-><A
+>1.14. <A
 HREF="#AEN693"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
-><A
+>1.15. <A
 HREF="#AEN781"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
-><A
+>1.16. <A
 HREF="#AEN891"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
-><A
+>1.17. <A
 HREF="#AEN978"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
-><A
+>1.18. <A
 HREF="#AEN1086"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
-><A
+>1.19. <A
 HREF="#AEN1149"
 >SEARCH MENU</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
+>1.19.1. <A
 HREF="#AEN1161"
 >Search Patterns</A
 ></DT
 ></DL
 ></DD
 ><DT
-><A
+>1.20. <A
 HREF="#AEN1201"
 >ADD OPERATION</A
 ></DT
 ><DT
-><A
+>1.21. <A
 HREF="#AEN1208"
 >DELETE OPERATION</A
 ></DT
 ><DT
-><A
+>1.22. <A
 HREF="#AEN1218"
 >CODESET CONVERSION</A
 ></DT
 ><DT
-><A
+>1.23. <A
 HREF="#AEN1323"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
-><A
+>1.24. <A
 HREF="#AEN1428"
 >IMPORT ERRORS</A
 ></DT
 ><DT
-><A
+>1.25. <A
 HREF="#AEN1501"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
-><A
+>1.26. <A
 HREF="#AEN1666"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
-><A
+>1.27. <A
 HREF="#AEN1675"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
-><A
+>1.28. <A
 HREF="#AEN1724"
 >System and User Properties</A
 ></DT
@@ -218,12 +218,135 @@ HREF="#AEN1724"
 ></DL
 ></DIV
 ><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>1-1. <A
+HREF="#AEN211"
+><ACRONYM
+CLASS="acronym"
+>GEDCOM</ACRONYM
+> person record</A
+></DT
+><DT
+>1-2. <A
+HREF="#AEN250"
+>Example of NAME formats</A
+></DT
+><DT
+>1-3. <A
+HREF="#AEN257"
+>Example of searching on NAMEs</A
+></DT
+><DT
+>1-4. <A
+HREF="#AEN310"
+>Example family record</A
+></DT
+><DT
+>1-5. <A
+HREF="#AEN376"
+>Default person record template</A
+></DT
+><DT
+>1-6. <A
+HREF="#AEN389"
+>Example editing of template record</A
+></DT
+><DT
+>1-7. <A
+HREF="#AEN488"
+>Example of entering a name</A
+></DT
+><DT
+>1-8. <A
+HREF="#AEN492"
+>Example of using wildcard in browsing</A
+></DT
+><DT
+>1-9. <A
+HREF="#AEN1395"
+>Example of using abbreviations</A
+></DT
+><DT
+>1-10. <A
+HREF="#AEN1412"
+>Example of replacing the default person record template</A
+></DT
+><DT
+>1-11. <A
+HREF="#AEN1415"
+>Example of replaced default person record template</A
+></DT
+><DT
+>1-12. <A
+HREF="#AEN1418"
+>Example of replaced single line default person record template</A
+></DT
+><DT
+>1-13. <A
+HREF="#AEN1444"
+>Example of bad NAME syntax (too many slashes in this case)</A
+></DT
+><DT
+>1-14. <A
+HREF="#AEN1455"
+>Example of XREF XYZ being defined twice</A
+></DT
+><DT
+>1-15. <A
+HREF="#AEN1466"
+>Example of person multiply defined</A
+></DT
+><DT
+>1-16. <A
+HREF="#AEN1473"
+>Example of family record missing key</A
+></DT
+><DT
+>1-17. <A
+HREF="#AEN1484"
+>Example of person record missing key</A
+></DT
+><DT
+>1-18. <A
+HREF="#AEN1491"
+>Example of level number which is too high</A
+></DT
+><DT
+>1-19. <A
+HREF="#AEN1498"
+>Example of lineage-linking line which is missing required value</A
+></DT
+><DT
+>1-20. <A
+HREF="#AEN1546"
+>Example of a source record</A
+></DT
+><DT
+>1-21. <A
+HREF="#AEN1690"
+>Example of referring events from a person record</A
+></DT
+><DT
+>1-22. <A
+HREF="#AEN1708"
+>Example of adding a new person</A
+></DT
+></DL
+></DIV
+><DIV
 CLASS="chapter"
 ><HR><H1
 ><A
 NAME="AEN12"
 ></A
->
+>Chapter 1. 
 
 Users' Manual
 
@@ -234,13 +357,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
->INTRODUCTION</A
+>1.1. INTRODUCTION</A
 ></H2
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > is a genealogy program
      that runs on <ACRONYM
 CLASS="acronym"
@@ -250,22 +373,22 @@ CLASS="acronym"
      others) in a database, and generates reports from those
      records. There are no practical limits on the number of
      records that can be stored in a
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database, nor on the
      amounts or kinds of data that can be kept in the
-     records. <TT
+     records. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > does not contain
      built-in reports.  Instead it provides a programming subsystem
      that you use to program your own reports and charts. The
      programming subsystem also lets you query your databases and
      process your data in any
-     way. <TT
+     way. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > uses the terminal
      independent features of <ACRONYM
 CLASS="acronym"
@@ -276,20 +399,20 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > is a non-commercial,
      experimental system that is use at your own risk software. I
-     developed <TT
+     developed <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > for personal
      use and shared it with friends. Enough of a demand arose
      through word of mouth and internet, that I have made the
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > source code and other
      information freely available under an MIT-style license
      reproduced below:
@@ -355,7 +478,7 @@ WIDTH="25"
 ALIGN="CENTER"
 VALIGN="TOP"
 ><IMG
-SRC="./stylesheet-images/note.gif"
+SRC="../images/note.gif"
 HSPACE="5"
 ALT="Note"></TD
 ><TD
@@ -386,12 +509,12 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN36"
->INSTALLATION</A
+>1.2. INSTALLATION</A
 ></H2
 ><P
->&#13;You may be installing <TT
+>&#13;You may be installing <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
 from a source distribution package or as an executable program
 already prepared for your <ACRONYM
@@ -404,9 +527,9 @@ CLASS="acronym"
 >) system. The
 source distribution comes with the readme, build script and
 make files necessary to build
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >. Follow the instructions
 in the readme file.  A number of executables are built
 which can be put it in a
@@ -425,9 +548,9 @@ CLASS="command"
 ></DT
 ><DD
 ><P
->&#13;a low-level editor for advanced debugging of broken <TT
+>&#13;a low-level editor for advanced debugging of broken <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > databases.
 </P
 ></DD
@@ -440,9 +563,9 @@ CLASS="command"
 ></DT
 ><DD
 ><P
->&#13;a utility program to verify <TT
+>&#13;a utility program to verify <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > databases.
 </P
 ></DD
@@ -456,9 +579,9 @@ CLASS="command"
 ><DD
 ><P
 >&#13;a stripped down version of the
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program, without the user interface
 for non-interactive processing of report programs
 </P
@@ -472,9 +595,9 @@ CLASS="command"
 ></DT
 ><DD
 ><P
->&#13;the <TT
+>&#13;the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program with full user interface
 </P
 ></DD
@@ -482,9 +605,9 @@ CLASS="application"
 ></DIV
 ><P
 >&#13;The source distribution package also contains documentation
-and some <TT
+and some <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programs.
 Included with these in the reports directory is a brief overview
 of the reports in the file index.html.
@@ -496,16 +619,16 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN70"
->STARTING <TT
+>1.3. STARTING <SPAN
 CLASS="application"
->LIFELINES</TT
+>LIFELINES</SPAN
 > AND CREATING DATABASES</A
 ></H2
 ><P
 >&#13;
-     You normally start <TT
+     You normally start <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > with
      the command: <KBD
 CLASS="userinput"
@@ -519,32 +642,32 @@ CLASS="replaceable"
 ></TT
 ></KBD
 > where
-     database is the name of a <TT
+     database is the name of a <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
-     database. If <TT
+     database. If <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > finds the
-     database, <TT
+     database, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > opens the
      database and takes you to the program's main menu. If the
-     database doesn't exist, <TT
+     database doesn't exist, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      asks whether it should create it, and if you answer yes, does
      so. You may create any number of databases, but only one can
-     be accessed by <TT
+     be accessed by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > at a
-     time. If you built the <TT
+     time. If you built the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      executable from the source package, the executable may be
      named <B
@@ -555,9 +678,9 @@ CLASS="command"
 CLASS="command"
 >lines</B
 >. You may either change its name or
-     invoke <TT
+     invoke <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > by using the
      command <B
 CLASS="command"
@@ -568,18 +691,12 @@ CLASS="command"
 ><P
 >&#13;
      The full command line interface to
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > is:
 
-     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+     <PRE
 CLASS="synopsis"
 >&#13;        <B
 CLASS="command"
@@ -594,9 +711,6 @@ CLASS="replaceable"
 ></TT
 >
      </PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
@@ -614,11 +728,10 @@ NAME="AEN95"
 ></A
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
 >-C</TD
@@ -774,9 +887,9 @@ CLASS="option"
 >-r</CODE
 > option opens the database with read-only
      access. When in this mode
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will not let you modify
      the database; no other operations are affected. The
      <CODE
@@ -784,9 +897,9 @@ CLASS="option"
 >-w</CODE
 > option opens the database with writeable
      access. If the database cannot be opened with the requested
-     mode <TT
+     mode <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > quits
      immediately. When you open a database with neither the
      <CODE
@@ -796,23 +909,23 @@ CLASS="option"
 CLASS="option"
 >-w</CODE
 > options,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > first tries to open the
      database with writeable access; if not possible
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > then tries to open the
      database with read-only access; and if this is not possible
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > quits. A
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database may be open
      simultaneously by any number of programs with read-only
      access; however, if a database is open by a program with
@@ -858,9 +971,9 @@ family you can see all the data.
 ><P
 >&#13;
      If you don't give the name of a database on the command line,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will prompt you for
      it.  If the name you supply is an absolute pathname or a
      relative pathname it is used as the path to the database.
@@ -869,9 +982,9 @@ CLASS="application"
 CLASS="envar"
 >LLDATABASES</CODE
 > variable or user options (described later),
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will search for the
      database in the directories named in the variable; this can be
      very convenient.
@@ -886,13 +999,13 @@ CLASS="envar"
 >&#13;
      If you would like to choose a database from a list of existing ones,
      enter a single question mark and press return when
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > prompts you for the database name.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will then display a list of all
      databases that it can find, and you may select one from the list.
 
@@ -904,16 +1017,16 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN179"
->INTRODUCTION TO <ACRONYM
+>1.4. INTRODUCTION TO <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
 ></A
 ></H2
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > records are stored in
      <ACRONYM
 CLASS="acronym"
@@ -925,17 +1038,17 @@ CLASS="acronym"
 >
      is a standard that defines a file format for moving
      genealogical data between computer
-     systems. <TT
+     systems. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > has adopted this
      format for structuring the records in its databases. This
      approach provides a structured yet flexible method for storing
      all the data you wish to record. There are few restrictions on
      the format, amount or type of information you may store in a
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database.
 
 </P
@@ -979,9 +1092,9 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > uses
      <ACRONYM
 CLASS="acronym"
@@ -990,9 +1103,9 @@ CLASS="acronym"
      though it does impose a few of the generally accepted
      lineage-linked semantic restrictions. This means some
      important things. It means that you can store all your
-     genealogical data in your <TT
+     genealogical data in your <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      database, and that you have wide freedom in how you choose
      your own conventions for structuring and formatting your
@@ -1000,9 +1113,9 @@ CLASS="application"
      databases can be different from the way that someone else
      stores their data.  This can be a problem if you share data
      with others or share report programs with other
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > users. My recommendation
      is to use <ACRONYM
 CLASS="acronym"
@@ -1013,9 +1126,9 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > does not use forms or
      screens to guide you through entering or changing
      data. Instead you use a screen editor and directly edit the
@@ -1028,9 +1141,9 @@ CLASS="acronym"
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > format, before you can use
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >. The
      <ACRONYM
 CLASS="acronym"
@@ -1041,9 +1154,9 @@ CLASS="acronym"
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > in order to use
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 
 </P
@@ -1061,7 +1174,7 @@ NAME="AEN211"
 ></A
 ><P
 ><B
->Example 1. 
+>Example 1-1. 
 
  <ACRONYM
 CLASS="acronym"
@@ -1070,12 +1183,6 @@ CLASS="acronym"
 
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;  0 @I25@ INDI
@@ -1159,9 +1266,6 @@ CLASS="userinput"
   1 FAMS @F12@
 
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -1183,9 +1287,9 @@ CLASS="acronym"
      detail; lines with higher level numbers expand on lines with
      lower numbers. Each record begins at level 0, and each deeper
      level increments the level by
-     one. <TT
+     one. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > does not restrict
      the structuring depth. Tags are uppercase (by convention) code
      words that specify the kind of information on the line or on
@@ -1196,9 +1300,9 @@ CLASS="application"
 ><P
 >&#13;
      The first line in a record indicates its type. There are four
-     fixed record types in <TT
+     fixed record types in <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      databases: person, family, source and event. The first, 0
      level line in these records have tags
@@ -1220,9 +1324,9 @@ CLASS="structname"
      record types, you may create your own record types by using
      any other tag on the 0 level line of a record. The lines that
      begin records are the only level 0 lines used in
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >. Each level 0 line has a
      cross-reference index between the level number and the
      tag. This index is the record's internal reference key; other
@@ -1244,9 +1348,9 @@ CLASS="structname"
 ><P
 >&#13;
      The second line in the example has the person's name. Each
-     person record in a <TT
+     person record in a <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      database must have at least one <CODE
 CLASS="structfield"
@@ -1268,17 +1372,11 @@ NAME="AEN250"
 ></A
 ><P
 ><B
->Example 2. 
+>Example 1-2. 
 Example of NAME formats
 
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;1 NAME <KBD
@@ -1294,9 +1392,6 @@ CLASS="userinput"
 >John/Smith/Jr.</KBD
 >
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -1316,16 +1411,10 @@ NAME="AEN257"
 ></A
 ><P
 ><B
->Example 3. 
+>Example 1-3. 
 Example of searching on NAMEs
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;
@@ -1342,17 +1431,14 @@ CLASS="userinput"
 >Mary</KBD
 >
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
      are all ways to enter a person named Mary with no known
      surname. A person may have any number, including zero, given
-     names and/or initials. A <TT
+     names and/or initials. A <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      person record may have any number of <CODE
 CLASS="structfield"
@@ -1366,9 +1452,9 @@ CLASS="structfield"
 ><P
 >&#13;
      The next line in the example gives the person's
-     sex. <TT
+     sex. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > doesn't require a
      <CODE
 CLASS="structfield"
@@ -1438,17 +1524,17 @@ CLASS="structfield"
 >PLAC</CODE
 > lines give the date and place
      of the event. The value of a
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      <CODE
 CLASS="structfield"
 >DATE</CODE
 > line is free format, though
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will try to parse it for
      specific day, month and year information. The value of a
      <CODE
@@ -1537,9 +1623,9 @@ CLASS="structfield"
 </P
 ><P
 >&#13;
-     When using <TT
+     When using <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to edit a
      person, you will not be able to edit the cross reference
      values on the <CODE
@@ -1554,9 +1640,9 @@ CLASS="structfield"
 >1
      FAMS</CODE
 > lines; these are maintained by
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 
 </P
@@ -1571,16 +1657,10 @@ NAME="AEN310"
 ></A
 ><P
 ><B
->Example 4. 
+>Example 1-4. 
 Example family record
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;
@@ -1602,9 +1682,6 @@ CLASS="userinput"
 >
   1 CHIL @I27@
   1 CHIL @I17@</PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -1649,9 +1726,9 @@ CLASS="structfield"
 CLASS="structfield"
 >1 CHIL</CODE
 > lines; these are maintained
-     by <TT
+     by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 
 </P
@@ -1664,14 +1741,14 @@ CLASS="application"
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > tags and value formats.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > does enforce a small set
      of conventions that you must obey. Within person records,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > requires that you use
      <CODE
 CLASS="structfield"
@@ -1682,9 +1759,9 @@ CLASS="structfield"
      SEX</CODE
 > lines with their special meanings and value
      formats. Though not required,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > assumes that you will use
      <CODE
 CLASS="structfield"
@@ -1702,9 +1779,9 @@ CLASS="structfield"
 >1 BURI</CODE
 > lines for birth, death,
      baptism and burial events, respectively. In family records,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > assumes you will use the
      <CODE
 CLASS="structfield"
@@ -1748,9 +1825,9 @@ CLASS="structfield"
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > format. When
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > prepares records for you
      to edit, however, it always indents the records, making them
      easier to read and understand. You do not need to follow this
@@ -1765,24 +1842,18 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN350"
->MAIN MENU</A
+>1.5. MAIN MENU</A
 ></H2
 ><P
 >&#13;
-     After <TT
+     After <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > opens an existing
      database, or creates a new one, it presents you with the main
      menu:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Please choose an operation:
    b Browse the persons in the database
@@ -1797,9 +1868,6 @@ CLASS="screen"
    Q Quit current database
    q Quit program
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -1846,7 +1914,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN359"
->CODESET</A
+>1.6. CODESET</A
 ></H2
 ><P
 >&#13;
@@ -1935,7 +2003,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN369"
->ENTERING THE FIRST PERSON</A
+>1.7. ENTERING THE FIRST PERSON</A
 ></H2
 ><P
 >&#13;
@@ -1949,15 +2017,15 @@ NAME="AEN369"
      Normally you add persons to the database from the browsing
      modes, but when entering the first person there is no one in
      the database to browse to. To add the first person to a
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database, first select
      the add operation from the main menu. You will be prompted
      with the add menu (described later).  Strike p to add a
-     person. <TT
+     person. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a
      template of a <ACRONYM
 CLASS="acronym"
@@ -1973,16 +2041,10 @@ NAME="AEN376"
 ></A
 ><P
 ><B
->Example 5. 
+>Example 1-5. 
 Default person record template
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;
@@ -2007,9 +2069,6 @@ CLASS="replaceable"
     2 DATE
     2 PLAC
     2 SOUR</PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -2063,16 +2122,10 @@ NAME="AEN389"
 ></A
 ><P
 ><B
->Example 6. 
+>Example 1-6. 
 Example editing of template record
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;
@@ -2118,9 +2171,6 @@ CLASS="userinput"
 
 ... lots of other events and facts
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -2140,9 +2190,9 @@ CLASS="structfield"
 CLASS="structfield"
 >FAMS</CODE
 >
-     lines. <TT
+     lines. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates and
      maintains these lines through specific user commands.
 
@@ -2151,19 +2201,19 @@ CLASS="application"
 >&#13;
      When you finish editing and leave the editor, you
      automatically return to
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >. If you made an error
      (eg, didn't use proper level numbers or didn't follow the
-     proper name convention), <TT
+     proper name convention), <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      displays an error message, and asks if you want to re-edit the
-     record. If you don't, <TT
+     record. If you don't, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      doesn't add the person to the database.
 
@@ -2171,15 +2221,15 @@ CLASS="application"
 ><P
 >&#13;
      When the record is in proper format,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks if you are sure you
      want to add the person to the database. If you answer yes, the
      person is added; if you answer no, the person isn't. In both
-     cases <TT
+     cases <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > returns to the main
      menu.
 
@@ -2191,24 +2241,24 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN413"
->SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
+>1.8. SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></H2
 ><P
 >&#13;
-     With <TT
+     With <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > you maintain the
      database records using a screen editor. This is different than
      other genealogical programs where screens or forms are used to
      gather the data.The default screen editor for
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > is
-     <TT
+     <SPAN
 CLASS="application"
->vi</TT
+>vi</SPAN
 >. (The <ACRONYM
 CLASS="acronym"
 >MS-Windows</ACRONYM
@@ -2240,21 +2290,21 @@ CLASS="replaceable"
 ></KBD
 >
      to your login profile file, and
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will use
-     <TT
+     <SPAN
 CLASS="application"
->emacs</TT
+>emacs</SPAN
 > for editing.
 
 </P
 ><P
 >&#13;
-     There are four other, <TT
+     There are four other, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      specific environment variables. They are
      <CODE
@@ -2309,13 +2359,13 @@ CLASS="acronym"
 CLASS="envar"
 >LLDATABASES</CODE
 > can be set to a list of directories
-     that hold <TT
+     that hold <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > databases. When
-     you execute the <TT
+     you execute the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program,
      these directories will be searched in turn for the database
      mentioned on the command line. For example,
@@ -2341,9 +2391,9 @@ CLASS="filename"
 </P
 ><P
 >&#13;
-     Each <TT
+     Each <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database is
      implemented as a directory with specific contents. The
      <CODE
@@ -2361,9 +2411,9 @@ CLASS="envar"
 >LLPROGRAMS</CODE
 > is used in
      the same way, but to specify the search path for
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > report generating and
      other programs (described later).
 
@@ -2402,9 +2452,9 @@ CLASS="envar"
 >&#13;
      You are not required to use these environment variables; when
      a variable is not defined,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > uses the current
      directory as its default value. If you do use the variables,
      you can override their use by specifying files and directories
@@ -2424,9 +2474,9 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > uses the curses library
      for terminal independent I/O. This requires you to specify
      your terminal type with the <CODE
@@ -2447,14 +2497,14 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN469"
->BASICS OF BROWSING</A
+>1.9. BASICS OF BROWSING</A
 ></H2
 ><P
 >&#13;
      You will use the browsing screens of
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > most of the time. When in
      these modes you can quickly search for or browse through the
      persons and families in the database. When you find a person
@@ -2518,31 +2568,22 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN480"
->IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
+>1.10. IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></H2
 ><P
 >&#13;
      To enter the browsing modes from the main menu strike
-     b. <TT
+     b. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify a
      person or list of persons to browse to:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Please identify person or persons to browse to.
 Enter name, key, refn or list:
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
@@ -2556,9 +2597,9 @@ Enter name, key, refn or list:
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > allows wide flexibility
      in how to enter names. You may enter a name in upper or lower
      case or any combination. You may leave out all but the first
@@ -2579,7 +2620,7 @@ NAME="AEN488"
 ></A
 ><P
 ><B
->Example 7. 
+>Example 1-7. 
 Example of entering a name
 </B
 ></P
@@ -2609,7 +2650,7 @@ NAME="AEN492"
 ></A
 ><P
 ><B
->Example 8. 
+>Example 1-8. 
 Example of using wildcard in browsing
 </B
 ></P
@@ -2628,44 +2669,35 @@ CLASS="literallayout"
 </P
 ><P
 >&#13;
-     After you enter a name, <TT
+     After you enter a name, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      searches for all persons who match. There are three
      possibilities: no one matches; one person matches; or more
      than one person matches. In the first case
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > writes: 
-     <TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+     <PRE
 CLASS="screen"
 >There is no one in the database with that name or key.</PRE
-></TD
-></TR
-></TABLE
 >
      and leaves you in the main menu.
 
 </P
 ><P
 >&#13;
-     If one person matches, <TT
+     If one person matches, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      enters the person browse mode displaying the matched
      person. If more than one person matches,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > enters the list browsing
      mode with the list of matching persons.
 
@@ -2676,14 +2708,14 @@ CLASS="application"
      internal, cross-reference key value. The internal key values
      of all person records are an I followed by digits.
      When you enter a key value you may omit the I.
-     If <TT
+     If <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > finds a person with
      the key value you provide,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > enters the person
      browsing mode displaying that person.  You can also browse to
      a Family, Source, or Note by entering it's key, but you must
@@ -2706,41 +2738,35 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN506"
->ZIP IDENTIFYING A NEW PERSON</A
+>1.11. ZIP IDENTIFYING A NEW PERSON</A
 ></H2
 ><P
 >&#13;
-     Some <TT
+     Some <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > operations need you
      to identify a person, not for the purpose of browsing, but for
      the purpose of completing an operation you have requested. For
      example, when you add a child to a family,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > may ask you to identify
      the child. When this happens a panel pops up that asks you to
      identify a person. You respond by typing a name or key exactly
      as you would for the b command. If no one matches,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > returns to the previous
      browsing mode. If the name matches persons in the database
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays something like:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Please choose from among these records.
   &#62;Thomas Trask Wetmore, b. 1826, N.B. (42)
@@ -2752,9 +2778,6 @@ CLASS="screen"
 _______________________________________________
 Commands: j Move down k Move up i Select q Quit
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -2767,9 +2790,9 @@ Commands: j Move down k Move up i Select q Quit
      at once. If this is so then you can use the j and k commands
      to scroll through the full list. If you don't find the proper
      person, use the q command and
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks whether you want to
      enter another name.
 
@@ -2786,16 +2809,16 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     When <TT
+     When <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a list of
      names for you to select from, it tries to add extra
      information to the name; this helps determine which name to
      choose, and is important in databases where many persons have
-     the same name. <TT
+     the same name. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > also
      places the person's key value at the end of each menu line;
      this may be helpful in large databases.
@@ -2815,7 +2838,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN521"
->BROWSE DISPLAY BASICS</A
+>1.12. BROWSE DISPLAY BASICS</A
 ></H2
 ><P
 >&#13;
@@ -2833,27 +2856,21 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN524"
->PERSON BROWSE SCREEN</A
+>1.13. PERSON BROWSE SCREEN</A
 ></H2
 ><P
 >&#13;
      After you identify a person to browse to,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > enters the person browse
      screen. The top panel in the display gives basic information
      about the person (in the normal, or vitals, mode, which is the
      default). The middle panel provides a menu of commands.
      For example:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;person: Thomas Trask WETMORE Sr (25)
   born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
@@ -2876,9 +2893,6 @@ Please choose an operation:             (pg 1/3)
 _______________________________________________________________________
 LifeLines -- Person Browse Screen
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -2907,15 +2921,15 @@ CLASS="action"
 ><P
 >&#13;
      Edit the person's database
-     record. <TT
+     record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > puts the record
      in a file, and then runs a screen editor so you can edit the
      record. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm any
      changes; the person is changed only if you answer yes.
 
@@ -2935,14 +2949,14 @@ CLASS="action"
 ><P
 >&#13;
      Browse to the person's father. If the father isn't in the
-     database, <TT
+     database, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > doesn't change
      the display. If there are more than one father,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to select one.
 
 </P
@@ -2961,14 +2975,14 @@ CLASS="action"
 ><P
 >&#13;
      Browse to the person's mother. If the mother isn't in the
-     database, <TT
+     database, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > doesn't change
      the display. If there are more than one mother,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to select one.
 
 </P
@@ -2987,9 +3001,9 @@ CLASS="action"
 ><P
 >&#13;
      Browse to the person's spouse. If the person has more than one
-     spouse, <TT
+     spouse, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      select one. If the person has no spouse, the display does not
      change.
@@ -3010,9 +3024,9 @@ CLASS="action"
 ><P
 >&#13;
      Browse to one of the person's children. If there is more than
-     one child, <TT
+     one child, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      select one. If the person has no children, the display does
      not change.
@@ -3072,9 +3086,9 @@ CLASS="action"
 >&#13;
      Browse to the family the person is a spouse or parent in, and
      switch to the family browse mode. If the person is in more
-     than one family, <TT
+     than one family, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you
      to identify which one. If the person is not a spouse or parent
      in any family, the display does not change.
@@ -3097,9 +3111,9 @@ CLASS="action"
      Browse to the family the person is a child in, and switch to
      the family browse mode. If the person is not a child in a
      family, the display does not change. If the person is a child
-     in more than one family, <TT
+     in more than one family, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      asks you to identify which one.
 
@@ -3119,9 +3133,9 @@ CLASS="action"
 ><P
 >&#13;
      Browse to a new person or list of
-     persons. <TT
+     persons. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify a person or persons by name, key or list name, and
      depending on how many persons are identified, switches either
@@ -3143,9 +3157,9 @@ CLASS="action"
 ><P
 >&#13;
      Add the person as a spouse/parent to an existing
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the family, and then asks you to confirm the request.
 
@@ -3166,9 +3180,9 @@ CLASS="action"
 >&#13;
      Add the person as a child to an existing family. The person
      may already be a child in another
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the family, and then asks you to confirm the request.
 
@@ -3189,9 +3203,9 @@ CLASS="action"
 >&#13;
      Remove the person as a spouse or parent from an existing
      family. If the person is a spouse or parent in more than one
-     family, <TT
+     family, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the family.
 
@@ -3228,21 +3242,21 @@ CLASS="action"
 ><P
 >&#13;
      Create and add a new person to the
-     database. <TT
+     database. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a
      record template and puts you into the screen editor to edit
      the record. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm the
      operation. If you do, the new person is added and becomes the
      current person. If not, the new person is not added, and
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > returns to the original
      display.
 
@@ -3263,48 +3277,48 @@ CLASS="action"
 >&#13;
      Create and add a new family to the database. The new family
      may have the current person as either a spouse/parent or as a
-     child; <TT
+     child; <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks which. If you
      choose to create a family with the person as a spouse/parent,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the
      other spouse if he or she is known. In either case
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a family
      template, and places you in the screen editor.  When you
-     return from the editor, <TT
+     return from the editor, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      asks you to confirm the operation. If you do,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > adds the family and
      shifts into family browse mode. If the command you ran just
      before the a command were the n command, and you choose to
      create a family with the person as a spouse/parent,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > guesses that the other
      spouse in the family will be the person displayed just before
      the new person was
-     created. <TT
+     created. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you if this
      is the case, and if so, automatically make that person the
      other spouse in the new family. If this is not the case,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the
      other spouse.
 
@@ -3343,9 +3357,9 @@ CLASS="action"
 >&#13;
      Swap (change chronological order) any two families that the
      person belongs to as a spouse or
-     parent. <TT
+     parent. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the two families and then swaps them.
 
@@ -3365,9 +3379,9 @@ CLASS="action"
 ><P
 >&#13;
      Change to the tandem person browse
-     mode. <TT
+     mode. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > first asks you to
      identify the second person.
 
@@ -3403,9 +3417,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-     Return to the <TT
+     Return to the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > main menu.
 
 </P
@@ -3424,9 +3438,9 @@ CLASS="action"
 ><P
 >&#13;
         Zip browse to a new person.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
         identify a person by name or key value, and if you do so,
         browses to that person.
@@ -3445,7 +3459,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN693"
->LIST BROWSE SCREEN</A
+>1.14. LIST BROWSE SCREEN</A
 ></H2
 ><P
 >&#13;
@@ -3455,13 +3469,7 @@ NAME="AEN693"
      panel is identified by the &#62; character. The right panel is the
      menu of available commands.
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;person: Thomas Trask WETMORE Sr (25)
   born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
@@ -3486,9 +3494,6 @@ _______________________________________________________________________
 _______________________________________________________________________
 LifeLines -- List Browse Screen
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -3574,14 +3579,14 @@ CLASS="action"
 ><P
 >&#13;
      Edit the displayed person's database
-     record. <TT
+     record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > runs the editor
      on the person's record. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm any
      changes, and then leaves you in the list browse screen.
 
@@ -3675,9 +3680,9 @@ CLASS="action"
      Lists of persons may be named, allowing you to quickly browse
      back to them by giving a list name in response to the b
      command from different
-     modes. <TT
+     modes. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will prompt you
      for the name. List names are most convenient when short.
 
@@ -3716,9 +3721,9 @@ CLASS="action"
 ><P
 >&#13;
      Add more persons to the current browse
-     list. <TT
+     list. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify a new person or list of persons by name, key or list
      name, and they are added to and name-sorted into the current
@@ -3756,9 +3761,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-     Return to the <TT
+     Return to the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > main menu.
 
 </P
@@ -3775,7 +3780,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN781"
->FAMILY BROWSE SCREEN</A
+>1.15. FAMILY BROWSE SCREEN</A
 ></H2
 ><P
 >&#13;
@@ -3784,13 +3789,7 @@ NAME="AEN781"
      panel shows the menu of available commands.  If the database contains
      more than two parents for this family only the first two are displayed.
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;father: Thomas Trask WETMORE IV (1)
   born: 18 December 1949, New London, New London, Connecticut
@@ -3813,9 +3812,6 @@ _______________________________________________________________________
 LifeLines -- Family Browse Screen (* toggles menu)
 
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ><P
@@ -3836,15 +3832,15 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-     Edit the family's record. <TT
+     Edit the family's record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      writes the record to a file and puts you into an editor to
      edit the file. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm the
      update; the family is changed only if you do so.
 
@@ -3902,9 +3898,9 @@ CLASS="action"
 >&#13;
      Browse to a child in the family, switching to the person
      browse screen. If the family has more than one child,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify a
      specific child.
 
@@ -3924,15 +3920,15 @@ CLASS="action"
 ><P
 >&#13;
      Create and add a new person to the
-     database. <TT
+     database. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a
      record template and puts you into the screen editor to edit
      the record. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm the
      operation. If you do, the new person is added to the
      database. If not, the new person is not added. In both cases
@@ -3954,25 +3950,25 @@ CLASS="action"
 ><P
 >&#13;
      Add a spouse to the
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the new spouse. If the command you ran just before
      the s command were the n command,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > guesses that the new
      spouse will be the person just
-     created. <TT
+     created. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks if this is
      the case, and if so, makes that person the second spouse in
-     the family. If not, <TT
+     the family. If not, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks
      you to identify the other spouse.
 
@@ -3992,30 +3988,30 @@ CLASS="action"
 ><P
 >&#13;
      Add a child to the
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the new child. If the command you ran just before the
      a command were the n command,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > guesses that the new
      child will be the person just
-     created. <TT
+     created. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks if this is
      the case, and if so, adds that child to the family. If not,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the
      child. If the family already has children,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > also asks where to place
      the new child in the family.
 
@@ -4035,9 +4031,9 @@ CLASS="action"
 ><P
 >&#13;
      Remove a parent/spouse from the
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the person, and if you do, removes him or her. The
      person is not removed from the database.
@@ -4058,9 +4054,9 @@ CLASS="action"
 ><P
 >&#13;
      Remove a child from the
-     family. <TT
+     family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the child should, and if you do, removes the child
      from the family. The person is not removed from the database.
@@ -4081,9 +4077,9 @@ CLASS="action"
 ><P
 >&#13;
      Swap (change the chronological order) of any two children in
-     the family.  <TT
+     the family.  <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify the two children and then swaps them.
 
@@ -4103,9 +4099,9 @@ CLASS="action"
 ><P
 >&#13;
      This command takes you to the tandem family browse
-     screen. <TT
+     screen. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to
      identify a second family, and then takes you to the tandem
      family screen, displaying both the two families.
@@ -4146,9 +4142,9 @@ CLASS="action"
 ><P
 >&#13;
      Zip browse to a new person.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify a
      person by name or key value, and if you do, browses to that
      person.
@@ -4168,9 +4164,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-     Return to the <TT
+     Return to the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > main menu.
 
 </P
@@ -4187,7 +4183,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN891"
->TANDEM PERSON BROWSE MODE</A
+>1.16. TANDEM PERSON BROWSE MODE</A
 ></H2
 ><P
 >&#13;
@@ -4198,13 +4194,7 @@ NAME="AEN891"
      gives the menu of available commands. For example:
 
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;  person: Thomas Trask WETMORE Sr (25)
   born: 13 March 1866, St. Mary's Bay, Digby, Nova Scotia
@@ -4228,9 +4218,6 @@ Please choose an operation:
 ______________________________________________________________________
 LifeLines - Two Person Browse Screen
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -4254,15 +4241,15 @@ CLASS="action"
 ><P
 >&#13;
      Edit the top person's
-     record. <TT
+     record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > writes the record
      to a file, and puts you in the screen editor to edit the
      file. When you return from the editor,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to confirm the
      update; the person is changed only if you do so.
 
@@ -4333,9 +4320,9 @@ CLASS="action"
 ><P
 >&#13;
      Replace the the top person with his/her spouse. If the person
-     has more than one spouse, <TT
+     has more than one spouse, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      asks you to identify one.
 
@@ -4355,9 +4342,9 @@ CLASS="action"
 ><P
 >&#13;
 Replace the top person with one of his/her children. If the person has more
-than one child, <TT
+than one child, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the one.
 
 </P
@@ -4375,9 +4362,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Browse to a new person or list of persons. <TT
+Browse to a new person or list of persons. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify a new
 person or persons by name, key or list name, and then does as described in the section on identifying a
 person.
@@ -4415,9 +4402,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Create a new family record; <TT
+Create a new family record; <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > assumes the two displayed persons are to become
 the spouses/parents in the new family; they must be of opposite sex.
 
@@ -4436,14 +4423,14 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Merge the bottom person into the top person. <TT
+Merge the bottom person into the top person. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > combines the two person
 records and places you in the screen editor to edit the combined record. When you are done, if you
-confirm the operation, <TT
+confirm the operation, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > removes the bottom person from the database, and the top person is
 given the combined record. See the section on merging.
 
@@ -4479,9 +4466,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Return to the <TT
+Return to the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > main menu.
 
 </P
@@ -4498,20 +4485,14 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN978"
->TANDEM FAMILY BROWSE MODE</A
+>1.17. TANDEM FAMILY BROWSE MODE</A
 ></H2
 ><P
 >&#13;
 The tandem family browse screen displays information about two families. Its main use it to support the
 family merging operation.The top two panels provide information about the two families you are
 browsing, and the bottom panel holds the menu of available commands. For example:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;father: Thomas Trask WETMORE IV (1)
   born: 18 December 1949, New London, New London, Connecticut
@@ -4535,9 +4516,6 @@ Please choose an operation:            (pg 1/3)
 __________________________________________________________________
 LifeLines -- Two Family Browse Screen (* toggles menu)
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -4560,14 +4538,14 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-This command lets you edit the top family's record. <TT
+This command lets you edit the top family's record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > writes the record into
 a file, and then puts you into an editor to edit that information. When you return from the editor,
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you whether you are sure you want to update the family in the database. The family
 is changed only if you answer yes.
 
@@ -4793,14 +4771,14 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Merge the bottom family into the top family. <TT
+Merge the bottom family into the top family. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > combines the two
 family records and places you in the screen editor to edit the combined record. When you are done, if
-you confirm the operation, <TT
+you confirm the operation, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > deletes the bottom family from the database, and the top
 family is given the combined record. See the section on merging.
 
@@ -4839,9 +4817,9 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-Return to the <TT
+Return to the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > main menu.
 
 </P
@@ -4858,19 +4836,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1086"
->PEDIGREE BROWSE MODE</A
+>1.18. PEDIGREE BROWSE MODE</A
 ></H2
 ><P
 >&#13;
 The pedigree browse screen displays a four-generation pedigree for the current person. The top panel
 holds the pedigree, and the bottom panel holds the menu of available commands. For example:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;                  John WETMORE [1755-1848] (32)
             Daniel Van Cott WETMORE [1791-1881] (41)
@@ -4894,9 +4866,6 @@ Please choose an operation:
  f Browse to father  c Browse to children  q Return to main menu
 __________________________________________________________________
 LifeLines - Pedigree Browse Mode</PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
@@ -4989,9 +4958,9 @@ CLASS="action"
 ><P
 >&#13;
 Browse to a spouse of the current person, shifting the display to the pedigree of
-that person. If the current person has more than one spouse, <TT
+that person. If the current person has more than one spouse, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the spouse;
 if the person has no spouse there is no change.
 
@@ -5011,9 +4980,9 @@ CLASS="action"
 ><P
 >&#13;
 Browse to a child of the current person, shifting the pedigree one generation
-forward. If the current person has more than one child, <TT
+forward. If the current person has more than one child, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the child; if
 the person has no children there is no change.
 
@@ -5033,9 +5002,9 @@ CLASS="action"
 ><P
 >&#13;
 Change to the family display; the family will be the one that the current person
-belongs to as spouse or parent. If there are more than one, <TT
+belongs to as spouse or parent. If there are more than one, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the proper
 one.
 
@@ -5089,20 +5058,14 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1149"
->SEARCH MENU</A
+>1.19. SEARCH MENU</A
 ></H2
 ><P
->&#13;If you choose Search database from the main menu, <TT
+>&#13;If you choose Search database from the main menu, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the search menu:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;How would you like to find a record?
   v Review visit history (12 records)
@@ -5110,9 +5073,6 @@ CLASS="screen"
   f Full database scan
   q Return to previous menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 The first two items will depend on your previous activity.  If you have
 browsed to individuals or family records in the database,
@@ -5120,9 +5080,9 @@ the first item will appear similar to what's shown above,
 if you haven't it will just contain a note that the visit history is empty.
 The second item will appear similar to what's shown above if you
 have changed individual records in this session 
-with <TT
+with <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >, otherwise it will contain
 a note that the change history is empty.
 </P
@@ -5133,17 +5093,11 @@ browse to that individual or family.
 </P
 ><P
 >&#13;If you choose Full database scan off the search menu, 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the fullscan menu.
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What scan type?
   f  Full name scan
@@ -5151,22 +5105,19 @@ CLASS="screen"
   r  Refn scan
   q  Return to previous menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 The first two items on this menu allow you to search all the NAME
 records in the current database.
 If you choose Full name scan you are prompted for a 
-search pattern and then <TT
+search pattern and then <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > searches for all 
 the individual NAME records whose value matches the pattern supplied.
 If you choose the Name fragment scan, you will be prompted for a 
-search pattern and then <TT
+search pattern and then <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will search for
 whitespace delimited words within individual NAME records that match the
 pattern supplied.
@@ -5177,7 +5128,7 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN1161"
->Search Patterns</A
+>1.19.1. Search Patterns</A
 ></H3
 ><P
 >&#13;The pattern supplied to the search commands is used to match against
@@ -5192,11 +5143,10 @@ NAME="AEN1164"
 ></A
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
 >?</TD
@@ -5289,78 +5239,42 @@ characters,
 </P
 ><P
 >&#13;As an example, consider the following NAME record:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;1 NAME <KBD
 CLASS="userinput"
 >John /Smith/</KBD
 >
 </PRE
-></TD
-></TR
-></TABLE
 >
 When doing a full name search, the value searched is the complete gedcom name 
 value including the slashes used to delimit the surname.
 in order to have a match, the search pattern
 must match the slashes.  Thus
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;*smith
 </PRE
-></TD
-></TR
-></TABLE
 >
 will not match this name, whereas
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;*smith/
 </PRE
-></TD
-></TR
-></TABLE
 >
 will match.
 </P
 ><P
 >&#13;When doing a name fragment search, the slashes are removed from the surname
 before trying to match the name, thus
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;smith
 smi*
 joh*
 *hn
 </PRE
-></TD
-></TR
-></TABLE
 >
 will all match this NAME record.
 </P
@@ -5372,21 +5286,15 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1201"
->ADD OPERATION</A
+>1.20. ADD OPERATION</A
 ></H2
 ><P
 >&#13;
-If you choose the add operation from the main menu, <TT
+If you choose the add operation from the main menu, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the add menu:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What do you want to add?
   p Person - add new person to the database
@@ -5395,18 +5303,15 @@ CLASS="screen"
   s Spouse - add a spouse to an existing family
   q Quit - return to the previous menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
 </P
 ><P
 >&#13;
-These operations work in a straightforward way. <TT
+These operations work in a straightforward way. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you the necessary questions, and lets
 you cancel at any time. The operations provided by this menu are also available from the browsing
 modes, and are often easier to perform there.
@@ -5419,21 +5324,15 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1208"
->DELETE OPERATION</A
+>1.21. DELETE OPERATION</A
 ></H2
 ><P
 >&#13;
-If you choose the delete operation at the main menu, <TT
+If you choose the delete operation at the main menu, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the delete menu:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What do you want to delete?
   c Child - remove a child from his/her family
@@ -5441,18 +5340,15 @@ CLASS="screen"
   p Person - remove a person completely
   q Quit - return to the previous menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
 </P
 ><P
 >&#13;
-These operations also work in a straightforward way. <TT
+These operations also work in a straightforward way. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you the necessary questions and
 lets you cancel at any time.
 
@@ -5469,9 +5365,9 @@ cannot be done from the browsing mode.
 </P
 ><P
 >&#13;
-There is no special operation for removing a family record. <TT
+There is no special operation for removing a family record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > silently removes any family
 record that has no parent or child associated with it.
 
@@ -5483,7 +5379,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1218"
->CODESET CONVERSION</A
+>1.22. CODESET CONVERSION</A
 ></H2
 ><P
 >&#13;
@@ -5531,18 +5427,12 @@ NAME="AEN1218"
      databases with no specified internal codeset.  </P
 ><P
 >&#13;
-If you choose the modify character translation tables operation from the main menu, <TT
+If you choose the modify character translation tables operation from the main menu, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays
 the character translation menu:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Which character mapping do you want to edit?
    e Editor to Internal mapping
@@ -5553,18 +5443,15 @@ CLASS="screen"
    r Internal to Report mapping
    q Return to main menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > can do codeset conversion in changing
      text from one form to another, and lifelines supports five different
      forms.
@@ -5628,17 +5515,17 @@ for records in the database
 ><P
 >&#13;
      When converting text from one form to another
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > normally uses iconv conversion, and
      codesets specified in configuration variables. This may be augmented by
      codeset translation or extension using the text conversion (*.tt) files in
      the tt subdirectory. To use the tables in the tt subdirectory,
      you need to set
-     the property "TTPATH" in your <TT
+     the property "TTPATH" in your <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      configuration file to the path of the tt directory.  There are two types
      of files in this directory. 
@@ -5757,13 +5644,7 @@ CLASS="acronym"
 >&#13;
 After you select a translation table you are placed in the editor to edit the table. Translation tables are
 made up of lines that look like:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="synopsis"
 ><TT
 CLASS="replaceable"
@@ -5776,9 +5657,6 @@ CLASS="replaceable"
 >pattern</I
 ></TT
 ></PRE
-></TD
-></TR
-></TABLE
 >
 where a tab separates the patterns. Each pattern is an arbitrary sequence of verbatim <ACRONYM
 CLASS="acronym"
@@ -5848,19 +5726,10 @@ CLASS="glosslist"
      example would be
 
 </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;##!name: UTF-8 to latex
 </PRE
-></TD
-></TR
-></TABLE
 ><P
 >&#13;
      Naming the translation table is desirable because these 
@@ -5931,22 +5800,16 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1323"
->MISCELLANEOUS UTILITIES</A
+>1.23. MISCELLANEOUS UTILITIES</A
 ></H2
 ><P
 >&#13;
 If you choose the miscellaneous utilities operation,
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the utilities menu:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What utility do you want to perform?
   s Save the database in a GEDCOM file
@@ -5961,9 +5824,6 @@ CLASS="screen"
   c  Character set options
   q Return to the main menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -5984,24 +5844,24 @@ CLASS="action"
 ><DD
 ><P
 >&#13;
-This command saves the complete <TT
+This command saves the complete <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database in a
 <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > file. All person, family, event, source and user-defined records are stored. This command
-may be used to periodically back up your database. When you use this command, <TT
+may be used to periodically back up your database. When you use this command, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you
 for the name of the file. If you have defined the <CODE
 CLASS="envar"
 >LLARCHIVE</CODE
-> shell variable, <TT
+> shell variable, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will store
 the file in the directory named in the variable.
 
@@ -6024,9 +5884,9 @@ This command allows you restore a complete database from a
 <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
-> file. When you select this command, <TT
+> file. When you select this command, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you for the name of the <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
@@ -6035,28 +5895,28 @@ This command can also be used to import data from a <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > file to an existing database. When
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > performs this command, it first reads the entire <ACRONYM
 CLASS="acronym"
 >GEDCOM</ACRONYM
 > file and checks it for validity.
-If there are problems in the file, <TT
+If there are problems in the file, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > describes them, writing them to the file err.log, and does
-not add any records to the database. If there are no problems, <TT
+not add any records to the database. If there are no problems, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > adds all the records found in
 the file to the database (only header and trailer records are not stored in the database).
 
 </P
 ><P
->&#13;Normally, <TT
+>&#13;Normally, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will replace the XREF's (the
 identifiers for individuals, families, sources, notes, etc.) in the
 <ACRONYM
@@ -6068,13 +5928,13 @@ CLASS="acronym"
 >GEDCOM</ACRONYM
 > for internal
 use of genealogy programs.  However, if the identifiers are compatible with
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > internal representation and there are no
-conflicts with existing identifiers, <TT
+conflicts with existing identifiers, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will
 ask you if you want to perserve the identifiers in the 
 <ACRONYM
@@ -6169,18 +6029,12 @@ CLASS="action"
 >&#13;
      This command allows you to edit the place abbreviations
      file. This file defines the abbreviations that are used by
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > when it creates lists of
      persons for you to select from. Each line in the file has the
-     format:<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+     format:<PRE
 CLASS="synopsis"
 ><TT
 CLASS="replaceable"
@@ -6193,9 +6047,6 @@ CLASS="replaceable"
 >&#13;     abbr </I
 ></TT
 ></PRE
-></TD
-></TR
-></TABLE
 >where word is a word to be
      abbreviated, and abbr is its abbreviation. The word and its
      abbreviation are separated by a colon. For example:
@@ -6207,7 +6058,7 @@ NAME="AEN1395"
 ></A
 ><P
 ><B
->Example 9. 
+>Example 1-9. 
 Example of using abbreviations
 </B
 ></P
@@ -6222,9 +6073,9 @@ Nova&nbsp;Scotia:N.S.</P
 </P
 ><P
 >&#13;
-When <TT
+When <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > constructs lists of persons for you to select from, it looks up the last component of
 certain <CODE
 CLASS="structfield"
@@ -6251,13 +6102,7 @@ CLASS="action"
 This command allows you to edit the user options file. The user options file
 is a record kept in the database that holds user selectable options. Each
 option has a name and a string value. Each line in the options file has the
-format:<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+format:<PRE
 CLASS="synopsis"
 ><TT
 CLASS="replaceable"
@@ -6270,9 +6115,6 @@ CLASS="replaceable"
 >value</I
 ></TT
 ></PRE
-></TD
-></TR
-></TABLE
 >
 where option is the name of an option and value is the option's string value.
 If the value is more than one line long, then the last character in each
@@ -6305,25 +6147,16 @@ NAME="AEN1412"
 ></A
 ><P
 ><B
->Example 10. 
+>Example 1-10. 
 Example of replacing the default person record template
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >&#13;
   0 INDI
   1 NAME //
   1 SEX</PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 you would edit the user option file to contain:<DIV
@@ -6333,7 +6166,7 @@ NAME="AEN1415"
 ></A
 ><P
 ><B
->Example 11. 
+>Example 1-11. 
 Example of replaced default person record template
 </B
 ></P
@@ -6352,7 +6185,7 @@ NAME="AEN1418"
 ></A
 ><P
 ><B
->Example 12. 
+>Example 1-12. 
 Example of replaced single line default person record template
 </B
 ></P
@@ -6390,7 +6223,7 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1428"
->IMPORT ERRORS</A
+>1.24. IMPORT ERRORS</A
 ></H2
 ><P
 >&#13;Errors generated during a GEDCOM import are logged to a file,
@@ -6401,45 +6234,36 @@ by default named errs.log.
 An XREF is the internal name used to Identify a family, individual, note,
 source or other record.  An XREF is bracked by two @ signs.  As an example
 </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @F6@ FAM
   1 HUSB @I25@
   1 WIFE @I26@
   1 CHIL @I17@</PRE
-></TD
-></TR
-></TABLE
 ><P
 >&#13;Here F6 is the internal name of this family.  The family refers
 to other individuals by specifing their XREF values.  Also I25, I26 and I17
 are XREF values of individuals. 
 </P
 ><P
->&#13;XREF values used within <TT
+>&#13;XREF values used within <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > are totally under
-the control of <TT
+the control of <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 The values that are used are always of the form, a single letter, followed by
 a number.  However, when importing a gedcom
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > should accept almost
 anything as an XREF, converting it to what is needed for internal use.
-For the curious, the letters that <TT
+For the curious, the letters that <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > uses
 are I for Individual, F for Family, S for Source, E for Events, and X for
 other records.
@@ -6465,24 +6289,15 @@ NAME="AEN1444"
 ></A
 ><P
 ><B
->Example 13. 
+>Example 1-13. 
 Example of bad NAME syntax (too many slashes in this case)
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @I99@ INDI
   1 NAME Mary /Smith/ nee /Jones/
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6512,16 +6327,10 @@ NAME="AEN1455"
 ></A
 ><P
 ><B
->Example 14. 
+>Example 1-14. 
 Example of XREF XYZ being defined twice
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @XYZ@ INDI
@@ -6529,9 +6338,6 @@ CLASS="programlisting"
   0 @XYZ@ FAM
   1 HUSB @I48@
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6564,16 +6370,10 @@ NAME="AEN1466"
 ></A
 ><P
 ><B
->Example 15. 
+>Example 1-15. 
 Example of person multiply defined
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @INDI_XYZ@ INDI
@@ -6581,9 +6381,6 @@ CLASS="programlisting"
   0 @INDI_XYZ@ INDI
   1 NAME Jack /Smith/
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6604,24 +6401,15 @@ NAME="AEN1473"
 ></A
 ><P
 ><B
->Example 16. 
+>Example 1-16. 
 Example of family record missing key
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 FAM
   1 HUSB @I1@
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6655,24 +6443,15 @@ NAME="AEN1484"
 ></A
 ><P
 ><B
->Example 17. 
+>Example 1-17. 
 Example of person record missing key
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 INDI
   1 NAME John /Smith/
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6692,25 +6471,16 @@ NAME="AEN1491"
 ></A
 ><P
 ><B
->Example 18. 
+>Example 1-18. 
 Example of level number which is too high
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @I99@ INDI
   1 NAME //
   3 NOTE name is missing
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ><DT
@@ -6731,25 +6501,16 @@ NAME="AEN1498"
 ></A
 ><P
 ><B
->Example 19. 
+>Example 1-19. 
 Example of lineage-linking line which is missing required value
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >  0 @I99@ INDI
   1 NAME John /Smith/
   2 FAMS
 </PRE
-></TD
-></TR
-></TABLE
 ></DIV
 ></DD
 ></DL
@@ -6761,13 +6522,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1501"
->HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
+>1.25. HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></H2
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > supports source, event
      and other, user-defined record types.  You can access these
      features in two ways: either through the x operation from the
@@ -6786,19 +6547,13 @@ CLASS="application"
 ><P
 >&#13;
      Using the first of these two possibilities
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > displays the following
      menu:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What activity do you want to perform?
 
@@ -6813,9 +6568,6 @@ CLASS="screen"
   6  Edit other record from the database
   q  Return to main menu
 </PRE
-></TD
-></TR
-></TABLE
 >
 
      Using the second variant (from the person and family browse
@@ -6824,47 +6576,29 @@ CLASS="screen"
      menu (they do mostly, but not entirely, the same things); the
      last three are described separately:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;  %s  Add source
   %e  Add event
   %o  Add other
 </PRE
-></TD
-></TR
-></TABLE
 >
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;  $s  List sources
   $n  List notes
   $$  List references
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
 ><P
 >&#13;
      The handling of source, event and user-defined records in
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > is still in
      development. For example, sources cannot yet be searched by
      REFN or be deleted.
@@ -6949,20 +6683,14 @@ CLASS="keycap"
 > from the
      person, family or auxiliary browse screens) is used to add a
      new source record to the database.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a template source
      and puts you in the screen editor to edit the template. The
      default template is:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >  0 SOUR
   1 REFN
@@ -6980,9 +6708,6 @@ CLASS="replaceable"
 >
 
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
@@ -7016,16 +6741,10 @@ NAME="AEN1546"
 ></A
 ><P
 ><B
->Example 20. 
+>Example 1-20. 
 Example of a source record
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >0 SOUR
@@ -7062,9 +6781,6 @@ CLASS="userinput"
 CLASS="userinput"
 >78 State Street</KBD
 ></PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -7082,12 +6798,6 @@ CLASS="keycap"
      following prompt (also, the key value of the new record is
      displayed in the status bar at this point):
 </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="screen"
 >&#13;Please choose from the following options:
@@ -7098,9 +6808,6 @@ CLASS="screen"
 
  Commands:   j Move down     k Move up    i Select     q Quit
 </PRE
-></TD
-></TR
-></TABLE
 ><P
 >&#13;
      The four options perform the following actions:
@@ -7153,24 +6860,15 @@ CLASS="action"
 >&#13;
 Use this operation to edit an existing source record already in
 the database. When you select this operation
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify a source:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Which source record do you want to edit?
 enter key or refn:
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -7181,9 +6879,9 @@ Identify a source by entering its key value, with or without the leading S, or b
 CLASS="structfield"
 >REFN</CODE
 >
-value. <TT
+value. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > retrieves the record and puts you in the editor with the record.
 
 </P
@@ -7206,19 +6904,13 @@ CLASS="keycap"
 >%e</B
 > from the person,
 family or auxiliary browse screens) adds a new event record to the
-database.  <TT
+database.  <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a template
 event and puts you in the screen editor to edit the template. The
 default template is:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >0 EVEN
   1 REFN
@@ -7228,9 +6920,6 @@ CLASS="programlisting"
     2 NAME
     2 ROLE
   1 SOUR</PRE
-></TD
-></TR
-></TABLE
 >
 
 </P
@@ -7287,12 +6976,6 @@ CLASS="keycap"
      following prompt (also, the key value of the new record is
      displayed in the status bar at this point):
 </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="screen"
 >&#13;Please choose from the following options:
@@ -7303,9 +6986,6 @@ CLASS="screen"
 
  Commands:   j Move down     k Move up    i Select     q Quit
 </PRE
-></TD
-></TR
-></TABLE
 ><P
 >&#13;
      The four options perform the following actions:
@@ -7357,26 +7037,17 @@ CLASS="action"
 >&#13;
      Use this operation to edit an existing event record from the
      database . When you select this operation
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify an
      event:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;Which event record do you want to edit?
 enter key or refn:
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -7389,9 +7060,9 @@ enter key or refn:
 CLASS="structfield"
 >REFN</CODE
 >
-     value. <TT
+     value. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > retrieves the
      record and places you in the screen editor with the record.
 
@@ -7416,27 +7087,18 @@ CLASS="keycap"
 > from the
      person, family or auxiliary browse screens) adds a new
      user-defined record to the database.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > creates a template and
      puts you in the screen editor to edit the template. The
      default template is
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >0 XXXX
 1 REFN
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ><P
@@ -7499,12 +7161,6 @@ CLASS="keycap"
      (also, the key value of the new record is displayed in the
      status bar at this point):
 </P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="screen"
 >&#13;Please choose from the following options:
@@ -7515,9 +7171,6 @@ CLASS="screen"
 
  Commands:   j Move down     k Move up    i Select     q Quit
 </PRE
-></TD
-></TR
-></TABLE
 ><P
 >&#13;
      The four options perform the following actions:
@@ -7570,26 +7223,17 @@ CLASS="action"
 >&#13;
      Use this operation to edit an existing user-defined record
      from the database. When you select this operation
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks you to identify the
      record:
 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="screen"
 >&#13;What record do you want to edit?
 enter key or refn:
 </PRE
-></TD
-></TR
-></TABLE
 >
 
 
@@ -7602,9 +7246,9 @@ enter key or refn:
 CLASS="structfield"
 >REFN</CODE
 >
-     value. <TT
+     value. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > retrieves the
      record and places you in the screen editor with the record.
 
@@ -7691,13 +7335,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1666"
->FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
+>1.26. FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></H2
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > 3.0.2 has relaxed most of
      restrictions on family structure that were imposed by earlier
      versions. For example, a family record may have more than one
@@ -7709,9 +7353,9 @@ CLASS="application"
      (any number of parents/spouses of any sex) should be allowed,
      and that children can be members of more than one family (eg,
      natural family and adoptive
-     family). <TT
+     family). <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > no longer takes
      a position on this matter; you are free to set up families any
      way you like; the operations that add spouses and children to
@@ -7723,9 +7367,9 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > provides features for
      merging persons together and for merging families
      together. The person merging feature is accessed from the
@@ -7739,9 +7383,9 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     Versions of <TT
+     Versions of <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > prior to
      3.0.2 required that persons and families meet certain criteria
      before they could be merged. The criteria ensured that the
@@ -7765,19 +7409,19 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1675"
->LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
+>1.27. LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></H2
 ><P
 >&#13;
-     Records in a <TT
+     Records in a <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database may
      refer to other records via cross-reference links. The
      lineage-linked references are maintained directly by
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > through operations found
      in the browsing mode menus.  These references are the links
      from a person to families (<CODE
@@ -7800,9 +7444,9 @@ CLASS="structfield"
 >1
      CHIL</CODE
 >). Because
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > maintains these links you
      are not allowed to change these lines when you are editing
      records. There are a couple of seeming exceptions to this
@@ -7825,9 +7469,9 @@ CLASS="structfield"
 ><P
 >&#13;
      Besides the lineage-links that are maintained by
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >, you may place your own
      links in records.  Probably the most common example of this is
      referring events within a person record to the record of the
@@ -7841,16 +7485,10 @@ NAME="AEN1690"
 ></A
 ><P
 ><B
->Example 21. 
+>Example 1-21. 
 Example of referring events from a person record
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >0 @I23@ INDI
@@ -7883,9 +7521,6 @@ CLASS="userinput"
 >Clarence Almon Torrey</KBD
 >
 ...</PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -7900,9 +7535,9 @@ CLASS="replaceable"
 ><I
 >@S3@</I
 ></TT
-> line in the person record refers to the source record. <TT
+> line in the person record refers to the source record. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > allows any specific
 structure within a record (in this case a birth event) to refer to another record. It is not possible to refer
 to a specific location within another record, though this may be supported eventually.
@@ -7919,9 +7554,9 @@ records are exported from one database or imported to another.
 ><P
 >&#13;
      Because internal key values are not permanent,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > allows you to assign a
      permanent user-defined key to any record in the database using
      the <CODE
@@ -7945,16 +7580,10 @@ NAME="AEN1708"
 ></A
 ><P
 ><B
->Example 22. 
+>Example 1-22. 
 Example of adding a new person
 </B
 ></P
-><TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
 ><PRE
 CLASS="programlisting"
 >0 INDI
@@ -7975,9 +7604,6 @@ CLASS="userinput"
 CLASS="userinput"
 >&#60;cat&#62;</KBD
 ></PRE
-></TD
-></TR
-></TABLE
 ></DIV
 >
 
@@ -7994,9 +7620,9 @@ CLASS="structfield"
 >REFN</CODE
 > value must be enclosed by
      angle brackets when used this
-     way. <TT
+     way. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > automatically
      replaces the <CODE
 CLASS="structfield"
@@ -8032,21 +7658,21 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1724"
->System and User Properties</A
+>1.28. System and User Properties</A
 ></H2
 ><P
 >&#13;There are a number of properties that can be specified to customize
-the behavior of <TT
+the behavior of <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.  These properties can 
-be specified in <TT
+be specified in <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
-configuration files, in each <TT
+configuration files, in each <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > database 
 or in some cases by environment variables.
 </P
@@ -8063,9 +7689,9 @@ file, it allows a report to reference your name as the source of the data
 being printed without having it hard-coded in the report.
 </P
 ><P
->&#13;When <TT
+>&#13;When <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > begins execution, it reads any
 specified configuration files and extracts Properties from the files read.
 It is possible for multiple configuration files to be read.  Properties
@@ -8082,11 +7708,10 @@ NAME="AEN1733"
 ></A
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
 >Note:</TD
@@ -8151,9 +7776,9 @@ value is the name of a file, load parameters from that file.
 ></P
 ></DIV
 ><P
->&#13;When <TT
+>&#13;When <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > searches for a property it looks for it as follows:
 </P
 ><DIV
@@ -8165,14 +7790,14 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;First, <TT
+>&#13;First, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > looks in the cmdline table.  This table contains the
 values that have been specified using the -I option to
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 </P
 ></DD
@@ -8182,9 +7807,9 @@ CLASS="application"
 ></DT
 ><DD
 ><P
-> Next, <TT
+> Next, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > looks in the database table.  This table contains the
 values which have been stored in the current database.
 </P
@@ -8195,9 +7820,9 @@ values which have been stored in the current database.
 ></DT
 ><DD
 ><P
->&#13;Next, <TT
+>&#13;Next, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > looks in the global table.  This table contains the
 values found when reading in the configuration files.
 </P
@@ -8208,9 +7833,9 @@ values found when reading in the configuration files.
 ></DT
 ><DD
 ><P
->&#13;Finally, <TT
+>&#13;Finally, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > looks in the environment table.
 Only a handful of properties may be set from the environment, namely 
 LLPROGRAMS, LLREPORTS, LLARCHIVES, LLDATABASES, and LLEDITOR.
@@ -8236,9 +7861,9 @@ CLASS="glosslist"
 CLASS="envar"
 >LLPROGRAMS</CODE
 > is the search path for
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > report generating and
 other programs.
 </P
@@ -8444,9 +8069,9 @@ CLASS="glossterm"
 days, months, years, date format, era format, and complex format.
 If string does not contain 6 comma separated numbers all formats are
 set to 0, except date format is set to 14.
-These formats are used by <TT
+These formats are used by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to display dates in long format.
 </P
 ></DD
@@ -8458,9 +8083,9 @@ CLASS="application"
 ><P
 >&#13;a custom ymd date picture.  A string in which %y, %m and %d will be
 converted to the corresponding year, month and day.
-This picture is used by <TT
+This picture is used by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to display dates in long format.
 </P
 ></DD
@@ -8474,9 +8099,9 @@ CLASS="application"
 days, months, years, date format, era format, and complex format.
 If string does not contain 6 comma separated numbers all formats are
 set to 0, except date format is set to 14.
-These formats are used by <TT
+These formats are used by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to display dates in short format.
 </P
 ></DD
@@ -8488,9 +8113,9 @@ CLASS="application"
 ><P
 >&#13;a custom ymd date picture.  A string in which %y, %m and %d will be
 converted to the corresponding year, month and day.
-This picture is used by <TT
+This picture is used by <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to display dates in short format.
 </P
 ></DD
@@ -8528,9 +8153,9 @@ The string is of the form "option1=value1\noption2=value2".
 ></DT
 ><DD
 ><P
->&#13;If set to a non-zero value will disable use of the <TT
+>&#13;If set to a non-zero value will disable use of the <CODE
 CLASS="function"
->system</TT
+>system</CODE
 >
 function.
 </P
@@ -8617,9 +8242,9 @@ are removed when the edit is finished and not stored in the database.
 ></DT
 ><DD
 ><P
->&#13;if defined, <TT
+>&#13;if defined, <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > outputs debug information
 related to translation table processing.
 </P
@@ -8641,21 +8266,12 @@ related to translation table processing.
 ><P
 >&#13;The default template to use whenever creating a new individual.
 If not specified, the concatenation of the following is used:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n"
 "1 BIRT\n  2 DATE\n  2 PLAC\n"
 "1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR\n"
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8667,19 +8283,10 @@ CLASS="programlisting"
 ><P
 >&#13;The default template to use whenever creating a new family.
 If not specified, the following is used:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n"
 </PRE
-></TD
-></TR
-></TABLE
 >
 Note: Unlike the others, this should not
 include the 0 level FAM tag.)
@@ -8693,19 +8300,10 @@ include the 0 level FAM tag.)
 ><P
 >&#13;The default template to use whenever creating a new source.
 If not specified, the following is used in english:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8717,19 +8315,10 @@ CLASS="programlisting"
 ><P
 >&#13;The default template to use whenever creating a new event.
 If not specified, the following is used in english:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8741,19 +8330,10 @@ CLASS="programlisting"
 ><P
 >&#13;The default template to use whenever creating a new other record.
 If not specified, the following is used in english:
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"0 XXXX\n1 REFN"
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8765,19 +8345,10 @@ CLASS="programlisting"
 ><P
 >&#13;string to use when writing gedcom files for the SUBM.
 Default is 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"1 SUBM".
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8789,19 +8360,10 @@ CLASS="programlisting"
 ><P
 >&#13;String containing the GEDC block for the header record when exporting GEDCOM.
 The default is 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD
@@ -8813,19 +8375,10 @@ CLASS="programlisting"
 ><P
 >&#13;String containing the CHAR block for the header record when exporting GEDCOM.
 The default is 
-<TABLE
-BORDER="0"
-BGCOLOR="#E0E0E0"
-WIDTH="100%"
-><TR
-><TD
-><PRE
+<PRE
 CLASS="programlisting"
 >&#13;"1 CHAR ASCII".
 </PRE
-></TD
-></TR
-></TABLE
 >
 </P
 ></DD

@@ -13,6 +13,12 @@
 
 	Bumping versions to 3.0.50 for new release.
 
+	* docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-reportmanual.txt docs/ll-userguide.html
+	docs/ll-userguide.pdf docs/ll-userguide.txt
+
+	Generating new manuals for version 3.0.50.
+
 2005-12-22 Stephen Dum
 	* ChangeLog configure.in
 
