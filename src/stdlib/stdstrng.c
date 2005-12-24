@@ -177,6 +177,7 @@ ll_tolower (INT c)
 /*===============================
  * eqstr_ex -- Are two strings equal (case-sensitive)?
  *  This is just eqstr extended to handle empty or null strings
+ *  Like eqstr, this is byte-by-byte comparison, no locale, no UTF-8
  *=============================*/
 BOOLEAN
 eqstr_ex (CNSTRING s1, CNSTRING s2)
@@ -191,25 +192,6 @@ eqstr_ex (CNSTRING s1, CNSTRING s2)
 			return FALSE;
 		else
 			return eqstr(s1, s2);
-	}
-}
-/*===============================
- * eqstri_ex -- Are two strings equal (case-insensitive)?
- *  This is just eqstri extended to handle empty or null strings
- *=============================*/
-BOOLEAN
-eqstri_ex (CNSTRING s1, CNSTRING s2)
-{
-	if (!s1 || !s1[0]) {
-		if (!s2 || !s2[0])
-			return TRUE;
-		else
-			return FALSE;
-	} else {
-		if (!s2 || !s2[0])
-			return FALSE;
-		else
-			return eqstri(s1, s2);
 	}
 }
 /*==================================

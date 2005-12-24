@@ -1,3 +1,4 @@
+
 2005-12-24 Stephen Dum
 	* ChangeLog src/gedlib/xlat.c src/interp/interp.c 
 	docs/ll-userguide.{xml,html,pdf,txt}
@@ -6,6 +7,15 @@
 	document codeset parameter in userguide.
 	removed some leaks in xlat cache, and fixed bug where cache was
 	created with both LISTNOFREE and LISTDOFREE 
+
+2005-12-24 Perry Rapp
+
+	* ChangeLog src/hdrs/llstdlib.h src/hdrs/standard.h
+	src/stdlib/path.c src/stdlib/stdstrng.c
+
+	Remove eqstri_ex (b/c stricmp not available on unix).
+	Add some comments to string macro definitions.
+
 2005-12-24 Perry Rapp
 
 	* build/msvc6/llexec/llexec.dsp

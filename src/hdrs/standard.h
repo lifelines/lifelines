@@ -156,13 +156,15 @@ eqstr does exact byte compare
 no locale, no custom sort, no Finnish option, no UTF-8 aware
 Perry, 2001/07/20
 */
-/* "eqstr (" -- see macro below */
+/* "eqstr (" -- see macro below -- byte-by-byte comparison, no locale, no UTF-8 */
 #define eqstr(s,t)       (!strcmp((s),(t)))
-/* "eqstri (" -- see macro below */
-#define eqstri(s,t)       (!stricmp((s),(t)))
+/* "eqstrn (" -- see macro below -- byte-by-byte comparison, no locale, no UTF-8 */
 #define eqstrn(s,t,len)  (!strncmp((s), (t), (len)))
+/* "nestr (" -- see macro below -- byte-by-byte comparison, no locale, no UTF-8 */
 #define nestr(s,t)       (strcmp((s),(t)))
+/* "cmpstr (" -- see macro below -- byte-by-byte comparison, no locale, no UTF-8*/
 #define cmpstr(s,t)      (strcmp((s),(t)))
+/* "cmpstrloc (" -- see macro below -- locale-aware comparison, handles UTF-8*/
 #define cmpstrloc(s,t)   (ll_strcmploc((s),(t)))
 
 #define check_cache()   ___check_cache(__LINE__, __FILE__)
