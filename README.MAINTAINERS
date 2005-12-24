@@ -7,6 +7,7 @@ Fetch latest cvs if desired, eg
 
 Edit the version number, setting it to the new release:
 (Running, eg, "cd build; sh setversions.sh 3.0.19; cd .." does this)
+(NB: setversions.sh requires bash3)
   NEWS
   INSTALL
   README
