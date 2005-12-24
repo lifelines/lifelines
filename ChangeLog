@@ -4,6 +4,15 @@
 
 	Fix path of invocation example for setversions.sh.
 
+	*  ChangeLog INSTALL NEWS README configure.in
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/btedit.1 docs/dbverify.1 docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml docs/llines.1
+	src/hdrs/version.h
+
+	Bumping versions to 3.0.50 for new release.
+
 2005-12-22 Stephen Dum
 	* ChangeLog configure.in
 
