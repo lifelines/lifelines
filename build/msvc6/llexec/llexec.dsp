@@ -440,6 +440,10 @@ SOURCE=..\..\..\src\gedlib\replace.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\interp\rptsort.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\rptui.c
 # End Source File
 # Begin Source File
