@@ -4,6 +4,11 @@
 
 	Fix compilation of llexec (for 3.0.50 windows binary).
 
+	* ChangeLog src/hdrs/llstdlib.h src/hdrs/standard.h
+	src/stdlib/path.c src/stdlib/stdstrng.c
+
+	New macro functions eqstri, eqstri_ex.
+
 2005-12-24 lifelines beta 3.0.50 RELEASE
 
 2005-12-24 Perry Rapp

@@ -158,6 +158,7 @@ void init_stdlib(void);
 /* stdstrng.c */
 INT chartype(INT);
 BOOLEAN eqstr_ex(CNSTRING s1, CNSTRING s2);
+BOOLEAN eqstri_ex(CNSTRING s1, CNSTRING s2);
 BOOLEAN isasciiletter(INT c);
 BOOLEAN isletter(INT);
 BOOLEAN islinebreak(INT c);

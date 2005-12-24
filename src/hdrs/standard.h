@@ -150,12 +150,16 @@ extern BOOLEAN alloclog;
 #define FATAL2(qq)    __fatal(__FILE__, __LINE__, qq)
 /* "ASSERT (" -- see macro below */
 #define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__, NULL)
+
 /*
 eqstr does exact byte compare
 no locale, no custom sort, no Finnish option, no UTF-8 aware
 Perry, 2001/07/20
 */
+/* "eqstr (" -- see macro below */
 #define eqstr(s,t)       (!strcmp((s),(t)))
+/* "eqstri (" -- see macro below */
+#define eqstri(s,t)       (!stricmp((s),(t)))
 #define eqstrn(s,t,len)  (!strncmp((s), (t), (len)))
 #define nestr(s,t)       (strcmp((s),(t)))
 #define cmpstr(s,t)      (strcmp((s),(t)))

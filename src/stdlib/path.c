@@ -97,9 +97,9 @@ BOOLEAN
 path_match (CNSTRING path1, CNSTRING path2)
 {
 #ifdef WIN32
-	return !stricmp((STRING)path1, (STRING)path2);
+	return !eqstri((STRING)path1, (STRING)path2);
 #else
-	return !strcmp((STRING)path1, (STRING)path2);
+	return !eqstr((STRING)path1, (STRING)path2);
 #endif
 }
 /*=================================
