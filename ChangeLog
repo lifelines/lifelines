@@ -8,6 +8,11 @@
 	removed some leaks in xlat cache, and fixed bug where cache was
 	created with both LISTNOFREE and LISTDOFREE 
 
+	* ChangeLog src/stdlib/path.c
+
+	undo a !strcmp that got transformed into a !eqstr
+	simplify filepath a bit.
+
 2005-12-24 Perry Rapp
 
 	* ChangeLog src/hdrs/llstdlib.h src/hdrs/standard.h

@@ -99,7 +99,7 @@ path_match (CNSTRING path1, CNSTRING path2)
 #ifdef WIN32
 	return !stricmp((STRING)path1, (STRING)path2);
 #else
-	return !eqstr((STRING)path1, (STRING)path2);
+	return !strcmp((STRING)path1, (STRING)path2);
 #endif
 }
 /*=================================
@@ -235,12 +235,15 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	if (ext && *ext) {
 		elen = strlen(ext);
 		if ((nlen > elen) && path_match(name+nlen-elen, ext)) {
-		/*  name has an explicit extension the same as this one */
 			ext = NULL;
 			elen = 0;
 		}
 	}
 	else { ext = NULL; elen = 0; }
+	/*  at this point ext is non-null only if name doesn't 
+	 *  end in ext.  I.E. we need to check for name + ext and name
+	 */
+
 	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
 
 	/* for absolute and relative path names we first check the
@@ -254,15 +257,12 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		if (ext) {
 			strcpy(buf1,name);
 			nlen = strlen(buf1);
-			if (nlen < elen || strcmp(&buf1[nlen-elen],ext) != 0) {
-				strcat(buf1, ext);
-				if (access(buf1, 0) == 0) return strsave(buf1);
-				buf1[nlen] = '\0'; /* remove extension */
-			}
+			strcat(buf1, ext);
 			if (access(buf1, 0) == 0) return strsave(buf1);
-		} else {
-			if (access(name, 0) == 0) return strsave(name);
+			buf1[nlen] = '\0'; /* remove extension */
+			if (access(buf1, 0) == 0) return strsave(buf1);
 		}
+		if (access(name, 0) == 0) return strsave(name);
 		/* fail if get here and name begins with a / or ./
 		 * as we didn't find the file.
 		 * however let foo/bar sneak thru, so we allow access
@@ -294,11 +294,9 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		strcpy(q, name);
 		if (ext) {
 			nlen = strlen(buf2);
-			if (nlen < elen || strcmp(&buf2[nlen-elen],ext) != 0) {
-				strcat(buf2, ext);
-				if (access(buf2, 0) == 0) return strsave(buf2);
-				buf2[nlen] = '\0'; /* remove extension */
-			}
+			strcat(buf2, ext);
+			if (access(buf2, 0) == 0) return strsave(buf2);
+			buf2[nlen] = '\0'; /* remove extension */
 		}
 		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
