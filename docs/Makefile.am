@@ -2,32 +2,54 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-# obsolete manuals: quickref.pdf quickref.ps lifelines.sgml
+###################
+# Manuals
+###################
 
-MANUALSSRC = ll-reportmanual.xml ll-userguide.xml
+MANUALS_en =	ll-reportmanual.html ll-reportmanual.pdf \
+		ll-reportmanual.txt \
+		ll-userguide.html ll-userguide.pdf \
+		ll-userguide.txt \
+		ll-devguide.html
 
-MANUALS_en =     ll-reportmanual.html ll-reportmanual.pdf \
-	     ll-reportmanual.txt listops.jpg \
-	     ll-userguide.html ll-userguide.pdf \
-	     ll-userguide.txt 
+MANUALS_sv =	ll-reportmanual.sv.html \
+		ll-userguide.sv.html
 
-MANUALS_sv = ll-reportmanual.sv.html ll-userguide.sv.html
+MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 
-MANUALS = $(MANUALS_en) $(MANUALS_sv)
+IMAGES =	listops.jpg
+
+MANUALSSRC =	ll-reportmanual.xml \
+		ll-userguide.xml \
+		ll-devguide.xml
+
+###################
+# Obsolete Manuals
+###################
+
+OLDGENFILES =	lifelines.html lifelines.txt \
+		lifelines.pdf lifelines.ps
+OLDSRCFILES =	lifelines.sgml
+OLDFILES =	quickref.pdf quickref.ps
+
+###################
+# Man Pages Manuals
+###################
 
 MANPAGES =   btedit.1 dbverify.1 llines.1
 
-OLDGENFILES = lifelines.html lifelines.pdf lifelines.ps lifelines.txt
+###################
+# Rules
+###################
 
 EXTRA_DIST = $(MANUALSSRC) $(MANUALS) $(MANPAGES)
 man1_MANS = $(MANPAGES)
 
-CONFIG_CLEAN_FILES = $(OLDGENFILES) $(MANUALS)
+CONFIG_CLEAN_FILES = $(OLDGENFILES) $(OLDSRCFILES) $(OLDFILES) $(MANUALS)
 
 docdir = $(datadir)/doc/lifelines
 doc_DATA = $(MANUALSSRC) $(MANUALS) 
 dist_pkgdata_DATA = $(MANUALS)
-
 
 # sensible values: empty, simple, fancy
 all: @DOCS_TARGET@
@@ -42,4 +64,3 @@ all: @DOCS_TARGET@
 	if [ -f /usr/bin/lynx ] ; then \
 	/usr/bin/lynx -force_html -dump -nolist -width=76 $^ > $@ ;\
 	fi
-
