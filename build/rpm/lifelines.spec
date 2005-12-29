@@ -98,7 +98,7 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 %files
 %defattr(-,root,root)
 %doc README ChangeLog NEWS AUTHORS LICENSE
-%doc .linesrc
+%doc .linesrc docs/lifelines.vim
 %doc docs/ll-reportmanual.xml docs/ll-reportmanual.html docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
 %doc docs/ll-userguide.xml docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
 
