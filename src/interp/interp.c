@@ -46,6 +46,7 @@
 #include "zstr.h"
 #include "icvt.h"
 #include "date.h"
+#include "xlat.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
@@ -383,6 +384,7 @@ interp_program_notfound:
 	symbol_tables_end();
 	pvalues_end();
 	wipe_pactx(pactx);
+	xl_free_adhoc_xlats();
 
 	/* kill any orphaned pathinfos */
 	while (!is_empty_list(plist)) {

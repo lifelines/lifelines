@@ -210,6 +210,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 {
 	XLAT xlat=0;
 	ZSTR zsrc=zs_new(), zdest=zs_new();
+	ZSTR zsrc_u=ll_toupperz(src,0),zdest_u=ll_toupperz(dest,0);
 	LIST srcsubs=0, destsubs=0;
 	STRING subcoding=0;
 	
@@ -225,8 +226,8 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		FORLIST(f_xlats, el)
 			xlattemp = (XLAT)el;
 			if (xlattemp->adhoc 
-				&& eqstr_ex(xlattemp->src, src)
-				&& eqstr_ex(xlattemp->dest, dest)
+				&& eqstr_ex(xlattemp->src, zs_str(zsrc_u))
+				&& eqstr_ex(xlattemp->dest, zs_str(zdest_u))
 				) {
 				xlat = xlattemp;
 				STOPLIST
@@ -234,19 +235,18 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 			}
 		ENDLIST
 	}
+	/* create new xlat & fill it out */
+	xlat = create_xlat(zs_str(zsrc_u), zs_str(zdest_u), adhoc);
+
 	/* check if identity */
-	if (eqstr(src, dest)) {
+	if (eqstr(zs_str(zsrc_u), zs_str(zdest_u))) {
 		/* new empty xlat will work for identity */
-		xlat = create_xlat(src, dest, adhoc);
 		goto end_get_xlat;
 	}
 
-	/* create new xlat & fill it out */
-	xlat = create_xlat(src, dest, adhoc);
-
 	/* parse out codesets & subcodings */
-	xl_parse_codeset(src, zsrc, &srcsubs);
-	xl_parse_codeset(dest, zdest, &destsubs);
+	xl_parse_codeset(zs_str(zsrc_u), zsrc, &srcsubs);
+	xl_parse_codeset(zs_str(zdest_u), zdest, &destsubs);
 
 	/* in source codeset, do subcodings requested by destination */
 	/* eg, if going from UTF-8 to GUI, transliterations done in UTF-8 first */
@@ -299,6 +299,10 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 end_get_xlat:
 	zs_free(&zsrc);
 	zs_free(&zdest);
+	zs_free(&zsrc_u);
+	zs_free(&zdest_u);
+	destroy_list(srcsubs);
+	destroy_list(destsubs);
 	return xlat;
 }
 /*==========================================================
@@ -474,12 +478,14 @@ load_dynttlist_from_dir (STRING dir)
 			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {
-			if (!valueof_obj(f_dyntts, zs_str(zfile))) {
+			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
+			if (!valueof_obj(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				STRING path = concat_path_alloc(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
-				insert_table_obj(f_dyntts, zs_str(zfile), dyntt);
+				insert_table_obj(f_dyntts, zs_str(zfile_u), dyntt);
+				zs_free(&zfile_u);
 				--dyntt->refcnt; /* leave table as sole owner */
 			}
 		}
@@ -499,6 +505,7 @@ load_dynttlist_from_dir (STRING dir)
  *  returns 1 if codeset-codeset conversion
  *  returns 2 if codeset subcoding conversion
  *  returns 0 if not valid name for tt
+ *  we leave case of filename alone, but zsrc and zdest are made uppercase
  *==========================================================*/
 static INT
 check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
@@ -523,12 +530,13 @@ check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
 		return 0;
 	}
 	ztemp = zs_newsubs(filename, underbar-filename);
-	zs_move(zsrc, &ztemp);
+	zsrc = ll_toupperz(zs_str(ztemp),0);
+	zs_free(&ztemp);
 	if (underbar[1]=='_') {
-		zs_sets(zdest, underbar+2);
+                zdest = ll_toupperz(underbar+2,0);
 		return 2;
 	} else {
-		zs_sets(zdest, underbar+1);
+                zdest = ll_toupperz(underbar+1,0);
 		return 1;
 	}
 }
@@ -565,7 +573,7 @@ xl_free_adhoc_xlats (void)
 		return;
 	/* we don't have a way to delete items from a list,
 	so just copy the ones we want to a new list */
-	newlist = create_list2(LISTDOFREE);
+	newlist = create_list();
 	FORLIST(f_xlats, el)
 		xlattemp = (XLAT)el;
 		if (xlattemp->adhoc) {
@@ -612,6 +620,7 @@ free_dyntts (void)
 void
 xlat_shutdown (void)
 {
+	xl_free_xlats();
 	free_dyntts();
 }
 /*=================================================
