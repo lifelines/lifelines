@@ -5133,8 +5133,8 @@ can be used.
         if (index(" BAPM BAPL CHR CHRA ",upper(tag(node)),1)) {
             return(node)
         }
-	return(0)
     }
+    return(0)
 }</synopsis>
 If you want to search for additional events or fewer events you can modify the
 string in the index call acccordingly.  Likewise, if you want the to prioritize

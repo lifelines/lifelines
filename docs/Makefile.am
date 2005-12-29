@@ -42,7 +42,7 @@ MANPAGES =   btedit.1 dbverify.1 llines.1
 # Rules
 ###################
 
-EXTRA_DIST = $(MANUALSSRC) $(MANUALS) $(MANPAGES)
+EXTRA_DIST = $(MANUALSSRC) $(MANUALS) $(MANPAGES) $(IMAGES) lifelines.vim
 man1_MANS = $(MANPAGES)
 
 CONFIG_CLEAN_FILES = $(OLDGENFILES) $(OLDSRCFILES) $(OLDFILES) $(MANUALS)

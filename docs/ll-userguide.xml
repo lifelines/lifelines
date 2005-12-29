@@ -5166,6 +5166,14 @@ for UTF-8, which may be entered as "UTF-8", "utf-8", or "65001". (The
 official, and preferred, name is UTF-8.
 </para>
 <glosslist>
+<glossentry><glossterm>codeset</glossterm><glossdef>
+
+<para>
+Is a property that report programs can read whose value is the codeset of the
+current database.
+</para>
+</glossdef></glossentry>
+
 <glossentry><glossterm>GedcomCodeset</glossterm><glossdef>
 
 <para>
@@ -5173,7 +5181,8 @@ Specifies the default Codeset to use when processing Gedcom files.
 There are actually 3 properties.
 <glossterm>GedcomCodesetOut</glossterm> and <glossterm>GedcomCodesetIn</glossterm>
 can be used to specify the codeset for output or input.  If either of these is
-not specified <glossterm>GedcomCodeset</glossterm> is used. Most Gedcom files should
+not specified 
+<glossterm>GedcomCodeset</glossterm> is used. Most Gedcom files should
 contain a codeset property, so this is not usually relevant when reading a Gedcom
 file, unless the input Gedcom file lacks a codeset property. This is used, however,
 when writing out a Gedcom file. 
