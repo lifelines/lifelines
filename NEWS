@@ -1,13 +1,20 @@
 LifeLines Source Release, Version 3.0.50
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+New features added in 3.0.51
+============================
+
 New features added in 3.0.50
 ============================
  - The spouses() iterator has been overloaded to iterate over the
    spouses of an individual if the first argument is an individual,
    and to iterate over all the husbands/wives if the first argument is
    a family.  The two uses also require a different number of arguments,
-   refer to the report manual for details.
+   Refer to the report manual for details.
+ - New Trigonometric and Spherical calculation functions added to the report
+   language, including sin, cos, tan, arcsin, arccos, arctan; conversion
+   routines dms2dec and deg2dms and a spherical distance estimator spdist.
+   Refer to the report manual for details.
 
 Bug fixes in 3.0.49
 ============================

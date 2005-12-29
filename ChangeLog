@@ -1,11 +1,13 @@
 2005-12-28 Stephen Dum
 	* ChangeLog docs/lifelines.vim docs/Makefile.am 
 	docs/ll-reportmanual.xml docs/ll-userguide.xml
+	NEWS
 
 	Include a copy of lifelines.vim in distribution.
 	Fix typo in example code in reportmanual
 	Add documentation for codeset property to userguide
 	Put listopts.jpg back into distribution.
+	Put Trig functions in NEWS
 
 2005-12-27 Matt Emmerton
 
