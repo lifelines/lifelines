@@ -10,6 +10,8 @@
 #
 
 %define lifelines_version       3.0.50
+%define reports_dir /usr/local/share/lifelines-%{lifelines_version}/reports
+%define tt_dir /usr/local/share/lifelines-%{lifelines_version}/tt
 
 Name: lifelines
 Summary: lifelines genealogy program
@@ -69,26 +71,26 @@ install -m 644 po/rw.gmo $RPM_BUILD_ROOT/usr/local/share/locale/rw/LC_MESSAGES/l
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/locale/sv/LC_MESSAGES
 install -m 644 po/sv.gmo $RPM_BUILD_ROOT/usr/local/share/locale/sv/LC_MESSAGES/lifelines.mo
 
-install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/*.ll $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/*.li $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/CREDIT reports/index.html $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/boc.gif reports/ll.png $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/*.c $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
-install -m 644 reports/ps-pedigree.ps reports/tree.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports
+install -d -m 755 $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/*.ll $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/*.li $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/CREDIT reports/index.html $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/boc.gif reports/ll.png $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/*.c $RPM_BUILD_ROOT%{reports_dir}
+install -m 644 reports/ps-pedigree.ps reports/tree.tex $RPM_BUILD_ROOT%{reports_dir}
 
-install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
-install -m 644 reports/novel/novel* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/novel
+install -d -m 755 $RPM_BUILD_ROOT%{reports_dir}/novel
+install -m 644 reports/novel/novel* $RPM_BUILD_ROOT%{reports_dir}/novel
 
-install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
-install -m 644 reports/pedtex/pedtex* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
-install -m 644 reports/pedtex/*.tex $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/pedtex
+install -d -m 755 $RPM_BUILD_ROOT%{reports_dir}/pedtex
+install -m 644 reports/pedtex/pedtex* $RPM_BUILD_ROOT%{reports_dir}/pedtex
+install -m 644 reports/pedtex/*.tex $RPM_BUILD_ROOT%{reports_dir}/pedtex
 
-install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
-install -m 644 reports/ps-fan/ps-fan* $RPM_BUILD_ROOT/usr/local/share/lifelines/reports/ps-fan
+install -d -m 755 $RPM_BUILD_ROOT%{reports_dir}/ps-fan
+install -m 644 reports/ps-fan/ps-fan* $RPM_BUILD_ROOT%{reports_dir}/ps-fan
 
-install -d -m 755 $RPM_BUILD_ROOT/usr/local/share/lifelines/tt
-install -m 644 tt/*.tt $RPM_BUILD_ROOT/usr/local/share/lifelines/tt
+install -d -m 755 $RPM_BUILD_ROOT%{tt_dir}
+install -m 644 tt/*.tt $RPM_BUILD_ROOT%{tt_dir}
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
 install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
@@ -114,8 +116,8 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/share/locale/nl/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/pl/LC_MESSAGES/lifelines.mo
 /usr/local/share/locale/rw/LC_MESSAGES/lifelines.mo
-/usr/local/share/lifelines/reports
-/usr/local/share/lifelines/tt
+%{reports_dir}
+%{tt_dir}
 /usr/local/man/man1/btedit.1
 /usr/local/man/man1/dbverify.1
 /usr/local/man/man1/llines.1

@@ -1,5 +1,10 @@
+2005-12-31 Stephen Dum
+	* ChangeLog build/rpm/lifelines.spec
+
+	move tt and reports directory into versioned lifelines directory
+	
 2005-12-30 Stephen Dum
-	* Changelog reports/Makefile.am 
+	* ChangeLog reports/Makefile.am 
 	in reports: anniver.ll cron.ll famgroup.ll
 	in reports/st:Makefile.am trigtest.ll trigtest.ref
 	remove reports/trigtest.ll
