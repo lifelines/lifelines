@@ -1,12 +1,23 @@
 /*
  * @progname       famgroup.ll
- * @version        none
+ * @version        1.1
  * @author         Kris Stanton  <kriss@medianet.com>
  * @category       
  * @output         TeX
  * @description
  *
  *   Family Group Sheet for LifeLines
+ *
+ *   Minor fixes by Patrick Texier 12/28/2005
+ *
+ *   The output is in LaTeX format.  Therefore, the name of the output file
+ *   should end in ".tex".  To print (assuming the name of the output file is
+ *   "out.tex"):
+ *       latex out
+ *       dvips out -o out.ps
+ *       lpr out.ps
+ *  or if you have it, you can generate a pdf with
+ *       pdflatex out
  */
 
 proc main ()
@@ -56,7 +67,7 @@ proc main ()
         col(0) "\\begin{tabular}{p{.25in}lp{7.84in}}"
         col(0) "& Other Wives (if any) & "
         spouses (h, sname, famname, number) {
-                if (nestr(w,sname)) {
+                if (ne(w,sname)) {
                         "$\\triangleright$ " name(sname)
                         " \\hspace{.1in} "
                         }
@@ -95,7 +106,7 @@ proc main ()
         col(0) "\\begin{tabular}{p{.25in}lp{7.6in}}"
         col(0) "& Other Husbands (if any) & "
         spouses (w, sname, famname, number) {
-                if (nestr(h,sname)) {
+                if (ne(h,sname)) {
                         "$\\triangleright$ " name(sname)
                         "\\hspace{.1in} "
                         }
@@ -155,7 +166,14 @@ proc main ()
                 if(eq(mmo,12)){ "December" }
                 " & \\centering \\small " if(ne(yyr,0)) {d(yyr)}
                 " & \\small " place(birth(child))
-                extractdate(death(child), ddy, mmo, yyr)
+		if(death(child)) {
+                	extractdate(death(child), ddy, mmo, yyr)
+		}
+		else {
+			set(ddy, 0)
+			set(mmo, 0)
+			set(yyr, 0)
+		}
                 col(0) " & \\centering \\small " if(ne(ddy,0)){d(ddy)}
                 " & \\small \\centering "
                 if(eq(mmo,1)){ "January" }

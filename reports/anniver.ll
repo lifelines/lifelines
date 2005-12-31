@@ -1,6 +1,6 @@
 /*
  * @progname       anniver.ll
- * @version        2.0
+ * @version        3.0
  * @author         Stephen Dum
  * @category       
  * @output         HTML
@@ -9,13 +9,15 @@
 Generate calendar of birth, death, marriage events arranged by the month 
 and day that they occurred.  Generates a top level index calendar, with actual
 events stored in a separate html file for each month.
-Warning, this report requires lifelines version 3.0.27 or later.
 Some properties must be set in your lifelines configuration file for this
 report to run, see comments at beginning of the report for details.
 
+Warning, this report requires lifelines version 3.0.50 or later.
+
          by Stephen Dum (stephen.dum@verizon.net)
          Version 1   March    2003  
-         Version 2   November 2005
+         Version 2   November 2005 Support privitizing data
+	 Version 3   December 2005 Do html char set encoding
 
 This program was inspired by similar efforts by Mitch Blank (mitch@ctrpnt.com)
 but without ever seeing the code he used to do a similar thing.
@@ -31,6 +33,7 @@ seconds.
 
 Before using, there are a few properties that need to be customized for your
 own environment so add them to your .linesrc ( or for windows lines.cfg) file.
+You can also set them on the command line (like -Ianniver.htmldir=/tmp/foo)
 The properties that are looked up are:
    user.fullname -- name of the database owner
    user.email -- email address of the db owner
@@ -39,8 +42,19 @@ The properties that are looked up are:
 		     (program expects a subdir in this directory with the name
 		      of the database in it.)
    anniver.backgroundimage -- path to the background image, no image if not defined.
-		     e.g. ../../image/crink.jpg
-                     this places image at the same level as /home/joe/genealogy/html
+                 e.g. ../../image/crink.jpg
+		 this places image at the same level as /home/joe/genealogy/html
+   privatization:  This report respects 2 levels of privatization
+       1. if a record "RESN confidential" exists on an individual they are
+	  skipped (as this report is designed to be shared, this seems
+	  like a reasonable default)
+       2. skip anyone estimated to be living
+
+   History.
+      Version 2 Add code to allow respecting privatized data.
+      Version 3 switch from baptism() to get_baptism() for wider coverage
+                use translation tables to convert data to properly 
+		escaped html.  This is very codeset dependent.
 */
 
 /* customization globals */
@@ -55,7 +69,11 @@ global(lo_bg_color)	/* non-highlighted year background color */
 
 global(db_owner)        /* name of database owner - from config file */
 global(owner_email)     /* email of database owner - from config file */
-global(privatize)       /* should we privatize the data */
+global(privatize)       /* should we privatize the data 
+			 * 0 = display all data
+			 * 1 = skip confidential records
+			 * 2 = skip confidential and living
+                         */
 global(withkey)         /* should we include key's in the output */
 global(cutoff_year)     /* 100 years before today */
                         /* birth >= cutoff_year  is about 101 years,
@@ -100,10 +118,20 @@ proc main ()
 
     extractdate(gettoday(),day,mon,cutoff_year)
     decr(cutoff_year,100)
+    set(cs,getproperty("codeset"))
+    if (eqstr(cs,"UTF-8")) {
+        set(srccs,"UTF-8")
+	set(dstcs,"UTF-8//html")
+    } elsif (eqstr(cs,"ISO-8859-15")) {
+        set(srccs,"ISO-8859-15//html")
+	set(dstcs,"UTF-8")
+    } else {
+        print("\nDatabase codeset ",cs," not supported, exiting\n")
+    }
 
     /* end of initialization of globals */
 
-    getint(privatize,"Enter 1 to privitize data, 0 otherwise")
+    getint(privatize,"\nPrivatization: 0 print all data; 1 skip confidential records; 2 skip confidential and living")
     getint(withkey,"Enter 1 to include keys, 0 otherwise")
     getindi(person,"Enter person to find descendants of (return for all)")
     indiset(thisgen)
@@ -216,7 +244,13 @@ proc main ()
 	    "&nbsp;"
 	}
 	"</b></font>" nl()
-	"<td><font size=4>" event "</font></td>" nl()
+	"<td><font size=4>"
+	if (srccs) {
+            convertcode(event,srccs,dstcs)
+        } else {
+            event
+        }
+	"</font></td>" nl()
     }
     if (ne(lastmonth,-1)) {
 	if (in_day) {
@@ -344,9 +378,10 @@ proc openfile(name,title) {
   print("Writing ", filename, "\n")
   newfile(filename, 0)
 
-  "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n"
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
   "<!DOCTYPE html public \"-//W3C//DTD HTML 4.01 Transitional//EN\" >\n"
   "<html>\n<head>\n"
+   "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n"
   "<title> " title " </title>\n"
   "<style type=\"text/css\">\n"
   "p.hindent { margin-top: 0.2em; margin-bottom:0em;\n"
@@ -391,7 +426,7 @@ proc add_indi(indi) {
     if (birth,birth(indi)) {
 	set(birth,get_date(birth))
 	set(birth_type," born")
-    } elsif (birth, baptism(indi)) {
+    } elsif (birth, get_baptism(indi)) {
 	set(birth,get_date(birth))
 	set(birth_type," baptized")
     }
@@ -403,11 +438,12 @@ proc add_indi(indi) {
 	set(death,get_date(death))
         set(death_type," buried")
     }
+    /* skip confidential records and living people */
     if (privatize) {
-	/* skip confidential or living people */
 	if (confidential(indi)) { return() }
+
 	/* living - birth, no death, and birth < 101 years ago */
-	if (and(birth,not(death))) {
+	if (and(ge(privatize,2),birth,not(death))) {
 	    if (ge(mod(birth,10000),cutoff_year)) { return()}
 	}
     }
@@ -427,11 +463,21 @@ proc add_indi(indi) {
 	}
 	enqueue(dates,death)
     }
+
     families(indi,famly, spouse, cnt) {
-	if (privatize) {
-	    /* skip confidential families */
-	    if (confidential(famly)) { return() }
+	/* skip confidential families */
+	if (confidential(famly)) { continue() }
+	if (and(privatize,spouse)) {
+	    if (confidential(spouse)) { continue() }
+
+	    /* living - birth, no death, and birth < 101 years ago */
+	    if (ge(privatize,2)) {
+		if (and(birth(spouse),not(death(spouse)))) {
+		    if (ge(mod(get_date(birth(spouse)),10000),cutoff_year)) { continue()}
+		}
+	    }
 	}
+
 	/* to avoid duplication, only enter data 
 	 * if indi is male, or there is no spouse
 	 */
@@ -439,17 +485,18 @@ proc add_indi(indi) {
 	    fornodes(fnode(famly), node) {
 		if(eqstr(tag(node),"MARR")) {
 		    if (spouse) {
-			set(spo,concat(" and ",name(spouse)," married"))
+			set(names,concat(name(indi)," and ",name(spouse)))
+			set(keys,concat("(",key(indi),",",key(spouse),")"))
 		    } else {
-			set(spo," married")
+			set(names,name(indi))
+			set(keys,concat("(",key(indi),")"))
 		    }
 		    set(marr,get_date(node))
 		    if (marr) {
 			if (withkey) {
-			    enqueue(events,concat(name(indi),spo,
-				    "(",key(indi),",",key(spouse),")"))
+			    enqueue(events,concat(names,keys," married"))
 			} else {
-			    enqueue(events,concat(name(indi),spo))
+			    enqueue(events,concat(names," married"))
 			}
 			enqueue(dates,marr)
 		    }
@@ -480,6 +527,15 @@ func confidential(n)
 	    if (eqstr(value(node),"confidential")) {
 	        return(1)
 	    }
+	}
+    }
+    return(0)
+}
+func get_baptism(ind)
+{
+    fornodes(ind,node) {
+        if (index(" BAPM BAPL CHR CHRA ",concat(" ",upper(tag(node))," "),1)) {
+	    return(node)
 	}
     }
     return(0)

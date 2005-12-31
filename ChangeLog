@@ -1,3 +1,15 @@
+2005-12-30 Stephen Dum
+	* Changelog reports/Makefile.am 
+	in reports: anniver.ll cron.ll famgroup.ll
+	in reports/st:Makefile.am trigtest.ll trigtest.ref
+	remove reports/trigtest.ll
+
+	Update anniver and cron to translate gedcom text to html using 
+	convert code and strengthen privatization code.
+	Check in fixes to famgroup.ll by Patrick Texier
+	move trigtest.ll to st directory and make it part of 'make check'
+	to verify proper operation of trig functions.
+
 2005-12-28 Stephen Dum
 	* ChangeLog docs/lifelines.vim docs/Makefile.am 
 	docs/ll-reportmanual.xml docs/ll-userguide.xml
