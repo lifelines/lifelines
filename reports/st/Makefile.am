@@ -16,12 +16,13 @@ SELFTEST_REPORTS = st_all.ll  \
 	st_number.li          \
 	st_string.li          \
 	st_string_UTF-8.li    \
-	st_table.li
+	st_table.li           \
+	trigtest.ll
 SELFTEST_REFERENCE = st_all.ref st_all_stdout.ref
 TEST_ITER_REPORTS = test_forindi.ll test_forfam.ll test_indi_it.ll \
-                    test_fam_it.ll test_othr_it.ll
+                    test_fam_it.ll test_othr_it.ll trigtest.ll
 TEST_ITER_REFERENCE = test_forindi.ref test_forfam.ref test_indi_it.ref \
-                    test_fam_it.ref test_othr_it.ref
+                    test_fam_it.ref test_othr_it.ref trigtest.ref
 TEST_ITER_DB = ti.ged
 TEST_OUTPUTS =test_forindi.out test_forfam.out test_indi_it.out \
                     test_fam_it.out test_othr_it.out st_all.out \

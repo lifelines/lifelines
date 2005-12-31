@@ -1,0 +1,59 @@
+Program is running...Simple Sine/Cosine/Tangent operations (degree->value)
+
+angle	sin	cos	tan
+0.00	0.00	1.00	0.00
+45.00	0.71	0.71	1.00
+89.99	1.00	0.00	5728.35
+90.00	1.00	0.00	N/A
+90.01	1.00	-0.00	-5728.35
+135.00	0.71	-0.71	-1.00
+180.00	0.00	-1.00	-0.00
+225.00	-0.71	-0.71	1.00
+269.99	-1.00	-0.00	5723.99
+270.00	-1.00	-0.00	N/A
+270.01	-1.00	0.00	-5723.99
+315.00	-0.71	0.71	-1.00
+360.00	0.00	1.00	0.00
+
+Simple ArcSine/ArcCosine/ArcTangent operations (value->degree)
+
+value	arcsin	arccos	arctan
+-1.00	-90.00	180.00	-45.00
+-0.71	-44.99	134.99	-35.26
+-0.35	-20.70	110.70	-19.47
+0.00	0.00	90.00	0.00
+0.35	20.70	69.30	19.47
+0.71	44.99	45.01	35.26
+1.00	90.00	0.00	45.00
+
+Reflexive operations (arcOP(OP(degree)) == degree)
+NOTE: Due to the periodic nature of these functions, output degree values may be
+different than the input degree values.
+NOTE: Due to roundoff, values may be out by a value of one in the least significant place.
+
+angle		arcsin(sin)	arccos(cos)	arctan(tan)
+0.00		0.00		0.00		0.00
+45.00		45.00		45.00		45.00
+89.99		90.00		89.99		89.99
+90.01		90.00		90.01		-89.99
+135.00		45.00		135.00		-45.00
+180.00		0.00		180.00		-0.00
+225.00		-45.00		135.00		45.00
+269.99		-90.00		90.01		89.99
+270.01		-90.00		89.99		-89.99
+315.00		-45.00		45.00		-45.00
+360.00		0.00		0.00		0.00
+
+Decimal Degrees to DMH Conversions
+
+44 degrees, 17 minutes and 29 seconds = 44.29 degrees.
+44.29 degrees = 44 degrees, 17 minutes and 29 seconds.
+
+Spherical Distance Calculations
+
+House Lat: 43 degrees, 24 minutes and 38 seconds = 43.41 degrees.
+House Lon: -80 degrees, 30 minutes and 32 seconds = -80.51 degrees.
+Cottage Lat: 44 degrees, 6 minutes and 6 seconds = 44.10 degrees.
+Cottage Lon: -81 degrees, 43 minutes and 18 seconds = -81.72 degrees.
+House to Cottage: 124.24
+House to Cottage (via roads, suggested by Google Maps: 138.20Program was run successfully.
