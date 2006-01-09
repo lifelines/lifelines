@@ -1,6 +1,6 @@
 /*
  * @progname       verify.ll
- * @version        9.0
+ * @version        12.0
  * @author         Eggert
  * @category       
  * @output         Text
@@ -9,26 +9,28 @@
 This LifeLines report program generates a text file which lists
 exceptions to assertions or checks about the database.	There are two
 forms of the output report, terse or verbose, selectable at runtime.
+See text at beginning of report for more details.
 
 verify - a LifeLines database verification report program
 	by Jim Eggert (eggertj@atc.ll.mit.edu)
-	Version 1,  3 November 1992 (unreleased, first simple try)
-	Version 2,  7 November 1992 (added lots of checks, verbose mode)
-	Version 3, 12 November 1992 (minor bugfix, parameter tuning,
+Version	1   3 Nov 1992 (unreleased, first simple try)
+	2   7 Nov 1992 (added lots of checks, verbose mode)
+	3  12 Nov 1992 (minor bugfix, parameter tuning,
 		added mrbbpm, unkgen, and hommar checks,
 		and more heuristics for birth and marriage years)
-	Version 4, 17 November 1992 (minor bugfix,
+	4  17 Nov 1992 (minor bugfix,
 		added femhus, malwif, cbspan, lngwdw, oldunm checks)
-	Version 5,  2 December 1992 (added mmnsnk check, improved morder)
-	Version 6, 26 March 1993 (improved paternity checks,
-		added hermaf check)
-	Version 7,  2 September 1993 (added noprnt check,
-		bug fix for parentless families)
-	Version 8,  2 December 1994 (added mulpar check)
-	Version 9, 28 April    1995 (added nofams check)
+	5   2 Dec 1992 (added mmnsnk check, improved morder)
+	6  26 Mar 1993 (improved paternity checks, added hermaf check)
+	7   2 Sep 1993 (added noprnt check, bug fix for parentless families)
+	8   2 Dec 1994 (added mulpar check)
+	9  28 Apr 1995 (added nofams check)
+	10  7 Sep 1995 (added mrabsm check, periodic printing to screen)
+	11 15 Jan 1997 (added infamp, mulhus, mulwif, mulchl checks)
+	12 15 Sep 2000 (added samgiv check)
 
 This LifeLines report program generates a text file which lists
-exceptions to assertions or checks about the database.	There are two
+exceptions to assertions or checks about the database.  There are two
 forms of the output report, terse or verbose, selectable at runtime.
 
 In the terse report, the assertions tested are labeled with a
@@ -54,20 +56,20 @@ this program.  Sorry.
 
 Normal and Irish twins are indistinguishable.  For the cspace
 assertion, intervening children with no known birthyear are treated
-intelligently.	Unknown birthyears and deathyears are assumed equal to
+intelligently.  Unknown birthyears and deathyears are assumed equal to
 the baptism years and burial years, respectively, if those are
 available.  Unknown marriage years are estimated from the children's
 birth or baptism years.
 
 For a large database, this program will likely generate a lot of
-output.	 I suggest that you go through this large output once to make
+output.  I suggest that you go through this large output once to make
 sure that everything is correct in the database.  After correcting any
 errors, run this program again, creating a reference report, which
 will still contain a lot of messages.  Then use diff to compare any
 later reports to the reference report to catch any new errors.
 
 You can sort the output report against the first field to sort against
-the check type.	 This actually makes the report look nicer too.	 Then
+the check type.  This actually makes the report look nicer too.  Then
 you can sort subsets of the output against other fields to look for
 the oldest person or the youngest father in the database, for example.
 
@@ -81,7 +83,7 @@ individual checks:
 person's age at death is older than _oldage_
    oldage key name birth death age
 person is baptized before birth
-   bpbef  key person birth baptism
+   bpbefb key person birth baptism
 person dies before birth
    dbefb  key person birth death
 person is buried before birth
@@ -117,10 +119,13 @@ person marries someone more than _jundec_ years older
 person marries younger than _yngmar_
    yngmar key person age spouse
 person marries older than _oldmar_
+   oldmar key person age spouse
 marriage out of order
    morder key person spouse
 marriage before birth from previous marriage
    mrbbpm key person marriage spouse previous_birth
+marriage after birth from subsequent marriage
+   mrabsm key person marriage spouse subsequent_birth
 homosexual marriage
    hommar key person marriage spouse
 person is a female husband
@@ -161,10 +166,22 @@ child is born more than _cspace_ years after previous child
    cspace key person familynum childnum child birthspace
 children's births span more than _cbspan_ years
    cbspan key person birthspan
+child is born before parents' marriage
+   illeg key person familynum maryear childnum child child_birth
+child has same given name as sibling
+   samgiv key person sibling
 
 family checks:
 family has no parents
    noprnt fkey firstchild nchildren
+individual / family pointer mismatch
+   infamp key person fkey
+family has multiple husbands
+   mulhus fkey key husband
+family has multiple wives
+   mulwif fkey key wife
+child is in family multiple times
+   mulchl fkey key child
 
 */
 
@@ -188,22 +205,23 @@ proc main ()
 {
 /* Main settable parameters */
     set(oldage,90)  /* maximum approximate age */
-    set(jundec,30)  /* maximum husband-wife age difference */
-    set(yngmar,17)  /* minimum age to marry */
+    set(jundec,20)  /* maximum husband-wife age difference */
+    set(yngmar,18)  /* minimum age to marry */
     set(oldmar,50)  /* maximum age to marry */
-    set(fecmom,11)  /* maximum number of children for a woman */
-    set(oldmom,49)  /* maximum age for a woman to bear a child */
-    set(yngmom,17)  /* minimum age for a woman to bear a child */
-    set(fecdad,15)  /* maximum number of children for a man */
-    set(olddad,65)  /* maximum age for a man to father a child */
+    set(fecmom,8)   /* maximum number of children for a woman */
+    set(oldmom,45)  /* maximum age for a woman to bear a child */
+    set(yngmom,18)  /* minimum age for a woman to bear a child */
+    set(fecdad,10)  /* maximum number of children for a man */
+    set(olddad,60)  /* maximum age for a man to father a child */
     set(yngdad,18)  /* minimum age for a man to father a child */
-    set(wedder,3)   /* maximum number of spouses for a person */
+    set(wedder,2)   /* maximum number of spouses for a person */
     set(cspace,8)   /* maximum number of years between children */
     set(cbspan,25)  /* maximum span of years for all children */
     set(nonpat,0)   /* 0 = compare child=father surnames by Soundex code,
 		       1 = require strict surname equality */
-    set(oldunm,99)  /* maximum age at death for unmarried person */
-    set(lngwdw,30)  /* maximum number of consecutive years of widowhood */
+    set(oldunm,40)  /* maximum age at death for unmarried person */
+    set(lngwdw,20)  /* maximum number of consecutive years of widowhood */
+    set(print_interval,100) /* how often to print status to the screen */
 
     getintmsg(verbose,"Enter 0 for terse, 1 for verbose output")
     if (verbose) {
@@ -245,16 +263,18 @@ proc main ()
 	set(tostr," to ")
 	set(morderstr,"Marriage out of order ")
 	set(familynostr," family ")
-	set(illegstr,"Possible illegitimate birth ")
+	set(illegstr,"Child born before parents' marriage ")
 	set(corderstr,"Child out of order ")
 	set(childnostr," child ")
 	set(prevbornstr," previous child born ")
 	set(ctwinstr,"Possible twin ")
 	set(cspacestr,"Widely spaced births ")
 	set(laterstr," years later")
-	set(nonpatstr,"Nonpatronymic inheritance ")
+	set(nonpatstr,"Nonpatrilineal surname inheritance ")
 	set(mrbbpmstr,"Marriage before birth from previous family ")
+	set(mrabsmstr,"Marriage after birth from subsequent family ")
 	set(prevmarbirthstr," previous birth ")
+	set(subsmarbirthstr," subsequent birth ")
 	set(unkgenstr,"Unknown gender ")
 	set(hermafstr,"Ambiguous gender ")
 	set(mulparstr,"Multiple parentage ")
@@ -274,9 +294,15 @@ proc main ()
 	set(beforefamilynostr," before family ")
 	set(mmnsnkstr,"Multiple marriages no spouse no kids ")
 	set(samnamstr,"Husband and wife with same surname ")
+	set(samgivstr,"Siblings with same given name ")
+	set(prevchildstr," previous child ")
 	set(noprntstr,"Family with no parents ")
 	set(firstchildstr," first child ")
 	set(numchildrenstr," of ")
+	set(infampstr,"Individual/family pointer mismatch ")
+	set(mulhusstr,"Family has multiple husbands ")
+	set(mulwifstr,"Family has multiple wives ")
+	set(mulchlstr,"Child is in family multiple times ")
 	set(nl,".\n")
     }
     else {
@@ -327,7 +353,9 @@ proc main ()
 	set(laterstr,"")
 	set(nonpatstr,"nonpat ")
 	set(mrbbpmstr,"mrbbpm ")
+	set(mrabsmstr,"mrabsm ")
 	set(prevmarbirthstr," ")
+	set(subsmarbirthstr," ")
 	set(unkgenstr,"unkgen ")
 	set(hermafstr,"hermaf ")
 	set(mulparstr,"mulpar ")
@@ -347,15 +375,22 @@ proc main ()
 	set(waswidowerstr," ")
 	set(mmnsnkstr,"mmnsnk ")
 	set(samnamstr,"samnam ")
+	set(samgivstr,"samgiv ")
+	set(prevchildstr," ")
 	set(noprntstr,"noprnt ")
 	set(firstchildstr," ")
 	set(numchildrenstr," ")
+	set(infampstr,"infamp ")
+	set(mulhusstr,"mulhus ")
+	set(mulwifstr,"mulwif ")
+	set(mulchlstr,"mulchl ")
 	set(nl,"\n")
     }
 
+    set(next_print,0)
+    print("Scanning individuals: I")
     forindi(person, number) {
-	set(idstr,save(concat(concat(key(person),namestr),
-			 name(person))))
+	set(idstr,concat(key(person),namestr,name(person)))
 /* individual checks */
 	set(byear,0)
 	if (bth,birth(person)) {
@@ -452,15 +487,58 @@ proc main ()
 	    set(waswidstr,waswidowstr)
 	}
 
-/* multiple parentage check */
+/* multiple parentage and family pointer check */
 	set(nfamc,0)
 	set(famstr,"")
 	fornodes(inode(person),node) {
-	    if (not(strcmp(tag(node),"FAMC"))) {
-		set(nfamc,add(nfamc,1))
-		if (eq(nfamc,1)) { set(famstr,save(value(node))) }
+	    if (eqstr(tag(node),"FAMC")) {
+		incr(nfamc)
+		if (eq(nfamc,1)) { set(famstr,value(node)) }
 		elsif (eq(nfamc,2)) { mulparstr idstr famstr }
 		if (ge(nfamc,2)) { " " value(node) }
+	    }
+	}
+	if (gt(nfamc,1)) { nl }
+	fornodes(inode(person),node) {
+	    if (eqstr(tag(node),"FAMC")) {
+		set(fxref,value(node))
+		set(found,0)
+		if (reference(fxref)) {
+		    fornodes(dereference(fxref),famnode) {
+			if (eqstr(tag(famnode),"CHIL")) {
+			    set(cxref,value(famnode))
+			    if (reference(cxref)) {
+				if (eqstr(xref(dereference(cxref)),
+					  xref(inode(person)))) {
+				    set(found,1)
+				    break()
+				}
+			    }
+			}
+		    }
+		}
+		if (not(found)) { infampstr idstr " " fxref nl }
+	    }
+	    if (eqstr(tag(node),"FAMS")) {
+		set(fxref,value(node))
+		set(found,0)
+		if (reference(fxref)) {
+		    if (male(person)) { set(spse,"HUSB") }
+		    else { set(spse,"WIFE") }
+		    fornodes(dereference(fxref),famnode) {
+			if (eqstr(tag(famnode),spse)) {
+			    set(sxref,value(famnode))
+			    if (reference(sxref)) {
+				if (eqstr(xref(dereference(sxref)),
+					  xref(inode(person)))) {
+				    set(found,1)
+				    break()
+				}
+			    }
+			}
+		    }
+		}
+		if (not(found)) { infampstr idstr " " fxref nl }
 	    }
 	}
 	if (gt(nfamc,1)) { nl }
@@ -488,8 +566,9 @@ proc main ()
 	set(prev_cbyind,0)
 	set(prev_maryear,0)
 	set(prev_sdyear,0)
+	set(prev_spouse,0)
 	families(person,fam,spouse,fnum) {
-	    if (eq(strcmp(sex(person),sex(spouse)),0)) {
+	    if (eqstr(sex(person),sex(spouse))) {
 		hommarstr idstr familynostr d(fnum)
 		namestr name(spouse) nl
 	    }
@@ -501,7 +580,7 @@ proc main ()
 	    }
 	    if (spouse) {
 		if (and(male(person),
-			not(strcmp(surname(person),surname(spouse))))) {
+			eqstr(surname(person),surname(spouse)))) {
 		    samnamstr idstr familynostr d(fnum)
 		    namestr name(spouse) nl
 		}
@@ -512,7 +591,7 @@ proc main ()
 		    jundecstr idstr
 		    bornstr d(byear) familynostr d(fnum)
 		    namestr name(spouse)
-		    bornstr d(birthyear) nl
+                    bornstr d(birthyear) nl
 		}
 	    }
 	    set(sdyear,0)
@@ -554,12 +633,12 @@ proc main ()
 		    elsif (lt(marage,yngmar)) {
 			yngmarstr idstr
 			marriedagestr d(marage) tostr
-			name(spouse) nl
+                        name(spouse) nl
 		    }
 		    elsif (gt(marage,oldmar)) {
 			oldmarstr idstr
 			marriedagestr d(marage) tostr
-			name(spouse) nl
+                        name(spouse) nl
 		    }
 		}
 		if (and(dyear,gt(maryear,dyear))) {
@@ -573,7 +652,6 @@ proc main ()
 		    tostr name(spouse)
 		    prevmarbirthstr d(prev_cbyear) nl
 		}
-		set(prev_maryear,maryear)
 	    }
 	    else { set(maryear,prev_maryear) }
 	    if (and(maryear,prev_sdyear)) {
@@ -589,13 +667,13 @@ proc main ()
 		if (gt(wdwyear,lngwdw)) {
 		    lngwdwstr idstr waswidstr
 		    d(wdwyear) yearsstr nl
-		}
+	 	}
 	    }
 	    if (and(and(gt(nfam,1),not(spouse)),eq(nchildren(fam),0))) {
 		mmnsnkstr idstr familynostr d(fnum) nl
 	    }
 	    children(fam,child,cnum) {
-		set(nkids,add(nkids,1))
+		incr(nkids)
 		call get_birthyear(child)
 		set(cbyear,birthyear)
 		if (and(cbyear,lt(cbyear,first_cbyear)))
@@ -608,14 +686,14 @@ proc main ()
 			oldstr parstr idstr
 			agestr d(bage) familynostr d(fnum)
 			childnostr d(cnum) namestr
-			name(child) nl
+                        name(child) nl
 		    }
 		    elsif (lt(bage,0)) {
 			unbstr parstr idstr
 			bornstr d(byear)
 			familynostr d(fnum) childnostr d(cnum)
 			namestr name(child)
-			bornstr d(cbyear) nl
+                        bornstr d(cbyear) nl
 		    }
 		    elsif (lt(bage,yngpar)) {
 			yngstr parstr idstr
@@ -629,18 +707,24 @@ proc main ()
 		    diedstr d(dyear)
 		    familynostr d(fnum) childnostr d(cnum)
 		    namestr name(child)
-		    bornstr d(cbyear) nl
+                    bornstr d(cbyear) nl
 		}
 		if (male(person)) {
 		    if (or(and(eq(nonpat,0),
-			   strcmp(save(soundex(person)),
-				  save(soundex(child)))),
+			   strcmp(soundex(person),soundex(child))),
 			   and(eq(nonpat,1),
-			       strcmp(save(surname(person)),
-				      save(surname(child)))))) {
+			       strcmp(surname(person),surname(child))))) {
 			nonpatstr idstr familynostr d(fnum)
 			childnostr d(cnum) namestr
-			name(child) nl }
+                        name(child) nl }
+		}
+		if (and(prev_maryear,cbyear)) {
+		    if (gt(prev_maryear,cbyear)) {
+			mrabsmstr idstr
+			marriedstr d(prev_maryear)
+			tostr name(prev_spouse)
+			subsmarbirthstr d(cbyear) nl
+		    }
 		}
 /* children checks */
 		if (cbyear) {
@@ -650,7 +734,7 @@ proc main ()
 			    illegstr idstr
 			    familynostr d(fnum) marriedstr d(maryear)
 			    childnostr d(cnum) namestr
-			    name(child)
+                            name(child)
 			    bornstr d(cbyear) nl
 			}
 		    }
@@ -660,13 +744,13 @@ proc main ()
 			    corderstr idstr
 			    familynostr d(fnum) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(cbyear) prevbornstr d(prev_cbyear) nl
+                            bornstr d(cbyear) prevbornstr d(prev_cbyear) nl
 			}
 			elsif (eq(cbyear,prev_cbyear)) {
 			    ctwinstr idstr
 			    familynostr d(fnum) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(cbyear) nl
+                            bornstr d(cbyear) nl
 			}
 			elsif (gt(cbyear,
 				    add(prev_cbyear,
@@ -674,14 +758,26 @@ proc main ()
 			    cspacestr idstr
 			    familynostr d(fnum) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(sub(cbyear,prev_cbyear)) laterstr nl
+                            bornstr d(sub(cbyear,prev_cbyear)) laterstr nl
 			}
 		    }
 		    set(prev_cbyear,cbyear)
 		    set(prev_cbyind,nkids)
 		    set(prev_cbyfnum,fnum)
 		}
+                if (strlen(givens(child))) {
+		    children(fam,child2,cnum2) {
+			if (lt(cnum2,cnum)) {
+			    if (not(strcmp(givens(child),givens(child2)))) {
+				samgivstr idstr " "
+				name(child) prevchildstr name(child2) nl
+			    }
+			}
+		    }
+		}
 	    }
+	    set(prev_spouse,spouse)
+	    if (maryear) { set(prev_maryear,maryear) }
 	}
 	set(prev_sdyear,sdyear)
 
@@ -695,15 +791,21 @@ proc main ()
 	    hadstr d(nkids) kidsinstr d(nfam)
 	    if (eq(nfam,1)) { familystr } else { familiesstr } nl
 	}
+	if (ge(number,next_print)) {
+	    print(d(number)," ")
+	    set(next_print,add(next_print,print_interval))
+	}
     }
-/* handle families with no parents */
-    forfam(fam,fnum) {
+
+/* family checks, including handling families with no parents */
+    set(next_print,0)
+    print("\nScanning families: F")
+    forfam(fam,number) {
 	if (not(or(husband(fam),wife(fam)))) {
 	    set(first_cbyear,99999)
 	    set(last_cbyear,0)
 	    set(prev_cbyear,0)
 	    set(prev_cbyind,0)
-	    set(prev_maryear,0)
 	    set(maryear,0)
 	    if (mar,marriage(fam)) {
 		extractdate(mar,marday,marmonth,maryear)
@@ -720,7 +822,7 @@ proc main ()
 			illegstr
 			key(fam) marriedstr d(maryear)
 			childnostr d(cnum) namestr
-			name(child)
+                        name(child)
 			bornstr d(cbyear) nl
 		    }
 		    if (prev_cbyear) {
@@ -728,13 +830,13 @@ proc main ()
 			    corderstr
 			    key(fam) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(cbyear) prevbornstr d(prev_cbyear) nl
+                            bornstr d(cbyear) prevbornstr d(prev_cbyear) nl
 			}
 			elsif (eq(cbyear,prev_cbyear)) {
 			    ctwinstr
 			    key(fam) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(cbyear) nl
+                            bornstr d(cbyear) nl
 			}
 			elsif (gt(cbyear,
 				    add(prev_cbyear,
@@ -742,7 +844,7 @@ proc main ()
 			    cspacestr
 			    key(fam) childnostr d(cnum)
 			    namestr name(child)
-			    bornstr d(sub(cbyear,prev_cbyear)) laterstr nl
+                            bornstr d(sub(cbyear,prev_cbyear)) laterstr nl
 			}
 		    }
 		    set(prev_cbyear,cbyear)
@@ -758,5 +860,63 @@ proc main ()
 	    firstchildstr key(firstchild) namestr name(firstchild)
 	    numchildrenstr d(cnum) nl
 	}
+/* check family pointers */
+	list(chillist)
+	fornodes(fnode(fam),node) {
+	    set(nhus,0)
+	    set(nwif,0)
+	    set(match,"")
+	    if (eqstr(tag(node),"CHIL")) {
+		set(match,"FAMC")
+		forlist(chillist,prevc,cnum) {
+		    if (eqstr(xref(node),prevc)) {
+			set(child,dereference(value(node)))
+			mulchlstr " " key(fam) " "
+			key(child) " " name(child) nl
+		    }
+		}
+		enqueue(chillist,value(node))
+	    }
+	    elsif (eqstr(tag(node),"HUSB")) {
+		set(match,"FAMS")
+		incr(nhus)
+		if (eq(nhus,2)) {
+		    mulhusstr key(fam) " "
+		    key(husband(fam)) " " name(husband(fam)) nl
+		}
+	    }
+	    elsif (eqstr(tag(node),"WIFE")) {
+		set(match,"FAMS")
+		incr(nwif)
+		if (eq(nwif,2)) {
+		    mulwifstr key(fam) " "
+		    key(wife(fam)) " " name(wife(fam)) nl
+		}
+	    }
+	    if (strlen(match)) {
+		set(pxref,value(node))
+		set(found,0)
+		if (reference(pxref)) {
+		    fornodes(dereference(pxref),pnode) {
+			if (eqstr(tag(pnode),match)) {
+			    set(fxref,value(pnode))
+			    if (reference(fxref)) {
+				if (eqstr(xref(dereference(fxref)),
+					  xref(fnode(fam)))) {
+				    set(found,1)
+				    break()
+				}
+			    }
+			}
+		    }
+		}
+		if (not(found)) { infampstr idstr " " fxref nl }
+	    }
+	}
+	if (ge(number,next_print)) {
+	    print(d(number)," ")
+	    set(next_print,add(next_print,print_interval))
+	}
     }
+    print("\nDone.")
 }

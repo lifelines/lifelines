@@ -1,3 +1,8 @@
+2005-01-08 Stephen Dum
+	* ChangeLog reports/verify.ll
+
+	Check in version 12 of verify.ll from Jim Eggert.
+
 2005-12-31 Stephen Dum
 	* ChangeLog build/rpm/lifelines.spec
 
