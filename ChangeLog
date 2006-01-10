@@ -4,6 +4,10 @@
 
 	Add links to homepage, FAQ, and list archives, to user guide.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Improve error wording.
+
 2005-01-08 Stephen Dum
 	* ChangeLog reports/verify.ll
 

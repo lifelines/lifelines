@@ -882,7 +882,7 @@ process_fam (RECORD rec)
 			/* look for family (key) in child */
 			if (!find_xref(key, child, "FAMC", NULL)) {
 				report_error(ERR_EXTRACHILD
-					, _("Improper child (%s) in family (%s)")
+					, _("Improper child: Child (%s) without FAMC reference to family (%s)")
 					, printkey(chilkey), key);
 			}
 		}
