@@ -8,6 +8,10 @@
 
 	Improve error wording.
 
+	* ChangeLog po/fr.po
+
+	Update French translation from Patrick Texier.
+
 2005-01-08 Stephen Dum
 	* ChangeLog reports/verify.ll
 
