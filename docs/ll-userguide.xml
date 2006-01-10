@@ -172,6 +172,35 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      </para>
      </note>
 
+<para>
+Other sources of information include:
+
+<informaltable pgwide='0' frame='none'>
+<tbody>
+<row>
+<entry>lifelines homepage
+</entry><entry>
+<ulink url="http://lifelines.sourceforge.net/">
+http://lifelines.sourceforge.net/</ulink>.
+</entry>
+</row><row>
+<entry>lifelines FAQ
+</entry><entry>
+<ulink url="http://lifelines.sourceforge.net/faq.html">
+http://lifelines.sourceforge.net/faq.html</ulink>.
+</entry>
+</row><row>
+<entry>LINES-L mailing list
+</entry><entry>
+<ulink url="http://listserv.nodak.edu/cgi-bin/wa.exe?A0=lines-l">
+http://listserv.nodak.edu/cgi-bin/wa.exe?A0=lines-l</ulink>.
+</entry>
+</row>
+</tbody></informaltable>
+
+</para>
+
+
 </sect1>
 
 

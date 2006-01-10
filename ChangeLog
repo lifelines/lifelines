@@ -1,3 +1,9 @@
+2006-01-10 Perry Rapp
+
+	* ChangeLog docs/ll-userguide.xml
+
+	Add links to homepage, FAQ, and list archives, to user guide.
+
 2005-01-08 Stephen Dum
 	* ChangeLog reports/verify.ll
 
