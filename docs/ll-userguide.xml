@@ -176,6 +176,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Other sources of information include:
 
 <informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
 <tbody>
 <row>
 <entry>lifelines homepage
@@ -196,7 +197,9 @@ http://lifelines.sourceforge.net/faq.html</ulink>.
 http://listserv.nodak.edu/cgi-bin/wa.exe?A0=lines-l</ulink>.
 </entry>
 </row>
-</tbody></informaltable>
+</tbody>
+</tgroup>
+</informaltable>
 
 </para>
 
