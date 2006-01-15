@@ -6,6 +6,8 @@
  * @output         dot format
  * @description    Use graphviz's dot to product multipage 
  *	           directed graphs of descendants.
+ *
+ *                 (dot is available from www.graphviz.com)
  *                 $ dot -Tps -ofamily.ps family.dot
  */
 

@@ -110,7 +110,8 @@ proc longvitals(i)
                 if (eq(0,strcmp("NOTE", tag(node)))) {
                         value(node)
                         fornodes(node, subnode) {
-                        if (eq(0,strcmp(or("CONT","CONC"), tag(subnode)))) {
+                        if (or(eqstr("CONT",tag(subnode)),
+			       eqstr("CONC",tag(subnode)))) {
                                         " " value(subnode)
                                 }
                         }

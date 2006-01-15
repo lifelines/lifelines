@@ -1,7 +1,12 @@
 2006-01-14 Stephen Dum
 	* ChangeLog docs/ll-userguide.xml
+	reports/regvital1.ll reports/timeline1.ll reports/timeline2.ll
+	reports/pointers.ll reports/reg_html.ll reports/register1-dot.ll
 
 	add <tgroup> to <informaltable> so it would compile.
+	remove duplicated copies of reports regvital1, timeline1,timeline2
+	fix minor bug in reg_html, clean up indexing for pointers.ll and
+	add note in register1-dot.ll
 
 2006-01-10 Perry Rapp
 

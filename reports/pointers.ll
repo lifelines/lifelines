@@ -7,6 +7,7 @@
  * @description
 
 Test a database for reciprocity of pointers between persons and families.
+
 Report any failures, primarily the following:
 
  Person Inn is a spouse/child in Fnn, but Fnn has no corresponding pointer.
