@@ -118,6 +118,9 @@ char * ngettext_null (const char *, const char *, unsigned long int);
 char * dngettext_null(const char *, const char *, const char *, unsigned long int);
 char * dcngettext_null(const char *, const char *, const char *, unsigned long int, int);
 
+/* norm_charmap.c */
+char *norm_charmap(char *name);
+
 /* path.c */
 STRING check_file_for_unicode(FILE * fp);
 INT chop_path(CNSTRING path, STRING dirs);

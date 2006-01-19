@@ -1,4 +1,12 @@
+2006-01-19 Matt Emmerton
+
+	* ChangeLog src/hdrs/llstdlib.h
+
+	Add prototype for norm_charmap() to avoid compiler
+	warnings on Debian/IA64 (Debian Bug #348618)
+
 2006-01-14 Stephen Dum
+
 	* ChangeLog docs/ll-userguide.xml
 	reports/regvital1.ll reports/timeline1.ll reports/timeline2.ll
 	reports/pointers.ll reports/reg_html.ll reports/register1-dot.ll
@@ -23,16 +31,19 @@
 	Update French translation from Patrick Texier.
 
 2005-01-08 Stephen Dum
+
 	* ChangeLog reports/verify.ll
 
 	Check in version 12 of verify.ll from Jim Eggert.
 
 2005-12-31 Stephen Dum
+
 	* ChangeLog build/rpm/lifelines.spec
 
 	move tt and reports directory into versioned lifelines directory
 	
 2005-12-30 Stephen Dum
+
 	* ChangeLog reports/Makefile.am 
 	in reports: anniver.ll cron.ll famgroup.ll
 	in reports/st:Makefile.am trigtest.ll trigtest.ref
@@ -45,6 +56,7 @@
 	to verify proper operation of trig functions.
 
 2005-12-28 Stephen Dum
+
 	* ChangeLog docs/lifelines.vim docs/Makefile.am 
 	docs/ll-reportmanual.xml docs/ll-userguide.xml
 	NEWS build/rpm/lifelines.spec
