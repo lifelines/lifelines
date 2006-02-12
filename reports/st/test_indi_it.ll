@@ -1,3 +1,16 @@
+/*
+ * @progname       test_indiit
+ * @version        1
+ * @author         Stephen Dum
+ * @category       self-test
+ * @output         text
+ * @description
+ * 
+ * test indi iterators: forindi, Parents, families, spouses, mothers, fathers
+ * Iterate over some data, printing results, so we can
+ * compare the output with exected results.
+ */
+
 proc main() {
     print(nl())
     forindi(i,c) { 

@@ -1,3 +1,16 @@
+/*
+ * @progname       test_fam_it
+ * @version        1
+ * @author         Stephen Dum
+ * @category       self-test
+ * @output         text
+ * @description
+ * 
+ * test family iterators: forfam, children and spouses
+ * Iterate over some data, printing results, so we can
+ * compare the output with exected results.
+ */
+
 
 proc main() {
     print(nl())

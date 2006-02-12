@@ -1,3 +1,14 @@
+2006-02-11 Stephen Dum
+	* ChangeLog reports/Makefile.am reports/ttable.ll
+	reports/st/test_fam_it.ll reports/st/test_forfam.ll
+	reports/st/test_forindi.ll reports/st/test_indi_it.ll
+	reports/st/test_othr_it.ll reports/st/trigtest.ll
+	reports/least_related.ll
+
+	remove least_related.ll which was just a stub saying it didn't work.
+	minor header cleanup in a number of reports.  remove reference to
+	regvital1.ll from makefile.
+
 2006-01-19 Matt Emmerton
 
 	* ChangeLog src/hdrs/llstdlib.h

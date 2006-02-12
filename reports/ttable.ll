@@ -7,6 +7,18 @@
  * @description
  *
  * Compute Pete Cook's C-Table comparison vector, as modified by Tom.
+ *
+ * What is this?  From l-lines list 10 Aug 1995 posting by Tom Wetmore:
+ * 
+ * There has been discussion on person matching in genealogical databases,
+ * the use of metrics to compare persons to help locate duplicates.
+ *
+ * Pete Cook suggested the CID metric a ways back, and recently suggested the
+ * CTable metric.  I remember another metric published in "Genealogical
+ * Computing" some time back.  John Chandler (?) reminded us of a metric that
+ * is used by the Genserve project (which, by my own experience) works quite
+ * well.
+ * above 2 paragraphs inserted by Stephen Dum
  */
 
 proc main ()

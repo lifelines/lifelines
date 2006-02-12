@@ -5,6 +5,9 @@
  * @category
  * @output         Text
  * @description    Tests functionality of trig-related functions.
+ *
+ * Test trig and spherical distance calculations
+ *
  */
 
 options("explicitvars")

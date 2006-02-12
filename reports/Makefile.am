@@ -44,10 +44,8 @@ LL_REPORTS = \
 	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll      \
 	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll refn.ll reg_html.ll \
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
-	regvital.ll regvital1.ll                                        \
-	relate.ll related_spouses.ll relation.ll relink.ll              \
-	rfc.ll rllgen.ll rootset.ll rslgen.ll                           \
-	rtflib.li sealing_line.ll	                                \
+	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll  \
+	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour.li                             \
 	sour2.li sources.ll sources_bib.ll                              \
