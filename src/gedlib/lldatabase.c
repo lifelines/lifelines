@@ -66,7 +66,8 @@ lldb_alloc (void)
 void
 lldb_set_btree (LLDATABASE lldb, void *btree)
 {
-	ASSERT(lldb && !lldb->btree);
+	ASSERT(lldb);
+	ASSERT(!lldb->btree);
 	lldb->btree = btree;
 	BTR = btree;
 }

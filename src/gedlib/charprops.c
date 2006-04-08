@@ -249,7 +249,8 @@ charprops_load (const char * codepage)
 static ZSTR
 charprops_toupperz (CNSTRING s)
 {
-	ASSERT(uu8 && loaded_utf8==1);
+	ASSERT(uu8);
+	ASSERT(loaded_utf8==1);
 	return convert_utf8(uppers, s);
 }
 /*==========================================
@@ -260,7 +261,8 @@ charprops_toupperz (CNSTRING s)
 static ZSTR
 charprops_tolowerz (CNSTRING s)
 {
-	ASSERT(uu8 && loaded_utf8==1);
+	ASSERT(uu8);
+	ASSERT(loaded_utf8==1);
 	return convert_utf8(lowers, s);
 }
 /*==========================================

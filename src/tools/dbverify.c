@@ -346,7 +346,8 @@ check_ghosts (void)
 		}
 	}
 
-	ASSERT(is_empty_list(tofix) && !soundexseq);
+	ASSERT(is_empty_list(tofix));
+	ASSERT(!soundexseq);
 
 	soundexseq = create_indiseq_sval();
 	/* soundexseq is used inside cgr_callback, across calls */

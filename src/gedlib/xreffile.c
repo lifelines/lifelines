@@ -198,7 +198,8 @@ static INT
 getxrefnum (DELETESET set)
 {
 	INT keynum;
-	ASSERT(xreffp && set->n >= 1);
+	ASSERT(xreffp);
+	ASSERT(set->n >= 1);
 	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
 	ASSERT(writexrefs());
 	maxkeynum=-1;
@@ -489,7 +490,9 @@ delete_xref_if_present (CNSTRING key)
 	INT lo=0;
 	INT i=0;
 
-	ASSERT(key && key[0] && key[1]);
+	ASSERT(key);
+	ASSERT(key[0]);
+	ASSERT(key[1]);
 	set = get_deleteset_from_type(key[0]);
 	keynum = atoi(key + 1);
 	ASSERT(keynum>0);

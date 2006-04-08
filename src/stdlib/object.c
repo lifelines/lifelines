@@ -77,7 +77,8 @@ addref_object (OBJECT obj)
 	vtable = (*obj);
 	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
 
-	ASSERT(vtable->isref_fnc && vtable->addref_fnc);
+	ASSERT(vtable->isref_fnc);
+	ASSERT(vtable->addref_fnc);
 	return (*vtable->addref_fnc)(obj);
 }
 /*=================================================
@@ -92,9 +93,11 @@ release_object (OBJECT obj)
 	ASSERT(obj);
 
 	vtable = (*obj);
-	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
 
-	ASSERT(vtable->isref_fnc && vtable->release_fnc);
+	ASSERT(vtable->vtable_magic == VTABLE_MAGIC);
+	ASSERT(vtable->isref_fnc);
+	ASSERT(vtable->release_fnc);
+
 	return (*vtable->release_fnc)(obj);
 }
 

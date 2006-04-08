@@ -150,7 +150,9 @@ static void
 record_dead_symtab (SYMTAB symtab)
 {
 	LIST newlist = create_list2(LISTNOFREE);
-	ASSERT(live_symtabs && length_list(live_symtabs)>0);
+	ASSERT(live_symtabs);
+	ASSERT(length_list(live_symtabs)>0);
+
 	/* hard to delete an element, so create a new shorter list */
 	FORLIST(live_symtabs, e)
 		if (e != symtab)

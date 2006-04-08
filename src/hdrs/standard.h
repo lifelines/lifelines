@@ -94,13 +94,13 @@ typedef unsigned char uchar;
 
 /* BOOLEAN TYPES */
 #ifndef BOOLEAN
-#define BOOLEAN int
+#define BOOLEAN	int
 #endif
 #ifndef TRUE
-#define TRUE 1
+#define TRUE	1
 #endif
 #ifndef FALSE
-#define FALSE 0
+#define FALSE	0
 #endif
 
 /* INTEGER AND FLOATING POINT TYPES */

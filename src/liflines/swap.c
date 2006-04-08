@@ -156,7 +156,8 @@ swap_children_impl (NODE fam, NODE one, NODE two)
 {
 	STRING str;
 	NODE tmp;
-	ASSERT(one && two);
+	ASSERT(one);
+	ASSERT(two);
    /* Swap CHIL nodes and update database */
 	str = nval(one);
 	nval(one) = nval(two);
@@ -321,8 +322,10 @@ swap_families (RECORD irec)
 		}
 	}
 
-	ASSERT(one && two);
-	ASSERT(eqstr(ntag(one), "FAMS") && eqstr(ntag(two), "FAMS"));
+	ASSERT(one);
+	ASSERT(two);
+	ASSERT(eqstr(ntag(one), "FAMS"));
+	ASSERT(eqstr(ntag(two), "FAMS"));
 
 /* Ask user to confirm */
 	if (!ask_yes_or_no(_(qScffswp)))

@@ -763,7 +763,8 @@ addmissingkeys (INT t)          /* type of record: INDI_REC ... */
 			ELMNT el = index_data[i];
 			if(Type(el) == t) {
 				j = atoi(Key(el)+1);
-				ASSERT((j>0) && (j <= tmax));
+				ASSERT(j>0);
+				ASSERT(j <= tmax);
 				kp[j] = 1;
 			}
 		}

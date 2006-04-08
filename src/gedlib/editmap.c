@@ -76,7 +76,8 @@ save_tt_to_file (INT ttnum, STRING filename)
 {
 	INT rtn;
 	TRANSLFNC translfnc = NULL; /* Must not translate the translation table! */
-	ASSERT(ttnum>=0 && ttnum<NUM_TT_MAPS);
+	ASSERT(ttnum>=0);
+	ASSERT(ttnum<NUM_TT_MAPS);
 	rtn = retrieve_to_textfile(map_keys[ttnum], filename, translfnc);
 	return (rtn != RECORD_ERROR);
 }

@@ -226,7 +226,8 @@ load_one_cmplx_pic (INT ecmplx, STRING abbrev, STRING full)
 {
 	STRING loc_abbrev = strsave(abbrev);
 	STRING loc_full = strsave(full);
-	ASSERT(ecmplx>=0 && ecmplx <ECMPLX_END);
+	ASSERT(ecmplx>=0);
+	ASSERT(ecmplx <ECMPLX_END);
 	/* 0=ABT (cmplx=3) */
 	cmplx_pics[ecmplx][0] = upper_dup(loc_abbrev);
 	/* 1=Abt (cmplx=4) */

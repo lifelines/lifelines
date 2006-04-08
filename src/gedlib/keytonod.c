@@ -608,7 +608,8 @@ remove_direct (CACHE cache, CACHEEL cel)
 {
 	CACHEEL prev = cprev(cel);
 	CACHEEL next = cnext(cel);
-	ASSERT(cache && cel);
+	ASSERT(cache);
+	ASSERT(cel);
 	if (prev) cnext(prev) = next;
 	if (next) cprev(next) = prev;
 	if (!prev) cacfirstdir(cache) = next;
@@ -622,7 +623,8 @@ static void
 first_direct (CACHE cache, CACHEEL cel)
 {
 	CACHEEL frst = cacfirstdir(cache);
-	ASSERT(cache && cel);
+	ASSERT(cache);
+	ASSERT(cel);
 	cacsizedir(cache)++;
 	cprev(cel) = NULL;
 	cnext(cel) = frst;
@@ -636,7 +638,8 @@ first_direct (CACHE cache, CACHEEL cel)
 static void
 direct_to_first (CACHE cache, CACHEEL cel)
 {
-	ASSERT(cache && cel);
+	ASSERT(cache);
+	ASSERT(cel);
 	if (cel == cacfirstdir(cache)) return;
 	remove_direct(cache, cel);
 	first_direct(cache, cel);
@@ -660,7 +663,8 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	RECORD rec=0;
 	int i, j;
 
-	ASSERT(cache && key);
+	ASSERT(cache);
+	ASSERT(cel);
 	rec = NULL;
 	if ((rawrec = retrieve_raw_record(key, &len))) 
 		/* 2003-11-22, we should use string_to_node here */
@@ -740,7 +744,8 @@ static NODE
 key_typed_to_node (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
-	ASSERT(cache && key);
+	ASSERT(cache);
+	ASSERT(key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
 	return cnode(cel);
@@ -754,7 +759,8 @@ static RECORD
 key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 {
 	CACHEEL cel;
-	ASSERT(cache && key);
+	ASSERT(cache);
+	ASSERT(key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
 	return get_record_for_cel(cel);
@@ -817,7 +823,8 @@ qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	CACHEEL cel=0;
 	RECORD rec=0;
 
-	ASSERT(cache && key);
+	ASSERT(cache);
+	ASSERT(key);
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
 	rec = get_record_for_cel(cel);
@@ -988,7 +995,8 @@ node_to_cache (CACHE cache, NODE top)
 	CACHEEL cel=0;
 	ASSERT(cache);
 	ASSERT(top);
-	ASSERT(!nparent(top) && !nsibling(top)); /* should be a root */
+	ASSERT(!nparent(top));	/* should be a root */
+	ASSERT(!nsibling(top)); /* should be a root */
 	if (nestr(cacname(cache), "OTHR")) {
 		/* only INDI records in INDI cache, etc */
 		if (!eqstr(cacname(cache), ntag(top))) {
@@ -1071,7 +1079,8 @@ static void
 put_node_in_cache (CACHE cache, CACHEEL cel, NODE node, STRING key)
 {
 	BOOLEAN travdone = FALSE;
-	ASSERT(cache && node);
+	ASSERT(cache);
+	ASSERT(node);
 	ASSERT(cacsizedir(cache) < cacmaxdir(cache));
 	init_cel(cel);
 	insert_table_ptr(cacdata(cache), key, cel);
@@ -1377,7 +1386,8 @@ static CACHEEL
 qkey_to_typed_cacheel (STRING key)
 {
 	char ntype;
-	ASSERT(key && key[0]);
+	ASSERT(key);
+	ASSERT(key[0]);
 	ntype = key[0];
 	switch(ntype) {
 	case 'I': return qkey_to_indi_cacheel(key);

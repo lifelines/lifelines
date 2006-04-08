@@ -129,7 +129,8 @@ join_indi (NODE indi,
            NODE fams)
 {
 	NODE node = NULL;
-	ASSERT(indi && eqstr("INDI", ntag(indi)));
+	ASSERT(indi);
+	ASSERT(eqstr("INDI", ntag(indi)));
 
 	nchild(indi) = NULL;
 	if (name) {

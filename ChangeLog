@@ -1,4 +1,24 @@
+2006-04-xx Matt Emmerton
+
+	* ChangeLog src/hdrs/standard.h src/tools/dbverify.c
+	src/interp/pvalmath.c src/interp/pvalue.c src/interp/symtab.c
+	src/liflines/browse.c src/liflines/lbrowse.c src/liflines/merge.c
+	src/liflines/swap.c src/liflines/tandem.c src/liflines/valgdcom.c
+	src/stdlib/array.c src/stdlib/hashtab.c src/stdlib/icvt.c
+	src/stdlib/object.c src/stdlib/zstr.c src/gedlib/charmaps.c
+	src/gedlib/charprops.c src/gedlib/datei.c src/gedlib/dateprint.c
+	src/gedlib/dblist.c src/gedlib/editmap.c src/gedlib/indiseq.c
+	src/gedlib/keytonod.c src/gedlib/lldatabase.c src/gedlib/record.c
+	src/gedlib/remove.c src/gedlib/spltjoin.c src/gedlib/translat.c
+	src/gedlib/xreffile.c
+
+	Split composite multiple ASSERTs (eg, ASSERT(a&&b); ) into
+	separate ASSERTs. (eg, ASSERT(a); ASSERT(b); )  This makes it
+	easier to determine which assertion failed when LifeLines
+	crashes -- especially without a core dump.
+
 2006-02-11 Stephen Dum
+
 	* ChangeLog reports/Makefile.am reports/ttable.ll
 	reports/st/test_fam_it.ll reports/st/test_forfam.ll
 	reports/st/test_forindi.ll reports/st/test_indi_it.ll

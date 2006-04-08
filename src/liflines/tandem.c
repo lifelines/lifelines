@@ -78,8 +78,12 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	BOOLEAN reuse=FALSE;
 	static INT mode = 'n';
 
-	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
-	ASSERT(prec2 && *prec2 && nztype(*prec2)=='I');
+	ASSERT(prec1);
+	ASSERT(*prec1);
+	ASSERT(nztype(*prec1)=='I');
+	ASSERT(prec2);
+	ASSERT(*prec2);
+	ASSERT(nztype(*prec2)=='I');
 	ASSERT(!*pseq);
 	current1 = *prec1;
 	current2 = *prec2;
@@ -196,8 +200,12 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	BOOLEAN reuse=FALSE;
 	static INT mode = 'n';
 
-	ASSERT(prec1 && *prec1 && nztype(*prec1)=='F');
-	ASSERT(prec2 && *prec2 && nztype(*prec2)=='F');
+	ASSERT(prec1);
+	ASSERT(*prec1);
+	ASSERT(nztype(*prec1)=='F');
+	ASSERT(prec2);
+	ASSERT(*prec2);
+	ASSERT(nztype(*prec2)=='F');
 	ASSERT(!*pseq);
 	current1 = *prec1;
 	current2 = *prec2;

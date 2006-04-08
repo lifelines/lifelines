@@ -220,7 +220,8 @@ remove_spouse (NODE indi, NODE fam)
 
 /* Remove (one) FAMS line from spouse */
 	node = find_node(indi, "FAMS", nxref(fam), &last);
-	ASSERT(node && last);
+	ASSERT(node);
+	ASSERT(last);
 	nsibling(last) = nsibling(node);
 	free_node(node);
 	node = NULL;

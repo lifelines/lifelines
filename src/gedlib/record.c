@@ -168,7 +168,8 @@ nzcel (RECORD rec)
 void
 record_set_cel (RECORD rec, CACHEEL cel)
 {
-	ASSERT(rec && cel);
+	ASSERT(rec);
+	ASSERT(cel);
 	rec->rec_top = 0;
 	rec->rec_cel = cel;
 }
@@ -179,7 +180,8 @@ record_set_cel (RECORD rec, CACHEEL cel)
 void
 record_remove_cel (RECORD rec, CACHEEL cel)
 {
-	ASSERT(rec && cel);
+	ASSERT(rec);
+	ASSERT(cel);
 	ASSERT(rec->rec_cel == cel);
 	rec->rec_cel = 0;
 }

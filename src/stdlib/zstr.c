@@ -127,7 +127,8 @@ dbgchk (ZSTR zstr)
 	ASSERT(zstr->str);
 	ASSERT(zstr->end);
 	ASSERT(zstr->max);
-	ASSERT(zstr->end >= zstr->str && zstr->end < zstr->str + zstr->max);
+	ASSERT(zstr->end >= zstr->str);
+	ASSERT(zstr->end < (zstr->str + zstr->max));
 	ASSERT(zstr->magic == 7843);
 }
 /* create & return new zstring */
@@ -385,7 +386,8 @@ void
 zs_move (ZSTR zstr, ZSTR * pzsrc)
 {
 	DBGCHK(zstr);
-	ASSERT(pzsrc && *pzsrc);
+	ASSERT(pzsrc);
+	ASSERT(*pzsrc);
 	free(zstr->str);
 	memcpy(zstr, (*pzsrc), sizeof(*zstr));
 	free(*pzsrc);

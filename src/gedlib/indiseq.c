@@ -2044,7 +2044,8 @@ indiseq_is_valtype_null (INDISEQ seq)
 INT
 get_indiseq_ival (INDISEQ seq, INT i)
 {
-	ASSERT(i >= 0 && i < ISize(seq));
+	ASSERT(i >= 0);
+	ASSERT(i < ISize(seq));
 	ASSERT(IValtype(seq) == ISVAL_INT || IValtype(seq) == ISVAL_NUL);
 	return sval(IData(seq)[i]).i;
 
@@ -2150,7 +2151,9 @@ calc_indiseq_name_el (INDISEQ seq, INT index)
 {
 	STRING key, name;
 
-	ASSERT(seq && index>=0 && index<ISize(seq));
+	ASSERT(seq);
+	ASSERT(index>=0);
+	ASSERT(index<ISize(seq));
 
 	if (IFlags(seq) & WITHNAMES)
 		return;

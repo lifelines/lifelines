@@ -452,7 +452,8 @@ sgettext (const char *msgid)
 ZSTR
 transl_get_predefined_menukey (INT trnum)
 {
-	ASSERT(trnum>=0 && trnum<ARRSIZE(conversions_keys));
+	ASSERT(trnum>=0);
+	ASSERT(trnum<ARRSIZE(conversions_keys));
 	return zs_news(sgettext(conversions_keys[trnum]));
 }
 /*==========================================================
@@ -510,7 +511,8 @@ transl_are_all_conversions_ok (void)
 static struct conversion_s *
 getconvert (INT trnum)
 {
-	ASSERT(trnum>=0 && trnum<NUM_TT_MAPS);
+	ASSERT(trnum>=0);
+	ASSERT(trnum<NUM_TT_MAPS);
 	return &conversions[trnum];
 }
 /*==========================================================
@@ -581,7 +583,8 @@ transl_is_xlat_valid (XLAT xlat)
 CNSTRING
 transl_get_map_name (INT trnum)
 {
-	ASSERT(trnum>=0 && trnum<NUM_TT_MAPS);
+	ASSERT(trnum>=0);
+	ASSERT(trnum<NUM_TT_MAPS);
 	return _(getconvert(trnum)->name);
 }
 /*==========================================================

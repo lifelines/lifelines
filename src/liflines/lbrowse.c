@@ -62,8 +62,12 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	RECORD rec=0;
 	INDISEQ seq, newseq;
 
-	ASSERT(prec1 && prec2 && pseq);
-	ASSERT(!*prec1 && !*prec2 && *pseq);
+	ASSERT(prec1);
+	ASSERT(!*prec1);
+	ASSERT(prec2);
+	ASSERT(!*prec2);
+	ASSERT(pseq);
+	ASSERT(*pseq);
 	seq = *pseq;
 	*pseq = 0;
 	current_seq = NULL;

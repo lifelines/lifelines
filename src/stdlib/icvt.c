@@ -72,7 +72,8 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 	int chwidth=1;
 	int inlen = sin ? strlen(sin) : 0;
 
-	ASSERT(src && dest);
+	ASSERT(src);
+	ASSERT(dest);
 
 	ict = iconv_open(dest, src);
 

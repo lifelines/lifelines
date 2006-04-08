@@ -44,7 +44,8 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 	STRING dirs=0;
 	INT ndirs=0;
 	STRING p=0;
-	ASSERT(!(*dblist) && !(*dbdesclist));
+	ASSERT(!(*dblist));
+	ASSERT(!(*dbdesclist));
 	*dblist = create_list2(LISTDOFREE);
 	*dbdesclist = create_list2(LISTDOFREE);
 	if (!path || !path[0])

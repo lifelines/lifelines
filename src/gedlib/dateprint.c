@@ -233,7 +233,8 @@ format_eratime (ZSTR zstr, INT eratime, INT efmt)
 static void
 format_cal (ZSTR zstr, INT cal)
 {
-	ASSERT(cal>=0 && cal<ARRSIZE(calendar_pics));
+	ASSERT(cal>=0);
+	ASSERT(cal<ARRSIZE(calendar_pics));
 	if (calendar_pics[cal]) {
 		ZSTR zs2 = zprintpic1(calendar_pics[cal], zs_str(zstr));
 		zs_move(zstr, &zs2);
@@ -251,8 +252,10 @@ static STRING
 get_cmplx_pic (INT ecmplx, INT cmplxnum)
 {
 	/* load_lang already generated all the pictures */
-	ASSERT(ecmplx>=0 && ecmplx<ECMPLX_END);
-	ASSERT(cmplxnum>=0 && cmplxnum<6);
+	ASSERT(ecmplx>=0);
+	ASSERT(ecmplx<ECMPLX_END);
+	ASSERT(cmplxnum>=0);
+	ASSERT(cmplxnum<6);
 	if (cmplx_custom[ecmplx])
 		return cmplx_custom[ecmplx];
 	return cmplx_pics[ecmplx][cmplxnum];
@@ -612,7 +615,8 @@ format_month (INT cal, struct tag_dnum mo, INT mfmt)
 	if (mfmt == 11)
 		return roman_upper[moval-1];
 	casing = mfmt-3;
-	ASSERT(casing>=0 && casing<ARRSIZE(months_gj[0]));
+	ASSERT(casing>=0);
+	ASSERT(casing<ARRSIZE(months_gj[0]));
 	switch (cal) {
 	case GDV_HEBREW: parr = months_heb; break;
 	case GDV_FRENCH: parr = months_fr; break;

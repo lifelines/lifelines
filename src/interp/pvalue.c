@@ -572,7 +572,8 @@ eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 {
 	INT hitype;
 
-	ASSERT(val1 && val2);
+	ASSERT(val1);
+	ASSERT(val2);
 	if (ptype(val1) == ptype(val2)) return;
 	if (ptype(val1) == PNULL)
 		ptype(val1) = ptype(val2);

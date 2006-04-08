@@ -159,7 +159,8 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 	STRING key, name;
 
 	/* verify & clear the output arguments */
-	ASSERT(prec && pseq);
+	ASSERT(prec);
+	ASSERT(pseq);
 	*prec = 0;
 	*pseq =0;
 
@@ -362,8 +363,11 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	char c2;
 	INT rtn=0; /* return code */
 
-	ASSERT(prec1 && *prec1 && nztype(*prec1)=='I');
-	ASSERT(!*prec2 && !*pseq);
+	ASSERT(prec1);
+	ASSERT(*prec1);
+	ASSERT(nztype(*prec1)=='I');
+	ASSERT(!*prec2);
+	ASSERT(!*pseq);
 
 	/* move working record into current */
 	setrecord(&current, prec1);
@@ -751,8 +755,10 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	char c2;
 	INT rtn=0; /* return code */
 
-	ASSERT(prec1 && *prec1);
-	ASSERT(!*prec2 && !*pseq);
+	ASSERT(prec1);
+	ASSERT(*prec1);
+	ASSERT(!*prec2);
+	ASSERT(!*pseq);
 
 	/* move working record into current */
 	setrecord(&current, prec1);
@@ -1027,8 +1033,11 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	char c2;
 	INT rtn=0; /* return code */
 
-	ASSERT(prec1 && *prec1 && nztype(*prec1)=='F');
-	ASSERT(!*prec2 && !*pseq);
+	ASSERT(prec1);
+	ASSERT(*prec1);
+	ASSERT(nztype(*prec1)=='F');
+	ASSERT(!*prec2);
+	ASSERT(!*pseq);
 
 	/* move working record into current */
 	setrecord(&current, prec1);

@@ -116,7 +116,9 @@ create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
 	for (i = 0; i < n; i++) {
 		left = lefts[i];
 		right = rights[i];
-		ASSERT(left && *left && right);
+		ASSERT(left);
+		ASSERT(right);
+		ASSERT(*left);
 		c = (uchar) *left++;
 		if (tt->start[c] == NULL)
 			tt->start[c] = create_xnode(NULL, c, NULL);

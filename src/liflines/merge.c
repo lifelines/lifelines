@@ -85,7 +85,8 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 
 /* Do start up checks */
 
-	ASSERT(indi1 && indi2);
+	ASSERT(indi1);
+	ASSERT(indi2);
 	ASSERT(eqstr("INDI", ntag(indi1)));
 	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (readonly) {
@@ -419,7 +420,8 @@ merge_two_fams (NODE fam1,
 		message(_(qSronlym));
 		return NULL;
 	}
-	ASSERT(fam1 && fam2);
+	ASSERT(fam1);
+	ASSERT(fam2);
 	ASSERT(eqstr("FAM", ntag(fam1)));
 	ASSERT(eqstr("FAM", ntag(fam2)));
 	if (fam1 == fam2) {

@@ -92,7 +92,8 @@ destroy_array (ARRAY array)
 void
 set_array_obj (ARRAY array, INT i, OBJECT obj)
 {
-	ASSERT(i>=0 && i< 0x1000000); /* 16,777,216 */
+	ASSERT(i>=0);
+	ASSERT(i< 0x1000000); /* 16,777,216 */
 	if (i>=AMax(array)) {
 		enlarge_array(array, i);
 	}

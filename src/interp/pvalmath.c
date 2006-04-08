@@ -390,7 +390,8 @@ is_numeric_zero (PVALUE val)
 static void
 num_conform_pvalues (CNSTRING op, PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 {
-	ASSERT(val1 && val2);
+	ASSERT(val1);
+	ASSERT(val2);
 
 	if (ptype(val1) == PNULL)
 		ptype(val1) = ptype(val2);
