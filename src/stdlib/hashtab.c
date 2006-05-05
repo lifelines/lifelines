@@ -274,7 +274,7 @@ hash (HASHTAB tab, CNSTRING key)
 		hval += *ckey++;
 	hval %= tab->maxhash;
 	ASSERT(hval>=0);
-	ASSERThval < tab->maxhash);
+	ASSERT(hval < tab->maxhash);
 	return hval;
 }
 /*================================

@@ -1,3 +1,9 @@
+2006-05-05 Perry Rapp
+
+	* ChangeLog src/stdlib/hashtab.c
+
+	Fix typo so lifelines compiles again.
+
 2006-04-xx Matt Emmerton
 
 	* ChangeLog src/hdrs/standard.h src/tools/dbverify.c
