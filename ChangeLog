@@ -6,6 +6,11 @@
 	Modify xrefs_get_counts_from_unopened_db to report bad dbs in
 	description rather than with ASSERT.
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Fix bad ASSERT which stopped lifelines from working at all.
+	sfbug#1489310
+
 2006-05-05 Perry Rapp
 
 	* ChangeLog src/stdlib/hashtab.c

@@ -664,7 +664,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	int i, j;
 
 	ASSERT(cache);
-	ASSERT(cel);
+	ASSERT(key);
 	rec = NULL;
 	if ((rawrec = retrieve_raw_record(key, &len))) 
 		/* 2003-11-22, we should use string_to_node here */
