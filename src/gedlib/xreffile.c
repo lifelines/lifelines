@@ -756,15 +756,19 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
  * xrefs_get_counts_from_unopened_db --
  *  read record counts out of file on disk
  * returns FALSE if specified path is not the root of a traditional lifelines database
+ * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
 BOOLEAN
 xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs)
+	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
 {
 	char scratch[100];
+	static char errstr[256];
 	FILE * fp = 0;
 	INT i;
 	INT ndels[5], nmax[5];
+
+	*errptr = 0;
 
 	ASSERT(!xreffp);
 	sprintf(scratch, "%s/xrefs", path);
@@ -772,13 +776,23 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 		return FALSE;
 	}
 	for (i=0; i<5; ++i) {
-		ASSERT(fread(&ndels[i], sizeof(INT), 1, fp) == 1);
+		if (fread(&ndels[i], sizeof(INT), 1, fp) != 1) {
+			snprintf(errstr, sizeof(errstr), "ndels[%d] bad", i);
+			*errptr = errstr;
+			fclose(fp);
+			return FALSE;
+		}
 	}
 	for (i=0; i<5; ++i) {
 		INT j;
 		for (j=0; j<ndels[i]; ++j) {
 			INT k;
-			ASSERT(fread(&k, sizeof(INT), 1, fp) == 1);
+			if (fread(&k, sizeof(INT), 1, fp) != 1) {
+				snprintf(errstr, sizeof(errstr), "ndels[%d]#%d bad", i, j);
+				*errptr = errstr;
+				fclose(fp);
+				return FALSE;
+			}
 			if (!j)
 				nmax[i] = k;
 		}

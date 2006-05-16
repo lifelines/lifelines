@@ -102,14 +102,18 @@ getdbdesc (STRING path, STRING userpath)
 {
 	INT nindis=0, nfams=0, nsours=0, nevens=0, nothrs=0;
 	char desc[MAXPATHLEN] = "";
+	char * errptr = 0;
 	if (xrefs_get_counts_from_unopened_db(path, &nindis, &nfams
-		, &nsours, &nevens, &nothrs)) {
+		, &nsours, &nevens, &nothrs, &errptr)) {
 
 		llstrapps(desc, sizeof(desc), uu8, userpath);
 		llstrapps(desc, sizeof(desc), uu8, " <");
 		llstrappf(desc, sizeof(desc), uu8, _(qSdbrecstats)
 			, nindis, nfams, nsours, nevens, nothrs);
 		llstrappf(desc, sizeof(desc), uu8, ">");
+	} else if (errptr) {
+		llstrapps(desc, sizeof(desc), uu8, userpath);
+		llstrappf(desc, sizeof(desc), uu8, " - bad db: %s", errptr);
 	}
 	return desc[0] ? strsave(desc) : 0;
 }

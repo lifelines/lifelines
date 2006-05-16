@@ -1,3 +1,11 @@
+2006-05-16 Perry Rapp
+
+	* ChangeLog src/gedlib/dblist.c src/gedlib/gedcomi.h
+	src/gedlib/xreffile.c
+
+	Modify xrefs_get_counts_from_unopened_db to report bad dbs in
+	description rather than with ASSERT.
+
 2006-05-05 Perry Rapp
 
 	* ChangeLog src/stdlib/hashtab.c

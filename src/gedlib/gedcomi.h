@@ -36,6 +36,6 @@ void record_set_cel(RECORD rec, CACHEEL cel);
 
 /* xreffile.c */
 BOOLEAN xrefs_get_counts_from_unopened_db(CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs);
+	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr);
 
 #endif /* _GEDCOM_PRIV_H */
