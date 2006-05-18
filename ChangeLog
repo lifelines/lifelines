@@ -1,3 +1,9 @@
+2006-05-18 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Update French translation from Patrick Texier.
+
 2006-05-16 Perry Rapp
 
 	* ChangeLog src/gedlib/dblist.c src/gedlib/gedcomi.h
