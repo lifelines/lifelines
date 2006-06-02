@@ -101,6 +101,7 @@ static void init_pactx(PACTX pactx);
 static BOOLEAN interpret_prog(PNODE begin, SYMTAB stab);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void print_report_duration(INT duration, INT uiduration);
+static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static void progmessage(MSG_LEVEL level, STRING);
 static void remove_tables(PACTX pactx);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
@@ -1890,13 +1891,15 @@ traverse_leave:
 	return irc;
 }
 /*=============================================+
- * prog_var_error -- Report a run time program error
+ * prog_var_error_zstr -- Report a run time program error
  *  due to mistyping of a particular variable
  *  node:  [IN]  current parse node
  *  stab:  [IN]  current symbol table (lexical scope)
  *  arg:   [IN]  if non-null, parse node of troublesome argument
  *  val:   [IN]  if non-null, PVALUE of troublesome argument
- *  fmt... [IN]  message
+ *  zstr:  [IN]  message
+ *
+ * Inline debugger is implemented here
  * See vprog_error
  * Created: 2002/02/17, Perry Rapp
  *============================================*/
@@ -1906,20 +1909,17 @@ struct dbgsymtab_s
 	INT count;
 	INT current;
 };
-void
-prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
+static void
+prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 {
 	STRING choices[4];
-	INT rtn;
-	va_list args;
-	ZSTR zstr;
+	INT rtn=0;
+
+	ASSERT(zstr);
 
 	arg = arg; /* unused */
 	/* TODO: What to do with arg ? Perry, 2003-01-19 */
 
-	va_start(args, fmt);
-	zstr = zs_newvf(fmt, args);
-	va_end(args);
 	if (val) {
 		ZSTR zval = describe_pvalue(val);
 		zs_appf(zstr, " (value: %s)", zs_str(zval));
@@ -1963,6 +1963,30 @@ dbgloop:
 		zs_free(&zstr);
 		free_array_strings(ARRSIZE(choices), choices);
 	}
+}
+/*=============================================+
+ * prog_var_error -- Report a run time program error
+ *  due to mistyping of a particular variable
+ *  node:  [IN]  current parse node
+ *  stab:  [IN]  current symbol table (lexical scope)
+ *  arg:   [IN]  if non-null, parse node of troublesome argument
+ *  val:   [IN]  if non-null, PVALUE of troublesome argument
+ *  fmt... [IN]  message
+ *
+ * Inline debugger is implemented here
+ * See vprog_error
+ * Created: 2005-06-01, Perry Rapp
+ *============================================*/
+void
+prog_var_error (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...)
+{
+	va_list args;
+	ZSTR zstr;
+
+	va_start(args, fmt);
+	zstr = zs_newvf(fmt, args);
+	va_end(args);
+	prog_var_error_zstr(node, stab, arg, val, zstr);
 }
 /*====================================================
  * disp_symtab -- Display contents of a symbol table

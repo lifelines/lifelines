@@ -1019,7 +1019,7 @@ llrpt_parents (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
 	if (*eflg) {
-		prog_error(node, "arg to parents must be a person");
+		prog_error(node, _(nonind1), "parents");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_fam(NULL);
@@ -1461,19 +1461,23 @@ PVALUE
 llrpt_and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
+	BOOLEAN rc = TRUE; /* result of function */
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
-	BOOLEAN rc = TRUE;
+	INT argix=1; /* count arguments for error message */
 	if (*eflg) {
-		prog_error(node, "an arg to and is not boolean");
+		prog_var_error(node, stab, arg, val1, nonboox, "and", "1");
 		return NULL;
 	}
 	rc = rc && pvalue_to_bool(val1);
 	delete_pvalue(val1);
 	while ((arg = inext(arg))) {
+		++argix;
 		if (rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
-				prog_error(node, "an arg to and is not boolean");
+				char numstr[33];
+				snprintf(numstr, sizeof(numstr), "%d", argix);
+				prog_var_error(node, stab, arg, val2, nonboox, "and", numstr);
 				return NULL;
 			}
 			rc = rc && pvalue_to_bool(val2);
@@ -1490,19 +1494,23 @@ PVALUE
 llrpt_or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	BOOLEAN rc = FALSE;
+	BOOLEAN rc = TRUE; /* result of function */
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
+	INT argix=1; /* count arguments for error message */
 	if (*eflg) {
-		prog_error(node, "an arg to or is not boolean");
+		prog_var_error(node, stab, arg, val1, nonboox, "or", "1");
 		return NULL;
 	}
 	rc = rc || pvalue_to_bool(val1);
 	delete_pvalue(val1);
 	while ((arg = inext(arg))) {
+		++argix;
 		if (!rc) {
 			val2 = eval_and_coerce(PBOOL, arg, stab, eflg);
 			if (*eflg) {
-				prog_error(node, "an arg to or is not boolean");
+				char numstr[33];
+				snprintf(numstr, sizeof(numstr), "%d", argix);
+				prog_var_error(node, stab, arg, val2, nonboox, "or", numstr);
 				return NULL;
 			}
 			rc = rc || pvalue_to_bool(val2);
@@ -1521,17 +1529,17 @@ llrpt_add (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE arg = (PNODE) iargs(node);
 	PVALUE val2, val1 = evaluate(arg, stab, eflg);
 	ZSTR zerr=0;
-	INT iarg=1;
+	INT argix=1; /* count arguments for error message */
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val1, badargx, "add", "1");
 		return NULL;
 	}
 	while ((arg = inext(arg))) {
-		++iarg;
+		++argix;
 		val2 = evaluate(arg, stab, eflg);
 		if (*eflg) {
 			char numstr[33];
-			snprintf(numstr, sizeof(numstr), "%d", iarg);
+			snprintf(numstr, sizeof(numstr), "%d", argix);
 			prog_var_error(node, stab, arg, val2, badargx, "add", numstr);
 			return NULL;
 		}
