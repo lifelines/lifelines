@@ -986,12 +986,16 @@ llrpt_short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_fath (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	PVALUE indival=0;
+	NODE indi = eval_indi2(arg, stab, eflg, NULL, &indival);
 	NODE fath = NULL;
 	if (*eflg) {
-		prog_error(node, _(nonind1), "father");
+		prog_var_error(node, stab, arg, indival, _(nonind1), "father");
+		delete_pvalue(indival);
 		return NULL;
 	}
+	delete_pvalue(indival);
 	if (indi)
 		fath = indi_to_fath(indi);
 	return create_pvalue_from_indi(fath);
@@ -1086,7 +1090,7 @@ llrpt_f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	char scratch[20];
 	char format[10];
 	INT prec = 2;
-	PNODE arg = (PNODE) iargs(node);
+	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	float fval;
 	if (*eflg) {
@@ -3573,9 +3577,22 @@ llrpt_fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*=======================================+
  * eval_indi -- Evaluate person expression
+ *  if any error occurs, *eflg is set to non-null
+ *  if caller wants pointer to cache element, pass in non-null pcel
  *======================================*/
 NODE
 eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
+{
+	return eval_indi2(expr, stab, eflg, pcel, NULL);
+}
+/*=======================================+
+ * eval_indi2 -- Evaluate person expression
+ *  If pval is non-null, it will be used to return
+ *  the evaluation PVALUE in case of error (*eflag set to non-zero)
+ *  in this case, caller must delete it
+ *======================================*/
+NODE
+eval_indi2 (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel, PVALUE *pval)
 {
 	NODE indi=0;
 	CACHEEL cel=0;
@@ -3583,8 +3600,13 @@ eval_indi (PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel)
 
 	if (*eflg || !val) {
 		if (val) {
-			delete_pvalue(val);
-			val=NULL;
+			if (pval) {
+				*pval = val;
+				/* now caller owns val */
+			} else {
+				delete_pvalue(val);
+				val=NULL;
+			}
 		}
 		return NULL;
 	}

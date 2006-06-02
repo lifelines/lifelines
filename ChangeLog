@@ -10,6 +10,12 @@
 
 	Upgrade llrpt_gettext from prog_error to prog_var_error (ie, debugger).
 
+	* ChangeLog src/interp/alloc.c src/interp/builtin.c
+	src/interp/interp.c src/interp/interpi.h
+
+	Revamp pnode debug code to append into zstring, and 
+	modify prog_var_error_zstr to describe arg when val empty.
+
 2006-05-18 Perry Rapp
 
 	* ChangeLog po/fr.po
@@ -563,8 +569,8 @@
 
 	Add new marriages report to Makefile.am.
 
-	* ChangeLog src\gedlib\editvtab.c src\hdrs\gedcom.h
-	src\liflines\screen.c
+	* ChangeLog src/gedlib/editvtab.c src/hdrs/gedcom.h
+	src/liflines/screen.c
 
 	Fix user option validator to test before & after codeset
 	(test was failing when no preexisting option in user options).

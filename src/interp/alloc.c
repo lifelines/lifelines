@@ -107,6 +107,7 @@ static void clear_error_strings(void);
 static void clear_pnode(PNODE node);
 static PNODE create_pnode(PACTX pactx, INT type);
 static void delete_pnode(PNODE node);
+static void describe_pnodes(PNODE node, ZSTR zstr, INT max);
 static void free_pnode_memory(PNODE node);
 static void rptinfo_destructor(VTABLE *obj);
 static void set_parents(PNODE body, PNODE node);
@@ -1062,130 +1063,165 @@ show_pnodes (PNODE node)
 		if (node) llwprintf(",");
 	}
 }
+/*==========================================================
+ * describe_pnodes -- DEBUG routine that describes expression PNODE chain
+ *  into zstring
+ *========================================================*/
+static void
+describe_pnodes (PNODE node, ZSTR zstr, INT max)
+{
+	while (node) {
+		describe_pnode(node, zstr, max);
+		node = inext(node);
+		if (node)
+			zs_appc(zstr, ',');
+	}
+}
 /*====================================================
  * debug_show_one_pnode -- DEBUG routine that show one PNODE
  *==================================================*/
 void
 debug_show_one_pnode (PNODE node)     /* node to print */
 {
+	ZSTR zstr = zs_newn(512);
+	INT max = 512;
+	describe_pnode(node, zstr, max);
+	llwprintf(zs_str(zstr));
+}
+/*====================================================
+ * debug_show_one_pnode -- DEBUG routine to describe one node
+ *  appending description into zstring
+ *  but not more than max chars
+ *==================================================*/
+void
+describe_pnode (PNODE node, ZSTR zstr, INT max)
+{
+	if ((INT)zs_len(zstr) >= max-2)
+		return;
+	if ((INT)zs_len(zstr) >= max-7) {
+		if (zs_str(zstr)[zs_len(zstr)-1] != '.')
+			zs_apps(zstr, "...");
+		return;
+	}
+
 	switch (itype(node)) {
 
 	case IICONS:
-		llwprintf("%d", pvalue_to_int(ivalue(node)));
+		zs_appf(zstr, "%d", pvalue_to_int(ivalue(node)));
 		break;
 	case IFCONS:
-		llwprintf("%f", pvalue_to_float(ivalue(node)));
+		zs_appf(zstr, "%f", pvalue_to_float(ivalue(node)));
 		break;
 	case ILCONS:
-		llwprintf("*ni*");
+		zs_apps(zstr, "*ni*");
 		break;
 	case ISCONS:
-		llwprintf("^^%s^^", pvalue_to_string(ivalue(node)));
+		zs_appf(zstr, "^^%s^^", pvalue_to_string(ivalue(node)));
 		break;
 	case IIDENT:
-		llwprintf("%s", iident(node));
+		zs_appf(zstr, "%s", iident(node));
 		break;
 	case IIF:
-		llwprintf("if(");
-		show_pnodes(icond(node));
-		llwprintf("){");
-		show_pnodes(ithen(node));
-		llwprintf("}");
+		zs_apps(zstr, "if(");
+		describe_pnodes(icond(node), zstr, max);
+		zs_apps(zstr, "){");
+		describe_pnodes(ithen(node), zstr, max);
+		zs_apps(zstr, "}");
 		if (ielse(node)) {
-			llwprintf("else{");
-			show_pnodes(ielse(node));
-			llwprintf("}");
+			zs_apps(zstr, "else{");
+			describe_pnodes(ielse(node), zstr, max);
+			zs_apps(zstr, "}");
 		}
 		break;
 	case IWHILE:
-		llwprintf("while(");
-		show_pnodes(icond(node));
-		llwprintf("){");
-		show_pnodes(ibody(node));
-		llwprintf("}");
+		zs_apps(zstr, "while(");
+		describe_pnodes(icond(node), zstr, max);
+		zs_apps(zstr, "){");
+		describe_pnodes(ibody(node), zstr, max);
+		zs_apps(zstr, "}");
 		break;
 	case IBREAK:
-		llwprintf("break ");
+		zs_apps(zstr, "break ");
 		break;
 	case ICONTINUE:
-		llwprintf("continue ");
+		zs_apps(zstr, "continue ");
 		break;
 	case IRETURN:
-		llwprintf("return(");
-		show_pnodes(iargs(node));
-		llwprintf(")");
+		zs_apps(zstr, "return(");
+		describe_pnodes(iargs(node), zstr, max);
+		zs_apps(zstr, ")");
 		break;
 	case IPDEFN:
-		llwprintf("*PDefn *");
+		zs_apps(zstr, "*PDefn *");
 		break;
 	case IPCALL:
-		llwprintf("%s(", iname(node));
-		show_pnodes(iargs(node));
-		llwprintf(")");
+		zs_appf(zstr, "%s(", iname(node));
+		describe_pnodes(iargs(node), zstr, max);
+		zs_apps(zstr, ")");
 		break;
 	case IFDEFN:
-		llwprintf("*FDefn *");
+		zs_apps(zstr, "*FDefn *");
 		break;
 	case IFCALL:
-		llwprintf("%s(", iname(node));
-		show_pnodes(iargs(node));
-		llwprintf(")");
+		zs_appf(zstr, "%s(", iname(node));
+		describe_pnodes(iargs(node), zstr, max);
+		zs_apps(zstr, ")");
 		break;
 	case IBCALL:
-		llwprintf("%s(", iname(node));
-		show_pnodes(iargs(node));
-		llwprintf(")");
+		zs_appf(zstr, "%s(", iname(node));
+		describe_pnodes(iargs(node), zstr, max);
+		zs_apps(zstr, ")");
 		break;
 	case ITRAV:
-		llwprintf("*Traverse *");
+		zs_apps(zstr, "*Traverse *");
 		break;
 	case INODES:
-		llwprintf("*Fornodes *");
+		zs_apps(zstr, "*Fornodes *");
 		break;
 	case IFAMILIES:
-		llwprintf("*FamiliesLoop *");
+		zs_apps(zstr, "*FamiliesLoop *");
 		break;
 	case ISPOUSES:
-		llwprintf("*SpousesLoop *");
+		zs_apps(zstr, "*SpousesLoop *");
 		break;
 	case ICHILDREN:
-		llwprintf("*ChildrenLoop *");
+		zs_apps(zstr, "*ChildrenLoop *");
 		break;
 	case IFAMILYSPOUSES:
-		llwprintf("*FamilySpousesLoop *");
+		zs_apps(zstr, "*FamilySpousesLoop *");
 		break;
 	case IINDI:
-		llwprintf("*PersonLoop *");
+		zs_apps(zstr, "*PersonLoop *");
 		break;
 	case IFAM:
-		llwprintf("*FamilyLoop *");
+		zs_apps(zstr, "*FamilyLoop *");
 		break;
 	case ISOUR:
-		llwprintf("*SourceLoop *");
+		zs_apps(zstr, "*SourceLoop *");
 		break;
 	case IEVEN:
-		llwprintf("*EventLoop *");
+		zs_apps(zstr, "*EventLoop *");
 		break;
 	case IOTHR:
-		llwprintf("*OtherLoop *");
+		zs_apps(zstr, "*OtherLoop *");
 		break;
 	case ILIST:
-		llwprintf("*ListLoop *");
+		zs_apps(zstr, "*ListLoop *");
 		break;
 	case ISET:
-		llwprintf("*IndisetLoop *");
+		zs_apps(zstr, "*IndisetLoop *");
 		break;
 	case IFATHS:
-		llwprintf("*FathersLoop *");
+		zs_apps(zstr, "*FathersLoop *");
 		break;
 	case IMOTHS:
-		llwprintf("*MothersLoop *");
+		zs_apps(zstr, "*MothersLoop *");
 		break;
 	case IFAMCS:
-		llwprintf("*ParentsLoop *");
+		zs_apps(zstr, "*ParentsLoop *");
 		break;
 	case INOTES:
-		llwprintf("*NotesLoop *");
+		zs_apps(zstr, "*NotesLoop *");
 		break;
 	default:
 		break;

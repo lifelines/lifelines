@@ -1917,12 +1917,15 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 
 	ASSERT(zstr);
 
-	arg = arg; /* unused */
-	/* TODO: What to do with arg ? Perry, 2003-01-19 */
-
 	if (val) {
 		ZSTR zval = describe_pvalue(val);
 		zs_appf(zstr, " (value: %s)", zs_str(zval));
+	} else if (arg) {
+		INT max=40 + zs_len(zstr); /* not too much argument description */
+		/* arg isn't evaluated, but describe will at least give its type */
+		zs_apps(zstr, " (arg: ");
+		describe_pnode(arg, zstr, max);
+		zs_apps(zstr, ")");
 	}
 	prog_error(node, zs_str(zstr));
 	zs_free(&zstr);
