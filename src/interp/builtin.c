@@ -257,10 +257,11 @@ llrpt_gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #ifdef ENABLE_NLS
 	STRING str2=0,textdomain=0,localepath=0;
 #endif /* ENABLE_NLS */
-	PVALUE val = eval_and_coerce(PSTRING, iargs(node), stab, eflg);
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
 	PVALUE newval=0;
 	if (*eflg) {
-		prog_error(node, nonstr1, "gettext");
+		prog_var_error(node, stab, arg, val, nonstr1, "gettext");
 		return NULL;
 	}
 	str = pvalue_to_string(val);

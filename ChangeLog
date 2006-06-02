@@ -6,6 +6,10 @@
 	Fix llrpt_or & llrpt_and to have i18n & debugger for bad args 
 	like llrpt_and.
 
+	* ChangeLog src/interp/builtin.c
+
+	Upgrade llrpt_gettext from prog_error to prog_var_error (ie, debugger).
+
 2006-05-18 Perry Rapp
 
 	* ChangeLog po/fr.po
