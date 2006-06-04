@@ -22,6 +22,8 @@ src/interp/alloc.c
 src/interp/builtin.c
 src/interp/interp.c
 src/interp/more.c
+src/interp/pvalue.c
+src/interp/progerr.c
 src/interp/rassa.c
 
 src/liflines/add.c

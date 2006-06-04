@@ -497,6 +497,10 @@ SOURCE=..\..\..\src\arch\platform.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\interp\progerr.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\property.c
 # End Source File
 # Begin Source File

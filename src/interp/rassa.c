@@ -52,6 +52,8 @@
 
 extern STRING nonintx,nonstrx;
 extern STRING nonboox;
+extern STRING qSwhtout;
+extern INT rpt_cancelled;
 
 /*********************************************
  * local enums & defines
@@ -84,8 +86,6 @@ static INT linebuflen = 0;
 static STRING bufptr = (STRING)linebuffer;
 
 static STRING outfilename;
-extern STRING qSwhtout;
-extern INT rpt_cancelled;
 
 /*********************************************
  * local function definitions

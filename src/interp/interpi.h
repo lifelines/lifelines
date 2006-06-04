@@ -529,6 +529,7 @@ PNODE icons_node(PACTX pactx, INT ival);
 PNODE iden_node(PACTX pactx, STRING);
 PNODE if_node(PACTX pactx, PNODE, PNODE, PNODE);
 BOOLEAN iistype(PNODE, INT);
+void init_debugger(void);
 void interp_load_lang(void);
 PNODE make_internal_string_node(PACTX pactx, STRING);
 PNODE mothers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
