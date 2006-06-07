@@ -1007,9 +1007,11 @@ llrpt_fath (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_moth (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	PVALUE indival=0;
+	NODE indi = eval_indi2(arg, stab, eflg, NULL, &indival);
 	if (*eflg) {
-		prog_error(node, _(nonind1), "mother");
+		prog_var_error(node, stab, arg, indival, _(nonind1), "mother");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -1022,9 +1024,11 @@ llrpt_moth (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_parents (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	PVALUE indival=0;
+	NODE indi = eval_indi2(arg, stab, eflg, NULL, &indival);
 	if (*eflg) {
-		prog_error(node, _(nonind1), "parents");
+		prog_var_error(node, stab, arg, indival, _(nonind1), "parents");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_fam(NULL);
@@ -1037,9 +1041,11 @@ llrpt_parents (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_nextsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	PVALUE indival=0;
+	NODE indi = eval_indi2(arg, stab, eflg, NULL, &indival);
 	if (*eflg) {
-		prog_error(node, _(nonind1), "nextsib");
+		prog_var_error(node, stab, arg, indival, _(nonind1), "nextsib");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);
@@ -1052,9 +1058,11 @@ llrpt_nextsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_prevsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE arg = iargs(node);
+	PVALUE indival=0;
+	NODE indi = eval_indi2(arg, stab, eflg, NULL, &indival);
 	if (*eflg) {
-		prog_error(node, _(nonind1), "prevsib");
+		prog_var_error(node, stab, arg, indival, _(nonind1), "prevsib");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_indi(NULL);

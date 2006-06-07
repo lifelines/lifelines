@@ -1,3 +1,10 @@
+2006-06-07 Perry Rapp
+
+	* ChangeLog src/interp/builtin.c
+
+	Convert prog_error calls to prog_var_error in
+	llrpt_moth, llrpt_parents, llrpt_nextsib, llrpt_prevsib.
+
 2006-06-04 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
