@@ -1075,12 +1075,13 @@ llrpt_prevsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	static char scratch[20];
+	static char scratch[20] = "";
+	PNODE arg = iargs(node);
 	PVALUE val;
 	INT i;
-	val = eval_and_coerce(PINT, iargs(node), stab, eflg);
+	val = eval_and_coerce(PINT, arg, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonint1, "d");
+		prog_var_error(node, stab, arg, val, nonint1, "d", "1");
 		return NULL;
 	}
 	i = pvalue_to_int(val);

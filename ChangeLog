@@ -3,7 +3,8 @@
 	* ChangeLog src/interp/builtin.c
 
 	Convert prog_error calls to prog_var_error in
-	llrpt_moth, llrpt_parents, llrpt_nextsib, llrpt_prevsib.
+	llrpt_moth, llrpt_parents, llrpt_nextsib, llrpt_prevsib,
+	llrpt_d.
 
 2006-06-04 Perry Rapp
 
