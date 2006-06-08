@@ -1508,7 +1508,7 @@ PVALUE
 llrpt_or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	BOOLEAN rc = TRUE; /* result of function */
+	BOOLEAN rc = FALSE; /* result of function */
 	PVALUE val2, val1 = eval_and_coerce(PBOOL, arg, stab, eflg);
 	INT argix=1; /* count arguments for error message */
 	if (*eflg) {
