@@ -3,7 +3,7 @@
 	* ChangeLog src/interp/builtin.c
 
 	Fix report or operator by fixing llrpt_or to initialize
-	variable rc to FALSE.
+	variable rc to FALSE. sf#1503144.
 
 2006-06-07 Perry Rapp
 
