@@ -1,6 +1,6 @@
 /*
  * @progname       st_date.li
- * @version        1.2 (2006-06-10)
+ * @version        1.3 (2006-06-10)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -32,9 +32,10 @@ proc testDates()
 	set_and_check_locale("en_US", "English")
 
 /* Test day of week function */
-	call testdow("2 JAN 1953", "Friday")
-	call testdow("6 JUN 2006", "Tuesday")
-	call testdow("5 MAY 1862", "Monday")
+    call dodowtests()
+
+/* Test julian date functions */
+	call dojdtests()
 	
 /* Test parsing only */
 	call tdparse("2 JAN 1953", 1953, 1, 2)
@@ -479,7 +480,17 @@ proc tdparse(src, yr, mo, da)
 }
 
 /*
- Test function dayofweek()
+ Check dayofweek() with a series of sample tests
+ */
+proc dodowtests()
+{
+	call testdow("2 JAN 1953", "Friday")
+	call testdow("6 JUN 2006", "Tuesday")
+	call testdow("5 MAY 1862", "Monday")
+}
+
+/*
+ Perform one test of function dayofweek()
  src is the date (as string) to parse
  adow is the correct answer
  */
@@ -494,4 +505,39 @@ proc testdow(src, adow)
 	}
 }
 
+/*
+ Check dayofweek() with a series of sample tests
+ */
+proc dojdtests()
+{
+	call testjd("2 JAN 1953", "3 JAN 1953")
+	call testjd("15 MAR 1582", "16 MAR 1582")
+}
 
+/*
+ Using one sample date, test the julian date functions
+ jdstring is the date to test
+ jdnext is the day after (to test adding one to the julian date number)
+ */
+proc testjd(jdstring, jdnext)
+{
+	set(orig, stddate(jdstring))
+	set(jdnum, date2jd(jdstring))
+	set(jdeven, jd2date(jdnum))
+	set(result, stddate(jdeven))
+	if (ne(orig, result))
+	{
+		call reportfail(concat("jd2date(date2jd(", jdstring, ")) failure: ", orig, "<>", result))
+	} else {
+		incr(testok)
+	}
+	set(jdnum1, add(jdnum, 1))
+	set(result, stddate(jd2date(jdnum1)))
+	if (ne(jdnext, result))
+	{
+		call reportfail(concat("stddate(date2jd(", jdstring, ")+1) failure: ", jdnext, "<>", result))
+	} else {
+		incr(testok)
+	}
+
+}

@@ -7,6 +7,10 @@
 	date2jd, dayofweek, jd2date, setdate.
 	Also add tests for dayofweek to st_date.li.
 
+	*ChangeLog reports/st/st_date.li
+
+	Add julian date tests. Move day of week tests to subroutine.
+
 2006-06-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c
