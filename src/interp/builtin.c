@@ -28,8 +28,6 @@
  *   3.0.0 - 07 May 94    3.0.2 - 03 Jan 95
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
-/* modified 2000-04-12 J.F.Chandler */
 
 #include "sys_inc.h"
 #include "llstdlib.h"
@@ -67,8 +65,9 @@ extern STRING qSaskstr,qSchoostrttl;
  *********************************************/
 
 static VPTR create_list_value_pvalue(LIST list);
-static INT normalize_year(INT yr);
 static ZSTR decode(STRING str, INT * offset);
+static FLOAT julianday(GDATEVAL gdv);
+static INT normalize_year(INT yr);
 
 /*********************************************
  * local variables
@@ -676,6 +675,43 @@ llrpt_set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	assign_iden(stab, iident(argvar), val);
+	return NULL;
+}
+/*===========================================+
+ * llrpt_setdate -- Date assignment operation
+ * usage: setdate(IDEN, STRING) -> VOID
+ * creation: Patrick Texier 2005/05/22
+ * Added to cvs: 2006/06/10
+ *===========================================*/
+PVALUE
+llrpt_setdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE argvar = iargs(node);
+	PNODE arg2;
+	STRING str = 0;
+	PVALUE val = NULL;
+	NODE prnt, chil;
+
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "setdate", "1");
+		*eflg = TRUE;
+		return NULL;
+	}
+	if ((arg2 = inext(argvar)) != NULL) {
+		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+		if (*eflg) {
+			prog_var_error(node, stab, arg2, val, nonstrx, "setdate", "2");
+			delete_pvalue(val);
+			return NULL;
+		}
+		str = pvalue_to_string(val);
+	}
+	/* Create an EVEN node with subordinate DATE node */
+	prnt = create_temp_node(NULL, "EVEN", NULL, NULL);
+	chil = create_temp_node(NULL, "DATE", str, prnt);
+	nchild(prnt) = chil;
+	/* Assign new EVEN node to new pvalue, and assign that to specified identifier */
+	assign_iden(stab, iident(argvar), create_pvalue_from_node(prnt));
 	return NULL;
 }
 /*===============================+
@@ -2841,6 +2877,193 @@ llrpt_date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = event_to_date(line, FALSE);
 	delete_pvalue(val);
 	return create_pvalue_from_string(str);
+}
+/*==========================================+
+ * llrpt_date2jd -- Return julian day of date
+ * usage: date2jd(EVENT) -> FLOAT
+ *        date2jd(STRING) -> FLOAT
+ * creation : Patrick Texier 2006/05/22
+ * Added to cvs: 2006/06/10
+ * =========================================*/
+PVALUE
+llrpt_date2jd (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	STRING str;
+	GDATEVAL gdv;
+	
+	FLOAT jd = 0;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	/* Handle string input */
+	if (val && which_pvalue_type(val) == PSTRING) {
+		str = pvalue_to_string(val);
+	}
+	else /* handle NODE input */
+	{
+		NODE evnt;
+		coerce_pvalue(PGNODE, val, eflg);
+		if (*eflg) {
+			/* Input neither string nor node, error */
+			prog_error(node, nonnodstr1, "date2jd");
+			return NULL;
+		}
+		evnt = pvalue_to_node(val);
+		str = event_to_date(evnt, FALSE);
+	}
+	/* Parse into lifelines date structure (GDATEVAL) */
+	gdv = extract_date(str);
+	/* Compute julian date value as float */
+	jd = julianday(gdv);
+
+	free_gdateval(gdv);
+	*eflg = FALSE;
+	return create_pvalue_from_float(jd);
+}
+/*=============================================+
+ * llrpt_dayofweek -- Return day of week
+ * usage: dayofweek(EVENT) -> STRING
+ *        dayofweek(STRING) -> STRING
+ * creation: Patrick Texier 2006/05/22
+ * Added to cvs: 2006/06/10
+ *=============================================*/
+static char *dofw[] = {  N_("Sunday"),  N_("Monday"), N_("Tuesday"),
+	N_("Wednesday"), N_("Thursday"), N_("Friday"), N_("Saturday") };
+PVALUE
+llrpt_dayofweek (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	STRING str = 0, str2 = 0;
+	GDATEVAL gdv;
+	INT weekdaynum = 0;
+	
+	FLOAT jd = 0;
+	PVALUE val = eval_without_coerce(iargs(node), stab, eflg);
+	/* Handle string input */
+	if (val && which_pvalue_type(val) == PSTRING) {
+		str = pvalue_to_string(val);
+	}
+	else /* handle NODE input */
+	{
+		NODE evnt;
+		coerce_pvalue(PGNODE, val, eflg);
+		if (*eflg) {
+			prog_error(node, nonnodstr1, "dayofweek");
+			return NULL;
+		}
+		evnt = pvalue_to_node(val);
+		str = event_to_date(evnt, FALSE);
+	}
+	/* Parse into lifelines date structure (GDATEVAL) */
+	gdv = extract_date(str);
+	/* Compute julian date value as float */
+	jd = julianday(gdv);
+	/* Compute which day of week */
+	weekdaynum = (INT)(jd + 1.5) % 7;
+	/* Convert to localized name */
+	str2 = _(dofw[weekdaynum]);
+
+	free_gdateval(gdv);
+	*eflg = FALSE;
+	return create_pvalue_from_string(str2);
+}
+/*===============================================+
+ * llrpt_jd2date -- Return date from Julian Day
+ * usage : jd2date(FLOAT) -> EVENT
+ * creation : Patrick Texier 2006/05/22
+ * Added to cvs: 2006/06/10
+ * =============================================== */
+static char *gedmonths[] = { "JAN", "FEB","MAR", "APR", "MAY", "JUN",
+	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+/* TODO Use an existing .h */
+
+PVALUE
+llrpt_jd2date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE arg = (PNODE) iargs(node);
+	FLOAT val2;
+	FLOAT f, z, a, ab, b, c, d, e;
+	INT yr, mo, dy;
+	NODE prnt, chil;
+	static char str[12];
+
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+
+	if (*eflg) {
+		prog_error(node, nonflox, "jd2date", "1");
+		return NULL;
+	}
+	/* Extract julian date float value */
+	val2 = pvalue_to_float(val);
+	z = floor(val2 + 0.5);
+	f = floor(val2 + 0.5 - z);
+	/* Gregorian correction */
+	if (z >= 2299159.5) {
+		ab = floor((z - 1867216.25) / 36524.25);
+		a = z + 1 + ab - floor(ab / 4);
+	} else {
+		a = z;
+	}
+	b = a + 1524;
+	c = floor((b - 122.1) / 365.25);
+	d = floor(365.25 * c);
+	e = floor((b - d) / 30.6001);
+	dy  = (INT)(b - d - floor(30.6001 * e) + f);
+	if (e <= 13) {
+		mo = (INT)(e - 1);
+	} else {
+		mo = (INT)(e - 13);
+	}
+	if (mo >= 2) {
+		yr = (INT)(c - 4716);
+	} else {
+		yr = (INT)(c - 4715);
+	}
+	/* Now print GEDCOM style date string */
+	sprintf(str, "%d %s %d", dy, gedmonths[mo - 1], yr);
+	/* Create an EVEN node with subordinate DATE node */
+	prnt = create_temp_node(NULL, "EVEN", NULL, NULL);
+	chil = create_temp_node(NULL, "DATE", str, prnt);
+	nchild(prnt) = chil;
+
+	*eflg = FALSE;
+
+	return create_pvalue_from_node(prnt);
+}
+
+/*======================================
+ * Julian day calculation
+ * Creation: Patrick Texier 2006/05/22
+ * Added to cvs: 2006/06/10
+ * ===================================== */
+static FLOAT
+julianday (GDATEVAL gdv)
+{
+	INT da = 0, mo = 0, yr = 0;
+	INT mmo = 0, yyr = 0;
+	FLOAT jd = 0.0;
+	
+	da = date_get_day(gdv);
+	/* 1th if no day */
+	if (da == 0)
+		da = 1;
+	mo = date_get_month(gdv);
+	/* January if no month */
+	if (mo == 0)
+		mo = 1;
+	yr = date_get_year(gdv);
+	
+	if (mo < 3) {
+		yyr = yr - 1;
+		mmo = mo + 12;
+	} else {
+		yyr = yr;
+		mmo = mo;
+	}
+	jd = floor(yyr * 365.25);
+	jd += floor(30.6001 * (mmo + 1));
+	jd += da + 1720994.5;
+	/*  gregorian correction after 1582/10/14 */
+	if ( jd > 2299159.5 )
+		jd = jd + 2.0 - floor(yyr/100.0) + floor(yyr / 400.0);
+	return jd;
 }
 /*=====================================================+
  * normalize_year -- Modify year before returning to report

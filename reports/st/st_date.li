@@ -1,6 +1,6 @@
 /*
  * @progname       st_date.li
- * @version        1.1 (2003-01-22)
+ * @version        1.2 (2006-06-10)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -30,6 +30,11 @@ proc testDates()
 	call initSubsection()
 
 	set_and_check_locale("en_US", "English")
+
+/* Test day of week function */
+	call testdow("2 JAN 1953", "Friday")
+	call testdow("6 JUN 2006", "Tuesday")
+	call testdow("5 MAY 1862", "Monday")
 	
 /* Test parsing only */
 	call tdparse("2 JAN 1953", 1953, 1, 2)
@@ -442,8 +447,7 @@ proc tdfb(src, dayfmt, monfmt, yrfmt, sfmt, ofmt, cfmt, dests, destc)
  Test parsing only, using year(), month(), and day() functions 
  src is the string to parse
  yr,mo,da is the correct output against which to test
-*/
-
+ */
 proc tdparse(src, yr, mo, da)
 {
 	set(result, strtoint(year(src)))
@@ -469,6 +473,22 @@ proc tdparse(src, yr, mo, da)
 	if (ne(dvar, da))
 	{
 		call reportfail(concat("extractdatestr(", src, ").da failure: ", d(da), "<>", d(dvar)))
+	} else {
+		incr(testok)
+	}
+}
+
+/*
+ Test function dayofweek()
+ src is the date (as string) to parse
+ adow is the correct answer
+ */
+proc testdow(src, adow)
+{
+	set(result, dayofweek(src))
+	if (ne(result, adow)) 
+	{
+		call reportfail(concat("dayofweek(", src, ") failure: ", adow, "<>", result))
 	} else {
 		incr(testok)
 	}

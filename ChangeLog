@@ -1,3 +1,12 @@
+2006-06-10 Perry Rapp
+
+	*ChangeLog reports/st/st_date.li src/interp/builtin.c
+	src/interp/functab.c src/interp/interpi.h
+
+	(From Patrick Texier) New report functions:
+	date2jd, dayofweek, jd2date, setdate.
+	Also add tests for dayofweek to st_date.li.
+
 2006-06-08 Perry Rapp
 
 	* ChangeLog src/interp/builtin.c
