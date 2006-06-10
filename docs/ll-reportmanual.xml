@@ -2933,6 +2933,15 @@ returns the `event' of the current date
 </glossdef></glossentry>
 
 <glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>setdate</function></funcdef><void/>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+creates an event with specified date and assigns to specified variable
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>dayformat</function></funcdef>
 <paramdef><parameter>INT</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
@@ -3055,6 +3064,8 @@ component has an entry in the place abbreviation table.
 
 <para>
 <function>Gettoday</function> creates an event that has today's date in the <structfield>DATE</structfield> line.
+<function>Setdate</function> creates an event that has the specified date in the <structfield>DATE</structfield> line,
+and assigns the new event to the specified variable.
 </para>
 
 <para>
@@ -3575,6 +3586,56 @@ from %1 to $2
 </tbody>
 </tgroup>
 </informaltable>
+
+</sect1>
+
+<sect1>
+
+<title>
+Date Arithmetic
+</title>
+
+<glosslist>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FLOAT <function>date2jd</function></funcdef>
+<paramdef><parameter>EVENT|STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+julian date number is number of days since origin (-4712/01/01 12h00 UT) of specified date
+</para>
+</glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>EVENT <function>jd2date</function></funcdef>
+<paramdef><parameter>FLOAT</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+Convert julian date number to date (actually to event structure with subordinate date)
+</para>
+</glossdef></glossentry>
+
+</glosslist>
+
+<para>
+These functions allow adding or subtracting days from dates.
+</para>
+
+<para>
+<function>date2jd</function> converts a date into a number of days, which can then be adjusted by simple arithmetic.
+Finally, <function>jd2date</function> converts the number of days back into a date.
+</para>
+
+<para>
+Julian calendar is used before 4 OCT 1582, and Gregorian calendar afterwards. 
+</para>
+
+<para>
+As with other date functions, calendar escapes (eg, "@#DRENCH R#@") are not respected, 
+and the only the first date of the DATE record is used.
+</para>
 
 </sect1>
 
