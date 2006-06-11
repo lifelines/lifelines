@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,8 +7,7 @@ Dokumentation för LifeLines
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -27,10 +26,10 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
 >Dokumentation för <TT
 CLASS="application"
 >LifeLines</TT
+></A
 ></H1
 ><H2
 CLASS="subtitle"
@@ -80,9 +79,9 @@ CLASS="application"
 ><DT
 ><A
 HREF="#AEN171"
->INTRODUKTION TILL <SPAN
+>INTRODUKTION TILL <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 ></A
 ></DT
 ><DT
@@ -216,8 +215,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
-></A
->INTRODUKTION</H2
+>INTRODUKTION</A
+></H2
 ><P
 >&#13;
 	<TT
@@ -225,9 +224,9 @@ CLASS="application"
 >LifeLines</TT
 > är ett
 	släktforskningsprogram som är utvecklat för
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >-system. Det ordnar genealogiska poster
 	(personer, familjer, källor, händelser och andra) i en
 	databas, och genererar rapporter från dessa poster. Det finns
@@ -250,9 +249,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > använder de
-	terminaloberoende egenskaperna hos <SPAN
+	terminaloberoende egenskaperna hos <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 > för
 	att tillhandahålla en skärmbild och ett menybaserat
 	användargränssnitt.
@@ -341,7 +340,7 @@ VALIGN="TOP"
 ><IMG
 SRC="./stylesheet-images/note.gif"
 HSPACE="5"
-ALT="Not"></TD
+ALT="Notera"></TD
 ><TD
 ALIGN="LEFT"
 VALIGN="TOP"
@@ -370,21 +369,21 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN36"
-></A
->INSTALLATION</H2
+>INSTALLATION</A
+></H2
 ><P
 >&#13;	Du kan installera <TT
 CLASS="application"
 >LifeLines</TT
 > från en
 	källkodsdistributionspaket med, eller som ett exekverbart
-	program för ditt <SPAN
+	program för ditt <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >- eller
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >system. Källkodsdistributionen
 	kommer med de läs-mig- (readme), byggskripts- och "make"-filer
 	som är nödvändiga för att bygga <TT
@@ -466,20 +465,19 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN64"
-></A
 >STARTA <TT
 CLASS="application"
 >LIFELINES</TT
-> OCH SKAPA DATABASER</H2
+> OCH SKAPA DATABASER</A
+></H2
 ><P
 >&#13;
 	Du startar normalt <TT
 CLASS="application"
 >LifeLines</TT
 > med
-	kommandot: <TT
+	kommandot: <KBD
 CLASS="userinput"
-><B
 ><B
 CLASS="command"
 >lines</B
@@ -488,8 +486,7 @@ CLASS="replaceable"
 ><I
 >databas</I
 ></TT
-></B
-></TT
+></KBD
 >, där
 	databas är namnet på en
 	<TT
@@ -557,9 +554,9 @@ CLASS="synopsis"
 >&#13;        <B
 CLASS="command"
 >lines</B
-> <TT
+> <CODE
 CLASS="option"
->[-acdfiklnortuwxzCFI]</TT
+>[-acdfiklnortuwxzCFI]</CODE
 > <TT
 CLASS="replaceable"
 ><I
@@ -580,11 +577,11 @@ CLASS="replaceable"
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN89"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -594,60 +591,35 @@ CLASS="CALSTABLE"
 ><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-C</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Ange plats för konfigurationsfil (t. ex.
 -C/home/bill/lifelines/.linesrc2)</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-F</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Finsk flagga (endast tillgänglig om kompilerad så)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-I</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Ange en användaregenskap (t. ex. -ILLEDITOR=gvim )
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-a</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >logga dynamiska minnesoperationer (för felsökning)</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-c</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >tillhandahåll cachevärden (t. ex., -ci400,4000f400,4000 sätter
 direkta indi- &#38; famcachevärden till 400, och indirekta indi- &#38;
 famcachevärden till 4000)
@@ -655,64 +627,39 @@ famcachevärden till 4000)
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-d</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;felsökningsläge (signalskydd avstängt för att passa bättre med
 avbrottspunkter)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-f</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;tvinga upp databasen - använd endast i nödfall
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-i</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;öppna en oföränderlig databas (inget skydd från andras åtkomst -- för
 användning på media utan skrivåtkomst) 
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-k</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;nyckelvärde visas alltid (normalt är nyckelvärdet undertryckt om
 REFN-värde finns)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-l</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lås (-ly) eller lås upp (-ln) en databas för användning med media utan
 skrivåtkomst (åtkomst till en låst databas behandlas som en
 oföränderlig)
@@ -720,99 +667,59 @@ oföränderlig)
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-n</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;använd ej traditionella familjeregler
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-o</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Ange programutmatningskatalog (t. ex., -o/tmp/minatest)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-r</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;öppna databasen med skrivskydd (skydda andra som skriver till
 databasen)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-t</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;spåra funktionsanrop i rapportprogram (för felsökning)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-u</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ange fönsterstorlek (t. ex., -u120,34 anger 120 kolumner till 34 rader)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-w</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;öppna databasen med skrivåtkomst (skydda från att andra skriver till
 eller läser databasen)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-x</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;exekvera ett enskilt LifeLinesrapportprogram direkt
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >-z</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Använd vanliga ASCII-tecken för att rita linjer i användargränsnittet
 i stället för specialtecknen för vt100.
 </TD
@@ -824,31 +731,31 @@ i stället för specialtecknen för vt100.
 ></DIV
 ><P
 >&#13;
-	Flaggan <TT
+	Flaggan <CODE
 CLASS="option"
->-r</TT
+>-r</CODE
 > öppnar databasen med skrivskydd. I
 	detta läge tillåter <TT
 CLASS="application"
 >LifeLines</TT
 > inte
 	att du gör några ändringar i databasen; inga andra operationer
-	påverkas. Flaggan <TT
+	påverkas. Flaggan <CODE
 CLASS="option"
->-w</TT
+>-w</CODE
 > öppnar databasen med
 	skrivåtkomst. Om databasen inte kan öppnas med begärd flagga, så
 	avslutas <TT
 CLASS="application"
 >LifeLines</TT
 > omedelbart. Om
-	du öppnar databasen utan vare sig flaggan <TT
+	du öppnar databasen utan vare sig flaggan <CODE
 CLASS="option"
->-r</TT
+>-r</CODE
 >
-	eller <TT
+	eller <CODE
 CLASS="option"
->-w</TT
+>-w</CODE
 >, försöker
 	<TT
 CLASS="application"
@@ -877,9 +784,9 @@ CLASS="application"
 >&#13;
 	I sällsynta fall kan mekanismen för skriv/läsläge misslyckas.
 	När detta händer kan databasen förefalla omöjlig att öppna. Om
-	det skulle hända, så använd flaggan <TT
+	det skulle hända, så använd flaggan <CODE
 CLASS="option"
->-f</TT
+>-f</CODE
 > för
 	att tvinga upp databasen; detta kommer att öppna databasen och
 	återställa lägesmekanismen. Det här är en farlig funktion; du
@@ -912,9 +819,9 @@ CLASS="application"
 >LifeLines</TT
 > att be dig skriva
 	in det. Om du inte använder skalvariabeln eller användarvärdet
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > (beskrivs senare), så måste namnet
 	du skriver in vara namnet på en katalog innehållande en
 	<TT
@@ -922,13 +829,13 @@ CLASS="application"
 >LifeLines</TT
 >databas, uttryckt som en
 	vanlig, absolut eller relativ, sökväg i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >. Om du använder variabeln
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 >, så kommer
 	<TT
 CLASS="application"
@@ -961,10 +868,10 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN171"
-></A
->INTRODUKTION TILL <SPAN
+>INTRODUKTION TILL <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
+></A
 ></H2
 ><P
 >&#13;
@@ -972,13 +879,13 @@ CLASS="acronym"
 CLASS="application"
 >LifeLines</TT
 >poster lagras i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-formatet; du organiserar, redigerar,
-	och sparar dina data i detta format. <SPAN
+	och sparar dina data i detta format. <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 	är en standard som definierar ett filformat för att flytta
 	data mellan datorsystem. <TT
@@ -998,38 +905,38 @@ CLASS="application"
 </P
 ><P
 >&#13;
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > är definierad på två nivåer. På den
-	syntaktiska nivån är <SPAN
+	syntaktiska nivån är <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > en enkel
 	uppsättning regler för att organisera och strukturera data i
 	poster, utan hänsyn till vilka typer av poster, typer av eller
 	format på information i posterna, eller relationer mellan
 	posterna det rör sig om. På den semantiska nivån lägger
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > till ytterligare en uppsättning
 	regler, som anger vilka typer av poster som är tillåtna, hur
 	poster ska struktureras, hur data inom posterna ska
 	identifieras och formateras, och vilka specifika relationer
 	mellan olika typer av poster som är tillåtna. I princip kan
 	det existera multipla semantiska versioner av
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >, men i praktiken finns det bara en,
-	"anlänkad" <SPAN
+	"anlänkad" <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >. Olyckligtvis är denna
-	semantiska version av <SPAN
+	semantiska version av <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > dåligt
 	definierad, och alla system för genealogiska data har tolkat
 	den på olika sätt.
@@ -1041,14 +948,14 @@ CLASS="acronym"
 CLASS="application"
 >LifeLines</TT
 > använder
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > primärt på den syntaktiska nivån,
 	även om några av de allmänt accepterade semantiska reglerna
-	för anlänkad <SPAN
+	för anlänkad <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > är obligatoriska. Detta
 	har några viktiga följder. Det innebär att du kan lagra alla
 	dina genealogiska data i din
@@ -1067,9 +974,9 @@ CLASS="application"
 >LifeLines</TT
 >. Min rekommendation är
 	att du följer vedertaget bruk för anlänkad
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > närhelst det är möjligt.
 
 </P
@@ -1082,35 +989,35 @@ CLASS="application"
 	formulär eller fönster för att vägleda dig när du för in
 	eller ändrar poster. Istället använder du en textredigerare
 	och redigerar dataposterna direkt. För detta krävs att du
-	förstår <SPAN
+	förstår <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-formatet, och klarar av att
-	redigera data i <SPAN
+	redigera data i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-format, innan du kan
 	använda <TT
 CLASS="application"
 >LifeLines</TT
 >.
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-formatet är ganska enkelt; den här
 	introduktionen ger all information du behöver för att kunna
-	använda <SPAN
+	använda <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >.
 
 </P
 ><P
 >&#13;
 	Här är ett exempel på en post om en person skriven i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >:
 
 <DIV
@@ -1122,9 +1029,9 @@ NAME="AEN203"
 ><B
 >Exempel 1. 
 
- Personpost i <SPAN
+ Personpost i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 
 </B
@@ -1138,116 +1045,80 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;  0 @I25@ INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask /Wetmore/ Sr</B
-></TT
+>Thomas Trask /Wetmore/ Sr</KBD
 >
-  1 SEX <TT
+  1 SEX <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->13 March 1866</B
-></TT
+>13 March 1866</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->St. Mary's Bay, Digby, Nova Scotia</B
-></TT
+>St. Mary's Bay, Digby, Nova Scotia</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->Social Security application</B
-></TT
+>Social Security application</KBD
 >
   1 NATU
-    2 NAME <TT
+    2 NAME <KBD
 CLASS="userinput"
-><B
->Thomas T. Wetmore</B
-></TT
+>Thomas T. Wetmore</KBD
 >
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->26 October 1888</B
-></TT
+>26 October 1888</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Norwich, New London, Connecticut</B
-></TT
+>Norwich, New London, Connecticut</KBD
 >
-    2 AGE <TT
+    2 AGE <KBD
 CLASS="userinput"
-><B
->22 years</B
-></TT
+>22 years</KBD
 >
-    2 COUR <TT
+    2 COUR <KBD
 CLASS="userinput"
-><B
->New London County Court of Common Pleas</B
-></TT
+>New London County Court of Common Pleas</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->court record from National Archives</B
-></TT
+>court record from National Archives</KBD
 >
-  1 OCCU <TT
+  1 OCCU <KBD
 CLASS="userinput"
-><B
->Antiques Dealer</B
-></TT
+>Antiques Dealer</KBD
 >
   1 DEAT
-    2 NAME <TT
+    2 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask Wetmore</B
-></TT
+>Thomas Trask Wetmore</KBD
 >
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->17 February 1947</B
-></TT
+>17 February 1947</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 AGE <TT
+    2 AGE <KBD
 CLASS="userinput"
-><B
->80 years, 11 months, 4 days</B
-></TT
+>80 years, 11 months, 4 days</KBD
 >
-    2 CAUS <TT
+    2 CAUS <KBD
 CLASS="userinput"
-><B
->Heart Attack</B
-></TT
+>Heart Attack</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->New London Death Records</B
-></TT
+>New London Death Records</KBD
 >
   1 FAMC @F11@
   1 FAMS @F6@
@@ -1263,9 +1134,9 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-	En <SPAN
+	En <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-post består av rader. Varje rad
 	har ett nivånummer och en etikett, och på de flesta rader
 	följer ett värde efter etiketten. På första raden i varje post
@@ -1299,20 +1170,20 @@ CLASS="application"
 >databaser: person-,
 	familje-, käll- och händelseposter. Den första raden, på nivå
 	0, i dessa poster har etiketterna
-	<SPAN
+	<CODE
 CLASS="structname"
->INDI</SPAN
+>INDI</CODE
 > respektive
-	<SPAN
+	<CODE
 CLASS="structname"
->FAM</SPAN
->, <SPAN
+>FAM</CODE
+>, <CODE
 CLASS="structname"
->SOUR</SPAN
+>SOUR</CODE
 >
-	och <SPAN
+	och <CODE
 CLASS="structname"
->EVEN</SPAN
+>EVEN</CODE
 >. Förutom dessa typer av
 	poster, kan du skapa egna typer av poster genom att använda
 	vilken annan etikett som helst på raden för nivå 0 i en post.
@@ -1330,9 +1201,9 @@ CLASS="application"
 ><P
 >&#13;
 	Den första raden i exempelposten har etiketten
-	<SPAN
+	<CODE
 CLASS="structname"
->INDI</SPAN
+>INDI</CODE
 >, som visar att det är en person.
 	Korsreferensvärdet, I25, kan användas av andra poster för att
 	hänvisa till denna post.
@@ -1345,16 +1216,14 @@ CLASS="structname"
 CLASS="application"
 >LifeLines</TT
 >databas
-	måste ha minst en rad av typen <TT
+	måste ha minst en rad av typen <CODE
 CLASS="structfield"
-><I
 >1
-	NAME</I
-></TT
+	NAME</CODE
 >, och dess värde måste vara i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >s namnformat. Formatet tillåter namn
 	att vara hur långa som helst, men efternamnet, som kan
 	placeras var som helst i namnet, måste avskiljas från övriga
@@ -1380,23 +1249,17 @@ WIDTH="100%"
 ><TD
 ><PRE
 CLASS="programlisting"
->&#13;1 NAME <TT
+>&#13;1 NAME <KBD
 CLASS="userinput"
-><B
->John/Smith</B
-></TT
+>John/Smith</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->John /Smith/</B
-></TT
+>John /Smith/</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->John/Smith/Jr.</B
-></TT
+>John/Smith/Jr.</KBD
 >
 </PRE
 ></TD
@@ -1435,23 +1298,17 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary//</B
-></TT
+>Mary//</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary/</B
-></TT
+>Mary/</KBD
 >
-1 NAME <TT
+1 NAME <KBD
 CLASS="userinput"
-><B
->Mary</B
-></TT
+>Mary</KBD
 >
 </PRE
 ></TD
@@ -1467,11 +1324,9 @@ CLASS="userinput"
 CLASS="application"
 >LifeLines</TT
 > kan ha ett obegränsat
-	antal rader med <TT
+	antal rader med <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 >, men
 	personen kommer bara att synas med värdet i den första av
 	dessa rader. Personer indexeras med alla sina namn, så du kan
@@ -1485,54 +1340,38 @@ CLASS="structfield"
 CLASS="application"
 >LifeLines</TT
 > tvingar dig inte att
-	inkludera en rad av typen <TT
+	inkludera en rad av typen <CODE
 CLASS="structfield"
-><I
->1 SEX</I
-></TT
+>1 SEX</CODE
 >,
 	men den är ändå lämplig att ha med. Radens värde ska vara
-	<TT
+	<KBD
 CLASS="userinput"
-><B
->M</B
-></TT
-> eller <TT
+>M</KBD
+> eller <KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 > om
 	personens kön är bekant; du kan låta bli att ge den ett värde,
-	eller sätta det till, exempelvis, <TT
+	eller sätta det till, exempelvis, <KBD
 CLASS="userinput"
-><B
->U</B
-></TT
+>U</KBD
 >
-	eller <TT
+	eller <KBD
 CLASS="userinput"
-><B
->?</B
-></TT
+>?</KBD
 > om det är obekant. En person
-	måste ha en rad av typen <TT
+	måste ha en rad av typen <CODE
 CLASS="structfield"
-><I
->1 SEX</I
-></TT
+>1 SEX</CODE
 >, med
-	endera av <TT
+	endera av <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 > eller
-	<TT
+	<KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 > som värde, innan du kan göra
 	honom/henne till make/maka eller förälder i en familj.
 
@@ -1542,52 +1381,38 @@ CLASS="userinput"
 	Exempelposten innehåller också tre händelser: födelse,
 	naturalisering, och död. En händelse inleds med en rad på nivå
 	1, där etiketten indikerar vilken typ av händelse det rör sig
-	om. <TT
+	om. <CODE
 CLASS="structfield"
-><I
->BIRT</I
-></TT
+>BIRT</CODE
 > är exempelvis den etikett
 	som används för en födelse.
 
 </P
 ><P
 >&#13;
-	Händelser har vanligen åtminstone en <TT
+	Händelser har vanligen åtminstone en <CODE
 CLASS="structfield"
-><I
 >2
-	DATE</I
-></TT
->-rad och en <TT
+	DATE</CODE
+>-rad och en <CODE
 CLASS="structfield"
-><I
 >2
-	PLAC</I
-></TT
->-rad, och ofta en <TT
+	PLAC</CODE
+>-rad, och ofta en <CODE
 CLASS="structfield"
-><I
 >2
-	SOUR</I
-></TT
->-rad. <TT
+	SOUR</CODE
+>-rad. <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >- och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-rader anger datum och ort för
-	händelsen. Värdet för en <TT
+	händelsen. Värdet för en <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >-rad i
 	<TT
 CLASS="application"
@@ -1599,19 +1424,15 @@ CLASS="application"
 > försöker alltid att
 	tolka det och finna information om år, månad och dag i det.
 	Värdet för en rad med etiketten
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > är vanligen en uppräkning av
 	geografiska angivelser, separerade av kommatecken, som börjar
 	med den mest specifika informationen, och avslutas med den
-	mest allmänna. Raden <TT
+	mest allmänna. Raden <CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > kan
 	antingen vara roten för en fullständig beskrivning av källan,
 	men dess värde kan också vara en korsreferensnyckel som pekar
@@ -1621,40 +1442,30 @@ CLASS="structfield"
 ><P
 >&#13;
 	Händelsen naturalisering (med etiketten
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->NATU</I
-></TT
+>NATU</CODE
 >) visar några andra rader.
-	Raden <TT
+	Raden <CODE
 CLASS="structfield"
-><I
->2 NAME</I
-></TT
+>2 NAME</CODE
 > anger personens namn,
 	så som det är noterat i källan (det är bara i raden
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > som man måste följa
-	formateringsreglerna för <SPAN
+	formateringsreglerna för <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >). Raden
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->2 AGE</I
-></TT
+>2 AGE</CODE
 > anger personens ålder vid
-	tiden för händelsen. Raden <TT
+	tiden för händelsen. Raden <CODE
 CLASS="structfield"
-><I
->2 COUR</I
-></TT
+>2 COUR</CODE
 >
 	anger vid vilken domstol naturaliseringen skedde.
 
@@ -1662,36 +1473,28 @@ CLASS="structfield"
 ><P
 >&#13;
 	Den avslutande händelsen är en dödshändelse (med etiketten
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->DEAT</I
-></TT
+>DEAT</CODE
 >). Raden av typen
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->2 CAUS</I
-></TT
+>2 CAUS</CODE
 > anger dödsorsak.
 
 </P
 ><P
 >&#13;
 	Vid slutet av posten återfinns tre rader som hänvisar till
-	familjeposter. En rad av typen <TT
+	familjeposter. En rad av typen <CODE
 CLASS="structfield"
-><I
 >1
-	FAMC</I
-></TT
+	FAMC</CODE
 > hänvisar till en familjepost som personen
 	tillhör som barn där; dess värde anger korsreferensvärdet för
-	den familjen. En <TT
+	den familjen. En <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 >-rad
 	hänvisar till en familjepost som personen tillhör i egenskap
 	av maka/make eller förälder.
@@ -1704,23 +1507,17 @@ CLASS="application"
 >LifeLines</TT
 > för att
 	redigera en person, så kommer du inte att kunna redigera
-	korsreferensvärdena på raderna <TT
+	korsreferensvärdena på raderna <CODE
 CLASS="structfield"
-><I
 >0
-	INDI</I
-></TT
->, <TT
+	INDI</CODE
+>, <CODE
 CLASS="structfield"
-><I
->1 FAMC</I
-></TT
+>1 FAMC</CODE
 > eller
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 >; dessa sköts av
 	<TT
 CLASS="application"
@@ -1756,23 +1553,17 @@ CLASS="programlisting"
   1 HUSB @I25@
   1 WIFE @I26@
   1 MARR
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->31 MAR 1891</B
-></TT
+>31 MAR 1891</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->New London Vital Records</B
-></TT
+>New London Vital Records</KBD
 >
   1 CHIL @I27@
   1 CHIL @I17@</PRE
@@ -1785,62 +1576,44 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-	Raden <TT
+	Raden <CODE
 CLASS="structfield"
-><I
->0 FAM</I
-></TT
+>0 FAM</CODE
 > tilldelar familjen
-	korsreferensvärdet F6. Posten innehåller <TT
+	korsreferensvärdet F6. Posten innehåller <CODE
 CLASS="structfield"
-><I
 >1
-	HUSB</I
-></TT
->- och <TT
+	HUSB</CODE
+>- och <CODE
 CLASS="structfield"
-><I
 >1
-	WIFE</I
-></TT
+	WIFE</CODE
 >-rader som ger hänvisningar till de två
 	makarna/föräldrarna. Posten innehåller också en
-	giftermålshändelse (etiketten <TT
+	giftermålshändelse (etiketten <CODE
 CLASS="structfield"
-><I
->MARR</I
-></TT
+>MARR</CODE
 >)
-	och två <TT
+	och två <CODE
 CLASS="structfield"
-><I
->1 CHIL</I
-></TT
+>1 CHIL</CODE
 >-rader, som hänvisar
 	till två barn i familjen. När du redigerar familjeposter, kan
-	du inte redigera <TT
+	du inte redigera <CODE
 CLASS="structfield"
-><I
->0 FAM</I
-></TT
+>0 FAM</CODE
 >-,
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
->-, <TT
+>1 HUSB</CODE
+>-, <CODE
 CLASS="structfield"
-><I
 >1
-	WIFE</I
-></TT
->- eller <TT
+	WIFE</CODE
+>- eller <CODE
 CLASS="structfield"
-><I
 >1
-	CHIL</I
-></TT
+	CHIL</CODE
 >-rader; dessa sköts av
 	<TT
 CLASS="application"
@@ -1854,9 +1627,9 @@ CLASS="application"
 	etiketter och strukturera dina uppgifter helt efter eget
 	huvud. Det är emellertid en god vana att använda de etiketter
 	och värdeformat som specificerats i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-standarden.
 	<TT
 CLASS="application"
@@ -1867,108 +1640,80 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > att du använder
-	raderna <TT
+	raderna <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
-> och <TT
+>1 NAME</CODE
+> och <CODE
 CLASS="structfield"
-><I
 >1
-	SEX</I
-></TT
+	SEX</CODE
 > med deras speciella betydelse och och
 	värdeformat. <TT
 CLASS="application"
 >LifeLines</TT
 > utgår också
 	från, men det inte är obligatoriskt, att du använder raderna
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 BIRT</I
-></TT
->, <TT
+>1 BIRT</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-	DEAT</I
-></TT
->, <TT
+	DEAT</CODE
+>, <CODE
 CLASS="structfield"
-><I
->1 CHR</I
-></TT
+>1 CHR</CODE
 > och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 BURI</I
-></TT
+>1 BURI</CODE
 > för respektive händelserna
 	födelse, död, dop och begravning. I familjeposter utgår
 	<TT
 CLASS="application"
 >LifeLines</TT
 > från att du kommer att
-	använda händelsen <TT
+	använda händelsen <CODE
 CLASS="structfield"
-><I
->1 MARR</I
-></TT
+>1 MARR</CODE
 > för
 	giftermål. Inom personposter får du inte använda raderna
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->0 INDI</I
-></TT
->, <TT
+>0 INDI</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-	FAMC</I
-></TT
-> eller <TT
+	FAMC</CODE
+> eller <CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 >,
 	eftersom dessa används för att sköta information om länkning.
-	Inom familjeposter får du inte använda <TT
+	Inom familjeposter får du inte använda <CODE
 CLASS="structfield"
-><I
 >0
-	FAM</I
-></TT
->-, <TT
+	FAM</CODE
+>-, <CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
+>1 HUSB</CODE
 >-,
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 WIFE</I
-></TT
->- eller <TT
+>1 WIFE</CODE
+>- eller <CODE
 CLASS="structfield"
-><I
 >1
-	CHIL</I
-></TT
+	CHIL</CODE
 >-rader.
 
 </P
 ><P
 >&#13;
 	Indenteringen i exemplen är inte en del av
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-formatet, men när
 	<TT
 CLASS="application"
@@ -1986,8 +1731,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN340"
-></A
->HUVUDMENY</H2
+>HUVUDMENY</A
+></H2
 ><P
 >&#13;
 	Efter att <TT
@@ -2076,9 +1821,9 @@ CLASS="screen"
 	av data. Kommandot hantera käll-, händelse- och övriga poster
 	ger dig tillgång till dessa tre posttyper. händelse- och
 	övriga typer av poster. Kommandot avsluta stänger databasen
-	och återgår till <SPAN
+	och återgår till <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >.
 
 </P
@@ -2099,8 +1844,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN351"
-></A
->TECKENKODNING</H2
+>TECKENKODNING</A
+></H2
 ><P
 >&#13;
      Efter att du har skapat en ny databas, och innan du
@@ -2197,8 +1942,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN361"
-></A
->LÄGGA IN DEN FÖRSTA PERSONEN</H2
+>LÄGGA IN DEN FÖRSTA PERSONEN</A
+></H2
 ><P
 >&#13;
      Notis: Innan du lägger in den första personen i din databas,
@@ -2223,9 +1968,9 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > skapar en mall för en
-	personpost i <SPAN
+	personpost i <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >, och placerar dig i en
 	textredigerare för att redigera mallen. Den förvalda mallen
 	ser ut så här:
@@ -2282,30 +2027,22 @@ CLASS="replaceable"
 >&#13;
 	Redigera mallen för att skapa en post för den nya personen.
 	Ändra namnet till personens namn. Indikera personens kön genom
-	att ta bort endera av <TT
+	att ta bort endera av <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 > eller
-	<TT
+	<KBD
 CLASS="userinput"
-><B
->F</B
-></TT
+>F</KBD
 >. Fyll i de födelse- och dödsdata så
 	bra du kan. Om personen lever, så ta bort dödshändelsen. Ta
-	bort alla <TT
+	bort alla <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >- och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-rader som du inte har
 	information för.
 
@@ -2318,9 +2055,9 @@ CLASS="structfield"
 	Indenteringen gör det enklare att läsa och göra ändringar i
 	posten, men är inte nödvändig. Du kan ändra den förvalda
 	mallen genom att att ändra användarinställningen
-	<TT
+	<CODE
 CLASS="option"
->INDIREC</TT
+>INDIREC</CODE
 > (beskrivs senare).
 
 </P
@@ -2350,61 +2087,43 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas Trask /Wetmore/ IV</B
-></TT
+>Thomas Trask /Wetmore/ IV</KBD
 >
-  1 SEX <TT
+  1 SEX <KBD
 CLASS="userinput"
-><B
->M</B
-></TT
+>M</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->18 DEC 1949</B
-></TT
+>18 DEC 1949</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->New London, New London, Connecticut</B
-></TT
+>New London, New London, Connecticut</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->Birth Certificate</B
-></TT
+>Birth Certificate</KBD
 >
-  1 OCCU <TT
+  1 OCCU <KBD
 CLASS="userinput"
-><B
->Software Engineer</B
-></TT
+>Software Engineer</KBD
 >
   1 RESI
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->1982 to 1995</B
-></TT
+>1982 to 1995</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Newburyport, Essex, Massachusetts</B
-></TT
+>Newburyport, Essex, Massachusetts</KBD
 >
-    2 ADDR <TT
+    2 ADDR <KBD
 CLASS="userinput"
-><B
->2 Barton Street, Newburyport, MA 01950</B
-></TT
+>2 Barton Street, Newburyport, MA 01950</KBD
 >
 	
 ... en massa andra händelser och fakta
@@ -2419,23 +2138,17 @@ CLASS="userinput"
 ><P
 >&#13;
 	När du redigerar en personpost, så lägg inte till eller
-	redigera rader med <TT
+	redigera rader med <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >,
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->FAMC</I
-></TT
+>FAMC</CODE
 > eller
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->FAMS</I
-></TT
+>FAMS</CODE
 >.
 	<TT
 CLASS="application"
@@ -2489,8 +2202,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN405"
-></A
->TEXTREDIGERARE OCH MILJÖVARIABLER</H2
+>TEXTREDIGERARE OCH MILJÖVARIABLER</A
+></H2
 ><P
 >&#13;
 	I <TT
@@ -2512,43 +2225,41 @@ CLASS="application"
 CLASS="application"
 >vi</TT
 >. (Versionen för
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 > har istället
 	<TT
 CLASS="application"
 >notepad.exe</TT
 > förvald.) Detta kan
-	upphävas genom miljövariablerna <TT
+	upphävas genom miljövariablerna <CODE
 CLASS="envar"
->ED</TT
+>ED</CODE
 >,
-	<TT
+	<CODE
 CLASS="envar"
->EDITOR</TT
-> eller <TT
+>EDITOR</CODE
+> eller <CODE
 CLASS="envar"
->LLEDITOR</TT
+>LLEDITOR</CODE
 >. Om du
 	exempelvis föredrar textredigeraren
 	<TT
 CLASS="application"
 >emacs</TT
 >, kan du lägga till raden
-	<TT
+	<KBD
 CLASS="userinput"
-><B
-><TT
+><CODE
 CLASS="envar"
->ED</TT
+>ED</CODE
 >=<TT
 CLASS="replaceable"
 ><I
 >emacs</I
 ></TT
-></B
-></TT
+></KBD
 >
 	i filen för din inloggningsprofil, varpå
 	<TT
@@ -2568,31 +2279,31 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 >specifika miljövariabler. De är
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
->, <TT
+>LLDATABASES</CODE
+>, <CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 >,
-	<TT
+	<CODE
 CLASS="envar"
->LLPROGRAMS</TT
-> och <TT
+>LLPROGRAMS</CODE
+> och <CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 >.
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > och 
-	<TT
+	<CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > är sökvägslistvariabler för
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >.
 
 </P
@@ -2600,13 +2311,13 @@ CLASS="acronym"
 >&#13;
 	Det finns även en konfigurationsfil, och inställningar kan
 	göras i den istället för i miljövariabler. Den kallas vanligen
-	.linesrc i <SPAN
+	.linesrc i <ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >, och lines.cfg i
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >. En exempelkonfigurationsfil bör
 	finnas inkluderad i distributionen.
 
@@ -2617,9 +2328,9 @@ CLASS="acronym"
 </P
 ><P
 >&#13;
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > kan sättas till en lista över
 	kataloger som innehåller
 	<TT
@@ -2632,19 +2343,17 @@ CLASS="application"
 > kommer dessa kataloger
 	att sökas igenom i tur och ordning efter den databas som nämns
 	på kommandoraden. Exempelvis indikerar
-	<TT
+	<KBD
 CLASS="userinput"
-><B
-><TT
+><CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 >=<TT
 CLASS="replaceable"
 ><I
 >.:/home/ttw4/LifeLines/Databaser</I
 ></TT
-></B
-></TT
+></KBD
 >
 	att <TT
 CLASS="application"
@@ -2665,9 +2374,9 @@ CLASS="application"
 >LifeLines</TT
 >databas
 	implementeras som en katalog med specifikt innehåll. Variabeln
-	<TT
+	<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > ska sättas till en lista över
 	kataloger som innehåller dessa databaskataloger, inte till en
 	lista över själva databaskatalogerna.
@@ -2675,9 +2384,9 @@ CLASS="envar"
 </P
 ><P
 >&#13;
-	Miljövariabeln <TT
+	Miljövariabeln <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > används på samma vis,
 	men för att ange sökvägen för rapportskapande och andra
 	program för <TT
@@ -2689,22 +2398,22 @@ CLASS="application"
 </P
 ><P
 >&#13;
-	<TT
+	<CODE
 CLASS="envar"
->LLARCHIVES</TT
-> och <TT
+>LLARCHIVES</CODE
+> och <CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > kan var
 	och en sättas till att ange en enda katalog.
-	<TT
+	<CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 > används för att välja en katalog där
 	alla säkerhetskopierade databaser ska sparas, och
-	<TT
+	<CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > används för att välja en katalog där
 	alla skapade rapporter och utdata från program ska placeras.
 
@@ -2734,9 +2443,9 @@ CLASS="application"
 >&#13;
 	Du kan använda konfigurationsfilen
 	i stället för miljövariabler. Detta är gjort speciellt med
-	tanke på användare på <SPAN
+	tanke på användare på <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >system,
 	där miljövariabler inte är en så vanlig konfigureringsteknik.
 
@@ -2748,14 +2457,14 @@ CLASS="application"
 >LifeLines</TT
 > använder biblioteket
 	curses för att få terminaloberoende I/O. Detta innebär att du
-	måste ange terminaltyp med miljövariabeln <TT
+	måste ange terminaltyp med miljövariabeln <CODE
 CLASS="envar"
->TERM</TT
+>TERM</CODE
 >.
 	(Detta gäller inte i versionen för
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 >.)
 
 </P
@@ -2766,8 +2475,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN465"
-></A
->GRUNDLÄGGANDE OM BLÄDDRING</H2
+>GRUNDLÄGGANDE OM BLÄDDRING</A
+></H2
 ><P
 >&#13;
 	Du kommer att använda de olika bläddringsfönstrena i
@@ -2818,18 +2527,18 @@ CLASS="application"
 	Personfönstret har flest visningslägen. Det har normalt läge,
 	vilket visar en sammanfattning av basdata för personen. Det
 	har (i likhet med alla andra fönster)
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-läge, vilket visar den verkliga
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-informationen, men förstärker den
 	med information för de rader som har en korsreferens
-	(<SPAN
+	(<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > xref). Det finns två typer av
 	tavel- eller trädfönster, ett för antavlor och ett för
 	stamtavlor. Djupet för träd som visas kan justeras via
@@ -2845,24 +2554,24 @@ CLASS="acronym"
 >&#13;
 	Familjefönstret och Tvåfamiljsfönstret har båda vanlig visning
 	(där sammanfattande basdata visas),
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-läge, och utökat
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-läge.
 
 </P
 ><P
->&#13;	Assistentfönstret har enbart <SPAN
+>&#13;	Assistentfönstret har enbart <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-läge
-	och utökat <SPAN
+	och utökat <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-läge.
 	(Listfönstret har inga visningslägen för närvarande.)
 
@@ -2874,8 +2583,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN483"
-></A
->IDENTIFIERA EN PERSON ELLER EN LISTA ÖVER PERSONER ATT BLÄDDRA TILL</H2
+>IDENTIFIERA EN PERSON ELLER EN LISTA ÖVER PERSONER ATT BLÄDDRA TILL</A
+></H2
 ><P
 >&#13;
 	Tryck b från huvudmenyn för att komma in i bläddringslägena.
@@ -3085,8 +2794,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN511"
-></A
->SNABBIDENTIFIERA EN PERSON</H2
+>SNABBIDENTIFIERA EN PERSON</A
+></H2
 ><P
 >&#13;
 	Några operationer i <TT
@@ -3196,8 +2905,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN526"
-></A
->GRUNDLÄGGANDE OM BLÄDDRINGSFÖNSTER</H2
+>GRUNDLÄGGANDE OM BLÄDDRINGSFÖNSTER</A
+></H2
 ><P
 >&#13;
 	Fönstret är uppdelat i rutor i alla bläddringsfönster. Längst
@@ -3214,8 +2923,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN529"
-></A
->PERSONFÖNSTRET</H2
+>PERSONFÖNSTRET</A
+></H2
 ><P
 >&#13;
 	När du har identifierat en person att bläddra till, så går
@@ -3833,8 +3542,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN698"
-></A
->LISTFÖNSTRET</H2
+>LISTFÖNSTRET</A
+></H2
 ><P
 >&#13;
 	Det här fönstret hanterar listor med personer. I den översta
@@ -4165,8 +3874,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN786"
-></A
->FAMILJEFÖNSTRET</H2
+>FAMILJEFÖNSTRET</A
+></H2
 ><P
 >&#13;
 	Det här fönstret visar information om en familj. I den övre
@@ -4576,8 +4285,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN896"
-></A
->TANDEMLÄGE FÖR PERSONER</H2
+>TANDEMLÄGE FÖR PERSONER</A
+></H2
 ><P
 >&#13;
 	Tvåpersonsfönstret visar information om två personer. Dess
@@ -4896,8 +4605,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN983"
-></A
->TANDEMLÄGE FÖR FAMILJER</H2
+>TANDEMLÄGE FÖR FAMILJER</A
+></H2
 ><P
 >&#13;
 	Tvåfamiljsfönstret visar information om två familjer. Dess
@@ -5265,8 +4974,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1091"
-></A
->OPERATIONEN LÄGG TILL</H2
+>OPERATIONEN LÄGG TILL</A
+></H2
 ><P
 >&#13;
 	Om du väljer operationen lägg till från huvudmenyn, visar
@@ -5316,8 +5025,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1098"
-></A
->OPERATIONEN TA BORT</H2
+>OPERATIONEN TA BORT</A
+></H2
 ><P
 >&#13;
 	Om du väljer operationen ta bort från huvudmenyn, visar
@@ -5385,8 +5094,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1108"
-></A
->KONVERTERING AV TECKENKODNINGAR</H2
+>KONVERTERING AV TECKENKODNINGAR</A
+></H2
 ><P
 >&#13;
      (Detta avsnitt var tidigare betitlat TECKENÖVERSÄTTNING.)
@@ -5479,9 +5188,9 @@ CLASS="application"
 >LifeLines</TT
 > har väldigt litet inbyggd
 	kunskap om teckenkodning. Om du använder 7-bitars
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 >-tecken, så kommer du inte att stöta
 	på några problem. Emellertid krävs det ytterligare tecken i
 	många europeiska och andra språk, och det finns många
@@ -5607,17 +5316,17 @@ databasformat
 ></DD
 ><DT
 ><B
-><SPAN
+><ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > to internal</B
 ></DT
 ><DD
 ><P
 >&#13;
-vid inläsning av <SPAN
+vid inläsning av <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-indataposter och skrivning
 av dem till databasen.
 
@@ -5625,18 +5334,18 @@ av dem till databasen.
 ></DD
 ><DT
 ><B
->internal to <SPAN
+>internal to <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 ></B
 ></DT
 ><DD
 ><P
 >&#13;
 vid skrivning av interna databasposter till extern
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil
 
 </P
@@ -5694,9 +5403,9 @@ CLASS="replaceable"
 ></TABLE
 >
 	där ett tabbsteg avdelar mönstren. Varje mönster är en
-	godtycklig följd av <SPAN
+	godtycklig följd av <ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 >-tecken och
 	kontrollsekvenser. Översättningen sker genom att hitta alla
 	mönster som matchar mönster på vänster sida, och ersätta dem
@@ -5780,8 +5489,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1203"
-></A
->DIVERSE VERKTYG</H2
+>DIVERSE VERKTYG</A
+></H2
 ><P
 >&#13;
 Om du väljer operationen diverse verktyg, så visar
@@ -5836,9 +5545,9 @@ CLASS="action"
 CLASS="application"
 >LifeLines</TT
 >databasen i en
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil. Alla person-, familje-,
 	händelse-, käll- och användardefinierade poster lagras. Detta
 	kommando kan användas för regelbunden säkerhetskopiering av
@@ -5847,9 +5556,9 @@ CLASS="acronym"
 CLASS="application"
 >LifeLines</TT
 > efter namnet på filen. Om
-	du har definierat skalvariabeln <TT
+	du har definierat skalvariabeln <CODE
 CLASS="envar"
->LLARCHIVE</TT
+>LLARCHIVE</CODE
 >, så
 	lagrar <TT
 CLASS="application"
@@ -5873,30 +5582,30 @@ CLASS="action"
 ><P
 >&#13;
 	Med detta kommando kan du återställa en fullständig databas
-	från en <SPAN
+	från en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil. När du väljer det här
 	kommandot, frågar <TT
 CLASS="application"
 >LifeLines</TT
 > efter
-	namnet på <SPAN
+	namnet på <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filen. Det här kommandot
 	kan också användas för att importera data från en
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil till en befintlig databas. När
 	<TT
 CLASS="application"
 >LifeLines</TT
 > utför det här kommandot,
-	läser det först in hela <SPAN
+	läser det först in hela <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filen, och
 	kontrollerar att den är giltig. Om det finns problem med
 	filen, så beskriver <TT
@@ -6060,11 +5769,9 @@ CLASS="application"
 >LifeLines</TT
 > skapar listor över
 	personer för dig att välja från, eftersöks den sista
-	komponenten i vissa <TT
+	komponenten i vissa <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >-rader, och
 	om den komponenten återfinns, ersätts den med dess
 	förkortning.
@@ -6234,12 +5941,12 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1301"
-></A
->FEL VID IMPORT</H2
+>FEL VID IMPORT</A
+></H2
 ><P
->&#13;Fel som uppkommit under <SPAN
+>&#13;Fel som uppkommit under <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-import loggas till
 en fil, som har det förinställda namnet errs.log. 
 </P
@@ -6349,8 +6056,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1338"
-></A
->HANTERA KÄLL-, HÄNDELSE- OCH ANVÄNDARDEFINIERADE POSTER</H2
+>HANTERA KÄLL-, HÄNDELSE- OCH ANVÄNDARDEFINIERADE POSTER</A
+></H2
 ><P
 >&#13;
 	<TT
@@ -6580,26 +6287,20 @@ CLASS="replaceable"
 </P
 ><P
 >&#13;
-	Ändra inte raden <TT
+	Ändra inte raden <CODE
 CLASS="structfield"
-><I
->0 SOUR</I
-></TT
+>0 SOUR</CODE
 >. I övrigt
 	får du redigera den här posten som du vill. Raden
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > är en speciell rad som du
 	kan använda för att ge källposten ett symboliskt namn för att
 	hänvisa till källposten. Se avsnittet om att använda
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värden. Eftersom många källor
 	har en titel och en författare, så finns dessa rader i den
 	förinställda mallen. Du kan justera källmallen via
@@ -6629,54 +6330,38 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 SOUR
-  1 REFN <TT
+  1 REFN <KBD
 CLASS="userinput"
-><B
->jcw</B
-></TT
+>jcw</KBD
 >
-  1 TITL <TT
+  1 TITL <KBD
 CLASS="userinput"
-><B
->The Wetmore Family of America, and its Collateral Branches: with</B
-></TT
+>The Wetmore Family of America, and its Collateral Branches: with</KBD
 >
-    2 CONT <TT
+    2 CONT <KBD
 CLASS="userinput"
-><B
->Genealogical, Biographical, and Historical Notices</B
-></TT
+>Genealogical, Biographical, and Historical Notices</KBD
 >
-  1 AUTH <TT
+  1 AUTH <KBD
 CLASS="userinput"
-><B
->James Carnahan Wetmore</B
-></TT
+>James Carnahan Wetmore</KBD
 >
   1 PUBL
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->1861</B
-></TT
+>1861</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->Albany, New York</B
-></TT
+>Albany, New York</KBD
 >
-    2 INST <TT
+    2 INST <KBD
 CLASS="userinput"
-><B
->Munsell and Rowland</B
-></TT
+>Munsell and Rowland</KBD
 >
-    2 ADDR <TT
+    2 ADDR <KBD
 CLASS="userinput"
-><B
->78 State Street</B
-></TT
+>78 State Street</KBD
 ></PRE
 ></TD
 ></TR
@@ -6818,11 +6503,9 @@ skriv in nyckel eller refn:
 >&#13;
 	Identifiera en källa genom att skriva in dess nyckelvärde, med
 	eller utan det inledande S-et, eller genom att skriva in dess
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värde.
 	<TT
 CLASS="application"
@@ -6890,33 +6573,27 @@ CLASS="programlisting"
 </P
 ><P
 >&#13;
-	Ändra inte raden <TT
+	Ändra inte raden <CODE
 CLASS="structfield"
-><I
->0 EVEN</I
-></TT
+>0 EVEN</CODE
 >. I övrigt
 	får du redigera den här posten som du vill. Raden
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 > ger dig möjlighet att ge
 	händelseposten ett symboliskt namn om du vill hänvisa till den
 	här händelsen från andra poster. Se avsnittet om att använda
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värden. Den förinställda
 	mallen föreslår att en händelsepost ska innehålla ett datum,
 	en plats, och hänvisar till personer med hänseende till den
 	roll de haft vid händelsen. Det finns mycket mindre
-	erfarenheter med händelsebaserad <SPAN
+	erfarenheter med händelsebaserad <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > än
 	med vanlig person- och familjebaserad. Du kanske till och med
 	undrar vad det finns för behov av händelseposter, när man helt
@@ -7056,11 +6733,9 @@ skriv in nyckel eller refn:
 >&#13;
 	Du identifierar en händelsepost genom att skriva in dess
 	nyckelvärde, med eller utan det inledande E-t, eller genom att
-	skriva in dess <TT
+	skriva in dess <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värde.
 	<TT
 CLASS="application"
@@ -7121,52 +6796,38 @@ CLASS="replaceable"
 ></TT
 > med den etikett som du
 	valt för den nya posten. Du kan välja vilken etikett du vill,
-	förutom <TT
+	förutom <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 >,
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->FAM</I
-></TT
+>FAM</CODE
 >,
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->SOUR</I
-></TT
+>SOUR</CODE
 > och
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->EVEN</I
-></TT
+>EVEN</CODE
 >. Till exempel, om du har
 	information om de skepp som dina nordamerikanska släktingar
 	anlände på, så kommer du att ha poster om de skeppen i din
-	databas; etiketten <TT
+	databas; etiketten <CODE
 CLASS="structfield"
-><I
->SHIP</I
-></TT
+>SHIP</CODE
 > är nästan
-	självskriven för de posterna. Raden <TT
+	självskriven för de posterna. Raden <CODE
 CLASS="structfield"
-><I
 >1
-	REFN</I
-></TT
+	REFN</CODE
 > ger dig möjlighet att ge den här posten ett
 	symboliskt namn som du kan använda när du vill hänvisa till
 	den från andra poster. Se avsnittet om att använda
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värden. Du kan justera mallen
 	för användardefinierade poster via användarinställningen OTHR
 	(antingen på databasnivå, via menyvalet user options, eller
@@ -7307,11 +6968,9 @@ skriv in nyckel eller refn:
 >&#13;
 	Du identifierar en post genom att skriva in dess nyckelvärde,
 	med eller utan det inledande X:et, eller genom att skriva in
-	dess <TT
+	dess <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värde.
 	<TT
 CLASS="application"
@@ -7405,8 +7064,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1520"
-></A
->FAMILJESTRUKTUR OCH ATT SLÅ SAMMAN PERSONER OCH FAMILJER</H2
+>FAMILJESTRUKTUR OCH ATT SLÅ SAMMAN PERSONER OCH FAMILJER</A
+></H2
 ><P
 >&#13;
 	<TT
@@ -7482,8 +7141,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1529"
-></A
->LÄNKA SAMMAN POSTER OCH ANVÄNDA FUNKTIONEN "REFN"</H2
+>LÄNKA SAMMAN POSTER OCH ANVÄNDA FUNKTIONEN "REFN"</A
+></H2
 ><P
 >&#13;
 	Poster i en <TT
@@ -7498,34 +7157,24 @@ CLASS="application"
 > genom operationer som
 	återfinns i menyerna för de olika bläddringslägena. Dessa
 	referenser avser dels länkarna från personer till familjer
-	(<TT
+	(<CODE
 CLASS="structfield"
-><I
->1 FAMC</I
-></TT
-> och <TT
+>1 FAMC</CODE
+> och <CODE
 CLASS="structfield"
-><I
 >1
-	FAMS</I
-></TT
+	FAMS</CODE
 >), dels länkarna från familjer till personer
-	(<TT
+	(<CODE
 CLASS="structfield"
-><I
->1 HUSB</I
-></TT
->, <TT
+>1 HUSB</CODE
+>, <CODE
 CLASS="structfield"
-><I
 >1
-	WIFE</I
-></TT
-> och <TT
+	WIFE</CODE
+> och <CODE
 CLASS="structfield"
-><I
->1 CHIL</I
-></TT
+>1 CHIL</CODE
 >).
 	Eftersom det är <TT
 CLASS="application"
@@ -7534,19 +7183,15 @@ CLASS="application"
 	som sköter dessa länkar, så är det inte tillåtet för dig att
 	ändra dessa rader när du redigerar poster. Det finns till
 	synes några undantag till den här regeln. Exempelvis får du
-	ändra ordningen på rader av typen <TT
+	ändra ordningen på rader av typen <CODE
 CLASS="structfield"
-><I
 >1
-	CHIL</I
-></TT
+	CHIL</CODE
 > i en familjepost för att ändra ordningen
 	mellan barnen, och du får ändra ordningen på rader av typen
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->1 FAMS</I
-></TT
+>1 FAMS</CODE
 > i en personpost för att
 	ändra ordningen mellan de familjer som personen var make eller
 	förälder i. Dessa operationer är tillåtna eftersom de inte
@@ -7586,45 +7231,33 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
 0 @I23@ INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas/Whitmore/</B
-></TT
+>Thomas/Whitmore/</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->about 1615</B
-></TT
+>about 1615</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->England</B
-></TT
+>England</KBD
 >
     2 SOUR @S3@
 ...
 0 @S3@ SOUR
-  1 REFN <TT
+  1 REFN <KBD
 CLASS="userinput"
-><B
->cat</B
-></TT
+>cat</KBD
 >
-  1 TITL <TT
+  1 TITL <KBD
 CLASS="userinput"
-><B
->New England Marriages Prior to 1700</B
-></TT
+>New England Marriages Prior to 1700</KBD
 >
-  1 AUTH <TT
+  1 AUTH <KBD
 CLASS="userinput"
-><B
->Clarence Almon Torrey</B
-></TT
+>Clarence Almon Torrey</KBD
 >
 ...</PRE
 ></TD
@@ -7636,11 +7269,9 @@ CLASS="userinput"
 </P
 ><P
 >&#13;
-	Raden <TT
+	Raden <CODE
 CLASS="structfield"
-><I
->2 SOUR</I
-></TT
+>2 SOUR</CODE
 >
 	<TT
 CLASS="replaceable"
@@ -7681,20 +7312,16 @@ CLASS="application"
 >LifeLines</TT
 > att du tilldelar en
 	permanent, användardefinierad nyckel till en post i databasen,
-	med hjälp av en <TT
+	med hjälp av en <CODE
 CLASS="structfield"
-><I
->1 REFN</I
-></TT
+>1 REFN</CODE
 >-rad. Värdet
 	för den här raden är en sträng som du väljer som permanent
 	nyckelvärde för posten. När du lägger till en länk till en
 	post som har ett användarbestämt
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värde, så kan du använda det
 	värdet istället för det interna nyckelvärdet. Till exempel,
 	när du lägger in personen i det föregående exemplet, kan du
@@ -7721,30 +7348,22 @@ WIDTH="100%"
 CLASS="programlisting"
 >&#13;
   0 INDI
-  1 NAME <TT
+  1 NAME <KBD
 CLASS="userinput"
-><B
->Thomas/Whitmore/</B
-></TT
+>Thomas/Whitmore/</KBD
 >
   1 BIRT
-    2 DATE <TT
+    2 DATE <KBD
 CLASS="userinput"
-><B
->about 1615</B
-></TT
+>about 1615</KBD
 >
-    2 PLAC <TT
+    2 PLAC <KBD
 CLASS="userinput"
-><B
->England</B
-></TT
+>England</KBD
 >
-    2 SOUR <TT
+    2 SOUR <KBD
 CLASS="userinput"
-><B
->&#60;cat&#62;</B
-></TT
+>&#60;cat&#62;</KBD
 ></PRE
 ></TD
 ></TR
@@ -7762,28 +7381,22 @@ CLASS="replaceable"
 >@S3@</I
 ></TT
 >, så används
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värdet cat.
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värdet måste omges av
 	vinkelparenteser när de används på detta
 	sätt. <TT
 CLASS="application"
 >LifeLines</TT
 > ersätter
-	automatiskt <TT
+	automatiskt <CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-länken med
 	motsvarande internt nyckelvärde när posten lagrats i
 	databasen.
@@ -7791,25 +7404,19 @@ CLASS="structfield"
 </P
 ><P
 >&#13;
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värdet kan också användas när
 	vid sökning efter efter person-, käll-, händelse- och
 	användardefinierade poster. Du bör inte lägga till fler än en
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-rad i en post, och alla
-	<TT
+	<CODE
 CLASS="structfield"
-><I
->REFN</I
-></TT
+>REFN</CODE
 >-värden bör vara unika.
 
 </P
@@ -7820,8 +7427,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1580"
-></A
->System- och användaregenskaper</H2
+>System- och användaregenskaper</A
+></H2
 ><P
 >&#13;
 	Det finns ett antal egenskaper som kan anges för att anpassa
@@ -7850,9 +7457,9 @@ CLASS="application"
 	först efter i katalogen som angivits i miljövariabeln HOME,
 	med antagande att den ställts in, och därefter i den aktuella
 	katalogen. Namnet på konfigurationsfilen är .linesrc på
-	<SPAN
+	<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
+>UNIX</ACRONYM
 >- eller linuxsystem och lines.cfg på
 	windowssystem. 
 
@@ -7950,25 +7557,25 @@ CLASS="application"
 >LifeLines</TT
 > i miljötabellen.
 Denna tabell innehåller de värden som hittats i miljövariablerna
-<TT
+<CODE
 CLASS="envar"
->LLPROGRAMS</TT
->, <TT
+>LLPROGRAMS</CODE
+>, <CODE
 CLASS="envar"
->LLREPORTS</TT
->, <TT
+>LLREPORTS</CODE
+>, <CODE
 CLASS="envar"
->LLARCHIVES</TT
->, <TT
+>LLARCHIVES</CODE
+>, <CODE
 CLASS="envar"
->LLDATABASES</TT
->, <TT
+>LLDATABASES</CODE
+>, <CODE
 CLASS="envar"
->LLNEWDBDIR</TT
+>LLNEWDBDIR</CODE
 >, and
-<TT
+<CODE
 CLASS="envar"
->LLEDITOR</TT
+>LLEDITOR</CODE
 >.
 </P
 ></DD
@@ -7988,9 +7595,9 @@ CLASS="glosslist"
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > är sökvägen för
 <TT
 CLASS="application"
@@ -8005,9 +7612,9 @@ program.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLREPORTS</TT
+>LLREPORTS</CODE
 > används för att välja en katalog där alla
 genererade rapporter och programutdtata kommer att placeras.
 </P
@@ -8018,9 +7625,9 @@ genererade rapporter och programutdtata kommer att placeras.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLARCHIVES</TT
+>LLARCHIVES</CODE
 > används för att välja en katalog där alla
 säkerhetskopierade databasfiler kommer att lagras.
 </P
@@ -8031,9 +7638,9 @@ säkerhetskopierade databasfiler kommer att lagras.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLDATABASES</TT
+>LLDATABASES</CODE
 > är en lista med kataloger som innehåller
 databaskataloger som används för att finna själva databaskatalogerna.
 </P
@@ -8044,9 +7651,9 @@ databaskataloger som används för att finna själva databaskatalogerna.
 ></DT
 ><DD
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="envar"
->LLNEWDBDIR</TT
+>LLNEWDBDIR</CODE
 > är en enda katalog där nya databaser som
 angivits utan sökvägar kommer att skapas. Detta är praktiskt för
 användare som generellt placerar alla sina databaser under en enda
@@ -8084,9 +7691,9 @@ CLASS="glosslist"
 ><DD
 ><P
 >&#13;Anger den förvalda kodningen att använda vid behandling av
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filer. Det finns faktiskt tre egenskaper.
 <I
 CLASS="glossterm"
@@ -8102,22 +7709,22 @@ endera av dessa inte är angiven, så används
 CLASS="glossterm"
 >GedcomCodeSet</I
 >. De flesta
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filer bör innehålla en kodningsegenskap, så
 detta är vanligen inte relevant vid inläsning av en
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil, såvida inte
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filen saknar en kodningsegenskap. Detta
-används, emellertid, när en <SPAN
+används, emellertid, när en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil skrivs ut.
 OBS: Detta ignoreras om databasen inte har någon intern kodning
 angiven.
@@ -8388,9 +7995,9 @@ teckenöversättningstabeller (*.tt).
 ></DT
 ><DD
 ><P
->&#13;sökväg att leta i vid inläsning av <SPAN
+>&#13;sökväg att leta i vid inläsning av <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filer
 </P
 ></DD
@@ -8524,9 +8131,9 @@ CLASS="programlisting"
 ></DT
 ><DD
 ><P
->&#13;sträng att använda vid skrivning av <SPAN
+>&#13;sträng att använda vid skrivning av <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-filer
 för SUBM.
 Det förvalda är
@@ -8553,9 +8160,9 @@ CLASS="programlisting"
 ><DD
 ><P
 >&#13;Sträng som innehåller GEDC-blocket för rubrikposten vid export till
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >.
 Det förvalda är
 <TABLE
@@ -8581,9 +8188,9 @@ CLASS="programlisting"
 ><DD
 ><P
 >&#13;Sträng som innehåller CHAR-blocket för rubrikposten vid export till
-<SPAN
+<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >.
 Det förvalda är
 <TABLE
@@ -8646,9 +8253,9 @@ den aktuella mappen.
 ></DT
 ><DD
 ><P
->&#13;Var fel som påträffas vid import av en <SPAN
+>&#13;Var fel som påträffas vid import av en <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >-fil
 ska skrivas.
 Det förvalda är errs.log 

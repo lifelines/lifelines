@@ -1,7 +1,14 @@
+2006-06-10 Stephen Dum
+	* ChangeLog docs/ll-devguide.{xml,html} ll-reportmanual.{html,pdf,txt}
+	  ll-userguide.{html,pdf,txt} ll-userguild.sv.html
+
+	Update formatted docs.
+
 2006-06-10 Perry Rapp
 
 	* ChangeLog reports/st/st_date.li src/interp/builtin.c
 	src/interp/functab.c src/interp/interpi.h
+
 
 	(From Patrick Texier) New report functions:
 	date2jd, dayofweek, jd2date, setdate.
