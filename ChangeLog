@@ -8,6 +8,10 @@
 
 	Add dayofweek to report manual.
 
+	* ChangeLog NEWS
+
+	Add new report functions to NEWS.
+
 2006-06-10 Stephen Dum
 	* ChangeLog docs/ll-devguide.{xml,html} ll-reportmanual.{html,pdf,txt}
 	  ll-userguide.{html,pdf,txt} ll-userguild.sv.html

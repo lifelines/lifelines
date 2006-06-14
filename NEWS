@@ -3,6 +3,7 @@ http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 New features added in 3.0.51
 ============================
+ - New report functions date2jd, dayofweek, jd2date, setdate.
 
 New features added in 3.0.50
 ============================
