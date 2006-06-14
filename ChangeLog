@@ -1,3 +1,9 @@
+2006-06-13 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Fix setdate declaration in report manual.
+
 2006-06-10 Stephen Dum
 	* ChangeLog docs/ll-devguide.{xml,html} ll-reportmanual.{html,pdf,txt}
 	  ll-userguide.{html,pdf,txt} ll-userguild.sv.html
