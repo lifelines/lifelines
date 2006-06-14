@@ -3043,6 +3043,16 @@ date of, in current complex format
 </para>
 </glossdef></glossentry>
 
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>STRING <function>dayofweek</function></funcdef>
+<paramdef><parameter>EVENT|STRING</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+day of week, in appropriate language
+</para>
+</glossdef></glossentry>
+
 </glosslist>
 
 <para>
@@ -3587,6 +3597,11 @@ from %1 to $2
 </tbody>
 </tgroup>
 </informaltable>
+
+<para>
+The function dayofweek is a way to access the (localized) day name, eg, "Thursday",
+for a given date.
+</para>
 
 </sect1>
 

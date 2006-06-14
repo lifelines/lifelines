@@ -4,6 +4,10 @@
 
 	Fix setdate declaration in report manual.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add dayofweek to report manual.
+
 2006-06-10 Stephen Dum
 	* ChangeLog docs/ll-devguide.{xml,html} ll-reportmanual.{html,pdf,txt}
 	  ll-userguide.{html,pdf,txt} ll-userguild.sv.html
