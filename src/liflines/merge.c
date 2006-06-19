@@ -103,6 +103,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	famc1 = FAMC(indi1);
 	famc2 = FAMC(indi2);
 /*LOOSEEND -- THIS CHECK IS NOT GOOD ENOUGH */
+/* comment from merge.c 1.2 2000-01-03 nozell */
 	if (traditional) {
 		if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
 			if (!ask_yes_or_no_msg(_(qSmgsfam), _(qSmgconf))) {

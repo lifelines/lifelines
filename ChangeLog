@@ -1,3 +1,9 @@
+2006-06-19 Perry Rapp
+
+	* ChangeLog src/liflines/merge.c
+
+	Cosmetic: annotating existing comment.
+
 2006-06-13 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml
