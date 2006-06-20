@@ -4,6 +4,11 @@
 
 	Minor cleanup & adding comments in merge_two_fams.
 
+	* ChangeLog src/liflines/lbrowse.c
+
+	Fix bug in add to list (browse_list); fix "strsave(key)" 
+	to "strsave(skey)".
+
 2006-06-19 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c
