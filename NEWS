@@ -5,6 +5,10 @@ New features added in 3.0.51
 ============================
  - New report functions date2jd, dayofweek, jd2date, setdate.
 
+Bug fixes in 3.0.39 (beta)
+============================
+ - Fix add to list (was repeating first person instead of adding).
+
 New features added in 3.0.50
 ============================
  - The spouses() iterator has been overloaded to iterate over the

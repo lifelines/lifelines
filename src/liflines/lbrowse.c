@@ -246,7 +246,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			FORINDISEQ(newseq, el, i)
 				skey = element_skey(el);
 				snam = element_name(el);
-				append_indiseq_null(seq, strsave(key), snam, FALSE, TRUE);
+				append_indiseq_null(seq, strsave(skey), snam, FALSE, TRUE);
 			ENDINDISEQ
 			namesort_indiseq(seq);
 			cur = top = 0;
