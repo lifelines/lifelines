@@ -1,8 +1,15 @@
+2006-06-20 Perry Rapp
+
+	* ChangeLog src/liflines/merge.c
+
+	Minor cleanup & adding comments in merge_two_fams.
+
 2006-06-19 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c
 
 	Cosmetic: annotating existing comment.
+
 
 2006-06-13 Perry Rapp
 

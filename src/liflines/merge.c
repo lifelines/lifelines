@@ -402,10 +402,16 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 /*=================================================================
  * merge_two_fams -- Merge first family into second; data from both
  *   are put in file that user edits; first family removed
+ *---------------------------------------------------------------
+ *  These are the four main variables
+ *   fam1 - upper family in database -- fam1 is merged into fam2
+ *   fam2 - lower family in database -- fam1 is merged into this person
+ *   fam3 - temporary which is the merged version for the user to edit
+ *   fam4 - merged version of the two persons after editing
+ *     the nodes inside fam4 are stored into fam2 & to dbase at the very end
  *===============================================================*/
 RECORD
-merge_two_fams (NODE fam1,
-                NODE fam2)
+merge_two_fams (NODE fam1, NODE fam2)
 {
 	NODE husb1, wife1, chil1, rest1, husb2, wife2, chil2, rest2;
 	NODE fref1, fref2;
@@ -434,14 +440,16 @@ merge_two_fams (NODE fam1,
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
 	split_fam(fam2, &fref2, &husb2, &wife2, &chil2, &rest2);
 	if (traditional) {
+		BOOLEAN ok = TRUE;
 		if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
 			message(_(qSdhusb));
-			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
-			join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
-			return NULL;
+			ok = FALSE;
 		}
-		if (wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
+		if (ok && wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
 			message(_(qSdwife));
+			ok = FALSE;
+		}
+		if (!ok) {
 			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
 			join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
 			return NULL;
