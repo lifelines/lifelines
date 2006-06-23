@@ -740,8 +740,95 @@ static void
 check_indi_lineage_links (NODE indi)
 {
 	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
+	NODE curs=0;
+	TABLE memtab = memtab = create_table_int();
+	TABLE_ITER tabit=0;
+	CNSTRING famkey=0;
+	INT count=0;
+	CNSTRING ikey = nxref(indi);
+
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+
+	/*
+	Make table listing all families this person is spouse in
+	(& how many times each)
+	*/
+	for (curs = fams; curs; curs = nsibling(curs)) {
+		famkey = rmvat(nval(curs));
+		if (!eqstr(ntag(curs), "FAMS")) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad spouse tag: %s"), ntag(curs));
+			FATAL2(msg);
+		}
+		increment_table_int(memtab, famkey);
+	}
+
+	/*
+	Check that all listed families contain person as FAMS as many times
+	as expected
+	*/
+	tabit = begin_table_iter(memtab);
+	while (next_table_int(tabit, &famkey, &count)) {
+		NODE fam = key_to_fam(famkey);
+		INT occur = 0;
+		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
+			if (eqstr(ntag(curs), "HUSB") || eqstr(ntag(curs), "WIFE")) {
+				if (eqstr(nval(curs), ikey)) {
+					++occur;
+				}
+			}
+		}
+		if (count != occur) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+				, _("Mismatched lineage spouse links between %s and %s: %d and %d")
+				, ikey, famkey, count, occur);
+			FATAL2(msg);
+		}
+	}
+	destroy_table(memtab);
+	memtab = create_table_int();
+
+	/*
+	Make table listing all families this person is child in
+	(& how many times each)
+	*/
+	for (curs = famc; curs; curs = nsibling(curs)) {
+		famkey = rmvat(nval(curs));
+		if (!eqstr(ntag(curs), "FAMC")) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad child tag: %s"), ntag(curs));
+			FATAL2(msg);
+		}
+		increment_table_int(memtab, famkey);
+	}
+
+	/*
+	Check that all listed families contain person as FAMC as many times
+	as expected
+	*/
+	tabit = begin_table_iter(memtab);
+	while (next_table_int(tabit, &famkey, &count)) {
+		NODE fam = key_to_fam(famkey);
+		INT occur = 0;
+		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
+			if (eqstr(ntag(curs), "CHIL")) {
+				if (eqstr(nval(curs), ikey)) {
+					++occur;
+				}
+			}
+		}
+		if (count != occur) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+				, _("Mismatched lineage child links between %s and %s: %d and %d")
+				, ikey, famkey, count, occur);
+			FATAL2(msg);
+		}
+	}
+
 	join_indi(indi, name, refn, sex, body, famc, fams);
+	destroy_table(memtab);
 }
 /*=================================================
  * check_fam_lineage_links -- Check all persons of

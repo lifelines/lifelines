@@ -6,6 +6,10 @@
 	and check_fam_lineage_links, and call before and after person
 	and family merges.
 
+	* ChangeLog src/liflines/merge.c
+
+	Implement check_indi_lineage_links.
+
 2006-06-20 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c
