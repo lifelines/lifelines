@@ -1,3 +1,11 @@
+2006-06-23 Perry Rapp
+
+	* ChangeLog src/liflines/merge.c
+
+	New skeleton unimplemented functions check_indi_lineage_links
+	and check_fam_lineage_links, and call before and after person
+	and family merges.
+
 2006-06-20 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c

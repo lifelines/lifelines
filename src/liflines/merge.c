@@ -41,6 +41,9 @@
 #include "llinesi.h"
 #include "feedback.h"
 
+/*********************************************
+ * external/imported variables
+ *********************************************/
 
 extern BOOLEAN traditional;
 extern STRING qSiredit, qScfpmrg, qSnopmrg, qSnoqmrg, qSnoxmrg, qSnofmrg;
@@ -50,6 +53,16 @@ extern STRING qSmgsfam,qSmgconf;
 static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
 static NODE remove_dupes(NODE, NODE);
 static NODE sort_children(NODE, NODE);
+
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void check_indi_lineage_links(NODE indi);
+static void check_fam_lineage_links(NODE fam);
+
 
 /*================================================================
  * merge_two_indis -- Merge first person to second; data from both
@@ -118,6 +131,11 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 		message(_(qSnoxmrg));
 		return NULL;
 	}
+
+
+/* sanity check lineage links */
+	check_indi_lineage_links(indi1);
+	check_indi_lineage_links(indi2);
 
 /* Split original persons */
 
@@ -397,6 +415,10 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	free_nodes(indi4);
 
 	remove_indi_by_root(indi01);	/* this is the original indi1 */
+
+/* sanity check lineage links */
+	check_indi_lineage_links(indi02);
+
 	return node_to_record(indi02);   /* this is the updated indi2 */
 }
 /*=================================================================
@@ -435,6 +457,10 @@ merge_two_fams (NODE fam1, NODE fam2)
 		message(_(qSnofmrg));
 		return NULL;
 	}
+
+/* sanity check lineage links */
+	check_fam_lineage_links(fam1);
+	check_fam_lineage_links(fam2);
 
 /* Check restrictions on families */
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
@@ -529,6 +555,11 @@ merge_two_fams (NODE fam1, NODE fam2)
 	join_fam(fam2, fref4, husb4, wife4, chil4, rest4);
 	resolve_refn_links(fam2);
 	fam_to_dbase(fam2);
+
+
+/* sanity check lineage links */
+	check_fam_lineage_links(fam2);
+	
 	return node_to_record(fam2);
 }
 /*================================================================
@@ -700,4 +731,27 @@ remove_dupes (NODE list1,
 		}
 	}
 	return copy1;
+}
+/*=================================================
+ * check_indi_lineage_links -- Check all families of
+ *  this person to make sure they point back to this person
+ *===============================================*/
+static void
+check_indi_lineage_links (NODE indi)
+{
+	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
+	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	join_indi(indi, name, refn, sex, body, famc, fams);
+}
+/*=================================================
+ * check_fam_lineage_links -- Check all persons of
+ *  this family to make sure they point back to this family
+ *===============================================*/
+static void
+check_fam_lineage_links (NODE fam)
+{
+	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
+	NODE curs=0;
+	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	join_fam(fam, fref, husb, wife, chil, rest);
 }
