@@ -10,6 +10,10 @@
 
 	Implement check_indi_lineage_links.
 
+	* ChangeLog src/liflines/merge.c
+
+	Cosmetic: adding comments.
+
 2006-06-20 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c

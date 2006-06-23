@@ -652,6 +652,7 @@ sort_children (NODE chil1,
 	NODE copy1, copy2, chil3, prev, kid1, kid2;
 	STRING year1, year2;
 	INT int1, int2;
+	/* copy1 contains all children in chil1 not in chil2 */
 	copy1 = remove_dupes(chil1, chil2);
 	copy2 = copy_nodes(chil2, TRUE, TRUE);
 	int1 = int2 = 1;
@@ -703,10 +704,17 @@ sort_children (NODE chil1,
 }
 /*=================================================
  * remove_dupes -- Return all in list1 not in list2
+ *  Creates a copy of list1 then traverses it
+ *   removing any items which are in list2
+ *  Then returns this new trimmed list.
+ * This is pretty inefficient algorithm, as every item
+ *  in list1 is compared against every item in list2
+ * It would be more efficient to make a table of items
+ *  on list2 first, and then use that to check each item
+ *  in list1.
  *===============================================*/
 static NODE
-remove_dupes (NODE list1,
-              NODE list2)
+remove_dupes (NODE list1, NODE list2)
 {
 	NODE copy1 = copy_nodes(list1, TRUE, TRUE);
 	NODE prev1, next1, curs1, curs2;
