@@ -755,6 +755,9 @@ check_indi_lineage_links (NODE indi)
 	INT count=0;
 	CNSTRING ikey = nxref(indi);
 
+/* sanity check record is not deleted */
+	ASSERT(is_key_in_use(ikey));
+
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 
 	/*
@@ -847,6 +850,11 @@ check_fam_lineage_links (NODE fam)
 {
 	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
 	NODE curs=0;
+	CNSTRING fkey = nxref(fam);
+
+/* sanity check record is not deleted */
+	ASSERT(is_key_in_use(fkey));
+	
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	join_fam(fam, fref, husb, wife, chil, rest);
 }

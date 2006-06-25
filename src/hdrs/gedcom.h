@@ -433,8 +433,8 @@ INT resolve_refn_links(NODE);
 RECORD_STATUS retrieve_to_file(STRING key, STRING file);
 RECORD_STATUS retrieve_to_textfile(STRING key, STRING file, TRANSLFNC);
 STRING retrieve_raw_record(CNSTRING, INT*);
-STRING rmvat(STRING);
-STRING rmvbrackets(STRING str);
+STRING rmvat(CNSTRING);
+STRING rmvbrackets(CNSTRING str);
 STRING rpt_setlocale(STRING str);
 void rptlocale(void);
 void save_original_locales(void);
@@ -565,6 +565,7 @@ CNSTRING soundex_get(INT i, CNSTRING name);
 /* xreffile.c */
 BOOLEAN addxref_if_missing (CNSTRING key);
 BOOLEAN delete_xref_if_present(CNSTRING key);
+BOOLEAN is_key_in_use(CNSTRING key);
 INT xref_firste(void);
 INT xref_firstf(void);
 INT xref_firsti(void);

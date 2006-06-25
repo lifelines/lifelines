@@ -77,7 +77,12 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
+static BOOLEAN addixref_impl(INT key, DUPS dups);
+static BOOLEAN addfxref_impl(INT key, DUPS dups);
+static BOOLEAN addsxref_impl(INT key, DUPS dups);
+static BOOLEAN addexref_impl(INT key, DUPS dups);
 static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
+static BOOLEAN addxxref_impl(INT key, DUPS dups);
 static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
@@ -85,14 +90,11 @@ static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
 static INT num_set(DELETESET set);
+static BOOLEAN parse_key(CNSTRING key, char * ktype, INT * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
+static BOOLEAN xref_isvalid_impl(DELETESET set, INT keynum);
 static INT xref_last(DELETESET set);
-static BOOLEAN addixref_impl(INT key, DUPS dups);
-static BOOLEAN addfxref_impl(INT key, DUPS dups);
-static BOOLEAN addsxref_impl(INT key, DUPS dups);
-static BOOLEAN addexref_impl(INT key, DUPS dups);
-static BOOLEAN addxxref_impl(INT key, DUPS dups);
 
 /*********************************************
  * local variables
@@ -416,13 +418,19 @@ void addxxref (INT key) { addxxref_impl(key, NODUPS); }
 static BOOLEAN
 addxref_impl (CNSTRING key, DUPS dups)
 {
-	INT keyint = atoi(key + 1);
-	switch(key[0]) {
-	case 'I': return addixref_impl(keyint, dups);
-	case 'F': return addfxref_impl(keyint, dups);
-	case 'S': return addsxref_impl(keyint, dups);
-	case 'E': return addexref_impl(keyint, dups);
-	case 'X': return addxxref_impl(keyint, dups);
+	char ktype=0;
+	INT keynum=0;
+	if (!parse_key(key, &ktype, &keynum)) {
+		char msg[512];
+		snprintf(msg, sizeof(msg)/sizeof(msg[0]), "Bad key passed to addxref_impl: %s", key);
+		FATAL2(msg);
+	}
+	switch(ktype) {
+	case 'I': return addixref_impl(keynum, dups);
+	case 'F': return addfxref_impl(keynum, dups);
+	case 'S': return addsxref_impl(keynum, dups);
+	case 'E': return addexref_impl(keynum, dups);
+	case 'X': return addxxref_impl(keynum, dups);
 	default: ASSERT(0); return FALSE;
 	}
 }
@@ -507,6 +515,52 @@ delete_xref_if_present (CNSTRING key)
 	maxkeynum=-1;
 	return TRUE;
 
+}
+/*==========================================
+ * parse_key -- Get key type (first char) and numeric value
+ * parse_key("I44") => 'I', 44
+ *========================================*/
+static BOOLEAN
+parse_key (CNSTRING key, char * ktype, INT * kval)
+{
+	if (!key || !key[0] || !key[1])
+		return FALSE;
+	/* convert "@I44@" to "I44" */
+	if (key[0] == '@' && key[strlen(key)-1] == '@')
+		key = rmvat(key);
+	*ktype = key[0];
+	*kval = atoi(key+1);
+	return TRUE;
+}
+/*==========================================
+ * is_key_in_use -- Return TRUE if a live record
+ *========================================*/
+BOOLEAN
+is_key_in_use (CNSTRING key)
+{
+	DELETESET set=0;
+	INT keynum=0;
+	char ktype=0;
+	INT lo=0;
+	INT i=0;
+	CNSTRING barekey=0;
+	BOOLEAN result=FALSE;
+
+	if (!parse_key(key, &ktype, &keynum)) {
+		char msg[512];
+		snprintf(msg, sizeof(msg)/sizeof(msg[0]), "Bad key passed to is_key_in_use: %s", key);
+		FATAL2(msg);
+	}
+
+	set = get_deleteset_from_type(ktype);
+
+	ASSERT(keynum>0);
+	
+	result = xref_isvalid_impl(set, keynum);
+
+	strfree((STRING *)&barekey);
+	
+	return result;
 }
 /*==========================================
  * freexref -- Free memory & clear xrefs array

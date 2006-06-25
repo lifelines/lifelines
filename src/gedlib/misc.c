@@ -57,7 +57,7 @@ addat (STRING str)
  *  returns static buffer
  *==========================================*/
 static STRING
-rmvat_char (STRING str, char c, char d)
+rmvat_char (CNSTRING str, char c, char d)
 {
 	STRING p;
 	int len;
@@ -83,7 +83,7 @@ rmvat_char (STRING str, char c, char d)
  *  returns static buffer
  *===========================================*/
 STRING
-rmvat (STRING str)
+rmvat (CNSTRING str)
 {
 	return rmvat_char(str, '@', '@');
 }
@@ -92,7 +92,7 @@ rmvat (STRING str)
  *  returns static buffer
  *===========================================*/
 STRING
-rmvbrackets (STRING str)
+rmvbrackets (CNSTRING str)
 {
 	return rmvat_char(str, '<', '>');
 }

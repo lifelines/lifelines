@@ -1,3 +1,11 @@
+2006-06-25 Perry Rapp
+
+	* ChangeLog src/liflines/merge.c
+
+	New function is_key_in_use.
+	Make string arg const in rmvat, rmvbrackets, rmvat_char.
+	New function parse_key;
+
 2006-06-23 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c
