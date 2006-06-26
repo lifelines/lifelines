@@ -266,7 +266,8 @@ create_elmnt (CHAR eltype, CNSTRING xref)
 	ELMNT el = (ELMNT) stdalloc(sizeof(*el));
 	memset(el, 0, sizeof(*el));
 	Type(el) = eltype;
-	Key(el) = strsave(xref);
+	if (xref)
+		Key(el) = strsave(xref);
 	return el;
 }
 /*=======================================
@@ -300,9 +301,8 @@ add_indi_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line, ELMNT *pel)
 		return -2;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
-		*pel = el = (ELMNT) stdalloc(sizeof(*el));
-		Type(el) = INDI_REC;
-		Key(el) = xref = strsave(xref);
+		*pel = el = create_elmnt(INDI_REC, xref);
+		xref = Key(el); /* dup'd copy of xref */
 		Line(el) = 0;
 		New(el) = NULL;
 		Sex(el) = 0;
@@ -345,16 +345,15 @@ add_fam_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
-		el = (ELMNT) stdalloc(sizeof(*el));
-		Type(el) = FAM_REC;
-		Key(el) = xref = strsave(xref);
+		el = create_elmnt(FAM_REC, xref);
 		Line(el) = 0;
 		New(el) = NULL;
 		Male(el) = 0;
 		Fmle(el) = 0;
 		dex = add_to_structures(xref, el);
-	} else
+	} else {
 		el = index_data[dex];
+	}
 	if (KNOWNTYPE(el) && Type(el) != FAM_REC) {
 		handle_err(ifeed, qSmatfam, line, xref);
 		return -1;
@@ -390,9 +389,8 @@ add_sour_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
-		el = (ELMNT) stdalloc(sizeof(*el));
-		Type(el) = SOUR_REC;
-		Key(el) = xref = strsave(xref);
+		el = create_elmnt(SOUR_REC, xref);
+		xref = Key(el); /* dup'd copy of xref */
 		Line(el) = 0;
 		New(el) = NULL;
 		dex = add_to_structures(xref, el);
@@ -435,9 +433,7 @@ add_even_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
-		el = (ELMNT) stdalloc(sizeof(*el));
-		Type(el) = EVEN_REC;
-		Key(el) = xref = strsave(xref);
+		el = create_elmnt(EVEN_REC, xref);
 		Line(el) = 0;
 		New(el) = NULL;
 		dex = add_to_structures(xref, el);
@@ -480,9 +476,7 @@ add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
 		return -1;
 	}
 	if ((dex = xref_to_index(xref)) == -1) {
-		el = (ELMNT) stdalloc(sizeof(*el));
-		Type(el) = OTHR_REC;
-		Key(el) = xref = strsave(xref);
+		el = create_elmnt(OTHR_REC, xref);
 		Line(el) = 0;
 		New(el) = NULL;
 		dex = add_to_structures(xref, el);
@@ -905,9 +899,7 @@ handle_value (STRING val, INT line)
 	if (!pointer_value(val)) return;
 	xref = rmvat(val);
 	if (xref_to_index(xref) != -1) return;
-	el = (ELMNT) stdalloc(sizeof(*el));
-	Type(el) = UNKN_REC;
-	Key(el) = xref = strsave(xref);
+	el = create_elmnt(UNKN_REC, xref);
 	New(el) = NULL;
 	Line(el) = line;
 	add_to_structures(xref, el);

@@ -1,3 +1,9 @@
+2006-06-26 Perry Rapp
+
+	* ChangeLog src/liflines/valgdcom.c
+
+	Wrap more import stdallocs with calls to create_elmnt.
+
 2006-06-25 Stephen Dum
 
 	* ChangeLog reports/cron.ll reports/anniver.ll
