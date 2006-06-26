@@ -8,6 +8,10 @@
 
 	Include line number in undefined error in check_references.
 
+	* ChangeLog src/liflines/valgdcom.c
+
+	Implement check_fam_lineage_links.
+
 2006-06-25 Stephen Dum
 
 	* ChangeLog reports/cron.ll reports/anniver.ll

@@ -748,16 +748,17 @@ static void
 check_indi_lineage_links (NODE indi)
 {
 	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
-	NODE curs=0;
+	NODE curs=0; /* for travesing node lists */
 	TABLE memtab = memtab = create_table_int();
 	TABLE_ITER tabit=0;
-	CNSTRING famkey=0;
+	CNSTRING famkey=0; /* used inside traversal loops */
 	INT count=0;
 	CNSTRING ikey = nxref(indi);
 
-/* sanity check record is not deleted */
+	/* sanity check record is not deleted */
 	ASSERT(is_key_in_use(ikey));
 
+/* Now validate lineage links of this person */
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 
 	/*
@@ -775,12 +776,16 @@ check_indi_lineage_links (NODE indi)
 	}
 
 	/*
-	Check that all listed families contain person as FAMS as many times
+	Check that all listed families contain person as spouse as many times
 	as expected
 	*/
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &famkey, &count)) {
 		NODE fam = key_to_fam(famkey);
+		/*
+		count how many times our main person (ikey)
+		occurs in this family (fam) as a spouse (HUSB or WIFE)
+		*/
 		INT occur = 0;
 		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "HUSB") || eqstr(ntag(curs), "WIFE")) {
@@ -815,12 +820,16 @@ check_indi_lineage_links (NODE indi)
 	}
 
 	/*
-	Check that all listed families contain person as FAMC as many times
+	Check that all listed families contain person as child (CHIL) as many times
 	as expected
 	*/
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &famkey, &count)) {
 		NODE fam = key_to_fam(famkey);
+		/*
+		count how many times our main person (ikey)
+		occurs in this family (fam) as a child (CHIL)
+		*/
 		INT occur = 0;
 		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "CHIL")) {
@@ -849,12 +858,114 @@ static void
 check_fam_lineage_links (NODE fam)
 {
 	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
-	NODE curs=0;
+	NODE curs=0; /* for travesing node lists */
+	TABLE memtab = memtab = create_table_int();
+	TABLE_ITER tabit=0;
+	CNSTRING indikey=0; /* used inside traversal loops */
+	INT count=0;
 	CNSTRING fkey = nxref(fam);
 
-/* sanity check record is not deleted */
+	/* sanity check record is not deleted */
 	ASSERT(is_key_in_use(fkey));
 	
+/* Now validate lineage links of this family */
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+
+	/*
+	Make table listing all spouses in this family
+	(& how many times each)
+	*/
+	for (curs = husb; curs; curs = nsibling(curs)) {
+		indikey = rmvat(nval(curs));
+		if (!eqstr(ntag(curs), "HUSB")) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad HUSB tag: %s"), ntag(curs));
+			FATAL2(msg);
+		}
+		increment_table_int(memtab, indikey);
+	}
+	for (curs = wife; curs; curs = nsibling(curs)) {
+		indikey = rmvat(nval(curs));
+		if (!eqstr(ntag(curs), "WIFE")) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad HUSB tag: %s"), ntag(curs));
+			FATAL2(msg);
+		}
+		increment_table_int(memtab, indikey);
+	}
+
+	/*
+	Check that all listed persons contain family as FAMS as many times
+	as expected
+	*/
+	tabit = begin_table_iter(memtab);
+	while (next_table_int(tabit, &indikey, &count)) {
+		NODE indi = key_to_indi(indikey);
+		/*
+		count how many times our main family (fkey)
+		occurs in this person (indi) as a spousal family (FAMS)
+		*/
+		INT occur = 0;
+		for (curs = nchild(indi); curs; curs = nsibling(curs)) {
+			if (eqstr(ntag(curs), "FAMS")) {
+				if (eqstr(nval(curs), fkey)) {
+					++occur;
+				}
+			}
+		}
+		if (count != occur) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+				, _("Mismatched lineage spouse links between %s and %s: %d and %d")
+				, fkey, indikey, count, occur);
+			FATAL2(msg);
+		}
+	}
+	destroy_table(memtab);
+	memtab = create_table_int();
+
+	/*
+	Make table listing all families this person is child in
+	(& how many times each)
+	*/
+	for (curs = chil; curs; curs = nsibling(curs)) {
+		indikey = rmvat(nval(curs));
+		if (!eqstr(ntag(curs), "CHIL")) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad child tag: %s"), ntag(curs));
+			FATAL2(msg);
+		}
+		increment_table_int(memtab, indikey);
+	}
+
+	/*
+	Check that all listed families contain person as FAMC as many times
+	as expected
+	*/
+	tabit = begin_table_iter(memtab);
+	while (next_table_int(tabit, &indikey, &count)) {
+		NODE indi = key_to_indi(indikey);
+		/*
+		count how many times our main family (fkey)
+		occurs in this person (indi) as a parental family (FAMC)
+		*/
+		INT occur = 0;
+		for (curs = nchild(indi); curs; curs = nsibling(curs)) {
+			if (eqstr(ntag(curs), "FAMC")) {
+				if (eqstr(nval(curs), fkey)) {
+					++occur;
+				}
+			}
+		}
+		if (count != occur) {
+			char msg[512];
+			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+				, _("Mismatched lineage child links between %s and %s: %d and %d")
+				, fkey, indikey, count, occur);
+			FATAL2(msg);
+		}
+	}
+	
+	
 	join_fam(fam, fref, husb, wife, chil, rest);
 }
