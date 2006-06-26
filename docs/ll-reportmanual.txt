@@ -1478,7 +1478,7 @@ Event and Date Functions
 
           returns the `event' of the current date
 
-   VOID setdate(void);
+   VOID setdate(VARSTRING);
 
           creates an event with specified date and assigns to specified
           variable
@@ -1522,6 +1522,10 @@ Event and Date Functions
    STRING complexdate(EVENT|STRING);
 
           date of, in current complex format
+
+   STRING dayofweek(EVENT|STRING);
+
+          day of week, in appropriate language
 
    These  functions extract information about the dates and places of
    events.
@@ -1649,6 +1653,9 @@ Event and Date Functions
    6 fr %1         from %1
    7 to %1         to %1
    8 fr %1 to %2   from %1 to $2
+
+   The function dayofweek is a way to access the (localized) day name, eg,
+   "Thursday", for a given date.
      _____________________________________________________________
 
 Date Arithmetic

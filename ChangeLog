@@ -1,3 +1,11 @@
+2006-06-25 Stephen Dum
+
+	* ChangeLog reports/cron.ll reports/anniver.ll
+	  docs/ll-reportmanual.{html,pdf,txt}
+
+	Incorporate changes by Dave Eaton to anniver and cron reports.
+	Update formatted documentation
+	
 2006-06-25 Perry Rapp
 
 	* ChangeLog src/liflines/merge.c
