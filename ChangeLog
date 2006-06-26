@@ -4,6 +4,10 @@
 
 	Wrap more import stdallocs with calls to create_elmnt.
 
+	* ChangeLog src/liflines/valgdcom.c
+
+	Include line number in undefined error in check_references.
+
 2006-06-25 Stephen Dum
 
 	* ChangeLog reports/cron.ll reports/anniver.ll

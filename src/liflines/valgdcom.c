@@ -90,6 +90,7 @@ static FILE *f_flog = 0;
 static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
+static STRING qSundrecl     = N_("Line %d: Reference to undefined record %s");
 static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s %s.");
 
 ELMNT *index_data = NULL;
@@ -801,7 +802,7 @@ check_references (IMPORT_FEEDBACK ifeed)
 		case EVEN_REC: check_even_links(ifeed, el); break;
 		case SOUR_REC: check_sour_links(ifeed, el); break;
 		case OTHR_REC: check_othr_links(ifeed, el); break;
-		default: handle_err(ifeed, qSundrec, Key(el));
+		default: handle_err(ifeed, qSundrecl, Line(el), Key(el));
 		}
 	}
 }
