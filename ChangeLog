@@ -1,3 +1,12 @@
+2006-06-29 Perry Rapp
+
+	* ChangeLog src/gedlib/xreffile.c
+
+	Add more error checking to add_xref_to_set_impl.
+	Optimize deleting last record in add_xref_to_set_impl.
+	Fix fencepost error in add_xref_to_set_impl which led
+	to incorrect ASSERT.
+
 2006-06-26 Perry Rapp
 
 	* ChangeLog src/liflines/valgdcom.c

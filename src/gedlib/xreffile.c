@@ -50,6 +50,21 @@ extern BTREE BTR;
  * nixrefs==1 means there are no deleted INDI keys
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
+/*
+ In memory, data is kept in a DELETESET
+ A brand new DELETE set has
+   n = 1 (0 deleted records)
+   recs[0] = 1 (recs[0] is always next available record above highest in use)
+   max = basic allocation unit (currently 64)
+   ctype varies (eg, 'I' for the INDI set)
+ If there are I1-I4 and I6 are live in the database, and I5 was deleted,
+ then the DELETE set has
+  n = 2 (1 deleted record)
+  recs[0] = 6 (next available record above highest in use)
+  recs[1] = 5 (I5 was deleted, so it is available)
+  max = allocation unit (still 64)
+  ctype as above (eg, 'I' for the INDI set)
+*/
 
 /*********************************************
  * local types
@@ -202,7 +217,18 @@ getxrefnum (DELETESET set)
 	INT keynum;
 	ASSERT(xreffp);
 	ASSERT(set->n >= 1);
-	keynum = (set->n == 1) ? set->recs[0]++ : set->recs[--(set->n)];
+	if (set->n == 1) {
+		/* no free records on list */
+		/* take new high number & bump high number */
+		keynum = set->recs[0]++;
+	} else {
+		/* take last free record on list */
+		keynum = set->recs[set->n - 1];
+		/* zero out the entry slipping off the top of the list */
+		set->recs[set->n - 1] = 0;
+		/* remove just-used entry from list */
+		--(set->n);
+	}
 	ASSERT(writexrefs());
 	maxkeynum=-1;
 	return keynum;
@@ -368,18 +394,35 @@ static BOOLEAN
 add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
 {
 	INT lo, i;
-	if (keynum <= 0 || !xreffp || (set->n) < 1) FATAL();
+	if (keynum <= 0 || !xreffp || (set->n) < 1) {
+		char msg[128];
+		snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			, _("Corrupt DELETESET %c"), set->ctype);
+		FATAL2(msg);
+	}
+	/* special case simplification if deleting last record */
+	if (keynum+1 == set->recs[0]) {
+		/*
+		just bump the 'next free' indicator down to 
+		return this keynum next, and we don't even have to
+		add this to the list
+		*/
+		--set->recs[0];
+		ASSERT(writexrefs());
+		return TRUE;
+	}
 	if (set->n >= set->max)
 		growxrefs(set);
 	ASSERT(set->n < set->max);
 
 	lo = find_slot(keynum, set);
-	if ((set->recs)[lo] == keynum) {
+	if (lo < set->n && (set->recs)[lo] == keynum) {
 		/* key is already free */
 		char msg[96];
 		if (dups==DUPSOK) 
 			return FALSE;
-		sprintf(msg, "Tried to add already-deleted record (%d) to xref (%c)!"
+		snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			, _("Tried to add already-deleted record (%d) to xref (%c)!")
 			, keynum, set->ctype);
 		FATAL2(msg); /* deleting a deleted record! */
 	}
@@ -505,11 +548,14 @@ delete_xref_if_present (CNSTRING key)
 	keynum = atoi(key + 1);
 	ASSERT(keynum>0);
 	lo = find_slot(keynum, set);
-	if ((set->recs)[lo] != keynum)
+	if (!(lo < set->n && (set->recs)[lo] == keynum))
 		return FALSE;
 	/* removing xrefs[lo] -- move lo+ down */
 	for (i=lo; i+1<set->n-1; ++i)
 		(set->recs)[i] = (set->recs)[i+1];
+	/* zero out the entry slipping off the top of the list */
+	if (set->n > 1)
+		set->recs[set->n - 1] = 0;
 	--(set->n);
 	ASSERT(writexrefs());
 	maxkeynum=-1;
