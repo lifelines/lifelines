@@ -7,6 +7,10 @@
 	Fix fencepost error in add_xref_to_set_impl which led
 	to incorrect ASSERT.
 
+	* ChangeLog NEWS
+
+	Add bugfix to NEWS for next release.
+
 2006-06-26 Perry Rapp
 
 	* ChangeLog src/liflines/valgdcom.c
