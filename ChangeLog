@@ -1,3 +1,11 @@
+2006-07-01 Perry Rapp
+
+	* ChangeLog NEWS src/interp/builtin.c src/interp/lex.c
+
+	Trap token overflows and ASSERT in lextok, instead of corrupting
+	memory. Add sanity ASSERT in inchar. Fix llrpt_value to save string
+	before losing contents of val.
+
 2006-06-29 Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c

@@ -3533,6 +3533,7 @@ llrpt_value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE ged;
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
+	STRING str = 0;
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "value");
 		return NULL;
@@ -3543,7 +3544,15 @@ llrpt_value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "value");
 		return NULL;
 	}
-	set_pvalue_string(val, nval(ged));
+	/*
+	save away string, so it doesn't die when val is cleared for 
+	assignment below
+	*/
+	str = nval(ged);
+	if (str)
+		str = strsave(str);
+	set_pvalue_string(val, str);
+	strfree(&str);
 	return val;
 }
 /*=============================+

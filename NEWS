@@ -9,6 +9,8 @@ Bug fixes in 3.0.51 (beta)
 ============================
  - Fix add to list (was repeating first person instead of adding).
  - Fix incorrect sporadic ASSERT in merge ("Tried to add already-deleted record...")
+ - Fix handling of overlong (or unterminated) string constants to ASSERT instead of overwriting memory
+ - Fix report value function handling of strings inside created nodes
 
 New features added in 3.0.50
 ============================

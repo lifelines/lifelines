@@ -137,7 +137,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 	INT retval, mul;
 	extern INT Yival;
 	extern FLOAT Yfval;
-	static char tokbuf[200];	/* token buffer */
+	static char tokbuf[512]; /* token buffer */
 	STRING p = tokbuf;
 
 	if (t == LETTER) {
@@ -207,10 +207,25 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		return FCONS;
 	}
 	if (c == '"') {
+		INT start_line = pactx->lineno;
 		p = tokbuf;
 		while (TRUE) {
-			while ((c = inchar(pactx)) != EOF && c != '"' && c != '\\')
+			while ((c = inchar(pactx)) != EOF && c != '"' && c != '\\') {
+				if (p-tokbuf > sizeof(tokbuf)/sizeof(tokbuf[0]) - 3) {
+					/* Overflowing tokbuf buffer */
+					/* TODO: (Perry, 2006-06-30) I don't know how to fail gracefully from here inside parser */
+					char msg[512];
+					snprintf(msg, sizeof(msg)/sizeof(msg[0])
+						, _("String constant overflowing internal buffer tokbuf len=%d, file: %s, start line: %d")
+						, sizeof(tokbuf)/sizeof(tokbuf[0])
+						, pactx->fullpath
+						, start_line + 1
+						);
+					FATAL2(msg);
+					*p = c = 0;
+				}
 				*p++ = c;
+			}
 			if (c == 0 || c == '"') {
 				*p = 0;
 				*lvalp = make_internal_string_node(pactx, tokbuf);
@@ -300,10 +315,12 @@ inchar (PACTX pactx)
 #ifdef SKIPCTRLZ
 	do {
 #endif
-		if (Lexmode == FILEMODE)
+		if (Lexmode == FILEMODE) {
 			c = getc(pactx->Pinfp);
-		else
+		} else {
+			ASSERT(Lp);
 			c = (uchar)*Lp++;
+		}
 #ifdef SKIPCTRLZ
 	} while(c == 26);		/* skip CTRL-Z */
 #endif
