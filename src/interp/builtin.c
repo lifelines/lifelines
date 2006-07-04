@@ -3116,8 +3116,10 @@ llrpt_extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(line, FALSE);
 	else
 		str = nval(line);
+	str = strsave(str); /* save in case we delete line node */
 	delete_pvalue(val);
 	gdv = extract_date(str);
+	strfree(&str);
 	/* TODO: deal with date information */
 	da = date_get_day(gdv);
 	mo = date_get_month(gdv);

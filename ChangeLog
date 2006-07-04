@@ -1,3 +1,9 @@
+2006-07-04 Perry Rapp
+
+	* ChangeLog NEWS src/interp/builtin.c
+
+	Fix llrpt_extractdate to save string before losing contents of val.
+
 2006-07-01 Perry Rapp
 
 	* ChangeLog NEWS src/interp/builtin.c src/interp/lex.c

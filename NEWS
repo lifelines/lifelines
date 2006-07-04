@@ -11,6 +11,7 @@ Bug fixes in 3.0.51 (beta)
  - Fix incorrect sporadic ASSERT in merge ("Tried to add already-deleted record...")
  - Fix handling of overlong (or unterminated) string constants to ASSERT instead of overwriting memory
  - Fix report value function handling of strings inside created nodes
+ - Fix report value bug in extractdate with cascaded calls without set assignment
 
 New features added in 3.0.50
 ============================
