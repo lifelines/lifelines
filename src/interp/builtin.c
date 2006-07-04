@@ -2832,9 +2832,9 @@ llrpt_trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
 	INT len;
-	PVALUE val;
+	PVALUE val=NULL;
 	NODE indi = eval_indi(arg, stab, eflg, (CACHEEL *) NULL);
-	STRING str;
+	STRING str=NULL;
 	if (*eflg) {
 		prog_error(node, nonindx, "trimname", "1");
 		return NULL;
@@ -2856,7 +2856,10 @@ llrpt_trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val);
 	str = name_string(trim_name(nval(indi), len));
+	if (str)
+		str = strsave(str);
 	set_pvalue_string(val, str);
+	strfree(&str);
 	return val;
 }
 /*==============================+
@@ -2866,8 +2869,8 @@ llrpt_trimname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE line;
-	STRING str;
+	NODE line=NULL;
+	STRING str=NULL;
 	PVALUE val = eval_and_coerce(PGNODE, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonnod1, "date");
@@ -2875,8 +2878,13 @@ llrpt_date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	line = pvalue_to_node(val);
 	str = event_to_date(line, FALSE);
+	/* save string in case node is temp (will get deleted in create_pvalue) */
+	if (str)
+		str = strsave(str);
 	delete_pvalue(val);
-	return create_pvalue_from_string(str);
+	val = create_pvalue_from_string(str);
+	strfree(&str);
+	return val;
 }
 /*==========================================+
  * llrpt_date2jd -- Return julian day of date

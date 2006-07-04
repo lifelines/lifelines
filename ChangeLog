@@ -16,6 +16,11 @@
 
 	Fix llrpt_place to save string before clearing val.
 
+	* ChangeLog src/interp/builtin.c
+
+	Fix llrpt_date to save string before clearing val.
+	Fix llrpt_trimname to save string before clearing val.
+
 2006-07-01 Perry Rapp
 
 	* ChangeLog NEWS src/interp/builtin.c src/interp/lex.c
