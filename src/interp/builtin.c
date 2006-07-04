@@ -3494,6 +3494,7 @@ llrpt_place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE evnt=NULL;
 	PNODE arg = iargs(node);
+	STRING str=NULL;
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 
 	if (*eflg) {
@@ -3501,7 +3502,11 @@ llrpt_place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	evnt = pvalue_to_node(val);
-	set_pvalue_string(val, event_to_plac(evnt, FALSE));
+	str = event_to_plac(evnt, FALSE);
+	if (str)
+		str = strsave(str);
+	set_pvalue_string(val, str);
+	strfree(&str);
 	return val;
 }
 /*============================+
