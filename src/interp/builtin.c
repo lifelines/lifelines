@@ -3492,7 +3492,7 @@ llrpt_year (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE evnt;
+	NODE evnt=NULL;
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 
@@ -3511,7 +3511,7 @@ llrpt_place (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE ged;
+	NODE ged=NULL;
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	STRING str=NULL;
@@ -3521,8 +3521,11 @@ llrpt_tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	ged = pvalue_to_node(val);
 	if (ged)
-		str=ntag(ged);
+		str = ntag(ged);
+	if (str)
+		str = strsave(str);
 	set_pvalue_string(val, str);
+	strfree(&str);
 	return val;
 }
 /*===============================+
@@ -3532,7 +3535,7 @@ llrpt_tag (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_value (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE ged;
+	NODE ged=NULL;
 	PNODE arg = iargs(node);
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	STRING str = 0;
