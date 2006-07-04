@@ -45,15 +45,19 @@ PVALUE
 llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = iargs(node);
-	NODE newnode=0, prnt=NULL;
-	PVALUE val1, val2;
-	STRING str1, str2;
+	NODE newnode=0;
+	NODE prnt=NULL; /* parent node for new node */
+	STRING xref=NULL; /* xref for new node */
+	PVALUE val1=NULL, val2=NULL;
+	STRING str1=NULL; /* 1st arg, which is tag for new node */
+	STRING str2=NULL; /* 2nd arg, which is value for new node */
 	val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val1, nonstrx, "createnode", "1");
 		delete_pvalue(val1);
 		return NULL;
 	}
+	/* 1st arg is tag for new node */
 	str1 = pvalue_to_string(val1);
 	val2 = eval_and_coerce(PSTRING, arg=inext(arg), stab, eflg);
 	if (*eflg) {
@@ -61,8 +65,9 @@ llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(val2);
 		return NULL;
 	}
+	/* 2nd arg is value for new node */
 	str2 = pvalue_to_string(val2);
-	newnode = create_temp_node(NULL, str1, str2, prnt);
+	newnode = create_temp_node(xref, str1, str2, prnt);
 	return create_pvalue_from_node(newnode);
 }
 /*=======================================

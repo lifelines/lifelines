@@ -4,6 +4,10 @@
 
 	Fix llrpt_extractdate to save string before losing contents of val.
 
+	* ChangeLog src/interp/write.c
+
+	Cosmetic: adding comments to llrpt_createnode.
+
 2006-07-01 Perry Rapp
 
 	* ChangeLog NEWS src/interp/builtin.c src/interp/lex.c
