@@ -1,3 +1,14 @@
+2006-07-10 Stephen Dum
+
+	* ChangeLog web web/...
+
+	Created a new toplevel directory in the CVS archives named web
+	so that we can use sf to keep track of the sf lifelines home page
+	and related files.  Checked into this directory the current web pages
+	(and what little history we had for index.html).  This is for archival
+	purposes and no changes were made to include this data in a build or
+	release process.
+
 2006-07-09 Stephen Dum
 
 	* ChangeLog  reports/search_source.ll reports/Makefile.am
