@@ -1,3 +1,9 @@
+2006-07-09 Stephen Dum
+
+	* ChangeLog  reports/search_source.ll reports/Makefile.am
+
+	Add report that searches source records for a string
+
 2006-07-04 Perry Rapp
 
 	* ChangeLog NEWS src/interp/builtin.c

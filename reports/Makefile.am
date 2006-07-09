@@ -45,6 +45,7 @@ LL_REPORTS = \
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
 	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll  \
 	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll \
+	search_source.ll                                                \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour.li                             \
 	sour2.li sources.ll sources_bib.ll                              \
