@@ -71,15 +71,15 @@ INT MAINWIN_WIDTH=0;
  * global/exported variables
  *********************************************/
 
-INT ll_lines = LINESREQ; /* update to be number of lines in screen */
-INT ll_cols = COLSREQ;	 /* number of columns in screen used by LifeLines */
+INT ll_lines = -1; /* update to be number of lines in screen */
+INT ll_cols = -1;	 /* number of columns in screen used by LifeLines */
 BOOLEAN stdout_vis = FALSE;
 INT cur_screen = 0;
 UIWINDOW main_win = NULL;
 UIWINDOW stdout_win=NULL;
 static UIWINDOW debug_win=NULL, debug_box_win=NULL;
 static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
-static UIWINDOW choose_from_list_win=NULL;
+//static UIWINDOW choose_from_list_win=NULL;
 static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
 static UIWINDOW search_menu_win=NULL, fullscan_menu_win=NULL;
 static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
@@ -91,7 +91,6 @@ static UIWINDOW extra_menu_win=NULL;
 
 extern INT alldone;
 extern BOOLEAN progrunning;
-extern STRING qSwin2big,qSwin2small;
 extern STRING empstr,empstr71,empstr120,readpath,readpath_file,qSronlye,qSdataerr;
 extern STRING qSabverr,qSuoperr,qSbadttnum,qSnosuchtt,qSmouttt,qSmintt;
 extern STRING qSmtitle,qScright,qSdbname,qSdbimmut,qSdbrdonly,qSplschs;
@@ -180,11 +179,11 @@ static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
 static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
-static UIWINDOW create_boxed_newwin2(CNSTRING name, INT rows, INT cols);
-static UIWINDOW create_newwin(CNSTRING name, INT rows, INT cols, INT begy, INT begx);
-static UIWINDOW create_newwin2(CNSTRING name, INT rows, INT cols);
-static UIWINDOW create_uisubwindow(CNSTRING name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
-static UIWINDOW create_uiwindow_impl(CNSTRING name, WINDOW * win, INT rows, INT cols);
+static void create_boxed_newwin2(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols);
+static void create_newwin(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols, INT begy, INT begx);
+static void create_newwin2(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols);
+static void create_uisubwindow(UIWINDOW * puiw, CNSTRING name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static void create_uiwindow_impl(UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void deactivate_uiwin_and_touch_all(void);
@@ -213,6 +212,7 @@ static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 static void place_cursor_main(void);
 static void place_cursor_popup(UIWINDOW uiwin);
 static void place_std_msg(void);
+static void platform_postcurses_init(void);
 static void refresh_main(void);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void repaint_add_menu(UIWINDOW uiwin);
@@ -223,6 +223,7 @@ static void repaint_search_menu(UIWINDOW uiwin);
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
+static int resize_screen_impl(char * errmsg, int errsize);
 static void run_report(BOOLEAN picklist);
 static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 static BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
@@ -287,32 +288,118 @@ static int ui_time_elapsed = 0; /* total time waiting for user input */
  *********************************************/
 
 /*============================
+ * set_screen_graphical -- Specify whether to use ncurses box characters
+ *  graphical:   [IN]  whether to use ncurses graphical box lines
+ *==========================*/
+void
+set_screen_graphical (BOOLEAN graphical)
+{
+	if (graphical) {
+		gr_btee = ACS_BTEE;
+		gr_hline = ACS_HLINE;
+		gr_ltee = ACS_LTEE;
+		gr_rtee = ACS_RTEE;
+		gr_ttee = ACS_TTEE;
+		gr_vline = ACS_VLINE;
+		gr_llx = ACS_LLCORNER;
+		gr_lrx = ACS_LRCORNER;
+		gr_ulx = ACS_ULCORNER;
+		gr_urx = ACS_URCORNER;
+	}
+	else {
+		gr_btee = '+';
+		gr_hline = '-';
+		gr_ltee = '+';
+		gr_rtee = '+';
+		gr_ttee = '+';
+		gr_vline = '|';
+		gr_llx = '*';
+		gr_lrx = '*';
+		gr_ulx = '*';
+		gr_urx = '*';
+	}
+	
+}
+/*============================
  * init_screen -- Init screens
+ *  returns 0 if current terminal is not large enough, or size requested too small
+  *  errmsg:      [OUT] buffer to hold failure message
+ *  errsize:     [IN]  size of errmsg buffer
  *==========================*/
 int
-init_screen (BOOLEAN graphical)
+init_screen (char * errmsg, int errsize)
 {
-	int extralines;
-	if (winx) { /* user specified window size */
-		ll_lines = winy;
-		ll_cols = winx;
-		if (ll_cols > COLS || ll_lines > LINES) {
-			endwin();
-			fprintf(stderr, _(qSwin2big), ll_cols, ll_lines, COLS, LINES);
+	return resize_screen_impl(errmsg, errsize);
+}
+/*============================
+ * update_screen_size -- Recreate windows etc if screen size has changed
+ *==========================*/
+void
+update_screen_size (void)
+{
+	char errmsg[512];
+	resize_screen_impl(errmsg, sizeof(errmsg)/sizeof(errmsg[0]));
+}
+/*============================
+ * resize_screen_impl -- setup windows & things dependent on screen size
+ *  returns 0 if current terminal is not large enough, or size requested too small
+ *  errmsg:      [OUT] buffer to hold failure message
+ *  errsize:     [IN]  size of errmsg buffer
+ * Safe to be called over and over again
+ * Doesn't do anything if screen size is unchanged from previous size, or if unsupported size
+ *==========================*/
+static int
+resize_screen_impl (char * errmsg, int errsize)
+{
+	int extralines=0;
+	INT newlines=0, newcols=0;
+
+	/* stop & restart ncurses to update LINES & COLS */
+	if (ll_lines > 0) {
+		/* need endwin before initscr below */
+		endwin();
+	}
+	if (1) {
+		WINDOW *win = initscr();
+		if (!win) {
+			snprintf(errmsg, errsize, _("initscr failed"));
+			return 0; /* fail */
+		}
+		noecho();
+		keypad(win, 1);
+	}
+
+	/* by default, use full screen (as many rows & cols as they have */
+	newlines=LINES;
+	newcols = COLS;
+
+	/* if user specified window size, use it, but check its validity */
+	if (winx) {
+		newlines = winy;
+		newcols = winx;
+		if (newcols > COLS || newlines > LINES) {
+			snprintf(errmsg, errsize
+				, _("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n")
+				, newcols, newlines, COLS, LINES);
 			return 0; /* fail */
 		}
 	}
-	else {
-		/* by default, use full screen (as many rows & cols as they have */
-		ll_lines = LINES;
-		ll_cols = COLS;
-	}
 	/* check that terminal meet minimum requirements */
-	if (ll_cols < COLSREQ || ll_lines < LINESREQ) {
-		endwin();
-		fprintf(stderr, _(qSwin2small), ll_cols, ll_lines, COLSREQ, LINESREQ);
+	if (newcols < COLSREQ || newlines < LINESREQ) {
+		snprintf(errmsg, errsize
+			, _("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n")
+			, newcols, newlines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
+
+	if (ll_lines == newlines && ll_cols == newcols) {
+		/* screen size is already configured & hasn't changed */
+		return 1; /* succeed */
+	}
+
+	
+	ll_lines = newlines;
+	ll_cols = newcols;
 
 	extralines = ll_lines - LINESREQ;
 	LINESTOTAL = ll_lines;
@@ -332,19 +419,6 @@ init_screen (BOOLEAN graphical)
 	create_windows();
 	brwsmenu_initialize(ll_lines, ll_cols);
 
-	if (graphical) {
-		gr_btee = ACS_BTEE;
-		gr_hline = ACS_HLINE;
-		gr_ltee = ACS_LTEE;
-		gr_rtee = ACS_RTEE;
-		gr_ttee = ACS_TTEE;
-		gr_vline = ACS_VLINE;
-		gr_llx = ACS_LLCORNER;
-		gr_lrx = ACS_LRCORNER;
-		gr_ulx = ACS_ULCORNER;
-		gr_urx = ACS_URCORNER;
-	}
-	
 	
 	return 1; /* succeed */
 }
@@ -443,37 +517,48 @@ paint_list_screen (void)
 	mvccwaddstr(win, row++, col, _(qSmn_quit));
 }
 /*==========================================
- * create_uiwindow_impl -- Create our WINDOW wrapper
+ * create_uiwindow_impl -- Create (or update) the WINDOW wrapper
+ *  safe to call on existing UIWINDOW
  *========================================*/
-static UIWINDOW
-create_uiwindow_impl (CNSTRING name, WINDOW * win, INT rows, INT cols)
+static void
+create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, INT cols)
 {
-	UIWINDOW uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
-	memset(uiwin, 0, sizeof(*uiwin));
-	uiwin->name = name;
-	uiw_win(uiwin) = win;
+	UIWINDOW uiwin=0;
+	ASSERT(puiw);
+	uiwin = *puiw;
+	if (!uiwin) {
+		*puiw = uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
+		memset(uiwin, 0, sizeof(*uiwin));
+	}
+	if (uiwin->name)
+		stdfree((STRING)uiwin->name);
+	uiwin->name = strsave(name);
+	if (uiw_win(uiwin) != win) {
+		if (uiw_win(uiwin))
+			delwin(uiw_win(uiwin));
+		uiw_win(uiwin) = win;
+	}
 	uiw_rows(uiwin) = rows;
 	uiw_cols(uiwin) = cols;
-	return uiwin;
 }
 /*==========================================
  * create_boxed_newwin2 -- Create a window with
  *  an auxiliary box window outside it
  *========================================*/
-static UIWINDOW
-create_boxed_newwin2 (CNSTRING name, INT rows, INT cols)
+static void
+create_boxed_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
 {
 	INT begy = (LINES - rows)/2;
 	INT begx = (COLS - cols)/2;
 	WINDOW * boxwin = newwin(rows, cols, begy, begx);
 	WINDOW * win=0;
 	UIWINDOW uiwin=0;
+	ASSERT(puiw);
 	++begy;
 	++begx;
 	win = subwin(boxwin, rows-2, cols-2, begy, begx);
-	uiwin = create_uiwindow_impl(name, win, rows-2, cols-2);
-	uiw_boxwin(uiwin) = boxwin;
-	return uiwin;
+	create_uiwindow_impl(puiw, name, win, rows-2, cols-2);
+	uiw_boxwin(*puiw) = boxwin;
 }
 /*==========================================
  * delete_uiwindow -- Delete WINDOW wrapper & contents
@@ -484,42 +569,52 @@ delete_uiwindow (UIWINDOW * uiw)
 {
 	if (*uiw) {
 		UIWINDOW w = *uiw;
+		ASSERT(uiw_win(w));
 		delwin(uiw_win(w));
+		ASSERT(w->name);
+		stdfree((STRING)w->name);
 		stdfree(w);
 		*uiw = 0;
 	}
 }
 /*==========================================
  * create_newwin -- Create our WINDOW wrapper
+ * Create ncurses window of specified size & location
+ *  and wrap it with a WUIWINDOW wrapper
+ *  and return that
  *========================================*/
-static UIWINDOW
-create_newwin (CNSTRING name, INT rows, INT cols, INT begy, INT begx)
+static void
+create_newwin (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
-	return create_uiwindow_impl(name, win,rows,cols);
+	create_uiwindow_impl(puiw, name, win, rows, cols);
 }
 /*==========================================
  * create_newwin2 -- Create our WINDOW wrapper
+ * Create ncurses window of specified size, centered on current physical screen
+ *  and wrap it with a WUIWINDOW wrapper
+ *  and return that
  *========================================*/
-static UIWINDOW
-create_newwin2 (CNSTRING name, INT rows, INT cols)
+static void
+create_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
 {
+	/* NEWWIN centers window on current physical screen */
 	WINDOW * win = NEWWIN(rows, cols);
-	return create_uiwindow_impl(name, win,rows,cols);
+	create_uiwindow_impl(puiw, name, win,rows,cols);
 }
 /*==========================================
  * create_uisubwindow -- Create our WINDOW wrapper
  *  for a true (& permanent) subwindow
  *========================================*/
-static UIWINDOW
-create_uisubwindow (CNSTRING name, UIWINDOW parent, INT rows, INT cols
+static void
+create_uisubwindow (UIWINDOW * puiw, CNSTRING name, UIWINDOW parent
+	, INT rows, INT cols
 	, INT begy, INT begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
-	UIWINDOW uiwin = create_uiwindow_impl(name, win, rows, cols);
-	uiw_parent(uiwin) = parent;
-	uiw_permsub(uiwin) = TRUE;
-	return uiwin;
+	create_uiwindow_impl(puiw, name, win, rows, cols);
+	uiw_parent(*puiw) = parent;
+	uiw_permsub(*puiw) = TRUE;
 }
 /*==========================================
  * destroy_windows -- Undo create_windows
@@ -527,7 +622,7 @@ create_uisubwindow (CNSTRING name, UIWINDOW parent, INT rows, INT cols
 static void
 destroy_windows (void)
 {
-	delete_uiwindow(&choose_from_list_win);
+//	delete_uiwindow(&choose_from_list_win);
 	delete_uiwindow(&ask_msg_win);
 	delete_uiwindow(&ask_win);
 	delete_uiwindow(&tt_menu_win);
@@ -543,20 +638,27 @@ static void
 create_windows (void)
 {
 	INT col;
-	stdout_win = create_boxed_newwin2("stdout_win", ll_lines-4, ll_cols-4);
+	
+	create_boxed_newwin2(&stdout_win, "stdout_win", ll_lines-4, ll_cols-4);
 	scrollok(uiw_win(stdout_win), TRUE);
+	
 	col = COLS/4;
-	debug_box_win = create_newwin("debug_box", 8, ll_cols-col-2, 1, col);
-	debug_win = create_uisubwindow("debug", debug_box_win, 6, ll_cols-col-4, 2, col+1);
+	create_newwin(&debug_box_win, "debug_box", 8, ll_cols-col-2, 1, col);
+
+	create_uisubwindow(&debug_win, "debug", debug_box_win, 6, ll_cols-col-4, 2, col+1);
 	scrollok(uiw_win(debug_win), TRUE);
 
 	MAINWIN_WIDTH = ll_cols;
 	LISTWIN_WIDTH = ll_cols-7;
- 	main_win = create_newwin2("main", ll_lines, MAINWIN_WIDTH);
-	tt_menu_win = create_newwin2("tt_menu", 12,MAINWIN_WIDTH-7);
-	ask_win = create_newwin2("ask", 4, 73);
-	ask_msg_win = create_newwin2("ask_msg", 5, 73);
-	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
+ 	create_newwin2(&main_win, "main", ll_lines, MAINWIN_WIDTH);
+
+	create_newwin2(&tt_menu_win, "tt_menu", 12,MAINWIN_WIDTH-7);
+
+	create_newwin2(&ask_win, "ask", 4, 73);
+
+	create_newwin2(&ask_msg_win, "ask_msg", 5, 73);
+
+//	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
 
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
@@ -816,8 +918,10 @@ void
 display_indi (RECORD indi, INT mode, BOOLEAN reuse)
 {
 	INT screen = ONE_PER_SCREEN;
-	INT lines = update_browse_menu(screen);
+	INT lines=0;
 	struct tag_llrect rect;
+	update_screen_size(); /* ensure screen size is current */
+	lines = update_browse_menu(screen);
 	/* leave room for box all around */
 	rect.top = 1;
 	rect.bottom = lines;
@@ -841,9 +945,12 @@ interact_indi (void)
 void
 display_fam (RECORD frec, INT mode, BOOLEAN reuse)
 {
-	INT width = MAINWIN_WIDTH;
+	INT width=0;
 	INT screen = ONE_FAM_SCREEN;
-	INT lines = update_browse_menu(screen);
+	INT lines=0;
+	update_screen_size(); /* ensure screen size is current */
+	lines = update_browse_menu(screen);
+	width = MAINWIN_WIDTH;
 	show_fam(main_win, frec, mode, 1, lines, width, &Scroll1, reuse);
 	display_screen(screen);
 }
@@ -863,10 +970,14 @@ void
 display_2indi (RECORD irec1, RECORD irec2, INT mode)
 {
 	INT screen = TWO_PER_SCREEN;
-	INT lines = update_browse_menu(screen);
-	INT lines1,lines2;
+	INT lines=0;
+	INT lines1=0,lines2=0;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
 	struct tag_llrect rect;
+
+	update_screen_size(); /* ensure screen size is current */
+	
+	lines = update_browse_menu(screen);
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
@@ -911,11 +1022,16 @@ void
 display_2fam (RECORD frec1, RECORD frec2, INT mode)
 {
 	UIWINDOW uiwin = main_win;
-	INT width=MAINWIN_WIDTH;
+	INT width=0;
 	INT screen = TWO_FAM_SCREEN;
-	INT lines = update_browse_menu(screen);
-	INT lines1,lines2;
+	INT lines=0;
+	INT lines1=0,lines2=0;
 	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
+
+	update_screen_size(); /* ensure screen size is current */
+	width=MAINWIN_WIDTH;
+
+	lines = update_browse_menu(screen);
 	lines--; /* for tandem line */
 	lines2 = lines/2;
 	lines1 = lines - lines2;
@@ -1413,7 +1529,7 @@ activate_popup_list_uiwin (listdisp * ld)
 
 	if (hgt>POPUP_LINES)
 		hgt = POPUP_LINES;
-	ld->uiwin = create_newwin2("list", hgt, LISTWIN_WIDTH);
+	create_newwin2(&ld->uiwin, "list", hgt, LISTWIN_WIDTH);
 	uiw_dynamic(ld->uiwin) = TRUE; /* delete when finished */
 	/* list is below details to nearly bottom */
 	ld->rectList.left = 1;
@@ -1651,7 +1767,7 @@ invoke_fullscan_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!fullscan_menu_win) {
-		fullscan_menu_win = create_newwin2("fullscan", 7,66);
+		create_newwin2(&fullscan_menu_win, "fullscan", 7,66);
 		/* paint it for the first & only time (it's static) */
 		repaint_fullscan_menu(fullscan_menu_win);
 	}
@@ -1700,7 +1816,7 @@ invoke_search_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!search_menu_win) {
-		search_menu_win = create_newwin2("search_menu", 7,66);
+		create_newwin2(&search_menu_win, "search_menu", 7,66);
 	}
 	/* repaint it every time, as history counts change */
 	repaint_search_menu(search_menu_win);
@@ -1748,7 +1864,7 @@ invoke_add_menu (void)
 	INT code;
 
 	if (!add_menu_win) {
-		add_menu_win = create_newwin2("add_menu", 8, 66);
+		create_newwin2(&add_menu_win, "add_menu", 8, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_add_menu(add_menu_win);
 	}
@@ -1781,7 +1897,7 @@ invoke_del_menu (void)
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	if (!del_menu_win) {
-		del_menu_win = create_newwin2("del_menu", 9, 66);
+		create_newwin2(&del_menu_win, "del_menu", 9, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_delete_menu(del_menu_win);
 	}
@@ -2134,7 +2250,7 @@ invoke_utils_menu (void)
 	WINDOW *win=0;
 
 	if (!utils_menu_win) {
-		utils_menu_win = create_newwin2("utils_menu", 14, 66);
+		create_newwin2(&utils_menu_win, "utils_menu", 14, 66);
 		/* paint it for the first & only time (it's static) */
 		repaint_utils_menu(utils_menu_win);
 	}
@@ -2177,7 +2293,7 @@ invoke_extra_menu (RECORD *prec)
 	WINDOW *win=0;
 
 	if (!extra_menu_win) {
-		extra_menu_win = create_newwin2("extra_menu", 13,66);
+		create_newwin2(&extra_menu_win, "extra_menu", 13,66);
 		/* paint it for the first & only time (it's static) */
 		repaint_extra_menu(extra_menu_win);
 	}
@@ -3803,4 +3919,17 @@ get_uitime (void)
 {
 	return ui_time_elapsed;
 }
-
+/*==================================================
+ * platform_postcurses_init -- platform-specific code
+ *  coming after curses initialized
+ *================================================*/
+static void
+platform_postcurses_init (void)
+{
+#ifdef WIN32
+	char buffer[80];
+	STRING title = _(qSmtitle);
+	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
+	wtitle(buffer);
+#endif
+}

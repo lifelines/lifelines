@@ -1,3 +1,28 @@
+2006-07-24 Perry Rapp
+
+	* ChangeLog src/gedlib/messages.c src/hdrs/screen.h
+	src/liflines/browse.c src/liflines/brwsmenu.c
+	src/liflines/dynmenu.c src/liflines/main.c
+	src/liflines/menuset.c src/liflines/screen.c
+	win32/mycurses.c
+
+	Pass error out of init_screen instead of using fprintf(stderr.
+	Split part of init_screen into new function set_screen_graphical.
+	Modified create_windows so it can be called over and over.
+	Moved guts of init_screen into new function resize_screen_impl.
+	win32/mycurs: moved static ConScreenBuffer to be local of mycur_init.
+	win32/mycurs: added new function check_for_resize.
+	Alter create_uiwin family of functions to take pointer so they
+	can alter existing uiwindow, instead of always creating new one.
+	(This is so we can recreate windows for sizing, without altering
+	uiwindow pointers.)
+	Moved platform_postcurses_init from main.c into screen.c.
+	Rolled init_curses_ui from main.c into resize_screen_impl.
+	Modify so it picks up LINES/COLS changes at redrawing person
+	or family -- but with disadvantage that it is executing
+	endwin/initscr every time to detect that. (A SIGWINCH handler
+	would probably be better.)
+
 2006-07-10 Stephen Dum
 
 	* ChangeLog web web/...

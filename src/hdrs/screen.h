@@ -93,16 +93,16 @@ typedef struct tag_uiwindow {
 	INT cur_y;         /* row for input cursor */
 	INT cur_x;         /* col for input cursor */
 } * UIWINDOW;
-#define uiw_win(x)      (x->win)
-#define uiw_boxwin(x)   (x->boxwin)
-#define uiw_parent(x)   (x->parent)
-#define uiw_child(x)    (x->child)
-#define uiw_permsub(x)  (x->permsub)
-#define uiw_dynamic(x)  (x->dynamic)
-#define uiw_rows(x)     (x->rows)
-#define uiw_cols(x)     (x->cols)
-#define uiw_cury(x)     (x->cur_y)
-#define uiw_curx(x)     (x->cur_x)
+#define uiw_win(x)      ((x)->win)
+#define uiw_boxwin(x)   ((x)->boxwin)
+#define uiw_parent(x)   ((x)->parent)
+#define uiw_child(x)    ((x)->child)
+#define uiw_permsub(x)  ((x)->permsub)
+#define uiw_dynamic(x)  ((x)->dynamic)
+#define uiw_rows(x)     ((x)->rows)
+#define uiw_cols(x)     ((x)->cols)
+#define uiw_cury(x)     ((x)->cur_y)
+#define uiw_curx(x)     ((x)->cur_x)
 
 extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
 extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
@@ -152,7 +152,7 @@ void display_indi(RECORD indi, INT mode, BOOLEAN reuse);
 void display_screen(INT);
 void dbprintf(STRING, ...);
 int get_uitime(void);
-int init_screen(BOOLEAN graphical);
+int init_screen(char * errmsg, int errsize);
 INT interact_2fam(void);
 INT interact_2indi(void);
 INT interact_fam(void);
@@ -164,6 +164,7 @@ STRING message_string (void);
 void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void paint_list_screen(void);
+void set_screen_graphical(BOOLEAN graphical);
 void show_horz_line(UIWINDOW, INT, INT, INT);
 void show_indi(UIWINDOW uiwin, RECORD indi, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);

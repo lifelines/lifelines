@@ -103,12 +103,10 @@ STRING  readpath = NULL;       /* database path used to open */
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN init_curses_ui(void);
 static void load_usage(void);
 static void load_version(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
-static void platform_postcurses_init(void);
 
 /*********************************************
  * local function definitions
@@ -292,10 +290,6 @@ prompt_for_db:
 	else /* developer wants to drive without seatbelt! */
 		stdstring_hardfail();
 
-	/* Initialize Curses UI */
-	if (!init_curses_ui())
-		goto finish;
-	platform_postcurses_init();
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -306,9 +300,18 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llines", NULL);
 	if (!crashlog) { crashlog = "CrashLog_llines.log"; }
 	crash_setcrashlog(crashlog);
-	/* initialize curses interface */
-	if (!init_screen(graphical))
-		goto finish;
+	
+	/* start (n)curses and create windows */
+	{
+		char errmsg[512];
+		if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
+		{
+			endwin();
+			fprintf(stderr, errmsg);
+			goto finish;
+		}
+		set_screen_graphical(graphical);
+	}
 	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
@@ -453,20 +456,6 @@ shutdown_ui (BOOLEAN pause)
 	/* Terminate Curses UI */
 	endwin();
 }
-/*==================================================
- * platform_postcurses_init -- platform-specific code
- *  coming after curses initialized
- *================================================*/
-static void
-platform_postcurses_init (void)
-{
-#ifdef WIN32
-	char buffer[80];
-	STRING title = _(qSmtitle);
-	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
-	wtitle(buffer);
-#endif
-}
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
  * databases. 
@@ -516,19 +505,4 @@ main_db_notify (STRING db, BOOLEAN opening)
 		crash_setdb(db);
 	else
 		crash_setdb("");
-}
-/*==================================================
- * init_curses_ui -- 
- * Created: 2003/01/03, Perry Rapp
- *================================================*/
-static BOOLEAN
-init_curses_ui (void)
-{
-	WINDOW *win;
-
-	win = initscr();
-	if (!win) return FALSE;
-	noecho();
-	keypad(win, 1);
-	return TRUE;
 }

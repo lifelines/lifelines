@@ -360,7 +360,6 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	INT nkeyp, indimodep;
 	RECORD save=0, tmp=0, tmp2=0;
 	INDISEQ seq = NULL;
-	char c2;
 	INT rtn=0; /* return code */
 
 	ASSERT(prec1);
@@ -628,15 +627,17 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
-			c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
-			if ((tmp = add_new_rec_maybe_ref(current, c2)) != 0) {
-				if (tmp == current) {
-					c = CMD_EDIT;
-					goto reprocess_indi_cmd; /* forward to edit */
+			{
+				char c2 = (c==CMD_ADD_SOUR ? 'S' : (c==CMD_ADD_EVEN ? 'E' : 'X'));
+				if ((tmp = add_new_rec_maybe_ref(current, c2)) != 0) {
+					if (tmp == current) {
+						c = CMD_EDIT;
+						goto reprocess_indi_cmd; /* forward to edit */
+					}
+					setrecord(prec1, &tmp);
+					rtn = BROWSE_UNK;
+					goto exitbrowse;
 				}
-				setrecord(prec1, &tmp);
-				rtn = BROWSE_UNK;
-				goto exitbrowse;
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */

@@ -45,12 +45,13 @@ static HANDLE hStdin = INVALID_HANDLE_VALUE;
 static HANDLE hStdout = INVALID_HANDLE_VALUE;
 static DWORD dwModeIn = 0;
 static DWORD dwModeOut = 0;
-static CONSOLE_SCREEN_BUFFER_INFO ConScreenBuffer = {0};
 static CONSOLE_CURSOR_INFO ConCursorInfo = {0};
 static COORD cOrigin = {0,0};
 static int redirected_in = 0;
 static int redirected_out = 0;
 static int redir_unflushed = 0; /* used to separate output when redirected */
+static int CurrentScreenWidth = -1;
+static int CurrentScreenHeight = -1;
 
 /* Others Windows environment data */
 extern int _fmode;		/* O_TEXT or O_BINARY */
@@ -138,14 +139,23 @@ WINDOW	*initscr()
 
 	if (!mycur_init(1))
 		return NULL;
-	if(curscr == NULL)
-		{
-		curscr = newwin(LINES, COLS, 0, 0);
-		/* set update point so whole screen is displayed */
-		curscr->_mincy = 0;
-		curscr->_maxcy = curscr->_maxy-1;
-		}
-	if(stdscr == NULL) stdscr = newwin(LINES, COLS, 0, 0);
+	if (curscr)
+	{
+		delwin(curscr);
+		curscr = 0;
+	}
+	curscr = newwin(LINES, COLS, 0, 0);
+	/* set update point so whole screen is displayed */
+	curscr->_mincy = 0;
+	curscr->_maxcy = curscr->_maxy-1;
+
+	if (stdscr)
+	{
+		delwin(stdscr);
+		stdscr = 0;
+	}
+	stdscr = newwin(LINES, COLS, 0, 0);
+
 	return(stdscr);
 }
 
@@ -178,6 +188,7 @@ WINDOW  *newwin(int nlines, int ncols, int begy, int begx)
 
 int delwin(WINDOW *wp)
 {
+	free(wp->_yarr);
 	free(wp);
 	return(0);
 }
@@ -341,8 +352,8 @@ int wnoutrefresh(WINDOW *wp)
 /* repaint physical screen from virtual image (curscr) */
 int doupdate(void)
 {
-	int linecount;
-	int i;
+	int linecount=0;
+	int i=0;
 	/* update the screen */
 	if((linecount  = (curscr->_maxcy - curscr->_mincy)) >= 0)
 	{
@@ -691,6 +702,7 @@ static int mycur_init(int fullscreen)
 
 	if(first)
 	{
+		CONSOLE_SCREEN_BUFFER_INFO ConScreenBuffer = {0};
 		OSVERSIONINFO verinfo;
 		verinfo.dwOSVersionInfoSize = sizeof(verinfo);
 		if (GetVersionEx(&verinfo) && verinfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
@@ -748,6 +760,8 @@ static int mycur_init(int fullscreen)
 			2002-10-19, Perry
 			*/
 		}
+		CurrentScreenWidth = ConScreenBuffer.dwSize.X;
+		CurrentScreenHeight = ConScreenBuffer.dwSize.Y;
 
 		/* get info on cursor */
 		GetConsoleCursorInfo(hStdout, &ConCursorInfo);
@@ -793,17 +807,37 @@ static int mycur_init(int fullscreen)
 	return 1;
 }
 
+/*
+Adjust LINES & COLS so they're not ridiculously large
+because screen buffer size can be very large (eg, 9000 lines)
+*/
 static void adjust_linescols()
 {
-	if(LINES > CUR_MAXLINES)
+	if (LINES > CUR_MAXLINES)
 		LINES = CUR_MAXLINES;
-	if(COLS > CUR_MAXCOLS)
+	if (COLS > CUR_MAXCOLS)
 		COLS = CUR_MAXCOLS;
 }
 
 /* helper structure for key table in mycur_getc */
 struct keycvt { int win; int curs; };
 
+/* Check if console size has changed, and update LINES & COLS if so */
+static void check_for_resize (void)
+{
+	CONSOLE_SCREEN_BUFFER_INFO ConScreenBuffer = {0};
+	if (!GetConsoleScreenBufferInfo(hStdout, &ConScreenBuffer))
+		return;
+
+	if (CurrentScreenWidth != ConScreenBuffer.dwSize.X
+		|| CurrentScreenHeight != ConScreenBuffer.dwSize.Y) {
+		/* screen has been resized */
+		LINES = CurrentScreenHeight= ConScreenBuffer.dwSize.Y;
+		COLS = CurrentScreenWidth = ConScreenBuffer.dwSize.X;
+		adjust_linescols();
+		console_resize_callback();
+	}
+}
 /*
  In May of 2002 Perry changed from ReadConsole to ReadConsoleInput
  in order to be able to get arrow keys etc
@@ -853,20 +887,13 @@ static int mycur_getc(WBITS wbits)
 		if (!nrecs)
 			return EOF;
 
-		if (inrec.EventType == WINDOW_BUFFER_SIZE_EVENT)
-		{
+		/* 2006-07-23, Perry:
+		Not receiving any inrec.EventType == WINDOW_BUFFER_SIZE_EVENT)
 			int width= inrec.Event.WindowBufferSizeEvent.dwSize.X;
 			int height = inrec.Event.WindowBufferSizeEvent.dwSize.Y;
-			/* 
-			Console window resized
-			but I don't know how to report this via curses
-			*/
-			LINES = height;
-			COLS = width;
-			adjust_linescols();
-			console_resize_callback();
-		}
-		else if (inrec.EventType == KEY_EVENT && inrec.Event.KeyEvent.bKeyDown
+		*/
+		check_for_resize();
+		if (inrec.EventType == KEY_EVENT && inrec.Event.KeyEvent.bKeyDown
 			&& inrec.Event.KeyEvent.wVirtualKeyCode != VK_MENU)
 		{
 			int keystate, keycode;

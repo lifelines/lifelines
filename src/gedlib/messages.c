@@ -416,10 +416,6 @@ ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
 ZST qSdbrecords   = N_("Database records");
 ZST qSdbrecstats  = N_("%dI, %dF, %dS, %dE, %dX");
 
-/* initialization */
-ZST qSwin2big     = N_("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n");
-ZST qSwin2small   = N_("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n");
-
 /* menus */
 ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
 ZST qScright      = N_("Copyright(c) 1991 to 1996, by T. T. Wetmore IV");

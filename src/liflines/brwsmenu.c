@@ -425,7 +425,7 @@ static MenuItem * f_MenuListPersons[] =
 /*============================
  * browsescreen_init - initialize one browse screen
  * title is strsaved inside here
- * reentrant
+ * Can be called to reinitialize an existing browsescreen
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 static void

@@ -55,7 +55,7 @@ static MenuItem * f_ExtraItems[] =
 
 /*============================
  * dynmenu_init - initialize one dynamic menu
- * reentrant
+ * Safe to call on either empty or full DYNMENU
  * Created: 2002/10/24, Perry Rapp
  *==========================*/
 void

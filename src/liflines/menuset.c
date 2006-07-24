@@ -72,7 +72,7 @@ static STRING f_current_title=0;
 
 /*============================
  * menuset_init - Load menu items into cmd array
- * reentrant
+ * Clears menuset and reloads it, so can be called with empty or full menuset
  * Created: 2001/01/28, Perry Rapp
  *==========================*/
 void
