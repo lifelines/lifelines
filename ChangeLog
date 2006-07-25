@@ -1,3 +1,14 @@
+2006-07-25 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/gedlib/messages.c src/hdrs/screen.h
+	src/liflines/Makefile.am src/liflines/screen.c
+	src/liflines/show.c src/liflines/listui.c
+	src/liflines/listui.h
+
+	Move popup and browse list code out of screen.c into
+	listui.c.
+
 2006-07-24 Perry Rapp
 
 	* ChangeLog src/gedlib/messages.c src/hdrs/screen.h

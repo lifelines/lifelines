@@ -57,8 +57,6 @@ INT Scroll1=0;
  *********************************************/
 
 extern BOOLEAN opt_nocb;	/* TRUE to suppress display of cb. data */
-extern INT LIST_LINES;		/* person info display lines above list */
-extern INT MAINWIN_WIDTH;
 extern INT listbadkeys;
 extern char badkeylist[];
 extern STRING qSmisskeys;

@@ -39,7 +39,6 @@
 /* strings used to clear the screen */
 STRING empstr = SS "                                                ";
 STRING empstr71 = SS "                                                                       ";
-STRING empstr120 = SS "                                                                                                                        ";
 
 
 ZST qSiddbse      = N_("You must identify a database.");
@@ -441,8 +440,7 @@ ZST qSttlauxbrw   = N_("LifeLines -- Auxiliary Browse Screen (* toggles menu)");
 ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
 
 /* list menu */
-ZST qSchlist      = N_("Commands:   j Move down     k Move up    i Select     q Quit");
-ZST qSvwlist      = N_("Commands:   j Move down     k Move up    q Quit");
+
 ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit");
 ZST qSvwlistx     = N_("Commands:   u Page Up, d Page Down, q Quit");
 ZST qSerrlist     = N_("Messages:");

@@ -75,6 +75,8 @@
 #   define ACS_URCORNER '*'
 #endif
 
+/* box drawing character type */
+typedef unsigned long llchtype;
 
 /*=========================================
  * UIWINDOWs -- Main screen, menus and popups
@@ -135,6 +137,7 @@ void load_gedcom(BOOLEAN picklist);
 BOOLEAN save_gedcom(void);
 
 /* screen.c */
+void activate_uiwin(UIWINDOW uiwin);
 void adjust_browse_menu_cols(INT delta);
 void adjust_browse_menu_height(INT delta);
 INT ask_for_char(STRING, STRING, STRING);
@@ -144,36 +147,44 @@ INT aux_browse(RECORD rec, INT mode, BOOLEAN reuse);
 INT choose_one_from_indiseq(STRING, INDISEQ);
 void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
 void clear_stdout_hseg(INT row, INT x1, INT x2);
+void create_newwin2(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols);
 void cycle_browse_menu(void);
+void deactivate_uiwin_and_touch_all(void);
 void display_2fam(RECORD frec1, RECORD frec2, INT mode);
 void display_2indi(RECORD irec1, RECORD irec2, INT mode);
 void display_fam(RECORD fam, INT mode, BOOLEAN reuse);
 void display_indi(RECORD indi, INT mode, BOOLEAN reuse);
 void display_screen(INT);
 void dbprintf(STRING, ...);
+void draw_win_box(WINDOW * win);
+llchtype get_gr_ttee(void);
+INT get_main_screen_width(void);
 int get_uitime(void);
 int init_screen(char * errmsg, int errsize);
 INT interact_2fam(void);
 INT interact_2indi(void);
 INT interact_fam(void);
 INT interact_indi(void);
+INT interact_popup(UIWINDOW uiwin, STRING str, INT screen);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark);
 void lock_status_msg(BOOLEAN lock);
 void main_menu(void);
 STRING message_string (void);
 void paint_main_screen(void);
 void paint_two_fam_screen(void);
-void paint_list_screen(void);
 void set_screen_graphical(BOOLEAN graphical);
 void show_horz_line(UIWINDOW, INT, INT, INT);
 void show_indi(UIWINDOW uiwin, RECORD indi, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 void show_indi_vitals(UIWINDOW uiwin, RECORD irec, LLRECT, INT *scroll, BOOLEAN reuse);
+BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
+	, INT * scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
 void term_screen(void);
 void toggle_browse_menu(void);
 INT twofam_browse(NODE, NODE, INT mode);
 INT twoindi_browse(NODE, NODE, INT mode);
+void uierase(UIWINDOW uiwin);
 void wfield(INT, INT, STRING);
 void wipe_window_rect(UIWINDOW uiwin, LLRECT rect);
 void wpos (INT, INT);
