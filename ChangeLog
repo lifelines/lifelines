@@ -5,6 +5,14 @@
 	Fix minor bug in testjd (all dates must be passed
 	through stddate before comparison).
 
+	* ChangeLog INSTALL NEWS README README.MAINTAINERS
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	configure.in docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml docs/llines.1 src/hdrs/version.h
+
+	Bump to version 3.0.51.
+
 2006-07-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
