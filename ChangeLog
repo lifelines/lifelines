@@ -13,6 +13,10 @@
 
 	Bump to version 3.0.51.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+
+	Add src/interp/progerr.c to llexec MSVC6 project file.
+
 2006-07-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
