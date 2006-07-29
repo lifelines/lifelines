@@ -1,6 +1,6 @@
 /*
  * @progname       st_date.li
- * @version        1.3 (2006-06-10)
+ * @version        1.4 (2006-07-30)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -518,6 +518,8 @@ proc dojdtests()
  Using one sample date, test the julian date functions
  jdstring is the date to test
  jdnext is the day after (to test adding one to the julian date number)
+ NB: All dates must be passed to stddate before comparison, 
+ including jdstring and jdnext, so all are formatted the same.
  */
 proc testjd(jdstring, jdnext)
 {
@@ -533,9 +535,10 @@ proc testjd(jdstring, jdnext)
 	}
 	set(jdnum1, add(jdnum, 1))
 	set(result, stddate(jd2date(jdnum1)))
-	if (ne(jdnext, result))
+	set(desired, stddate(jdnext))
+	if (ne(desired, result))
 	{
-		call reportfail(concat("stddate(date2jd(", jdstring, ")+1) failure: ", jdnext, "<>", result))
+		call reportfail(concat("stddate(date2jd(", jdstring, ")+1) failure: ", desired, "<>", result))
 	} else {
 		incr(testok)
 	}

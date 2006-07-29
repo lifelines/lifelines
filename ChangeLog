@@ -1,3 +1,10 @@
+2006-07-30 Perry Rapp
+
+	* ChangeLog reports/st/st_date.li
+
+	Fix minor bug in testjd (all dates must be passed
+	through stddate before comparison).
+
 2006-07-25 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
