@@ -1,3 +1,9 @@
+2006-07-28 Stephen Dum
+	*  ChangeLog docs/ll-devguide.html \
+	docs/ll-reportmanual.{html,pdf,txt} docs/ll-userguide.{html,pdf,txt}
+
+	Update docs
+
 2006-07-30 Perry Rapp
 
 	* ChangeLog reports/st/st_date.li

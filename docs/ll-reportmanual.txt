@@ -1,7 +1,7 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.50
+LifeLines Version 3.0.51
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
@@ -2380,7 +2380,7 @@ Miscellaneous Functions
 
    Database returns the name of the current database, useful in titling
    reports. program returns the name of the current report program. Version
-   returns the version of the running LifeLines program, eg, 3.0.50.
+   returns the version of the running LifeLines program, eg, 3.0.51.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate) shell command, by invoking the system shell. This will not
