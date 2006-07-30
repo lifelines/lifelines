@@ -48,6 +48,16 @@ Add an entry mentioning the new version in the
 Commit changes (new version number, new message catalogs):
   $ cvs -z3 ci
 
+Announce new version to Free Translation Project.
+Per: http://www.iro.umontreal.ca/translation/HTML/maintainers.html
+ <Merely send the URL of a packaged distribution to
+  translation@iro.umontreal.ca. Use the string
+  "DOMAIN-VERSION.pot" somewhere in the subject line
+  of your invoice. Beware that a POT file may only
+  be processed once by the Translation Project.>
+Free Translation Project page for lifelines:
+  http://www.iro.umontreal.ca/translation/registry.cgi?domain=lifelines
+
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
 For rpm packages, see ./build/rpm/lifelines.spec.

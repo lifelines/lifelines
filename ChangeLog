@@ -8,6 +8,10 @@
 
 	(Cosmetic) updated French translation from Patrick Texier.
 
+	* ChangeLog README.MAINTAINERS
+
+	Add instructions to send pot updates to Free Translation Project.
+
 2006-07-29 lifelines beta 3.0.51 RELEASE
  (2006-07-29 sourceforge timezone)
 
