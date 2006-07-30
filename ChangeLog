@@ -1,10 +1,20 @@
+2006-07-29 lifelines beta 3.0.51 RELEASE
+ (2006-07-29 sourceforge timezone)
+
+2006-07-30 Perry Rapp
+
+	*  ChangeLog po/da.po po/de.po po/el.po po/eo.po po/es.po
+	po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	3.0.51 release.
+	
 2006-07-28 Stephen Dum
 	*  ChangeLog docs/ll-devguide.html \
 	docs/ll-reportmanual.{html,pdf,txt} docs/ll-userguide.{html,pdf,txt}
 
 	Update docs
 
-2006-07-30 Perry Rapp
+2006-07-28 Perry Rapp
 
 	* ChangeLog reports/st/st_date.li
 
