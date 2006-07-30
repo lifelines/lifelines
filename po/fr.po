@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.50\n"
-"POT-Creation-Date: 2006-07-25 08:56+0200\n"
-"PO-Revision-Date: 2006-07-25 09:20+0200\n"
+"Project-Id-Version: Lifelines 3.0.51\n"
+"POT-Creation-Date: 2006-07-30 08:00+0200\n"
+"PO-Revision-Date: 2006-07-30 08:00+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
