@@ -1,3 +1,11 @@
+2006-08-11 Perry Rapp
+
+	* build/msvc6/btedit/btedit.rc build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
+
+	Update windows projects with version stamp for today
+	(still 3.0.51, as same source code).
+	
 2006-07-30 Perry Rapp
 
 	* ChangeLog po/fr.po
@@ -23,7 +31,7 @@
 	3.0.51 release.
 	
 2006-07-28 Stephen Dum
-	*  ChangeLog docs/ll-devguide.html \
+	*  ChangeLog docs/ll-devguide.html
 	docs/ll-reportmanual.{html,pdf,txt} docs/ll-userguide.{html,pdf,txt}
 
 	Update docs
