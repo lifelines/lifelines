@@ -1,6 +1,10 @@
+2006-08-11 lifelines beta 3.0.51b RELEASE
+ (Fix windows binaries and French version)
+
 2006-08-11 Perry Rapp
 
-	* build/msvc6/btedit/btedit.rc build/msvc6/dbverify/dbVerify.rc
+	* ChangeLog build/msvc6/btedit/btedit.rc
+	build/msvc6/dbverify/dbVerify.rc
 	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
 
 	Update windows projects with version stamp for today
@@ -20,7 +24,7 @@
 
 	Add instructions to send pot updates to Free Translation Project.
 
-2006-07-29 lifelines beta 3.0.51 RELEASE
+2006-07-30 lifelines beta 3.0.51 RELEASE
  (2006-07-29 sourceforge timezone)
 
 2006-07-30 Perry Rapp
