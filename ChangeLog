@@ -4,6 +4,9 @@
 	src/hdrs/screen.h
 	src/liflines/Makefile.am src/liflines/listui.c
 	src/liflines/llinesi.h src/liflines/screen.c
+	*NEW src/liflines/interact.c
+	*NEW src/liflines/screeni.h
+	*NEW src/liflines/searchui.c
 
 	Remove unused screen argument from interact_popup.
 	Split interact calls into interact_screen_menu
