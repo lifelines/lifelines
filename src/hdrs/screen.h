@@ -165,7 +165,7 @@ INT interact_2fam(void);
 INT interact_2indi(void);
 INT interact_fam(void);
 INT interact_indi(void);
-INT interact_popup(UIWINDOW uiwin, STRING str, INT screen);
+INT interact_popup(UIWINDOW uiwin, STRING str);
 INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark);
 void lock_status_msg(BOOLEAN lock);
 void main_menu(void);

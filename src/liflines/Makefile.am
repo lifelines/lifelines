@@ -10,11 +10,11 @@ bin_PROGRAMS = llines llexec
 llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
 	cscurses.c delete.c dynmenu.c \
-	edit.c error.c export.c import.c \
+	edit.c error.c export.c import.c interact.c \
 	lbrowse.c listui.c loadsave.c \
 	main.c menuset.c merge.c miscutls.c \
 	newrecs.c pedigree.c \
-	scan.c selectdb.c show.c screen.c swap.c \
+	scan.c screen.c searchui.c selectdb.c show.c swap.c \
 	tandem.c valgdcom.c \
 	listui.h llinesi.h 
 
@@ -43,7 +43,7 @@ localedir = $(datadir)/locale
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 # End stuff for gettext
 
-EXTRA_DIST = llinesi.h
+EXTRA_DIST = llinesi.h screeni.h
 
 
 # these dependencies are so that building parts ('make btedit' or 'make

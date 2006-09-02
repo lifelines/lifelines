@@ -317,6 +317,10 @@ SOURCE=..\..\..\src\gedlib\init.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\interact.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\interp.c
 # End Source File
 # Begin Source File
@@ -566,6 +570,10 @@ SOURCE=..\..\..\src\arch\scandir.c
 # Begin Source File
 
 SOURCE=..\..\..\src\liflines\screen.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\liflines\searchui.c
 # End Source File
 # Begin Source File
 
@@ -865,6 +873,10 @@ SOURCE=..\..\..\src\hdrs\list.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\listui.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\liflines\llinesi.h
 # End Source File
 # Begin Source File
@@ -941,6 +953,10 @@ SOURCE=..\..\..\src\hdrs\screen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\screeni.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\hdrs\sequence.h
 # End Source File
 # Begin Source File
@@ -995,10 +1011,6 @@ SOURCE=..\..\..\src\hdrs\zstr.h
 # Begin Source File
 
 SOURCE=..\..\..\ChangeLog
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\liflines\listui.h
 # End Source File
 # End Target
 # End Project

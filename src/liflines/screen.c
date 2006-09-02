@@ -39,6 +39,7 @@
 #include "llinesi.h"
 #include "menuitem.h"
 #include "screen.h"
+#include "screeni.h"
 #include "cscurses.h"
 #include "zstr.h"
 #include "cache.h"
@@ -165,7 +166,6 @@ static void edit_place_table(void);
 static void end_action(void);
 BOOLEAN get_answer(UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen);
 static INT get_brwsmenu_size(INT screen);
-static INT interact(UIWINDOW uiwin, STRING str, INT screen);
 static RECORD invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
@@ -235,8 +235,6 @@ test to see if a type is typedef'd */
 static llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
 static llchtype gr_hline='-', gr_vline= '|';
 static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
-
-static int ui_time_elapsed = 0; /* total time waiting for user input */
 
 /*********************************************
  * local & exported function definitions
@@ -668,7 +666,7 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	c = interact(uiwin, "bsadprtuxqQ", -1);
+	c = interact_choice_string(uiwin, "bsadprtuxqQ");
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
@@ -859,8 +857,7 @@ display_indi (RECORD indi, INT mode, BOOLEAN reuse)
 INT
 interact_indi (void)
 {
-	INT screen = ONE_PER_SCREEN;
-	return interact(main_win, NULL, screen);
+	return interact_screen_menu(main_win, ONE_PER_SCREEN);
 }
 /*=======================================
  * display_fam -- Paint fam on-screen
@@ -883,8 +880,7 @@ display_fam (RECORD frec, INT mode, BOOLEAN reuse)
 INT
 interact_fam (void)
 {
-	INT screen = ONE_FAM_SCREEN;
-	return interact(main_win, NULL, screen);
+	return interact_screen_menu(main_win, ONE_FAM_SCREEN);
 }
 /*=============================================
  * display_2indi -- Paint tandem indi screen
@@ -926,8 +922,7 @@ display_2indi (RECORD irec1, RECORD irec2, INT mode)
 INT
 interact_2indi (void)
 {
-	INT screen = TWO_PER_SCREEN;
-	return interact(main_win, NULL, screen);
+	return interact_screen_menu(main_win, TWO_PER_SCREEN);
 }
 /*====================================
  * show_tandem_line -- Display horizontal line between top & bottom
@@ -973,16 +968,15 @@ display_2fam (RECORD frec1, RECORD frec2, INT mode)
 INT
 interact_2fam (void)
 {
-	INT screen = TWO_FAM_SCREEN;
-	return interact(main_win, NULL, screen);
+	return interact_screen_menu(main_win, TWO_FAM_SCREEN);
 }
 /*=========================================
  * interact_popup -- Get menu choice for a popup window
  *=======================================*/
 INT
-interact_popup (UIWINDOW uiwin, STRING str, INT screen)
+interact_popup (UIWINDOW uiwin, STRING str)
 {
-	return interact(uiwin, str, screen);
+	return interact_choice_string(uiwin, str);
 }
 /*=======================================
  * aux_browse -- Handle aux_browse screen
@@ -992,16 +986,15 @@ INT
 aux_browse (RECORD rec, INT mode, BOOLEAN reuse)
 {
 	UIWINDOW uiwin = main_win;
-	INT screen = AUX_SCREEN;
-	INT lines = update_browse_menu(screen);
+	INT lines = update_browse_menu(AUX_SCREEN);
 	struct tag_llrect rect;
 	rect.top = 1;
 	rect.bottom = lines;
 	rect.left = 1;
 	rect.right = MAINWIN_WIDTH-1;
 	show_aux(uiwin, rec, mode, &rect,  &Scroll1, reuse);
-	display_screen(screen);
-	return interact(uiwin, NULL, screen);
+	display_screen(AUX_SCREEN);
+	return interact_screen_menu(uiwin, AUX_SCREEN);
 }
 /*=========================================
  * list_browse -- Handle list_browse screen
@@ -1015,7 +1008,7 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
 	display_screen(LIST_SCREEN);
-	return interact(main_win, "jkeimrtbanx$^udUDq", -1);
+	return interact_choice_string(main_win, "jkeimrtbanx$^udUDq");
 }
 /*======================================
  * ask_for_db_filename -- Ask user for lifelines database directory
@@ -1206,7 +1199,7 @@ ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
 	mvccwaddstr(win, y++, 2, ttl);
 	mvccwaddstr(win, y++, 2, prmpt);
 	wrefresh(win);
-	rv = interact(uiwin, ptrn, -1);
+	rv = interact_choice_string(uiwin, ptrn);
 	return rv;
 }
 /*============================================
@@ -1411,7 +1404,7 @@ invoke_fullscan_menu (void)
 	while (!done) {
 		activate_uiwin(uiwin);
 		place_cursor_popup(uiwin);
-		code = interact(uiwin, "fnrq", -1);
+		code = interact_choice_string(uiwin, "fnrq");
 
 		switch (code) {
 		case 'f':
@@ -1460,7 +1453,7 @@ invoke_search_menu (void)
 	while (!done) {
 		activate_uiwin(uiwin);
 		place_cursor_popup(uiwin);
-		code = interact(uiwin, "vcfq", -1);
+		code = interact_choice_string(uiwin, "vcfq");
 
 		switch (code) {
 		case 'v':
@@ -1508,7 +1501,7 @@ invoke_add_menu (void)
 
 	activate_uiwin(uiwin);
 	wmove(win, 1, 27);
-	code = interact(uiwin, "pfcsq", -1);
+	code = interact_choice_string(uiwin, "pfcsq");
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
@@ -1541,7 +1534,7 @@ invoke_del_menu (void)
 
 	activate_uiwin(uiwin);
 	wmove(win, 1, 30);
-	code = interact(uiwin, "csifoq", -1);
+	code = interact_choice_string(uiwin, "csifoq");
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
@@ -1860,7 +1853,7 @@ choose_tt (STRING prompt)
 		draw_tt_win(prompt);
 		activate_uiwin(uiwin);
 		wmove(uiw_win(uiwin), 1, strlen(prompt)+3);
-		code = interact(uiwin, "emixgdrq", -1);
+		code = interact_choice_string(uiwin, "emixgdrq");
 		deactivate_uiwin_and_touch_all();
 		switch (code) {
 		case 'e': return MEDIN;
@@ -1894,7 +1887,7 @@ invoke_utils_menu (void)
 	activate_uiwin(uiwin);
 
 	wmove(win, 1, strlen(_(qSmn_uttl))+3);
-	code = interact(uiwin, "srRkidmeocq", -1);
+	code = interact_choice_string(uiwin, "srRkidmeocq");
 	deactivate_uiwin_and_touch_all();
 
 	begin_action();
@@ -1939,7 +1932,7 @@ invoke_extra_menu (RECORD *prec)
 
 		activate_uiwin(uiwin);
 		wmove(win, 1, strlen(_(qSmn_xttl))+3);
-		code = interact(uiwin, "sex123456q", -1);
+		code = interact_choice_string(uiwin, "sex123456q");
 		deactivate_uiwin_and_touch_all();
 
 		switch (code) {
@@ -2000,117 +1993,6 @@ edit_user_options (void)
 		set_db_options(uopts);
 	strfree(&param);
 	release_table(uopts);
-}
-/*===============================
- * translate_hdware_key -- 
- *  translate curses keycode into menuitem.h constant
- *=============================*/
-struct hdkeycvt { int key; int cmd; };
-static INT
-translate_hdware_key (INT c)
-{
-	/* curses constant, menuitem constant */
-	static struct hdkeycvt hdkey[] = {
-		{ KEY_UP, CMD_KY_UP }
-		, { KEY_DOWN, CMD_KY_DN }
-		, { KEY_NPAGE, CMD_KY_PGDN }
-		, { KEY_PPAGE, CMD_KY_PGUP }
-		, { KEY_SNEXT, CMD_KY_SHPGDN }
-		, { KEY_SPREVIOUS, CMD_KY_SHPGUP }
-		, { KEY_HOME, CMD_KY_HOME }
-		, { KEY_END, CMD_KY_END }
-		, { KEY_ENTER, CMD_KY_ENTER }
-	};
-	int i;
-	for (i=0; i<ARRSIZE(hdkey); ++i) {
-		if (c == hdkey[i].key)
-			return hdkey[i].cmd;
-	}
-	return CMD_NONE;
-}
-/*===============================
- * translate_control_key -- 
- *  translate control keys into menuitem.h constant
- *=============================*/
-static INT
-translate_control_key (INT c)
-{
-	static struct hdkeycvt hdkey[] = {
-		{ '\r', CMD_KY_ENTER } /* Win32 */
-		, { '\n', CMD_KY_ENTER } /* UNIX */
-	};
-	int i;
-	for (i=0; i<ARRSIZE(hdkey); ++i) {
-		if (c == hdkey[i].key)
-			return hdkey[i].cmd;
-	}
-	return CMD_NONE;
-}
-/*===============================
- * interact -- Interact with user
- * This is just for browse screens (witness argument "screen")
- *=============================*/
-static INT
-interact (UIWINDOW uiwin, STRING str, INT screen)
-{
-	char buffer[4]; /* 3 char cmds max */
-	INT offset=0;
-	INT cmdnum;
-	INT c, i, n = str ? strlen(str) : 0;
-
-	/* Menu Loop */
-	while (TRUE)
-	{
-		INT time_start=time(NULL);
-		crmode();
-		keypad(uiw_win(uiwin),1);
-		c = wgetch(uiw_win(uiwin));
-		ui_time_elapsed += time(NULL) - time_start;
-		if (c == EOF) c = 'q';
-		nocrmode();
-		if (!progrunning && !lock_std_msg) {
-			/* after they chose off the menu, we wipe any
-			status message still lingering from before they chose */
-			if (status_showing[0]) {
-				status_showing[0] = 0;
-				place_std_msg();
-			}
-		}
-		if (c<0x20) {
-			return translate_control_key(c);
-		}
-		if (has_key(c)) {
-			return translate_hdware_key(c);
-		}
-		if (str) { /* traditional */
-			for (i = 0; i < n; i++) {
-				if (c == (uchar)str[i]) return c;
-			}
-		} else { /* new menus (in menuitem.c) */
-			if (offset < (INT)sizeof(buffer)-1) {
-				buffer[offset] = c;
-				buffer[offset+1] = 0;
-				offset++;
-			} else {
-				buffer[0] = c;
-				buffer[1] = 0;
-				offset = 1;
-			}
-
-			/* Get Menu Command */
-			cmdnum = menuset_check_cmd(get_screen_menuset(screen), buffer);
-
-			/* Act On Menu Command */
-			if (cmdnum != CMD_NONE && cmdnum != CMD_PARTIAL) {
-				return cmdnum;
-			}
-			if (cmdnum != CMD_PARTIAL) {
-				msg_error(_(qSmn_unkcmd));
-				offset = 0;
-			}
-		}
-		/* choice was no good, we loop & wait for another choice */
-	}
 }
 /*============================================
  * get_answer -- Have user respond with string
@@ -3159,15 +3041,6 @@ uicolor (UIWINDOW uiwin, LLRECT rect, char ch)
 		color_hseg(win, i, rect->left, rect->right, ch);
 	}
 }
-/*============================
- * get_uitime -- return cumulative elapsed time waiting 
- *  for user input (since start of program)
- *==========================*/
-int
-get_uitime (void)
-{
-	return ui_time_elapsed;
-}
 /*==================================================
  * platform_postcurses_init -- platform-specific code
  *  coming after curses initialized
@@ -3197,4 +3070,18 @@ llchtype
 get_gr_ttee (void)
 {
 	return gr_ttee; /* eg, '+' */
+}
+/*==================================================
+ * clear_status_display -- clear any lingering status display
+ * (called by interact code after user has pressed a button)
+ *================================================*/
+void
+clear_status_display (void)
+{
+	if (progrunning) return;
+	if (lock_std_msg) return;
+	if (status_showing[0]) {
+		status_showing[0] = 0;
+		place_std_msg();
+	}
 }

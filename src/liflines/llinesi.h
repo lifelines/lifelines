@@ -1,10 +1,12 @@
 /*
   Functions used inside the liflines module
   The high-level but not curses-specific portion of the program
+  screen.h is not included before this header, so UIWIN etc cannot
+  be used here (see screeni.h for declarations requiring screen.h).
 */
 
-#ifndef _LIFLINES_PRIV_H
-#define _LIFLINES_PRIV_H
+#ifndef llinesi_h_included
+#define llinesi_h_included
 
 typedef struct tag_llrect {
 	INT top;
@@ -118,6 +120,9 @@ RECORD full_name_scan(STRING sts);
 RECORD name_fragment_scan(STRING sts);
 RECORD refn_scan(STRING sts);
 
+/* screen.c */
+void clear_status_display(void);
+
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);
 BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
@@ -137,4 +142,4 @@ INT validate_get_warning_count(void);
 INT xref_to_index (STRING);
 
 
-#endif /* _LIFLINES_PRIV_H */
+#endif /* llinesi_h_included */

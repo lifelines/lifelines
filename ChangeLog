@@ -1,3 +1,18 @@
+2006-09-02 Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+	src/hdrs/screen.h
+	src/liflines/Makefile.am src/liflines/listui.c
+	src/liflines/llinesi.h src/liflines/screen.c
+
+	Remove unused screen argument from interact_popup.
+	Split interact calls into interact_screen_menu
+	and interact_choice_string, and renamed interact
+	to interact_worker.
+	Moved interact_screen_menu, interact_choice_string,
+	interact_worker, translate_hdware_key, translate_control_key
+	to new file interact.c. Created new header screeni.h.
+
 2006-08-11 lifelines beta 3.0.51b RELEASE
  (Fix windows binaries and French version)
 
