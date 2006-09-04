@@ -10,4 +10,7 @@
 INT interact_choice_string(UIWINDOW uiwin, STRING str);
 INT interact_screen_menu(UIWINDOW uiwin, INT screen);
 
+/* screen.h */
+void place_cursor_popup(UIWINDOW uiwin);
+
 #endif /* screeni_h_included */

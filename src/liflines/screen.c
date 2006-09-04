@@ -26,7 +26,6 @@
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
-#include <time.h>
 #include "llstdlib.h"
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
@@ -80,9 +79,7 @@ UIWINDOW main_win = NULL;
 UIWINDOW stdout_win=NULL;
 static UIWINDOW debug_win=NULL, debug_box_win=NULL;
 static UIWINDOW ask_win=NULL, ask_msg_win=NULL;
-//static UIWINDOW choose_from_list_win=NULL;
 static UIWINDOW add_menu_win=NULL, del_menu_win=NULL;
-static UIWINDOW search_menu_win=NULL, fullscan_menu_win=NULL;
 static UIWINDOW utils_menu_win=NULL, tt_menu_win=NULL;
 static UIWINDOW extra_menu_win=NULL;
 
@@ -121,14 +118,10 @@ extern STRING qShitkey;
 extern STRING qSmn_add_ttl,qSmn_add_indi,qSmn_add_fam,qSmn_add_chil,qSmn_add_spou;
 extern STRING qSmn_del_ttl,qSmn_del_chil,qSmn_del_spou;
 extern STRING qSmn_del_indi,qSmn_del_fam,qSmn_del_any;
-extern STRING qSmn_sca_ttl,qSmn_sca_nmfu,qSmn_sca_nmfr,qSmn_sca_refn;
-extern STRING qSmn_sea_ttl,qSmn_sea_vhis,qSmn_sea_vhi2,qSmn_sea_vhix;
-extern STRING qSmn_sea_chis,qSmn_sea_chi2,qSmn_sea_chix,qSmn_sea_scan;
 extern STRING qSmn_tt_ttl,qSmn_tt_edit,qSmn_tt_load,qSmn_tt_save,qSmn_tt_exp;
 extern STRING qSmn_tt_imp,qSmn_tt_dir;
 extern STRING qSmn_tt_edin,qSmn_tt_ined,qSmn_tt_gdin,qSmn_tt_ingd;
 extern STRING qSmn_tt_dsin,qSmn_tt_inds,qSmn_tt_inrp;
-extern STRING qSsts_sca_ful,qSsts_sca_fra,qSsts_sca_ref,qSsts_sca_non;
 
 
 /*********************************************
@@ -170,19 +163,14 @@ static RECORD invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
 static INT invoke_extra_menu(RECORD *rec);
-static RECORD invoke_search_menu(void);
-static RECORD invoke_fullscan_menu(void);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 static void place_cursor_main(void);
-static void place_cursor_popup(UIWINDOW uiwin);
 static void place_std_msg(void);
 static void platform_postcurses_init(void);
 static void refresh_main(void);
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
-static void repaint_fullscan_menu(UIWINDOW uiwin);
-static void repaint_search_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
 static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
@@ -543,7 +531,6 @@ create_uisubwindow (UIWINDOW * puiw, CNSTRING name, UIWINDOW parent
 static void
 destroy_windows (void)
 {
-//	delete_uiwindow(&choose_from_list_win);
 	delete_uiwindow(&ask_msg_win);
 	delete_uiwindow(&ask_win);
 	delete_uiwindow(&tt_menu_win);
@@ -578,7 +565,6 @@ create_windows (void)
 
 	create_newwin2(&ask_msg_win, "ask_msg", 5, 73);
 
-//	choose_from_list_win = create_newwin2("choose_from_list", 15, 73);
 
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
@@ -1383,102 +1369,6 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, INT trnum)
 	mvccuwaddstr(uiwin, row, col, zs_str(zstr));
 	zs_free(&zstr);
 }
-/*==============================
- * invoke_fullscan_menu -- Handle fullscan menu
- *============================*/
-static RECORD
-invoke_fullscan_menu (void)
-{
-	UIWINDOW uiwin=0;
-	RECORD rec=0;
-	INT code=0;
-	BOOLEAN done=FALSE;
-
-	if (!fullscan_menu_win) {
-		create_newwin2(&fullscan_menu_win, "fullscan", 7,66);
-		/* paint it for the first & only time (it's static) */
-		repaint_fullscan_menu(fullscan_menu_win);
-	}
-	uiwin = fullscan_menu_win;
-
-	while (!done) {
-		activate_uiwin(uiwin);
-		place_cursor_popup(uiwin);
-		code = interact_choice_string(uiwin, "fnrq");
-
-		switch (code) {
-		case 'f':
-			rec = full_name_scan(_(qSsts_sca_ful));
-			if (rec)
-				done=TRUE;
-			break;
-		case 'n':
-			rec = name_fragment_scan(_(qSsts_sca_fra));
-			if (rec)
-				done=TRUE;
-			break;
-		case 'r':
-			rec = refn_scan(_(qSsts_sca_ref));
-			if (rec)
-				done=TRUE;
-			break;
-		case 'q': 
-			done=TRUE;
-			break;
-		}
-		deactivate_uiwin_and_touch_all();
-		if (!done)
-			msg_status(_(qSsts_sca_non));
-	}
-	return rec;
-}
-/*==============================
- * invoke_search_menu -- Handle search menu
- *============================*/
-static RECORD
-invoke_search_menu (void)
-{
-	UIWINDOW uiwin=0;
-	RECORD rec=0;
-	INT code=0;
-	BOOLEAN done=FALSE;
-
-	if (!search_menu_win) {
-		create_newwin2(&search_menu_win, "search_menu", 7,66);
-	}
-	/* repaint it every time, as history counts change */
-	repaint_search_menu(search_menu_win);
-	uiwin = search_menu_win;
-
-	while (!done) {
-		activate_uiwin(uiwin);
-		place_cursor_popup(uiwin);
-		code = interact_choice_string(uiwin, "vcfq");
-
-		switch (code) {
-		case 'v':
-			rec = disp_vhistory_list();
-			if (rec)
-				done=TRUE;
-			break;
-		case 'c':
-			rec = disp_chistory_list();
-			if (rec)
-				done=TRUE;
-			break;
-		case 'f':
-			rec = invoke_fullscan_menu();
-			if (rec)
-				done=TRUE;
-			break;
-		case 'q': 
-			done=TRUE;
-			break;
-		}
-		deactivate_uiwin_and_touch_all();
-	}
-	return rec;
-}
 /*============================
  * invoke_add_menu -- Handle add menu
  * returns addref'd record
@@ -2209,7 +2099,7 @@ show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
  * in their own private UIWINDOW (& curses) window,
  * such as the full scan popup
  *===========================================*/
-static void
+void
 place_cursor_popup (UIWINDOW uiwin)
 {
 	wmove(uiw_win(uiwin), uiw_cury(uiwin), uiw_curx(uiwin));
@@ -2735,65 +2625,6 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_del_fam));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_any));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
-}
-/*=====================================
- * repaint_fullscan_menu -- Draw menu choices for main full scan menu
- *===================================*/
-static void
-repaint_fullscan_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
-	STRING title = _(qSmn_sca_ttl);
-	draw_win_box(win);
-	mvccwaddstr(win, row++, 2, title);
-	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfu));
-	mvccwaddstr(win, row++, 4, _(qSmn_sca_nmfr));
-	mvccwaddstr(win, row++, 4, _(qSmn_sca_refn));
-	mvccwaddstr(win, row++, 4, _(qSmn_ret));
-	/* set cursor position */
-	uiw_cury(uiwin) = 1;
-	uiw_curx(uiwin) = 3+strlen(title);
-}
-/*=====================================
- * repaint_search_menu -- Draw menu for main history/scan menu
- *===================================*/
-static void
-repaint_search_menu (UIWINDOW uiwin)
-{
-	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
-	STRING title = _(qSmn_sea_ttl);
-	INT n = 0;
-	char buffer[80];
-	draw_win_box(win);
-	mvccwaddstr(win, row++, 2, title);
-	n = get_vhist_len();
-	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl("v  Review visit history (%d record)"
-			, "v  Review visit history (%d records)"
-			, n), n);
-	} else {
-		llstrncpy(buffer, _("(visit history is empty)"), sizeof(buffer), uu8);
-	}
-	mvccwaddstr(win, row++, 4, buffer);
-	n = get_chist_len();
-	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl("c  Review change history (%d record)"
-			, "c  Review change history (%d records)"
-			, n), n);
-	} else {
-		llstrncpy(buffer, _("(change history is empty)")
-			, sizeof(buffer), uu8);
-	}
-	mvccwaddstr(win, row++, 4, buffer);
-	mvccwaddstr(win, row++, 4, _(qSmn_sea_scan));
-	mvccwaddstr(win, row++, 4, _(qSmn_ret));
-	/* set cursor position */
-	uiw_cury(uiwin) = 1;
-	uiw_curx(uiwin) = 3+strlen(title);
 }
 /*=====================================
  * repaint_utils_menu -- 

@@ -123,6 +123,9 @@ RECORD refn_scan(STRING sts);
 /* screen.c */
 void clear_status_display(void);
 
+/* searchui.c */
+RECORD invoke_search_menu(void);
+
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);
 BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);

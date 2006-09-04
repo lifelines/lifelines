@@ -556,7 +556,6 @@ ZST qSmn_del_any  = N_("o  Other - remove other record completely");
 
 /* &&end delete menu, begin search menu */
 ZST qSmn_sea_ttl  = N_("How would you like to find a record?");
-ZST qSmn_sea_scan = N_("f  Full database scan");
 
 /* &&end search menu, begin fullscan menu */
 ZST qSmn_sca_ttl  = N_("What scan type?");

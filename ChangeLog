@@ -1,4 +1,15 @@
+2006-09-04 Perry Rapp
+
+	* ChangeLog src/gedlib/messages.c src/liflines/interact.c
+	src/liflines/llinesi.h src/liflines/screen.c
+	src/liflines/screeni.h src/liflines/searchui.c
+
+	Move search menu & window painting into searchui.c
+	Affected: invoke_search_menu, invoke_fullscan_menu,
+	repaint_fullscan_menu, repaint_search_menu
+
 2006-09-04 Stephen Dum
+	
 	* ChangeLog src/liflines/valgdcom.c
 
 	Fixed  misclassifying of 'Other' records on import by validate_gedcom

@@ -28,9 +28,6 @@
 
 #include <time.h>
 #include "llstdlib.h"
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
 #include "liflines.h"
 #include "llinesi.h"
 #include "menuitem.h"
