@@ -1,3 +1,9 @@
+2006-09-04 Stephen Dum
+	* ChangeLog src/liflines/valgdcom.c
+
+	Fixed  misclassifying of 'Other' records on import by validate_gedcom
+	(it was using first letter of record type, which fails for Other).
+
 2006-09-02 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
