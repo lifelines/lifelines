@@ -8,6 +8,10 @@
 	Affected: invoke_search_menu, invoke_fullscan_menu,
 	repaint_fullscan_menu, repaint_search_menu
 
+	* ChangeLog src/liflines/valgdcom.c
+
+	Fix type warning (due to ternary conditional promoting to int).
+
 2006-09-04 Stephen Dum
 	
 	* ChangeLog src/liflines/valgdcom.c

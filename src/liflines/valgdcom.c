@@ -225,8 +225,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 					rec_type = OTHR_REC;
 					other = add_othr_defn(ifeed, xref, flineno);
 				}
-				if (ifeed && ifeed->validated_rec_fnc)
-					ifeed->validated_rec_fnc((rec_type==OTHR_REC)?'X':tag[0], tag, count);
+				if (ifeed && ifeed->validated_rec_fnc) {
+					char ctype = (rec_type==OTHR_REC) ? 'X': tag[0];
+					ifeed->validated_rec_fnc(ctype, tag, count);
+				}
 			}
 		} else {
 			/* specific handling for specific record types */
