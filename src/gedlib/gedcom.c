@@ -231,7 +231,7 @@ node_to_nkey (NODE node, NKEY * nkey)
 	}
 	strcpy(nkey->key, node_to_key(node));
 	nkey->ntype = nkey->key[0];
-	sscanf(&nkey->key[1], "%d", &nkey->keynum);
+	sscanf(&nkey->key[1], "%ld", &nkey->keynum);
 	return TRUE;
 }
 /*==================================================
@@ -271,7 +271,7 @@ nkey_load_key (NKEY * nkey)
 	char key[MAXKEYWIDTH+1];
 	if (nkey->key)
 		return;
-	sprintf(key, "%c%d", nkey->ntype, nkey->keynum);
+	sprintf(key, "%c%ld", nkey->ntype, nkey->keynum);
 	strcpy(nkey->key, key);
 }
 /*==================================================

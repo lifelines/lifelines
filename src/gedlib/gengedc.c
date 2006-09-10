@@ -325,7 +325,7 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 	{
 		char scratch[MAXLINELEN+1];
 		STRING pq = scratch;
-		sprintf(pq, "%d", lvl);
+		sprintf(pq, "%ld", lvl);
 		pq += strlen(pq);
 		if (nxref(node)) {
 			sprintf(pq, " %s", nxref(node));

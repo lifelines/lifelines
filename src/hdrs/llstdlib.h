@@ -46,7 +46,7 @@ extern BOOLEAN uu8;         /* flag set if int_codeset is UTF-8 */
 extern STRING  int_codeset;
 
 /* appendstr.c */
-void appendstr(char ** pdest, int * len, int utf8, const char * src);
+void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
 	/* llstrcatn is a bad name, because its prototype is different from strcatn! */
 #define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)
 

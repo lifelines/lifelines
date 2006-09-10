@@ -285,7 +285,7 @@ node_strlen (INT levl,       /* level */
 {
 	INT len;
 	char scratch[10];
-	sprintf(scratch, "%d", levl);
+	sprintf(scratch, "%ld", levl);
 	len = strlen(scratch) + 1;
 	if (nxref(node)) len += strlen(nxref(node)) + 1;
 	len += strlen(ntag(node));

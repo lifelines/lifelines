@@ -104,7 +104,7 @@ GetWinSysError (INT nerr)
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		nerr,
-		0, // Default language
+		0, /* Default language */
 		(LPTSTR) &lpMsgBuf,
 		0,
 		NULL 

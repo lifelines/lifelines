@@ -752,7 +752,7 @@ get_trantable_desc (TRANTABLE tt)
 	} else {
 		zs_apps(zstr, "(Unnamed table)");
 	}
-	sprintf(buffer, " [%d]", tt->total);
+	sprintf(buffer, " [%ld]", tt->total);
 	zs_apps(zstr, buffer);
 	return zstr;
 }

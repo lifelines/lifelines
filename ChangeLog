@@ -1,3 +1,15 @@
+2006-09-10 Perry Rapp
+
+	* ChangeLog po/fr.po src/arch/platform.c src/btree/btrec.c
+	src/gedlib/charmaps.c src/gedlib/dateprint.c
+	src/gedlib/dbcontext.c src/gedlib/dispfmt.c
+	src/gedlib/gedcom.c src/gedlib/gengedc.c src/gedlib/indiseq.c
+	src/gedlib/init.c src/gedlib/node.c src/hdrs/llstdlib.h
+	src/stdlib/appendstr.c
+
+	Cleaning up gcc warnings (mostly changing %d format
+	specifiers to %ld where INT used).
+
 2006-09-04 Perry Rapp
 
 	* ChangeLog src/gedlib/messages.c src/liflines/interact.c

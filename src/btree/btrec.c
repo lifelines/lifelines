@@ -65,7 +65,7 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 	if (!(i>=0 && i<nkeys(block))) {
 		char msg[256];
 		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
-		sprintf(msg+strlen(msg), "Bad index (%d) passed to check_offset", i);
+		sprintf(msg+strlen(msg), "Bad index (%ld) passed to check_offset", i);
 		FATAL2(msg);
 	}
 	
@@ -75,10 +75,10 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 
 	if (offlo + lenlo != offhi) {
 		char msg[256];
-		int blocknum = ixself(block);
+		INT blocknum = ixself(block);
 		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
 		sprintf(msg+strlen(msg)
-			, "Found corrupt block#%x: index(%d) off=%d, len=%d, key(%d) off=%d"
+			, "Found corrupt block#%lx: index(%ld) off=%ld, len=%ld, key(%ld) off=%ld"
 			, blocknum, i-1, offlo, lenlo, i, offhi);
 		FATAL2(msg);
 	}
@@ -372,7 +372,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	}
 	if (fseek(fd, (long)(offs(block, i) + BUFLEN), 0)) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Seek to offset (%d) failed for blockfile (rkey=%s)"
+		sprintf(msg, "Seek to offset (%ld) failed for blockfile (rkey=%s)"
 			, offs(block,i), rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
@@ -383,14 +383,14 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	}
 	if (len < 0) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Bad len (%d) for blockfile (rkey=%s)"
+		sprintf(msg, "Bad len (%ld) for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
 	rawrec = (RAWRECORD) stdalloc(len + 1);
 	if (!(fread(rawrec, len, 1, fd) == 1)) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Read for %d bytes failed for blockfile (rkey=%s)"
+		sprintf(msg, "Read for %ld bytes failed for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
@@ -435,7 +435,7 @@ bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 		/* should never revisit the master node */
 		if (ixself(index) == ixself(bmaster(btree))) {
 			char msg[400];
-			sprintf(msg, _("Btree lookup looped back to master (%d)!"), ixself(index));
+			sprintf(msg, _("Btree lookup looped back to master (%ld)!"), ixself(index));
 
 			FATAL2(msg);
 		}
@@ -480,7 +480,7 @@ movefiles (STRING from_file, STRING to_file)
 	if (rtn) {
 		char temp[1024];
 		snprintf(temp, sizeof(temp),
-			"rename failed code %d, from <%s> to <%s>",
+			"rename failed code %ld, from <%s> to <%s>",
 			rtn, from_file, to_file);
 		FATAL2(temp);
 	}

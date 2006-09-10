@@ -657,7 +657,7 @@ format_year (struct tag_dnum yr, INT yfmt)
 		}
 	}
 	if (yrval > 999 || yfmt == 2) {
-		sprintf(scratch, "%d", yrval);
+		sprintf(scratch, "%ld", yrval);
 		return scratch;
 	}
 	p = (yfmt==1 ? "000" : "   ");
@@ -667,7 +667,7 @@ format_year (struct tag_dnum yr, INT yfmt)
 		llstrncpy(scratch, p, 2+1, uu8);
 	else
 		llstrncpy(scratch, p, 1+1, uu8);
-	sprintf(scratch+strlen(scratch), "%d", yrval);
+	sprintf(scratch+strlen(scratch), "%ld", yrval);
 	return scratch;
 }
 /*=============================

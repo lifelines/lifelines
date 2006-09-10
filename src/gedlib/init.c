@@ -73,7 +73,6 @@ extern INT opt_finnish, opt_mychar;
 
 static void check_installation_path(void);
 static BOOLEAN load_configs(STRING configfile, STRING * pmsg);
-static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
 static void post_codesets_hook(void);
 static void pre_codesets_hook(void);
 static void update_db_options(void);

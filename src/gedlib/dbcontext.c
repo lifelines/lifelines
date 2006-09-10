@@ -43,6 +43,7 @@
 #include "mychar.h"
 #include "charprops.h"
 #include "xlat.h"
+#include "dbcontext.h"
 
 
 /*********************************************
@@ -51,6 +52,12 @@
 
 extern BOOLEAN writeable;
 extern STRING readpath,readpath_file;
+
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
 
 /*********************************************
  * local variables

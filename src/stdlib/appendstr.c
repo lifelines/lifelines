@@ -27,7 +27,7 @@
  * NB: Need one byte for terminating zero, so len==1 is same as len==0.
  *================================*/
 void
-appendstr (char ** pdest, int * len, int utf8, const char * src)
+appendstr (STRING * pdest, INT * len, int utf8, CNSTRING src)
 {
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */
