@@ -352,6 +352,12 @@ prompt_stdout (STRING prompt)
 {
 	return ask_for_char(NULL, prompt, NULL);
 }
+/* called from ask.c, curses version in searchui.c */
+INDISEQ
+invoke_search_menu (void)
+{
+	return NULL;
+}
 /*=============================================================
  * Internal Use Only
  *===========================================================*/

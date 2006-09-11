@@ -19,14 +19,15 @@
 	can return indiseqs like all other ask & scan code paths.
 	New functions invoke_search_source_menu, do_sources_scan,
 	do_fields_scan.
-	NB: llexec is broken now, as it includes ask.c, which calls
-	invoke_search_source_menu, which uses ncurses.c. Probable fix is
-	to use ui/ui_cli.c.
 
 	* ChangeLog src/liflines/screen.c
 
 	Remove obsolete declarations of translate_control_key
 	and translate_hdware_key.
+
+	* ChangeLog src/ui/ui_cli.c
+
+	Fix llexec by adding stub invoke_search_menu in ui/ui_cli.c.
 
 2006-09-10 Perry Rapp
 
