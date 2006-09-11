@@ -20,7 +20,13 @@
 	New functions invoke_search_source_menu, do_sources_scan,
 	do_fields_scan.
 	NB: llexec is broken now, as it includes ask.c, which calls
-	invoke_search_source_menu, which uses ncurses.c.
+	invoke_search_source_menu, which uses ncurses.c. Probable fix is
+	to use ui/ui_cli.c.
+
+	* ChangeLog src/liflines/screen.c
+
+	Remove obsolete declarations of translate_control_key
+	and translate_hdware_key.
 
 2006-09-10 Perry Rapp
 

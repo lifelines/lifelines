@@ -184,8 +184,6 @@ BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(BOOLEAN includeCurrent);
-static INT translate_control_key(INT c);
-static INT translate_hdware_key(INT c);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static INT update_browse_menu(INT screen);
 static BOOLEAN yes_no_value(INT c);
