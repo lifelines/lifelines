@@ -124,7 +124,7 @@ void
 choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
-	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), NOCONFIRM, DOASK1))))
+	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), DOASK1))))
 		return;
 	/* confirm if caller desired */
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfpdel))) return;
@@ -142,7 +142,7 @@ BOOLEAN
 choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
-	if (!record && !(record = ask_for_any(_(qSidodel), NOCONFIRM, DOASK1)))
+	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
 		return FALSE;
 	/* confirm if caller desired */
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfodel)))
@@ -168,7 +168,7 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 	}
 
 /* Identify spouse to remove */
-	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOCONFIRM, NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
 	if (!irec) return FALSE;
 	if (!FAMS(nztop(irec))) {
 		message(_(qSntprnt));
@@ -210,7 +210,7 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 	}
 		
 /* Identify child and check for FAMC nodes */
-	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOCONFIRM, NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);
 	if (!irec) return FALSE;
 	if (!FAMC(nztop(irec))) {
 		message(_(qSntchld));

@@ -74,7 +74,7 @@ swap_children (RECORD prnt, RECORD frec)
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOCONFIRM, NOASK1);
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
@@ -187,7 +187,7 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOCONFIRM, NOASK1);
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
 	if (!prnt) return FALSE;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
@@ -284,7 +284,7 @@ swap_families (RECORD irec)
 	}
 
 /* Find person and assure has >= 2 families */
-	if (!irec) irec = ask_for_indi(_(qSidfswp), NOCONFIRM, NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1);
 	if (!irec) return FALSE;
 	indi = nztop(irec);
 	if (!(fams = FAMS(indi))) {

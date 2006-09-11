@@ -180,7 +180,7 @@ llrpt_getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!msg)
 		msg = _("Identify person for program:");
 	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
-	key = rptui_ask_for_indi_key(msg, NOCONFIRM, DOASK1);
+	key = rptui_ask_for_indi_key(msg, DOASK1);
 	if (key) {
 		assign_iden(stab, iident(arg)
 			, create_pvalue_from_indi_key(key));
@@ -2267,13 +2267,13 @@ llrpt_length (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		INT type = which_pvalue_type(val);
 		if (type == PLIST) {
 			LIST list = pvalue_to_list(val);
-			len = length_list(list);
+			len = (list ? length_list(list) : 0);
 		} else if (type == PTABLE) {
 			TABLE table = pvalue_to_table(val);
-			len = get_table_count(table);
+			len = (table ? get_table_count(table) : 0);
 		} else if (type == PSET) {
 			INDISEQ seq = pvalue_to_seq(val);
-			len = length_indiseq(seq);
+			len = (seq ? length_indiseq(seq) : 0);
 		}
 	}
 	if (len == -1) {

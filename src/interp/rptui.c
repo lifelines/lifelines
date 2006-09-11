@@ -7,6 +7,8 @@
 */
 /*=============================================================
  * rptui.c -- Wrappers for UI functions used by report interpreter
+ * These take care of switching to UI locale, and keeping GUI wait time
+ *  accounted separately from report run time.
  *==============================================================*/
 
 
@@ -87,11 +89,11 @@ rptui_ask_for_indi_list (STRING ttl, BOOLEAN reask)
 	return seq;
 }
 STRING
-rptui_ask_for_indi_key (STRING ttl, CONFIRMQ confirmq, ASK1Q ask1)
+rptui_ask_for_indi_key (STRING ttl, ASK1Q ask1)
 {
 	STRING s;
 	begin_rptui();
-	s = ask_for_indi_key(ttl, confirmq, ask1);
+	s = ask_for_indi_key(ttl, ask1);
 	end_rptui();
 	return s;
 }

@@ -61,7 +61,7 @@ ZST qSronlym      = N_("The database is read only; you may not merge records.");
 ZST qSronlyr      = N_("The database is read only; you may not remove records.");
 ZST qSronly       = N_("The database is read only.");
 
-ZST qSidbrws      = N_("enter name, key, refn or list:");
+ZST qSidbrws      = N_("Name, key, refn, list, or @:");
 ZST qSidkyrfn     = N_("enter key or refn: ");
 ZST qSidcrmv      = N_("Please choose the child to remove from the family.");
 ZST qSidsrmv      = N_("Please choose the spouse/parent to remove from the family.");
@@ -95,11 +95,7 @@ ZST qSidcswp      = N_("Identify a parent in the family having children swapped.
 ZST qSidfswp      = N_("Whose families/spouses are to be swapped?");
 ZST qSidprnt      = N_("Identify one of the child's parents, if known.");
 
-ZST qSscanrs      = N_("Scan results:");
-ZST qSscnnmf      = N_("Enter pattern to match against single surname or given name.");
-ZST qSscnfnm      = N_("Enter pattern to match against full name.");
 ZST qSscnrfn      = N_("Enter pattern to match against refn.");
-ZST qSscantt      = N_("pattern: ");
 
 ZST qSnotonei     = N_("Please choose from among these people.");
 ZST qSnotonex     = N_("Please choose from among these records.");
@@ -557,14 +553,11 @@ ZST qSmn_del_any  = N_("o  Other - remove other record completely");
 /* &&end delete menu, begin search menu */
 ZST qSmn_sea_ttl  = N_("How would you like to find a record?");
 
-/* &&end search menu, begin fullscan menu */
-ZST qSmn_sca_ttl  = N_("What scan type?");
-ZST qSmn_sca_nmfu = N_("f  Full name scan");
-ZST qSmn_sca_nmfr = N_("n  Name fragment (whitespace-delimited) scan");
-ZST qSmn_sca_refn = N_("r  Refn scan");
+/* &&end search menu, begin scan status strings */
 ZST qSsts_sca_ful = N_("Performing full name scan");
 ZST qSsts_sca_fra = N_("Performing name fragment scan");
 ZST qSsts_sca_ref = N_("Performing refn scan");
+ZST qSsts_sca_src = N_("Performing source scan");
 ZST qSsts_sca_non = N_("No records found in scan");
 
 /* &&complex date strings (A=abbrev, B=full)*/

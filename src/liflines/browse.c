@@ -93,14 +93,17 @@ static INT browse_fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 static INT browse_indi_modes(RECORD *prec1, RECORD *prec2, INDISEQ *pseq
 	, INT indimode);
 static INT browse_pedigree(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+static RECORD disp_chistory_list(void);
+static RECORD disp_vhistory_list(void);
 static INT display_aux(RECORD rec, INT mode, BOOLEAN reuse);
 static INT get_hist_count(struct hist * histp);
+static INDISEQ get_history_list(struct hist * histp);
 static RECORD goto_fam_child(RECORD frec, int childno);
 static RECORD goto_indi_child(RECORD irec, int childno);
 static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
 static INT handle_history_cmds(INT c, RECORD *prec1);
 static RECORD history_back(struct hist * histp);
-static RECORD history_list(struct hist * histp);
+static RECORD do_disp_history_list(struct hist * histp);
 static void history_record(RECORD rec, struct hist * histp);
 static RECORD history_fwd(struct hist * histp);
 static void init_hist(struct hist * histp, INT count);
@@ -472,11 +475,11 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0)
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0)
 				setrecord(&current, &tmp);
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
 				if (nztype(tmp) != 'I') {
 					setrecord(prec1, &tmp);
 					rtn = BROWSE_UNK;
@@ -641,7 +644,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
-			if ((tmp = ask_for_indi(_(qSidp2br), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidp2br), NOASK1)) != 0) {
 				setrecord(prec1, &current);
 				setrecord(prec2, &tmp);
 				rtn = BROWSE_TAND;
@@ -825,14 +828,14 @@ reprocess_aux_cmd:
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -1220,14 +1223,14 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			goto exitbrowse;
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_INDI;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOCONFIRM, NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -1757,36 +1760,68 @@ history_fwd (struct hist * histp)
  *  returns NULL if no history or if user cancels
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
-RECORD
+static RECORD
 disp_vhistory_list (void)
 {
-	return history_list(&vhist);
+	return do_disp_history_list(&vhist);
 }
 /*==================================================
  * disp_chistory_list -- show user the changed history list
  *  returns NULL if no history or if user cancels
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
-RECORD
+static RECORD
 disp_chistory_list (void)
 {
-	return history_list(&chist);
+	return do_disp_history_list(&chist);
 }
 /*==================================================
- * history_list -- let user choose from history list
+ * get_chistory_list -- return indiseq of change history
+ *  returns NULL if no history
+ *================================================*/
+INDISEQ
+get_chistory_list (void)
+{
+	return get_history_list(&chist);
+}
+/*==================================================
+ * get_vhistory_list -- Return indiseq of visit history
+ *  returns NULL if no history
+ *================================================*/
+INDISEQ
+get_vhistory_list (void)
+{
+	return get_history_list(&vhist);
+}
+/*==================================================
+ * do_disp_history_list -- let user choose from history list
  *  calls message(nohist) if none found
  *  returns NULL if no history or if user cancels
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
 static RECORD
-history_list (struct hist * histp)
+do_disp_history_list (struct hist * histp)
+{
+	INDISEQ seq = get_history_list(histp);
+	RECORD rec=0;
+
+	if (!seq) {
+		message(_(qSnohist));
+		return NULL;
+	}
+	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
+	remove_indiseq(seq);
+	return rec;
+}
+/*==================================================
+ * get_history_list -- return specified history list as indiseq
+ *================================================*/
+static INDISEQ
+get_history_list (struct hist * histp)
 {
 	INDISEQ seq=0;
-	NODE node=0;
-	RECORD rec=0;
 	INT next, prev;
 	if (!histp->size || histp->start==-1) {
-		message(_(qSnohist));
 		return NULL;
 	}
 	/* add all items of history to seq */
@@ -1794,6 +1829,7 @@ history_list (struct hist * histp)
 	prev = -1;
 	next = histp->start;
 	while (1) {
+		NODE node=0;
 		nkey_to_node(&histp->list[next], &node);
 		if (node) {
 			STRING key = node_to_key(node);
@@ -1804,9 +1840,7 @@ history_list (struct hist * histp)
 		if (next == histp->past_end)
 			break; /* finished them all */
 	}
-	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
-	remove_indiseq(seq);
-	return rec;
+	return seq;
 }
 /*==================================================
  * ask_clear_history -- delete vist history

@@ -1808,13 +1808,14 @@ refn_to_indiseq (STRING ukey, INT letr, INT sort)
  * key_to_indiseq -- Return person sequence of the matching key
  *  name:  [IN]  name to search for
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
+ * returns NULL if name is empty or not found
  *=============================================================*/
 INDISEQ
 key_to_indiseq (STRING name, char ctype)
 {
-	STRING key;
+	STRING key=0;
 	INDISEQ seq = NULL;
-	RECORD rec;
+	RECORD rec=0;
 	if (!name) return NULL;
 	rec = id_by_key(name, ctype);
 	if (!rec) return NULL;
@@ -1824,6 +1825,24 @@ key_to_indiseq (STRING name, char ctype)
 	append_indiseq_null(seq, key, NULL, FALSE, FALSE);
 	return seq;
 }
+/*=============================================================
+ * rec_to_indiseq -- Return new sequence containing specified record
+ *  rec:  [IN]  record to put in list
+ * returns NULL if record is null
+ *=============================================================*/
+#ifdef UNUSED_CODE
+INDISEQ
+rec_to_indiseq (RECORD rec)
+{
+	STRING key=0;
+	INDISEQ seq = NULL;
+	if (!rec) return NULL;
+	key = rmvat(nxref(nztop(rec)));
+	seq = create_indiseq_null();
+	append_indiseq_null(seq, key, NULL, FALSE, FALSE);
+	return seq;
+}
+#endif /* UNUSED CODE */
 /*===========================================================
  * str_to_indiseq -- Return person sequence matching a string
  *  name:  [IN]  name to search for

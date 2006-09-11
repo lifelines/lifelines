@@ -38,8 +38,8 @@ void add_child_to_fam(NODE child, NODE fam, INT i);
 NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
-STRING ask_for_indi_key(STRING, CONFIRMQ, ASK1Q);
-RECORD ask_for_indi(STRING ttl, CONFIRMQ, ASK1Q);
+STRING ask_for_indi_key(STRING, ASK1Q ask1);
+RECORD ask_for_indi(STRING ttl, ASK1Q ask1);
 
 /* ask.c */
 RECORD ask_for_fam(STRING, STRING);

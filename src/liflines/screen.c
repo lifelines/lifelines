@@ -177,6 +177,7 @@ static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
 static int resize_screen_impl(char * errmsg, int errsize);
 static void run_report(BOOLEAN picklist);
+static RECORD search_for_one_record(void);
 static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
@@ -642,6 +643,23 @@ prompt_stdout (STRING prompt)
 	return i;
 }
 /*=====================================
+ * search_for_one_record -- Invoke search menu & trim to one record
+ *===================================*/
+static RECORD
+search_for_one_record (void)
+{
+	INDISEQ seq = invoke_search_menu();
+	if (!seq) return NULL;
+	if (!length_indiseq(seq)) {
+		remove_indiseq(seq);
+		return NULL;
+	}
+	/* namesort uses canonkeysort for non-persons */
+	namesort_indiseq(seq);
+	return choose_from_indiseq(seq, DOASK1, 
+		_("Search results"), _("Search results"));
+}
+/*=====================================
  * main_menu -- Handle main_menu screen
  *===================================*/
 void
@@ -659,7 +677,7 @@ main_menu (void)
 	case 'b': main_browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			RECORD rec = invoke_search_menu();
+			RECORD rec = search_for_one_record();
 			if (rec)
 				main_browse(rec, BROWSE_UNK);
 		}

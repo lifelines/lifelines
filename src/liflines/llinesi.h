@@ -36,17 +36,17 @@ void advanced_person_edit(NODE);
 void advanced_family_edit(NODE);
 
 /* ask.c */
-RECORD ask_for_any(STRING ttl, CONFIRMQ, ASK1Q);
+RECORD ask_for_any(STRING ttl, ASK1Q ask1);
 INDISEQ ask_for_indiseq(CNSTRING ttl, char ctype, INT *prc);
 
 /* browse.c */
 RECORD choose_any_event(void);
 RECORD choose_any_other(void);
 RECORD choose_any_source(void);
-RECORD disp_vhistory_list(void);
-RECORD disp_chistory_list(void);
-INT get_vhist_len(void);
 INT get_chist_len(void);
+INDISEQ get_chistory_list(void);
+INT get_vhist_len(void);
+INDISEQ get_vhistory_list(void);
 BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
 BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
@@ -116,15 +116,17 @@ void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-RECORD full_name_scan(STRING sts);
-RECORD name_fragment_scan(STRING sts);
-RECORD refn_scan(STRING sts);
+INDISEQ full_name_scan(STRING sts);
+INDISEQ name_fragment_scan(STRING sts);
+INDISEQ refn_scan(STRING sts);
+INDISEQ scan_souce_by_author(STRING sts);
+INDISEQ scan_souce_by_title(STRING sts);
 
 /* screen.c */
 void clear_status_display(void);
 
 /* searchui.c */
-RECORD invoke_search_menu(void);
+INDISEQ invoke_search_menu(void);
 
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);

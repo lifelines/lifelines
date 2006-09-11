@@ -48,7 +48,7 @@ extern STRING qSdbrecstats,qSdbrecords;
 void
 key_util (void)
 {
-	RECORD indi = ask_for_indi(_("Whose key value do you want?"), NOCONFIRM, NOASK1);
+	RECORD indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
 	if (!indi) return;
 	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), 70));
 }

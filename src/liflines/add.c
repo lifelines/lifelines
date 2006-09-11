@@ -254,7 +254,7 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 
 /* Identify child if caller did not */
 
-	if (!child) child = nztop(ask_for_indi(_(qSidchld), NOCONFIRM, DOASK1));
+	if (!child) child = nztop(ask_for_indi(_(qSidchld), DOASK1));
 	if (!child) return NULL;
 
 /* Identify family if caller did not */
@@ -354,7 +354,7 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 
 /* Identify spouse to add to family */
 
-	if (!sprec) sprec = ask_for_indi(_(qSidsadd), NOCONFIRM, DOASK1);
+	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1);
 	if (!sprec) return FALSE;
 	spouse = nztop(sprec);
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
@@ -531,7 +531,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 /* Identify first spouse */
 
 	if (!sprec1) 
-		sprec1 = ask_for_indi(_(qSidsps1), NOCONFIRM, NOASK1);
+		sprec1 = ask_for_indi(_(qSidsps1), NOASK1);
 	if (!sprec1) 
 		return NULL;
 	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN) {
@@ -542,7 +542,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 /* Identify optional spouse */
 
 	if (!sprec2)
-		sprec2 = ask_for_indi(_(qSidsps2), NOCONFIRM, DOASK1);
+		sprec2 = ask_for_indi(_(qSidsps2), DOASK1);
 	if (sprec2) {
 		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || 
 			(traditional && sex1 == sex2)) {

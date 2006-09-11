@@ -62,7 +62,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Identify indi if necessary */
-	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOCONFIRM, NOASK1)))
+	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOASK1)))
 		return FALSE;
 	indi1 = nztop(irec1);
 
@@ -152,7 +152,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 
 /* Identify family if necessary */
 	if (!frec1) {
-		irec = ask_for_indi(_(qSidspse), NOCONFIRM, NOASK1);
+		irec = ask_for_indi(_(qSidspse), NOASK1);
 		if (!irec) return FALSE;
 		if (!FAMS(nztop(irec))) {
 			message(_(qSntprnt));

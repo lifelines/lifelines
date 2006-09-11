@@ -1,3 +1,24 @@
+2006-09-11 Perry Rapp
+
+	* ChangeLog src/gedlib/src/gedlib src/gedlib/indiseq.c
+	src/gedlib/messages.c src/hdrs/indiseq.h src/hdrs/liflines.h
+	src/interp/builtin.c src/interp/rptui.c src/interp/rptui.h
+	src/liflines/add.c src/liflines/ask.c src/liflines/browse.c
+	src/liflines/delete.c src/liflines/edit.c src/liflines/llinesi.h
+	src/liflines/miscutls.c src/liflines/scan.c src/liflines/screen.c
+	src/liflines/searchui.c src/liflines/swap.c
+
+	Modify ask_for_indiseq to invoke full search subroutine if "@" entered.
+	Remove CONFIRMQ arg of ask_for_indi and ask_for_any, as it is
+	always NOCONFIRM.
+	Expand ask_for_indi_list_once into its only caller ask_for_indi_list.
+	Modify llrpt_length to handle null sequence.
+	Rewrite scan.c to return sequences instead of records, and rename
+	type SCAN_PATTERN to SCANNER and expand it.
+	New functions get_chistory_list & get_vhistory_list so history stuff
+	can return indiseqs like all other ask & scan code paths.
+	New functions invoke_search_source_menu, do_sources_scan, do_fields_scan.
+
 2006-09-10 Perry Rapp
 
 	* ChangeLog po/fr.po src/arch/platform.c src/btree/btrec.c
