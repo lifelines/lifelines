@@ -17,7 +17,10 @@
 	type SCAN_PATTERN to SCANNER and expand it.
 	New functions get_chistory_list & get_vhistory_list so history stuff
 	can return indiseqs like all other ask & scan code paths.
-	New functions invoke_search_source_menu, do_sources_scan, do_fields_scan.
+	New functions invoke_search_source_menu, do_sources_scan,
+	do_fields_scan.
+	NB: llexec is broken now, as it includes ask.c, which calls
+	invoke_search_source_menu, which uses ncurses.c.
 
 2006-09-10 Perry Rapp
 
