@@ -195,8 +195,14 @@ invoke_fullscan_menu (void)
 			done=TRUE;
 			break;
 		}
-		if (seq && length_indiseq(seq) > 0)
-			done=TRUE;
+		if (seq) {
+			if (length_indiseq(seq) > 0) {
+				done=TRUE;
+			} else {
+				remove_indiseq(seq);
+				seq = NULL;
+			}
+		}
 		deactivate_uiwin_and_touch_all();
 		if (!done)
 			msg_status(_(qSsts_sca_non));
@@ -258,8 +264,15 @@ invoke_search_source_menu (void)
 			done=TRUE;
 			break;
 		}
-		if (seq)
-			done=TRUE;
+		if (seq) {
+			if (length_indiseq(seq) > 0) {
+				done=TRUE;
+			} else {
+				remove_indiseq(seq);
+				seq = NULL;
+			}
+		}
+
 		deactivate_uiwin_and_touch_all();
 		if (!done)
 			msg_status(_(qSsts_sca_non));

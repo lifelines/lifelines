@@ -207,7 +207,15 @@ main_browse (RECORD rec1, INT code)
 	if (!rec1)
 		prompt_for_browse(&rec1, &code, &seq);
 
-	if (!rec1 && !seq) return;
+	if (!rec1) {
+		if (!seq) return;
+		if (!length_indiseq(seq)) {
+			remove_indiseq(seq);
+			return;
+		}
+	}
+			
+
 
 	/*
 	loop here handle user browsing around through

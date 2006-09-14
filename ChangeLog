@@ -1,3 +1,10 @@
+2006-09-15 Perry Rapp
+
+	* ChangeLog src/liflines/browse.c src/liflines/searchui.c
+
+	Fix crash in browse/search submenu.
+	Plug indiseq leak in invoke_fullscan_menu.
+
 2006-09-11 Perry Rapp
 
 	* ChangeLog src/gedlib/src/gedlib src/gedlib/indiseq.c
