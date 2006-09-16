@@ -216,7 +216,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 					/* TODO: (Perry, 2006-06-30) I don't know how to fail gracefully from here inside parser */
 					char msg[512];
 					snprintf(msg, sizeof(msg)/sizeof(msg[0])
-						, _("String constant overflowing internal buffer tokbuf len=%d, file: %s, start line: %d")
+						, _("String constant overflowing internal buffer tokbuf len=%d, file: %s, start line: %ld")
 						, sizeof(tokbuf)/sizeof(tokbuf[0])
 						, pactx->fullpath
 						, start_line + 1

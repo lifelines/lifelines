@@ -1064,7 +1064,7 @@ check_set (INDISEQ seq, char ctype)
 				, ctype, i);
 			if (todo.fix_deletes) {
 				char key[33];
-				sprintf(key, "%c%d", ctype, i);
+				sprintf(key, "%c%ld", ctype, i);
 				if (mark_deleted_record_as_deleted(key)) {
 					report_fix(ERR_UNDELETED
 						, _("Fixed missing undeleted record %c%d")
@@ -1113,7 +1113,7 @@ check_btree (BTREE btr)
 	INDEX index = bmaster(BTR);
 	INT mk1 = bkfile(btr).k_mkey;
 	if (ixself(index) != mk1) {
-		printf(_("Master fkey misaligned (%d != %d)\n"), ixself(index), mk1);
+		printf(_("Master fkey misaligned (%ld != %ld)\n"), ixself(index), mk1);
 		return FALSE;
 	}
 	check_index(btr, index, fkeytab, NULL, NULL);
@@ -1146,7 +1146,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		}
 		newix = readindex(btr, fkey, TRUE);
 		if (!newix) {
-			printf(_("Error loading index at key %d\n"), i);
+			printf(_("Error loading index at key %ld\n"), i);
 			printblock((BLOCK)index);
 		}
 		/* figure upper & lower bounds of what keys should be in the child */
@@ -1209,7 +1209,7 @@ check_keys (BLOCK block, RKEY * lo, RKEY * hi)
 		if (i<n) {
 			INT rel = cmpkeys(&rkeys(block, i), &rkeys(block, i+1));
 			if (rel >= 0) {
-				printf(_("Key %d not below next key\n"), i);
+				printf(_("Key %ld not below next key\n"), i);
 				printblock(block);
 				ok = FALSE;
 			}
@@ -1241,7 +1241,7 @@ validate_errs (void)
 	for (i=0; i<ARRSIZE(errs); i++) {
 		if (errs[i].err != i) {
 			fprintf(stderr
-				, _("Invalid errs array[%d] in dbverify - fix program\n")
+				, _("Invalid errs array[%ld] in dbverify - fix program\n")
 				, i);
 			FATAL();
 		}

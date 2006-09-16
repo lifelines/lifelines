@@ -553,7 +553,7 @@ write_node (INT levl, FILE *fp, XLAT ttm, NODE node,
 		for (i = 1;  i < levl;  i++)
 			fprintf(fp, "  ");
 	}
-	fprintf(fp, "%d", levl);
+	fprintf(fp, "%ld", levl);
 	if (nxref(node)) fprintf(fp, " %s", nxref(node));
 	fprintf(fp, " %s", ntag(node));
 	if ((p = nval(node))) {
@@ -594,7 +594,7 @@ swrite_node (INT levl,       /* level */
 {
 	char scratch[600];
 	STRING q = scratch;
-	sprintf(q, "%d ", levl);
+	sprintf(q, "%ld ", levl);
 	q += strlen(q);
 	if (nxref(node)) {
 		strcpy(q, nxref(node));

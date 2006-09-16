@@ -1,3 +1,17 @@
+2006-09-16 Perry Rapp
+
+	* ChangeLog src/gedlib/gstrings.c src/gedlib/nodechk.c
+	src/gedlib/nodeio.c	src/gedlib/valtable.c src/gedlib/xreffile.c
+	src/interp/alloc.c src/interp/builtin.c src/interp/interp.c
+	src/interp/lex.c src/interp/pvalalloc.c src/liflines/add.c
+	src/liflines/browse.c src/liflines/import.c	src/liflines/listui.c
+	src/liflines/llexec.c src/liflines/loadsave.c src/liflines/main.c
+	src/liflines/menuset.c src/liflines/merge.c src/liflines/screen.c
+	src/stdlib/fileops.c src/stdlib/memalloc.c src/stdlib/proptbls.c
+	src/tools/dbverify.c src/ui/ui_cli.c
+
+	Changing %d to %ld where INT used, to clean up gcc warnings.
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c

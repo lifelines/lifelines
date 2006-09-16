@@ -256,7 +256,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 		wives++;
 	for (node=chil; node; node=nsibling(node))
 		children++;
-	sprintf(counts, "%dh,%dw,%dch", husbands, wives, children);
+	sprintf(counts, "%ldh,%ldw,%ldch", husbands, wives, children);
 	llstrcatn(&p, " ", &mylen);
 	llstrcatn(&p, counts, &mylen);
 	if (husbands) {

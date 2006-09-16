@@ -797,7 +797,7 @@ check_indi_lineage_links (NODE indi)
 		if (count != occur) {
 			char msg[512];
 			snprintf(msg, sizeof(msg)/sizeof(msg[0])
-				, _("Mismatched lineage spouse links between %s and %s: %d and %d")
+				, _("Mismatched lineage spouse links between %s and %s: %ld and %ld")
 				, ikey, famkey, count, occur);
 			FATAL2(msg);
 		}
@@ -841,7 +841,7 @@ check_indi_lineage_links (NODE indi)
 		if (count != occur) {
 			char msg[512];
 			snprintf(msg, sizeof(msg)/sizeof(msg[0])
-				, _("Mismatched lineage child links between %s and %s: %d and %d")
+				, _("Mismatched lineage child links between %s and %s: %ld and %ld")
 				, ikey, famkey, count, occur);
 			FATAL2(msg);
 		}
@@ -916,7 +916,7 @@ check_fam_lineage_links (NODE fam)
 		if (count != occur) {
 			char msg[512];
 			snprintf(msg, sizeof(msg)/sizeof(msg[0])
-				, _("Mismatched lineage spouse links between %s and %s: %d and %d")
+				, _("Mismatched lineage spouse links between %s and %s: %ld and %ld")
 				, fkey, indikey, count, occur);
 			FATAL2(msg);
 		}
@@ -960,7 +960,7 @@ check_fam_lineage_links (NODE fam)
 		if (count != occur) {
 			char msg[512];
 			snprintf(msg, sizeof(msg)/sizeof(msg[0])
-				, _("Mismatched lineage child links between %s and %s: %d and %d")
+				, _("Mismatched lineage child links between %s and %s: %ld and %ld")
 				, fkey, indikey, count, occur);
 			FATAL2(msg);
 		}

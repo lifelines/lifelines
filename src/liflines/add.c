@@ -171,7 +171,7 @@ add_new_indi_to_db (RECORD indi0)
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
-	sprintf(key, "I%d", keynum);
+	sprintf(key, "I%ld", keynum);
 	init_new_record(indi0, key);
 	for (node = name; node; node = nsibling(node)) {
 		add_name(nval(node), key);

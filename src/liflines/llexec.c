@@ -151,23 +151,23 @@ main (INT argc, char **argv)
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					INT icsz_indi=0;
-					sscanf(optarg+1, "%d,%d", &csz_indi, &icsz_indi);
+					sscanf(optarg+1, "%ld,%ld", &csz_indi, &icsz_indi);
 				}
 				else if(*optarg == 'f') {
 					INT icsz_fam=0;
-					sscanf(optarg+1, "%d,%d", &csz_fam, &icsz_fam);
+					sscanf(optarg+1, "%ld,%ld", &csz_fam, &icsz_fam);
 				}
 				else if(*optarg == 's') {
 					INT icsz_sour=0;
-					sscanf(optarg+1, "%d,%d", &csz_sour, &icsz_sour);
+					sscanf(optarg+1, "%ld,%ld", &csz_sour, &icsz_sour);
 				}
 				else if(*optarg == 'e') {
 					INT icsz_even=0;
-					sscanf(optarg+1, "%d,%d", &csz_even, &icsz_even);
+					sscanf(optarg+1, "%ld,%ld", &csz_even, &icsz_even);
 				}
 				else if((*optarg == 'o') || (*optarg == 'x')) {
 					INT icsz_othr=0;
-					sscanf(optarg+1, "%d,%d", &csz_othr, &icsz_othr);
+					sscanf(optarg+1, "%ld,%ld", &csz_othr, &icsz_othr);
 				}
 				optarg++;
 				while(*optarg && isdigit((uchar)*optarg)) optarg++;

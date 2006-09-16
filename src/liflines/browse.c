@@ -1595,7 +1595,7 @@ load_nkey_list (STRING key, struct hist * histp)
 			continue;
 		if (keynum<1 || keynum>MAXKEYNUMBER)
 			continue;
-		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
+		snprintf(key, sizeof(key), "%c%ld", ntype, keynum);
 		strcpy(histp->list[temp].key, key);
 		histp->list[temp].ntype = ntype;
 		histp->list[temp].keynum = keynum;

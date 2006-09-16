@@ -35,7 +35,7 @@ report_fatal_fileop (STRING call, INT code, CNSTRING filename, STRING srcfile, i
 {
 	char details[4096];
 	if (!filename || !filename[0]) filename = "?";
-	snprintf(details, sizeof(details), "%s failed code %d, to file %s",
+	snprintf(details, sizeof(details), "%s failed code %ld, to file %s",
 		call, code, filename);
 	__fatal(srcfile, srcline, details); /* exits */
 }

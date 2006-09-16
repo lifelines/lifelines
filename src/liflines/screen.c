@@ -320,7 +320,7 @@ resize_screen_impl (char * errmsg, int errsize)
 		newcols = winx;
 		if (newcols > COLS || newlines > LINES) {
 			snprintf(errmsg, errsize
-				, _("The requested window size (%d,%d) is too large for your terminal (%d,%d).\n")
+				, _("The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n")
 				, newcols, newlines, COLS, LINES);
 			return 0; /* fail */
 		}
@@ -328,7 +328,7 @@ resize_screen_impl (char * errmsg, int errsize)
 	/* check that terminal meet minimum requirements */
 	if (newcols < COLSREQ || newlines < LINESREQ) {
 		snprintf(errmsg, errsize
-			, _("The requested window size (%d,%d) is too small for LifeLines (%d,%d).\n")
+			, _("The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n")
 			, newcols, newlines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}

@@ -502,7 +502,7 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 	BOOLEAN scrollable = (rows < ld->listlen);
 	/* for short lists, use leading numbers */
 	if (ld->listlen < 10) {
-		sprintf(buffer, "%d: ", ld->listlen);
+		sprintf(buffer, "%ld: ", ld->listlen);
 		i = strlen(buffer);
 		width -= i; /* for "1: " */
 		offset += i;
@@ -548,7 +548,7 @@ print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
 	char suffix[30];
 	if (len > uiw_cols(ld->uiwin)-2)
 		len = uiw_cols(ld->uiwin)-2;
-	sprintf(suffix, " (%d/%d)", ld->cur+1, ld->listlen);
+	sprintf(suffix, " (%ld/%ld)", ld->cur+1, ld->listlen);
 	len -= strlen(suffix)+1; /* reserve room for suffix */
 	ptr[0] = 0;
 	if ((INT)strlen(ttl)>len-1) {
