@@ -9,6 +9,10 @@
 
 	Set version numbers to 3.0.52.
 
+	* ChangeLog README.MAINTAINERS
+
+	Add btedit.rc to list of files with version number.
+
 2006-09-16 Perry Rapp
 
 	* ChangeLog src/gedlib/gstrings.c src/gedlib/nodechk.c

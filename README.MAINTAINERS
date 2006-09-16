@@ -14,6 +14,7 @@ Edit the version number, setting it to the new release:
   configure.in
   build/rpm/lifelines.spec
   src/hdrs/version.h
+  build/msvc6/btedit/btedit.rc (4 occurrences)
   build/msvc6/dbverify/dbVerify.rc (4 occurrences)
   build/msvc6/llexec/llexec.rc (4 occurrences)
   build/msvc6/llines/llines.rc (4 occurrences)
