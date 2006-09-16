@@ -99,7 +99,6 @@ static void init_pactx(PACTX pactx);
 static BOOLEAN interpret_prog(PNODE begin, SYMTAB stab);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void print_report_duration(INT duration, INT uiduration);
-static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static void progmessage(MSG_LEVEL level, STRING);
 static void remove_tables(PACTX pactx);
 static void wipe_pactx(PACTX pactx);

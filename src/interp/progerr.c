@@ -57,6 +57,7 @@ struct dbgsymtab_s
 
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
+static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
 
 /*********************************************
@@ -80,7 +81,6 @@ init_debugger (void)
 	vprog_prevfile[0] = 0;
 	vprog_prevline=-1;
 }
-
 /*=============================================+
  * prog_var_error_zstr -- Report a run time program error
  *  due to mistyping of a particular variable

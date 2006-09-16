@@ -31,6 +31,10 @@
 
 	Remove unused locals in is_key_in_use.
 
+	* ChangeLog src/interp/interp.c src/interp/progerr.c
+
+	Move declaration of prog_var_error_zstr to correct module (progerr.c).
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c
