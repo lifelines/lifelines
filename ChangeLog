@@ -35,6 +35,10 @@
 
 	Move declaration of prog_var_error_zstr to correct module (progerr.c).
 
+	* ChangeLog src/stdlib/norm_charmap.c
+
+	Add declaration of norm_charmap just before definition.
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c
