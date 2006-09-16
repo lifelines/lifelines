@@ -587,8 +587,6 @@ is_key_in_use (CNSTRING key)
 	DELETESET set=0;
 	INT keynum=0;
 	char ktype=0;
-	INT lo=0;
-	INT i=0;
 	CNSTRING barekey=0;
 	BOOLEAN result=FALSE;
 

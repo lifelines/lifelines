@@ -27,6 +27,10 @@
 
 	Include "gedcomi.h" in llgettext.c, for declaration of llgettext_init.
 
+	* ChangeLog src/gedlib/xreffile.c
+
+	Remove unused locals in is_key_in_use.
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c
