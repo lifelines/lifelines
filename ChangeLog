@@ -12,6 +12,13 @@
 
 	Changing %d to %ld where INT used, to clean up gcc warnings.
 
+	* ChangeLog NEWS src/liflines/show.c
+
+	Fix buffer overflow in browse list (sf patch 1491225 
+	by Andreas Kirschbaum). Update NEWS with recent improvements
+	and this bug fix.
+
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c

@@ -844,7 +844,8 @@ person_display (NODE indi, NODE fam, INT len)
 	static char scratch1[120];
 	static char scratch2[100];
 	STRING p;
-	INT keyspace = max_keywidth() + 3; /* parentheses & leading space */
+	/* parentheses & leading space & possible "i" */
+	INT keyspace = max_keywidth() + 4; 
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
 	if (len > ARRSIZE(scratch1)-1)
@@ -883,9 +884,10 @@ person_display (NODE indi, NODE fam, INT len)
 		p += strlen(p);
 	}
 	if(getlloptint("DisplayKeyTags", 0) > 0) {
-		sprintf(p, " (i%s)", key_of_record(indi));
+		snprintf(p, scratch1+len-p, " (i%s)", key_of_record(indi));
+
 	} else {
-		sprintf(p, " (%s)", key_of_record(indi));
+		snprintf(p, scratch1+len-p, " (%s)", key_of_record(indi));
 	}
 	return scratch1;
 }

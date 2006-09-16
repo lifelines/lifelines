@@ -1,6 +1,15 @@
 LifeLines Source Release, Version 3.0.51
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+New features added in 3.0.52 (beta)
+============================
+ - New @ escape from browse prompt to full database search
+ - Add author & title to full database search
+
+Bug fixes in 3.0.52 (beta)
+============================
+ - Fix buffer overflow in browse list (sourceforge patch by Andreas Kirschbaum)
+
 New features added in 3.0.51 (beta)
 ============================
  - New report functions date2jd, dayofweek, jd2date, setdate.
