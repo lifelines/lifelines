@@ -18,6 +18,10 @@
 	by Andreas Kirschbaum). Update NEWS with recent improvements
 	and this bug fix.
 
+	* ChangeLog src/gedlib/llgettext.c
+
+	Fix llgettext_init to use arguments, and add documentation for
+	them in header comment.
 
 2006-09-15 Perry Rapp
 

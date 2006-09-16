@@ -29,7 +29,10 @@ static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
 
 /*==================================================
  * llgettext_init -- initialize gettext with initially
- *  desired codeset
+ * desired codeset. This may be changed later by user
+ * options, but  this is initial best guess.
+ *  domain:  [IN]  package domain (eg, "lifelines")
+ *  codeset: [IN]  codeset to use
  *================================================*/
 void
 llgettext_init (CNSTRING domain, CNSTRING codeset)
@@ -39,13 +42,13 @@ llgettext_init (CNSTRING domain, CNSTRING codeset)
 
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
-	set_gettext_codeset(PACKAGE, gui_codeset_out);
+	set_gettext_codeset(domain, codeset);
 
 	/* allow run-time specification of locale directory */
 	/* (LOCALEDIR is compile-time) */
 	e = getlloptstr("LocaleDir", "");
 	if (e && *e) {
-		bindtextdomain(PACKAGE, e);
+		bindtextdomain(domain, e);
 		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
 	}
 
