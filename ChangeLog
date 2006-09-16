@@ -23,6 +23,10 @@
 	Fix llgettext_init to use arguments, and add documentation for
 	them in header comment.
 
+	* ChangeLog src/gedlib/llgettext.c
+
+	Include "gedcomi.h" in llgettext.c, for declaration of llgettext_init.
+
 2006-09-15 Perry Rapp
 
 	* ChangeLog src/liflines/browse.c src/liflines/searchui.c

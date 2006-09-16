@@ -11,6 +11,7 @@
 
 #include "llstdlib.h"
 #include "gedcom.h"
+#include "gedcomi.h"
 #include "codesets.h"
 #include "lloptions.h"
 #include "zstr.h"
