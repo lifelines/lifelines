@@ -460,7 +460,6 @@ create_boxed_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
 	INT begx = (COLS - cols)/2;
 	WINDOW * boxwin = newwin(rows, cols, begy, begx);
 	WINDOW * win=0;
-	UIWINDOW uiwin=0;
 	ASSERT(puiw);
 	++begy;
 	++begx;

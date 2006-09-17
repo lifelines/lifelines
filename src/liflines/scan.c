@@ -319,7 +319,6 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
 	INT len, ind;
 	STRING piece;
 	SCANNER * scanner = (SCANNER *)param;
-	INDISEQ seq = scanner->seq;
 	newset=newset; /* unused */
 	if (scanner->scantype == SCAN_NAME_FULL) {
 		if (scanner_does_pattern_match(scanner, name)) {
@@ -347,7 +346,6 @@ static BOOLEAN
 rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
 {
 	SCANNER * scanner = (SCANNER *)param;
-	INDISEQ seq = scanner->seq;
 	ASSERT(scanner->scantype == SCAN_REFN);
 	newset=newset; /* unused */
 
