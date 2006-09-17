@@ -47,6 +47,7 @@
 #endif
 #include "codesets.h"
 #include "charprops.h"
+#include "listui.h"
 
 
 

@@ -16,6 +16,10 @@
 
 	Removing some unused variables.
 
+	* ChangeLog src/liflines/interact.c src/liflines/listui.c
+
+	Include "screeni.h" in interact.c; include "listui.h" in listui.c.
+
 2006-09-17 lifelines beta 3.0.52 RELEASE
  (2006-09-16 sourceforge timezone)
 
