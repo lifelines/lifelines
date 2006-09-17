@@ -886,7 +886,7 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 		for (j=0; j<ndels[i]; ++j) {
 			INT k;
 			if (fread(&k, sizeof(INT), 1, fp) != 1) {
-				snprintf(errstr, sizeof(errstr), "ndels[%ld]#%d bad", i, j);
+				snprintf(errstr, sizeof(errstr), "ndels[%ld]#%ld bad", i, j);
 				*errptr = errstr;
 				fclose(fp);
 				return FALSE;

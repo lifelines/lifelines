@@ -1,5 +1,11 @@
-2006-07-17 lifelines beta 3.0.52 RELEASE
- (2006-07-16 sourceforge timezone)
+2006-09-17, Perry Rapp
+
+	* ChangeLog src/gedlib/xreffile.c
+
+	Changing %d to %ld where INT used, to clean up gcc warnings.
+
+2006-09-17 lifelines beta 3.0.52 RELEASE
+ (2006-09-16 sourceforge timezone)
 
 2006-09-17 Perry Rapp
 
