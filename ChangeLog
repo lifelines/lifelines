@@ -8,6 +8,10 @@
 
 	Comment out unused function table_pvcleaner.
 
+	* ChangeLog src/stdlib/sequence.c
+
+	Fix cosmetic type errors in Data element of sequence.
+
 2006-09-17 lifelines beta 3.0.52 RELEASE
  (2006-09-16 sourceforge timezone)
 

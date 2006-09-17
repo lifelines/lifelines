@@ -239,7 +239,8 @@ SEQUENCE
 sinsseq (SEQUENCE seq,   /* sequence */
          ELEMENT el)     /* element */
 {
-	INT i, *d;
+	INT i;
+	ELEMENT *d=0;
 	(void) tinsseq(seq, (ELEMENT) 0);
 	d = Data(seq);
 	i = Size(seq) - 1;
@@ -258,8 +259,8 @@ fndel (SEQUENCE seq,   /* sequence */
        ELEMENT val,    /* element value */
        INT *loc)       /* index if found */
 {
-	INT i, n, *d;
-	d = Data(seq);
+	INT i, n;
+	ELEMENT *d = Data(seq);
 	n = Size(seq);
 	*loc = -1;
 	for (i = 0; i < n; i++) {
