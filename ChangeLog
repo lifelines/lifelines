@@ -4,6 +4,10 @@
 
 	Changing %d to %ld where INT used, to clean up gcc warnings.
 
+	* ChangeLog src/interp/pvalue.c
+
+	Comment out unused function table_pvcleaner.
+
 2006-09-17 lifelines beta 3.0.52 RELEASE
  (2006-09-16 sourceforge timezone)
 

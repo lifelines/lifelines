@@ -61,7 +61,6 @@ static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_record_pvaltype(INT valtype);
 static OBJECT pvalue_copy(OBJECT obj, int deep);
 static void pvalue_destructor(VTABLE *obj);
-static void table_pvcleaner(CNSTRING key, UNION uval);
 
 /*********************************************
  * local variables
@@ -322,6 +321,7 @@ clear_pv_indiseq (INDISEQ seq)
  *  from table
  * Created: 2001/03/24, Perry Rapp
  *======================================*/
+#ifdef UNUSED
 static void
 table_pvcleaner (CNSTRING key, UNION uval)
 {
@@ -330,6 +330,7 @@ table_pvcleaner (CNSTRING key, UNION uval)
 	delete_pvalue(val);
 	uval.w = NULL;
 }
+#endif
 /*========================================
  * delete_vptr_pvalue -- Delete a program value
  *  (passed in as a VPTR)
