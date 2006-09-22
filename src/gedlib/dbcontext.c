@@ -57,7 +57,8 @@ extern STRING readpath,readpath_file;
  * local function prototypes
  *********************************************/
 
-static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration);
+static BOOLEAN alterdb(INT alteration, INT *lldberr);
+static BOOLEAN open_database_impl(LLDATABASE lldb, INT alteration, INT *lldberr);
 
 /*********************************************
  * local variables
@@ -77,7 +78,7 @@ static int rdr_count = 0;
  *  returns FALSE & sets bterrno if error (eg, keyfile corrupt)
  *================================================*/
 static BOOLEAN
-alterdb (INT alteration)
+alterdb (INT alteration, INT *lldberr)
 {
 	/*
 	Forcefully alter reader/writer count to 0.
@@ -92,16 +93,16 @@ alterdb (INT alteration)
 	struct stat sbuf;
 	sprintf(scratch, "%s/key", readpath);
 	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		bterrno = BTERR_KFILE_ALTERDB;
+		*lldberr = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	if (!(fp = fopen(scratch, LLREADBINARYUPDATE)) ||
 		  fread(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE_ALTERDB;
+		*lldberr = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
-		if (!validate_keyfile2(&kfile2)) {
+		if (!validate_keyfile2(&kfile2, lldberr)) {
 			/* validate set bterrno */
 			goto force_open_db_exit;
 		}
@@ -110,7 +111,7 @@ alterdb (INT alteration)
 		/* unlock db */
 		if (kfile1.k_ostat != -2) {
 			/* can't unlock a db unless it is locked */
-			bterrno = BTERR_UNLOCKED;
+			*lldberr = BTERR_UNLOCKED;
 			goto force_open_db_exit;
 		}
 		kfile1.k_ostat = 0;
@@ -118,12 +119,12 @@ alterdb (INT alteration)
 		/* lock db */
 		if (kfile1.k_ostat == -2) {
 			/* can't lock a db that is already locked */
-			bterrno = BTERR_LOCKED;
+			*lldberr = BTERR_LOCKED;
 			goto force_open_db_exit;
 		}
 		if (kfile1.k_ostat != 0) {
 			/* can't lock a db unless it is unused currently*/
-			bterrno = kfile1.k_ostat < 0 ? BTERR_WRITER : BTERR_READERS;
+			*lldberr = kfile1.k_ostat < 0 ? BTERR_WRITER : BTERR_READERS;
 			goto force_open_db_exit;
 		}
 		kfile1.k_ostat = -2;
@@ -131,7 +132,7 @@ alterdb (INT alteration)
 		/* force open db */
 		if (kfile1.k_ostat == -2) {
 			/* cannot force open a locked database */
-			bterrno = BTERR_LOCKED;
+			*lldberr = BTERR_LOCKED;
 			goto force_open_db_exit;
 		}
 		kfile1.k_ostat = 0;
@@ -141,7 +142,7 @@ alterdb (INT alteration)
 	}
 	rewind(fp);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fp) != 1) {
-		bterrno = BTERR_KFILE_ALTERDB;
+		*lldberr = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;
 	}
 	/* ok everything went successfully */
@@ -158,17 +159,17 @@ force_open_db_exit:
  * Upon failure, sets bterrno and returns false
  *================================================*/
 static BOOLEAN
-open_database_impl (LLDATABASE lldb, INT alteration)
+open_database_impl (LLDATABASE lldb, INT alteration, INT *lldberr)
 {
 	int c;
 	INT writ = !readonly + writeable;
 	BTREE btree = 0;
 
 	/* handle db adjustments (which only affect keyfile) first */
-	if (alteration > 0 && !alterdb(alteration)) return FALSE;
+	if (alteration > 0 && !alterdb(alteration, lldberr)) return FALSE;
 
 	/* call btree module to do actual open of BTR */
-	if (!(btree = bt_openbtree(readpath, FALSE, writ, immutable)))
+	if (!(btree = bt_openbtree(readpath, FALSE, writ, immutable, lldberr)))
 		return FALSE;
 	lldb_set_btree(lldb, btree);
 	/* we have to set the global variable readonly correctly, because
@@ -178,10 +179,10 @@ open_database_impl (LLDATABASE lldb, INT alteration)
 	if (readonly && writeable) {
 		c = bkfile(btree).k_ostat;
 		if (c < 0) {
-			bterrno = BTERR_WRITER;
+			*lldberr = BTERR_WRITER;
 		} else {
 			rdr_count = c-1;
-			bterrno = BTERR_READERS;
+			*lldberr = BTERR_READERS;
 		}
 		return FALSE;
 	}
@@ -193,7 +194,7 @@ open_database_impl (LLDATABASE lldb, INT alteration)
  *  dbpath:       [in] database path to open
  *================================================*/
 BOOLEAN
-open_database (INT alteration, STRING dbpath)
+open_database (INT alteration, STRING dbpath, INT *lldberr)
 {
 	LLDATABASE lldb = lldb_alloc();
 	BOOLEAN rtn = FALSE;
@@ -208,12 +209,12 @@ open_database (INT alteration, STRING dbpath)
 	if (f_dbnotify)
 		(*f_dbnotify)(readpath, TRUE);
 
-	rtn = open_database_impl(lldb, alteration);
+	rtn = open_database_impl(lldb, alteration, lldberr);
 	if (!rtn) {
 		/* open failed so clean up, preserve bterrno */
-		int myerr = bterrno;
+		int myerr = *lldberr;
 		lldb_close(&lldb);
-		bterrno = myerr;
+		*lldberr = myerr;
 	}
 	def_lldb = lldb;
 	return rtn;
@@ -223,7 +224,7 @@ open_database (INT alteration, STRING dbpath)
  *  dbpath:  [IN]  path of database about to create
  *================================================*/
 BOOLEAN
-create_database (STRING dbpath)
+create_database (STRING dbpath, INT *lldberr)
 {
 	LLDATABASE lldb = lldb_alloc();
 	BTREE btree = 0;
@@ -234,7 +235,7 @@ create_database (STRING dbpath)
 		TABLE dbopts = create_table_str();
 		STRING msg=0;
 		if (!init_valtab_from_string(props, dbopts, '=', &msg)) {
-			bterrno = BTERR_BADPROPS;
+			*lldberr = BTERR_BADPROPS;
 			destroy_table(dbopts);
 			return FALSE;
 		}
@@ -245,11 +246,11 @@ create_database (STRING dbpath)
 	readpath_file=strsave(lastpathname(dbpath));
 	readpath=strsave(dbpath);
 
-	if (!(btree = bt_openbtree(dbpath, TRUE, 2, immutable))) {
+	if (!(btree = bt_openbtree(dbpath, TRUE, 2, immutable, lldberr))) {
 		/* open failed so clean up, preserve bterrno */
-		int myerr = bterrno;
+		int myerr = *lldberr;
 		lldb_close(&lldb);
-		bterrno = myerr;
+		*lldberr = myerr;
 		return FALSE;
 	}
 	def_lldb = lldb;

@@ -135,16 +135,18 @@ select_database (STRING dbrequested, INT alteration, STRING * perrmsg)
 BOOLEAN
 open_or_create_database (INT alteration, STRING *dbused)
 {
+	INT lldberrnum=0;
 	/* Open Database */
-	if (open_database(alteration, *dbused)) {
+	if (open_database(alteration, *dbused, &lldberrnum))
 		return TRUE;
-	}
+
 	/* filter out real errors */
-	if (bterrno != BTERR_NODB && bterrno != BTERR_NOKEY)
+	if (lldberrnum != BTERR_NODB && lldberrnum != BTERR_NOKEY)
 	{
-		show_open_error(bterrno);
+		show_open_error(lldberrnum);
 		return FALSE;
 	}
+
 	if (readonly || immutable || alteration)
 	{
 		llwprintf("Cannot create new database with -r, -i, -l, or -f flags.");
@@ -174,10 +176,10 @@ open_or_create_database (INT alteration, STRING *dbused)
 		return FALSE;
 
 	/* try to make a new db */
-	if (create_database(*dbused))
+	if (create_database(*dbused, &lldberrnum))
 		return TRUE;
 
-	show_open_error(bterrno);
+	show_open_error(lldberrnum);
 	return FALSE;
 }
 /*===================================================

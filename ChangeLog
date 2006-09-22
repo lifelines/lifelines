@@ -1,3 +1,11 @@
+2006-09-22, Perry Rapp
+
+	* ChangeLog src\btree\opnbtree.c src\gedlib\dbcontext.c
+	src\hdrs\btree.h src\hdrs\gedcom.h src\liflines\selectdb.c
+
+	Changes from dbf branch: localize errors (remove global bterrno)
+	and new error type BTERR_MASTER_INDEX.
+
 2006-09-17, Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c

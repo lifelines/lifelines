@@ -44,7 +44,7 @@
 /* alphabetical */
 static void init_keyfile1(KEYFILE1 * kfile1);
 static void init_keyfile2(KEYFILE2 * kfile2);
-static BOOLEAN initbtree (STRING basedir);
+static BOOLEAN initbtree (STRING basedir, INT *lldberr);
 
 /*********************************************
  * local function definitions
@@ -82,37 +82,38 @@ init_keyfile2 (KEYFILE2 * kfile2)
  * 2000/12/08, Perry Rapp
  *==========================================*/
 BOOLEAN
-validate_keyfile2 (KEYFILE2 * kfile2)
+validate_keyfile2 (KEYFILE2 * kfile2, INT *lldberr)
 {
 	if (strcmp(kfile2->name, KF2_NAME))
 	{
-		bterrno = BTERR_ILLEGKF;
+		*lldberr = BTERR_ILLEGKF;
 		return FALSE;
 	}
 	if (kfile2->magic != KF2_MAGIC)
 	{
-		bterrno = BTERR_ALIGNKF;
+		*lldberr = BTERR_ALIGNKF;
 		return FALSE;
 	}
 	if (kfile2->version != KF2_VER)
 	{
-		bterrno = BTERR_VERKF;
+		*lldberr = BTERR_VERKF;
 		return FALSE;
 	}
 	return TRUE;
 }
 /*============================================
  * bt_openbtree -- Alloc and init BTREE structure
- *  If it fails, it returns NULL and sets the global bterrno
- *  dir:   [in] btree base dir
- *  cflag: [in] create btree if no exist?
- *  writ:  [in] requesting write access? 1=yes, 2=requiring 
- *  immut: [in,out] user can/will not change anything including keyfile
+ *  If it fails, it returns NULL and sets the *lldberr
+ *  dir:     [IN]  btree base dir
+ *  cflag:   [IN]  create btree if no exist?
+ *  writ:    [IN]  requesting write access? 1=yes, 2=requiring 
+ *  immut:   [I/O] user can/will not change anything including keyfile
+ *  lldberr: [OUT] error code (if returns NULL)
  * If this succeeds, it sets readonly & immutable flags in btree structure
  *  as appropriate (eg, if keyfile couldn't be opened in readwrite mode)
  *==========================================*/
 BTREE
-bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
+bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldberr)
 {
 	BTREE btree;
 	char scratch[200];
@@ -124,32 +125,32 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 	STRING dbmode;
 
 	/* we only allow 150 characters in base directory name */
-	bterrno = 0;
+	*lldberr = 0;
 	if (strlen(dir) > 150) {
-		bterrno = BTERR_LNGDIR;
+		*lldberr = BTERR_LNGDIR;
 		goto failopenbtree;
 	}
 	/* See if base directory exists */
 	if (stat(dir, &sbuf)) {
 		/* db directory not found */
 		if (!cflag || !writ || immut) {
-			bterrno = BTERR_NODB;
+			*lldberr = BTERR_NODB;
 			goto failopenbtree;
 		}
 		/* create flag set, so try to create it & stat again */
 		sprintf(scratch, "%s/", dir);
 		if (!mkalldirs(scratch) || stat(dir, &sbuf)) {
-			bterrno = BTERR_DBCREATEFAILED;
+			*lldberr = BTERR_DBCREATEFAILED;
 			goto failopenbtree;
 		}
 	} else if (!S_ISDIR(sbuf.st_mode)) {
 		/* found but not directory */
-		bterrno = BTERR_DBBLOCKEDBYFILE;
+		*lldberr = BTERR_DBBLOCKEDBYFILE;
 		goto failopenbtree;
 	}
 	/* db dir was found, or created & then found */
 	if (access(dir, 0)) {
-		bterrno = BTERR_DBACCESS;
+		*lldberr = BTERR_DBACCESS;
 		goto failopenbtree;
 	}
 
@@ -158,25 +159,25 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut)
 	if (stat(scratch, &sbuf)) {
 		/* no keyfile */
 		if (!cflag) {
-			bterrno = BTERR_NOKEY;
+			*lldberr = BTERR_NOKEY;
 			goto failopenbtree;
 		}
 		/* create flag set, so try to create it & stat again */
-		if (!initbtree(dir) || stat(scratch, &sbuf)) {
-			/* initbtree actually set bterrno, but we ignore it */
-			bterrno = BTERR_DBCREATEFAILED;
+		if (!initbtree(dir, lldberr) || stat(scratch, &sbuf)) {
+			/* initbtree actually set *lldberr, but we ignore it */
+			*lldberr = BTERR_DBCREATEFAILED;
 			goto failopenbtree;
 		}
 	} else {
 		if (cflag) {
 			/* keyfile found - don't create on top of it */
-			bterrno = BTERR_EXISTS;
+			*lldberr = BTERR_EXISTS;
 			goto failopenbtree;
 		}
 	}
 	if (!S_ISREG(sbuf.st_mode)) {
 		/* keyfile is a directory! */
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto failopenbtree;
 	}
 
@@ -189,18 +190,18 @@ immutretry:
 			immut = TRUE;
 			goto immutretry;
 		}
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto failopenbtree;
 	}
 	if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto failopenbtree;
 	}
 /* Read & validate KEYFILE2 - if not present, we'll add it below */
 	/* see btree.h for explanation of KEYFILE2 */
 	if (fread(&kfile2, sizeof(kfile2), 1, fk) == 1) {
-		if (!validate_keyfile2(&kfile2))
-			goto failopenbtree; /* validate set bterrno */
+		if (!validate_keyfile2(&kfile2, lldberr))
+			goto failopenbtree; /* validate set *lldberr */
 		keyed2=TRUE;
 	}
 	if (writ < 2 && kfile1.k_ostat == -2)
@@ -208,11 +209,11 @@ immutretry:
 	/* if not immutable, handle reader/writer protection update */
 	if (!immut) {
 		if (kfile1.k_ostat == -1) {
-			bterrno = BTERR_WRITER;
+			*lldberr = BTERR_WRITER;
 			goto failopenbtree;
 		}
 		if (kfile1.k_ostat == -2) {
-			bterrno = BTERR_LOCKED;
+			*lldberr = BTERR_LOCKED;
 			goto failopenbtree;
 		}
 
@@ -223,19 +224,19 @@ immutretry:
 			kfile1.k_ostat++;
 		rewind(fk);
 		if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1) {
-			bterrno = BTERR_KFILE;
+			*lldberr = BTERR_KFILE;
 			goto failopenbtree;
 		}
 		if (!keyed2) {
 			/* add KEYFILE2 structure */
 			init_keyfile2(&kfile2);
 			if (fwrite(&kfile2, sizeof(kfile2), 1, fk) != 1) {
-				bterrno = BTERR_KFILE;
+				*lldberr = BTERR_KFILE;
 				goto failopenbtree;
 			}
 		}
 		if (fflush(fk) != 0) {
-			bterrno = BTERR_KFILE;
+			*lldberr = BTERR_KFILE;
 			goto failopenbtree;
 		}
 	}
@@ -248,7 +249,8 @@ immutretry:
 	if (!(bmaster(btree)))
 	{
 		stdfree(btree);
-		goto failopenbtree; /* bterrno set by readindex */
+		*lldberr = BTERR_MASTER_INDEX;
+		goto failopenbtree;
 	}
 	
 	bwrite(btree) = !immut && writ && (kfile1.k_ostat == -1);
@@ -268,7 +270,7 @@ failopenbtree:
  * initbtree -- Initialize new BTREE
  *================================*/
 static BOOLEAN
-initbtree (STRING basedir)
+initbtree (STRING basedir, INT *lldberr)
 {
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
@@ -282,21 +284,21 @@ initbtree (STRING basedir)
 /* Open file for writing keyfile */
 	sprintf(scratch, "%s/key", basedir);
 	if ((fk = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto initbtree_exit;
 	}
 
 /* Open file for writing master index */
 	sprintf(scratch, "%s/aa/aa", basedir);
 	if (!mkalldirs(scratch) || (fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERR_INDEX;
+		*lldberr = BTERR_INDEX;
 		goto initbtree_exit;
 	}
 
 /* Open file for writing first data block */
 	sprintf(scratch, "%s/ab/aa", basedir);
 	if (!mkalldirs(scratch) || (fd = fopen(scratch, LLWRITEBINARY)) == NULL) {
-		bterrno = BTERR_BLOCK;
+		*lldberr = BTERR_BLOCK;
 		goto initbtree_exit;
 	}
 
@@ -305,12 +307,12 @@ initbtree (STRING basedir)
 	init_keyfile2(&kfile2);
 	if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1
 		|| fwrite(&kfile2, sizeof(kfile2), 1, fk) != 1) {
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto initbtree_exit;
 	}
 	if (fclose(fk) != 0) {
 		fk = NULL;
-		bterrno = BTERR_KFILE;
+		*lldberr = BTERR_KFILE;
 		goto initbtree_exit;
 	}
 	fk=NULL;
@@ -326,12 +328,12 @@ initbtree (STRING basedir)
 	stdfree(master);
 	master = 0;
 	if (rtn != 1) {
-		bterrno = BTERR_INDEX;
+		*lldberr = BTERR_INDEX;
 		goto initbtree_exit;
 	}
 	if (fclose(fi) != 0) {
 		fi = NULL;
-		bterrno = BTERR_INDEX;
+		*lldberr = BTERR_INDEX;
 		goto initbtree_exit;
 	}
 	fi=NULL;
@@ -346,12 +348,12 @@ initbtree (STRING basedir)
 	stdfree(block);
 	block = 0;
 	if (rtn != 1) {
-		bterrno = BTERR_BLOCK;
+		*lldberr = BTERR_BLOCK;
 		goto initbtree_exit;
 	}
 	if (fclose(fd) != 0) {
 		fd = NULL;
-		bterrno = BTERR_BLOCK;
+		*lldberr = BTERR_BLOCK;
 		goto initbtree_exit;
 	}
 	fd = NULL;
@@ -384,7 +386,8 @@ closebtree (BTREE btree)
 		} else { /* read-only, get current shared status */
 			rewind(fk);
 			if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
-				bterrno = BTERR_KFILE;
+				/* *lldberr = BTERR_KFILE */
+				/* closebtree does not report specific errors */
 				goto exit_closebtree;
 			}
 			if (kfile1.k_ostat <= 0) {
@@ -398,12 +401,13 @@ closebtree (BTREE btree)
 		}
 		rewind(fk);
 		if (fwrite(&kfile1, sizeof(kfile1), 1, fk) != 1) {
-			bterrno = BTERR_KFILE;
+			/* *lldberr = BTERR_KFILE */
+			/* closebtree does not report specific errors */
 			goto exit_closebtree;
 		}
 		if (fclose(fk) != 0) {
 			fk = NULL;
-			bterrno = BTERR_KFILE;
+			/* *lldberr = BTERR_KFILE; */
 			goto exit_closebtree;
 		}
 		fk = NULL;

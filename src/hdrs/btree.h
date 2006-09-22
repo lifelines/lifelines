@@ -158,8 +158,8 @@ RECORD_STATUS write_record_to_textfile(BTREE btree, RKEY rkey, STRING file, TRAN
 /* opnbtree.c */
 BOOLEAN closebtree(BTREE);
 void describe_dberror(INT dberr, STRING buffer, INT buflen);
-BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut);
-BOOLEAN validate_keyfile2(KEYFILE2 *);
+BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldberr);
+BOOLEAN validate_keyfile2(KEYFILE2 * kfile2, INT *lldberr);
 
 /* index.c */
 void get_index_file(STRING path, BTREE btr, FKEY ikey);
@@ -182,7 +182,6 @@ STRING rkey2str(RKEY);
 RKEY   str2rkey(CNSTRING);
 STRING fkey2path(FKEY);
 
-extern INT bterrno;
 
 enum {
   BTERR_NODB=8            /* no db directory */
@@ -193,6 +192,7 @@ enum {
 , BTERR_KFILE             /*problem with the key file*/
 , BTERR_KFILE_ALTERDB     /*problem with the key file trying to alter a db*/
 , BTERR_INDEX             /*problem with an index file*/
+, BTERR_MASTER_INDEX      /*problem with master index file*/
 , BTERR_BLOCK             /*problem with a data block file*/
 , BTERR_LNGDIR            /*base directory name too long*/
 , BTERR_WRITER            /*can't open database because writer has it & -w was specified*/
