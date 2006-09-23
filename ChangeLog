@@ -10,6 +10,10 @@
 
 	Fix some strange non-matching indents to surrounding pattern.
 
+	* ChangeLog src/liflines/browse.c
+
+	Fix some strange non-matching indents to surrounding pattern.
+
 2006-09-17, Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c

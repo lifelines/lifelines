@@ -1222,7 +1222,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if (nztype(current) != 'F') {
 					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
-				    goto exitbrowse;
+					goto exitbrowse;
 				}
 				break;
 			}
