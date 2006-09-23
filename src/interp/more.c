@@ -1144,7 +1144,7 @@ llrpt_getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 static double
 deg2rad (double deg)
 {
-  return ((fmod(deg,360.0))/180.0*M_PI);
+	return ((fmod(deg,360.0))/180.0*M_PI);
 }
 /*========================================
  * rad2deg -- trigonometric conversion: radians to degrees
@@ -1153,7 +1153,7 @@ deg2rad (double deg)
 static double
 rad2deg (double rad)
 {
-  return (fmod((rad/M_PI*180.0),360.0));
+	return (fmod((rad/M_PI*180.0),360.0));
 }
 /*========================================
  * llrpt_dms2deg -- convert degrees in DMS format to decimal degrees
@@ -1172,8 +1172,8 @@ llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PINT, arg1, stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonflox, "dms2deg", "1");
-                return NULL;
-        }
+		return NULL;
+	}
 	decdeg += pvalue_to_int(val);
 	if (decdeg < 0) {
 		decdeg *= -1;
@@ -1183,15 +1183,15 @@ llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	val = eval_and_coerce(PINT, arg2, stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonflox, "dms2deg", "2");
-                return NULL;
-        }
+		return NULL;
+	}
 	decdeg += (pvalue_to_int(val) / 60.0);
 
 	val = eval_and_coerce(PINT, arg3, stab, eflg);
 	if (*eflg) {
 		prog_error(node, nonflox, "dms2deg", "3");
-                return NULL;
-        }
+		return NULL;
+	}
 	decdeg += (pvalue_to_int(val) / 3600.0);
 
 	if (neg == 1) {
@@ -1219,8 +1219,8 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	if (*eflg) {
 		prog_error(node, nonflox, "deg2dms", "1");
-                return NULL;
-        }
+		return NULL;
+	}
 
 	decdeg = pvalue_to_float(val);
 	if (decdeg < 0) {
@@ -1229,7 +1229,7 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	
 	deg = (int)(decdeg);
-        decdeg -= deg;
+	decdeg -= deg;
 	decdeg *= 60;
 	min = (int)(decdeg);
 	decdeg -= min;
@@ -1251,14 +1251,14 @@ PVALUE
 llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 
 	if (*eflg) {
 		prog_error(node, nonflox, "sin", "1");
-                return NULL;
-        }
-
-        return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
+		return NULL;
+	}
+	
+	return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
  * llrpt_cos -- trigonometric COSINE function
@@ -1267,15 +1267,15 @@ llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-
-        if (*eflg) {
-                prog_error(node, nonflox, "cos", "1");
-                return NULL;
-        }
-
-        return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	
+	if (*eflg) {
+		prog_error(node, nonflox, "cos", "1");
+		return NULL;
+	}
+	
+	return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
 }
 /*========================================
  * llrpt_tan -- trigonometric TANGENT function
@@ -1284,16 +1284,16 @@ llrpt_cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	FLOAT val2;
 
-        if (*eflg) {
-                prog_error(node, nonflox, "tan", "1");
-                return NULL;
-        }
+	if (*eflg) {
+		prog_error(node, nonflox, "tan", "1");
+		return NULL;
+	}
 
-        val2 = pvalue_to_float(val);
+	val2 = pvalue_to_float(val);
 
 	/* avoid SIGFPE caused by invalid input */
 	if (fmod((val2-90),180) == 0) {
@@ -1302,7 +1302,7 @@ llrpt_tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 
-        return create_pvalue_from_float(tan(deg2rad(val2)));
+	return create_pvalue_from_float(tan(deg2rad(val2)));
 }
 /*========================================
  * llrpt_arcsin -- trigonometric inverse SINE function
@@ -1312,7 +1312,7 @@ PVALUE
 llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	FLOAT val2;
 
 	if (*eflg) {
@@ -1329,7 +1329,7 @@ llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 
-        return create_pvalue_from_float(rad2deg(asin(val2)));
+	return create_pvalue_from_float(rad2deg(asin(val2)));
 }
 /*========================================
  * llrpt_arccos -- trigonometric inverse COSINE function
@@ -1338,14 +1338,14 @@ llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
 	FLOAT val2;
 
-        if (*eflg) {
-                prog_error(node, nonflox, "arccos", "1");
-                return NULL;
-        }
+	if (*eflg) {
+		prog_error(node, nonflox, "arccos", "1");
+		return NULL;
+	}
 
 	val2 = pvalue_to_float(val);
 
@@ -1365,15 +1365,15 @@ llrpt_arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg = (PNODE) iargs(node);
-        PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-
-        if (*eflg) {
-                prog_error(node, nonflox, "arctan", "1");
-                return NULL;
-        }
-
-        return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
+	PNODE arg = (PNODE) iargs(node);
+	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	
+	if (*eflg) {
+		prog_error(node, nonflox, "arctan", "1");
+		return NULL;
+	}
+	
+	return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
 }
 /*========================================
  * llrpt_spdist -- spherical distance calculator
@@ -1383,37 +1383,37 @@ llrpt_arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-        PNODE arg1 = (PNODE) iargs(node);
-        PNODE arg2 = inext(arg1);
-        PNODE arg3 = inext(arg2);
-        PNODE arg4 = inext(arg3);
+	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg2 = inext(arg1);
+	PNODE arg3 = inext(arg2);
+	PNODE arg4 = inext(arg3);
 	PVALUE val1, val2, val3, val4;
 	FLOAT lat0, lon0, lat1, lon1;
 	FLOAT dist, dist1, dist2;
 
-        val1 = eval_and_coerce(PFLOAT, arg1, stab, eflg);
-        if (*eflg) {
-                prog_error(node, nonflox, "spdist", "1");
-                return NULL;
-        }
-
-        val2 = eval_and_coerce(PFLOAT, arg2, stab, eflg);
-        if (*eflg) {
-                prog_error(node, nonflox, "spdist", "2");
-                return NULL;
-        }
-
-        val3 = eval_and_coerce(PFLOAT, arg3, stab, eflg);
-        if (*eflg) {
-                prog_error(node, nonflox, "spdist", "3");
-                return NULL;
-        }
-
-        val4 = eval_and_coerce(PFLOAT, arg4, stab, eflg);
-        if (*eflg) {
-                prog_error(node, nonflox, "spdist", "4");
-                return NULL;
-        }
+	val1 = eval_and_coerce(PFLOAT, arg1, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "spdist", "1");
+		return NULL;
+	}
+	
+	val2 = eval_and_coerce(PFLOAT, arg2, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "spdist", "2");
+		return NULL;
+	}
+	
+	val3 = eval_and_coerce(PFLOAT, arg3, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "spdist", "3");
+		return NULL;
+	}
+	
+	val4 = eval_and_coerce(PFLOAT, arg4, stab, eflg);
+	if (*eflg) {
+		prog_error(node, nonflox, "spdist", "4");
+		return NULL;
+	}
 
 	lat0 = pvalue_to_float(val1);
 	lon0 = pvalue_to_float(val2);
@@ -1429,5 +1429,5 @@ llrpt_spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	dist2 = sin(deg2rad(lat0)) * sin(deg2rad(lat1));
 	dist = 6380.0 * acos(dist1 + dist2);
 
-        return create_pvalue_from_float(dist);
+	return create_pvalue_from_float(dist);
 }
