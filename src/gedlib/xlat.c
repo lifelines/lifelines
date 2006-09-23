@@ -533,10 +533,10 @@ check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
 	zsrc = ll_toupperz(zs_str(ztemp),0);
 	zs_free(&ztemp);
 	if (underbar[1]=='_') {
-                zdest = ll_toupperz(underbar+2,0);
+		zdest = ll_toupperz(underbar+2,0);
 		return 2;
 	} else {
-                zdest = ll_toupperz(underbar+1,0);
+		zdest = ll_toupperz(underbar+1,0);
 		return 1;
 	}
 }

@@ -12,7 +12,11 @@
 
 	* ChangeLog src/liflines/browse.c
 
-	Fix some strange non-matching indents to surrounding pattern.
+	Fix more indents.
+
+	* ChangeLog src/gedlib/xlat.c
+
+	Fix more indents.
 
 2006-09-17, Perry Rapp
 
