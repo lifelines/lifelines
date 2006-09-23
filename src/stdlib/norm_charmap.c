@@ -36,8 +36,6 @@
 
 static char buf[16];
 
-char *norm_charmap(char *name);
-
 char *norm_charmap(char *name)
 {
   char *p;

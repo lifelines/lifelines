@@ -23,6 +23,10 @@
 	More complete type definitions, and include protection
 	(to work with berkeleydb headers).
 
+	* ChangeLog src/stdlib/norm_charmap.c
+
+	Remove extra declaration of norm_charmap.
+
 2006-09-17, Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c
