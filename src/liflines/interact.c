@@ -61,7 +61,7 @@ static int ui_time_elapsed = 0; /* total time waiting for user input */
  *********************************************/
 
 /*===============================
- * interact -- Interact with user
+ * interact_choice_string -- Interact with user
  * Handle string of choices as passed
  * also returns hardware and control keys, so caller must check & loop
  *=============================*/
@@ -71,7 +71,7 @@ interact_choice_string (UIWINDOW uiwin, STRING str)
 	return interact_worker(uiwin, str, -1);
 }
 /*===============================
- * interact -- Interact with user
+ * interact_screen_menu -- Interact with user
  * This is just for browse screens (witness argument "screen")
  * and uses the preconfigured menu for that screen
  * also returns hardware and control keys, so caller must check & loop
@@ -82,7 +82,7 @@ interact_screen_menu (UIWINDOW uiwin, INT screen)
 	return interact_worker(uiwin, NULL, screen);
 }
 /*===============================
- * interact -- Interact with user
+ * interact_worker -- Interact with user
  * This is just for browse screens (witness argument "screen")
  *=============================*/
 static INT
