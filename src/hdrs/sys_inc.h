@@ -32,8 +32,16 @@
 #include <fcntl.h> /* _O_BINARY */
 #include "msvc.h" /* pragmas to suppress warnings */
 #define snprintf _snprintf
-#define int32_t __int32
-#define int16_t __int16
+#ifndef	__BIT_TYPES_DEFINED__
+#define	__BIT_TYPES_DEFINED__
+typedef unsigned __int8 u_int8_t;
+typedef signed __int16 int16_t;
+typedef unsigned __int16 u_int16_t;
+typedef signed __int32 int32_t;
+typedef unsigned __int32 u_int32_t;
+typedef signed __int64 int64_t;
+typedef unsigned __int64 u_int64_t;
+#endif
 #ifndef M_PI
 #define M_PI 3.1459265
 #endif

@@ -18,6 +18,11 @@
 
 	Fix more indents.
 
+	* ChangeLog src/hdrs/sys_inc.h
+
+	More complete type definitions, and include protection
+	(to work with berkeleydb headers).
+
 2006-09-17, Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c
