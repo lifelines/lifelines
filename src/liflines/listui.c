@@ -98,9 +98,9 @@ static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
+static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
-static void shw_popup_list(INDISEQ seq, listdisp * ld);
 
 /*********************************************
  * local variables

@@ -568,7 +568,6 @@ create_windows (void)
 	draw_win_box(uiw_win(ask_win));
 	draw_win_box(uiw_win(ask_msg_win));
 	draw_win_box(uiw_win(debug_box_win));
-
 }
 /*=================================
  * display_screen -- 

@@ -20,7 +20,6 @@
 #include "indiseq.h"
 #include "interp.h"	/* for poutput */
 #include "gengedc.h"
-#include "generic.h"
 
 /*********************************************
  * local types

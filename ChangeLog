@@ -1,3 +1,14 @@
+2006-09-24, Perry Rapp
+
+	* ChangeLog build/msvc6/llines/llinesprj.dsp
+    src/gedlib/gengedc.c src/liflines/listui.c src/liflines/listui.h
+    src/liflines/main.c src/liflines/screen.c src/tools/dbverify.c
+
+	Cosmetic; add ifdef guard around listui.h. Fix alphabetization
+	of local functions in listui.c. Remove unneeded include of
+    generic.h in gengedc.c. Remove unused generic files from project.
+    Fix MSVC6 compilation of dbverify.
+
 2006-09-23, Perry Rapp
 
 	* ChangeLog src/btree/opnbtree.c src/gedlib/dbcontext.c

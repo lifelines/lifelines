@@ -1302,6 +1302,7 @@ main (int argc, char **argv)
 	BOOLEAN allchecks=FALSE; /* if user requested all checks */
 	INT returnvalue=1;
 	STRING crashlog=NULL;
+	INT lldberrnum=0;
 
 	/* initialize all the low-level library code */
 	init_stdlib();
@@ -1370,10 +1371,11 @@ main (int argc, char **argv)
 	crashlog = getlloptstr("CrashLog_dbverify", NULL);
 	if (!crashlog) { crashlog = "Crashlog_dbverify.log"; }
 	crash_setcrashlog(crashlog);
-	
-	if (!(BTR = bt_openbtree(dbname, cflag, writ, immut))) {
+
+	/* NB: This assumes btree database */
+	if (!(BTR = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
 		char buffer[256];
-		describe_dberror(bterrno, buffer, ARRSIZE(buffer));
+		describe_dberror(lldberrnum, buffer, ARRSIZE(buffer));
 		puts(buffer);
 		goto done;
 	}

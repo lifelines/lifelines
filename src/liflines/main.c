@@ -300,7 +300,7 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llines", NULL);
 	if (!crashlog) { crashlog = "CrashLog_llines.log"; }
 	crash_setcrashlog(crashlog);
-	
+
 	/* start (n)curses and create windows */
 	{
 		char errmsg[512];
