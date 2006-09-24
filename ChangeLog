@@ -9,6 +9,10 @@
     generic.h in gengedc.c. Remove unused generic files from project.
     Fix MSVC6 compilation of dbverify.
 
+	* ChangeLog src/btree/utils.c src/gedlib/dbcontext.c
+
+	Cleanup.
+
 2006-09-23, Perry Rapp
 
 	* ChangeLog src/btree/opnbtree.c src/gedlib/dbcontext.c

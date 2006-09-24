@@ -75,7 +75,7 @@ static int rdr_count = 0;
  /*==================================================
  * alterdb -- force open, lock, or unlock a database
  *  alteration: [in] 1=unlock, 2=lock, 3=force open
- *  returns FALSE & sets bterrno if error (eg, keyfile corrupt)
+ *  returns FALSE & sets lldberr if error (eg, keyfile corrupt)
  *================================================*/
 static BOOLEAN
 alterdb (INT alteration, INT *lldberr)
@@ -103,7 +103,7 @@ alterdb (INT alteration, INT *lldberr)
 	}
 	if (fread(&kfile2, sizeof(kfile2), 1, fp) == 1) {
 		if (!validate_keyfile2(&kfile2, lldberr)) {
-			/* validate set bterrno */
+			/* validate set lldberr */
 			goto force_open_db_exit;
 		}
 	}
@@ -156,7 +156,7 @@ force_open_db_exit:
  * open_database_impl -- open database
  *  alteration:  [in] flag for forceopen (3), lock (2), & unlock (1)
  *  uses global readpath
- * Upon failure, sets bterrno and returns false
+ * Upon failure, sets lldberr and returns false
  *================================================*/
 static BOOLEAN
 open_database_impl (LLDATABASE lldb, INT alteration, INT *lldberr)
@@ -211,7 +211,7 @@ open_database (INT alteration, STRING dbpath, INT *lldberr)
 
 	rtn = open_database_impl(lldb, alteration, lldberr);
 	if (!rtn) {
-		/* open failed so clean up, preserve bterrno */
+		/* open failed so clean up, preserve lldberr */
 		int myerr = *lldberr;
 		lldb_close(&lldb);
 		*lldberr = myerr;
@@ -247,7 +247,7 @@ create_database (STRING dbpath, INT *lldberr)
 	readpath=strsave(dbpath);
 
 	if (!(btree = bt_openbtree(dbpath, TRUE, 2, immutable, lldberr))) {
-		/* open failed so clean up, preserve bterrno */
+		/* open failed so clean up, preserve lldberr */
 		int myerr = *lldberr;
 		lldb_close(&lldb);
 		*lldberr = myerr;

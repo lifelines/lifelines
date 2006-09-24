@@ -33,7 +33,6 @@
 #include "llstdlib.h"
 #include "btreei.h"
 
-INT bterrno = 0;
 
 /*=========================================
  * rkey2str -- Convert record key to STRING
@@ -53,6 +52,7 @@ rkey2str (RKEY rkey)
 }
 /*=========================================
  * str2rkey -- Convert STRING to record key
+ * eg, str2rkey("I34") => "     I34"
  *=======================================*/
 RKEY
 str2rkey (CNSTRING str)
