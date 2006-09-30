@@ -67,6 +67,8 @@ main (int argc,
 	BOOLEAN cflag=FALSE; /* create new db if not found */
 	BOOLEAN writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
+	INT lldberrnum=0;
+
 #ifdef WIN32
 	/* TO DO - research if this is necessary */
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
@@ -78,7 +80,7 @@ main (int argc,
 	}
 	dbname = argv[1];
 	key = argv[2];
-	if (!(btree = bt_openbtree(dbname, cflag, writ, immut))) {
+	if (!(btree = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
 		printf("could not open btree: %s\n", dbname);
 		return (1);
 	}
