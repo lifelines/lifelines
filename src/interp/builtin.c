@@ -2733,7 +2733,9 @@ llrpt_insert (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nonstrx, "insert", "2");
 		goto exit_insert;
 	}
-	str = strsave(pvalue_to_string(val));
+	str = pvalue_to_string(val);
+	if (str) 
+	    str = strsave(str);
 	delete_pvalue(val);
 
 	val = evaluate(inext(arg), stab, eflg);
@@ -3124,7 +3126,8 @@ llrpt_extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = event_to_date(line, FALSE);
 	else
 		str = nval(line);
-	str = strsave(str); /* save in case we delete line node */
+	if (str)
+	    str = strsave(str); /* save in case we delete line node */
 	delete_pvalue(val);
 	gdv = extract_date(str);
 	strfree(&str);
