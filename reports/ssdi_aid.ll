@@ -1,6 +1,6 @@
 /*
  * @progname       ssdi_aid.ll
- * @version        1
+ * @version        3
  * @author         Jim Eggert (eggertj@ll.mit.edu)
  * @category       
  * @output         Text
@@ -12,19 +12,25 @@ The SSDI starts in 1962 and is periodically updated to include
 more recent years.  This program guesses birth and death years
 to make its determinations.  If it finds a person likely to be
 in the SSDI, it searches for the string SSDI in their notes to
-indicate that an SSDI entry has already been found.  If so, it
-prints an asterisk to indicate found entries.
+indicate that an SSDI entry has already been found.  If not, it
+outputs a line about that person.
 
 The output persons are in database order.  Women are output in
-their own name and any married name.  To alphabetize the names,
-you can use Unix sort:
+with their last married name.  To alphabetize the names in the text
+report, you can use Unix sort:
 
   sort -b +1 ss.out > ss.sort
+
+The program optionally generates HTML output with buttons to search
+the Rootsweb online SSDI database.
 
 ssdi_aid - a LifeLines program to aid in the use of the U.S. Social
            Security Death Index
           by Jim Eggert (eggertj@ll.mit.edu)
           Version 1, 28 June 1995
+          Version 2, 22 November 1996
+          Version 3, 11 January 2005 (changed to Rootsweb site)
+
 */
 
 global(byear_delta)
@@ -42,7 +48,11 @@ proc main() {
   set(mother_age,23)  /* assumed age of first motherhood */
   set(father_age,25)  /* assumed age of first fatherhood */
   set(years_between_kids,2) /* assumed years between children */
-  set(oldage,90)
+  set(oldage,90)       /* normal maximum death age */
+  set(byearstart,1850) /* no one born before then can be in the SSDI */
+
+  set(unknownname,"<") /* for women, any spouse whose surname contains this
+                          is considered to have an unknown surname */
 
   getindi(person)
   while(person) {
@@ -51,6 +61,20 @@ proc main() {
   }
 
   getintmsg(minage,"Enter minimum age for listing:")
+
+  getintmsg(html,"Enter 0 for text, 1 for html output:")
+
+  if (html) {
+    getintmsg(includebyears,"Enter 1 to include birth years in database query")
+    "<HTML>\n"
+    "<HEAD>\n"
+    "<TITLE> SSDI Aid Report </TITLE>\n"
+    "</HEAD>\n"
+    "<BODY>\n"
+    "Press a button to query Rootsweb's online SSDI database
+     for that individual."
+    "<HR>\n"
+  }
 
   set(namewidth,50)  /* change this value as needed */
   "key" col(8) "@LAST, First Middle [MAIDEN]"
@@ -64,6 +88,8 @@ proc main() {
   set(pset,union(pset,descendantset(pset)))
   print("' spouses")
   set(pset,union(pset,spouseset(pset)))
+  print("' descendants")
+  set(pset,union(pset,descendantset(pset)))
   print("... done.\n")
 
   set(thisyear,atoi(year(gettoday())))
@@ -71,6 +97,11 @@ proc main() {
 
   print("Traversing individuals...")
   forindiset(pset,person,pval,pnum) {
+    set(star,1)
+    fornotes(inode(person),note) {
+      if (index(note,"SSDI:",1)) { set(star,0) }
+    }
+    if (star) {
     set(byear,0)
     set(bdate,"")
     if (b,birth(person)) {
@@ -83,7 +114,7 @@ proc main() {
       }
     }
     call estimate_byear(person)
-    set(byear,sub(byear_est,byear_est_delta))
+/*    set(byear,sub(byear_est,byear_est_delta)) */
     if(and(byear_est,not(strlen(bdate)))) {
         set(bdate,save(concat("c ",d(byear_est))))
     }
@@ -105,31 +136,63 @@ proc main() {
       }
     }
 
-    if (or(ge(dyear,1962),
-           and(not(dyear),le(byear,byearend)))) {
-      set(star,0)
-      fornotes(inode(person),note) {
-        if (index(note,"SSDI",1)) { set(star,1) }
-      }
-      if (star) { "*" } else { " " }
-      key(person) col(8)
-      set(nsp,nspouses(person))
-      set(no_mname,1)
-      if (and(female(person),ne(nsp,0))) {
-        set(maidenname,save(concat(", ",fullname(person,1,1,100))))
-        spouses(person,spouse,fam,spnum) {
-          if (eq(spnum,nsp)) {
+      if (or(ge(dyear,1940),
+             and(not(dyear),le(byear,byearend),ge(byear,byearstart)))) {
+        set(nfam,nfamilies(person))
+        set(myname,fullname(person,1,0,namewidth))
+        set(mysurname,surname(person))
+        if (and(female(person),ne(nfam,0))) {
+          set(maidenname,save(concat(", ",fullname(person,1,1,100))))
+          families(person,fam,spouse,famnum) {
             if (spousesurname,surname(spouse)) {
-              trim(concat(upper(spousesurname),maidenname),namewidth)
-              set(no_mname,0)
+              if (strlen(spousesurname)) {
+                if (not(index(spousesurname,unknownname,1))) {
+                  set(mysurname,spousesurname)
+                  set(myname,
+                        trim(concat(upper(spousesurname),maidenname),namewidth))
+                  if (ne(famnum,nfam)) {
+                    set(myname,
+                        trim(concat("+",myname),namewidth))
+                  }
+                }
+              }
             }
           }
         }
-        if (no_mname) { "*" }
+        if (html) {
+          "<form method=post action=" qt()
+          "http://ssdi.rootsweb.com/cgi-bin/ssdi.cgi" qt()
+          "><input type=hidden name=lastname value=" qt()
+          mysurname qt()
+          "><input type=hidden name=firstname value=" qt()
+          list(givennamelist)
+          extracttokens(givens(person),givennamelist,nnames," ")
+          dequeue(givennamelist) qt() ">"
+          if (includebyears) {
+            if (lt(byear_est_delta,2)) {
+              "<input type=hidden name=birth value=" qt()
+              d(byear) qt() ">"
+            }
+          }
+          "<input type=submit name=submit value=" qt() key(person) qt()
+          "><input type=hidden name=nt value=" qt() "exact" qt() ">"
+        } else { 
+          key(person) col(8)
+        }
+        myname
+        if (html) {
+          " " bdate " " long(d) "</form>"
+        }
+        else {
+          col(bcol) bdate col(dcol) long(d)
+        }
+        nl()
       }
-      if (no_mname) { fullname(person,1,0,namewidth) }
-      col(bcol) bdate col(dcol) long(d) nl()
     }
+  }
+  if (html) {
+    "</BODY>\n"
+    "</HTML>\n"
   }
 }
 

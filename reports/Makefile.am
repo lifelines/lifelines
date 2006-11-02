@@ -33,7 +33,7 @@ LL_REPORTS = \
 	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll       \
 	igi-merge.ll igi-search.ll index1.ll index_html.ll index_mm.ll  \
 	interestset.li indiv.ll infant_mortality.ll ldsgedcom.li        \
-	line.ll listsour.ll ll2html4.ll ll2visio.ll    lldb.ll          \
+	line.ll listsour.ll ll2html.ll ll2visio.ll    lldb.ll          \
 	longlines.ll maritalinfo.ll marriages.ll marriages1.ll menu.ll  \
 	name2html.ll                                                    \
 	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll            \
