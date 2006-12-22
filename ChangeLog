@@ -1,4 +1,19 @@
-2006-11-01, Stephen Dum
+2006-12-22 Matt Emmerton
+
+	* ChangeLog src/liflines/screen.c src/hdrs/ui.h
+
+	Split some more composite ASSERTs.
+	Add proto for invoke_search_menu to ui.h to avoid compile warning in src/ui.
+
+2006-12-22 Matt Emmerton
+
+	* ChangeLog docs/listops.jpg docs/listops.odg
+
+	Add OpenOffice Draw (ODG) version of listops diagram.
+	Regenerate JPG graphic based on this source.
+	
+2006-11-01 Stephen Dum
+
         * ChangeLog reports/Makefile.am reports/ssdi_aid.ll
 	reports/ahnenliste.ll, add reports/ll2html.ll
 	remove reports/ll2html4.ll
@@ -7,34 +22,35 @@
 	rename ll2html4.ll to ll2html.ll - removing version number from
 	report name.
 
-2006-10-25, Stephen Dum
+2006-10-25 Stephen Dum
+
 	* ChangeLog src/interp/builtin.c
 
 	Fix id 1583327 - strsave assert when called byllrpt_extractdate
 	while dereferencing null string.
 
-2006-10-01, Perry Rapp
+2006-10-01 Perry Rapp
 
-    * ChangeLog src/tools/btedit.c
+	* ChangeLog src/tools/btedit.c
 
 	Fix call from btedit to bt_openbtree.
 
-2006-09-24, Perry Rapp
+2006-09-24 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
-    src/gedlib/gengedc.c src/liflines/listui.c src/liflines/listui.h
-    src/liflines/main.c src/liflines/screen.c src/tools/dbverify.c
+	src/gedlib/gengedc.c src/liflines/listui.c src/liflines/listui.h
+	src/liflines/main.c src/liflines/screen.c src/tools/dbverify.c
 
 	Cosmetic; add ifdef guard around listui.h. Fix alphabetization
 	of local functions in listui.c. Remove unneeded include of
-    generic.h in gengedc.c. Remove unused generic files from project.
-    Fix MSVC6 compilation of dbverify.
+	generic.h in gengedc.c. Remove unused generic files from project.
+	Fix MSVC6 compilation of dbverify.
 
 	* ChangeLog src/btree/utils.c src/gedlib/dbcontext.c
 
 	Cleanup.
 
-2006-09-23, Perry Rapp
+2006-09-23 Perry Rapp
 
 	* ChangeLog src/btree/opnbtree.c src/gedlib/dbcontext.c
 	src/hdrs/btree.h src/hdrs/gedcom.h src/liflines/selectdb.c
@@ -67,7 +83,7 @@
 
 	Cosmetic; fixing some copy & paste header comments.
 
-2006-09-17, Perry Rapp
+2006-09-17 Perry Rapp
 
 	* ChangeLog src/gedlib/xreffile.c
 

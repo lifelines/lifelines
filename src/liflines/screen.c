@@ -1971,7 +1971,8 @@ message_string (void)
 	if (!cur_screen) return "";
 	if (cur_screen == MAIN_SCREEN)
 		return _("LifeLines -- Main Menu");
-	ASSERT(cur_screen >= 1 && cur_screen <= MAX_SCREEN);
+	ASSERT(cur_screen >= 1);
+	ASSERT(cur_screen <= MAX_SCREEN);
 	return get_screen_title(cur_screen);
 }
 /*=================================================
@@ -2691,7 +2692,10 @@ void
 activate_uiwin (UIWINDOW uiwin)
 {
 	WINDOW * win = uiw_win(uiwin);
-	ASSERT(uiwin && win && !uiw_parent(uiwin));
+	ASSERT(uiwin);
+	ASSERT(win);
+	ASSERT(!uiw_parent(uiwin));
+
 	/* link into parent/child chain */
 	uiw_parent(uiwin) = active_uiwin;
 	if (active_uiwin) {
@@ -2700,6 +2704,7 @@ activate_uiwin (UIWINDOW uiwin)
 		/* refresh current (in case it was obscured by stdout */
 		wrefresh(uiw_win(active_uiwin));
 	}
+
 	/* switch to new & refresh */
 	active_uiwin = uiwin;
 	touchwin(win);
@@ -2784,13 +2789,20 @@ static void
 switch_to_uiwin (UIWINDOW uiwin)
 {
 	WINDOW * win = uiw_win(uiwin);
-	if (uiwin != active_uiwin) {
-		ASSERT(uiwin && win && !uiw_parent(uiwin) && !uiw_child(uiwin));
+	if (uiwin != active_uiwin)
+	{
+		ASSERT(uiwin);
+		ASSERT(win);	
+		ASSERT(!uiw_parent(uiwin));
+		ASSERT(!uiw_child(uiwin));
+
 		/* link into parent/child chain */
 		uiw_parent(uiwin) = active_uiwin;
-		if (active_uiwin) {
+		if (active_uiwin)
+		{
 			/* current active window must be solo, no parent or child */
-			ASSERT(!uiw_child(active_uiwin) && !uiw_parent(active_uiwin));
+			ASSERT(!uiw_child(active_uiwin));
+			ASSERT(!uiw_parent(active_uiwin));
 		}
 		/* switch to new & refresh */
 		active_uiwin = uiwin;

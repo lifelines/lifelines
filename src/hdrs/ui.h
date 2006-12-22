@@ -63,3 +63,5 @@ void refresh_stdout (void);
 void rpt_print (STRING str);
 void view_array (STRING ttl, INT no, STRING *pstrngs);
 BOOLEAN yes_no_value(INT c);
+INDISEQ invoke_search_menu (void);
+
