@@ -4,6 +4,10 @@
 
 	New Spanish translation from Larry Hamilton.
 
+	* ChangeLog NEWS
+
+	List new Spanish translation in news for next release.
+
 2006-12-22 Matt Emmerton
 
 	* ChangeLog src/liflines/screen.c src/hdrs/ui.h
