@@ -1,3 +1,9 @@
+2007-02-18 Perry Rapp
+
+	* ChangeLog po/es.po
+
+	New Spanish translation from Larry Hamilton.
+
 2006-12-22 Matt Emmerton
 
 	* ChangeLog src/liflines/screen.c src/hdrs/ui.h
