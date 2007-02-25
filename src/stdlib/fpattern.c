@@ -80,7 +80,7 @@ static const char	copyright[] =
 #endif
 
 #if defined(unix) || defined(_unix) || defined(__unix) || \
-    defined(__unix__) || ( defined(__MACH__) && defined(__APPLE_CC__) )
+    defined(__unix__) || defined(__NetBSD__) || ( defined(__MACH__) && defined(__APPLE_CC__) )
 #define UNIX	1
 #define DOS	0
 #elif defined(__MSDOS__) || defined(_WIN32)

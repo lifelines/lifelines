@@ -11,6 +11,7 @@ Table of Contents
 In order to compile lifelines from the cvs sources,
 the developer needs to have a number of tools available.
 
+make: build process requires gmake
 autotools suite: both autoconf and automake (which in turn 
      require the m4 macro processor) are used to generate
      Makefiles and various build files.

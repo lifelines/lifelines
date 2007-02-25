@@ -1,3 +1,11 @@
+2007-02-25 Stephen Dum
+
+	* README.DEVELOPERS src/stdlib/fpattern.c
+
+	Mention in README that gmake is required.  Add __NetBSD__ to list
+	of 'unix like' defines to fix compilation failure reported by James P.
+	Jones.
+
 2007-02-18 Perry Rapp
 
 	* ChangeLog po/es.po
