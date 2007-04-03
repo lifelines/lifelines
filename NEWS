@@ -1,10 +1,19 @@
 LifeLines Source Release, Version 3.0.52
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
+
+============================
 New features added in 3.0.53 (beta)
  - New Spanish translation by Larry Hamilton
 
 ============================
+Bug fixes in 3.0.53 (beta)
+ - Fix strsave assert when called by llrpt_extractdate
+    while dereferencing null string (sf bug 1583327)
+ - Update verify.ll to version 13 (Jim Eggert)
+ - Update some other reports from Jim Eggert
+ - Fix fpattern compilation issue on NETBSD
+
 New features added in 3.0.52 (beta)
 ============================
  - New @ escape from browse prompt to full database search
@@ -21,10 +30,13 @@ New features added in 3.0.51 (beta)
 Bug fixes in 3.0.51 (beta)
 ============================
  - Fix add to list (was repeating first person instead of adding).
- - Fix incorrect sporadic ASSERT in merge ("Tried to add already-deleted record...")
- - Fix handling of overlong (or unterminated) string constants to ASSERT instead of overwriting memory
+ - Fix incorrect sporadic ASSERT in merge ("Tried to add already-deleted
+    record...")
+ - Fix handling of overlong (or unterminated) string constants to ASSERT
+    instead of overwriting memory
  - Fix report value function handling of strings inside created nodes
- - Fix report value bug in extractdate with cascaded calls without set assignment
+ - Fix report value bug in extractdate with cascaded calls without set
+    assignment
 
 New features added in 3.0.50
 ============================
