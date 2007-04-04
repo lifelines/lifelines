@@ -10,6 +10,16 @@
 	Fix setversions.sh regexp handling for bash 3.2+
 	 (no quotes around regexp).
 
+	* ChangeLog INSTALL NEWS README configure.in
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/btedit.1 docs/dbverify.1 docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml docs/llines.1
+	po/da.po po/de.po po/el.po po/eo.po po/es.po po/fr.po po/it.po
+	po/nl.po po/pl.po po/rw.po po/sv.po src/hdrs/version.h
+
+	Set versions to 3.0.53. Fix format bug in French msg file (po).
+
 2007-04-03 Perry Rapp
 
 	* ChangeLog NEWS
