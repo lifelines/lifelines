@@ -1,6 +1,6 @@
 #!/bin/bash
 # Created: 2005-10-08, Perry Rapp
-# Edited:  2005-11-18, Perry Rapp
+# Edited:  2007-04-04, Perry Rapp
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
@@ -96,7 +96,7 @@ function applyversion {
   DAY=`date +%d`
   JULIANDAY=`date +%-j`
   JULIANVERSION=$((($YEAR-1990)*1000 + $JULIANDAY))
-  if [[ $VERSION =~ '([0-9]+)\.([0-9]+)\.([0-9]+)' ]]
+  if [[ $VERSION =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]
   then
     # numeric portion of version is now $BASH_REMATCH
     # eg, for 3.0.18p3-4, $BASH_REMATCH holds 3.0.18

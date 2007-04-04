@@ -5,6 +5,11 @@
 	Fix setversions.sh julian day handling (was misinterpreting
 	leading 0 as octal. Also include version in error msg.)
 
+	*  ChangeLog build/setversions.sh
+
+	Fix setversions.sh regexp handling for bash 3.2+
+	 (no quotes around regexp).
+
 2007-04-03 Perry Rapp
 
 	* ChangeLog NEWS
