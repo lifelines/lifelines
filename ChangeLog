@@ -1,3 +1,10 @@
+2007-04-04 Perry Rapp
+
+	*  ChangeLog build/setversions.sh
+
+	Fix setversions.sh julian day handling (was misinterpreting
+	leading 0 as octal. Also include version in error msg.)
+
 2007-04-03 Perry Rapp
 
 	* ChangeLog NEWS

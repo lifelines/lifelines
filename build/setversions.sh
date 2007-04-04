@@ -94,8 +94,8 @@ function applyversion {
   YEAR=`date +%Y`
   MONTHABBR=`date +%b`
   DAY=`date +%d`
-  JULIANDAY=`date +%j`
-  ((JULIANVERSION=($YEAR-1990)*1000+$JULIANDAY))
+  JULIANDAY=`date +%-j`
+  JULIANVERSION=$((($YEAR-1990)*1000 + $JULIANDAY))
   if [[ $VERSION =~ '([0-9]+)\.([0-9]+)\.([0-9]+)' ]]
   then
     # numeric portion of version is now $BASH_REMATCH
@@ -105,7 +105,7 @@ function applyversion {
     VERSION2=${BASH_REMATCH[2]}
     VERSION3=${BASH_REMATCH[3]}
   else
-    failexit "Version could not be parsed into expected format"
+    failexit "Version ($VERSION) could not be parsed into expected format"
   fi
  echo "Full version=<$VERSION>"
  echo "Numeric version=<$VERSION1.$VERSION2.$VERSION3>"
