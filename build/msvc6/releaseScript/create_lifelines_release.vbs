@@ -1,7 +1,7 @@
 ' create_lifelines_release.vbs
 ' Create new lifelines release directory
 ' Created: 2005-06-12, Perry
-' Edited:  2005-09-16, Perry
+' Edited:  2007-04-05, Perry
 '
 ' This requires a working cygwin directory (for tarball and gmo language files)
 ' and a Windows source directory (for the bin output directory of Visual C++)
@@ -202,7 +202,7 @@ End Sub
 Function PopulateLangs()
   Dim langs()
   Dim langString
-  langString = "da de el eo fr it nl pl rw sv"
+  langString = "da de el eo es fr it nl pl rw sv"
   Dim nlangs
   nlangs = (Len(langString)+1)/3
   ReDim langs(nlangs-1)
