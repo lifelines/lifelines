@@ -4,6 +4,10 @@
 
 	Fix term_screen to clear ll_lines & ll_cols (to fix Q main menu choice).
 
+	* ChangeLog NEWS
+
+	Document above bugfix.
+
 2007-04-05 Perry Rapp
 
 	* ChangeLog

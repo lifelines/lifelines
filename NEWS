@@ -3,11 +3,15 @@ http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
 ============================
+Bug fixes in 3.0.53 (beta)
+ - Fix bug in main menu exit option Q
+
 New features added in 3.0.53 (beta)
+============================
  - New Spanish translation by Larry Hamilton
 
-============================
 Bug fixes in 3.0.53 (beta)
+============================
  - Fix strsave assert when called by llrpt_extractdate
     while dereferencing null string (sf bug 1583327)
  - Update verify.ll to version 13 (Jim Eggert)
