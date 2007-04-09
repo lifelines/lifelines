@@ -1,3 +1,9 @@
+2007-04-09 Perry Rapp
+
+	* ChangeLog src/liflines/screen.c
+
+	Fix term_screen to clear ll_lines & ll_cols (to fix Q main menu choice).
+
 2007-04-05 Perry Rapp
 
 	* ChangeLog

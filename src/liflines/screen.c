@@ -370,6 +370,12 @@ term_screen (void)
 	menuitem_terminate();
 	active_uiwin = 0;
 	destroy_windows();
+
+	/* must clear window size so resize_screen_impl will
+	start from scratch, in case we're closing and then
+	starting up again (ie, Q option from main menu) */
+	ll_lines = -1;
+	ll_cols = -1;
 }
 /*=======================================
  * draw_win_box -- wrapper for curses box
