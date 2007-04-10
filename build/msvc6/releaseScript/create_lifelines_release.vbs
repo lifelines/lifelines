@@ -1,7 +1,7 @@
 ' create_lifelines_release.vbs
 ' Create new lifelines release directory
 ' Created: 2005-06-12, Perry
-' Edited:  2007-04-05, Perry
+' Edited:  2007-04-10, Perry
 '
 ' This requires a working cygwin directory (for tarball and gmo language files)
 ' and a Windows source directory (for the bin output directory of Visual C++)
@@ -276,6 +276,8 @@ End Sub
 ' Copy docs & reports
 Sub CopyTextFiles(fso, DistRoot, TargetRoot, minimal)
   fso.CopyFile DistRoot + "\NEWS", TargetRoot + "\"
+  fso.CopyFile DistRoot + "\.linesrc", TargetRoot + "\.linesrc"
+  fso.CopyFile DistRoot + "\lines.cfg", TargetRoot + "\lines.cfg"
   If minimal = True Then Exit Sub
   fso.CopyFile DistRoot + "\README", TargetRoot + "\"
   fso.CopyFile DistRoot + "\LICENSE", TargetRoot + "\"
