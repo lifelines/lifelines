@@ -9,7 +9,7 @@
 # Add comment to top of comments at bottom if you revise this file.
 #
 
-%define lifelines_version       3.0.53
+%define lifelines_version       3.0.54
 %define reports_dir /usr/local/share/lifelines-%{lifelines_version}/reports
 %define tt_dir /usr/local/share/lifelines-%{lifelines_version}/tt
 

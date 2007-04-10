@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-04 18:42-0400\n"
+"POT-Creation-Date: 2007-04-09 21:06-0400\n"
 "PO-Revision-Date: 2002-06-09 21:32-0400\n"
 "Last-Translator: None yet\n"
 "Language-Team: Not submitted yet\n"
@@ -3581,193 +3581,193 @@ msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 
-#: src/liflines/screen.c:656
+#: src/liflines/screen.c:662
 msgid "Search results"
 msgstr ""
 
-#: src/liflines/screen.c:763
+#: src/liflines/screen.c:769
 #, c-format
 msgid "(pg %d/%d)"
 msgstr ""
 
-#: src/liflines/screen.c:1381
+#: src/liflines/screen.c:1387
 msgid "No conversion"
 msgstr ""
 
-#: src/liflines/screen.c:1462
+#: src/liflines/screen.c:1468
 msgid "Internal codeset"
 msgstr ""
 
-#: src/liflines/screen.c:1465
+#: src/liflines/screen.c:1471
 msgid "Internal UTF-8: Yes"
 msgstr ""
 
-#: src/liflines/screen.c:1467
+#: src/liflines/screen.c:1473
 msgid "Internal UTF-8: No"
 msgstr ""
 
-#: src/liflines/screen.c:1471
+#: src/liflines/screen.c:1477
 msgid "Locales are enabled."
 msgstr ""
 
-#: src/liflines/screen.c:1473
+#: src/liflines/screen.c:1479
 msgid "Locales are disabled."
 msgstr ""
 
-#: src/liflines/screen.c:1476
+#: src/liflines/screen.c:1482
 msgid "NLS (National Language Support) is compiled in."
 msgstr ""
 
-#: src/liflines/screen.c:1482
+#: src/liflines/screen.c:1488
 msgid "NLS (National Language Support) is not compiled in."
 msgstr ""
 
-#: src/liflines/screen.c:1495
+#: src/liflines/screen.c:1501
 msgid "iconv (codeset conversion) is compiled in."
 msgstr ""
 
-#: src/liflines/screen.c:1497
+#: src/liflines/screen.c:1503
 msgid "iconv (codeset conversion) is not compiled in."
-msgstr ""
-
-#: src/liflines/screen.c:1499
-#, c-format
-msgid "Startup collate locale: %s"
-msgstr ""
-
-#: src/liflines/screen.c:1502
-#, c-format
-msgid "Startup messages locale: %s"
 msgstr ""
 
 #: src/liflines/screen.c:1505
 #, c-format
-msgid "Current collate locale: %s"
+msgid "Startup collate locale: %s"
 msgstr ""
 
 #: src/liflines/screen.c:1508
 #, c-format
-msgid "Current messages locale: %s"
+msgid "Startup messages locale: %s"
 msgstr ""
 
 #: src/liflines/screen.c:1511
 #, c-format
+msgid "Current collate locale: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1514
+#, c-format
+msgid "Current messages locale: %s"
+msgstr ""
+
+#: src/liflines/screen.c:1517
+#, c-format
 msgid "Collation routine: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1515
+#: src/liflines/screen.c:1521
 #, c-format
 msgid "GUI codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1518
+#: src/liflines/screen.c:1524
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1520
+#: src/liflines/screen.c:1526
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1525
+#: src/liflines/screen.c:1531
 #, c-format
 msgid "editor codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1528
+#: src/liflines/screen.c:1534
 #, c-format
 msgid "editor output codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1530
+#: src/liflines/screen.c:1536
 #, c-format
 msgid "editor input codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1535
+#: src/liflines/screen.c:1541
 #, c-format
 msgid "report codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1538
+#: src/liflines/screen.c:1544
 #, c-format
 msgid "report output codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1540
+#: src/liflines/screen.c:1546
 #, c-format
 msgid "report input codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1545
+#: src/liflines/screen.c:1551
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1548
+#: src/liflines/screen.c:1554
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1550
+#: src/liflines/screen.c:1556
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1558
+#: src/liflines/screen.c:1564
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1560
+#: src/liflines/screen.c:1566
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1564
+#: src/liflines/screen.c:1570
 msgid "Codeset information"
 msgstr ""
 
-#: src/liflines/screen.c:1581
+#: src/liflines/screen.c:1587
 #, c-format
 msgid "gettext dll: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1585
+#: src/liflines/screen.c:1591
 #, c-format
 msgid "gettext dll version: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1590
+#: src/liflines/screen.c:1596
 msgid "gettext dll had no version"
 msgstr ""
 
-#: src/liflines/screen.c:1595
+#: src/liflines/screen.c:1601
 msgid "no gettext dll found"
 msgstr ""
 
-#: src/liflines/screen.c:1604
+#: src/liflines/screen.c:1610
 #, c-format
 msgid "iconv dll: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1608
+#: src/liflines/screen.c:1614
 #, c-format
 msgid "iconv dll version: %s"
 msgstr ""
 
-#: src/liflines/screen.c:1613
+#: src/liflines/screen.c:1619
 msgid "iconv dll had no version"
 msgstr ""
 
-#: src/liflines/screen.c:1618
+#: src/liflines/screen.c:1624
 msgid "no iconv dll found"
 msgstr ""
 
-#: src/liflines/screen.c:1872
+#: src/liflines/screen.c:1878
 msgid "Impermissible to change codeset in a populated database"
 msgstr ""
 
-#: src/liflines/screen.c:1973
+#: src/liflines/screen.c:1979
 msgid "LifeLines -- Main Menu"
 msgstr ""
 
