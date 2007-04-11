@@ -90,6 +90,8 @@ chartype (INT c)
 BOOLEAN
 isnumch (INT c)
 {
+	if (c<0 || c>0x7F) return FALSE;
+	/* Now we know it is ASCII range */
 #ifndef OS_NOCTYPE
 	return (isdigit(c));
 #else
@@ -105,6 +107,8 @@ isnumch (INT c)
 BOOLEAN
 iswhite (INT c)
 {
+	if (c<0 || c>0x7F) return FALSE;
+	/* Now we know it is ASCII range */
 #ifndef OS_NOCTYPE
 	return (isspace(c));
 #else

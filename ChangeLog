@@ -1,3 +1,10 @@
+2007-04-11 Perry Rapp
+
+	* ChangeLog NEWS src/stdlib/stdstrng.c
+
+	Fix isnumch & iswhite to fail all non-ASCII input; MS-Windows versions
+	are buggy on non-ASCII input (isspace(160)=>8).
+
 2007-04-10 Perry Rapp
 
 	* ChangeLog build/msvc6/releaseScript/create_lifelines_release.vbs
