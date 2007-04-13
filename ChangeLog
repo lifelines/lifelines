@@ -1,3 +1,10 @@
+2007-04-13 Perry Rapp
+
+	* ChangeLog
+	*NEW build/md5/write_md5sums.sh
+
+	Add script to generate md5sums on release page.
+
 2007-04-13 lifelines beta 3.0.55 RELEASE
 
 2007-04-12 Perry Rapp
