@@ -1,0 +1,22 @@
+Perry has been building MS-Windows binary
+packages on a Windows machine with:
+  cygwin and a local cvs copy (UNIX line endings)
+  another local cvs copy (Windows line endings)
+  Microsoft Visual Studio 6 (MSVC6)
+
+Build a release in the local cvs copy under cygwin,
+following README.MAINTAINER instructions, up to
+the part that says to come to this file for win32.
+
+Update your local cvs Windows copy to the latest.
+Compile the executables in MSVC6 to release mode.
+Run a batch file to create a new release directory.
+
+You must create this batch file (once, not once per
+release), and it just calls the
+create_lifelines_release.vbs script with directory
+arguments telling it where the local cvs unix copy is,
+and where the local cvs windows copy is. (The script
+copies some files, including the tarball and the 
+translated message files, from the local unix copy.)
+

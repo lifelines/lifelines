@@ -17,6 +17,11 @@
 	Move readme for rpm creation to root,
 	and rename to README.MAINTAINERS.rpm.
 
+	* ChangeLog README.MAINTAINERS
+	*NEW README.MAINTAINERS.win32
+
+	Add skeleton instructions for win32 build.
+
 2007-04-11 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/stdstrng.c

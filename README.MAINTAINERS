@@ -61,7 +61,14 @@ Free Translation Project page for lifelines:
 
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
-For rpm packages, see README.MAINTAINERS.rpm.
+
+rpm:  See README.MAINTAINERS.rpm
+
+debian: lifelines is a supported debian package
+         and has a debian maintainer (q.v.)
+
+MS-Windows: See README.MAINTAINERS.win32
+
 
 Go to lifelines admin page, and create a new
 beta release. Paste in top part of ./NEWS file
