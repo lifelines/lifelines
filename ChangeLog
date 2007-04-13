@@ -10,6 +10,13 @@
 
 	Add tt directory to layout list.
 
+	* ChangeLog README.MAINTAINERS
+	*DELETE build/rpm/README_Make_rpms
+	*NEW README.MAINTAINERS.rpm
+
+	Move readme for rpm creation to root,
+	and rename to README.MAINTAINERS.rpm.
+
 2007-04-11 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/stdstrng.c
