@@ -1,0 +1,12 @@
+%packager %{echo "$USER"}
+%_topdir /home/puddle/myrpm
+%_rpmtopdir %{_topdir}/%{name}
+%_builddir %{_rpmtopdir}/BUILD
+%_rpmdir %{_rpmtopdir}
+%_sourcedir %{_rpmtopdir}
+%_specdir %{_rpmtopdir}
+%_srcrpmdir %{_rpmtopdir}
+%_tmppath %{_rpmtopdir}/TMP
+%_buildroot %{_tmppath}/%{name}-root
+
+

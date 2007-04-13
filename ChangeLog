@@ -1,3 +1,11 @@
+2007-04-12 Perry Rapp
+
+	* ChangeLog README.MAINTAINERS
+	*NEW build/rpm/README_Make_rpms
+	*NEW build/rpm/rpmmacros_sample
+
+	Add explanation of how to make rpm releases.
+
 2007-04-11 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/stdstrng.c

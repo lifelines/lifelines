@@ -61,7 +61,7 @@ Free Translation Project page for lifelines:
 
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
-For rpm packages, see ./build/rpm/lifelines.spec.
+For rpm packages, see ./build/rpm/README_Make_rpms
 
 Go to lifelines admin page, and create a new
 beta release. Paste in top part of ./NEWS file

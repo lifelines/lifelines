@@ -1,0 +1,40 @@
+To make rpms as a regular (non-root) users,
+you need to have the rpm program installed
+on your system (of course). If you run
+"rpm --help" and get a lot of text back,
+you have rpm :)
+
+To create a local rpm directory for creating
+rpm releases, you may copy the sample 
+rpmmacros file in this directory to your
+home directory as .rpmmacros, like so:
+
+$ cp rpmmacros_sample ~/.rpmmacros
+
+That depends on you having a local rpm
+directory named ~/myrpm, so you must create
+that directory, and a subdirectory for
+lifelines files:
+
+$ mkdir ~/myrpm
+$ mkdir ~/myrpm/lifelines
+
+Now you are ready to create an rpm release.
+This is a two step operation
+
+=========
+#1) Copy the distribution tarball to the
+lifelines rpm directory:
+
+$ cp ../../bld/lifelines*.tar.gz ~/myrpm/lifelines
+
+=========
+#2) Create the rpms
+
+$ rpmbuild -ba lifelines.spec
+
+or on older systems,
+
+$ rpm -ba lifelines.spec
+
+
