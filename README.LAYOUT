@@ -1,4 +1,4 @@
-LifeLines Source Release, Version 3.0.20
+LifeLines Source Release, Version 3.0.54
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
@@ -124,3 +124,9 @@ Non-Source Code Directories
 ./reports/
 
     Lifelines language reports (*.ll)
+
+./tt/
+
+   Translation tables, for character set conversions for users
+   without iconv, or for custom conversions.
+

@@ -6,6 +6,10 @@
 
 	Add explanation of how to make rpm releases.
 
+	* ChangeLog README.LAYOUT
+
+	Add tt directory to layout list.
+
 2007-04-11 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/stdstrng.c
