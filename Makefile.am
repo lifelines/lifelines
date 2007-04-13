@@ -8,7 +8,10 @@ SUBDIRS = build intl po win32 src docs reports tt
 EXTRA_DIST = .linesrc lines.cfg lines.cfg.input \
              COPYING LICENSE INSTALL NEWS README AUTHORS ABOUT-NLS \
              README.AUTOCONF README.DEVELOPERS README.INTERNATIONAL \
-             README.LAYOUT README.MAINTAINERS
+             README.LAYOUT \
+             README.MAINTAINERS README.MAINTAINERS.rpm \
+             README.MAINTAINERS.win32
+
 CLEANFILES = .linesrc lines.cfg
 
 docdir = $(datadir)/doc/lifelines

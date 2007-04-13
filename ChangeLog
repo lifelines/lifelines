@@ -22,6 +22,10 @@
 
 	Add skeleton instructions for win32 build.
 
+	* ChangeLog Makefile.am
+
+	Add new README.MAINTAINERS.* files to dist.
+
 2007-04-11 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/stdstrng.c
