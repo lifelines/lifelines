@@ -67,6 +67,12 @@
 
 	Fix do_import to ignore incoming CHAR if GEDCOM has a BOM.
 
+	* ChangeLog src/liflines/import.c
+
+	Fixed do_import to use local variable for source encoding.
+	Fixed it to respect CHAR line of GEDCOM input, if specified
+	(and if no BOM).
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

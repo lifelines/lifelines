@@ -116,14 +116,8 @@ import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 	STRING geddef=0;
 	BOOLEAN rtn;
 
-	/* save & restore default gedcom codeset in */
-	strupdate(&geddef, gedcom_codeset_in); 
-	
 	flineno = 0;
 	rtn = do_import(ifeed, fp);
-
-	strupdate(&gedcom_codeset_in, geddef);
-	strfree(&geddef);
 
 	return rtn;
 }
@@ -150,6 +144,9 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	STRING gdcodeset=0;
 	INT warnings=0;
 
+	/* start by assuming default */
+	strupdate(&gdcodeset, gedcom_codeset_in);
+
 /*	rptui_init(); *//* clear ui time counter */
 
 /* Open and validate GEDCOM file */
@@ -158,7 +155,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 		goto end_import;
 	}
 	if (eqstr_ex(unistr, "UTF-8")) {
-		strupdate(&gedcom_codeset_in, "UTF-8");
+		strupdate(&gdcodeset, "UTF-8");
 	}
 
 	if (!scan_header(fp, metadatatab, &zerr)) {
@@ -176,9 +173,8 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 		}
 	}
 	if (!unistr && (str = valueof_str(metadatatab, "CHAR"))!= NULL) {
-		/* believe file's character set declaration
-		unless there was a BOM */
-		gdcodeset = strsave(str);
+		/* if no BOM, use file's declared encoding if present */
+		strupdate(&gdcodeset, str);
 	}
 
 	/* TODO: Push this codeset question down to after the validation, where we can know if
@@ -212,9 +208,9 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 		}
 	}
 
-	if (gedcom_codeset_in[0] && int_codeset[0]) {
+	if (gdcodeset[0] && int_codeset[0]) {
 retry_input_codeset:
-		ttm = transl_get_xlat(gedcom_codeset_in, int_codeset);
+		ttm = transl_get_xlat(gdcodeset, int_codeset);
 		if (!transl_is_xlat_valid(ttm)) {
 			ZSTR zstr=zs_new();
 			char csname[64];
@@ -222,7 +218,7 @@ retry_input_codeset:
 			transl_release_xlat(ttm);
 			ttm = 0;
 			zs_setf(zstr, _("Cannot convert codeset (from <%s> to <%s>)")
-				, gedcom_codeset_in, int_codeset);
+				, gdcodeset, int_codeset);
 			b = ask_for_string(zs_str(zstr)
 				, _("Enter codeset to assume (* for none)")
 				, csname, sizeof(csname)) && csname[0];
@@ -230,7 +226,7 @@ retry_input_codeset:
 			if (!b)
 				goto end_import;
 			if (!eqstr(csname, "*")) {
-				strupdate(&gedcom_codeset_in, csname);
+				strupdate(&gdcodeset, csname);
 				goto retry_input_codeset;
 			}
 		}
