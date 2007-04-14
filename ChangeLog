@@ -8,6 +8,10 @@
 	instead of using hardcoded "ASCII" by default.
 	sfbug#1700485: Export not writing CHAR value in header correctly
 
+	* ChangeLog web/index.html
+
+	Fix link to freshmeat appindex page for lifelines.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
