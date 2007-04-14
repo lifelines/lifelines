@@ -261,6 +261,8 @@ write_node_to_editfile (NODE node)
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	prefix_file_for_edit(fp);
+
 	write_nodes(0, fp, ttmo, node,  TRUE, TRUE, TRUE);
 	fclose(fp);
 }

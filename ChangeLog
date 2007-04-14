@@ -40,6 +40,12 @@
 	records get BOM if appropriate.
 	sfbug#1700719: New source doesn't get BOM
 
+	* ChangeLog src/liflines/newrecs.c
+
+	Call prefix_file_for_edit from write_node_to_editfile, so editing
+	S,E,X records get BOM if appropriate.
+	sfbug#1700723: edit source (etc) not getting BOM
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
