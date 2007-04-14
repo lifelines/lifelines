@@ -282,6 +282,7 @@ save_gedcom (void)
 		msg_error(_("The database was not saved."));
 		return FALSE; 
 	}
+	prefix_file_for_gedcom(fp);
 
 	memset(&efeed, 0, sizeof(efeed));
 	efeed.added_rec_fnc = export_saved_rec;
