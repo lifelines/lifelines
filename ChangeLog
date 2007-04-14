@@ -20,6 +20,11 @@
 
 	Factor UTF-8 BOM code out of write_indi_to_file into 
 	new prefix_file, and also use from write_fam_to_file.
+	sfbug#1700702: fam edit doesn't get BOM
+
+	* ChangeLog NEWS
+
+	List bugfix of writing BOM to fam edit files in NEWS.
 
 2007-04-13 Perry Rapp
 

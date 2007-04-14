@@ -6,6 +6,7 @@ Bug fixes in 3.0.56 (beta)
 ============================
  - Write correct CHAR value to header when
     exporting GEDCOM
+ - Write BOM to family edit files under windows.
 
 Bug fixes in 3.0.55 (beta)
 ============================
