@@ -16,6 +16,11 @@
 
 	Rewrite description of HDR_CHAR, to say it shouldn't be used.
 
+	* ChangeLog src/gedlib/nodeio.c
+
+	Factor UTF-8 BOM code out of write_indi_to_file into 
+	new prefix_file, and also use from write_fam_to_file.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

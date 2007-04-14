@@ -43,13 +43,14 @@ static BOOLEAN buffer_to_line(STRING p, INT *plev, STRING *pxref
 	, STRING *ptag, STRING *pval, STRING *pmsg);
 static NODE do_first_fp_to_node(FILE *fp, BOOLEAN list, XLAT tt
 	, STRING *pmsg, BOOLEAN *peof);
+static void prefix_file(FILE *fp, XLAT tt);
 static BOOLEAN string_to_line(STRING *ps, INT *plev, STRING *pxref, 
 	STRING *ptag, STRING *pval, STRING *pmsg);
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
-static BOOLEAN write_bom(void);
-static void write_fam_to_file(NODE fam, CNSTRING file, BOOLEAN bom);
-static void write_indi_to_file(NODE indi, CNSTRING file, BOOLEAN bom);
+static BOOLEAN should_write_bom(void);
+static void write_fam_to_file(NODE fam, CNSTRING file);
+static void write_indi_to_file(NODE indi, CNSTRING file);
 static void write_node(INT levl, FILE *fp, XLAT ttm,
 	NODE node, BOOLEAN indent);
 
@@ -643,21 +644,35 @@ node_to_string (NODE node)      /* root */
 	return str;
 }
 /*=====================================
+ * prefix_file - write BOM prefix to file if appropriate
+ *  This handles prepending BOM (byte order mark) to UTF-8 files
+ *===================================*/
+static void
+prefix_file (FILE *fp, XLAT tt)
+{
+	if (!should_write_bom())
+		return;
+	if (is_codeset_utf8(xl_get_dest_codeset(tt)))
+	{
+		/* 3-byte UTF-8 byte order mark */
+		char bom[] = "\xEF\xBB\xBF";
+		fwrite(bom, strlen(bom), 1, fp);
+	}
+}
+/*=====================================
  * write_indi_to_file - write node tree into GEDCOM
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
+write_indi_to_file (NODE indi, CNSTRING file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE name, refn, sex, body, famc, fams;
 	
 	ASSERT(fp = fopen(file, LLWRITETEXT));
-	if (bom && is_codeset_utf8(xl_get_dest_codeset(ttmo))) {
-		char bom[] = "\xEF\xBB\xBF";
-		fwrite(bom, strlen(bom), 1, fp);
-	}
+	prefix_file(fp, ttmo);
+
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
@@ -674,7 +689,7 @@ write_indi_to_file (NODE indi, CNSTRING file, BOOLEAN bom)
  * (byte order marker)
  *===================================*/
 static BOOLEAN
-write_bom (void)
+should_write_bom (void)
 {
 #ifdef WIN32
 	return TRUE;
@@ -690,9 +705,8 @@ write_bom (void)
 void
 write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
 {
-	BOOLEAN bom = write_bom();
 	annotate_with_supplemental(indi, rfmt);
-	write_indi_to_file(indi, file, bom);
+	write_indi_to_file(indi, file);
 	resolve_refn_links(indi);
 }
 /*=====================================
@@ -703,9 +717,8 @@ write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
 void
 write_fam_to_file_for_edit (NODE fam, CNSTRING file, RFMT rfmt)
 {
-	BOOLEAN bom = write_bom();
 	annotate_with_supplemental(fam, rfmt);
-	write_fam_to_file(fam, file, bom);
+	write_fam_to_file(fam, file);
 	resolve_refn_links(fam);
 }
 /*=====================================
@@ -713,14 +726,15 @@ write_fam_to_file_for_edit (NODE fam, CNSTRING file, RFMT rfmt)
  * (no user interaction)
  *===================================*/
 static void
-write_fam_to_file (NODE fam, CNSTRING file, BOOLEAN bom)
+write_fam_to_file (NODE fam, CNSTRING file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	NODE refn, husb, wife, chil, body;
-	bom = bom; /* unused */
 
 	ASSERT(fp = fopen(file, LLWRITETEXT));
+	prefix_file(fp, ttmo);
+
 	split_fam(fam, &refn, &husb, &wife, &chil, &body);
 	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
