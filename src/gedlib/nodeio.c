@@ -644,6 +644,16 @@ node_to_string (NODE node)      /* root */
 	return str;
 }
 /*=====================================
+ * prefix_file_for_edit - write BOM prefix to file if appropriate
+ *  This handles prepending BOM (byte order mark) to UTF-8 files
+ *===================================*/
+void
+prefix_file_for_edit (FILE *fp)
+{
+	XLAT ttmo = transl_get_predefined_xlat(MINED);
+	prefix_file(fp, ttmo);
+}
+/*=====================================
  * prefix_file - write BOM prefix to file if appropriate
  *  This handles prepending BOM (byte order mark) to UTF-8 files
  *===================================*/

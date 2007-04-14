@@ -26,6 +26,14 @@
 
 	List bugfix of writing BOM to fam edit files in NEWS.
 
+	* ChangeLog src/gedlib/nodeio.c src/hdrs/gedcom.h
+	src/liflines/add.c
+
+	Call new function prefix_file_for_edit from add_indi_by_edit
+	to provide BOM prefix for new INDI edit file. Same fix for
+	add_family_by_edit.
+	sfbug#1700701: new indi edit doesn't get BOM
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

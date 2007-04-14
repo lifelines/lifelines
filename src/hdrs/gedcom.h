@@ -544,6 +544,7 @@ void nodechk(NODE node, CNSTRING scope);
 void nodechk_enable(BOOLEAN enable);
 
 /* nodeio.c */
+void prefix_file_for_edit(FILE *fp);
 STRING node_to_string(NODE);
 NODE string_to_node(STRING);
 void write_indi_to_file_for_edit(NODE indi, CNSTRING file, RFMT rfmt);

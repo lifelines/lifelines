@@ -90,7 +90,10 @@ add_indi_by_edit (RFMT rfmt)
 
 /* Create person template for user to edit */
 
-	if (!(fp = fopen(editfile, LLWRITETEXT))) return NULL;
+	if (!(fp = fopen(editfile, LLWRITETEXT)))
+		return NULL;
+	prefix_file_for_edit(fp);
+
 	/* prefer useroption in this db */
 	if ((str = getlloptstr("INDIREC", NULL)))
 		fprintf(fp, "%s\n", str);
@@ -512,9 +515,9 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	NODE fam1, fam2=0, husb, wife, chil;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	STRING msg, key, str;
+	STRING msg=0, key=0, str=0;
 	BOOLEAN emp;
-	FILE *fp;
+	FILE *fp=NULL;
 
 	if (readonly) {
 		message(_(qSronlya));
@@ -583,6 +586,8 @@ editfam:
 /* Prepare file for user to edit */
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	prefix_file_for_edit(fp);
+
 	write_nodes(0, fp, ttmo, fam1, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, husb, TRUE, TRUE, TRUE);
 	write_nodes(1, fp, ttmo, wife, TRUE, TRUE, TRUE);
