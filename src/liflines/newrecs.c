@@ -151,6 +151,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 		msg_error(_(qSnofopn), editfile);
 		return FALSE;
 	}
+	prefix_file_for_edit(fp);
 	fprintf(fp, "%s\n", recstr);
 
 /* Have user edit new record */

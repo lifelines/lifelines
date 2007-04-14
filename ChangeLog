@@ -34,6 +34,12 @@
 	add_family_by_edit.
 	sfbug#1700701: new indi edit doesn't get BOM
 
+	* ChangeLog src/liflines/newrecs.c
+
+	Call prefix_file_for_edit from edit_add_record, so new S,E,X
+	records get BOM if appropriate.
+	sfbug#1700719: New source doesn't get BOM
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
