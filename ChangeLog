@@ -73,6 +73,10 @@
 	Fixed it to respect CHAR line of GEDCOM input, if specified
 	(and if no BOM).
 
+	* ChangeLog NEWS
+
+	Summarize recent BOM changes to NEWS.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

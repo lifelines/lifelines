@@ -5,8 +5,12 @@ http://lifelines.sourceforge.net
 Bug fixes in 3.0.56 (beta)
 ============================
  - Write correct CHAR value to header when
-    exporting GEDCOM
- - Write BOM to family edit files under windows.
+    exporting GEDCOM, and write UTF-8 BOM
+    under windows when exporting to UTF-8.
+ - Read GEDCOM UTF-8 BOM if present
+ - Use GEDCOM CHAR value if present
+ - Write UTF-8 BOM to edit files under windows,
+    when appropriate.
 
 Bug fixes in 3.0.55 (beta)
 ============================
