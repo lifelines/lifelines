@@ -5492,11 +5492,13 @@ The default is
 <glossentry><glossterm>HDR_CHAR</glossterm><glossdef>
 
 <para>
+Normally lifelines will populate the CHAR block in the header record
+automatically when exporting GEDCOM, with the actual character encoding
+being used in the export; this can be found in the settings displayed
+in the u(ser) c(harset settings) page. However, if desired, the HDR_CHAR
+variable may be used to overwrite the entire CHAR line.
 String containing the CHAR block for the header record when exporting GEDCOM.
-The default is 
-<programlisting>
-"1 CHAR ASCII".
-</programlisting>
+An example HDR_CHAR value would be "1 CHAR ASCII".
 </para>
 </glossdef></glossentry>
 

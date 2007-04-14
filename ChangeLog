@@ -12,6 +12,10 @@
 
 	Fix link to freshmeat appindex page for lifelines.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Rewrite description of HDR_CHAR, to say it shouldn't be used.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
