@@ -46,6 +46,11 @@
 	S,E,X records get BOM if appropriate.
 	sfbug#1700723: edit source (etc) not getting BOM
 
+	* ChangeLog src/liflines/export.c
+
+	Fix archive_in_file to write output CHAR using output
+	encoding of transl_get_predefined_xlat(MINGD).
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

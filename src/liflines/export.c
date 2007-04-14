@@ -41,6 +41,7 @@
 #include "lloptions.h"
 #include "codesets.h"
 #include "impfeed.h"
+#include "xlat.h"
 
 /*********************************************
  * external/imported variables
@@ -94,7 +95,7 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	time_t curtime;
 	STRING str=0;
 	struct tag_trav_parm travparm;
-	STRING outcharset = gedcom_codeset_out;
+	xlat_gedout = transl_get_predefined_xlat(MINGD);
 
 	curtime = time(NULL);
 	pt = localtime(&curtime);
@@ -114,12 +115,16 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	/* header character set info */
 	/* should be outcharset; that is what is being used */
 	str = getlloptstr("HDR_CHAR", 0);
-	if (str)
+	if (str) {
 		fprintf(fp, "%s\n", str);
-	else
+	} else {
+		/* xlat_gedout is the actual conversion used, so
+		we should use the name of its output */
+		CNSTRING outcharset = xl_get_dest_codeset(xlat_gedout);
 		fprintf(fp, "1 CHAR %s\n", outcharset);
+	}
 	/* finished header */
-	xlat_gedout = transl_get_predefined_xlat(MINGD);
+
 	nindi = nfam = neven = nsour = nothr = 0;
 	memset(&travparm, 0, sizeof(travparm));
 	travparm.efeed = efeed;
