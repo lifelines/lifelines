@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.55
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.56 (beta)
+============================
+ - Write correct CHAR value to header when
+    exporting GEDCOM
+
 Bug fixes in 3.0.55 (beta)
 ============================
  - Fix name manipulation for non-ASCII letters

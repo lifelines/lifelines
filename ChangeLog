@@ -1,3 +1,13 @@
+2007-04-14 Perry Rapp
+
+	* ChangeLog NEWS lines.cfg.input
+	src/liflines/export.c
+
+	Fix export to write the output character set 
+	into the header CHAR line correctly by default,
+	instead of using hardcoded "ASCII" by default.
+	sfbug#1700485: Export not writing CHAR value in header correctly
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog

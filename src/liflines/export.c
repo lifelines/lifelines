@@ -39,7 +39,7 @@
 #include "llinesi.h"
 #include "feedback.h"
 #include "lloptions.h"
-
+#include "codesets.h"
 #include "impfeed.h"
 
 /*********************************************
@@ -89,11 +89,12 @@ static INT nindi, nfam, neven, nsour, nothr;
 BOOLEAN
 archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 {
-	char dat[30], tim[20];
-	struct tm *pt;
+	char dat[30]="", tim[20]="";
+	struct tm *pt=0;
 	time_t curtime;
-	STRING str;
+	STRING str=0;
 	struct tag_trav_parm travparm;
+	STRING outcharset = gedcom_codeset_out;
 
 	curtime = time(NULL);
 	pt = localtime(&curtime);
@@ -111,9 +112,12 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	str = getlloptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
 	fprintf(fp, "%s\n", str);
 	/* header character set info */
-	/* TODO: Shouldn't this be taken from the report output codeset? Perry,2005-10-02 */
-	str = getlloptstr("HDR_CHAR", "1 CHAR ASCII");
-	fprintf(fp, "%s\n", str);
+	/* should be outcharset; that is what is being used */
+	str = getlloptstr("HDR_CHAR", 0);
+	if (str)
+		fprintf(fp, "%s\n", str);
+	else
+		fprintf(fp, "1 CHAR %s\n", outcharset);
 	/* finished header */
 	xlat_gedout = transl_get_predefined_xlat(MINGD);
 	nindi = nfam = neven = nsour = nothr = 0;

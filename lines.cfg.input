@@ -9,7 +9,7 @@ dnl m4 lines.cfg.input > .linesrc
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2005-02-06
+# 2007-04-14
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -210,7 +210,8 @@ ifdef(`WINDOWS',
 # Specify the GEDC line for the header (of GEDCOM exports)
 #  This is meant to specify what character set was used in the data.
 #HDR_CHAR=1 CHAR ASCII
-# This sample version is the same as the default if none is given.
+# The default is the actual encoding used to output the GEDCOM
+# so this should not normally be overridden
 
 # Set the visit history size (# of entries remembered in visit history)
 #HistorySize=20
