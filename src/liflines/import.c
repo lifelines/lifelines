@@ -175,7 +175,9 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 				goto end_import;
 		}
 	}
-	if ((str = valueof_str(metadatatab, "CHAR"))!= NULL) {
+	if (!unistr && (str = valueof_str(metadatatab, "CHAR"))!= NULL) {
+		/* believe file's character set declaration
+		unless there was a BOM */
 		gdcodeset = strsave(str);
 	}
 

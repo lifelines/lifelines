@@ -63,6 +63,10 @@
 	sfbug#1700489: export not writing UTF-8 BOM
 	sfrfe#942414: utf-8 byte-order mark in gedcom
 
+	* ChangeLog src/liflines/import.c
+
+	Fix do_import to ignore incoming CHAR if GEDCOM has a BOM.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
