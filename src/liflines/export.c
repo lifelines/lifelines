@@ -95,7 +95,7 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	time_t curtime;
 	STRING str=0;
 	struct tag_trav_parm travparm;
-	xlat_gedout = transl_get_predefined_xlat(MINGD);
+	xlat_gedout = transl_get_predefined_xlat(MINGD); /* internal to GEDCOM */
 
 	curtime = time(NULL);
 	pt = localtime(&curtime);

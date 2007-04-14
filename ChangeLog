@@ -51,6 +51,10 @@
 	Fix archive_in_file to write output CHAR using output
 	encoding of transl_get_predefined_xlat(MINGD).
 
+	* ChangeLog src/gedlib/editvtab.c src/liflines/export.c
+
+	Cosmetic; comment a few translations.
+
 2007-04-13 Perry Rapp
 
 	* ChangeLog
