@@ -12,6 +12,10 @@
 	to write BOM to report files when appropriate. Similarly fix
 	set_output_file to prefix when opening new or empty file.
 
+	* ChangeLog src/interp/builtin.c
+
+	Cosmetic: improving comments.
+
 2007-04-14 Perry Rapp
 
 	* ChangeLog NEWS lines.cfg.input

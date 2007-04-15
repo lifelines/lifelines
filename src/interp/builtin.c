@@ -716,7 +716,7 @@ llrpt_setdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*===============================+
  * llrpt_dup -- Dup operation
- * usage: dup(LIST) -> VOID
+ * usage: dup(LIST) -> LIST
  *==============================*/
 PVALUE
 llrpt_dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1878,6 +1878,7 @@ llrpt_strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=========================================+
  * llrpt_nestr -- Compare two strings
  * usage: nestr(STRING, STRING) -> BOOLEAN
+ *  calls nestr function
  *========================================*/
 PVALUE
 llrpt_nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1905,6 +1906,7 @@ llrpt_nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=========================================+
  * llrpt_eqstr -- Compare two strings
  * usage: eqstr(STRING, STRING) -> BOOLEAN
+ *  calls eqstr function
  *========================================*/
 PVALUE
 llrpt_eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1932,6 +1934,7 @@ llrpt_eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=======================================+
  * llrpt_strtoint -- Convert string to integer
  * usage: strtoint(STRING) -> INT
+ *  calls atoi function
  *======================================*/
 PVALUE
 llrpt_strtoint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1951,7 +1954,7 @@ llrpt_strtoint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*============================+
  * llrpt_clear -- Clear a list, set, indiseq
- * usage: list(IDENT) -> VOID
+ * usage: clear(LIST) -> VOID
  *===========================*/
 PVALUE
 llrpt_clear (PNODE node, SYMTAB stab, BOOLEAN *eflg)
