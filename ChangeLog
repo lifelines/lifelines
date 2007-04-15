@@ -1,3 +1,10 @@
+2007-04-15 Perry Rapp
+
+	* ChangeLog docs/llines.1
+	*NEW docs/llexec.1
+
+	Add man page for llines.
+
 2007-04-14 Perry Rapp
 
 	* ChangeLog NEWS lines.cfg.input

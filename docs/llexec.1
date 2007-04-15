@@ -1,30 +1,24 @@
-.TH LLINES 1 "2007 Apr" "Lifelines 3.0.55"
+.\" Placeholder man page for LifeLines
+.TH llexec 1 "2007 Apr" "Lifelines 3.0.55"
 .SH NAME
-llines \- lifelines genealogy program
+llexec \- lifelines report processor
 .SH SYNOPSIS
-.B llines
-[\fIOPTION\fR]... 
-.br
-.B llines
-[\fIOPTION\fR]... \fIDatabase\fR
-.br
 .B llexec
 [\fIOPTION\fR]... \fIDatabase\fR
 .br
-.B dbverify
-[\fIOPTION\fR]... \fIDatabase\fR
 .SH DESCRIPTION
 .PP
-llines invokes the LifeLines genealogy program.
+llexec is a slimmed down version of the \fIllines\fR 
+lifelines genealogy program, used for executing reports
+from scripts.
 .PP
-For up to date documentation please refer to the Documentation 
-section of this man page.
+llexec has simplified and stubbed out input/output in
+place of llines curses interface, and expects to be invoked
+with a report on the commandline (via the \fI-x\fR option).
 .PP
-LifeLines is a program to manipulate genealogical information in
-lineage-linked GEDCOM format. It has a curses interface, and a
-built-in interpreter for its own genealogical report language.
+llexec uses almost all the same options as \fIllines\fR.
 .SH OPTIONS
-The following options are some of the options available for \fIllines\fR.
+The following options are some of the options available for \fIllexec\fR.
 .TP
 .BI \-C
 Specify configuration file location.
@@ -84,16 +78,10 @@ interface rather than the vt100 special characters
 .TP
 .BI \-?
 Display options summary, (on UNIX or Linux use the \-h option)
-.PP
-\fIllexec\fR is a version of \fIllines\fR without the user interface for
-non-interactive processing of report programs. (Typically used with the -x
-option.)
-.PP
-\fIdbverify\fR is a utility program to verify Lifelines databases.
-For information about options, run \fdbverify\fR with th \-h option.
 .SH FILES
-Lifelines looks for a configuration file for various settings. See description
-in the userguide for details.
+llexec looks for a configuration file for various settings, in
+exactly the same manner as \fIllines\fR. See the lifelines userguide
+for details.
 .SH DOCUMENTATION
 The LifeLines documentation should be installed as part of the installation,
 and may also be viewed at the project site:
