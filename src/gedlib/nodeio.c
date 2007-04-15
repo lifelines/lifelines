@@ -664,6 +664,17 @@ prefix_file_for_gedcom (FILE *fp)
 	prefix_file(fp, ttmo);
 }
 /*=====================================
+ * prefix_file_for_report - write BOM prefix to file if appropriate
+ *  This handles prepending BOM (byte order mark) to UTF-8 files
+ *===================================*/
+void
+prefix_file_for_report (FILE *fp)
+{
+	XLAT ttmo = transl_get_predefined_xlat(MINRP);
+	prefix_file(fp, ttmo);
+}
+
+/*=====================================
  * prefix_file - write BOM prefix to file if appropriate
  *  This handles prepending BOM (byte order mark) to UTF-8 files
  *===================================*/

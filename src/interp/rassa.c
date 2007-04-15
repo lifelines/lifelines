@@ -229,7 +229,7 @@ static BOOLEAN
 set_output_file (STRING outfname, BOOLEAN append)
 {
 	STRING modestr = append ? LLAPPENDTEXT:LLWRITETEXT;
-	STRING rptdir;
+	STRING rptdir=0;
 	if (Poutfp) {
 		finishrassa();
 		fclose(Poutfp);
@@ -242,6 +242,15 @@ set_output_file (STRING outfname, BOOLEAN append)
 		msg_error(_("Could not open file %s"), outfname);
 		return FALSE;
 	}
+	/* if appending to existing non-empty file, don't add BOM */
+	if (append) {
+		long offset = 0;
+		fseek(Poutfp, 0, SEEK_END);
+		offset = ftell(Poutfp);
+		if (offset > 0)
+			return TRUE;
+	}
+	prefix_file_for_report(Poutfp);
 	return TRUE;
 }
 /*====================================+
@@ -273,6 +282,7 @@ request_file (BOOLEAN *eflg)
 		stdfree(outfilename);
 	outfilename = fullpath;
 	strfree(&fname);
+	prefix_file_for_report(Poutfp);
 	return TRUE;
 }
 /*====================================+

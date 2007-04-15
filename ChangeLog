@@ -5,6 +5,13 @@
 
 	Add man page for llines.
 
+	* ChangeLog src/gedlib/nodeio.c src/hdrs/gedcom.h
+	src/interp/rassa.c
+
+	Add call from request_file to new function prefix_file_for_report
+	to write BOM to report files when appropriate. Similarly fix
+	set_output_file to prefix when opening new or empty file.
+
 2007-04-14 Perry Rapp
 
 	* ChangeLog NEWS lines.cfg.input
