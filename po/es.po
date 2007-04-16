@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.47\n"
+"Project-Id-Version: lifelines 3.0.55\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-04-13 16:37-0400\n"
-"PO-Revision-Date: 2007-02-16 00:40-0500\n"
+"PO-Revision-Date: 2007-04-15 00:40-0500\n"
 "Last-Translator: Larry Hamilton <lmh@hamiltongensociety.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
@@ -582,7 +582,7 @@ msgstr "¿Usted realmente desea poner al día a esta familia?"
 
 #: src/gedlib/messages.c:180
 msgid "Do you really want to update this source?"
-msgstr "¿Usted realmente desea poner al día esta fuente?"
+msgstr "¿Quisiera actualizar esta fuente en verdad?"
 
 #: src/gedlib/messages.c:181
 msgid "Do you really want to update this event?"
@@ -1423,7 +1423,7 @@ msgstr "Comando inválido."
 
 #: src/gedlib/messages.c:426
 msgid "enter y (yes) or n (no): "
-msgstr "agregue y (si) o n (no): "
+msgstr "agregue s (si) o n (no): "
 
 #: src/gedlib/messages.c:427
 msgid "yYnN"

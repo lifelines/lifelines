@@ -6,6 +6,10 @@
 	remove synopsis of other commands (which
 	now have their own man pages).
 
+	* ChangeLog po/es.po
+
+	Spanish translation tweaks by Larry Hamilton.
+
 2007-04-15 Perry Rapp
 
 	* ChangeLog docs/llines.1
