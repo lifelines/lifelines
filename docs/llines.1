@@ -1,21 +1,12 @@
 .TH LLINES 1 "2007 Apr" "Lifelines 3.0.55"
 .SH NAME
-llines \- lifelines genealogy program
+llines \- LifeLines genealogy program
 .SH SYNOPSIS
-.B llines
-[\fIOPTION\fR]... 
+.BI "llines [" OPTION ]... 
 .br
-.B llines
-[\fIOPTION\fR]... \fIDatabase\fR
-.br
-.B llexec
-[\fIOPTION\fR]... \fIDatabase\fR
-.br
-.B dbverify
-[\fIOPTION\fR]... \fIDatabase\fR
+.BI "llines [" OPTION ]... Database
 .SH DESCRIPTION
-.PP
-llines invokes the LifeLines genealogy program.
+\fIllines\fR invokes the LifeLines genealogy program.
 .PP
 For up to date documentation please refer to the Documentation 
 section of this man page.
@@ -68,7 +59,7 @@ Specify program output filename (eg, -o/tmp/mytests)
 .BI \-r
 Open database with read-only access (protect against other writer access)
 .TP
-.BI \-u \fICOLS\fP,\fIROWS
+.BI \-u \fICOLS\fP,\fIROWS\fR
 Specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
 .TP
 .BI \-w
@@ -90,10 +81,22 @@ non-interactive processing of report programs. (Typically used with the -x
 option.)
 .PP
 \fIdbverify\fR is a utility program to verify Lifelines databases.
-For information about options, run \fdbverify\fR with th \-h option.
+For information about options, run \fIdbverify\fR with the \-h option.
 .SH FILES
-Lifelines looks for a configuration file for various settings. See description
-in the userguide for details.
+.I /etc/lifelines.conf
+.br
+.I ~/.linesrc
+.br
+.I ~/lines.cfg
+.br
+.I ./linesrc
+.br
+.I ./lines.cfg
+.RS
+Possible locations for Lifelines configuration file
+Lifelines looks for a configuration file for various settings. See section
+\fISystem And User Properties\fR in the userguide for details.
+.RE
 .SH DOCUMENTATION
 The LifeLines documentation should be installed as part of the installation,
 and may also be viewed at the project site:
@@ -104,3 +107,8 @@ The normal installation process includes a large number of sample report
 programs that you can customize to suit your needs.  In the directory
 containing these reports you should file a file named index.html which gives a
 very brief summary of each report.
+.SH "SEE ALSO"
+.BR llexec (1),
+.BR dbverify (1),
+.BR btedit (1)
+

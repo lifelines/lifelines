@@ -1,3 +1,11 @@
+2007-04-16 Perry Rapp
+
+	* ChangeLog docs/llines.1
+
+	Add See Also to llines man page, and
+	remove synopsis of other commands (which
+	now have their own man pages).
+
 2007-04-15 Perry Rapp
 
 	* ChangeLog docs/llines.1
