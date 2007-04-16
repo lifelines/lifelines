@@ -1,3 +1,10 @@
+2007-04-16 Perry Rapp
+
+	* ChangeLog build/rpm/lifelines.spec
+
+	Add changelog entry to lifelines.spec for
+	Steve's yesterday change.
+
 2007-04-15 Stephen Dum
 	* ChangeLog build/rpm/lifelines.spec
 
