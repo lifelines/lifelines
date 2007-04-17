@@ -1,3 +1,11 @@
+2007-04-17 Perry Rapp
+
+	* ChangeLog ll-reportmanual.xml
+
+	Add some comments to sample report, and add
+	section on invoking reports, to explain purpose
+	of llexec program.
+
 2007-04-16 Perry Rapp
 
 	* ChangeLog build/rpm/lifelines.spec

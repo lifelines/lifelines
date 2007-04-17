@@ -128,13 +128,14 @@ Tutorial Ahnentafel report
 <para>
 
      For example, say you want <application>LifeLines</application>
-     to generate an ahnentafel. Such a report might look
-     like:
+     to generate an ahnentafel (ancestor) report for Tom Wetmore.
+	 Such a report would show Tom Wetmore, his parents, grandparents,
+	 great-grandparents, and so on. It would like like the following:
 
 <example>
 
 <title>
-Example of ahnentafel report   
+Example of ahnentafel report
 </title>
 
 <literallayout>
@@ -195,13 +196,20 @@ proc main ()
     getindi(indi)
     list(ilist)
     list(alist)
-    enqueue(ilist, indi)
-    enqueue(alist, 1)
+    enqueue(ilist, indi)  /* list of people needing to be displayed */
+    enqueue(alist, 1)     /* ancestor numbers for people on ilist */
+	
+	/*
+	Our basic loop is we take the next person who needs to be displayed,
+	display them, and then record their parents as needing to be displayed.
+	*/
     while (indi, dequeue(ilist)) {
+	  /* display person we just pulled off list */
       set(ahnen, dequeue(alist))
       d(ahnen) ". " name(indi) nl()
       if (e, birth(indi)) { " b. " long(e) nl() }
       if (e, death(indi)) { " d. " long(e) nl() }
+	  /* add person's parents to list to display */
       if (par, father(indi)) {
         enqueue(ilist, par)
         enqueue(alist, mul(2,ahnen))
@@ -517,6 +525,36 @@ proc main()
 
 }
 </programlisting>
+
+</sect1><sect1>
+
+<title>
+Invoking Reports
+</title>
+
+<para>
+As mentioned earlier, reports may be invoked interactively from the main
+menu via the <keycap>r</keycap> option from the main menu. 
+</para>
+
+<para>
+Alternatively, llines may be called with the -x option to have it
+immediately run a report. For example, to have lifelines run the
+example ahnentafel report above, on a database named wetmore, 
+this command
+<command>llines -x ahnentafel_tutorial wetmore</command>
+would be used.
+</para>
+
+<para>
+For more efficient operation from scripts, the lifelines
+distribution includes a smaller program
+<command>llexec</command>
+which includes all functionality of lifelines except the
+curses GUI. <command>llexec</command> is made specifically,
+therefore, for invocations such as
+<command>llexec -x ahnentafel_tutorial wetmore</command>
+</para>
 
 </sect1>
 
