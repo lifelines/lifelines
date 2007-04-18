@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: lifelines 3.0.55\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-04-13 16:37-0400\n"
-"PO-Revision-Date: 2007-04-15 00:40-0500\n"
+"PO-Revision-Date: 2007-04-17 23:10-0500\n"
 "Last-Translator: Larry Hamilton <lmh@hamiltongensociety.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
@@ -88,14 +88,13 @@ msgstr "No puede quitar a persona pasada de la familia."
 #: src/gedlib/messages.c:52
 msgid "lines [-adkrwiflntcuFxoCzI] [database]   # Use -F for Finnish database"
 msgstr ""
-"lines [-adkrwiflntcuFxoC] [base de datos]   # Use -F para Finlandés base de "
+"lines [-adkrwiflntcuFxoC] [base de datos] #Use -F para Finlandés base de "
 "datos"
 
 #: src/gedlib/messages.c:54
-#, fuzzy
 msgid "lines [-adkrwiflntcuxoCzI] [database]   # Finnish database"
 msgstr ""
-"lines [-adkrwiflntcuFxoC] [base de datos]   # Use -F para Finlandés base de "
+"lines [-adkrwiflntcuFxoC] [base de datos] #Use -F para Finlandés base de "
 "datos"
 
 #: src/gedlib/messages.c:56
@@ -1542,12 +1541,12 @@ msgstr "Elija de historia"
 msgid ""
 "Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access."
 msgstr ""
-"No puede combinar inmutable (- i) o inalterable (- r) con de lectura/"
-"grabación (- w) acceso."
+"No puede combinar inmutable (-i) o inalterable (-r) con de lectura/"
+"grabación (-w) acceso."
 
 #: src/gedlib/messages.c:462
 msgid "Cannot combine forceopen (-f) and lock (-l) flags."
-msgstr "No puede combinar forceopen (- f) y se traba (- l) las banderas."
+msgstr "No puede combinar forceopen (-f) y se traba (-l) las banderas."
 
 #: src/gedlib/messages.c:463
 msgid "Program"
