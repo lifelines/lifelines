@@ -1,3 +1,26 @@
+2007-04-19 Perry Rapp
+
+	* ChangeLog src/hdrs/list.h src/hdrs/screen.h
+	src/liflines/brwsmenu.c src/liflines/screen.c
+	src/stdlib/list.c
+
+	Add static list_uiwin to screen.c to track uiwindows.
+	New function add_uiwin in screen.c.
+	Add outdated field to struct tag_uiwindow, and
+	set upon language change, and recreate uiwindows
+	when outdated.
+	Comment out unused function delete_list_element.
+	New list function find_delete_list_elements.
+	Rename brwsmenu's on_lang_change to brwsmenu_on_lang_change.
+	New screen local function screen_on_lang_change.
+	New brwsmenu function register_brwsmenu_lang_callbacks.
+	New screen function register_screen_lang_callbacks.
+	Add uierase call to repaint_utils_menu so it can be called
+	on existing window.
+	Similar fixes to invoke_del_menu, repaint_delete_menu.
+	Similar fixes to invoke_add_menu, repaint_add_menu.
+	Similar fixes to invoke_extra_menu, repaint_extra_menu.
+
 2007-04-18 Perry Rapp
 
 	* ChangeLog po/es.po
@@ -6517,15 +6540,20 @@ Released 3.0.33 beta.
 	Reduce including of mystring.h. Minor refactoring of ll_toupper.
 
 2003-04-11 Stephen Dum
+
 	* ChangeLog docs/ll-reportmanual.xml
+
 	Add text to include description about main procedure usage
 
 2003-04-05 Stephen Dum
+
 	* ChangeLog, .linesrc, lines.cfg, reports/anniver.ll, reports/cron.ll
+
 	Correct OTHRREC reference to OTHR, merge some comments from lines.cfg
 	into .linesrc, so two files are more consistent. Fix typo in reports.
 
 2003-03-25 Stephen Dum
+
 	* ChangeLog reports/anniver.ll reports/cron.ll src/interp/interp.c
 	reports/Makefile.am reports/gen_index
 

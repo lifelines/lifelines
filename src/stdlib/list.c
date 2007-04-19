@@ -175,10 +175,12 @@ in_list (LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el))
 {
 	LNODE lnode;
 	INT index=0;
-	if (!list) return FALSE;
+	if (is_empty_list(list)) /* calls validate_list */
+		return FALSE;
 	lnode = lhead(list);
 	while (lnode) {
-		if((*func)(param, lelement(lnode))) return index;
+		if ((*func)(param, lelement(lnode)))
+			return index;
 		lnode = lnext(lnode);
 	}
 	validate_list(list);
@@ -298,7 +300,8 @@ pop_list (LIST list)
 {
 	LNODE node;
 	VPTR el;
-	if (is_empty_list(list)) return NULL;
+	if (is_empty_list(list)) /* calls validate_list */
+		return NULL;
 	node = lhead(list);
 	lhead(list) = lnext(node);
 	if (!lhead(list))
@@ -347,7 +350,8 @@ pop_list_tail (LIST list)
 {
 	LNODE node;
 	VPTR el;
-	if (is_empty_list(list)) return NULL;
+	if (is_empty_list(list)) /* calls validate_list */
+		return NULL;
 	node = ltail(list);
 	ltail(list) = lprev(node);
 	if (!ltail(list))
@@ -582,6 +586,7 @@ unlock_list_node (LNODE node)
  * delete_list_element - Delete element using array access
  *  Call func (unless NULL) on element before deleting
  *================================================*/
+#ifdef UNUSED_CODE
 BOOLEAN
 delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 {
@@ -600,6 +605,19 @@ delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 		stdfree(node);
 		return TRUE;
 	}
+	detach_node_from_list(list, node);
+	return TRUE;
+}
+#endif
+/*==================================================
+ * detach_node_from_list - Remove node from list
+ *  does not delete node, simply detaches it from the list
+ *  and decrements list's count
+ *================================================*/
+static void
+detach_node_from_list (LIST list, LNODE node)
+{
+	validate_list(list);
 	if (lprev(node)) {
 		lnext(lprev(node)) = lnext(node);
 	}
@@ -614,7 +632,39 @@ delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 	}
 	--llen(list);
 	validate_list(list);
-	return TRUE;
+}
+/*==================================================
+ * find_delete_list_elements - Delete qualifying element(s)
+ *  list:      [I/O] list to change
+ *  func:      [IN]  test function to qualify elements (return TRUE to choose)
+ *  deleteall: [IN]  true to delete all qualifying, false to delete first
+ * returns number elements deleted
+ *================================================*/
+INT
+find_delete_list_elements (LIST list, VPTR param,
+	BOOLEAN (*func)(VPTR param, VPTR el), BOOLEAN deleteall)
+{
+	LNODE lnode = NULL;
+	INT count = 0;
+	if (is_empty_list(list)) /* calls validate_list */
+		return 0;
+	ASSERT(func);
+	lnode = lhead(list);
+	while (lnode) {
+		LNODE lnext = lnext(lnode);
+		if ((*func)(param, lelement(lnode))) {
+			detach_node_from_list(list, lnode);
+			++count;
+			if (ltype(list) == LISTDOFREE) {
+				free_list_element(lelement(lnode));
+			}
+			if (!deleteall)
+				return count;
+		}
+		lnode = lnext;
+	}
+	return count;
+
 }
 /*==================================================
  * trav_list_head - Return tail node of list

@@ -130,6 +130,7 @@ extern STRING qSmn_tt_dsin,qSmn_tt_inds,qSmn_tt_inrp;
 
 /* alphabetical */
 static void add_shims_info(LIST list);
+static void add_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(STRING msg);
 static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
 	, STRING buffer, INT buflen);
@@ -153,6 +154,7 @@ static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
 static void display_status(STRING text);
+static BOOLEAN does_match(VPTR param, VPTR el);
 static void edit_tt_menu(void);
 static void edit_user_options(void);
 static void edit_place_table(void);
@@ -169,6 +171,8 @@ static void place_cursor_main(void);
 static void place_std_msg(void);
 static void platform_postcurses_init(void);
 static void refresh_main(void);
+static void register_screen_lang_callbacks(BOOLEAN registering);
+static void remove_uiwin(UIWINDOW uiwin);
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
 /*static void repaint_tt_menu(UIWINDOW uiwin);*/
@@ -177,6 +181,7 @@ static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
 static int resize_screen_impl(char * errmsg, int errsize);
 static void run_report(BOOLEAN picklist);
+static void screen_on_lang_change(VPTR uparm);
 static RECORD search_for_one_record(void);
 static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
 BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
@@ -216,6 +221,7 @@ static BOOLEAN msg_flag = FALSE; /* need to show msg list */
 static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
 static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
+static LIST list_uiwin = 0; /* list of all uiwindows */
 
 /* we ought to use chtype, but only if it is typedef'd, but there is no
 test to see if a type is typedef'd */
@@ -443,6 +449,7 @@ create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, IN
 	if (!uiwin) {
 		*puiw = uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
 		memset(uiwin, 0, sizeof(*uiwin));
+		add_uiwin(uiwin);
 	}
 	if (uiwin->name)
 		stdfree((STRING)uiwin->name);
@@ -454,6 +461,36 @@ create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, IN
 	}
 	uiw_rows(uiwin) = rows;
 	uiw_cols(uiwin) = cols;
+}
+/*==========================================
+ * add_uiwin -- Record new uiwin into master list
+ *========================================*/
+static void
+add_uiwin (UIWINDOW uiwin)
+{
+	if (!list_uiwin)
+		list_uiwin = create_list2(LISTNOFREE);
+	enqueue_list(list_uiwin, uiwin);
+}
+/*==========================================
+ * remove_uiwin -- Remove uiwin from master list
+ *========================================*/
+static void
+remove_uiwin (UIWINDOW uiwin)
+{
+	VPTR param = uiwin;
+	BOOLEAN deleteall = FALSE;
+	ASSERT(list_uiwin);
+	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
+}
+/*==========================================
+ * does_match -- Used as callback to remove_uiwin
+ *  in finding an element in a list
+ *========================================*/
+static BOOLEAN
+does_match (VPTR param, VPTR el)
+{
+	return param == el;
 }
 /*==========================================
  * create_boxed_newwin2 -- Create a window with
@@ -482,6 +519,7 @@ delete_uiwindow (UIWINDOW * uiw)
 {
 	if (*uiw) {
 		UIWINDOW w = *uiw;
+		remove_uiwin(w);
 		ASSERT(uiw_win(w));
 		delwin(uiw_win(w));
 		ASSERT(w->name);
@@ -1403,7 +1441,10 @@ invoke_add_menu (void)
 
 	if (!add_menu_win) {
 		create_newwin2(&add_menu_win, "add_menu", 8, 66);
-		/* paint it for the first & only time (it's static) */
+		add_menu_win->outdated = TRUE; /* needs drawing */
+	}
+
+	if (add_menu_win->outdated) {
 		repaint_add_menu(add_menu_win);
 	}
 	uiwin = add_menu_win;
@@ -1436,7 +1477,9 @@ invoke_del_menu (void)
 	WINDOW * win=0;
 	if (!del_menu_win) {
 		create_newwin2(&del_menu_win, "del_menu", 9, 66);
-		/* paint it for the first & only time (it's static) */
+		del_menu_win->outdated = TRUE; /* needs drawing */
+	}
+	if (del_menu_win->outdated) {
 		repaint_delete_menu(del_menu_win);
 	}
 	uiwin = del_menu_win;
@@ -1789,7 +1832,9 @@ invoke_utils_menu (void)
 
 	if (!utils_menu_win) {
 		create_newwin2(&utils_menu_win, "utils_menu", 14, 66);
-		/* paint it for the first & only time (it's static) */
+		utils_menu_win->outdated = TRUE; /* needs drawing */
+	}
+	if (utils_menu_win->outdated) {
 		repaint_utils_menu(utils_menu_win);
 	}
 	uiwin = utils_menu_win;
@@ -1832,7 +1877,9 @@ invoke_extra_menu (RECORD *prec)
 
 	if (!extra_menu_win) {
 		create_newwin2(&extra_menu_win, "extra_menu", 13,66);
-		/* paint it for the first & only time (it's static) */
+		extra_menu_win->outdated = TRUE; /* needs drawing */
+	}
+	if (extra_menu_win->outdated) {
 		repaint_extra_menu(extra_menu_win);
 	}
 	uiwin = extra_menu_win;
@@ -2622,6 +2669,7 @@ repaint_add_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_add_ttl));
 	mvccwaddstr(win, row++, 4, _(qSmn_add_indi));
@@ -2638,6 +2686,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_del_ttl));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_chil));
@@ -2655,6 +2704,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_uttl));
 	mvccwaddstr(win, row++, 4, _(qSmn_utsave));
@@ -2677,6 +2727,7 @@ repaint_extra_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
+	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_xttl));
 	mvccwaddstr(win, row++, 4, _(qSmn_xxbsour));
@@ -2947,4 +2998,36 @@ clear_status_display (void)
 		status_showing[0] = 0;
 		place_std_msg();
 	}
+}
+/*============================
+ * register_screen_lang_callbacks -- (un)register our callbacks
+ *  for language or codeset changes
+ *==========================*/
+static void
+register_screen_lang_callbacks (BOOLEAN registering)
+{
+	if (registering) {
+		register_uilang_callback(screen_on_lang_change, 0);
+		register_uicodeset_callback(screen_on_lang_change, 0);
+	} else {
+		unregister_uilang_callback(screen_on_lang_change, 0);
+		unregister_uicodeset_callback(screen_on_lang_change, 0);
+	}
+}
+/*============================
+ * screen_on_lang_change -- UI language  or codeset has changed
+ *==========================*/
+static void
+screen_on_lang_change (VPTR uparm)
+{
+	LIST_ITER listit=0;
+	VPTR ptr=0;
+	uparm = uparm; /* unused */
+	listit = begin_list(list_uiwin);
+	while (next_list_ptr(listit, &ptr)) {
+		UIWINDOW uiwin = (UIWINDOW)ptr;
+		uiwin->outdated = TRUE;
+	}
+	end_list_iter(&listit);
+
 }

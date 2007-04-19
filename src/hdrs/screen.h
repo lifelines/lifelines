@@ -90,6 +90,7 @@ typedef struct tag_uiwindow {
 	struct tag_uiwindow * child;
 	BOOLEAN permsub;   /* TRUE if a fixed subwindow */
 	BOOLEAN dynamic;   /* TRUE means delete when finished */
+	BOOLEAN outdated;  /* for language changes */
 	INT rows;
 	INT cols;
 	INT cur_y;         /* row for input cursor */

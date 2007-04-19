@@ -51,7 +51,8 @@ static void browsescreen_init(struct BrowseScreenInfo * sinfo , STRING title, IN
 	, INT MinRows, INT MaxRows
 	, INT MenuTop, INT MenuLeft, INT MenuWidth
 	, INT MenuSize, MenuItem ** MenuItems);
-static void on_lang_change(VPTR uparm);
+static void brwsmenu_on_lang_change(VPTR uparm);
+static void register_brwsmenu_lang_callbacks(BOOLEAN registering);
 
 /*********************************************
  * local variables
@@ -573,8 +574,7 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 		, MenuSize, MenuItems);
 
 	if (!f_reloading) {
-		register_uilang_callback(on_lang_change, 0);
-		register_uicodeset_callback(on_lang_change, 0);
+		register_brwsmenu_lang_callbacks(TRUE);
 	}
 }
 /*============================
@@ -585,8 +585,7 @@ menuitem_terminate (void)
 {
 	INT i;
 	if (!f_reloading) {
-		unregister_uilang_callback(on_lang_change, 0);
-		unregister_uicodeset_callback(on_lang_change, 0);
+		register_brwsmenu_lang_callbacks(FALSE);
 	}
 	for (i=1; i<=MAX_SCREEN; i++) {
 		struct BrowseScreenInfo * sinfo=&f_BrowseScreenInfo[i];
@@ -596,11 +595,25 @@ menuitem_terminate (void)
 	f_initialized = FALSE;
 }
 /*============================
- * on_lang_change -- UI language has changed
- *  (or codeset has changed, we also use for that callback)
+ * register_brwsmenu_lang_callbacks -- (un)register our callbacks
+ *  for language or codeset changes
  *==========================*/
 static void
-on_lang_change (VPTR uparm)
+register_brwsmenu_lang_callbacks (BOOLEAN registering)
+{
+	if (registering) {
+		register_uilang_callback(brwsmenu_on_lang_change, 0);
+		register_uicodeset_callback(brwsmenu_on_lang_change, 0);
+	} else {
+		unregister_uilang_callback(brwsmenu_on_lang_change, 0);
+		unregister_uicodeset_callback(brwsmenu_on_lang_change, 0);
+	}
+}
+/*============================
+ * brwsmenu_on_lang_change -- UI language or codeset has changed
+ *==========================*/
+static void
+brwsmenu_on_lang_change (VPTR uparm)
 {
 	uparm = uparm; /* unused */
 	f_reloading = TRUE;

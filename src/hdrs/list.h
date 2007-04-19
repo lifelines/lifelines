@@ -80,7 +80,8 @@ void destroy_list(LIST list);
 
 /* working with elements of list */
 void back_list(LIST, VPTR);
-BOOLEAN delete_list_element(LIST list, INT index1b, ELEMENT_DESTRUCTOR func);
+/*BOOLEAN delete_list_element(LIST list, INT index1b, ELEMENT_DESTRUCTOR func);*/
+INT find_delete_list_elements(LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el), BOOLEAN deleteall);
 VPTR dequeue_list(LIST);
 void enqueue_list(LIST, VPTR);
 VPTR get_list_element(LIST, INT, LIST_CREATE_VALUE);
