@@ -34,6 +34,15 @@
 	New function ll_bindtextdomain (to catch LocaleDir changes).
 	Fix customlocale to UiLocaleMessages works.
 
+	* ChangeLog src/gedlib/gedcomi.h src/gedlib/llgettext.c
+	src/gedlib/locales.c src/hdrs/gedcom.h src/liflines/llexec.c
+	src/liflines/main.c src/tools/dbverify.c
+
+	Fix LocaleDir handling; LOCALEDIR is only available in
+	src/liflines directory, so pass it to llgettext at startup.
+	New llgettext function llgettext_set_default_localedir.
+	New llgettext function update_textdomain_localedir.
+
 2007-04-18 Perry Rapp
 
 	* ChangeLog po/es.po

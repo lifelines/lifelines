@@ -23,12 +23,21 @@
 
 static TABLE gt_localeDirs = NULL; /* most recent */ /* leaks */
 static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
+static STRING gt_defLocaleDir = 0; /* compiled default */ /* leak */
 
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
+/*==================================================
+ * llgettext_set_default_localedir -- save LOCALEDIR
+ *================================================*/
+void
+llgettext_set_default_localedir (CNSTRING localeDir)
+{
+	strupdate(&gt_defLocaleDir, localeDir);
+}
 /*==================================================
  * llgettext_init -- initialize gettext with initially
  * desired codeset. This may be changed later by user
@@ -40,25 +49,48 @@ void
 llgettext_init (CNSTRING domain, CNSTRING codeset)
 {
 #if ENABLE_NLS
-	STRING newLocaleDir = 0;
-
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
 	set_gettext_codeset(domain, codeset);
 
-	/* allow run-time specification of locale directory */
-	/* (LOCALEDIR is compile-time) */
-	newLocaleDir = getlloptstr("LocaleDir", LOCALEDIR);
-	if (newLocaleDir) {
-		ll_bindtextdomain(domain, newLocaleDir);
-	}
+	update_textdomain_localedir(domain, "Ui");
 
 #else /* ENABLE_NLS */
 	domain = domain;
 	codeset = codeset;
 #endif /* ENABLE_NLS */
 }
+/*==================================================
+ * update_textdomain_localedir --
+ *  call bindtextdomain with current localedir
+ *  domain:  [IN] package domain (eg, "lifelines")
+ *  prefix:  [IN] "Ui" or "Rpt"
+ *================================================*/
+void
+update_textdomain_localedir (CNSTRING domain, CNSTRING prefix)
+{
+	STRING newLocaleDir = 0;
+	char keyname[30] = ""; /* eg, "UiLocaleDir" */
+	/* allow run-time specification of locale directory */
 
+	/* Default to compile-time specified (LOCALEDIR) */
+	newLocaleDir = gt_defLocaleDir;
+
+	/* Check for config setting for LocaleDir
+	newLocaleDir = getlloptstr("LocaleDir", newLocaleDir);
+
+	/* Check for Ui or Rpt specific setting, eg, UiLocaleDir */
+	if (prefix && prefix[0]) {
+		snprintf(keyname, sizeof(keyname), "%sLocaleDir", prefix);
+		newLocaleDir = getlloptstr(keyname, newLocaleDir);
+	}
+
+	if (newLocaleDir) {
+		/* ll_bindtextdomain is caching; it will only submit
+		real changes to gettext version */
+		ll_bindtextdomain(domain, newLocaleDir);
+	}
+}
 /*=================================
  * ll_bindtextdomain -- interceptor for bindtextdomain calls
  *  to send ui callbacks

@@ -146,6 +146,8 @@ main (INT argc, char **argv)
 	
 #if ENABLE_NLS
 	/* setup gettext translation */
+	/* NB: later we may revise locale dir or codeset
+	based on user settings */
 	ll_bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
@@ -292,6 +294,7 @@ prompt_for_db:
 
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
+	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
 		llwprintf("%s", msg);
 		goto finish;

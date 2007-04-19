@@ -507,6 +507,7 @@ void lldb_set_btree(LLDATABASE lldb, void * btree);
 /* llgettext.c */
 CNSTRING get_gettext_codeset(void);
 void ll_bindtextdomain(CNSTRING domain, CNSTRING localeDir);
+void llgettext_set_default_localedir(CNSTRING defLocaleDir);
 void set_gettext_codeset(CNSTRING domain, CNSTRING codeset);
 
 /* misc.c */

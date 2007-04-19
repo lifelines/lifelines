@@ -17,6 +17,7 @@ NODE is_cel_loaded(CACHEEL cel);
 /* llgettext.c */
 void init_win32_gettext_shim(void);
 void llgettext_init(CNSTRING domain, CNSTRING codeset);
+void update_textdomain_localedir(CNSTRING domain, CNSTRING prefix);
 
 /* names.c */
 RECORD id_by_key(CNSTRING name, char ctype);

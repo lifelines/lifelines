@@ -28,6 +28,7 @@
 #include "icvt.h"
 #include "lloptions.h"
 #include "date.h"
+#include "gedcomi.h"
 
 /*********************************************
  * local function prototypes
@@ -240,9 +241,7 @@ termlocale (void)
 void
 uilocale (void)
 {
-	STRING str = getlloptstr("LocaleDir", LOCALEDIR);
-	str = getlloptstr("UiLocaleDir", str);
-	ll_bindtextdomain(PACKAGE, str);
+	update_textdomain_localedir(PACKAGE, "Ui");
 
 	customlocale("UiLocale");
 }

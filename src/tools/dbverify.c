@@ -1362,6 +1362,7 @@ main (int argc, char **argv)
 		todo.check_missing_data_records = 1;
 
 	/* initialize options & misc. stuff */
+	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(0, &msg, 0)) {
 		printf("%s\n", msg);
 		goto done;

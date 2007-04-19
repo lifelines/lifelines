@@ -273,6 +273,7 @@ prompt_for_db:
 	platform_init();
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
+	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
 		llwprintf("%s", msg);
 		goto finish;
