@@ -11,6 +11,11 @@ Bug fixes in 3.0.56 (beta)
  - Use GEDCOM CHAR value if present
  - Write UTF-8 BOM to edit files under windows,
     when appropriate.
+ - Write UTF-8 BOM to reports under windows,
+    when appropriate.
+ - Fix so setting LocaleDir (or UiLocaleDir) works
+    from database options.
+
 
 Bug fixes in 3.0.55 (beta)
 ============================

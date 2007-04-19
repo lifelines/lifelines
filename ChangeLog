@@ -43,6 +43,10 @@
 	New llgettext function llgettext_set_default_localedir.
 	New llgettext function update_textdomain_localedir.
 
+	* ChangeLog NEWS
+
+	Record latest bugfixes into NEWS.
+
 2007-04-18 Perry Rapp
 
 	* ChangeLog po/es.po
