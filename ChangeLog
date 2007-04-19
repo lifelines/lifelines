@@ -21,6 +21,12 @@
 	Similar fixes to invoke_add_menu, repaint_add_menu.
 	Similar fixes to invoke_extra_menu, repaint_extra_menu.
 
+	* ChangeLog src/liflines/screen.c
+
+	Call register_screen_lang_callbacks from init_screen and
+	term_screen, and fix repainting routines to clear outdated
+	flags.
+
 2007-04-18 Perry Rapp
 
 	* ChangeLog po/es.po

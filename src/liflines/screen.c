@@ -276,7 +276,11 @@ set_screen_graphical (BOOLEAN graphical)
 int
 init_screen (char * errmsg, int errsize)
 {
-	return resize_screen_impl(errmsg, errsize);
+	int rtn = resize_screen_impl(errmsg, errsize);
+	if (rtn) { /* success */
+		register_screen_lang_callbacks(TRUE);
+	}
+	return rtn;
 }
 /*============================
  * update_screen_size -- Recreate windows etc if screen size has changed
@@ -373,6 +377,7 @@ resize_screen_impl (char * errmsg, int errsize)
 void
 term_screen (void)
 {
+	register_screen_lang_callbacks(FALSE);
 	menuitem_terminate();
 	active_uiwin = 0;
 	destroy_windows();
@@ -2677,6 +2682,7 @@ repaint_add_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_add_chil));
 	mvccwaddstr(win, row++, 4, _(qSmn_add_spou));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
+	uiwin->outdated = FALSE;
 }
 /*=====================================
  * repaint_delete_menu -- Draw menu choices for main delete item menu
@@ -2695,6 +2701,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_del_fam));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_any));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
+	uiwin->outdated = FALSE;
 }
 /*=====================================
  * repaint_utils_menu -- 
@@ -2718,6 +2725,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_utusropt));
 	mvccwaddstr(win, row++, 4, _(qSmn_mmcset));
 	mvccwaddstr(win, row++, 4, _(qSmn_quit));
+	uiwin->outdated = FALSE;
 }
 /*=====================================
  * repaint_extra_menu -- 
@@ -2740,6 +2748,7 @@ repaint_extra_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_xxaothr));
 	mvccwaddstr(win, row++, 4, _(qSmn_xxeothr));
 	mvccwaddstr(win, row++, 4, _(qSmn_quit));
+	uiwin->outdated = FALSE;
 }
 /*============================
  * activate_uiwin -- 
