@@ -133,7 +133,7 @@ main (INT argc, char **argv)
 
 #if ENABLE_NLS
 	/* setup gettext translation */
-	bindtextdomain(PACKAGE, LOCALEDIR);
+	ll_bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
 

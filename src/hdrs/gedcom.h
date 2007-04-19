@@ -505,8 +505,9 @@ void lldb_close(LLDATABASE *plldb);
 void lldb_set_btree(LLDATABASE lldb, void * btree);
 
 /* llgettext.c */
-void set_gettext_codeset(CNSTRING domain, CNSTRING codeset);
 CNSTRING get_gettext_codeset(void);
+void ll_bindtextdomain(CNSTRING domain, CNSTRING localeDir);
+void set_gettext_codeset(CNSTRING domain, CNSTRING codeset);
 
 /* misc.c */
 INT xrefval(char ntype, STRING str);

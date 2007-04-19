@@ -21,6 +21,7 @@
  * local variables
  *********************************************/
 
+static TABLE gt_localeDirs = NULL; /* most recent */ /* leaks */
 static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
 
 /*********************************************
@@ -39,7 +40,7 @@ void
 llgettext_init (CNSTRING domain, CNSTRING codeset)
 {
 #if ENABLE_NLS
-	STRING e;
+	STRING newLocaleDir = 0;
 
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
@@ -47,15 +48,38 @@ llgettext_init (CNSTRING domain, CNSTRING codeset)
 
 	/* allow run-time specification of locale directory */
 	/* (LOCALEDIR is compile-time) */
-	e = getlloptstr("LocaleDir", "");
-	if (e && *e) {
-		bindtextdomain(domain, e);
-		locales_notify_language_change(); /* TODO: is this necessary ? 2002-09-29, Perry */
+	newLocaleDir = getlloptstr("LocaleDir", LOCALEDIR);
+	if (newLocaleDir) {
+		ll_bindtextdomain(domain, newLocaleDir);
 	}
 
 #else /* ENABLE_NLS */
 	domain = domain;
 	codeset = codeset;
+#endif /* ENABLE_NLS */
+}
+
+/*=================================
+ * ll_bindtextdomain -- interceptor for bindtextdomain calls
+ *  to send ui callbacks
+ *===============================*/
+void
+ll_bindtextdomain (CNSTRING domain, CNSTRING localeDir)
+{
+#if ENABLE_NLS
+	STRING oldLocaleDir = 0;
+
+	if (!gt_localeDirs) {
+		gt_localeDirs = create_table_str();
+	}
+	/* skip if already set */
+	oldLocaleDir = valueof_str(gt_localeDirs, domain);
+	if (eqstr_ex(oldLocaleDir, localeDir))
+		return;
+	insert_table_str(gt_localeDirs, domain, localeDir);
+
+	bindtextdomain(domain, localeDir);
+	locales_notify_language_change();
 #endif /* ENABLE_NLS */
 }
 /*=================================
@@ -74,7 +98,12 @@ init_win32_gettext_shim (void)
 	{
 		if (intlshim_set_property("dll_path", e))
 		{
-			bindtextdomain(PACKAGE, LOCALEDIR);
+			/* clear cache of bindtextdomain calls */
+			if (gt_localeDirs) {
+				destroy_table(gt_localeDirs);
+				gt_localeDirs = 0;
+			}
+			ll_bindtextdomain(PACKAGE, LOCALEDIR);
 			textdomain(PACKAGE);
 		}
 		/* tell gettext where to find iconv */

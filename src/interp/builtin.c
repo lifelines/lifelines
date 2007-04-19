@@ -267,12 +267,12 @@ llrpt_gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #ifdef ENABLE_NLS
 	textdomain = zs_str(irptinfo(node)->textdomain);
 	localepath = zs_str(irptinfo(node)->localepath);
-	bindtextdomain(textdomain, localepath);
+	ll_bindtextdomain(textdomain, localepath);
 	set_gettext_codeset(textdomain, "work_around_set_gettext_codeset_cache");
 	set_gettext_codeset(textdomain, int_codeset);
 	str2 = irptinfo(node)->fullpath;
 	str2 = _(str);
-	bindtextdomain(PACKAGE, localepath);
+	ll_bindtextdomain(PACKAGE, localepath);
 	str = str2;
 #endif
 	newval = create_pvalue_from_string(str);

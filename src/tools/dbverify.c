@@ -1315,7 +1315,7 @@ main (int argc, char **argv)
 #endif /* HAVE_SETLOCALE */
 
 #if ENABLE_NLS
-	bindtextdomain(PACKAGE, LOCALEDIR);
+	ll_bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 #endif
 

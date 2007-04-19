@@ -59,9 +59,9 @@ static BOOLEAN customized_loc = FALSE;
 #ifdef ENABLE_NLS
 static BOOLEAN customized_msgs = FALSE;
 #endif /* ENABLE_NLS */
-static STRING  current_coll = NULL; /* most recent */
-static STRING  current_msgs = NULL; /* most recent */
-static STRING  rptlocalestr = NULL; /* if set by report program */
+static STRING current_coll = NULL; /* most recent */
+static STRING current_msgs = NULL; /* most recent */
+static STRING rptlocalestr = NULL; /* if set by report program */
 static LIST f_uicodeset_callbacks = NULL; /* collection of callbacks for UI codeset changes */
 static LIST f_uilang_callbacks = NULL; /* collection of callbacks for UI language changes */
 
@@ -240,6 +240,10 @@ termlocale (void)
 void
 uilocale (void)
 {
+	STRING str = getlloptstr("LocaleDir", LOCALEDIR);
+	str = getlloptstr("UiLocaleDir", str);
+	ll_bindtextdomain(PACKAGE, str);
+
 	customlocale("UiLocale");
 }
 /*==========================================
@@ -250,6 +254,12 @@ uilocale (void)
 void
 rptlocale (void)
 {
+	/* 2007-04-19, Perry:
+	 I'm not sure what textdomain to use here
+	 rptinfo has a textdomain (see llrpt_gettext)
+	 but that is per-rptinfo
+	*/
+
 	customlocale("RptLocale");
 	if (rptlocalestr) /* report has specified locale */
 		llsetlocale(LC_ALL, rptlocalestr);

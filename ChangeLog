@@ -27,6 +27,13 @@
 	term_screen, and fix repainting routines to clear outdated
 	flags.
 
+	* ChangeLog src/gedlib/llgettext.c src/gedlib/locales.c
+	src/hdrs/gedcom.h src/interp/builtin.c src/liflines/llexec.c
+	src/liflines/main.c src/tools/dbverify.c
+
+	New function ll_bindtextdomain (to catch LocaleDir changes).
+	Fix customlocale to UiLocaleMessages works.
+
 2007-04-18 Perry Rapp
 
 	* ChangeLog po/es.po
