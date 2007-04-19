@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.51\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-13 16:37-0400\n"
+"POT-Creation-Date: 2007-04-19 17:36-0400\n"
 "PO-Revision-Date: 2006-07-30 08:00+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -2657,83 +2657,83 @@ msgstr "onze"
 msgid "twelve"
 msgstr "douze"
 
-#: src/interp/builtin.c:2170
+#: src/interp/builtin.c:2173
 msgid "the arg to empty is not a list, table or set"
 msgstr "le paramètre de empty n'est pas une liste, table ou ensemble"
 
-#: src/interp/builtin.c:2280
+#: src/interp/builtin.c:2283
 msgid "the arg to length is not a list, table or set"
 msgstr "le paramètre de length n'est pas une liste, table ou ensemble"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "He"
 msgstr "Il"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "he"
 msgstr "il"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "His"
 msgstr "Son"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "his"
 msgstr "son"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "him"
 msgstr "lui"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "She"
 msgstr "Elle"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "she"
 msgstr "elle"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "Her"
 msgstr "Son"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her"
 msgstr "son"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her_"
 msgstr "son"
 
-#: src/interp/builtin.c:2848
+#: src/interp/builtin.c:2851
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) la personne n'a pas de nom"
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Sunday"
 msgstr "dimanche"
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Monday"
 msgstr "lundi"
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Tuesday"
 msgstr "mardi"
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Wednesday"
 msgstr "mercredi"
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Thursday"
 msgstr "jeudi"
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Friday"
 msgstr "vendredi"
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Saturday"
 msgstr "samedi"
 
@@ -2938,15 +2938,15 @@ msgstr "Interruption :"
 msgid "Could not open file %s"
 msgstr "Impossible d'ouvrir le fichier %s"
 
-#: src/interp/rassa.c:262
+#: src/interp/rassa.c:271
 msgid "Report stopping due to error opening output file"
 msgstr "Rapport arrêté à cause d'une erreur d'ouverture du fichier de sortie"
 
-#: src/interp/rassa.c:264
+#: src/interp/rassa.c:273
 msgid "Report stopping due to lack of output file"
 msgstr "Rapport arrêté à cause de l'absence de fichier de sortie"
 
-#: src/interp/rassa.c:320
+#: src/interp/rassa.c:330
 msgid "illegal call to pos."
 msgstr "Appel invalide à la pos."
 
@@ -2961,419 +2961,419 @@ msgstr[1] "Il y a %d références non résolues."
 msgid "?  Other menu choices"
 msgstr "?  Autres choix"
 
-#: src/liflines/brwsmenu.c:68
+#: src/liflines/brwsmenu.c:69
 msgid "e  Edit the person"
 msgstr "e  Éditer personne"
 
-#: src/liflines/brwsmenu.c:69
+#: src/liflines/brwsmenu.c:70
 msgid "e  Edit the family"
 msgstr "e  Éditer famille "
 
-#: src/liflines/brwsmenu.c:70
+#: src/liflines/brwsmenu.c:71
 msgid "e  Edit record"
 msgstr "e  Éditer enrg"
 
-#: src/liflines/brwsmenu.c:71
+#: src/liflines/brwsmenu.c:72
 msgid "e  Edit top person"
 msgstr "e  Éditer pers. haut"
 
-#: src/liflines/brwsmenu.c:72
+#: src/liflines/brwsmenu.c:73
 msgid "e  Edit top family"
 msgstr "e  Éditer famille haut"
 
-#: src/liflines/brwsmenu.c:73
+#: src/liflines/brwsmenu.c:74
 msgid "f  Browse to father"
 msgstr "f  Atteindre père"
 
-#: src/liflines/brwsmenu.c:74
+#: src/liflines/brwsmenu.c:75
 msgid "f  Browse top father"
 msgstr "f  Atteindre père haut"
 
-#: src/liflines/brwsmenu.c:75
+#: src/liflines/brwsmenu.c:76
 msgid "m  Browse to mother"
 msgstr "m  Atteindre mère"
 
-#: src/liflines/brwsmenu.c:76
+#: src/liflines/brwsmenu.c:77
 msgid "m  Browse top mother"
 msgstr "m  Atteindre mère haut"
 
-#: src/liflines/brwsmenu.c:77
+#: src/liflines/brwsmenu.c:78
 msgid "s  Browse to spouse/s"
 msgstr "s  Atteindre conjoint/s"
 
-#: src/liflines/brwsmenu.c:78
+#: src/liflines/brwsmenu.c:79
 msgid "s  Browse top spouse/s"
 msgstr "s  Att. conjoint/s haut"
 
-#: src/liflines/brwsmenu.c:79
+#: src/liflines/brwsmenu.c:80
 msgid "c  Browse to children"
 msgstr "c  Atteindre enfants"
 
-#: src/liflines/brwsmenu.c:80
+#: src/liflines/brwsmenu.c:81
 msgid "c  Browse top children"
 msgstr "c  Att. enfants haut"
 
-#: src/liflines/brwsmenu.c:81
+#: src/liflines/brwsmenu.c:82
 msgid "o  Browse to older sib"
 msgstr "o  Atteindre f/s aîné"
 
-#: src/liflines/brwsmenu.c:82
+#: src/liflines/brwsmenu.c:83
 msgid "y  Browse to younger sib"
 msgstr "y  Atteindre f/s cadet"
 
-#: src/liflines/brwsmenu.c:83
+#: src/liflines/brwsmenu.c:84
 msgid "g  Browse to family"
 msgstr "g  Atteindre famille"
 
-#: src/liflines/brwsmenu.c:84
+#: src/liflines/brwsmenu.c:85
 msgid "u  Browse to parents"
 msgstr "u  Atteindre parents"
 
-#: src/liflines/brwsmenu.c:85
+#: src/liflines/brwsmenu.c:86
 msgid "b  Browse to persons"
 msgstr "b  Atteindre personne"
 
-#: src/liflines/brwsmenu.c:86
+#: src/liflines/brwsmenu.c:87
 msgid "t  Browse to top"
 msgstr "t  Atteindre fen. haut"
 
-#: src/liflines/brwsmenu.c:87
+#: src/liflines/brwsmenu.c:88
 msgid "b  Browse to bottom"
 msgstr "b  Atteindre fen. bas"
 
-#: src/liflines/brwsmenu.c:88
+#: src/liflines/brwsmenu.c:89
 msgid "h  Add as spouse"
 msgstr "h  Ajouter comme conjoint"
 
-#: src/liflines/brwsmenu.c:89
+#: src/liflines/brwsmenu.c:90
 msgid "i  Add as child"
 msgstr "i  Ajouter comme enfant"
 
-#: src/liflines/brwsmenu.c:90
+#: src/liflines/brwsmenu.c:91
 msgid "s  Add spouse to family"
 msgstr "s  Ajouter épouse"
 
-#: src/liflines/brwsmenu.c:91
+#: src/liflines/brwsmenu.c:92
 msgid "a  Add child to family"
 msgstr "a  Ajouter enfant"
 
-#: src/liflines/brwsmenu.c:92
+#: src/liflines/brwsmenu.c:93
 msgid "a  Add family"
 msgstr "a  Ajouter famille"
 
-#: src/liflines/brwsmenu.c:93
+#: src/liflines/brwsmenu.c:94
 msgid "x  Swap two families"
 msgstr "x  Inverser 2 familles"
 
-#: src/liflines/brwsmenu.c:94
+#: src/liflines/brwsmenu.c:95
 msgid "x  Swap two children"
 msgstr "x  Inverser 2 enfants"
 
-#: src/liflines/brwsmenu.c:96
+#: src/liflines/brwsmenu.c:97
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr "%c  Ordre des enfants"
 
-#: src/liflines/brwsmenu.c:97
+#: src/liflines/brwsmenu.c:98
 msgid "x  Switch top/bottom"
 msgstr "x  Inverser Haut/Bas"
 
-#: src/liflines/brwsmenu.c:98
+#: src/liflines/brwsmenu.c:99
 msgid "n  Create new person"
 msgstr "n  Ajouter personne"
 
-#: src/liflines/brwsmenu.c:99
+#: src/liflines/brwsmenu.c:100
 msgid "a  Create new family"
 msgstr "a  Ajouter famille"
 
-#: src/liflines/brwsmenu.c:100
+#: src/liflines/brwsmenu.c:101
 msgid "tt Enter tandem mode"
 msgstr "tt Mode tandem"
 
-#: src/liflines/brwsmenu.c:101
+#: src/liflines/brwsmenu.c:102
 msgid "tt Enter family tandem"
 msgstr "tt Mode tandem familles"
 
-#: src/liflines/brwsmenu.c:102
+#: src/liflines/brwsmenu.c:103
 msgid "zi Browse to indi"
 msgstr "zi Atteindre pers"
 
-#: src/liflines/brwsmenu.c:103
+#: src/liflines/brwsmenu.c:104
 msgid "zz Browse to any"
 msgstr "zz Atteindre"
 
-#: src/liflines/brwsmenu.c:104
+#: src/liflines/brwsmenu.c:105
 msgid "r  Remove as spouse"
 msgstr "r  Suppr. conjoint"
 
-#: src/liflines/brwsmenu.c:105
+#: src/liflines/brwsmenu.c:106
 msgid "d  Remove as child"
 msgstr "d  Suppr. enfant"
 
-#: src/liflines/brwsmenu.c:106
+#: src/liflines/brwsmenu.c:107
 msgid "r  Remove spouse from"
 msgstr "r  Suppr. lien conjoint"
 
-#: src/liflines/brwsmenu.c:107
+#: src/liflines/brwsmenu.c:108
 msgid "d  Remove child from"
 msgstr "d  Suppr. lien enfant"
 
-#: src/liflines/brwsmenu.c:108
+#: src/liflines/brwsmenu.c:109
 msgid "(  Scroll up"
 msgstr "(  Déplac. haut"
 
-#: src/liflines/brwsmenu.c:109
+#: src/liflines/brwsmenu.c:110
 msgid ")  Scroll down"
 msgstr ")  Déplac. bas"
 
-#: src/liflines/brwsmenu.c:110
+#: src/liflines/brwsmenu.c:111
 msgid "]  Increase tree depth"
 msgstr "]  Aug. profond. arbre"
 
-#: src/liflines/brwsmenu.c:111
+#: src/liflines/brwsmenu.c:112
 msgid "[  Decrease tree depth"
 msgstr "[  Dim. profond. arbre"
 
-#: src/liflines/brwsmenu.c:112
+#: src/liflines/brwsmenu.c:113
 msgid "(t Scroll top up"
 msgstr "(t Déplac. fh haut"
 
-#: src/liflines/brwsmenu.c:113
+#: src/liflines/brwsmenu.c:114
 msgid ")t Scroll top down"
 msgstr ")t Déplac. fh bas"
 
-#: src/liflines/brwsmenu.c:114
+#: src/liflines/brwsmenu.c:115
 msgid "(b Scroll bottom up"
 msgstr "(b Déplac. fb haut"
 
-#: src/liflines/brwsmenu.c:115
+#: src/liflines/brwsmenu.c:116
 msgid ")b Scroll bottom down"
 msgstr ")b Déplac. fb bas"
 
-#: src/liflines/brwsmenu.c:116
+#: src/liflines/brwsmenu.c:117
 msgid "(( Scroll both up"
 msgstr "(( Déplac. 2f haut"
 
-#: src/liflines/brwsmenu.c:117
+#: src/liflines/brwsmenu.c:118
 msgid ")) Scroll both down"
 msgstr ")) Déplac. 2f bas"
 
-#: src/liflines/brwsmenu.c:118
+#: src/liflines/brwsmenu.c:119
 msgid "#  Toggle childnos"
 msgstr "#  N° enfants (o/n)"
 
-#: src/liflines/brwsmenu.c:119
+#: src/liflines/brwsmenu.c:120
 msgid "!g GEDCOM mode"
 msgstr "!g Mode GEDCOM"
 
-#: src/liflines/brwsmenu.c:120
+#: src/liflines/brwsmenu.c:121
 msgid "!x GEDCOMX mode"
 msgstr "!x Mode GEDCOMX"
 
-#: src/liflines/brwsmenu.c:121
+#: src/liflines/brwsmenu.c:122
 msgid "!t GEDCOMT mode"
 msgstr "!t Mode GEDCOMT"
 
-#: src/liflines/brwsmenu.c:122
+#: src/liflines/brwsmenu.c:123
 msgid "!a Ancestors mode"
 msgstr "!a Mode ascendants"
 
-#: src/liflines/brwsmenu.c:123
+#: src/liflines/brwsmenu.c:124
 msgid "!d Descendants mode"
 msgstr "!d Mode descendants"
 
-#: src/liflines/brwsmenu.c:124
+#: src/liflines/brwsmenu.c:125
 msgid "!n Normal mode"
 msgstr "!n Mode normal"
 
-#: src/liflines/brwsmenu.c:125
+#: src/liflines/brwsmenu.c:126
 msgid "p  Pedigree mode"
 msgstr "p  Mode ascendants"
 
-#: src/liflines/brwsmenu.c:126
+#: src/liflines/brwsmenu.c:127
 msgid "!! Cycle mode"
 msgstr "!! Autre mode"
 
-#: src/liflines/brwsmenu.c:128
+#: src/liflines/brwsmenu.c:129
 msgid "(1-9)  Browse to child"
 msgstr "(1-9)  Atteindre enfant"
 
-#: src/liflines/brwsmenu.c:129
+#: src/liflines/brwsmenu.c:130
 msgid "y  Turn on sync"
 msgstr "y  Activer sync"
 
-#: src/liflines/brwsmenu.c:130
+#: src/liflines/brwsmenu.c:131
 msgid "A  Advanced view"
 msgstr "A  Vue détaillée"
 
-#: src/liflines/brwsmenu.c:131
+#: src/liflines/brwsmenu.c:132
 msgid "tc Tandem to children"
 msgstr "tc Tandem enfants"
 
-#: src/liflines/brwsmenu.c:132
+#: src/liflines/brwsmenu.c:133
 msgid "tf Tandem to father/s"
 msgstr "tf Tandem père/s"
 
-#: src/liflines/brwsmenu.c:133
+#: src/liflines/brwsmenu.c:134
 msgid "tg Tandem to family/s"
 msgstr "tg Tandem familles"
 
-#: src/liflines/brwsmenu.c:134
+#: src/liflines/brwsmenu.c:135
 msgid "f  Browse to fathers"
 msgstr "f  Atteindre pères"
 
-#: src/liflines/brwsmenu.c:135
+#: src/liflines/brwsmenu.c:136
 msgid "m  Browse to mothers"
 msgstr "m  Atteindre mères"
 
-#: src/liflines/brwsmenu.c:136
+#: src/liflines/brwsmenu.c:137
 msgid "tm Tandem to mother/s"
 msgstr "tm Tandem mères"
 
-#: src/liflines/brwsmenu.c:137
+#: src/liflines/brwsmenu.c:138
 msgid "ts Tandem to spouse/s"
 msgstr "ts Tandem conjoints"
 
-#: src/liflines/brwsmenu.c:138
+#: src/liflines/brwsmenu.c:139
 msgid "tu Tandem to parents"
 msgstr "tu Tandem parents"
 
-#: src/liflines/brwsmenu.c:139
+#: src/liflines/brwsmenu.c:140
 msgid "<  Enlarge menu area"
 msgstr "<  Agrandir zone menu"
 
-#: src/liflines/brwsmenu.c:140
+#: src/liflines/brwsmenu.c:141
 msgid ">  Shrink menu area"
 msgstr ">  Réduire zone menu"
 
-#: src/liflines/brwsmenu.c:141
+#: src/liflines/brwsmenu.c:142
 msgid "M> More menu cols"
 msgstr "M> Ajouter cols menu"
 
-#: src/liflines/brwsmenu.c:142
+#: src/liflines/brwsmenu.c:143
 msgid "M< Less menu cols"
 msgstr "M< Suppr. cols menu"
 
-#: src/liflines/brwsmenu.c:143
+#: src/liflines/brwsmenu.c:144
 msgid "+  Next in db"
 msgstr "+  Suivant base"
 
-#: src/liflines/brwsmenu.c:144
+#: src/liflines/brwsmenu.c:145
 msgid "-  Prev in db"
 msgstr "-  Précédent base"
 
-#: src/liflines/brwsmenu.c:145
+#: src/liflines/brwsmenu.c:146
 msgid "d  Copy top to bottom"
 msgstr "d  Copier haut vers bas"
 
-#: src/liflines/brwsmenu.c:146
+#: src/liflines/brwsmenu.c:147
 msgid "j  Merge bottom to top"
 msgstr "j  Fusionner bas à haut"
 
-#: src/liflines/brwsmenu.c:147
+#: src/liflines/brwsmenu.c:148
 msgid "j  Move down list"
 msgstr "j  Suivant liste"
 
-#: src/liflines/brwsmenu.c:148
+#: src/liflines/brwsmenu.c:149
 msgid "k  Move up list"
 msgstr "k  Précédent liste"
 
-#: src/liflines/brwsmenu.c:149
+#: src/liflines/brwsmenu.c:150
 msgid "e  Edit this person"
 msgstr "e  Éditer personne"
 
-#: src/liflines/brwsmenu.c:150
+#: src/liflines/brwsmenu.c:151
 msgid "i  Browse this person"
 msgstr "i  Atteindre personne"
 
-#: src/liflines/brwsmenu.c:151
+#: src/liflines/brwsmenu.c:152
 msgid "m  Mark this person"
 msgstr "m  Marquer personne"
 
-#: src/liflines/brwsmenu.c:152
+#: src/liflines/brwsmenu.c:153
 msgid "d  Delete from list"
 msgstr "d  Supprimer de la liste"
 
-#: src/liflines/brwsmenu.c:153
+#: src/liflines/brwsmenu.c:154
 msgid "n  Name this list"
 msgstr "n  Nommer cette liste"
 
-#: src/liflines/brwsmenu.c:154
+#: src/liflines/brwsmenu.c:155
 msgid "b  Browse new persons"
 msgstr "b  Atteindre autres"
 
-#: src/liflines/brwsmenu.c:155
+#: src/liflines/brwsmenu.c:156
 msgid "a  Add to this list"
 msgstr "a  Ajouter à la liste"
 
-#: src/liflines/brwsmenu.c:156
+#: src/liflines/brwsmenu.c:157
 msgid "x  Swap mark/current"
 msgstr "x  Basculer marque"
 
-#: src/liflines/brwsmenu.c:157
+#: src/liflines/brwsmenu.c:158
 msgid "$s  List sources"
 msgstr "$s Liste sources"
 
-#: src/liflines/brwsmenu.c:158
+#: src/liflines/brwsmenu.c:159
 msgid "$n  List notes"
 msgstr "$n Liste notes"
 
-#: src/liflines/brwsmenu.c:159
+#: src/liflines/brwsmenu.c:160
 msgid "$$  List references"
 msgstr "$$ Liste références"
 
-#: src/liflines/brwsmenu.c:160
+#: src/liflines/brwsmenu.c:161
 msgid "^b  History/back"
 msgstr "&b Préc. historique"
 
-#: src/liflines/brwsmenu.c:161
+#: src/liflines/brwsmenu.c:162
 msgid "^f  History/fwd"
 msgstr "&f Suiv. historique"
 
-#: src/liflines/brwsmenu.c:162
+#: src/liflines/brwsmenu.c:163
 msgid "^l  History list"
 msgstr "&l Liste historique"
 
-#: src/liflines/brwsmenu.c:163
+#: src/liflines/brwsmenu.c:164
 msgid "^c Clear history"
 msgstr "&c Effacer histor."
 
-#: src/liflines/brwsmenu.c:164
+#: src/liflines/brwsmenu.c:165
 msgid "^xb  ChngHist/back"
 msgstr "&xb ChngHist préc."
 
-#: src/liflines/brwsmenu.c:165
+#: src/liflines/brwsmenu.c:166
 msgid "^xf  ChngHist/fwd"
 msgstr "&xf ChngHist suiv."
 
-#: src/liflines/brwsmenu.c:166
+#: src/liflines/brwsmenu.c:167
 msgid "^xl  ChngHist list"
 msgstr "&xl ChngHist liste"
 
-#: src/liflines/brwsmenu.c:167
+#: src/liflines/brwsmenu.c:168
 msgid "^xc Clear ChngHist"
 msgstr "&xc Eff. ChngHist"
 
-#: src/liflines/brwsmenu.c:169
+#: src/liflines/brwsmenu.c:170
 #, no-c-format
 msgid "%s  Add source"
 msgstr "%s Ajouter source"
 
-#: src/liflines/brwsmenu.c:171
+#: src/liflines/brwsmenu.c:172
 #, no-c-format
 msgid "%e  Add event"
 msgstr "%e Ajouter événement"
 
-#: src/liflines/brwsmenu.c:173
+#: src/liflines/brwsmenu.c:174
 #, no-c-format
 msgid "%o  Add other"
 msgstr "%o Ajouter divers"
 
-#: src/liflines/brwsmenu.c:176
+#: src/liflines/brwsmenu.c:177
 msgid "B  Browse new family"
 msgstr "B  Atteindre famille"
 
-#: src/liflines/brwsmenu.c:489
+#: src/liflines/brwsmenu.c:490
 msgid "Missing title"
 msgstr "Titre manquant"
 
@@ -3391,7 +3391,7 @@ msgid_plural "%d children"
 msgstr[0] "%d enfant"
 msgstr[1] "%d enfants"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1481
+#: src/liflines/error.c:61 src/tools/dbverify.c:1482
 msgid "Fatal Error"
 msgstr "Erreur fatale"
 
@@ -3404,39 +3404,39 @@ msgstr "ERREUR FATALE"
 msgid "  in file <%s> at line %d\n"
 msgstr "  dans le fichier <%s> à la ligne %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1492
+#: src/liflines/error.c:70 src/tools/dbverify.c:1493
 msgid "ASSERT failure"
 msgstr "ASSERT échec"
 
-#: src/liflines/import.c:172
+#: src/liflines/import.c:169
 msgid "This is not a lineage linked GEDCOM file."
 msgstr "Ce n'est pas un fichier GEDCOM 'lineage linked'."
 
-#: src/liflines/import.c:173
+#: src/liflines/import.c:170
 msgid "Proceed anyway?"
 msgstr "Poursuivre quand même ?"
 
-#: src/liflines/import.c:188
+#: src/liflines/import.c:186
 msgid "No current internal codeset, so no codeset conversion can be done"
 msgstr "Pas de jeu de car. interne, aucune conversion ne peut être effectuée"
 
-#: src/liflines/import.c:189
+#: src/liflines/import.c:187
 msgid "Proceed without codeset conversion?"
 msgstr "Traiter sans conversion de jeu de caractères ?"
 
-#: src/liflines/import.c:206
+#: src/liflines/import.c:204
 #, c-format
 msgid "%d warning during import"
 msgid_plural "%d warnings during import"
 msgstr[0] "%d avertissement pendant l'importation"
 msgstr[1] "%d avertissements pendant l'importation"
 
-#: src/liflines/import.c:222
+#: src/liflines/import.c:220
 #, c-format
 msgid "Cannot convert codeset (from <%s> to <%s>)"
 msgstr "Impossible de convertir le jeu de caractères (de <%s> à <%s>)"
 
-#: src/liflines/import.c:225
+#: src/liflines/import.c:223
 msgid "Enter codeset to assume (* for none)"
 msgstr "Entrez le jeu de caractères à utiliser (* aucun)"
 
@@ -3508,11 +3508,11 @@ msgstr "Durée de l'importation %s (durée iu %s)\n"
 msgid "The database was not saved."
 msgstr "La base n'a pas été enregistrée."
 
-#: src/liflines/main.c:367
+#: src/liflines/main.c:370
 msgid "Warning: database codeset unspecified"
 msgstr "Avertissement : base sans jeu de caractères spécifié"
 
-#: src/liflines/main.c:369
+#: src/liflines/main.c:372
 msgid "Warning: not all conversions available"
 msgstr "Avertissement : toutes les conversions ne sont pas disponibles"
 
@@ -3606,12 +3606,12 @@ msgstr "motif :"
 msgid "Enter pattern to match against author."
 msgstr "Entrez un motif de recherche pour un refn."
 
-#: src/liflines/screen.c:306
+#: src/liflines/screen.c:316
 #, c-format
 msgid "initscr failed"
 msgstr "échec de initscr"
 
-#: src/liflines/screen.c:323
+#: src/liflines/screen.c:333
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n"
@@ -3619,7 +3619,7 @@ msgstr ""
 "La taille de fenêtre utilisée (%d,%d) est trop grande pour votre terminal (%"
 "d,%d).\n"
 
-#: src/liflines/screen.c:331
+#: src/liflines/screen.c:341
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
@@ -3627,194 +3627,194 @@ msgstr ""
 "La taille de fenêtre utilisée (%d,%d) est trop petite pour LifeLines (%d, %"
 "d).\n"
 
-#: src/liflines/screen.c:662
+#: src/liflines/screen.c:705
 #, fuzzy
 msgid "Search results"
 msgstr "Résultats de la recherche :"
 
-#: src/liflines/screen.c:769
+#: src/liflines/screen.c:812
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(pg %d/%d)"
 
-#: src/liflines/screen.c:1387
+#: src/liflines/screen.c:1430
 msgid "No conversion"
 msgstr "Pas de conversion"
 
-#: src/liflines/screen.c:1468
+#: src/liflines/screen.c:1516
 msgid "Internal codeset"
 msgstr "Page de codes interne"
 
-#: src/liflines/screen.c:1471
+#: src/liflines/screen.c:1519
 msgid "Internal UTF-8: Yes"
 msgstr "UTF-8 en interne : oui"
 
-#: src/liflines/screen.c:1473
+#: src/liflines/screen.c:1521
 msgid "Internal UTF-8: No"
 msgstr "UTF-8 en interne : non"
 
-#: src/liflines/screen.c:1477
+#: src/liflines/screen.c:1525
 msgid "Locales are enabled."
 msgstr "Locales disponibles."
 
-#: src/liflines/screen.c:1479
+#: src/liflines/screen.c:1527
 msgid "Locales are disabled."
 msgstr "Locales non disponibles."
 
-#: src/liflines/screen.c:1482
+#: src/liflines/screen.c:1530
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Support de Langage National) inclus."
 
-#: src/liflines/screen.c:1488
+#: src/liflines/screen.c:1536
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Support de Langage National) non-inclus."
 
-#: src/liflines/screen.c:1501
+#: src/liflines/screen.c:1549
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (conversion de code de page) inclus."
 
-#: src/liflines/screen.c:1503
+#: src/liflines/screen.c:1551
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (conversion de code de page) non inclus."
 
-#: src/liflines/screen.c:1505
+#: src/liflines/screen.c:1553
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Collate locale au démarrage : %s"
 
-#: src/liflines/screen.c:1508
+#: src/liflines/screen.c:1556
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Message locale au démarrage : %s"
 
-#: src/liflines/screen.c:1511
+#: src/liflines/screen.c:1559
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Collate locale courant : %s"
 
-#: src/liflines/screen.c:1514
+#: src/liflines/screen.c:1562
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Messages locale courant : %s"
 
-#: src/liflines/screen.c:1517
+#: src/liflines/screen.c:1565
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Routine de conversion : %s"
 
-#: src/liflines/screen.c:1521
+#: src/liflines/screen.c:1569
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "jeu de car. GUI : %s"
 
-#: src/liflines/screen.c:1524
+#: src/liflines/screen.c:1572
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "Jeu de caractères GUI en sortie : %s"
 
-#: src/liflines/screen.c:1526
+#: src/liflines/screen.c:1574
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "Jeu de caractères GUI en entrée : %s"
 
-#: src/liflines/screen.c:1531
+#: src/liflines/screen.c:1579
 #, c-format
 msgid "editor codeset: %s"
 msgstr "Jeu de caractères éditeur : %s"
 
-#: src/liflines/screen.c:1534
+#: src/liflines/screen.c:1582
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "Jeu de caractères éditeur en sortie : %s"
 
-#: src/liflines/screen.c:1536
+#: src/liflines/screen.c:1584
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "Jeu de caractères éditeur en entrée : %s"
 
-#: src/liflines/screen.c:1541
+#: src/liflines/screen.c:1589
 #, c-format
 msgid "report codeset: %s"
 msgstr "Jeu de caractères rapports : %s"
 
-#: src/liflines/screen.c:1544
+#: src/liflines/screen.c:1592
 #, c-format
 msgid "report output codeset: %s"
 msgstr "Jeu de caractères rapport en sortie : %s"
 
-#: src/liflines/screen.c:1546
+#: src/liflines/screen.c:1594
 #, c-format
 msgid "report input codeset: %s"
 msgstr "Jeu de caractères rapport en entrée : %s"
 
-#: src/liflines/screen.c:1551
+#: src/liflines/screen.c:1599
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "jeu de car. GEDCOM : %s"
 
-#: src/liflines/screen.c:1554
+#: src/liflines/screen.c:1602
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "Jeu de caractères gedcom en sortie : %s"
 
-#: src/liflines/screen.c:1556
+#: src/liflines/screen.c:1604
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "Jeu de caractères gedcom en entrée : %s"
 
-#: src/liflines/screen.c:1564
+#: src/liflines/screen.c:1612
 msgid "UTF-8 charprops loaded"
 msgstr "Propriétés UTF-8 chargées"
 
-#: src/liflines/screen.c:1566
+#: src/liflines/screen.c:1614
 msgid "UTF-8 charprops not loaded"
 msgstr "Propriétés UTF-8 non chargées"
 
-#: src/liflines/screen.c:1570
+#: src/liflines/screen.c:1618
 msgid "Codeset information"
 msgstr "Information de code de page :"
 
-#: src/liflines/screen.c:1587
+#: src/liflines/screen.c:1635
 #, c-format
 msgid "gettext dll: %s"
 msgstr "dll gettext : %s"
 
-#: src/liflines/screen.c:1591
+#: src/liflines/screen.c:1639
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "version dll gettext : %s "
 
-#: src/liflines/screen.c:1596
+#: src/liflines/screen.c:1644
 msgid "gettext dll had no version"
 msgstr "dll gettext sans version"
 
-#: src/liflines/screen.c:1601
+#: src/liflines/screen.c:1649
 msgid "no gettext dll found"
 msgstr "dll gettext non trouvée"
 
-#: src/liflines/screen.c:1610
+#: src/liflines/screen.c:1658
 #, c-format
 msgid "iconv dll: %s"
 msgstr "dll iconv : %s"
 
-#: src/liflines/screen.c:1614
+#: src/liflines/screen.c:1662
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "version dll iconv : %s"
 
-#: src/liflines/screen.c:1619
+#: src/liflines/screen.c:1667
 msgid "iconv dll had no version"
 msgstr "dll iconv sans version"
 
-#: src/liflines/screen.c:1624
+#: src/liflines/screen.c:1672
 msgid "no iconv dll found"
 msgstr "dll iconv non trouvée"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1930
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Impossible de modifier le jeu de caractères dans une base non-vide"
 
-#: src/liflines/screen.c:1979
+#: src/liflines/screen.c:2031
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Menu principal"
 
@@ -4470,30 +4470,30 @@ msgstr "Enregistrements manquants (%s)"
 msgid "Fixed missing data record (%s)"
 msgstr "Correction enregistrements manquants (%s)"
 
-#: src/tools/dbverify.c:1453
+#: src/tools/dbverify.c:1454
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d erreur"
 msgstr[1] "%d erreurs"
 
-#: src/tools/dbverify.c:1457
+#: src/tools/dbverify.c:1458
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d corrigé"
 msgstr[1] "%d corrigés"
 
-#: src/tools/dbverify.c:1464
+#: src/tools/dbverify.c:1465
 msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
-#: src/tools/dbverify.c:1483
+#: src/tools/dbverify.c:1484
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 
-#: src/tools/dbverify.c:1488
+#: src/tools/dbverify.c:1489
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "Dans le fichier <%s> à la ligne %d"

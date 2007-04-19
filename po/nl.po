@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-13 16:37-0400\n"
+"POT-Creation-Date: 2007-04-19 17:36-0400\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -2688,83 +2688,83 @@ msgstr "elf"
 msgid "twelve"
 msgstr "twaalf"
 
-#: src/interp/builtin.c:2170
+#: src/interp/builtin.c:2173
 msgid "the arg to empty is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2280
+#: src/interp/builtin.c:2283
 msgid "the arg to length is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "He"
 msgstr "Hij"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "he"
 msgstr "hij"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "His"
 msgstr "Zijn"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "his"
 msgstr "zijn"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "him"
 msgstr "hem"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "She"
 msgstr "Zij"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "she"
 msgstr "zij"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "Her"
 msgstr "Haar"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her"
 msgstr "haar"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her_"
 msgstr "haar_"
 
-#: src/interp/builtin.c:2848
+#: src/interp/builtin.c:2851
 msgid "(trimname) person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Saturday"
 msgstr ""
 
@@ -2968,17 +2968,17 @@ msgstr "Bezig met afbreken: "
 msgid "Could not open file %s"
 msgstr "Kon bestand %s niet openen"
 
-#: src/interp/rassa.c:262
+#: src/interp/rassa.c:271
 msgid "Report stopping due to error opening output file"
 msgstr ""
 "Bezig met stoppen van melding wegens fout bij het openen van het "
 "uitvoerbestand"
 
-#: src/interp/rassa.c:264
+#: src/interp/rassa.c:273
 msgid "Report stopping due to lack of output file"
 msgstr "Bezig met stoppen van melden wegens gebrek aan uitvoerbestand"
 
-#: src/interp/rassa.c:320
+#: src/interp/rassa.c:330
 msgid "illegal call to pos."
 msgstr ""
 
@@ -2993,420 +2993,420 @@ msgstr[1] "Er waren %d onuitgemaakte verwijzingen."
 msgid "?  Other menu choices"
 msgstr "?  Andere menukeuzes"
 
-#: src/liflines/brwsmenu.c:68
+#: src/liflines/brwsmenu.c:69
 msgid "e  Edit the person"
 msgstr "e  De persoon bewerken"
 
-#: src/liflines/brwsmenu.c:69
+#: src/liflines/brwsmenu.c:70
 msgid "e  Edit the family"
 msgstr "e  De familie bewerken"
 
-#: src/liflines/brwsmenu.c:70
+#: src/liflines/brwsmenu.c:71
 msgid "e  Edit record"
 msgstr "e  De opgave bewerken"
 
-#: src/liflines/brwsmenu.c:71
+#: src/liflines/brwsmenu.c:72
 msgid "e  Edit top person"
 msgstr "e  Bovenste persoon bewerken"
 
-#: src/liflines/brwsmenu.c:72
+#: src/liflines/brwsmenu.c:73
 #, fuzzy
 msgid "e  Edit top family"
 msgstr "e  De familie bewerken"
 
-#: src/liflines/brwsmenu.c:73
+#: src/liflines/brwsmenu.c:74
 msgid "f  Browse to father"
 msgstr "f  Naar vader bladeren"
 
-#: src/liflines/brwsmenu.c:74
+#: src/liflines/brwsmenu.c:75
 msgid "f  Browse top father"
 msgstr "f  Naar bovenste vader bladeren"
 
-#: src/liflines/brwsmenu.c:75
+#: src/liflines/brwsmenu.c:76
 msgid "m  Browse to mother"
 msgstr "m  Naar moeder bladeren"
 
-#: src/liflines/brwsmenu.c:76
+#: src/liflines/brwsmenu.c:77
 msgid "m  Browse top mother"
 msgstr "m  Naar bovenste moeder bladeren"
 
-#: src/liflines/brwsmenu.c:77
+#: src/liflines/brwsmenu.c:78
 msgid "s  Browse to spouse/s"
 msgstr "s  Naar partner(s) bladeren"
 
-#: src/liflines/brwsmenu.c:78
+#: src/liflines/brwsmenu.c:79
 msgid "s  Browse top spouse/s"
 msgstr "s  Naar bovenste partner(s) bladeren"
 
-#: src/liflines/brwsmenu.c:79
+#: src/liflines/brwsmenu.c:80
 msgid "c  Browse to children"
 msgstr "c  Naar kinderen bladeren"
 
-#: src/liflines/brwsmenu.c:80
+#: src/liflines/brwsmenu.c:81
 msgid "c  Browse top children"
 msgstr "c  Naar bovenste kinderen bladeren"
 
-#: src/liflines/brwsmenu.c:81
+#: src/liflines/brwsmenu.c:82
 msgid "o  Browse to older sib"
 msgstr "o  Naar oudere broer of zus bladeren"
 
-#: src/liflines/brwsmenu.c:82
+#: src/liflines/brwsmenu.c:83
 msgid "y  Browse to younger sib"
 msgstr "y  Naar jongere broer of zus bladeren"
 
-#: src/liflines/brwsmenu.c:83
+#: src/liflines/brwsmenu.c:84
 msgid "g  Browse to family"
 msgstr "g  Naar familie bladeren"
 
-#: src/liflines/brwsmenu.c:84
+#: src/liflines/brwsmenu.c:85
 msgid "u  Browse to parents"
 msgstr "u  Naar ouders bladeren"
 
-#: src/liflines/brwsmenu.c:85
+#: src/liflines/brwsmenu.c:86
 msgid "b  Browse to persons"
 msgstr "b  Naar personen bladeren"
 
-#: src/liflines/brwsmenu.c:86
+#: src/liflines/brwsmenu.c:87
 msgid "t  Browse to top"
 msgstr "t  Naar top bladeren"
 
-#: src/liflines/brwsmenu.c:87
+#: src/liflines/brwsmenu.c:88
 msgid "b  Browse to bottom"
 msgstr "b  Naar onderzijde bladeren"
 
-#: src/liflines/brwsmenu.c:88
+#: src/liflines/brwsmenu.c:89
 msgid "h  Add as spouse"
 msgstr "h  Als partner toevoegen"
 
-#: src/liflines/brwsmenu.c:89
+#: src/liflines/brwsmenu.c:90
 msgid "i  Add as child"
 msgstr "i  Als kind toevoegen"
 
-#: src/liflines/brwsmenu.c:90
+#: src/liflines/brwsmenu.c:91
 msgid "s  Add spouse to family"
 msgstr "s  Partner aan familie toevoegen"
 
-#: src/liflines/brwsmenu.c:91
+#: src/liflines/brwsmenu.c:92
 msgid "a  Add child to family"
 msgstr "a  Kind aan familie toevoegen"
 
-#: src/liflines/brwsmenu.c:92
+#: src/liflines/brwsmenu.c:93
 msgid "a  Add family"
 msgstr "a  Familie toevoegen"
 
-#: src/liflines/brwsmenu.c:93
+#: src/liflines/brwsmenu.c:94
 msgid "x  Swap two families"
 msgstr "x  Twee families omwisselen"
 
-#: src/liflines/brwsmenu.c:94
+#: src/liflines/brwsmenu.c:95
 msgid "x  Swap two children"
 msgstr "x  Twee kinderen omwisselen"
 
-#: src/liflines/brwsmenu.c:96
+#: src/liflines/brwsmenu.c:97
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr "%c  Kind herordenen"
 
-#: src/liflines/brwsmenu.c:97
+#: src/liflines/brwsmenu.c:98
 msgid "x  Switch top/bottom"
 msgstr "x  Bovenzijde/onderzijde omwisselen"
 
-#: src/liflines/brwsmenu.c:98
+#: src/liflines/brwsmenu.c:99
 msgid "n  Create new person"
 msgstr "n  Nieuwe persoon maken"
 
-#: src/liflines/brwsmenu.c:99
+#: src/liflines/brwsmenu.c:100
 msgid "a  Create new family"
 msgstr "a  Nieuwe familie maken"
 
-#: src/liflines/brwsmenu.c:100
+#: src/liflines/brwsmenu.c:101
 msgid "tt Enter tandem mode"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:101
+#: src/liflines/brwsmenu.c:102
 msgid "tt Enter family tandem"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:102
+#: src/liflines/brwsmenu.c:103
 msgid "zi Browse to indi"
 msgstr "zi Naar indi bladeren"
 
-#: src/liflines/brwsmenu.c:103
+#: src/liflines/brwsmenu.c:104
 msgid "zz Browse to any"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:104
+#: src/liflines/brwsmenu.c:105
 msgid "r  Remove as spouse"
 msgstr "r  Als partner verwijderen"
 
-#: src/liflines/brwsmenu.c:105
+#: src/liflines/brwsmenu.c:106
 msgid "d  Remove as child"
 msgstr "d  Als kind verwijderen"
 
-#: src/liflines/brwsmenu.c:106
+#: src/liflines/brwsmenu.c:107
 msgid "r  Remove spouse from"
 msgstr "r  Partner verwijderen uit"
 
-#: src/liflines/brwsmenu.c:107
+#: src/liflines/brwsmenu.c:108
 msgid "d  Remove child from"
 msgstr "d  Kind verwijderen uit"
 
-#: src/liflines/brwsmenu.c:108
+#: src/liflines/brwsmenu.c:109
 msgid "(  Scroll up"
 msgstr "(  Naar boven schuiven"
 
-#: src/liflines/brwsmenu.c:109
+#: src/liflines/brwsmenu.c:110
 msgid ")  Scroll down"
 msgstr ")  Naar beneden schuiven"
 
-#: src/liflines/brwsmenu.c:110
+#: src/liflines/brwsmenu.c:111
 msgid "]  Increase tree depth"
 msgstr "]  Boomdiepte vergroten"
 
-#: src/liflines/brwsmenu.c:111
+#: src/liflines/brwsmenu.c:112
 msgid "[  Decrease tree depth"
 msgstr "[  Boomdiepte verkleinen"
 
-#: src/liflines/brwsmenu.c:112
+#: src/liflines/brwsmenu.c:113
 msgid "(t Scroll top up"
 msgstr "(t Top omhoog schuiven"
 
-#: src/liflines/brwsmenu.c:113
+#: src/liflines/brwsmenu.c:114
 msgid ")t Scroll top down"
 msgstr ")t Top omlaag schuiven"
 
-#: src/liflines/brwsmenu.c:114
+#: src/liflines/brwsmenu.c:115
 msgid "(b Scroll bottom up"
 msgstr "(b Onderkant omhoog schuiven"
 
-#: src/liflines/brwsmenu.c:115
+#: src/liflines/brwsmenu.c:116
 msgid ")b Scroll bottom down"
 msgstr ")b Onderkant omlaag schuiven"
 
-#: src/liflines/brwsmenu.c:116
+#: src/liflines/brwsmenu.c:117
 msgid "(( Scroll both up"
 msgstr "(( Beide omhoog schuiven"
 
-#: src/liflines/brwsmenu.c:117
+#: src/liflines/brwsmenu.c:118
 msgid ")) Scroll both down"
 msgstr ")) Beide omlaag schuiven"
 
-#: src/liflines/brwsmenu.c:118
+#: src/liflines/brwsmenu.c:119
 msgid "#  Toggle childnos"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:119
+#: src/liflines/brwsmenu.c:120
 msgid "!g GEDCOM mode"
 msgstr "!g GEDCOM modus"
 
-#: src/liflines/brwsmenu.c:120
+#: src/liflines/brwsmenu.c:121
 msgid "!x GEDCOMX mode"
 msgstr "!x GEDCOMX modus"
 
-#: src/liflines/brwsmenu.c:121
+#: src/liflines/brwsmenu.c:122
 msgid "!t GEDCOMT mode"
 msgstr "!t GEDCOMT modus"
 
-#: src/liflines/brwsmenu.c:122
+#: src/liflines/brwsmenu.c:123
 msgid "!a Ancestors mode"
 msgstr "!a Vooroudermodus"
 
-#: src/liflines/brwsmenu.c:123
+#: src/liflines/brwsmenu.c:124
 msgid "!d Descendants mode"
 msgstr "!d Afstammelingenmodus"
 
-#: src/liflines/brwsmenu.c:124
+#: src/liflines/brwsmenu.c:125
 msgid "!n Normal mode"
 msgstr "!n Normale modus"
 
-#: src/liflines/brwsmenu.c:125
+#: src/liflines/brwsmenu.c:126
 msgid "p  Pedigree mode"
 msgstr "p  Stamboommodus"
 
-#: src/liflines/brwsmenu.c:126
+#: src/liflines/brwsmenu.c:127
 msgid "!! Cycle mode"
 msgstr "!! Cyclusmodus"
 
-#: src/liflines/brwsmenu.c:128
+#: src/liflines/brwsmenu.c:129
 msgid "(1-9)  Browse to child"
 msgstr "(1-9)  Naar kind bladeren"
 
-#: src/liflines/brwsmenu.c:129
+#: src/liflines/brwsmenu.c:130
 msgid "y  Turn on sync"
 msgstr "y  Sync aanzetten"
 
-#: src/liflines/brwsmenu.c:130
+#: src/liflines/brwsmenu.c:131
 msgid "A  Advanced view"
 msgstr "A  Uitgebreide weergave"
 
-#: src/liflines/brwsmenu.c:131
+#: src/liflines/brwsmenu.c:132
 msgid "tc Tandem to children"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:132
+#: src/liflines/brwsmenu.c:133
 msgid "tf Tandem to father/s"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:133
+#: src/liflines/brwsmenu.c:134
 msgid "tg Tandem to family/s"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:134
+#: src/liflines/brwsmenu.c:135
 msgid "f  Browse to fathers"
 msgstr "f  Naar vaders bladeren"
 
-#: src/liflines/brwsmenu.c:135
+#: src/liflines/brwsmenu.c:136
 msgid "m  Browse to mothers"
 msgstr "m  Naar moeders bladeren"
 
-#: src/liflines/brwsmenu.c:136
+#: src/liflines/brwsmenu.c:137
 msgid "tm Tandem to mother/s"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:137
+#: src/liflines/brwsmenu.c:138
 msgid "ts Tandem to spouse/s"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:138
+#: src/liflines/brwsmenu.c:139
 msgid "tu Tandem to parents"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:139
+#: src/liflines/brwsmenu.c:140
 msgid "<  Enlarge menu area"
 msgstr "<  Menugebied groter maken"
 
-#: src/liflines/brwsmenu.c:140
+#: src/liflines/brwsmenu.c:141
 msgid ">  Shrink menu area"
 msgstr ">  Menugebied kleiner maken"
 
-#: src/liflines/brwsmenu.c:141
+#: src/liflines/brwsmenu.c:142
 msgid "M> More menu cols"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:142
+#: src/liflines/brwsmenu.c:143
 msgid "M< Less menu cols"
 msgstr ""
 
-#: src/liflines/brwsmenu.c:143
+#: src/liflines/brwsmenu.c:144
 msgid "+  Next in db"
 msgstr "+  Volgende in db"
 
-#: src/liflines/brwsmenu.c:144
+#: src/liflines/brwsmenu.c:145
 msgid "-  Prev in db"
 msgstr "-  Vorige in db"
 
-#: src/liflines/brwsmenu.c:145
+#: src/liflines/brwsmenu.c:146
 msgid "d  Copy top to bottom"
 msgstr "d  Top naar onderzijde kopiëren"
 
-#: src/liflines/brwsmenu.c:146
+#: src/liflines/brwsmenu.c:147
 msgid "j  Merge bottom to top"
 msgstr "j  Onderzijde naar top samenvoegen"
 
-#: src/liflines/brwsmenu.c:147
+#: src/liflines/brwsmenu.c:148
 msgid "j  Move down list"
 msgstr "j  Lijst omlaag schuiven"
 
-#: src/liflines/brwsmenu.c:148
+#: src/liflines/brwsmenu.c:149
 msgid "k  Move up list"
 msgstr "k  Lijst omhoog schuiven"
 
-#: src/liflines/brwsmenu.c:149
+#: src/liflines/brwsmenu.c:150
 msgid "e  Edit this person"
 msgstr "e  Deze persoon bewerken"
 
-#: src/liflines/brwsmenu.c:150
+#: src/liflines/brwsmenu.c:151
 msgid "i  Browse this person"
 msgstr "i  Deze persoon bladeren"
 
-#: src/liflines/brwsmenu.c:151
+#: src/liflines/brwsmenu.c:152
 msgid "m  Mark this person"
 msgstr "m  Deze persoon markeren"
 
-#: src/liflines/brwsmenu.c:152
+#: src/liflines/brwsmenu.c:153
 msgid "d  Delete from list"
 msgstr "d  Uit lijst verwijderen"
 
-#: src/liflines/brwsmenu.c:153
+#: src/liflines/brwsmenu.c:154
 msgid "n  Name this list"
 msgstr "n  Deze lijst benoemen"
 
-#: src/liflines/brwsmenu.c:154
+#: src/liflines/brwsmenu.c:155
 msgid "b  Browse new persons"
 msgstr "b  Nieuwe personen bladeren"
 
-#: src/liflines/brwsmenu.c:155
+#: src/liflines/brwsmenu.c:156
 msgid "a  Add to this list"
 msgstr "a  Aan deze lijst toevoegen"
 
-#: src/liflines/brwsmenu.c:156
+#: src/liflines/brwsmenu.c:157
 msgid "x  Swap mark/current"
 msgstr "x  Gemarkeerde/huidige omwisselen"
 
-#: src/liflines/brwsmenu.c:157
+#: src/liflines/brwsmenu.c:158
 msgid "$s  List sources"
 msgstr "$s  Bronnen weergeven"
 
-#: src/liflines/brwsmenu.c:158
+#: src/liflines/brwsmenu.c:159
 msgid "$n  List notes"
 msgstr "$n  Notities weergeven"
 
-#: src/liflines/brwsmenu.c:159
+#: src/liflines/brwsmenu.c:160
 msgid "$$  List references"
 msgstr "$$  Verwijzingen weergeven"
 
-#: src/liflines/brwsmenu.c:160
+#: src/liflines/brwsmenu.c:161
 msgid "^b  History/back"
 msgstr "^b  Geschiedenis/terug"
 
-#: src/liflines/brwsmenu.c:161
+#: src/liflines/brwsmenu.c:162
 msgid "^f  History/fwd"
 msgstr "^f  Geschiedenis/vooruit"
 
-#: src/liflines/brwsmenu.c:162
+#: src/liflines/brwsmenu.c:163
 msgid "^l  History list"
 msgstr "^l  Geschiedenislijst"
 
-#: src/liflines/brwsmenu.c:163
+#: src/liflines/brwsmenu.c:164
 msgid "^c Clear history"
 msgstr "^c Geschiedenis leegmaken"
 
-#: src/liflines/brwsmenu.c:164
+#: src/liflines/brwsmenu.c:165
 msgid "^xb  ChngHist/back"
 msgstr "^xb  WijzGesch/terug"
 
-#: src/liflines/brwsmenu.c:165
+#: src/liflines/brwsmenu.c:166
 msgid "^xf  ChngHist/fwd"
 msgstr "^xf  WijzGesch/vooruit"
 
-#: src/liflines/brwsmenu.c:166
+#: src/liflines/brwsmenu.c:167
 msgid "^xl  ChngHist list"
 msgstr "^xl  WijzGesch weergeven"
 
-#: src/liflines/brwsmenu.c:167
+#: src/liflines/brwsmenu.c:168
 msgid "^xc Clear ChngHist"
 msgstr "^xc WijzGesch leegmaken"
 
-#: src/liflines/brwsmenu.c:169
+#: src/liflines/brwsmenu.c:170
 #, no-c-format
 msgid "%s  Add source"
 msgstr "%s  Bron toevoegen"
 
-#: src/liflines/brwsmenu.c:171
+#: src/liflines/brwsmenu.c:172
 #, no-c-format
 msgid "%e  Add event"
 msgstr "%e  Gebeurtenis toevoegen"
 
-#: src/liflines/brwsmenu.c:173
+#: src/liflines/brwsmenu.c:174
 #, no-c-format
 msgid "%o  Add other"
 msgstr "%o  Andere toevoegen"
 
-#: src/liflines/brwsmenu.c:176
+#: src/liflines/brwsmenu.c:177
 msgid "B  Browse new family"
 msgstr "B  Nieuwe familie bladeren"
 
-#: src/liflines/brwsmenu.c:489
+#: src/liflines/brwsmenu.c:490
 msgid "Missing title"
 msgstr "Ontbrekende titel"
 
@@ -3424,7 +3424,7 @@ msgid_plural "%d children"
 msgstr[0] "%d kind"
 msgstr[1] "%d kinderen"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1481
+#: src/liflines/error.c:61 src/tools/dbverify.c:1482
 msgid "Fatal Error"
 msgstr "Fatale fout"
 
@@ -3437,42 +3437,42 @@ msgstr "FATALE FOUT"
 msgid "  in file <%s> at line %d\n"
 msgstr "  in bestand <%s> op regel %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1492
+#: src/liflines/error.c:70 src/tools/dbverify.c:1493
 msgid "ASSERT failure"
 msgstr ""
 
-#: src/liflines/import.c:172
+#: src/liflines/import.c:169
 msgid "This is not a lineage linked GEDCOM file."
 msgstr ""
 
-#: src/liflines/import.c:173
+#: src/liflines/import.c:170
 #, fuzzy
 msgid "Proceed anyway?"
 msgstr "Toch voortgaan ?"
 
-#: src/liflines/import.c:188
+#: src/liflines/import.c:186
 msgid "No current internal codeset, so no codeset conversion can be done"
 msgstr ""
 "Geen huidige interne codeset, dus er kan geen codesetomzetting worden gedaan"
 
-#: src/liflines/import.c:189
+#: src/liflines/import.c:187
 #, fuzzy
 msgid "Proceed without codeset conversion?"
 msgstr "Voortgaan zonder codesetomzetting ?"
 
-#: src/liflines/import.c:206
+#: src/liflines/import.c:204
 #, c-format
 msgid "%d warning during import"
 msgid_plural "%d warnings during import"
 msgstr[0] "%d waarschuwing tijdens het invoeren"
 msgstr[1] "%d waarschuwingen tijdens het invoeren"
 
-#: src/liflines/import.c:222
+#: src/liflines/import.c:220
 #, c-format
 msgid "Cannot convert codeset (from <%s> to <%s>)"
 msgstr "Kan codeset niet converteren (van <%s> naar <%s>)"
 
-#: src/liflines/import.c:225
+#: src/liflines/import.c:223
 msgid "Enter codeset to assume (* for none)"
 msgstr "Geef codeset in om toe te eigenen (* voor geen)"
 
@@ -3547,11 +3547,11 @@ msgstr "Ontoelaatbare echtgenote (%s) in familie (%s)"
 msgid "The database was not saved."
 msgstr "De gegevensbank is niet opgeslagen."
 
-#: src/liflines/main.c:367
+#: src/liflines/main.c:370
 msgid "Warning: database codeset unspecified"
 msgstr "Waarschuwing: gegevensbankcodeset niet gespecificeerd"
 
-#: src/liflines/main.c:369
+#: src/liflines/main.c:372
 msgid "Warning: not all conversions available"
 msgstr "Waarschuwing: niet alle omzettingen zijn beschikbaar"
 
@@ -3646,219 +3646,219 @@ msgstr "patroon: "
 msgid "Enter pattern to match against author."
 msgstr "Geef patroon in om overeen te stemmen met refn."
 
-#: src/liflines/screen.c:306
+#: src/liflines/screen.c:316
 #, c-format
 msgid "initscr failed"
 msgstr ""
 
-#: src/liflines/screen.c:323
+#: src/liflines/screen.c:333
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n"
 msgstr ""
 "De gevraagde venstergrootte (%d,%d) is te groot voor uw terminal (%d,%d).\n"
 
-#: src/liflines/screen.c:331
+#: src/liflines/screen.c:341
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 "De gevraagde venstergrootte (%d,%d) is te klein voor LifeLines (%d,%d).\n"
 
-#: src/liflines/screen.c:662
+#: src/liflines/screen.c:705
 #, fuzzy
 msgid "Search results"
 msgstr "Zoekresultaten:"
 
-#: src/liflines/screen.c:769
+#: src/liflines/screen.c:812
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(pg %d/%d)"
 
-#: src/liflines/screen.c:1387
+#: src/liflines/screen.c:1430
 msgid "No conversion"
 msgstr "Geen omzetting"
 
-#: src/liflines/screen.c:1468
+#: src/liflines/screen.c:1516
 msgid "Internal codeset"
 msgstr "Interne codeset"
 
-#: src/liflines/screen.c:1471
+#: src/liflines/screen.c:1519
 #, fuzzy
 msgid "Internal UTF-8: Yes"
 msgstr "Interne codeset"
 
-#: src/liflines/screen.c:1473
+#: src/liflines/screen.c:1521
 #, fuzzy
 msgid "Internal UTF-8: No"
 msgstr "m  Intern naar editor afbeelden "
 
-#: src/liflines/screen.c:1477
+#: src/liflines/screen.c:1525
 msgid "Locales are enabled."
 msgstr "Taaldefinities zijn ingeschakeld."
 
-#: src/liflines/screen.c:1479
+#: src/liflines/screen.c:1527
 msgid "Locales are disabled."
 msgstr "Gebieden zijn uitgeschakeld."
 
-#: src/liflines/screen.c:1482
+#: src/liflines/screen.c:1530
 #, fuzzy
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Nationale Taalondersteuning) is uitgeschakeld."
 
-#: src/liflines/screen.c:1488
+#: src/liflines/screen.c:1536
 #, fuzzy
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Nationale Taalondersteuning) is ingeschakeld."
 
-#: src/liflines/screen.c:1501
+#: src/liflines/screen.c:1549
 #, fuzzy
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (codesetomzetting) is uitgeschakeld."
 
-#: src/liflines/screen.c:1503
+#: src/liflines/screen.c:1551
 #, fuzzy
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (codesetomzetting) is ingeschakeld."
 
-#: src/liflines/screen.c:1505
+#: src/liflines/screen.c:1553
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Opstartsorteergebied: %s"
 
-#: src/liflines/screen.c:1508
+#: src/liflines/screen.c:1556
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Opstartberichtengebied: %s"
 
-#: src/liflines/screen.c:1511
+#: src/liflines/screen.c:1559
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Huidig sorteergebied: %s"
 
-#: src/liflines/screen.c:1514
+#: src/liflines/screen.c:1562
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Huidig berichtengebied: %s"
 
-#: src/liflines/screen.c:1517
+#: src/liflines/screen.c:1565
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Sorteermethode: %s"
 
-#: src/liflines/screen.c:1521
+#: src/liflines/screen.c:1569
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "GUI codeset: %s"
 
-#: src/liflines/screen.c:1524
+#: src/liflines/screen.c:1572
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "GUI uitvoercodeset: %s"
 
-#: src/liflines/screen.c:1526
+#: src/liflines/screen.c:1574
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "GUI invoercodeset: %s"
 
-#: src/liflines/screen.c:1531
+#: src/liflines/screen.c:1579
 #, c-format
 msgid "editor codeset: %s"
 msgstr "editorcodeset: %s"
 
-#: src/liflines/screen.c:1534
+#: src/liflines/screen.c:1582
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "editoruitvoercodeset: %s"
 
-#: src/liflines/screen.c:1536
+#: src/liflines/screen.c:1584
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "editorinvoercodeset: %s"
 
-#: src/liflines/screen.c:1541
+#: src/liflines/screen.c:1589
 #, c-format
 msgid "report codeset: %s"
 msgstr "codeset melden: %s"
 
-#: src/liflines/screen.c:1544
+#: src/liflines/screen.c:1592
 #, c-format
 msgid "report output codeset: %s"
 msgstr "uitvoercodeset melden: %s"
 
-#: src/liflines/screen.c:1546
+#: src/liflines/screen.c:1594
 #, c-format
 msgid "report input codeset: %s"
 msgstr "invoercodeset melden: %s"
 
-#: src/liflines/screen.c:1551
+#: src/liflines/screen.c:1599
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM codeset: %s"
 
-#: src/liflines/screen.c:1554
+#: src/liflines/screen.c:1602
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "gedcom uitvoercodeset: %s"
 
-#: src/liflines/screen.c:1556
+#: src/liflines/screen.c:1604
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "gedcom invoercodeset: %s"
 
-#: src/liflines/screen.c:1564
+#: src/liflines/screen.c:1612
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1566
+#: src/liflines/screen.c:1614
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1570
+#: src/liflines/screen.c:1618
 msgid "Codeset information"
 msgstr "Codesetinformatie"
 
-#: src/liflines/screen.c:1587
+#: src/liflines/screen.c:1635
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext dll: %s"
 
-#: src/liflines/screen.c:1591
+#: src/liflines/screen.c:1639
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext dllversie: %s"
 
-#: src/liflines/screen.c:1596
+#: src/liflines/screen.c:1644
 msgid "gettext dll had no version"
 msgstr "gettext dll had geen versie"
 
-#: src/liflines/screen.c:1601
+#: src/liflines/screen.c:1649
 msgid "no gettext dll found"
 msgstr "geen gettext dll gevonden"
 
-#: src/liflines/screen.c:1610
+#: src/liflines/screen.c:1658
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv dll: %s"
 
-#: src/liflines/screen.c:1614
+#: src/liflines/screen.c:1662
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv dllversie: %s"
 
-#: src/liflines/screen.c:1619
+#: src/liflines/screen.c:1667
 msgid "iconv dll had no version"
 msgstr "iconv dll had geen versie"
 
-#: src/liflines/screen.c:1624
+#: src/liflines/screen.c:1672
 msgid "no iconv dll found"
 msgstr "geen iconv dll gevonden"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1930
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Niet toegelaten om codeset te veranderen in een bevolkte gegevensbank"
 
-#: src/liflines/screen.c:1979
+#: src/liflines/screen.c:2031
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Hoofdmenu"
 
@@ -4516,30 +4516,30 @@ msgstr "Ontbrekende opgaven"
 msgid "Fixed missing data record (%s)"
 msgstr "Ontbrekende opgaven"
 
-#: src/tools/dbverify.c:1453
+#: src/tools/dbverify.c:1454
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fout"
 msgstr[1] "%d fouten"
 
-#: src/tools/dbverify.c:1457
+#: src/tools/dbverify.c:1458
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d hersteld"
 msgstr[1] "%d hersteld"
 
-#: src/tools/dbverify.c:1464
+#: src/tools/dbverify.c:1465
 msgid "No errors found"
 msgstr "Geen fouten gevonden"
 
-#: src/tools/dbverify.c:1483
+#: src/tools/dbverify.c:1484
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "FATALE FOUT"
 
-#: src/tools/dbverify.c:1488
+#: src/tools/dbverify.c:1489
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In bestand <%s> op regel %d"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-13 16:37-0400\n"
+"POT-Creation-Date: 2007-04-19 17:36-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -2649,83 +2649,83 @@ msgstr "dekunu"
 msgid "twelve"
 msgstr "dekdu"
 
-#: src/interp/builtin.c:2170
+#: src/interp/builtin.c:2173
 msgid "the arg to empty is not a list, table or set"
 msgstr "la opcio por malplenigo ne estas listo, tabelo, aý aro"
 
-#: src/interp/builtin.c:2280
+#: src/interp/builtin.c:2283
 msgid "the arg to length is not a list, table or set"
 msgstr "la opcio por grandeco ne estas listo, tabelo, aý aro"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "He"
 msgstr "Li"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "he"
 msgstr "li"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "His"
 msgstr "Lia"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "his"
 msgstr "lia"
 
-#: src/interp/builtin.c:2468
+#: src/interp/builtin.c:2471
 msgid "him"
 msgstr "lin"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "She"
 msgstr "Þi"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "she"
 msgstr "þi"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "Her"
 msgstr "Þia"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her"
 msgstr "þia"
 
-#: src/interp/builtin.c:2470
+#: src/interp/builtin.c:2473
 msgid "her_"
 msgstr "þia_"
 
-#: src/interp/builtin.c:2848
+#: src/interp/builtin.c:2851
 msgid "(trimname) person does not have a name"
 msgstr "(tondunomo) homo ne havas nomon"
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2938
+#: src/interp/builtin.c:2941
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2939
+#: src/interp/builtin.c:2942
 msgid "Saturday"
 msgstr ""
 
@@ -2930,15 +2930,15 @@ msgstr "Misfinigas: "
 msgid "Could not open file %s"
 msgstr "Ne povis malfermi dosieron %s"
 
-#: src/interp/rassa.c:262
+#: src/interp/rassa.c:271
 msgid "Report stopping due to error opening output file"
 msgstr "Raporto haltas pro eraro dum malfermado de celdosiero"
 
-#: src/interp/rassa.c:264
+#: src/interp/rassa.c:273
 msgid "Report stopping due to lack of output file"
 msgstr "Raporto haltas pro manko de celdosiero"
 
-#: src/interp/rassa.c:320
+#: src/interp/rassa.c:330
 msgid "illegal call to pos."
 msgstr "kontraýleøa voko al pos."
 
@@ -2953,419 +2953,419 @@ msgstr[1] "Ekzistis %d malplenumitaj referencoj."
 msgid "?  Other menu choices"
 msgstr "?  Aliaj menuelektoj"
 
-#: src/liflines/brwsmenu.c:68
+#: src/liflines/brwsmenu.c:69
 msgid "e  Edit the person"
 msgstr "e  Redaktu la homon"
 
-#: src/liflines/brwsmenu.c:69
+#: src/liflines/brwsmenu.c:70
 msgid "e  Edit the family"
 msgstr "e  Redaktu la familion"
 
-#: src/liflines/brwsmenu.c:70
+#: src/liflines/brwsmenu.c:71
 msgid "e  Edit record"
 msgstr "e  Redaktu rikordon"
 
-#: src/liflines/brwsmenu.c:71
+#: src/liflines/brwsmenu.c:72
 msgid "e  Edit top person"
 msgstr "e  Redaktu plej supran homon"
 
-#: src/liflines/brwsmenu.c:72
+#: src/liflines/brwsmenu.c:73
 msgid "e  Edit top family"
 msgstr "e  Redaktu plej supran familion"
 
-#: src/liflines/brwsmenu.c:73
+#: src/liflines/brwsmenu.c:74
 msgid "f  Browse to father"
 msgstr "f  Krozu al patro"
 
-#: src/liflines/brwsmenu.c:74
+#: src/liflines/brwsmenu.c:75
 msgid "f  Browse top father"
 msgstr "f  Krozu plej supran patron"
 
-#: src/liflines/brwsmenu.c:75
+#: src/liflines/brwsmenu.c:76
 msgid "m  Browse to mother"
 msgstr "m  Krozu al patrino"
 
-#: src/liflines/brwsmenu.c:76
+#: src/liflines/brwsmenu.c:77
 msgid "m  Browse top mother"
 msgstr "m  Krozu plej supran patrinon"
 
-#: src/liflines/brwsmenu.c:77
+#: src/liflines/brwsmenu.c:78
 msgid "s  Browse to spouse/s"
 msgstr "s  Krozu al geedzoj"
 
-#: src/liflines/brwsmenu.c:78
+#: src/liflines/brwsmenu.c:79
 msgid "s  Browse top spouse/s"
 msgstr "s  Krozu plej suprajn geedzojn"
 
-#: src/liflines/brwsmenu.c:79
+#: src/liflines/brwsmenu.c:80
 msgid "c  Browse to children"
 msgstr "c  Krozu al infanoj"
 
-#: src/liflines/brwsmenu.c:80
+#: src/liflines/brwsmenu.c:81
 msgid "c  Browse top children"
 msgstr "c  Krozu plej suprajn infanojn"
 
-#: src/liflines/brwsmenu.c:81
+#: src/liflines/brwsmenu.c:82
 msgid "o  Browse to older sib"
 msgstr "o  Krozu al pli maljuna gefrato"
 
-#: src/liflines/brwsmenu.c:82
+#: src/liflines/brwsmenu.c:83
 msgid "y  Browse to younger sib"
 msgstr "y  Krozu al pli juna gefrato"
 
-#: src/liflines/brwsmenu.c:83
+#: src/liflines/brwsmenu.c:84
 msgid "g  Browse to family"
 msgstr "g  Krozu al familio"
 
-#: src/liflines/brwsmenu.c:84
+#: src/liflines/brwsmenu.c:85
 msgid "u  Browse to parents"
 msgstr "u  Krozu al gepatroj"
 
-#: src/liflines/brwsmenu.c:85
+#: src/liflines/brwsmenu.c:86
 msgid "b  Browse to persons"
 msgstr "b  Krozu al homoj"
 
-#: src/liflines/brwsmenu.c:86
+#: src/liflines/brwsmenu.c:87
 msgid "t  Browse to top"
 msgstr "t  Krozu al supro"
 
-#: src/liflines/brwsmenu.c:87
+#: src/liflines/brwsmenu.c:88
 msgid "b  Browse to bottom"
 msgstr "b  Krozu al fundo"
 
-#: src/liflines/brwsmenu.c:88
+#: src/liflines/brwsmenu.c:89
 msgid "h  Add as spouse"
 msgstr "h  Aldonu kiel geedzo"
 
-#: src/liflines/brwsmenu.c:89
+#: src/liflines/brwsmenu.c:90
 msgid "i  Add as child"
 msgstr "i  Aldonu kiel infano"
 
-#: src/liflines/brwsmenu.c:90
+#: src/liflines/brwsmenu.c:91
 msgid "s  Add spouse to family"
 msgstr "s  Aldonu geedzon al familio"
 
-#: src/liflines/brwsmenu.c:91
+#: src/liflines/brwsmenu.c:92
 msgid "a  Add child to family"
 msgstr "a  Aldonu infanon al familio"
 
-#: src/liflines/brwsmenu.c:92
+#: src/liflines/brwsmenu.c:93
 msgid "a  Add family"
 msgstr "a  Aldonu familion"
 
-#: src/liflines/brwsmenu.c:93
+#: src/liflines/brwsmenu.c:94
 msgid "x  Swap two families"
 msgstr "x  Interþanøu du familiojn"
 
-#: src/liflines/brwsmenu.c:94
+#: src/liflines/brwsmenu.c:95
 msgid "x  Swap two children"
 msgstr "x  Interþanøu du infanojn"
 
-#: src/liflines/brwsmenu.c:96
+#: src/liflines/brwsmenu.c:97
 #, no-c-format
 msgid "%c  Reorder child"
 msgstr "%c  Reordigu infanon"
 
-#: src/liflines/brwsmenu.c:97
+#: src/liflines/brwsmenu.c:98
 msgid "x  Switch top/bottom"
 msgstr "x  Baskulu supron/fundon"
 
-#: src/liflines/brwsmenu.c:98
+#: src/liflines/brwsmenu.c:99
 msgid "n  Create new person"
 msgstr "n  Kreu novan homon"
 
-#: src/liflines/brwsmenu.c:99
+#: src/liflines/brwsmenu.c:100
 msgid "a  Create new family"
 msgstr "a  Kreu novan familion"
 
-#: src/liflines/brwsmenu.c:100
+#: src/liflines/brwsmenu.c:101
 msgid "tt Enter tandem mode"
 msgstr "tt Eniru tandeman modalon"
 
-#: src/liflines/brwsmenu.c:101
+#: src/liflines/brwsmenu.c:102
 msgid "tt Enter family tandem"
 msgstr "tt Eniru familian tandemon"
 
-#: src/liflines/brwsmenu.c:102
+#: src/liflines/brwsmenu.c:103
 msgid "zi Browse to indi"
 msgstr "zi Krozu al indi"
 
-#: src/liflines/brwsmenu.c:103
+#: src/liflines/brwsmenu.c:104
 msgid "zz Browse to any"
 msgstr "zz Krozu al iun ajn"
 
-#: src/liflines/brwsmenu.c:104
+#: src/liflines/brwsmenu.c:105
 msgid "r  Remove as spouse"
 msgstr "r  Forigu kiel geedzo"
 
-#: src/liflines/brwsmenu.c:105
+#: src/liflines/brwsmenu.c:106
 msgid "d  Remove as child"
 msgstr "d  Forigu kiel infano"
 
-#: src/liflines/brwsmenu.c:106
+#: src/liflines/brwsmenu.c:107
 msgid "r  Remove spouse from"
 msgstr "r  Forigu geedzon el"
 
-#: src/liflines/brwsmenu.c:107
+#: src/liflines/brwsmenu.c:108
 msgid "d  Remove child from"
 msgstr "d  Forigu infanon el"
 
-#: src/liflines/brwsmenu.c:108
+#: src/liflines/brwsmenu.c:109
 msgid "(  Scroll up"
 msgstr "(  Rulumu supren"
 
-#: src/liflines/brwsmenu.c:109
+#: src/liflines/brwsmenu.c:110
 msgid ")  Scroll down"
 msgstr ")  Rulumu suben"
 
-#: src/liflines/brwsmenu.c:110
+#: src/liflines/brwsmenu.c:111
 msgid "]  Increase tree depth"
 msgstr "]  Pligrandigu arban profundecon"
 
-#: src/liflines/brwsmenu.c:111
+#: src/liflines/brwsmenu.c:112
 msgid "[  Decrease tree depth"
 msgstr "[  Malpligrandigu arban profundecon"
 
-#: src/liflines/brwsmenu.c:112
+#: src/liflines/brwsmenu.c:113
 msgid "(t Scroll top up"
 msgstr "(t Rulumu supron supren"
 
-#: src/liflines/brwsmenu.c:113
+#: src/liflines/brwsmenu.c:114
 msgid ")t Scroll top down"
 msgstr ")t Rulumu supron suben"
 
-#: src/liflines/brwsmenu.c:114
+#: src/liflines/brwsmenu.c:115
 msgid "(b Scroll bottom up"
 msgstr "(b Rulumu fundon supren"
 
-#: src/liflines/brwsmenu.c:115
+#: src/liflines/brwsmenu.c:116
 msgid ")b Scroll bottom down"
 msgstr ")b Rulumu fundon suben"
 
-#: src/liflines/brwsmenu.c:116
+#: src/liflines/brwsmenu.c:117
 msgid "(( Scroll both up"
 msgstr "(( Rulumu ambaý supren"
 
-#: src/liflines/brwsmenu.c:117
+#: src/liflines/brwsmenu.c:118
 msgid ")) Scroll both down"
 msgstr ")) Rulumu ambaý suben"
 
-#: src/liflines/brwsmenu.c:118
+#: src/liflines/brwsmenu.c:119
 msgid "#  Toggle childnos"
 msgstr "#  Baskulu infannumerojn"
 
-#: src/liflines/brwsmenu.c:119
+#: src/liflines/brwsmenu.c:120
 msgid "!g GEDCOM mode"
 msgstr "!g GEDCOM modalo"
 
-#: src/liflines/brwsmenu.c:120
+#: src/liflines/brwsmenu.c:121
 msgid "!x GEDCOMX mode"
 msgstr "!x GEDCOMX modalo"
 
-#: src/liflines/brwsmenu.c:121
+#: src/liflines/brwsmenu.c:122
 msgid "!t GEDCOMT mode"
 msgstr "!t GEDCOMT modalo"
 
-#: src/liflines/brwsmenu.c:122
+#: src/liflines/brwsmenu.c:123
 msgid "!a Ancestors mode"
 msgstr "!a Prapatra modalo"
 
-#: src/liflines/brwsmenu.c:123
+#: src/liflines/brwsmenu.c:124
 msgid "!d Descendants mode"
 msgstr "!d Posteula modalo"
 
-#: src/liflines/brwsmenu.c:124
+#: src/liflines/brwsmenu.c:125
 msgid "!n Normal mode"
 msgstr "!n Normala modalo"
 
-#: src/liflines/brwsmenu.c:125
+#: src/liflines/brwsmenu.c:126
 msgid "p  Pedigree mode"
 msgstr "p  Genealogia modalo"
 
-#: src/liflines/brwsmenu.c:126
+#: src/liflines/brwsmenu.c:127
 msgid "!! Cycle mode"
 msgstr "!! Ciklu modalon"
 
-#: src/liflines/brwsmenu.c:128
+#: src/liflines/brwsmenu.c:129
 msgid "(1-9)  Browse to child"
 msgstr "(1-9)  Krozu al infano"
 
-#: src/liflines/brwsmenu.c:129
+#: src/liflines/brwsmenu.c:130
 msgid "y  Turn on sync"
 msgstr "y  Þaltu sinkronigon"
 
-#: src/liflines/brwsmenu.c:130
+#: src/liflines/brwsmenu.c:131
 msgid "A  Advanced view"
 msgstr "A  Altnivela vida¼o"
 
-#: src/liflines/brwsmenu.c:131
+#: src/liflines/brwsmenu.c:132
 msgid "tc Tandem to children"
 msgstr "tc Tandemo al infanoj"
 
-#: src/liflines/brwsmenu.c:132
+#: src/liflines/brwsmenu.c:133
 msgid "tf Tandem to father/s"
 msgstr "tf Tandemo al patro(j)"
 
-#: src/liflines/brwsmenu.c:133
+#: src/liflines/brwsmenu.c:134
 msgid "tg Tandem to family/s"
 msgstr "tg Tandemo al familio(j)"
 
-#: src/liflines/brwsmenu.c:134
+#: src/liflines/brwsmenu.c:135
 msgid "f  Browse to fathers"
 msgstr "f  Krozu al patroj"
 
-#: src/liflines/brwsmenu.c:135
+#: src/liflines/brwsmenu.c:136
 msgid "m  Browse to mothers"
 msgstr "m  Krozu al patrinoj"
 
-#: src/liflines/brwsmenu.c:136
+#: src/liflines/brwsmenu.c:137
 msgid "tm Tandem to mother/s"
 msgstr "tm Tandemo al patrino(j)"
 
-#: src/liflines/brwsmenu.c:137
+#: src/liflines/brwsmenu.c:138
 msgid "ts Tandem to spouse/s"
 msgstr "ts Tandemo al geedzo(j)"
 
-#: src/liflines/brwsmenu.c:138
+#: src/liflines/brwsmenu.c:139
 msgid "tu Tandem to parents"
 msgstr "tu Tandemo al gepatroj"
 
-#: src/liflines/brwsmenu.c:139
+#: src/liflines/brwsmenu.c:140
 msgid "<  Enlarge menu area"
 msgstr "<  Pligrandigu menuan areon"
 
-#: src/liflines/brwsmenu.c:140
+#: src/liflines/brwsmenu.c:141
 msgid ">  Shrink menu area"
 msgstr ">  Malpligrandigu menuan areon"
 
-#: src/liflines/brwsmenu.c:141
+#: src/liflines/brwsmenu.c:142
 msgid "M> More menu cols"
 msgstr "M> Pli da menuaj kolumnoj"
 
-#: src/liflines/brwsmenu.c:142
+#: src/liflines/brwsmenu.c:143
 msgid "M< Less menu cols"
 msgstr "M< Malpli da menuaj kolumnoj"
 
-#: src/liflines/brwsmenu.c:143
+#: src/liflines/brwsmenu.c:144
 msgid "+  Next in db"
 msgstr "+  La sekvan en db"
 
-#: src/liflines/brwsmenu.c:144
+#: src/liflines/brwsmenu.c:145
 msgid "-  Prev in db"
 msgstr "-  La lastan en db"
 
-#: src/liflines/brwsmenu.c:145
+#: src/liflines/brwsmenu.c:146
 msgid "d  Copy top to bottom"
 msgstr "d  Kopiu supron al fundo"
 
-#: src/liflines/brwsmenu.c:146
+#: src/liflines/brwsmenu.c:147
 msgid "j  Merge bottom to top"
 msgstr "j  Kunfandigu fundon al supro"
 
-#: src/liflines/brwsmenu.c:147
+#: src/liflines/brwsmenu.c:148
 msgid "j  Move down list"
 msgstr "j  Iru suben en listo"
 
-#: src/liflines/brwsmenu.c:148
+#: src/liflines/brwsmenu.c:149
 msgid "k  Move up list"
 msgstr "k  Iru supren en listo"
 
-#: src/liflines/brwsmenu.c:149
+#: src/liflines/brwsmenu.c:150
 msgid "e  Edit this person"
 msgstr "e  Redaktu æi tiun homon"
 
-#: src/liflines/brwsmenu.c:150
+#: src/liflines/brwsmenu.c:151
 msgid "i  Browse this person"
 msgstr "i  Krozu æi tiun homon"
 
-#: src/liflines/brwsmenu.c:151
+#: src/liflines/brwsmenu.c:152
 msgid "m  Mark this person"
 msgstr "m  Marku æi tiun homon"
 
-#: src/liflines/brwsmenu.c:152
+#: src/liflines/brwsmenu.c:153
 msgid "d  Delete from list"
 msgstr "d  Forstreku el listo"
 
-#: src/liflines/brwsmenu.c:153
+#: src/liflines/brwsmenu.c:154
 msgid "n  Name this list"
 msgstr "n  Nomigu æi tiun liston"
 
-#: src/liflines/brwsmenu.c:154
+#: src/liflines/brwsmenu.c:155
 msgid "b  Browse new persons"
 msgstr "b  Krozu novajn homojn"
 
-#: src/liflines/brwsmenu.c:155
+#: src/liflines/brwsmenu.c:156
 msgid "a  Add to this list"
 msgstr "a  Aldonu al æi tiu listo"
 
-#: src/liflines/brwsmenu.c:156
+#: src/liflines/brwsmenu.c:157
 msgid "x  Swap mark/current"
 msgstr "x  Interþanøu markon/nunon"
 
-#: src/liflines/brwsmenu.c:157
+#: src/liflines/brwsmenu.c:158
 msgid "$s  List sources"
 msgstr "$s  Montru fontojn"
 
-#: src/liflines/brwsmenu.c:158
+#: src/liflines/brwsmenu.c:159
 msgid "$n  List notes"
 msgstr "$n  Montru notojn"
 
-#: src/liflines/brwsmenu.c:159
+#: src/liflines/brwsmenu.c:160
 msgid "$$  List references"
 msgstr "$$  Montru referencojn"
 
-#: src/liflines/brwsmenu.c:160
+#: src/liflines/brwsmenu.c:161
 msgid "^b  History/back"
 msgstr "^b  Historio/malantaýen"
 
-#: src/liflines/brwsmenu.c:161
+#: src/liflines/brwsmenu.c:162
 msgid "^f  History/fwd"
 msgstr "^f  Historio/antaýen"
 
-#: src/liflines/brwsmenu.c:162
+#: src/liflines/brwsmenu.c:163
 msgid "^l  History list"
 msgstr "^l  Historion montru"
 
-#: src/liflines/brwsmenu.c:163
+#: src/liflines/brwsmenu.c:164
 msgid "^c Clear history"
 msgstr "^c Malplenigu historion"
 
-#: src/liflines/brwsmenu.c:164
+#: src/liflines/brwsmenu.c:165
 msgid "^xb  ChngHist/back"
 msgstr "^xb  ÞøHist/malantaýen"
 
-#: src/liflines/brwsmenu.c:165
+#: src/liflines/brwsmenu.c:166
 msgid "^xf  ChngHist/fwd"
 msgstr "^xf  ÞøHist/antaýen"
 
-#: src/liflines/brwsmenu.c:166
+#: src/liflines/brwsmenu.c:167
 msgid "^xl  ChngHist list"
 msgstr "^xl  ÞøHist-on montru"
 
-#: src/liflines/brwsmenu.c:167
+#: src/liflines/brwsmenu.c:168
 msgid "^xc Clear ChngHist"
 msgstr "^xc Malplenigu ÞøHist-on"
 
-#: src/liflines/brwsmenu.c:169
+#: src/liflines/brwsmenu.c:170
 #, no-c-format
 msgid "%s  Add source"
 msgstr "%s  Aldonu fonton"
 
-#: src/liflines/brwsmenu.c:171
+#: src/liflines/brwsmenu.c:172
 #, no-c-format
 msgid "%e  Add event"
 msgstr "%e  Aldonu okazon"
 
-#: src/liflines/brwsmenu.c:173
+#: src/liflines/brwsmenu.c:174
 #, no-c-format
 msgid "%o  Add other"
 msgstr "%o  Aldonu alian"
 
-#: src/liflines/brwsmenu.c:176
+#: src/liflines/brwsmenu.c:177
 msgid "B  Browse new family"
 msgstr "B  Krozu novan familion"
 
-#: src/liflines/brwsmenu.c:489
+#: src/liflines/brwsmenu.c:490
 msgid "Missing title"
 msgstr "Mankanta titolo"
 
@@ -3383,7 +3383,7 @@ msgid_plural "%d children"
 msgstr[0] "%d infano"
 msgstr[1] "%d infanoj"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1481
+#: src/liflines/error.c:61 src/tools/dbverify.c:1482
 msgid "Fatal Error"
 msgstr "Neriparebla Eraro"
 
@@ -3396,39 +3396,39 @@ msgstr "NERIPAREBLA ERARO"
 msgid "  in file <%s> at line %d\n"
 msgstr "  en dosiero <%s> sur linio %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1492
+#: src/liflines/error.c:70 src/tools/dbverify.c:1493
 msgid "ASSERT failure"
 msgstr "ASERTA fiasko"
 
-#: src/liflines/import.c:172
+#: src/liflines/import.c:169
 msgid "This is not a lineage linked GEDCOM file."
 msgstr "Æi tiu ne estas devenligita GEDCOM dosiero."
 
-#: src/liflines/import.c:173
+#: src/liflines/import.c:170
 msgid "Proceed anyway?"
 msgstr "Almenaý daýru?"
 
-#: src/liflines/import.c:188
+#: src/liflines/import.c:186
 msgid "No current internal codeset, so no codeset conversion can be done"
 msgstr "Ne nuna interna kodpaøo, do ne kodpaøa þanøiøo eblas"
 
-#: src/liflines/import.c:189
+#: src/liflines/import.c:187
 msgid "Proceed without codeset conversion?"
 msgstr "Daýru sen kodpaøa þanøiøo?"
 
-#: src/liflines/import.c:206
+#: src/liflines/import.c:204
 #, c-format
 msgid "%d warning during import"
 msgid_plural "%d warnings during import"
 msgstr[0] "%d averto dum importado"
 msgstr[1] "%d avertoj dum importado"
 
-#: src/liflines/import.c:222
+#: src/liflines/import.c:220
 #, c-format
 msgid "Cannot convert codeset (from <%s> to <%s>)"
 msgstr "Ne povas þanøigi kodpaøon (de <%s> al <%s>)"
 
-#: src/liflines/import.c:225
+#: src/liflines/import.c:223
 msgid "Enter codeset to assume (* for none)"
 msgstr "Enmetu kodpaøon por premiso (* por neniu)"
 
@@ -3500,11 +3500,11 @@ msgstr "Importada daýro %s (ui %s)\n"
 msgid "The database was not saved."
 msgstr "La datumbazo ne estas registrita."
 
-#: src/liflines/main.c:367
+#: src/liflines/main.c:370
 msgid "Warning: database codeset unspecified"
 msgstr "Averto: datumbaza kodpaøo ne estas indikita"
 
-#: src/liflines/main.c:369
+#: src/liflines/main.c:372
 msgid "Warning: not all conversions available"
 msgstr "Averto: ne æiuj þanøigoj estas haveblaj"
 
@@ -3599,215 +3599,215 @@ msgstr "þablono: "
 msgid "Enter pattern to match against author."
 msgstr "Enmetu þablonon kontraý kiu kongrui refn."
 
-#: src/liflines/screen.c:306
+#: src/liflines/screen.c:316
 #, c-format
 msgid "initscr failed"
 msgstr ""
 
-#: src/liflines/screen.c:323
+#: src/liflines/screen.c:333
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n"
 msgstr ""
 "La petita fenestra grandeco (%d,%d) tro grandas por via ekrano (%d,%d).\n"
 
-#: src/liflines/screen.c:331
+#: src/liflines/screen.c:341
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 "La petita fenestra grandeco (%d,%d) tro malgrandas por LifeLines (%d,%d).\n"
 
-#: src/liflines/screen.c:662
+#: src/liflines/screen.c:705
 #, fuzzy
 msgid "Search results"
 msgstr "Ekzamenu rezultojn:"
 
-#: src/liflines/screen.c:769
+#: src/liflines/screen.c:812
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(pø %d/%d)"
 
-#: src/liflines/screen.c:1387
+#: src/liflines/screen.c:1430
 msgid "No conversion"
 msgstr "Neniu þanøigo"
 
-#: src/liflines/screen.c:1468
+#: src/liflines/screen.c:1516
 msgid "Internal codeset"
 msgstr "Interna kodpaøo"
 
-#: src/liflines/screen.c:1471
+#: src/liflines/screen.c:1519
 #, fuzzy
 msgid "Internal UTF-8: Yes"
 msgstr "Interna kodpaøo"
 
-#: src/liflines/screen.c:1473
+#: src/liflines/screen.c:1521
 #, fuzzy
 msgid "Internal UTF-8: No"
 msgstr "Interna al Redaktila"
 
-#: src/liflines/screen.c:1477
+#: src/liflines/screen.c:1525
 msgid "Locales are enabled."
 msgstr "Loka¼aroj ebliøitaj"
 
-#: src/liflines/screen.c:1479
+#: src/liflines/screen.c:1527
 msgid "Locales are disabled."
 msgstr "Loka¼aroj malebliøitaj"
 
-#: src/liflines/screen.c:1482
+#: src/liflines/screen.c:1530
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) estas entradukigita"
 
-#: src/liflines/screen.c:1488
+#: src/liflines/screen.c:1536
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1501
+#: src/liflines/screen.c:1549
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (kodpaøa þanøigado) estas entradukigita"
 
-#: src/liflines/screen.c:1503
+#: src/liflines/screen.c:1551
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (kodpaøa þanøigado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1505
+#: src/liflines/screen.c:1553
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Komenca ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1508
+#: src/liflines/screen.c:1556
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Komenca mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1511
+#: src/liflines/screen.c:1559
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Nuna ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1514
+#: src/liflines/screen.c:1562
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Nuna mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1517
+#: src/liflines/screen.c:1565
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Ordizigada subprogramo: %s"
 
-#: src/liflines/screen.c:1521
+#: src/liflines/screen.c:1569
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "GUI-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1524
+#: src/liflines/screen.c:1572
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "GUI-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1526
+#: src/liflines/screen.c:1574
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "GUI-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1531
+#: src/liflines/screen.c:1579
 #, c-format
 msgid "editor codeset: %s"
 msgstr "redaktila kodpaøo: %s"
 
-#: src/liflines/screen.c:1534
+#: src/liflines/screen.c:1582
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "redaktila eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1536
+#: src/liflines/screen.c:1584
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "redaktila eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1541
+#: src/liflines/screen.c:1589
 #, c-format
 msgid "report codeset: %s"
 msgstr "raporta kodpaøo: %s"
 
-#: src/liflines/screen.c:1544
+#: src/liflines/screen.c:1592
 #, c-format
 msgid "report output codeset: %s"
 msgstr "raporta eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1546
+#: src/liflines/screen.c:1594
 #, c-format
 msgid "report input codeset: %s"
 msgstr "raporta eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1551
+#: src/liflines/screen.c:1599
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1554
+#: src/liflines/screen.c:1602
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "gedcom-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1556
+#: src/liflines/screen.c:1604
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "gedcom-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1564
+#: src/liflines/screen.c:1612
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1566
+#: src/liflines/screen.c:1614
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1570
+#: src/liflines/screen.c:1618
 msgid "Codeset information"
 msgstr "Kodpaøa informo"
 
-#: src/liflines/screen.c:1587
+#: src/liflines/screen.c:1635
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext (akirteksa¼a) dll: %s"
 
-#: src/liflines/screen.c:1591
+#: src/liflines/screen.c:1639
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext (akirteksa¼a) dll eldono: %s"
 
-#: src/liflines/screen.c:1596
+#: src/liflines/screen.c:1644
 msgid "gettext dll had no version"
 msgstr "gettext (akirteksa¼a) dll ne havis eldonon: %s"
 
-#: src/liflines/screen.c:1601
+#: src/liflines/screen.c:1649
 msgid "no gettext dll found"
 msgstr "trovis neniun gettext (akirteksa¼an) dll-on"
 
-#: src/liflines/screen.c:1610
+#: src/liflines/screen.c:1658
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv dll: %s"
 
-#: src/liflines/screen.c:1614
+#: src/liflines/screen.c:1662
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv dll eldono: %s"
 
-#: src/liflines/screen.c:1619
+#: src/liflines/screen.c:1667
 msgid "iconv dll had no version"
 msgstr "iconv dll ne havis eldonon"
 
-#: src/liflines/screen.c:1624
+#: src/liflines/screen.c:1672
 msgid "no iconv dll found"
 msgstr "trovis neniun iconv dll"
 
-#: src/liflines/screen.c:1878
+#: src/liflines/screen.c:1930
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Þanøante kodpaøon malpermesita en enhaviøita datumbazo"
 
-#: src/liflines/screen.c:1979
+#: src/liflines/screen.c:2031
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Æefa Menuo"
 
@@ -4459,30 +4459,30 @@ msgstr "Mankanta datuma rikordo (%s)"
 msgid "Fixed missing data record (%s)"
 msgstr "Riparis mankanta datuma rikordo (%s)"
 
-#: src/tools/dbverify.c:1453
+#: src/tools/dbverify.c:1454
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d eraro"
 msgstr[1] "%d eraroj"
 
-#: src/tools/dbverify.c:1457
+#: src/tools/dbverify.c:1458
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d riparita"
 msgstr[1] "%d riparitaj"
 
-#: src/tools/dbverify.c:1464
+#: src/tools/dbverify.c:1465
 msgid "No errors found"
 msgstr "Neniun eraron trovis"
 
-#: src/tools/dbverify.c:1483
+#: src/tools/dbverify.c:1484
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "NERIPAREBLA ERARO"
 
-#: src/tools/dbverify.c:1488
+#: src/tools/dbverify.c:1489
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "En dosiero <%s> æe linio %d"
