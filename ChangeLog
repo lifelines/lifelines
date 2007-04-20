@@ -11,6 +11,11 @@
 
 	Add latest fix into NEWS
 
+	* ChangeLog src/tools/dbverify.c
+
+	Revising printf calls to use PRId32 for INT, and rearranging
+	strings to remove that macro from i18n strings.
+
 2007-04-19 lifelines beta 3.0.56 RELEASE
 
 2007-04-19 Perry Rapp
