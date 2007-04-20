@@ -2,6 +2,11 @@ LifeLines Source Release, Version 3.0.56
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.57 (beta)
+============================
+ - Fix LocaleDir settings (broken
+    again just as 3.0.56 released)
+
 Bug fixes in 3.0.56 (beta)
 ============================
  - Write correct CHAR value to header when

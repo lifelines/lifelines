@@ -7,6 +7,10 @@
 	Fix missing end comment in update_textdomain_localedir
 	which broke localedir handling.
 
+	* ChangeLog NEWS
+
+	Add latest fix into NEWS
+
 2007-04-19 lifelines beta 3.0.56 RELEASE
 
 2007-04-19 Perry Rapp
