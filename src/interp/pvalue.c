@@ -1042,6 +1042,13 @@ create_pvalue_from_string (CNSTRING str)
 {
 	return create_pvalue(PSTRING, (VPTR)str);
 }
+PVALUE
+create_pvalue_from_zstr (ZSTR * pzstr)
+{
+	PVALUE val = create_pvalue_from_string(zs_str(*pzstr));
+	zs_free(pzstr);
+	return val;
+}
 void
 set_pvalue_string (PVALUE val, CNSTRING str)
 {

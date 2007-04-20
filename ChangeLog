@@ -1,3 +1,12 @@
+2007-04-20 Perry Rapp
+
+	* ChangeLog src/gedlib/llgettext.c src/hdrs/pvalue.h
+	src/interp/builtin.c src/interp/pvalue.c
+
+	New function create_pvalue_from_zstr.
+	Fix missing end comment in update_textdomain_localedir
+	which broke localedir handling.
+
 2007-04-19 lifelines beta 3.0.56 RELEASE
 
 2007-04-19 Perry Rapp

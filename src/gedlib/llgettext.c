@@ -76,7 +76,7 @@ update_textdomain_localedir (CNSTRING domain, CNSTRING prefix)
 	/* Default to compile-time specified (LOCALEDIR) */
 	newLocaleDir = gt_defLocaleDir;
 
-	/* Check for config setting for LocaleDir
+	/* Check for config setting for LocaleDir */
 	newLocaleDir = getlloptstr("LocaleDir", newLocaleDir);
 
 	/* Check for Ui or Rpt specific setting, eg, UiLocaleDir */

@@ -2367,8 +2367,7 @@ llrpt_concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		++argcnt;
 		delete_pvalue(val);
 	}
-	val = create_pvalue_from_string(zs_str(zstr));
-	zs_free(&zstr);
+	val = create_pvalue_from_zstr(&zstr);
 	return val;
 }
 /*=======================================+

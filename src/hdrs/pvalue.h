@@ -127,6 +127,7 @@ PVALUE create_pvalue_from_othr_keynum(INT i);
 PVALUE create_pvalue_from_seq(INDISEQ seq);
 PVALUE create_pvalue_from_sour_keynum(INT i);
 PVALUE create_pvalue_from_string(CNSTRING str);
+PVALUE create_pvalue_from_zstr(ZSTR * pzstr);
 PVALUE create_pvalue_from_table(TABLE tab);
 ZSTR describe_pvalue(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
