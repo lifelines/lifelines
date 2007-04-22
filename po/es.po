@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.55\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-19 17:36-0400\n"
+"POT-Creation-Date: 2007-04-22 13:18-0400\n"
 "PO-Revision-Date: 2007-04-17 23:10-0500\n"
 "Last-Translator: Larry Hamilton <lmh@hamiltongensociety.org>\n"
 "Language-Team: Not a language team\n"
@@ -2687,75 +2687,75 @@ msgstr "el arg a vaciar no es una lista, una tabla o un sistema"
 msgid "the arg to length is not a list, table or set"
 msgstr "el arg a la longitud no es una lista, una tabla o un sistema"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "He"
 msgstr "El"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "he"
 msgstr "el"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "His"
 msgstr "Suyo"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "his"
 msgstr "suyo"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "him"
 msgstr "el"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "She"
 msgstr "Ella"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "she"
 msgstr "ella"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "Her"
 msgstr "Suya"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her"
 msgstr "suya"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her_"
 msgstr "ella"
 
-#: src/interp/builtin.c:2851
+#: src/interp/builtin.c:2850
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) la persona no tiene un nombre"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Sunday"
 msgstr "Domingo"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Monday"
 msgstr "Lunes"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Tuesday"
 msgstr "Martes"
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Wednesday"
 msgstr "Miércoles"
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Thursday"
 msgstr "Jueves"
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Friday"
 msgstr "Viernes"
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Saturday"
 msgstr "Sabado"
 
@@ -3414,7 +3414,7 @@ msgid_plural "%d children"
 msgstr[0] "%d niño"
 msgstr[1] "%d niños"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1482
+#: src/liflines/error.c:61 src/tools/dbverify.c:1485
 msgid "Fatal Error"
 msgstr "Error Fatal"
 
@@ -3427,7 +3427,7 @@ msgstr "ERROR FATAL"
 msgid "  in file <%s> at line %d\n"
 msgstr "en archivo <%s> en la línea %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1493
+#: src/liflines/error.c:70 src/tools/dbverify.c:1496
 msgid "ASSERT failure"
 msgstr "AFIRME la falta"
 
@@ -4438,83 +4438,83 @@ msgid "Failed to fix missing undeleted record %s"
 msgstr "Falló arreglado falto registro no borrado %s..."
 
 #: src/tools/dbverify.c:1116
-#, c-format
-msgid "Master fkey misaligned (%ld != %ld)\n"
+#, fuzzy, c-format
+msgid "Master fkey misaligned"
 msgstr "El fkey principal se alineó mal (%ld! = %ld)\n"
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1143
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr "¡Complete un ciclo en los índices, archivo %s encontrado otra vez!\n"
 
-#: src/tools/dbverify.c:1149
-#, c-format
-msgid "Error loading index at key %ld\n"
+#: src/tools/dbverify.c:1150
+#, fuzzy, c-format
+msgid "Error loading index at key"
 msgstr "Índice del cargamento del error en la clave %ld\n"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1198
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "Primera clave en bloque debajo del limite de los progenitores\n"
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1206
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Clave pasada en bloque sobre el límite de los progenitores\n"
 
-#: src/tools/dbverify.c:1212
-#, c-format
-msgid "Key %ld not below next key\n"
+#: src/tools/dbverify.c:1214
+#, fuzzy, c-format
+msgid "Key not below next key"
 msgstr "Clave %ld no debajo el clave siguiente\n"
 
-#: src/tools/dbverify.c:1228 src/tools/dbverify.c:1230
+#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
 msgstr "datos de cuadra..."
 
-#: src/tools/dbverify.c:1231
+#: src/tools/dbverify.c:1234
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr "%s fkey=%d, fichero=%s"
 
-#: src/tools/dbverify.c:1244
-#, c-format
-msgid "Invalid errs array[%ld] in dbverify - fix program\n"
+#: src/tools/dbverify.c:1247
+#, fuzzy, c-format
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Inválido errs arreglo[%ld] en dbverify - programma de arreglado\n"
 
-#: src/tools/dbverify.c:1280
+#: src/tools/dbverify.c:1283
 #, c-format
 msgid "Missing data record (%s)"
 msgstr "Registro de datos que falta (%s)"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1287
 #, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Registro de datos que falta arreglado (%s)"
 
-#: src/tools/dbverify.c:1454
+#: src/tools/dbverify.c:1457
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d error"
 msgstr[1] "%d errors"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d arreglado"
 msgstr[1] "%d arreglados"
 
-#: src/tools/dbverify.c:1465
+#: src/tools/dbverify.c:1468
 msgid "No errors found"
 msgstr "Ningunos errores encontrados"
 
-#: src/tools/dbverify.c:1484
+#: src/tools/dbverify.c:1487
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ERROR FATAL: "
 
-#: src/tools/dbverify.c:1489
+#: src/tools/dbverify.c:1492
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "En el archivo <%s> en la línea %d"

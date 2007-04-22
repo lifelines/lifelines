@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.46\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-19 17:36-0400\n"
+"POT-Creation-Date: 2007-04-22 13:18-0400\n"
 "PO-Revision-Date: 2005-06-20 15:57+0200\n"
 "Last-Translator: Jens Arvidsson <jya@sverige.nu>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2662,75 +2662,75 @@ msgstr "argumentet till empty är inte en lista, tabell eller uppsättning"
 msgid "the arg to length is not a list, table or set"
 msgstr "argumentet till length är inte en lista, tabell eller uppsättning"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "He"
 msgstr "Han"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "he"
 msgstr "han"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "His"
 msgstr "Hans"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "his"
 msgstr "hans"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "him"
 msgstr "honom"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "She"
 msgstr "Hon"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "she"
 msgstr "hon"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "Her"
 msgstr "Hennes"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her"
 msgstr "hennes"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her_"
 msgstr "henne"
 
-#: src/interp/builtin.c:2851
+#: src/interp/builtin.c:2850
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) personen har inget namn"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Saturday"
 msgstr ""
 
@@ -3388,7 +3388,7 @@ msgid_plural "%d children"
 msgstr[0] "%d barn"
 msgstr[1] "%d barn"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1482
+#: src/liflines/error.c:61 src/tools/dbverify.c:1485
 msgid "Fatal Error"
 msgstr "Ödesdigert fel"
 
@@ -3401,7 +3401,7 @@ msgstr "SYSTEMANROPSFEL"
 msgid "  in file <%s> at line %d\n"
 msgstr "  i filen <%s> vid rad %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1493
+#: src/liflines/error.c:70 src/tools/dbverify.c:1496
 msgid "ASSERT failure"
 msgstr "ASSERT-misslyckande"
 
@@ -4414,82 +4414,82 @@ msgstr "Misslyckades med att laga saknad återskapad post %s"
 
 #: src/tools/dbverify.c:1116
 #, fuzzy, c-format
-msgid "Master fkey misaligned (%ld != %ld)\n"
+msgid "Master fkey misaligned"
 msgstr "Huvud-fkey felpositionerad (%d != %d)\n"
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1143
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr "Cykel i index, fil %s hittades igen!\n"
 
-#: src/tools/dbverify.c:1149
+#: src/tools/dbverify.c:1150
 #, fuzzy, c-format
-msgid "Error loading index at key %ld\n"
+msgid "Error loading index at key"
 msgstr "Fel vid inläsning av position vid nyckel %d\n"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1198
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "Första nyckel i block under förälders gräns\n"
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1206
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Sista nyckel i block under förälders gräns\n"
 
-#: src/tools/dbverify.c:1212
+#: src/tools/dbverify.c:1214
 #, fuzzy, c-format
-msgid "Key %ld not below next key\n"
+msgid "Key not below next key"
 msgstr "Nyckel %d inte under nästa nyckel\n"
 
-#: src/tools/dbverify.c:1228 src/tools/dbverify.c:1230
+#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
 msgstr "datablock"
 
-#: src/tools/dbverify.c:1231
+#: src/tools/dbverify.c:1234
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr "%s fkey=%d, fil=%s"
 
-#: src/tools/dbverify.c:1244
+#: src/tools/dbverify.c:1247
 #, fuzzy, c-format
-msgid "Invalid errs array[%ld] in dbverify - fix program\n"
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Ogiltig felvektor[%d] i dbverify - laga programmet\n"
 
-#: src/tools/dbverify.c:1280
+#: src/tools/dbverify.c:1283
 #, c-format
 msgid "Missing data record (%s)"
 msgstr "Datapost saknas (%s)"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1287
 #, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Lagade saknad datapost (%s)"
 
-#: src/tools/dbverify.c:1454
+#: src/tools/dbverify.c:1457
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fel"
 msgstr[1] "%d fel"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d lagad"
 msgstr[1] "%d lagade"
 
-#: src/tools/dbverify.c:1465
+#: src/tools/dbverify.c:1468
 msgid "No errors found"
 msgstr "Inga fel hittades"
 
-#: src/tools/dbverify.c:1484
+#: src/tools/dbverify.c:1487
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ÖDESDIGERT FEL"
 
-#: src/tools/dbverify.c:1489
+#: src/tools/dbverify.c:1492
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "I filen <%s> vid rad %d"

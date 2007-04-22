@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-19 17:36-0400\n"
+"POT-Creation-Date: 2007-04-22 13:18-0400\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -3083,76 +3083,76 @@ msgstr ""
 msgid "the arg to length is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "He"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "he"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "His"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "his"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "him"
 msgstr ""
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "She"
 msgstr ""
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "she"
 msgstr ""
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "Her"
 msgstr ""
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her"
 msgstr ""
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her_"
 msgstr ""
 
-#: src/interp/builtin.c:2851
+#: src/interp/builtin.c:2850
 #, fuzzy
 msgid "(trimname) person does not have a name"
 msgstr "(OYA a Izina:"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Saturday"
 msgstr ""
 
@@ -3932,7 +3932,7 @@ msgid_plural "%d children"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1482
+#: src/liflines/error.c:61 src/tools/dbverify.c:1485
 msgid "Fatal Error"
 msgstr ""
 
@@ -3945,7 +3945,7 @@ msgstr ""
 msgid "  in file <%s> at line %d\n"
 msgstr "in IDOSIYE ku Umurongo"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1493
+#: src/liflines/error.c:70 src/tools/dbverify.c:1496
 msgid "ASSERT failure"
 msgstr ""
 
@@ -5012,59 +5012,59 @@ msgstr "Icyabitswe"
 
 #: src/tools/dbverify.c:1116
 #, c-format
-msgid "Master fkey misaligned (%ld != %ld)\n"
+msgid "Master fkey misaligned"
 msgstr ""
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1143
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1149
-#, c-format
-msgid "Error loading index at key %ld\n"
-msgstr ""
+#: src/tools/dbverify.c:1150
+#, fuzzy, c-format
+msgid "Error loading index at key"
+msgstr "Ibyatanzwe"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1198
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1206
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1212
+#: src/tools/dbverify.c:1214
 #, c-format
-msgid "Key %ld not below next key\n"
+msgid "Key not below next key"
 msgstr ""
 
-#: src/tools/dbverify.c:1228 src/tools/dbverify.c:1230
+#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
 msgstr ""
 
-#: src/tools/dbverify.c:1231
+#: src/tools/dbverify.c:1234
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:1244
+#: src/tools/dbverify.c:1247
 #, fuzzy, c-format
-msgid "Invalid errs array[%ld] in dbverify - fix program\n"
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Imbonerahamwe in"
 
-#: src/tools/dbverify.c:1280
+#: src/tools/dbverify.c:1283
 #, fuzzy, c-format
 msgid "Missing data record (%s)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1287
 #, fuzzy, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:1454
+#: src/tools/dbverify.c:1457
 #, fuzzy, c-format
 msgid "%d error"
 msgid_plural "%d errors"
@@ -5072,24 +5072,24 @@ msgstr[0] "%dIkosa rya"
 msgstr[1] "%dIkosa rya"
 
 # sw/source\ui\utlui\initui.src:RID_SW_SHELLRES.STR_FIELD_FIXED.text
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, fuzzy, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%dbidahinduka)"
 msgstr[1] "%dbidahinduka)"
 
-#: src/tools/dbverify.c:1465
+#: src/tools/dbverify.c:1468
 #, fuzzy
 msgid "No errors found"
 msgstr "Amakosa Byabonetse"
 
-#: src/tools/dbverify.c:1484
+#: src/tools/dbverify.c:1487
 #, c-format
 msgid "FATAL ERROR: "
 msgstr ""
 
-#: src/tools/dbverify.c:1489
+#: src/tools/dbverify.c:1492
 #, fuzzy, c-format
 msgid "In file <%s> at line %d"
 msgstr "IDOSIYE ku Umurongo"

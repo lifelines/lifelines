@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-19 17:36-0400\n"
+"POT-Creation-Date: 2007-04-22 13:18-0400\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -2696,75 +2696,75 @@ msgstr ""
 msgid "the arg to length is not a list, table or set"
 msgstr ""
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "He"
 msgstr "Hij"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "he"
 msgstr "hij"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "His"
 msgstr "Zijn"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "his"
 msgstr "zijn"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "him"
 msgstr "hem"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "She"
 msgstr "Zij"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "she"
 msgstr "zij"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "Her"
 msgstr "Haar"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her"
 msgstr "haar"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her_"
 msgstr "haar_"
 
-#: src/interp/builtin.c:2851
+#: src/interp/builtin.c:2850
 msgid "(trimname) person does not have a name"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Saturday"
 msgstr ""
 
@@ -3424,7 +3424,7 @@ msgid_plural "%d children"
 msgstr[0] "%d kind"
 msgstr[1] "%d kinderen"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1482
+#: src/liflines/error.c:61 src/tools/dbverify.c:1485
 msgid "Fatal Error"
 msgstr "Fatale fout"
 
@@ -3437,7 +3437,7 @@ msgstr "FATALE FOUT"
 msgid "  in file <%s> at line %d\n"
 msgstr "  in bestand <%s> op regel %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1493
+#: src/liflines/error.c:70 src/tools/dbverify.c:1496
 msgid "ASSERT failure"
 msgstr ""
 
@@ -4463,83 +4463,83 @@ msgstr "Ontbrekende niet-verwijderde opgave %c%d"
 
 #: src/tools/dbverify.c:1116
 #, c-format
-msgid "Master fkey misaligned (%ld != %ld)\n"
+msgid "Master fkey misaligned"
 msgstr ""
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1143
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1149
-#, c-format
-msgid "Error loading index at key %ld\n"
-msgstr ""
+#: src/tools/dbverify.c:1150
+#, fuzzy, c-format
+msgid "Error loading index at key"
+msgstr "Fout bij het benaderen van gegevens"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1198
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1206
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1212
+#: src/tools/dbverify.c:1214
 #, c-format
-msgid "Key %ld not below next key\n"
+msgid "Key not below next key"
 msgstr ""
 
-#: src/tools/dbverify.c:1228 src/tools/dbverify.c:1230
+#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
 msgstr ""
 
-#: src/tools/dbverify.c:1231
+#: src/tools/dbverify.c:1234
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:1244
+#: src/tools/dbverify.c:1247
 #, fuzzy, c-format
-msgid "Invalid errs array[%ld] in dbverify - fix program\n"
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr ""
 "Ongeldige foutenvector[%d] in gegevensbankverifiëren - programma herstellen\n"
 
-#: src/tools/dbverify.c:1280
+#: src/tools/dbverify.c:1283
 #, fuzzy, c-format
 msgid "Missing data record (%s)"
 msgstr "Ontbrekende opgaven"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1287
 #, fuzzy, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Ontbrekende opgaven"
 
-#: src/tools/dbverify.c:1454
+#: src/tools/dbverify.c:1457
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fout"
 msgstr[1] "%d fouten"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d hersteld"
 msgstr[1] "%d hersteld"
 
-#: src/tools/dbverify.c:1465
+#: src/tools/dbverify.c:1468
 msgid "No errors found"
 msgstr "Geen fouten gevonden"
 
-#: src/tools/dbverify.c:1484
+#: src/tools/dbverify.c:1487
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "FATALE FOUT"
 
-#: src/tools/dbverify.c:1489
+#: src/tools/dbverify.c:1492
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In bestand <%s> op regel %d"

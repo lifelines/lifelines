@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-19 17:36-0400\n"
+"POT-Creation-Date: 2007-04-22 13:18-0400\n"
 "PO-Revision-Date: 2005-04-15 17:56+0200\n"
 "Last-Translator: Piotr Bolek <piotr.bolek@7bulls.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -2659,75 +2659,75 @@ msgstr "argument polecenie empty nie jest list±, tabel± ani zbiorem"
 msgid "the arg to length is not a list, table or set"
 msgstr "argument polecenia length nie jest list±, tabel± ani zbiorem"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "He"
 msgstr "On"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "he"
 msgstr "on"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "His"
 msgstr "Jego"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "his"
 msgstr "jego"
 
-#: src/interp/builtin.c:2471
+#: src/interp/builtin.c:2470
 msgid "him"
 msgstr "jemu"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "She"
 msgstr "Ona"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "she"
 msgstr "ona"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "Her"
 msgstr "Jej"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her"
 msgstr "jej"
 
-#: src/interp/builtin.c:2473
+#: src/interp/builtin.c:2472
 msgid "her_"
 msgstr "jej_"
 
-#: src/interp/builtin.c:2851
+#: src/interp/builtin.c:2850
 msgid "(trimname) person does not have a name"
 msgstr "(trimname) osoba nie ma nazwiska"
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Sunday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Monday"
 msgstr ""
 
-#: src/interp/builtin.c:2941
+#: src/interp/builtin.c:2940
 msgid "Tuesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Wednesday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Thursday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Friday"
 msgstr ""
 
-#: src/interp/builtin.c:2942
+#: src/interp/builtin.c:2941
 msgid "Saturday"
 msgstr ""
 
@@ -3392,7 +3392,7 @@ msgstr[0] "%d dziecko"
 msgstr[1] "%d dzieci"
 msgstr[2] "%d dzieci"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1482
+#: src/liflines/error.c:61 src/tools/dbverify.c:1485
 msgid "Fatal Error"
 msgstr "B³±d krytyczny"
 
@@ -3405,7 +3405,7 @@ msgstr "B£¡Ð KRYTYCZNY"
 msgid "  in file <%s> at line %d\n"
 msgstr "  w pliku <%s>, wiersz %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1493
+#: src/liflines/error.c:70 src/tools/dbverify.c:1496
 msgid "ASSERT failure"
 msgstr "nieudany ASSERT"
 
@@ -4427,59 +4427,59 @@ msgstr "Nie uda³o siê poprawiæ brakuj±cego nieusuniêtego rekord %s"
 
 #: src/tools/dbverify.c:1116
 #, fuzzy, c-format
-msgid "Master fkey misaligned (%ld != %ld)\n"
+msgid "Master fkey misaligned"
 msgstr "G³ówny fkey uszkodzony (%d != %d)\n"
 
-#: src/tools/dbverify.c:1142
+#: src/tools/dbverify.c:1143
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr "Cykl w indeksach, plik %s znaleziony ponownie!\n"
 
-#: src/tools/dbverify.c:1149
+#: src/tools/dbverify.c:1150
 #, fuzzy, c-format
-msgid "Error loading index at key %ld\n"
+msgid "Error loading index at key"
 msgstr "B³±d ³adowania indeksu przy kluczu %d\n"
 
-#: src/tools/dbverify.c:1196
+#: src/tools/dbverify.c:1198
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "Pierwszy klucz w bloku poni¿ej limitu rodziców\n"
 
-#: src/tools/dbverify.c:1204
+#: src/tools/dbverify.c:1206
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Ostatni klucz w bloku powy¿ej limitu rodziców\n"
 
-#: src/tools/dbverify.c:1212
+#: src/tools/dbverify.c:1214
 #, fuzzy, c-format
-msgid "Key %ld not below next key\n"
+msgid "Key not below next key"
 msgstr "Klucz %d nie jest ni¿ej ni¿ nastêpny klucz\n"
 
-#: src/tools/dbverify.c:1228 src/tools/dbverify.c:1230
+#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
 msgstr "blok danych"
 
-#: src/tools/dbverify.c:1231
+#: src/tools/dbverify.c:1234
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr "%s fkey=%d, plik=%s"
 
-#: src/tools/dbverify.c:1244
+#: src/tools/dbverify.c:1247
 #, fuzzy, c-format
-msgid "Invalid errs array[%ld] in dbverify - fix program\n"
+msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "B³êdna tablica b³êdów[%d] w dbverify - popraw program\n"
 
-#: src/tools/dbverify.c:1280
+#: src/tools/dbverify.c:1283
 #, c-format
 msgid "Missing data record (%s)"
 msgstr "Brakuj±cy rekord danych (%s)"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1287
 #, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Poprawiono brakuj±cy rekord danych (%s)"
 
-#: src/tools/dbverify.c:1454
+#: src/tools/dbverify.c:1457
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
@@ -4487,7 +4487,7 @@ msgstr[0] "%d b³±d"
 msgstr[1] "%d b³êdy"
 msgstr[2] "%d b³êdów"
 
-#: src/tools/dbverify.c:1458
+#: src/tools/dbverify.c:1461
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
@@ -4495,16 +4495,16 @@ msgstr[0] "%d poprawiony"
 msgstr[1] "%d poprawione"
 msgstr[2] "%d poprawionych"
 
-#: src/tools/dbverify.c:1465
+#: src/tools/dbverify.c:1468
 msgid "No errors found"
 msgstr "Nie ma b³êdów"
 
-#: src/tools/dbverify.c:1484
+#: src/tools/dbverify.c:1487
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "B£¡D KRYTYCZNY: "
 
-#: src/tools/dbverify.c:1489
+#: src/tools/dbverify.c:1492
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "W pliku <%s> w wierszu %d"
