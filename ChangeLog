@@ -1,5 +1,13 @@
 2007-04-22 lifelines beta 3.0.57 RELEASE
 
+2007-04-11 Perry Rapp
+	Increased version to 3.0.57
+
+	* ChangeLog src/tools/dbverify.c
+
+	Reverted PRId32 use to %ld to fix win32 compilation
+	to get 3.0.57 out.
+
 2007-04-20 Perry Rapp
 
 	* ChangeLog src/gedlib/llgettext.c src/hdrs/pvalue.h
