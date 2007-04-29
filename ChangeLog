@@ -1,3 +1,11 @@
+2007-04-29 Perry Rapp
+
+	* ChangeLog build/setversions.sh build/rpm/lifelines.spec
+	docs/Makefile.am
+
+	Add llexec.1 man page to distribution
+	and rpm distribution.
+
 2007-04-22 lifelines beta 3.0.57 RELEASE
 
 2007-04-11 Perry Rapp

@@ -95,6 +95,7 @@ install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
 install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
 install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
 install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
+install -m 644 docs/llexec.1 $RPM_BUILD_ROOT/usr/local/man/man1/llexec.1
 
 
 %files
@@ -123,8 +124,11 @@ install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
 /usr/local/man/man1/btedit.1
 /usr/local/man/man1/dbverify.1
 /usr/local/man/man1/llines.1
+/usr/local/man/man1/llexec.1
 
 %changelog
+* Sun Apr 29 2007 Perry Rapp
+- add llexec.1 man page to release
 * Sun Apr 15 2007 Stephen Dum
 - add README* files to release
 * Wed Dec 21 2005 Stephen Dum

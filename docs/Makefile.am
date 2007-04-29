@@ -36,7 +36,7 @@ OLDFILES =	quickref.pdf quickref.ps
 # Man Pages Manuals
 ###################
 
-MANPAGES =   btedit.1 dbverify.1 llines.1
+MANPAGES =   btedit.1 dbverify.1 llines.1 llexec.1
 
 ###################
 # Rules

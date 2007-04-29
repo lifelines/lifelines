@@ -1,6 +1,6 @@
 #!/bin/bash
 # Created: 2005-10-08, Perry Rapp
-# Edited:  2007-04-04, Perry Rapp
+# Edited:  2007-04-29, Perry Rapp
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
@@ -131,7 +131,7 @@ function applyversion {
   alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
   altermansrc btedit.1 btedit
   altermansrc dbverify.1 dbverify
-  altermansrc llines.1 LLINES
+  altermansrc llines.1 llexec.1 LLINES
   alterwinversions ../build/msvc6/dbverify/dbVerify.rc
   alterwinversions ../build/msvc6/llexec/llexec.rc
   alterwinversions ../build/msvc6/llines/llines.rc
@@ -160,6 +160,7 @@ function restore {
   restorefile ../docs/ll-reportmanual.xml
   restorefile ../docs/ll-userguide.xml
   restorefile ../docs/llines.1
+  restorefile ../docs/llexec.1
   restorefile ../build/msvc6/dbverify/dbVerify.rc
   restorefile ../build/msvc6/llexec/llexec.rc
   restorefile ../build/msvc6/llines/llines.rc
