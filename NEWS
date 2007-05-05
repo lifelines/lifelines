@@ -4,6 +4,10 @@ http://lifelines.sourceforge.net
 
 Bug fixes in 3.0.57 (beta)
 ============================
+ - Fix inlist to handle empty lists correctly
+
+Bug fixes in 3.0.57 (beta)
+============================
  - Fix LocaleDir settings (broken
     again just as 3.0.56 released)
 

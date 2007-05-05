@@ -176,7 +176,7 @@ in_list (LIST list, VPTR param, BOOLEAN (*func)(VPTR param, VPTR el))
 	LNODE lnode;
 	INT index=0;
 	if (is_empty_list(list)) /* calls validate_list */
-		return FALSE;
+		return -1;
 	lnode = lhead(list);
 	while (lnode) {
 		if ((*func)(param, lelement(lnode)))

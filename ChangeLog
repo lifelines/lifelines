@@ -1,3 +1,10 @@
+2007-05-05 Perry Rapp
+
+	* ChangeLog NEWS src/stdlib/list.c
+
+	Fix in_list (needs to return -1 for empty list,
+	not FALSE).
+
 2007-04-29 Perry Rapp
 
 	* ChangeLog build/setversions.sh build/rpm/lifelines.spec
