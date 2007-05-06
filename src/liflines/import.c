@@ -63,7 +63,7 @@ extern INT gd_smax;	/* maximum source key number */
 extern INT gd_emax;	/* maximum event key number */
 extern INT gd_xmax;	/* maximum other key number */
 
-extern STRING qSgdnadd, qSdboldk, qSdbnewk, qSdbodel;
+extern STRING qSgdnadd, qSdboldk, qSdbnewk;
 extern STRING qScfoldk, qSunsupuniv, qSproceed;
 
 /*********************************************
@@ -241,7 +241,13 @@ retry_input_codeset:
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {
-		    snprintf(msgbuf, sizeof(msgbuf), _(qSdbodel), totkeys-totused);
+			INT delkeys = totkeys-totused;
+			snprintf(msgbuf, sizeof(msgbuf)
+				, _pl("Using original keys, %d deleted record will be in the database."
+					, "Using original keys, %d deleted records will be in the database."
+					, delkeys)
+				, delkeys
+				);
 		}
 		else strcpy(msgbuf, " ");
 		gd_reuse = ask_yes_or_no_msg(msgbuf, _(qScfoldk));

@@ -54,6 +54,7 @@ struct tag_symtab_iter {
  *********************************************/
 
 /* alphabetical */
+static SYMTAB create_symtab(CNSTRING title);
 static void free_symtable_iter(SYMTAB_ITER symtabit);
 static void record_dead_symtab(SYMTAB symtab);
 static void record_live_symtab(SYMTAB symtab);
@@ -118,16 +119,37 @@ remove_symtab (SYMTAB stab)
 	stdfree(stab);
 }
 /*======================================================
- * create_symtab -- Create a symbol table
+ * create_symtab_proc -- Create a symbol table for a procedure
  *  returns allocated SYMTAB
  *====================================================*/
 SYMTAB
-create_symtab (void)
+create_symtab_proc (CNSTRING procname)
+{
+	char title[128];
+	llstrncpyf(title, sizeof(title), uu8, "proc: %s", procname);
+	return create_symtab(title);
+}
+/*======================================================
+ * create_symtab_global -- Create a global symbol table
+ *  returns allocated SYMTAB
+ *====================================================*/
+SYMTAB
+create_symtab_global (void)
+{
+	return create_symtab("global");
+}
+/*======================================================
+ * create_symtab -- Create a symbol table
+ *  returns allocated SYMTAB
+ *====================================================*/
+static SYMTAB
+create_symtab (CNSTRING title)
 {
 	SYMTAB symtab = (SYMTAB)stdalloc(sizeof(*symtab));
 	memset(symtab, 0, sizeof(*symtab));
 
 	symtab->tab = create_table_custom_vptr(delete_vptr_pvalue);
+	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, title);
 
 	record_live_symtab(symtab);
 

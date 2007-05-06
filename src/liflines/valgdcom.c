@@ -1056,7 +1056,9 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 	ZSTR zpath = zs_new();
 	*zerr = 0;
 	for (linno=1; 1; ++linno) {
-		XLAT xlat=0; /* no codeset translation yet */
+		XLAT xlat=0;
+		/* no codeset translation yet, b/c we've not found the file's
+		encoding declaration yet */
 		INT rc;
 		STRING xref, tag, val, msg;
 		lastoff = ftell(fp);

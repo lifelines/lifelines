@@ -247,7 +247,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		goto ufunc_leave;
 	}
 
-	newstab = create_symtab();
+	newstab = create_symtab_proc(procname);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(func);
 	while (arg && parm) {
@@ -255,7 +255,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		PVALUE value = evaluate(arg, stab, &eflg);
 		if (eflg) {
 			if (getlloptint("FullReportCallStack", 0) > 0)
-				prog_error(node, "In user function %s()", iname(node));
+				prog_error(node, "In user function %s()", procname);
 			return INTERROR;
 		}
 		insert_symtab(newstab, iident(parm), value);
@@ -263,7 +263,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "``%s'': mismatched args and params\n", procname);
 		goto ufunc_leave;
 	}
 	irc = interpret((PNODE) ibody(func), newstab, &val);
@@ -283,7 +283,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		break;
 	}
 	if (getlloptint("FullReportCallStack", 0) > 0)
-		prog_error(node, "In user function %s()", iname(node));
+		prog_error(node, "In user function %s()", procname);
 	*eflg = TRUE;
 	delete_pvalue(val);
 	val=NULL;

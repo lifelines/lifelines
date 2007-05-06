@@ -329,7 +329,9 @@ describe_dberror (INT dberr, STRING buffer, INT buflen)
 		break;
 	case BTERR_READERS:
 		llstrappf(b, n, u8
-			, _("The database is already opened for read access by %d users.\n  ")
+			, _pl("The database is already opened for read access by %d user."
+				, "The database is already opened for read access by %d users."
+				, rdr_count)
 			, rdr_count);
 		break;
 	case BTERR_BADPROPS:

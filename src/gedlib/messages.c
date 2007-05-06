@@ -268,7 +268,6 @@ ZST qSnosuchtt    = N_("No such translation table in this database");
 ZST qSgdnadd      = N_("Because of errors the GEDCOM file was not loaded.\n");
 ZST qSdboldk      = N_("No errors; adding records with original keys...");
 ZST qSdbnewk      = N_("No errors; adding records with new keys...");
-ZST qSdbodel      = N_("Using original keys, %d deleted records will be in the database.");
 ZST qScfoldk      = N_("Use original keys from GEDCOM file?");
 ZST qSproceed     = N_("Proceed?");
 ZST qSoutarc      = N_("Enter name of output archive file.");

@@ -1,3 +1,13 @@
+2007-05-06 Perry Rapp
+
+	* ChangeLog src/gedlib/dbcontext.c src/gedlib/messages.c
+	src/interp/eval.c src/interp/interp.c src/interp/interpi.h
+	src/interp/progerr.c src/interp/symtab.c src/liflines/import.c
+	src/liflines/valgdcom.c
+
+	i18n fix in describe_dberror.
+	Removed qSdbodel & fixed with pluralizable i18n.
+	Add title to symbol table, and display in debugger.
 
 2007-05-05 Perry Rapp
 

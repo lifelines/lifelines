@@ -130,6 +130,7 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		n = (stab->tab ? get_table_count(stab->tab) : 0);
 		zs_setf(zstr, _pl("Display local (%d var)",
 			"Display locals (%d vars)", n), n);
+		zs_appf(zstr, " [%s]", stab->title);
 		choices[i++] = strsave(zs_str(zstr));
 		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
 		zs_setf(zstr, _pl("Display global (%d var)",
