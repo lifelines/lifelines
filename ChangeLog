@@ -17,6 +17,10 @@
 	Add parent field to symbol tables (SYMTAB).
 	New functions count_symtab_ancestors & get_symtab_ancestor.
 
+	*ChangeLog reports/st/st_list.li
+
+	Add two more in_list tests to self-test for lists.
+
 2007-05-05 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/list.c
