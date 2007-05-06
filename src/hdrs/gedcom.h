@@ -93,6 +93,7 @@ struct tag_node {
 #define nsibling(n) ((n)->n_sibling)
 #define nflag(n)    ((n)->n_flag)
 #define nrefcnt(n)  ((n)->n_refcnt)
+#define ncel(n)     ((n)->n_cel)
 enum { ND_TEMP=1 };
 
 struct tag_nkey { char ntype; INT keynum; char key[MAXKEYWIDTH+1]; };

@@ -136,6 +136,7 @@ void delete_pvalue_ptr(PVALUE * valp);
 NODE remove_node_and_delete_pvalue(PVALUE *);
 void eq_conform_pvalues(PVALUE, PVALUE, BOOLEAN*);
 BOOLEAN eqv_pvalues(VPTR, VPTR);
+BOOLEAN is_node_pvalue(PVALUE value);
 BOOLEAN is_numeric_pvalue(PVALUE);
 BOOLEAN is_pvalue(PVALUE);
 BOOLEAN is_record_pvalue(PVALUE);

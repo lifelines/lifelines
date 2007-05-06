@@ -55,10 +55,16 @@ CACHEEL qkey_to_sour_cacheel(STRING);
 CACHEEL qkey_to_othr_cacheel(STRING);
 
 void lock_cache(CACHEEL);
-void lock_record_in_cache(RECORD rec);
-void semilock_cache(CACHEEL);
 void unlock_cache(CACHEEL);
+
+void lock_record_in_cache(RECORD rec);
 void unlock_record_from_cache(RECORD rec);
+
+void lockrpt_cache(CACHEEL);
+void unlockrpt_cache(CACHEEL);
+INT cel_rptlocks(CACHEEL cel);
+INT free_all_rprtlocks(void);
+
 
 CNSTRING cacheel_to_key(CACHEEL cel);
 NODE cacheel_to_node(CACHEEL cel);

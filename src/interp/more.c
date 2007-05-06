@@ -82,13 +82,13 @@ PVALUE
 llrpt_extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list=0;
-	STRING str, str2;
-	INT len, sind;
+	STRING str=0, str2=0;
+	INT len=0, sind=0;
 	PNODE nexp = (PNODE) iargs(node);
 	PNODE lexp = inext(nexp);
 	PNODE lvar = inext(lexp);
 	PNODE svar = inext(lvar);
-	NODE line;
+	NODE line=0;
 	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
 
 	if (*eflg) {
@@ -968,19 +968,47 @@ rightjustify (STRING str, INT len)
 PVALUE
 llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT type;
-	CACHEEL cel;
+	CACHEEL cel=0;
 	PNODE arg = iargs(node);
 	PVALUE val = evaluate(arg, stab, eflg);
-	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
-		*eflg = TRUE;
+	if (*eflg) {
 		prog_var_error(node, stab, arg, val
-		  , _("the arg to lock must be a person or family"));
+		  , _("error evaluating arg to lock"));
 		return NULL;
 	}
-	cel = pvalue_to_cel(val);
+	if (!val) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, val
+		  , _("null arg in lock"));
+		return NULL;
+	}
+	if (is_record_pvalue(val)) {
+		cel = pvalue_to_cel(val);
+	} else if (is_node_pvalue(val)) {
+		NODE nd = pvalue_to_node(val);
+		cel = ncel(nd);
+		if (!cel) {
+			*eflg = TRUE;
+			prog_var_error(node, stab, arg, val
+			  , _("node passed to lock must be inside a record"));
+			return NULL;
+		}
+	} else {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, val
+		  , _("the arg to lock must be a record or node"));
+		return NULL;
+	}
 	delete_pvalue(val);
-	if (cel) lock_cache(cel);
+	if (cel) {
+		if (cel_rptlocks(cel)>999999) {
+			*eflg = TRUE;
+			prog_var_error(node, stab, arg, val
+			  , _("Error: there are 999,999 locks on arg to lock"));
+			return NULL;
+		}
+		lockrpt_cache(cel);
+	}
 /* TO DO - ought to ensure this gets freed */
 	return NULL;
 }
@@ -991,19 +1019,41 @@ llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT type;
-	CACHEEL cel;
+	CACHEEL cel=0;
 	PNODE arg = iargs(node);
 	PVALUE val = evaluate(arg, stab, eflg);
-	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
-		*eflg = TRUE;
+	if (*eflg) {
 		prog_var_error(node, stab, arg, val
-		  , _("the arg to unlock must be a person or family"));
+		  , _("error evaluating arg to unlock"));
 		return NULL;
 	}
-	cel = pvalue_to_cel(val);
+	if (!val) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, val
+		  , _("null arg in unlock"));
+		return NULL;
+	}
+	if (is_record_pvalue(val)) {
+		cel = pvalue_to_cel(val);
+	} else if (is_node_pvalue(val)) {
+		NODE nd = pvalue_to_node(val);
+		cel = ncel(nd);
+		if (!cel) {
+			*eflg = TRUE;
+			prog_var_error(node, stab, arg, val
+			  , _("node passed to unlock must be inside a record"));
+			return NULL;
+		}
+	} else {
+		*eflg = TRUE;
+		prog_var_error(node, stab, arg, val
+		  , _("the arg to unlock must be a record or node"));
+		return NULL;
+	}
 	delete_pvalue(val);
-	if (cel) unlock_cache(cel);
+	if (cel) {
+		unlockrpt_cache(cel);
+	}
 	return NULL;
 }
 /*==========================================+

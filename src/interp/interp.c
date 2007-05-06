@@ -80,7 +80,7 @@ BOOLEAN rpt_cancelled = FALSE;
 
 extern INT progerror;
 extern BOOLEAN progrunning, progparsing;
-extern STRING qSwhatrpt,qSidrpt;
+extern STRING qSwhatrpt;
 extern STRING nonint1, nonintx, nonstr1, nonstrx, nullarg1, nonfname1;
 extern STRING nonnodstr1, nonind1, nonindx, nonfam1, nonfamx;
 extern STRING nonrecx, nonnod1;
@@ -93,6 +93,7 @@ extern STRING qSunsupuniv;
  *********************************************/
 
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
+static void clean_orphaned_rptlocks(void);
 static void enqueue_parse_error(const char * fmt, ...);
 static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull,BOOLEAN include);
 static void init_pactx(PACTX pactx);
@@ -134,6 +135,9 @@ finishinterp (void)
 {
 	finishrassa();
 
+	/* clean up any orphaned report locks on records */
+	clean_orphaned_rptlocks();
+
 	if (progerror) {
 		refresh_stdout();
 		/* we used to sleep for 5 seconds here */
@@ -153,22 +157,18 @@ progmessage (MSG_LEVEL level, STRING msg)
 	INT mylen=sizeof(buf);
 	INT maxwidth = msg_width();
 	INT msglen = strlen(msg);
-	STRING program = _(qSidrpt);
 	if (maxwidth >= 0 && maxwidth < mylen)
 		mylen = maxwidth;
 	if (cur_pathinfo && *cur_pathinfo->fullpath && msglen+20 < maxwidth) {
 		INT len = 99999;
 		if (msg_width() >= 0) {
-			len = sizeof(buf)-strlen(program)-1-1-msglen;
+			len = sizeof(buf)-3-msglen;
 		}
-		llstrcatn(&ptr, program, &mylen);
-		llstrcatn(&ptr, " ", &mylen);
-		llstrcatn(&ptr, compress_path(cur_pathinfo->fullpath, len), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
+		llstrcatn(&ptr, " [", &mylen);
+		llstrcatn(&ptr, compress_path(cur_pathinfo->fullpath, len), &mylen);
+		llstrcatn(&ptr, "] ", &mylen);
 	} else {
-		llstrcatn(&ptr, program, &mylen);
-		llstrcatn(&ptr, " ", &mylen);
 		llstrcatn(&ptr, msg, &mylen);
 	}
 	msg_output(level, buf);
@@ -313,14 +313,14 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	}
 
 	if (Perrors) {
-		progmessage(MSG_ERROR, _("contains errors.\n"));
+		progmessage(MSG_ERROR, _("Program contains errors.\n"));
 		goto interp_program_exit;
 	}
 
    /* Find top procedure */
 
 	if (!(first = (PNODE) valueof_ptr(get_rptinfo(rootfilepath)->proctab, proc))) {
-		progmessage(MSG_ERROR, _("needs a starting procedure.\n"));
+		progmessage(MSG_ERROR, _("Program needs a starting procedure.\n"));
 		goto interp_program_exit;
 	}
 
@@ -352,7 +352,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	progparsing = FALSE;
 	progrunning = TRUE;
 	progerror = 0;
-	progmessage(MSG_STATUS, _("is running..."));
+	progmessage(MSG_STATUS, _("Program is running..."));
 	ranit = interpret_prog((PNODE) ibody(first), stab);
 
    /* Clean up and return */
@@ -407,13 +407,13 @@ interpret_prog (PNODE begin, SYMTAB stab)
 	switch(rtn) {
 	case INTOKAY:
 	case INTRETURN:
-		progmessage(MSG_INFO, _("was run successfully.\n"));
+		progmessage(MSG_INFO, _("Program was run successfully.\n"));
 		return TRUE;
 	default:
 		if (rpt_cancelled) {
-			progmessage(MSG_STATUS, _("was cancelled.\n"));
+			progmessage(MSG_STATUS, _("Program was cancelled.\n"));
 		} else
-			progmessage(MSG_STATUS, _("was not run because of errors.\n"));
+			progmessage(MSG_STATUS, _("Program was not run because of errors.\n"));
 		return FALSE;
 	}
 }
@@ -2114,7 +2114,6 @@ check_rpt_requires (PACTX pactx, STRING fullpath)
 		}
 	}
 	return 0;
-
 }
 /*=============================================+
  * enqueue_parse_error -- Queue up a parsing error
@@ -2142,7 +2141,6 @@ enqueue_parse_error (const char * fmt, ...)
  *  for display during signal processing
  * Created: 2003/07/01 (Matt Emmerton)
  *=============================================*/
-
 ZSTR
 get_report_error_msg (STRING msg)
 {
@@ -2154,4 +2152,20 @@ get_report_error_msg (STRING msg)
 		zstr = zprintpic2(_(msg), irptinfo(Pnode)->fullpath, line);
         }
 	return zstr;
+}
+/*=============================================+
+ * clean_orphaned_rptlocks - Clean up any locks on
+ * records that report didn't unlock
+ *=============================================*/
+static
+void clean_orphaned_rptlocks (void)
+{
+	INT ct = free_all_rprtlocks();
+	if (ct) {
+		char msg[256];
+		sprintf(msg, _pl("Program forgot to unlock %d record",
+			"Program forgot to unlock %d records", ct), ct);
+		progmessage(MSG_ERROR, msg);
+
+	}
 }

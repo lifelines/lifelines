@@ -58,15 +58,17 @@ struct tag_cacheel {
 	CACHEEL c_prev;   /* previous el */
 	CACHEEL c_next;   /* next el */
 	STRING c_key;     /* record key */
-	INT c_lock;       /* locked? */
+	INT c_lock;       /* lock count (includes report locks) */
+	INT c_rptlock;    /* report lock count */
 	RECORD c_record;
 };
-#define cnode(e) ((e)->c_node)
-#define cprev(e) ((e)->c_prev)
-#define cnext(e) ((e)->c_next)
-#define ckey(e)  ((e)->c_key)
-#define cclock(e) ((e)->c_lock)
-#define crecord(e) ((e)->c_record)
+#define cnode(e)      ((e)->c_node)
+#define cprev(e)      ((e)->c_prev)
+#define cnext(e)      ((e)->c_next)
+#define ckey(e)       ((e)->c_key)
+#define cclock(e)     ((e)->c_lock)
+#define ccrptlock(e)  ((e)->c_rptlock)
+#define crecord(e)    ((e)->c_record)
 
 /*==============================
  * CACHE -- Internal cache type.
@@ -837,8 +839,29 @@ void
 lock_cache (CACHEEL cel)
 {
 	ASSERT(cnode(cel)); /* must be in direct */
-	cclock(cel)++;
+	++cclock(cel);
 	ASSERT(cclock(cel)>0);
+}
+/*======================================
+ * lockrpt_cache -- Lock CACHEEL into direct cache (for report program)
+ *====================================*/
+void
+lockrpt_cache (CACHEEL cel)
+{
+	ASSERT(cnode(cel)); /* must be in direct */
+	/* put real lock on to actually lock it */
+	++cclock(cel);
+	/* put report lock on, so we can free orphaned report locks */
+	++ccrptlock(cel);
+	ASSERT(cclock(cel)>0);
+}
+/*======================================
+ * cel_rptlocks -- return report lock count for specified cache element
+ *====================================*/
+INT
+cel_rptlocks (CACHEEL cel)
+{
+	return ccrptlock(cel);
 }
 /*======================================
  * lock_record_in_cache -- Load record into cache & lock it
@@ -860,9 +883,21 @@ lock_record_in_cache (RECORD rec)
 void
 unlock_cache (CACHEEL cel)
 {
-	ASSERT(cclock(cel)>0);
+	ASSERT(cclock(cel) > 0);
 	ASSERT(cnode(cel));
-	cclock(cel)--;
+	--cclock(cel);
+}
+/*==========================================
+ * unlockrpt_cache -- Unlock CACHEEL from direct cache (report program call)
+ *========================================*/
+void
+unlockrpt_cache (CACHEEL cel)
+{
+	ASSERT(cclock(cel) > 0);
+	ASSERT(ccrptlock(cel) > 0);
+	ASSERT(cnode(cel));
+	--cclock(cel);
+	--ccrptlock(cel);
 }
 /*======================================
  * unlock_record_from_cache -- Remove lock on record
@@ -879,6 +914,8 @@ unlock_record_from_cache (RECORD rec)
 }
 /*=========================================
  * cache_get_lock_counts -- Fill in lock counts
+ * does not include report locks (but, this isn't
+ *  called during reports anyway)
  *=======================================*/
 static void
 cache_get_lock_counts (CACHE ca, INT * locks)
@@ -1456,4 +1493,40 @@ void
 set_all_nodetree_to_root_cel (NODE root)
 {
 	set_all_nodetree_to_cel(root, root->n_cel);
+}
+/*=======================================================
+ * free_all_rprtlocks_in_cache -- Remove any rptlocks on any
+ *  elements in this cache, and return number removed
+ *=====================================================*/
+static INT
+free_all_rprtlocks_in_cache (CACHE cache)
+{
+	INT ct=0;
+	CACHEEL cel=0;
+
+	for (cel = caclastdir(cache); cel; cel = cprev(cel)) {
+		if (ccrptlock(cel)) {
+			INT delta = ccrptlock(cel);
+			ccrptlock(cel) = 0;
+			ASSERT(cclock(cel) >= delta);
+			cclock(cel) -= delta;
+			++ct;
+		}
+	}
+	return ct;
+}
+/*=======================================================
+ * free_all_rprtlocks -- Remove any rptlocks on any
+ *  elements in all caches, and return number removed
+ *=====================================================*/
+INT
+free_all_rprtlocks (void)
+{
+	INT ct=0;
+	ct += free_all_rprtlocks_in_cache(indicache);
+	ct += free_all_rprtlocks_in_cache(famcache);
+	ct += free_all_rprtlocks_in_cache(sourcache);
+	ct += free_all_rprtlocks_in_cache(sourcache);
+	ct += free_all_rprtlocks_in_cache(othrcache);
+	return ct;
 }

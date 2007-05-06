@@ -460,7 +460,6 @@ ZST qSdataerr     = N_("Error accessing data");
 ZST qSidhist      = N_("Choose from history");
 ZST qSnorwandro   = N_("Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.");
 ZST qSnofandl     = N_("Cannot combine forceopen (-f) and lock (-l) flags.");
-ZST qSidrpt       = N_("Program");
 ZST qSiddefpath   = N_("Default path: ");
 ZST qSmisskeys    = N_("WARNING: missing keys");
 ZST qSbadkeyptr   = N_("This does not point to another record in the database!");

@@ -128,10 +128,12 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		INT n=0,i=0;
 		/* report debugger: Option to display list of local symbols */
 		n = (stab->tab ? get_table_count(stab->tab) : 0);
-		zs_setf(zstr, _("Display locals (%d)"), n);
+		zs_setf(zstr, _pl("Display local (%d var)",
+			"Display locals (%d vars)", n), n);
 		choices[i++] = strsave(zs_str(zstr));
 		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
-		zs_setf(zstr, _("Display globals (%d)"), n);
+		zs_setf(zstr, _pl("Display global (%d var)",
+			"Display globals (%d vars)", n), n);
 		choices[i++] = strsave(zs_str(zstr));
 		choices[i++] = strsave(_("Pop one level"));
 		choices[i++] = strsave(_("Quit debugger"));

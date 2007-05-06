@@ -1,3 +1,4 @@
+
 2007-05-05 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/list.c
@@ -8,6 +9,28 @@
 	* ChangeLog reports/st/st_list.li
 
 	Add self-test to st/st_list.li for inlist of empty list.
+
+	* ChangeLog docs/ll-reportmanual.xml src/gedlib/keytonod.c
+	src/gedlib/messages.c src/hdrs/cache.h src/hdrs/gedcom.h
+	src/hdrs/pvalue.h src/interp/interp.c src/interp/more.c
+	src/interp/progerr.c src/interp/pvalue.c
+
+	Track report locks & free after report:
+	  Remove declaration of function semilock_cache
+	  (which was removed in the past).
+	  Allow llrpt_lock & llrpt_unlock to work on any
+	  records (not just people & familes), and on nodes.
+	  New function is_node_pvalue.
+	  New macro ncel in gedcom.h (for node).
+	  Change llrpt_lock to call lockrpt_cache instead of
+	  lock_cache, and similarly for llrpt_unlock.
+	  New member c_rptlock in tag_cacheel.
+	  New functions free_all_rprtlocks_in_cache and
+	  free_all_rprtlocks in keytonod.c.
+	Remove hardcoded "Program" prefix in progmessage
+	  (was bad i18n). Removed constant qSidrpt.
+	Fix i18n in prog_var_error_zstr for pluralization
+	  (ie, use _pl( macro).
 
 2007-04-29 Perry Rapp
 

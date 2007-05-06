@@ -707,6 +707,14 @@ which_pvalue_type (PVALUE val)
 	return ptype(val);
 }
 /*========================================
+ * is_node_pvalue -- Does pvalue contain PGNODE ?
+ *======================================*/
+BOOLEAN
+is_node_pvalue (PVALUE value)
+{
+	return ptype(value) == PGNODE;
+}
+/*========================================
  * is_record_pvalue -- Does pvalue contain record ?
  *======================================*/
 BOOLEAN

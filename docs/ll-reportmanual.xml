@@ -4990,21 +4990,21 @@ Miscellaneous Functions
 <glosslist>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>lock</function></funcdef>
-<paramdef><parameter>INDI|FAM</parameter></paramdef>
+<paramdef><parameter>RECORD|NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-lock a person or family in memory
+lock a record (or record containing specified node) in memory
 </para>
 
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>VOID <function>unlock</function></funcdef>
-<paramdef><parameter>INDI|FAM</parameter></paramdef>
+<paramdef><parameter>RECORD|NODE</parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-unlock a person or family from memory
+unlock a record (or record containing specified node) from memory
 </para>
 </glossdef></glossentry>
 
