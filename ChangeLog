@@ -5,6 +5,10 @@
 	Fix in_list (needs to return -1 for empty list,
 	not FALSE).
 
+	* ChangeLog reports/st/st_list.li
+
+	Add self-test to st/st_list.li for inlist of empty list.
+
 2007-04-29 Perry Rapp
 
 	* ChangeLog build/setversions.sh build/rpm/lifelines.spec

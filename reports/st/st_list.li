@@ -1,6 +1,6 @@
 /*
  * @progname       st_list.li
- * @version        1.14 (2005-02-01)
+ * @version        1.15 (2007-05-05)
  * @author         Perry Rapp
  * @category       self-test
  * @output         none
@@ -29,6 +29,10 @@ proc testLists()
 	list(li)
 	if (not(empty(li))) {
 		call reportfail("empty FAILED")
+	}
+	else { incr(testok) }
+	if (inlist(li,4)) {
+		call reportfail("inlist(empty) FAILED")
 	}
 	else { incr(testok) }
 	enqueue(li, 1)
