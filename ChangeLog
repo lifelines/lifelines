@@ -25,6 +25,16 @@
 
 	Fix first arg to main to be int (rather than INT).
 
+	* ChangeLog INSTALL NEWS README configure.in
+	build/msvc6/dbverify/dbVerify.rc build/msvc6/llexec/llexec.rc
+	build/msvc6/llines/llines.rc build/rpm/lifelines.spec
+	docs/btedit.1 docs/dbverify.1 docs/ll-devguide.xml
+	docs/ll-reportmanual.xml docs/ll-userguide.xml docs/llines.1
+	po/da.po po/de.po po/el.po po/eo.po po/es.po po/fr.po po/it.po
+	po/nl.po po/pl.po po/rw.po po/sv.po src/hdrs/version.h
+
+	Make new release 3.0.58.
+
 2007-05-05 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/list.c
