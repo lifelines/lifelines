@@ -117,7 +117,7 @@ static void parse_arg(const char * optarg, char ** optname, char **optval);
  * main -- Main routine of LifeLines
  *================================*/
 int
-main (INT argc, char **argv)
+main (int argc, char **argv)
 {
 	extern char *optarg;
 	extern int optind;

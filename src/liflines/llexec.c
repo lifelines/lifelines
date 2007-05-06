@@ -100,7 +100,7 @@ static void platform_init(void);
  * main -- Main routine of LifeLines
  *================================*/
 int
-main (INT argc, char **argv)
+main (int argc, char **argv)
 {
 	extern char *optarg;
 	extern int optind;

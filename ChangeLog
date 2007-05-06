@@ -21,6 +21,10 @@
 
 	Add two more in_list tests to self-test for lists.
 
+	* ChangeLog src/liflines/llexec.c src/liflines/main.c
+
+	Fix first arg to main to be int (rather than INT).
+
 2007-05-05 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/list.c
