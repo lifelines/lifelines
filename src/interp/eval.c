@@ -247,7 +247,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		goto ufunc_leave;
 	}
 
-	newstab = create_symtab_proc(procname);
+	newstab = create_symtab_proc(procname, stab);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(func);
 	while (arg && parm) {

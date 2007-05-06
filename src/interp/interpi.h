@@ -75,13 +75,15 @@ typedef struct tag_rptinfo *RPTINFO;
 
 
 /* symbol table data is just table data */
-typedef struct tag_symtab {
+typedef struct tag_symtab *SYMTAB;
+struct tag_symtab {
 	TABLE tab;
+	SYMTAB parent;
 	char title[128];
-} *SYMTAB;
+};
 
 SYMTAB create_symtab_global(void);
-SYMTAB create_symtab_proc(CNSTRING procname);
+SYMTAB create_symtab_proc(CNSTRING procname, SYMTAB parstab);
 void delete_symtab_element(SYMTAB stab, STRING iden);
 BOOLEAN in_symtab(SYMTAB stab, STRING key);
 void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);

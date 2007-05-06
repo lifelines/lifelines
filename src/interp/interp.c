@@ -341,7 +341,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
-	stab = create_symtab_proc(proc);
+	stab = create_symtab_proc(proc, NULL);
 	for (i = 0; i < nargs; i++) {
 		insert_symtab(stab, iident(parm), args[0]);
 		parm = inext(parm);
@@ -1781,7 +1781,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		irc = INTERROR;
 		goto call_leave;
 	}
-	newstab = create_symtab_proc(procname);
+	newstab = create_symtab_proc(procname, stab);
 	arg = (PNODE) iargs(node);
 	parm = (PNODE) iargs(proc);
 	while (arg && parm) {

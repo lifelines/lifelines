@@ -55,8 +55,10 @@ struct dbgsymtab_s
  * local function prototypes
  *********************************************/
 
+static INT count_symtab_ancestors(SYMTAB stab);
 static void disp_symtab(STRING title, SYMTAB stab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
+static SYMTAB get_symtab_ancestor(SYMTAB stab, INT index);
 static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
 
@@ -83,7 +85,6 @@ init_debugger (void)
 }
 /*=============================================+
  * prog_var_error_zstr -- Report a run time program error
- *  due to mistyping of a particular variable
  *  node:  [IN]  current parse node
  *  stab:  [IN]  current symbol table (lexical scope)
  *  arg:   [IN]  if non-null, parse node of troublesome argument
@@ -97,8 +98,11 @@ init_debugger (void)
 static void
 prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 {
-	STRING choices[4];
+	STRING choices[5];
 	INT rtn=0;
+	SYMTAB curstab = stab; /* currently displayed symbol table */
+	INT nlevels=0; /* number frames on callstack */
+	INT curlevel=0; /* 0 is lowest */
 
 	ASSERT(zstr);
 
@@ -123,37 +127,104 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 			dbg_mode = -99;
 	}
 
-	if (dbg_mode != -99) {
+	/* call stack size & location */
+	nlevels = count_symtab_ancestors(stab) + 1;
+	curlevel = 0;
+
+	/* report debugger loop */
+	while (dbg_mode != -99) {
 		ZSTR zstr=zs_new();
-		INT n=0,i=0;
-		/* report debugger: Option to display list of local symbols */
-		n = (stab->tab ? get_table_count(stab->tab) : 0);
+		INT n=0;
+		/* 0: display local variable(s) */
+		n = (curstab->tab ? get_table_count(curstab->tab) : 0);
 		zs_setf(zstr, _pl("Display local (%d var)",
 			"Display locals (%d vars)", n), n);
-		zs_appf(zstr, " [%s]", stab->title);
-		choices[i++] = strsave(zs_str(zstr));
+		zs_appf(zstr, " [%s]", curstab->title);
+		choices[0] = strsave(zs_str(zstr));
+		/* 1: display global variables */
 		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
 		zs_setf(zstr, _pl("Display global (%d var)",
 			"Display globals (%d vars)", n), n);
-		choices[i++] = strsave(zs_str(zstr));
-		choices[i++] = strsave(_("Pop one level"));
-		choices[i++] = strsave(_("Quit debugger"));
-		ASSERT(i==ARRSIZE(choices));
+		choices[1] = strsave(zs_str(zstr));
+		/* 2: up call stack */
+		n = nlevels - curlevel - 1;
+		zs_setf(zstr, _pl("Call stack has %d higher level", "Call stack has %d higher levels", n), n);
+		zs_apps(zstr, ". ");
+		if (n > 0) {
+			zs_apps(zstr, _(" Go up one level"));
+			zs_appf(zstr, "(%s)", curstab->parent->title);
+		}
+		choices[2] = strsave(zs_str(zstr));
+		/* 3: down call stack */
+		n = curlevel;
+		zs_setf(zstr, _pl("Call stack has %d lower level", "Call stack has %d lower levels", n), n);
+		zs_apps(zstr, ". ");
+		if (n > 0) {
+			CNSTRING title = get_symtab_ancestor(stab, n-1)->title;
+			zs_apps(zstr, _(" Go down one level"));
+			zs_appf(zstr, "(%s)", title);
+		}
+		choices[3] = strsave(zs_str(zstr));
+		/* quit */
+		choices[4] = strsave(_("Quit debugger"));
 dbgloop:
 		rtn = rptui_choose_from_array(_("Report debugger"), ARRSIZE(choices), choices);
-		if (rtn == 3 || rtn == -1)
+		if (rtn == 4 || rtn == -1) {
 			dbg_mode = -99;
-		else if (rtn == 0) {
-			disp_symtab(_("Local variables"), stab);
+		} else if (rtn == 0) {
+			disp_symtab(_("Local variables"), curstab);
 			goto dbgloop;
-		}
-		else if (rtn == 1) {
+		} else if (rtn == 1) {
 			disp_symtab(_("Global variables"), globtab);
 			goto dbgloop;
+		} else if (rtn == 2) {
+			if (curlevel+1 < nlevels) {
+				curstab = curstab->parent;
+				++curlevel;
+				ASSERT(curstab);
+			}
+		} else if (rtn == 3) {
+			if (curlevel > 0) {
+				curstab = get_symtab_ancestor(stab, curlevel-1);
+				--curlevel;
+				ASSERT(curstab);
+			}
 		}
 		zs_free(&zstr);
 		free_array_strings(ARRSIZE(choices), choices);
 	}
+}
+/*=============================================+
+ * count_symtab_ancestors -- count number of symbol tables
+ *  in call stack above specified one
+ *============================================*/
+static INT
+count_symtab_ancestors (SYMTAB stab)
+{
+	INT ct=0;
+	SYMTAB curstab = stab;
+	while (curstab->parent) {
+		++ct;
+		curstab = curstab->parent;
+	}
+	return ct;
+}
+/*=============================================+
+ * get_symtab_ancestor -- return nth ancestor
+ *   where n is the index passed by caller
+ *   (0 is valid, and returns same one)
+ *============================================*/
+static SYMTAB
+get_symtab_ancestor (SYMTAB stab, INT index)
+{
+	SYMTAB curstab = stab;
+	while (index > 0) {
+		ASSERT(curstab);
+		curstab = curstab->parent;
+		--index;
+	}
+	ASSERT(curstab);
+	return curstab;
 }
 /*=============================================+
  * prog_var_error -- Report a run time program error

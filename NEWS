@@ -2,9 +2,14 @@ LifeLines Source Release, Version 3.0.57
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+New features added in 3.0.53 (beta)
+============================
+ - Implement going up & down stack in report debugger
+
 Bug fixes in 3.0.57 (beta)
 ============================
  - Fix inlist to handle empty lists correctly
+ - Fix not to crash if report doesn't unlock records
 
 Bug fixes in 3.0.57 (beta)
 ============================

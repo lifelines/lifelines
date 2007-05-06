@@ -54,7 +54,7 @@ struct tag_symtab_iter {
  *********************************************/
 
 /* alphabetical */
-static SYMTAB create_symtab(CNSTRING title);
+static SYMTAB create_symtab(CNSTRING title, SYMTAB parstab);
 static void free_symtable_iter(SYMTAB_ITER symtabit);
 static void record_dead_symtab(SYMTAB symtab);
 static void record_live_symtab(SYMTAB symtab);
@@ -123,11 +123,11 @@ remove_symtab (SYMTAB stab)
  *  returns allocated SYMTAB
  *====================================================*/
 SYMTAB
-create_symtab_proc (CNSTRING procname)
+create_symtab_proc (CNSTRING procname, SYMTAB parstab)
 {
 	char title[128];
 	llstrncpyf(title, sizeof(title), uu8, "proc: %s", procname);
-	return create_symtab(title);
+	return create_symtab(title, parstab);
 }
 /*======================================================
  * create_symtab_global -- Create a global symbol table
@@ -136,19 +136,23 @@ create_symtab_proc (CNSTRING procname)
 SYMTAB
 create_symtab_global (void)
 {
-	return create_symtab("global");
+	return create_symtab("global", NULL);
 }
 /*======================================================
  * create_symtab -- Create a symbol table
+ *  @title:    [IN]  title (procedure or func name)
+ *  @parstab:  [IN]  (dynamic) parent symbol table
+ *                    only for debugging, not for scope
  *  returns allocated SYMTAB
  *====================================================*/
 static SYMTAB
-create_symtab (CNSTRING title)
+create_symtab (CNSTRING title, SYMTAB parstab)
 {
 	SYMTAB symtab = (SYMTAB)stdalloc(sizeof(*symtab));
 	memset(symtab, 0, sizeof(*symtab));
 
 	symtab->tab = create_table_custom_vptr(delete_vptr_pvalue);
+	symtab->parent = parstab;
 	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, title);
 
 	record_live_symtab(symtab);

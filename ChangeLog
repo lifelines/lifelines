@@ -9,6 +9,14 @@
 	Removed qSdbodel & fixed with pluralizable i18n.
 	Add title to symbol table, and display in debugger.
 
+	* ChangeLog NEWS src/interp/eval.c
+	src/interp/interp.c src/interp/interpi.h
+	src/interp/progerr.c src/interp/symtab.c
+
+	Display call stack count in report debugger.
+	Add parent field to symbol tables (SYMTAB).
+	New functions count_symtab_ancestors & get_symtab_ancestor.
+
 2007-05-05 Perry Rapp
 
 	* ChangeLog NEWS src/stdlib/list.c
