@@ -1,3 +1,13 @@
+2007-05-07 Perry Rapp
+
+	* ChangeLog NEWS build/setversions.sh docs/llexec.1
+	docs/llines.1
+
+	Fix setversions.sh to handle btedit win32 resource.
+	Fix llines man page to be same as others.
+
+2007-05-06 lifelines beta 3.0.58 RELEASE
+
 2007-05-06 Perry Rapp
 
 	* ChangeLog src/gedlib/dbcontext.c src/gedlib/messages.c

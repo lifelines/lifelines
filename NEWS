@@ -6,7 +6,7 @@ New features added in 3.0.58 (beta)
 ============================
  - Implement going up & down stack in report debugger
 
-Bug fixes in 3.0.57 (beta)
+Bug fixes in 3.0.58 (beta)
 ============================
  - Fix inlist to handle empty lists correctly
  - Fix not to crash if report doesn't unlock records

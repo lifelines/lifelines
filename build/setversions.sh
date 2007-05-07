@@ -131,10 +131,12 @@ function applyversion {
   alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
   altermansrc btedit.1 btedit
   altermansrc dbverify.1 dbverify
-  altermansrc llines.1 llexec.1 LLINES
+  altermansrc llines.1 llines
+  altermansrc llexec.1 llexec
   alterwinversions ../build/msvc6/dbverify/dbVerify.rc
   alterwinversions ../build/msvc6/llexec/llexec.rc
   alterwinversions ../build/msvc6/llines/llines.rc
+  alterwinversions ../build/msvc6/btedit/btedit.rc
 }
 
 function altermansrc {
