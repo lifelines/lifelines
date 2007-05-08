@@ -4,6 +4,10 @@
 
 	Fix sample INDIREC line to have slash after surname.
 
+	* ChangeLog po/fr.po
+
+	Updated French translation by Patrick Texier.
+
 2007-05-07 Perry Rapp
 
 	* ChangeLog NEWS build/setversions.sh docs/llexec.1

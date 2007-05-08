@@ -1,19 +1,19 @@
 # French messages for Lifelines <http://lifelines.sourceforge.net>
 # Copyright (C) 1991-1999 Thomas T. Wetmore IV
-# Translation by Patrick Texier <p.texier@genindre.org>, 2002-2006.
-# <http://www.genindre.org/ftp/lifelines/llfr.zip>
+# Translation by Patrick Texier <p.texier@genindre.org>, 2002-2007.
+# <http://www.genindre.org/ftp/lifelines/llfr.zip>.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.51\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-06 18:53-0400\n"
-"PO-Revision-Date: 2006-07-30 08:00+0200\n"
+"Project-Id-Version: Lifelines 3.0.58\n"
+"POT-Creation-Date: 2007-05-08 11:30+0200\n"
+"PO-Revision-Date: 2007-05-08 11:30+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: src/gedlib/charmaps.c:769
@@ -64,7 +64,7 @@ msgstr "Quel répertoire contient la base LifeLines ? (? = liste)"
 
 #: src/gedlib/messages.c:46
 msgid "enter path: "
-msgstr "entrez le chemin :"
+msgstr "entrez le chemin d'accès :"
 
 #: src/gedlib/messages.c:47
 msgid "There is no LifeLines database in that directory."
@@ -119,9 +119,8 @@ msgid "The database is read only."
 msgstr "La base est en lecture seule."
 
 #: src/gedlib/messages.c:64
-#, fuzzy
 msgid "Name, key, refn, list, or @:"
-msgstr "Entrez un nom, clé, refn ou liste :"
+msgstr "Nom, clé, refn, liste ou @ :"
 
 #: src/gedlib/messages.c:65
 msgid "enter key or refn: "
@@ -440,7 +439,7 @@ msgstr "Cette personne n'est un enfant ; impossible de la supprimer"
 
 #: src/gedlib/messages.c:148
 msgid "This person's sex is not known; can't make family."
-msgstr "Cette personne n'a pas de sexe ; ne peut faire partie d'une famille."
+msgstr "Cette personne n'a pas de sexe ; elle ne peut créer une famille."
 
 #: src/gedlib/messages.c:149
 msgid "This family already has a husband/male parent."
@@ -470,68 +469,68 @@ msgstr "Choisissez une famille par un conjoint/parent."
 msgid ""
 "Do you want to edit the person again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditez cette personne ? (Sinon les changements seront perdus.)"
+"Voulez-vous remodifier cette personne ? (Sinon les changements seront perdus.)"
 
 #: src/gedlib/messages.c:157
 msgid "Do you want to edit the person again?"
-msgstr "Voulez-vous rééditer cette personne ?"
+msgstr "Voulez-vous remodifier cette personne ?"
 
 #: src/gedlib/messages.c:158
 msgid ""
 "Do you want to edit the family again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditer cette famille ? (Sinon les changements seront perdus)."
+"Voulez-vous remodifier cette famille ? (Sinon les changements seront perdus)."
 
 #: src/gedlib/messages.c:159
 msgid "Do you want to edit the family again?"
-msgstr "Voulez-vous rééditer cette famille ?"
+msgstr "Voulez-vous remodifier cette famille ?"
 
 #: src/gedlib/messages.c:160
 msgid ""
 "Do you want to edit the source again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditer cette source ? (Sinon les changement seront perdus.)"
+"Voulez-vous remodifier cette source ? (Sinon les changement seront perdus.)"
 
 #: src/gedlib/messages.c:161
 msgid "Do you want to edit the source again?"
-msgstr "Voulez-vous rééditer cette source ?"
+msgstr "Voulez-vous remodifier cette source ?"
 
 #: src/gedlib/messages.c:162
 msgid ""
 "Do you want to edit the event again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditer cet événement ? (Sinon les changements seront perdus.)"
+"Voulez-vous remodifier cet événement ? (Sinon les changements seront perdus.)"
 
 #: src/gedlib/messages.c:163
 msgid "Do you want to edit the event again?"
-msgstr "Voulez-vous rééditer cet événement ?"
+msgstr "Voulez-vous remodifier cet événement ?"
 
 #: src/gedlib/messages.c:164
 msgid ""
 "Do you want to edit the record again? (Otherwise changes will be discarded.)"
 msgstr ""
-"Voulez-vous rééditer cet enregistrement ? (Sinon les changements seront "
+"Voulez-vous remodifier cet enregistrement ? (Sinon les changements seront "
 "perdus.)"
 
 #: src/gedlib/messages.c:165
 msgid "Do you want to edit the record again?"
-msgstr "Voulez-vous rééditer cet enregistrement ?"
+msgstr "Voulez-vous remodifier cet enregistrement ?"
 
 #: src/gedlib/messages.c:166
 msgid "Whom do you want to edit?"
-msgstr "Que voulez-vous éditer ?"
+msgstr "Que voulez-vous modifier ?"
 
 #: src/gedlib/messages.c:167
 msgid "Which source record do you want to edit?"
-msgstr "Quel enregistrement source voulez-vous éditer ?"
+msgstr "Quel enregistrement source voulez-vous modifier ?"
 
 #: src/gedlib/messages.c:168
 msgid "Which event record do you want to edit?"
-msgstr "Quel enregistrement événement voulez-vous éditer ?"
+msgstr "Quel enregistrement événement voulez-vous modifier ?"
 
 #: src/gedlib/messages.c:169
 msgid "What record do you want to edit?"
-msgstr "Quel enregistrement voulez-vous éditer ?"
+msgstr "Quel enregistrement voulez-vous modifier ?"
 
 #: src/gedlib/messages.c:171
 msgid "Do you really want to add this person to the database?"
@@ -782,7 +781,7 @@ msgstr "(Le séparateur est %s)"
 
 #: src/gedlib/messages.c:238
 msgid "Do you want to re-edit it?"
-msgstr "Voulez-vous le rééditer ?"
+msgstr "Voulez-vous le remodifier ?"
 
 #: src/gedlib/messages.c:240
 #, c-format
@@ -1290,34 +1289,34 @@ msgstr "(+) : "
 #: src/gedlib/messages.c:390
 msgid "You cannot edit the INDI line in a person record."
 msgstr ""
-"Vous ne pouvez pas éditer la ligne INDI d'un enregistrement individuel."
+"Vous ne pouvez pas modifier la ligne INDI d'un enregistrement individuel."
 
 #: src/gedlib/messages.c:391
 msgid "You cannot edit the FAMC line in a person record."
 msgstr ""
-"Vous ne pouvez pas éditer la ligne FAMC d'un enregistrement individuel."
+"Vous ne pouvez pas modifier la ligne FAMC d'un enregistrement individuel."
 
 #: src/gedlib/messages.c:392
 msgid "You cannot edit the FAMS lines in a person record."
 msgstr ""
-"Vous ne pouvez pas éditer la ligne FAMS d'un enregistrement individuel."
+"Vous ne pouvez pas modifier la ligne FAMS d'un enregistrement individuel."
 
 #: src/gedlib/messages.c:393
 msgid "You cannot edit the FAM line in a family record."
-msgstr "Vous ne pouvez pas éditer la ligne FAM d'un enregistrement familial."
+msgstr "Vous ne pouvez pas modiifier la ligne FAM d'un enregistrement familial."
 
 #: src/gedlib/messages.c:394
 msgid "You cannot edit the HUSB line in a family record."
-msgstr "Vous ne pouvez pas éditer la ligne HUSB d'un enregistrement familial."
+msgstr "Vous ne pouvez pas modifier la ligne HUSB d'un enregistrement familial."
 
 #: src/gedlib/messages.c:395
 msgid "You cannot edit the WIFE line in a family record."
-msgstr "Vous ne pouvez pas éditer la ligne WIFE d'un enregistrement familial."
+msgstr "Vous ne pouvez pas modifier la ligne WIFE d'un enregistrement familial."
 
 #: src/gedlib/messages.c:396
 msgid "You cannot edit the CHIL lines in a family record."
 msgstr ""
-"Vous ne pouvez pas éditer les lignes CHIL d'un enregistrement familial."
+"Vous ne pouvez pas modifier les lignes CHIL d'un enregistrement familial."
 
 #: src/gedlib/messages.c:397
 msgid "The record is empty."
@@ -1459,7 +1458,7 @@ msgstr "Choisir une des options suivantes :"
 #: src/gedlib/messages.c:445
 #, c-format
 msgid "New record is %s"
-msgstr "Nouvel enregistrement : %s"
+msgstr "Le Nouvel enregistrement est %s"
 
 #: src/gedlib/messages.c:446
 msgid "Insert xref automatically at bottom of current record."
@@ -1467,7 +1466,7 @@ msgstr "Insérer automatiquement un xref à la fin de chaque enregistrement."
 
 #: src/gedlib/messages.c:447
 msgid "Edit current record now to add xref manually."
-msgstr "Éditer l'enregistrement en cours et ajouter manuellement un xref."
+msgstr "Modifier l'enregistrement en cours pour ajouter manuellement un xref."
 
 #: src/gedlib/messages.c:448
 msgid "Browse new record (without adding xref)."
@@ -1666,11 +1665,11 @@ msgstr "m  Voir les statistiques mémoire"
 
 #: src/gedlib/messages.c:505
 msgid "e  Edit the place abbreviation file"
-msgstr "e  Éditer le fichier des abréviations des lieux"
+msgstr "e  Modifier le fichier des abréviations des lieux"
 
 #: src/gedlib/messages.c:506
 msgid "o  Edit the user options file"
-msgstr "o  Éditer le fichier d'options utilisateur"
+msgstr "o  Modifier le fichier d'options utilisateur"
 
 #: src/gedlib/messages.c:509
 msgid "What activity do you want to perform?"
@@ -1718,7 +1717,7 @@ msgstr "Table de correspondance"
 
 #: src/gedlib/messages.c:522
 msgid "e  edit individual tables (in db)"
-msgstr "e  éditer une table individuelle (dans la base)"
+msgstr "e  modifier une table individuelle (dans la base)"
 
 #: src/gedlib/messages.c:523
 msgid "l  load a table from a file (into db)"
@@ -1742,7 +1741,7 @@ msgstr "répertoire d'import/export :"
 
 #: src/gedlib/messages.c:530
 msgid "Which character mapping do you want to edit?"
-msgstr "Quelle table de caractères voulez-vous éditer ?"
+msgstr "Quelle table de caractères voulez-vous modifier ?"
 
 #: src/gedlib/messages.c:531
 msgid "Which character mapping do you want to save?"
@@ -1813,9 +1812,8 @@ msgid "Performing refn scan"
 msgstr "En cours : recherche refn"
 
 #: src/gedlib/messages.c:558
-#, fuzzy
 msgid "Performing source scan"
-msgstr "En cours : recherche refn"
+msgstr "En cours : recherche source"
 
 #: src/gedlib/messages.c:559
 msgid "No records found in scan"
@@ -2246,7 +2244,6 @@ msgid "NO NAME"
 msgstr "NON DÉNOMMÉ"
 
 #: src/gedlib/node.c:1167
-#, c-format
 msgid "Node memory leaks:"
 msgstr "Noeuds-mémoire perdus :"
 
@@ -2592,9 +2589,9 @@ msgid "twelfth"
 msgstr "douzième"
 
 #: src/interp/builtin.c:1210
-#, fuzzy, c-format
+#, c-format
 msgid "%ldth"
-msgstr "%dème"
+msgstr "%ldème"
 
 #: src/interp/builtin.c:1220
 msgid "zero"
@@ -2739,14 +2736,12 @@ msgid "Error: file <%s> not found"
 msgstr "Erreur : fichier <%s> non trouvé"
 
 #: src/interp/interp.c:316
-#, fuzzy
 msgid "Program contains errors.\n"
-msgstr "contient des erreurs.\n"
+msgstr "Le programme contient des erreurs.\n"
 
 #: src/interp/interp.c:323
-#, fuzzy
 msgid "Program needs a starting procedure.\n"
-msgstr "a besoin d'une procédure de démarrage.\n"
+msgstr "Le programme a besoin d'une procédure de démarrage.\n"
 
 #: src/interp/interp.c:340
 #, c-format
@@ -2754,24 +2749,20 @@ msgid "Proc %s must be called with %d (not %d) parameters."
 msgstr "La proc. %s doit être appelée avec %d paramètres et non %d."
 
 #: src/interp/interp.c:355
-#, fuzzy
 msgid "Program is running..."
-msgstr "s'exécute..."
+msgstr "Le programme s'exécute..."
 
 #: src/interp/interp.c:410
-#, fuzzy
 msgid "Program was run successfully.\n"
-msgstr "s'est correctement exécuté.\n"
+msgstr "Le programme s'est correctement exécuté.\n"
 
 #: src/interp/interp.c:414
-#, fuzzy
 msgid "Program was cancelled.\n"
-msgstr "a été interrompu.\n"
+msgstr "Le programme a été interrompu.\n"
 
 #: src/interp/interp.c:416
-#, fuzzy
 msgid "Program was not run because of errors.\n"
-msgstr "a été interrompu à cause d'erreurs.\n"
+msgstr "Le programme a été interrompu par des erreurs.\n"
 
 #: src/interp/interp.c:506
 #, c-format
@@ -2820,8 +2811,8 @@ msgstr "Ce rapport nécessite un programme plus récent pour fonctionner\n"
 #, c-format
 msgid "Program forgot to unlock %d record"
 msgid_plural "Program forgot to unlock %d records"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le programme n'a pas pu débloquer %d enregistrement"
+msgstr[1] "Le programme n'a pas pu débloquer %d enregistrements"
 
 #: src/interp/more.c:648
 msgid "Please choose from the following list."
@@ -2833,42 +2824,39 @@ msgstr "Type invalide trouvé dans la liste de choix de menu"
 
 #: src/interp/more.c:976
 msgid "error evaluating arg to lock"
-msgstr ""
+msgstr "erreur d'évaluation des paramètres à bloquer"
 
 #: src/interp/more.c:982
 msgid "null arg in lock"
-msgstr ""
+msgstr "paramètre null à bloquer"
 
 #: src/interp/more.c:993
 msgid "node passed to lock must be inside a record"
-msgstr ""
+msgstr "le noeud à bloquer doit appartenir à un enregistrement"
 
 #: src/interp/more.c:999
-#, fuzzy
 msgid "the arg to lock must be a record or node"
-msgstr "l'arg. à bloquer doit être une personne ou famille"
+msgstr "le paramètre à bloquer doit être un enegistrement ou un noeud"
 
 #: src/interp/more.c:1007
 msgid "Error: there are 999,999 locks on arg to lock"
-msgstr ""
+msgstr "Erreur : il y a 999 999 blocages à effectuer"
 
 #: src/interp/more.c:1027
 msgid "error evaluating arg to unlock"
-msgstr ""
+msgstr "erreur en évaluant les paramètres à débloquer"
 
 #: src/interp/more.c:1033
 msgid "null arg in unlock"
-msgstr ""
+msgstr "paramètre null à débloquer"
 
 #: src/interp/more.c:1044
-#, fuzzy
 msgid "node passed to unlock must be inside a record"
-msgstr "l'arg. à débloquer doit être une personne ou famille"
+msgstr "le paramètre à débloquer doit être contenu dans un enregistrement"
 
 #: src/interp/more.c:1050
-#, fuzzy
 msgid "the arg to unlock must be a record or node"
-msgstr "l'arg. à débloquer doit être une personne ou famille"
+msgstr "le paramètre à débloquer doit être un enregistrement ou un noeud"
 
 #: src/interp/pvalue.c:810
 #, c-format
@@ -2917,42 +2905,40 @@ msgid "Enter d for debugger, q to quit"
 msgstr "Entrez d pour déboguer, q pour quitter"
 
 #: src/interp/progerr.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Display local (%d var)"
 msgid_plural "Display locals (%d vars)"
-msgstr[0] "Afficher variables locales (%d)"
-msgstr[1] "Afficher variables locales (%d)"
+msgstr[0] "Afficher variables locales (%d var)"
+msgstr[1] "Afficher variables locales (%d vars)"
 
 #: src/interp/progerr.c:146
-#, fuzzy, c-format
+#, c-format
 msgid "Display global (%d var)"
 msgid_plural "Display globals (%d vars)"
-msgstr[0] "Afficher variables globales (%d)"
-msgstr[1] "Afficher variables globales (%d)"
+msgstr[0] "Afficher variables globales (%d var)"
+msgstr[1] "Afficher variables globales (%d vars)"
 
 #: src/interp/progerr.c:151
 #, c-format
 msgid "Call stack has %d higher level"
 msgid_plural "Call stack has %d higher levels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La pile des appels a %d niveau supérieur"
+msgstr[1] "La pile des appels a %d niveaux supérieurs"
 
 #: src/interp/progerr.c:154
-#, fuzzy
 msgid " Go up one level"
-msgstr "Descendre d'un niveau"
+msgstr " Monter d'un niveau"
 
 #: src/interp/progerr.c:160
 #, c-format
 msgid "Call stack has %d lower level"
 msgid_plural "Call stack has %d lower levels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La pile des appels a %d niveau inférieur"
+msgstr[1] "La pile des appels a %d niveaux inférieurs"
 
 #: src/interp/progerr.c:164
-#, fuzzy
 msgid " Go down one level"
-msgstr "Descendre d'un niveau"
+msgstr " Descendre d'un niveau"
 
 #: src/interp/progerr.c:169
 msgid "Quit debugger"
@@ -3022,23 +3008,23 @@ msgstr "?  Autres choix"
 
 #: src/liflines/brwsmenu.c:69
 msgid "e  Edit the person"
-msgstr "e  Éditer personne"
+msgstr "e  Modifier personne"
 
 #: src/liflines/brwsmenu.c:70
 msgid "e  Edit the family"
-msgstr "e  Éditer famille "
+msgstr "e  Modifier famille "
 
 #: src/liflines/brwsmenu.c:71
 msgid "e  Edit record"
-msgstr "e  Éditer enrg"
+msgstr "e  Modif. enrg"
 
 #: src/liflines/brwsmenu.c:72
 msgid "e  Edit top person"
-msgstr "e  Éditer pers. haut"
+msgstr "e  Modif. pers. haut"
 
 #: src/liflines/brwsmenu.c:73
 msgid "e  Edit top family"
-msgstr "e  Éditer famille haut"
+msgstr "e  Modif. famille haut"
 
 #: src/liflines/brwsmenu.c:74
 msgid "f  Browse to father"
@@ -3058,7 +3044,7 @@ msgstr "m  Atteindre mère haut"
 
 #: src/liflines/brwsmenu.c:78
 msgid "s  Browse to spouse/s"
-msgstr "s  Atteindre conjoint/s"
+msgstr "s  Atteindre conjoint"
 
 #: src/liflines/brwsmenu.c:79
 msgid "s  Browse top spouse/s"
@@ -3339,7 +3325,7 @@ msgstr "k  Précédent liste"
 
 #: src/liflines/brwsmenu.c:150
 msgid "e  Edit this person"
-msgstr "e  Éditer personne"
+msgstr "e  Modif. cette personne"
 
 #: src/liflines/brwsmenu.c:151
 msgid "i  Browse this person"
@@ -3500,11 +3486,11 @@ msgid "Enter codeset to assume (* for none)"
 msgstr "Entrez le jeu de caractères à utiliser (* aucun)"
 
 #: src/liflines/import.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Using original keys, %d deleted record will be in the database."
 msgid_plural "Using original keys, %d deleted records will be in the database."
 msgstr[0] ""
-"Avec les clés d'origine, il y aura %d enreg. supprimés dans la base."
+"Avec les clés d'origine, il y aura %d enreg. supprimé dans la base."
 msgstr[1] ""
 "Avec les clés d'origine, il y aura %d enreg. supprimés dans la base."
 
@@ -3620,9 +3606,9 @@ msgid "Bad spouse tag: %s"
 msgstr "Tag de couple incorrect : %s"
 
 #: src/liflines/merge.c:800 src/liflines/merge.c:919
-#, fuzzy, c-format
+#, c-format
 msgid "Mismatched lineage spouse links between %s and %s: %ld and %ld"
-msgstr "Liens de couple incorrects entre %s et %s : %d et %d"
+msgstr "Liens de couple incorrects entre %s et %s : %ld et %ld"
 
 #: src/liflines/merge.c:816 src/liflines/merge.c:935
 #, c-format
@@ -3630,9 +3616,9 @@ msgid "Bad child tag: %s"
 msgstr "Tag d'enfant incorrect : %s"
 
 #: src/liflines/merge.c:844 src/liflines/merge.c:963
-#, fuzzy, c-format
+#, c-format
 msgid "Mismatched lineage child links between %s and %s: %ld and %ld"
-msgstr "Liens de parenté incorrects entre %s et %s : %d et %d"
+msgstr "Liens de parenté incorrects entre %s et %s : %ld et %ld"
 
 #: src/liflines/merge.c:882 src/liflines/merge.c:891
 #, c-format
@@ -3670,35 +3656,32 @@ msgid "pattern: "
 msgstr "motif :"
 
 #: src/liflines/scan.c:151 src/liflines/scan.c:165
-#, fuzzy
 msgid "Enter pattern to match against author."
-msgstr "Entrez un motif de recherche pour un refn."
+msgstr "Entrez un motif de recherche pour un auteur."
 
 #: src/liflines/screen.c:316
-#, c-format
 msgid "initscr failed"
 msgstr "échec de initscr"
 
 #: src/liflines/screen.c:333
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n"
 msgstr ""
-"La taille de fenêtre utilisée (%d,%d) est trop grande pour votre terminal (%"
-"d,%d).\n"
+"La taille de fenêtre utilisée (%ld,%ld) est trop grande pour votre terminal "
+"(%d,%d).\n"
 
 #: src/liflines/screen.c:341
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
 msgstr ""
-"La taille de fenêtre utilisée (%d,%d) est trop petite pour LifeLines (%d, %"
+"La taille de fenêtre utilisée (%ld,%ld) est trop petite pour LifeLines (%d, %"
 "d).\n"
 
 #: src/liflines/screen.c:705
-#, fuzzy
 msgid "Search results"
-msgstr "Résultats de la recherche :"
+msgstr "Résultats de la recherche"
 
 #: src/liflines/screen.c:812
 #, c-format
@@ -3773,7 +3756,7 @@ msgstr "Routine de conversion : %s"
 #: src/liflines/screen.c:1569
 #, c-format
 msgid "GUI codeset: %s"
-msgstr "jeu de car. GUI : %s"
+msgstr "Jeu de caractère GUI : %s"
 
 #: src/liflines/screen.c:1572
 #, c-format
@@ -3818,7 +3801,7 @@ msgstr "Jeu de caractères rapport en entrée : %s"
 #: src/liflines/screen.c:1599
 #, c-format
 msgid "GEDCOM codeset: %s"
-msgstr "jeu de car. GEDCOM : %s"
+msgstr "Jeu de caractères GEDCOM : %s"
 
 #: src/liflines/screen.c:1602
 #, c-format
@@ -3880,7 +3863,7 @@ msgstr "dll iconv non trouvée"
 
 #: src/liflines/screen.c:1930
 msgid "Impermissible to change codeset in a populated database"
-msgstr "Impossible de modifier le jeu de caractères dans une base non-vide"
+msgstr "Impossible de modifier le jeu de caractères d'une base non-vide"
 
 #: src/liflines/screen.c:2031
 msgid "LifeLines -- Main Menu"
@@ -4061,7 +4044,7 @@ msgstr[1] "%6d erreurs"
 #: src/liflines/valgdcom.c:930 src/liflines/valgdcom.c:958
 #, c-format
 msgid " (see log file <%s>)"
-msgstr " (voir fichier trace <%s>)"
+msgstr " (voir le fichier trace <%s>)"
 
 #: src/liflines/valgdcom.c:932 src/liflines/valgdcom.c:960
 msgid " (no log file)"
@@ -4081,7 +4064,7 @@ msgstr[1] "%6d avertissements"
 #: src/liflines/valgdcom.c:1067
 #, c-format
 msgid "Processed %d lines without finding end of HEAD"
-msgstr "%d lignes traitées sans trouver la fin de HEAD"
+msgstr "%d lignes lues sans trouver la fin de HEAD"
 
 #: src/liflines/valgdcom.c:1072
 #, c-format
@@ -4091,7 +4074,7 @@ msgstr "Fin de fichier à la ligne %d"
 #: src/liflines/valgdcom.c:1076
 #, c-format
 msgid "Error at line %d: %s"
-msgstr "Erreur en ligne %d : %s"
+msgstr "Erreur à la ligne %d : %s"
 
 #: src/liflines/valgdcom.c:1080
 #, c-format
@@ -4217,88 +4200,71 @@ msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/users/myname/lifelines/databases/myfamily"
 
 #: src/tools/dbverify.c:235
-#, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
 msgstr "utilisation : dbverify -(paramètres) <btree>\n"
 
 #: src/tools/dbverify.c:236
-#, c-format
 msgid "flags:\n"
 msgstr "paramètres :\n"
 
 #: src/tools/dbverify.c:237
-#, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr "\t-a = Exécute tous les contrôles (sans effectuer de corrections)\n"
 
 #: src/tools/dbverify.c:238
-#, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr "\t-g = Contrôle des orphelins (noms/refns)\n"
 
 #: src/tools/dbverify.c:239
-#, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr "\t-G = Contrôle & correction des orphelines (noms/refns)\n"
 
 #: src/tools/dbverify.c:240
-#, c-format
 msgid "\t-i = Check individuals\n"
 msgstr "\t-i = Contrôle des individus\n"
 
 #: src/tools/dbverify.c:241
-#, c-format
 msgid "\t-f = Check families\n"
 msgstr "\t-f = Contrôle des familles\n"
 
 #: src/tools/dbverify.c:242
-#, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 "\t-F = Modification de tous les liens familliaux erronés (en _badptr)\n"
 
 #: src/tools/dbverify.c:243
-#, c-format
 msgid "\t-h = Display help text (this text)\n"
 msgstr "\t-h = Affiche le texte d'aide (ce texte)\n"
 
 #: src/tools/dbverify.c:244
-#, c-format
 msgid "\t-s = Check sours\n"
 msgstr "\t-s = Contrôle des sources\n"
 
 #: src/tools/dbverify.c:245
-#, c-format
 msgid "\t-e = Check events\n"
 msgstr "\t-e = Contrôle des événements\n"
 
 #: src/tools/dbverify.c:246
-#, c-format
 msgid "\t-x = Check others\n"
 msgstr "\t-x = Contrôle des enregistrements divers\n"
 
 #: src/tools/dbverify.c:247
-#, c-format
 msgid "\t-l = Check database structure\n"
 msgstr "\t-l = Contrôle de la structure de la base\n"
 
 #: src/tools/dbverify.c:248
-#, c-format
 msgid "\t-m = Check for records missing data entries\n"
 msgstr "\t-m = Contrôle des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:249
-#, c-format
 msgid "\t-M = Fix records missing data entries\n"
 msgstr "\t-M = Correction des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:250
-#, c-format
 msgid "\t-D = Fix bad delete entries\n"
 msgstr "\t-D = Correction des enregistrements supprimés erronés\n"
 
 #: src/tools/dbverify.c:251
-#, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
 msgstr "\t-n = Verbeux (affiche chaque enregistrement traité)\n"
 
@@ -4484,9 +4450,8 @@ msgid "Failed to fix missing undeleted record %s"
 msgstr "Échec de la correction d'un enregistrement non effacé manquant %s"
 
 #: src/tools/dbverify.c:1116
-#, fuzzy, c-format
 msgid "Master fkey misaligned"
-msgstr "Fclé principale mal alignée (%d != %d)\n"
+msgstr "Fclé principale mal alignée"
 
 #: src/tools/dbverify.c:1143
 #, c-format
@@ -4494,24 +4459,20 @@ msgid "Cycle in indexes, file %s found again!\n"
 msgstr "Boucle dans les index, fichier %s déjà trouvé !\n"
 
 #: src/tools/dbverify.c:1150
-#, fuzzy, c-format
 msgid "Error loading index at key"
-msgstr "Erreur de lecture de l'index à la clé %d\n"
+msgstr "Erreur de lecture de l'index à la clé"
 
 #: src/tools/dbverify.c:1198
-#, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "1ère clé du bloc avant la limite parent\n"
 
 #: src/tools/dbverify.c:1206
-#, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Dernière clé du bloc après la limité parent\n"
 
 #: src/tools/dbverify.c:1214
-#, fuzzy, c-format
 msgid "Key not below next key"
-msgstr "La clé %d n'est pas avant la clé suivante\n"
+msgstr "La clé n'est pas avant la clé suivante"
 
 #: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
 msgid "data block"
@@ -4523,10 +4484,9 @@ msgid "%s fkey=%d, file=%s"
 msgstr "%s cle=%d, fichier=%s"
 
 #: src/tools/dbverify.c:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
-msgstr ""
-"Tableaux d'erreurs invalides [%d] dans dbverify - programme à corriger\n"
+msgstr "Tableau [%d] d'erreurs invalide dans dbverify - programme à corriger\n"
 
 #: src/tools/dbverify.c:1283
 #, c-format
@@ -4557,7 +4517,6 @@ msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
 #: src/tools/dbverify.c:1487
-#, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 
@@ -4566,185 +4525,3 @@ msgstr "ERREUR FATALE :"
 msgid "In file <%s> at line %d"
 msgstr "Dans le fichier <%s> à la ligne %d"
 
-#~ msgid "Program"
-#~ msgstr "Le programme"
-
-#~ msgid "Commands:   j Move down     k Move up    i Select     q Quit"
-#~ msgstr "Commandes :  j Dépl.bas     k Dépl.haut  i Sélect.    q Quitter"
-
-#~ msgid "Commands:   j Move down     k Move up    q Quit"
-#~ msgstr "Commandes :  j Dépl.bas     k Dépl.haut  q Quitter"
-
-#~ msgid "f  Full database scan"
-#~ msgstr "f  Recherche complète base"
-
-#~ msgid "What scan type?"
-#~ msgstr "Quel type de recherche ?"
-
-#~ msgid "f  Full name scan"
-#~ msgstr "f  Recherche nom complet"
-
-#~ msgid "n  Name fragment (whitespace-delimited) scan"
-#~ msgstr "n  Recherche partie (séparée par des espaces) du nom"
-
-#~ msgid "r  Refn scan"
-#~ msgstr "r  Recherche Refn"
-
-#~ msgid "Choose an operation:"
-#~ msgstr "Choisissez une opération:"
-
-#~ msgid "r  Remove from list"
-#~ msgstr "r  Supprimer de la liste"
-
-#~ msgid "t  Enter tandem mode"
-#~ msgstr "t  Entrer mode tandem"
-
-#~ msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
-#~ msgstr ""
-#~ "Commandes :  j Dépl.bas    k Dépl.haut d Supprimer i Sélect. q Quitter"
-
-#~ msgid "--- CURRENT SELECTION ---"
-#~ msgstr "--- SÉLECTION COURANTE ---"
-
-#~ msgid "--- LIST ---"
-#~ msgstr "-- LISTE ---"
-
-#~ msgid "-- CURRENT SELECTION --"
-#~ msgstr "-- SÉLECTION COURANTE --"
-
-#~ msgid "v  Review visit history (%d record)"
-#~ msgid_plural "v  Review visit history (%d records)"
-#~ msgstr[0] "v  Voir historique des visites (%d enr.)"
-#~ msgstr[1] "v  Voir historique des visites (%d enr.)"
-
-#~ msgid "(visit history is empty)"
-#~ msgstr "(l'historique de visites est vide)"
-
-#~ msgid "c  Review change history (%d record)"
-#~ msgid_plural "c  Review change history (%d records)"
-#~ msgstr[0] "c  Voir historique des chang. (%d enr.)"
-#~ msgstr[1] "c  Voir historique des chang. (%d enr.)"
-
-#~ msgid "(change history is empty)"
-#~ msgstr "(l'historique des modifications est vide)"
-
-#~ msgid "Database error: -- "
-#~ msgstr "Erreur base : -- "
-
-#~ msgid "requested database does not exist."
-#~ msgstr "base demandée inexistante."
-
-#~ msgid "db directory is file, not directory."
-#~ msgstr "répertoire de base est un fichier, pas un répertoire."
-
-#~ msgid "creation of new database failed."
-#~ msgstr "échec de la création d'une nouvelle base"
-
-#~ msgid "error accessing database directory."
-#~ msgstr "erreur d'accès au répertoire de la base"
-
-#~ msgid "no keyfile (directory does not appear to be a database)."
-#~ msgstr "pas de fichier clé (le répertoire ne semble pas être une base)."
-
-#~ msgid "could not open, read or write an index file."
-#~ msgstr "impossible d'ouvrir, lire ou écrire un fichier d'index."
-
-#~ msgid "could not open, read or write the key file."
-#~ msgstr "impossible d'ouvrir, lire ou écrire un fichier de clés."
-
-#~ msgid "could not open, read or write the key file (to alter database)."
-#~ msgstr ""
-#~ "impossible d'ouvrir, lire ou écrire le fichier de clés (pour modifier la "
-#~ "base)"
-
-#~ msgid "could not open, read or write a block file."
-#~ msgstr "impossible d'ouvrir, lire ou écrire un fichier 'bloc'."
-
-#~ msgid "name of database is too long."
-#~ msgstr "nom de base trop long."
-
-#~ msgid "The database is already open for writing."
-#~ msgstr "La base est déjà ouverte en écriture."
-
-#~ msgid "The database is locked (no readwrite access)."
-#~ msgstr "La base est bloquée (pas d'accès en lecture/écriture)."
-
-#~ msgid "The database is unlocked."
-#~ msgstr "La base n'est pas bloquée."
-
-#~ msgid "keyfile is corrupt."
-#~ msgstr "le fichier de clés est corrompu."
-
-#~ msgid "keyfile is wrong alignment."
-#~ msgstr "le fichier de clés a un mauvais alignement."
-
-#~ msgid "keyfile is wrong version."
-#~ msgstr "le fichier de clés n'a pas la bonne version."
-
-#~ msgid "Existing database found."
-#~ msgstr "Base existante trouvée."
-
-#~ msgid ""
-#~ "The database is already opened for read access by %d users.\n"
-#~ "  "
-#~ msgstr ""
-#~ "La base est déjà ouverte en lecture par %d utilisateurs.\n"
-#~ "  "
-
-#~ msgid "Invalid properties set for new database"
-#~ msgstr "Ensemble de propriétés invalide pour la nouvelle base"
-
-#~ msgid "Undefined database error -- fix program."
-#~ msgstr "Erreur de base indéfinie -- vérifiez le programme."
-
-#~ msgid "First argument to (r)sort must be list or array"
-#~ msgstr "Le premier argument de (r)sort doit être une liste ou un tableau"
-
-#~ msgid "Arguments to (r)sort must be of same size"
-#~ msgstr "Les arguments de (r)sort doivent être de même taille"
-
-#~ msgid "Second argument to (r)sort must be list or array"
-#~ msgstr "Le second argument de (r)sort doit être une liste ou un tableau"
-
-#~ msgid "    in file <%s> at line %d\n"
-#~ msgstr "    dans le fichier <%s> à la ligne %d\n"
-
-#~ msgid "Current database"
-#~ msgstr "Base ouverte"
-
-#~ msgid "Choose database to open"
-#~ msgstr "Sélectionnez la base à ouvrir"
-
-#~ msgid "No databases found in database path"
-#~ msgstr "Pas de base trouvée dans le chemin d'accès"
-
-#~ msgid "Error: output file <%s> could not be created.\n"
-#~ msgstr "Erreur : Le fichier de sortie <%s> ne peut être créé.\n"
-
-#~ msgid ""
-#~ "usage: dbverify -(flags) <btree>\n"
-#~ "flags:\n"
-#~ "\t-a = Perform all checks (does not include fixes)\n"
-#~ "\t-g = Check for ghosts (names/refns)\n"
-#~ "\t-G = Check for & fix ghosts (names/refns)\n"
-#~ "\t-i = Check individuals\n"
-#~ "\t-f = Check families\n"
-#~ "\t-s = Check sours\n"
-#~ "\t-e = Check events\n"
-#~ "\t-x = Check others\n"
-#~ "\t-n = Noisy (echo every record processed)\n"
-#~ msgstr ""
-#~ "utilisation : dbverify -(paramètres) <btree>\n"
-#~ "paramètres :\n"
-#~ "\t-a = Effectue tous les contrôles (aucune rectification)\n"
-#~ "\t-g = Vérifie les fantômes (noms/refns)\n"
-#~ "\t-G = Vérifie et corrige les fantômes (noms/refns)\n"
-#~ "\t-i = Vérifie les individus\n"
-#~ "\t-f = Vérifie les familles\n"
-#~ "\t-s = Vérifie les sources\n"
-#~ "\t-e = Vérifie les événements\n"
-#~ "\t-x = Vérifie les enregistrements divers\n"
-#~ "\t-n = Bruyant (affiche chaque enregistrement traité)\n"
-
-#~ msgid "Added (%dP, %dF, %dS, %dE, %dX) records"
-#~ msgstr "Enregistrements ajoutés (%dP, %dF, %dS, %dE, %dX)"
