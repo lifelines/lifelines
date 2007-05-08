@@ -9,7 +9,7 @@ dnl m4 lines.cfg.input > .linesrc
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2007-04-14
+# 2007-05-08
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -176,7 +176,7 @@ ifdef(`WINDOWS',
 # default is 6
 
 # Set the default data for new persons
-#INDIREC=0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n1 BIRT\n  2 DATE\n  2 PLAC\n1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR
+#INDIREC=0 INDI\n1 NAME Fname/Surname/\n1 SEX MF\n1 BIRT\n  2 DATE\n  2 PLAC\n1 DEAT\n  2 DATE\n  2 PLAC\n1 SOUR
 # This sample version is the same as the default if none is given.
 
 # Set the default data for the body of a new family

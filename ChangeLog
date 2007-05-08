@@ -1,3 +1,9 @@
+2007-05-08 Perry Rapp
+
+	* ChangeLog lines.cfg.input
+
+	Fix sample INDIREC line to have slash after surname.
+
 2007-05-07 Perry Rapp
 
 	* ChangeLog NEWS build/setversions.sh docs/llexec.1
