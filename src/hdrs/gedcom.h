@@ -500,6 +500,9 @@ STRING generic_to_list_string(NODE node, STRING key, INT len, STRING delim, RFMT
 STRING *get_child_strings(NODE, RFMT, INT*, STRING**);
 STRING indi_to_list_string(NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey);
 
+/* init.c */
+void print_version(CNSTRING program);
+
 /* lldatabase.c */
 LLDATABASE lldb_alloc(void);
 void lldb_close(LLDATABASE *plldb);

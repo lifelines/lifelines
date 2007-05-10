@@ -1246,6 +1246,7 @@ validate_errs (void)
 			fprintf(stderr
 				, _("Invalid errs array[%d] in dbverify - fix program\n")
 				, i);
+			print_version("dbverify");
 			FATAL();
 		}
 	}
@@ -1306,6 +1307,7 @@ main (int argc, char **argv)
 	INT returnvalue=1;
 	STRING crashlog=NULL;
 	INT lldberrnum=0;
+	int i=0;
 
 	/* initialize all the low-level library code */
 	init_stdlib();
@@ -1329,6 +1331,20 @@ main (int argc, char **argv)
 	_fmode = O_BINARY;	/* default to binary rather than TEXT mode */
 #endif
 
+	/* handle conventional arguments --version and --help */
+	/* needed for help2man to synthesize manual pages */
+	for (i=1; i<argc; ++i) {
+		if (!strcmp(argv[i], "--version")) {
+			print_version("dbverify");
+			return 0;
+		}
+		if (!strcmp(argv[i], "--help")
+			|| !strcmp(argv[i], "-?")) {
+			print_usage();
+			return 0;
+		}
+	}
+
 	if (argc != 3 || argv[1][0] != '-' || argv[1][1] == '\0') {
 		print_usage();
 		goto done;
@@ -1351,6 +1367,7 @@ main (int argc, char **argv)
 		case 'm': todo.check_missing_data_records=TRUE; break;
 		case 'M': todo.fix_missing_data_records=TRUE; break;
 		case 'D': todo.fix_deletes=TRUE; break;
+		case 'v': print_version("llexec"); goto done;
 		case 'h':
 		default: print_usage(); goto done;
 		}

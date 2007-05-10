@@ -79,7 +79,6 @@ extern int opterr;
 
 
 static STRING usage = "";      /* usage string */
-static STRING version = "";    /* version string */
 int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 int opt_mychar = FALSE;        /* Custom character set handling (bypass libc) */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
@@ -104,9 +103,9 @@ STRING  readpath = NULL;       /* database path used to open */
 
 /* alphabetical */
 static void load_usage(void);
-static void load_version(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
+static void print_usage(void);
 
 /*********************************************
  * local function definitions
@@ -135,6 +134,7 @@ main (int argc, char **argv)
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
 	STRING crashlog=NULL;
+	int i=0;
 
 	/* initialize all the low-level library code */
 	init_stdlib();
@@ -154,7 +154,22 @@ main (int argc, char **argv)
 
 	save_original_locales();
 	load_usage();
-	load_version();
+
+	/* handle conventional arguments --version and --help */
+	/* needed for help2man to synthesize manual pages */
+	for (i=1; i<argc; ++i) {
+		if (!strcmp(argv[i], "--version")
+			|| !strcmp(argv[i], "-v")) {
+			print_version("dbverify");
+			return 0;
+		}
+		if (!strcmp(argv[i], "--help")
+			|| !strcmp(argv[i], "-h")
+			|| !strcmp(argv[i], "-?")) {
+			print_usage();
+			return 0;
+		}
+	}
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
@@ -409,7 +424,7 @@ finish:
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
-	if (showversion) { puts(version); strfree(&version); }
+	if (showversion) { print_version("llines"); }
 	if (showusage) puts(usage);
 
 	/* Exit */
@@ -486,15 +501,15 @@ load_usage (void)
 	usage = _(qSusgNorm);
 #endif
 }
-
+/*==================================================
+ * print_usage -- Display help/usage
+ *================================================*/
 static void
-load_version (void)
+print_usage (void)
 {
-	char verbuff[80];
-	llstrncpyf(verbuff, 80, uu8, _(qSmtitle), get_lifelines_version(80));
-	version = strsave(verbuff);
+	printf(usage);
+	printf("\n");
 }
-
 /*==================================================
  * main_db_notify -- callback called whenever a db is
  *  opened or closed
