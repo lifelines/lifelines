@@ -191,6 +191,7 @@ static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(BOOLEAN includeCurrent);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static INT update_browse_menu(INT screen);
+static void update_screen_size(void);
 static BOOLEAN yes_no_value(INT c);
 
 /*********************************************
@@ -285,7 +286,7 @@ init_screen (char * errmsg, int errsize)
 /*============================
  * update_screen_size -- Recreate windows etc if screen size has changed
  *==========================*/
-void
+static void
 update_screen_size (void)
 {
 	char errmsg[512];

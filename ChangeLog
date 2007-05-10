@@ -14,6 +14,10 @@
 	Fix typo (llines & llexec were calling themselves
 	dbverify in their --version output).
 
+	* ChangeLog src/liflines/screen.c
+
+	Make update_screen_size static and give it prototype.
+
 2007-05-08 Perry Rapp
 
 	* ChangeLog lines.cfg.input
