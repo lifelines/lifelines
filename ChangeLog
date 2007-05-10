@@ -9,6 +9,11 @@
 	Add --version and --help support to btedit, via new local functions
 	print_version and print_usage.
 
+	* ChangeLog src/liflines/llexec.c src/liflines/main.c
+
+	Fix typo (llines & llexec were calling themselves
+	dbverify in their --version output).
+
 2007-05-08 Perry Rapp
 
 	* ChangeLog lines.cfg.input

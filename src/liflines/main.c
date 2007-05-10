@@ -160,7 +160,7 @@ main (int argc, char **argv)
 	for (i=1; i<argc; ++i) {
 		if (!strcmp(argv[i], "--version")
 			|| !strcmp(argv[i], "-v")) {
-			print_version("dbverify");
+			print_version("llines");
 			return 0;
 		}
 		if (!strcmp(argv[i], "--help")
