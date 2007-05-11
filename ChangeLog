@@ -26,6 +26,11 @@
 
 	Updated doc files regenerated from xml sources (3.0.59).
 
+	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/es.po
+	po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	Update po files from latest code.
+
 2007-05-10 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h

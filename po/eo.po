@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-06 18:53-0400\n"
+"POT-Creation-Date: 2007-05-11 13:17-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -53,6 +53,23 @@ msgstr "%dj%03dt"
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Mankanta NOMO linio en INDI rikordo; rikordo ignorita.\n"
+
+#: src/gedlib/init.c:228
+#, fuzzy, c-format
+msgid "Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."
+msgstr "Kopirajtita(c) 1991 al 1996, de T. T. Wetmore IV"
+
+#: src/gedlib/init.c:230
+#, c-format
+msgid ""
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+msgstr ""
+
+#: src/gedlib/init.c:235
+#, c-format
+msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
+msgstr ""
 
 #: src/gedlib/messages.c:44
 msgid "You must identify a database."
@@ -3440,7 +3457,7 @@ msgid_plural "%d children"
 msgstr[0] "%d infano"
 msgstr[1] "%d infanoj"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1485
+#: src/liflines/error.c:61 src/tools/dbverify.c:1502
 msgid "Fatal Error"
 msgstr "Neriparebla Eraro"
 
@@ -3453,7 +3470,7 @@ msgstr "NERIPAREBLA ERARO"
 msgid "  in file <%s> at line %d\n"
 msgstr "  en dosiero <%s> sur linio %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1496
+#: src/liflines/error.c:70 src/tools/dbverify.c:1513
 msgid "ASSERT failure"
 msgstr "ASERTA fiasko"
 
@@ -3568,11 +3585,11 @@ msgstr "Importada daýro %s (ui %s)\n"
 msgid "The database was not saved."
 msgstr "La datumbazo ne estas registrita."
 
-#: src/liflines/main.c:370
+#: src/liflines/main.c:385
 msgid "Warning: database codeset unspecified"
 msgstr "Averto: datumbaza kodpaøo ne estas indikita"
 
-#: src/liflines/main.c:372
+#: src/liflines/main.c:387
 msgid "Warning: not all conversions available"
 msgstr "Averto: ne æiuj þanøigoj estas haveblaj"
 
@@ -3667,215 +3684,215 @@ msgstr "þablono: "
 msgid "Enter pattern to match against author."
 msgstr "Enmetu þablonon kontraý kiu kongrui refn."
 
-#: src/liflines/screen.c:316
+#: src/liflines/screen.c:317
 #, c-format
 msgid "initscr failed"
 msgstr ""
 
-#: src/liflines/screen.c:333
+#: src/liflines/screen.c:334
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n"
 msgstr ""
 "La petita fenestra grandeco (%d,%d) tro grandas por via ekrano (%d,%d).\n"
 
-#: src/liflines/screen.c:341
+#: src/liflines/screen.c:342
 #, fuzzy, c-format
 msgid ""
 "The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n"
 msgstr ""
 "La petita fenestra grandeco (%d,%d) tro malgrandas por LifeLines (%d,%d).\n"
 
-#: src/liflines/screen.c:705
+#: src/liflines/screen.c:706
 #, fuzzy
 msgid "Search results"
 msgstr "Ekzamenu rezultojn:"
 
-#: src/liflines/screen.c:812
+#: src/liflines/screen.c:813
 #, c-format
 msgid "(pg %d/%d)"
 msgstr "(pø %d/%d)"
 
-#: src/liflines/screen.c:1430
+#: src/liflines/screen.c:1431
 msgid "No conversion"
 msgstr "Neniu þanøigo"
 
-#: src/liflines/screen.c:1516
+#: src/liflines/screen.c:1517
 msgid "Internal codeset"
 msgstr "Interna kodpaøo"
 
-#: src/liflines/screen.c:1519
+#: src/liflines/screen.c:1520
 #, fuzzy
 msgid "Internal UTF-8: Yes"
 msgstr "Interna kodpaøo"
 
-#: src/liflines/screen.c:1521
+#: src/liflines/screen.c:1522
 #, fuzzy
 msgid "Internal UTF-8: No"
 msgstr "Interna al Redaktila"
 
-#: src/liflines/screen.c:1525
+#: src/liflines/screen.c:1526
 msgid "Locales are enabled."
 msgstr "Loka¼aroj ebliøitaj"
 
-#: src/liflines/screen.c:1527
+#: src/liflines/screen.c:1528
 msgid "Locales are disabled."
 msgstr "Loka¼aroj malebliøitaj"
 
-#: src/liflines/screen.c:1530
+#: src/liflines/screen.c:1531
 msgid "NLS (National Language Support) is compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) estas entradukigita"
 
-#: src/liflines/screen.c:1536
+#: src/liflines/screen.c:1537
 msgid "NLS (National Language Support) is not compiled in."
 msgstr "NLS (Nacia Lingva Subtenado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1549
+#: src/liflines/screen.c:1550
 msgid "iconv (codeset conversion) is compiled in."
 msgstr "iconv (kodpaøa þanøigado) estas entradukigita"
 
-#: src/liflines/screen.c:1551
+#: src/liflines/screen.c:1552
 msgid "iconv (codeset conversion) is not compiled in."
 msgstr "iconv (kodpaøa þanøigado) ne estas entradukigita"
 
-#: src/liflines/screen.c:1553
+#: src/liflines/screen.c:1554
 #, c-format
 msgid "Startup collate locale: %s"
 msgstr "Komenca ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1556
+#: src/liflines/screen.c:1557
 #, c-format
 msgid "Startup messages locale: %s"
 msgstr "Komenca mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1559
+#: src/liflines/screen.c:1560
 #, c-format
 msgid "Current collate locale: %s"
 msgstr "Nuna ordiza loka¼aro: %s"
 
-#: src/liflines/screen.c:1562
+#: src/liflines/screen.c:1563
 #, c-format
 msgid "Current messages locale: %s"
 msgstr "Nuna mesaøa loka¼aro: %s"
 
-#: src/liflines/screen.c:1565
+#: src/liflines/screen.c:1566
 #, c-format
 msgid "Collation routine: %s"
 msgstr "Ordizigada subprogramo: %s"
 
-#: src/liflines/screen.c:1569
+#: src/liflines/screen.c:1570
 #, c-format
 msgid "GUI codeset: %s"
 msgstr "GUI-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1572
+#: src/liflines/screen.c:1573
 #, c-format
 msgid "GUI output codeset: %s"
 msgstr "GUI-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1574
+#: src/liflines/screen.c:1575
 #, c-format
 msgid "GUI input codeset: %s"
 msgstr "GUI-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1579
+#: src/liflines/screen.c:1580
 #, c-format
 msgid "editor codeset: %s"
 msgstr "redaktila kodpaøo: %s"
 
-#: src/liflines/screen.c:1582
+#: src/liflines/screen.c:1583
 #, c-format
 msgid "editor output codeset: %s"
 msgstr "redaktila eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1584
+#: src/liflines/screen.c:1585
 #, c-format
 msgid "editor input codeset: %s"
 msgstr "redaktila eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1589
+#: src/liflines/screen.c:1590
 #, c-format
 msgid "report codeset: %s"
 msgstr "raporta kodpaøo: %s"
 
-#: src/liflines/screen.c:1592
+#: src/liflines/screen.c:1593
 #, c-format
 msgid "report output codeset: %s"
 msgstr "raporta eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1594
+#: src/liflines/screen.c:1595
 #, c-format
 msgid "report input codeset: %s"
 msgstr "raporta eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1599
+#: src/liflines/screen.c:1600
 #, c-format
 msgid "GEDCOM codeset: %s"
 msgstr "GEDCOM-a kodpaøo: %s"
 
-#: src/liflines/screen.c:1602
+#: src/liflines/screen.c:1603
 #, c-format
 msgid "gedcom output codeset: %s"
 msgstr "gedcom-a eliga kodpaøo: %s"
 
-#: src/liflines/screen.c:1604
+#: src/liflines/screen.c:1605
 #, c-format
 msgid "gedcom input codeset: %s"
 msgstr "gedcom-a eniga kodpaøo: %s"
 
-#: src/liflines/screen.c:1612
+#: src/liflines/screen.c:1613
 msgid "UTF-8 charprops loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1614
+#: src/liflines/screen.c:1615
 msgid "UTF-8 charprops not loaded"
 msgstr ""
 
-#: src/liflines/screen.c:1618
+#: src/liflines/screen.c:1619
 msgid "Codeset information"
 msgstr "Kodpaøa informo"
 
-#: src/liflines/screen.c:1635
+#: src/liflines/screen.c:1636
 #, c-format
 msgid "gettext dll: %s"
 msgstr "gettext (akirteksa¼a) dll: %s"
 
-#: src/liflines/screen.c:1639
+#: src/liflines/screen.c:1640
 #, c-format
 msgid "gettext dll version: %s"
 msgstr "gettext (akirteksa¼a) dll eldono: %s"
 
-#: src/liflines/screen.c:1644
+#: src/liflines/screen.c:1645
 msgid "gettext dll had no version"
 msgstr "gettext (akirteksa¼a) dll ne havis eldonon: %s"
 
-#: src/liflines/screen.c:1649
+#: src/liflines/screen.c:1650
 msgid "no gettext dll found"
 msgstr "trovis neniun gettext (akirteksa¼an) dll-on"
 
-#: src/liflines/screen.c:1658
+#: src/liflines/screen.c:1659
 #, c-format
 msgid "iconv dll: %s"
 msgstr "iconv dll: %s"
 
-#: src/liflines/screen.c:1662
+#: src/liflines/screen.c:1663
 #, c-format
 msgid "iconv dll version: %s"
 msgstr "iconv dll eldono: %s"
 
-#: src/liflines/screen.c:1667
+#: src/liflines/screen.c:1668
 msgid "iconv dll had no version"
 msgstr "iconv dll ne havis eldonon"
 
-#: src/liflines/screen.c:1672
+#: src/liflines/screen.c:1673
 msgid "no iconv dll found"
 msgstr "trovis neniun iconv dll"
 
-#: src/liflines/screen.c:1930
+#: src/liflines/screen.c:1931
 msgid "Impermissible to change codeset in a populated database"
 msgstr "Þanøante kodpaøon malpermesita en enhaviøita datumbazo"
 
-#: src/liflines/screen.c:2031
+#: src/liflines/screen.c:2032
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Æefa Menuo"
 
@@ -4517,40 +4534,40 @@ msgstr "%s dosierþlosilo=%d, dosiero=%s"
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Malvalida errs (eraroj) vektoro[%d] en dbverify - riparu programon\n"
 
-#: src/tools/dbverify.c:1283
+#: src/tools/dbverify.c:1284
 #, c-format
 msgid "Missing data record (%s)"
 msgstr "Mankanta datuma rikordo (%s)"
 
-#: src/tools/dbverify.c:1287
+#: src/tools/dbverify.c:1288
 #, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Riparis mankanta datuma rikordo (%s)"
 
-#: src/tools/dbverify.c:1457
+#: src/tools/dbverify.c:1474
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d eraro"
 msgstr[1] "%d eraroj"
 
-#: src/tools/dbverify.c:1461
+#: src/tools/dbverify.c:1478
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d riparita"
 msgstr[1] "%d riparitaj"
 
-#: src/tools/dbverify.c:1468
+#: src/tools/dbverify.c:1485
 msgid "No errors found"
 msgstr "Neniun eraron trovis"
 
-#: src/tools/dbverify.c:1487
+#: src/tools/dbverify.c:1504
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "NERIPAREBLA ERARO"
 
-#: src/tools/dbverify.c:1492
+#: src/tools/dbverify.c:1509
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "En dosiero <%s> æe linio %d"
