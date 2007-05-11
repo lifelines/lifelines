@@ -28,8 +28,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,58,17126
- PRODUCTVERSION 3,0,58,17126
+ FILEVERSION 3,0,59,17131
+ PRODUCTVERSION 3,0,59,17131
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -47,14 +47,14 @@ BEGIN
             VALUE "Comments", "http://www.sourceforge.net/projects/lifelines\0"
             VALUE "CompanyName", "LifeLines on SourceForge\0"
             VALUE "FileDescription", "llexec\0"
-            VALUE "FileVersion", "3, 0, 58, 17126\0"
+            VALUE "FileVersion", "3, 0, 59, 17131\0"
             VALUE "InternalName", "llexec\0"
             VALUE "LegalCopyright", "Copyright © 2002-2006\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "llexec.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "LifeLines Genealogical DB and Programming System\0"
-            VALUE "ProductVersion", "3, 0, 58, 17126\0"
+            VALUE "ProductVersion", "3, 0, 59, 17131\0"
             VALUE "SpecialBuild", "Win32 version by Perry Rapp\0"
         END
     END

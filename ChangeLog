@@ -10,6 +10,16 @@
 
 	Add entry for upcoming release (3.0.59 stable).
 
+	* ChangeLog INSTALL NEWS README configure.in
+	build/msvc6/btedit/btedit.rc build/msvc6/dbverify/dbVerify.rc
+	build/msvc6/llexec/llexec.rc build/msvc6/llines/llines.rc
+	build/rpm/lifelines.spec docs/btedit.1 docs/dbverify.1
+	docs/ll-devguide.xml docs/ll-reportmanual.xml
+	docs/ll-userguide.xml docs/llexec.1 docs/llines.1
+	src/hdrs/version.h
+
+	Bump version to 3.0.59.
+
 2007-05-10 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h
