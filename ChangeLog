@@ -6,6 +6,10 @@
 
 	Updated doc files regenerated from xml sources.
 
+	* ChangeLog NEWS
+
+	Add entry for upcoming release (3.0.59 stable).
+
 2007-05-10 Perry Rapp
 
 	* ChangeLog src/gedlib/init.c src/hdrs/gedcom.h
