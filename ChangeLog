@@ -4,7 +4,7 @@
 	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
 	docs/ll-userguide.html docs/ll-userguide.pdf
 
-	Updated doc files regenerated from xml sources.
+	Updated doc files regenerated from xml sources (3.0.58).
 
 	* ChangeLog NEWS
 
@@ -19,6 +19,12 @@
 	src/hdrs/version.h
 
 	Bump version to 3.0.59.
+
+	*  ChangeLog docs/ll-devguide.html
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-userguide.html docs/ll-userguide.pdf
+
+	Updated doc files regenerated from xml sources (3.0.59).
 
 2007-05-10 Perry Rapp
 
