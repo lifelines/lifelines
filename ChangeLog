@@ -1,3 +1,9 @@
+2007-05-12 Perry Rapp
+
+	* ChangeLog build/setversions.sh
+
+	Add btedit.rc to setversions.sh restore handling.
+
 2007-05-11 lifelines stable 3.0.59 RELEASE
 
 2007-05-11 Perry Rapp

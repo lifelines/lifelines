@@ -1,6 +1,6 @@
 #!/bin/bash
 # Created: 2005-10-08, Perry Rapp
-# Edited:  2007-04-29, Perry Rapp
+# Edited:  2007-05-12, Perry Rapp
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
@@ -166,6 +166,7 @@ function restore {
   restorefile ../build/msvc6/dbverify/dbVerify.rc
   restorefile ../build/msvc6/llexec/llexec.rc
   restorefile ../build/msvc6/llines/llines.rc
+  restorefile ../build/msvc6/btedit/btedit.rc
 }
 
 # Invoke whichever functionality was requested
