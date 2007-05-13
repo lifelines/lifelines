@@ -119,7 +119,7 @@ function applyversion {
   alterfile ../INSTALL "$SEDPAT"
   alterfile ../README "$SEDPAT"
   SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
-  alterfile ../configure.in "$SEDPAT"
+  alterfile ../configure.ac "$SEDPAT"
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile ../build/rpm/lifelines.spec "$SEDPAT"
   SEDPAT="s/\(#define LIFELINES_VERSION \"\)[0-9][[:alnum:].\-]*\"$/\1$VERSION\\\"/"
@@ -155,7 +155,7 @@ function restore {
   restorefile ../NEWS
   restorefile ../INSTALL
   restorefile ../README
-  restorefile ../configure.in
+  restorefile ../configure.ac
   restorefile ../build/rpm/lifelines.spec
   restorefile ../src/hdrs/version.h
   restorefile ../docs/ll-devguide.xml

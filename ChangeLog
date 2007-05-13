@@ -1,3 +1,14 @@
+2007-05-13 Perry Rapp
+
+	* ChangeLog README.AUTOCONF README.DEVELOPERS README.MAINTAINERS
+	build/setversions.sh docs/ll-devguide.xml
+	*DELETE configure.in
+	*NEW configure.ac
+
+	Rename configure.in to (modern) name of configure.ac.
+	Fix ll-devguide.xml to use build/setversions.sh 
+	instead of manual file list.
+
 2007-05-12 Perry Rapp
 
 	* ChangeLog build/setversions.sh

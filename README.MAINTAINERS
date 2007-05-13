@@ -11,7 +11,7 @@ Edit the version number, setting it to the new release:
   NEWS
   INSTALL
   README
-  configure.in
+  configure.ac
   build/rpm/lifelines.spec
   src/hdrs/version.h
   build/msvc6/btedit/btedit.rc (4 occurrences)

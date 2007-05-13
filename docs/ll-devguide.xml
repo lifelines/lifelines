@@ -819,7 +819,7 @@ Makefile, Makefile.in, config.h, config.h.in, or configure.
 </para>
 
 <para>
-The proper files to modify by hand are configure.in (if there's something
+The proper files to modify by hand are configure.ac (if there's something
 new you need to determine about the host system at configuration time)
 and Makefile.am (if source files are added or removed, targets added,
 or dependencies changed).
@@ -828,7 +828,7 @@ or dependencies changed).
 <para>
 As long as you have autoconf and automake installed on your system, the
 Makefiles generated will be able to regenerate any file dependent on a
-Makefile.am or configure.in.  To regenerate the build system explicitly
+Makefile.am or configure.ac.  To regenerate the build system explicitly
 run the script autogen.sh:
 <programlisting>
  sh autogen.sh
@@ -867,7 +867,7 @@ automake: This generates Makefile.in files from Makefile.am files.
 </para>
 
 <para>
-autoconf: This generates configure from configure.in (or configure.ac).
+autoconf: This generates configure from configure.ac.
 </para>
 
 <para>
@@ -971,15 +971,8 @@ If everything goes ok, this will generate a source and binary rpm.
 <sect1>
 <title>Making a release</title>
 <para>
-To release a new version, edit the version number in
-<programlisting>
-  NEWS
-  configure.in
-  build/rpm/lifelines.spec
-  src/hdrs/version.h
-  build/msvc6/llines/llines.rc
-  docs/ll-*.xml
-</programlisting>
+To release a new version, run the build/setversions.sh script
+to set the version in the many necessary files.
 Add an entry mentioning the new version in the
 <programlisting>
   ChangeLog
