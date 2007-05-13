@@ -63,7 +63,7 @@ void unlock_record_from_cache(RECORD rec);
 void lockrpt_cache(CACHEEL);
 void unlockrpt_cache(CACHEEL);
 INT cel_rptlocks(CACHEEL cel);
-INT free_all_rprtlocks(void);
+int free_all_rprtlocks(void);
 
 
 CNSTRING cacheel_to_key(CACHEEL cel);

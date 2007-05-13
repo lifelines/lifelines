@@ -1498,7 +1498,7 @@ set_all_nodetree_to_root_cel (NODE root)
  * free_all_rprtlocks_in_cache -- Remove any rptlocks on any
  *  elements in this cache, and return number removed
  *=====================================================*/
-static INT
+static int
 free_all_rprtlocks_in_cache (CACHE cache)
 {
 	INT ct=0;

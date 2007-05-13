@@ -2160,7 +2160,7 @@ get_report_error_msg (STRING msg)
 static
 void clean_orphaned_rptlocks (void)
 {
-	INT ct = free_all_rprtlocks();
+	int ct = free_all_rprtlocks();
 	if (ct) {
 		char msg[256];
 		sprintf(msg, _pl("Program forgot to unlock %d record",

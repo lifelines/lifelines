@@ -9,6 +9,12 @@
 	Fix ll-devguide.xml to use build/setversions.sh 
 	instead of manual file list.
 
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/cache.h
+	src/interp/interp.c
+
+	Change return type of free_all_rprtlocks from INT to int,
+	so can use %d printf type.
+
 2007-05-12 Perry Rapp
 
 	* ChangeLog build/setversions.sh
