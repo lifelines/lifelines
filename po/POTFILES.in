@@ -6,6 +6,7 @@
 src/gedlib/charmaps.c
 src/gedlib/dateparse.c
 src/gedlib/dateprint.c
+src/gedlib/dbcontext.c
 src/gedlib/editmap.c
 src/gedlib/editvtab.c
 src/gedlib/gedcom.c

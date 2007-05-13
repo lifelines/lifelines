@@ -20,6 +20,12 @@
 	Add some src files needed for MSVC compilation which weren't
 	making it into dist tarball.
 
+	* ChangeLog po/POTFILES.in
+
+	Add file src/gedlib/dbcontext.c to list of src files for
+	l10n.
+
+
 2007-05-12 Perry Rapp
 
 	* ChangeLog build/setversions.sh
