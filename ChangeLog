@@ -15,6 +15,11 @@
 	Change return type of free_all_rprtlocks from INT to int,
 	so can use %d printf type.
 
+	* ChangeLog src/hdrs/win32/Makefile.am win32/Makefile.am
+
+	Add some src files needed for MSVC compilation which weren't
+	making it into dist tarball.
+
 2007-05-12 Perry Rapp
 
 	* ChangeLog build/setversions.sh

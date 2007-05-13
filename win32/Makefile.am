@@ -3,4 +3,4 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST=getopt.c mycurses.c w32systm.c
+EXTRA_DIST=getopt.c iconvshim.c intlshim.c mycurses.c w32systm.c

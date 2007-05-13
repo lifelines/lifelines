@@ -3,5 +3,5 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = curses.h getopt.h msvc.h
+EXTRA_DIST = curses.h getopt.h iconv.h iconvshim.h intlshim.h msvc.h
 
