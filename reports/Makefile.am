@@ -80,6 +80,8 @@ EXTRA_DIST = $(pkg_REPORTS) \
 
 dist_pkgdata_DATA = $(EXTRA_DIST)
 
+CLEANFILES = index.html
+
 PERL = perl
 index.html: $(LL_REPORTS)
 	-$(PERL) $(top_srcdir)/reports/gen_index $^
