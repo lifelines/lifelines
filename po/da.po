@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-13 22:02-0400\n"
+"POT-Creation-Date: 2007-05-14 10:43-0400\n"
 "PO-Revision-Date: 2002-11-09 19:20+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -145,19 +145,19 @@ msgstr ""
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr ""
 
-#: src/gedlib/init.c:228
+#: src/gedlib/init.c:228 src/tools/btedit.c:207
 #, fuzzy, c-format
 msgid "Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."
 msgstr "Copyright© 1991 til 1996, af T. T. Wetmore IV"
 
-#: src/gedlib/init.c:230
+#: src/gedlib/init.c:230 src/tools/btedit.c:209
 #, c-format
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 msgstr ""
 
-#: src/gedlib/init.c:235
+#: src/gedlib/init.c:235 src/tools/btedit.c:214
 #, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
 msgstr ""
@@ -4299,6 +4299,113 @@ msgstr ""
 msgid "Missing HEAD line at line %d"
 msgstr ""
 
+#: src/tools/btedit.c:108
+#, c-format
+msgid "btedit requires 2 arguments (btree and key)."
+msgstr ""
+
+#: src/tools/btedit.c:110
+#, c-format
+msgid "See `btedit --help' for more information."
+msgstr ""
+
+#: src/tools/btedit.c:117
+#, fuzzy, c-format
+msgid "Failed to open btree: %s."
+msgstr "Kunne ikke åbne filen %s."
+
+#: src/tools/btedit.c:124
+#, fuzzy, c-format
+msgid "There is no record with key: %s"
+msgstr "Der findes ingen post med den nøgle eller reference."
+
+#: src/tools/btedit.c:126
+#, fuzzy, c-format
+msgid "Error accessing record: %s"
+msgstr "Fejl ved dataadgang"
+
+#: src/tools/btedit.c:135
+#, c-format
+msgid "Editor or system call failed."
+msgstr ""
+
+#: src/tools/btedit.c:137
+#, fuzzy, c-format
+msgid "Database was not be modified."
+msgstr "Databasen er skrivebeskyttet; du kan ikke tilføje poster."
+
+#: src/tools/btedit.c:143
+#, fuzzy, c-format
+msgid "Readonly database can not be modified."
+msgstr "Databasen er skrivebeskyttet; du kan ikke tilføje poster."
+
+#: src/tools/btedit.c:150
+#, c-format
+msgid "Error writing file 'btedit.tmp'."
+msgstr ""
+
+#: src/tools/btedit.c:156
+#, c-format
+msgid "Record %s modified."
+msgstr ""
+
+#: src/tools/btedit.c:226
+msgid "\"\\My Documents\\LifeLines\\Databases\\MyFamily\""
+msgstr ""
+
+#: src/tools/btedit.c:228 src/tools/dbverify.c:232
+msgid "/home/users/myname/lifelines/databases/myfamily"
+msgstr ""
+
+#: src/tools/btedit.c:231
+#, c-format
+msgid ""
+"lifelines `btedit' edits raw binary btree blocks\n"
+"in lifelines database files. Do NOT use this unless\n"
+"you know what you are doing and you have backed up\n"
+"your database."
+msgstr ""
+
+#: src/tools/btedit.c:236
+#, c-format
+msgid "Usage btedit [database] [rkey]"
+msgstr ""
+
+#: src/tools/btedit.c:238
+#, c-format
+msgid "Options:"
+msgstr ""
+
+#: src/tools/btedit.c:240
+#, c-format
+msgid "\t--help\tdisplay this help and exit"
+msgstr ""
+
+#: src/tools/btedit.c:242
+#, c-format
+msgid "\t--version\toutput version information and exit"
+msgstr ""
+
+#: src/tools/btedit.c:244
+#, c-format
+msgid "Examples:"
+msgstr ""
+
+#: src/tools/btedit.c:246
+#, c-format
+msgid "\tbtedit %s I34"
+msgstr ""
+
+#: src/tools/btedit.c:248
+#, c-format
+msgid "edit raw btree block for person I34"
+msgstr ""
+
+#: src/tools/btedit.c:250
+#, c-format
+msgid "Report bugs to lifelines.sourceforge.net"
+msgstr ""
+
 #: src/tools/dbverify.c:175
 msgid "Orphan names"
 msgstr ""
@@ -4412,10 +4519,6 @@ msgstr "Titel mangler"
 
 #: src/tools/dbverify.c:230
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
-msgstr ""
-
-#: src/tools/dbverify.c:232
-msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr ""
 
 #: src/tools/dbverify.c:236

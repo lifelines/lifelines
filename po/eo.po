@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-13 22:02-0400\n"
+"POT-Creation-Date: 2007-05-14 10:43-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -146,19 +146,19 @@ msgstr "Malkonita datumbaza eraro -- riparu programon."
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Mankanta NOMO linio en INDI rikordo; rikordo ignorita.\n"
 
-#: src/gedlib/init.c:228
+#: src/gedlib/init.c:228 src/tools/btedit.c:207
 #, fuzzy, c-format
 msgid "Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."
 msgstr "Kopirajtita(c) 1991 al 1996, de T. T. Wetmore IV"
 
-#: src/gedlib/init.c:230
+#: src/gedlib/init.c:230 src/tools/btedit.c:209
 #, c-format
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 msgstr ""
 
-#: src/gedlib/init.c:235
+#: src/gedlib/init.c:235 src/tools/btedit.c:214
 #, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
 msgstr ""
@@ -4232,6 +4232,114 @@ msgstr "Multoble difinita HEAD linio æe linio %d"
 msgid "Missing HEAD line at line %d"
 msgstr "Mankanta HEAD linio æe linio %d"
 
+#: src/tools/btedit.c:108
+#, c-format
+msgid "btedit requires 2 arguments (btree and key)."
+msgstr ""
+
+#: src/tools/btedit.c:110
+#, c-format
+msgid "See `btedit --help' for more information."
+msgstr ""
+
+#: src/tools/btedit.c:117
+#, fuzzy, c-format
+msgid "Failed to open btree: %s."
+msgstr "Ne povas malfermi dosiero %s."
+
+#: src/tools/btedit.c:124
+#, fuzzy, c-format
+msgid "There is no record with key: %s"
+msgstr "Ne ekzistas rikordo kun tiu þlosilo aý referenco."
+
+#: src/tools/btedit.c:126
+#, fuzzy, c-format
+msgid "Error accessing record: %s"
+msgstr "Eraro dum datumalirado"
+
+#: src/tools/btedit.c:135
+#, c-format
+msgid "Editor or system call failed."
+msgstr ""
+
+#: src/tools/btedit.c:137
+#, fuzzy, c-format
+msgid "Database was not be modified."
+msgstr "La datumbazo ne estas registrita."
+
+#: src/tools/btedit.c:143
+#, fuzzy, c-format
+msgid "Readonly database can not be modified."
+msgstr "La datumbazo ne estas registrita."
+
+#: src/tools/btedit.c:150
+#, c-format
+msgid "Error writing file 'btedit.tmp'."
+msgstr ""
+
+#: src/tools/btedit.c:156
+#, c-format
+msgid "Record %s modified."
+msgstr ""
+
+#: src/tools/btedit.c:226
+#, fuzzy
+msgid "\"\\My Documents\\LifeLines\\Databases\\MyFamily\""
+msgstr "\\Miaj Datumaroj\\LifeLines\\Datumbazoj\\MiaFamilio"
+
+#: src/tools/btedit.c:228 src/tools/dbverify.c:232
+msgid "/home/users/myname/lifelines/databases/myfamily"
+msgstr "/hejmo/uzantoj/mianomo/lifelines/datumbazoj/miafamilio"
+
+#: src/tools/btedit.c:231
+#, c-format
+msgid ""
+"lifelines `btedit' edits raw binary btree blocks\n"
+"in lifelines database files. Do NOT use this unless\n"
+"you know what you are doing and you have backed up\n"
+"your database."
+msgstr ""
+
+#: src/tools/btedit.c:236
+#, c-format
+msgid "Usage btedit [database] [rkey]"
+msgstr ""
+
+#: src/tools/btedit.c:238
+#, c-format
+msgid "Options:"
+msgstr ""
+
+#: src/tools/btedit.c:240
+#, c-format
+msgid "\t--help\tdisplay this help and exit"
+msgstr ""
+
+#: src/tools/btedit.c:242
+#, c-format
+msgid "\t--version\toutput version information and exit"
+msgstr ""
+
+#: src/tools/btedit.c:244
+#, c-format
+msgid "Examples:"
+msgstr ""
+
+#: src/tools/btedit.c:246
+#, c-format
+msgid "\tbtedit %s I34"
+msgstr ""
+
+#: src/tools/btedit.c:248
+#, c-format
+msgid "edit raw btree block for person I34"
+msgstr ""
+
+#: src/tools/btedit.c:250
+#, c-format
+msgid "Report bugs to lifelines.sourceforge.net"
+msgstr ""
+
 #: src/tools/dbverify.c:175
 msgid "Orphan names"
 msgstr "Ofraj nomoj"
@@ -4335,10 +4443,6 @@ msgstr "Mankantaj datumaj rikordoj"
 #: src/tools/dbverify.c:230
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\Miaj Datumaroj\\LifeLines\\Datumbazoj\\MiaFamilio"
-
-#: src/tools/dbverify.c:232
-msgid "/home/users/myname/lifelines/databases/myfamily"
-msgstr "/hejmo/uzantoj/mianomo/lifelines/datumbazoj/miafamilio"
 
 #: src/tools/dbverify.c:236
 #, c-format
