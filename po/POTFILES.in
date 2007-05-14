@@ -55,4 +55,6 @@ src/liflines/valgdcom.c
 
 src/stdlib/signals.c
 
+src/tools/btedit.c
 src/tools/dbverify.c
+

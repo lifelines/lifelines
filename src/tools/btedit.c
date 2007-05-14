@@ -103,21 +103,26 @@ main (int argc,
 
 	/* Parse Command-Line Arguments */
 	if (argc != 3) {
-		printf("usage: btedit <btree> <rkey>\n");
+		printf(_("btedit requires 2 arguments (btree and key)."));
+		puts("");
+		printf(_("See `btedit --help' for more information."));
+		puts("");
 		return (1);
 	}
 	dbname = argv[1];
 	key = argv[2];
 	if (!(btree = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
-		printf("could not open btree: %s\n", dbname);
+		printf(_("Failed to open btree: %s."), dbname);
+		puts("");
 		return (1);
 	}
 	rtn = write_record_to_file(btree, str2rkey(key), "btedit.tmp");
 	if (rtn != RECORD_SUCCESS) {
 		if (rtn == RECORD_NOT_FOUND)
-			printf("there is no record with key: %s\n", key);
+			printf(_("There is no record with key: %s"), key);
 		else
-			printf("error accessing record: %s\n", key);
+			printf(_("Error accessing record: %s"), key);
+		puts("");
 		closebtree(btree);
 		btree = 0;
 		return (0);
@@ -197,16 +202,16 @@ print_usage (void)
 	printf("\n\n");
 	printf(_("Options:"));
 	printf("\n");
-	printf("\t--help\tdisplay this help and exit");
+	printf(_("\t--help\tdisplay this help and exit"));
 	printf("\n");
-	printf("\t--version\toutput version information and exit");
+	printf(_("\t--version\toutput version information and exit"));
 	printf("\n\n");
 	printf(_("Examples:"));
 	printf("\n");
-	printf("\tbtedit %s I34", fname);
+	printf(_("\tbtedit %s I34"), fname);
 	printf("\n\t\t");
 	printf(_("edit raw btree block for person I34"));
 	printf("\n\n");
-	printf("Report bugs to lifelines.sourceforge.net");
+	printf(_("Report bugs to lifelines.sourceforge.net"));
 	printf("\n");
 }

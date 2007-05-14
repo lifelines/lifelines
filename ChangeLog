@@ -17,6 +17,11 @@
 
 	Regenerate po files to include more i18n'd strings.
 
+	* ChangeLog po/POTFILES.in src/tools/btedit.c
+
+	i18n btedit.c, and capitalize some error messages, and
+	remove carriage returns from i18n strings.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 
