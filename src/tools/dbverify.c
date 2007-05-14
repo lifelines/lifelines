@@ -153,6 +153,7 @@ static void report_fix(INT err, STRING fmt, ...);
 static void report_progress(STRING fmt, ...);
 static void report_results(void);
 static void validate_errs(void);
+static void vcrashlog(int newline, const char * fmt, va_list args);
 
 /*********************************************
  * local variables
@@ -1516,16 +1517,41 @@ __fatal (STRING file, int line, CNSTRING details)
 	exit(1);
 }
 /*===============================
- * __crashlog -- Details preceding a fatal error
+ * vcrashlog -- Send crash info to screen
+ *  internal implementation
+ *=============================*/
+static void
+vcrashlog (int newline, const char * fmt, va_list args)
+{
+	vprintf(fmt, args);
+	if (newline) {
+		printf("\n");
+	}
+}
+/*===============================
+ * crashlog -- Send string to crash log and screen
  *=============================*/
 void
 crashlog (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	vprintf(fmt, args);
+	vcrashlog(0, fmt, args);
 	va_end(args);
 }
+/*===============================
+ * crashlogn -- Send string to crash log and screen
+ *  add carriage return to end line
+ *=============================*/
+void
+crashlogn (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vcrashlog(1, fmt, args);
+	va_end(args);
+}
+
 /*===============================
  * printkey -- Displayable version of key
  *  same as key, except for NULL keys

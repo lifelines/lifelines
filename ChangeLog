@@ -1,3 +1,12 @@
+2007-05-14 Perry Rapp
+
+	* ChangeLog po/POTFILES.in src/gedlib/keytonod.c
+	src/hdrs/llstdlib.h src/liflines/error.c src/tools/dbverify.c
+
+	Fix function free_all_rprtlocks to return int (per its declaration).
+	Add crashlogn which appends carriage return, and i18n crashlog calls
+	in keytonod.c, and add keytonod.c to po/POTFILES.in.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 

@@ -61,6 +61,7 @@ should return.
 */
 void __fatal(STRING file, int line, CNSTRING details);
 void crashlog(STRING fmt, ...);
+void crashlogn(STRING fmt, ...);
 
 
 /* dirs.c */

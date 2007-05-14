@@ -673,6 +673,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 		rec = string_to_record(rawrec, key, len);
 	if (!rec)
 	{
+		ZSTR zstr=zs_newn(256);
 		if(listbadkeys) {
 			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
 				if (badkeylist[0])
@@ -682,16 +683,20 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 			return(NULL);
 		}
 		if (reportmode) return(NULL);
-		crashlog("key %s is not in database. Use \"btedit <database> <key>\" to fix.\n", (char *) key);
-		crashlog("where <key> is probably one of the following:\n");
+		crashlogn(_("Database error caused by reference to nonexisting key <%s>."), (char *)key);
+		crashlogn(_("It might be possible to fix this with btedit."));
+		zs_sets(zstr, _("Neighboring keys include:"));
 		for(i = 0; i < 10; i++)
 		{
 			j = keyidx + i;
 			if(j >= 10) j -= 10;
-			if (keybuf[j][0])
-				crashlog(" %s", (char *)keybuf[j]);
+			if (keybuf[j][0]) {
+				zs_appc(zstr, ' ');
+				zs_apps(zstr, keybuf[j]);
+			}
 		}
-		crashlog("\n");
+		crashlogn(zs_str(zstr));
+		zs_free(&zstr);
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
 	ASSERT(rec);
@@ -1064,7 +1069,7 @@ get_free_cacheel (CACHE cache)
 		for (cel = caclastdir(cache); cel && cclock(cel); cel = cprev(cel)) {
 		}
 		if (!cel) {
-			llwprintf("Cache overflow! (Cache=%s, size=%d)\n", cacname(cache), cacmaxdir(cache));
+			crashlog(_("Cache [%s] overflowed its max size (%d)"), cacname(cache), cacmaxdir(cache));
 			ASSERT(0);
 		}
 		remove_from_cache(cache, ckey(cel));
@@ -1519,10 +1524,10 @@ free_all_rprtlocks_in_cache (CACHE cache)
  * free_all_rprtlocks -- Remove any rptlocks on any
  *  elements in all caches, and return number removed
  *=====================================================*/
-INT
+int
 free_all_rprtlocks (void)
 {
-	INT ct=0;
+	int ct=0;
 	ct += free_all_rprtlocks_in_cache(indicache);
 	ct += free_all_rprtlocks_in_cache(famcache);
 	ct += free_all_rprtlocks_in_cache(sourcache);

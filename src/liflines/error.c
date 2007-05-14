@@ -38,6 +38,8 @@
 #define INCLUDED_STDARG_H
 #endif
 
+static void vcrashlog(int newline, const char * fmt, va_list args);
+
 
 /*
  2002/10/05
@@ -74,20 +76,47 @@ __fatal (STRING file, int line, CNSTRING details)
 	exit(1);
 }
 /*===============================
- * __crashlog -- Details preceding a fatal error
+ * vcrashlog -- Send crash info to crash log and screen
+ *  internal implementation
  *=============================*/
-void
-crashlog (STRING fmt, ...)
+static void
+vcrashlog (int newline, const char * fmt, va_list args)
 {
 	char buffer[2048];
-	va_list args;
-	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
-	va_end(args);
+	buffer[sizeof(buffer)-1] = 0;
+	if (newline) {
+		/* ensure room at end to append \n */
+		buffer[sizeof(buffer)-2] = 0;
+		strcat(buffer, "\n");
+	}
 
 	/* send to error log if one is specified */
 	errlog_out(NULL, buffer, NULL, -1);
 
 	/* send to screen */
 	llwprintf(buffer);
+}
+/*===============================
+ * vcrashlog -- Send crash info to crash log and screen
+ *=============================*/
+void
+crashlog (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vcrashlog(0, fmt, args);
+	va_end(args);
+}
+/*===============================
+ * vcrashlog -- Send crash info to crash log and screen
+ *  add carriage return to end line
+ *=============================*/
+void
+crashlogn (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vcrashlog(1, fmt, args);
+	va_end(args);
 }

@@ -12,6 +12,7 @@ src/gedlib/editvtab.c
 src/gedlib/gedcom.c
 src/gedlib/gstrings.c
 src/gedlib/init.c
+src/gedlib/keytonod.c
 src/gedlib/lloptions.c
 src/gedlib/messages.c
 src/gedlib/node.c
