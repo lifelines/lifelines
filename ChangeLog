@@ -22,6 +22,11 @@
 	i18n btedit.c, and capitalize some error messages, and
 	remove carriage returns from i18n strings.
 
+	* ChangeLog src/tools/btedit.c
+
+	Detect system/edit errors in btedit and handle.
+	Add success message as well.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 

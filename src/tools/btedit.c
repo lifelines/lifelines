@@ -52,6 +52,7 @@ STRING int_codeset=0;     /* internal codeset */
  *********************************************/
 
 /* alphabetical */
+static int llsystem(const char * cmd);
 static void print_usage(void);
 static void print_version(CNSTRING program);
 
@@ -71,11 +72,12 @@ main (int argc,
 	char cmdbuf[512];
 	char *editor;
 	char *dbname, *key;
-	RECORD_STATUS rtn;
+	RECORD_STATUS recstat;
 	BOOLEAN cflag=FALSE; /* create new db if not found */
 	BOOLEAN writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
 	INT lldberrnum=0;
+	int rtn=0;
 	int i=0;
 
 	/* TODO: needs locale & gettext initialization */
@@ -114,35 +116,58 @@ main (int argc,
 	if (!(btree = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
 		printf(_("Failed to open btree: %s."), dbname);
 		puts("");
-		return (1);
+		return 2;
 	}
-	rtn = write_record_to_file(btree, str2rkey(key), "btedit.tmp");
-	if (rtn != RECORD_SUCCESS) {
-		if (rtn == RECORD_NOT_FOUND)
+	recstat = write_record_to_file(btree, str2rkey(key), "btedit.tmp");
+	if (recstat != RECORD_SUCCESS) {
+		if (recstat == RECORD_NOT_FOUND)
 			printf(_("There is no record with key: %s"), key);
 		else
 			printf(_("Error accessing record: %s"), key);
 		puts("");
-		closebtree(btree);
-		btree = 0;
-		return (0);
+		rtn = 3;
+		goto finish;
 	}
 
 	editor = environ_determine_editor(PROGRAM_BTEDIT);
 	sprintf(cmdbuf, "%s btedit.tmp", editor);
-#ifdef WIN32
-	/* use w32system, because it will wait for the editor to finish */
-	w32system(cmdbuf);
-#else
-	system(cmdbuf);
-#endif
+	if (llsystem(cmdbuf) != 0) {
+		printf(_("Editor or system call failed."));
+		puts("");
+		printf(_("Database was not be modified."));
+		puts("");
+		rtn = 4;
+		goto finish;
+	}
 	if (bwrite(btree)) {
 		addfile(btree, str2rkey(key), "btedit.tmp");
 		unlink("btedit.tmp");
+		printf(_("Record %s modified."), key);
+		puts("");
 	}
+	rtn = 0;
+
+finish:
 	closebtree(btree);
 	btree = 0;
-	return TRUE;
+	return rtn;
+}
+/*=============================
+ * llsystem -- wrapper for system call
+ *  (handles Win32 version as well)
+ * return value of 0 is assumed successful
+ *===========================*/
+static int
+llsystem (const char * cmd)
+{
+	int rtn=-1;
+#ifdef WIN32
+        /* use w32system, because it will wait for the editor to finish */
+        rtn = w32system(cmd);
+#else
+        rtn = system(cmd);
+#endif
+	return rtn;
 }
 /*=============================
  * __fatal -- Fatal error routine
