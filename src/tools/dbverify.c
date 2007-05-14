@@ -1417,7 +1417,8 @@ main (int argc, char **argv)
 		printf(_(qSbaddb));
 		goto done;
 	}
-	printf("Checking %s\n", dbname);
+	printf(_("Checking %s"), dbname);
+	puts("");
 
 	/* all checks - if any new ones, have to update this */
 	if (allchecks) {

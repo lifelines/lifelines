@@ -42,6 +42,11 @@
 
 	Regenerate po files to include more i18n'd strings.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Localize "Checking..." message in dbverify main.
+
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 
