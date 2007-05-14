@@ -33,6 +33,10 @@
 	Spread out btedit return codes to allow space
 	if more added in-between.
 
+	* ChangeLog src/tools/btedit.c
+
+	Add error handling to btedit in case addfile fails.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 

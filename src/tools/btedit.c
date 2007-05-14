@@ -146,7 +146,12 @@ main (int argc,
 		goto finish;
 	}
 
-	addfile(btree, str2rkey(key), "btedit.tmp");
+	if (!addfile(btree, str2rkey(key), "btedit.tmp")) {
+		printf(_("Error writing file 'btedit.tmp'."));
+		puts("");
+		rtn = 60;
+		goto finish;
+	}
 	unlink("btedit.tmp");
 	printf(_("Record %s modified."), key);
 	puts("");
