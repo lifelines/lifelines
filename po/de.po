@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-11 13:17-0400\n"
+"POT-Creation-Date: 2007-05-13 22:02-0400\n"
 "PO-Revision-Date: 2003-06-19 06:32+0200\n"
 "Last-Translator: Frank Ellebrecht <ellebrecht-edv@gmx.de>\n"
 "Language-Team: None\n"
@@ -52,6 +52,98 @@ msgstr "%dJahr%03dTag"
 msgid "%dy%03dd"
 msgstr "%dJahr%03dTag"
 
+#: src/gedlib/dbcontext.c:276
+msgid "Database error: -- "
+msgstr "Fehler in der Datenbank: -- "
+
+#: src/gedlib/dbcontext.c:280
+msgid "requested database does not exist."
+msgstr "Gewünschte Datenbank existiert nicht."
+
+#: src/gedlib/dbcontext.c:283
+msgid "db directory is file, not directory."
+msgstr "DB ist eine Datei, kein Verzeichnis."
+
+#: src/gedlib/dbcontext.c:286
+msgid "creation of new database failed."
+msgstr "Anlegen der neuen Datenbank ist gescheitert."
+
+#: src/gedlib/dbcontext.c:289
+msgid "error accessing database directory."
+msgstr "Fehler beim Zugriff auf das Datenbankverzeichnis."
+
+#: src/gedlib/dbcontext.c:292
+msgid "no keyfile (directory does not appear to be a database)."
+msgstr "Dieses Verzeichnis scheint keine Datenbank zu sein."
+
+#: src/gedlib/dbcontext.c:295
+msgid "could not open, read or write an index file."
+msgstr "Öffnen, Lesen oder Schreiben des Index fehlgeschlagen."
+
+#: src/gedlib/dbcontext.c:298
+msgid "could not open, read or write the key file."
+msgstr "Öffnen, Lesen oder Schreiben der Indexdatei fehlgeschlagen."
+
+#: src/gedlib/dbcontext.c:301
+msgid "could not open, read or write the key file (to alter database)."
+msgstr ""
+"DB konnte nicht geändert werden: Fehler beim Öffnen, Lesen oder Schreiben."
+
+#: src/gedlib/dbcontext.c:304
+msgid "could not open, read or write a block file."
+msgstr "Öffnen, Lesen oder Schreiben der Blockdatei fehlgeschlagen."
+
+#: src/gedlib/dbcontext.c:307
+msgid "name of database is too long."
+msgstr "Name der Datenbank ist zu lang."
+
+#: src/gedlib/dbcontext.c:310
+msgid "The database is already open for writing."
+msgstr "Auf die Datenbank wird bereits zugegriffen."
+
+#: src/gedlib/dbcontext.c:313
+msgid "The database is locked (no readwrite access)."
+msgstr "Die Datenbank ist gesperrt (kein Schreibzugriff). "
+
+#: src/gedlib/dbcontext.c:316
+msgid "The database is unlocked."
+msgstr "Die Datenbank ist freigeschaltet."
+
+#: src/gedlib/dbcontext.c:319
+msgid "keyfile is corrupt."
+msgstr "Indexdatei ist fehlerhaft."
+
+#: src/gedlib/dbcontext.c:322
+msgid "keyfile is wrong alignment."
+msgstr "Indexdatei hat die falsche Ausrichtung."
+
+#: src/gedlib/dbcontext.c:325
+msgid "keyfile is wrong version."
+msgstr "Indexdatei hat falsche Version."
+
+#: src/gedlib/dbcontext.c:328
+msgid "Existing database found."
+msgstr "Vorhandene Datenbank gefunden."
+
+#: src/gedlib/dbcontext.c:332
+#, fuzzy, c-format
+msgid "The database is already opened for read access by %d user."
+msgid_plural "The database is already opened for read access by %d users."
+msgstr[0] ""
+"Auf die Datenbank wird bereits von %d Benutzern lesend zugegriffen.\n"
+"  "
+msgstr[1] ""
+"Auf die Datenbank wird bereits von %d Benutzern lesend zugegriffen.\n"
+"  "
+
+#: src/gedlib/dbcontext.c:338
+msgid "Invalid properties set for new database"
+msgstr "Ungültige Einstellungen für neue Datenbank."
+
+#: src/gedlib/dbcontext.c:341
+msgid "Undefined database error -- fix program."
+msgstr "Schwerer Datenbankfehler -- Programm reparieren."
+
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Dieser Person fehlt der Name; Datensatz ignoriert.\n"
@@ -71,6 +163,29 @@ msgstr ""
 #: src/gedlib/init.c:235
 #, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
+msgstr ""
+
+#: src/gedlib/keytonod.c:686
+#, c-format
+msgid "Database error caused by reference to nonexisting key <%s>."
+msgstr ""
+
+#: src/gedlib/keytonod.c:687
+msgid "It might be possible to fix this with btedit."
+msgstr ""
+
+#: src/gedlib/keytonod.c:688
+msgid "Neighboring keys include:"
+msgstr ""
+
+#: src/gedlib/keytonod.c:1045
+#, c-format
+msgid "Bad cache entry <%s> != <%s>"
+msgstr ""
+
+#: src/gedlib/keytonod.c:1072
+#, c-format
+msgid "Cache [%s] overflowed its max size (%d)"
 msgstr ""
 
 #: src/gedlib/messages.c:44
@@ -3502,20 +3617,20 @@ msgid_plural "%d children"
 msgstr[0] "%d Kind"
 msgstr[1] "%d Kinder"
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1502
+#: src/liflines/error.c:63 src/tools/dbverify.c:1503
 msgid "Fatal Error"
 msgstr "Verhängnisvoller Fehler"
 
-#: src/liflines/error.c:64
+#: src/liflines/error.c:66
 msgid "FATAL ERROR"
 msgstr "Verhängnisvoller Fehler"
 
-#: src/liflines/error.c:68
+#: src/liflines/error.c:70
 #, c-format
 msgid "  in file <%s> at line %d\n"
 msgstr "  in Datei <%s>, Zeile %d\n"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1513
+#: src/liflines/error.c:72 src/tools/dbverify.c:1514
 msgid "ASSERT failure"
 msgstr "Fehler beim Einfügen"
 
@@ -4172,459 +4287,459 @@ msgstr "HEAD-Eintrag doppelt in Zeile %d"
 msgid "Missing HEAD line at line %d"
 msgstr "HEAD-Eintrag fehlt in Zeile %d"
 
-#: src/tools/dbverify.c:174
+#: src/tools/dbverify.c:175
 msgid "Orphan names"
 msgstr "Verwaister Name"
 
-#: src/tools/dbverify.c:175
+#: src/tools/dbverify.c:176
 msgid "Ghost names"
 msgstr "Geistername"
 
-#: src/tools/dbverify.c:176 src/tools/dbverify.c:177
+#: src/tools/dbverify.c:177 src/tools/dbverify.c:178
 msgid "Duplicate names"
 msgstr "Doppelte Namen"
 
-#: src/tools/dbverify.c:178
+#: src/tools/dbverify.c:179
 msgid "Non-indi names"
 msgstr "Keine Personennamen"
 
-#: src/tools/dbverify.c:179
+#: src/tools/dbverify.c:180
 msgid "Duplicate individuals"
 msgstr "Doppelte Person"
 
-#: src/tools/dbverify.c:180
+#: src/tools/dbverify.c:181
 msgid "Duplicate families"
 msgstr "Doppelte Familien"
 
-#: src/tools/dbverify.c:181
+#: src/tools/dbverify.c:182
 msgid "Duplicate sources"
 msgstr "Doppelte Quellen"
 
-#: src/tools/dbverify.c:182
+#: src/tools/dbverify.c:183
 msgid "Duplicate events"
 msgstr "Doppelte Ereignisse"
 
-#: src/tools/dbverify.c:183
+#: src/tools/dbverify.c:184
 msgid "Duplicate others"
 msgstr "Doppelte Datensätze"
 
-#: src/tools/dbverify.c:184
+#: src/tools/dbverify.c:185
 #, fuzzy
 msgid "Missing records (from deleteset)"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:185
+#: src/tools/dbverify.c:186
 msgid "Deleted records"
 msgstr "Gelöschte Datensätze"
 
-#: src/tools/dbverify.c:186
+#: src/tools/dbverify.c:187
 msgid "Bad name"
 msgstr "Ungültiger Name"
 
-#: src/tools/dbverify.c:187
+#: src/tools/dbverify.c:188
 msgid "Bad family reference"
 msgstr "Ungültiger Verweis auf Familie"
 
-#: src/tools/dbverify.c:188
+#: src/tools/dbverify.c:189
 msgid "Missing child"
 msgstr "Fehlendes Kind"
 
-#: src/tools/dbverify.c:189
+#: src/tools/dbverify.c:190
 msgid "Missing spouse"
 msgstr "Fehlender Ehegatte"
 
-#: src/tools/dbverify.c:190
+#: src/tools/dbverify.c:191
 msgid "Bad HUSB reference"
 msgstr "Verweis auf Ehemann ist ungültig"
 
-#: src/tools/dbverify.c:191
+#: src/tools/dbverify.c:192
 msgid "Bad WIFE reference"
 msgstr "Verweis auf Ehefrau ist ungültig"
 
-#: src/tools/dbverify.c:192
+#: src/tools/dbverify.c:193
 msgid "Bad CHIL reference"
 msgstr "Verweis auf Kind ist ungültig"
 
-#: src/tools/dbverify.c:193
+#: src/tools/dbverify.c:194
 msgid "Improper HUSB"
 msgstr "Fehler bei Ehemann (HUSB)"
 
-#: src/tools/dbverify.c:194
+#: src/tools/dbverify.c:195
 msgid "Improper WIFE"
 msgstr "Fehler bei Ehefrau (WIFE)"
 
-#: src/tools/dbverify.c:195
+#: src/tools/dbverify.c:196
 msgid "Improper child"
 msgstr "Fehler bei Kind"
 
-#: src/tools/dbverify.c:196
+#: src/tools/dbverify.c:197
 msgid "Empty family"
 msgstr "Leere Familie"
 
-#: src/tools/dbverify.c:197
+#: src/tools/dbverify.c:198
 msgid "Single person family"
 msgstr "Familie besteht nur aus einer Person"
 
-#: src/tools/dbverify.c:198
+#: src/tools/dbverify.c:199
 msgid "Bad pointer"
 msgstr "Verweis ungültig"
 
-#: src/tools/dbverify.c:199
+#: src/tools/dbverify.c:200
 #, fuzzy
 msgid "Missing data records"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:229
+#: src/tools/dbverify.c:230
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\Eigene Dateien\\LifeLines\\Datenbanken\\meineFamilie"
 
-#: src/tools/dbverify.c:231
+#: src/tools/dbverify.c:232
 msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/Benutzer/meinName/lifelines/Datenbank/meineFamilie"
 
-#: src/tools/dbverify.c:235
+#: src/tools/dbverify.c:236
 #, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
 msgstr ""
 
-#: src/tools/dbverify.c:236
+#: src/tools/dbverify.c:237
 #, c-format
 msgid "flags:\n"
 msgstr ""
 
-#: src/tools/dbverify.c:237
+#: src/tools/dbverify.c:238
 #, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:238
+#: src/tools/dbverify.c:239
 #, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:239
+#: src/tools/dbverify.c:240
 #, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:240
+#: src/tools/dbverify.c:241
 #, fuzzy, c-format
 msgid "\t-i = Check individuals\n"
 msgstr "Doppelte Person"
 
-#: src/tools/dbverify.c:241
+#: src/tools/dbverify.c:242
 #, c-format
 msgid "\t-f = Check families\n"
 msgstr ""
 
-#: src/tools/dbverify.c:242
+#: src/tools/dbverify.c:243
 #, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:243
+#: src/tools/dbverify.c:244
 #, c-format
 msgid "\t-h = Display help text (this text)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:244
+#: src/tools/dbverify.c:245
 #, c-format
 msgid "\t-s = Check sours\n"
 msgstr ""
 
-#: src/tools/dbverify.c:245
+#: src/tools/dbverify.c:246
 #, c-format
 msgid "\t-e = Check events\n"
 msgstr ""
 
-#: src/tools/dbverify.c:246
+#: src/tools/dbverify.c:247
 #, c-format
 msgid "\t-x = Check others\n"
 msgstr ""
 
-#: src/tools/dbverify.c:247
+#: src/tools/dbverify.c:248
 #, c-format
 msgid "\t-l = Check database structure\n"
 msgstr ""
 
-#: src/tools/dbverify.c:248
+#: src/tools/dbverify.c:249
 #, c-format
 msgid "\t-m = Check for records missing data entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:249
+#: src/tools/dbverify.c:250
 #, c-format
 msgid "\t-M = Fix records missing data entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:250
+#: src/tools/dbverify.c:251
 #, c-format
 msgid "\t-D = Fix bad delete entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:251
+#: src/tools/dbverify.c:252
 #, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:252
+#: src/tools/dbverify.c:253
 #, c-format
 msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr "Beispiel: dbverify -ifsex \"%s\"\n"
 
-#: src/tools/dbverify.c:385
+#: src/tools/dbverify.c:386
 #, c-format
 msgid "Non-indi name, key=%s, name=%s"
 msgstr "Keine Name für Person, Schlüssel=%s, Name=%s"
 
-#: src/tools/dbverify.c:402
+#: src/tools/dbverify.c:403
 #, c-format
 msgid "Orphaned name: %s"
 msgstr "Verwaister Name: %s"
 
-#: src/tools/dbverify.c:416
+#: src/tools/dbverify.c:417
 #, c-format
 msgid "Ghost name: %s -> %s"
 msgstr "Geistername: %s -> %s"
 
-#: src/tools/dbverify.c:448
+#: src/tools/dbverify.c:449
 #, c-format
 msgid "Orphaned refn: %s"
 msgstr "Verwaiste REFN: %s"
 
-#: src/tools/dbverify.c:488
+#: src/tools/dbverify.c:489
 #, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr "Doppelte Namen für %s (%s)"
 
-#: src/tools/dbverify.c:523
+#: src/tools/dbverify.c:524
 #, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr "Doppelte REFN für %s (%s)"
 
-#: src/tools/dbverify.c:636
+#: src/tools/dbverify.c:637
 #, c-format
 msgid "Duplicate individual for %s"
 msgstr "Doppelte Personen für %s"
 
-#: src/tools/dbverify.c:678
+#: src/tools/dbverify.c:679
 #, c-format
 msgid "Bad name for individual %s: %s"
 msgstr "Ungültiger Name für %s: %s"
 
-#: src/tools/dbverify.c:696 src/tools/dbverify.c:720
+#: src/tools/dbverify.c:697 src/tools/dbverify.c:721
 #, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr "Ungültiger Verweis auf Familie (%s) Person %s"
 
-#: src/tools/dbverify.c:702
+#: src/tools/dbverify.c:703
 #, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr "Kind (%s) fehlt in Familie (%s)"
 
-#: src/tools/dbverify.c:706
+#: src/tools/dbverify.c:707
 #, fuzzy, c-format
 msgid "Fixed missing child (%s) in family (%s)"
 msgstr "Kind (%s) fehlt in Familie (%s)"
 
-#: src/tools/dbverify.c:726
+#: src/tools/dbverify.c:727
 #, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr "Ehepartner (%s) fehlt in Familie (%s)"
 
-#: src/tools/dbverify.c:730
+#: src/tools/dbverify.c:731
 #, fuzzy, c-format
 msgid "Fixed missing spouse (%s) in family (%s)"
 msgstr "Ehepartner (%s) fehlt in Familie (%s)"
 
-#: src/tools/dbverify.c:764
+#: src/tools/dbverify.c:765
 #, c-format
 msgid "Duplicate family for %s"
 msgstr "Familie doppelt belegt: %s"
 
-#: src/tools/dbverify.c:815
+#: src/tools/dbverify.c:816
 #, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr "Verweis auf Ehemann (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:821
+#: src/tools/dbverify.c:822
 #, fuzzy, c-format
 msgid "Fixed Bad HUSB reference (%s) in family %s"
 msgstr "Verweis auf Ehemann (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:830
+#: src/tools/dbverify.c:831
 #, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr "Verweis auf Ehemann (%s) in Familie (%s) fehlerhaft"
 
-#: src/tools/dbverify.c:843
+#: src/tools/dbverify.c:844
 #, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr "Verweis auf Ehefrau (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:849
+#: src/tools/dbverify.c:850
 #, fuzzy, c-format
 msgid "Fixed Bad wife reference (%s) in family %s"
 msgstr "Verweis auf Ehefrau (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:858
+#: src/tools/dbverify.c:859
 #, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr "Verweis auf Ehefrau (%s) in Familie (%s) fehlerhaft"
 
-#: src/tools/dbverify.c:871
+#: src/tools/dbverify.c:872
 #, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr "Verweis auf Kind (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:877
+#: src/tools/dbverify.c:878
 #, fuzzy, c-format
 msgid "Fixed bad child reference (%s) in family %s"
 msgstr "Verweis auf Kind (%s) in Familie %s ungültig"
 
-#: src/tools/dbverify.c:886
+#: src/tools/dbverify.c:887
 #, fuzzy, c-format
 msgid "Improper child: Child (%s) without FAMC reference to family (%s)"
 msgstr "Verweis auf Kind (%s) in Familie (%s) fehlerhaft"
 
-#: src/tools/dbverify.c:894
+#: src/tools/dbverify.c:895
 #, c-format
 msgid "Empty family (%s)"
 msgstr "Familie ist leer (%s)"
 
-#: src/tools/dbverify.c:896
+#: src/tools/dbverify.c:897
 #, c-format
 msgid "Single person family (%s)"
 msgstr "Familie besteht aus einer Person (%s)"
 
-#: src/tools/dbverify.c:922
+#: src/tools/dbverify.c:923
 #, c-format
 msgid "Duplicate source for %s"
 msgstr "Doppelte Quelle für %s"
 
-#: src/tools/dbverify.c:938
+#: src/tools/dbverify.c:939
 #, c-format
 msgid "Duplicate event for %s"
 msgstr "Doppeltes Ereignis für %s"
 
-#: src/tools/dbverify.c:954
+#: src/tools/dbverify.c:955
 #, c-format
 msgid "Duplicate record for %s"
 msgstr "Doppelter Datensatz für %s"
 
-#: src/tools/dbverify.c:1025
+#: src/tools/dbverify.c:1026
 #, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr "Verweis (in %s) ungültig: %s"
 
-#: src/tools/dbverify.c:1063
+#: src/tools/dbverify.c:1064
 #, c-format
 msgid "Missing undeleted record %c%d"
 msgstr "Wiederhergestellter Datensatz %c%d fehlt"
 
-#: src/tools/dbverify.c:1070
+#: src/tools/dbverify.c:1071
 #, fuzzy, c-format
 msgid "Fixed missing undeleted record %c%d"
 msgstr "Wiederhergestellter Datensatz %c%d fehlt"
 
-#: src/tools/dbverify.c:1074
+#: src/tools/dbverify.c:1075
 #, fuzzy, c-format
 msgid "Failed to fix missing undeleted record %c%d"
 msgstr "Wiederhergestellter Datensatz %c%d fehlt"
 
-#: src/tools/dbverify.c:1086
+#: src/tools/dbverify.c:1087
 #, c-format
 msgid "Delete set contains valid record %s"
 msgstr "Löschauftrag enthält gültigen Datensatz %s"
 
-#: src/tools/dbverify.c:1091
+#: src/tools/dbverify.c:1092
 #, fuzzy, c-format
 msgid "Fixed delete set contains valid record %s"
 msgstr "Löschauftrag enthält gültigen Datensatz %s"
 
-#: src/tools/dbverify.c:1095
+#: src/tools/dbverify.c:1096
 #, fuzzy, c-format
 msgid "Failed to fix missing undeleted record %s"
 msgstr "Wiederhergestellter Datensatz %c%d fehlt"
 
-#: src/tools/dbverify.c:1116
+#: src/tools/dbverify.c:1117
 #, c-format
 msgid "Master fkey misaligned"
 msgstr ""
 
-#: src/tools/dbverify.c:1143
+#: src/tools/dbverify.c:1144
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1150
+#: src/tools/dbverify.c:1151
 #, fuzzy, c-format
 msgid "Error loading index at key"
 msgstr "Fehler bei Datenzugriff"
 
-#: src/tools/dbverify.c:1198
+#: src/tools/dbverify.c:1199
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1206
+#: src/tools/dbverify.c:1207
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1214
+#: src/tools/dbverify.c:1215
 #, c-format
 msgid "Key not below next key"
 msgstr ""
 
-#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
+#: src/tools/dbverify.c:1232 src/tools/dbverify.c:1234
 msgid "data block"
 msgstr ""
 
-#: src/tools/dbverify.c:1234
+#: src/tools/dbverify.c:1235
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:1247
+#: src/tools/dbverify.c:1248
 #, fuzzy, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Ungültige Fehlermeldung [%d] in dbverify - Programm reparieren\n"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1285
 #, fuzzy, c-format
 msgid "Missing data record (%s)"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:1288
+#: src/tools/dbverify.c:1289
 #, fuzzy, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:1474
+#: src/tools/dbverify.c:1475
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d Fehler"
 msgstr[1] "%d Fehler"
 
-#: src/tools/dbverify.c:1478
+#: src/tools/dbverify.c:1479
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d repariert"
 msgstr[1] "%d repariert"
 
-#: src/tools/dbverify.c:1485
+#: src/tools/dbverify.c:1486
 msgid "No errors found"
 msgstr "Keine Fehler gefunden"
 
-#: src/tools/dbverify.c:1504
+#: src/tools/dbverify.c:1505
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "Verhängnisvoller Fehler: "
 
-#: src/tools/dbverify.c:1509
+#: src/tools/dbverify.c:1510
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In Datei <%s> in Zeile %d"
@@ -4706,74 +4821,6 @@ msgstr "In Datei <%s> in Zeile %d"
 
 #~ msgid "Current database"
 #~ msgstr "Aktuelle Datenbank"
-
-#~ msgid "Database error: -- "
-#~ msgstr "Fehler in der Datenbank: -- "
-
-#~ msgid "requested database does not exist."
-#~ msgstr "Gewünschte Datenbank existiert nicht."
-
-#~ msgid "db directory is file, not directory."
-#~ msgstr "DB ist eine Datei, kein Verzeichnis."
-
-#~ msgid "creation of new database failed."
-#~ msgstr "Anlegen der neuen Datenbank ist gescheitert."
-
-#~ msgid "error accessing database directory."
-#~ msgstr "Fehler beim Zugriff auf das Datenbankverzeichnis."
-
-#~ msgid "no keyfile (directory does not appear to be a database)."
-#~ msgstr "Dieses Verzeichnis scheint keine Datenbank zu sein."
-
-#~ msgid "could not open, read or write an index file."
-#~ msgstr "Öffnen, Lesen oder Schreiben des Index fehlgeschlagen."
-
-#~ msgid "could not open, read or write the key file."
-#~ msgstr "Öffnen, Lesen oder Schreiben der Indexdatei fehlgeschlagen."
-
-#~ msgid "could not open, read or write the key file (to alter database)."
-#~ msgstr ""
-#~ "DB konnte nicht geändert werden: Fehler beim Öffnen, Lesen oder Schreiben."
-
-#~ msgid "could not open, read or write a block file."
-#~ msgstr "Öffnen, Lesen oder Schreiben der Blockdatei fehlgeschlagen."
-
-#~ msgid "name of database is too long."
-#~ msgstr "Name der Datenbank ist zu lang."
-
-#~ msgid "The database is already open for writing."
-#~ msgstr "Auf die Datenbank wird bereits zugegriffen."
-
-#~ msgid "The database is locked (no readwrite access)."
-#~ msgstr "Die Datenbank ist gesperrt (kein Schreibzugriff). "
-
-#~ msgid "The database is unlocked."
-#~ msgstr "Die Datenbank ist freigeschaltet."
-
-#~ msgid "keyfile is corrupt."
-#~ msgstr "Indexdatei ist fehlerhaft."
-
-#~ msgid "keyfile is wrong alignment."
-#~ msgstr "Indexdatei hat die falsche Ausrichtung."
-
-#~ msgid "keyfile is wrong version."
-#~ msgstr "Indexdatei hat falsche Version."
-
-#~ msgid "Existing database found."
-#~ msgstr "Vorhandene Datenbank gefunden."
-
-#~ msgid ""
-#~ "The database is already opened for read access by %d users.\n"
-#~ "  "
-#~ msgstr ""
-#~ "Auf die Datenbank wird bereits von %d Benutzern lesend zugegriffen.\n"
-#~ "  "
-
-#~ msgid "Invalid properties set for new database"
-#~ msgstr "Ungültige Einstellungen für neue Datenbank."
-
-#~ msgid "Undefined database error -- fix program."
-#~ msgstr "Schwerer Datenbankfehler -- Programm reparieren."
 
 #~ msgid "Choose database to open"
 #~ msgstr "Wählen Sie die zu öffnende Datenbank"

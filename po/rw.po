@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-11 13:17-0400\n"
+"POT-Creation-Date: 2007-05-13 22:02-0400\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -72,6 +72,115 @@ msgstr "%dy%03dd"
 msgid "%dy%03dd"
 msgstr "%dy%03dd"
 
+#: src/gedlib/dbcontext.c:276
+#, fuzzy
+msgid "Database error: -- "
+msgstr "Ikosa"
+
+#: src/gedlib/dbcontext.c:280
+#, fuzzy
+msgid "requested database does not exist."
+msgstr "Ububikoshingiro OYA"
+
+#: src/gedlib/dbcontext.c:283
+#, fuzzy
+msgid "db directory is file, not directory."
+msgstr "DB bushyinguro ni IDOSIYE OYA bushyinguro"
+
+#: src/gedlib/dbcontext.c:286
+#, fuzzy
+msgid "creation of new database failed."
+msgstr "Bya Gishya Ububikoshingiro Byanze"
+
+#: src/gedlib/dbcontext.c:289
+#, fuzzy
+msgid "error accessing database directory."
+msgstr "Ikosa Ububikoshingiro bushyinguro"
+
+#: src/gedlib/dbcontext.c:292
+#, fuzzy
+msgid "no keyfile (directory does not appear to be a database)."
+msgstr "Oya bushyinguro OYA Kugaragara Kuri a Ububikoshingiro"
+
+#: src/gedlib/dbcontext.c:295
+#, fuzzy
+msgid "could not open, read or write an index file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika Umubarendanga IDOSIYE"
+
+#: src/gedlib/dbcontext.c:298
+#, fuzzy
+msgid "could not open, read or write the key file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE"
+
+#: src/gedlib/dbcontext.c:301
+#, fuzzy
+msgid "could not open, read or write the key file (to alter database)."
+msgstr ""
+"OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE Kuri "
+"Ububikoshingiro"
+
+#: src/gedlib/dbcontext.c:304
+#, fuzzy
+msgid "could not open, read or write a block file."
+msgstr "OYA Gufungura Gusoma Cyangwa Kwandika a Funga IDOSIYE"
+
+#: src/gedlib/dbcontext.c:307
+#, fuzzy
+msgid "name of database is too long."
+msgstr "Izina: Bya Ububikoshingiro ni"
+
+#: src/gedlib/dbcontext.c:310
+#, fuzzy
+msgid "The database is already open for writing."
+msgstr "Ububikoshingiro ni Gufungura kugirango"
+
+#: src/gedlib/dbcontext.c:313
+#, fuzzy
+msgid "The database is locked (no readwrite access)."
+msgstr "Ububikoshingiro ni Gifunze Oya"
+
+#: src/gedlib/dbcontext.c:316
+#, fuzzy
+msgid "The database is unlocked."
+msgstr "Ububikoshingiro ni"
+
+#: src/gedlib/dbcontext.c:319
+#, fuzzy
+msgid "keyfile is corrupt."
+msgstr "ni"
+
+#: src/gedlib/dbcontext.c:322
+#, fuzzy
+msgid "keyfile is wrong alignment."
+msgstr "ni Itunganya"
+
+#: src/gedlib/dbcontext.c:325
+#, fuzzy
+msgid "keyfile is wrong version."
+msgstr "ni Verisiyo"
+
+#: src/gedlib/dbcontext.c:328
+#, fuzzy
+msgid "Existing database found."
+msgstr "Ububikoshingiro Byabonetse"
+
+#: src/gedlib/dbcontext.c:332
+#, fuzzy, c-format
+msgid "The database is already opened for read access by %d user."
+msgid_plural "The database is already opened for read access by %d users."
+msgstr[0] "Ububikoshingiro ni kugirango Gusoma ku"
+msgstr[1] "Ububikoshingiro ni kugirango Gusoma ku"
+
+#: src/gedlib/dbcontext.c:338
+#, fuzzy
+msgid "Invalid properties set for new database"
+msgstr "Indangakintu... Gushyiraho kugirango Gishya Ububikoshingiro"
+
+#: src/gedlib/dbcontext.c:341
+#, fuzzy
+msgid "Undefined database error -- fix program."
+msgstr "Ububikoshingiro Ikosa Porogaramu"
+
 #: src/gedlib/gedcom.c:112
 #, fuzzy
 msgid "Missing NAME line in INDI record; record ignored.\n"
@@ -92,6 +201,29 @@ msgstr ""
 #: src/gedlib/init.c:235
 #, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
+msgstr ""
+
+#: src/gedlib/keytonod.c:686
+#, c-format
+msgid "Database error caused by reference to nonexisting key <%s>."
+msgstr ""
+
+#: src/gedlib/keytonod.c:687
+msgid "It might be possible to fix this with btedit."
+msgstr ""
+
+#: src/gedlib/keytonod.c:688
+msgid "Neighboring keys include:"
+msgstr ""
+
+#: src/gedlib/keytonod.c:1045
+#, c-format
+msgid "Bad cache entry <%s> != <%s>"
+msgstr ""
+
+#: src/gedlib/keytonod.c:1072
+#, c-format
+msgid "Cache [%s] overflowed its max size (%d)"
 msgstr ""
 
 #: src/gedlib/messages.c:44
@@ -3999,20 +4131,20 @@ msgid_plural "%d children"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/liflines/error.c:61 src/tools/dbverify.c:1502
+#: src/liflines/error.c:63 src/tools/dbverify.c:1503
 msgid "Fatal Error"
 msgstr ""
 
-#: src/liflines/error.c:64
+#: src/liflines/error.c:66
 msgid "FATAL ERROR"
 msgstr ""
 
-#: src/liflines/error.c:68
+#: src/liflines/error.c:70
 #, fuzzy, c-format
 msgid "  in file <%s> at line %d\n"
 msgstr "in IDOSIYE ku Umurongo"
 
-#: src/liflines/error.c:70 src/tools/dbverify.c:1513
+#: src/liflines/error.c:72 src/tools/dbverify.c:1514
 msgid "ASSERT failure"
 msgstr ""
 
@@ -4694,451 +4826,451 @@ msgstr "Umurongo ku Umurongo"
 msgid "Missing HEAD line at line %d"
 msgstr "Umurongo ku Umurongo"
 
-#: src/tools/dbverify.c:174
+#: src/tools/dbverify.c:175
 #, fuzzy
 msgid "Orphan names"
 msgstr "Amazina"
 
-#: src/tools/dbverify.c:175
+#: src/tools/dbverify.c:176
 #, fuzzy
 msgid "Ghost names"
 msgstr "Amazina"
 
-#: src/tools/dbverify.c:176 src/tools/dbverify.c:177
+#: src/tools/dbverify.c:177 src/tools/dbverify.c:178
 #, fuzzy
 msgid "Duplicate names"
 msgstr "Amazina"
 
-#: src/tools/dbverify.c:178
+#: src/tools/dbverify.c:179
 #, fuzzy
 msgid "Non-indi names"
 msgstr "Amazina"
 
-#: src/tools/dbverify.c:179
+#: src/tools/dbverify.c:180
 msgid "Duplicate individuals"
 msgstr ""
 
-#: src/tools/dbverify.c:180
+#: src/tools/dbverify.c:181
 msgid "Duplicate families"
 msgstr ""
 
-#: src/tools/dbverify.c:181
+#: src/tools/dbverify.c:182
 msgid "Duplicate sources"
 msgstr ""
 
-#: src/tools/dbverify.c:182
+#: src/tools/dbverify.c:183
 #, fuzzy
 msgid "Duplicate events"
 msgstr "Ibyabaye"
 
-#: src/tools/dbverify.c:183
+#: src/tools/dbverify.c:184
 #, fuzzy
 msgid "Duplicate others"
 msgstr "Ibindi"
 
-#: src/tools/dbverify.c:184
+#: src/tools/dbverify.c:185
 #, fuzzy
 msgid "Missing records (from deleteset)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:185
+#: src/tools/dbverify.c:186
 #, fuzzy
 msgid "Deleted records"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:186
+#: src/tools/dbverify.c:187
 #, fuzzy
 msgid "Bad name"
 msgstr "Izina:"
 
-#: src/tools/dbverify.c:187
+#: src/tools/dbverify.c:188
 #, fuzzy
 msgid "Bad family reference"
 msgstr "Indango"
 
-#: src/tools/dbverify.c:188
+#: src/tools/dbverify.c:189
 msgid "Missing child"
 msgstr ""
 
-#: src/tools/dbverify.c:189
+#: src/tools/dbverify.c:190
 msgid "Missing spouse"
 msgstr ""
 
-#: src/tools/dbverify.c:190
+#: src/tools/dbverify.c:191
 #, fuzzy
 msgid "Bad HUSB reference"
 msgstr "Indango"
 
-#: src/tools/dbverify.c:191
+#: src/tools/dbverify.c:192
 #, fuzzy
 msgid "Bad WIFE reference"
 msgstr "Indango"
 
-#: src/tools/dbverify.c:192
+#: src/tools/dbverify.c:193
 #, fuzzy
 msgid "Bad CHIL reference"
 msgstr "Indango"
 
-#: src/tools/dbverify.c:193
+#: src/tools/dbverify.c:194
 msgid "Improper HUSB"
 msgstr ""
 
-#: src/tools/dbverify.c:194
+#: src/tools/dbverify.c:195
 msgid "Improper WIFE"
 msgstr ""
 
-#: src/tools/dbverify.c:195
+#: src/tools/dbverify.c:196
 msgid "Improper child"
 msgstr ""
 
-#: src/tools/dbverify.c:196
+#: src/tools/dbverify.c:197
 msgid "Empty family"
 msgstr ""
 
-#: src/tools/dbverify.c:197
+#: src/tools/dbverify.c:198
 msgid "Single person family"
 msgstr ""
 
-#: src/tools/dbverify.c:198
+#: src/tools/dbverify.c:199
 #, fuzzy
 msgid "Bad pointer"
 msgstr "Mweretsi"
 
-#: src/tools/dbverify.c:199
+#: src/tools/dbverify.c:200
 #, fuzzy
 msgid "Missing data records"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:229
+#: src/tools/dbverify.c:230
 #, fuzzy
 msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\MY"
 
-#: src/tools/dbverify.c:231
+#: src/tools/dbverify.c:232
 #, fuzzy
 msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/Ku Ntangiriro Ububikoshingiro"
 
-#: src/tools/dbverify.c:235
+#: src/tools/dbverify.c:236
 #, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
 msgstr ""
 
-#: src/tools/dbverify.c:236
+#: src/tools/dbverify.c:237
 #, c-format
 msgid "flags:\n"
 msgstr ""
 
-#: src/tools/dbverify.c:237
+#: src/tools/dbverify.c:238
 #, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:238
+#: src/tools/dbverify.c:239
 #, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:239
+#: src/tools/dbverify.c:240
 #, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:240
+#: src/tools/dbverify.c:241
 #, c-format
 msgid "\t-i = Check individuals\n"
 msgstr ""
 
-#: src/tools/dbverify.c:241
+#: src/tools/dbverify.c:242
 #, c-format
 msgid "\t-f = Check families\n"
 msgstr ""
 
-#: src/tools/dbverify.c:242
+#: src/tools/dbverify.c:243
 #, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:243
+#: src/tools/dbverify.c:244
 #, c-format
 msgid "\t-h = Display help text (this text)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:244
+#: src/tools/dbverify.c:245
 #, c-format
 msgid "\t-s = Check sours\n"
 msgstr ""
 
-#: src/tools/dbverify.c:245
+#: src/tools/dbverify.c:246
 #, c-format
 msgid "\t-e = Check events\n"
 msgstr ""
 
-#: src/tools/dbverify.c:246
+#: src/tools/dbverify.c:247
 #, c-format
 msgid "\t-x = Check others\n"
 msgstr ""
 
-#: src/tools/dbverify.c:247
+#: src/tools/dbverify.c:248
 #, c-format
 msgid "\t-l = Check database structure\n"
 msgstr ""
 
-#: src/tools/dbverify.c:248
+#: src/tools/dbverify.c:249
 #, c-format
 msgid "\t-m = Check for records missing data entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:249
+#: src/tools/dbverify.c:250
 #, c-format
 msgid "\t-M = Fix records missing data entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:250
+#: src/tools/dbverify.c:251
 #, c-format
 msgid "\t-D = Fix bad delete entries\n"
 msgstr ""
 
-#: src/tools/dbverify.c:251
+#: src/tools/dbverify.c:252
 #, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
 msgstr ""
 
-#: src/tools/dbverify.c:252
+#: src/tools/dbverify.c:253
 #, fuzzy, c-format
 msgid "example: dbverify -ifsex \"%s\"\n"
 msgstr "Urugero"
 
-#: src/tools/dbverify.c:385
+#: src/tools/dbverify.c:386
 #, fuzzy, c-format
 msgid "Non-indi name, key=%s, name=%s"
 msgstr "Izina: Urufunguzo Izina:"
 
-#: src/tools/dbverify.c:402
+#: src/tools/dbverify.c:403
 #, fuzzy, c-format
 msgid "Orphaned name: %s"
 msgstr "Izina:"
 
-#: src/tools/dbverify.c:416
+#: src/tools/dbverify.c:417
 #, fuzzy, c-format
 msgid "Ghost name: %s -> %s"
 msgstr "Izina:"
 
-#: src/tools/dbverify.c:448
+#: src/tools/dbverify.c:449
 #, c-format
 msgid "Orphaned refn: %s"
 msgstr ""
 
-#: src/tools/dbverify.c:488
+#: src/tools/dbverify.c:489
 #, fuzzy, c-format
 msgid "Duplicate name for %s (%s)"
 msgstr "Izina: kugirango"
 
-#: src/tools/dbverify.c:523
+#: src/tools/dbverify.c:524
 #, fuzzy, c-format
 msgid "Duplicate refn for %s (%s)"
 msgstr "kugirango"
 
-#: src/tools/dbverify.c:636
+#: src/tools/dbverify.c:637
 #, fuzzy, c-format
 msgid "Duplicate individual for %s"
 msgstr "kugirango"
 
-#: src/tools/dbverify.c:678
+#: src/tools/dbverify.c:679
 #, fuzzy, c-format
 msgid "Bad name for individual %s: %s"
 msgstr "Izina: kugirango"
 
-#: src/tools/dbverify.c:696 src/tools/dbverify.c:720
+#: src/tools/dbverify.c:697 src/tools/dbverify.c:721
 #, fuzzy, c-format
 msgid "Bad family reference (%s) individual %s"
 msgstr "Indango"
 
-#: src/tools/dbverify.c:702
+#: src/tools/dbverify.c:703
 #, fuzzy, c-format
 msgid "Missing child (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:706
+#: src/tools/dbverify.c:707
 #, fuzzy, c-format
 msgid "Fixed missing child (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:726
+#: src/tools/dbverify.c:727
 #, fuzzy, c-format
 msgid "Missing spouse (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:730
+#: src/tools/dbverify.c:731
 #, fuzzy, c-format
 msgid "Fixed missing spouse (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:764
+#: src/tools/dbverify.c:765
 #, fuzzy, c-format
 msgid "Duplicate family for %s"
 msgstr "kugirango"
 
-#: src/tools/dbverify.c:815
+#: src/tools/dbverify.c:816
 #, fuzzy, c-format
 msgid "Bad HUSB reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:821
+#: src/tools/dbverify.c:822
 #, fuzzy, c-format
 msgid "Fixed Bad HUSB reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:830
+#: src/tools/dbverify.c:831
 #, fuzzy, c-format
 msgid "Improper HUSB (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:843
+#: src/tools/dbverify.c:844
 #, fuzzy, c-format
 msgid "Bad wife reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:849
+#: src/tools/dbverify.c:850
 #, fuzzy, c-format
 msgid "Fixed Bad wife reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:858
+#: src/tools/dbverify.c:859
 #, fuzzy, c-format
 msgid "Improper wife (%s) in family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:871
+#: src/tools/dbverify.c:872
 #, fuzzy, c-format
 msgid "Bad child reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:877
+#: src/tools/dbverify.c:878
 #, fuzzy, c-format
 msgid "Fixed bad child reference (%s) in family %s"
 msgstr "Indango in"
 
-#: src/tools/dbverify.c:886
+#: src/tools/dbverify.c:887
 #, fuzzy, c-format
 msgid "Improper child: Child (%s) without FAMC reference to family (%s)"
 msgstr "in"
 
-#: src/tools/dbverify.c:894
+#: src/tools/dbverify.c:895
 #, c-format
 msgid "Empty family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:896
+#: src/tools/dbverify.c:897
 #, c-format
 msgid "Single person family (%s)"
 msgstr ""
 
-#: src/tools/dbverify.c:922
+#: src/tools/dbverify.c:923
 #, fuzzy, c-format
 msgid "Duplicate source for %s"
 msgstr "Inkomoko kugirango"
 
-#: src/tools/dbverify.c:938
+#: src/tools/dbverify.c:939
 #, fuzzy, c-format
 msgid "Duplicate event for %s"
 msgstr "Icyabaye kugirango"
 
-#: src/tools/dbverify.c:954
+#: src/tools/dbverify.c:955
 #, fuzzy, c-format
 msgid "Duplicate record for %s"
 msgstr "Icyabitswe kugirango"
 
-#: src/tools/dbverify.c:1025
+#: src/tools/dbverify.c:1026
 #, fuzzy, c-format
 msgid "Bad pointer (in %s): %s"
 msgstr "Mweretsi in"
 
-#: src/tools/dbverify.c:1063
+#: src/tools/dbverify.c:1064
 #, fuzzy, c-format
 msgid "Missing undeleted record %c%d"
 msgstr "Icyabitswe"
 
-#: src/tools/dbverify.c:1070
+#: src/tools/dbverify.c:1071
 #, fuzzy, c-format
 msgid "Fixed missing undeleted record %c%d"
 msgstr "Icyabitswe"
 
-#: src/tools/dbverify.c:1074
+#: src/tools/dbverify.c:1075
 #, fuzzy, c-format
 msgid "Failed to fix missing undeleted record %c%d"
 msgstr "Icyabitswe"
 
-#: src/tools/dbverify.c:1086
+#: src/tools/dbverify.c:1087
 #, fuzzy, c-format
 msgid "Delete set contains valid record %s"
 msgstr "Gushyiraho Kirimo Byemewe Icyabitswe"
 
-#: src/tools/dbverify.c:1091
+#: src/tools/dbverify.c:1092
 #, fuzzy, c-format
 msgid "Fixed delete set contains valid record %s"
 msgstr "Gushyiraho Kirimo Byemewe Icyabitswe"
 
-#: src/tools/dbverify.c:1095
+#: src/tools/dbverify.c:1096
 #, fuzzy, c-format
 msgid "Failed to fix missing undeleted record %s"
 msgstr "Icyabitswe"
 
-#: src/tools/dbverify.c:1116
+#: src/tools/dbverify.c:1117
 #, c-format
 msgid "Master fkey misaligned"
 msgstr ""
 
-#: src/tools/dbverify.c:1143
+#: src/tools/dbverify.c:1144
 #, c-format
 msgid "Cycle in indexes, file %s found again!\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1150
+#: src/tools/dbverify.c:1151
 #, fuzzy, c-format
 msgid "Error loading index at key"
 msgstr "Ibyatanzwe"
 
-#: src/tools/dbverify.c:1198
+#: src/tools/dbverify.c:1199
 #, c-format
 msgid "First key in block below parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1206
+#: src/tools/dbverify.c:1207
 #, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr ""
 
-#: src/tools/dbverify.c:1214
+#: src/tools/dbverify.c:1215
 #, c-format
 msgid "Key not below next key"
 msgstr ""
 
-#: src/tools/dbverify.c:1231 src/tools/dbverify.c:1233
+#: src/tools/dbverify.c:1232 src/tools/dbverify.c:1234
 msgid "data block"
 msgstr ""
 
-#: src/tools/dbverify.c:1234
+#: src/tools/dbverify.c:1235
 #, c-format
 msgid "%s fkey=%d, file=%s"
 msgstr ""
 
-#: src/tools/dbverify.c:1247
+#: src/tools/dbverify.c:1248
 #, fuzzy, c-format
 msgid "Invalid errs array[%d] in dbverify - fix program\n"
 msgstr "Imbonerahamwe in"
 
-#: src/tools/dbverify.c:1284
+#: src/tools/dbverify.c:1285
 #, fuzzy, c-format
 msgid "Missing data record (%s)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:1288
+#: src/tools/dbverify.c:1289
 #, fuzzy, c-format
 msgid "Fixed missing data record (%s)"
 msgstr "Ibyabitswe"
 
-#: src/tools/dbverify.c:1474
+#: src/tools/dbverify.c:1475
 #, fuzzy, c-format
 msgid "%d error"
 msgid_plural "%d errors"
@@ -5146,24 +5278,24 @@ msgstr[0] "%dIkosa rya"
 msgstr[1] "%dIkosa rya"
 
 # sw/source\ui\utlui\initui.src:RID_SW_SHELLRES.STR_FIELD_FIXED.text
-#: src/tools/dbverify.c:1478
+#: src/tools/dbverify.c:1479
 #, fuzzy, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%dbidahinduka)"
 msgstr[1] "%dbidahinduka)"
 
-#: src/tools/dbverify.c:1485
+#: src/tools/dbverify.c:1486
 #, fuzzy
 msgid "No errors found"
 msgstr "Amakosa Byabonetse"
 
-#: src/tools/dbverify.c:1504
+#: src/tools/dbverify.c:1505
 #, c-format
 msgid "FATAL ERROR: "
 msgstr ""
 
-#: src/tools/dbverify.c:1509
+#: src/tools/dbverify.c:1510
 #, fuzzy, c-format
 msgid "In file <%s> at line %d"
 msgstr "IDOSIYE ku Umurongo"
@@ -5249,94 +5381,6 @@ msgstr "IDOSIYE ku Umurongo"
 #, fuzzy
 #~ msgid "Current database"
 #~ msgstr "ibyibanze bihari"
-
-#, fuzzy
-#~ msgid "Database error: -- "
-#~ msgstr "Ikosa"
-
-#, fuzzy
-#~ msgid "requested database does not exist."
-#~ msgstr "Ububikoshingiro OYA"
-
-#, fuzzy
-#~ msgid "db directory is file, not directory."
-#~ msgstr "DB bushyinguro ni IDOSIYE OYA bushyinguro"
-
-#, fuzzy
-#~ msgid "creation of new database failed."
-#~ msgstr "Bya Gishya Ububikoshingiro Byanze"
-
-#, fuzzy
-#~ msgid "error accessing database directory."
-#~ msgstr "Ikosa Ububikoshingiro bushyinguro"
-
-#, fuzzy
-#~ msgid "no keyfile (directory does not appear to be a database)."
-#~ msgstr "Oya bushyinguro OYA Kugaragara Kuri a Ububikoshingiro"
-
-#, fuzzy
-#~ msgid "could not open, read or write an index file."
-#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika Umubarendanga IDOSIYE"
-
-#, fuzzy
-#~ msgid "could not open, read or write the key file."
-#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE"
-
-#, fuzzy
-#~ msgid "could not open, read or write the key file (to alter database)."
-#~ msgstr ""
-#~ "OYA Gufungura Gusoma Cyangwa Kwandika i Urufunguzo IDOSIYE Kuri "
-#~ "Ububikoshingiro"
-
-#, fuzzy
-#~ msgid "could not open, read or write a block file."
-#~ msgstr "OYA Gufungura Gusoma Cyangwa Kwandika a Funga IDOSIYE"
-
-#, fuzzy
-#~ msgid "name of database is too long."
-#~ msgstr "Izina: Bya Ububikoshingiro ni"
-
-#, fuzzy
-#~ msgid "The database is already open for writing."
-#~ msgstr "Ububikoshingiro ni Gufungura kugirango"
-
-#, fuzzy
-#~ msgid "The database is locked (no readwrite access)."
-#~ msgstr "Ububikoshingiro ni Gifunze Oya"
-
-#, fuzzy
-#~ msgid "The database is unlocked."
-#~ msgstr "Ububikoshingiro ni"
-
-#, fuzzy
-#~ msgid "keyfile is corrupt."
-#~ msgstr "ni"
-
-#, fuzzy
-#~ msgid "keyfile is wrong alignment."
-#~ msgstr "ni Itunganya"
-
-#, fuzzy
-#~ msgid "keyfile is wrong version."
-#~ msgstr "ni Verisiyo"
-
-#, fuzzy
-#~ msgid "Existing database found."
-#~ msgstr "Ububikoshingiro Byabonetse"
-
-#, fuzzy
-#~ msgid ""
-#~ "The database is already opened for read access by %d users.\n"
-#~ "  "
-#~ msgstr "Ububikoshingiro ni kugirango Gusoma ku"
-
-#, fuzzy
-#~ msgid "Invalid properties set for new database"
-#~ msgstr "Indangakintu... Gushyiraho kugirango Gishya Ububikoshingiro"
-
-#, fuzzy
-#~ msgid "Undefined database error -- fix program."
-#~ msgstr "Ububikoshingiro Ikosa Porogaramu"
 
 #, fuzzy
 #~ msgid "Choose database to open"

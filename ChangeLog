@@ -12,6 +12,11 @@
 	Fix some gcc printf warnings by making error counts
 	int instead of INT.
 
+	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/es.po
+	po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	Regenerate po files to include more i18n'd strings.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 
