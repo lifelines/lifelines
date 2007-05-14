@@ -76,9 +76,9 @@ int opt_mychar = 0;
  * errinfo -- holds stats on a type of error
  *========================================*/
 struct errinfo {
-	INT err;
-	INT err_count;
-	INT fix_count;
+	int err;
+	int err_count;
+	int fix_count;
 	STRING desc;
 };
 /*==================================
@@ -342,7 +342,7 @@ check_ghosts (void)
 		while (!is_empty_list(tofix)) {
 			rec = (NAMEREFN_REC *) dequeue_list(tofix);
 			remove_name(rec->namerefn, rec->key);
-			errs[rec->err].fix_count++;
+			++errs[rec->err].fix_count;
 			free_namerefn(rec);
 		}
 	}

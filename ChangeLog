@@ -7,6 +7,11 @@
 	Add crashlogn which appends carriage return, and i18n crashlog calls
 	in keytonod.c, and add keytonod.c to po/POTFILES.in.
 
+	* ChangeLog src/tools/dbverify.c
+
+	Fix some gcc printf warnings by making error counts
+	int instead of INT.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 
