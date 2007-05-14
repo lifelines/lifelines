@@ -27,6 +27,12 @@
 	Detect system/edit errors in btedit and handle.
 	Add success message as well.
 
+	* ChangeLog src/tools/btedit.c
+
+	Report btedit failure if database is readonly.
+	Spread out btedit return codes to allow space
+	if more added in-between.
+
 2007-05-13 Stephen Dum
 	* ChangeLog reports/Makefile.am
 

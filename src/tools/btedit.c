@@ -109,14 +109,14 @@ main (int argc,
 		puts("");
 		printf(_("See `btedit --help' for more information."));
 		puts("");
-		return (1);
+		return 10;
 	}
 	dbname = argv[1];
 	key = argv[2];
 	if (!(btree = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
 		printf(_("Failed to open btree: %s."), dbname);
 		puts("");
-		return 2;
+		return 20;
 	}
 	recstat = write_record_to_file(btree, str2rkey(key), "btedit.tmp");
 	if (recstat != RECORD_SUCCESS) {
@@ -125,7 +125,7 @@ main (int argc,
 		else
 			printf(_("Error accessing record: %s"), key);
 		puts("");
-		rtn = 3;
+		rtn = 30;
 		goto finish;
 	}
 
@@ -136,15 +136,20 @@ main (int argc,
 		puts("");
 		printf(_("Database was not be modified."));
 		puts("");
-		rtn = 4;
+		rtn = 40;
 		goto finish;
 	}
-	if (bwrite(btree)) {
-		addfile(btree, str2rkey(key), "btedit.tmp");
-		unlink("btedit.tmp");
-		printf(_("Record %s modified."), key);
+	if (!bwrite(btree)) {
+		printf(_("Readonly database can not be modified."));
 		puts("");
+		rtn = 50;
+		goto finish;
 	}
+
+	addfile(btree, str2rkey(key), "btedit.tmp");
+	unlink("btedit.tmp");
+	printf(_("Record %s modified."), key);
+	puts("");
 	rtn = 0;
 
 finish:
