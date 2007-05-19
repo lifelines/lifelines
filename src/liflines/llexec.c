@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2000-2002 Perry Rapp
+   Copyright (c) 2000-2007 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -7,7 +7,7 @@
 */
 /*=============================================================
  * llexec.c -- Frontend code for lifelines report generator
- * Copyright(c) 2002 by Perry Rapp; all rights reserved
+ * Copyright(c) 2002-2007 by Perry Rapp; all rights reserved
  *===========================================================*/
 
 #include "llstdlib.h"
@@ -15,7 +15,6 @@
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "btree.h"
 #include "table.h"
 #include "translat.h"
 #include "gedcom.h"
@@ -25,6 +24,7 @@
 #include "interp.h"
 #include "feedback.h"
 #include "ui.h"
+#include "llinesi.h"
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -54,7 +54,7 @@ extern int opterr;
  * required global variables
  *********************************************/
 
-static STRING usage = "";      /* usage string */
+static STRING usage_summary = "";      /* usage string */
 int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 int opt_mychar = FALSE;        /* Custom character set handling (bypass libc) */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
@@ -385,7 +385,7 @@ finish:
 usage:
 	/* Display Version and/or Command-Line Usage Help */
 	if (showversion) { print_version("llexec"); }
-	if (showusage) puts(usage);
+	if (showusage) puts(usage_summary);
 
 	/* Exit */
 	return !ok;
@@ -452,14 +452,14 @@ load_usage (void)
 #ifdef FINNISH
 # ifdef FINNISHOPTION
 	opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-	usage = _(qSusgFinnOpt);
+	usage_summary = _(qSusgFinnOpt);
 # else
 	opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-	usage = _(qSusgFinnAlw);
+	usage_summary = _(qSusgFinnAlw);
 # endif
 #else
 	opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
-	usage = _(qSusgNorm);
+	usage_summary = _(qSusgNorm);
 #endif
 }
 /*===============================================
@@ -469,8 +469,8 @@ load_usage (void)
 static void
 print_usage (void)
 {
-	printf(usage);
-	printf("\n");
+	char * exename = "llexec";
+	print_lines_usage(exename);
 }
 /*==================================================
  * main_db_notify -- callback called whenever a db is

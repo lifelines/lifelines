@@ -29,7 +29,11 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+
+#ifndef _INDISEQ_H
 #include "indiseq.h"
+#endif
+
 #include "feedback.h"
 
 /* Prototypes */

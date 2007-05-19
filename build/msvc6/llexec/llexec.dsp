@@ -280,6 +280,10 @@ SOURCE=..\..\..\src\interp\lex.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\liflines\lines_usage.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\stdlib\list.c
 # End Source File
 # Begin Source File

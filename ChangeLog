@@ -4,6 +4,17 @@
 
 	Add help2man compatible --help output to lifelines.
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp src/hdrs/liflines.h
+	src/hdrs/pvalue.h src/hdrs/screen.h src/hdrs/ui.h
+	src/liflines/llexec.c src/liflines/llinesi.h
+	src/liflines/main.c 
+	*NEW src/liflines/lines_usage.c
+
+	Tweak line returns of --help output to not wrap on
+	80 character display. Move show_usage to be shared by
+	both llines and llexec.
+
 2007-05-14 Perry Rapp
 
 	* ChangeLog po/POTFILES.in src/gedlib/keytonod.c

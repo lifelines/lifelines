@@ -32,7 +32,11 @@
 #include "list.h"       /* for LIST */
 #include "cache.h"      /* for CACHEEL */
 #include "gedcom.h"     /* for NODE, RECORD */
+
+#ifndef _INDISEQ_H
 #include "indiseq.h"    /* for INDISEQ */
+#endif
+
 #include "table.h"      /* for TABLE */
 
 typedef union {

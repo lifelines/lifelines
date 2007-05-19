@@ -8,6 +8,14 @@
 #ifndef llinesi_h_included
 #define llinesi_h_included
 
+#ifndef _GEDCOM_H
+#include "gedcom.h"
+#endif
+
+#ifndef _INDISEQ_H
+#include "indiseq.h"
+#endif
+
 typedef struct tag_llrect {
 	INT top;
 	INT bottom;
@@ -76,6 +84,9 @@ BOOLEAN import_from_gedcom_file(IMPORT_FEEDBACK ifeed, FILE *fp);
 
 /* lbrowse.c */
 INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+
+/* lines_usage.c */
+void print_lines_usage(CNSTRING exename);
 
 
 /* merge.c */

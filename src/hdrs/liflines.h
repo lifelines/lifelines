@@ -12,7 +12,10 @@
 
 #include "standard.h"
 #include "gedcom.h"
+
+#ifndef _INDISEQ_H
 #include "indiseq.h"
+#endif
 
 #ifndef INCLUDED_UIPROMPTS_H
 #include "uiprompts.h"

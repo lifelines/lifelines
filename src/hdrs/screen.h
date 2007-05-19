@@ -33,7 +33,10 @@
 #define _SCREEN_H
 
 #include "gedcom.h"
+
+#ifndef _INDISEQ_H
 #include "indiseq.h"
+#endif
 
 #include "mycurses.h"
 
