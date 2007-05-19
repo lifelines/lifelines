@@ -11,7 +11,7 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
 	cscurses.c delete.c dynmenu.c \
 	edit.c error.c export.c import.c interact.c \
-	lbrowse.c listui.c loadsave.c \
+	lbrowse.c lines_usage.c listui.c loadsave.c \
 	main.c menuset.c merge.c miscutls.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c selectdb.c show.c swap.c \
@@ -19,7 +19,7 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	listui.h llinesi.h 
 
 # what goes into llexec ?
-llexec_SOURCES = ask.c error.c llexec.c selectdb.c llexec.h
+llexec_SOURCES = ask.c error.c lines_usage.c llexec.c selectdb.c llexec.h
 
 # extra stuff for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \

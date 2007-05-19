@@ -15,6 +15,10 @@
 	80 character display. Move show_usage to be shared by
 	both llines and llexec.
 
+	* ChangeLog Makefile.am src/liflines/Makefile.am
+
+	Add new lines_usage.c file to Makefile.am.
+
 2007-05-14 Perry Rapp
 
 	* ChangeLog po/POTFILES.in src/gedlib/keytonod.c
