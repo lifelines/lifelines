@@ -1,3 +1,9 @@
+2007-05-19 Perry Rapp
+
+	* ChangeLog src/liflines/llexec.c src/liflines/main.c
+
+	Add help2man compatible --help output to lifelines.
+
 2007-05-14 Perry Rapp
 
 	* ChangeLog po/POTFILES.in src/gedlib/keytonod.c
@@ -48,6 +54,7 @@
 
 
 2007-05-13 Stephen Dum
+
 	* ChangeLog reports/Makefile.am
 
 	Add index.html to the clean targets in reports directory

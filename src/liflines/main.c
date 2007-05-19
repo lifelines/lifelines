@@ -501,13 +501,95 @@ load_usage (void)
 	usage = _(qSusgNorm);
 #endif
 }
-/*==================================================
- * print_usage -- Display help/usage
- *================================================*/
-static void
+/*===============================================
+ * print_usage -- display program help/usage
+ *  displays to stdout
+ *=============================================*/
+void
 print_usage (void)
 {
-	printf(usage);
+#ifdef WIN32
+	char * exename = "Lines";
+#else
+	char * exename = "llines";
+#endif
+
+	printf(_("Lifelines `%s' program is a (n)curses-based genealogy\n"
+		"program. It has its own databases, and uses records in\n"
+		"GEDCOM format. Records store information about people,\n"
+		"families, sources, events, and other types of data (such\n"
+		"as notes). Lifelines includes a custom report language and\n"
+		"comes with a collection of reports."), exename);
+	printf("\n\n");
+	printf(_("Usage: %s [OPTIONS] [database]"), exename);
+	printf("\n\n");
+	printf(_("Options:"));
+	printf("\n\t");
+	printf(_("-C[FILE]"));
+	printf("\n\t\t");
+	printf(_("Specify configuration file location"));
+	printf("\n\t-F\n\t\t");
+	printf(_("Finnish option (if compiled to allow Finnish option)"));
+	printf("\n\t");
+	printf(_("-I[KEY=VALUE]"));
+	printf("\n\t\t");
+	printf(_("Specify a user property (e.g. -ILLEDITOR=gvim)"));
+	printf("\n\t-a\n\t\t");
+	printf(_("log dynamic memory operation (for debugging)"));
+	printf("\n\t");
+	printf(_("-c[TYPE][DIRECT,INDIRECT]"));
+	printf("\n\t\t");
+	printf(_("supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
+		"\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"));
+	printf("\n\t-d\n\t\t");
+	printf(_("debug mode (disable signal trapping)"));
+	printf("\n\t-f\n\t\t");
+	printf(_("force open (for recovery from errors or power failure)"));
+	printf("\n\t-i\n\t\t");
+	printf(_("open database with immutable access (for use on read-only media)"));
+	printf("\n\t-k\n\t\t");
+	printf(_("always show keys (even if REFN available)"));
+	printf("\n\t-ln\n\t\t");
+	printf(_("unlock a database (for correct access on read-write media)"));
+	printf("\n\t-ly\n\t\t");
+	printf(_("lock a database (for use on read-only media)"));
+	printf("\n\t-n\n\t\t");
+	printf(_("do not use traditional family rules"));
+	printf("\n\t-O[FILE]\n\t\t");
+	printf(_("Specify program output filename (eg, -o/tmp/mytests)"));
+	printf("\n\t-r\n\t\t");
+	printf(_("open database with read-only access (prohibiting other write access)"));
+	printf("\n\t-t\n\t\t");
+	printf(_("trace function calls in report programs (for debugging)"));
+	printf("\n\t");
+	printf(_("-u[HEIGHT,WIDTH]"));
+	printf("\n\t\t");
+	printf(_("specify window size (eg, -u120,34 specifies 120 columns by 34 rows)"));
+	printf("\n\t--help\n\t\t");
+	printf(_("display this help and exit"));
+	printf("\n\t-w\n\t\t");
+	printf(_("open database with writeable access (this is the default)"));
+	printf("\n\t");
+	printf("-x[REPORT]");
+	printf("\n\t\t");
+	printf(_("execute a single lifelines report program directly"));
+	printf("\n\t-z\n\t\t");
+	printf(_("Use normal ASCII characters for drawing lines, instead of\n"
+		"\t\tspecial VT100 terminal characters"));
+	printf("\n\t--version\n\t\t");
+	printf(_("output version information and exit"));
+	printf("\n\n");
+	printf(_("Examples:"));
+	printf("\n\t");
+	printf(_("%s myfamily"), exename);
+	printf("\n\t\t");
+	printf(_("Open database 'myfamily' with Lifelines"));
+	printf("\n\t");
+	printf(_("%s -f myfamily"), exename);
+	printf("\n\t\t");
+	printf(_("Unlock database 'myfamily', after a power failure left the database locked"));
+	printf("\n\n");
+	printf(_("Report bugs to lifelines.sourceforge.net"));
 	printf("\n");
 }
 /*==================================================

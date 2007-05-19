@@ -462,9 +462,10 @@ load_usage (void)
 	usage = _(qSusgNorm);
 #endif
 }
-/*==================================================
- * print_usage -- Display help/usage
- *================================================*/
+/*===============================================
+ * print_usage -- display program help/usage
+ *  displays to stdout
+ *=============================================*/
 static void
 print_usage (void)
 {
