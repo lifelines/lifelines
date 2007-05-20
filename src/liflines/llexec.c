@@ -80,11 +80,7 @@ INT screen_width = 20; /* TODO */
  *********************************************/
 
 /* alphabetical */
-static void init_browse_module(void);
-static void init_show_module(void);
 static void print_usage(void);
-static void term_browse_module(void);
-static void term_show_module(void);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
@@ -348,8 +344,8 @@ prompt_for_db:
 		llwprintf(_(qSbaddb));
 		goto finish;
 	}
-	init_show_module();
-	init_browse_module();
+	/* does not use show module */
+	/* does not use browse module */
 	if (exargs) {
 		set_cmd_options(exargs);
 		release_table(exargs);
@@ -363,8 +359,8 @@ prompt_for_db:
 	} else {
 		/* TODO: prompt for report filename */
 	}
-	term_show_module();
-	term_browse_module();
+	/* does not use show module */
+	/* does not use browse module */
 	ok=TRUE;
 
 finish:
@@ -486,22 +482,3 @@ main_db_notify (STRING db, BOOLEAN opening)
 		crash_setdb("");
 }
 
-static void
-init_show_module (void)
-{
-}
-
-static void
-term_show_module (void)
-{
-}
-
-static void
-init_browse_module (void)
-{
-}
-
-static void
-term_browse_module (void)
-{
-}

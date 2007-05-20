@@ -1,3 +1,11 @@
+2007-05-20 Perry Rapp
+
+	* ChangeLog src/liflines/llexec.c
+
+	Remove entirely faked out calls to browse & show module
+	from llexec.c (b/c llexec.c now includes llines.h, so
+	these conflicted with the real ones).
+
 2007-05-19 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c
