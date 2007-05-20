@@ -160,6 +160,9 @@ msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 msgstr ""
+"Ceci est un logiciel libre ; consultez les sources pour plus\n"
+"d'informations légales. Il n'y a AUCUNE garantie ; mme pas pour la\n"
+"COMMERCIALISATION ou l'ADEQUATION  UN BUT PARTICULIER."
 
 #: src/gedlib/init.c:235 src/tools/btedit.c:214
 #, c-format

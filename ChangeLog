@@ -6,6 +6,11 @@
 	from llexec.c (b/c llexec.c now includes llines.h, so
 	these conflicted with the real ones).
 
+	* ChangeLog po/fr.po
+
+	Add French translation of the free software statement
+	in --version output.
+
 2007-05-19 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c src/liflines/main.c
