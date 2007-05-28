@@ -1,3 +1,8 @@
+2007-05-27 Stephen Dum
+	* ChangeLog reports/desc-tex2/README
+
+	Update README to reflect distributed files.
+
 2007-05-20 Perry Rapp
 
 	* ChangeLog src/liflines/llexec.c
@@ -79,7 +84,6 @@
 	* ChangeLog src/tools/dbverify.c
 
 	Localize "Checking..." message in dbverify main.
-
 
 2007-05-13 Stephen Dum
 

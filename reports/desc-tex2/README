@@ -1,49 +1,24 @@
-This directory contains the following files, 
-as of January 21, 1995
+desc-txt is a program to generate Descendent tree's in TeX.
+Written by Eric Majani, modified by Pete Glassernbury, Jim Eggert
+and D. Roegel.
 
--rw-rw-r--  1 roegel       3016 Jan 21 19:09 README
--rw-rw-r--  1 roegel       2236 Jan 12 22:01 desc-tex
--rw-rw-r--  1 roegel      11056 Jan 17 00:47 desc-tex2
--rw-rw-r--  1 roegel       6478 Jan 21 19:08 drsetup.tex
--rw-rw-r--  1 roegel      14798 Jan 17 00:47 drtree.tex
--rw-rw-r--  1 roegel       1321 Jan 21 19:13 ex1.tex
--rw-rw-r--  1 roegel       1395 Jan 17 21:21 extree1.log
--rw-rw-r--  1 roegel     229299 Jan 17 21:22 extree1.ps
--rw-rw-r--  1 roegel      10247 Jan 17 00:40 extree1.tex
--rw-rw-r--  1 roegel       1069 Jan 17 21:22 extree2.log
--rw-rw-r--  1 roegel     184035 Jan 17 21:23 extree2.ps
--rw-rw-r--  1 roegel       7168 Jan 17 00:36 extree2.tex
--rw-rw-r--  1 roegel        139 Jan 17 00:51 mysetup.tex
--rw-rw-r--  1 roegel      10682 Jan  7 18:34 poster.doc
--rw-rw-r--  1 roegel      12396 Jan  7 18:34 poster.dvi
--rw-r--r--  1 roegel      11582 Jan  7 17:05 poster.tex
--rw-r--r--  1 roegel      15025 Jan  7 18:34 pstricks.con
--rw-r--r--  1 roegel       9556 Jan  7 18:34 pstricks.pro
--rw-r--r--  1 roegel      56301 Jan  7 18:34 pstricks.tex
--rw-rw-r--  1 roegel        102 Jan 17 00:56 setup.tex
--rw-rw-r--  1 roegel       9207 Jan 11 22:59 tree.tex
-
-
-Here is a short description of each:
+Here is a short description of the files contained in this directory:
 
 README        -> this file
-desc-tex      -> version 1 of desc-tex
-desc-tex2     -> version 2 of desc-tex
+desc-tex.ll   -> version 1 of desc-tex
+desc-tex2.ll  -> version 2 of desc-tex
 drsetup.tex   -> general personnalisation TeX macros 
                   (don't change this file; change mysetup.tex)
 drtree.tex    -> modified tree macros for desc-tex2 
 ex1.tex       -> an example showing how to merge two or more
                  trees ``by hand'' and using invisible nodes.
-extree1.ps    -> PostScript output example 1 (300dpi)
-                   (generated for US letter size: 8.5in x 11in)
 extree1.tex   -> Source of previous file. 
-extree2.ps    -> PostScript output example 2 (300dpi)
-                   (generated for US letter size: 8.5in x 11in)
 extree2.tex   -> Source of previous file.
 mysetup.tex   -> Personal setup: feel free to modify this file.
 poster.doc    -> source documentation of the poster macros
-poster.dvi    -> dvi documentation of the poster macros
 poster.tex    -> Tim Van Zandt's poster macros
+poster1.tex   -> other poster macros
+poster2.tex   -> other poster macros
 pstricks.con  -> pstricks configuration file (you normally
                    don't need to change it)
 pstricks.pro  -> prologue file for dvips
@@ -63,5 +38,4 @@ How to make it work ?
   - generate PostScript with dvips
 
 --------------------------------------------------------------------------
-
 
