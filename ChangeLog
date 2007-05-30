@@ -1,3 +1,8 @@
+2007-05-30 Stephen Dum
+	* ChangeLog reports/st/.cvsignore
+
+	Add .cvsignore file resolving Bug id 1717366
+
 2007-05-28 Stephen Dum
 
 	* ChangeLog docs/ll-reportmanual.xml
