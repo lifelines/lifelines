@@ -1,7 +1,9 @@
 2007-05-30 Stephen Dum
-	* ChangeLog reports/st/.cvsignore
+	* ChangeLog reports/st/.cvsignore src/liflines/lines_usage.c
 
 	Add .cvsignore file resolving Bug id 1717366
+	Modify llexec usage message to be more attuned to llexec
+	(loosly addressing bug id's 1360907 and 1360909)
 
 2007-05-28 Stephen Dum
 

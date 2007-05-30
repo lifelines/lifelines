@@ -31,7 +31,7 @@ print_lines_usage (CNSTRING exename)
 		"information about people, families, sources, events, and\n"
 		"other types of data (such as notes). Lifelines includes a\n"
 		"custom report language and comes with a collection of reports.")
-		, exename);
+		);
 	printf("\n\n");
 	printf(_("Usage: %s [OPTIONS] [database]"), exename);
 	printf("\n\n");
@@ -95,15 +95,30 @@ print_lines_usage (CNSTRING exename)
 	printf("\n\n");
 	printf(_("Examples:"));
 	printf("\n\t");
-	printf(_("%s myfamily"), exename);
-	printf("\n\t\t");
-	printf(_("Open database 'myfamily' with Lifelines"));
-	printf("\n\t");
-	printf(_("%s -f myfamily"), exename);
-	printf("\n\t\t");
-	printf(_("Unlock database 'myfamily', after a power failure left\n"
-		"\t\tthe database locked"));
-	printf("\n\n");
+	if (0 == strcmp(exename, "llexec")) {
+	    printf(_("%s myfamily -x eol"), exename);
+	    printf("\n\t\t");
+	    printf(_("Open the database 'myfamily' with Lifelines"));
+	    printf("\n\t\t");
+	    printf(_("and run the eol.ll report"));
+	    printf("\n\t");
+	    printf(_("%s -f myfamily -x eol"), exename);
+	    printf("\n\t\t");
+	    printf(_("Unlock database 'myfamily', after a power failure left the"));
+	    printf("\n\t\t");
+	    printf(_("database locked and run 'eol.ll' report"));
+	    printf("\n\n");
+	} else {
+	    printf(_("%s myfamily"), exename);
+	    printf("\n\t\t");
+	    printf(_("Open database 'myfamily' with Lifelines"));
+	    printf("\n\t");
+	    printf(_("%s -f myfamily"), exename);
+	    printf("\n\t\t");
+	    printf(_("Unlock database 'myfamily', after a power failure left\n"
+		    "\t\tthe database locked"));
+	    printf("\n\n");
+	}
 	printf(_("REPORTING BUGS"));
 	printf("\n\t");
 	printf(_("Report bugs to lifelines.sourceforge.net"));
