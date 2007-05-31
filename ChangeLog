@@ -1,3 +1,10 @@
+2007-05-31 Perry Rapp
+
+	* ChangeLog docs/ll-devguide.html docs/ll-devguide.pdf
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+
+	Updated doc files regenerated from xml sources.
+
 2007-05-30 Stephen Dum
 	* ChangeLog reports/st/.cvsignore src/liflines/lines_usage.c
 
