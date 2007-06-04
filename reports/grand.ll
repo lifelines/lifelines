@@ -1,6 +1,6 @@
 /*
  * @progname       grand
- * @version        1.0
+ * @version        1.1
  * @author         Stephen Dum
  * @category
  * @output         text
@@ -19,6 +19,7 @@ the same rank. Thus numbering can appear to repeat.  I.E. you might see
 grand - a LifeLines database program
     by Stephen Dum  stephen.dum@verizon.net
     Version 1,  15 December 2002
+    Version 1.1,  3 June 2007  - minor update
 */
 
 global(gkdates)           /* list of numeric versions of dates for sorting */
@@ -26,13 +27,11 @@ global(refind)            /* list used to hold indexes of dates sorted*/
 global(adopt_event)
 proc main()
 {
-
     dayformat(0)          /* leave spaces in single digit days */
     monthformat(4)        /* print month as Jan... */
     dateformat(0)         /* use 'da mon year' order */
 
-
-    list(gkdates)	
+    list(gkdates)
     list(refind)
 
     /* for finding children */
@@ -58,7 +57,7 @@ proc main()
     list(gggkids_par)     /* index into ggkids array so we can get parent */
     list(gggkids_adop)    /* adoption flag */
 
-    /* what about great great great grand children  */
+    /* for finding great great great grand children */
     list(ggggkids)         /* list of great great great grand children */
     list(ggggkids_par)     /* index into gggkids array so we can get parent */
     list(ggggkids_adop)    /* adoption flag */
@@ -78,13 +77,11 @@ proc main()
         }
     }
     enqueue(par,indi0)
+
+    /* put out header */
+    call print_header(indi0)
+
     /* compute children of selected individual */
-    col(30) "Children of" nl()
-    col(30) name(indi0,false)  nl()
-    families(indi0, f, ind, i) {
-	col(30) "Spouse: " name(ind, false) nl()
-    }
-    /* compute children */
     call compute_child(par,kids,kids_par,kids_adop)
 
     /* and print children */
@@ -117,7 +114,6 @@ proc main()
 		                gkids,   gkids_par, kids, 3)
 
 		/* compute great great great grand children */
-
 		call compute_child(gggkids,ggggkids,ggggkids_par,ggggkids_adop)
 		if (length(ggggkids)) {
 		    call print_kids(ggggkids, ggggkids_par, ggggkids_adop,
@@ -197,6 +193,7 @@ func finddup(clist,ind_child) {
   }
   return(0)
 }
+
 /* print_kids - for lower levels not all arrays are used
  * k1    - list of children being printed
  * g1    - index into k2 for parents of children
@@ -225,6 +222,100 @@ proc print_kids(k1, g1, a, k2, g2, k3, g3, k4, level) {
     set(dups,0)
 
     /* print out the title for the section */
+    set(title,start_section(level))
+
+    /* Iterate over values in refind and print out the data
+     * lasti - last printed rank for individual
+     * lastd - birth date of previous entry for same date check
+     * count - child rank
+     *
+     * index - child rank to print for this individual
+     */
+    set(lasti,1)
+    set(lastd,getel(gkdates,1))
+    set(count,0)
+    forlist(refind, ind, i) {
+	set(cur_per, getel(k1, ind))
+	set(cur_per_par_ind, getel(g1, ind))
+
+	/* list all children with same birth date as same number
+	 * also, second marriages and adoptions may cause child to be
+	 * listed twice, it's easiest to remove here, since data is sorted
+	 * by birthdate.
+	 */
+	incr(count)
+	if (ne(lastd,getel(gkdates,i))) {
+	    /* dates are different */
+	    set(index,count)
+	    set(lasti,count)
+	    set(lastd,getel(gkdates,i))
+	} else {
+	    /* date same, keep using same index value */
+	    set(index,lasti)
+	}
+	set(adopt,getel(a,ind))
+        /* uncomment next 3 lines if you want adopted children to listed,
+         * but not counted
+	if (adopt) {
+	    "--"
+	    decr(count)
+	}
+        */
+        d(index)
+	/* print first line */
+	"." col(5) name(cur_per,false)
+	col(36) date(birth(cur_per))
+	if (eq(level, 0)) {
+	    if(adopt) {
+		incr(adopted)
+		col(49) "Adopt:" adopt 
+	    }
+	    nl()
+	} else {
+	    col(49) name(getel(k2,cur_per_par_ind),false) nl()
+	    if(adopt) {
+		incr(adopted)
+		col(5) "Adopt:" adopt 
+	    }
+	    nl()
+	}
+	if (ne(date(death(cur_per)), 0)) {
+	    col(5) "died: " date(death(cur_per))
+	    if (lt(level,2)) {
+		nl()
+	    }
+	}
+	if (gt(level, 1)) {
+	    set(gpar,getel(g2,cur_per_par_ind))
+	    col(23) name(getel(k3,gpar),false)
+	}
+	if (gt(level,2)) {
+	    col(49) name(getel(k4,getel(g3,gpar)),false)
+	}
+	if (gt(level,1)) {
+		nl()
+	}
+    }
+
+    /* print section summary */
+    set(count,sub(length(k1),dups))
+    nl()
+    d(count)  " " title
+    if (adopted) { " (" d(adopted) " adopted)" }
+    nl()
+    print(d(count), " ", title)
+    if (adopted) { print(" (",d(adopted)," adopted)") }
+    print(nl())
+}
+
+proc print_header(parent) {
+    col(30) "Children of" nl()
+    col(30) name(parent,false)  nl()
+    families(parent, f, ind, i) {
+	col(30) "Spouse: " name(ind, false) nl()
+    }
+}
+func start_section(level) {
     nl()
     if (eq(level,0)) {
 	set(title,"Children")
@@ -255,89 +346,7 @@ proc print_kids(k1, g1, a, k2, g2, k3, g3, k4, level) {
 	col(5) "Name" col(36) "Birth" col(49) "Parent" nl()
 	col(23) "Grand Parent" col(49) "Great Grand Parent" nl()
     }
-    /* Iterate over values in refind and print out the data
-     * lasti - last printed rank for individual
-     * lastd - birth date of previous entry for same date check
-     * count - child rank
-     *
-     * index - child rank to print for this individual
-     */
-    set(lasti,1)
-    set(lastd,getel(gkdates,1))
-    set(count,0)
-    forlist(refind, ind, i) {
-	set(cur_per, getel(k1, ind))
-	set(cur_per_par_ind, getel(g1, ind))
-
-	/* list all children with same birth date as same number
-	 * also, second marriages and adoptions may cause child to be
-	 * listed twice, it's easiest to remove here, since data is sorted
-	 * by birthdate.
-	 */
-	incr(count)
-	if (ne(lastd,getel(gkdates,i))) {
-	    /* dates are different */
-	    set(index,count)
-	    set(lasti,count)
-	    set(lastd,getel(gkdates,i))
-	} else {
-	    /* date same, keep using same index value */
-	    set(index,lasti)
-	}
-	if (adopt,getel(a,ind)) {
-	    /* next 2 lines if you want adopted children to listed,
-	     * but not counted, the d(index) line otherwise
-	    "--"
-	    decr(count)
-	    */
-	    d(index)
-	} else {
-	    d(index)
-	}
-	/* print first line */
-	"." col(5) name(cur_per,false)
-	col(36) date(birth(cur_per))
-	if (eq(level, 0)) {
-	    if(adopt) {
-		incr(adopted)
-		col(49) "Adopt:" adopt
-	    }
-	    nl()
-	} else {
-	    col(49) name(getel(k2,cur_per_par_ind),false) nl()
-	    if(adopt) {
-		incr(adopted)
-		col(5) "Adopt:" adopt
-	    }
-	}
-	if (ne(date(death(cur_per)), 0)) {
-	    col(5) "died: " date(death(cur_per))
-	    if (lt(level,2)) {
-		nl()
-	    }
-	}
-	if (gt(level, 1)) {
-	    set(gpar,getel(g2,cur_per_par_ind))
-	    col(23) name(getel(k3,gpar),false)
-	}
-	if (gt(level,2)) {
-	    col(49) name(getel(k4,getel(g3,gpar)),false)
-	}
-	if (gt(level,1)) {
-		nl()
-	}
-    }
-
-    /* print section summary */
-    set(count,sub(length(k1),dups))
-    nl()
-    d(count)  " " title
-    if (adopted) { " (" d(adopted) " adopted)" }
-    nl()
-    print(d(count), " ", title)
-    if (adopted) { print(" (",d(adopted)," adopted)") }
-    set(adopted, 0)
-    print(nl())
+    return(title)
 }
 
 func print_ref(title) {
