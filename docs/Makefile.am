@@ -9,8 +9,8 @@
 MANUALS_en =	ll-reportmanual.html ll-reportmanual.pdf \
 		ll-reportmanual.txt \
 		ll-userguide.html ll-userguide.pdf \
-		ll-userguide.txt \
-		ll-devguide.html
+		ll-userguide.txt ll-devguide.html \
+		ll-index.html ll-index.sv.html
 
 MANUALS_sv =	ll-reportmanual.sv.html \
 		ll-userguide.sv.html

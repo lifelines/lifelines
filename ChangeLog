@@ -1,3 +1,10 @@
+2007-06-03 Stephen Dum
+        
+	* ChangeLog docs/ll-index.html docs/ll-index.sv.html docs/Makefile.am
+
+	Add index files for the docs to meet debian package requirements
+	(response to debian bug #330483)
+
 2007-05-31 Perry Rapp
 
 	* ChangeLog docs/ll-devguide.html docs/ll-devguide.pdf
