@@ -1,3 +1,9 @@
+2007-06-05 Stephen Dum
+
+	* ChangeLog docs/llexec.1 docs/llines.1
+
+	Fix typo in man pages.  Add reference to llines in llexec man page.
+
 2007-06-03 Stephen Dum
         
 	* ChangeLog docs/ll-index.html docs/ll-index.sv.html docs/Makefile.am
