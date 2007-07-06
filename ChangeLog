@@ -11,6 +11,12 @@
 
 	Bump version to 3.0.60.
 
+	* ChangeLog docs/ll-devguide.html
+	docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+	docs/ll-userguide.html docs/ll-userguide.pdf
+
+	Updated doc files regenerated from xml sources.
+
 2007-06-05 Stephen Dum
 
 	* ChangeLog docs/llexec.1 docs/llines.1
