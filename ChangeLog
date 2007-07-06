@@ -17,6 +17,11 @@
 
 	Updated doc files regenerated from xml sources.
 
+	* ChangeLog README.MAINTAINERS
+
+	Add note about some reports not building correctly
+	in UTF-8 locale.
+
 2007-06-05 Stephen Dum
 
 	* ChangeLog docs/llexec.1 docs/llines.1

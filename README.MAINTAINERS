@@ -26,6 +26,11 @@ Edit the version number, setting it to the new release:
 Run autotools:
   $ sh autogen.sh
 
+Note: There are several reports which do not build
+correctly in UTF-8 locale. Therefore, if you use
+a UTF-8 locale, do something like so:
+export LANG=en_US.ISO-8859-1
+
 Build local copy in ./bld subdirectory:
   $ rm -rf bld
   $ mkdir bld
