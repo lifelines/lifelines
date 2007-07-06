@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 10:43-0400\n"
+"POT-Creation-Date: 2007-07-06 17:45-0400\n"
 "PO-Revision-Date: 2002-11-09 19:20+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -3624,7 +3624,7 @@ msgid_plural "%d children"
 msgstr[0] "barn"
 msgstr[1] "barn"
 
-#: src/liflines/error.c:63 src/tools/dbverify.c:1503
+#: src/liflines/error.c:63 src/tools/dbverify.c:1504
 msgid "Fatal Error"
 msgstr ""
 
@@ -3638,7 +3638,7 @@ msgstr "SYSTEMKALDSFEJL"
 msgid "  in file <%s> at line %d\n"
 msgstr ""
 
-#: src/liflines/error.c:72 src/tools/dbverify.c:1514
+#: src/liflines/error.c:72 src/tools/dbverify.c:1515
 msgid "ASSERT failure"
 msgstr ""
 
@@ -4840,31 +4840,36 @@ msgstr "Titel mangler"
 msgid "Fixed missing data record (%s)"
 msgstr "Titel mangler"
 
-#: src/tools/dbverify.c:1475
+#: src/tools/dbverify.c:1420
+#, c-format
+msgid "Checking %s"
+msgstr ""
+
+#: src/tools/dbverify.c:1476
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/tools/dbverify.c:1479
+#: src/tools/dbverify.c:1480
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/tools/dbverify.c:1486
+#: src/tools/dbverify.c:1487
 #, fuzzy
 msgid "No errors found"
 msgstr "Ingen poster fandtes i søgning"
 
-#: src/tools/dbverify.c:1505
+#: src/tools/dbverify.c:1506
 #, fuzzy, c-format
 msgid "FATAL ERROR: "
 msgstr "SYSTEMKALDSFEJL"
 
-#: src/tools/dbverify.c:1510
+#: src/tools/dbverify.c:1511
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr ""

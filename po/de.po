@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 10:43-0400\n"
+"POT-Creation-Date: 2007-07-06 17:45-0400\n"
 "PO-Revision-Date: 2003-06-19 06:32+0200\n"
 "Last-Translator: Frank Ellebrecht <ellebrecht-edv@gmx.de>\n"
 "Language-Team: None\n"
@@ -3617,7 +3617,7 @@ msgid_plural "%d children"
 msgstr[0] "%d Kind"
 msgstr[1] "%d Kinder"
 
-#: src/liflines/error.c:63 src/tools/dbverify.c:1503
+#: src/liflines/error.c:63 src/tools/dbverify.c:1504
 msgid "Fatal Error"
 msgstr "Verhängnisvoller Fehler"
 
@@ -3630,7 +3630,7 @@ msgstr "Verhängnisvoller Fehler"
 msgid "  in file <%s> at line %d\n"
 msgstr "  in Datei <%s>, Zeile %d\n"
 
-#: src/liflines/error.c:72 src/tools/dbverify.c:1514
+#: src/liflines/error.c:72 src/tools/dbverify.c:1515
 msgid "ASSERT failure"
 msgstr "Fehler beim Einfügen"
 
@@ -4820,30 +4820,35 @@ msgstr "Fehlende Datensätze"
 msgid "Fixed missing data record (%s)"
 msgstr "Fehlende Datensätze"
 
-#: src/tools/dbverify.c:1475
+#: src/tools/dbverify.c:1420
+#, c-format
+msgid "Checking %s"
+msgstr ""
+
+#: src/tools/dbverify.c:1476
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d Fehler"
 msgstr[1] "%d Fehler"
 
-#: src/tools/dbverify.c:1479
+#: src/tools/dbverify.c:1480
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d repariert"
 msgstr[1] "%d repariert"
 
-#: src/tools/dbverify.c:1486
+#: src/tools/dbverify.c:1487
 msgid "No errors found"
 msgstr "Keine Fehler gefunden"
 
-#: src/tools/dbverify.c:1505
+#: src/tools/dbverify.c:1506
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "Verhängnisvoller Fehler: "
 
-#: src/tools/dbverify.c:1510
+#: src/tools/dbverify.c:1511
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In Datei <%s> in Zeile %d"

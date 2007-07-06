@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.58\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 10:43-0400\n"
+"POT-Creation-Date: 2007-07-06 17:45-0400\n"
 "PO-Revision-Date: 2007-05-08 11:30+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -3579,7 +3579,7 @@ msgid_plural "%d children"
 msgstr[0] "%d enfant"
 msgstr[1] "%d enfants"
 
-#: src/liflines/error.c:63 src/tools/dbverify.c:1503
+#: src/liflines/error.c:63 src/tools/dbverify.c:1504
 msgid "Fatal Error"
 msgstr "Erreur fatale"
 
@@ -3592,7 +3592,7 @@ msgstr "ERREUR FATALE"
 msgid "  in file <%s> at line %d\n"
 msgstr "  dans le fichier <%s> à la ligne %d\n"
 
-#: src/liflines/error.c:72 src/tools/dbverify.c:1514
+#: src/liflines/error.c:72 src/tools/dbverify.c:1515
 msgid "ASSERT failure"
 msgstr "ASSERT échec"
 
@@ -4767,30 +4767,35 @@ msgstr "Enregistrements manquants (%s)"
 msgid "Fixed missing data record (%s)"
 msgstr "Correction enregistrements manquants (%s)"
 
-#: src/tools/dbverify.c:1475
+#: src/tools/dbverify.c:1420
+#, c-format
+msgid "Checking %s"
+msgstr ""
+
+#: src/tools/dbverify.c:1476
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d erreur"
 msgstr[1] "%d erreurs"
 
-#: src/tools/dbverify.c:1479
+#: src/tools/dbverify.c:1480
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d corrigé"
 msgstr[1] "%d corrigés"
 
-#: src/tools/dbverify.c:1486
+#: src/tools/dbverify.c:1487
 msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
-#: src/tools/dbverify.c:1505
+#: src/tools/dbverify.c:1506
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 
-#: src/tools/dbverify.c:1510
+#: src/tools/dbverify.c:1511
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "Dans le fichier <%s> à la ligne %d"

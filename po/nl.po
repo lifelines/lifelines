@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 10:43-0400\n"
+"POT-Creation-Date: 2007-07-06 17:45-0400\n"
 "PO-Revision-Date: 2004-05-08 17:16+0200\n"
 "Last-Translator: Julie Vermeersch <julie@lambda1.be>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -3613,7 +3613,7 @@ msgid_plural "%d children"
 msgstr[0] "%d kind"
 msgstr[1] "%d kinderen"
 
-#: src/liflines/error.c:63 src/tools/dbverify.c:1503
+#: src/liflines/error.c:63 src/tools/dbverify.c:1504
 msgid "Fatal Error"
 msgstr "Fatale fout"
 
@@ -3626,7 +3626,7 @@ msgstr "FATALE FOUT"
 msgid "  in file <%s> at line %d\n"
 msgstr "  in bestand <%s> op regel %d\n"
 
-#: src/liflines/error.c:72 src/tools/dbverify.c:1514
+#: src/liflines/error.c:72 src/tools/dbverify.c:1515
 msgid "ASSERT failure"
 msgstr ""
 
@@ -4820,30 +4820,35 @@ msgstr "Ontbrekende opgaven"
 msgid "Fixed missing data record (%s)"
 msgstr "Ontbrekende opgaven"
 
-#: src/tools/dbverify.c:1475
+#: src/tools/dbverify.c:1420
+#, c-format
+msgid "Checking %s"
+msgstr ""
+
+#: src/tools/dbverify.c:1476
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d fout"
 msgstr[1] "%d fouten"
 
-#: src/tools/dbverify.c:1479
+#: src/tools/dbverify.c:1480
 #, c-format
 msgid "%d fixed"
 msgid_plural "%d fixed"
 msgstr[0] "%d hersteld"
 msgstr[1] "%d hersteld"
 
-#: src/tools/dbverify.c:1486
+#: src/tools/dbverify.c:1487
 msgid "No errors found"
 msgstr "Geen fouten gevonden"
 
-#: src/tools/dbverify.c:1505
+#: src/tools/dbverify.c:1506
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "FATALE FOUT"
 
-#: src/tools/dbverify.c:1510
+#: src/tools/dbverify.c:1511
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "In bestand <%s> op regel %d"
