@@ -1144,6 +1144,42 @@ loop counter which starts at one and is incremented by one each time the
 the block of commands is executed.  The two variables indi and cnt will
 have the value null after the iteration has completed.
 </para>
+
+<para>
+For the purpose of traversing all records in the database, the following
+iterators may be used:
+
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='1in'></colspec>
+<tbody>
+<row>
+<entry>forindi</entry>
+<entry>Iterate over all people</entry>
+</row>
+<row>
+<entry>forfam</entry>
+<entry>Iterate over all families</entry>
+</row>
+<row>
+<entry>forsour</entry>
+<entry>Iterate over all sources</entry>
+</row>
+<row>
+<entry>foreven</entry>
+<entry>Iterate over all events</entry>
+</row>
+<row>
+<entry>forothr</entry>
+<entry>Iterate over all other recoure types</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</para>
+
+
 <para>
 All the iterators are described in more detail later in the section where
 their definition occurs.

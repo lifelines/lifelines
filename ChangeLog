@@ -1,3 +1,9 @@
+2007-07-30 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add table of global iterators to iterators chapter.
+
 2007-07-06 lifelines stable 3.0.60 RELEASE
 
 2007-07-06 Perry Rapp
