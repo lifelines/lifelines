@@ -4,6 +4,12 @@
 
 	Add table of global iterators to iterators chapter.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add para between title, key, and soundex descriptions.
+	Correct key description (applies to all record types) and
+	add examples. Fix grammar (who's => whose) in indi description.
+
 2007-07-06 lifelines stable 3.0.60 RELEASE
 
 2007-07-06 Perry Rapp

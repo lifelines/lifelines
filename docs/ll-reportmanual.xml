@@ -1837,12 +1837,12 @@ first title of
 </glossdef></glossentry>
 <glossentry><glossterm><funcsynopsis><funcprototype>
 <funcdef>STRING <function>key</function></funcdef>
-<paramdef><parameter>INDI|FAM</parameter>,
+<paramdef><parameter>RECORD</parameter>,
 <parameter><replaceable>BOOL</replaceable></parameter></paramdef>
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-internal key of (work for families also)
+internal key of (works for any record type)
 </para>
 
 </glossdef></glossentry>
@@ -2056,8 +2056,19 @@ number of families the person is a parent/spouse in; these two values are not ne
 </para>
 
 <para>
-<function>Title</function> returns the value of the first <structfield>1 TITL</structfield> line in the record. <function>Key</function> returns the key value of a person or
-family; it there is a second parameter and it is non-null, the leading <literal>I</literal> or <literal>F</literal> will be stripped. <function>Soundex</function>
+<function>Title</function> returns the value of the first <structfield>1 TITL</structfield> line in the record. 
+</para>
+
+<para>
+<function>Key</function> returns the key value of a person (or any record);
+if there is a second parameter and it is non-null, the leading <literal>I</literal> (or <literal>F</literal> 
+or <literal>S</literal> or <literal>E</literal> or <literal>X</literal>) will be stripped. For example, if
+<literal>key(curindi)</literal> returns <literal>I23</literal>, then <literal>key(curindi,1)</literal>
+returns <literal>23</literal>.
+</para>
+
+<para>
+<function>Soundex</function>
 returns the Soundex code of the person.
 </para>
 
@@ -2068,7 +2079,7 @@ not a <type>NODE</type> value. If you want to process the nodes within a person 
 </para>
 
 <para>
-<function>Indi</function> returns the person who's key is passed as an argument;
+<function>Indi</function> returns the person whose key is passed as an argument;
 if no person has the key <function>indi</function> returns
 <returnvalue>null</returnvalue>.
 INDI  keys are accepted either as Innn or @Innn@.
