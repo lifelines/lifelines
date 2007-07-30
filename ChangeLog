@@ -10,6 +10,10 @@
 	Correct key description (applies to all record types) and
 	add examples. Fix grammar (who's => whose) in indi description.
 
+	* ChangeLog docs/ll-reportmanual.html docs/ll-reportmanual.pdf
+
+	Regenerate documentation from xml.
+
 2007-07-06 lifelines stable 3.0.60 RELEASE
 
 2007-07-06 Perry Rapp
