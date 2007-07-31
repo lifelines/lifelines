@@ -1,3 +1,10 @@
+2007-07-30 Stephen Dum
+
+	* ChangeLog configure.ac src/hdrs/mycurses.h
+
+        Change detection of curses configuration to use curses.h
+        if ncursesw/curses.h doesn't exist - allows build on SuSE 10.
+
 2007-07-30 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.xml
