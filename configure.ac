@@ -146,7 +146,7 @@ echo Looking for header files
 AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
-AC_CHECK_HEADERS( ncursesw/curses.h )
+AC_CHECK_HEADERS( ncurses/curses.h ncursesw/curses.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )

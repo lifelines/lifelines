@@ -1,8 +1,12 @@
 2007-07-31 Stephen Dum
 
-	* ChangeLog configure.ac 
+	* ChangeLog configure.ac src/hdrs/mycurses.h README.DEVELOPERS
 
         Fix typo
+        Update mycurses.h to look for curses.h as ncursesw/curses.h,
+        ncurses/curses.h and then curses.h.  Perhaps this will increase
+        compatibility.   Also add a some notes on building the code to
+        the README.DEVELOPERS.
 
 2007-07-30 Stephen Dum
 

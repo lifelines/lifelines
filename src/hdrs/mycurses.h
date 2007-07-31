@@ -7,6 +7,8 @@
 #if defined(HAVE_LIBNCURSESW)
     #if defined(HAVE_NCURSESW_CURSES_H)
     #include <ncursesw/curses.h>
+    #elif defined(HAVE_NCURSES_CURSES_H)
+    #include <ncurses/curses.h>
     #else
     #include <curses.h>
     #endif
