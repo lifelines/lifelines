@@ -1,3 +1,9 @@
+2007-07-31 Stephen Dum
+
+	* ChangeLog configure.ac 
+
+        Fix typo
+
 2007-07-30 Stephen Dum
 
 	* ChangeLog configure.ac src/hdrs/mycurses.h
