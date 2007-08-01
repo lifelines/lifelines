@@ -1,3 +1,9 @@
+2007-08-01 Perry Rapp
+
+	* ChangeLog src/hdrs/mycurses.h
+
+	Add case for having libncurses and ncurses/curses.h.
+
 2007-07-31 Stephen Dum
 
 	* ChangeLog configure.ac src/hdrs/mycurses.h README.DEVELOPERS
