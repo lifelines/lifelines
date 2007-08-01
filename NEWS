@@ -2,9 +2,13 @@ LifeLines Source Release, Version 3.0.60
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
-New features added in 3.0.59 (stable)
+Changes in 3.0.61 (stable)
 ===========================
- - updated pregenerated html and pdf manuals
+ - Improvements to configure finding curses
+
+Changes in 3.0.60 (stable)
+===========================
+ - Minor doc tweaks, and packaging tweaks for Debian
 
 New features added in 3.0.58 (beta)
 ============================

@@ -8,6 +8,10 @@
 
 	Minor grammar editing.
 
+	* ChangeLog NEWS
+
+	Add change notes for 3.0.60 and 3.0.61.
+
 2007-07-31 Stephen Dum
 
 	* ChangeLog configure.ac src/hdrs/mycurses.h README.DEVELOPERS
