@@ -4,6 +4,10 @@
 
 	Add case for having libncurses and ncurses/curses.h.
 
+	* ChangeLog README.DEVELOPERS
+
+	Minor grammar editing.
+
 2007-07-31 Stephen Dum
 
 	* ChangeLog configure.ac src/hdrs/mycurses.h README.DEVELOPERS

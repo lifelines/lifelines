@@ -100,22 +100,22 @@ configure will generate config.h and Makefile files from Makefile.in files.
 
 1. check out the code from cvs - there is a link off 
    http://lifelines.sourceforge.net
-   which gives instructions for checking out the code.  If your not a 
+   which gives instructions for checking out the code.  If you're not a 
    sourceforge developer, you can use the anonymous checkout procedure.
 2. For building, refer to the README.MAINTAINERS file and execute the
    commands under 'Run autotools:' and 'Build local copy in ./bld subdirectory:'
-   Note: these commands describe one way to procede.  There are many other
+   Note: these commands describe one way to proceed.  There are many other
    approaches which will also work.
-3. The language files po/*.po get updated when you build code, they are also
+3. The language files po/*.po get updated when you build code; they are also
    updated from CVS.  If you find that conflicts occur with these files,
    you can simply remove them and update them from CVS again.  Then your build
    should proceed as normal.
 4. curses.h.  It seems that every distribution places curses.h and
    libcurses.so in different places or has slightly different names 
-   for the files.  For example, libcursesw.so or libcursesw.a seems the 
-   most prominate versions.  If you find that lifelines can't find curses.h
+   for the files.  For example, libcursesw.so or libcursesw.a seem the 
+   most prominant versions.  If you find that lifelines can't find curses.h
    on your system, you can pass in the directory of the file on the configure
-   step.  For example if your curses.h was in /usr/local/ncurses and it wan't
+   step.  For example if your curses.h was in /usr/local/ncurses and it wasn't
    being found, you could add to the configure step
    ../configure CPPFLAGS=-I/usr/local/ncurses
    
