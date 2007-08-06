@@ -4,6 +4,10 @@
 
 	Add listui.c to list of files needing i18n.
 
+	* ChangeLog po/POTFILES.in
+
+	Add all other source files needing i18n to list.
+
 2007-08-01 Perry Rapp
 
 	* ChangeLog src/hdrs/mycurses.h

@@ -3,10 +3,14 @@
 # in menuitem.c. Then a handful are scattered elsewhere.
 # This list may not be complete.
 
+src/btree/btrec.c
+
 src/gedlib/charmaps.c
+src/gedlib/datei.c
 src/gedlib/dateparse.c
 src/gedlib/dateprint.c
 src/gedlib/dbcontext.c
+src/gedlib/dblist.c
 src/gedlib/editmap.c
 src/gedlib/editvtab.c
 src/gedlib/gedcom.c
@@ -16,20 +20,31 @@ src/gedlib/keytonod.c
 src/gedlib/lloptions.c
 src/gedlib/messages.c
 src/gedlib/node.c
+src/gedlib/nodeio.c
+src/gedlib/record.c
 src/gedlib/remove.c
 src/gedlib/translat.c
 src/gedlib/valid.c
+src/gedlib/xlat.c
+src/gedlib/xreffile.c
 
 src/interp/alloc.c
 src/interp/builtin.c
+src/interp/eval.c
 src/interp/interp.c
+src/interp/intrpseq.c
+src/interp/lex.c
 src/interp/more.c
+src/interp/pvalalloc.c
+src/interp/pvalmath.c
 src/interp/pvalue.c
 src/interp/progerr.c
 src/interp/rassa.c
+src/interp/rptsort.c
 
 src/liflines/add.c
 src/liflines/ask.c
+src/liflines/askgedc.c
 src/liflines/askprogram.c
 src/liflines/browse.c
 src/liflines/brwsmenu.c
@@ -39,8 +54,11 @@ src/liflines/edit.c
 src/liflines/error.c
 src/liflines/export.c
 src/liflines/import.c
+src/liflines/interact.c
 src/liflines/lbrowse.c
+src/liflines/lines_usage.c
 src/liflines/listui.c
+src/liflines/llexec.c
 src/liflines/loadsave.c
 src/liflines/main.c
 src/liflines/menuset.c
@@ -49,13 +67,19 @@ src/liflines/miscutls.c
 src/liflines/newrecs.c
 src/liflines/scan.c
 src/liflines/screen.c
+src/liflines/searchui.c
+src/liflines/selectdb.c
 src/liflines/show.c
 src/liflines/swap.c
 src/liflines/tandem.c
 src/liflines/valgdcom.c
 
+src/stdlib/errlog.c
+src/stdlib/llabort.c
 src/stdlib/signals.c
 
 src/tools/btedit.c
 src/tools/dbverify.c
+
+src/ui/ui_cli.c
 
