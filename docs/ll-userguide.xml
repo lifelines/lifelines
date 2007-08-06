@@ -226,6 +226,7 @@ in the readme file.  A number of executables are built
 which can be put it in a
 directory in your execution path. If you get the program in
 executable form, follow whatever instructions came with it.
+The following executables are included:
 </para>
 <glosslist>
 
@@ -260,7 +261,8 @@ the <application>LifeLines</application> program with full user interface
 
 <para>
 The source distribution package also contains documentation
-and some <application>LifeLines</application> programs.
+and some <application>LifeLines</application> programs to demonstrate
+the capabilities of the report language.
 Included with these in the reports directory is a brief overview
 of the reports in the file index.html.
 </para>
@@ -285,7 +287,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
 <para>
 
      You normally start <application>LifeLines</application> with
-     the command: <userinput><command>lines</command> <replaceable class="parameter">database</replaceable></userinput> where
+     the command: <userinput><command>llines</command> <replaceable class="parameter">database</replaceable></userinput> where
      database is the name of a <application>LifeLines</application>
      database. If <application>LifeLines</application> finds the
      database, <application>LifeLines</application> opens the
@@ -294,12 +296,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      asks whether it should create it, and if you answer yes, does
      so. You may create any number of databases, but only one can
      be accessed by <application>LifeLines</application> at a
-     time. If you built the <application>LifeLines</application>
-     executable from the source package, the executable may be
-     named <command>llines</command> rather than
-     <command>lines</command>. You may either change its name or
-     invoke <application>LifeLines</application> by using the
-     command <command>llines</command> instead.
+     time. 
 
 </para>
 
@@ -311,7 +308,7 @@ STARTING <application>LIFELINES</application> AND CREATING DATABASES
      <application>LifeLines</application> is:
 
      <synopsis>
-        <command>lines</command> <option>[-acdfiklnortuwxzCFI]</option><replaceable class="parameter">[database]</replaceable>
+        <command>llines</command> <option>[-acdfiklnortuwxzCFI]</option><replaceable class="parameter">[database]</replaceable>
      </synopsis>
 
 </para>
@@ -5594,6 +5591,145 @@ URL to the users home page.
 </glosslist>
 
 </sect1>
+<sect1>
+<title>
+Other Executables
+</title>
+<sect2>
+<title>
+dbverify
+</title>
+<para>
+dbverify is a utility to check an existing database and report on various
+inconsistencies.  It can also repair a number of issues found.
+</para>
+<para>
+dbverify supports the following options:
+</para>
 
+<informaltable pgwide='0' frame='none'>
+<tgroup cols='2'>
+<colspec colwidth='0.5in'></colspec>
+<tbody>
+<row>
+<entry>-a</entry>
+<entry>Perform all checks (does not include fixes)</entry>
+</row>
+<row>
+<entry>-D </entry>
+<entry>Fix bad delete entries</entry>
+</row>
+<row>
+<entry>-e </entry>
+<entry>Check events</entry>
+</row>
+<row>
+<entry>-f </entry>
+<entry>Check families</entry>
+</row>
+<row>
+<entry>-F </entry>
+<entry>Alter any bad family lineage pointers (to _badptr)</entry>
+</row>
+<row>
+<entry> -g </entry>
+<entry>Check for ghosts (names/refns)</entry>
+</row>
+<row>
+<entry>-G </entry>
+<entry>Check for & fix ghosts (names/refns)</entry>
+</row>
+<row>
+<entry>-h </entry>
+<entry>Display help text (this text)</entry>
+</row>
+<row>
+<entry>-i </entry>
+<entry>Check individuals</entry>
+</row>
+<row>
+<entry>-l </entry>
+<entry>Check database structure</entry>
+</row>
+<row>
+<entry>-m </entry>
+<entry>Check for records missing data entries</entry>
+</row>
+<row>
+<entry>-M </entry>
+<entry>Fix records missing data entries</entry>
+</row>
+<row>
+<entry>-n </entry>
+<entry>Noisy (echo every record processed)</entry>
+</row>
+<row>
+<entry>-s </entry>
+<entry>Check sours</entry>
+</row>
+<row>
+<entry>-x </entry>
+<entry>Check others</entry>
+</row>
+</tbody>
+</tgroup>
+
+</informaltable>
+</sect2>
+<sect2>
+<title>
+btedit
+</title>
+<para>
+This program edits raw binary btree blocks in a 
+<application>LifeLines</application> lifelines database file.
+Some information about it's usage is provided by running:
+<programlisting>
+btedit -h
+</programlisting>
+Do NOT use this unless
+you know what you are doing and you have backed up
+your database.
+</para>
+<para>
+The 
+<application>LifeLines</application> database has proven rather robust over
+the years.  However, it is important to make frequent backups of any
+database.  If you experience database corruption, make sure you save a copy
+of the database before trying any recovery process.  Only work on a copy of
+the data so that the data is not further damaged.
+</para>
+<para>
+Try exporting the database to a gedcom file from within 
+<command>llines</command>.  Compare the saved file with previously saved
+versions.  Editing the gedcom file to correct
+issues is often easier than using btedit.
+</para>
+</sect2>
+<sect2>
+<title>
+llexec
+</title>
+<para>
+llexec envokes the LifeLines report execution program without a GUI
+for non-interactive processing of report programs.  The supported options are
+the same as for <command>llines</command>.  
+</para>
+<para>
+An example usage, which will opend the database 'myfamily' and run the report
+eol.ll is:
+<programlisting>
+llexec myfamily -x eol 
+</programlisting>
+Programs that require input, will prompt for that data and read from standard
+input. If a program required the input of a 0 or 1 to control the output,
+the following is one way to allow use of llexec in a script:
+<programlisting>
+echo "1" | llexec myfamily -x myprog 
+</programlisting>
+</para>
+
+</sect2>
+</sect1>
 </chapter>
 </book>

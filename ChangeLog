@@ -1,3 +1,11 @@
+2007-08-06 Stephen Dum
+
+	* ChangeLog docs/ll-userguide.xml src/liflines/lines_usage.c
+
+	Add text about dbverify and btedit to userguide, update
+	information in Introduction about llines.  Minor clean up to
+	llexec usage message.
+
 2007-08-06 Perry Rapp
 
 	* ChangeLog po/POTFILES.in
