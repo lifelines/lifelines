@@ -19,6 +19,12 @@
 
 	Prepare for 3.0.61 release.
 
+	* ChangeLog docs/ll-devguide.html docs/ll-reportmanual.html
+	docs/ll-reportmanual.pdf docs/ll-userguide.html
+	docs/ll-userguide.pdf
+
+	Regenerate docs.
+
 2007-08-01 Perry Rapp
 
 	* ChangeLog src/hdrs/mycurses.h
