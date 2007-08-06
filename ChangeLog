@@ -1,3 +1,9 @@
+2007-08-06 Perry Rapp
+
+	* ChangeLog po/POTFILES.in
+
+	Add listui.c to list of files needing i18n.
+
 2007-08-01 Perry Rapp
 
 	* ChangeLog src/hdrs/mycurses.h

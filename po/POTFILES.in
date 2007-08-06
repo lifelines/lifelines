@@ -40,6 +40,7 @@ src/liflines/error.c
 src/liflines/export.c
 src/liflines/import.c
 src/liflines/lbrowse.c
+src/liflines/listui.c
 src/liflines/loadsave.c
 src/liflines/main.c
 src/liflines/menuset.c
