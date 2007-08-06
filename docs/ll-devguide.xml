@@ -2,7 +2,7 @@
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
-[<!ENTITY llversion '3.0.60'>]>
+[<!ENTITY llversion '3.0.61'>]>
 
 <!--
 Outline for developer's guide to lifelines code.

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.58\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-06 17:45-0400\n"
+"POT-Creation-Date: 2007-08-06 11:38-0400\n"
 "PO-Revision-Date: 2007-05-08 11:30+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -15,6 +15,16 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
+
+#: src/btree/btrec.c:369
+#, c-format
+msgid "Failed (errno=%d) to open blockfile (rkey=%s): %s"
+msgstr ""
+
+#: src/btree/btrec.c:438
+#, c-format
+msgid "Btree lookup looped back to master (%ld)!"
+msgstr ""
 
 #: src/gedlib/charmaps.c:769
 msgid "<unnamed>"
@@ -2390,12 +2400,17 @@ msgstr "NON DÉNOMMÉ"
 msgid "Node memory leaks:"
 msgstr "Noeuds-mémoire perdus :"
 
-#: src/gedlib/node.c:1170
+#: src/gedlib/node.c:1170 src/gedlib/record.c:361 src/interp/pvalalloc.c:301
 #, c-format
 msgid "%d item leaked"
 msgid_plural "%d items leaked"
 msgstr[0] "%d objet perdu"
 msgstr[1] "%d objets perdus"
+
+#: src/gedlib/record.c:358
+#, fuzzy, c-format
+msgid "Record memory leaks:"
+msgstr "Noeuds-mémoire perdus :"
 
 #: src/gedlib/remove.c:250
 msgid "Families may not yet be removed in this fashion."
@@ -2492,6 +2507,62 @@ msgstr " (dbint tt: %s)"
 #: src/gedlib/valid.c:75
 msgid "This person record does not have a name line."
 msgstr "Cet enregistrement individuel ne possède pas de ligne nom."
+
+#: src/gedlib/xlat.c:347
+#, fuzzy, c-format
+msgid "ttpath get_conversion_dyntt:from <%s> to <%s>: %s"
+msgstr "Impossible de convertir le jeu de caractères (de <%s> à <%s>)"
+
+#: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
+msgid "succeeded"
+msgstr ""
+
+#: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
+#, fuzzy
+msgid "failed"
+msgstr "cinq"
+
+#: src/gedlib/xlat.c:369
+#, c-format
+msgid "ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"
+msgstr ""
+
+#: src/gedlib/xlat.c:435
+msgid "No TTPATH config variable"
+msgstr ""
+
+#: src/gedlib/xlat.c:464
+#, c-format
+msgid "ttpath checking dir <%s>"
+msgstr ""
+
+#: src/gedlib/xlat.c:478
+#, fuzzy, c-format
+msgid "ttpath file <%s> typed as %d"
+msgstr "Dans le fichier <%s> à la ligne %d"
+
+#: src/gedlib/xlat.c:690
+#, fuzzy
+msgid "(no conversion)"
+msgstr "Pas de conversion"
+
+#. TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal
+#: src/gedlib/xlat.c:713
+#, fuzzy, c-format
+msgid "%d step"
+msgid_plural "%d steps"
+msgstr[0] "%d élément"
+msgstr[1] "%d éléments"
+
+#: src/gedlib/xreffile.c:400
+#, c-format
+msgid "Corrupt DELETESET %c"
+msgstr ""
+
+#: src/gedlib/xreffile.c:425
+#, c-format
+msgid "Tried to add already-deleted record (%ld) to xref (%c)!"
+msgstr ""
 
 #: src/interp/alloc.c:798
 #, c-format
@@ -2868,6 +2939,16 @@ msgstr "vendredi"
 msgid "Saturday"
 msgstr "samedi"
 
+#: src/interp/eval.c:244
+#, fuzzy, c-format
+msgid "Undefined func: %s"
+msgstr "Proc. non définie : %s"
+
+#: src/interp/eval.c:246
+#, fuzzy, c-format
+msgid "Ambiguous call to func: %s"
+msgstr "Appel ambigu à la proc. : %s "
+
 #: src/interp/interp.c:247
 #, c-format
 msgid "Report not found: %s "
@@ -2957,6 +3038,17 @@ msgid_plural "Program forgot to unlock %d records"
 msgstr[0] "Le programme n'a pas pu débloquer %d enregistrement"
 msgstr[1] "Le programme n'a pas pu débloquer %d enregistrements"
 
+#: src/interp/intrpseq.c:303
+msgid "missing or incorrect value for sort"
+msgstr ""
+
+#: src/interp/lex.c:219
+#, c-format
+msgid ""
+"String constant overflowing internal buffer tokbuf len=%d, file: %s, start "
+"line: %ld"
+msgstr ""
+
 #: src/interp/more.c:648
 msgid "Please choose from the following list."
 msgstr "Choisissez dans la liste suivante."
@@ -3000,6 +3092,26 @@ msgstr "le paramètre à débloquer doit être contenu dans un enregistrement"
 #: src/interp/more.c:1050
 msgid "the arg to unlock must be a record or node"
 msgstr "le paramètre à débloquer doit être un enregistrement ou un noeud"
+
+#: src/interp/pvalalloc.c:295
+#, c-format
+msgid "PVALUE memory leak report:"
+msgstr ""
+
+#: src/interp/pvalmath.c:70
+#, c-format
+msgid "Nonnumeric type to operation %s: %s"
+msgstr ""
+
+#: src/interp/pvalmath.c:85
+#, fuzzy, c-format
+msgid "Illegal value to operation %s: %s"
+msgstr "Appel invalide à la pos."
+
+#: src/interp/pvalmath.c:411
+#, fuzzy, c-format
+msgid "%s: not compatible numeric types: %s and %s"
+msgstr "%s : types incomparables : %s et %s"
 
 #: src/interp/pvalue.c:810
 #, c-format
@@ -3137,6 +3249,21 @@ msgstr "Rapport arrêté à cause de l'absence de fichier de sortie"
 #: src/interp/rassa.c:330
 msgid "illegal call to pos."
 msgstr "Appel invalide à la pos."
+
+#: src/interp/rptsort.c:104
+#, fuzzy
+msgid "First argument to (r)sort must be list or array"
+msgstr "Lock (-l) attend y ou n comme paramètre."
+
+#: src/interp/rptsort.c:117 src/interp/rptsort.c:128
+#, fuzzy
+msgid "Arguments to (r)sort must be of same size"
+msgstr "Lock (-l) attend y ou n comme paramètre."
+
+#: src/interp/rptsort.c:137
+#, fuzzy
+msgid "Second argument to (r)sort must be list or array"
+msgstr "Lock (-l) attend y ou n comme paramètre."
 
 #: src/liflines/add.c:68
 #, c-format
@@ -3458,23 +3585,23 @@ msgstr "d  Copier haut vers bas"
 msgid "j  Merge bottom to top"
 msgstr "j  Fusionner bas à haut"
 
-#: src/liflines/brwsmenu.c:148
+#: src/liflines/brwsmenu.c:148 src/liflines/listui.c:842
 msgid "j  Move down list"
 msgstr "j  Suivant liste"
 
-#: src/liflines/brwsmenu.c:149
+#: src/liflines/brwsmenu.c:149 src/liflines/listui.c:843
 msgid "k  Move up list"
 msgstr "k  Précédent liste"
 
-#: src/liflines/brwsmenu.c:150
+#: src/liflines/brwsmenu.c:150 src/liflines/listui.c:844
 msgid "e  Edit this person"
 msgstr "e  Modif. cette personne"
 
-#: src/liflines/brwsmenu.c:151
+#: src/liflines/brwsmenu.c:151 src/liflines/listui.c:845
 msgid "i  Browse this person"
 msgstr "i  Atteindre personne"
 
-#: src/liflines/brwsmenu.c:152
+#: src/liflines/brwsmenu.c:152 src/liflines/listui.c:846
 msgid "m  Mark this person"
 msgstr "m  Marquer personne"
 
@@ -3482,19 +3609,19 @@ msgstr "m  Marquer personne"
 msgid "d  Delete from list"
 msgstr "d  Supprimer de la liste"
 
-#: src/liflines/brwsmenu.c:154
+#: src/liflines/brwsmenu.c:154 src/liflines/listui.c:849
 msgid "n  Name this list"
 msgstr "n  Nommer cette liste"
 
-#: src/liflines/brwsmenu.c:155
+#: src/liflines/brwsmenu.c:155 src/liflines/listui.c:850
 msgid "b  Browse new persons"
 msgstr "b  Atteindre autres"
 
-#: src/liflines/brwsmenu.c:156
+#: src/liflines/brwsmenu.c:156 src/liflines/listui.c:851
 msgid "a  Add to this list"
 msgstr "a  Ajouter à la liste"
 
-#: src/liflines/brwsmenu.c:157
+#: src/liflines/brwsmenu.c:157 src/liflines/listui.c:852
 msgid "x  Swap mark/current"
 msgstr "x  Basculer marque"
 
@@ -3639,6 +3766,295 @@ msgstr[1] ""
 #: src/liflines/lbrowse.c:219
 msgid "Tandom browse only compatible with persons or families."
 msgstr "Le mode tandem n'est disponible qu'avec des personnes ou familles."
+
+#: src/liflines/lines_usage.c:21
+#, c-format
+msgid "%s invokes the Lifelines report execution program."
+msgstr ""
+
+#: src/liflines/lines_usage.c:23
+#, c-format
+msgid "%s invokes the Lifelines GUI."
+msgstr ""
+
+#: src/liflines/lines_usage.c:26
+#, c-format
+msgid ""
+"Lifelines is a program to manipulate genealogical information\n"
+"in lineage-linked GEDCOM format. It has a curses interface and a\n"
+"built-in interpreter for its own genealogical report language.\n"
+"\n"
+"It has its own databases, and records are edited directly in GEDCOM\n"
+"(with an editor of the user's choice). Records store\n"
+"information about people, families, sources, events, and\n"
+"other types of data (such as notes). Lifelines includes a\n"
+"custom report language and comes with a collection of reports."
+msgstr ""
+
+#: src/liflines/lines_usage.c:36
+#, c-format
+msgid "Usage: %s [OPTIONS] [database]"
+msgstr ""
+
+#: src/liflines/lines_usage.c:38 src/tools/btedit.c:238
+#, c-format
+msgid "Options:"
+msgstr ""
+
+#: src/liflines/lines_usage.c:40
+#, c-format
+msgid "-C[FILE]"
+msgstr ""
+
+#: src/liflines/lines_usage.c:42
+#, fuzzy, c-format
+msgid "Specify configuration file location"
+msgstr "Fichier de configuration incorrect : ligne trop longue."
+
+#: src/liflines/lines_usage.c:44
+#, c-format
+msgid "Finnish option (if compiled to allow Finnish option)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:46
+#, c-format
+msgid "-I[KEY=VALUE]"
+msgstr ""
+
+#: src/liflines/lines_usage.c:48
+#, c-format
+msgid "Specify a user property (e.g. -ILLEDITOR=gvim)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:50
+#, c-format
+msgid "log dynamic memory operation (for debugging)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:52
+#, c-format
+msgid "-c[TYPE][DIRECT,INDIRECT]"
+msgstr ""
+
+#: src/liflines/lines_usage.c:54
+#, c-format
+msgid ""
+"supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
+"\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:57
+#, c-format
+msgid "debug mode (disable signal trapping)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:59
+#, c-format
+msgid "force open (for recovery from errors or power failure)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:61
+#, c-format
+msgid "open database with immutable access (for use on read-only media)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:63
+#, c-format
+msgid "always show keys (even if REFN available)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:65
+#, c-format
+msgid "unlock a database (for correct access on read-write media)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:67
+#, c-format
+msgid "lock a database (for use on read-only media)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:69
+#, c-format
+msgid "do not use traditional family rules"
+msgstr ""
+
+#: src/liflines/lines_usage.c:71
+#, c-format
+msgid "Specify program output filename (eg, -o/tmp/mytests)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:73
+#, c-format
+msgid ""
+"open database with read-only access (prohibiting other\n"
+"\t\twrite access)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:76
+#, c-format
+msgid "trace function calls in report programs (for debugging)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:78
+#, c-format
+msgid "-u[HEIGHT,WIDTH]"
+msgstr ""
+
+#: src/liflines/lines_usage.c:80
+#, c-format
+msgid ""
+"specify window size (eg, -u120,34 specifies 120 columns\n"
+"\t\tby 34 rows)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:83
+#, c-format
+msgid "display this help and exit"
+msgstr ""
+
+#: src/liflines/lines_usage.c:85
+#, c-format
+msgid "open database with writeable access (this is the default)"
+msgstr ""
+
+#: src/liflines/lines_usage.c:89
+#, c-format
+msgid "execute a single lifelines report program directly"
+msgstr ""
+
+#: src/liflines/lines_usage.c:91
+#, c-format
+msgid ""
+"Use normal ASCII characters for drawing lines, instead of\n"
+"\t\tspecial VT100 terminal characters"
+msgstr ""
+
+#: src/liflines/lines_usage.c:94
+#, c-format
+msgid "output version information and exit"
+msgstr ""
+
+#: src/liflines/lines_usage.c:96 src/tools/btedit.c:244
+#, c-format
+msgid "Examples:"
+msgstr ""
+
+#: src/liflines/lines_usage.c:99
+#, c-format
+msgid "%s myfamily -x eol"
+msgstr ""
+
+#: src/liflines/lines_usage.c:101
+#, c-format
+msgid "Open the database 'myfamily' with Lifelines"
+msgstr ""
+
+#: src/liflines/lines_usage.c:103
+#, c-format
+msgid "and run the eol.ll report"
+msgstr ""
+
+#: src/liflines/lines_usage.c:105
+#, c-format
+msgid "%s -f myfamily -x eol"
+msgstr ""
+
+#: src/liflines/lines_usage.c:107
+#, c-format
+msgid "Unlock database 'myfamily', after a power failure left the"
+msgstr ""
+
+#: src/liflines/lines_usage.c:109
+#, c-format
+msgid "database locked and run 'eol.ll' report"
+msgstr ""
+
+#: src/liflines/lines_usage.c:112
+#, fuzzy, c-format
+msgid "%s myfamily"
+msgstr "Famille vide"
+
+#: src/liflines/lines_usage.c:114
+#, c-format
+msgid "Open database 'myfamily' with Lifelines"
+msgstr ""
+
+#: src/liflines/lines_usage.c:116
+#, fuzzy, c-format
+msgid "%s -f myfamily"
+msgstr "Famille vide"
+
+#: src/liflines/lines_usage.c:118
+#, c-format
+msgid ""
+"Unlock database 'myfamily', after a power failure left\n"
+"\t\tthe database locked"
+msgstr ""
+
+#: src/liflines/lines_usage.c:122
+#, c-format
+msgid "REPORTING BUGS"
+msgstr ""
+
+#: src/liflines/lines_usage.c:124 src/tools/btedit.c:250
+#, c-format
+msgid "Report bugs to lifelines.sourceforge.net"
+msgstr ""
+
+#: src/liflines/lines_usage.c:126
+#, c-format
+msgid "COPYRIGHT"
+msgstr ""
+
+#: src/liflines/lines_usage.c:131
+#, c-format
+msgid "SEE ALSO"
+msgstr ""
+
+#: src/liflines/listui.c:155 src/liflines/listui.c:252
+#, fuzzy
+msgid "Commands:   j Move down     k Move up    i Select     q Quit"
+msgstr ""
+"Commandes :  Sélect. par nombre, u Page préc., d Page suiv., i Sélect., q "
+"Quitter"
+
+#: src/liflines/listui.c:157
+msgid "Commands:   j Move down     k Move up    q Quit"
+msgstr ""
+
+#: src/liflines/listui.c:249
+#, fuzzy
+msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
+msgstr ""
+"Commandes :  Sélect. par nombre, u Page préc., d Page suiv., i Sélect., q "
+"Quitter"
+
+#: src/liflines/listui.c:431
+msgid "--- CURRENT SELECTION ---"
+msgstr ""
+
+#: src/liflines/listui.c:434 src/liflines/listui.c:597
+msgid "--- LIST ---"
+msgstr ""
+
+#: src/liflines/listui.c:628
+msgid "-- CURRENT SELECTION --"
+msgstr ""
+
+#: src/liflines/listui.c:840
+#, fuzzy
+msgid "Choose an operation:"
+msgstr "Choisissez une opération :"
+
+#: src/liflines/listui.c:847
+#, fuzzy
+msgid "r  Remove from list"
+msgstr "d  Supprimer de la liste"
+
+#: src/liflines/listui.c:848
+#, fuzzy
+msgid "t  Enter tandem mode"
+msgstr "tt Mode tandem"
 
 #: src/liflines/loadsave.c:94
 msgid "Person"
@@ -4012,6 +4428,74 @@ msgstr "Impossible de modifier le jeu de caractères d'une base non-vide"
 msgid "LifeLines -- Main Menu"
 msgstr "LifeLines -- Menu principal"
 
+# c-format
+#: src/liflines/searchui.c:133
+#, fuzzy, c-format
+msgid "v  Review visit history (%d record)"
+msgid_plural "v  Review visit history (%d records)"
+msgstr[0] "Supprimer l'historique (%d entrées) ?"
+msgstr[1] "Supprimer l'historique (%d entrées) ?"
+
+#: src/liflines/searchui.c:137
+msgid "(visit history is empty)"
+msgstr ""
+
+#: src/liflines/searchui.c:143
+#, c-format
+msgid "c  Review change history (%d record)"
+msgid_plural "c  Review change history (%d records)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/liflines/searchui.c:147
+#, fuzzy
+msgid "(change history is empty)"
+msgstr "L'enregistrement est vide."
+
+#: src/liflines/searchui.c:220
+msgid "What scan type?"
+msgstr ""
+
+#: src/liflines/searchui.c:223
+#, fuzzy
+msgid "f  Full name scan"
+msgstr "En cours : recherche nom complet"
+
+#: src/liflines/searchui.c:224
+msgid "n  Name fragment (whitespace-delimited) scan"
+msgstr ""
+
+#: src/liflines/searchui.c:225
+#, fuzzy
+msgid "r  Refn scan"
+msgstr "En cours : recherche refn"
+
+#: src/liflines/searchui.c:226
+#, fuzzy
+msgid "s  Source scan"
+msgstr "En cours : recherche source"
+
+#: src/liflines/searchui.c:290
+msgid "Scan on what source field?"
+msgstr ""
+
+#: src/liflines/searchui.c:293
+msgid "a  Scan by author"
+msgstr ""
+
+#: src/liflines/searchui.c:294
+msgid "t  Scan by title"
+msgstr ""
+
+#: src/liflines/selectdb.c:95
+#, fuzzy
+msgid "Choose database to open"
+msgstr "La base n'a pas été enregistrée."
+
+#: src/liflines/selectdb.c:103
+msgid "No databases found in database path"
+msgstr ""
+
 #: src/liflines/show.c:123
 msgid "born"
 msgstr " °  "
@@ -4234,6 +4718,16 @@ msgstr "Ligne HEAD en double à la ligne %d"
 msgid "Missing HEAD line at line %d"
 msgstr "Ligne HEAD manquante à la ligne %d :"
 
+#: src/stdlib/errlog.c:61
+#, fuzzy, c-format
+msgid "    in file <%s> at line %d\n"
+msgstr "  dans le fichier <%s> à la ligne %d\n"
+
+#: src/stdlib/errlog.c:63
+#, fuzzy
+msgid "Current database"
+msgstr "Base ouverte - %s"
+
 #: src/tools/btedit.c:108
 #, c-format
 msgid "btedit requires 2 arguments (btree and key)."
@@ -4307,11 +4801,6 @@ msgstr ""
 msgid "Usage btedit [database] [rkey]"
 msgstr ""
 
-#: src/tools/btedit.c:238
-#, c-format
-msgid "Options:"
-msgstr ""
-
 #: src/tools/btedit.c:240
 #, c-format
 msgid "\t--help\tdisplay this help and exit"
@@ -4322,11 +4811,6 @@ msgstr ""
 msgid "\t--version\toutput version information and exit"
 msgstr ""
 
-#: src/tools/btedit.c:244
-#, c-format
-msgid "Examples:"
-msgstr ""
-
 #: src/tools/btedit.c:246
 #, c-format
 msgid "\tbtedit %s I34"
@@ -4335,11 +4819,6 @@ msgstr ""
 #: src/tools/btedit.c:248
 #, c-format
 msgid "edit raw btree block for person I34"
-msgstr ""
-
-#: src/tools/btedit.c:250
-#, c-format
-msgid "Report bugs to lifelines.sourceforge.net"
 msgstr ""
 
 #: src/tools/dbverify.c:175

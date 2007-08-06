@@ -1,10 +1,11 @@
-LifeLines Source Release, Version 3.0.60
+LifeLines Source Release, Version 3.0.61
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
 Changes in 3.0.61 (stable)
 ===========================
  - Improvements to configure finding curses
+ - More strings made ready for internationalization
 
 Changes in 3.0.60 (stable)
 ===========================
