@@ -1733,7 +1733,7 @@ Example of using wildcard in browsing
      the key value you provide,
      <application>LifeLines</application> enters the person
      browsing mode displaying that person.  You can also browse to
-     a Family, Source, or Note by entering it's key, but you must
+     a Family, Source, or Note by entering its key, but you must
      include the letter identifing the key type, thus F11, S1, or N3
      would browse to the family, source or note corresponding to the key
      if it exists.
@@ -3848,7 +3848,7 @@ the file to the database (only header and trailer records are not stored in the 
 <para>
 Normally, <application>LifeLines</application> will replace the XREF's (the
 identifiers for individuals, families, sources, notes, etc.) in the
-<acronym>GEDCOM</acronym> with it's own.
+<acronym>GEDCOM</acronym> with its own.
 These identifiers are reserved by the <acronym>GEDCOM</acronym> for internal
 use of genealogy programs.  However, if the identifiers are compatible with
 <application>LifeLines</application> internal representation and there are no
@@ -5078,7 +5078,7 @@ If the file .linesrc exists in the current directory read parameters from it.
 <row>
 <entry>2d</entry>
 <entry>
-If LLCONFIGFILE is defined in the command line or database table and it's 
+If LLCONFIGFILE is defined in the command line or database table and its 
 value is the name of a file, load parameters from that file.
 </entry>
 </row>
@@ -5683,7 +5683,7 @@ btedit
 <para>
 This program edits raw binary btree blocks in a 
 <application>LifeLines</application> lifelines database file.
-Some information about it's usage is provided by running:
+Some information about its usage is provided by running:
 <programlisting>
 btedit -h
 </programlisting>
