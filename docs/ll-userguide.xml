@@ -5716,7 +5716,7 @@ for non-interactive processing of report programs.  The supported options are
 the same as for <command>llines</command>.  
 </para>
 <para>
-An example usage, which will opend the database 'myfamily' and run the report
+An example usage, which will open the database 'myfamily' and run the report
 eol.ll is:
 <programlisting>
 llexec myfamily -x eol 
