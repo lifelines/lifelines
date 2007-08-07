@@ -5,6 +5,10 @@
 	Fix missing i18n in repaint_search_menu (thanks to
 	Patrick Texier).
 
+	* ChangeLog po/fr.po
+
+	Updated French translation by Patrick Texier.
+
 2007-08-06 Stephen Dum
 
 	* ChangeLog docs/ll-userguide.xml src/liflines/lines_usage.c

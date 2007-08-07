@@ -1,14 +1,13 @@
 # French messages for Lifelines <http://lifelines.sourceforge.net>
-# Copyright (C) 1991-1999 Thomas T. Wetmore IV
+# Copyright (C) 1991-2007 Thomas T. Wetmore IV and al.
 # Translation by Patrick Texier <p.texier@genindre.org>, 2002-2007.
 # <http://www.genindre.org/ftp/lifelines/llfr.zip>.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Lifelines 3.0.58\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-06 11:38-0400\n"
-"PO-Revision-Date: 2007-05-08 11:30+0200\n"
+"Project-Id-Version: Lifelines 3.0.61\n"
+"POT-Creation-Date: 2007-08-07 09:03+0200\n"
+"PO-Revision-Date: 2007-08-07 09:50+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +18,12 @@ msgstr ""
 #: src/btree/btrec.c:369
 #, c-format
 msgid "Failed (errno=%d) to open blockfile (rkey=%s): %s"
-msgstr ""
+msgstr "Échec (errnp=%d) en ouverture du bloc de fichier (rkey=%s) : %s"
 
 #: src/btree/btrec.c:438
 #, c-format
 msgid "Btree lookup looped back to master (%ld)!"
-msgstr ""
+msgstr "Btree lookup looped back to master (%ld)!"
 
 #: src/gedlib/charmaps.c:769
 msgid "<unnamed>"
@@ -61,146 +60,135 @@ msgid "%dy%03dd"
 msgstr "%da%03dj"
 
 #: src/gedlib/dbcontext.c:276
-#, fuzzy
 msgid "Database error: -- "
-msgstr "Enregistrements de la base"
+msgstr "Erreur base : -- "
 
 #: src/gedlib/dbcontext.c:280
-#, fuzzy
 msgid "requested database does not exist."
-msgstr "La base n'a pas été enregistrée."
+msgstr "La base demandée n'existe pas."
 
 #: src/gedlib/dbcontext.c:283
 msgid "db directory is file, not directory."
-msgstr ""
+msgstr "Le répertoire de la base est un fichier, non un répertoire."
 
 #: src/gedlib/dbcontext.c:286
 msgid "creation of new database failed."
-msgstr ""
+msgstr "La création de la base a échoué."
 
 #: src/gedlib/dbcontext.c:289
-#, fuzzy
 msgid "error accessing database directory."
-msgstr "Erreur d'accès aux données"
+msgstr "Erreur d'accès au répertoire de la base"
 
 #: src/gedlib/dbcontext.c:292
 msgid "no keyfile (directory does not appear to be a database)."
-msgstr ""
+msgstr "Pas de fichier de clé (le répertoire n'est pas une base)."
 
 #: src/gedlib/dbcontext.c:295
 msgid "could not open, read or write an index file."
-msgstr ""
+msgstr "Impossible d'accéder à un fichier de clés."
 
 #: src/gedlib/dbcontext.c:298
 msgid "could not open, read or write the key file."
-msgstr ""
+msgstr "Impossible d'accéder au fichier de clés."
 
 #: src/gedlib/dbcontext.c:301
 msgid "could not open, read or write the key file (to alter database)."
-msgstr ""
+msgstr "Impossible d'accéder au fichier de clés (pour modifier la base)."
 
 #: src/gedlib/dbcontext.c:304
 msgid "could not open, read or write a block file."
-msgstr ""
+msgstr "Impossible d'accéder à un bloc de fichier."
 
 #: src/gedlib/dbcontext.c:307
-#, fuzzy
 msgid "name of database is too long."
-msgstr "La base est en lecture seule."
+msgstr "Le nom de la base est trop long."
 
 #: src/gedlib/dbcontext.c:310
-#, fuzzy
 msgid "The database is already open for writing."
-msgstr "La base est en lecture seule."
+msgstr "La base est déjà ouverte en écriture."
 
 #: src/gedlib/dbcontext.c:313
-#, fuzzy
 msgid "The database is locked (no readwrite access)."
 msgstr "La base est en lecture seule."
 
 #: src/gedlib/dbcontext.c:316
-#, fuzzy
 msgid "The database is unlocked."
-msgstr "La base n'a pas été enregistrée."
+msgstr "La base n'est pas bloquée."
 
 #: src/gedlib/dbcontext.c:319
-#, fuzzy
 msgid "keyfile is corrupt."
-msgstr "La base est corrompue."
+msgstr "Le fichier de clés est corrompu."
 
 #: src/gedlib/dbcontext.c:322
 msgid "keyfile is wrong alignment."
-msgstr ""
+msgstr "Le fichier de clé a un alignement incorrect."
 
 #: src/gedlib/dbcontext.c:325
 msgid "keyfile is wrong version."
-msgstr ""
+msgstr "Le fichier de clé a une version incorrecte."
 
 #: src/gedlib/dbcontext.c:328
 msgid "Existing database found."
-msgstr ""
+msgstr "Base existante trouvée."
 
 #: src/gedlib/dbcontext.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "The database is already opened for read access by %d user."
 msgid_plural "The database is already opened for read access by %d users."
-msgstr[0] "La base est en lecture seule; vous ne pouvez effectuer des ajouts."
-msgstr[1] "La base est en lecture seule; vous ne pouvez effectuer des ajouts."
+msgstr[0] "La base est déja ouverte en lecture par %d utilisateur."
+msgstr[1] "La base est déja ouverte en lecture par %d utilisateurs."
 
 #: src/gedlib/dbcontext.c:338
 msgid "Invalid properties set for new database"
-msgstr ""
+msgstr "Les propriétés d'une nouvelle base sont incorrectes."
 
 #: src/gedlib/dbcontext.c:341
 msgid "Undefined database error -- fix program."
-msgstr ""
+msgstr "Erreur de base inconnue -- le programme est à corriger."
 
 #: src/gedlib/gedcom.c:112
 msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Ligne NAME manquante dans enr. INDI ; enr. ignoré.\n"
 
 #: src/gedlib/init.c:228 src/tools/btedit.c:207
-#, fuzzy, c-format
 msgid "Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."
-msgstr "Copyright © de 1991 à 1996, par T. T. Wetmore IV"
+msgstr "Copyright © 1991-2007 Thomas T. Wetmore IV et al."
 
 #: src/gedlib/init.c:230 src/tools/btedit.c:209
-#, c-format
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 msgstr ""
 "Ceci est un logiciel libre ; consultez les sources pour plus\n"
-"d'informations légales. Il n'y a AUCUNE garantie ; mme pas pour la\n"
-"COMMERCIALISATION ou l'ADEQUATION  UN BUT PARTICULIER."
+"d'informations légales. Il n'y a AUCUNE garantie ; même pas pour la\n"
+"COMMERCIALISATION ou l'ADÉQUATION À UN BUT PARTICULIER."
 
 #: src/gedlib/init.c:235 src/tools/btedit.c:214
-#, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
-msgstr ""
+msgstr "Écrit par Tom Wetmore. Maintenu à lifelines.sourceforge.net."
 
 #: src/gedlib/keytonod.c:686
 #, c-format
 msgid "Database error caused by reference to nonexisting key <%s>."
-msgstr ""
+msgstr "Erreur de base : référence à une clé inexistante (%s)."
 
 #: src/gedlib/keytonod.c:687
 msgid "It might be possible to fix this with btedit."
-msgstr ""
+msgstr "Il doit être possible de résoudre ceci avec btedit."
 
 #: src/gedlib/keytonod.c:688
 msgid "Neighboring keys include:"
-msgstr ""
+msgstr "Les clés voisines incluent :"
 
 #: src/gedlib/keytonod.c:1045
 #, c-format
 msgid "Bad cache entry <%s> != <%s>"
-msgstr ""
+msgstr "Entrée de cache invalide (%s) != (%s)"
 
 #: src/gedlib/keytonod.c:1072
 #, c-format
 msgid "Cache [%s] overflowed its max size (%d)"
-msgstr ""
+msgstr "Le cache [%s] a dépassé sa taille limite (%d)"
 
 #: src/gedlib/messages.c:44
 msgid "You must identify a database."
@@ -2396,7 +2384,6 @@ msgid "NO NAME"
 msgstr "NON DÉNOMMÉ"
 
 #: src/gedlib/node.c:1167
-#, c-format
 msgid "Node memory leaks:"
 msgstr "Noeuds-mémoire perdus :"
 
@@ -2408,9 +2395,8 @@ msgstr[0] "%d objet perdu"
 msgstr[1] "%d objets perdus"
 
 #: src/gedlib/record.c:358
-#, fuzzy, c-format
 msgid "Record memory leaks:"
-msgstr "Noeuds-mémoire perdus :"
+msgstr "Enregistrements en mémoire perdus :"
 
 #: src/gedlib/remove.c:250
 msgid "Families may not yet be removed in this fashion."
@@ -2509,60 +2495,58 @@ msgid "This person record does not have a name line."
 msgstr "Cet enregistrement individuel ne possède pas de ligne nom."
 
 #: src/gedlib/xlat.c:347
-#, fuzzy, c-format
+#, c-format
 msgid "ttpath get_conversion_dyntt:from <%s> to <%s>: %s"
-msgstr "Impossible de convertir le jeu de caractères (de <%s> à <%s>)"
+msgstr "ttpath get_conversion_dyntt: de <%s> à <%s> : %s"
 
 #: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
 msgid "succeeded"
-msgstr ""
+msgstr "réussi"
 
 #: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
-#, fuzzy
 msgid "failed"
-msgstr "cinq"
+msgstr "échoué"
 
 #: src/gedlib/xlat.c:369
 #, c-format
 msgid "ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"
-msgstr ""
+msgstr "ttpath get_subcoding_dyntt de <%s> au sous-code <%s> : %s"
 
 #: src/gedlib/xlat.c:435
 msgid "No TTPATH config variable"
-msgstr ""
+msgstr "Pas de variable de configuration TTPATH"
 
 #: src/gedlib/xlat.c:464
 #, c-format
 msgid "ttpath checking dir <%s>"
-msgstr ""
+msgstr "ttpath vérification du répertoire <%s>"
 
 #: src/gedlib/xlat.c:478
-#, fuzzy, c-format
+#, c-format
 msgid "ttpath file <%s> typed as %d"
-msgstr "Dans le fichier <%s> à la ligne %d"
+msgstr "ttpath fichier <%s> saisi comme %d"
 
 #: src/gedlib/xlat.c:690
-#, fuzzy
 msgid "(no conversion)"
-msgstr "Pas de conversion"
+msgstr "(pas de conversion)"
 
 #. TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal
 #: src/gedlib/xlat.c:713
-#, fuzzy, c-format
+#, c-format
 msgid "%d step"
 msgid_plural "%d steps"
-msgstr[0] "%d élément"
-msgstr[1] "%d éléments"
+msgstr[0] "%d passage"
+msgstr[1] "%d passages"
 
 #: src/gedlib/xreffile.c:400
 #, c-format
 msgid "Corrupt DELETESET %c"
-msgstr ""
+msgstr "DELETESET %c corrompu"
 
 #: src/gedlib/xreffile.c:425
 #, c-format
 msgid "Tried to add already-deleted record (%ld) to xref (%c)!"
-msgstr ""
+msgstr "Tentative d'ajouter l'enreg. supprimé (%ld) au xref (%c) !"
 
 #: src/interp/alloc.c:798
 #, c-format
@@ -2940,14 +2924,14 @@ msgid "Saturday"
 msgstr "samedi"
 
 #: src/interp/eval.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Undefined func: %s"
-msgstr "Proc. non définie : %s"
+msgstr "Fonction non définie : %s"
 
 #: src/interp/eval.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Ambiguous call to func: %s"
-msgstr "Appel ambigu à la proc. : %s "
+msgstr "Appel ambigu à la fonction : %s "
 
 #: src/interp/interp.c:247
 #, c-format
@@ -3040,7 +3024,7 @@ msgstr[1] "Le programme n'a pas pu débloquer %d enregistrements"
 
 #: src/interp/intrpseq.c:303
 msgid "missing or incorrect value for sort"
-msgstr ""
+msgstr "Valeur manquante ou incorrecte pour sort"
 
 #: src/interp/lex.c:219
 #, c-format
@@ -3048,6 +3032,8 @@ msgid ""
 "String constant overflowing internal buffer tokbuf len=%d, file: %s, start "
 "line: %ld"
 msgstr ""
+"String constant overflowing internal buffer tokbuf len=%d, file: %s, start "
+"line: %ld"
 
 #: src/interp/more.c:648
 msgid "Please choose from the following list."
@@ -3094,24 +3080,23 @@ msgid "the arg to unlock must be a record or node"
 msgstr "le paramètre à débloquer doit être un enregistrement ou un noeud"
 
 #: src/interp/pvalalloc.c:295
-#, c-format
 msgid "PVALUE memory leak report:"
-msgstr ""
+msgstr "Échec mémoire PVALUE :"
 
 #: src/interp/pvalmath.c:70
 #, c-format
 msgid "Nonnumeric type to operation %s: %s"
-msgstr ""
+msgstr "Type non-numérique pour l'opération %s : %s"
 
 #: src/interp/pvalmath.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal value to operation %s: %s"
-msgstr "Appel invalide à la pos."
+msgstr "Valeur invalide pour l'opération %s : %s"
 
 #: src/interp/pvalmath.c:411
-#, fuzzy, c-format
+#, c-format
 msgid "%s: not compatible numeric types: %s and %s"
-msgstr "%s : types incomparables : %s et %s"
+msgstr "%s : types numériques incompatibles : %s et %s"
 
 #: src/interp/pvalue.c:810
 #, c-format
@@ -3251,19 +3236,16 @@ msgid "illegal call to pos."
 msgstr "Appel invalide à la pos."
 
 #: src/interp/rptsort.c:104
-#, fuzzy
 msgid "First argument to (r)sort must be list or array"
-msgstr "Lock (-l) attend y ou n comme paramètre."
+msgstr "Le premier paramètre de (r)sort doit être une liste ou une table."
 
 #: src/interp/rptsort.c:117 src/interp/rptsort.c:128
-#, fuzzy
 msgid "Arguments to (r)sort must be of same size"
-msgstr "Lock (-l) attend y ou n comme paramètre."
+msgstr "Les paramètres de (r)sort doivent être de même taille"
 
 #: src/interp/rptsort.c:137
-#, fuzzy
 msgid "Second argument to (r)sort must be list or array"
-msgstr "Lock (-l) attend y ou n comme paramètre."
+msgstr "Le second paramètre de (r)sort doit être une liste ou une table."
 
 #: src/liflines/add.c:68
 #, c-format
@@ -3769,16 +3751,15 @@ msgstr "Le mode tandem n'est disponible qu'avec des personnes ou familles."
 
 #: src/liflines/lines_usage.c:21
 #, c-format
-msgid "%s invokes the Lifelines report execution program."
-msgstr ""
+msgid "%s invokes the Lifelines report execution program without GUI."
+msgstr "%s lance le programme d'exécution de rapports Lifelines sans IU."
 
 #: src/liflines/lines_usage.c:23
 #, c-format
 msgid "%s invokes the Lifelines GUI."
-msgstr ""
+msgstr "%s appelle l'interface utilisateur Lifelines"
 
 #: src/liflines/lines_usage.c:26
-#, c-format
 msgid ""
 "Lifelines is a program to manipulate genealogical information\n"
 "in lineage-linked GEDCOM format. It has a curses interface and a\n"
@@ -3790,271 +3771,244 @@ msgid ""
 "other types of data (such as notes). Lifelines includes a\n"
 "custom report language and comes with a collection of reports."
 msgstr ""
+"Lifelines est un programme de manipulation d'informations généalogiques\n"
+"dans le format GEDCOM 'lineage-linked'. Il possède une interface curses et\n"
+"un interpréteur intégré pour son langage d'éditions généalogiques.\n"
+"\n"
+"Il a ses propres bases, et ses enregistrements sont modifiés directement\n"
+"au format GEDCOM (avec un éditeur au chois de l'utilisateur). Les\n"
+"enregistrements contiennent les données concernant les personnes, familles\n"
+"familles, sources, événements et autres (comme les notes). Lifelines inclut\n"
+"un langage spéfique d'éditions et est fourni avec un ensemble de rapports."
 
 #: src/liflines/lines_usage.c:36
 #, c-format
 msgid "Usage: %s [OPTIONS] [database]"
-msgstr ""
+msgstr "Utilisation : %s [OPTIONS] [base]"
 
 #: src/liflines/lines_usage.c:38 src/tools/btedit.c:238
-#, c-format
 msgid "Options:"
-msgstr ""
+msgstr "Options :"
 
 #: src/liflines/lines_usage.c:40
-#, c-format
 msgid "-C[FILE]"
-msgstr ""
+msgstr "-C[FICHIER}"
 
 #: src/liflines/lines_usage.c:42
-#, fuzzy, c-format
 msgid "Specify configuration file location"
-msgstr "Fichier de configuration incorrect : ligne trop longue."
+msgstr "Indiquez l'emplacement du fichier de configuration"
 
 #: src/liflines/lines_usage.c:44
-#, c-format
 msgid "Finnish option (if compiled to allow Finnish option)"
-msgstr ""
+msgstr "Option finlandais (si c'est compilé avec l'option)"
 
 #: src/liflines/lines_usage.c:46
-#, c-format
 msgid "-I[KEY=VALUE]"
-msgstr ""
+msgstr "-I[CLÉ=VALEUR]"
 
 #: src/liflines/lines_usage.c:48
-#, c-format
 msgid "Specify a user property (e.g. -ILLEDITOR=gvim)"
-msgstr ""
+msgstr "Indiquez une propriété utilisateur (ex -ILLEDITOR=gvim)"
 
 #: src/liflines/lines_usage.c:50
-#, c-format
 msgid "log dynamic memory operation (for debugging)"
-msgstr ""
+msgstr "trac des opérations de mémoire dynamique (pour mise au point)"
 
 #: src/liflines/lines_usage.c:52
-#, c-format
 msgid "-c[TYPE][DIRECT,INDIRECT]"
-msgstr ""
+msgstr "-c[TYPE][DIRECT,INDIRECT]"
 
 #: src/liflines/lines_usage.c:54
-#, c-format
 msgid ""
 "supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
 "\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"
 msgstr ""
+"indique les valeurs de cache (ex, -ci400,4000f400,4000 fournit\n"
+"des caches directs de pers. et de fam. à 400, et des caches indirects à 4000)"
 
 #: src/liflines/lines_usage.c:57
-#, c-format
 msgid "debug mode (disable signal trapping)"
-msgstr ""
+msgstr "mode de déboggage (désactive les 'trappes' de signal)"
 
 #: src/liflines/lines_usage.c:59
-#, c-format
 msgid "force open (for recovery from errors or power failure)"
-msgstr ""
+msgstr "force l'ouverture (pour reprendre après des erreurs ou une coupure)"
 
 #: src/liflines/lines_usage.c:61
-#, c-format
 msgid "open database with immutable access (for use on read-only media)"
-msgstr ""
+msgstr "ouvre la base en lecture seule (pour un média en lecture seule)"
 
 #: src/liflines/lines_usage.c:63
-#, c-format
 msgid "always show keys (even if REFN available)"
-msgstr ""
+msgstr "montre toujours les clés (même si un REFN est disponible)"
 
 #: src/liflines/lines_usage.c:65
-#, c-format
 msgid "unlock a database (for correct access on read-write media)"
-msgstr ""
+msgstr "débloque une base (pour un accès correct en lecture-écriture)"
 
 #: src/liflines/lines_usage.c:67
-#, c-format
 msgid "lock a database (for use on read-only media)"
-msgstr ""
+msgstr "bloque une base (pour un média en lecture seule)"
 
 #: src/liflines/lines_usage.c:69
-#, c-format
 msgid "do not use traditional family rules"
-msgstr ""
+msgstr "ne pas utiliser les règles de famille traditionelle"
 
 #: src/liflines/lines_usage.c:71
-#, c-format
 msgid "Specify program output filename (eg, -o/tmp/mytests)"
-msgstr ""
+msgstr "Indique le fichier de sortie pu programme (ex : -o/tmp/mestests)"
 
 #: src/liflines/lines_usage.c:73
-#, c-format
 msgid ""
 "open database with read-only access (prohibiting other\n"
 "\t\twrite access)"
 msgstr ""
+"ouvre la base en lecture seule (interdisant les autres\n"
+"\t\taccès en écriture)"
 
 #: src/liflines/lines_usage.c:76
-#, c-format
 msgid "trace function calls in report programs (for debugging)"
-msgstr ""
+msgstr "trace les appels de fonction dans les rapports (pour mise au point)"
 
 #: src/liflines/lines_usage.c:78
-#, c-format
 msgid "-u[HEIGHT,WIDTH]"
-msgstr ""
+msgstr "-u[LARGEUR,HAUTEUR]"
 
 #: src/liflines/lines_usage.c:80
-#, c-format
 msgid ""
 "specify window size (eg, -u120,34 specifies 120 columns\n"
 "\t\tby 34 rows)"
 msgstr ""
+"indique la taille de fenêtre (ex : -u 120,34 donne 120 colonnes\n"
+"\t\tet 34 lignes"
 
 #: src/liflines/lines_usage.c:83
-#, c-format
 msgid "display this help and exit"
-msgstr ""
+msgstr "affiche cette aide et sort"
 
 #: src/liflines/lines_usage.c:85
-#, c-format
 msgid "open database with writeable access (this is the default)"
-msgstr ""
+msgstr "ouvre la base avec un accès en écriture (défaut)"
 
 #: src/liflines/lines_usage.c:89
-#, c-format
 msgid "execute a single lifelines report program directly"
-msgstr ""
+msgstr "éxécute un programme d'édition lifelines directement"
 
 #: src/liflines/lines_usage.c:91
-#, c-format
 msgid ""
 "Use normal ASCII characters for drawing lines, instead of\n"
 "\t\tspecial VT100 terminal characters"
 msgstr ""
+"Utilise les caratères ASCII normaux pour tracer les lignes, au lieu des\n"
+"caractères spéciaux de terminal VT100"
 
 #: src/liflines/lines_usage.c:94
-#, c-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "affiche les informations de version et sort"
 
 #: src/liflines/lines_usage.c:96 src/tools/btedit.c:244
-#, c-format
 msgid "Examples:"
-msgstr ""
+msgstr "Exemples :"
 
 #: src/liflines/lines_usage.c:99
 #, c-format
 msgid "%s myfamily -x eol"
-msgstr ""
+msgstr "%s mafamille -e eol"
 
 #: src/liflines/lines_usage.c:101
-#, c-format
 msgid "Open the database 'myfamily' with Lifelines"
-msgstr ""
+msgstr "Ouvre la base 'mafamille' avec Lifelines"
 
 #: src/liflines/lines_usage.c:103
-#, c-format
 msgid "and run the eol.ll report"
-msgstr ""
+msgstr "et exécute le rapport eol.ll"
 
 #: src/liflines/lines_usage.c:105
 #, c-format
 msgid "%s -f myfamily -x eol"
-msgstr ""
+msgstr "%s -f mafamille -x eol"
 
 #: src/liflines/lines_usage.c:107
-#, c-format
 msgid "Unlock database 'myfamily', after a power failure left the"
-msgstr ""
+msgstr "Débloque la base 'mafamille' après une coupure laissant la"
 
 #: src/liflines/lines_usage.c:109
-#, c-format
 msgid "database locked and run 'eol.ll' report"
-msgstr ""
+msgstr "base bloquée et lance le rapport 'eol.ll'"
 
 #: src/liflines/lines_usage.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "%s myfamily"
-msgstr "Famille vide"
+msgstr "%s mafamille"
 
 #: src/liflines/lines_usage.c:114
-#, c-format
 msgid "Open database 'myfamily' with Lifelines"
-msgstr ""
+msgstr "Ouvre la base 'mafamille' avec Lifelines"
 
 #: src/liflines/lines_usage.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "%s -f myfamily"
-msgstr "Famille vide"
+msgstr "%s -f mafamille"
 
 #: src/liflines/lines_usage.c:118
-#, c-format
 msgid ""
 "Unlock database 'myfamily', after a power failure left\n"
 "\t\tthe database locked"
 msgstr ""
+"Débloque la base 'mafamille', après une coupure laissant\n"
+" \t\tla base bloquée"
 
 #: src/liflines/lines_usage.c:122
-#, c-format
 msgid "REPORTING BUGS"
-msgstr ""
+msgstr "RECENSEMENT DES BOGUES"
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:250
-#, c-format
 msgid "Report bugs to lifelines.sourceforge.net"
-msgstr ""
+msgstr "Envoyez les bogues à lifefelines.sourceforge.net."
 
 #: src/liflines/lines_usage.c:126
-#, c-format
 msgid "COPYRIGHT"
-msgstr ""
+msgstr "COPYRIGHT"
 
 #: src/liflines/lines_usage.c:131
-#, c-format
 msgid "SEE ALSO"
-msgstr ""
+msgstr "VOIR AUSSI"
 
 #: src/liflines/listui.c:155 src/liflines/listui.c:252
-#, fuzzy
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
-msgstr ""
-"Commandes :  Sélect. par nombre, u Page préc., d Page suiv., i Sélect., q "
-"Quitter"
+msgstr "Commandes :    j Dépl. bas     k Dépl. haut    i Sélect.    q Quitter"
 
 #: src/liflines/listui.c:157
 msgid "Commands:   j Move down     k Move up    q Quit"
-msgstr ""
+msgstr "Commandes :    j Dépl. bas     k Dépl. haut    q Quitter"
 
 #: src/liflines/listui.c:249
-#, fuzzy
 msgid "Commands:  j Move down   k Move up  d Delete   i Select   q Quit"
-msgstr ""
-"Commandes :  Sélect. par nombre, u Page préc., d Page suiv., i Sélect., q "
-"Quitter"
+msgstr "Commandes : j Dépl. bas  k Dépl. haut  d Suppr.  i Sélect.  q Quitter"
 
 #: src/liflines/listui.c:431
 msgid "--- CURRENT SELECTION ---"
-msgstr ""
+msgstr "--- SÉLECTION EN COURS ---"
 
 #: src/liflines/listui.c:434 src/liflines/listui.c:597
 msgid "--- LIST ---"
-msgstr ""
+msgstr "--- LISTE ---"
 
 #: src/liflines/listui.c:628
 msgid "-- CURRENT SELECTION --"
-msgstr ""
+msgstr "-- SÉLECTION EN COURS --"
 
 #: src/liflines/listui.c:840
-#, fuzzy
 msgid "Choose an operation:"
 msgstr "Choisissez une opération :"
 
 #: src/liflines/listui.c:847
-#, fuzzy
 msgid "r  Remove from list"
-msgstr "d  Supprimer de la liste"
+msgstr "r  Supprimer de la liste"
 
 #: src/liflines/listui.c:848
-#, fuzzy
 msgid "t  Enter tandem mode"
-msgstr "tt Mode tandem"
+msgstr "t  Mode tandem"
 
 #: src/liflines/loadsave.c:94
 msgid "Person"
@@ -4218,7 +4172,6 @@ msgid "Enter pattern to match against author."
 msgstr "Entrez un motif de recherche pour un auteur."
 
 #: src/liflines/screen.c:317
-#, c-format
 msgid "initscr failed"
 msgstr "échec de initscr"
 
@@ -4430,71 +4383,70 @@ msgstr "LifeLines -- Menu principal"
 
 # c-format
 #: src/liflines/searchui.c:133
-#, fuzzy, c-format
+#, c-format
 msgid "v  Review visit history (%d record)"
 msgid_plural "v  Review visit history (%d records)"
-msgstr[0] "Supprimer l'historique (%d entrées) ?"
-msgstr[1] "Supprimer l'historique (%d entrées) ?"
+msgstr[0] "v  Parcourir l'historique des visites (%d entrée)"
+msgstr[1] "v  Parcourir l'historique des visites (%d entrées)"
 
 #: src/liflines/searchui.c:137
 msgid "(visit history is empty)"
-msgstr ""
+msgstr "(l'historique des visites est vide)"
 
 #: src/liflines/searchui.c:143
 #, c-format
 msgid "c  Review change history (%d record)"
 msgid_plural "c  Review change history (%d records)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "c  Parcourir l'historique des modifications (%d entrée)"
+msgstr[1] "c  Parcourir l'historique des modifications (%d entrées)"
 
 #: src/liflines/searchui.c:147
-#, fuzzy
 msgid "(change history is empty)"
-msgstr "L'enregistrement est vide."
+msgstr "(l'historique des modifications est vide)"
+
+#: src/liflines/searchui.c:151
+msgid "f  Full database scan"
+msgstr "f  Recherche sur l'ensemble de la base"
 
 #: src/liflines/searchui.c:220
 msgid "What scan type?"
-msgstr ""
+msgstr "Quel type de recherche ?"
 
 #: src/liflines/searchui.c:223
-#, fuzzy
 msgid "f  Full name scan"
-msgstr "En cours : recherche nom complet"
+msgstr "f  Recherche nom complet"
 
 #: src/liflines/searchui.c:224
 msgid "n  Name fragment (whitespace-delimited) scan"
-msgstr ""
+msgstr "n  Rech. par fragment du nom (délimité par des espaces)"
 
 #: src/liflines/searchui.c:225
-#, fuzzy
 msgid "r  Refn scan"
-msgstr "En cours : recherche refn"
+msgstr "r  Recherche refn"
 
 #: src/liflines/searchui.c:226
-#, fuzzy
 msgid "s  Source scan"
-msgstr "En cours : recherche source"
+msgstr "s  Recherche source"
 
 #: src/liflines/searchui.c:290
 msgid "Scan on what source field?"
-msgstr ""
+msgstr "Rech sur quel champ source ?"
 
 #: src/liflines/searchui.c:293
 msgid "a  Scan by author"
-msgstr ""
+msgstr "a  Rech. par auteur"
 
 #: src/liflines/searchui.c:294
 msgid "t  Scan by title"
-msgstr ""
+msgstr "t  Rech. par titre"
 
 #: src/liflines/selectdb.c:95
-#, fuzzy
 msgid "Choose database to open"
-msgstr "La base n'a pas été enregistrée."
+msgstr "Choisissez la data à ouvrir."
 
 #: src/liflines/selectdb.c:103
 msgid "No databases found in database path"
-msgstr ""
+msgstr "Aucune base trouvée dans le chamin d'accès"
 
 #: src/liflines/show.c:123
 msgid "born"
@@ -4719,107 +4671,99 @@ msgid "Missing HEAD line at line %d"
 msgstr "Ligne HEAD manquante à la ligne %d :"
 
 #: src/stdlib/errlog.c:61
-#, fuzzy, c-format
+#, c-format
 msgid "    in file <%s> at line %d\n"
-msgstr "  dans le fichier <%s> à la ligne %d\n"
+msgstr "    dans le fichier <%s> à la ligne %d\n"
 
 #: src/stdlib/errlog.c:63
-#, fuzzy
 msgid "Current database"
-msgstr "Base ouverte - %s"
+msgstr "Base ouverte"
 
 #: src/tools/btedit.c:108
-#, c-format
 msgid "btedit requires 2 arguments (btree and key)."
-msgstr ""
+msgstr "btedit demande 2 paramètres (arbre et clé)."
 
 #: src/tools/btedit.c:110
-#, c-format
 msgid "See `btedit --help' for more information."
-msgstr ""
+msgstr "Voir `btedit --help' for plus d'informations."
 
 #: src/tools/btedit.c:117
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open btree: %s."
-msgstr "Impossible d'ouvrir le fichier %s."
+msgstr "Impossible d'ouvrir le fichier de clés : %s."
 
 #: src/tools/btedit.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "There is no record with key: %s"
-msgstr "Il n'y a pas d'enregistrement avec cette clé ou référence"
+msgstr "Il n'y a pas d'enregistrement avec la clé : %s"
 
 #: src/tools/btedit.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error accessing record: %s"
-msgstr "Erreur d'accès aux données"
+msgstr "Erreur d'accès à l'enregistrement : %s"
 
 #: src/tools/btedit.c:135
-#, c-format
 msgid "Editor or system call failed."
-msgstr ""
+msgstr "L'éditeur ou un appel-système ont échoué."
 
 #: src/tools/btedit.c:137
-#, fuzzy, c-format
 msgid "Database was not be modified."
-msgstr "La base n'a pas été enregistrée."
+msgstr "La base n'a pas été modifiée."
 
 #: src/tools/btedit.c:143
-#, fuzzy, c-format
 msgid "Readonly database can not be modified."
-msgstr "La base n'a pas été enregistrée."
+msgstr "Une base en lecture seule ne peut être modifiée."
 
 #: src/tools/btedit.c:150
-#, c-format
 msgid "Error writing file 'btedit.tmp'."
-msgstr ""
+msgstr "Erreur d'écriture du fichier 'btedit.tmp'."
 
 #: src/tools/btedit.c:156
 #, c-format
 msgid "Record %s modified."
-msgstr ""
+msgstr "L'enregistrement %s a été modifié."
 
 #: src/tools/btedit.c:226
-#, fuzzy
 msgid "\"\\My Documents\\LifeLines\\Databases\\MyFamily\""
-msgstr "\\My Documents\\LifeLines\\Databases\\MyFamily"
+msgstr "\"\\My Documents\\LifeLines\\Databases\\MyFamily\""
 
 #: src/tools/btedit.c:228 src/tools/dbverify.c:232
 msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/users/myname/lifelines/databases/myfamily"
 
 #: src/tools/btedit.c:231
-#, c-format
 msgid ""
 "lifelines `btedit' edits raw binary btree blocks\n"
 "in lifelines database files. Do NOT use this unless\n"
 "you know what you are doing and you have backed up\n"
 "your database."
 msgstr ""
+"lifelines `btedit' permet de modifier des arbres binaires\n"
+"dans les bases LifeLines. NE l'utilisez PAS sauf si\n"
+"vous savez ce que vous faites et possédez une séauvegarde\n"
+"de votre base."
 
 #: src/tools/btedit.c:236
-#, c-format
 msgid "Usage btedit [database] [rkey]"
-msgstr ""
+msgstr "Utulisation btedit [base] [clé]"
 
 #: src/tools/btedit.c:240
-#, c-format
 msgid "\t--help\tdisplay this help and exit"
-msgstr ""
+msgstr "\t--help\taffiche cette aide et sort"
 
 #: src/tools/btedit.c:242
-#, c-format
 msgid "\t--version\toutput version information and exit"
-msgstr ""
+msgstr "\t --version\taffiche les informations de version et sort"
 
+# src/tools/btedit.c:246
 #: src/tools/btedit.c:246
 #, c-format
 msgid "\tbtedit %s I34"
-msgstr ""
+msgstr "\tbtedit %s I34"
 
 #: src/tools/btedit.c:248
-#, c-format
 msgid "edit raw btree block for person I34"
-msgstr ""
+msgstr "Modifie l'arbre pour la personne I34"
 
 #: src/tools/dbverify.c:175
 msgid "Orphan names"
@@ -4926,88 +4870,71 @@ msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\My Documents\\LifeLines\\Databases\\MyFamily"
 
 #: src/tools/dbverify.c:236
-#, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
 msgstr "utilisation : dbverify -(paramètres) <btree>\n"
 
 #: src/tools/dbverify.c:237
-#, c-format
 msgid "flags:\n"
 msgstr "paramètres :\n"
 
 #: src/tools/dbverify.c:238
-#, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr "\t-a = Exécute tous les contrôles (sans effectuer de corrections)\n"
 
 #: src/tools/dbverify.c:239
-#, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr "\t-g = Contrôle des orphelins (noms/refns)\n"
 
 #: src/tools/dbverify.c:240
-#, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr "\t-G = Contrôle & correction des orphelines (noms/refns)\n"
 
 #: src/tools/dbverify.c:241
-#, c-format
 msgid "\t-i = Check individuals\n"
 msgstr "\t-i = Contrôle des individus\n"
 
 #: src/tools/dbverify.c:242
-#, c-format
 msgid "\t-f = Check families\n"
 msgstr "\t-f = Contrôle des familles\n"
 
 #: src/tools/dbverify.c:243
-#, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 "\t-F = Modification de tous les liens familliaux erronés (en _badptr)\n"
 
 #: src/tools/dbverify.c:244
-#, c-format
 msgid "\t-h = Display help text (this text)\n"
 msgstr "\t-h = Affiche le texte d'aide (ce texte)\n"
 
 #: src/tools/dbverify.c:245
-#, c-format
 msgid "\t-s = Check sours\n"
 msgstr "\t-s = Contrôle des sources\n"
 
 #: src/tools/dbverify.c:246
-#, c-format
 msgid "\t-e = Check events\n"
 msgstr "\t-e = Contrôle des événements\n"
 
 #: src/tools/dbverify.c:247
-#, c-format
 msgid "\t-x = Check others\n"
 msgstr "\t-x = Contrôle des enregistrements divers\n"
 
 #: src/tools/dbverify.c:248
-#, c-format
 msgid "\t-l = Check database structure\n"
 msgstr "\t-l = Contrôle de la structure de la base\n"
 
 #: src/tools/dbverify.c:249
-#, c-format
 msgid "\t-m = Check for records missing data entries\n"
 msgstr "\t-m = Contrôle des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:250
-#, c-format
 msgid "\t-M = Fix records missing data entries\n"
 msgstr "\t-M = Correction des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:251
-#, c-format
 msgid "\t-D = Fix bad delete entries\n"
 msgstr "\t-D = Correction des enregistrements supprimés erronés\n"
 
 #: src/tools/dbverify.c:252
-#, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
 msgstr "\t-n = Verbeux (affiche chaque enregistrement traité)\n"
 
@@ -5193,7 +5120,6 @@ msgid "Failed to fix missing undeleted record %s"
 msgstr "Échec de la correction d'un enregistrement non effacé manquant %s"
 
 #: src/tools/dbverify.c:1117
-#, c-format
 msgid "Master fkey misaligned"
 msgstr "Fclé principale mal alignée"
 
@@ -5203,22 +5129,18 @@ msgid "Cycle in indexes, file %s found again!\n"
 msgstr "Boucle dans les index, fichier %s déjà trouvé !\n"
 
 #: src/tools/dbverify.c:1151
-#, c-format
 msgid "Error loading index at key"
 msgstr "Erreur de lecture de l'index à la clé"
 
 #: src/tools/dbverify.c:1199
-#, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "1ère clé du bloc avant la limite parent\n"
 
 #: src/tools/dbverify.c:1207
-#, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Dernière clé du bloc après la limité parent\n"
 
 #: src/tools/dbverify.c:1215
-#, c-format
 msgid "Key not below next key"
 msgstr "La clé n'est pas avant la clé suivante"
 
@@ -5249,7 +5171,7 @@ msgstr "Correction enregistrements manquants (%s)"
 #: src/tools/dbverify.c:1420
 #, c-format
 msgid "Checking %s"
-msgstr ""
+msgstr "Vérification %s"
 
 #: src/tools/dbverify.c:1476
 #, c-format
@@ -5270,7 +5192,6 @@ msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
 #: src/tools/dbverify.c:1506
-#, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 
@@ -5278,3 +5199,6 @@ msgstr "ERREUR FATALE :"
 #, c-format
 msgid "In file <%s> at line %d"
 msgstr "Dans le fichier <%s> à la ligne %d"
+
+#~ msgid "Le fichier de clé a une version incorrecte."
+#~ msgstr "Le fichier de clé a une version incorrecte."
