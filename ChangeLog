@@ -17,6 +17,10 @@
 
 	Fix typo ("opend") in userguide.
 
+	* ChangeLog docs/ll-userguide.html docs/ll-userguide.pdf
+
+	Regenerate docs
+
 2007-08-06 Stephen Dum
 
 	* ChangeLog docs/ll-userguide.xml src/liflines/lines_usage.c

@@ -79,7 +79,7 @@ CLASS="application"
 ></DT
 ><DT
 ><A
-HREF="#AEN195"
+HREF="#AEN190"
 >INTRODUCTION TO <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
@@ -87,133 +87,157 @@ CLASS="acronym"
 ></DT
 ><DT
 ><A
-HREF="#AEN366"
+HREF="#AEN361"
 >MAIN MENU</A
 ></DT
 ><DT
 ><A
-HREF="#AEN375"
+HREF="#AEN370"
 >CODESET</A
 ></DT
 ><DT
 ><A
-HREF="#AEN385"
+HREF="#AEN380"
 >ENTERING THE FIRST PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN429"
+HREF="#AEN424"
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN485"
+HREF="#AEN480"
 >BASICS OF BROWSING</A
 ></DT
 ><DT
 ><A
-HREF="#AEN496"
+HREF="#AEN491"
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN522"
+HREF="#AEN517"
 >ZIP IDENTIFYING A NEW PERSON</A
 ></DT
 ><DT
 ><A
-HREF="#AEN537"
+HREF="#AEN532"
 >BROWSE DISPLAY BASICS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN540"
+HREF="#AEN535"
 >PERSON BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN709"
+HREF="#AEN704"
 >LIST BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN797"
+HREF="#AEN792"
 >FAMILY BROWSE SCREEN</A
 ></DT
 ><DT
 ><A
-HREF="#AEN907"
+HREF="#AEN902"
 >TANDEM PERSON BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN994"
+HREF="#AEN989"
 >TANDEM FAMILY BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1102"
+HREF="#AEN1097"
 >PEDIGREE BROWSE MODE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1165"
+HREF="#AEN1160"
 >SEARCH MENU</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN1177"
+HREF="#AEN1172"
 >Search Patterns</A
 ></DT
 ></DL
 ></DD
 ><DT
 ><A
-HREF="#AEN1217"
+HREF="#AEN1212"
 >ADD OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1224"
+HREF="#AEN1219"
 >DELETE OPERATION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1234"
+HREF="#AEN1229"
 >CODESET CONVERSION</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1339"
+HREF="#AEN1334"
 >MISCELLANEOUS UTILITIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1444"
+HREF="#AEN1439"
 >IMPORT ERRORS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1517"
+HREF="#AEN1512"
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1682"
+HREF="#AEN1677"
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1691"
+HREF="#AEN1686"
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1740"
+HREF="#AEN1735"
 >System and User Properties</A
 ></DT
+><DT
+><A
+HREF="#AEN2031"
+>Other Executables</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN2033"
+>dbverify</A
+></DT
+><DT
+><A
+HREF="#AEN2086"
+>btedit</A
+></DT
+><DT
+><A
+HREF="#AEN2095"
+>llexec</A
+></DT
+></DL
+></DD
 ></DL
 ></DD
 ></DL
@@ -486,6 +510,7 @@ in the readme file.  A number of executables are built
 which can be put it in a
 directory in your execution path. If you get the program in
 executable form, follow whatever instructions came with it.
+The following executables are included:
 </P
 ><DIV
 CLASS="glosslist"
@@ -559,7 +584,8 @@ CLASS="application"
 and some <TT
 CLASS="application"
 >LifeLines</TT
-> programs.
+> programs to demonstrate
+the capabilities of the report language.
 Included with these in the reports directory is a brief overview
 of the reports in the file index.html.
 </P
@@ -586,7 +612,7 @@ CLASS="userinput"
 ><B
 ><B
 CLASS="command"
->lines</B
+>llines</B
 > <TT
 CLASS="replaceable"
 ><I
@@ -618,27 +644,7 @@ CLASS="application"
 CLASS="application"
 >LifeLines</TT
 > at a
-     time. If you built the <TT
-CLASS="application"
->LifeLines</TT
->
-     executable from the source package, the executable may be
-     named <B
-CLASS="command"
->llines</B
-> rather than
-     <B
-CLASS="command"
->lines</B
->. You may either change its name or
-     invoke <TT
-CLASS="application"
->LifeLines</TT
-> by using the
-     command <B
-CLASS="command"
->llines</B
-> instead.
+     time. 
 
 </P
 ><P
@@ -659,7 +665,7 @@ WIDTH="100%"
 CLASS="synopsis"
 >&#13;        <B
 CLASS="command"
->lines</B
+>llines</B
 > <TT
 CLASS="option"
 >[-acdfiklnortuwxzCFI]</TT
@@ -684,7 +690,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN111"
+NAME="AEN106"
 ></A
 ><P
 ></P
@@ -1069,7 +1075,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN195"
+NAME="AEN190"
 ></A
 >INTRODUCTION TO <SPAN
 CLASS="acronym"
@@ -1223,7 +1229,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN227"
+NAME="AEN222"
 ></A
 ><P
 ><B
@@ -1468,7 +1474,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN266"
+NAME="AEN261"
 ></A
 ><P
 ><B
@@ -1522,7 +1528,7 @@ CLASS="userinput"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN273"
+NAME="AEN268"
 ></A
 ><P
 ><B
@@ -1847,7 +1853,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN326"
+NAME="AEN321"
 ></A
 ><P
 ><B
@@ -2096,7 +2102,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN366"
+NAME="AEN361"
 ></A
 >MAIN MENU</H2
 ><P
@@ -2177,7 +2183,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN375"
+NAME="AEN370"
 ></A
 >CODESET</H2
 ><P
@@ -2266,7 +2272,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN385"
+NAME="AEN380"
 ></A
 >ENTERING THE FIRST PERSON</H2
 ><P
@@ -2301,7 +2307,7 @@ CLASS="acronym"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN392"
+NAME="AEN387"
 ></A
 ><P
 ><B
@@ -2399,7 +2405,7 @@ CLASS="option"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN405"
+NAME="AEN400"
 ></A
 ><P
 ><B
@@ -2554,7 +2560,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN429"
+NAME="AEN424"
 ></A
 >SCREEN EDITORS AND ENVIRONMENT VARIABLES</H2
 ><P
@@ -2814,7 +2820,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN485"
+NAME="AEN480"
 ></A
 >BASICS OF BROWSING</H2
 ><P
@@ -2885,7 +2891,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN496"
+NAME="AEN491"
 ></A
 >IDENTIFYING A PERSON OR LIST OF PERSONS TO BROWSE</H2
 ><P
@@ -2943,7 +2949,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN504"
+NAME="AEN499"
 ></A
 ><P
 ><B
@@ -2973,7 +2979,7 @@ t/wtmr/iv<br>
 <DIV
 CLASS="example"
 ><A
-NAME="AEN508"
+NAME="AEN503"
 ></A
 ><P
 ><B
@@ -3054,7 +3060,7 @@ CLASS="application"
 >LifeLines</TT
 > enters the person
      browsing mode displaying that person.  You can also browse to
-     a Family, Source, or Note by entering it's key, but you must
+     a Family, Source, or Note by entering its key, but you must
      include the letter identifing the key type, thus F11, S1, or N3
      would browse to the family, source or note corresponding to the key
      if it exists.
@@ -3073,7 +3079,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN522"
+NAME="AEN517"
 ></A
 >ZIP IDENTIFYING A NEW PERSON</H2
 ><P
@@ -3182,7 +3188,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN537"
+NAME="AEN532"
 ></A
 >BROWSE DISPLAY BASICS</H2
 ><P
@@ -3200,7 +3206,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN540"
+NAME="AEN535"
 ></A
 >PERSON BROWSE SCREEN</H2
 ><P
@@ -3812,7 +3818,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN709"
+NAME="AEN704"
 ></A
 >LIST BROWSE SCREEN</H2
 ><P
@@ -4142,7 +4148,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN797"
+NAME="AEN792"
 ></A
 >FAMILY BROWSE SCREEN</H2
 ><P
@@ -4554,7 +4560,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN907"
+NAME="AEN902"
 ></A
 >TANDEM PERSON BROWSE MODE</H2
 ><P
@@ -4865,7 +4871,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN994"
+NAME="AEN989"
 ></A
 >TANDEM FAMILY BROWSE MODE</H2
 ><P
@@ -5225,7 +5231,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1102"
+NAME="AEN1097"
 ></A
 >PEDIGREE BROWSE MODE</H2
 ><P
@@ -5456,7 +5462,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1165"
+NAME="AEN1160"
 ></A
 >SEARCH MENU</H2
 ><P
@@ -5544,7 +5550,7 @@ CLASS="sect2"
 ><HR><H3
 CLASS="sect2"
 ><A
-NAME="AEN1177"
+NAME="AEN1172"
 ></A
 >Search Patterns</H3
 ><P
@@ -5554,7 +5560,7 @@ when used in a pattern:
 <DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1180"
+NAME="AEN1175"
 ></A
 ><P
 ></P
@@ -5781,7 +5787,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1217"
+NAME="AEN1212"
 ></A
 >ADD OPERATION</H2
 ><P
@@ -5828,7 +5834,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1224"
+NAME="AEN1219"
 ></A
 >DELETE OPERATION</H2
 ><P
@@ -5892,7 +5898,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1234"
+NAME="AEN1229"
 ></A
 >CODESET CONVERSION</H2
 ><P
@@ -6340,7 +6346,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1339"
+NAME="AEN1334"
 ></A
 >MISCELLANEOUS UTILITIES</H2
 ><P
@@ -6472,7 +6478,7 @@ identifiers for individuals, families, sources, notes, etc.) in the
 <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
-> with it's own.
+> with its own.
 These identifiers are reserved by the <SPAN
 CLASS="acronym"
 >GEDCOM</SPAN
@@ -6613,7 +6619,7 @@ CLASS="replaceable"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1411"
+NAME="AEN1406"
 ></A
 ><P
 ><B
@@ -6713,7 +6719,7 @@ record template with the following:
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1428"
+NAME="AEN1423"
 ></A
 ><P
 ><B
@@ -6741,7 +6747,7 @@ CLASS="programlisting"
 you would edit the user option file to contain:<DIV
 CLASS="example"
 ><A
-NAME="AEN1431"
+NAME="AEN1426"
 ></A
 ><P
 ><B
@@ -6760,7 +6766,7 @@ CLASS="literallayout"
 or, using the \n escape so as to keep the entry on one line:<DIV
 CLASS="example"
 ><A
-NAME="AEN1434"
+NAME="AEN1429"
 ></A
 ><P
 ><B
@@ -6801,7 +6807,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1444"
+NAME="AEN1439"
 ></A
 >IMPORT ERRORS</H2
 ><P
@@ -6873,7 +6879,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1460"
+NAME="AEN1455"
 ></A
 ><P
 ><B
@@ -6920,7 +6926,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1471"
+NAME="AEN1466"
 ></A
 ><P
 ><B
@@ -6972,7 +6978,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1482"
+NAME="AEN1477"
 ></A
 ><P
 ><B
@@ -7012,7 +7018,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1489"
+NAME="AEN1484"
 ></A
 ><P
 ><B
@@ -7063,7 +7069,7 @@ not defined.</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1500"
+NAME="AEN1495"
 ></A
 ><P
 ><B
@@ -7100,7 +7106,7 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1507"
+NAME="AEN1502"
 ></A
 ><P
 ><B
@@ -7139,7 +7145,7 @@ value field (INDI I99).</B
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN1514"
+NAME="AEN1509"
 ></A
 ><P
 ><B
@@ -7172,7 +7178,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1517"
+NAME="AEN1512"
 ></A
 >HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS</H2
 ><P
@@ -7430,7 +7436,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1562"
+NAME="AEN1557"
 ></A
 ><P
 ><B
@@ -8150,7 +8156,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1682"
+NAME="AEN1677"
 ></A
 >FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES</H2
 ><P
@@ -8224,7 +8230,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1691"
+NAME="AEN1686"
 ></A
 >LINKING RECORDS TOGETHER AND USING THE REFN FEATURE</H2
 ><P
@@ -8311,7 +8317,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1706"
+NAME="AEN1701"
 ></A
 ><P
 ><B
@@ -8433,7 +8439,7 @@ CLASS="structfield"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN1724"
+NAME="AEN1719"
 ></A
 ><P
 ><B
@@ -8543,7 +8549,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1740"
+NAME="AEN1735"
 ></A
 >System and User Properties</H2
 ><P
@@ -8588,7 +8594,7 @@ overrides prior definitions.  Configuration files are read as follows:
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1749"
+NAME="AEN1744"
 ></A
 ><P
 ></P
@@ -8688,7 +8694,7 @@ VALIGN="MIDDLE"
 ><TD
 ALIGN="LEFT"
 VALIGN="MIDDLE"
->&#13;If LLCONFIGFILE is defined in the command line or database table and it's 
+>&#13;If LLCONFIGFILE is defined in the command line or database table and its 
 value is the name of a file, load parameters from that file.
 </TD
 ></TR
@@ -9500,6 +9506,321 @@ fetched from the system when possible.
 </P
 ></DD
 ></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2031"
+></A
+>Other Executables</H2
+><DIV
+CLASS="sect2"
+><H3
+CLASS="sect2"
+><A
+NAME="AEN2033"
+></A
+>dbverify</H3
+><P
+>&#13;dbverify is a utility to check an existing database and report on various
+inconsistencies.  It can also repair a number of issues found.
+</P
+><P
+>&#13;dbverify supports the following options:
+</P
+><DIV
+CLASS="informaltable"
+><A
+NAME="AEN2037"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-a</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Perform all checks (does not include fixes)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-D </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Fix bad delete entries</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-e </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check events</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-f </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check families</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-F </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Alter any bad family lineage pointers (to _badptr)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+> -g </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check for ghosts (names/refns)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-G </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check for &#38; fix ghosts (names/refns)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-h </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Display help text (this text)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-i </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check individuals</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-l </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check database structure</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-m </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check for records missing data entries</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-M </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Fix records missing data entries</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-n </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Noisy (echo every record processed)</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-s </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check sours</TD
+></TR
+><TR
+><TD
+WIDTH="48"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>-x </TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Check others</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN2086"
+></A
+>btedit</H3
+><P
+>&#13;This program edits raw binary btree blocks in a 
+<TT
+CLASS="application"
+>LifeLines</TT
+> lifelines database file.
+Some information about its usage is provided by running:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;btedit -h
+</PRE
+></TD
+></TR
+></TABLE
+>
+Do NOT use this unless
+you know what you are doing and you have backed up
+your database.
+</P
+><P
+>&#13;The 
+<TT
+CLASS="application"
+>LifeLines</TT
+> database has proven rather robust over
+the years.  However, it is important to make frequent backups of any
+database.  If you experience database corruption, make sure you save a copy
+of the database before trying any recovery process.  Only work on a copy of
+the data so that the data is not further damaged.
+</P
+><P
+>&#13;Try exporting the database to a gedcom file from within 
+<B
+CLASS="command"
+>llines</B
+>.  Compare the saved file with previously saved
+versions.  Editing the gedcom file to correct
+issues is often easier than using btedit.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><HR><H3
+CLASS="sect2"
+><A
+NAME="AEN2095"
+></A
+>llexec</H3
+><P
+>&#13;llexec envokes the LifeLines report execution program without a GUI
+for non-interactive processing of report programs.  The supported options are
+the same as for <B
+CLASS="command"
+>llines</B
+>.  
+</P
+><P
+>&#13;An example usage, which will open the database 'myfamily' and run the report
+eol.ll is:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;llexec myfamily -x eol 
+</PRE
+></TD
+></TR
+></TABLE
+>
+Programs that require input, will prompt for that data and read from standard
+input. If a program required the input of a 0 or 1 to control the output,
+the following is one way to allow use of llexec in a script:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;echo "1" | llexec myfamily -x myprog 
+</PRE
+></TD
+></TR
+></TABLE
+>
+</P
 ></DIV
 ></DIV
 ></DIV
