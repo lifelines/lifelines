@@ -148,7 +148,7 @@ repaint_search_menu (UIWINDOW uiwin)
 			, sizeof(buffer), uu8);
 	}
 	mvccwaddstr(win, row++, 4, buffer);
-	mvccwaddstr(win, row++, 4, ("f  Full database scan"));
+	mvccwaddstr(win, row++, 4, _("f  Full database scan"));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 	/* set cursor position */
 	uiw_cury(uiwin) = 1;
