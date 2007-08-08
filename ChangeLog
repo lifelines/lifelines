@@ -1,3 +1,12 @@
+2007-08-08 lifelines stable 3.0.61 RELEASE
+
+2007-08-08 Perry Rapp
+
+	* ChangeLog po/da.po po/de.po po/el.po po/eo.po po/es.po
+	po/fr.po po/it.po po/nl.po po/pl.po po/rw.po po/sv.po
+
+	Create 3.0.61 release.
+
 2007-08-07 Perry Rapp
 
 	* ChangeLog src/liflines/searchui.c

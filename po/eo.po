@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-06 11:38-0400\n"
+"POT-Creation-Date: 2007-08-08 14:34-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -3762,7 +3762,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:21
 #, c-format
-msgid "%s invokes the Lifelines report execution program."
+msgid "%s invokes the Lifelines report execution program without GUI."
 msgstr ""
 
 #: src/liflines/lines_usage.c:23
@@ -4436,6 +4436,10 @@ msgstr[1] "c  Revizu þanøan historion (%d rikordoj)"
 #: src/liflines/searchui.c:147
 msgid "(change history is empty)"
 msgstr "(þanøa historio estas malplena)"
+
+#: src/liflines/searchui.c:151
+msgid "f  Full database scan"
+msgstr "f  Plena datumbaza ekzameno"
 
 #: src/liflines/searchui.c:220
 msgid "What scan type?"
@@ -5259,9 +5263,6 @@ msgstr "En dosiero <%s> æe linio %d"
 
 #~ msgid "Program"
 #~ msgstr "Programo"
-
-#~ msgid "f  Full database scan"
-#~ msgstr "f  Plena datumbaza ekzameno"
 
 #~ msgid "Error: output file <%s> could not be created.\n"
 #~ msgstr "Eraro: ne povas krei celdosieron <%s>.\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-06 11:38-0400\n"
+"POT-Creation-Date: 2007-08-08 14:34-0400\n"
 "PO-Revision-Date: 2005-04-15 17:56+0200\n"
 "Last-Translator: Piotr Bolek <piotr.bolek@7bulls.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -3785,7 +3785,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:21
 #, c-format
-msgid "%s invokes the Lifelines report execution program."
+msgid "%s invokes the Lifelines report execution program without GUI."
 msgstr ""
 
 #: src/liflines/lines_usage.c:23
@@ -4466,6 +4466,10 @@ msgstr[2] "c  Zobacz historiê zmian (%d rekordów)"
 #: src/liflines/searchui.c:147
 msgid "(change history is empty)"
 msgstr "(historia zmian pusta)"
+
+#: src/liflines/searchui.c:151
+msgid "f  Full database scan"
+msgstr "f  Przeszukiwanie ca³ej bazy"
 
 #: src/liflines/searchui.c:220
 msgid "What scan type?"
@@ -5294,9 +5298,6 @@ msgstr "W pliku <%s> w wierszu %d"
 
 #~ msgid "Program"
 #~ msgstr "Program"
-
-#~ msgid "f  Full database scan"
-#~ msgstr "f  Przeszukiwanie ca³ej bazy"
 
 #~ msgid "Error: output file <%s> could not be created.\n"
 #~ msgstr "B³±d: nie mo¿na utworzyæ pliku wyj¶ciowego <%s>.\n"

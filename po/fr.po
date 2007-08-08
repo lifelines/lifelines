@@ -6,7 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Lifelines 3.0.61\n"
-"POT-Creation-Date: 2007-08-07 09:03+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-08 14:34-0400\n"
 "PO-Revision-Date: 2007-08-07 09:50+0200\n"
 "Last-Translator: Patrick Texier <p.texier@genindre.org>\n"
 "Language-Team: Not a language team\n"
@@ -151,10 +152,12 @@ msgid "Missing NAME line in INDI record; record ignored.\n"
 msgstr "Ligne NAME manquante dans enr. INDI ; enr. ignoré.\n"
 
 #: src/gedlib/init.c:228 src/tools/btedit.c:207
+#, c-format
 msgid "Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."
 msgstr "Copyright © 1991-2007 Thomas T. Wetmore IV et al."
 
 #: src/gedlib/init.c:230 src/tools/btedit.c:209
+#, c-format
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -164,6 +167,7 @@ msgstr ""
 "COMMERCIALISATION ou l'ADÉQUATION À UN BUT PARTICULIER."
 
 #: src/gedlib/init.c:235 src/tools/btedit.c:214
+#, c-format
 msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
 msgstr "Écrit par Tom Wetmore. Maintenu à lifelines.sourceforge.net."
 
@@ -2384,6 +2388,7 @@ msgid "NO NAME"
 msgstr "NON DÉNOMMÉ"
 
 #: src/gedlib/node.c:1167
+#, c-format
 msgid "Node memory leaks:"
 msgstr "Noeuds-mémoire perdus :"
 
@@ -2395,6 +2400,7 @@ msgstr[0] "%d objet perdu"
 msgstr[1] "%d objets perdus"
 
 #: src/gedlib/record.c:358
+#, c-format
 msgid "Record memory leaks:"
 msgstr "Enregistrements en mémoire perdus :"
 
@@ -3080,6 +3086,7 @@ msgid "the arg to unlock must be a record or node"
 msgstr "le paramètre à débloquer doit être un enregistrement ou un noeud"
 
 #: src/interp/pvalalloc.c:295
+#, c-format
 msgid "PVALUE memory leak report:"
 msgstr "Échec mémoire PVALUE :"
 
@@ -3760,6 +3767,7 @@ msgid "%s invokes the Lifelines GUI."
 msgstr "%s appelle l'interface utilisateur Lifelines"
 
 #: src/liflines/lines_usage.c:26
+#, c-format
 msgid ""
 "Lifelines is a program to manipulate genealogical information\n"
 "in lineage-linked GEDCOM format. It has a curses interface and a\n"
@@ -3787,38 +3795,47 @@ msgid "Usage: %s [OPTIONS] [database]"
 msgstr "Utilisation : %s [OPTIONS] [base]"
 
 #: src/liflines/lines_usage.c:38 src/tools/btedit.c:238
+#, c-format
 msgid "Options:"
 msgstr "Options :"
 
 #: src/liflines/lines_usage.c:40
+#, c-format
 msgid "-C[FILE]"
 msgstr "-C[FICHIER}"
 
 #: src/liflines/lines_usage.c:42
+#, c-format
 msgid "Specify configuration file location"
 msgstr "Indiquez l'emplacement du fichier de configuration"
 
 #: src/liflines/lines_usage.c:44
+#, c-format
 msgid "Finnish option (if compiled to allow Finnish option)"
 msgstr "Option finlandais (si c'est compilé avec l'option)"
 
 #: src/liflines/lines_usage.c:46
+#, c-format
 msgid "-I[KEY=VALUE]"
 msgstr "-I[CLÉ=VALEUR]"
 
 #: src/liflines/lines_usage.c:48
+#, c-format
 msgid "Specify a user property (e.g. -ILLEDITOR=gvim)"
 msgstr "Indiquez une propriété utilisateur (ex -ILLEDITOR=gvim)"
 
 #: src/liflines/lines_usage.c:50
+#, c-format
 msgid "log dynamic memory operation (for debugging)"
 msgstr "trac des opérations de mémoire dynamique (pour mise au point)"
 
 #: src/liflines/lines_usage.c:52
+#, c-format
 msgid "-c[TYPE][DIRECT,INDIRECT]"
 msgstr "-c[TYPE][DIRECT,INDIRECT]"
 
 #: src/liflines/lines_usage.c:54
+#, c-format
 msgid ""
 "supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
 "\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"
@@ -3827,38 +3844,47 @@ msgstr ""
 "des caches directs de pers. et de fam. à 400, et des caches indirects à 4000)"
 
 #: src/liflines/lines_usage.c:57
+#, c-format
 msgid "debug mode (disable signal trapping)"
 msgstr "mode de déboggage (désactive les 'trappes' de signal)"
 
 #: src/liflines/lines_usage.c:59
+#, c-format
 msgid "force open (for recovery from errors or power failure)"
 msgstr "force l'ouverture (pour reprendre après des erreurs ou une coupure)"
 
 #: src/liflines/lines_usage.c:61
+#, c-format
 msgid "open database with immutable access (for use on read-only media)"
 msgstr "ouvre la base en lecture seule (pour un média en lecture seule)"
 
 #: src/liflines/lines_usage.c:63
+#, c-format
 msgid "always show keys (even if REFN available)"
 msgstr "montre toujours les clés (même si un REFN est disponible)"
 
 #: src/liflines/lines_usage.c:65
+#, c-format
 msgid "unlock a database (for correct access on read-write media)"
 msgstr "débloque une base (pour un accès correct en lecture-écriture)"
 
 #: src/liflines/lines_usage.c:67
+#, c-format
 msgid "lock a database (for use on read-only media)"
 msgstr "bloque une base (pour un média en lecture seule)"
 
 #: src/liflines/lines_usage.c:69
+#, c-format
 msgid "do not use traditional family rules"
 msgstr "ne pas utiliser les règles de famille traditionelle"
 
 #: src/liflines/lines_usage.c:71
+#, c-format
 msgid "Specify program output filename (eg, -o/tmp/mytests)"
 msgstr "Indique le fichier de sortie pu programme (ex : -o/tmp/mestests)"
 
 #: src/liflines/lines_usage.c:73
+#, c-format
 msgid ""
 "open database with read-only access (prohibiting other\n"
 "\t\twrite access)"
@@ -3867,14 +3893,17 @@ msgstr ""
 "\t\taccès en écriture)"
 
 #: src/liflines/lines_usage.c:76
+#, c-format
 msgid "trace function calls in report programs (for debugging)"
 msgstr "trace les appels de fonction dans les rapports (pour mise au point)"
 
 #: src/liflines/lines_usage.c:78
+#, c-format
 msgid "-u[HEIGHT,WIDTH]"
 msgstr "-u[LARGEUR,HAUTEUR]"
 
 #: src/liflines/lines_usage.c:80
+#, c-format
 msgid ""
 "specify window size (eg, -u120,34 specifies 120 columns\n"
 "\t\tby 34 rows)"
@@ -3883,18 +3912,22 @@ msgstr ""
 "\t\tet 34 lignes"
 
 #: src/liflines/lines_usage.c:83
+#, c-format
 msgid "display this help and exit"
 msgstr "affiche cette aide et sort"
 
 #: src/liflines/lines_usage.c:85
+#, c-format
 msgid "open database with writeable access (this is the default)"
 msgstr "ouvre la base avec un accès en écriture (défaut)"
 
 #: src/liflines/lines_usage.c:89
+#, c-format
 msgid "execute a single lifelines report program directly"
 msgstr "éxécute un programme d'édition lifelines directement"
 
 #: src/liflines/lines_usage.c:91
+#, c-format
 msgid ""
 "Use normal ASCII characters for drawing lines, instead of\n"
 "\t\tspecial VT100 terminal characters"
@@ -3903,10 +3936,12 @@ msgstr ""
 "caractères spéciaux de terminal VT100"
 
 #: src/liflines/lines_usage.c:94
+#, c-format
 msgid "output version information and exit"
 msgstr "affiche les informations de version et sort"
 
 #: src/liflines/lines_usage.c:96 src/tools/btedit.c:244
+#, c-format
 msgid "Examples:"
 msgstr "Exemples :"
 
@@ -3916,10 +3951,12 @@ msgid "%s myfamily -x eol"
 msgstr "%s mafamille -e eol"
 
 #: src/liflines/lines_usage.c:101
+#, c-format
 msgid "Open the database 'myfamily' with Lifelines"
 msgstr "Ouvre la base 'mafamille' avec Lifelines"
 
 #: src/liflines/lines_usage.c:103
+#, c-format
 msgid "and run the eol.ll report"
 msgstr "et exécute le rapport eol.ll"
 
@@ -3929,10 +3966,12 @@ msgid "%s -f myfamily -x eol"
 msgstr "%s -f mafamille -x eol"
 
 #: src/liflines/lines_usage.c:107
+#, c-format
 msgid "Unlock database 'myfamily', after a power failure left the"
 msgstr "Débloque la base 'mafamille' après une coupure laissant la"
 
 #: src/liflines/lines_usage.c:109
+#, c-format
 msgid "database locked and run 'eol.ll' report"
 msgstr "base bloquée et lance le rapport 'eol.ll'"
 
@@ -3942,6 +3981,7 @@ msgid "%s myfamily"
 msgstr "%s mafamille"
 
 #: src/liflines/lines_usage.c:114
+#, c-format
 msgid "Open database 'myfamily' with Lifelines"
 msgstr "Ouvre la base 'mafamille' avec Lifelines"
 
@@ -3951,6 +3991,7 @@ msgid "%s -f myfamily"
 msgstr "%s -f mafamille"
 
 #: src/liflines/lines_usage.c:118
+#, c-format
 msgid ""
 "Unlock database 'myfamily', after a power failure left\n"
 "\t\tthe database locked"
@@ -3959,18 +4000,22 @@ msgstr ""
 " \t\tla base bloquée"
 
 #: src/liflines/lines_usage.c:122
+#, c-format
 msgid "REPORTING BUGS"
 msgstr "RECENSEMENT DES BOGUES"
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:250
+#, c-format
 msgid "Report bugs to lifelines.sourceforge.net"
 msgstr "Envoyez les bogues à lifefelines.sourceforge.net."
 
 #: src/liflines/lines_usage.c:126
+#, c-format
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 #: src/liflines/lines_usage.c:131
+#, c-format
 msgid "SEE ALSO"
 msgstr "VOIR AUSSI"
 
@@ -4172,6 +4217,7 @@ msgid "Enter pattern to match against author."
 msgstr "Entrez un motif de recherche pour un auteur."
 
 #: src/liflines/screen.c:317
+#, c-format
 msgid "initscr failed"
 msgstr "échec de initscr"
 
@@ -4680,10 +4726,12 @@ msgid "Current database"
 msgstr "Base ouverte"
 
 #: src/tools/btedit.c:108
+#, c-format
 msgid "btedit requires 2 arguments (btree and key)."
 msgstr "btedit demande 2 paramètres (arbre et clé)."
 
 #: src/tools/btedit.c:110
+#, c-format
 msgid "See `btedit --help' for more information."
 msgstr "Voir `btedit --help' for plus d'informations."
 
@@ -4703,18 +4751,22 @@ msgid "Error accessing record: %s"
 msgstr "Erreur d'accès à l'enregistrement : %s"
 
 #: src/tools/btedit.c:135
+#, c-format
 msgid "Editor or system call failed."
 msgstr "L'éditeur ou un appel-système ont échoué."
 
 #: src/tools/btedit.c:137
+#, c-format
 msgid "Database was not be modified."
 msgstr "La base n'a pas été modifiée."
 
 #: src/tools/btedit.c:143
+#, c-format
 msgid "Readonly database can not be modified."
 msgstr "Une base en lecture seule ne peut être modifiée."
 
 #: src/tools/btedit.c:150
+#, c-format
 msgid "Error writing file 'btedit.tmp'."
 msgstr "Erreur d'écriture du fichier 'btedit.tmp'."
 
@@ -4732,6 +4784,7 @@ msgid "/home/users/myname/lifelines/databases/myfamily"
 msgstr "/home/users/myname/lifelines/databases/myfamily"
 
 #: src/tools/btedit.c:231
+#, c-format
 msgid ""
 "lifelines `btedit' edits raw binary btree blocks\n"
 "in lifelines database files. Do NOT use this unless\n"
@@ -4744,14 +4797,17 @@ msgstr ""
 "de votre base."
 
 #: src/tools/btedit.c:236
+#, c-format
 msgid "Usage btedit [database] [rkey]"
 msgstr "Utulisation btedit [base] [clé]"
 
 #: src/tools/btedit.c:240
+#, c-format
 msgid "\t--help\tdisplay this help and exit"
 msgstr "\t--help\taffiche cette aide et sort"
 
 #: src/tools/btedit.c:242
+#, c-format
 msgid "\t--version\toutput version information and exit"
 msgstr "\t --version\taffiche les informations de version et sort"
 
@@ -4762,6 +4818,7 @@ msgid "\tbtedit %s I34"
 msgstr "\tbtedit %s I34"
 
 #: src/tools/btedit.c:248
+#, c-format
 msgid "edit raw btree block for person I34"
 msgstr "Modifie l'arbre pour la personne I34"
 
@@ -4870,71 +4927,88 @@ msgid "\\My Documents\\LifeLines\\Databases\\MyFamily"
 msgstr "\\My Documents\\LifeLines\\Databases\\MyFamily"
 
 #: src/tools/dbverify.c:236
+#, c-format
 msgid "usage: dbverify -(flags) <btree>\n"
 msgstr "utilisation : dbverify -(paramètres) <btree>\n"
 
 #: src/tools/dbverify.c:237
+#, c-format
 msgid "flags:\n"
 msgstr "paramètres :\n"
 
 #: src/tools/dbverify.c:238
+#, c-format
 msgid "\t-a = Perform all checks (does not include fixes)\n"
 msgstr "\t-a = Exécute tous les contrôles (sans effectuer de corrections)\n"
 
 #: src/tools/dbverify.c:239
+#, c-format
 msgid "\t-g = Check for ghosts (names/refns)\n"
 msgstr "\t-g = Contrôle des orphelins (noms/refns)\n"
 
 #: src/tools/dbverify.c:240
+#, c-format
 msgid "\t-G = Check for & fix ghosts (names/refns)\n"
 msgstr "\t-G = Contrôle & correction des orphelines (noms/refns)\n"
 
 #: src/tools/dbverify.c:241
+#, c-format
 msgid "\t-i = Check individuals\n"
 msgstr "\t-i = Contrôle des individus\n"
 
 #: src/tools/dbverify.c:242
+#, c-format
 msgid "\t-f = Check families\n"
 msgstr "\t-f = Contrôle des familles\n"
 
 #: src/tools/dbverify.c:243
+#, c-format
 msgid "\t-F = Alter any bad family lineage pointers (to _badptr)\n"
 msgstr ""
 "\t-F = Modification de tous les liens familliaux erronés (en _badptr)\n"
 
 #: src/tools/dbverify.c:244
+#, c-format
 msgid "\t-h = Display help text (this text)\n"
 msgstr "\t-h = Affiche le texte d'aide (ce texte)\n"
 
 #: src/tools/dbverify.c:245
+#, c-format
 msgid "\t-s = Check sours\n"
 msgstr "\t-s = Contrôle des sources\n"
 
 #: src/tools/dbverify.c:246
+#, c-format
 msgid "\t-e = Check events\n"
 msgstr "\t-e = Contrôle des événements\n"
 
 #: src/tools/dbverify.c:247
+#, c-format
 msgid "\t-x = Check others\n"
 msgstr "\t-x = Contrôle des enregistrements divers\n"
 
 #: src/tools/dbverify.c:248
+#, c-format
 msgid "\t-l = Check database structure\n"
 msgstr "\t-l = Contrôle de la structure de la base\n"
 
 #: src/tools/dbverify.c:249
+#, c-format
 msgid "\t-m = Check for records missing data entries\n"
 msgstr "\t-m = Contrôle des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:250
+#, c-format
 msgid "\t-M = Fix records missing data entries\n"
 msgstr "\t-M = Correction des enregistrements sans données\n"
 
 #: src/tools/dbverify.c:251
+#, c-format
 msgid "\t-D = Fix bad delete entries\n"
 msgstr "\t-D = Correction des enregistrements supprimés erronés\n"
 
 #: src/tools/dbverify.c:252
+#, c-format
 msgid "\t-n = Noisy (echo every record processed)\n"
 msgstr "\t-n = Verbeux (affiche chaque enregistrement traité)\n"
 
@@ -5120,6 +5194,7 @@ msgid "Failed to fix missing undeleted record %s"
 msgstr "Échec de la correction d'un enregistrement non effacé manquant %s"
 
 #: src/tools/dbverify.c:1117
+#, c-format
 msgid "Master fkey misaligned"
 msgstr "Fclé principale mal alignée"
 
@@ -5129,18 +5204,22 @@ msgid "Cycle in indexes, file %s found again!\n"
 msgstr "Boucle dans les index, fichier %s déjà trouvé !\n"
 
 #: src/tools/dbverify.c:1151
+#, c-format
 msgid "Error loading index at key"
 msgstr "Erreur de lecture de l'index à la clé"
 
 #: src/tools/dbverify.c:1199
+#, c-format
 msgid "First key in block below parent's limit\n"
 msgstr "1ère clé du bloc avant la limite parent\n"
 
 #: src/tools/dbverify.c:1207
+#, c-format
 msgid "Last key in block above parent's limit\n"
 msgstr "Dernière clé du bloc après la limité parent\n"
 
 #: src/tools/dbverify.c:1215
+#, c-format
 msgid "Key not below next key"
 msgstr "La clé n'est pas avant la clé suivante"
 
@@ -5192,6 +5271,7 @@ msgid "No errors found"
 msgstr "Pas d'erreurs trouvées"
 
 #: src/tools/dbverify.c:1506
+#, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE :"
 

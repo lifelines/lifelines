@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-06 11:38-0400\n"
+"POT-Creation-Date: 2007-08-08 14:34-0400\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -4324,7 +4324,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:21
 #, c-format
-msgid "%s invokes the Lifelines report execution program."
+msgid "%s invokes the Lifelines report execution program without GUI."
 msgstr ""
 
 #: src/liflines/lines_usage.c:23
@@ -5036,6 +5036,11 @@ msgstr[0] "C Guhindura>> Urutonde Icyabitswe"
 #, fuzzy
 msgid "(change history is empty)"
 msgstr "(Guhindura>> Urutonde ni ubusa"
+
+#: src/liflines/searchui.c:151
+#, fuzzy
+msgid "f  Full database scan"
+msgstr "F Ububikoshingiro Gusikana"
 
 #: src/liflines/searchui.c:220
 #, fuzzy
@@ -5889,10 +5894,6 @@ msgstr "IDOSIYE ku Umurongo"
 
 #~ msgid "Program"
 #~ msgstr "Porogaramu"
-
-#, fuzzy
-#~ msgid "f  Full database scan"
-#~ msgstr "F Ububikoshingiro Gusikana"
 
 #, fuzzy
 #~ msgid "Error: output file <%s> could not be created.\n"

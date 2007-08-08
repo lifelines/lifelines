@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.55\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-06 11:38-0400\n"
+"POT-Creation-Date: 2007-08-08 14:34-0400\n"
 "PO-Revision-Date: 2007-04-17 23:10-0500\n"
 "Last-Translator: Larry Hamilton <lmh@hamiltongensociety.org>\n"
 "Language-Team: Not a language team\n"
@@ -3801,7 +3801,7 @@ msgstr "Tandom hojea solamente compatible con las personas o las familias."
 
 #: src/liflines/lines_usage.c:21
 #, c-format
-msgid "%s invokes the Lifelines report execution program."
+msgid "%s invokes the Lifelines report execution program without GUI."
 msgstr ""
 
 #: src/liflines/lines_usage.c:23
@@ -4483,6 +4483,11 @@ msgstr[1] ""
 #, fuzzy
 msgid "(change history is empty)"
 msgstr "El registro es vacío."
+
+#: src/liflines/searchui.c:151
+#, fuzzy
+msgid "f  Full database scan"
+msgstr "Ejecución de la exploración del nombre completo"
 
 #: src/liflines/searchui.c:220
 msgid "What scan type?"
