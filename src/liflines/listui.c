@@ -770,7 +770,7 @@ A solution would be to pass in what is known from browse_list, and then
 manufacture a listdisp here
 - Perry, 2002/01/01
 */
-	static STRING empstr49 = (STRING) "                                                 ";
+	static STRING empstr51 = (STRING) "                                                   ";
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row, len = length_indiseq(seq);
@@ -784,7 +784,7 @@ manufacture a listdisp here
 	calc_indiseq_names(seq); /* we certainly need the names */
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
-		mvccwaddstr(win, i, 1, empstr49);
+		mvccwaddstr(win, i, 1, empstr51);
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
