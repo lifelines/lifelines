@@ -149,7 +149,7 @@ open_or_create_database (INT alteration, STRING *dbused)
 
 	if (readonly || immutable || alteration)
 	{
-		llwprintf("Cannot create new database with -r, -i, -l, or -f flags.");
+		llwprintf(_("Cannot create new database with -r, -i, -l, or -f flags."));
 		return FALSE;
 	}
 	/*

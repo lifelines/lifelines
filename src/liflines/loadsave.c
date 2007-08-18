@@ -287,7 +287,7 @@ save_gedcom (void)
 	memset(&efeed, 0, sizeof(efeed));
 	efeed.added_rec_fnc = export_saved_rec;
 
-	llwprintf("Saving database `%s' in file `%s'.", readpath_file, fullpath);
+	llwprintf(_("Saving database `%s' in file `%s'."), readpath_file, fullpath);
 
 	/* Display 0 counts */
 	clear_rec_counts(0);

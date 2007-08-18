@@ -1,3 +1,10 @@
+2007-08-18 Perry Rapp
+
+	* ChangeLog src/liflines/loadsave.c src/liflines/selectdb.c
+
+	i18n strings (reported by Patrick Texier)
+	in open_or_create_database, save_gedcom.
+
 2007-08-10 lifelines stable 3.0.61-2 RELEASE
 
 2007-08-09 Perry Rapp
