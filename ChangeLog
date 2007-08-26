@@ -9,6 +9,14 @@
 	Fix GuiCodesetOut spelling (was incorrectly "GuiCodesetOutput")
 	and add explanatory comment about defaults.
 
+	* ChangeLog tt/Makefile.am src/liflines/import.c
+	*NEW tt/UTF-8__TrCyrillicAscii.tt
+
+	Check for & warn about lossy conversions during GEDCOM import.
+	New functions is_lossy_conversion & is_unicode_encoding_name.
+	Add translation table to partially transliterate Cyrillic 
+	into ASCII.
+
 2007-08-18 Perry Rapp
 
 	* ChangeLog src/liflines/loadsave.c src/liflines/selectdb.c

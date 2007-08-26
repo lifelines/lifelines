@@ -90,6 +90,8 @@ typedef struct gd_metadata_s {
 
 /* alphabetical */
 static BOOLEAN do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
+static BOOLEAN is_lossy_conversion(const char * cs_src, const char * cs_dest);
+static BOOLEAN is_unicode_encoding_name(const char * codeset);
 static void restore_record(NODE node, INT type, INT num);
 static STRING translate_key(STRING);
 static BOOLEAN translate_values(NODE, VPTR);
@@ -187,6 +189,20 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 			, _("Proceed without codeset conversion?")
 			))
 			goto end_import;
+	}
+
+	/* Warn if lossy code conversion likely */
+	if (gdcodeset[0] && int_codeset[0]) {
+		if (is_lossy_conversion(gdcodeset, int_codeset)) {
+			ZSTR zstr=zs_new();
+			zs_setf(zstr, _("Lossy codeset conversion (from <%s> to <%s>) likely")
+				, gdcodeset, int_codeset);
+			if (!ask_yes_or_no_msg(
+				zs_str(zstr)
+				, _("Proceed anyway?")
+				))
+				goto end_import;
+		}
 	}
 
 	/* validate */
@@ -404,4 +420,42 @@ translate_values (NODE node, VPTR param)
 	stdfree(nval(node));
 	nval(node) = strsave(new);
 	return TRUE;
+}
+/*============================================================
+ * is_lossy_conversion -- Is this a lossy codeset conversion?
+ * (we say it is if from Unicode to non-Unicode)
+ *==========================================================*/
+static BOOLEAN
+is_lossy_conversion (const char * cs_src, const char * cs_dest)
+{
+	/* if no destination, then no conversion, not lossy */
+	if (!cs_dest || !cs_dest[0]) return FALSE;
+	if (eqstr_ex(cs_src, cs_dest)) {
+		/* source same as destination, no conversion, not lossy */
+		return FALSE;
+	} else {
+		const char * cs_in = norm_charmap((char *)cs_src);
+		const char * cs_out = norm_charmap((char *)cs_dest);
+		/* conversion to unicode is not lossy */
+		if (is_unicode_encoding_name(cs_out)) return FALSE;
+		/* if source is ASCII, assume all ok, not lossy */
+		if (eqstr(cs_in, "ASCII")) return FALSE;
+		/* everything else assumed lossy */
+		return TRUE;
+	}
+}
+/*============================================================
+ * is_unicode_encoding_name -- Is this a unicode encoding?
+ *==========================================================*/
+static BOOLEAN
+is_unicode_encoding_name (const char * codeset)
+{
+	if (!codeset || !codeset[0]) return FALSE;
+	if (eqstr(codeset, "UTF-8")) return TRUE;
+	if (eqstr(codeset, "UCS-2LE")) return TRUE;
+	if (eqstr(codeset, "UCS-2BE")) return TRUE;
+	if (eqstr(codeset, "UTF-16LE")) return TRUE;
+	if (eqstr(codeset, "UTF-16BE")) return TRUE;
+	if (eqstr(codeset, "UTF-32")) return TRUE;
+	return FALSE;
 }

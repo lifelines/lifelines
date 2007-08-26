@@ -30,7 +30,8 @@ pkg_TT = \
 	README \
 	UTF-8_CP437.tt \
 	UTF-8_ISO-8859-2.tt \
-	UTF-8__unhtml.tt
+	UTF-8__unhtml.tt \
+	UTF-8__TrCyrillicAscii.tt
 
 EXTRA_DIST = \
 	$(pkg_TT) \
