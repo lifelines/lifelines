@@ -1,3 +1,9 @@
+2007-08-26 Perry Rapp
+
+	* ChangeLog lines.cfg.input
+
+	Add default in comment for user option AnnotatePointers.
+
 2007-08-18 Perry Rapp
 
 	* ChangeLog src/liflines/loadsave.c src/liflines/selectdb.c

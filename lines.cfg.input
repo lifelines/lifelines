@@ -9,7 +9,7 @@ dnl m4 lines.cfg.input > .linesrc
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2007-05-08
+# 2007-08-26
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -286,6 +286,7 @@ ifdef(`WINDOWS',
 # Add comment after pointers (during edit) (default is 0)
 # Eg, change 1 HUSB @I1@ to 1 HUSB @I1@ {{ John/SMITH }} 
 #AnnotatePointers=1
+# Default is 0
 
 # Display surnames in all caps on screen
 # Eg, display John/Smith as John/SMITH
