@@ -253,10 +253,13 @@ ifdef(`WINDOWS',
 # Default is none
 #GuiCodeset=8859-1
 # Default is none
+# If not specified, default is used (Windows DOS codepage or Unix nl_langinfo)
 
-# Suffix for codeset when converting to GUI codeset
-#GuiCodesetOutput=//TRANSLIT
+# GUI codeset to use when converting from internal to GUI
+# This is to allow opportunity to enable transliteration here
+#GuiCodesetOut=CP437//TRANSLIT
 # Default is none
+# If not specified, GuiCodeset is used (and see its default)
 
 # Coded charset name for editor use
 #EditorCodeset=8859-1

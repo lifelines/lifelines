@@ -4,6 +4,11 @@
 
 	Add default in comment for user option AnnotatePointers.
 
+	* ChangeLog lines.cfg.input
+
+	Fix GuiCodesetOut spelling (was incorrectly "GuiCodesetOutput")
+	and add explanatory comment about defaults.
+
 2007-08-18 Perry Rapp
 
 	* ChangeLog src/liflines/loadsave.c src/liflines/selectdb.c
