@@ -98,7 +98,9 @@ static void init_display_indi(RECORD irec, INT width);
 static void init_display_fam(RECORD frec, INT width);
 static void pedigree_line(CANVASDATA canvas, INT x, INT y, STRING string, INT overflow);
 static STRING person_display(NODE, NODE, INT);
-static void put_out_line(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag);
+static void put_out_line_int(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag);
+static void put_out_line_disp(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag);
+static void put_out_line_wk(UIWINDOW uiwin, INT x, INT y, STRING string, INT maxcol, INT flag, BOOLEAN disp);
 static STRING sh_fam_to_event_shrt(NODE node, STRING tag, STRING head
 	, INT len);
 static STRING sh_indi_to_event_long(NODE node, STRING tag
@@ -394,7 +396,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 		overflow = ((i+1 == hgt-5+ *scroll)&&(i+1 != Solen));
 		if (*scroll && (i == *scroll))
 			overflow = 1;
-		put_out_line(uiwin, localrow+5+i, rect->left, Sothers[i], rect->right, overflow);
+		put_out_line_int(uiwin, localrow+5+i, rect->left, Sothers[i], rect->right, overflow);
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
@@ -590,7 +592,7 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 		if (*scroll && (i == *scroll))
 			overflow = 1;
 		len = strlen(Sothers[i]+1);
-		put_out_line(uiwin, localrow+7+i, 1, Sothers[i]+1, maxcol, overflow);
+		put_out_line_int(uiwin, localrow+7+i, 1, Sothers[i]+1, maxcol, overflow);
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
@@ -952,15 +954,26 @@ pedigree_line (CANVASDATA canvas, INT y, INT x, STRING string, INT overflow)
 		string += delta;
 		x = canvas->rect->left;
 	}
-	put_out_line((UIWINDOW)canvas->param, y, x, string, canvas->rect->right, overflow);
+	put_out_line_disp((UIWINDOW)canvas->param, y, x, string, canvas->rect->right, overflow);
 }
 /*=====================================
  * put_out_line - move string to screen
  * but also append ++ at end if flagged
  * start string at x,y, and do not go beyond maxcol
+ * _disp version means string is already in display encoding
  *====================================*/
 static void
-put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
+put_out_line_disp (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
+{
+	put_out_line_wk(uiwin, y, x, string, maxcol, flag, TRUE);
+}
+static void
+put_out_line_int (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
+{
+	put_out_line_wk(uiwin, y, x, string, maxcol, flag, FALSE);
+}
+static void
+put_out_line_wk (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag, BOOLEAN disp)
 {
 	WINDOW * win = uiw_win(uiwin);
 	static LINESTRING buffer=0; /* local buffer resized when needed */
@@ -972,6 +985,8 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 		buflen = maxlen+1;
 		buffer = (LINESTRING)stdalloc(buflen);
 	}
+	/* TODO: Should convert to output codeset now, before limiting text */
+
 	/* copy into local buffer (here we enforce maxcol) */
 	llstrncpy(buffer, string, buflen, uu8);
 	if (flag) {
@@ -987,7 +1002,10 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 		buffer[i++] = '+';
 		buffer[i++] = '\0';
 	}
-	mvccwaddstr(win, y, x, buffer);
+	if (disp)
+		mvwaddstr(win, y, x, buffer);
+	else
+		mvccwaddstr(win, y, x, buffer);
 }
 /*==================================================================
  * show_childnumbers - toggle display of numbers for children
