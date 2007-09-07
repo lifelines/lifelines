@@ -954,7 +954,7 @@ pedigree_line (CANVASDATA canvas, INT y, INT x, STRING string, INT overflow)
 		string += delta;
 		x = canvas->rect->left;
 	}
-	put_out_line_disp((UIWINDOW)canvas->param, y, x, string, canvas->rect->right, overflow);
+	put_out_line_int((UIWINDOW)canvas->param, y, x, string, canvas->rect->right, overflow);
 }
 /*=====================================
  * put_out_line - move string to screen
