@@ -1,6 +1,6 @@
-# Created by Perry Rapp 2007-08-26
-# Start of ASCII transliteration table for UTF-8 Cyrillic
-#
+## Created by Perry Rapp 2007-09-07
+## Start of ASCII transliteration table for UTF-8 Cyrillic
+##
 $D0$90	^$41	# u0410	#CYRILLIC CAPITAL LETTER A map to ^A
 $D0$91	^$42	# u0411	#CYRILLIC CAPITAL LETTER BE map to ^B
 $D0$9C	^$4D	# u041C	#CYRILLIC CAPITAL LETTER EM map to ^M

@@ -1,3 +1,10 @@
+2007-09-07 Perry Rapp
+
+	* ChangeLog tt/UTF-8__TrCyrillicAscii.tt
+
+	Fix comments (must start with ##) so Cyrillic transcription
+	is valid.
+
 2007-08-27 Perry Rapp
 
 	* ChangeLog src/liflines/show.c
