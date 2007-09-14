@@ -498,7 +498,6 @@ node_lineprint (INT width, void * param)
 	INT mylen=sizeof(line);
 	NODE_PRINT_PARAM npp = (NODE_PRINT_PARAM)param;
 	NODE node=npp->node;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 
 	if (mylen>width)
 		mylen=width;
@@ -522,8 +521,7 @@ node_lineprint (INT width, void * param)
 			llstrcatn(&ptr, str, &mylen);
 		}
 	}
-	translate_string(ttmd, line, output, sizeof(output)/sizeof(output[0])-1);
-	return output;
+	return line;
 }
 /*=================================
  * tn_lineprint -- print a displaynode line

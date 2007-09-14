@@ -1,3 +1,12 @@
+2007-09-14 Perry Rapp
+
+	* ChangeLog src/liflines/pedigree.c src/liflines/show.c
+
+	Fix node_lineprint; do not translate encoding. (It will be
+	later translated, as with all other node printers). This fixes
+	bug that Gedcom view was getting codeset conversion twice.
+	Delete unused function put_out_line_disp.
+
 2007-09-07 Perry Rapp
 
 	* ChangeLog tt/UTF-8__TrCyrillicAscii.tt
