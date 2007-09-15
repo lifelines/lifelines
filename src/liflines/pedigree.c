@@ -263,14 +263,15 @@ add_dnodes (NODE node, INT gen, INT indent, INT maxgen, INT * count, CANVASDATA 
 	STRING ptr=output;
 	INT leader;
 	LIST list=NULL;
-	XLAT ttmd = transl_get_predefined_xlat(MINDS);
 	INT mylen=sizeof(output), mylenorig;
 	if (mylen>width)
 		mylen = width;
 	mylenorig = mylen;
 
-	/* kind of tricky -- we build the xref & tag into output
-	and then translate it back into line */
+	/* build xref & tag into line */
+	line[0] = 0;
+	ptr = line;
+	mylen = sizeof(line);
 
 	if (nxref(node)) {
 		llstrcatn(&ptr, nxref(node), &mylen);
@@ -280,23 +281,19 @@ add_dnodes (NODE node, INT gen, INT indent, INT maxgen, INT * count, CANVASDATA 
 		llstrcatn(&ptr, ntag(node), &mylen);
 		llstrcatn(&ptr, " ", &mylen);
 	}
-	leader = ptr-output;
+	leader = ptr-line;
 	width -= leader;
 	if (width < 10) {
 		/* insufficient space */
 		return NULL;
 	}
 
-	/* translate the xref & tag into line */
-	translate_string(ttmd, output, line, sizeof(line)-1);
-	ptr = line + strlen(line);
-	mylen = sizeof(line) - strlen(line);
-	/* now output is available as scratch */
+	/* output is available as scratch */
 
 	list = text_to_list("", width, LISTDOFREE);
 	if (nval(node)) {
-		translate_string(ttmd, nval(node), output, sizeof(output)-1);
-		append_to_text_list(list, output, width, FALSE); 
+		STRING valtxt = nval(node);
+		append_to_text_list(list, valtxt, width, FALSE); 
 	}
 
 	/* anode is first child */
@@ -305,6 +302,7 @@ add_dnodes (NODE node, INT gen, INT indent, INT maxgen, INT * count, CANVASDATA 
 	if (nchild(node)) {
 		for ( ; anode && !nchild(anode); anode = nsibling(anode)) {
 			BOOLEAN newline=FALSE;
+			STRING valtxt=NULL;
 			if (eqstr(ntag(anode), "CONC")) {
 				append_to_text_list(list, " ", width, FALSE);
 				newline = FALSE;
@@ -313,8 +311,8 @@ add_dnodes (NODE node, INT gen, INT indent, INT maxgen, INT * count, CANVASDATA 
 			} else {
 				break;
 			}
-			translate_string(ttmd, nval(anode), output, sizeof(output)-1);
-			append_to_text_list(list, output, width, newline); 
+			valtxt = nval(anode);
+			append_to_text_list(list, valtxt, width, newline); 
 		}
 	}
 	/* anode is now first non-assimilated child */

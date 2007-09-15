@@ -4,6 +4,11 @@
 
 	Updated French translation from Patrick Texier.
 
+	* ChangeLog src/liflines/pedigree.c
+
+	Fix add_dnodes to not translate codeset (b/c text will
+	be translated later as other node printers).
+
 2007-09-14 Perry Rapp
 
 	* ChangeLog src/liflines/pedigree.c src/liflines/show.c
