@@ -1,3 +1,9 @@
+2007-09-15 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Updated French translation from Patrick Texier.
+
 2007-09-14 Perry Rapp
 
 	* ChangeLog src/liflines/pedigree.c src/liflines/show.c
