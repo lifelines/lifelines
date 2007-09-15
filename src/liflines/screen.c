@@ -878,6 +878,8 @@ show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
 		show_gedcom(uiwin, frec, GDVW_NORMAL, &rect, scroll, reuse);
 	else if (mode=='x')
 		show_gedcom(uiwin, frec, GDVW_EXPANDED, &rect, scroll, reuse);
+	else if (mode=='t')
+		show_gedcom(uiwin, frec, GDVW_TEXT, &rect, scroll, reuse);
 	else
 		show_fam_vitals(uiwin, frec, row, hgt, width, scroll, reuse);
 	unlock_cache(fcel);
