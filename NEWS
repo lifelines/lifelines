@@ -2,6 +2,10 @@ LifeLines Source Release, Version 3.0.61
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
+Bug fixes in 3.0.62 
+============================
+ - Fix encoding conversion for GEDCOM, pedigree, and GEDCOM text modes.
+
 Changes in 3.0.61 (stable)
 ===========================
  - Improvements to configure finding curses

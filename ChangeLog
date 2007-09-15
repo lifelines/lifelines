@@ -13,6 +13,10 @@
 
 	Fix show_fam to handle GDVW_TEXT (thanks to Patrick Texier).
 
+	* ChangeLog NEWS
+
+	Minor update to NEWS file.
+
 2007-09-14 Perry Rapp
 
 	* ChangeLog src/liflines/pedigree.c src/liflines/show.c
