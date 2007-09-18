@@ -1,3 +1,10 @@
+2007-09-19 Perry Rapp
+
+	* ChangeLog
+	*NEW build/build_dist.sh
+
+	New script to automate some of the build steps.
+
 2007-09-15 Perry Rapp
 
 	* ChangeLog po/fr.po
