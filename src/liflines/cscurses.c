@@ -91,6 +91,11 @@ mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 
 			/* #2) We should account for zero-width characters, eg, use wcwidth */
 			/* Unfortunately, lifelines doesn't yet use wcwidth or config test it */
+			/* TODO:
+			config test for wcswidth
+			and substitute Markus Kuhn's
+			http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
+			*/
 		}
 		rtn = mvwaddnstr(wp, y, x, zs_str(zstr), n);
 	}
