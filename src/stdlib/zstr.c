@@ -248,6 +248,16 @@ zs_fix (ZSTR zstr)
 	zstr->end = zstr->str + strlen(zstr->str);
 	return zstr->str;
 }
+/* chop off string to specified length */
+void
+zs_chop (ZSTR zstr, unsigned int len)
+{
+	DBGCHK(zstr);
+	if (len < zs_len(zstr)) {
+		zstr->str[len] = 0;
+		zstr->end = zstr->str + len;
+	}
+}
 /* set length directly; caller may use this if using embedded nulls */
 char *
 zs_set_len (ZSTR zstr, unsigned int len)

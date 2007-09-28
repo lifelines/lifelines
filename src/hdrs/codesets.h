@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2002 Perry Rapp
+   Copyright (c) 2002-2007 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -10,8 +10,6 @@
 #define codesets_h_included
 
 
-/* internal codeset of current database */
-extern BOOLEAN uu8;            /* flag if internal codeset is UTF-8 */
 extern STRING int_codeset;     /* internal codeset */
 
 extern STRING editor_codeset_out; /* output to editor */

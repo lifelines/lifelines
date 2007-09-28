@@ -21,7 +21,6 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    SOFTWARE.
 */
-/* modified 05 Jan 2000 by Paul B. McBride (pmcbride@tiac.net) */
 
 #ifndef _LL_STDLIB_H
 #define _LL_STDLIB_H
@@ -43,6 +42,7 @@
 
 /* Current internal codeset (the same as that of the loaded database). */
 extern BOOLEAN uu8;         /* flag set if int_codeset is UTF-8 */
+extern BOOLEAN gui8;        /* flag if display output encoding is UTF-8 */
 extern STRING  int_codeset;
 
 /* appendstr.c */

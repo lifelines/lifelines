@@ -72,25 +72,26 @@ int
 mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 {
 	ZSTR zstr = zs_news(cp);
-	int rtn;
+	int rtn=0;
+	
 	int_to_disp(zstr);
-	/* TODO: Need to be using wcswidth for UTF-8 displays
-	2005-09-14 -- lifelines doesn't yet use wcswidth, so we need
-	a config test for it? Also, we need a way here to ask if the
-	GUI codeset is UTF-8. For internal codeset, we set a global
-	uu8 as a flag if the internal codeset is UTF-8, and we use
-	function is_codeset_utf8 to decide. We should do a similar
-	test when we assign the GUI codeset -- that is, when we
-	set gui_codeset_out, which is in two locations in
-	src/gedlib/init.c
-	*/
-	if (zs_len(zstr) < (unsigned)n) {
+
+	if (zs_len(zstr) < (unsigned int)n) {
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	} else {
-		/* TODO: Need to account for UTF-8 truncation in case output cs is UTF-8 :(
-		That is, we should truncate earlier if n happens to not be at a character
-		boundary in UTF-8, so we don't leave part of a character at the end.
-		*/
+		if (zs_len(zstr) > (unsigned int)n) {
+			STRING str = zs_str(zstr);
+			/* We need to do length truncation correctly for UTF-8 output */
+			/* #1) We need to not break UTF-8 multibytes */
+
+			INT width=0;
+			STRING prev = find_prev_char(&str[n-1], &width, str, gui8);
+			width += (prev - str);
+			zs_chop(zstr, width);
+
+			/* #2) We should account for zero-width characters, eg, use wcwidth */
+			/* Unfortunately, lifelines doesn't yet use wcwidth or config test it */
+		}
 		rtn = mvwaddnstr(wp, y, x, zs_str(zstr), n);
 	}
 	zs_free(&zstr);

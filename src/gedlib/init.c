@@ -320,8 +320,13 @@ update_db_options (void)
 	if (!int_codeset)
 		strupdate(&int_codeset, "");
 	if (!eqstr_ex(int_codeset, str)) {
+		/* database encoding changed */
 		strupdate(&int_codeset, str);
+
+		/* Here is where the global uu8 variable is set
+		This is a flag if the internal (database) encoding is UTF-8 */
 		uu8 = is_codeset_utf8(int_codeset);
+		
 		/* always translate to internal codeset */
 		set_gettext_codeset(PACKAGE, int_codeset);
 		/* need to reload all predefined codeset conversions */

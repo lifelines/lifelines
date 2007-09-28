@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2002 Perry Rapp
+   Copyright (c) 2002-2007 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -28,6 +28,7 @@ char * zs_str(ZCSTR);
 unsigned int zs_len(ZCSTR zstr);
 unsigned int zs_allocsize(ZCSTR zstr);
 char * zs_fix(ZSTR zstr);
+void zs_chop(ZSTR zstr, unsigned int len);
 char * zs_set_len(ZSTR zstr, unsigned int len);
 char * zs_sets(ZSTR zstr, const char *);
 char * zs_setz(ZSTR zstr, ZCSTR zsrc);

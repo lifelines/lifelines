@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2002 Perry Rapp
+   Copyright (c) 2002-2007 Perry Rapp
    "The MIT license"
    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -13,6 +13,7 @@
 
 #include "llstdlib.h"
 #include "codesets.h"
+#include "gedcom.h"
 #include "lloptions.h"
 #include "zstr.h"
 #include "arch.h"
@@ -31,6 +32,7 @@
 
 /* internal codeset of current database */
 BOOLEAN uu8=0;            /* flag if internal codeset is UTF-8 */
+BOOLEAN gui8=0;            /* flag if display output encoding is UTF-8 */
 STRING int_codeset=0;     /* internal codeset */
 
 STRING editor_codeset_out=0; /* output to editor */
@@ -122,6 +124,10 @@ init_codesets (void)
 #endif
 	}
 	strupdate(&gui_codeset_out, e);
+	/* Now set the global variable gui8, which tells
+	us if the display output encoding is UTF-8, for
+	purposes of string length truncation */
+	gui8 = is_codeset_utf8(gui_codeset_out);
 
 /* GuiCodesetIn */
 	e = getlloptstr("GuiCodesetIn", "");
