@@ -203,6 +203,9 @@ unicode_to_utf8 (INT wch, char * utf8)
 }
 /*=========================================
  * chopstr_utf8 -- chop string at specified byte index
+ * Eg, chopstr_utf8("abc", 2, x) results in "ab"
+ * If UTF-8, backs up as necessary to avoid leaving
+ * broken multibyte at end
  *=======================================*/
 void
 chopstr_utf8 (STRING str, INT index, BOOLEAN utf8)
