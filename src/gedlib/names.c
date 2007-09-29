@@ -989,6 +989,7 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 }
 /*===============================================
  * name_string -- Remove slashes from GEDCOM name
+ * returns static buffer
  *=============================================*/
 STRING
 name_string (STRING name)
@@ -1006,6 +1007,7 @@ name_string (STRING name)
 }
 /*==========================================================
  * name_surfirst - Convert GEDCOM name to surname first form
+ * returns static buffer
  *========================================================*/
 static STRING
 name_surfirst (STRING name)

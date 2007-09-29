@@ -5,9 +5,9 @@
 
 	Add Markus Kuhn's implementation of wcswidth to arch.
 
-	* ChangeLog src/gedlib/gstrings.c
+	* ChangeLog src/gedlib/gstrings.c src/gedlib/names.c
 
-	Add comment by code that looks wrong to me.
+	Adding comments.
 
 2007-09-28 Perry Rapp
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
