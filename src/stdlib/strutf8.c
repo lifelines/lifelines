@@ -40,6 +40,8 @@ utf8len (char ch)
  * If limit is non-zero, don't back up beyond this.
  * This will set *width=0 if it gets back to limit without 
  *  finding valid character, or backs up more than 6 characters
+ * Warning: return width + pointer may exceed lenght of string
+ *  if input was pointing at partial multibyte at end (broken string)
  * Created: 2002/06/12, Perry Rapp
  *=======================================*/
 STRING
@@ -55,13 +57,12 @@ find_prev_char (STRING ptr, INT * width, STRING limit, int utf8)
 			--ptr;
 			if (init - ptr == 7)
 				break;
-			if (*ptr & 0x80)
+			/* if UTF-8 trail byte, keep backing up */
+			if ((*ptr & 0x80) && !(*ptr & 0x40))
 				continue;
 			tmp = utf8len(*ptr);
-			if (tmp <= init-ptr) {
-				len = tmp;
-				break;
-			}
+			len = tmp;
+			break;
 		}
 	} else {
 		if (ptr != limit) {
@@ -200,4 +201,15 @@ unicode_to_utf8 (INT wch, char * utf8)
 	}
 	*lpd++ = 0;
 }
-
+/*=========================================
+ * chopstr_utf8 -- chop string at specified byte index
+ *=======================================*/
+void
+chopstr_utf8 (STRING str, INT index, BOOLEAN utf8)
+{
+	INT width=0, i=0;
+	STRING prev = find_prev_char(&str[index+1], &width, str, utf8);
+	prev[0] = 0;
+	/* We don't zero out entire width in case it is outside of
+	string range, in case caller passed us a broken string */
+}

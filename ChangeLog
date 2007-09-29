@@ -9,6 +9,11 @@
 
 	Adding comments.
 
+	* ChangeLog src/hdrs/llstdlib.h src/stdlib/strutf8.c
+
+	New function chopstr_utf8. Fix error in find_prev_char
+	(it was backing to last ASCII character, not last char start).
+
 2007-09-28 Perry Rapp
 	* ChangeLog src/gedlib/codesets.c src/gedlib/init.c
 	src/hdrs/codesets.h src/hdrs/llstdlib.h src/hdrs/zstr.h
