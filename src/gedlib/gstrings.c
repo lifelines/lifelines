@@ -119,6 +119,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	} else
 		name = _(qSunksps);
 	sprintf(p, "%s", name);
+	/* TODO: Shouldn't we len -= strlen(p) first ? Perry, 2007-09-29 */
 	p += strlen(p);
 	if (fam)  evt = fam_to_event(fam, "MARR", _(qSdspa_mar), len, rfmt);
 	if (!evt) evt = indi_to_event(indi, "BIRT", _(qSdspa_bir), len, rfmt);
