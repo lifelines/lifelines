@@ -693,6 +693,10 @@ SOURCE=..\..\..\win32\w32systm.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\arch\wcswidth.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\interp\write.c
 # End Source File
 # Begin Source File
