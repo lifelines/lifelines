@@ -213,10 +213,7 @@ llstrncpy (char *dest, const char *src, size_t n, int utf8)
 	}
 	strncpy(dest, src, n);
 	if (dest[n-1]) {
-		/* overflowed -- back up to last character that fits */
-		INT width=0;
-		STRING prev = find_prev_char(&dest[n-1], &width, dest, utf8);
-		prev[width]=0;
+		chopstr_utf8(dest, n-1, utf8);
 	}
 	return dest;
 }

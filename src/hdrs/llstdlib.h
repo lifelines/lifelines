@@ -212,6 +212,7 @@ void chopstr_utf8(STRING str, INT index, BOOLEAN utf8);
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT next_char32(STRING * ptr, int utf8);
 void skip_BOM(STRING * pstr);
+size_t str8chlen(CNSTRING str);
 void unicode_to_utf8(INT wch, char * utf8);
 INT utf8len(char ch);
 

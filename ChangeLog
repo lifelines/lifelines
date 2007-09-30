@@ -1,3 +1,11 @@
+2007-09-30 Perry Rapp
+
+	* ChangeLog src/hdrs/cscurses.h src/hdrs/llstdlib.h
+	src/liflines/cscurses.c src/stdlib/stdstrng.c src/stdlib/strutf8.c
+
+	New functions str8chlen & output_width.
+	Fix llstrncpy to use chop_utf8.
+
 2007-09-29 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp

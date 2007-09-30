@@ -17,6 +17,19 @@
 #include "cscurses.h"
 #include "zstr.h"
 
+/*********************************************
+ * local function prototypes
+ *********************************************/
+
+/* alphabetical */
+static void disp_to_int(ZSTR zstr);
+static void int_to_disp(ZSTR zstr);
+static size_t output_width(ZSTR zstr);
+
+/*********************************************
+ * local & exported function definitions
+ * body of module
+ *********************************************/
 
 /*============================
  * int_to_disp -- convert internal codeset to GUI
@@ -39,6 +52,20 @@ disp_to_int (ZSTR zstr)
 	XLAT xlat = transl_get_predefined_xlat(MDSIN);
 	if (xlat)
 		transl_xlat(xlat, zstr); /* ignore failure */
+}
+/*============================
+ * output_width -- display width of string in characters
+ *==========================*/
+static size_t
+output_width (ZSTR zstr)
+{
+	if (gui8) {
+		/* TODO: Need to use wcswidth here */
+		return str8chlen(zs_str(zstr));
+	} else {
+		return zs_len(zstr);
+
+	}
 }
 /*============================
  * mvcuwaddstr -- convert to GUI codeset & output to screen
@@ -79,7 +106,7 @@ mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 	if (zs_len(zstr) < (unsigned int)n) {
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	} else {
-		if (zs_len(zstr) > (unsigned int)n) {
+		if (output_width(zstr) > n) {
 			STRING str = zs_str(zstr);
 			/* We need to do length truncation correctly for UTF-8 output */
 			/* #1) We need to not break UTF-8 multibytes */

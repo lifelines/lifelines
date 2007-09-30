@@ -12,7 +12,7 @@
 #include "llstdlib.h"
 
 /*==============================
- * utf8len -- Length of a utf-8 character
+ * utf8len -- Length of a UTF-8 character
  *  ch: [in] starting byte
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
@@ -20,7 +20,7 @@ INT
 utf8len (char ch)
 {
 	/* test short cases first, as probably much more common */
-	if (!(ch & 0x80 && ch & 0x40))
+	if (!((ch & 0x80) && (ch & 0x40)))
 		return 1; /* not a multibyte lead byte */
 	if (!(ch & 0x20))
 		return 2;
@@ -31,6 +31,31 @@ utf8len (char ch)
 	if (!(ch & 0x04))
 		return 5;
 	return 6;
+}
+/*==============================
+ * str8chlen -- Length of a UTF-8 string in characters
+ * Created: 2001/08/02 (Perry Rapp)
+ *============================*/
+size_t
+str8chlen (CNSTRING str)
+{
+	CNSTRING ptr = str;
+	size_t len = 0;
+	size_t chwidth = 0;
+	size_t i=0;
+	while (*ptr) {
+		chwidth = utf8len(*ptr);
+		++len;
+		/* advance pointer, but be careful
+		not to skip blindly over null in middle
+		of broken multibyte sequence */
+		for (i=0; i<chwidth; ++i) {
+			if (!ptr[0])
+				return len;
+			++ptr;
+		}
+	}
+	return len;
 }
 /*=========================================
  * find_prev_char -- Back up to start of previous character.
