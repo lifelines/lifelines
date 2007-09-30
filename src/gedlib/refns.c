@@ -463,6 +463,7 @@ is_annotated_xref (CNSTRING val, INT * len)
 /*==========================================================
  * annotate_with_supplemental -- Expand any references that have REFNs
  *  This converts, eg, "@S25@" to "<1850.Census>"
+ * Used for editing
  *========================================================*/
 void
 annotate_with_supplemental (NODE node, RFMT rfmt)
@@ -487,6 +488,7 @@ annotate_with_supplemental (NODE node, RFMT rfmt)
  * annotate_node -- Alter a node by
  *  expanding refns (eg, "@S25@" to "<1850.Census>")
  *  annotating pointers (eg, "@I1@" to "@I1@ {{ John/SMITH }}")
+ * Used during editing
  *=====================================================*/
 static void
 annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT rfmt)
@@ -502,7 +504,7 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 	
 	if (expand_refns) {
 		NODE refn = REFN(nztop(rec));
-		char buffer[60];
+		char buffer[120];
 		/* if there is a REFN, and it fits in our buffer,
 		and it doesn't have any (confusing) > in it */
 		if (refn && nval(refn) && !strchr(nval(refn), '>')
@@ -518,7 +520,7 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 	}
 
 	if (annotate_pointers) {
-		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE);
+		STRING str = generic_to_list_string(nztop(rec), key, 120, ", ", rfmt, FALSE);
 		ZSTR zstr = zs_news(nval(node));
 		zs_apps(zstr, " {{");
 		zs_apps(zstr, str);

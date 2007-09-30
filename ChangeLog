@@ -6,6 +6,10 @@
 	New functions str8chlen & output_width.
 	Fix llstrncpy to use chop_utf8.
 
+	* ChangeLog src/gedlib/refns.c
+
+	Add comments and expand string maximums in annotate_node.
+
 2007-09-29 Perry Rapp
 
 	* ChangeLog build/msvc6/llines/llinesprj.dsp
