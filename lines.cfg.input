@@ -9,7 +9,7 @@ dnl m4 lines.cfg.input > .linesrc
 # As are blank lines
 # So some of the examples are commented out...
 #
-# 2007-08-26
+# 2007-10-01
 #
 # Note that paths are assigned with :=
 # Other values are assigned with =
@@ -170,6 +170,7 @@ ifdef(`WINDOWS',
 # Trailing string to append when truncating events in short display
 #  (eg, to see "b. 1995-5-3, Miss..." instead of "b. 1995-5-3, Missour")
 #ShortOmitString=...
+#  default is none
 
 # Width to indent pedigree ancestor & descendent views, and gedcom view
 #GedcomDisplayIndent=2
@@ -318,7 +319,7 @@ LocaleDir:=%llroot%\locale
 ,
 #LocaleDir:=/usr/share/locale
 )dnl
-# default is depend on gettext's default
+# Default is to use the compiled-in default (LOCALEDIR)
 
 # Global translation tables
 # Syntax is TT.which.ics.n

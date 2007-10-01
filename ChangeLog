@@ -16,6 +16,10 @@
 	Remove some obsolete comments. Add warning for adding as child
 	a person who is already a child in some family (qSiscinf).
 
+	* ChangeLog lines.cfg.input
+
+	Cosmetic: minor editing of comments in config file.
+
 2007-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/llstdlib.h
