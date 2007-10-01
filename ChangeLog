@@ -13,8 +13,8 @@
 	* ChangeLog src/gedlib/charmaps.c src/gedlib/datei.c
 	src/gedlib/dateparse.c src/gedlib/messages.c src/liflines/add.c
 
-	Remove some obsolete comments. Add warning for adding a child
-	already in a family (qSiscinf).
+	Remove some obsolete comments. Add warning for adding as child
+	a person who is already a child in some family (qSiscinf).
 
 2007-09-30 Perry Rapp
 
