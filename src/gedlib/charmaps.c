@@ -26,7 +26,10 @@
  * global/exported variables
  *********************************************/
 
-/* TODO: 2002-11-28, this will go away with new system */
+/*
+ Keys for optional character set conversion tables in database
+  MEDIN means Editor to Internal, etc
+*/
 const char *map_keys[] = {
 	"MEDIN", "MINED", "MGDIN", "MINGD",
 	"MDSIN", "MINDS", "MRPIN", "MINRP", "MSORT",

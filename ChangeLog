@@ -10,6 +10,12 @@
 	New function limit_width. Fix truncations in
 	indi_to_list_string etc to be UTF-8 aware via limit_width().
 
+	* ChangeLog src/gedlib/charmaps.c src/gedlib/datei.c
+	src/gedlib/dateparse.c src/gedlib/messages.c src/liflines/add.c
+
+	Remove some obsolete comments. Add warning for adding a child
+	already in a family (qSiscinf).
+
 2007-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/llstdlib.h

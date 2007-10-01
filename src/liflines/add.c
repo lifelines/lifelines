@@ -260,6 +260,12 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 	if (!child) child = nztop(ask_for_indi(_(qSidchld), DOASK1));
 	if (!child) return NULL;
 
+/* Warn if child to add is already in some family */
+	if (FAMC(child)) {
+		if (!ask_yes_or_no(_(qSiscinf)))
+			return NULL;
+	}
+
 /* Identify family if caller did not */
 
 	if (!fam) fam = nztop(ask_for_fam(_(qSidprnt), _(qSidsbln)));

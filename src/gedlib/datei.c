@@ -213,8 +213,6 @@ init_keywordtbl (void)
 		j = gedkeys[i].value;
 		insert_table_int(keywordtbl, gedkeys[i].keyword, j);
 	}
-	/* TODO: We need to load months of other calendars here */
-
 }
 /*=============================
  * load_one_cmplx_pic -- Generate case variations

@@ -200,8 +200,7 @@ ZST qSidsbln      = N_("Please identify one of the child's siblings.");
 ZST qSidsadd      = N_("Identify spouse/parent to add to an existing family.");
 ZST qSidsinf      = N_("Identify spouse/parent already in family, if known.");
 ZST qSkchild      = N_("Identify child already in family.");
-/* TODO: why isn't iscinf used ? 2002.04.27, Perry */
-ZST qSiscinf      = N_("This person is already a child in a family.");
+ZST qSiscinf      = N_("This person is already a child in a family. Add anyway?");
 ZST qSidsps1      = N_("Identify a spouse/parent for the new family.");
 ZST qSidsps2      = N_("Identify the second spouse/parent, if known.");
 ZST qStwohsb      = N_("Both families must have husbands/fathers.");

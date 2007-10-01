@@ -594,6 +594,7 @@ get_date_tok (struct tag_dnum *pdnum)
 			pdnum->val = i % 100;
 			/* TODO: we need to use the fact that calendar is i/100 */
 			/* That is, now we know what calendar this is in */
+			/* Except Gregorian & Julian are not distinguished by month names */
 			return MONTH_TOK;
 		}
 		pdnum->val = 0;
@@ -751,7 +752,7 @@ is_date_delim (char c)
 {
 	if (iswhite((uchar)c))
 		return TRUE;
-	/* TODO: Any other characters here ? Do we internationalize it ? */
+	/* Assume these are all the valid delimiters in a date */
 	if (c=='/' || c=='-' || c=='.' || c==',')
 		return TRUE;
 	return FALSE;
