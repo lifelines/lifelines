@@ -4,6 +4,12 @@
 
 	Add unsigned int cast in mvccwaddnstr.
 
+	* ChangeLog src/gedlib/gstrings.c src/gedlib/refns.c
+	src/hdrs/llstdlib.h src/stdlib/stdstrng.c src/stdlib/strutf8.c
+
+	New function limit_width. Fix truncations in
+	indi_to_list_string etc to be UTF-8 aware via limit_width().
+
 2007-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/llstdlib.h

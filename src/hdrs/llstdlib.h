@@ -208,7 +208,8 @@ void set_utf8_casing(ZSTR (*ufnc)(CNSTRING), ZSTR (*lfnc)(CNSTRING));
 STRING upperascii_s(STRING str);
 
 /* strutf8.c */
-void chopstr_utf8(STRING str, INT index, BOOLEAN utf8);
+void chopstr_utf8(STRING str, size_t index, BOOLEAN utf8);
+void limit_width(STRING str, size_t width, BOOLEAN utf8);
 STRING find_prev_char(STRING ptr, INT * width, STRING limit, int utf8);
 INT next_char32(STRING * ptr, int utf8);
 void skip_BOM(STRING * pstr);

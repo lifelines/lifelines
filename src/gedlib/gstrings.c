@@ -160,8 +160,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 		*p = '\0';
 	    }
 	}
-	if ((INT)strlen(scratch) > len)
-		scratch[len] = 0;
+	limit_width(scratch, len, uu8);
 	return strsave(scratch);
 }
 /*================================================
@@ -195,6 +194,7 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
 		llstrcatn(&p, delim, &mylen);
 		llstrcatn(&p, name, &mylen);
 	}
+	limit_width(scratch, len, uu8);
 	return strsave(scratch);
 }
 /*================================================
@@ -223,6 +223,7 @@ even_to_list_string (NODE even, INT len, STRING delim)
                 llstrcatn(&p, name, &mylen);
 		llstrcatn(&p, ")", &mylen);
 	}
+	limit_width(scratch, len, uu8);
 	return strsave(scratch);
 }
 /*================================================
@@ -284,6 +285,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	}
 	join_fam(fam, refn, husb, wife, chil, rest);
 	/* TO DO - print a husband and a wife out */
+	limit_width(scratch, len, uu8);
 	return strsave(scratch);
 }
 /*================================================
@@ -332,6 +334,7 @@ other_to_list_string(NODE node, INT len, STRING delim)
 		else
 			break;
 	}
+	limit_width(scratch, len, uu8);
 	return strsave(scratch);
 }
 /*===========================================

@@ -233,11 +233,21 @@ unicode_to_utf8 (INT wch, char * utf8)
  * broken multibyte at end
  *=======================================*/
 void
-chopstr_utf8 (STRING str, INT index, BOOLEAN utf8)
+chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8)
 {
 	INT width=0, i=0;
 	STRING prev = find_prev_char(&str[index+1], &width, str, utf8);
 	prev[0] = 0;
 	/* We don't zero out entire width in case it is outside of
 	string range, in case caller passed us a broken string */
+}
+/*=========================================
+ * limit_width -- chop string if longer than specified width
+ *  handles UTF-8
+ *=======================================*/
+void
+limit_width (STRING str, size_t width, BOOLEAN utf8)
+{
+	if (strlen(str) < width) return;
+	chopstr_utf8(str, width-1, utf8);
 }

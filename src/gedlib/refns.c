@@ -504,7 +504,7 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 	
 	if (expand_refns) {
 		NODE refn = REFN(nztop(rec));
-		char buffer[120];
+		char buffer[60];
 		/* if there is a REFN, and it fits in our buffer,
 		and it doesn't have any (confusing) > in it */
 		if (refn && nval(refn) && !strchr(nval(refn), '>')
@@ -520,7 +520,7 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 	}
 
 	if (annotate_pointers) {
-		STRING str = generic_to_list_string(nztop(rec), key, 120, ", ", rfmt, FALSE);
+		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE);
 		ZSTR zstr = zs_news(nval(node));
 		zs_apps(zstr, " {{");
 		zs_apps(zstr, str);
