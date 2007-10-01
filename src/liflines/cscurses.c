@@ -106,7 +106,7 @@ mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 	if (zs_len(zstr) < (unsigned int)n) {
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	} else {
-		if (output_width(zstr) > n) {
+		if (output_width(zstr) > (size_t)n) {
 			STRING str = zs_str(zstr);
 			/* We need to do length truncation correctly for UTF-8 output */
 			/* #1) We need to not break UTF-8 multibytes */

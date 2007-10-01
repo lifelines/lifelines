@@ -1,3 +1,9 @@
+2007-10-01 Perry Rapp
+
+	* ChangeLog src/liflines/cscurses.c
+
+	Add unsigned int cast in mvccwaddnstr.
+
 2007-09-30 Perry Rapp
 
 	* ChangeLog src/hdrs/cscurses.h src/hdrs/llstdlib.h
