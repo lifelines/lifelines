@@ -1,13 +1,13 @@
 # Swedish messages for LifeLines.
 # Copyright (C) 2002-2007 Free Software Foundation, Inc.
-# Jens Arvidsson <ulmiwallius@hotmail.com>, 2002-2007.
+# Jens Arvidsson <ulmiwallius@gmail.com>, 2002-2007.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: lifelines 3.0.60\n"
+"Project-Id-Version: lifelines 3.0.62\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-05 20:19-0400\n"
-"PO-Revision-Date: 2007-08-05 18:13+0200\n"
+"POT-Creation-Date: 2007-10-06 12:51+0200\n"
+"PO-Revision-Date: 2007-10-06 14:25+0200\n"
 "Last-Translator: Jens Arvidsson <ulmiwallius@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgstr ""
 #: src/btree/btrec.c:369
 #, c-format
 msgid "Failed (errno=%d) to open blockfile (rkey=%s): %s"
-msgstr ""
+msgstr "Misslyckades (errno=%d) med att öppna blockfil (rkey=%s): %s"
 
 #: src/btree/btrec.c:438
 #, c-format
 msgid "Btree lookup looped back to master (%ld)!"
-msgstr ""
+msgstr "Btreesökning loopades tillbaka till huvud (%ld)!"
 
 #: src/gedlib/charmaps.c:772
 msgid "<unnamed>"
@@ -795,9 +795,8 @@ msgid "Identify child already in family."
 msgstr "Identifiera barn som redan finns i familjen."
 
 #: src/gedlib/messages.c:203
-#, fuzzy
 msgid "This person is already a child in a family. Add anyway?"
-msgstr "Den här personen är redan barn i en familj."
+msgstr "Den här personen är redan barn i en familj. Lägg till ändå?"
 
 #: src/gedlib/messages.c:204
 msgid "Identify a spouse/parent for the new family."
@@ -2388,9 +2387,9 @@ msgstr[0] "%d objekt läckte"
 msgstr[1] "%d objekt läckte"
 
 #: src/gedlib/record.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "Record memory leaks:"
-msgstr "Nodminnesläckor:"
+msgstr "Postminnesläckor:"
 
 #: src/gedlib/remove.c:250
 msgid "Families may not yet be removed in this fashion."
@@ -2489,60 +2488,58 @@ msgid "This person record does not have a name line."
 msgstr "Denna personpost har ingen namnrad."
 
 #: src/gedlib/xlat.c:347
-#, fuzzy, c-format
+#, c-format
 msgid "ttpath get_conversion_dyntt:from <%s> to <%s>: %s"
-msgstr "Kan inte konvertera teckenkodning (från <%s> till <%s>)"
+msgstr "ttpath get_conversion_dyntt:från <%s> till <%s>: %s\""
 
 #: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
 msgid "succeeded"
-msgstr ""
+msgstr "lyckades"
 
 #: src/gedlib/xlat.c:349 src/gedlib/xlat.c:371
-#, fuzzy
 msgid "failed"
-msgstr "fem"
+msgstr "misslyckades"
 
 #: src/gedlib/xlat.c:369
 #, c-format
 msgid "ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"
-msgstr ""
+msgstr "ttpath get_subcoding_dyntt från <%s> till subkod <%s>: %s"
 
 #: src/gedlib/xlat.c:435
 msgid "No TTPATH config variable"
-msgstr ""
+msgstr "Inte en TTPATH-konfigvariabel"
 
 #: src/gedlib/xlat.c:464
 #, c-format
 msgid "ttpath checking dir <%s>"
-msgstr ""
+msgstr "ttpath kontrollerar katalog <%s>"
 
 #: src/gedlib/xlat.c:478
-#, fuzzy, c-format
+#, c-format
 msgid "ttpath file <%s> typed as %d"
-msgstr "I filen <%s> vid rad %d"
+msgstr "ttpathfil <%s> inskriven som %d"
 
 #: src/gedlib/xlat.c:690
-#, fuzzy
 msgid "(no conversion)"
-msgstr "Ingen konvertering."
+msgstr "(ingen konvertering)"
 
 #. TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal
 #: src/gedlib/xlat.c:713
-#, fuzzy, c-format
+#, c-format
 msgid "%d step"
 msgid_plural "%d steps"
-msgstr[0] "%d lagad"
-msgstr[1] "%d lagade"
+msgstr[0] "%d steg"
+msgstr[1] "%d steg"
 
 #: src/gedlib/xreffile.c:400
 #, c-format
 msgid "Corrupt DELETESET %c"
-msgstr ""
+msgstr "Trasigt DELETESET %c"
 
 #: src/gedlib/xreffile.c:425
 #, c-format
 msgid "Tried to add already-deleted record (%ld) to xref (%c)!"
-msgstr ""
+msgstr "Försökte lägga till redan borttagen post (%ld) till xref (%c)!"
 
 #: src/interp/alloc.c:798
 #, c-format
@@ -2920,14 +2917,14 @@ msgid "Saturday"
 msgstr "Lördag"
 
 #: src/interp/eval.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Undefined func: %s"
-msgstr "Odefinierad proc: %s"
+msgstr "Odefinierad func: %s"
 
 #: src/interp/eval.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Ambiguous call to func: %s"
-msgstr "Tvetydigt anrop till proc: %s"
+msgstr "Tvetydigt anrop till func: %s"
 
 #: src/interp/interp.c:247
 #, c-format
@@ -3020,14 +3017,14 @@ msgstr[1] "Program glömde att låsa upp %d poster"
 
 #: src/interp/intrpseq.c:303
 msgid "missing or incorrect value for sort"
-msgstr ""
+msgstr "saknat eller felaktigt värde för sort"
 
 #: src/interp/lex.c:219
 #, c-format
 msgid ""
 "String constant overflowing internal buffer tokbuf len=%d, file: %s, start "
 "line: %ld"
-msgstr ""
+msgstr "Strängkonstant spiller över intern buffert tokbuf len=%d, fil: %s, första rad: %ld"
 
 #: src/interp/more.c:648
 msgid "Please choose from the following list."
@@ -3076,22 +3073,22 @@ msgstr "argumentet till unlock måste vara en post eller nod."
 #: src/interp/pvalalloc.c:295
 #, c-format
 msgid "PVALUE memory leak report:"
-msgstr ""
+msgstr "rapport om PVALUE-minnesläcka:"
 
 #: src/interp/pvalmath.c:70
 #, c-format
 msgid "Nonnumeric type to operation %s: %s"
-msgstr ""
+msgstr "Ickenumerisk typ för operation %s: %s"
 
 #: src/interp/pvalmath.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal value to operation %s: %s"
-msgstr "otillåtet anrop till pos."
+msgstr "Otillåtet anrop till operation %s: %s"
 
 #: src/interp/pvalmath.c:411
-#, fuzzy, c-format
+#, c-format
 msgid "%s: not compatible numeric types: %s and %s"
-msgstr "%s: Ojämförbara typer: %s och %s"
+msgstr "%s: ojämförbara numeriska typer: %s och %s"
 
 #: src/interp/pvalue.c:810
 #, c-format
@@ -3718,9 +3715,9 @@ msgid "Proceed without codeset conversion?"
 msgstr "Fortsätt utan konvertering av teckenkodning?"
 
 #: src/liflines/import.c:198
-#, fuzzy, c-format
+#, c-format
 msgid "Lossy codeset conversion (from <%s> to <%s>) likely"
-msgstr "Kan inte konvertera teckenkodning (från <%s> till <%s>)"
+msgstr "Destruktiv teckenkonvertering (från <%s> till <%s>) sannolik"
 
 #: src/liflines/import.c:220
 #, c-format
@@ -3755,12 +3752,12 @@ msgstr "Tandembläddring endast kompatibel med personer eller familjer."
 #: src/liflines/lines_usage.c:21
 #, c-format
 msgid "%s invokes the Lifelines report execution program without GUI."
-msgstr ""
+msgstr "%s anropar Lifelines rapportexekveringsprogram utan GUI."
 
 #: src/liflines/lines_usage.c:23
 #, c-format
 msgid "%s invokes the Lifelines GUI."
-msgstr ""
+msgstr "%s anropar Lifelines grafiska gränssnitt."
 
 #: src/liflines/lines_usage.c:26
 #, c-format
@@ -3775,11 +3772,20 @@ msgid ""
 "other types of data (such as notes). Lifelines includes a\n"
 "custom report language and comes with a collection of reports."
 msgstr ""
+"Lifelines är ett program för att bearbeta genealogisk information\n"
+"i anlänkat GEDCOM-format. Det har ett cursesgränssnitt och en\n"
+"inbyggd tolk för sitt eget rapportspråk för genealogiska rapporter.\n"
+"\n"
+"Det har sina egna databaser, och poster redigeras direkt i GEDCOM\n"
+"(med en redigerare som användaren själv väljer). I posterna lagras\n"
+"information om personer, familjer, källor, händelser och\n"
+"andra typer av uppgifter (som noteringar). Lifelines har ett\n"
+"anpassat rapportspråk och en samling rapporter ingår."
 
 #: src/liflines/lines_usage.c:36
 #, c-format
 msgid "Usage: %s [OPTIONS] [database]"
-msgstr ""
+msgstr "Användning: %s [FLAGGOR] [databas]"
 
 #: src/liflines/lines_usage.c:38 src/tools/btedit.c:238
 #, c-format
@@ -3789,37 +3795,37 @@ msgstr "Flaggor:"
 #: src/liflines/lines_usage.c:40
 #, c-format
 msgid "-C[FILE]"
-msgstr ""
+msgstr "-C[FIL]"
 
 #: src/liflines/lines_usage.c:42
-#, fuzzy, c-format
+#, c-format
 msgid "Specify configuration file location"
-msgstr "Fel i konfigurationsfil: för lång rad."
+msgstr "Ange plats för konfigurationsfil"
 
 #: src/liflines/lines_usage.c:44
 #, c-format
 msgid "Finnish option (if compiled to allow Finnish option)"
-msgstr ""
+msgstr "Finsk flagga (om kompilerad för att tillåta finsk flagga)"
 
 #: src/liflines/lines_usage.c:46
 #, c-format
 msgid "-I[KEY=VALUE]"
-msgstr ""
+msgstr "-I[NYCKEL=VÄRDE]"
 
 #: src/liflines/lines_usage.c:48
 #, c-format
 msgid "Specify a user property (e.g. -ILLEDITOR=gvim)"
-msgstr ""
+msgstr "Ange en användaregenskap (t.ex. -ILLEDITOR=gvim)"
 
 #: src/liflines/lines_usage.c:50
 #, c-format
 msgid "log dynamic memory operation (for debugging)"
-msgstr ""
+msgstr "logga dynamiska minnesoperationer (för avlusning)"
 
 #: src/liflines/lines_usage.c:52
 #, c-format
 msgid "-c[TYPE][DIRECT,INDIRECT]"
-msgstr ""
+msgstr "-c[TYP] [DIREKT,INDIREKT]"
 
 #: src/liflines/lines_usage.c:54
 #, c-format
@@ -3827,46 +3833,48 @@ msgid ""
 "supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
 "\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"
 msgstr ""
+"tillhandahåll cachevärden (tex, -ci400,4000f400,4000 ställer in direkta\n"
+"\t\tindi- & famcacher till 400, och indirekta indi- & famcacher till 4000)"
 
 #: src/liflines/lines_usage.c:57
 #, c-format
 msgid "debug mode (disable signal trapping)"
-msgstr ""
+msgstr "avlusningsläge (stäng av signalfångning)"
 
 #: src/liflines/lines_usage.c:59
 #, c-format
 msgid "force open (for recovery from errors or power failure)"
-msgstr ""
+msgstr "framtvinga öppnande (för återskapande från fel eller strömavbrott)"
 
 #: src/liflines/lines_usage.c:61
 #, c-format
 msgid "open database with immutable access (for use on read-only media)"
-msgstr ""
+msgstr "öppna databas med oföränderlig åtkomst (för användning på skrivskyddade media)"
 
 #: src/liflines/lines_usage.c:63
 #, c-format
 msgid "always show keys (even if REFN available)"
-msgstr ""
+msgstr "visa alltid nycklar (även om REFN finns)"
 
 #: src/liflines/lines_usage.c:65
 #, c-format
 msgid "unlock a database (for correct access on read-write media)"
-msgstr ""
+msgstr "lås upp en databas (för korrekt åtkomst på skrivbara media)"
 
 #: src/liflines/lines_usage.c:67
 #, c-format
 msgid "lock a database (for use on read-only media)"
-msgstr ""
+msgstr "lås en databas (för användning på skrivskyddade media)"
 
 #: src/liflines/lines_usage.c:69
 #, c-format
 msgid "do not use traditional family rules"
-msgstr ""
+msgstr "använd inte traditionella familjeregler"
 
 #: src/liflines/lines_usage.c:71
 #, c-format
 msgid "Specify program output filename (eg, -o/tmp/mytests)"
-msgstr ""
+msgstr "Ange filnamn för utdata från program (tex, -o/tmp/minatest)"
 
 #: src/liflines/lines_usage.c:73
 #, c-format
@@ -3874,16 +3882,18 @@ msgid ""
 "open database with read-only access (prohibiting other\n"
 "\t\twrite access)"
 msgstr ""
+"öppna databas med skrivskyddad åtkomst (förhindrar annan\n"
+"\t\tskrivåtkomst)"
 
 #: src/liflines/lines_usage.c:76
 #, c-format
 msgid "trace function calls in report programs (for debugging)"
-msgstr ""
+msgstr "spåra funktionsanrop i rapportprogram (för avlusning)"
 
 #: src/liflines/lines_usage.c:78
 #, c-format
 msgid "-u[HEIGHT,WIDTH]"
-msgstr ""
+msgstr "-u[HÖJD,BREDD]"
 
 #: src/liflines/lines_usage.c:80
 #, c-format
@@ -3891,21 +3901,23 @@ msgid ""
 "specify window size (eg, -u120,34 specifies 120 columns\n"
 "\t\tby 34 rows)"
 msgstr ""
+"ange fönsterstorlek (tex, -u120,34 anger 120 kolumner\n"
+"\t\toch 34 rader)"
 
 #: src/liflines/lines_usage.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "display this help and exit"
-msgstr "\t--help\tvisa denna hjälp och avsluta"
+msgstr "visa denna hjälp och avsluta"
 
 #: src/liflines/lines_usage.c:85
 #, c-format
 msgid "open database with writeable access (this is the default)"
-msgstr ""
+msgstr "öppna databas med skrvåtkomst (detta är standard)"
 
 #: src/liflines/lines_usage.c:89
 #, c-format
 msgid "execute a single lifelines report program directly"
-msgstr ""
+msgstr "kör ett enskilt rapportprogram för Lifelines direkt"
 
 #: src/liflines/lines_usage.c:91
 #, c-format
@@ -3913,11 +3925,13 @@ msgid ""
 "Use normal ASCII characters for drawing lines, instead of\n"
 "\t\tspecial VT100 terminal characters"
 msgstr ""
+"Använd vanliga ASCII-tecken för att rita linjer, i stället för\n"
+"\t\tsärskilda VT100-terminaltecken"
 
 #: src/liflines/lines_usage.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "output version information and exit"
-msgstr "\t--version\tskriv ut versionsinformation och avsluta"
+msgstr "skriv ut versionsinformation och avsluta"
 
 #: src/liflines/lines_usage.c:96 src/tools/btedit.c:244
 #, c-format
@@ -3927,47 +3941,47 @@ msgstr "Exempel:"
 #: src/liflines/lines_usage.c:99
 #, c-format
 msgid "%s myfamily -x eol"
-msgstr ""
+msgstr "%s minfamilj -x eol"
 
 #: src/liflines/lines_usage.c:101
 #, c-format
 msgid "Open the database 'myfamily' with Lifelines"
-msgstr ""
+msgstr "Öppna databasen 'minfamilj' med Lifelines"
 
 #: src/liflines/lines_usage.c:103
 #, c-format
 msgid "and run the eol.ll report"
-msgstr ""
+msgstr "och kör rapporten eol.ll"
 
 #: src/liflines/lines_usage.c:105
 #, c-format
 msgid "%s -f myfamily -x eol"
-msgstr ""
+msgstr "%s -f minfamilj -x eol"
 
 #: src/liflines/lines_usage.c:107
 #, c-format
 msgid "Unlock database 'myfamily', after a power failure left the"
-msgstr ""
+msgstr "Lås upp databasen 'minfamilj', efter att ett strömavbrott hade"
 
 #: src/liflines/lines_usage.c:109
 #, c-format
 msgid "database locked and run 'eol.ll' report"
-msgstr ""
+msgstr "låst databasen och kör rapporten 'eol.ll'"
 
 #: src/liflines/lines_usage.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "%s myfamily"
-msgstr "Tom familj"
+msgstr "%s minfamilj"
 
 #: src/liflines/lines_usage.c:114
 #, c-format
 msgid "Open database 'myfamily' with Lifelines"
-msgstr ""
+msgstr "Öppna databasen 'minfamilj' med Lifelines"
 
 #: src/liflines/lines_usage.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "%s -f myfamily"
-msgstr "Tom familj"
+msgstr "%s -f minfamilj"
 
 #: src/liflines/lines_usage.c:118
 #, c-format
@@ -3975,11 +3989,13 @@ msgid ""
 "Unlock database 'myfamily', after a power failure left\n"
 "\t\tthe database locked"
 msgstr ""
+"Lås upp databasen 'minfamilj', efter att ett strömavbrott hade\n"
+"\t\tlåst databasen"
 
 #: src/liflines/lines_usage.c:122
 #, c-format
 msgid "REPORTING BUGS"
-msgstr ""
+msgstr "ATT RAPPORTERA FEL"
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:250
 #, c-format
@@ -3989,12 +4005,12 @@ msgstr "Rapportera fel till lifelines.sourceforge.net"
 #: src/liflines/lines_usage.c:126
 #, c-format
 msgid "COPYRIGHT"
-msgstr ""
+msgstr "COPYRIGHT"
 
 #: src/liflines/lines_usage.c:131
 #, c-format
 msgid "SEE ALSO"
-msgstr ""
+msgstr "SE OCKSÅ"
 
 #: src/liflines/listui.c:155 src/liflines/listui.c:252
 msgid "Commands:   j Move down     k Move up    i Select     q Quit"
@@ -4098,9 +4114,9 @@ msgid "The database was not saved."
 msgstr "Databasen sparades inte."
 
 #: src/liflines/loadsave.c:290
-#, fuzzy, c-format
+#, c-format
 msgid "Saving database `%s' in file `%s'."
-msgstr "Databasen \"%s\" har sparats till \"%s\"."
+msgstr "Sparar databas `%s' i fil `%s'."
 
 #: src/liflines/main.c:385
 msgid "Warning: database codeset unspecified"
@@ -4453,21 +4469,20 @@ msgid "r  Refn scan"
 msgstr "r  Refn-sökning"
 
 #: src/liflines/searchui.c:226
-#, fuzzy
 msgid "s  Source scan"
-msgstr "r  Refn-sökning"
+msgstr "s  Källsökning"
 
 #: src/liflines/searchui.c:290
 msgid "Scan on what source field?"
-msgstr ""
+msgstr "Sök på vilket källfält?"
 
 #: src/liflines/searchui.c:293
 msgid "a  Scan by author"
-msgstr ""
+msgstr "a  Sök på författare"
 
 #: src/liflines/searchui.c:294
 msgid "t  Scan by title"
-msgstr ""
+msgstr "Sök på titel"
 
 #: src/liflines/selectdb.c:95
 msgid "Choose database to open"
@@ -4479,7 +4494,7 @@ msgstr "Inga databaser hittades i sökvägen för databaser"
 
 #: src/liflines/selectdb.c:152
 msgid "Cannot create new database with -r, -i, -l, or -f flags."
-msgstr ""
+msgstr "Kan inte skapa ny databas med flaggorna -r, -i, -l, eller -f."
 
 #: src/liflines/show.c:123
 msgid "born"
