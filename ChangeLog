@@ -1,3 +1,8 @@
+2007-10-07 Stephen Dum
+	* ChangeLog docs/ll-userguide.xml
+
+	remove set of paranthesis.
+
 2007-10-06 lifelines stable 3.0.62 RELEASE
 
 	* ChangeLog INSTALL NEWS README configure.ac

@@ -218,7 +218,7 @@ INSTALLATION
 You may be installing <application>LifeLines</application>
 from a source distribution package or as an executable program
 already prepared for your <acronym>UNIX</acronym>
-(or <acronym>MS-Windows</acronym>) system. The
+or <acronym>MS-Windows</acronym> system. The
 source distribution comes with the readme, build script and
 make files necessary to build
 <application>LifeLines</application>. Follow the instructions
