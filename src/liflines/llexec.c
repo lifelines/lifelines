@@ -112,7 +112,7 @@ main (int argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
-	STRING crashlog=0;
+	STRING crashlog=NULL;
 	int i=0;
 
 	/* initialize all the low-level library code */
@@ -276,10 +276,10 @@ main (int argc, char **argv)
 prompt_for_db:
 
 	/* catch any fault, so we can close database */
-	if (debugmode)
-		stdstring_hardfail();
-	else
+	if (!debugmode)
 		set_signals();
+	else /* developer wants to drive without seatbelt! */
+		stdstring_hardfail();
 
 	platform_init();
 	set_displaykeys(keyflag);
@@ -367,7 +367,7 @@ finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
-	if (dbused) strfree(&dbused);
+	strfree(&dbused);
 	strfree(&dbrequested);
 	strfree(&readpath_file);
 	shutdown_interpreter();
