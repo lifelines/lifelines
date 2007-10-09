@@ -476,9 +476,9 @@ print_usage (void)
 static void
 main_db_notify (STRING db, BOOLEAN opening)
 {
+	/* store name away for reporting in case of crash later */
 	if (opening)
 		crash_setdb(db);
 	else
 		crash_setdb("");
 }
-

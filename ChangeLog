@@ -4,6 +4,10 @@
 
 	Simplify isnumeric and remove todo above it.
 
+	* ChangeLog src/liflines/llexec.c
+
+	Cosmetic changes to make llexec.c resemble main.c.
+
 2007-10-07 Stephen Dum
 	* ChangeLog docs/ll-userguide.xml
 
