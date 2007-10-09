@@ -1,7 +1,13 @@
+2007-10-09 Perry Rapp
+
+	* ChangeLog src/stdlib/strcvt.c
+
+	Simplify isnumeric and remove todo above it.
+
 2007-10-07 Stephen Dum
 	* ChangeLog docs/ll-userguide.xml
 
-	remove set of paranthesis.
+	remove set of parentheses.
 
 2007-10-06 lifelines stable 3.0.62 RELEASE
 

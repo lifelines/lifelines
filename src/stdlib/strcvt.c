@@ -91,20 +91,20 @@ makeznarrow (ZSTR zwstr)
 }
 /*=========================================
  * isnumeric -- Check string for all digits
- * TODO: convert to Unicode -- but must find where we make
- * numeric equivalent & convert it as well
+ * Used to parse GEDCOM pointers (eg, @I23@)
+ * so only needs to handle ASCII digits
+ * Does not need to handle any other types of digits
  *=======================================*/
 BOOLEAN
 isnumeric (STRING str)
 {
 	INT c;
 	if (!str) return FALSE;
+	/* only needs to handle ASCII digits
+	so can use very simple ASCII comparison */
 	while ((c = (uchar)*str++)) {
-#ifndef OS_NOCTYPE
-		if (chartype(c) != DIGIT) return FALSE;
-#else
-		if (!isdigit(c)) return FALSE;
-#endif
+		if (!(c >= '0' && c <= '9'))
+			return FALSE;
 	}
 	return TRUE;
 }
