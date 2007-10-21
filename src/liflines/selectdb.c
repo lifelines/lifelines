@@ -136,6 +136,8 @@ BOOLEAN
 open_or_create_database (INT alteration, STRING *dbused)
 {
 	INT lldberrnum=0;
+	char dbdir[MAXPATHLEN] = "";
+
 	/* Open Database */
 	if (open_database(alteration, *dbused, &lldberrnum))
 		return TRUE;
@@ -155,21 +157,25 @@ open_or_create_database (INT alteration, STRING *dbused)
 	/*
 	error was only that db doesn't exist, so lets try
 	making a new one 
-	If no database directory specified, add prefix llnewdbdir
 	*/
+	/* First construct directory to use */
 	if (is_unadorned_directory(*dbused)) {
+		/* no dir specified, so use first from LLDATABASES */
 		STRING dbpath = getlloptstr("LLDATABASES", ".");
 		CNSTRING newdbdir = get_first_path_entry(dbpath);
-		STRING temp = *dbused;
 		if (newdbdir) {
-			char tempth[MAXPATHLEN];
+			/* newdbdir is static from get_first_path_entry */
 			newdbdir = strdup(newdbdir);
-			concat_path(newdbdir, *dbused, uu8, tempth, sizeof(tempth));
-			*dbused = strsave(tempth);
-			stdfree(temp);
+			concat_path(newdbdir, *dbused, uu8, dbdir, sizeof(dbdir));
 			stdfree((STRING)newdbdir);
+		} else {
+			llstrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
 		}
+	} else {
+		llstrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
 	}
+	expand_special_fname_chars(dbdir, sizeof(dbdir), uu8);
+	strupdate(dbused, dbdir);
 
 	/* Is user willing to make a new db ? */
 	if (!ask_yes_or_no_msg(_(qSnodbse), _(qScrdbse))) 
