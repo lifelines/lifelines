@@ -27,8 +27,6 @@
 
 #include "llstdlib.h"
 
-/* TODO: does Unicode introduce any new whitespace characters ? 2002.06.26, Perry */
-
 /*================================
  * trim -- Trim string if too long
  *  returns static buffer (or NULL)

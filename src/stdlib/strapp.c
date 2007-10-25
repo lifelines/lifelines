@@ -76,7 +76,6 @@ llstrappf (char * dest, int limit, int utf8, const char * fmt, ...)
 char *
 llstrappvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
 {
-	/* TODO: Revise for UTF-8 */
 	size_t len = strlen(dest);
 	size_t n = limit-len;
 	if (n < 2) /* must fit trailing zero */
