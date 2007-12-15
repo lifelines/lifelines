@@ -5,6 +5,11 @@
 
 	Add new report which outputs specified tags of a database to GEDCOM.
 
+	* ChangeLog reports/gedmin.ll
+
+	Revised gedmin to allow keeping certain tags only for dead people (& fams).
+	More extensive statistics reported.
+
 2007-10-25 Perry Rapp
 
 	* ChangeLog src/stdlib/strapp.c src/stdlib/strwhite.c
