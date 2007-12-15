@@ -1,3 +1,10 @@
+2007-12-15 Perry Rapp
+
+	* ChangeLog
+	*NEW reports/gedmin.ll
+
+	Add new report which outputs specified tags of a database to GEDCOM.
+
 2007-10-25 Perry Rapp
 
 	* ChangeLog src/stdlib/strapp.c src/stdlib/strwhite.c
