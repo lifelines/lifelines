@@ -22,6 +22,7 @@ typedef INT (*OBJCMPFNC)(OBJECT obj1, OBJECT obj2, VPTR param);
 #define AData(s)     ((s)->ar_data)
 
 void add_array_obj(ARRAY array, OBJECT obj);
+void addref_array(ARRAY array);
 ARRAY create_array_objval(INT size);
 BOOLEAN delete_array_obj(ARRAY, INT i);
 void destroy_array(ARRAY array);

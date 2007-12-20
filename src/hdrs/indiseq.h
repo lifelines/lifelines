@@ -127,6 +127,7 @@ typedef struct tag_indiseq *INDISEQ;
  *===================*/
 
 void add_browse_list(STRING, INDISEQ);
+void addref_indiseq(INDISEQ seq);
 INDISEQ ancestor_indiseq(INDISEQ seq);
 void append_indiseq_null(INDISEQ, STRING key, CNSTRING name, BOOLEAN sure, BOOLEAN alloc);
 void append_indiseq_ival(INDISEQ, STRING key, STRING name, INT val, BOOLEAN sure, BOOLEAN alloc);

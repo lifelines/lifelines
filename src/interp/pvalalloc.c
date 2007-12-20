@@ -85,9 +85,9 @@ static void
 debug_check (void)
 {
 	PVALUE val;
-	for (val=free_list; val; val=val->value)
+	for (val=free_list; val; val=val->value.pxd)
 	{
-		ASSERT(val->type == PFREED && val->value != val);
+		ASSERT(val->type == PFREED && val->value.pxd != val);
 	}
 }
 #endif
@@ -132,7 +132,7 @@ alloc_pvalue_memory (void)
 			PVALUE val1 = &new_block->values[i];
 			init_pvalue_vtable(val1);
 			val1->type = PFREED;
-			val1->value = free_list;
+			val1->value.pxd = free_list;
 			free_list = val1;
 			if (debugging_pvalues)
 				debug_check();
@@ -140,14 +140,14 @@ alloc_pvalue_memory (void)
 	}
 	/* pull pvalue off of free list */
 	val = free_list;
-	free_list = free_list->value;
+	free_list = free_list->value.pxd;
 	if (debugging_pvalues)
 		debug_check();
 	live_pvalues++;
 #endif
 	/* set type to uninitialized - caller ought to set type */
 	ptype(val) = PNULL;
-	pvalvv(val) = 0;
+	val->value.pxd = 0;
 	return val;
 }
 /*========================================
@@ -174,7 +174,7 @@ free_pvalue_memory (PVALUE val)
 	}
 	/* put on free list */
 	val->type = PFREED;
-	val->value = free_list;
+	val->value.pxd = free_list;
 	free_list = val;
 	if (debugging_pvalues)
 		debug_check();

@@ -3644,7 +3644,7 @@ llrpt_parent (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_var_error(node, stab, arg, val, nullarg1, "parent");
 		return NULL;
 	}
-	set_pvalue(val, PGNODE, nparent(ged));
+	set_pvalue_node(val, nparent(ged));
 	return val;
 }
 /*========================================+
@@ -3786,7 +3786,7 @@ llrpt_indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!p || *p++ != 'I' || *p == 0) {
 		delete_pvalue(val);
-		return create_pvalue(PINDI,0);
+		return create_pvalue_of_null_indi();
 	}
 	*q++ = 'I';
 	while (chartype(c = (uchar)*p++) == DIGIT)
@@ -3794,9 +3794,10 @@ llrpt_indi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (c != 0 && (strip_at == 0 || c != '@')) {
-		return create_pvalue(PINDI,0);
+		return create_pvalue_of_null_indi();
 	}
-	if (strlen(scratch) == 1) return create_pvalue(PINDI,0);
+	if (strlen(scratch) == 1)
+		return create_pvalue_of_null_indi();
 
 	val = create_pvalue_from_indi_key(scratch);
 	return val;
@@ -3824,7 +3825,7 @@ llrpt_fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!p || *p++ != 'F' || *p == 0) {
 		delete_pvalue(val);
-		return create_pvalue(PFAM,0);
+		return create_pvalue_of_null_fam();
 	}
 	*q++ = 'F';
 	while (chartype(c = (uchar)*p++) == DIGIT)
@@ -3832,9 +3833,10 @@ llrpt_fam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	*q = 0;
 	delete_pvalue(val);
 	if (c != 0 && (strip_at == 0 || c != '@')) {
-		return create_pvalue(PFAM,0);
+		return create_pvalue_of_null_fam();
 	}
-	if (strlen(scratch) == 1) return create_pvalue(PFAM,0);
+	if (strlen(scratch) == 1)
+		return create_pvalue_of_null_fam();
 
 	val = create_pvalue_from_fam_key(scratch);
 	return val;
@@ -3926,7 +3928,9 @@ llrpt_free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	    val = symtab_valueofbool(globtab, iident(arg), &there);
 	}
 	if (there && val) {
-		set_pvalue(val, PNULL, NULL);
+		clear_pvalue(val);
+		val->type = PNULL;
+		val->value.pxd = 0;
 	}
 	return NULL;
 }

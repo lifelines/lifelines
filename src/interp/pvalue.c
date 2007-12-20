@@ -50,17 +50,16 @@
 static FLOAT bool_to_float(BOOLEAN);
 static INT bool_to_int(BOOLEAN);
 static void clear_pv_indiseq(INDISEQ seq);
-static void clear_pvalue(PVALUE val);
-
 static PVALUE create_pvalue_from_keynum_impl(INT i, INT ptype);
 static PVALUE create_pvalue_from_key_impl(CNSTRING key, INT ptype);
 static PVALUE create_pvalue_from_record(RECORD rec, INT ptype);
 /* static BOOLEAN eq_pstrings(PVALUE val1, PVALUE val2); */
 static int float_to_int(float f);
-static void free_float_pvalue(PVALUE val);
 static BOOLEAN is_record_pvaltype(INT valtype);
 static OBJECT pvalue_copy(OBJECT obj, int deep);
 static void pvalue_destructor(VTABLE *obj);
+static void release_pvalue_contents(PVALUE val);
+static void set_pvalue(PVALUE val, INT type, PVALUE_DATA pvd);
 
 /*********************************************
  * local variables
@@ -94,10 +93,10 @@ static struct tag_vtable vtable_for_pvalue = {
  * create_pvalue -- Create a program value
  *======================================*/
 PVALUE
-create_pvalue (INT type, VPTR value)
+create_pvalue (INT type, PVALUE_DATA pvd)
 {
 	PVALUE val = create_new_pvalue();
-	set_pvalue(val, type, value);
+	set_pvalue(val, type, pvd);
 	return val;
 }
 /*==================================
@@ -106,95 +105,96 @@ create_pvalue (INT type, VPTR value)
  *  type:  [IN]  new type for pvalue
  *  value: [IN]  new value for pvalue
  *================================*/
-void
-set_pvalue (PVALUE val, INT type, VPTR value)
+static void
+set_pvalue (PVALUE val, INT type, PVALUE_DATA pvd)
 {
-	if (type == ptype(val) && value == pvalvv(val)) {
-		/* self-assignment */
-		/* already have the value, or hold the pointer & reference */
+	/* for simple types, we can simply assign */
+	/* but for indirect/pointer types, we must beware of self-assignment */
+	if (type == PNULL) {
+		clear_pvalue(val);
 		return;
-	}
-
-	/* record pvalues each have their own RECORD on the heap */
-
-	clear_pvalue(val);
-
-	/* sanity check */
-	switch(type) {
-	case PNULL:
-		ASSERT(!value);
-		break;
-	}
-	/* types that don't simply assign pointer */
-	/* old refers to value passed in */
-	/* new refers to newly allocated copy to set */
-	switch(type) {
-	case PSTRING:
-		{
-			/* always copies string so caller doesn't have to */
-			if (value) {
-				STRING strold = (STRING)value;
-				STRING strnew = strsave(strold);
-				value = strnew;
-			}
-		break;
+	} else if (type == PINT) {
+		clear_pvalue(val);
+		val->type = PINT;
+		val->value.ixd = pvd.ixd;
+	} else if (type == PFLOAT) {
+		clear_pvalue(val);
+		val->type = PFLOAT;
+		val->value.fxd = pvd.fxd;
+	} else if (type == PBOOL) {
+		clear_pvalue(val);
+		val->type = PBOOL;
+		val->value.bxd = pvd.bxd;
+	} else if (type == PSTRING) {
+		STRING str = pvd.sxd;
+		/* strings are always copied, no self-assignment issue */
+		clear_pvalue(val);
+		val->type = PSTRING;
+		if (str)
+			val->value.sxd = strsave(str);
+		else
+			val->value.sxd = 0;
+	} else if (type == PGNODE) {
+		NODE node = pvd.nxd;
+		if (val->type == PGNODE && val->value.nxd == node)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = PGNODE;
+		val->value.nxd = node;
+		if (node) {
+			++nrefcnt(node);
+			dolock_node_in_cache(node, TRUE);
 		}
-	case PFLOAT:
-		{
-			float valold, *ptrnew;
-			ASSERT(value);
-			/* floats don't fit into VPTR, so we're using heap copies */
-			valold = *(float *)value;
-			/* allocate new pointer & copy float into place */
-			ptrnew = (float *)stdalloc(sizeof(*ptrnew));
-			*ptrnew = valold;
-			value = ptrnew;
-		}
-		break;
-	}
-
-	ptype(val) = type;
-	pvalvv(val) = value;
-
-	if (is_record_pvaltype(type)) {
-		RECORD rec = pvalue_to_record(val);
+	} else if (is_record_pvaltype(type)) { /* PINDI, PFAM, PSOUR, PEVEN, POTHR */
+		RECORD rec = pvd.rxd;
+		if (val->type == type && val->value.rxd == rec)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = type;
+		val->value.rxd = rec;
 		if (rec) {
 			addref_record(rec);
 		}
-	}
-
-	/* reference counted types and so forth */
-	switch(type) {
-	case PGNODE:
-		{
-			NODE node = pvalue_to_node(val);
-			if (node) {
-				++nrefcnt(node);
-				dolock_node_in_cache(node, TRUE);
-			}
-		}
-		break;
-	case PLIST:
-		{
-			LIST list = pvalue_to_list(val);
+	} else if (type == PLIST) {
+		LIST list = pvd.lxd;
+		if (val->type == PLIST && val->value.lxd == list)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = PLIST;
+		val->value.lxd = list;
+		if (list) {
 			addref_list(list);
 		}
-		break;
-	case PTABLE:
-		{
-			TABLE table = pvalue_to_table(val);
+	} else if (type == PTABLE) {
+		TABLE table = pvd.txd;
+		if (val->type == PTABLE && val->value.txd == table)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = PTABLE;
+		val->value.txd = table;
+		if (table) {
 			addref_table(table);
 		}
-		break;
-	case PSET:
-		{
-			INDISEQ seq = pvalue_to_seq(val);
-			/* because of getindiset, seq might be NULL */
-			if (seq) {
-				++IRefcnt(seq);
-			}
+	} else if (type == PSET) {
+		INDISEQ seq = pvd.qxd;
+		if (val->type == PSET && val->value.qxd == seq)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = PSET;
+		val->value.qxd = seq;
+		if (seq) {
+			addref_indiseq(seq);
 		}
-		break;
+	} else if (type == PARRAY) {
+		ARRAY arr = pvd.axd;
+		if (val->type == PARRAY && val->value.axd == arr)
+			return; /* self-assignment */
+		clear_pvalue(val);
+		val->type = PARRAY;
+		val->value.axd = arr;
+		if (arr) {
+			addref_array(arr);
+		}
 	}
 }
 /*========================================
@@ -226,19 +226,31 @@ wrong here - Perry, 2003-03-07 */
 #endif /* NOT_WORKING_ON_LARGE_DATA_SETS */
 }
 /*========================================
- * clear_pvalue -- Empty contents of pvalue
+ * clear_pvalue -- Set pvalue to null
+ *  releasing any contents
+ * Created: 2007/12/19, Perry Rapp
+ *======================================*/
+void
+clear_pvalue (PVALUE val)
+{
+	release_pvalue_contents(val);
+	val->type = PNULL;
+	val->value.pxd = 0;
+}
+/*========================================
+ * release_pvalue_contents -- Empty contents of pvalue
  *  This doesn't bother to clear val->value
  *  because caller will do so
  * Created: 2001/01/20, Perry Rapp
  *======================================*/
 static void
-clear_pvalue (PVALUE val)
+release_pvalue_contents (PVALUE val)
 {
 	check_pvalue_validity(val);
 	switch (ptype(val)) {
 	/*
 	embedded values have no referenced memory to clear
-	PINT, PBOOLEAN 
+	PINT, PBOOLEAN, PFLOAT
 	*/
 	/*
 	PNULL is a null value
@@ -254,9 +266,6 @@ clear_pvalue (PVALUE val)
 				}
 			}
 		}
-		return;
-	case PFLOAT:
-		free_float_pvalue(val);
 		return;
 	case PSTRING:
 		{
@@ -352,8 +361,8 @@ remove_node_and_delete_pvalue (PVALUE * pval)
 	NODE node=0;
 	if (*pval) {
 		PVALUE vl= *pval;
-		node = pvalue_to_node(vl);
-		pvalvv(vl) = 0; /* remove pointer to payload */
+		node = vl->value.nxd;
+		vl->value.nxd = 0;
 		delete_pvalue(vl);
 	}
 	*pval = 0;
@@ -405,7 +414,31 @@ create_pvalue_from_indi (NODE indi)
 	if (indi)
 		return create_pvalue_from_indi_key(indi_to_key(indi));
 	else
-		return create_pvalue(PINDI, 0);
+		return create_pvalue_of_null_indi();
+}
+/*=====================================================
+ * create_pvalue_of_null_indi -- Return pvalue of null indi
+ * That is, a pvalue of INDI type pointing to nothing
+ * Created: 2007/12/19, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_of_null_indi (void)
+{
+	PVALUE_DATA pvd;
+	pvd.rxd = 0;
+	return create_pvalue(PINDI, pvd);
+}
+/*=====================================================
+ * create_pvalue_of_null_fam -- Return pvalue of null fam
+ * That is, a pvalue of FAM type pointing to nothing
+ * Created: 2007/12/19, Perry Rapp
+ *===================================================*/
+PVALUE
+create_pvalue_of_null_fam (void)
+{
+	PVALUE_DATA pvd;
+	pvd.rxd = 0;
+	return create_pvalue(PFAM, pvd);
 }
 /*=====================================================
  * create_pvalue_from_indi_key
@@ -435,7 +468,7 @@ create_pvalue_from_cel (INT type, CACHEEL cel)
 {
 	PVALUE val=0;
 	RECORD rec = cel ? get_record_for_cel(cel) : 0;
-	val = create_pvalue(type, rec);
+	val = create_pvalue_from_record(rec, type);
 	release_record(rec); /* ownership transferred to pvalue */
 	return val;
 }
@@ -458,8 +491,10 @@ create_pvalue_from_indi_keynum (INT i)
 PVALUE
 create_pvalue_from_fam (NODE fam)
 {
-	CACHEEL cel = fam ? fam_to_cacheel_old(fam) : NULL;
-	return create_pvalue_from_cel(PFAM, cel);
+	if (fam)
+		return create_pvalue_from_fam_key(fam_to_key(fam));
+	else
+		return create_pvalue_of_null_fam();
 }
 /*====================================================
  * create_pvalue_from_fam_keynum -- Return indi as pvalue
@@ -507,8 +542,10 @@ create_pvalue_from_othr_keynum (INT i)
 static PVALUE
 create_pvalue_from_record (RECORD rec, INT ptype)
 {
+	PVALUE_DATA pvd;
 	/* record pvalues simply point to their heap-alloc'd record */
-	return create_pvalue(ptype, rec);
+	pvd.rxd = rec;
+	return create_pvalue(ptype, pvd);
 }
 /*====================================================
  * create_pvalue_from_keynum_impl -- Create pvalue for any type
@@ -531,17 +568,6 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	}
 	sprintf(key, "%c%d", cptype, i);
 	return create_pvalue_from_key_impl(key, ptype);
-}
-/*==================================
- * free_float_pvalue -- Delete float pvalue
- * Inverse of make_float_pvalue
- * Created: 2002/01/09, Perry Rapp
- *================================*/
-static void
-free_float_pvalue (PVALUE val)
-{
-	float *ptr = (float *)pvalvv(val);
-	stdfree(ptr);
 }
 /*==================================
  * create_pvalue_from_key_impl -- Create pvalue from any key
@@ -594,6 +620,28 @@ eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	}
 	*eflg = TRUE;
 }
+static BOOLEAN get_pvalue_as_bool (PVALUE val)
+{
+	switch(val->type)
+	{
+	case PNULL: return FALSE;
+	case PINT: return val->value.ixd != 0;
+	case PFLOAT: return val->value.fxd != 0;
+	case PBOOL: return val->value.bxd;
+	case PSTRING: return val->value.sxd != 0;
+	case PINDI:
+	case PFAM:
+	case PSOUR:
+	case PEVEN:
+	case POTHR:
+		return val->value.rxd != 0;
+	case PLIST: return val->value.lxd != 0;
+	case PTABLE: return val->value.txd != 0;
+	case PSET: return val->value.qxd != 0;
+	case PARRAY: return val->value.axd != 0;
+	}
+	return FALSE;
+}
 /*=========================================================
  * coerce_pvalue -- Convert PVALUE from one type to another
  *  type:  [in] type to convert to
@@ -609,8 +657,7 @@ coerce_pvalue (INT type, PVALUE val, BOOLEAN *eflg)
 	if (type == ptype(val)) return; /* no coercion needed */
 
 	if (type == PBOOL) {
-		/* Anything is convertible to PBOOL */
-		BOOLEAN boo = (pvalvv(val) != NULL);
+		BOOLEAN boo = get_pvalue_as_bool(val);
 		set_pvalue_bool(val, boo);
 		return;
 	}
@@ -788,10 +835,14 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		    else rel = (rec1  == rec2);
 		    break;
 		 }
-		/* for everything else, just compare value pointer */
-		default:
-			rel = (pvalvv(val1) == pvalvv(val2));
-			break;
+		case PLIST:
+			return val1->value.lxd == val2->value.lxd;
+		case PTABLE:
+			return val1->value.txd == val2->value.txd;
+		case PSET:
+			return val1->value.qxd == val2->value.qxd;
+		case PARRAY:
+			return val1->value.axd == val2->value.axd;
 		}
 	}
 	return rel;
@@ -915,11 +966,10 @@ describe_pvalue (PVALUE val)
 	zs_appc(zstr, '<');
 	zs_apps(zstr, get_pvalue_type_name(type));
 	zs_appc(zstr, ',');
-	if (pvalvv(val) == NULL) {
-		zs_apps(zstr, "NULL>");
-		return zstr;
-	}
+
 	switch (type) {
+	case PNULL:
+		zs_appf(zstr, "<NULL>");
 	case PINT:
 		zs_appf(zstr, "%d", pvalue_to_int(val));
 		break;
@@ -983,7 +1033,9 @@ describe_pvalue (PVALUE val)
 PVALUE
 create_pvalue_any (void)
 {
-	return create_pvalue(PNULL, NULL);
+	PVALUE_DATA pvd;
+	pvd.pxd = 0;
+	return create_pvalue(PNULL, pvd);
 }
 /*==================================
  * PINT: pvalue containing an int
@@ -991,17 +1043,21 @@ create_pvalue_any (void)
 PVALUE
 create_pvalue_from_int (INT ival)
 {
-	return create_pvalue(PINT, (VPTR) ival);
+	PVALUE_DATA pvd;
+	pvd.ixd = ival;
+	return create_pvalue(PINT, pvd);
 }
 void
 set_pvalue_int (PVALUE val, INT inum)
 {
-	set_pvalue(val, PINT, (VPTR)inum);
+	PVALUE_DATA pvd;
+	pvd.ixd = inum;
+	set_pvalue(val, PINT, pvd);
 }
 INT
 pvalue_to_int (PVALUE val)
 {
-	return (INT)pvalvv(val);
+	return val->value.ixd;
 }
 /*==================================
  * PFLOAT: pvalue containing a float
@@ -1011,18 +1067,21 @@ pvalue_to_int (PVALUE val)
 PVALUE
 create_pvalue_from_float (float fval)
 {
-	return create_pvalue(PFLOAT, &fval);
+	PVALUE_DATA pvd;
+	pvd.fxd = fval;
+	return create_pvalue(PFLOAT, pvd);
 }
 void
 set_pvalue_float (PVALUE val, float fnum)
 {
-	set_pvalue(val, PFLOAT, &fnum);
+	PVALUE_DATA pvd;
+	pvd.fxd = fnum;
+	set_pvalue(val, PFLOAT, pvd);
 }
 float
 pvalue_to_float (PVALUE val)
 {
-	/* TODO: change when ptag goes to UNION */
-	return *(float*)pvalvv(val);
+	return pvalvv(val).fxd;
 }
 /*==================================
  * PBOOL: pvalue containing a boolean
@@ -1030,17 +1089,21 @@ pvalue_to_float (PVALUE val)
 PVALUE
 create_pvalue_from_bool (BOOLEAN bval)
 {
-	return create_pvalue_from_int(bval);
+	PVALUE_DATA pvd;
+	pvd.bxd = bval;
+	return create_pvalue(PBOOL, pvd);
 }
 void
 set_pvalue_bool (PVALUE val, BOOLEAN bnum)
 {
-	set_pvalue(val, PBOOL, (VPTR)bnum);
+	PVALUE_DATA pvd;
+	pvd.bxd = bnum;
+	set_pvalue(val, PBOOL, pvd);
 }
 BOOLEAN
 pvalue_to_bool (PVALUE val)
 {
-	return (BOOLEAN)pvalvv(val);
+	return pvalvv(val).bxd;
 }
 /*==================================
  * PSTRING: pvalue containing a string
@@ -1048,7 +1111,9 @@ pvalue_to_bool (PVALUE val)
 PVALUE
 create_pvalue_from_string (CNSTRING str)
 {
-	return create_pvalue(PSTRING, (VPTR)str);
+	PVALUE_DATA pvd;
+	pvd.sxd = (STRING)str;
+	return create_pvalue(PSTRING, pvd);
 }
 PVALUE
 create_pvalue_from_zstr (ZSTR * pzstr)
@@ -1060,12 +1125,14 @@ create_pvalue_from_zstr (ZSTR * pzstr)
 void
 set_pvalue_string (PVALUE val, CNSTRING str)
 {
-	set_pvalue(val, PSTRING, (VPTR)str); /* makes new copy of string */
+	PVALUE_DATA pvd;
+	pvd.sxd = (STRING)str;
+	set_pvalue(val, PSTRING, pvd);
 }
 STRING
 pvalue_to_string (PVALUE val)
 {
-	return (STRING)pvalvv(val);
+	return pvalvv(val).sxd;
 }
 /*==================================
  * PGNODE: pvalue containing a GEDCOM node
@@ -1073,17 +1140,21 @@ pvalue_to_string (PVALUE val)
 PVALUE
 create_pvalue_from_node (NODE node)
 {
-	return create_pvalue(PGNODE, node);
+	PVALUE_DATA pvd;
+	pvd.nxd = node;
+	return create_pvalue(PGNODE, pvd);
 }
 void
 set_pvalue_node (PVALUE val, NODE node)
 {
-	set_pvalue(val, PGNODE, (VPTR)node);
+	PVALUE_DATA pvd;
+	pvd.nxd = node;
+	set_pvalue(val, PGNODE, pvd);
 }
 NODE
 pvalue_to_node (PVALUE val)
 {
-	return (NODE)pvalvv(val);
+	return pvalvv(val).nxd;
 }
 /*==================================
  * record pvalues (PINDI, PFAM, ...)
@@ -1091,9 +1162,8 @@ pvalue_to_node (PVALUE val)
 RECORD
 pvalue_to_record (PVALUE val)
 {
-	RECORD rec = pvalvv(val); /* may be NULL */
 	ASSERT(is_record_pvalue(val));
-	return rec;
+	return pvalvv(val).rxd; /* may be NULL */
 }
 CACHEEL
 pvalue_to_cel (PVALUE val)
@@ -1110,12 +1180,14 @@ pvalue_to_cel (PVALUE val)
 PVALUE
 create_pvalue_from_list (LIST list)
 {
-	return create_pvalue(PLIST, list);
+	PVALUE_DATA pvd;
+	pvd.lxd = list;
+	return create_pvalue(PLIST, pvd);
 }
 LIST
 pvalue_to_list (PVALUE val)
 {
-	return (LIST)pvalvv(val);
+	return pvalvv(val).lxd;
 }
 /*==================================
  * TABLE: pvalue containing a table
@@ -1123,12 +1195,14 @@ pvalue_to_list (PVALUE val)
 PVALUE
 create_pvalue_from_table (TABLE tab)
 {
-	return create_pvalue(PTABLE, tab);
+	PVALUE_DATA pvd;
+	pvd.txd = tab;
+	return create_pvalue(PTABLE, pvd);
 }
 TABLE
 pvalue_to_table (PVALUE val)
 {
-	return (TABLE)pvalvv(val);
+	return pvalvv(val).txd;
 }
 /*==================================
  * PSET: pvalue containing a set (INDISEQ)
@@ -1136,17 +1210,21 @@ pvalue_to_table (PVALUE val)
 PVALUE
 create_pvalue_from_seq (INDISEQ seq)
 {
-	return create_pvalue(PSET, seq);
+	PVALUE_DATA pvd;
+	pvd.qxd = seq;
+	return create_pvalue(PSET, pvd);
 }
 void
 set_pvalue_seq (PVALUE val, INDISEQ seq)
 {
-	set_pvalue(val, PSET, (VPTR)seq);
+	PVALUE_DATA pvd;
+	pvd.qxd = seq;
+	set_pvalue(val, PSET, pvd);
 }
 INDISEQ
 pvalue_to_seq (PVALUE val)
 {
-	return (INDISEQ)pvalvv(val);
+	return pvalvv(val).qxd;
 }
 /*==================================
  * ARRAY: pvalue containing an array
@@ -1154,7 +1232,7 @@ pvalue_to_seq (PVALUE val)
 ARRAY
 pvalue_to_array (PVALUE val)
 {
-	return (ARRAY)pvalvv(val);
+	return pvalvv(val).axd;
 }
 /*========================================
  * init_pvalue_vtable -- set vtable (for allocator in pvalalloc.c)

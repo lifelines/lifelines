@@ -2206,3 +2206,13 @@ qkey_to_name (STRING key)
 	if (!name) return NULL;
 	return nval(name);
 }
+/*=======================================================
+ * addref_indiseq -- Add new live reference to indiset
+ * Created: 2007/12/19, Perry Rapp
+ *=====================================================*/
+void
+addref_indiseq (INDISEQ seq)
+{
+	if (seq)
+		++IRefcnt(seq);
+}

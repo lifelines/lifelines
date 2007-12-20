@@ -41,47 +41,48 @@
 
 typedef union {
 	/* "basic" types, should be same as UNION */
-        BOOLEAN b;
-        INT     i;
-        FLOAT   f;
-	STRING	s;
-        VPTR    p;	/* Try not to use this! */
+        BOOLEAN bxd;
+        INT     ixd;
+        FLOAT   fxd;
+	STRING	sxd;
+        VPTR    pxd;	/* Try not to use this! */
 	/* "complex" types */
-	NODE	n;
-	ARRAY	a;
-	LIST	l;
-	CACHEEL	c;
-	RECORD	r;
-	INDISEQ	q;
-	TABLE	t;
+	NODE	nxd;
+	ARRAY	axd;
+	LIST	lxd;
+	CACHEEL	cxd;
+	RECORD	rxd;
+	INDISEQ	qxd;
+	TABLE	txd;
 } PVALUE_DATA;
 
 typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
         struct tag_vtable * vtable;
         unsigned char type;     /* type of value */
-        VPTR value;
+//        VPTR value;
+	PVALUE_DATA value;
         /* PVALUE_DATA value; */
 };
 
 /* PVALUE types */
 
-#define PNULL      1  /* (freed pvalue) any value -- no type restriction - always NULL value */
-#define PINT       2  /* integer */
+#define PNULL      1  /* pxd=0 */ /* (freed pvalue) any value -- no type restriction - always NULL value */
+#define PINT       2  /* ixd */ /* integer */
 /* PLONG==3 is obsolete */
-#define PFLOAT     4  /* floating point */
-#define PBOOL      5  /* boolean */
-#define PSTRING    6  /* string */
-#define PGNODE	   7  /* GEDCOM node */
-#define PINDI      8  /* GEDCOM person record */
-#define PFAM       9  /* GEDCOM family record */
-#define PSOUR     10  /* GEDCOM source record */
-#define PEVEN     11  /* GEDCOM event record */
-#define POTHR     12  /* GEDCOM other record */
-#define PLIST     13  /* list */
-#define PTABLE    14  /* table */
-#define PSET      15  /* set */
-#define PARRAY    16  /* array */
+#define PFLOAT     4  /* fxd */ /* floating point */
+#define PBOOL      5  /* bxd */ /* boolean */
+#define PSTRING    6  /* sxd */ /* string */
+#define PGNODE	   7  /* nxd */ /* GEDCOM node */
+#define PINDI      8  /* rxd */ /* GEDCOM person record */
+#define PFAM       9  /* rxd */ /* GEDCOM family record */
+#define PSOUR     10  /* rxd */ /* GEDCOM source record */
+#define PEVEN     11  /* rxd */ /* GEDCOM event record */
+#define POTHR     12  /* rxd */ /* GEDCOM other record */
+#define PLIST     13  /* lxd */ /* list */
+#define PTABLE    14  /* txd */ /* table */
+#define PSET      15  /* qxd */ /* set/indiseq */
+#define PARRAY    16  /* axd */ /* array */
 #define PMAXLIVE  PARRAY /* maximum live type */
 #define PFREED    99  /* returned to free list */
 
@@ -108,11 +109,12 @@ void eq_pvalues(PVALUE, PVALUE, BOOLEAN*eflg, ZSTR * zerr);
 
 /* PVALUE Functions */
 void bad_type_error(CNSTRING op, ZSTR *zerr, PVALUE val1, PVALUE val2);
+void clear_pvalue(PVALUE val);
 void coerce_pvalue(INT, PVALUE, BOOLEAN*);
 PVALUE copy_pvalue(PVALUE);
 PVALUE create_new_pvalue_list(void);
 PVALUE create_new_pvalue_table(void);
-PVALUE create_pvalue(INT, VPTR);
+PVALUE create_pvalue(INT type, PVALUE_DATA pvd);
 PVALUE create_pvalue_any(void);
 PVALUE create_pvalue_from_bool(BOOLEAN bval);
 PVALUE create_pvalue_from_cel(INT type, CACHEEL cel);
@@ -133,6 +135,8 @@ PVALUE create_pvalue_from_sour_keynum(INT i);
 PVALUE create_pvalue_from_string(CNSTRING str);
 PVALUE create_pvalue_from_zstr(ZSTR * pzstr);
 PVALUE create_pvalue_from_table(TABLE tab);
+PVALUE create_pvalue_of_null_fam(void);
+PVALUE create_pvalue_of_null_indi(void);
 ZSTR describe_pvalue(PVALUE);
 void delete_vptr_pvalue(VPTR ptr);
 void delete_pvalue(PVALUE);
@@ -159,7 +163,6 @@ INDISEQ pvalue_to_seq(PVALUE val);
 STRING pvalue_to_string(PVALUE);
 TABLE pvalue_to_table(PVALUE val);
 struct tag_array *pvalue_to_array(PVALUE val);
-void set_pvalue(PVALUE, INT, VPTR);
 void set_pvalue_bool(PVALUE val, BOOLEAN bv);
 void set_pvalue_float(PVALUE val, float fnum);
 void set_pvalue_int(PVALUE val, INT iv);

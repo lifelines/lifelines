@@ -190,4 +190,13 @@ array_destructor (VTABLE *obj)
 	ASSERT((*obj) == &vtable_for_array);
 	destroy_array(array);
 }
-
+/*=================================================
+ * addref_array -- Add a live reference to array
+ *===============================================*/
+void
+addref_array (ARRAY array)
+{
+	if (array) {
+		++ARefcnt(array);
+	}
+}

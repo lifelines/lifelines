@@ -1,3 +1,11 @@
+2007-12-20 Perry Rapp
+
+	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
+	src/hdrs/indiseq.h src/hdrs/pvalue.h src/interp/builtin.c
+	src/interp/pvalalloc.c src/interp/pvalue.c src/stdlib/array.c
+
+	Fix pvalue to store PVALUE_DATA union instead of VPTR pointer
+
 2007-12-15 Perry Rapp
 
 	* ChangeLog
