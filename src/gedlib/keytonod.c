@@ -114,7 +114,7 @@ static CACHEEL key_to_othr_cacheel(CNSTRING key);
 static CACHEEL key_to_sour_cacheel(CNSTRING key);
 static CACHEEL node_to_cache(CACHE, NODE);
 static void put_node_in_cache(CACHE cache, CACHEEL cel, NODE node, STRING key);
-static void remove_cel_from_cache(CACHE cache, CACHEEL cel);
+static void remove_cel_from_cache(CACHE cache, CACHEEL cel, BOOLEAN delcache);
 static NODE qkey_to_node(CACHE cache, CNSTRING key, STRING tag);
 static RECORD qkey_typed_to_record(CACHE cache, CNSTRING key, STRING tag);
 /* static CACHEEL qkey_to_typed_cacheel(STRING key); */
@@ -583,7 +583,8 @@ delete_cache (CACHE * pcache)
 	if (!cache) return;
 	/* Loop through all cache elements, freeing each */
 	while ((frst = cacfirstdir(cache)) != 0) {
-		remove_cel_from_cache(cache, frst);
+		BOOLEAN delcache = TRUE;
+		remove_cel_from_cache(cache, frst, delcache);
 	}
 	/* TODO: Need to delete cache elements on free list */
 	num = get_table_count(cacdata(cache));
@@ -1186,20 +1187,21 @@ remove_from_cache_by_key (CNSTRING key)
 static void
 remove_from_cache (CACHE cache, CNSTRING key)
 {
+	BOOLEAN delcache = FALSE;
 	CACHEEL cel=0;
 
 	if (!key || *key == 0 || !cache)
 		return;
 	/* If it has a key, it is in the cache */
 	cel = valueof_ptr(cacdata(cache), key);
-	remove_cel_from_cache(cache, cel);
+	remove_cel_from_cache(cache, cel, delcache);
 }
 /*=============================================
  * remove_from_cache -- Move cache entry to free list
  *  Requires non-null input
  *===========================================*/
 static void
-remove_cel_from_cache (CACHE cache, CACHEEL cel)
+remove_cel_from_cache (CACHE cache, CACHEEL cel, BOOLEAN delcache)
 {
 	CACHEEL celnext=0;
 	STRING key = ckey(cel);
@@ -1207,7 +1209,26 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel)
 	/* caller ensured cache && key are non-null */
 	ASSERT(cel);
 
-	ASSERT(!cclock(cel)); /* not supposed to remove locked elements */
+	if (!cclock(cel)) {
+		/*
+		not supposed to remove locked elements!
+		Construct informational message and cause exception
+		*/
+		char msg[1024] = "";
+		NODE node = cnode(cel);
+		if (delcache) {
+			llstrapps(msg, sizeof(msg), uu8
+			, _("Locked cache element found when deleting cache"));
+		} else {
+			llstrapps(msg, sizeof(msg), uu8
+			, _("Locked cache element found when releasing cache element"));
+		}
+		if (node && nxref(node)) {
+			llstrappf(msg, sizeof(msg), uu8, _(" (node %s)"), nxref(node));
+		}
+		FATAL2(msg);
+	}
+	ASSERT(!cclock(cel)); 
 	ASSERT(cnode(cel));
 	remove_direct(cache, cel);
 

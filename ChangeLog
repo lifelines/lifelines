@@ -6,6 +6,11 @@
 
 	Fix pvalue to store PVALUE_DATA union instead of VPTR pointer
 
+	* ChangeLog src/gedlib/keytonod.c
+
+	Changed locked assert in remove_cel_from_cache to be more
+	detailed fatal msg.
+
 2007-12-15 Perry Rapp
 
 	* ChangeLog
