@@ -149,7 +149,7 @@ BOOLEAN delete_indiseq(INDISEQ, STRING, STRING, INT);
 INDISEQ descendent_indiseq(INDISEQ seq);
 INDISEQ difference_indiseq(INDISEQ, INDISEQ);
 INT element_ikey(SORTEL el);
-BOOLEAN element_indiseq(INDISEQ, INT, STRING*, STRING*);
+BOOLEAN element_indiseq(INDISEQ seq, INT index, STRING *pkey, STRING *pname);
 BOOLEAN element_indiseq_ival(INDISEQ seq, INT index, STRING*, INT *, STRING*);
 CNSTRING element_key_indiseq(INDISEQ seq, INT index);
 CNSTRING element_name(SORTEL el);

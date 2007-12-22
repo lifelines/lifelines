@@ -17,6 +17,12 @@
 	disp_dbgsymtab, init_dbgsymtab_arrays, free_dbgsymtab_arrays,
 	make_empty_string_table, make_empty_pvalue_table.
 
+	* ChangeLog src\hdrs\indiseq.h src\interp\progerr.c
+
+	Add some msg_info calls to disp_pvalue & disp_list.
+	Implement disp_table. Rename disp_symtab_cb as format_dbgsymtab_val.
+	New function format_dbgsymtab_str. Implement disp_seq.
+
 2007-12-20 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h

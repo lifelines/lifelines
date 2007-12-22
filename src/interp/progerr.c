@@ -63,7 +63,8 @@ static void disp_pvalue(PVALUE val);
 static void disp_seq(INDISEQ seq);
 static void disp_symtab(STRING title, SYMTAB stab);
 static void disp_table(TABLE tab);
-static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, struct dbgsymtab_s * sdata);
+static void format_dbgsymtab_val(STRING key, PVALUE val, struct dbgsymtab_s * sdata);
+static void format_dbgsymtab_str(STRING key, STRING valstr, PVALUE val, struct dbgsymtab_s * sdata);
 static void free_dbgsymtab_arrays(struct dbgsymtab_s * sdata);
 static SYMTAB get_symtab_ancestor(SYMTAB stab, INT index);
 static void init_dbgsymtab_arrays(struct dbgsymtab_s * sdata, INT nels);
@@ -274,13 +275,13 @@ disp_symtab (STRING title, SYMTAB stab)
 	if (!nels) return;
 	init_dbgsymtab_arrays(&sdata, nels);
 	/* Now traverse & print the actual entries into string array
-	(sdata.locals) via disp_symtab_cb() */
+	(sdata.locals) via format_dbgsymtab_val() */
 	symtabit = begin_symtab_iter(stab);
 	if (symtabit) {
 		STRING key=0;
 		PVALUE val=0;
 		while (next_symtab_entry(symtabit, (CNSTRING *)&key, &val)) {
-			disp_symtab_cb(key, val, &sdata);
+			format_dbgsymtab_val(key, val, &sdata);
 		}
 		end_symtab_iter(&symtabit);
 	}
@@ -305,29 +306,43 @@ disp_dbgsymtab (CNSTRING title, struct dbgsymtab_s * sdata)
 		if (choice == -1)
 			break;
 		val = sdata->values[choice];
-		disp_pvalue(val);
+		if (val)
+			disp_pvalue(val);
 	}
 }
 /*====================================================
- * disp_symtab_cb -- Display one entry in symbol table
+ * format_dbgsymtab_val -- Display one entry in symbol table
  *  This is part of the report language debugger
  *  key:   [IN]  name of current symbol
  *  val:   [IN]  value of current symbol
- *  param: [I/O] points to dbgsymtab_s, where list is being printed
+ *  sdata: [I/O] structure holding array of values & strings to display
  *==================================================*/
-static BOOLEAN
-disp_symtab_cb (STRING key, PVALUE val, struct dbgsymtab_s * sdata)
+static void
+format_dbgsymtab_val (STRING key, PVALUE val, struct dbgsymtab_s * sdata)
 {
-	ZSTR zline = zs_newn(80), zval;
-	ASSERT(sdata->current < sdata->count);
-	zval = describe_pvalue(val);
-	zs_setf(zline, "%s: %s", key, zs_str(zval));
+	ZSTR zval = describe_pvalue(val);
+	STRING valstr = zs_str(zval);
+	format_dbgsymtab_str(key, valstr, val, sdata);
 	zs_free(&zval);
+}
+/*====================================================
+ * format_dbgsymtab_val -- Display one entry in symbol table
+ *  This is part of the report language debugger
+ *  key:   [IN]  name of current symbol
+ *  valstr:   [IN]  string to display for current value
+ *  val:   [IN]  value of current symbol (or NULL if none applicable)
+ *  sdata: [I/O] structure holding array of values & strings to display
+ *==================================================*/
+static void
+format_dbgsymtab_str (STRING key, STRING valstr, PVALUE val, struct dbgsymtab_s * sdata)
+{
+	ZSTR zline = zs_newn(80);
+	ASSERT(sdata->current < sdata->count);
+	zs_setf(zline, "%s: %s", key, valstr);
 	sdata->displays[sdata->current] = strsave(zs_str(zline));
 	sdata->values[sdata->current] = val;
 	++sdata->current;
 	zs_free(&zline);
-	return TRUE; /* continue */
 }
 /*====================================================
  * disp_pvalue -- Display details of specified pvalue
@@ -351,7 +366,7 @@ disp_pvalue (PVALUE val)
 				if (nval(node)) {
 					llstrapps(str, len, uu8, nval(node));
 				}
-				/* TODO - display string */
+				msg_info(str);
 			}
 			return;
 		case PINDI:
@@ -364,7 +379,7 @@ disp_pvalue (PVALUE val)
 				NODE node = nztop(rec);
 				size_t len = 128;
 				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
-				/* TODO - display string */
+				msg_info(txt);
 			}
 			return;
 		case PLIST:
@@ -397,25 +412,26 @@ disp_list (LIST list)
 {
 	struct dbgsymtab_s sdata;
 	INT nels = length_list(list);
-	INT i = 0;
-	VPTR ptr = 0;
-	LIST_ITER listit = 0;
 	if (!nels) {
+		msg_info(_("list is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
 
-	listit = begin_list(list);
-	i = 0;
-	while (next_list_ptr(listit, &ptr)) {
-		PVALUE val = ptr;
-		char key[10];
-		snprintf(key, sizeof(key), "%d", sdata.current+1);
-		disp_symtab_cb(key, val, &sdata);
+	/* loop thru list building display array */
+	{
+		LIST_ITER listit = begin_list(list);
+		VPTR ptr = 0;
+		while (next_list_ptr(listit, &ptr)) {
+			PVALUE val = ptr;
+			char key[10];
+			snprintf(key, sizeof(key), "%d", sdata.current+1);
+			format_dbgsymtab_val(key, val, &sdata);
+		}
+		end_list_iter(&listit);
 	}
-	end_list_iter(&listit);
 
-	disp_dbgsymtab("LIST contents", &sdata);
+	disp_dbgsymtab(_("LIST contents"), &sdata);
 
 	free_dbgsymtab_arrays(&sdata);
 }
@@ -427,11 +443,30 @@ disp_list (LIST list)
 static void
 disp_table (TABLE tab)
 {
+	struct dbgsymtab_s sdata;
 	INT nels = get_table_count(tab);
 	if (!nels) {
+		msg_info(_("table is empty"));
 		return;
 	}
-	/* TODO */
+	init_dbgsymtab_arrays(&sdata, nels);
+
+	/* loop thru table building display array */
+	{
+		TABLE_ITER tabit = begin_table_iter(tab);
+		STRING key=0;
+		VPTR ptr = 0;
+		while (next_table_ptr(tabit, &key, &ptr)) {
+			PVALUE val = ptr;
+			format_dbgsymtab_val(key, val, &sdata);
+		}
+		end_table_iter(&tabit);
+	}
+	
+
+	disp_dbgsymtab(_("TABLE contents"), &sdata);
+
+	free_dbgsymtab_arrays(&sdata);
 }
 /*=============================================+
  * disp_seq -- Display sequence contents
@@ -441,11 +476,27 @@ disp_table (TABLE tab)
 static void
 disp_seq (INDISEQ seq)
 {
+	struct dbgsymtab_s sdata;
 	INT nels = length_indiseq(seq);
+	INT i=0;
 	if (!nels) {
+		msg_info(_("sequence is empty"));
 		return;
 	}
-	/* TODO */
+	init_dbgsymtab_arrays(&sdata, nels);
+
+	/* loop thru seq building display array */
+	for (i=0; i<nels; ++i)
+	{
+		STRING key=0, name=0;
+		PVALUE val = NULL;
+		element_indiseq(seq, i, &key, &name);
+		format_dbgsymtab_str(key, name, val, &sdata);
+	}
+	
+	disp_dbgsymtab(_("SEQ contents"), &sdata);
+
+	free_dbgsymtab_arrays(&sdata);
 }
 /*=============================================+
  * prog_error -- Report a run time program error
