@@ -57,9 +57,18 @@ struct dbgsymtab_s
  *********************************************/
 
 static INT count_symtab_ancestors(SYMTAB stab);
+static void disp_dbgsymtab(CNSTRING title, struct dbgsymtab_s * sdata);
+static void disp_list(LIST list);
+static void disp_pvalue(PVALUE val);
+static void disp_seq(INDISEQ seq);
 static void disp_symtab(STRING title, SYMTAB stab);
+static void disp_table(TABLE tab);
 static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, struct dbgsymtab_s * sdata);
+static void free_dbgsymtab_arrays(struct dbgsymtab_s * sdata);
 static SYMTAB get_symtab_ancestor(SYMTAB stab, INT index);
+static void init_dbgsymtab_arrays(struct dbgsymtab_s * sdata, INT nels);
+static PVALUE * make_empty_pvalue_table(INT nels);
+static STRING * make_empty_string_table(INT nels);
 static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
 
@@ -259,41 +268,45 @@ static void
 disp_symtab (STRING title, SYMTAB stab)
 {
 	SYMTAB_ITER symtabit=0;
-	INT n = (stab->tab ? get_table_count(stab->tab) : 0);
+	INT nels = (stab->tab ? get_table_count(stab->tab) : 0);
 	struct dbgsymtab_s sdata;
-	INT bytes = n * sizeof(STRING);
 	INT choice = 0;
-	if (!n) return;
-	memset(&sdata, 0, sizeof(sdata));
-	sdata.count = n;
-	sdata.displays = (STRING *)stdalloc(n * sizeof(STRING));
-	sdata.values = (PVALUE *)stdalloc(n * sizeof(PVALUE));
-	memset(sdata.displays, 0, n * sizeof(STRING));
-	memset(sdata.values, 0, n * sizeof(STRING));
+	if (!nels) return;
+	init_dbgsymtab_arrays(&sdata, nels);
 	/* Now traverse & print the actual entries into string array
 	(sdata.locals) via disp_symtab_cb() */
 	symtabit = begin_symtab_iter(stab);
 	if (symtabit) {
 		STRING key=0;
-		PVALUE pval=0;
-		while (next_symtab_entry(symtabit, (CNSTRING *)&key, &pval)) {
-			disp_symtab_cb(key, pval, &sdata);
+		PVALUE val=0;
+		while (next_symtab_entry(symtabit, (CNSTRING *)&key, &val)) {
+			disp_symtab_cb(key, val, &sdata);
 		}
 		end_symtab_iter(&symtabit);
 	}
-	/*
-	Actually display data from string array */
+	disp_dbgsymtab(title, &sdata);
+	free_dbgsymtab_arrays(&sdata);
+}
+/*====================================================
+ * display_dbgsymtab -- Display values in dbgsymtab in list
+ *  (allows user to drill into container values)
+ * This is used for symbol tables, lists, etc.
+ *  title: [IN]  list title
+ *  sdata: [IN]  values to display
+ *==================================================*/
+static void
+disp_dbgsymtab (CNSTRING title, struct dbgsymtab_s * sdata)
+{
 	while (TRUE) {
 		PVALUE val = 0;
 		ZSTR zstr = 0;
-		choice = rptui_choose_from_array(title, n, sdata.displays);
+		INT choice = 0;
+		choice = rptui_choose_from_array((STRING)title, sdata->count, sdata->displays);
 		if (choice == -1)
 			break;
-		val = sdata.values[choice];
-		zstr = describe_pvalue(val);
+		val = sdata->values[choice];
+		disp_pvalue(val);
 	}
-	free_array_strings(n, sdata.displays);
-	stdfree(sdata.values);
 }
 /*====================================================
  * disp_symtab_cb -- Display one entry in symbol table
@@ -315,6 +328,124 @@ disp_symtab_cb (STRING key, PVALUE val, struct dbgsymtab_s * sdata)
 	++sdata->current;
 	zs_free(&zline);
 	return TRUE; /* continue */
+}
+/*====================================================
+ * disp_pvalue -- Display details of specified pvalue
+ *  Drilldown in variable debugger
+ *  This is primarily to display contents of container values
+ *  val:   [IN]  value to display
+ *==================================================*/
+static void
+disp_pvalue (PVALUE val)
+{
+	switch (which_pvalue_type(val)) {
+		case PGNODE:
+			{
+				NODE node = pvalue_to_node(val);
+				char buffer[256] = "";
+				size_t len = sizeof(buffer);
+				STRING str = buffer;
+				if (ntag(node)) {
+					llstrappf(str, len, uu8, "%s: ", ntag(node));
+				}
+				if (nval(node)) {
+					llstrapps(str, len, uu8, nval(node));
+				}
+				/* TODO - display string */
+			}
+			return;
+		case PINDI:
+		case PFAM:
+		case PSOUR:
+		case PEVEN:
+		case POTHR:
+			{
+				RECORD rec = pvalue_to_record(val);
+				NODE node = nztop(rec);
+				size_t len = 128;
+				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
+				/* TODO - display string */
+			}
+			return;
+		case PLIST:
+			{
+				LIST list = pvalue_to_list(val);
+				disp_list(list);
+			}
+			return;
+		case PTABLE:
+			{
+				TABLE tab = pvalue_to_table(val);
+				disp_table(tab);
+			}
+			return;
+		case PSET:
+			{
+				INDISEQ seq = pvalue_to_seq(val);
+				disp_seq(seq);
+			}
+			return;
+	}
+}
+/*=============================================+
+ * disp_list -- Display list contents
+ *  used for drilldown in variable debugger
+ *  list:  list to display
+ *============================================*/
+static void
+disp_list (LIST list)
+{
+	struct dbgsymtab_s sdata;
+	INT nels = length_list(list);
+	INT i = 0;
+	VPTR ptr = 0;
+	LIST_ITER listit = 0;
+	if (!nels) {
+		return;
+	}
+	init_dbgsymtab_arrays(&sdata, nels);
+
+	listit = begin_list(list);
+	i = 0;
+	while (next_list_ptr(listit, &ptr)) {
+		PVALUE val = ptr;
+		char key[10];
+		snprintf(key, sizeof(key), "%d", sdata.current+1);
+		disp_symtab_cb(key, val, &sdata);
+	}
+	end_list_iter(&listit);
+
+	disp_dbgsymtab("LIST contents", &sdata);
+
+	free_dbgsymtab_arrays(&sdata);
+}
+/*=============================================+
+ * disp_table -- Display table contents
+ *  used for drilldown in variable debugger
+ *  tab:  table to display
+ *============================================*/
+static void
+disp_table (TABLE tab)
+{
+	INT nels = get_table_count(tab);
+	if (!nels) {
+		return;
+	}
+	/* TODO */
+}
+/*=============================================+
+ * disp_seq -- Display sequence contents
+ *  used for drilldown in variable debugger
+ *  seq:  sequence to display
+ *============================================*/
+static void
+disp_seq (INDISEQ seq)
+{
+	INT nels = length_indiseq(seq);
+	if (!nels) {
+		return;
+	}
+	/* TODO */
 }
 /*=============================================+
  * prog_error -- Report a run time program error
@@ -396,4 +527,62 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		sleep(num);
 	zs_free(&zstr);
 	return msgbuff;
+}
+/*=============================================+
+ * init_dbgsymtab_arrays -- Initialize contents of dbgsymtab
+ *  and create its arrays
+ *  sdata: [I/O] dbgsymtab to be initialized
+ *  nels:  [IN] number of elements
+ *============================================*/
+static void
+init_dbgsymtab_arrays (struct dbgsymtab_s * sdata, INT nels)
+{
+	memset(sdata, 0, sizeof(*sdata));
+	sdata->count = nels;
+	sdata->displays = make_empty_string_table(nels);
+	sdata->values = make_empty_pvalue_table(nels);
+}
+/*=============================================+
+ * free_dbgsymtab_arrays -- Clear dbgsymtab after use
+ *  frees its arrays and dynamic strings
+ *  values are assumed to be borrowed, not to free
+ *  sdata: [I/O] dbgsymtab to be cleared
+ *============================================*/
+static void
+free_dbgsymtab_arrays (struct dbgsymtab_s * sdata)
+{
+	free_array_strings(sdata->count, sdata->displays);
+	stdfree(sdata->displays);
+	sdata->displays = 0;
+	/* do not free sdata.values pointers, they're borrowed */
+	stdfree(sdata->values);
+	sdata->values = 0;
+	sdata->count = 0;
+	memset(sdata, 0, sizeof(*sdata));
+}
+/*=============================================+
+ * make_empty_string_table -- Create table of strings
+ *  allocate table and initialize all strings to NULL
+ *  nels:  [IN] number of elements in table
+ * Returns dynamically allocated array
+ *============================================*/
+static STRING *
+make_empty_string_table (INT nels)
+{
+	STRING * arrd = (STRING *)stdalloc(nels * sizeof(arrd[0]));
+	memset(arrd, 0, nels * sizeof(arrd[0]));
+	return arrd;
+}
+/*=============================================+
+ * make_empty_pvalue_table -- Create table of pvalue pointers
+ *  allocate table and initialize all pointers to NULL
+ *  nels:  [IN] number of elements in table
+ * Returns dynamically allocated array
+ *============================================*/
+static PVALUE *
+make_empty_pvalue_table (INT nels)
+{
+	PVALUE * arrd = (PVALUE*)stdalloc(nels * sizeof(arrd[0]));
+	memset(arrd, 0, nels * sizeof(arrd[0]));
+	return arrd;
 }

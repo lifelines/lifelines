@@ -635,9 +635,9 @@ static BOOLEAN get_pvalue_as_bool (PVALUE val)
 	case PEVEN:
 	case POTHR:
 		return val->value.rxd != 0;
-	case PLIST: return val->value.lxd != 0;
-	case PTABLE: return val->value.txd != 0;
-	case PSET: return val->value.qxd != 0;
+	case PLIST: return pvalue_to_list(val) != 0;
+	case PTABLE: return pvalue_to_table(val) != 0;
+	case PSET: return pvalue_to_seq(val) != 0;
 	case PARRAY: return val->value.axd != 0;
 	}
 	return FALSE;
@@ -836,11 +836,11 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		    break;
 		 }
 		case PLIST:
-			return val1->value.lxd == val2->value.lxd;
+			return pvalue_to_list(val1) == pvalue_to_list(val2);
 		case PTABLE:
-			return val1->value.txd == val2->value.txd;
+			return pvalue_to_table(val1) == pvalue_to_table(val2);
 		case PSET:
-			return val1->value.qxd == val2->value.qxd;
+			return pvalue_to_seq(val1) == pvalue_to_seq(val2);
 		case PARRAY:
 			return val1->value.axd == val2->value.axd;
 		}
@@ -976,8 +976,25 @@ describe_pvalue (PVALUE val)
 	case PFLOAT:
 		zs_appf(zstr, "%f", pvalue_to_float(val));
 		break;
+	case PBOOL:
+		zs_apps(zstr, pvalue_to_bool(val) ? _("True") : _("False"));
+		break;
 	case PSTRING:
 		zs_appf(zstr, "\"%s\"", pvalue_to_string(val));
+		break;
+	case PGNODE:
+		{
+			NODE node = pvalue_to_node(val);
+			if (!node)
+				zs_apps(zstr, "NULL");
+			else {
+				STRING tag = ntag(node);
+				if (!tag)
+					zs_apps(zstr, "null tag");
+				else
+					zs_appf(zstr, "tag='%s'", tag);
+			}
+		}
 		break;
 	case PINDI:
 	case PFAM:
@@ -1018,20 +1035,6 @@ describe_pvalue (PVALUE val)
 			ARRAY arr = pvalue_to_array(val);
 			INT n = get_array_size(arr);
 			zs_appf(zstr, _pl("%d element", "%d elements", n), n);
-		}
-		break;
-	case PGNODE:
-		{
-			NODE node = pvalue_to_node(val);
-			if (!node)
-				zs_apps(zstr, "NULL");
-			else {
-				STRING tag = ntag(node);
-				if (!tag)
-					zs_apps(zstr, "null tag");
-				else
-					zs_appf(zstr, "tag='%s'", tag);
-			}
 		}
 		break;
 	default:

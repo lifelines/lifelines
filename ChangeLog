@@ -8,6 +8,15 @@
 	Remove two unnecessary includes of array.h.
 	Fix declaration & argument passing of disp_symtab_cb.
 
+	* ChangeLog src/interp/progerr.c src/interp/pvalue.c
+	src/interp/rptui.c src/interp/rptui.h
+
+	Wrap some direct references to PVALUE_DATA members in existing
+	accessors (eg, pvalue_to_list instead of ->value.lxd).
+	New functions disp_pvalue, disp_list, disp_table, disp_seq,
+	disp_dbgsymtab, init_dbgsymtab_arrays, free_dbgsymtab_arrays,
+	make_empty_string_table, make_empty_pvalue_table.
+
 2007-12-20 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
