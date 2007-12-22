@@ -14,7 +14,6 @@
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "interpi.h"
-#include "array.h"
 
  /*========================================
  * sort_array_by_array -- sort first array of pvalues

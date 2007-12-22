@@ -46,7 +46,8 @@ extern INT rpt_cancelled;
 
 struct dbgsymtab_s
 {
-	STRING * locals;
+	PVALUE * values;
+	STRING * displays;
 	INT count;
 	INT current;
 };
@@ -57,7 +58,7 @@ struct dbgsymtab_s
 
 static INT count_symtab_ancestors(SYMTAB stab);
 static void disp_symtab(STRING title, SYMTAB stab);
-static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, VPTR param);
+static BOOLEAN disp_symtab_cb(STRING key, PVALUE val, struct dbgsymtab_s * sdata);
 static SYMTAB get_symtab_ancestor(SYMTAB stab, INT index);
 static void prog_var_error_zstr(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr);
 static STRING vprog_error(PNODE node, STRING fmt, va_list args);
@@ -261,25 +262,38 @@ disp_symtab (STRING title, SYMTAB stab)
 	INT n = (stab->tab ? get_table_count(stab->tab) : 0);
 	struct dbgsymtab_s sdata;
 	INT bytes = n * sizeof(STRING);
+	INT choice = 0;
 	if (!n) return;
 	memset(&sdata, 0, sizeof(sdata));
 	sdata.count = n;
-	sdata.locals = (STRING *)stdalloc(bytes);
-	memset(sdata.locals, 0, bytes);
-	/* Now traverse & print the actual entries via disp_symtab_cb() */
+	sdata.displays = (STRING *)stdalloc(n * sizeof(STRING));
+	sdata.values = (PVALUE *)stdalloc(n * sizeof(PVALUE));
+	memset(sdata.displays, 0, n * sizeof(STRING));
+	memset(sdata.values, 0, n * sizeof(STRING));
+	/* Now traverse & print the actual entries into string array
+	(sdata.locals) via disp_symtab_cb() */
 	symtabit = begin_symtab_iter(stab);
 	if (symtabit) {
 		STRING key=0;
 		PVALUE pval=0;
 		while (next_symtab_entry(symtabit, (CNSTRING *)&key, &pval)) {
-			disp_symtab_cb(key, pval, &sdata.locals);
+			disp_symtab_cb(key, pval, &sdata);
 		}
 		end_symtab_iter(&symtabit);
 	}
-	/* Title of report debugger's list of local symbols */
-	/* TODO: 2003-01-19, we could allow drilldown on lists, tables & sets here */
-	rptui_view_array(title, n, sdata.locals);
-	free_array_strings(n, sdata.locals);
+	/*
+	Actually display data from string array */
+	while (TRUE) {
+		PVALUE val = 0;
+		ZSTR zstr = 0;
+		choice = rptui_choose_from_array(title, n, sdata.displays);
+		if (choice == -1)
+			break;
+		val = sdata.values[choice];
+		zstr = describe_pvalue(val);
+	}
+	free_array_strings(n, sdata.displays);
+	stdfree(sdata.values);
 }
 /*====================================================
  * disp_symtab_cb -- Display one entry in symbol table
@@ -289,15 +303,16 @@ disp_symtab (STRING title, SYMTAB stab)
  *  param: [I/O] points to dbgsymtab_s, where list is being printed
  *==================================================*/
 static BOOLEAN
-disp_symtab_cb (STRING key, PVALUE val, VPTR param)
+disp_symtab_cb (STRING key, PVALUE val, struct dbgsymtab_s * sdata)
 {
-	struct dbgsymtab_s * sdata = (struct dbgsymtab_s *)param;
 	ZSTR zline = zs_newn(80), zval;
 	ASSERT(sdata->current < sdata->count);
 	zval = describe_pvalue(val);
 	zs_setf(zline, "%s: %s", key, zs_str(zval));
 	zs_free(&zval);
-	sdata->locals[sdata->current++] = strsave(zs_str(zline));
+	sdata->displays[sdata->current] = strsave(zs_str(zline));
+	sdata->values[sdata->current] = val;
+	++sdata->current;
 	zs_free(&zline);
 	return TRUE; /* continue */
 }

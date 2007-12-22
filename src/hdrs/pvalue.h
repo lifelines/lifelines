@@ -60,9 +60,7 @@ typedef struct tag_pvalue *PVALUE;
 struct tag_pvalue {
         struct tag_vtable * vtable;
         unsigned char type;     /* type of value */
-//        VPTR value;
 	PVALUE_DATA value;
-        /* PVALUE_DATA value; */
 };
 
 /* PVALUE types */

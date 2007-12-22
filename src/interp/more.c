@@ -39,7 +39,6 @@
 #include "lloptions.h"
 #include "feedback.h" /* call_system_cmd */
 #include "zstr.h"
-#include "array.h"
 
 /*********************************************
  * external/imported variables

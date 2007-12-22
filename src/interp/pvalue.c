@@ -946,7 +946,7 @@ get_pvalue_type_name (INT ptype)
 }
 /*======================================================
  * debug_pvalue_as_string -- DEBUG routine that shows a PVALUE
- *  returns static buffer
+ *  returns zstring (dynamic string)
  *====================================================*/
 ZSTR
 describe_pvalue (PVALUE val)
@@ -1018,6 +1018,20 @@ describe_pvalue (PVALUE val)
 			ARRAY arr = pvalue_to_array(val);
 			INT n = get_array_size(arr);
 			zs_appf(zstr, _pl("%d element", "%d elements", n), n);
+		}
+		break;
+	case PGNODE:
+		{
+			NODE node = pvalue_to_node(val);
+			if (!node)
+				zs_apps(zstr, "NULL");
+			else {
+				STRING tag = ntag(node);
+				if (!tag)
+					zs_apps(zstr, "null tag");
+				else
+					zs_appf(zstr, "tag='%s'", tag);
+			}
 		}
 		break;
 	default:

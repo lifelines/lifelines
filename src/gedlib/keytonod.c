@@ -1209,7 +1209,7 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel, BOOLEAN delcache)
 	/* caller ensured cache && key are non-null */
 	ASSERT(cel);
 
-	if (!cclock(cel)) {
+	if (cclock(cel)) {
 		/*
 		not supposed to remove locked elements!
 		Construct informational message and cause exception

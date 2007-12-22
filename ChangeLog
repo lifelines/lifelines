@@ -1,3 +1,13 @@
+2007-12-22 Perry Rapp
+
+	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
+	src/interp/more.c src/interp/progerr.c src/interp/pvalue.c
+	src/interp/rptsort.c
+
+	Fix reversed log in locked assert. Display tag of PGNODE in debugger.
+	Remove two unnecessary includes of array.h.
+	Fix declaration & argument passing of disp_symtab_cb.
+
 2007-12-20 Perry Rapp
 
 	* ChangeLog src/gedlib/indiseq.c src/hdrs/array.h
