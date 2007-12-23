@@ -5507,6 +5507,48 @@ size of a set
 
 
 </sect1>
+<sect1>
+    
+<title>
+Debugging Reports
+</title>
+
+<para>
+
+The lifelines program includes in its report engine a small
+debugger feature. If the program parses successfully, but
+an error is found during execution, you will be prompted
+to either enter the debug or to quit.
+
+<screen>
+Report file: /home/user/lifelines/reports/test.ll
+Runtime Error at line 50: set: the arg #1 must be a variable. (arg: tag(node))
+Enter d for debugger, q to quit
+</screen>
+
+</para>
+<para>
+If you press d to enter the debugger, you will be presented
+with the debugger main menu, from which you can view
+the current (local) variables, or the global variables.
+
+<screen>
+Report debugger (1/5)
+  >1: Display locals (4 vars) [proc: checkrec]
+   2: Display global (1 var)
+   3: Call stack has 3 higher levels.  Go up one level(proc: rectest)
+   4: Call stack has 0 lower levels.
+   5: Quit debugger
+</screen>
+
+Examining these values might help you determine what went
+wrong with the program. Select the locals or the globals
+to view the values of those variables. If any non-empty
+lists, tables, or sets are displayed, they may be 
+selected, to view their contents.
+</para>
+
+</sect1>
 
 </chapter>
 </book>

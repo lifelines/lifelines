@@ -1,3 +1,9 @@
+2007-12-23 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add debugging section to end of report manual.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
