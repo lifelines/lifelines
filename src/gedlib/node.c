@@ -80,7 +80,7 @@ NODE parents_nodes(NODE faml);
 
 /* node allocator's free list */
 static NDALLOC first_blck = (NDALLOC) 0;
-static INT live_count = 0;
+static int live_count = 0;
 
 static struct tag_vtable vtable_for_node = {
 	VTABLE_MAGIC

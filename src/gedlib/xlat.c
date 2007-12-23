@@ -681,7 +681,7 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 ZSTR
 xlat_get_description (XLAT xlat)
 {
-	INT count=0;
+	int count=0;
 	ZSTR zrtn=zs_new();  /* final string to return */
 	ZSTR zstr=zs_new(); /* string with details of iconv conversions */
 	char stepcount[32];

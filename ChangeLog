@@ -39,6 +39,10 @@
 
 	Fix configure.ac for above move.
 
+	* ChangeLog src/gedlib/node.c src/gedlib/xlat.c
+
+	Change two variables from INT to int, to work with %d.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
