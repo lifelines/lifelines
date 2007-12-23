@@ -49,6 +49,10 @@ Source Code Directories
 
     Library of replacement functions missing on some platforms.
 
+./src/arch/mswin
+
+	Microsoft Windows specific source code
+
 ./src/btree/
 
     btree (database) implementation, with access functions.
@@ -104,13 +108,11 @@ Source Code Directories
     Will contain UI-specific code for obtaining input and displaying
     output
 
-./win32/ (ALMOST OBSOLETE)
+./win32/ (OBSOLETE)
 
-    Code from the win32 port, used only when creating win32 target
-
-./win32/hdrs/ (OBSOLETE)
-
-    Headers used in win32 port (before ./hdrs existed)
+    Nothing is here anymore. This used to house Microsoft Windows
+	specific code, but it was moved to ./src/arch/mswin and
+	./src/hdrs/win32.
 
 
 Non-Source Code Directories

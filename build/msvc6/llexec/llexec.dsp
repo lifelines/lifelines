@@ -220,7 +220,7 @@ SOURCE=..\..\..\src\gedlib\gengedc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\getopt.c
+SOURCE=..\..\..\src\arch\mswin\getopt.c
 # End Source File
 # Begin Source File
 
@@ -236,7 +236,7 @@ SOURCE=..\..\..\src\interp\heapused.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\iconvshim.c
+SOURCE=..\..\..\src\arch\mswin\iconvshim.c
 # End Source File
 # Begin Source File
 
@@ -260,7 +260,7 @@ SOURCE=..\..\..\src\interp\interp.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\intlshim.c
+SOURCE=..\..\..\src\arch\mswin\intlshim.c
 # End Source File
 # Begin Source File
 

@@ -9,6 +9,32 @@
 
 	Add README to hdrs/win32 subdir.
 
+	* ChangeLog Makefile.am README.LAYOUT
+	* build/msvc6/btedit/bteditCmd.dsp
+	* build/msvc6/dbverify/dbverifyCmd.dsp
+	* build/msvc6/llexec/llexec.dsp
+	* build/msvc6/llines/llinesprj.dsp
+	* src/Makefile.am src/arch/Makefile.am
+	*NEW src/arch/mswin/.cvsignore
+	*NEW src/arch/mswin/Makefile.am
+	*NEW src/arch/mswin/getopt.c
+	*NEW src/arch/mswin/iconvshim.c
+	*NEW src/arch/mswin/intlshim.c
+	*NEW src/arch/mswin/mycurses.c
+	*NEW src/arch/mswin/old_readme_win32.txt
+	*NEW src/arch/mswin/w32systm.c
+	*DELETE win32/.cvsignore
+	*DELETE win32/Makefile.am
+	*DELETE win32/getopt.c
+	*DELETE win32/iconvshim.c
+	*DELETE win32/intlshim.c
+	*DELETE win32/mycurses.c
+	*DELETE win32/readme_win32.txt
+	*DELETE win32/w32systm.c
+
+	Move Microsoft Windows specific source files from
+	./win32 to ./src/arch/mswin.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
@@ -28,7 +54,7 @@
 	disp_dbgsymtab, init_dbgsymtab_arrays, free_dbgsymtab_arrays,
 	make_empty_string_table, make_empty_pvalue_table.
 
-	* ChangeLog src\hdrs\indiseq.h src\interp\progerr.c
+	* ChangeLog src/hdrs/indiseq.h src/interp/progerr.c
 
 	Add some msg_info calls to disp_pvalue & disp_list.
 	Implement disp_table. Rename disp_symtab_cb as format_dbgsymtab_val.

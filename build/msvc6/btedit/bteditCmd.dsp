@@ -123,7 +123,7 @@ SOURCE=..\..\..\src\stdlib\fileops.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\iconvshim.c
+SOURCE=..\..\..\src\arch\mswin\iconvshim.c
 # End Source File
 # Begin Source File
 
@@ -135,7 +135,7 @@ SOURCE=..\..\..\src\btree\index.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\intlshim.c
+SOURCE=..\..\..\src\arch\mswin\intlshim.c
 # End Source File
 # Begin Source File
 
@@ -199,7 +199,7 @@ SOURCE=..\..\..\src\stdlib\vtable.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\w32systm.c
+SOURCE=..\..\..\src\arch\mswin\w32systm.c
 # End Source File
 # Begin Source File
 

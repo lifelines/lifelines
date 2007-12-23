@@ -3,6 +3,8 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
+SUBDIRS = mswin
+
 noinst_LIBRARIES= libarch.a
 
 libarch_a_SOURCES = platform.c

@@ -196,7 +196,7 @@ SOURCE=..\..\..\src\stdlib\hashtab.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\iconvshim.c
+SOURCE=..\..\..\src\arch\mswin\iconvshim.c
 # End Source File
 # Begin Source File
 
@@ -216,7 +216,7 @@ SOURCE=..\..\..\src\gedlib\init.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\win32\intlshim.c
+SOURCE=..\..\..\src\arch\mswin\intlshim.c
 # End Source File
 # Begin Source File
 
