@@ -271,7 +271,6 @@ disp_symtab (STRING title, SYMTAB stab)
 	SYMTAB_ITER symtabit=0;
 	INT nels = (stab->tab ? get_table_count(stab->tab) : 0);
 	struct dbgsymtab_s sdata;
-	INT choice = 0;
 	if (!nels) return;
 	init_dbgsymtab_arrays(&sdata, nels);
 	/* Now traverse & print the actual entries into string array
@@ -300,7 +299,6 @@ disp_dbgsymtab (CNSTRING title, struct dbgsymtab_s * sdata)
 {
 	while (TRUE) {
 		PVALUE val = 0;
-		ZSTR zstr = 0;
 		INT choice = 0;
 		choice = rptui_choose_from_array((STRING)title, sdata->count, sdata->displays);
 		if (choice == -1)

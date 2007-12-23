@@ -235,7 +235,7 @@ unicode_to_utf8 (INT wch, char * utf8)
 void
 chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8)
 {
-	INT width=0, i=0;
+	INT width=0;
 	STRING prev = find_prev_char(&str[index+1], &width, str, utf8);
 	prev[0] = 0;
 	/* We don't zero out entire width in case it is outside of

@@ -43,6 +43,10 @@
 
 	Change two variables from INT to int, to work with %d.
 
+	* ChangeLog src/interp/progerr.c src/stdlib/strutf8.c
+
+	Cosmetic: remove some unused variables.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
