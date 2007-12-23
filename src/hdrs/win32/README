@@ -1,0 +1,7 @@
+This directory (lifelines/src/hdrs/win32) holds
+header files specific to compiling under 
+Microsoft Windows with Visual C++.
+
+The lifelines Visual C++ Project files include 
+this directory in their search paths.
+

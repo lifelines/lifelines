@@ -4,6 +4,11 @@
 
 	Add debugging section to end of report manual.
 
+	* ChangeLog
+	*NEW src/hdrs/win32/README
+
+	Add README to hdrs/win32 subdir.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h
