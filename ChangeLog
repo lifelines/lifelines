@@ -35,6 +35,10 @@
 	Move Microsoft Windows specific source files from
 	./win32 to ./src/arch/mswin.
 
+	* ChangeLog configure.ac
+
+	Fix configure.ac for above move.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h

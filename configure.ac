@@ -257,6 +257,7 @@ dnl **************************************************************
 AC_OUTPUT(Makefile \
         src/Makefile \
         src/arch/Makefile \
+        src/arch/mswin/Makefile \
         src/btree/Makefile \
         src/interp/Makefile \
         src/gedlib/Makefile \
@@ -270,7 +271,6 @@ AC_OUTPUT(Makefile \
         reports/Makefile \
         reports/st/Makefile \
         tt/Makefile \
-        win32/Makefile \
         build/Makefile \
         intl/Makefile \
         po/Makefile.in)
