@@ -47,6 +47,10 @@
 
 	Cosmetic: remove some unused variables.
 
+	* ChangeLog src/stdlib/strutf8.c
+
+	Cosmetic: Add newline at end of strutf8.c.
+
 2007-12-22 Perry Rapp
 
 	* ChangeLog src/gedlib/keytonod.c src/hdrs/pvalue.h

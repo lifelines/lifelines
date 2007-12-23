@@ -251,3 +251,4 @@ limit_width (STRING str, size_t width, BOOLEAN utf8)
 	if (strlen(str) < width) return;
 	chopstr_utf8(str, width-1, utf8);
 }
+
