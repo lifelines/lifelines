@@ -103,10 +103,9 @@ store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
  *=================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void * param);
+	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_PARAM;
-/* see above */
 static BOOLEAN
 trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
@@ -115,10 +114,8 @@ trav_callback (RKEY rkey, STRING data, INT len, void * param)
 	strcpy(key, rkey2str(rkey));
 	return tparam->func(key, data, len, tparam->param);
 }
-/* see above */
 void
-traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, 
-	BOOLEAN(*func)(CNSTRING key, STRING data, INT len, void *param), void *param)
+traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, void *param)
 {
 	RKEY lo1, hi1;
 	TRAV_PARAM tparam;
@@ -140,10 +137,9 @@ traverse_db_rec_keys (CNSTRING lo, CNSTRING hi,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(CNSTRING key, RECORD rec, void * param);
+	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_RECORD_PARAM;
-/* see above */
 static BOOLEAN
 trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 {
@@ -155,13 +151,12 @@ trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 	if (!strcmp(data, "DELE\n"))
 		return TRUE;
 	rec = string_to_record(data, key, len);
-	keepgoing = tparam->func(key, rec, tparam->param);
+	keepgoing = tparam->func(key, rec, 0, tparam->param);
 	release_record(rec);
 	return keepgoing;
 }
-/* see above */
 void
-traverse_db_key_recs (BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param)
+traverse_db_key_recs (TRAV_RECORD_FUNC_BYSTR func, void *param)
 {
 	TRAV_RECORD_PARAM tparam;
 	CNSTRING lo,hi;

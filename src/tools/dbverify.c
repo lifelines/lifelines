@@ -116,8 +116,8 @@ typedef struct
 
 /* alphabetical */
 static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
-static BOOLEAN cgn_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-static BOOLEAN cgr_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+static BOOLEAN cgn_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param));
+static BOOLEAN cgr_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param));
 static void check_and_fix_records(void);
 static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
@@ -141,7 +141,7 @@ static void finish_and_delete_refnset(void);
 static void fix_nodes(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
-static BOOLEAN nodes_callback(CNSTRING key, RECORD rec, void *param);
+static BOOLEAN nodes_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, rec, newset, param));
 static void printblock(BLOCK block);
 static CNSTRING printkey(CNSTRING key);
 static void print_usage(void);
@@ -373,7 +373,7 @@ check_ghosts (void)
  * Created: 2001/01/01, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
+cgn_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param))
 {
 	/* a name record which points at indi=key */
 	RECORD indi0 = NULL;
@@ -431,7 +431,7 @@ cgn_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
  * Created: 2001/01/13, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgr_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
+cgr_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param))
 {
 	/* a refn record which points at record=key */
 	RECORD rec = key_to_record(key);
@@ -593,8 +593,9 @@ fix_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback (CNSTRING key, RECORD rec, void *param)
+nodes_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, rec, newset, param))
 {
+	newset=newset;	/* NOTUSED */
 	param=param;	/* NOTUSED */
 	if (noisy)
 		report_progress("Node: %s", key);

@@ -35,6 +35,7 @@
 #include "feedback.h"
 #include "liflines.h"
 #include "fpattern.h"
+#include "gedcom.h"	/* for TRAV_* functions */
 
 #include "llinesi.h"
 
@@ -74,8 +75,8 @@ static INT SCAN_SRC_TITL=4;
 static void do_fields_scan(SCANNER * scanner, RECORD rec);
 static void do_name_scan(SCANNER * scanner, STRING prompt);
 static void do_sources_scan(SCANNER * scanner, CNSTRING prompt);
-static BOOLEAN ns_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-static BOOLEAN rs_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+static BOOLEAN ns_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param));
+static BOOLEAN rs_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param));
 static void scanner_add_result(SCANNER * scanner, CNSTRING key);
 static BOOLEAN scanner_does_pattern_match(SCANNER *scanner, CNSTRING text);
 static INDISEQ scanner_free_and_return_seq(SCANNER * scanner);
@@ -314,7 +315,7 @@ scanner_add_result (SCANNER * scanner, CNSTRING key)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static BOOLEAN
-ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
+ns_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param))
 {
 	INT len, ind;
 	STRING piece;
@@ -343,7 +344,7 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static BOOLEAN
-rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
+rs_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param))
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);

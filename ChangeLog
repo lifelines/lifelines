@@ -1,3 +1,14 @@
+2007-12-24 Matt Emmerton
+
+	* ChangeLog src/hdrs/btree.h src/btree/traverse.c
+	src/hdrs/gedcom.h src/gedlib/intrface.c src/gedlib/names.c
+	src/gedlib/refns.c src/liflines/scan.c src/tools/dbverify.c
+
+	Use #defines to simplify traversal routine function pointers
+	and argument lists. This is a working version of the changes
+	that were attempted on 2004-10-16 and backed out on 2004-10-27.
+	(For those who are counting, that's only 38 months.)
+
 2007-12-24 Perry Rapp
 
 	* ChangeLog reports/st/st_date.li src/hdrs/llstdlib.h

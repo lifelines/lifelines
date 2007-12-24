@@ -675,12 +675,11 @@ index_by_refn (NODE node,
  *==================================================*/
 typedef struct
 {
-	BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_REFN_PARAM;
-/* see above */
 static BOOLEAN
-traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
+traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
@@ -695,9 +694,8 @@ traverse_refn_callback (RKEY rkey, STRING data, INT len, void *param)
 	}
 	return TRUE;
 }
-/* see above */
 void
-traverse_refns (BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param)
+traverse_refns (TRAV_RECORD_FUNC_BYSTR func, void *param)
 {
 	TRAV_REFN_PARAM tparam;
 	tparam.param = param;

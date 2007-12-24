@@ -54,6 +54,12 @@
 #define ERROR 0
 #define DONE -1
 
+/*============================================
+ * Traversal function pointer typedefs
+ *==========================================*/
+typedef BOOLEAN(*TRAV_RECORD_FUNC_BYSTR)(CNSTRING, CNSTRING, INT, void*);
+#define TRAV_RECORD_FUNC_BYSTR_ARGS(a,b,c,d) CNSTRING a, CNSTRING b, INT c, void* d
+
 /*=====================================
  * NODE -- Internal form of GEDCOM line
  *===================================*/
@@ -456,7 +462,7 @@ BOOLEAN store_record(CNSTRING key, STRING rec, INT len);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
 void termlocale(void);
 BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
-void traverse_refns(BOOLEAN(*func)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param), void *param);
+void traverse_refns(TRAV_RECORD_FUNC_BYSTR func, void *param);
 INT tree_strlen(INT, NODE);
 void uilocale(void);
 NODE union_nodes(NODE, NODE, BOOLEAN, BOOLEAN);
@@ -488,8 +494,8 @@ void delete_record_missing_data_entry(CNSTRING key);
 BOOLEAN mark_deleted_record_as_deleted(CNSTRING key);
 BOOLEAN mark_live_record_as_live(CNSTRING key);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
-void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, BOOLEAN(*func)(CNSTRING key, STRING data, INT, void *param), void * param);
-void traverse_db_key_recs(BOOLEAN(*func)(CNSTRING key, RECORD, void *param), void *param);
+void traverse_db_key_recs(TRAV_RECORD_FUNC_BYSTR, void *param);
+void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, void *param);
 
 /* keytonod.c */
 void add_new_indi_to_cache(RECORD rec);
@@ -528,7 +534,7 @@ LIST name_to_list(CNSTRING name, INT *plen, INT *psind);
 STRING name_string(STRING);
 int namecmp(STRING, STRING);
 void remove_name(STRING name, CNSTRING key);
-void traverse_names(BOOLEAN(*func)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param), void *param);
+void traverse_names (TRAV_RECORD_FUNC_BYSTR func, void *param);
 STRING trim_name(STRING, INT);
 
 /* node.c */

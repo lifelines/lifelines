@@ -145,6 +145,15 @@ typedef struct {
 #define offs(p,i)  ((p)->ix_offs[i])
 #define lens(p,i)  ((p)->ix_lens[i])
 
+/*============================================
+ * Traversal function pointer typedefs
+ *==========================================*/
+typedef BOOLEAN(*TRAV_INDEX_FUNC)(BTREE, INDEX, void*);
+typedef BOOLEAN(*TRAV_BLOCK_FUNC)(BTREE, BLOCK, void*);
+
+typedef BOOLEAN(*TRAV_RECORD_FUNC_BYKEY)(RKEY, STRING, INT, void*);
+#define TRAV_RECORD_FUNC_BYKEY_ARGS(a,b,c,d) RKEY a, STRING b, INT c, void* d
+
 /*====================================
  * BTREE library function declarations 
  *==================================*/
@@ -174,8 +183,8 @@ BOOLEAN isrecord(BTREE, RKEY);
 INT cmpkeys(const RKEY * rk1, const RKEY * rk2);
 
 /* traverse.c */
-BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, BOOLEAN (*ifunc)(BTREE, INDEX, void *), BOOLEAN (*dfunc)(BTREE, BLOCK, void *));
-void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, BOOLEAN(*func)(RKEY, STRING data, INT len, void *param), void *param);
+BOOLEAN traverse_index_blocks(BTREE, INDEX, void *, TRAV_INDEX_FUNC ifunc, TRAV_BLOCK_FUNC dfunc);
+void traverse_db_rec_rkeys(BTREE, RKEY lo, RKEY hi, TRAV_RECORD_FUNC_BYKEY func, void *param);
 
 /* utils.c */
 STRING rkey2str(RKEY);
