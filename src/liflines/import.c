@@ -115,8 +115,7 @@ static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
 BOOLEAN
 import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
-	STRING geddef=0;
-	BOOLEAN rtn;
+	BOOLEAN rtn=FALSE;
 
 	flineno = 0;
 	rtn = do_import(ifeed, fp);

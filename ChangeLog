@@ -56,6 +56,10 @@
 	Move Microsoft Windows specific headers from src/hdrs/win32
 	to src/hdrs/mswin.
 
+	* ChangeLog src/liflines/import.c
+
+	Cleanup: removed unused variable in import_from_gedcom_file.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog configure.ac
