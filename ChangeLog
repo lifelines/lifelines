@@ -16,7 +16,7 @@
 	Changed pa_handle_option to take CNSTRING instead of PVALUE.
 	New function get_internal_string_node_value.
 	Various const cleanup as encountered during above changes.
-	Changed IIDENT ndoes to use new union struct node.vars.iident.
+	Changed IIDENT nodes to use new union struct node.vars.iident.
 	New function iident_name replaced macro iident.
 	Fix leak in llrpt_extractdatestr.
 	Changed many calls to delete_pvalue into calls to delete_pvalue_ptr.
@@ -59,6 +59,10 @@
 	* ChangeLog src/liflines/import.c
 
 	Cleanup: removed unused variable in import_from_gedcom_file.
+
+	* ChangeLog src/stdlib/icvt.c
+
+	Removed unneeded & wrong cast in call to iconv in iconv_trans.
 
 2007-12-24 Matt Emmerton
 

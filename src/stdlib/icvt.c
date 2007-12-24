@@ -122,7 +122,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 
 cvting:
 	/* main convert */
-	cvted = iconv (ict, (char **)&inptr, &inleft, &outptr, &outleft);
+	cvted = iconv (ict, &inptr, &inleft, &outptr, &outleft);
 
 	/* zero terminate & fix output zstring */
 	/* there may be embedded nulls, if UCS-2/4 is target! */
