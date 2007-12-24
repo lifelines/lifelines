@@ -491,7 +491,7 @@ indi_lineprint (INT width, void * param)
 static STRING
 node_lineprint (INT width, void * param)
 {
-	static char line[120], output[120];
+	static char line[120];
 	STRING ptr=line;
 	INT mylen=sizeof(line);
 	NODE_PRINT_PARAM npp = (NODE_PRINT_PARAM)param;

@@ -22,6 +22,10 @@
 	Changed many calls to delete_pvalue into calls to delete_pvalue_ptr.
 	Initialized some local variables.
 
+	* ChangeLog src/liflines/pedigree.c
+
+	Cleanup: removed unused variable in node_lineprint.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog configure.ac
