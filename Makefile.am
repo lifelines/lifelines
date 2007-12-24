@@ -14,7 +14,7 @@ EXTRA_DIST = .linesrc lines.cfg lines.cfg.input \
 
 CLEANFILES = .linesrc lines.cfg
 
-docdir = $(datadir)/doc/lifelines
+docdir = $(datarootdir)/doc/lifelines
 doc_DATA = $(EXTRA_DIST)
 
 PERL=perl

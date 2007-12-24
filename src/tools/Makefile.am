@@ -34,8 +34,7 @@ dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 # $(top_srcdir)/src/hdrs for headers
 INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
-# Stuff for gettext (copied from gnu hello-1.3.35)
-localedir = $(datadir)/locale
+# Locale stuff for gettext
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 # End stuff for gettext
 

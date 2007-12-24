@@ -38,13 +38,10 @@ llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 # $(top_srcdir)/src/hdrs for headers
 INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
-# Stuff for gettext (copied from gnu hello-1.3.35)
-localedir = $(datadir)/locale
+# Locale information for gettext
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-# End stuff for gettext
 
 EXTRA_DIST = llinesi.h screeni.h
-
 
 # these dependencies are so that building parts ('make btedit' or 'make
 # lines') will work

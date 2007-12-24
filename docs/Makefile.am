@@ -47,7 +47,7 @@ man1_MANS = $(MANPAGES)
 
 CONFIG_CLEAN_FILES = $(OLDGENFILES) $(OLDSRCFILES) $(OLDFILES) $(MANUALS)
 
-docdir = $(datadir)/doc/lifelines
+docdir = $(datarootdir)/doc/lifelines
 doc_DATA = $(MANUALSSRC) $(MANUALS) 
 dist_pkgdata_DATA = $(MANUALS)
 

@@ -251,6 +251,21 @@ AC_TRY_LINK([#include <libintl.h>], [bind_textdomain_codeset("","");],
   fi
 
 dnl **************************************************************
+dnl Backwards-compatibility hacks for older autoconf (pre-2.60)
+dnl 1) datadir is obsolete and has been replaced by datarootdir.
+dnl 2) localedir is new, was previously set based on datadir
+dnl
+dnl We set these up here to avoid warnings from newer tools.
+dnl All Makefile.am files have been updated to use the new vars.
+dnl **************************************************************
+if test -z $datarootdir; then
+  datarootdir=$datadir
+fi
+if test -z $localedir; then
+  localedir=$datarootdir/locale
+fi
+
+dnl **************************************************************
 dnl Build Makefiles
 dnl **************************************************************
 
