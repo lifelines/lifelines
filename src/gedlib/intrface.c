@@ -106,6 +106,7 @@ typedef struct
 	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_PARAM;
+/* see above */
 static BOOLEAN
 trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
@@ -114,6 +115,7 @@ trav_callback (RKEY rkey, STRING data, INT len, void * param)
 	strcpy(key, rkey2str(rkey));
 	return tparam->func(key, data, len, tparam->param);
 }
+/* see above */
 void
 traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, void *param)
 {
@@ -140,6 +142,7 @@ typedef struct
 	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_RECORD_PARAM;
+/* see above */
 static BOOLEAN
 trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 {
@@ -155,6 +158,7 @@ trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 	release_record(rec);
 	return keepgoing;
 }
+/* see above */
 void
 traverse_db_key_recs (TRAV_RECORD_FUNC_BYSTR func, void *param)
 {

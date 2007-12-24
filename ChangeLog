@@ -11,6 +11,10 @@
 
 	Moved most of ChangeLog contents into new docs/ChangeLog_to_3.0.62
 
+	* ChangeLog src/gedlib/intrface.c
+
+	Restore lost comments.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog src/hdrs/btree.h src/btree/traverse.c
