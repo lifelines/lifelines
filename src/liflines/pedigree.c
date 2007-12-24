@@ -90,7 +90,7 @@ static void print_to_screen(INT gen, INT indent, INT * row, LINEPRINT_FNC, void 
 static LIST text_to_list (STRING text, INT width, INT whattofree);
 static STRING tn_lineprint(INT width, void * param);
 static void trav_bin_in_print_tn(DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA canvas);
-static void trav_pre_print_nd(NODE node, INT * row, INT gen, INT indent, CANVASDATA canvas, INT gdvw);
+static void trav_pre_print_nod(NODE node, INT * row, INT gen, INT indent, CANVASDATA canvas, INT gdvw);
 static void trav_pre_print_tn(DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA canvas);
 static void trav_pre_print_tn_str(DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA canvas);
 static void set_scroll_max(CANVASDATA canvas, INT count);
@@ -569,12 +569,12 @@ trav_pre_print_tn_str (DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA c
 		trav_pre_print_tn_str(n0, row, gen+1, indent, canvas);
 }
 /*=================================
- * trav_pre_print_nd -- traverse node tree,
+ * trav_pre_print_nod -- traverse node tree,
  *  printing nodes in preorder
  * Created: 2001/01/27, Perry Rapp
  *===============================*/
 static void
-trav_pre_print_nd (NODE node, INT * row, INT gen, INT indent,
+trav_pre_print_nod (NODE node, INT * row, INT gen, INT indent,
 	CANVASDATA canvas, INT gdvw)
 {
 	NODE child;
@@ -585,7 +585,7 @@ trav_pre_print_nd (NODE node, INT * row, INT gen, INT indent,
 	which handles scrolling */
 	print_to_screen(gen, indent, row, &node_lineprint, &npp, canvas);
 	for (child=nchild(node); child; child=nsibling(child))
-		trav_pre_print_nd(child, row, gen+1, indent, canvas, gdvw);
+		trav_pre_print_nod(child, row, gen+1, indent, canvas, gdvw);
 }
 /*===========================================
  * trav_bin_in_print_tn -- traverse binary tree,
@@ -679,7 +679,7 @@ pedigree_draw_gedcom (RECORD rec, INT gdvw, CANVASDATA canvas, BOOLEAN reuse)
 	set_scroll_max(canvas, count);
 	check_scroll_max(canvas);
 	/* preorder traversal */
-	trav_pre_print_nd(nztop(rec), &row, gen, indent, canvas, gdvw);
+	trav_pre_print_nod(nztop(rec), &row, gen, indent, canvas, gdvw);
 }
 /*=========================================================
  * draw_gedcom_text -- print out gedcom node tree in text wrapped view

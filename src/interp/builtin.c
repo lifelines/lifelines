@@ -113,7 +113,7 @@ llrpt_getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		*eflg = TRUE;
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), create_pvalue_from_int(num));
+	assign_iden(stab, iident_name(arg), create_pvalue_from_int(num));
 	delete_pvalue(val);
 	return NULL;
 }
@@ -148,7 +148,7 @@ llrpt_getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		buffer[0]=0;
 	}
 	ansval = create_pvalue_from_string(buffer);
-	assign_iden(stab, iident(arg), ansval);
+	assign_iden(stab, iident_name(arg), ansval);
 	delete_pvalue(val);
 	return NULL;
 }
@@ -179,13 +179,13 @@ llrpt_getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!msg)
 		msg = _("Identify person for program:");
-	assign_iden(stab, iident(arg), create_pvalue_from_indi(NULL));
+	assign_iden(stab, iident_name(arg), create_pvalue_from_indi(NULL));
 	key = rptui_ask_for_indi_key(msg, DOASK1);
 	if (key) {
-		assign_iden(stab, iident(arg)
+		assign_iden(stab, iident_name(arg)
 			, create_pvalue_from_indi_key(key));
 	}
-	if (val) delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	return NULL;
 }
 /*=====================================+
@@ -202,10 +202,10 @@ llrpt_getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		*eflg = TRUE;
 		return NULL;
 	}
-	assign_iden(stab, iident(arg), NULL);
+	assign_iden(stab, iident_name(arg), NULL);
 	fam = nztop(rptui_ask_for_fam(_("Enter a spouse from family."),
 	    _("Enter a sibling from family.")));
-	assign_iden(stab, iident(arg), create_pvalue_from_fam(fam));
+	assign_iden(stab, iident_name(arg), create_pvalue_from_fam(fam));
 	return NULL;
 }
 /*=================================================+
@@ -241,8 +241,8 @@ llrpt_getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	seq = rptui_ask_for_indi_list(msg, TRUE);
 	if (seq)
 		namesort_indiseq(seq); /* in case uilocale != rptlocale */
-	delete_pvalue(val);
-	assign_iden(stab, iident(arg), create_pvalue_from_seq(seq));
+	delete_pvalue_ptr(&val);
+	assign_iden(stab, iident_name(arg), create_pvalue_from_seq(seq));
 	return NULL;
 }
 /*==================================+
@@ -276,7 +276,7 @@ llrpt_gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	str = str2;
 #endif
 	newval = create_pvalue_from_string(str);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	return newval;
 }
 /*==================================+
@@ -321,7 +321,7 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 		captype = pvalue_to_bool(val) ? DOSURCAP : NOSURCAP;
-		delete_pvalue(val);
+		delete_pvalue_ptr(&val);
 	}
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
 		if (getlloptint("RequireNames", 0)) {
@@ -362,7 +362,7 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	caps = pvalue_to_bool(val) ? DOSURCAP : NOSURCAP;
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonboox, "fullname", "3");
@@ -370,7 +370,7 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	regorder = pvalue_to_bool(val) ? REGORDER : SURFIRST;
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonintx, "fullname", "4");
@@ -378,7 +378,7 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	len = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
@@ -489,7 +489,7 @@ llrpt_bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			goto bytecode_exit;
 		}
 		codeset = strsave(pvalue_to_string(val2));
-		delete_pvalue(val2);
+		delete_pvalue_ptr(&val2);
 	} else {
 		codeset = strsave(report_codeset_in);
 	}
@@ -513,7 +513,7 @@ llrpt_bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	newval = create_pvalue_from_string(zs_str(zstr));
 bytecode_exit:
 	zs_free(&zstr);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	strfree(&codeset);
 	return newval;
 }
@@ -545,7 +545,7 @@ llrpt_convertcode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		goto convertcode_exit;
 	}
 	cs_dest = strsave(pvalue_to_string(tempval));
-	delete_pvalue(tempval);
+	delete_pvalue_ptr(&tempval);
 	arg = inext(arg);
 	if (arg) {
 		cs_src = cs_dest;
@@ -555,7 +555,7 @@ llrpt_convertcode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			goto convertcode_exit;
 		}
 		cs_dest = strsave(pvalue_to_string(tempval));
-		delete_pvalue(tempval);
+		delete_pvalue_ptr(&tempval);
 	}
 	if (!cs_src)
 		cs_src = strsave(int_codeset);
@@ -667,14 +667,14 @@ llrpt_set (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (*eflg || !val) {
 		if (!(*eflg) && !val) {
 			*eflg = TRUE;
-			prog_var_error(node, stab, argexpr, val, _("set(%s, <Null>) is invalid"), iident(argvar));
+			prog_var_error(node, stab, argexpr, val, _("set(%s, <Null>) is invalid"), iident_name(argvar));
 		} else {
 			*eflg = TRUE;
 			prog_var_error(node, stab, argexpr, val, badargx, "set", "2");
 		}
 		return NULL;
 	}
-	assign_iden(stab, iident(argvar), val);
+	assign_iden(stab, iident_name(argvar), val);
 	return NULL;
 }
 /*===========================================+
@@ -711,7 +711,7 @@ llrpt_setdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	chil = create_temp_node(NULL, "DATE", str, prnt);
 	nchild(prnt) = chil;
 	/* Assign new EVEN node to new pvalue, and assign that to specified identifier */
-	assign_iden(stab, iident(argvar), create_pvalue_from_node(prnt));
+	assign_iden(stab, iident_name(argvar), create_pvalue_from_node(prnt));
 	return NULL;
 }
 /*===============================+
@@ -734,7 +734,7 @@ llrpt_dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	/* traverse and copy */
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	newlist = create_list3(delete_vptr_pvalue);
 	for (i=0; i<length_list(list); i++) {
 		newval = (PVALUE) get_list_element(list, i+1, NULL);
@@ -982,7 +982,7 @@ llrpt_long (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	even = pvalue_to_node(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
@@ -1007,7 +1007,7 @@ llrpt_short (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	even = pvalue_to_node(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 
 	/* if we were cleverer, we wouldn't call this every time */
 	init_rpt_reformat();
@@ -1031,7 +1031,7 @@ llrpt_fath (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		delete_pvalue(indival);
 		return NULL;
 	}
-	delete_pvalue(indival);
+	delete_pvalue_ptr(&indival);
 	if (indi)
 		fath = indi_to_fath(indi);
 	return create_pvalue_from_indi(fath);
@@ -1176,7 +1176,7 @@ llrpt_alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	i = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (i < 1 || i > 26)
 		sprintf(scratch, "XX");
 	else
@@ -1204,7 +1204,7 @@ llrpt_ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	i = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (*eflg || i < 1) return NULL;
 	if (i > 12)
 		sprintf(scratch, _("%ldth"), i);
@@ -1233,7 +1233,7 @@ llrpt_card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	i = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (i < 0 || i > 12)
 		sprintf(scratch, "%ld", i);
 	else
@@ -1273,7 +1273,7 @@ llrpt_roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	i = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (i < 1 || i > 3999)
 		sprintf(scratch, "%ld", i);
 	else {
@@ -1519,7 +1519,7 @@ llrpt_and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	rc = rc && pvalue_to_bool(val1);
-	delete_pvalue(val1);
+	delete_pvalue_ptr(&val1);
 	while ((arg = inext(arg))) {
 		++argix;
 		if (rc) {
@@ -1531,7 +1531,7 @@ llrpt_and (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				return NULL;
 			}
 			rc = rc && pvalue_to_bool(val2);
-			delete_pvalue(val2);
+			delete_pvalue_ptr(&val2);
 		}
 	}
 	return create_pvalue_from_bool(rc);
@@ -1552,7 +1552,7 @@ llrpt_or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	rc = rc || pvalue_to_bool(val1);
-	delete_pvalue(val1);
+	delete_pvalue_ptr(&val1);
 	while ((arg = inext(arg))) {
 		++argix;
 		if (!rc) {
@@ -1564,7 +1564,7 @@ llrpt_or (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				return NULL;
 			}
 			rc = rc || pvalue_to_bool(val2);
-			delete_pvalue(val2);
+			delete_pvalue_ptr(&val2);
 		}
 	}
 	return create_pvalue_from_bool(rc);
@@ -1804,7 +1804,7 @@ llrpt_incr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		zs_free(&zerr);
 		return NULL;
 	}
-	assign_iden(stab, iident(vararg), val);
+	assign_iden(stab, iident_name(vararg), val);
 	return NULL;
 }
 /*============================+
@@ -1844,7 +1844,7 @@ llrpt_decr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		zs_free(&zerr);
 		return NULL;
 	}
-	assign_iden(stab, iident(vararg), val);
+	assign_iden(stab, iident_name(vararg), val);
 	return NULL;
 }
 /*======================================+
@@ -1855,8 +1855,8 @@ PVALUE
 llrpt_strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	STRING str1, str2, emp = (STRING) "";
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING str1=0, str2=0, emp = (STRING) "";
+	PVALUE val2=0, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to strcmp is not a string");
 		return NULL;
@@ -1872,7 +1872,7 @@ llrpt_strcmp (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!str2) str2 = emp;
 
 	set_pvalue_int(val1, cmpstrloc(str1, str2));
-	delete_pvalue(val2);
+	delete_pvalue_ptr(&val2);
 	return val1;
 }
 /*=========================================+
@@ -1884,8 +1884,8 @@ PVALUE
 llrpt_nestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	STRING str1, str2, emp = (STRING) "";
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING str1=0, str2=0, emp = (STRING) "";
+	PVALUE val2=0, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to nestr is not a string");
 		return NULL;
@@ -1912,8 +1912,8 @@ PVALUE
 llrpt_eqstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	STRING str1, str2, emp = (STRING) "";
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING str1=0, str2=0, emp = (STRING) "";
+	PVALUE val2=0, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
 	if (*eflg) {
 		prog_error(node, "1st arg to eqstr is not a string");
 		return NULL;
@@ -1990,7 +1990,7 @@ llrpt_list (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	newval = create_new_pvalue_list();
 
-	assign_iden(stab, iident(arg), newval);
+	assign_iden(stab, iident_name(arg), newval);
 	return NULL;
 }
 /*=======================================+
@@ -2016,7 +2016,7 @@ llrpt_push (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	push_list(list, el);
 	return NULL;
 }
@@ -2028,8 +2028,8 @@ PVALUE
 llrpt_inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE arg = (PNODE) iargs(node);
-	LIST list;
-	PVALUE el;
+	LIST list=0;
+	PVALUE el=0;
 	BOOLEAN bFound;
 	PVALUE val = eval_and_coerce(PLIST, arg, stab, eflg);
 	if (*eflg) {
@@ -2046,7 +2046,7 @@ llrpt_inlist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	list = pvalue_to_list(val);
 	bFound = in_list(list, el, eqv_pvalues) >= 0;
 	set_pvalue_bool(val, bFound);
-	delete_pvalue(el);
+	delete_pvalue_ptr(&el);
 	return val;
 }
 /*====================================+
@@ -2072,7 +2072,7 @@ llrpt_enqueue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	enqueue_list(list, el);
 	return NULL;
 }
@@ -2099,7 +2099,7 @@ llrpt_requeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	back_list(list, el);
 	return NULL;
 }
@@ -2110,14 +2110,14 @@ llrpt_requeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_pop (PNODE node, SYMTAB stab, BOOLEAN  *eflg)
 {
-	LIST list;
+	LIST list=0;
 	PVALUE val = eval_and_coerce(PLIST, iargs(node), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "the arg to pop is not a list");
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (is_empty_list(list)) return create_pvalue_any();
 	return (PVALUE) pop_list(list);
 }
@@ -2705,7 +2705,7 @@ llrpt_table (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	newval = create_new_pvalue_table();
 
-	assign_iden(stab, iident(var), newval);
+	assign_iden(stab, iident_name(var), newval);
 	return NULL;
 }
 /*=========================================+
@@ -3138,9 +3138,9 @@ llrpt_extractdate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	mo = date_get_month(gdv);
 	yr = date_get_year(gdv);
 	yr = normalize_year(yr);
-	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
-	assign_iden(stab, iident(mvar), create_pvalue_from_int(mo));
-	assign_iden(stab, iident(yvar), create_pvalue_from_int(yr));
+	assign_iden(stab, iident_name(dvar), create_pvalue_from_int(da));
+	assign_iden(stab, iident_name(mvar), create_pvalue_from_int(mo));
+	assign_iden(stab, iident_name(yvar), create_pvalue_from_int(yr));
 	free_gdateval(gdv);
 	*eflg = FALSE;
 	return NULL;
@@ -3154,7 +3154,7 @@ llrpt_extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING str = NULL, yrstr;
 	INT mod=0, da=0, mo=0, yr=0;
-	PVALUE val;
+	PVALUE val=0;
 	PNODE date;
 	PNODE modvar = (PNODE) iargs(node);
 	PNODE dvar = inext(modvar);
@@ -3198,6 +3198,8 @@ llrpt_extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str = pvalue_to_string(val);
 	}
 	gdv = extract_date(str);
+	delete_pvalue_ptr(&val);
+	str = NULL;
 	/* TODO: deal with date information */
 	mod = date_get_mod(gdv);
 	da = date_get_day(gdv);
@@ -3206,11 +3208,11 @@ llrpt_extractdatestr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	yr = normalize_year(yr);
 	yrstr = date_get_year_string(gdv);
 	if (!yrstr) yrstr="";
-	assign_iden(stab, iident(modvar), create_pvalue_from_int(mod));
-	assign_iden(stab, iident(dvar), create_pvalue_from_int(da));
-	assign_iden(stab, iident(mvar), create_pvalue_from_int(mo));
-	assign_iden(stab, iident(yvar), create_pvalue_from_int(yr));
-	assign_iden(stab, iident(ystvar), create_pvalue_from_string(yrstr));
+	assign_iden(stab, iident_name(modvar), create_pvalue_from_int(mod));
+	assign_iden(stab, iident_name(dvar), create_pvalue_from_int(da));
+	assign_iden(stab, iident_name(mvar), create_pvalue_from_int(mo));
+	assign_iden(stab, iident_name(yvar), create_pvalue_from_int(yr));
+	assign_iden(stab, iident_name(ystvar), create_pvalue_from_string(yrstr));
 	free_gdateval(gdv);
 	return NULL;
 }
@@ -3923,9 +3925,9 @@ llrpt_free (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		*eflg = TRUE;
 		return NULL;
 	}
-	val = symtab_valueofbool(stab, iident(arg), &there);
+	val = symtab_valueofbool(stab, iident_name(arg), &there);
 	if (!there) {
-	    val = symtab_valueofbool(globtab, iident(arg), &there);
+	    val = symtab_valueofbool(globtab, iident_name(arg), &there);
 	}
 	if (there && val) {
 		clear_pvalue(val);

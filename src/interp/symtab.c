@@ -89,7 +89,7 @@ LIST live_symtabs=0; /* list of symbol tables, to check for leaks */
  *  val:  [IN]  already created PVALUE
  *====================================================*/
 void
-insert_symtab (SYMTAB stab, STRING iden, PVALUE val)
+insert_symtab (SYMTAB stab, CNSTRING iden, PVALUE val)
 {
 	insert_table_ptr(stab->tab, iden, val);
 }
@@ -204,7 +204,7 @@ symbol_tables_end (void)
  *  @key:  [IN]  key sought
  *====================================================*/
 BOOLEAN
-in_symtab (SYMTAB stab, STRING key)
+in_symtab (SYMTAB stab, CNSTRING key)
 {
 	return in_table(stab->tab, key);
 }
@@ -216,7 +216,7 @@ in_symtab (SYMTAB stab, STRING key)
  *  returns PVALUE assigned to key in symbol table, if found
  *====================================================*/
 PVALUE
-symtab_valueofbool (SYMTAB stab, STRING key, BOOLEAN *there)
+symtab_valueofbool (SYMTAB stab, CNSTRING key, BOOLEAN *there)
 {
 	return (PVALUE)valueofbool_ptr(stab->tab, key, there);
 }

@@ -90,14 +90,14 @@ __allocate (int len, STRING file, int line)
  *  line: [in] line num in file releasing memory
  *==================================================*/
 void
-__deallocate (void *ptr, STRING file, int line)
+__deallocate (const void *ptr, STRING file, int line)
 {
 	if (ptr) live_allocs--;
 	if (alloclog) {
 		sprintf(scratch, "%8p F %s\t%d", ptr, file, line);
 		alloc_out(scratch);
 	}
-	if(ptr) free(ptr);
+	if(ptr) free((void *)ptr);
 }
 /*====================================================
  * __reallocate -- Reallocate memory - used by stdrealloc

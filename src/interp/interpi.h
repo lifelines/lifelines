@@ -85,11 +85,11 @@ struct tag_symtab {
 SYMTAB create_symtab_global(void);
 SYMTAB create_symtab_proc(CNSTRING procname, SYMTAB parstab);
 void delete_symtab_element(SYMTAB stab, STRING iden);
-BOOLEAN in_symtab(SYMTAB stab, STRING key);
-void insert_symtab(SYMTAB stab, STRING iden, PVALUE val);
+BOOLEAN in_symtab(SYMTAB stab, CNSTRING key);
+void insert_symtab(SYMTAB stab, CNSTRING iden, PVALUE val);
 void remove_symtab(SYMTAB stab);
 void symbol_tables_end(void);
-PVALUE symtab_valueofbool(SYMTAB, STRING, BOOLEAN*);
+PVALUE symtab_valueofbool(SYMTAB stab, CNSTRING key, BOOLEAN *there);
 
 
 /* symbol table iteration */
@@ -103,6 +103,12 @@ void end_symtab_iter(SYMTAB_ITER * psymtabit);
 /************************************************************************/
 
 typedef struct tag_pnode *PNODE;
+
+typedef struct tag_ipcall_data {
+	CNSTRING fname;
+	PNODE fargs;
+} IPCALL_DATA;
+
 struct tag_pnode {
 	char     i_type;       /* type of node */
 	PNODE    i_prnt;       /* parent of this node */
@@ -115,12 +121,34 @@ struct tag_pnode {
 	VPTR     i_word3;
 	VPTR     i_word4;
 	VPTR     i_word5;
+	union {
+		struct {
+			PVALUE value;
+		} iicons;
+		struct {
+			PVALUE value;
+		} ifcons;
+		struct {
+			PVALUE value;
+		} iscons;
+		struct {
+			CNSTRING name;
+		} iident;
+		struct {
+			CNSTRING fname;
+			PNODE fargs;
+			PNODE func;
+		} ifcall;
+		struct {
+			CNSTRING fname;
+			PNODE fargs;
+		} ipcall;
+	} vars;
 };
 
 /* pnode types */
 #define IICONS       1   /* integer constant */
 #define IFCONS       2   /* floating constant */
-#define ILCONS       3   /* long integer constant */
 #define ISCONS       4   /* string constant */
 #define IIDENT       5   /* identifier */
 #define IIF          6   /* if statement */
@@ -154,8 +182,7 @@ struct tag_pnode {
 
 /* pnode flags */
 enum {
-	PN_IVALUEX_PVALUE = 0x1 /* ivaluex is a pvalue */
-	, PN_INAME_HSTR = 0x2 /* iname is a heap string */
+	 PN_INAME_HSTR = 0x2 /* iname is a heap string */
 	, PN_ICHILD_HPTR = 0x4 /* ichild is a heap string */
 	, PN_INUM_HPTR = 0x8 /* inum is a heap string */
 	, PN_ISPOUSE_HPTR = 0x10 /* ispouse is a heap string */
@@ -163,7 +190,6 @@ enum {
 	, PN_IELEMENT_HPTR = 0x40 /* ielement is a heap string */
 	, PN_IPARENT_HPTR = 0x80 /* iiparent is a heap string */
 	, PN_IVALVAR_HPTR = 0x100 /* ivalvar is a heap string */
-	, PN_IIDENT_HSTR = 0x200 /* iident is a heap string */
 };
 
 #define itype(i)     ((i)->i_type)  /* node type - all nodes */
@@ -172,9 +198,7 @@ enum {
 #define iline(i)     ((i)->i_line)  /* program line - all nodes */
 #define irptinfo(i)  ((i)->i_rptinfo)  /* program name - all nodes */
 
-#define ivalue(i)    ((PVALUE)((i)->i_word1)) /* constant values */
-#define ivaluex(i)   ((i)->i_word1)     /* constant values, for setting */
-#define iident(i)    ((i)->i_word1)     /* ident nodes */
+CNSTRING iident_name(PNODE node);
 #define iargs(i)     ((i)->i_word2)     /* param and arg lists */
 #define icond(i)     ((i)->i_word1)     /* cond expr in if & while */
 #define ithen(i)     ((i)->i_word2)     /* then statement in if */
@@ -495,12 +519,16 @@ extern INT nobuiltins;
 void dolock_node_in_cache(NODE, BOOLEAN lock);
 
 /* Prototypes */
-void assign_iden(SYMTAB, STRING, PVALUE);
+void assign_iden(SYMTAB stab, CNSTRING id, PVALUE value);
 PNODE break_node(PACTX pactx);
-PNODE call_node(PACTX pactx, STRING, PNODE);
 PNODE children_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 void clear_rptinfos(void);
 PNODE continue_node(PACTX pactx);
+PNODE create_call_node(PACTX pactx, STRING, PNODE);
+PNODE create_fcons_node(PACTX pactx, FLOAT);
+PNODE create_icons_node(PACTX pactx, INT ival);
+PNODE create_iden_node(PACTX pactx, STRING);
+PNODE create_proc_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 void describe_pnode (PNODE node, ZSTR zstr, INT max);
 void debug_show_one_pnode(PNODE);
 CNSTRING get_pvalue_type_name(INT ptype);
@@ -516,7 +544,6 @@ NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 PNODE families_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE fathers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
-PNODE fcons_node(PACTX pactx, FLOAT);
 PNODE fdef_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 PNODE foreven_node(PACTX pactx, STRING, STRING, PNODE);
 PNODE forfam_node(PACTX pactx, STRING, STRING, PNODE);
@@ -531,10 +558,9 @@ void free_iden(void *iden);
 void free_all_pnodes(void);
 void free_pnode_tree(PNODE);
 PNODE func_node(PACTX pactx, STRING, PNODE);
+CNSTRING get_internal_string_node_value(PNODE node);
 PNODE get_proc_node(CNSTRING procname, TABLE loctab, TABLE gtab, INT * count);
 RPTINFO get_rptinfo(CNSTRING fullpath);
-PNODE icons_node(PACTX pactx, INT ival);
-PNODE iden_node(PACTX pactx, STRING);
 PNODE if_node(PACTX pactx, PNODE, PNODE, PNODE);
 BOOLEAN iistype(PNODE, INT);
 void init_debugger(void);
@@ -546,12 +572,11 @@ void pa_handle_char_encoding(PACTX pactx, PNODE node);
 void pa_handle_include(PACTX pactx, PNODE node);
 void pa_handle_func(PACTX pactx, CNSTRING funcname, PNODE nd_args, PNODE nd_body);
 void pa_handle_global(STRING iden);
-void pa_handle_option(PVALUE optval);
+void pa_handle_option(CNSTRING optname);
 void pa_handle_proc(PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body);
 void pa_handle_require(PACTX pactx, PNODE node);
 PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
-PNODE proc_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 STRING prot(STRING str);
@@ -562,14 +587,14 @@ void show_pnode(PNODE);
 void show_pnodes(PNODE);
 PNODE spouses_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 BOOLEAN start_output_file (STRING outfname);
-PNODE string_node(PACTX pactx, STRING);
+PNODE create_string_node(PACTX pactx, STRING);
 void trace_endl(void);
 void trace_out(STRING fmt, ...);
 void trace_outl(STRING fmt, ...);
 void trace_pnode(PNODE node);
 void trace_pvalue(PVALUE val);
 PNODE traverse_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
-PVALUE valueof_iden(PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg);
+PVALUE valueof_iden(PNODE node, SYMTAB stab, CNSTRING iden, BOOLEAN *eflg);
 PNODE while_node(PACTX pactx, PNODE, PNODE);
 
 #endif /* _INTERP_PRIV_H */

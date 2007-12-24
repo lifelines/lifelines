@@ -363,7 +363,7 @@ get_first_path_entry (CNSTRING path)
  *  pfname: [OUT]  stdalloc'd copy of full path found
  *=========================================*/
 FILE *
-fopenpath (STRING name, STRING mode, STRING path, STRING ext, INT utf8
+fopenpath (CNSTRING name, STRING mode, STRING path, STRING ext, INT utf8
 	, STRING *pfname)
 {
 	FILE * fp;

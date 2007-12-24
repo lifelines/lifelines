@@ -1,3 +1,27 @@
+2007-12-24 Perry Rapp
+
+	* ChangeLog reports/st/st_date.li src/hdrs/llstdlib.h
+	src/interp/alloc.c src/interp/builtin.c src/interp/eval.c
+	src/interp/interp.c src/interp/interpi.h src/interp/intrpseq.c
+	src/interp/more.c src/interp/pvalalloc.c src/interp/pvalue.c
+	src/interp/rassa.c src/interp/symtab.c src/interp/yacc.y
+	src/liflines/pedigree.c src/stdlib/memalloc.c src/stdlib/path.c
+
+	Remove unused PNODE type ILCONS.
+	Rename trav_pre_print_nd to trav_pre_print_nod.
+	Move node-specific data of tag_pnode into embedded, union structs.
+	Change first arg of __deallocate to const pointer.
+	Changed IPCALL nodes to use new union struct node.vars.ipcall.
+	Changed IICONS nodes to use new union struct node.vars.iicons.
+	Changed pa_handle_option to take CNSTRING instead of PVALUE.
+	New function get_internal_string_node_value.
+	Various const cleanup as encountered during above changes.
+	Changed IIDENT ndoes to use new union struct node.vars.iident.
+	New function iident_name replaced macro iident.
+	Fix leak in llrpt_extractdatestr.
+	Changed many calls to delete_pvalue into calls to delete_pvalue_ptr.
+	Initialized some local variables.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog configure.ac

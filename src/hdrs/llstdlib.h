@@ -111,7 +111,7 @@ void set_usersort(usersortfnc fnc);
 
 /* memalloc.c */
 void *__allocate(int, STRING file, int line);
-void __deallocate(void*, STRING file, int line);
+void __deallocate(const void*, STRING file, int line);
 void * __reallocate(void*, INT size, STRING file, int line);
 INT alloc_count(void);
 void report_alloc_live_count(STRING str);
@@ -131,7 +131,7 @@ STRING concat_path(CNSTRING dir, CNSTRING file, INT utf8, STRING buffer, INT buf
 STRING concat_path_alloc(CNSTRING dir, CNSTRING file);
 BOOLEAN expand_special_fname_chars(STRING buffer, INT buflen, INT uu8);
 STRING filepath(CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING ext, INT utf8);
-FILE* fopenpath(STRING, STRING, STRING, STRING, INT utf8, STRING*);
+FILE* fopenpath(CNSTRING, STRING, STRING, STRING, INT utf8, STRING*);
 CNSTRING get_first_path_entry(CNSTRING path);
 BOOLEAN is_path(CNSTRING dir);
 BOOLEAN is_dir_sep(char c);

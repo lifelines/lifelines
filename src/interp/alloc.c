@@ -104,7 +104,13 @@ typedef struct tag_pn_block *PN_BLOCK;
 /* alphabetical */
 static PNODE alloc_pnode_memory(void);
 static void clear_error_strings(void);
+static void clear_call_node(PNODE node);
+static void clear_icons_node(PNODE node);
+static void clear_iden_node(PNODE node);
+static void clear_fcons_node(PNODE node);
 static void clear_pnode(PNODE node);
+static void clear_proc_node(PNODE node);
+static void clear_string_node(PNODE node);
 static PNODE create_pnode(PACTX pactx, INT type);
 static void delete_pnode(PNODE node);
 static void describe_pnodes(PNODE node, ZSTR zstr, INT max);
@@ -242,12 +248,13 @@ create_pnode (PACTX pactx, INT type)
 static void
 clear_pnode (PNODE node)
 {
-	if (node->i_flags & PN_IVALUEX_PVALUE) {
-		PVALUE val = ivaluex(node);
-		if (val) {
-			delete_pvalue(val);
-			ivaluex(node) = 0;
-		}
+	switch (itype(node)) {
+	case IICONS: clear_icons_node(node); return;
+	case IFCONS: clear_fcons_node(node); return;
+	case ISCONS: clear_string_node(node); return;
+	case IIDENT: clear_iden_node(node); return;
+	case IPCALL: clear_call_node(node); return;
+	case IPDEFN: clear_proc_node(node);  return;
 	}
 	if (node->i_flags & PN_INAME_HSTR) {
 		STRING str = iname(node);
@@ -305,14 +312,6 @@ clear_pnode (PNODE node)
 			ivalvar(node) = 0;
 		}
 	}
-	if (node->i_flags & PN_IIDENT_HSTR) {
-		STRING str = iident(node);
-		if (str) {
-			stdfree(str);
-			iident(node) = 0;
-		}
-	}
-
 }
 /*==================================
  * delete_pnode -- Create PNODE node
@@ -326,17 +325,47 @@ delete_pnode (PNODE node)
 	free_pnode_memory(node);
 }
 /*==================================
- * string_node -- Create string node
+ * create_string_node -- Create string node
  *  We copy the string memory.
  *================================*/
 PNODE
-string_node (PACTX pactx, STRING str)
+create_string_node (PACTX pactx, STRING str)
 {
 	PNODE node = create_pnode(pactx, ISCONS);
 	ASSERT(str); /* we're not converting NULL to "" because nobody passes us NULL */
-	ivaluex(node) = create_pvalue_from_string(str);
-	node->i_flags = PN_IVALUEX_PVALUE;
+	node->vars.iscons.value = create_pvalue_from_string(str);
 	return node;
+}
+/*===================================
+ * get_internal_string_node_value -- 
+ *   Return string value from string constant node
+ *  node:  IN]  node
+ *=================================*/
+CNSTRING
+get_internal_string_node_value (PNODE node)
+{
+	PVALUE pval=0;
+	ASSERT(itype(node) == ISCONS);
+	pval = node->vars.iscons.value;
+	ASSERT(pval);
+	ASSERT(ptype(pval) == PSTRING);
+	return pvalue_to_string(pval);
+}
+/*===================================
+ * clear_string_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_string_node (PNODE node)
+{
+	PVALUE val=0;
+	ASSERT(itype(node) == ISCONS);
+	val = node->vars.iscons.value;
+	if (val) {
+		delete_pvalue(val);
+		node->vars.iscons.value = 0;
+	}
+
 }
 /*========================================
  * children_node -- Create child loop node
@@ -678,44 +707,94 @@ traverse_node (PACTX pactx, PNODE nexpr, STRING snode, STRING levv, PNODE body)
  * iden_node -- Create identifier node
  *==================================*/
 PNODE
-iden_node (PACTX pactx, STRING iden)
+create_iden_node (PACTX pactx, STRING iden)
 {
 	PNODE node = create_pnode(pactx, IIDENT);
-	iident(node) = (VPTR) iden;
-	node->i_flags = PN_IIDENT_HSTR;
+	node->vars.iident.name = iden;
 	return node;
 }
+CNSTRING
+iident_name (PNODE node)
+{
+	ASSERT(itype(node) == IIDENT);
+	return node->vars.iident.name;
+}
+/*===================================
+ * clear_iden_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_iden_node (PNODE node)
+{
+	CNSTRING str=0;
+	ASSERT(itype(node) == IIDENT);
+	str = iident_name(node);
+	if (str) {
+		stdfree(str);
+		node->vars.iident.name = 0;
+	}
+}
 /*==================================
- * icons_node -- Create integer node
+ * create_icons_node -- Create integer node
  *================================*/
 PNODE
-icons_node (PACTX pactx, INT ival)
+create_icons_node (PACTX pactx, INT ival)
 {
 	PNODE node = create_pnode(pactx, IICONS);
-	ivaluex(node) = create_pvalue_from_int(ival);
-	node->i_flags = PN_IVALUEX_PVALUE;
+	node->vars.iicons.value = create_pvalue_from_int(ival);
 	return node;
+}
+/*===================================
+ * clear_icons_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_icons_node (PNODE node)
+{
+	PVALUE val=0;
+	ASSERT(itype(node) == IICONS);
+	val = node->vars.iicons.value;
+	if (val) {
+		delete_pvalue(val);
+		node->vars.iicons.value = 0;
+	}
+
 }
 /*===================================
  * fcons_node -- Create floating node
  *=================================*/
 PNODE
-fcons_node (PACTX pactx, FLOAT fval)
+create_fcons_node (PACTX pactx, FLOAT fval)
 {
 	PNODE node = create_pnode(pactx, IFCONS);
-	ivaluex(node) = create_pvalue_from_float(fval);
-	node->i_flags = PN_IVALUEX_PVALUE;
+	node->vars.ifcons.value = create_pvalue_from_float(fval);
 	return node;
 }
 /*===================================
- * proc_node -- Create procedure node
+ * clear_fcons_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_fcons_node (PNODE node)
+{
+	PVALUE val=0;
+	ASSERT(itype(node) == IFCONS);
+	val = node->vars.ifcons.value;
+	if (val) {
+		delete_pvalue(val);
+		node->vars.ifcons.value = 0;
+	}
+
+}
+/*===================================
+ * create_proc_node -- Create procedure node
  *  pactx: [I/O] pointer to parseinfo structure (parse globals)
- *  name:  [IN]  proc name
+ *  name:  [IN]  proc name (from IDEN token)
  *  parms: [IN]  param/s
  *  body:  [IN]  body
  *=================================*/
 PNODE
-proc_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
+create_proc_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IPDEFN);
 	iname(node) = (VPTR) name;
@@ -724,6 +803,21 @@ proc_node (PACTX pactx, CNSTRING name, PNODE parms, PNODE body)
 	node->i_flags = PN_INAME_HSTR;
 	set_parents(body, node);
 	return node;
+}
+/*===================================
+ * clear_proc_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_proc_node (PNODE node)
+{
+	STRING str=0;
+	ASSERT(itype(node) == IPDEFN);
+	str = iname(node);
+	if (str) {
+		stdfree(str);
+		iname(node) = 0;
+	}
 }
 /*==================================================
  * fdef_node -- Create user function definition node
@@ -987,19 +1081,33 @@ while_node (PACTX pactx, PNODE cond, PNODE body)
 	return node;
 }
 /*===================================
- * call_node -- Create proc call node
+ * create_call_node -- Create proc call node
  *  pactx: [I/O] pointer to parseinfo structure (parse globals)
- *  name:  [IN]  procedure name
+ *  name:  [IN]  procedure name (from IDEN value)
  *  args:  [IN]  argument(s)
  *=================================*/
 PNODE
-call_node (PACTX pactx, STRING name, PNODE args)
+create_call_node (PACTX pactx, STRING name, PNODE args)
 {
 	PNODE node = create_pnode(pactx, IPCALL);
-	iname(node) = (VPTR) name;
-	iargs(node) = (VPTR) args;
-	node->i_flags = PN_INAME_HSTR;
+	node->vars.ipcall.fname = name;
+	node->vars.ipcall.fargs = args;
 	return node;
+}
+/*===================================
+ * clear_call_node -- Free memory stored inside node
+ *  node:  [I/O] node
+ *=================================*/
+static void
+clear_call_node (PNODE node)
+{
+	CNSTRING str=0;
+	ASSERT(itype(node) == IPCALL);
+	str = node->vars.ipcall.fname;
+	if (str) {
+		stdfree(str);
+		node->vars.ipcall.fname;
+	}
 }
 /*================================
  * break_node -- Create break node
@@ -1107,19 +1215,16 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 	switch (itype(node)) {
 
 	case IICONS:
-		zs_appf(zstr, "%d", pvalue_to_int(ivalue(node)));
+		zs_appf(zstr, "%d", pvalue_to_int(node->vars.iicons.value));
 		break;
 	case IFCONS:
-		zs_appf(zstr, "%f", pvalue_to_float(ivalue(node)));
-		break;
-	case ILCONS:
-		zs_apps(zstr, "*ni*");
+		zs_appf(zstr, "%f", pvalue_to_float(node->vars.ifcons.value));
 		break;
 	case ISCONS:
-		zs_appf(zstr, "^^%s^^", pvalue_to_string(ivalue(node)));
+		zs_appf(zstr, "^^%s^^", pvalue_to_string(node->vars.iscons.value));
 		break;
 	case IIDENT:
-		zs_appf(zstr, "%s", iident(node));
+		zs_appf(zstr, "%s", iident_name(node));
 		break;
 	case IIF:
 		zs_apps(zstr, "if(");

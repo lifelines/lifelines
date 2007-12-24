@@ -94,10 +94,12 @@ extern STRING qSunsupuniv;
 
 static STRING check_rpt_requires(PACTX pactx, STRING fname);
 static void clean_orphaned_rptlocks(void);
+static void delete_pathinfo(PATHINFO * pathinfo);
 static void enqueue_parse_error(const char * fmt, ...);
-static BOOLEAN find_program(STRING fname, STRING localdir, STRING *pfull,BOOLEAN include);
+static BOOLEAN find_program(CNSTRING fname, STRING localdir, STRING *pfull,BOOLEAN include);
 static void init_pactx(PACTX pactx);
 static BOOLEAN interpret_prog(PNODE begin, SYMTAB stab);
+static PATHINFO new_pathinfo(CNSTRING fname, STRING fullpath);
 static void parse_file(PACTX pactx, STRING fname, STRING fullpath);
 static void print_report_duration(INT duration, INT uiduration);
 static void progmessage(MSG_LEVEL level, STRING);
@@ -178,7 +180,7 @@ progmessage (MSG_LEVEL level, STRING msg)
  *  all memory is newly heap-allocated
  *============================================*/
 static PATHINFO
-new_pathinfo (STRING fname, STRING fullpath)
+new_pathinfo (CNSTRING fname, STRING fullpath)
 {
 	PATHINFO pathinfo = (PATHINFO)stdalloc(sizeof(*pathinfo));
 	memset(pathinfo, 0, sizeof(*pathinfo));
@@ -187,8 +189,7 @@ new_pathinfo (STRING fname, STRING fullpath)
 	return pathinfo;
 }
 /*=============================================+
- * new_pathinfo -- Return new, filled-out pathinfo object
- *  all memory is newly heap-allocated
+ * delete_pathinfo -- Free memory inside pathinfo
  *============================================*/
 static void
 delete_pathinfo (PATHINFO * pathinfo)
@@ -343,7 +344,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	}
 	stab = create_symtab_proc(proc, NULL);
 	for (i = 0; i < nargs; i++) {
-		insert_symtab(stab, iident(parm), args[0]);
+		insert_symtab(stab, iident_name(parm), args[0]);
 		parm = inext(parm);
 	}
 
@@ -457,7 +458,7 @@ remove_tables (PACTX pactx)
  * Returns TRUE if found
  *=====================================*/
 static BOOLEAN
-find_program (STRING fname, STRING localdir, STRING *pfull,BOOLEAN include)
+find_program (CNSTRING fname, STRING localdir, STRING *pfull,BOOLEAN include)
 {
 	STRING programsdir = getlloptstr("LLPROGRAMS", ".");
 	FILE * fp = 0;
@@ -600,7 +601,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		switch (itype(node)) {
 		case ISCONS:
-			poutput(pvalue_to_string(ivalue(node)), &eflg);
+			poutput(pvalue_to_string(node->vars.iscons.value), &eflg);
 			if (eflg)
 				goto interp_fail;
 			break;
@@ -608,7 +609,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 			val = eval_and_coerce(PSTRING, node, stab, &eflg);
 			if (eflg) {
 				prog_error(node, _("identifier: %s should be a string\n"),
-				    iident(node));
+				    iident_name(node));
 				goto interp_fail;
 			}
 			str = pvalue_to_string(val);
@@ -1768,8 +1769,8 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	SYMTAB newstab = NULL;
 	INTERPTYPE irc=INTERROR;
-	PNODE arg=NULL, parm=NULL, proc;
-	STRING procname = iname(node);
+	PNODE arg=NULL, parm=NULL, proc=NULL;
+	CNSTRING procname = node->vars.ipcall.fname;
 	INT count=0;
 	/* find proc in local or global table */
 	proc = get_proc_node(procname, irptinfo(node)->proctab, gproctab, &count);
@@ -1781,9 +1782,10 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		irc = INTERROR;
 		goto call_leave;
 	}
+	ASSERT(itype(proc) == IPDEFN);
 	newstab = create_symtab_proc(procname, stab);
-	arg = (PNODE) iargs(node);
-	parm = (PNODE) iargs(proc);
+	arg = node->vars.ipcall.fargs; /* call instance */
+	parm = (PNODE) iargs(proc); /* declaration */
 	while (arg && parm) {
 		BOOLEAN eflg = FALSE;
 		PVALUE value = evaluate(arg, stab, &eflg);
@@ -1791,7 +1793,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 			irc = INTERROR;
 			goto call_leave;
 		}
-		insert_symtab(newstab, iident(parm), value);
+		insert_symtab(newstab, iident_name(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -1894,15 +1896,12 @@ pa_handle_global (STRING iden)
  * Called directly from generated parser code (ie, from code in yacc.y)
  *=============================================*/
 void
-pa_handle_option (PVALUE optval)
+pa_handle_option (CNSTRING optname)
 {
-	STRING optstr;
-	ASSERT(ptype(optval)==PSTRING); /* grammar only allows strings */
-	optstr = pvalue_to_string(optval);
-	if (eqstr(optstr,"explicitvars")) {
+	if (eqstr(optname, "explicitvars")) {
 		explicitvars = 1;
 	} else {
-		/* TO DO - figure out how to set the error flag & report error */
+		/* TODO - figure out how to set the error flag & report error */
 	}
 }
 /*=============================================+
@@ -1915,11 +1914,8 @@ pa_handle_option (PVALUE optval)
 void
 pa_handle_char_encoding (PACTX pactx, PNODE node)
 {
-	PVALUE pval = ivalue(node);
-	STRING codeset;
-	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
+	CNSTRING codeset = get_internal_string_node_value(node);
 	pactx=pactx; /* unused */
-	codeset = pvalue_to_string(pval);
 	strupdate(&irptinfo(node)->codeset, codeset);
 }
 /*=============================================+
@@ -1938,7 +1934,7 @@ make_internal_string_node (PACTX pactx, STRING str)
 		XLAT xlat = transl_get_xlat_to_int(rptcodeset);
 		transl_xlat(xlat, zstr);
 	}
-	node = string_node(pactx, zs_str(zstr));
+	node = create_string_node(pactx, zs_str(zstr));
 	zs_free(&zstr);
 	return node;
 }
@@ -1950,16 +1946,12 @@ void
 pa_handle_include (PACTX pactx, PNODE node)
 {
 	/*STRING fname = ifname(node); */ /* current file */
-	PVALUE pval = ivalue(node);
-	STRING newfname;
+	CNSTRING newfname = get_internal_string_node_value(node);
 	STRING fullpath=0, localpath=0;
 	ZSTR zstr=0;
 	PATHINFO pathinfo = 0;
 	pactx=pactx; /* unused */
 
-	ASSERT(ptype(pval)==PSTRING); /* grammar only allows strings */
-	newfname = pvalue_to_string(pval);
-	
 	/* if it is relative, get local path to give to find_program */
 	if (!is_path(newfname)) {
 		localpath = zs_str(irptinfo(node)->localpath);
@@ -1983,11 +1975,9 @@ pa_handle_include (PACTX pactx, PNODE node)
 void
 pa_handle_require (PACTX pactx, PNODE node)
 {
-	PVALUE pval = ivalue(node);
-	STRING str;
+	CNSTRING reqver = get_internal_string_node_value(node);
 	STRING propstr = "requires_lifelines-reports.version:";
-	TABLE tab;
-	ASSERT(ptype(pval)==PSTRING);
+	TABLE tab=0;
 	pactx=pactx; /* unused */
 
 	tab = (TABLE)valueof_obj(pactx->filetab, pactx->fullpath);
@@ -1997,8 +1987,7 @@ pa_handle_require (PACTX pactx, PNODE node)
 		release_table(tab); /* release our reference, pactx->filetab owns now */
 	}
 
-	str = pvalue_to_string(pval);
-	insert_table_str(tab, propstr, str);
+	insert_table_str(tab, propstr, reqver);
 }
 /*=============================================+
  * pa_handle_proc -- proc declaration (parse time)
@@ -2018,7 +2007,7 @@ pa_handle_proc (PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body)
 			, procname, iline(procnode)+1, iline(nd_body)+1, pactx->fullpath);
 	}
 	/* consumes procname */
-	procnode = proc_node(pactx, procname, nd_args, nd_body);
+	procnode = create_proc_node(pactx, procname, nd_args, nd_body);
 	insert_table_ptr(rptinfo->proctab, procname, procnode);
 
 	/* add to global proc table */

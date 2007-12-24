@@ -80,7 +80,7 @@ defn 	:	proc
 			if (eqstr("include", (STRING) $1))
 				pa_handle_include(pactx, (PNODE) $3);
 			if (eqstr("option", (STRING) $1))
-				pa_handle_option(ivalue((PNODE) $3));
+				pa_handle_option(get_internal_string_node_value((PNODE) $3));
 			if (eqstr("char_encoding", (STRING) $1))
 				pa_handle_char_encoding(pactx, (PNODE) $3);
 			if (eqstr("require", (STRING) $1))
@@ -109,11 +109,11 @@ idenso	:	/* empty */ {
 	;
 idens	:	IDEN {
 			/* consumes $1 */
-			$$ = iden_node(pactx, (STRING)$1);
+			$$ = create_iden_node(pactx, (STRING)$1);
 		}
 	|	IDEN ',' idens {
 			/* consumes $1 */
-			$$ = iden_node(pactx, (STRING)$1);
+			$$ = create_iden_node(pactx, (STRING)$1);
 			inext(((PNODE)$$)) = (PNODE) $3;
 		}
 	;
@@ -248,7 +248,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		}
 	|	CALL IDEN m '(' exprso ')' {
 			/* consumes $2 */
-			$$ = call_node(pactx, (STRING)$2, (PNODE)$5);
+			$$ = create_call_node(pactx, (STRING)$2, (PNODE)$5);
 			((PNODE)$$)->i_line = (INT) $3;
 		}
 	|	BREAK m '(' ')' {
@@ -296,7 +296,7 @@ elseo	:	/* empty */ {
 	;
 expr	:	IDEN {
 			/* consumes $1 */
-			$$ = iden_node(pactx, (STRING)$1);
+			$$ = create_iden_node(pactx, (STRING)$1);
 			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {
@@ -308,10 +308,10 @@ expr	:	IDEN {
 			$$ = $1;
 		}
 	|	ICONS {
-			$$ = icons_node(pactx, Yival);
+			$$ = create_icons_node(pactx, Yival);
 		}
 	|	FCONS {
-			$$ = fcons_node(pactx, Yfval);
+			$$ = create_fcons_node(pactx, Yfval);
 		}
 	;
 exprso	:	/* empty */ {

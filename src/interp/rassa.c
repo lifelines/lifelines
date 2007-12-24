@@ -130,14 +130,14 @@ llrpt_pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	rows = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = eval_and_coerce(PINT, inext((PNODE)iargs(node)), stab, eflg);
 	if (*eflg) {
 		prog_error(node, "2nd arg to pagemode must be an integer.");
 		return NULL;
 	}
 	cols = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	*eflg = TRUE;
 	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
 		prog_error(node, "illegal page size.");
@@ -190,14 +190,14 @@ llrpt_newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	strupdate(&outfilename, name);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = eval_and_coerce(PBOOL, arg=inext(arg), stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonboox, "1");
 		return NULL;
 	}
 	aflag = pvalue_to_bool(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (!set_output_file(outfilename, aflag)) {
 		*eflg = TRUE;
 		prog_error(node, "Failed to open output file: %s", outfilename);

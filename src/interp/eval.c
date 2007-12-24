@@ -67,11 +67,11 @@ evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return evaluate_ufunc(node, stab, eflg);
 	*eflg = FALSE;
 	if (iistype(node, IICONS))
-		return copy_pvalue(ivalue(node));
+		return copy_pvalue(node->vars.iicons.value);
 	if (iistype(node, ISCONS))
-		return copy_pvalue(ivalue(node));
+		return copy_pvalue(node->vars.iscons.value);
 	if (iistype(node, IFCONS))
-		return copy_pvalue(ivalue(node));
+		return copy_pvalue(node->vars.ifcons.value);
 	*eflg = TRUE;
 	return NULL;
 }
@@ -137,7 +137,7 @@ trace_endl (void)
 PVALUE
 evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING iden = (STRING) iident(node);
+	CNSTRING iden = iident_name(node);
 	if (prog_trace)
 		trace_outl("evaluate_iden called: iden = %s", iden);
 	*eflg = FALSE;
@@ -148,7 +148,7 @@ evaluate_iden (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * makes & returns copy
  *======================================*/
 PVALUE
-valueof_iden (PNODE node, SYMTAB stab, STRING iden, BOOLEAN *eflg)
+valueof_iden (PNODE node, SYMTAB stab, CNSTRING iden, BOOLEAN *eflg)
 {
 	BOOLEAN there;
 	PVALUE val;
@@ -199,7 +199,7 @@ evaluate_cond (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	show_pvalue(val);
 	wprintf("\n");
 #endif
-	if (var) assign_iden(stab, iident(node), copy_pvalue(val));
+	if (var) assign_iden(stab, iident_name(node), copy_pvalue(val));
 	coerce_pvalue(PBOOL, val, eflg);
 	rc = pvalue_to_bool(val);
 	delete_pvalue(val);
@@ -230,10 +230,10 @@ PVALUE
 evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	STRING procname = (STRING) iname(node);
-	PNODE func, arg, parm;
+	PNODE func=0, arg=0, parm=0;
 	SYMTAB newstab = NULL;
 	PVALUE val=NULL;
-	INTERPTYPE irc;
+	INTERPTYPE irc=0;
 	INT count=0;
 
 	*eflg = TRUE;
@@ -258,7 +258,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 				prog_error(node, "In user function %s()", procname);
 			return INTERROR;
 		}
-		insert_symtab(newstab, iident(parm), value);
+		insert_symtab(newstab, iident_name(parm), value);
 		arg = inext(arg);
 		parm = inext(parm);
 	}
@@ -321,7 +321,7 @@ num_params (PNODE node)
  * assign_iden -- Assign ident value in symtab
  *==========================================*/
 void
-assign_iden (SYMTAB stab, STRING id, PVALUE value)
+assign_iden (SYMTAB stab, CNSTRING id, PVALUE value)
 {
 	SYMTAB tab = stab;
 	if (!in_symtab(stab, id) && in_symtab(globtab, id))

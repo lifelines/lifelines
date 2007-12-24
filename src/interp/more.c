@@ -135,8 +135,8 @@ llrpt_extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		len = 0;
 		sind = 0;
 	}
-	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
-	insert_symtab(stab, iident(svar), create_pvalue_from_int(sind));
+	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(len));
+	insert_symtab(stab, iident_name(svar), create_pvalue_from_int(sind));
 	return NULL;
 }
 /*==============================================================+
@@ -178,7 +178,7 @@ llrpt_extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		prog_error(node, nonvarx, "extractplaces", "3");
 		return NULL;
 	}
-	insert_symtab(stab, iident(lvar), create_pvalue_from_int(0));
+	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(0));
 	*eflg = FALSE;
 	if (!line) return NULL;
 	if (strcmp("PLAC", ntag(line)) && !(line = PLAC(line))) return NULL;
@@ -189,7 +189,7 @@ llrpt_extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		str2 = (STRING)el; /* place_to_list made list of strings */
 		push_list(list, create_pvalue_from_string(str2));
 	ENDLIST
-	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
+	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(len));
 	return NULL;
 }
 /*==========================================================+
@@ -236,12 +236,12 @@ llrpt_extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	*eflg = FALSE;
-	insert_symtab(stab, iident(lvar), create_pvalue_from_int(0));
+	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(0));
 	temp = value_to_list(str, &len, dlm);
 	FORLIST(temp, el)
 		push_list(list, create_pvalue_from_string((STRING)el));
 	ENDLIST
-	insert_symtab(stab, iident(lvar), create_pvalue_from_int(len));
+	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(len));
 	delete_pvalue(val1);
 	delete_pvalue(val2);
 	return NULL;
@@ -1101,10 +1101,10 @@ llrpt_genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	seqval = create_pvalue_from_seq(NULL);
-	assign_iden(stab, iident(arg), seqval);
+	assign_iden(stab, iident_name(arg), seqval);
 	if (!name || *name == 0) return NULL;
 	seqval = create_pvalue_from_seq(str_to_indiseq(name, 'I'));
-	assign_iden(stab, iident(arg), seqval);
+	assign_iden(stab, iident_name(arg), seqval);
 	return NULL;
 }
 /*================================================+
@@ -1247,7 +1247,7 @@ llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		decdeg *= -1;
 	}
 
-	insert_symtab(stab, iident(ret1), create_pvalue_from_float(decdeg));
+	insert_symtab(stab, iident_name(ret1), create_pvalue_from_float(decdeg));
 	return NULL;
 }
 /*========================================
@@ -1287,9 +1287,9 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	if (neg == 1) { deg *= -1; }
 
-	insert_symtab(stab, iident(ret1), create_pvalue_from_int(deg));
-	insert_symtab(stab, iident(ret2), create_pvalue_from_int(min));
-	insert_symtab(stab, iident(ret3), create_pvalue_from_int(sec));
+	insert_symtab(stab, iident_name(ret1), create_pvalue_from_int(deg));
+	insert_symtab(stab, iident_name(ret2), create_pvalue_from_int(min));
+	insert_symtab(stab, iident_name(ret3), create_pvalue_from_int(sec));
 	return NULL;
 }
 /*========================================
