@@ -13,7 +13,7 @@
 #include <errno.h>
 #ifdef HAVE_ICONV
 # ifdef WIN32_ICONV_SHIM
-#  include "win32/iconvshim.h"
+#  include "mswin/iconvshim.h"
 # else
 #  include <iconv.h>
 # endif

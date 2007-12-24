@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "../../../src/hdrs" /I "../../../src/hdrs/mswin" /I "../../../intl" /I "." /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../src/hdrs" /I "../../../src/hdrs/win32" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../src/hdrs" /I "../../../src/hdrs/mswin" /I "../../../intl" /I "." /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -765,7 +765,7 @@ SOURCE=..\..\..\src\hdrs\cscurses.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\win32\curses.h
+SOURCE=..\..\..\src\hdrs\mswin\curses.h
 # End Source File
 # Begin Source File
 
@@ -817,7 +817,7 @@ SOURCE=..\..\..\src\hdrs\gengedc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\win32\getopt.h
+SOURCE=..\..\..\src\hdrs\mswin\getopt.h
 # End Source File
 # Begin Source File
 
@@ -825,11 +825,11 @@ SOURCE=..\..\..\src\hdrs\hashtab.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\win32\iconv.h
+SOURCE=..\..\..\src\hdrs\mswin\iconv.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\win32\iconvshim.h
+SOURCE=..\..\..\src\hdrs\mswin\iconvshim.h
 # End Source File
 # Begin Source File
 
@@ -853,7 +853,7 @@ SOURCE=..\..\..\src\interp\interpi.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\hdrs\win32\intlshim.h
+SOURCE=..\..\..\src\hdrs\mswin\intlshim.h
 # End Source File
 # Begin Source File
 

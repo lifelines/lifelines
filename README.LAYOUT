@@ -72,9 +72,9 @@ Source Code Directories
     Header files.
     screen.h is curses-specific, and will probably be moved eventually.
 
-./src/hdrs/win32/
+./src/hdrs/mswin/
 
-    Headers for win32 implementation code.
+    Headers for Microsoft Windows specific code.
 
 ./src/interp/
 

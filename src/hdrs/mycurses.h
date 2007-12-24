@@ -21,7 +21,7 @@
 #elif defined(HAVE_LIBCURSES)
 #include <curses.h>
 #elif defined(HAVE_WINDOWS_H)
-#include "win32/curses.h"
+#include "mswin/curses.h"
 #else
 #error Unsupported curses configuration!
 #endif

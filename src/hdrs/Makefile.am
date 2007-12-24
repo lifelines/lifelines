@@ -3,7 +3,7 @@
 
 # AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = win32
+SUBDIRS = mswin
 
 EXTRA_DIST = \
 	arch.h array.h btree.h \

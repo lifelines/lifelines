@@ -22,7 +22,7 @@
 /*** NLS (National Language Support) ***/
 
 #ifdef WIN32_INTL_SHIM
-#include "win32/intlshim.h"
+#include "mswin/intlshim.h"
 #else
 #include <libintl.h>
 #endif
