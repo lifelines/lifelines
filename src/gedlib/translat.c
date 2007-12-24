@@ -219,14 +219,13 @@ translate_string (XLAT ttm, CNSTRING in, STRING out, INT maxlen)
  * NB: If no translation table, entire string is always written
  *========================================================*/
 BOOLEAN
-translate_write(XLAT ttm, STRING in, INT *lenp
-	, FILE *ofp, BOOLEAN last)
+translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
 {
-	char intmp[MAXLINELEN+2];
-	char out[MAXLINELEN+2];
-	char *tp;
-	char *bp;
-	int i,j;
+	char intmp[MAXLINELEN+2]="";
+	char out[MAXLINELEN+2]="";
+	char *tp=0;
+	STRING bp = in;
+	int i=0,j=0;
 
 	if(ttm == NULL) {
 	    ASSERT(fwrite(in, *lenp, 1, ofp) == 1);
@@ -234,10 +233,8 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 	    return TRUE;
 	}
 
-	bp = (char *)in;
 	/* loop through lines one by one */
 	for(i = 0; i < *lenp; ) {
-		int outbytes;
 		/* copy in to intmp, up to first \n or our buffer size-1 */
 		tp = intmp;
 		for(j = 0; (j <= MAXLINELEN) && (i < *lenp) && (*bp != '\n'); j++) {
@@ -266,7 +263,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp
 		/* TODO (2002-11-28): modify to use dynamic string */
 		translate_string(ttm, intmp, out, MAXLINELEN+2);
 		if (out && strlen(out)) {
-			outbytes = fwrite(out, 1, strlen(out), ofp);
+			int outbytes = fwrite(out, 1, strlen(out), ofp);
 			if (!outbytes || ferror(ofp)) {
 				crashlog("outbytes=%d, errno=%d, outstr=%s"
 					, outbytes, errno, out);

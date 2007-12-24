@@ -1,3 +1,11 @@
+2007-12-24 Perry Rapp
+
+	* ChangeLog src/gedlib/translat.c src/hdrs/translat.h
+	src/liflines/export.c
+
+	Cleanup. Changed third arg of copy_and_translate from INT to char
+	(which removed a cast).
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog src/hdrs/btree.h src/btree/traverse.c
@@ -38,31 +46,31 @@
 	Cleanup: removed unused variable in node_lineprint.
 
 	* ChangeLog README.LAYOUT
-	build\msvc6\btedit\bteditCmd.dsp
-	build\msvc6\dbverify\dbverifyCmd.dsp
-	build\msvc6\llexec\llexec.dsp
-	build\msvc6\llines\llinesprj.dsp
+	build/msvc6/btedit/bteditCmd.dsp
+	build/msvc6/dbverify/dbverifyCmd.dsp
+	build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp
 	configure.ac
-	src\hdrs\Makefile.am src\hdrs\llnls.h src\hdrs\mycurses.h
-	src\stdlib\icvt.c
-	*NEW src\hdrs\mswin\.cvsignore
-	*NEW src\hdrs\mswin\Makefile.am
-	*NEW src\hdrs\mswin\README
-	*NEW src\hdrs\mswin\curses.h
-	*NEW src\hdrs\mswin\getopt.h
-	*NEW src\hdrs\mswin\iconv.h
-	*NEW src\hdrs\mswin\iconvshim.h
-	*NEW src\hdrs\mswin\intlshim.h
-	*NEW src\hdrs\mswin\msvc.h
-	*DELETED src\hdrs\win32\.cvsignore
-	*DELETED src\hdrs\win32\Makefile.am
-	*DELETED src\hdrs\win32\README
-	*DELETED src\hdrs\win32\curses.h
-	*DELETED src\hdrs\win32\getopt.h
-	*DELETED src\hdrs\win32\iconv.h
-	*DELETED src\hdrs\win32\iconvshim.h
-	*DELETED src\hdrs\win32\intlshim.h
-	*DELETED src\hdrs\win32\msvc.h
+	src/hdrs/Makefile.am src/hdrs/llnls.h src/hdrs/mycurses.h
+	src/stdlib/icvt.c
+	*NEW src/hdrs/mswin/.cvsignore
+	*NEW src/hdrs/mswin/Makefile.am
+	*NEW src/hdrs/mswin/README
+	*NEW src/hdrs/mswin/curses.h
+	*NEW src/hdrs/mswin/getopt.h
+	*NEW src/hdrs/mswin/iconv.h
+	*NEW src/hdrs/mswin/iconvshim.h
+	*NEW src/hdrs/mswin/intlshim.h
+	*NEW src/hdrs/mswin/msvc.h
+	*DELETED src/hdrs/win32/.cvsignore
+	*DELETED src/hdrs/win32/Makefile.am
+	*DELETED src/hdrs/win32/README
+	*DELETED src/hdrs/win32/curses.h
+	*DELETED src/hdrs/win32/getopt.h
+	*DELETED src/hdrs/win32/iconv.h
+	*DELETED src/hdrs/win32/iconvshim.h
+	*DELETED src/hdrs/win32/intlshim.h
+	*DELETED src/hdrs/win32/msvc.h
 
 	Move Microsoft Windows specific headers from src/hdrs/win32
 	to src/hdrs/mswin.
@@ -74,6 +82,7 @@
 	* ChangeLog src/stdlib/icvt.c
 
 	Removed unneeded & wrong cast in call to iconv in iconv_trans.
+
 
 2007-12-24 Matt Emmerton
 

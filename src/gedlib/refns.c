@@ -678,6 +678,7 @@ typedef struct
 	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_REFN_PARAM;
+/* see above */
 static BOOLEAN
 traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 {
@@ -694,6 +695,7 @@ traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 	}
 	return TRUE;
 }
+/* see above */
 void
 traverse_refns (TRAV_RECORD_FUNC_BYSTR func, void *param)
 {

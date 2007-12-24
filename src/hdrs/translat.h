@@ -63,7 +63,7 @@ void remove_trantable(TRANTABLE);
 void translate_catn(XLAT ttm, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(XLAT, CNSTRING in, STRING out, INT max);
 ZSTR translate_string_to_zstring(XLAT ttm, CNSTRING in);
-BOOLEAN translate_write(XLAT, STRING, INT*, FILE*, BOOLEAN);
+BOOLEAN translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last);
 CNSTRING tt_get_name(TRANTABLE tt);
 
 

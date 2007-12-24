@@ -64,7 +64,7 @@ struct tag_trav_parm {
 
 /* alphabetical */
 static BOOLEAN archive(BTREE btree, BLOCK block, void * param);
-static void copy_and_translate(FILE *fo, INT len, struct tag_trav_parm * travparm, INT c, XLAT xlat);
+static void copy_and_translate(FILE *fo, INT len, struct tag_trav_parm * travparm, char ctype, XLAT xlat);
 
 /*********************************************
  * local variables
@@ -141,15 +141,15 @@ archive (BTREE btree, BLOCK block, void * param)
 {
 	INT i, n, l;
 	char scratch[100];
-	STRING key;
-	FILE *fo;
+	FILE *fo=0;
 	struct tag_trav_parm * travparm = (struct tag_trav_parm *)param;
 
 	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
-	ASSERT(fo = fopen(scratch, LLREADBINARY));
+	fo = fopen(scratch, LLREADBINARY);
+	ASSERT(fo);
 	n = nkeys(block);
 	for (i = 0; i < n; i++) {
-		key = rkey2str(rkeys(block, i));
+		STRING key = rkey2str(rkeys(block, i));
 		if (*key != 'I' && *key != 'F' && *key != 'E' &&
 		    *key != 'S' && *key != 'X')
 			continue;
@@ -165,27 +165,30 @@ archive (BTREE btree, BLOCK block, void * param)
  * copy_and_translate -- Copy record with translation
  *=================================================*/
 static void
-copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, INT c, XLAT xlat)
+copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, char ctype, XLAT xlat)
 {
-	char in[BUFLEN];
-	char *inp;
-	int remlen, num;
+	char in[BUFLEN]="";
+	char *inp=0;
+	int remlen=0, num=0;
 	FILE * fn = travparm->fp;
 	struct tag_export_feedback * efeed = travparm->efeed;
 	
 	inp = in;		/* location for next read */
 	remlen = BUFLEN;	/* max for next read */
 	while (len > 0) {
-	    	if(len < remlen) remlen = len;
+		BOOLEAN last=FALSE, ok=FALSE;
+		if(len < remlen) remlen = len;
 		ASSERT(fread(inp, remlen, 1, fo) == 1);
 		len -= remlen;
 		remlen = (inp + remlen) - in;	/* amount in current buffer */
-		ASSERT(translate_write(xlat, in, &remlen, fn, (len <= 0)));
+		last = (len <= 0);
+		ok = translate_write(xlat, in, &remlen, fn, last);
+		ASSERT(ok);
 		inp = in + remlen;		/* position for next read */
 		remlen = BUFLEN - remlen;	/* max for next read */
 	}
 	num = 0;
-	switch (c) {
+	switch (ctype) {
 	case 'I': num = ++nindi; break;
 	case 'F': num = ++nfam;  break;
 	case 'E': num = ++neven; break;
@@ -194,5 +197,5 @@ copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, INT c, X
 	default: FATAL();
 	}
 	if (efeed && efeed->added_rec_fnc)
-		efeed->added_rec_fnc((char)c, num);
+		efeed->added_rec_fnc(ctype, num);
 }

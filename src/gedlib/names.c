@@ -1129,6 +1129,7 @@ typedef struct
 	TRAV_RECORD_FUNC_BYSTR func;
 	void * param;
 } TRAV_NAME_PARAM;
+/* see above */
 static BOOLEAN
 traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 {
@@ -1145,6 +1146,7 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 	}
 	return TRUE;
 }
+/* see above */
 void
 traverse_names (TRAV_RECORD_FUNC_BYSTR func, void *param)
 {
