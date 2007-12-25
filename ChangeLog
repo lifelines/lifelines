@@ -12,6 +12,12 @@
 
 	Add explanatory comment to traverse_index_blocks header comment.
 
+	* ChangeLog src/gedlib/intrface.c src/hdrs/gedcom.h
+	src/tools/dbverify.c
+
+	Add args macros from name & refn traverses, with appropriate types
+	and arg names. Fix all traverse macros to consistently use plural nouns.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog src/hdrs/gedcom.h src/gedlib/intrface.c

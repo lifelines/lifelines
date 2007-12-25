@@ -103,24 +103,24 @@ store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
  *=================================================*/
 typedef struct
 {
-	TRAV_RAWRECORD_FUNC func;
+	TRAV_RAWRECORDS_FUNC func;
 	void * param;
-} TRAV_PARAM;
+} TRAV_RAWRECORDS_PARAM;
 /* see above */
 static BOOLEAN
 trav_callback (RKEY rkey, STRING data, INT len, void * param)
 {
-	TRAV_PARAM *tparam = (TRAV_PARAM *)param;
+	TRAV_RAWRECORDS_PARAM *tparam = (TRAV_RAWRECORDS_PARAM *)param;
 	char key[MAXKEYWIDTH+1];
 	strcpy(key, rkey2str(rkey));
 	return tparam->func(key, data, len, tparam->param);
 }
 /* see above */
 void
-traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RAWRECORD_FUNC func, void *param)
+traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RAWRECORDS_FUNC func, void *param)
 {
 	RKEY lo1, hi1;
-	TRAV_PARAM tparam;
+	TRAV_RAWRECORDS_PARAM tparam;
 	tparam.param = param;
 	tparam.func = func;
 	if (lo)
@@ -139,14 +139,14 @@ traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RAWRECORD_FUNC func, void *
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC func;
+	TRAV_RECORDS_FUNC func;
 	void * param;
-} TRAV_RECORD_PARAM;
+} TRAV_RECORDS_PARAM;
 /* see above */
 static BOOLEAN
-trav_rec_callback (TRAV_RAWRECORD_FUNC_ARGS(key, data, len, param))
+trav_rec_callback (TRAV_RAWRECORDS_FUNC_ARGS(key, data, len, param))
 {
-	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
+	TRAV_RECORDS_PARAM *tparam = (TRAV_RECORDS_PARAM *)param;
 	RECORD rec=0;
 	BOOLEAN keepgoing=FALSE;
 	if (key[0]!='I' && key[0]!='F' && key[0]!='S' && key[0]!='E' && key[0]!='X')
@@ -160,9 +160,9 @@ trav_rec_callback (TRAV_RAWRECORD_FUNC_ARGS(key, data, len, param))
 }
 /* see above */
 void
-traverse_db_key_recs (TRAV_RECORD_FUNC func, void *param)
+traverse_db_key_recs (TRAV_RECORDS_FUNC func, void *param)
 {
-	TRAV_RECORD_PARAM tparam;
+	TRAV_RECORDS_PARAM tparam;
 	CNSTRING lo,hi;
 	tparam.param = param;
 	tparam.func = func;

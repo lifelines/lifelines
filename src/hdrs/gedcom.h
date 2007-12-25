@@ -122,13 +122,17 @@ CACHEEL nzcel(RECORD rec);
 /*============================================
  * Traversal function pointer typedefs
  *==========================================*/
-typedef BOOLEAN(*TRAV_RAWRECORD_FUNC)(CNSTRING key, STRING data, INT len, void *param);
-typedef BOOLEAN(*TRAV_RECORD_FUNC)(CNSTRING key, RECORD rec, void *param);
-typedef BOOLEAN(*TRAV_NAMES_FUNC)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-typedef BOOLEAN(*TRAV_REFNS_FUNC)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+typedef BOOLEAN(*TRAV_RAWRECORDS_FUNC)(CNSTRING key, STRING data, INT len, void *param);
+#define TRAV_RAWRECORDS_FUNC_ARGS(zkey,zdata,zlen,zparam) CNSTRING zkey, STRING zdata, INT zlen, void *zparam
 
-#define TRAV_RAWRECORD_FUNC_ARGS(zkey,zdata,zlen,zparam) CNSTRING zkey, STRING zdata, INT zlen, void *zparam
-#define TRAV_RECORD_FUNC_ARGS(zkey,zrec,zparam) CNSTRING zkey, RECORD zrec, void *zparam
+typedef BOOLEAN(*TRAV_RECORDS_FUNC)(CNSTRING key, RECORD rec, void *param);
+#define TRAV_RECORDS_FUNC_ARGS(zkey,zrec,zparam) CNSTRING zkey, RECORD zrec, void *zparam
+
+typedef BOOLEAN(*TRAV_NAMES_FUNC)(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
+#define TRAV_NAMES_FUNC_ARGS(zkey,zname,znewset,zparam) CNSTRING zkey, CNSTRING zname, BOOLEAN znewset, void *zparam
+
+typedef BOOLEAN(*TRAV_REFNS_FUNC)(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
+#define TRAV_REFNS_FUNC_ARGS(zkey,zrefn,znewset,zparam) CNSTRING zkey, CNSTRING zrefn, BOOLEAN znewset, void *zparam
 
 /*=====================================
  * LLDATABASE types -- LifeLines database
@@ -499,8 +503,8 @@ void delete_record_missing_data_entry(CNSTRING key);
 BOOLEAN mark_deleted_record_as_deleted(CNSTRING key);
 BOOLEAN mark_live_record_as_live(CNSTRING key);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
-void traverse_db_key_recs(TRAV_RECORD_FUNC, void *param);
-void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, TRAV_RAWRECORD_FUNC func, void *param);
+void traverse_db_key_recs(TRAV_RECORDS_FUNC, void *param);
+void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, TRAV_RAWRECORDS_FUNC func, void *param);
 
 /* keytonod.c */
 void add_new_indi_to_cache(RECORD rec);

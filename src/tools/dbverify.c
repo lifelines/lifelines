@@ -41,6 +41,7 @@
 #include "lloptions.h"
 #include "cache.h"
 #include "arch.h"
+#include "gedcom.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
@@ -116,8 +117,8 @@ typedef struct
 
 /* alphabetical */
 static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
-static BOOLEAN cgn_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param));
-static BOOLEAN cgr_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param));
+static BOOLEAN cgn_callback(TRAV_NAMES_FUNC_ARGS(key, name, newset, param));
+static BOOLEAN cgr_callback(TRAV_REFNS_FUNC_ARGS(key, refn, newset, param));
 static void check_and_fix_records(void);
 static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
@@ -141,7 +142,7 @@ static void finish_and_delete_refnset(void);
 static void fix_nodes(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
-static BOOLEAN nodes_callback(TRAV_RECORD_FUNC_ARGS(key, rec, param));
+static BOOLEAN nodes_callback(TRAV_RECORDS_FUNC_ARGS(key, rec, param));
 static void printblock(BLOCK block);
 static CNSTRING printkey(CNSTRING key);
 static void print_usage(void);
@@ -373,7 +374,7 @@ check_ghosts (void)
  * Created: 2001/01/01, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgn_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param))
+cgn_callback (TRAV_NAMES_FUNC_ARGS(key, name, newset, param))
 {
 	/* a name record which points at indi=key */
 	RECORD indi0 = NULL;
@@ -431,7 +432,7 @@ cgn_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, name, newset, param))
  * Created: 2001/01/13, Perry Rapp
  *==========================================*/
 static BOOLEAN
-cgr_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, refn, newset, param))
+cgr_callback (TRAV_REFNS_FUNC_ARGS(key, refn, newset, param))
 {
 	/* a refn record which points at record=key */
 	RECORD rec = key_to_record(key);
@@ -593,7 +594,7 @@ fix_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback(TRAV_RECORD_FUNC_ARGS(key, rec, param))
+nodes_callback(TRAV_RECORDS_FUNC_ARGS(key, rec, param))
 {
 	param=param;	/* NOTUSED */
 	if (noisy)
