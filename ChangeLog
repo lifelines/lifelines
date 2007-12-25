@@ -1,3 +1,13 @@
+2007-12-25 Perry Rapp
+
+	* ChangeLog src/gedlib/intrface.c
+	src/gedlib/names.c src/gedlib/refns.c src/hdrs/gedcom.h
+	src/liflines/scan.c src/tools/dbverify.c
+
+	Add different traversal typedefs to fix conflicting types.
+	Rename TRAV_RECORD_FUNC_BYSTR to TRAV_RAWRECORD_FUNC
+	and TRAV_RECORD_FUNC_BYREC to TRAV_RECORD_FUNC.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog src/hdrs/gedcom.h src/gedlib/intrface.c

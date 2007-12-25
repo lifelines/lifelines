@@ -675,7 +675,7 @@ index_by_refn (NODE node,
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC_BYSTR func;
+	TRAV_REFNS_FUNC func;
 	void * param;
 } TRAV_REFN_PARAM;
 /* see above */
@@ -697,7 +697,7 @@ traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 }
 /* see above */
 void
-traverse_refns (TRAV_RECORD_FUNC_BYSTR func, void *param)
+traverse_refns (TRAV_REFNS_FUNC func, void *param)
 {
 	TRAV_REFN_PARAM tparam;
 	tparam.param = param;

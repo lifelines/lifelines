@@ -1126,7 +1126,7 @@ name_to_list (CNSTRING name, INT *plen, INT *psind)
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC_BYSTR func;
+	TRAV_NAMES_FUNC func;
 	void * param;
 } TRAV_NAME_PARAM;
 /* see above */
@@ -1148,7 +1148,7 @@ traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
 }
 /* see above */
 void
-traverse_names (TRAV_RECORD_FUNC_BYSTR func, void *param)
+traverse_names (TRAV_NAMES_FUNC func, void *param)
 {
 	TRAV_NAME_PARAM tparam;
 	tparam.param = param;

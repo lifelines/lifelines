@@ -103,7 +103,7 @@ store_text_file_to_db (STRING key, CNSTRING file, TRANSLFNC transfnc)
  *=================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC_BYSTR func;
+	TRAV_RAWRECORD_FUNC func;
 	void * param;
 } TRAV_PARAM;
 /* see above */
@@ -117,7 +117,7 @@ trav_callback (RKEY rkey, STRING data, INT len, void * param)
 }
 /* see above */
 void
-traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, void *param)
+traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RAWRECORD_FUNC func, void *param)
 {
 	RKEY lo1, hi1;
 	TRAV_PARAM tparam;
@@ -139,16 +139,16 @@ traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, voi
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC_BYREC func;
+	TRAV_RECORD_FUNC func;
 	void * param;
 } TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
-trav_rec_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, data, len, param))
+trav_rec_callback (TRAV_RAWRECORD_FUNC_ARGS(key, data, len, param))
 {
 	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
-	RECORD rec;
-	BOOLEAN keepgoing;
+	RECORD rec=0;
+	BOOLEAN keepgoing=FALSE;
 	if (key[0]!='I' && key[0]!='F' && key[0]!='S' && key[0]!='E' && key[0]!='X')
 		return TRUE;
 	if (!strcmp(data, "DELE\n"))
@@ -160,7 +160,7 @@ trav_rec_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, data, len, param))
 }
 /* see above */
 void
-traverse_db_key_recs (TRAV_RECORD_FUNC_BYREC func, void *param)
+traverse_db_key_recs (TRAV_RECORD_FUNC func, void *param)
 {
 	TRAV_RECORD_PARAM tparam;
 	CNSTRING lo,hi;
