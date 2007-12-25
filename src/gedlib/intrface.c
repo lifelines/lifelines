@@ -139,12 +139,12 @@ traverse_db_rec_keys (CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, voi
  *==================================================*/
 typedef struct
 {
-	TRAV_RECORD_FUNC_BYSTR func;
+	TRAV_RECORD_FUNC_BYREC func;
 	void * param;
 } TRAV_RECORD_PARAM;
 /* see above */
 static BOOLEAN
-trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
+trav_rec_callback (TRAV_RECORD_FUNC_BYSTR_ARGS(key, data, len, param))
 {
 	TRAV_RECORD_PARAM *tparam = (TRAV_RECORD_PARAM *)param;
 	RECORD rec;
@@ -154,13 +154,13 @@ trav_rec_callback (CNSTRING key, STRING data, INT len, void * param)
 	if (!strcmp(data, "DELE\n"))
 		return TRUE;
 	rec = string_to_record(data, key, len);
-	keepgoing = tparam->func(key, rec, 0, tparam->param);
+	keepgoing = tparam->func(key, rec, tparam->param);
 	release_record(rec);
 	return keepgoing;
 }
 /* see above */
 void
-traverse_db_key_recs (TRAV_RECORD_FUNC_BYSTR func, void *param)
+traverse_db_key_recs (TRAV_RECORD_FUNC_BYREC func, void *param)
 {
 	TRAV_RECORD_PARAM tparam;
 	CNSTRING lo,hi;

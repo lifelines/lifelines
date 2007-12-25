@@ -54,12 +54,6 @@
 #define ERROR 0
 #define DONE -1
 
-/*============================================
- * Traversal function pointer typedefs
- *==========================================*/
-typedef BOOLEAN(*TRAV_RECORD_FUNC_BYSTR)(CNSTRING, CNSTRING, INT, void*);
-#define TRAV_RECORD_FUNC_BYSTR_ARGS(a,b,c,d) CNSTRING a, CNSTRING b, INT c, void* d
-
 /*=====================================
  * NODE -- Internal form of GEDCOM line
  *===================================*/
@@ -124,6 +118,15 @@ CNSTRING nzkey(RECORD rec);
 INT nzkeynum(RECORD rec);
 char nztype(RECORD rec);
 CACHEEL nzcel(RECORD rec);
+
+/*============================================
+ * Traversal function pointer typedefs
+ *==========================================*/
+typedef BOOLEAN(*TRAV_RECORD_FUNC_BYSTR)(CNSTRING, CNSTRING, INT, void*);
+typedef BOOLEAN(*TRAV_RECORD_FUNC_BYREC)(CNSTRING, RECORD, void*);
+
+#define TRAV_RECORD_FUNC_BYSTR_ARGS(a,b,c,d) CNSTRING a, CNSTRING b, INT c, void* d
+#define TRAV_RECORD_FUNC_BYREC_ARGS(a,b,c) CNSTRING a, RECORD b, void *c
 
 /*=====================================
  * LLDATABASE types -- LifeLines database
@@ -494,7 +497,7 @@ void delete_record_missing_data_entry(CNSTRING key);
 BOOLEAN mark_deleted_record_as_deleted(CNSTRING key);
 BOOLEAN mark_live_record_as_live(CNSTRING key);
 BOOLEAN store_text_file_to_db(STRING key, CNSTRING file, TRANSLFNC);
-void traverse_db_key_recs(TRAV_RECORD_FUNC_BYSTR, void *param);
+void traverse_db_key_recs(TRAV_RECORD_FUNC_BYREC, void *param);
 void traverse_db_rec_keys(CNSTRING lo, CNSTRING hi, TRAV_RECORD_FUNC_BYSTR func, void *param);
 
 /* keytonod.c */

@@ -141,7 +141,7 @@ static void finish_and_delete_refnset(void);
 static void fix_nodes(void);
 static void free_namerefn(NAMEREFN_REC * rec);
 static BOOLEAN fix_bad_pointer(CNSTRING key, RECORD rec, NODE node);
-static BOOLEAN nodes_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, rec, newset, param));
+static BOOLEAN nodes_callback(TRAV_RECORD_FUNC_BYREC_ARGS(key, rec, param));
 static void printblock(BLOCK block);
 static CNSTRING printkey(CNSTRING key);
 static void print_usage(void);
@@ -593,9 +593,8 @@ fix_nodes (void)
  * Created: 2001/01/14, Perry Rapp
  *===========================================*/
 static BOOLEAN
-nodes_callback(TRAV_RECORD_FUNC_BYSTR_ARGS(key, rec, newset, param))
+nodes_callback(TRAV_RECORD_FUNC_BYREC_ARGS(key, rec, param))
 {
-	newset=newset;	/* NOTUSED */
 	param=param;	/* NOTUSED */
 	if (noisy)
 		report_progress("Node: %s", key);
