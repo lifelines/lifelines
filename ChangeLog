@@ -8,6 +8,10 @@
 	Rename TRAV_RECORD_FUNC_BYSTR to TRAV_RAWRECORD_FUNC
 	and TRAV_RECORD_FUNC_BYREC to TRAV_RECORD_FUNC.
 
+	* ChangeLog src/btree/traverse.c
+
+	Add explanatory comment to traverse_index_blocks header comment.
+
 2007-12-24 Matt Emmerton
 
 	* ChangeLog src/hdrs/gedcom.h src/gedlib/intrface.c

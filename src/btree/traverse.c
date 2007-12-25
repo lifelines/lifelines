@@ -48,6 +48,10 @@ static BOOLEAN traverse_index(BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_R
 /*=====================================================
  * traverse_index_blocks - Traverse BTREE, doing things
  * this calls readindex directly, so it skips the index cache
+ *
+ * This is used by archive function to avoid thrashing the
+ *  index cache, as the archive has to traverse every index
+ *  to write the entire database out.
  *===================================================*/
 BOOLEAN
 traverse_index_blocks (BTREE btree, INDEX index, void *param
