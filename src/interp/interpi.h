@@ -135,6 +135,15 @@ struct tag_pnode {
 			CNSTRING name;
 		} iident;
 		struct {
+			PNODE icond;
+			PNODE ithen;
+			PNODE ielse;
+		} iif;
+		struct {
+			PNODE icond;
+			PNODE ibody;
+		} iwhile;
+		struct {
 			CNSTRING fname;
 			PNODE fargs;
 			PNODE func;
@@ -200,9 +209,6 @@ enum {
 
 CNSTRING iident_name(PNODE node);
 #define iargs(i)     ((i)->i_word2)     /* param and arg lists */
-#define icond(i)     ((i)->i_word1)     /* cond expr in if & while */
-#define ithen(i)     ((i)->i_word2)     /* then statement in if */
-#define ielse(i)     ((i)->i_word3)     /* else statement in if */
 
 #define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */

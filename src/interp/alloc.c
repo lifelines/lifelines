@@ -1058,9 +1058,9 @@ PNODE
 if_node (PACTX pactx, PNODE cond, PNODE tnode, PNODE enode)
 {
 	PNODE node = create_pnode(pactx, IIF);
-	icond(node) = (VPTR) cond;
-	ithen(node) = (VPTR) tnode;
-	ielse(node) = (VPTR) enode;
+	node->vars.iif.icond = cond;
+	node->vars.iif.ithen = tnode;
+	node->vars.iif.ielse = enode;
 	set_parents(tnode, node);
 	set_parents(enode, node);
 	return node;
@@ -1075,8 +1075,8 @@ PNODE
 while_node (PACTX pactx, PNODE cond, PNODE body)
 {
 	PNODE node = create_pnode(pactx, IWHILE);
-	icond(node) = (VPTR) cond;
-	ibody(node) = (VPTR) body;
+	node->vars.iwhile.icond = cond;
+	node->vars.iwhile.ibody = body;
 	set_parents(body, node);
 	return node;
 }
@@ -1228,21 +1228,21 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 		break;
 	case IIF:
 		zs_apps(zstr, "if(");
-		describe_pnodes(icond(node), zstr, max);
+		describe_pnodes(node->vars.iif.icond, zstr, max);
 		zs_apps(zstr, "){");
-		describe_pnodes(ithen(node), zstr, max);
+		describe_pnodes(node->vars.iif.ithen, zstr, max);
 		zs_apps(zstr, "}");
-		if (ielse(node)) {
+		if (node->vars.iif.ielse) {
 			zs_apps(zstr, "else{");
-			describe_pnodes(ielse(node), zstr, max);
+			describe_pnodes(node->vars.iif.ielse, zstr, max);
 			zs_apps(zstr, "}");
 		}
 		break;
 	case IWHILE:
 		zs_apps(zstr, "while(");
-		describe_pnodes(icond(node), zstr, max);
+		describe_pnodes(node->vars.iwhile.icond, zstr, max);
 		zs_apps(zstr, "){");
-		describe_pnodes(ibody(node), zstr, max);
+		describe_pnodes(node->vars.iwhile.ibody, zstr, max);
 		zs_apps(zstr, "}");
 		break;
 	case IBREAK:

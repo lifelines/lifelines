@@ -1,3 +1,10 @@
+2007-12-30 Perry Rapp
+
+	* ChangeLog src/interp/alloc.c src/interp/interp.c
+	src/interp/interpi.h src/interp/yacc.y
+
+	Implement if/next & while structs inside pnode union.
+
 2007-12-25 Perry Rapp
 
 	* ChangeLog src/gedlib/intrface.c

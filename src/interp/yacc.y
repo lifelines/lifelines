@@ -230,10 +230,10 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			prev = NULL;  this = (PNODE)$10;
 			while (this) {
 				prev = this;
-				this = (PNODE) ielse(this);
+				this = this->vars.iif.ielse;
 			}
 			if (prev) {
-				ielse(prev) = (VPTR)$11;
+				prev->vars.iif.ielse = (VPTR)$11;
 				$$ = if_node(pactx, (PNODE)$4, (PNODE)$8,
 				    (PNODE)$10);
 			} else
@@ -278,12 +278,12 @@ elsifs	:	elsif {
 			$$ = $1;
 		}
 	|	elsif  elsifs {
-			ielse((PNODE)$1) = (VPTR)$2;
+			((PNODE)$1)->vars.iif.ielse = $2;
 			$$ = $1;
 		}
 	;
 elsif	:	ELSIF '(' expr secondo ')' '{' tmplts '}' {
-			inext(((PNODE)$3)) = (PNODE)$4;
+			((PNODE)$3)->vars.iif.ielse = (PNODE)$4;
 			$$ = if_node(pactx, (PNODE)$3, (PNODE)$7, (PNODE)NULL);
 		}
 	;

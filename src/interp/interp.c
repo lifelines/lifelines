@@ -1708,10 +1708,13 @@ INTERPTYPE
 interp_if (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
-	BOOLEAN cond = evaluate_cond(icond(node), stab, &eflg);
+	PNODE icond = node->vars.iif.icond;
+	PNODE ithen = node->vars.iif.ithen;
+	PNODE ielse = node->vars.iif.ielse;
+	BOOLEAN cond = evaluate_cond(icond, stab, &eflg);
 	if (eflg) return INTERROR;
-	if (cond) return interpret((PNODE) ithen(node), stab, pval);
-	if (ielse(node)) return interpret((PNODE) ielse(node), stab, pval);
+	if (cond) return interpret(ithen, stab, pval);
+	if (ielse) return interpret(ielse, stab, pval);
 	return INTOKAY;
 }
 /*=========================================+
@@ -1720,13 +1723,15 @@ interp_if (PNODE node, SYMTAB stab, PVALUE *pval)
 INTERPTYPE
 interp_while (PNODE node, SYMTAB stab, PVALUE *pval)
 {
-	BOOLEAN eflg = FALSE, cond;
+	BOOLEAN eflg=FALSE, cond=FALSE;
 	INTERPTYPE irc;
 	while (TRUE) {
-		cond = evaluate_cond(icond(node), stab, &eflg);
+		PNODE icond = node->vars.iwhile.icond;
+		PNODE ibody = node->vars.iwhile.ibody;
+		cond = evaluate_cond(icond, stab, &eflg);
 		if (eflg) return INTERROR;
 		if (!cond) return INTOKAY;
-		switch (irc = interpret((PNODE) ibody(node), stab, pval)) {
+		switch (irc = interpret(ibody, stab, pval)) {
 		case INTCONTINUE:
 		case INTOKAY:
 			continue;
