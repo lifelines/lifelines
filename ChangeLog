@@ -4,6 +4,14 @@
 
 	New function strcfree for constant strings.
 
+	* ChangeLog src/interp/alloc.c src/interp/builtin.c
+	src/interp/interpi.h src/interp/intrpseq.c
+
+	Change builtin (llrpt) functions to use new function
+	builtin_args instead of macro iargs (so they needn't
+	be changed when builtin function data storage is fixed
+	to use struct inside pnode union).
+
 2007-12-30 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c

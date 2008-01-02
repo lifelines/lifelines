@@ -209,6 +209,7 @@ enum {
 
 CNSTRING iident_name(PNODE node);
 #define iargs(i)     ((i)->i_word2)     /* param and arg lists */
+PNODE builtin_args(PNODE node);
 
 #define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */

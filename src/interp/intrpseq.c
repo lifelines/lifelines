@@ -78,7 +78,7 @@ llrpt_indiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ newseq=0;
 	PVALUE newval=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	if (!iistype(arg1, IIDENT)) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, arg1, NULL, nonvar1, "indiset");
@@ -102,7 +102,7 @@ llrpt_addtoset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	NODE indi=0;
 	STRING key=0;
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
+	PNODE arg1 = builtin_args(node), arg2 = inext(arg1),
 	    arg3 = inext(arg2);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
@@ -161,7 +161,7 @@ llrpt_inset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING key=0;
 	INDISEQ seq;
 	BOOLEAN rel;
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
+	PNODE arg1 = builtin_args(node), arg2 = inext(arg1);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE valr=0;
 	if (*eflg ||!val1 || !(seq = pvalue_to_seq(val1))) {
@@ -203,7 +203,7 @@ llrpt_deletefromset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING key=0;
 	BOOLEAN all, rc;
 	INDISEQ seq;
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1),
+	PNODE arg1 = builtin_args(node), arg2 = inext(arg1),
 	    arg3 = inext(arg2);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val3=0;
@@ -249,7 +249,7 @@ PVALUE
 llrpt_namesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "namesort");
@@ -270,7 +270,7 @@ PVALUE
 llrpt_keysort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "namesort");
@@ -291,7 +291,7 @@ PVALUE
 llrpt_valuesort (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "valuesort");
@@ -316,7 +316,7 @@ PVALUE
 llrpt_uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "uniqueset");
@@ -336,7 +336,8 @@ llrpt_uniqueset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
+	PNODE arg1 = builtin_args(node);
+	PNODE arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
@@ -366,7 +367,8 @@ llrpt_union (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
+	PNODE arg1 = builtin_args(node);
+	PNODE arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
@@ -397,7 +399,8 @@ llrpt_intersect (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_difference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node), arg2 = inext(arg1);
+	PNODE arg1 = builtin_args(node);
+	PNODE arg2 = inext(arg1);
 	INDISEQ op2=0, op1=0;
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	PVALUE val2=0;
@@ -429,7 +432,7 @@ PVALUE
 llrpt_parentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "parentset");
@@ -450,7 +453,7 @@ PVALUE
 llrpt_childset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "childset");
@@ -470,7 +473,7 @@ PVALUE
 llrpt_siblingset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "siblingset");
@@ -489,7 +492,7 @@ PVALUE
 llrpt_spouseset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "spouseset");
@@ -508,7 +511,7 @@ PVALUE
 llrpt_ancestorset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "ancestorset");
@@ -527,7 +530,7 @@ PVALUE
 llrpt_descendentset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "descendentset");
@@ -546,7 +549,7 @@ PVALUE
 llrpt_gengedcom (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcom");
@@ -569,7 +572,7 @@ PVALUE
 llrpt_gengedcomweak (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcomweak");
@@ -592,7 +595,7 @@ PVALUE
 llrpt_gengedcomstrong (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INDISEQ seq=0;
-	PNODE arg1 = (PNODE) iargs(node);
+	PNODE arg1 = builtin_args(node);
 	PVALUE val1 = eval_and_coerce(PSET, arg1, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg1, val1, nonset1, "gengedcomstrong");

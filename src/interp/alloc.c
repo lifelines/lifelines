@@ -719,6 +719,17 @@ iident_name (PNODE node)
 	ASSERT(itype(node) == IIDENT);
 	return node->vars.iident.name;
 }
+/*====================================
+ * builtin_args -- Return args node of a call to built-in function
+ *==================================*/
+PNODE
+builtin_args (PNODE node)
+{
+	ASSERT(itype(node) == IBCALL);
+	return (PNODE)iargs(node);
+	/* TODO: */
+	/* return node->vars.ibcall.fargs; */
+}
 /*===================================
  * clear_iden_node -- Free memory stored inside node
  *  node:  [I/O] node
