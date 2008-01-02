@@ -88,20 +88,20 @@ static struct tag_rfmt rpt_shrt_rfmt; /* long form report format */
 PVALUE
 llrpt_getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	PNODE arg2=0;
+	PNODE argvar = builtin_args(node);
+	PNODE argvar2=0;
 	INT num;
 	STRING msg = 0;
 	PVALUE val = NULL;
-	if (!iistype(arg, IIDENT)) {
-		prog_var_error(node, stab, arg, NULL, nonvarx, "getint", "1");
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "getint", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if ((arg2 = inext(arg)) != NULL) {
-		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+	if ((argvar2 = inext(argvar)) != NULL) {
+		val = eval_and_coerce(PSTRING, argvar2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg2, val, nonstrx, "getint", "2");
+			prog_var_error(node, stab, argvar2, val, nonstrx, "getint", "2");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -113,7 +113,7 @@ llrpt_getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		*eflg = TRUE;
 		return NULL;
 	}
-	assign_iden(stab, iident_name(arg), create_pvalue_from_int(num));
+	assign_iden(stab, iident_name(argvar), create_pvalue_from_int(num));
 	delete_pvalue(val);
 	return NULL;
 }
@@ -124,20 +124,20 @@ llrpt_getint (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	PNODE arg2=0;
+	PNODE argvar = builtin_args(node);
+	PNODE argvar2=0;
 	STRING msg = _(qSchoostrttl);
 	PVALUE val = NULL, ansval;
 	char buffer[MAXPATHLEN];
-	if (!iistype(arg, IIDENT)) {
-		prog_var_error(node, stab, arg, NULL, nonvarx, "getstr", "1");
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "getstr", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if ((arg2 = inext(arg)) != NULL) {
-		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+	if ((argvar2 = inext(argvar)) != NULL) {
+		val = eval_and_coerce(PSTRING, argvar2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg2, val, nonstrx, "getstr", "2");
+			prog_var_error(node, stab, argvar2, val, nonstrx, "getstr", "2");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -148,7 +148,7 @@ llrpt_getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		buffer[0]=0;
 	}
 	ansval = create_pvalue_from_string(buffer);
-	assign_iden(stab, iident_name(arg), ansval);
+	assign_iden(stab, iident_name(argvar), ansval);
 	delete_pvalue(val);
 	return NULL;
 }
@@ -159,19 +159,19 @@ llrpt_getstr (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	PNODE arg2;
-	STRING key, msg = 0;
+	PNODE argvar = builtin_args(node);
+	PNODE argvar2=0;
+	STRING key=0, msg = 0;
 	PVALUE val = NULL;
-	if (!iistype(arg, IIDENT)) {
-		prog_var_error(node, stab, arg, NULL, nonvarx, "getindi", "1");
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "getindi", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if ((arg2 = inext(arg)) != 0) {
-		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+	if ((argvar2 = inext(argvar)) != 0) {
+		val = eval_and_coerce(PSTRING, argvar2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg2, val, nonstrx, "getindi", "2");
+			prog_var_error(node, stab, argvar2, val, nonstrx, "getindi", "2");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -179,10 +179,10 @@ llrpt_getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	if (!msg)
 		msg = _("Identify person for program:");
-	assign_iden(stab, iident_name(arg), create_pvalue_from_indi(NULL));
+	assign_iden(stab, iident_name(argvar), create_pvalue_from_indi(NULL));
 	key = rptui_ask_for_indi_key(msg, DOASK1);
 	if (key) {
-		assign_iden(stab, iident_name(arg)
+		assign_iden(stab, iident_name(argvar)
 			, create_pvalue_from_indi_key(key));
 	}
 	delete_pvalue_ptr(&val);
@@ -195,17 +195,17 @@ llrpt_getindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	NODE fam;
-	if (!iistype(arg, IIDENT)) {
-		prog_var_error(node, stab, arg, NULL, nonvar1, "getfam");
+	PNODE argvar = builtin_args(node);
+	NODE fam=0;
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvar1, "getfam");
 		*eflg = TRUE;
 		return NULL;
 	}
-	assign_iden(stab, iident_name(arg), NULL);
+	assign_iden(stab, iident_name(argvar), NULL);
 	fam = nztop(rptui_ask_for_fam(_("Enter a spouse from family."),
 	    _("Enter a sibling from family.")));
-	assign_iden(stab, iident_name(arg), create_pvalue_from_fam(fam));
+	assign_iden(stab, iident_name(argvar), create_pvalue_from_fam(fam));
 	return NULL;
 }
 /*=================================================+
@@ -217,20 +217,20 @@ llrpt_getfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	PNODE arg2=0;
-	INDISEQ seq;
+	PNODE argvar = builtin_args(node);
+	PNODE argvar2=0;
+	INDISEQ seq=0;
 	STRING msg = 0;
 	PVALUE val = NULL;
-	if (!iistype(arg, IIDENT)) {
-		prog_var_error(node, stab, arg, NULL, nonvarx, "getindiset", "1");
+	if (!iistype(argvar, IIDENT)) {
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "getindiset", "1");
 		*eflg = TRUE;
 		return NULL;
 	}
-	if ((arg2 = inext(arg)) != NULL) {
-		val = eval_and_coerce(PSTRING, arg2, stab, eflg);
+	if ((argvar2 = inext(argvar)) != NULL) {
+		val = eval_and_coerce(PSTRING, argvar2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg2, val, nonstrx, "getindiset", "2");
+			prog_var_error(node, stab, argvar2, val, nonstrx, "getindiset", "2");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -242,7 +242,7 @@ llrpt_getindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (seq)
 		namesort_indiseq(seq); /* in case uilocale != rptlocale */
 	delete_pvalue_ptr(&val);
-	assign_iden(stab, iident_name(arg), create_pvalue_from_seq(seq));
+	assign_iden(stab, iident_name(argvar), create_pvalue_from_seq(seq));
 	return NULL;
 }
 /*==================================+
@@ -256,11 +256,11 @@ llrpt_gettext (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 #ifdef ENABLE_NLS
 	STRING str2=0,textdomain=0,localepath=0;
 #endif /* ENABLE_NLS */
-	PNODE arg = builtin_args(node);
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	PVALUE newval=0;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "gettext");
+		prog_var_error(node, stab, argvar, val, nonstr1, "gettext");
 		return NULL;
 	}
 	str = pvalue_to_string(val);
@@ -302,21 +302,21 @@ llrpt_gettoday (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	PNODE arg2=0;
-	NODE name, indi = eval_indi(arg, stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	PNODE argvar2=0;
+	NODE name, indi = eval_indi(argvar, stab, eflg, NULL);
 	SURCAPTYPE captype = DOSURCAP;
-	PVALUE val;
+	PVALUE val=0;
 	STRING outname = 0;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonindx, "name", "1");
+		prog_var_error(node, stab, argvar, NULL, nonindx, "name", "1");
 		return NULL;
 	}
 	if (!indi) return create_pvalue_from_string("");
-	if ((arg2 = inext(arg)) != NULL) {
-		val = eval_and_coerce(PBOOL, arg2, stab, eflg);
+	if ((argvar2 = inext(argvar)) != NULL) {
+		val = eval_and_coerce(PBOOL, argvar2, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg2, val, nonboox, "name", "2");
+			prog_var_error(node, stab, argvar2, val, nonboox, "name", "2");
 			delete_pvalue(val);
 			return NULL;
 		}
@@ -326,7 +326,7 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (!(name = find_tag(nchild(indi), "NAME"))) {
 		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
-			prog_var_error(node, stab, arg, NULL, _("name: person does not have a name"));
+			prog_var_error(node, stab, argvar, NULL, _("name: person does not have a name"));
 			return NULL;
 		}
 		return create_pvalue_from_string(0);
@@ -341,39 +341,39 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = builtin_args(node);
-	NODE name, indi;
-	PVALUE val;
+	PNODE argvar = builtin_args(node);
+	NODE name=0, indi=0;
+	PVALUE val=0;
 	SURCAPTYPE caps = DOSURCAP;
 	SURORDER regorder = REGORDER;
-	INT len;
-	STRING outname;
+	INT len=0;
+	STRING outname=0;
 
-	indi = eval_indi(arg, stab, eflg, NULL);
+	indi = eval_indi(argvar, stab, eflg, NULL);
 	if (*eflg || !indi) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, NULL, nonindx, "fullname", "1");
+		prog_var_error(node, stab, argvar, NULL, nonindx, "fullname", "1");
 		return NULL;
 	}
-	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
+	val = eval_and_coerce(PBOOL, argvar = inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonboox, "fullname", "2");
+		prog_var_error(node, stab, argvar, val, nonboox, "fullname", "2");
 		delete_pvalue(val);
 		return NULL;
 	}
 	caps = pvalue_to_bool(val) ? DOSURCAP : NOSURCAP;
 	delete_pvalue_ptr(&val);
-	val = eval_and_coerce(PBOOL, arg = inext(arg), stab, eflg);
+	val = eval_and_coerce(PBOOL, argvar = inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonboox, "fullname", "3");
+		prog_var_error(node, stab, argvar, val, nonboox, "fullname", "3");
 		delete_pvalue(val);
 		return NULL;
 	}
 	regorder = pvalue_to_bool(val) ? REGORDER : SURFIRST;
 	delete_pvalue_ptr(&val);
-	val = eval_and_coerce(PINT, arg = inext(arg), stab, eflg);
+	val = eval_and_coerce(PINT, argvar = inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonintx, "fullname", "4");
+		prog_var_error(node, stab, argvar, val, nonintx, "fullname", "4");
 		delete_pvalue(val);
 		return NULL;
 	}
