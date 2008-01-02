@@ -17,6 +17,11 @@
 	Change local variable "arg" to "argvar", for easier
 	grep -- down to line 400 of builtin.c.
 
+	* ChangeLog src/interp/builtin.c
+
+	Change local variable "arg" to "argvar", for easier
+	grep -- down to line 2000 of builtin.c.
+
 2007-12-30 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c
