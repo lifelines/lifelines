@@ -36,6 +36,18 @@ strfree (STRING * str)
 	}
 }
 /*===============================
+ * strcfree -- Free & clear a CNSTRING by ref
+ *  (STRING may be NULL)
+ *=============================*/
+void
+strcfree (CNSTRING * str)
+{
+	if (*str) {
+		stdfree(*str);
+		*str = NULL;
+	}
+}
+/*===============================
  * strupdate -- strfree followed by strsave
  *  (STRING may be NULL)
  *=============================*/

@@ -1,3 +1,9 @@
+2008-01-02 Perry Rapp
+
+	* ChangeLog src/hdrs/llstdlib.h src/stdlib/stralloc.c
+
+	New function strcfree for constant strings.
+
 2007-12-30 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/interp.c

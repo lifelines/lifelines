@@ -182,6 +182,7 @@ void stdstring_hardfail(void);
 STRING allocsubbytes(STRING s, INT start, INT num);
 void free_array_strings(INT n, STRING * arr);
 STRING strconcat(STRING, STRING);
+void strcfree(CNSTRING *);
 void strfree(STRING *);
 STRING strsave(CNSTRING);
 void strupdate(STRING * str, CNSTRING value);
