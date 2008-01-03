@@ -346,3 +346,35 @@ llrpt_setel (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*===================================
  * llrpt_length is in builtin.c, as it is shared by table, list, and seq
  *=================================*/
+/*===============================+
+ * llrpt_dup -- Dup operation
+ * usage: dup(LIST) -> LIST
+ *==============================*/
+PVALUE
+llrpt_dup (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	PNODE argvar = builtin_args(node);
+	LIST list=0;
+	LIST newlist=0;
+	PVALUE val=0, newval=0;
+	INT i=0;
+
+	val = evaluate(argvar, stab, eflg);
+	if (*eflg || !val) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, badargx, "dup", "1");
+		return NULL;
+	}
+	/* traverse and copy */
+	list = pvalue_to_list(val);
+	delete_pvalue_ptr(&val);
+	newlist = create_list3(delete_vptr_pvalue);
+	for (i=0; i<length_list(list); i++) {
+		newval = (PVALUE) get_list_element(list, i+1, NULL);
+		enqueue_list(newlist, copy_pvalue(newval));
+	}
+	/* assign new list */
+	newval = create_pvalue_from_list(newlist);
+	release_list(newlist); /* release our ref to newlist */
+	return newval;
+}

@@ -7,6 +7,12 @@
 
 	Move interpreter functions for lists to new file builtin_list.c.
 
+	* ChangeLog src/interp/builtin.c src/interp/builtin_list.c
+
+	Move function llrpt_dup from builtin.c to builtin_list.c.
+	Remove obsolete declaration of create_list_value_pvalue from 
+	builtin.c.
+
 2008-01-02 Perry Rapp
 
 	* ChangeLog src/hdrs/llstdlib.h src/stdlib/stralloc.c
