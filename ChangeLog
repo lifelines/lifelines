@@ -1,5 +1,14 @@
 2008-01-02 Perry Rapp
 
+	* ChangeLog build/msvc6/llexec/llexec.dsp
+	build/msvc6/llines/llinesprj.dsp
+	src/interp/Makefile.am 	src/interp/builtin.c
+	*NEW src/interp/builtin_list.c
+
+	Move interpreter functions for lists to new file builtin_list.c.
+
+2008-01-02 Perry Rapp
+
 	* ChangeLog src/hdrs/llstdlib.h src/stdlib/stralloc.c
 
 	New function strcfree for constant strings.

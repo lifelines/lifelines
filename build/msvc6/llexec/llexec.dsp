@@ -128,6 +128,10 @@ SOURCE=..\..\..\src\interp\builtin.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\interp\builtin_list.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\gedlib\charmaps.c
 # End Source File
 # Begin Source File

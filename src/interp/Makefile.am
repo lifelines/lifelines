@@ -4,7 +4,8 @@
 
 noinst_LIBRARIES = libinterp.a
 
-libinterp_a_SOURCES = alloc.c builtin.c eval.c functab.c heapused.c \
+libinterp_a_SOURCES = alloc.c builtin.c builtin_list.c eval.c \
+	functab.c heapused.c \
 	interp.c intrpseq.c lex.c more.c progerr.c \
 	pvalalloc.c pvalmath.c pvalue.c \
 	rassa.c rptsort.c rptui.c \
