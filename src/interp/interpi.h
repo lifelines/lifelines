@@ -509,6 +509,18 @@ extern INT _cols;
 extern INT Perrors;
 extern INT nobuiltins;
 
+/* standard argument error messages (populated in alloc.c) */
+extern STRING nonint1, nonintx, nonboox, nonflox, nonstr1, nonstrx;
+extern STRING nullarg1, nonfname1;
+extern STRING nonnodstr1;
+extern STRING nonind1, nonindx, nonfam1, nonfamx, nonrecx;
+extern STRING nonnod1, nonnodx;
+extern STRING nonvar1, nonvarx;
+extern STRING nonlst1, nonlstx;
+extern STRING nontabx;
+extern STRING badtrig;
+extern STRING badarg1, badargs, badargx;
+
 /* Input and output modes */
 
 #define FILEMODE   0	/* input from a file */

@@ -31,17 +31,6 @@
 #include "interpi.h"
 
 /*********************************************
- * external/imported variables
- *********************************************/
-
-extern STRING nonint1,nonintx,nonflox,nonstr1,nonstrx,nullarg1,nonfname1;
-extern STRING nonnodstr1;
-extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx;
-extern STRING nonvar1,nonvarx,nonboox,nonlst1,nonlstx;
-extern STRING nontabx;
-extern STRING badargs,badargx,badarg1;
-
-/*********************************************
  * local function prototypes
  *********************************************/
 

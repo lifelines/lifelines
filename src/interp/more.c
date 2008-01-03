@@ -45,8 +45,6 @@
  *********************************************/
 
 extern STRING qSnotonei, qSifonei;
-extern STRING nonint1,nonintx,nonflox,nonstr1,nonstrx,nonlstx,nonvarx;
-extern STRING nonind1,nonindx,nonfam1,nonrecx,nonnod1,nonnodx,badtrig;
 
 /*********************************************
  * local function prototypes

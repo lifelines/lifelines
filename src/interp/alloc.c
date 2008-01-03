@@ -985,6 +985,11 @@ shutdown_interpreter (void)
  * These are used by many report functions.
  * This avoids having to localize dozens of strings
  * just like these.
+ * Examples:
+ * nonfam1 is for a function taking a single argument 
+ *   which should be a FAM
+ * nonfamx is for a function taking multiple arguments 
+ *   with error in one which should be a FAM
  * Created: 2002/02/16, Perry Rapp
  *===========================*/
 void

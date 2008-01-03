@@ -81,11 +81,6 @@ BOOLEAN rpt_cancelled = FALSE;
 extern INT progerror;
 extern BOOLEAN progrunning, progparsing;
 extern STRING qSwhatrpt;
-extern STRING nonint1, nonintx, nonstr1, nonstrx, nullarg1, nonfname1;
-extern STRING nonnodstr1, nonind1, nonindx, nonfam1, nonfamx;
-extern STRING nonrecx, nonnod1;
-extern STRING nonnodx, nonvar1, nonvarx, nonboox, nonlst1, nonlstx;
-extern STRING badargs, badargx, nonrecx;
 extern STRING qSunsupuniv;
 
 /*********************************************

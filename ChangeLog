@@ -13,6 +13,13 @@
 	Remove obsolete declaration of create_list_value_pvalue from 
 	builtin.c.
 
+	* ChangeLog src/interp/alloc.c src/interp/builtin.c
+	src/interp/builtin_list.c src/interp/interp.c src/interp/interpi.h
+	src/interp/more.c
+
+	Move declarations of standard interpreter arg. errors (nonint1...)
+	into interpi.h instead of being duplicated across source files.
+
 2008-01-02 Perry Rapp
 
 	* ChangeLog src/hdrs/llstdlib.h src/stdlib/stralloc.c
