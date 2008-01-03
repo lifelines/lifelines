@@ -309,25 +309,37 @@ llrpt_outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT col, row;
-	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
+	INT col=0, row=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "pos", "1");
+		prog_var_error(node, stab, argvar, val, nonintx, "pos", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	row = pvalue_to_int(val);
-	delete_pvalue(val);
-	val = eval_and_coerce(PINT, inext((PNODE) iargs(node)), stab, eflg);
+	if (row < 1 || row > __rows) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, badargx, "pos", "1");
+		return NULL;
+	}
+	delete_pvalue_ptr(&val);
+	val = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonintx, "pos", "1");
+		prog_var_error(node, stab, argvar, val, nonintx, "pos", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	col = pvalue_to_int(val);
-	delete_pvalue(val);
-	if (outputmode != PAGEMODE || row < 1 || row > __rows ||
-	    col < 1 || col > __cols) {
+	if (col < 1 || col > __cols) {
 		*eflg = TRUE;
-		prog_error(node, _("illegal call to pos."));
+		prog_var_error(node, stab, argvar, val, badargx, "pos", "2");
+		return NULL;
+	}
+	delete_pvalue_ptr(&val);
+	if (outputmode != PAGEMODE) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, NULL, val, "pos only valid in page mode");
 		return NULL;
 	}
 	currow = row;
@@ -341,17 +353,25 @@ llrpt_pos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT row;
-	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
+	INT row=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to row must be an integer.");
+		prog_var_error(node, stab, argvar, val, nonint1, "row");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	*eflg = TRUE;
 	row = pvalue_to_int(val);
-	delete_pvalue(val);
-	if (outputmode != PAGEMODE || row < 1 || row > __rows) {
-		prog_error(node, "the arg to row is in error.");
+	delete_pvalue_ptr(&val);
+	if (outputmode != PAGEMODE) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, "row only valid in page mode");
+		return NULL;
+	}
+	if (row < 1 || row > __rows) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, badarg1, "row");
 		return NULL;
 	}
 	*eflg = FALSE;
@@ -366,14 +386,16 @@ llrpt_row (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT newcol;
-	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
+	INT newcol=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to col must be an integer.");
+		prog_var_error(node, stab, argvar, val, nonint1, "col");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	newcol = pvalue_to_int(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (newcol < 1) newcol = 1;
 	if (newcol > MAXCOLS) newcol = MAXCOLS;
 	if (newcol == curcol) return NULL;
