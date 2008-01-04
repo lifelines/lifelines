@@ -53,6 +53,8 @@
 /* reused report language error strings */
 STRING nonint1     = 0;
 STRING nonintx     = 0;
+STRING nonboo1     = 0;
+STRING nonboox     = 0;
 STRING nonflox     = 0;
 STRING nonstr1     = 0;
 STRING nonstrx     = 0;
@@ -63,6 +65,7 @@ STRING nonind1     = 0;
 STRING nonindx     = 0;
 STRING nonfam1     = 0;
 STRING nonfamx     = 0;
+STRING nonif1      = 0;
 STRING nonrecx     = 0;
 STRING nonnod1     = 0;
 STRING nonnodx     = 0;
@@ -71,7 +74,6 @@ STRING nonvarx     = 0;
 STRING nontabx     = 0;
 STRING nonset1     = 0;
 STRING nonsetx     = 0;
-STRING nonboox     = 0;
 STRING nonlst1     = 0;
 STRING nonlstx     = 0;
 STRING badargs     = 0;
@@ -991,6 +993,8 @@ clear_error_strings (void)
 {
 	strfree(&nonint1);
 	strfree(&nonintx);
+	strfree(&nonboo1);
+	strfree(&nonboox);
 	strfree(&nonflox);
 	strfree(&nonstr1);
 	strfree(&nonstrx);
@@ -1001,12 +1005,12 @@ clear_error_strings (void)
 	strfree(&nonindx);
 	strfree(&nonfam1);
 	strfree(&nonfamx);
+	strfree(&nonif1);
 	strfree(&nonrecx);
 	strfree(&nonnod1);
 	strfree(&nonnodx);
 	strfree(&nonvar1);
 	strfree(&nonvarx);
-	strfree(&nonboox);
 	strfree(&nonlst1);
 	strfree(&nonlstx);
 	strfree(&nontabx);
@@ -1061,6 +1065,8 @@ interp_load_lang (void)
 	clear_error_strings();
 	nonint1     = strsave(_("%s: the arg must be an integer."));
 	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
+	nonboo1     = strsave(_("%s: the arg must be a boolean."));
+	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
 	nonflox     = strsave(_("%s: the arg #%s must be a float."));
 	nonstr1     = strsave(_("%s: the arg must be a string."));
 	nonstrx     = strsave(_("%s: the arg #%s must be a string."));
@@ -1071,12 +1077,12 @@ interp_load_lang (void)
 	nonindx     = strsave(_("%s: the arg #%s must be a person."));
 	nonfam1     = strsave(_("%s: the arg must be a family."));
 	nonfamx     = strsave(_("%s: the arg #%s must be a family."));
+	nonif1      = strsave(_("%s: the arg must be a person or family."));
 	nonrecx     = strsave(_("%s: the arg #%s must be a record."));
 	nonnod1     = strsave(_("%s: the arg must be a node."));
 	nonnodx     = strsave(_("%s: the arg #%s must be a node."));
 	nonvar1     = strsave(_("%s: the arg must be a variable."));
 	nonvarx     = strsave(_("%s: the arg #%s must be a variable."));
-	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
 	nonlst1     = strsave(_("%s: the arg must be a list."));
 	nonlstx     = strsave(_("%s: the arg #%s must be a list."));
 	nontabx     = strsave(_("%s: the arg #%s must be a table."));

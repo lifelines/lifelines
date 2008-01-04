@@ -201,7 +201,7 @@ llrpt_extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	LIST list=0, temp=0;
 	INT len;
 	STRING str, dlm;
-	PNODE sexp = (PNODE) iargs(node);
+	PNODE sexp = builtin_args(node);
 	PNODE lexp = inext(sexp);
 	PNODE lvar = inext(lexp);
 	PNODE dexp = inext(lvar);
@@ -258,16 +258,18 @@ llrpt_database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	extern STRING readpath;
 	BOOLEAN full = FALSE;
-	PVALUE val;
+	PVALUE val=0;
+	PNODE argvar = builtin_args(node);
 	*eflg = FALSE;
-	if (iargs(node)) {
-		val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
+	if (argvar) {
+		val = eval_and_coerce(PBOOL, argvar, stab, eflg);
 		if (*eflg) {
-			prog_error(node, "the arg to database is not boolean");
+			prog_var_error(node, stab, argvar, val, nonboo1, "database");
+			delete_pvalue_ptr(&val);
 			return NULL;
 		}
 		full = pvalue_to_bool(val);
-		delete_pvalue(val);
+		delete_pvalue_ptr(&val);
 	}
 	return create_pvalue_from_string(
 	    (full ? readpath : lastpathname(readpath)));
@@ -279,32 +281,37 @@ llrpt_database (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_index (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT num;
-	PNODE arg = (PNODE) iargs(node);
-	STRING sub, str;
-	PVALUE val3, val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	INT num=0;
+	PNODE argvar = builtin_args(node);
+	STRING sub=0, str=0;
+	PVALUE val3=0, val2=0;
+	PVALUE val1 = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to index is not a string");
+		prog_var_error(node, stab, argvar, val1, nonstrx, "index", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	str = pvalue_to_string(val1);
-	arg = inext(arg);
-	val2 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	val2 = eval_and_coerce(PSTRING, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to index is not a string");
+		prog_var_error(node, stab, argvar, val2, nonstrx, "index", "2");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	sub = pvalue_to_string(val2);
-	arg = inext(arg);
-	val3 = eval_and_coerce(PINT, arg, stab, eflg);
+	val3 = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "3rd arg to index is not an integer");
+		prog_var_error(node, stab, argvar, val3, nonintx, "index", "3");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
+		delete_pvalue_ptr(&val3);
 		return NULL;
 	}
 	num = pvalue_to_int(val3);
 	set_pvalue_int(val3, ll_index(str, sub, num));
-	delete_pvalue(val1);
-	delete_pvalue(val2);
+	delete_pvalue_ptr(&val1);
+	delete_pvalue_ptr(&val2);
 	return val3;
 }
 /*==============================================+
@@ -315,26 +322,30 @@ PVALUE
 llrpt_substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT lo, hi;
-	PNODE arg = (PNODE) iargs(node);
-	STRING str, substr;
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	STRING str=0, substr=0;
+	PVALUE val2=0;
+	PVALUE val1 = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to substring is not a string");
+		prog_var_error(node, stab, argvar, val1, nonstrx, "substring", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	str = pvalue_to_string(val1);
-	arg = inext(arg);
-	val2 = eval_and_coerce(PINT, arg, stab, eflg);
+	val2 = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to substring is not an integer");
+		prog_var_error(node, stab, argvar, val2, nonintx, "substring", "2");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	lo = pvalue_to_int(val2);
-	delete_pvalue(val2);
-	arg = inext(arg);
-	val2 = eval_and_coerce(PINT, arg, stab, eflg);
+	delete_pvalue_ptr(&val2);
+	val2 = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "3rd arg to substring is not an integer");
+		prog_var_error(node, stab, argvar, val2, nonintx, "substring", "3");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	hi = pvalue_to_int(val2);
@@ -342,7 +353,7 @@ llrpt_substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	substr = allocsubstring(str, lo, hi);
 	set_pvalue_string(val2, substr);
 	stdfree(substr);
-	delete_pvalue(val1);
+	delete_pvalue_ptr(&val1);
 	return val2;
 }
 /*======================================================
@@ -355,13 +366,13 @@ llrpt_substring (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 static INT
 ll_index (STRING str, STRING sub, INT num)
 {
-	INT result;
-	STRING pi;
+	INT result=0;
+	STRING pi=0;
 	if (!str || !sub || *str == 0 || *sub == 0) return 0;
 	pi = stdalloc(strlen(sub)+1);
 	compute_pi(pi, sub);
 	result = kmp_search(pi, str, sub, num);
-	stdfree(pi);
+	strfree(&pi);
 	return result;
 }
 /*===============================================
@@ -375,9 +386,9 @@ ll_index (STRING str, STRING sub, INT num)
 static INT
 kmp_search (STRING pi, STRING str, STRING sub, INT num)
 {
-	INT i, n, m, q = 0, found = 0;
-	n = strlen(str);
-	m = strlen(sub);
+	INT i, q = 0, found = 0;
+	INT n = strlen(str);
+	INT m = strlen(sub);
 	for (i = 1; i <= n; i++) {
 		while (q > 0 && sub[q] != str[i-1])
 			q = pi[q];
@@ -508,15 +519,17 @@ llrpt_choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	INT type;
 	CNSTRING key=0;
-	CACHEEL cel;
-	PVALUE val = evaluate(iargs(node), stab, eflg);
+	CACHEEL cel=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = evaluate(argvar, stab, eflg);
 	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
 		*eflg = TRUE;
-		prog_error(node, "the arg to choosechild must be a person or family");
+		prog_var_error(node, stab, argvar, val, nonif1, "choosechild");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	cel = pvalue_to_cel(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (!cel) return create_pvalue_from_indi(NULL);
 	key = cacheel_to_key(cel);
 	if (*key == 'I') {
@@ -969,7 +982,7 @@ rightjustify (STRING str, INT len)
 }
 /*=========================================+
  * llrpt_lock -- Lock person or family in memory
- * usage: lock(INDI|FAM) -> VOID
+ * usage: lock(INDI|FAM|EVEN|SOUR|OTHR) -> VOID
  *========================================*/
 PVALUE
 llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -1020,7 +1033,7 @@ llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*===============================================+
  * llrpt_unlock -- Unlock person or family from memory
- * usage: unlock(INDI|FAM) -> VOID
+ * usage: unlock(INDI|FAM|EVEN|SOUR|OTHR) -> VOID
  *==============================================*/
 PVALUE
 llrpt_unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)

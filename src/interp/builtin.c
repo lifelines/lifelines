@@ -2290,7 +2290,7 @@ llrpt_female (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 }
 /*========================================+
  * llrpt_key -- Return person or family key
- * usage: key(INDI|FAM [,BOOL]) -> STRING
+ * usage: key(INDI|FAM|EVEN|SOUR|OTHR [,BOOL]) -> STRING
  *=======================================*/
 PVALUE
 llrpt_key (PNODE node, SYMTAB stab, BOOLEAN *eflg)

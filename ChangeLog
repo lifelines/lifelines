@@ -9,7 +9,6 @@
 	llrpt_chooseindi, llrpt_choosesubset.
 	New functions ipdefn_args, ipcall_args, ifdefn_args, ifcall_args.
 
-
 	* ChangeLog README.MAINTAINERS
 
 	Add note about st/st_all to README.MAINTAINERS.
@@ -18,6 +17,13 @@
 	*NEW docs/todo_Perry.txt
 
 	Put my long-term todo list into cvs under docs.
+
+	* ChangeLog src/interp/alloc.c src/interp/builtin.c
+	src/interp/interpi.h src/interp/more.c
+
+	New std report errors nonboo1,nonif1. Improve error reporting for
+	llrpt_database, llrpt_index, llrpt_substring, llrpt_chooseindi,
+	llrpt_choosesubset, llrpt_choosechild.
 
 2008-01-03 Perry Rapp
 
