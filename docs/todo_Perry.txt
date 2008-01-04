@@ -1,0 +1,112 @@
+todo_Perry.txt
+2008-01-03
+
+Perry's notes on things to do eventually, not in any particular order.
+*********************************
+
+Replace iargs(node) with builtin(args) in 
+  interp.c
+  more.c
+  rptsort.c
+  write.c
+  yacc.y/yacc.c
+
+Fix to use union structs
+  ibreak
+  icontinue
+  ireturn
+  ipdefn
+  ipcall
+  ifdefn
+  ifcall
+  ibcall
+  itrav
+  inodes
+  ifamilies
+  ispouses
+  ichildren
+  iindi
+  ifam
+  isour
+  ieven
+  iothr
+  ilist
+  iset
+  ifaths
+  imoths
+  ifamcs
+  inotes
+  ifamilyspouses
+
+Upgrade prog_error to prog_var_error in various places
+
+gettags & fortags stuff on RFE
+
+
+*** OLDER STUFF ***
+
+Decide how to proceed, now that I've implemented rbtree as an alternate implemenation of table.
+
+Alter FORLIST macros to use list iterators.
+
+Get rid of NEW types of PVALUEs (make them all PNULL).
+
+Split gedcom.h declarations by module.
+
+Can browse S/E/X be changed to use the full-screen list browse ?
+
+How about a new browse anything off of main menu ?
+
+Do something about list menu (the detail cmds are not listed) -- use the fancy menuitem stuff ?
+
+Implement check for overwrite in file save ?
+
+Send report output thru msg list (have to parse for carriage returns).
+
+Test ~ on different Windows OS's.
+
+Rewrite text files in docs subdir to cover different Windows OS's.
+
+Make msgbox multiline gracefully.
+
+Have created db layer & Berkeley backend, but need to fix traversal to use iteration, and need to integrate into cvs trunk.
+
+Add access to import errors and maybe other logs via editor.
+
+W. E. Brown's enhancement requests of 2005-10
+
+Fix the path.c code for network shares (ugh). What about calling OpenFileDialog on MS-Windows ?
+
+It would be nice to have a way to jump to first surname beginning with, eg, S, in the list (like MS-Windows list controls).
+
+Consider pulling in regex and/or pcre if available, and making available to report language. But then what do we do ? Have 3 arguments to create_match_string ? (pcre style, regex style, and fpattern style ?)
+
+GUI: Someone did a wxwindows frontend in 2005 spring
+
+*** REPORT LANGUAGE ISSUES ************
+
+Implement setproperty in report language.
+
+Consider adding firstrec,nextrec,forrec to enumerate other types of records (obviously SOUR & EVEN have to be implemented differently).
+
+Do something about unused ARRAY type (would be better to implement existing LIST type as arrays, like STL dequeues).
+
+Disable report debugger in llexec.
+
+Make 6th argument to extractdatestr mandatory.
+
+Is there a bug in __extractnames - it deletes its value before manipulating the string; what if the list was from a temp?
+
+*** CHARACTER ISSUES ************
+
+Implement character classification routines.
+
+Add textdomain & gettext & ngettext to report language.
+
+Decide whether to move strings from messages.c back to sources. The real question is how will i18n work when there is a GUI version and it shares many source files..
+
+i18n strings in valdlgcom.c & in node.c.
+
+Remove Finnish specific code.
+
+Does customized SOUNDEX work ? document (or fix)
