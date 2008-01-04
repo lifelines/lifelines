@@ -29,6 +29,11 @@
 
 	Remove iargs from yacc.y (unnecessary initialization).
 
+	* ChangeLog docs/todo_Perry.txt src/interp/alloc.c
+	src/interp/interpi.h src/interp/rptsort.c
+
+	New std report error nonlstarrx. Improve error reporting in sortimpl.
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c

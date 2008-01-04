@@ -523,6 +523,7 @@ extern STRING nonvar1, nonvarx;
 extern STRING nonlst1, nonlstx;
 extern STRING nontabx;
 extern STRING nonset1,nonsetx;
+extern STRING nonlstarrx;
 extern STRING badtrig;
 extern STRING badarg1, badargs, badargx;
 

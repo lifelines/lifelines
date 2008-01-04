@@ -7,7 +7,6 @@ Perry's notes on things to do eventually, not in any particular order.
 Replace iargs(node) with builtin(args) in 
   interp.c
   more.c
-  rptsort.c
   write.c
 
 Fix to use union structs

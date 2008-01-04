@@ -74,8 +74,8 @@ sortpair_bin (const void * el1, const void * el2)
 static PVALUE
 sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val1 = eval_without_coerce(arg, stab, eflg), val2=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val1 = eval_without_coerce(argvar, stab, eflg), val2=0;
 	LIST list_vals = 0, list_keys = 0;
 	ARRAY arr_vals = 0, arr_keys = 0;
 	INT nsort = 0; /* size of array & index */
@@ -100,20 +100,21 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 			array[i].value = (PVALUE)get_array_obj(arr_vals, i);
 		}
 	} else {
-		prog_error(node, _("First argument to (r)sort must be list or array"));
+		prog_var_error(node, stab, argvar, val1, nonlstarrx, "(r)sort", "1");
 		*eflg = TRUE;
 		goto exit_sort;
 	}
 	/* (optional) 2nd argument is keys collection */
 	/* we use the keys to collate */
 	/* (if keys collection not provided, we collate on values) */
-	arg = inext(arg);
-	if (arg) {
-		val2 = eval_without_coerce(arg, stab, eflg);
+	argvar = inext(argvar);
+	if (argvar) {
+		val2 = eval_without_coerce(argvar, stab, eflg);
 		if (which_pvalue_type(val2) == PLIST) {
 			list_keys = pvalue_to_list(val2);
 			if (nsort != length_list(list_keys)) {
-				prog_error(node, _("Arguments to (r)sort must be of same size"));
+				prog_var_error(node, stab, argvar, val2
+					, _("Arguments to (r)sort must be of same size"));
 				*eflg = TRUE;
 				goto exit_sort;
 			}
@@ -124,7 +125,8 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 		} else if (which_pvalue_type(val2) == PARRAY) {
 			arr_keys = pvalue_to_array(val2);
 			if (nsort != get_array_size(arr_keys)) {
-				prog_error(node, _("Arguments to (r)sort must be of same size"));
+				prog_var_error(node, stab, argvar, val2
+					, _("Arguments to (r)sort must be of same size"));
 				*eflg = TRUE;
 				goto exit_sort;
 			}
@@ -133,7 +135,7 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 				array[i].key = val;
 			}
 		} else {
-			prog_error(node, _("Second argument to (r)sort must be list or array"));
+			prog_var_error(node, stab, argvar, val1, nonlstarrx, "(r)sort", "2");
 			*eflg = TRUE;
 			return NULL;
 		}
@@ -207,8 +209,8 @@ sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)
 	/* else, no keys collection (2nd argument), so no 2nd reorder */
 
 exit_sort:
-	delete_pvalue(val1);
-	delete_pvalue(val2);
+	delete_pvalue_ptr(&val1);
+	delete_pvalue_ptr(&val2);
 	if (array)
 		stdfree(array);
 	if (index)
