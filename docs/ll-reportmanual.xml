@@ -4019,11 +4019,23 @@ respectively.
 </para>
 
 <para>
-<function>Choosechild</function> asks the user select a child of a family or person; its single argument is a person or family;
-it return the child. <function>Choosefam</function> has the user select a family that a person is in as a spouse; its argument
-is a person; it returns the family. <function>Chooseindi</function> has the user select one person from a set of persons; its
-argument in a set of persons; it returns the chosen person. <function>Choosespouse</function> has the user select a spouse of a
-person; its argument is a person; it returns the chosen spouse. <function>Choosesubset</function> has the user select a subset of
+<function>Choosechild</function> asks the user select a child of a family or
+person; its single argument is a person or family; it return the child. 
+
+<function>Choosefam</function> has the user select a family that a
+person is in as a spouse; its argument is a person; it returns the
+family.
+
+<function>Chooseindi</function> has the user select one person from a
+set of persons; its argument in a set of persons; it returns the chosen
+person.
+
+<function>Choosespouse</function> has the user select a spouse of a
+person; its argument is a person; it returns the chosen spouse. (Note:
+if a husband marries the same woman several times, she will appear each
+time in the list, with the different marriage dates if known.)
+
+<function>Choosesubset</function> has the user select a subset of
 persons from a set of persons; its argument is the chosen subset.
 </para>
 

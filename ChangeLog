@@ -34,6 +34,11 @@
 
 	New std report error nonlstarrx. Improve error reporting in sortimpl.
 
+	* ChangeLog docs/ll-reportmanual.xml
+
+	Add note that Choosespouse will return remarried spouses multiple
+	times (and reformat raw text of that para to not wrap).
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c
