@@ -721,6 +721,7 @@ iident_name (PNODE node)
 }
 /*====================================
  * builtin_args -- Return args node of a call to built-in function
+ *  This are the instance (runtime) values
  *==================================*/
 PNODE
 builtin_args (PNODE node)
@@ -729,6 +730,54 @@ builtin_args (PNODE node)
 	return (PNODE)iargs(node);
 	/* TODO: */
 	/* return node->vars.ibcall.fargs; */
+}
+/*====================================
+ * ipdefn_args -- Return args node of a proc declaration
+ *  This are the variables used in the proc declaration
+ *==================================*/
+PNODE
+ipdefn_args (PNODE node)
+{
+	ASSERT(itype(node) == IPDEFN);
+	return (PNODE)iargs(node);
+	/* TODO: */
+	/* return node->vars.ipdefn.args; */
+}
+/*====================================
+ * ipcall_args -- Return args node of a proc call
+ *  This are the instance values passed in the call
+ *==================================*/
+PNODE
+ipcall_args (PNODE node)
+{
+	ASSERT(itype(node) == IPCALL);
+	return (PNODE)iargs(node);
+	/* TODO: */
+	/* return node->vars.ipcall.args; */
+}
+/*====================================
+ * ifdefn_args -- Return args node of a func declaration
+ *  This are the variables used in the func declaration
+ *==================================*/
+PNODE
+ifdefn_args (PNODE node)
+{
+	ASSERT(itype(node) == IFDEFN);
+	return (PNODE)iargs(node);
+	/* TODO: */
+	/* return node->vars.ipdefn.args; */
+}
+/*====================================
+ * ifcall_args -- Return args node of a func call
+ *  This are the instance values passed in the call
+ *==================================*/
+PNODE
+ifcall_args (PNODE node)
+{
+	ASSERT(itype(node) == IFCALL);
+	return (PNODE)iargs(node);
+	/* TODO: */
+	/* return node->vars.ipcall.args; */
 }
 /*===================================
  * clear_iden_node -- Free memory stored inside node

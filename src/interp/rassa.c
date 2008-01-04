@@ -50,8 +50,6 @@
  * external/imported variables
  *********************************************/
 
-extern STRING nonintx,nonstrx;
-extern STRING nonboox;
 extern STRING qSwhtout;
 extern INT rpt_cancelled;
 
@@ -123,24 +121,33 @@ finishrassa (void)
 PVALUE
 llrpt_pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT cols, rows;
-	PVALUE val = eval_and_coerce(PINT, iargs(node), stab, eflg);
+	INT cols=0, rows=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "1st arg to pagemode must be an integer.");
+		prog_var_error(node, stab, argvar, val, nonintx, "pagemode", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	rows = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
-	val = eval_and_coerce(PINT, inext((PNODE)iargs(node)), stab, eflg);
+	val = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to pagemode must be an integer.");
+		prog_var_error(node, stab, argvar, val, nonintx, "pagemode", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	cols = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
 	*eflg = TRUE;
-	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
-		prog_error(node, "illegal page size.");
+	if (!(cols >= 1 && cols <= MAXCOLS)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, badargx, "pagemode", "1");
+		return NULL;
+	}
+	if (!(rows >= 1 && rows <= MAXROWS)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, badargx, "pagemode", "2");
 		return NULL;
 	}
 	*eflg = FALSE;
@@ -175,32 +182,35 @@ llrpt_linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_newfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	BOOLEAN aflag;
-	STRING name;
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	BOOLEAN aflag=FALSE;
+	STRING name=0;
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstrx, "newfile", "1");
+		prog_var_error(node, stab, argvar, val, nonstrx, "newfile", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	name = pvalue_to_string(val);
 	if (!name || !name[0]) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, val, "1st arg to newfile must be a nonempty string.");
+		prog_var_error(node, stab, argvar, val, "1st arg to newfile must be a nonempty string.");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	strupdate(&outfilename, name);
 	delete_pvalue_ptr(&val);
-	val = eval_and_coerce(PBOOL, arg=inext(arg), stab, eflg);
+	val = eval_and_coerce(PBOOL, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonboox, "1");
+		prog_var_error(node, stab, argvar, val, nonboox, "newfile", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	aflag = pvalue_to_bool(val);
 	delete_pvalue_ptr(&val);
 	if (!set_output_file(outfilename, aflag)) {
 		*eflg = TRUE;
-		prog_error(node, "Failed to open output file: %s", outfilename);
+		prog_var_error(node, stab, argvar, NULL, "Failed to open output file: %s", outfilename);
 	}
 	return NULL;
 }

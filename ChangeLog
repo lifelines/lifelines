@@ -1,3 +1,14 @@
+2008-01-04 Perry Rapp
+
+	* ChangeLog src/interp/alloc.c src/interp/eval.c
+	src/interp/interp.c src/interp/interpi.h src/interp/intrpseq.c
+	src/interp/more.c src/interp/rassa.c
+
+	Improve error reporting for llrpt_pagemode, llrpt_newfile,
+	llrpt_extractnames, llrpt_extractplaces, llrpt_extracttokens,
+	llrpt_chooseindi, llrpt_choosesubset.
+	New functions ipdefn_args, ipcall_args, ifdefn_args, ifcall_args.
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c

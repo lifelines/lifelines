@@ -331,7 +331,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
    /* Link arguments to parameters in symbol table */
 
-	parm = (PNODE) iargs(first);
+	parm = ipdefn_args(first);
 	if (nargs != num_params(parm)) {
 		msg_error(_("Proc %s must be called with %d (not %d) parameters."),
 			proc, num_params(parm), nargs);

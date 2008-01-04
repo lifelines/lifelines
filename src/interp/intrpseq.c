@@ -38,12 +38,6 @@
 #include "gengedc.h"
 
 /*********************************************
- * external/imported variables
- *********************************************/
-
-extern STRING nonindx,nonvar1,nonset1,nonsetx,nonboox;
-
-/*********************************************
  * local function prototypes
  *********************************************/
 

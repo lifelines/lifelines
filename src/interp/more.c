@@ -81,37 +81,38 @@ llrpt_extractnames (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	LIST list=0;
 	STRING str=0, str2=0;
 	INT len=0, sind=0;
-	PNODE nexp = (PNODE) iargs(node);
+	PNODE nexp = builtin_args(node);
 	PNODE lexp = inext(nexp);
 	PNODE lvar = inext(lexp);
 	PNODE svar = inext(lvar);
 	NODE line=0;
 	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
-
 	if (*eflg) {
-		prog_error(node, nonnodx, "extractnames", "1");
+		prog_var_error(node, stab, nexp, val, nonnodx, "extractnames", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	line = pvalue_to_node(val);
 	delete_pvalue(val);
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonlstx, "extractnames", "2");
+		prog_var_error(node, stab, lexp, val, nonlstx, "extractnames", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (list)
 		make_list_empty(list);
 	else
 		list = create_list();
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractnames", "3");
+		prog_var_error(node, stab, lvar, NULL, nonvarx, "extractnames", "3");
 		return NULL;
 	}
 	if (!iistype(svar, IIDENT)) {
-		prog_error(node, nonvarx, "extractnames", "4");
+		prog_var_error(node, stab, svar, NULL, nonvarx, "extractnames", "4");
 		return NULL;
 	}
 	/* if it isn't a NAME line, look under it for a NAME line */
@@ -145,35 +146,35 @@ PVALUE
 llrpt_extractplaces (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	LIST list=0, temp=0;
-	STRING str, str2;
-	INT len;
-	PNODE nexp = (PNODE) iargs(node);
+	STRING str=0, str2=0;
+	INT len=0;
+	PNODE nexp = builtin_args(node);
 	PNODE lexp = inext(nexp);
 	PNODE lvar = inext(lexp);
 	NODE line;
 	PVALUE val = eval_and_coerce(PGNODE, nexp, stab, eflg);
-
 	if (*eflg) {
-		prog_error(node, nonnodx, "extractplaces", "1");
+		prog_var_error(node, stab, nexp, val, nonnodx, "extractplaces", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	line = pvalue_to_node(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = eval_and_coerce(PLIST, lexp, stab, eflg);
-	if (*eflg || !val) {
-		*eflg = TRUE;
-		prog_error(node, nonlstx, "extractplaces", "2");
+	if (*eflg) {
+		prog_var_error(node, stab, lexp, val, nonlstx, "extractplaces", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val); /* Could this inadvertently delete the list? */
+	delete_pvalue_ptr(&val); /* Could this inadvertently delete the list? */
 	if (list)
 		make_list_empty(list);
 	else
 		list = create_list();
 	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
-		prog_error(node, nonvarx, "extractplaces", "3");
+		prog_var_error(node, stab, lvar, NULL, nonvarx, "extractplaces", "3");
 		return NULL;
 	}
 	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(0));
@@ -204,16 +205,20 @@ llrpt_extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PNODE lexp = inext(sexp);
 	PNODE lvar = inext(lexp);
 	PNODE dexp = inext(lvar);
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, sexp, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSTRING, sexp, stab, eflg);
+	PVALUE val2=0;
 
 	if (*eflg) {
-		prog_error(node, nonstrx, "extracttokens", "1");
+		prog_var_error(node, stab, sexp, val1, nonstrx, "extracttokens", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	str = pvalue_to_string(val1);
 	val2 = eval_and_coerce(PLIST, lexp, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "2nd arg to extracttokens must be a list");
+		prog_var_error(node, stab, lexp, val2, nonlstx, "extracttokens", "2");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	list = pvalue_to_list(val2);
@@ -221,27 +226,27 @@ llrpt_extracttokens (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	make_list_empty(list);
 	val2 = eval_and_coerce(PSTRING, dexp, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonstrx, "extracttokens", "4");
+		prog_var_error(node, stab, dexp, val2, nonstrx, "extracttokens", "4");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	dlm = pvalue_to_string(val2);
-#ifdef DEBUG
-	llwprintf("dlm = %s\n", dlm);
-#endif
-	*eflg = TRUE;
 	if (!iistype(lvar, IIDENT)) {
-		prog_error(node, "3rd arg to extracttokens must be a variable");
+		*eflg = TRUE;
+		prog_var_error(node, stab, lvar, NULL, nonvarx, "extracttokens", "3");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
-	*eflg = FALSE;
 	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(0));
 	temp = value_to_list(str, &len, dlm);
 	FORLIST(temp, el)
 		push_list(list, create_pvalue_from_string((STRING)el));
 	ENDLIST
 	insert_symtab(stab, iident_name(lvar), create_pvalue_from_int(len));
-	delete_pvalue(val1);
-	delete_pvalue(val2);
+	delete_pvalue_ptr(&val1);
+	delete_pvalue_ptr(&val2);
 	return NULL;
 }
 /*===================================+
@@ -451,15 +456,17 @@ allocsubstring (STRING s, INT i, INT j)
 PVALUE
 llrpt_chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
+	PNODE argvar = builtin_args(node);
 	NODE indi=0;
 	INDISEQ seq=0;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PVALUE val = eval_and_coerce(PSET, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to chooseindi is not a set of persons");
+		prog_var_error(node, stab, argvar, val, nonset1, "chooseindi");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	seq = pvalue_to_seq(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 	if (!indi) return NULL;
@@ -472,15 +479,17 @@ llrpt_chooseindi (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 PVALUE
 llrpt_choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 {
-	STRING msg;
-	INDISEQ newseq, seq;
-	PVALUE val = eval_and_coerce(PSET, iargs(node), stab, eflg);
+	PNODE argvar = builtin_args(node);
+	STRING msg=0;
+	INDISEQ newseq=0, seq=0;
+	PVALUE val = eval_and_coerce(PSET, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, "the arg to choosesubset is not a set of persons");
+		prog_var_error(node, stab, argvar, val, nonset1, "choosesubset");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	seq = pvalue_to_seq(val);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (!seq || length_indiseq(seq) < 1) return NULL;
 	newseq = copy_indiseq(seq);
 	msg = (length_indiseq(newseq) > 1) ? _(qSnotonei): _(qSifonei);

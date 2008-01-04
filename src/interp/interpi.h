@@ -210,6 +210,10 @@ enum {
 CNSTRING iident_name(PNODE node);
 #define iargs(i)     ((i)->i_word2)     /* param and arg lists */
 PNODE builtin_args(PNODE node);
+PNODE ipdefn_args(PNODE node);
+PNODE ipcall_args(PNODE node);
+PNODE ifdefn_args(PNODE node);
+PNODE ifcall_args(PNODE node);
 
 #define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */
@@ -518,6 +522,7 @@ extern STRING nonnod1, nonnodx;
 extern STRING nonvar1, nonvarx;
 extern STRING nonlst1, nonlstx;
 extern STRING nontabx;
+extern STRING nonset1,nonsetx;
 extern STRING badtrig;
 extern STRING badarg1, badargs, badargx;
 
