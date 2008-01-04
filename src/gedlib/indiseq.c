@@ -1272,14 +1272,15 @@ indi_to_children (NODE indi)
 /*=======================================================
  * indi_to_spouses -- Create sequence of person's spouses
  *  values will be family keynums
- *  (this is the ISPRN_SPOUSESEQ style)
+ * This seq will be ISPRN_SPOUSESEQ style, meaning
+ *  marriage dates are included with names in print strings
  *=====================================================*/
 INDISEQ
 indi_to_spouses (NODE indi)
 {
-	INDISEQ seq;
+	INDISEQ seq=0;
 	INT num, num1, val, len = 0;
-	STRING key;
+	STRING key=0;
 	if (!indi) return NULL;
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
@@ -1293,6 +1294,29 @@ indi_to_spouses (NODE indi)
 			}
 		ENDFAMSPOUSES
 	ENDFAMS
+	if (!len) {
+		remove_indiseq(seq);
+		seq=NULL;
+	}
+	return seq;
+}
+/*=======================================================
+ * fam_to_spouses -- Create sequence of spouses of family
+ *  (null values)
+ *=====================================================*/
+INDISEQ
+fam_to_spouses (NODE fam)
+{
+	INDISEQ seq=0;
+	INT num1, len = 0;
+	STRING key=0;
+	if (!fam) return NULL;
+	seq = create_indiseq_ival();
+	FORFAMSPOUSES(fam, spouse, num1)
+		len++;
+		key = indi_to_key(spouse);
+		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+	ENDFAMSPOUSES
 	if (!len) {
 		remove_indiseq(seq);
 		seq=NULL;
@@ -1345,7 +1369,7 @@ indi_to_mothers (NODE indi)
 }
 /*=========================================================
  * indi_to_families -- Create sequence of person's families
- *  values will be spouse keynums
+ *  values will be input person keynum
  *  (this is the ISPRN_FAMSEQ style)
  * indi: [IN]  find families of this person
  * fams: [IN]  if TRUE, find spousal families, else parental
@@ -1353,9 +1377,9 @@ indi_to_mothers (NODE indi)
 INDISEQ
 indi_to_families (NODE indi, BOOLEAN fams)
 {
-	INDISEQ seq;
+	INDISEQ seq=0;
 	INT num, num2, val;
-	STRING key;
+	STRING key=0;
 	INT mykeynum=0;
 	if (!indi) return NULL;
 	mykeynum = atoi(indi_to_key(indi) + 1);
@@ -1374,7 +1398,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
 					spkeynum = temp;
 			}
 			ENDFAMSPOUSES
-			append_indiseq_ival(seq, fkey, NULL, spkeynum, TRUE, FALSE);
+			append_indiseq_ival(seq, fkey, NULL, mykeynum, TRUE, FALSE);
 			strfree(&fkey);
 		}
 		ENDFAMS
@@ -1710,13 +1734,39 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 static STRING
 famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
-	NODE fam, spouse;
-	STRING key, name, str;
-	INT val;
+	NODE fam=0, spouse=0;
+	STRING key=0, name=0, str=0;
+	INT val=0, num1=0;
+	INT spkeynum=0;
+	INDISEQ spseq = create_indiseq_null();
+	NODE indi=0;
+	ZSTR zstr = zs_newn(len);
+
 	element_indiseq_ival(seq, i, &key, &val, &name);
 	fam = key_to_fam(key);
-	spouse = ( val ? keynum_to_indi(val) : NULL);
-	str = indi_to_list_string(spouse, fam, len, rfmt, TRUE);
+
+	/* build sequence of other spouses in this family */
+	FORFAMSPOUSES(fam, spouse, num1)
+		len++;
+		key = indi_to_key(spouse);
+		spkeynum = atoi(key + 1);
+		if (val != spkeynum) {
+			append_indiseq_null(spseq, key, NULL, TRUE, FALSE);
+		}
+	ENDFAMSPOUSES
+	
+	/* build string list of spouses */
+	FORINDISEQ(spseq, el, num)
+		indi = key_to_indi(skey(el));
+		str = indi_to_list_string(indi, fam, len/length_indiseq(spseq), rfmt, TRUE);
+		if (zs_len(zstr)) zs_apps(zstr, ", ");
+		zs_apps(zstr, str);
+		strfree(&str);
+	ENDINDISEQ
+	
+	/* make heap string to return */
+	str = strdup(zs_str(zstr));
+	zs_free(&zstr);
 	return str;
 }
 /*================================================

@@ -517,9 +517,11 @@ llrpt_choosesubset (PNODE node, SYMTAB stab, BOOLEAN * eflg)
 PVALUE
 llrpt_choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT type;
+	INT type=0;
 	CNSTRING key=0;
 	CACHEEL cel=0;
+	INDISEQ seq=0;
+	NODE indi=0;
 	PNODE argvar = builtin_args(node);
 	PVALUE val = evaluate(argvar, stab, eflg);
 	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
@@ -531,48 +533,65 @@ llrpt_choosechild (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	cel = pvalue_to_cel(val);
 	delete_pvalue_ptr(&val);
 	if (!cel) return create_pvalue_from_indi(NULL);
-	key = cacheel_to_key(cel);
 	if (*key == 'I') {
-		NODE indi = cacheel_to_node(cel);
-		INDISEQ seq = indi_to_children(indi);
-		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue_from_indi(NULL);
-		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
-		remove_indiseq(seq);
-		return create_pvalue_from_indi(indi); /* indi may be NULL */
+		NODE indi1 = cacheel_to_node(cel);
+		seq = indi_to_children(indi1);
 	} else if (*key == 'F') {
-		NODE fam = key_to_fam(key);
-		NODE indi=0;
-		INDISEQ seq = fam_to_children(fam);
-		if (!seq || length_indiseq(seq) < 1)
-			return create_pvalue_from_indi(NULL);
-		indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
-		remove_indiseq(seq);
-		return create_pvalue_from_indi(indi); /* indi may be NULL */
-	}
-	*eflg = TRUE;
-	prog_error(node, "major error in choosechild");
-	return NULL;
-}
-/*=================================================+
- * llrpt_choosespouse -- Have user choose spouse of person
- * usage: choosespouse(INDI) -> INDI
- *================================================*/
-PVALUE
-llrpt_choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
-{
-	NODE indi = eval_indi(iargs(node), stab, eflg, NULL);
-	INDISEQ seq;
-	if (*eflg) {
-		prog_error(node, "the arg to choosespouse must be a person");
+		NODE fam1 = cacheel_to_node(cel);
+		seq = fam_to_children(fam1);
+	} else {
+		*eflg = TRUE;
+		prog_error(node, "major error in choosechild");
 		return NULL;
 	}
-	seq = indi_to_spouses(indi);
 	if (!seq || length_indiseq(seq) < 1)
 		return create_pvalue_from_indi(NULL);
 	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
 	remove_indiseq(seq);
 	return create_pvalue_from_indi(indi); /* indi may be NULL */
+}
+/*=================================================+
+ * llrpt_choosespouse -- Have user choose spouse of person
+ * usage: choosespouse(INDI|FAM) -> INDI
+ *================================================*/
+PVALUE
+llrpt_choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+{
+	INT type=0;
+	CNSTRING key=0;
+	CACHEEL cel=0;
+	INDISEQ seq=0;
+	NODE indi=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = evaluate(argvar, stab, eflg);
+	if (*eflg || !val || ((type = which_pvalue_type(val)) != PINDI && type != PFAM)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, val, nonif1, "choosespouse");
+		delete_pvalue_ptr(&val);
+		return NULL;
+	}
+	cel = pvalue_to_cel(val);
+	delete_pvalue_ptr(&val);
+	if (!cel) return create_pvalue_from_indi(NULL);
+	key = cacheel_to_key(cel);
+
+	if (*key == 'I') {
+		NODE indi1 = cacheel_to_node(cel);
+		seq = indi_to_spouses(indi1);
+	} else if (*key == 'F') {
+		NODE fam1 = cacheel_to_node(cel);
+		seq = fam_to_spouses(fam1);
+	} else {
+		*eflg = TRUE;
+		prog_error(node, "major error in choosespouse");
+		return NULL;
+	}
+	if (!seq || length_indiseq(seq) < 1)
+		return create_pvalue_from_indi(NULL);
+	indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
+	remove_indiseq(seq);
+	return create_pvalue_from_indi(indi); /* indi may be NULL */
+
 }
 /*==============================================+
  * llrpt_choosefam -- Have user choose family of person

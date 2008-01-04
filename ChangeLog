@@ -39,6 +39,15 @@
 	Add note that Choosespouse will return remarried spouses multiple
 	times (and reformat raw text of that para to not wrap).
 
+	* ChangeLog docs/ll-reportmanual.xml src/gedlib/indiseq.c
+	src/hdrs/indiseq.h src/interp/more.c
+
+	New function fam_to_spouses. Change indi_to_families to put
+	person's own keynum as value, so can pick up all other spouses
+	for print line for ISPRN_FAMSEQ style. Modify famseq_print_el to
+	include all other spouses. Simplify llrpt_choosechild by factoring
+	common code. Modify choosespouse to work for families also.
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c

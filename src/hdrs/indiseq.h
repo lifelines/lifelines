@@ -159,6 +159,7 @@ CNSTRING element_sval(SORTEL el);
 INDISEQ fam_to_children(NODE);
 INDISEQ fam_to_fathers(NODE);
 INDISEQ fam_to_mothers(NODE);
+INDISEQ fam_to_spouses(NODE fam);
 INDISEQ find_named_seq(STRING);
 INDISEQ get_all_even(void);
 INDISEQ get_all_othe(void);
