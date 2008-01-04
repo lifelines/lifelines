@@ -25,6 +25,10 @@
 	llrpt_database, llrpt_index, llrpt_substring, llrpt_chooseindi,
 	llrpt_choosesubset, llrpt_choosechild.
 
+	* ChangeLog docs/todo_Perry.txt src/interp/yacc.y
+
+	Remove iargs from yacc.y (unnecessary initialization).
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c

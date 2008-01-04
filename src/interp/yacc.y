@@ -297,7 +297,6 @@ elseo	:	/* empty */ {
 expr	:	IDEN {
 			/* consumes $1 */
 			$$ = create_iden_node(pactx, (STRING)$1);
-			iargs(((PNODE)$$)) = NULL;
 		}
 	|	IDEN m '(' exprso ')' {
 			/* consumes $1 */

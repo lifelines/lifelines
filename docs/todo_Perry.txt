@@ -1,5 +1,5 @@
 todo_Perry.txt
-2008-01-03
+2008-01-04
 
 Perry's notes on things to do eventually, not in any particular order.
 *********************************
@@ -9,7 +9,6 @@ Replace iargs(node) with builtin(args) in
   more.c
   rptsort.c
   write.c
-  yacc.y/yacc.c
 
 Fix to use union structs
   ibreak
