@@ -5,6 +5,8 @@ releasing it.
 Fetch latest cvs if desired, eg 
   $ cvs -z3 up -d
 
+Compile and test current source, using report st/st_all.
+
 Edit the version number, setting it to the new release:
 (Running, eg, "cd build; sh setversions.sh 3.0.19; cd .." does this)
 (NB: setversions.sh requires bash3)

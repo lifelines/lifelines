@@ -9,6 +9,10 @@
 	llrpt_chooseindi, llrpt_choosesubset.
 	New functions ipdefn_args, ipcall_args, ifdefn_args, ifcall_args.
 
+	* ChangeLog README.MAINTAINERS
+
+	Add note about st/st_all to README.MAINTAINERS.
+
 2008-01-03 Perry Rapp
 
 	* ChangeLog src/interp/rassa.c
