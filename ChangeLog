@@ -14,7 +14,7 @@
 	
 	* ChangeLog docs/todo_Perry.txt src/interp/more.c
 
-	More irags to builtin_args changes & improving error reporting--
+	More iargs to builtin_args changes & improving error reporting--
 	all trig functions.
 
 2008-01-04 Perry Rapp
