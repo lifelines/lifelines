@@ -1386,13 +1386,16 @@ llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	PNODE argvar = builtin_args(node);
 	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	FLOAT fval=0;
 	if (*eflg) {
 		prog_var_error(node, stab, argvar, val, nonflo1, "sin");
 		delete_pvalue_ptr(&val);
 		return NULL;
 	}
-	
-	return create_pvalue_from_float(sin(deg2rad(pvalue_to_float(val))));
+	fval = pvalue_to_float(val);
+	delete_pvalue_ptr(&val);
+
+	return create_pvalue_from_float(sin(deg2rad(fval)));
 }
 /*========================================
  * llrpt_cos -- trigonometric COSINE function

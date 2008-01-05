@@ -21,6 +21,13 @@
 
 	Add recent changes.
 
+	* ChangeLog NEWS reports\st\st_all.ll
+	src\hdrs\sys_inc.h src\interp\more.c
+	*NEW reports\st\st_trig.li
+
+	Fix constant M_PI so trig results come out correct. Add new
+	self-test st_trig.li.
+
 2008-01-04 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/eval.c

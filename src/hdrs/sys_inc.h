@@ -43,7 +43,7 @@ typedef signed __int64 int64_t;
 typedef unsigned __int64 u_int64_t;
 #endif
 #ifndef M_PI
-#define M_PI 3.1459265
+#define M_PI 3.14159265
 #endif
 #endif /* _MSC_VER */
 

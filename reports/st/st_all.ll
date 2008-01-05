@@ -1,6 +1,6 @@
 /*
  * @progname       st_all.ll
- * @version        1.14 (2005-02-01)
+ * @version        1.15 (2008-01-05)
  * @author         Perry Rapp
  * @category       self-test
  * @output         mixed
@@ -31,6 +31,7 @@ include("st_collate.li")
 include("st_date.li")
 include("st_name.li")
 include("st_number.li")
+include("st_trig.li")
 include("st_convert.li")
 include("st_list.li")
 include("st_table.li")
@@ -64,6 +65,9 @@ proc main()
 	}
 	if (dostep(alltests, "Test numbers ? (0=no)")) {
 		call testNums()
+	}
+	if (dostep(alltests, "Test trig ? (0=no)")) {
+		call testTrig()
 	}
 	if (dostep(alltests, "Test names ? (0=no)")) {
 		call testNames()
