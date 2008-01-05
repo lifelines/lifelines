@@ -1325,17 +1325,17 @@ llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node);
-	PNODE ret1 = inext(arg1);
-	PNODE ret2 = inext(ret1);
-	PNODE ret3 = inext(ret2);
+	PNODE argvar1 = builtin_args(node);
+	PNODE retvar1 = inext(argvar1);
+	PNODE retvar2 = inext(retvar1);
+	PNODE retvar3 = inext(retvar2);
 	FLOAT decdeg;
 	INT deg, min, sec, neg=0;
 
-	PVALUE val = eval_and_coerce(PFLOAT, arg1, stab, eflg);
-
+	PVALUE val = eval_and_coerce(PFLOAT, argvar1, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "deg2dms", "1");
+		prog_var_error(node, stab, argvar1, val, nonflox, "deg2dms", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 
@@ -1343,6 +1343,23 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (decdeg < 0) {
 		decdeg *= -1;
 		neg = 1;
+	}
+	delete_pvalue_ptr(&val);
+
+	if (!iistype(retvar1, IIDENT)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, retvar1, NULL, nonvarx, "dms2deg", "2");
+		return NULL;
+	}
+	if (!iistype(retvar2, IIDENT)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, retvar2, NULL, nonvarx, "dms2deg", "3");
+		return NULL;
+	}
+	if (!iistype(retvar3, IIDENT)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, retvar3, NULL, nonvarx, "dms2deg", "4");
+		return NULL;
 	}
 	
 	deg = (int)(decdeg);
@@ -1355,9 +1372,9 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	if (neg == 1) { deg *= -1; }
 
-	insert_symtab(stab, iident_name(ret1), create_pvalue_from_int(deg));
-	insert_symtab(stab, iident_name(ret2), create_pvalue_from_int(min));
-	insert_symtab(stab, iident_name(ret3), create_pvalue_from_int(sec));
+	insert_symtab(stab, iident_name(retvar1), create_pvalue_from_int(deg));
+	insert_symtab(stab, iident_name(retvar2), create_pvalue_from_int(min));
+	insert_symtab(stab, iident_name(retvar3), create_pvalue_from_int(sec));
 	return NULL;
 }
 /*========================================

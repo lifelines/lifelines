@@ -8,6 +8,10 @@
 	if 4th arg to llrpt_dms2deg is actually a variable. New std error
 	nonflo1.
 
+	* ChangeLog src/interp/more.c
+
+	Check that args to llrpt_deg2dms are variables.
+
 2008-01-04 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/eval.c
