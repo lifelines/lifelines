@@ -1,12 +1,11 @@
 todo_Perry.txt
-2008-01-04
+2008-01-05
 
 Perry's notes on things to do eventually, not in any particular order.
 *********************************
 
 Replace iargs(node) with builtin(args) in 
   interp.c
-  more.c
   write.c
 
 Fix to use union structs

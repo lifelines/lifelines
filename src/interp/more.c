@@ -1401,15 +1401,18 @@ llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	float fval=0;
 	
 	if (*eflg) {
-		prog_error(node, nonflox, "cos", "1");
+		prog_var_error(node, stab, argvar, val, nonflox, "cos", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
-	
-	return create_pvalue_from_float(cos(deg2rad(pvalue_to_float(val))));
+	fval = pvalue_to_float(val);
+	delete_pvalue_ptr(&val);
+	return create_pvalue_from_float(cos(deg2rad(fval)));
 }
 /*========================================
  * llrpt_tan -- trigonometric TANGENT function
@@ -1418,25 +1421,28 @@ llrpt_cos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-	FLOAT val2;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	FLOAT fval=0;
 
 	if (*eflg) {
-		prog_error(node, nonflox, "tan", "1");
+		prog_var_error(node, stab, argvar, val, nonflox, "tan", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 
-	val2 = pvalue_to_float(val);
+	fval = pvalue_to_float(val);
 
 	/* avoid SIGFPE caused by invalid input */
-	if (fmod((val2-90),180) == 0) {
+	if (fmod((fval - 90),180) == 0) {
 		*eflg = 1;
-		prog_error(node, badtrig, "tan", "1");
+		prog_var_error(node, stab, argvar, val, badtrig, "tan", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
+	delete_pvalue_ptr(&val);
 
-	return create_pvalue_from_float(tan(deg2rad(val2)));
+	return create_pvalue_from_float(tan(deg2rad(fval)));
 }
 /*========================================
  * llrpt_arcsin -- trigonometric inverse SINE function
@@ -1445,25 +1451,28 @@ llrpt_tan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-	FLOAT val2;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	FLOAT fval=0;
 
 	if (*eflg) {
-		prog_error(node, nonflox, "arcsin", "1");
+		prog_var_error(node, stab, argvar, val, nonflox, "arcsin", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 
-	val2 = pvalue_to_float(val);
+	fval = pvalue_to_float(val);
 
 	/* avoid SIGFPE caused by invalid input */
-	if (val2 > 1.0 || val2 < -1.0) {
+	if (fval > 1.0 || fval < -1.0) {
 		*eflg = 1;
-		prog_error(node, badtrig, "arcsin", "1");
+		prog_var_error(node, stab, argvar, val, badtrig, "arcsin", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
+	delete_pvalue_ptr(&val);
 
-	return create_pvalue_from_float(rad2deg(asin(val2)));
+	return create_pvalue_from_float(rad2deg(asin(fval)));
 }
 /*========================================
  * llrpt_arccos -- trigonometric inverse COSINE function
@@ -1472,25 +1481,28 @@ llrpt_arcsin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-	FLOAT val2;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	FLOAT fval=0;
 
 	if (*eflg) {
-		prog_error(node, nonflox, "arccos", "1");
+		prog_var_error(node, stab, argvar, val, nonflox, "arccos", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 
-	val2 = pvalue_to_float(val);
+	fval = pvalue_to_float(val);
 
 	/* avoid SIGFPE caused by invalid input */
-	if (val2 > 1.0 || val2 < -1.0) {
+	if (fval > 1.0 || fval < -1.0) {
 		*eflg = 1;
-		prog_error(node, badtrig, "arccos", "1");
+		prog_var_error(node, stab, argvar, val, badtrig, "arccos", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
+	delete_pvalue_ptr(&val);
 
-        return create_pvalue_from_float(rad2deg(acos(val2)));
+        return create_pvalue_from_float(rad2deg(acos(fval)));
 }
 /*========================================
  * llrpt_arctan -- trigonometric inverse TANGENT function
@@ -1499,15 +1511,19 @@ llrpt_arccos (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
+	FLOAT fval=0;
 	
 	if (*eflg) {
-		prog_error(node, nonflox, "arctan", "1");
+		prog_var_error(node, stab, argvar, val, nonflox, "arctan", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
+	fval = pvalue_to_float(val);
+	delete_pvalue_ptr(&val);
 	
-	return create_pvalue_from_float(rad2deg(atan(pvalue_to_float(val))));
+	return create_pvalue_from_float(rad2deg(atan(fval)));
 }
 /*========================================
  * llrpt_spdist -- spherical distance calculator
@@ -1517,42 +1533,49 @@ llrpt_arctan (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_spdist (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node);
-	PNODE arg2 = inext(arg1);
-	PNODE arg3 = inext(arg2);
-	PNODE arg4 = inext(arg3);
+	PNODE argvar1 = builtin_args(node);
+	PNODE argvar2 = inext(argvar1);
+	PNODE argvar3 = inext(argvar2);
+	PNODE argvar4 = inext(argvar3);
 	PVALUE val1, val2, val3, val4;
 	FLOAT lat0, lon0, lat1, lon1;
 	FLOAT dist, dist1, dist2;
 
-	val1 = eval_and_coerce(PFLOAT, arg1, stab, eflg);
+	val1 = eval_and_coerce(PFLOAT, argvar1, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "spdist", "1");
+		prog_var_error(node, stab, argvar1, val1, nonflox, "spdist", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
-	
-	val2 = eval_and_coerce(PFLOAT, arg2, stab, eflg);
-	if (*eflg) {
-		prog_error(node, nonflox, "spdist", "2");
-		return NULL;
-	}
-	
-	val3 = eval_and_coerce(PFLOAT, arg3, stab, eflg);
-	if (*eflg) {
-		prog_error(node, nonflox, "spdist", "3");
-		return NULL;
-	}
-	
-	val4 = eval_and_coerce(PFLOAT, arg4, stab, eflg);
-	if (*eflg) {
-		prog_error(node, nonflox, "spdist", "4");
-		return NULL;
-	}
-
 	lat0 = pvalue_to_float(val1);
+	delete_pvalue_ptr(&val1);
+	
+	val2 = eval_and_coerce(PFLOAT, argvar2, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, argvar2, val2, nonflox, "spdist", "2");
+		delete_pvalue_ptr(&val2);
+		return NULL;
+	}
 	lon0 = pvalue_to_float(val2);
+	delete_pvalue_ptr(&val2);
+	
+	val3 = eval_and_coerce(PFLOAT, argvar3, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, argvar3, val3, nonflox, "spdist", "3");
+		delete_pvalue_ptr(&val3);
+		return NULL;
+	}
 	lat1 = pvalue_to_float(val3);
+	delete_pvalue_ptr(&val3);
+	
+	val4 = eval_and_coerce(PFLOAT, argvar4, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, argvar4, val4, nonflox, "spdist", "4");
+		delete_pvalue_ptr(&val4);
+		return NULL;
+	}
 	lon1 = pvalue_to_float(val4);
+	delete_pvalue_ptr(&val4);
 
 	/* Suggested by Patrick Texier, and verified by the following sites*/
 	/* 1) http://www.skimountaineer.com/CascadeSki/CascadeDistance.php */

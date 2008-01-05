@@ -11,6 +11,11 @@
 	* ChangeLog src/interp/more.c
 
 	Check that args to llrpt_deg2dms are variables.
+	
+	* ChangeLog docs/todo_Perry.txt src/interp/more.c
+
+	More irags to builtin_args changes & improving error reporting--
+	all trig functions.
 
 2008-01-04 Perry Rapp
 
