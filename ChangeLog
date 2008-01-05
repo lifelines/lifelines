@@ -17,6 +17,10 @@
 	More iargs to builtin_args changes & improving error reporting--
 	all trig functions.
 
+	* ChangeLog NEWS
+
+	Add recent changes.
+
 2008-01-04 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/eval.c
