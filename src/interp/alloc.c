@@ -55,6 +55,7 @@ STRING nonint1     = 0;
 STRING nonintx     = 0;
 STRING nonboo1     = 0;
 STRING nonboox     = 0;
+STRING nonflo1     = 0;
 STRING nonflox     = 0;
 STRING nonstr1     = 0;
 STRING nonstrx     = 0;
@@ -996,6 +997,7 @@ clear_error_strings (void)
 	strfree(&nonintx);
 	strfree(&nonboo1);
 	strfree(&nonboox);
+	strfree(&nonflo1);
 	strfree(&nonflox);
 	strfree(&nonstr1);
 	strfree(&nonstrx);
@@ -1069,6 +1071,7 @@ interp_load_lang (void)
 	nonintx     = strsave(_("%s: the arg #%s must be an integer."));
 	nonboo1     = strsave(_("%s: the arg must be a boolean."));
 	nonboox     = strsave(_("%s: the arg #%s must be a boolean."));
+	nonflo1     = strsave(_("%s: the arg must be a float."));
 	nonflox     = strsave(_("%s: the arg #%s must be a float."));
 	nonstr1     = strsave(_("%s: the arg must be a string."));
 	nonstrx     = strsave(_("%s: the arg #%s must be a string."));

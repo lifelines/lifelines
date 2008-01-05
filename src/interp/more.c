@@ -600,9 +600,11 @@ llrpt_choosespouse (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_choosefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam, indi = eval_indi(iargs(node), stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	NODE fam, indi = eval_indi(argvar, stab, eflg, NULL);
 	INDISEQ seq;
 	if (*eflg) {
+		prog_var_error(node, stab, argvar, NULL, nonind1, "choosefam");
 		prog_error(node, "the arg to choosefam must be a person");
 		return NULL;
 	}
@@ -684,27 +686,27 @@ llrpt_menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT i, j, len;
 	STRING msg, *strngs;
 	STRING ttl = _("Please choose from the following list.");
-	PNODE arg = (PNODE) iargs(node);
-	LIST list;
-	PVALUE vel, val;
-	INT nsize;
-	val = eval_and_coerce(PLIST, arg, stab, eflg);
-
+	PNODE argvar = builtin_args(node);
+	LIST list=0;
+	PVALUE vel=0, val=0;
+	INT nsize=0;
+	val = eval_and_coerce(PLIST, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, "menuchoose", "1");
+		prog_var_error(node, stab, argvar, val, "menuchoose", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	list = pvalue_to_list(val);
-	delete_pvalue(val);
-	val = NULL;
+	delete_pvalue_ptr(&val);
 	if (!list || length_list(list) < 1)
 		return create_pvalue_from_int(0);
 	msg = NULL;
-	arg = (PNODE) inext(arg);
-	if (arg) {
-		val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	argvar = inext(argvar);
+	if (argvar) {
+		val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 		if (*eflg) {
-			prog_var_error(node, stab, arg, val, nonstrx, "menuchoose", "2");
+			prog_var_error(node, stab, argvar, val, nonstrx, "menuchoose", "2");
+			delete_pvalue_ptr(&val);
 			return NULL;
 		}
 		msg = pvalue_to_string(val);
@@ -729,7 +731,7 @@ llrpt_menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	for (j=0; j<len; j++)
 		stdfree(strngs[j]);
 	stdfree(strngs);
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	return create_pvalue_from_int(i + 1);
 }
 /*================================+
@@ -739,16 +741,17 @@ llrpt_menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING cmd;
-	PNODE arg = iargs(node);
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING cmd=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "system");
+		prog_var_error(node, stab, argvar, val, nonstr1, "system");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	cmd = pvalue_to_string(val);
 	if (!cmd || *cmd == 0) {
-		delete_pvalue(val);
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	if (!getlloptint("DenySystemCalls", 0)) {
@@ -756,7 +759,7 @@ llrpt_runsystem (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	} else {
 		/* llwprintf("Suppressing system(%s) call", cmd); */
 	}
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	return NULL;
 }
 /*============================================+
@@ -778,12 +781,12 @@ llrpt_firstindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	NODE indi = eval_indi(arg, stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	NODE indi = eval_indi(argvar, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "nextindi");
+		prog_var_error(node, stab, argvar, NULL, nonind1, "nextindi");
 		return NULL;
 	}
 	if (!indi)
@@ -800,12 +803,12 @@ llrpt_nextindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_previndi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	NODE indi = eval_indi(arg, stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	NODE indi = eval_indi(argvar, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonind1, "previndi");
+		prog_var_error(node, stab, argvar, NULL, nonind1, "previndi");
 		return NULL;
 	}
 	if (!indi)
@@ -846,12 +849,12 @@ llrpt_firstfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	NODE fam = eval_fam(arg, stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	NODE fam = eval_fam(argvar, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonfam1, "nextfam");
+		prog_var_error(node, stab, argvar, NULL, nonfam1, "nextfam");
 		return NULL;
 	}
 	if (!fam)
@@ -868,12 +871,12 @@ llrpt_nextfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_prevfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	NODE fam = eval_fam(arg, stab, eflg, NULL);
+	PNODE argvar = builtin_args(node);
+	NODE fam = eval_fam(argvar, stab, eflg, NULL);
 	static char key[10];
 	INT i;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, NULL, nonfam1, "prevfam");
+		prog_var_error(node, stab, argvar, NULL, nonfam1, "prevfam");
 		return NULL;
 	}
 	if (!fam)
@@ -903,14 +906,15 @@ llrpt_lastfam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING key;
-	PNODE arg = iargs(node);
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	STRING key=0;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	INT len;
 	STRING rawrec = NULL;
 	NODE node2 = NULL;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "dereference");
+		prog_var_error(node, stab, argvar, val, nonstr1, "dereference");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	key = pvalue_to_string(val);
@@ -922,7 +926,7 @@ llrpt_dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		if (rawrec)
 			node2 = string_to_node(rawrec);
 	}
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	val = create_pvalue_from_node(node2);
 	if (rawrec) stdfree(rawrec);
 	return val;
@@ -934,12 +938,13 @@ llrpt_dereference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	STRING key;
+	STRING key=0;
 	BOOLEAN rc;
-	PNODE arg = iargs(node);
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "reference");
+		prog_var_error(node, stab, argvar, val, nonstr1, "reference");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	key = pvalue_to_string(val);
@@ -955,23 +960,27 @@ llrpt_reference (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE sarg = (PNODE) iargs(node);
-	PNODE larg = inext(sarg);
+	PNODE sargvar = builtin_args(node);
+	PNODE largvar = inext(sargvar);
 	INT len;
-	STRING str;
-	PVALUE val2, val1 = eval_and_coerce(PSTRING, sarg, stab, eflg);
+	STRING str=0;
+	PVALUE val2;
+	PVALUE val1 = eval_and_coerce(PSTRING, sargvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, sarg, val1, nonstrx, "rjustify", "1");
+		prog_var_error(node, stab, sargvar, val1, nonstrx, "rjustify", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	str = pvalue_to_string(val1);
-	val2 = eval_and_coerce(PINT, larg, stab, eflg);
+	val2 = eval_and_coerce(PINT, largvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, larg, val2, nonintx, "rjustify", "2");
+		prog_var_error(node, stab, largvar, val2, nonintx, "rjustify", "2");
+		delete_pvalue_ptr(&val1);
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	len = pvalue_to_int(val2);
-	delete_pvalue(val2);
+	delete_pvalue_ptr(&val2);
 	str = rightjustify(str, len); /* newly alloc'd */
 	set_pvalue_string(val1, str);
 	strfree(&str);
@@ -984,20 +993,20 @@ llrpt_rjustify (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 static STRING
 rightjustify (STRING str, INT len)
 {
-	STRING new;
+	STRING newstr=0;
 	INT lstr, nsp, i, j;
 	if (len < 1) return NULL;
 	if (len > 512) len = 512;
-	new = (STRING) stdalloc(len + 1);
+	newstr = (STRING) stdalloc(len + 1);
 	lstr = strlen(str);
 	nsp = len - lstr;
 	if (nsp < 0) nsp = 0;
 	for (i = 0; i < nsp; i++)
-		new[i] = ' ';
+		newstr[i] = ' ';
 	for (i = nsp, j = 0; i < len; i++, j++)
-		new[i] = str[j];
-	new[i] = 0;
-	return new;
+		newstr[i] = str[j];
+	newstr[i] = 0;
+	return newstr;
 }
 /*=========================================+
  * llrpt_lock -- Lock person or family in memory
@@ -1007,16 +1016,17 @@ PVALUE
 llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	CACHEEL cel=0;
-	PNODE arg = iargs(node);
-	PVALUE val = evaluate(arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = evaluate(argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("error evaluating arg to lock"));
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	if (!val) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("null arg in lock"));
 		return NULL;
 	}
@@ -1027,21 +1037,23 @@ llrpt_lock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		cel = ncel(nd);
 		if (!cel) {
 			*eflg = TRUE;
-			prog_var_error(node, stab, arg, val
+			prog_var_error(node, stab, argvar, val
 			  , _("node passed to lock must be inside a record"));
+			delete_pvalue_ptr(&val);
 			return NULL;
 		}
 	} else {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("the arg to lock must be a record or node"));
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (cel) {
 		if (cel_rptlocks(cel)>999999) {
 			*eflg = TRUE;
-			prog_var_error(node, stab, arg, val
+			prog_var_error(node, stab, argvar, val
 			  , _("Error: there are 999,999 locks on arg to lock"));
 			return NULL;
 		}
@@ -1058,16 +1070,17 @@ PVALUE
 llrpt_unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	CACHEEL cel=0;
-	PNODE arg = iargs(node);
-	PVALUE val = evaluate(arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = evaluate(argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("error evaluating arg to unlock"));
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	if (!val) {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("null arg in unlock"));
 		return NULL;
 	}
@@ -1078,17 +1091,19 @@ llrpt_unlock (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		cel = ncel(nd);
 		if (!cel) {
 			*eflg = TRUE;
-			prog_var_error(node, stab, arg, val
+			prog_var_error(node, stab, argvar, val
 			  , _("node passed to unlock must be inside a record"));
+			delete_pvalue_ptr(&val);
 			return NULL;
 		}
 	} else {
 		*eflg = TRUE;
-		prog_var_error(node, stab, arg, val
+		prog_var_error(node, stab, argvar, val
 		  , _("the arg to unlock must be a record or node"));
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
-	delete_pvalue(val);
+	delete_pvalue_ptr(&val);
 	if (cel) {
 		unlockrpt_cache(cel);
 	}
@@ -1102,10 +1117,11 @@ PVALUE
 llrpt_savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	NODE line;
-	PNODE arg = iargs(node);
-	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PGNODE, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonnod1, "savenode");
+		prog_var_error(node, stab, argvar, val, nonnod1, "savenode");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	line = pvalue_to_node(val);
@@ -1121,29 +1137,29 @@ llrpt_savenode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_genindiset (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	STRING name;
+	PNODE argvar = builtin_args(node);
+	STRING name=0;
 	PVALUE seqval=0;
-	PVALUE val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	PVALUE val1 = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val1, nonstrx, "genindiset" , "1");
-		delete_pvalue(val1);
+		prog_var_error(node, stab, argvar, val1, nonstrx, "genindiset" , "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	name = pvalue_to_string(val1);
 	if(name) name = strsave(name);
-	delete_pvalue(val1);
-	arg = inext(arg);
-	if (!iistype(arg, IIDENT)) {
+	delete_pvalue_ptr(&val1);
+	argvar = inext(argvar);
+	if (!iistype(argvar, IIDENT)) {
 		*eflg = TRUE;
-		prog_error(node, "2nd arg to genindiset must be a variable");
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "genindiset", "2");
 		return NULL;
 	}
 	seqval = create_pvalue_from_seq(NULL);
-	assign_iden(stab, iident_name(arg), seqval);
+	assign_iden(stab, iident_name(argvar), seqval);
 	if (!name || *name == 0) return NULL;
 	seqval = create_pvalue_from_seq(str_to_indiseq(name, 'I'));
-	assign_iden(stab, iident_name(arg), seqval);
+	assign_iden(stab, iident_name(argvar), seqval);
 	return NULL;
 }
 /*================================================+
@@ -1165,8 +1181,9 @@ llrpt_version (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_pvalue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = evaluate(iargs(node), stab, eflg);
-	ZSTR zstr;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = evaluate(argvar, stab, eflg);
+	ZSTR zstr=0;
 #ifdef DEBUG
 	debug_show_one_pnode(node);
 	llwprintf("\npvalue: %d ",val);
@@ -1200,9 +1217,15 @@ llrpt_program (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PVALUE val = eval_and_coerce(PBOOL, iargs(node), stab, eflg);
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PBOOL, argvar, stab, eflg);
+	if (*eflg) {
+		prog_var_error(node, stab, argvar, val, nonboo1, "debug");
+		delete_pvalue_ptr(&val);
+		return NULL;
+	}
 	prog_trace = pvalue_to_bool(val);
-	/* leaking val ? */
+	delete_pvalue_ptr(&val);
 	return NULL;
 }
 /*========================================
@@ -1212,12 +1235,12 @@ llrpt_debug (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_getproperty(PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	PVALUE val = eval_and_coerce(PSTRING, arg, stab, eflg);
-	STRING str;
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PSTRING, argvar, stab, eflg);
+	STRING str=0;
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonstr1, "getproperty");
-		delete_pvalue(val);
+		prog_var_error(node, stab, argvar, val, nonstr1, "getproperty");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	str = pvalue_to_string(val);
@@ -1250,16 +1273,14 @@ rad2deg (double rad)
 PVALUE
 llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg1 = (PNODE) iargs(node);
-	PNODE arg2 = inext(arg1);
-	PNODE arg3 = inext(arg2);
-	PNODE ret1 = inext(arg3);
+	PNODE argvar = builtin_args(node);
 	FLOAT decdeg = 0.0;
 	INT neg=0;
 
-	PVALUE val = eval_and_coerce(PINT, arg1, stab, eflg);
+	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "dms2deg", "1");
+		prog_var_error(node, stab, argvar, val, nonintx, "dms2deg", "1");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	decdeg += pvalue_to_int(val);
@@ -1268,25 +1289,33 @@ llrpt_dms2deg (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		neg = 1;
 	}
 
-	val = eval_and_coerce(PINT, arg2, stab, eflg);
+	val = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "dms2deg", "2");
+		prog_var_error(node, stab, argvar, val, nonintx, "dms2deg", "2");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	decdeg += (pvalue_to_int(val) / 60.0);
 
-	val = eval_and_coerce(PINT, arg3, stab, eflg);
+	val = eval_and_coerce(PINT, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "dms2deg", "3");
+		prog_var_error(node, stab, argvar, val, nonintx, "dms2deg", "3");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	decdeg += (pvalue_to_int(val) / 3600.0);
-
 	if (neg == 1) {
 		decdeg *= -1;
 	}
+	delete_pvalue_ptr(&val);
 
-	insert_symtab(stab, iident_name(ret1), create_pvalue_from_float(decdeg));
+	argvar = inext(argvar);
+	if (!iistype(argvar, IIDENT)) {
+		*eflg = TRUE;
+		prog_var_error(node, stab, argvar, NULL, nonvarx, "dms2deg", "4");
+		return NULL;
+	}
+	insert_symtab(stab, iident_name(argvar), create_pvalue_from_float(decdeg));
 	return NULL;
 }
 /*========================================
@@ -1338,11 +1367,11 @@ llrpt_deg2dms (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_sin (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = (PNODE) iargs(node);
-	PVALUE val = eval_and_coerce(PFLOAT, arg, stab, eflg);
-
+	PNODE argvar = builtin_args(node);
+	PVALUE val = eval_and_coerce(PFLOAT, argvar, stab, eflg);
 	if (*eflg) {
-		prog_error(node, nonflox, "sin", "1");
+		prog_var_error(node, stab, argvar, val, nonflo1, "sin");
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	

@@ -1,3 +1,13 @@
+2008-01-05 Perry Rapp
+
+	* ChangeLog src/interp/alloc.c src/interp/interpi.h
+	src/interp/more.c
+
+	Changing more iargs macro calls to builtin_args function calls.
+	Misc. improvements to error reporting, including adding checking
+	if 4th arg to llrpt_dms2deg is actually a variable. New std error
+	nonflo1.
+
 2008-01-04 Perry Rapp
 
 	* ChangeLog src/interp/alloc.c src/interp/eval.c

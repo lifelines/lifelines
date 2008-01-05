@@ -514,7 +514,8 @@ extern INT Perrors;
 extern INT nobuiltins;
 
 /* standard argument error messages (populated in alloc.c) */
-extern STRING nonint1, nonintx, nonboo1, nonboox, nonflox, nonstr1, nonstrx;
+extern STRING nonint1, nonintx, nonboo1, nonboox;
+extern STRING nonflo1, nonflox, nonstr1, nonstrx;
 extern STRING nullarg1, nonfname1;
 extern STRING nonnodstr1;
 extern STRING nonind1, nonindx, nonfam1, nonfamx, nonif1, nonrecx;
