@@ -6,6 +6,7 @@ http://lifelines.sourceforge.net
 Contents:
 1. General (UNIX) installation
  1a) Dependencies
+ 1b) Specific Issues
 2. Platform specific notes
  2a) Platforms supported out-of-the-box
  2b) Microsoft Windows
@@ -102,6 +103,23 @@ http://xml.apache.org/
     $ xalan -o ll-userguide.html ll-userguide.xml .../docbook-xsl/html/docbook.xsl
     $ htmldoc -f ll-userguide.pdf ll-userguide.html
 DarwinPorts has xercesc, xalanc, docbook-xml, and docbook-xsl.
+
+******************************
+1b) Specific Issues
+******************************
+
+GETTEXT
+
+If configure succeeds, but make fails very early with an error like so:
+
+  cd ../../po && rm -f da.gmo && : -c --statistics -o da.gmo da.po
+  mv: cannot stat `t-da.gmo': No such file or directory
+  ...
+
+then you probably do not have the gettext tools -- the commandline
+tools needed for development, which are needed to compile, and
+are generally a separate package from the runtime libraries needed
+by running programs.
 
 **************************
 2. Platform specific notes
