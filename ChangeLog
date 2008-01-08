@@ -11,6 +11,10 @@
 	Add REPORTS section to user manual, referring to the reports
 	index.html file, and the report manual.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Remove superfluous sect1 end tags in user manual.
+
 2008-01-06 Perry Rapp
 
 	* ChangeLog INSTALL
