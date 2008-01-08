@@ -6,6 +6,11 @@
 	note to README.MAINTAINERS pointing to software requirements
 	in README.DEVELOPERS.
 
+	* ChangeLog docs/ll-userguide.xml
+
+	Add REPORTS section to user manual, referring to the reports
+	index.html file, and the report manual.
+
 2008-01-06 Perry Rapp
 
 	* ChangeLog INSTALL

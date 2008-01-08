@@ -101,7 +101,8 @@ INTRODUCTION
      amounts or kinds of data that can be kept in the
      records. <application>LifeLines</application> does not contain
      built-in reports.  Instead it provides a programming subsystem
-     that you use to program your own reports and charts. The
+     that you use to program your own reports and charts (which has a
+	 separate manual -- the lifelines report manual). The
      programming subsystem also lets you query your databases and
      process your data in any
      way. <application>LifeLines</application> uses the terminal
@@ -4988,6 +4989,34 @@ Example of adding a new person
 
 </sect1>
 
+</sect1>
+
+
+<sect1>
+
+
+
+<title>
+
+LIFELINES REPORTS
+
+</title>
+
+
+<para>
+
+Lifelines comes with some prewritten reports, in the reports directory. See
+the file index.html in the reports directory, for a list and summary of these
+reports. Lifelines also has a built-in report language for writing your own
+reports, and comes with a report manual describing how to write reports: see
+the separate lifelines report manual (ll-reportmanual.html, or
+ll-reportmanual.pdf).
+
+</para>
+
+</sect1>
+
+</sect1>
 
 <sect1>
 
