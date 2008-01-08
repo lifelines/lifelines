@@ -1,3 +1,6 @@
+Note: See top of README.DEVELOPERS for required
+software; maintainers need the same software.
+
 These instructions are for building a new lifelines 
 release, in your cvs working directory, and actually
 releasing it.

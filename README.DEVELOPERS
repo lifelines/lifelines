@@ -12,7 +12,11 @@ Table of Contents
 In order to compile lifelines from the cvs sources,
 the developer needs to have a number of tools available.
 
+cvs, ssh: to access sourceforge repository
 make: build process requires gmake
+gcc (or another compiler): to compile c source
+libintl, gettext: (libs and tools) to compile source and translations
+libncurses (or libcurses): for GUI code
 autotools suite: both autoconf and automake (which in turn 
      require the m4 macro processor) are used to generate
      Makefiles and various build files.

@@ -1,3 +1,11 @@
+2008-01-08 Perry Rapp
+
+	* ChangeLog README.DEVELOPERS README.MAINTAINERS
+
+	Add a few more required software packages for developers. Add
+	note to README.MAINTAINERS pointing to software requirements
+	in README.DEVELOPERS.
+
 2008-01-06 Perry Rapp
 
 	* ChangeLog INSTALL
