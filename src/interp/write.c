@@ -44,30 +44,32 @@ extern STRING nonind1,nonstrx,nonnod1,nonnodx;
 PVALUE
 llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
+	PNODE argvar = builtin_args(node);
 	NODE newnode=0;
 	NODE prnt=NULL; /* parent node for new node */
 	STRING xref=NULL; /* xref for new node */
 	PVALUE val1=NULL, val2=NULL;
 	STRING str1=NULL; /* 1st arg, which is tag for new node */
 	STRING str2=NULL; /* 2nd arg, which is value for new node */
-	val1 = eval_and_coerce(PSTRING, arg, stab, eflg);
+	val1 = eval_and_coerce(PSTRING, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val1, nonstrx, "createnode", "1");
-		delete_pvalue(val1);
+		prog_var_error(node, stab, argvar, val1, nonstrx, "createnode", "1");
+		delete_pvalue_ptr(&val1);
 		return NULL;
 	}
 	/* 1st arg is tag for new node */
 	str1 = pvalue_to_string(val1);
-	val2 = eval_and_coerce(PSTRING, arg=inext(arg), stab, eflg);
+	val2 = eval_and_coerce(PSTRING, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val2, nonstrx, "createnode", "2");
-		delete_pvalue(val2);
+		prog_var_error(node, stab, argvar, val2, nonstrx, "createnode", "2");
+		delete_pvalue_ptr(&val2);
 		return NULL;
 	}
 	/* 2nd arg is value for new node */
 	str2 = pvalue_to_string(val2);
 	newnode = create_temp_node(xref, str1, str2, prnt);
+	delete_pvalue_ptr(&val1);
+	delete_pvalue_ptr(&val2);
 	return create_pvalue_from_node(newnode);
 }
 /*=======================================
@@ -78,38 +80,38 @@ llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	PNODE arg = iargs(node);
-	NODE newchild, next, prnt, prev;
+	PNODE argvar = builtin_args(node);
+	NODE newchild=0, next=0, prnt=0, prev=0;
 
 	/* first argument, node (must be nonnull) */
-	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
+	PVALUE val = eval_and_coerce(PGNODE, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "1");
+		prog_var_error(node, stab, argvar, val, nonnodx, "addnode", "1");
 		delete_pvalue(val);
 		return NULL;
 	}
 	newchild = remove_node_and_delete_pvalue(&val);
 	if (!newchild) {
-		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "1");
+		prog_var_error(node, stab, argvar, val, nonnodx, "addnode", "1");
 		return NULL;
 	}
 
 	/* second argument, parent (must be nonnull) */
-	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
+	val = eval_and_coerce(PGNODE, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
+		prog_var_error(node, stab, argvar, val, nonnodx, "addnode", "2");
 		return NULL;
 	}
 	prnt = remove_node_and_delete_pvalue(&val);
 	if (!prnt) {
-		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "2");
+		prog_var_error(node, stab, argvar, val, nonnodx, "addnode", "2");
 		return NULL;
 	}
 
 	/* third argument, prior sibling (may be null) */
-	val = eval_and_coerce(PGNODE, arg=inext(arg), stab, eflg);
+	val = eval_and_coerce(PGNODE, argvar=inext(argvar), stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, arg, val, nonnodx, "addnode", "3");
+		prog_var_error(node, stab, argvar, val, nonnodx, "addnode", "3");
 		delete_pvalue(val);
 		return NULL;
 	}
@@ -153,7 +155,7 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	PVALUE val = eval_and_coerce(PGNODE, arg, stab, eflg);
 	if (*eflg) {
 		prog_var_error(node, stab, arg, val, nonnod1, "detachnode");
-		delete_pvalue(val);
+		delete_pvalue_ptr(&val);
 		return NULL;
 	}
 	dead = pvalue_to_node(val);
@@ -177,6 +179,7 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
 	/* we don't actually delete the node, garbage collection must get it */
+	/* leak pvalue val ? */
 	return NULL;
 }
 /*======================================
@@ -186,15 +189,15 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_writeindi (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE indi1;
-	PNODE arg = iargs(node);
-	NODE indi2 = eval_indi(arg, stab, eflg, NULL);
-	STRING rawrec=0, msg;
+	NODE indi1=0;
+	PNODE argvar = builtin_args(node);
+	NODE indi2 = eval_indi(argvar, stab, eflg, NULL);
+	STRING rawrec=0, msg=0;
 	INT len, cnt;
 	BOOLEAN rtn=FALSE;
 
 	if (*eflg || !indi2) {
-		prog_var_error(node, stab, arg, 0, nonind1, "writeindi");
+		prog_var_error(node, stab, argvar, 0, nonind1, "writeindi");
 		return NULL;
 	}
 
@@ -247,13 +250,18 @@ end_writeindi:
 PVALUE
 llrpt_writefam (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	NODE fam1;
-	NODE fam2 = eval_fam(iargs(node), stab, eflg, NULL);
+	NODE fam1=0;
+	PNODE argvar = builtin_args(node);
+	NODE fam2 = eval_fam(argvar, stab, eflg, NULL);
 	STRING rawrec=0, msg;
 	INT len, cnt;
 	BOOLEAN rtn=FALSE;
-	if (*eflg) return NULL;
 
+	if (*eflg || !fam2) {
+		prog_var_error(node, stab, argvar, 0, nonfam1, "writefam");
+		return NULL;
+	}
+	
 	/* make a copy, so we can delete it */
 	fam2 = copy_node_subtree(fam2);
 

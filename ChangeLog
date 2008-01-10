@@ -1,3 +1,10 @@
+2008-01-10 Perry Rapp
+
+	* ChangeLog src/interp/write.c
+
+	More changing iargs() to builtin_args and fixing misc. aspects
+	of handling.
+
 2008-01-08 Perry Rapp
 
 	* ChangeLog README.DEVELOPERS README.MAINTAINERS
