@@ -6,6 +6,12 @@
 	Add custom html DSSL stylesheet to force shaded verbatim text
 	in output HTML docs.
 
+	* ChangeLog docs/ll-devguide.html docs/ll-reportmanual.html
+	docs/ll-reportmanual.pdf docs/ll-userguide.html
+	docs/ll-userguide.pdf
+
+	Newly generated docs.
+
 2008-01-10 Perry Rapp
 
 	* ChangeLog src/interp/write.c

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -8,8 +8,7 @@ THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -28,17 +27,17 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
->THE <TT
+>THE <SPAN
 CLASS="application"
->LIFELINES</TT
-> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR</H1
+>LIFELINES</SPAN
+> PROGRAMMING SUBSYSTEM AND REPORT GENERATOR</A
+></H1
 ><H2
 CLASS="subtitle"
-><TT
+><SPAN
 CLASS="application"
->LifeLines</TT
-> Version 3.0.61</H2
+>LifeLines</SPAN
+> Version 3.0.62</H2
 ><H3
 CLASS="author"
 ><A
@@ -54,7 +53,7 @@ CLASS="TOC"
 >Table of Contents</B
 ></DT
 ><DT
-><A
+>1. <A
 HREF="#AEN12"
 >Report Programming Manual</A
 ></DT
@@ -83,11 +82,11 @@ HREF="#AEN145"
 ></DL
 ></DD
 ><DT
-><A
+>2. <A
 HREF="#AEN155"
-><TT
+><SPAN
 CLASS="application"
->LIFELINES</TT
+>LIFELINES</SPAN
 > PROGRAMMING REFERENCE</A
 ></DT
 ><DD
@@ -227,8 +226,33 @@ HREF="#AEN3637"
 HREF="#AEN3813"
 >Deprecated Functions</A
 ></DT
+><DT
+><A
+HREF="#AEN3973"
+>Debugging Reports</A
+></DT
 ></DL
 ></DD
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>1-1. <A
+HREF="#AEN32"
+>Example of ahnentafel report</A
+></DT
+><DT
+>1-2. <A
+HREF="#AEN37"
+>Example of ahnentafel report script</A
+></DT
 ></DL
 ></DIV
 ><DIV
@@ -237,7 +261,7 @@ CLASS="chapter"
 ><A
 NAME="AEN12"
 ></A
->
+>Chapter 1. 
 Report Programming Manual
 </H1
 ><DIV
@@ -246,60 +270,60 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN14"
-></A
->Introduction</H2
+>Introduction</A
+></H2
 ><P
 >&#13;
-     The <TT
+     The <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programming subsystem
      lets you produce reports in any style or layout. You may
-     generate files in <TT
+     generate files in <SPAN
 CLASS="application"
->troff</TT
+>troff</SPAN
 >,
-     <TT
+     <SPAN
 CLASS="application"
->Postscript</TT
+>Postscript</SPAN
 >,
-     <TT
+     <SPAN
 CLASS="application"
->TeX</TT
->, <SPAN
+>TeX</SPAN
+>, <ACRONYM
 CLASS="acronym"
->SGML</SPAN
+>SGML</ACRONYM
 > or any
-     other <SPAN
+     other <ACRONYM
 CLASS="acronym"
->ASCII</SPAN
+>ASCII</ACRONYM
 >-based format, for further text
      processing and printing. You access the report generator by
      choosing the r command from the main menu. You may also use
      the programming subsystem to create query and other processing
      programs that write their results directly upon the
      screen. For example, there is a
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program that computes the
      relationship between any two persons in a database.
 
 </P
 ><P
 >&#13;
-     Each <TT
+     Each <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program is written
-     in the <TT
+     in the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programming
      language, and the programs are stored in normal files. When
-     you direct <TT
+     you direct <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to run a
      program, it asks you for the name of the program file, asks
      you where you want the program's output written, and then runs
@@ -313,13 +337,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN28"
-></A
->Tutorial Ahnentafel report</H2
+>Tutorial Ahnentafel report</A
+></H2
 ><P
 >&#13;
-     For example, say you want <TT
+     For example, say you want <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      to generate an ahnentafel (ancestor) report for Tom Wetmore.
 	 Such a report would show Tom Wetmore, his parents, grandparents,
@@ -332,7 +356,7 @@ NAME="AEN32"
 ></A
 ><P
 ><B
->Example 1. 
+>Example 1-1. 
 Example of ahnentafel report
 </B
 ></P
@@ -368,9 +392,9 @@ d.&nbsp;10&nbsp;May&nbsp;1900,&nbsp;New&nbsp;London,&nbsp;Connecticut<br>
 </P
 ><P
 >&#13;
-     Here is a <TT
+     Here is a <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program that
      generates this report:
 
@@ -381,7 +405,7 @@ NAME="AEN37"
 ></A
 ><P
 ><B
->Example 2. 
+>Example 1-2. 
 Example of ahnentafel report script   
 </B
 ></P
@@ -454,9 +478,9 @@ CLASS="filename"
 CLASS="keycap"
 >r</B
 > option from the main menu,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks:
 
 <TABLE
@@ -479,19 +503,17 @@ enter string:
 ><P
 >&#13;
      You enter
-     <TT
+     <KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="literal"
 >ahnentafel_tutorial</TT
-></B
-></TT
+></KBD
 >. Since the
      program generates a report,
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > asks where to write that
      report:
 
@@ -515,26 +537,24 @@ enter file name:
 ><P
 >&#13;
      You enter a file name, say
-     <TT
+     <KBD
 CLASS="userinput"
-><B
 ><TT
 CLASS="filename"
 >my.ahnen</TT
-></B
-></TT
+></KBD
 >.
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > reads the program ahnen,
      executes the program, and writes the report output to
      <TT
 CLASS="filename"
 >my.ahnen</TT
->. <TT
+>. <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
      reports any syntax or run-time errors found while trying to
      run the program.
@@ -543,9 +563,9 @@ CLASS="application"
 </P
 ><P
 >&#13;
-     A <TT
+     A <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program is made up of
      <SPAN
 CLASS="type"
@@ -639,17 +659,17 @@ enqueue(alist, 1)
 CLASS="type"
 >statement</SPAN
 > calls the
-     <TT
+     <CODE
 CLASS="function"
->getindi</TT
+>getindi</CODE
 > (get individual) <SPAN
 CLASS="type"
 >built-in
      function</SPAN
 >, which causes
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > to ask you to identify a
      person using the zip browse style of identification:
 
@@ -674,9 +694,9 @@ enter name:
 ><P
 >&#13;
      After you identify a person, he or she is assigned to the
-     variable <TT
+     variable <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. The next two
      <SPAN
 CLASS="type"
@@ -685,27 +705,27 @@ CLASS="type"
 CLASS="type"
 >list
      variables</SPAN
->, <TT
+>, <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > and
-     <TT
+     <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. <SPAN
 CLASS="type"
 >Lists</SPAN
 > hold sequences of
      things; there are operations for placing things on lists,
      taking things off, and iterating through the list elements. In
-     the example, <TT
+     the example, <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 > holds a list of
      ancestors, in ahnentafel order, who have not yet been reported
-     on, and <TT
+     on, and <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 > holds their respective
      ahnentafel numbers.
 
@@ -713,23 +733,23 @@ CLASS="varname"
 </P
 ><P
 >&#13;
-     The next two statements call the <TT
+     The next two statements call the <CODE
 CLASS="function"
->enqueue</TT
+>enqueue</CODE
 >
      function, adding the first members to both lists. The person
-     identified by the <TT
+     identified by the <CODE
 CLASS="function"
->getindi</TT
+>getindi</CODE
 > function is
-     made the first member of <TT
+     made the first member of <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, and the
      number one, this person's ahnentafel number, is made the first
-     member of <TT
+     member of <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >.
 
 </P
@@ -796,19 +816,19 @@ CLASS="programlisting"
 ></TR
 ></TABLE
 >
-removes (via <TT
+removes (via <CODE
 CLASS="function"
->dequeue</TT
->) a person from <TT
+>dequeue</CODE
+>) a person from <CODE
 CLASS="varname"
->ilist</TT
->, and assigns the person to variable <TT
+>ilist</CODE
+>, and assigns the person to variable <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 >. As long as there
-are persons on <TT
+are persons on <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >, another iteration of the loop follows.
 
 </P
@@ -831,16 +851,16 @@ set(ahnen, dequeue(alist))</PRE
 CLASS="type"
 >assignment</SPAN
 > statement. The second argument is evaluated; its value is assigned to the first
-argument, which must be a variable. Here the next number in <TT
+argument, which must be a variable. Here the next number in <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 > is removed and assigned to variable
-<TT
+<CODE
 CLASS="varname"
->ahnen</TT
->. This is the ahnentafel number of the person just removed from <TT
+>ahnen</CODE
+>. This is the ahnentafel number of the person just removed from <CODE
 CLASS="varname"
->ilist</TT
+>ilist</CODE
 >.
 
 </P
@@ -863,17 +883,17 @@ d(ahnen) ". " name(indi) nl()</PRE
 CLASS="type"
 >expression</SPAN
 > statements; when expressions are used as statements, their values, if any, are
-treated as strings and written directly to the report output file. The <TT
+treated as strings and written directly to the report output file. The <CODE
 CLASS="function"
->d</TT
+>d</CODE
 > function converts its integer
-argument to a numeric string. The ". " is a literal (constant) string value. The <TT
+argument to a numeric string. The ". " is a literal (constant) string value. The <CODE
 CLASS="function"
->name</TT
+>name</CODE
 > function returns the
-default form of a person's name. The <TT
+default form of a person's name. The <CODE
 CLASS="function"
->nl</TT
+>nl</CODE
 > function returns a string containing the newline character.
 
 </P
@@ -909,9 +929,9 @@ CLASS="type"
 > statement calls the
 birth function, returning the first birth event in a person's
 record. If the event exists it is assigned to variable
-<TT
+<CODE
 CLASS="varname"
->e</TT
+>e</CODE
 >, and the <SPAN
 CLASS="type"
 >body</SPAN
@@ -927,34 +947,28 @@ CLASS="type"
 CLASS="type"
 >expression</SPAN
 >
-statements: a literal, and calls to the <TT
+statements: a literal, and calls to the <CODE
 CLASS="function"
->long</TT
+>long</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->nl</TT
-> functions. <TT
+>nl</CODE
+> functions. <CODE
 CLASS="function"
->Long</TT
+>Long</CODE
 > takes an
-<TT
+<CODE
 CLASS="parameter"
-><I
->event</I
-></TT
+>event</CODE
 > and returns the values of
-the first <TT
+the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > and
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines in the <SPAN
 CLASS="type"
 >event</SPAN
@@ -989,20 +1003,20 @@ enqueue(alist,add(1,mul(2,ahnen)))
 ><P
 >&#13;
 These lines add the father and mother of the current person, if either or both are in the database, to
-<TT
+<CODE
 CLASS="varname"
->ilist</TT
->. They also compute and add the parents' ahnentafel numbers to <TT
+>ilist</CODE
+>. They also compute and add the parents' ahnentafel numbers to <CODE
 CLASS="varname"
->alist</TT
+>alist</CODE
 >. A father's ahnentafel
 number is twice that of his child. A mother's ahnentafel number is twice that of her child plus one.
-These values are computed with the <TT
+These values are computed with the <CODE
 CLASS="function"
->mul</TT
-> and <TT
+>mul</CODE
+> and <CODE
 CLASS="function"
->add</TT
+>add</CODE
 > functions.
 
 </P
@@ -1013,8 +1027,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN141"
-></A
->Template for creating new reports</H2
+>Template for creating new reports</A
+></H2
 ><P
 >&#13;The following is a good template to use when creating a new report from scratch.
 </P
@@ -1058,8 +1072,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN145"
-></A
->Invoking Reports</H2
+>Invoking Reports</A
+></H2
 ><P
 >&#13;As mentioned earlier, reports may be invoked interactively from the main
 menu via the <B
@@ -1104,34 +1118,34 @@ CLASS="chapter"
 ><A
 NAME="AEN155"
 ></A
->
+>Chapter 2. 
 
-<TT
+<SPAN
 CLASS="application"
->LIFELINES</TT
+>LIFELINES</SPAN
 > PROGRAMMING REFERENCE
 
 </H1
 ><P
 >&#13;
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programs are stored in files you edit with a screen editor. Programs are not edited from within
-the <TT
+the <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program; edit them as you would any text file. The programs may be stored in any
-directories; they do not have to be kept in or associated with <TT
+directories; they do not have to be kept in or associated with <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > databases. You may set the
-<TT
+<CODE
 CLASS="envar"
->LLPROGRAMS</TT
-> shell variable to hold a list of directories that <TT
+>LLPROGRAMS</CODE
+> shell variable to hold a list of directories that <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > will use to automatically
 search for programs when you request program execution.
 
@@ -1142,13 +1156,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN164"
-></A
->Procedures and Functions</H2
+>Procedures and Functions</A
+></H2
 ><P
 >&#13;
-A <TT
+A <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program is made up of one or more <SPAN
 CLASS="type"
 >procedures</SPAN
@@ -1175,22 +1189,22 @@ CLASS="synopsis"
 </P
 ><P
 >&#13;
-<SPAN
+<CODE
 CLASS="symbol"
->Name</SPAN
+>Name</CODE
 > is the name of the <SPAN
 CLASS="type"
 >procedure</SPAN
->, <SPAN
+>, <CODE
 CLASS="symbol"
->params</SPAN
+>params</CODE
 > is an optional list of <SPAN
 CLASS="type"
 >parameters</SPAN
 > separated by commas,
-and <SPAN
+and <CODE
 CLASS="symbol"
->statements</SPAN
+>statements</CODE
 > is a list of statements that make up the <SPAN
 CLASS="type"
 >procedure</SPAN
@@ -1252,15 +1266,15 @@ CLASS="synopsis"
 </P
 ><P
 >&#13;
-<SPAN
+<CODE
 CLASS="symbol"
->Name</SPAN
->, <SPAN
+>Name</CODE
+>, <CODE
 CLASS="symbol"
->params</SPAN
-> and <SPAN
+>params</CODE
+> and <CODE
 CLASS="symbol"
->statements</SPAN
+>statements</CODE
 > are defined as in <SPAN
 CLASS="type"
 >procedures</SPAN
@@ -1345,13 +1359,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN218"
-></A
->Comments</H2
+>Comments</A
+></H2
 ><P
 >&#13;
-You may comment your <TT
+You may comment your <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programs using the following notation:<TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -1424,8 +1438,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN229"
-></A
->Statements</H2
+>Statements</A
+></H2
 ><P
 >&#13;
      There are a number of <SPAN
@@ -1478,9 +1492,9 @@ CLASS="synopsis"
 ></TD
 ></TR
 ></TABLE
->, where <SPAN
+>, where <CODE
 CLASS="symbol"
->indi</SPAN
+>indi</CODE
 >
      is a person, returns the person's name and writes it to the
      output file. On the other hand, the expression
@@ -1497,17 +1511,17 @@ CLASS="synopsis"
 ></TR
 ></TABLE
 > assigns the
-     variable <TT
+     variable <CODE
 CLASS="varname"
->n</TT
+>n</CODE
 > the number of spouses that
-     person <TT
+     person <CODE
 CLASS="varname"
->indi</TT
+>indi</CODE
 > has, but since
-     <TT
+     <CODE
 CLASS="function"
->set</TT
+>set</CODE
 > returns
      <SPAN
 CLASS="returnvalue"
@@ -1716,16 +1730,16 @@ CLASS="returnvalue"
 The <SPAN
 CLASS="type"
 >call</SPAN
-> statement provides procedure calls. <SPAN
+> statement provides procedure calls. <CODE
 CLASS="symbol"
->Name</SPAN
+>Name</CODE
 > must match one of the <SPAN
 CLASS="type"
 >procedures</SPAN
 > defined in the
-report program. <SPAN
+report program. <CODE
 CLASS="symbol"
->Args</SPAN
+>Args</CODE
 > is a list of <SPAN
 CLASS="type"
 >argument</SPAN
@@ -1861,15 +1875,13 @@ interpreter no older than that specified.
 The <SPAN
 CLASS="type"
 >include</SPAN
-> statement includes the contents of another file into the current file; its <TT
+> statement includes the contents of another file into the current file; its <CODE
 CLASS="parameter"
-><I
->string</I
-></TT
+>string</CODE
 > expression is
-the name of another <TT
+the name of another <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program file. It is described in more detail below. The <SPAN
 CLASS="type"
 >global</SPAN
@@ -1880,17 +1892,13 @@ CLASS="type"
 > or <SPAN
 CLASS="type"
 >function</SPAN
->; it declares a <TT
+>; it declares a <CODE
 CLASS="parameter"
-><I
->variable</I
-></TT
+>variable</CODE
 > to have global scope.  The 
-<TT
+<CODE
 CLASS="parameter"
-><I
->variable</I
-></TT
+>variable</CODE
 > is initialized to 0.
 
 </P
@@ -1957,17 +1965,13 @@ CLASS="synopsis"
 The <SPAN
 CLASS="type"
 >set</SPAN
-> statement is the assignment statement; the <TT
+> statement is the assignment statement; the <CODE
 CLASS="parameter"
-><I
->expression</I
-></TT
+>expression</CODE
 > is evaluated, and its value is assigned
-to the <TT
+to the <CODE
 CLASS="parameter"
-><I
->variable</I
-></TT
+>variable</CODE
 >. The <SPAN
 CLASS="type"
 >continue</SPAN
@@ -2004,8 +2008,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN336"
-></A
->Expressions</H2
+>Expressions</A
+></H2
 ><P
 >&#13;
 There are four types of expressions: <SPAN
@@ -2067,23 +2071,23 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN352"
-></A
->Include Feature</H2
+>Include Feature</A
+></H2
 ><P
 >&#13;
-The <TT
+The <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programming language provides an <SPAN
 CLASS="type"
 >include</SPAN
-> feature. Using this feature one <TT
+> feature. Using this feature one <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
-program can refer to other <TT
+program can refer to other <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programs. This feature is provided by the include statement:<TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -2096,28 +2100,28 @@ CLASS="synopsis"
 ></TD
 ></TR
 ></TABLE
->where <SPAN
+>where <CODE
 CLASS="symbol"
->string</SPAN
-> is a quoted string that is the name of another <TT
+>string</CODE
+> is a quoted string that is the name of another <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program file. When an include
 statement is encountered, the program that it refers to is read at that point, exactly as if the contents of
-included file had been in the body of the original file at that point. This allows you to create <TT
+included file had been in the body of the original file at that point. This allows you to create <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
 program library files that can be used by many programs. Included files may in turn contain <SPAN
 CLASS="type"
 >include</SPAN
 >
-statements, and so on to any depth. <TT
+statements, and so on to any depth. <SPAN
 CLASS="application"
->LifeLines</TT
-> will use the <TT
+>LifeLines</SPAN
+> will use the <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > shell variable, if set, to
 search for the <SPAN
 CLASS="type"
@@ -2142,17 +2146,17 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN368"
-></A
->Built-in Functions</H2
+>Built-in Functions</A
+></H2
 ><P
 >&#13;
 There is a long list of <SPAN
 CLASS="type"
 >built-in functions</SPAN
 >, and this list will continue to grow for some time. The first
-subsection below describes the value types used in <TT
+subsection below describes the value types used in <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > programs; these are the types of <SPAN
 CLASS="type"
 >variables</SPAN
@@ -2177,8 +2181,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN377"
-></A
->Value Types</H2
+>Value Types</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2215,9 +2219,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;event; reference to substructure of nodes in a <SPAN
+>&#13;event; reference to substructure of nodes in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > record (reference)
 </P
 ></DD
@@ -2230,9 +2234,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;family; reference to a <SPAN
+>&#13;family; reference to a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > FAM record (reference)
 </P
 ></DD
@@ -2257,9 +2261,9 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;person; reference to a <SPAN
+>&#13;person; reference to a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > INDI record (reference)
 </P
 ></DD
@@ -2296,12 +2300,12 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;<SPAN
+>&#13;<ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
-> node; reference to a line in a <SPAN
+>GEDCOM</ACRONYM
+> node; reference to a line in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > tree/record (reference)
 </P
 ></DD
@@ -2390,12 +2394,12 @@ CLASS="type"
 CLASS="type"
 >variable</SPAN
 >; when this is so its type is given as
-<TT
+<CODE
 CLASS="varname"
->XXX_V</TT
->, where <SPAN
+>XXX_V</CODE
+>, where <CODE
 CLASS="symbol"
->XXX</SPAN
+>XXX</CODE
 > is one of the types above. The <SPAN
 CLASS="type"
 >built-ins</SPAN
@@ -2446,8 +2450,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN474"
-></A
->Iterators</H2
+>Iterators</A
+></H2
 ><P
 >&#13;
 The report generator provides a number of iterator statements
@@ -2507,71 +2511,45 @@ iterators may be used:
 
 <DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN485"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="96"><COL><TBODY
 ><TR
 ><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >forindi</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Iterate over all people</TD
 ></TR
 ><TR
 ><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >forfam</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Iterate over all families</TD
 ></TR
 ><TR
 ><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >forsour</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Iterate over all sources</TD
 ></TR
 ><TR
 ><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >foreven</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Iterate over all events</TD
 ></TR
 ><TR
 ><TD
-WIDTH="96"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >forothr</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >Iterate over all other recoure types</TD
 ></TR
 ></TBODY
@@ -2593,8 +2571,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN505"
-></A
->Arithmetic and Logic Functions</H2
+>Arithmetic and Logic Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -2602,37 +2580,19 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN510"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->add</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->
-<TT
-CLASS="parameter"
-><I
->...</I
-></TT
->);</CODE
+>NUMBER add</CODE
+>(NUMBER,
+NUMBER
+...);</CODE
 ></P
 ><P
 ></P
@@ -2648,31 +2608,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN522"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->sub</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->);</CODE
+>NUMBER sub</CODE
+>(NUMBER,
+NUMBER);</CODE
 ></P
 ><P
 ></P
@@ -2690,37 +2637,19 @@ subtraction
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN533"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->mul</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->
-<TT
-CLASS="parameter"
-><I
->...</I
-></TT
->);</CODE
+>NUMBER mul</CODE
+>(NUMBER,
+NUMBER
+...);</CODE
 ></P
 ><P
 ></P
@@ -2738,31 +2667,18 @@ multiplication - two to 32 arguments
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN545"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->div</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->);</CODE
+>NUMBER div</CODE
+>(NUMBER,
+NUMBER);</CODE
 ></P
 ><P
 ></P
@@ -2780,31 +2696,18 @@ division
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN556"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->mod</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>INT mod</CODE
+>(INT,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -2822,31 +2725,18 @@ modulus (remainder)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN567"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->exp</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>NUMBER exp</CODE
+>(NUMBER,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -2864,25 +2754,17 @@ exponentiation
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN578"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NUMBER <TT
-CLASS="function"
->neg</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->);</CODE
+>NUMBER neg</CODE
+>(NUMBER);</CODE
 ></P
 ><P
 ></P
@@ -2900,25 +2782,17 @@ negation
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN588"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->float</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>FLOAT float</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -2936,25 +2810,17 @@ convert int to float
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN598"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->int</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>INT int</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -2972,30 +2838,17 @@ convert float to int
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN608"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->incr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->);</CODE
+>VOID incr</CODE
+>(NUMBER,NUMBER);</CODE
 ></P
 ><P
 ></P
@@ -3013,30 +2866,17 @@ increment variable by second argument (or by 1 if no second argument)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN619"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->decr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->,<TT
-CLASS="parameter"
-><I
->NUMBER</I
-></TT
->);</CODE
+>VOID decr</CODE
+>(NUMBER,NUMBER);</CODE
 ></P
 ><P
 ></P
@@ -3054,37 +2894,19 @@ decrement variable by second argument (or by 1 if no second argument)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN630"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->and</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->
-<TT
-CLASS="parameter"
-><I
->...</I
-></TT
->);</CODE
+>BOOL and</CODE
+>(BOOL,
+BOOL
+...);</CODE
 ></P
 ><P
 ></P
@@ -3102,37 +2924,19 @@ logical and - two to 32 arguments
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN642"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->or</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->
-<TT
-CLASS="parameter"
-><I
->...</I
-></TT
->);</CODE
+>BOOL or</CODE
+>(BOOL,
+BOOL
+...);</CODE
 ></P
 ><P
 ></P
@@ -3150,25 +2954,17 @@ logical or - two to 32 arguments
 ><B
 > <DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN654"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->not</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->);</CODE
+>BOOL not</CODE
+>(BOOL);</CODE
 ></P
 ><P
 ></P
@@ -3186,31 +2982,18 @@ logical not
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN664"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->eq</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL eq</CODE
+>(ANY,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -3228,31 +3011,18 @@ equality (not strings)
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN675"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->ne</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL ne</CODE
+>(ANY,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -3270,31 +3040,18 @@ non-equality
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN686"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->lt</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL lt</CODE
+>(ANY,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -3312,31 +3069,18 @@ less than
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN697"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->gt</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->
+>BOOL gt</CODE
+>(ANY,
+ANY
 );</CODE
 ></P
 ><P
@@ -3355,31 +3099,18 @@ greater than
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN708"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->le</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL le</CODE
+>(ANY,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -3397,31 +3128,18 @@ less than or equal
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN719"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->ge</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL ge</CODE
+>(ANY,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -3438,122 +3156,122 @@ greater than or equal
 ></DL
 ></DIV
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Add</TT
->, <TT
+>Add</CODE
+>, <CODE
 CLASS="function"
->sub</TT
->, <TT
+>sub</CODE
+>, <CODE
 CLASS="function"
->mul</TT
+>mul</CODE
 > 
-and <TT
+and <CODE
 CLASS="function"
->div</TT
+>div</CODE
 > do normal arithmetic of integer or floating values.
 If any operand is float, the result is float.
-Functions <TT
+Functions <CODE
 CLASS="function"
->add</TT
-> and <TT
+>add</CODE
+> and <CODE
 CLASS="function"
->mul</TT
+>mul</CODE
 > can have two to
 32 arguments; the sum or product of the full set of arguments is computed.
-Functions <TT
+Functions <CODE
 CLASS="function"
->sub</TT
-> and <TT
+>sub</CODE
+> and <CODE
 CLASS="function"
->div</TT
+>div</CODE
 > have 
-two arguments each; <TT
+two arguments each; <CODE
 CLASS="function"
->sub</TT
+>sub</CODE
 > subtracts its second argument
-from its first, and <TT
+from its first, and <CODE
 CLASS="function"
->div</TT
+>div</CODE
 > divides its first argument by its
 second.
-The <TT
+The <CODE
 CLASS="function"
->mod</TT
+>mod</CODE
 > function returns the remainder after dividing the
 first parameter by the second. If the second argument to 
-<TT
+<CODE
 CLASS="function"
->div</TT
-> or <TT
+>div</CODE
+> or <CODE
 CLASS="function"
->mod</TT
+>mod</CODE
 > is zero,
 these functions return 0 and generate a run time error.
-<TT
+<CODE
 CLASS="function"
->Exp</TT
+>Exp</CODE
 > performs integer exponentiation.
-<TT
+<CODE
 CLASS="function"
->Neg</TT
+>Neg</CODE
 > negates its argument.
 The functions 
-<TT
+<CODE
 CLASS="function"
->float</TT
+>float</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->int</TT
+>int</CODE
 >
 can be used to explicitly convert a value to float or int where needed.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Incr</TT
-> and <TT
+>Incr</CODE
+> and <CODE
 CLASS="function"
->decr</TT
+>decr</CODE
 > increment by one and decrement by one, respectively, the value of a variable. The
 argument to both functions must be a variable.  These functions take an
 optional second argument which is the amount to increment or decrement the
 variable by. 
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->And</TT
-> and <TT
+>And</CODE
+> and <CODE
 CLASS="function"
->or</TT
+>or</CODE
 > do logical operations. Both functions take two to 32 arguments. All arguments are and'ed or
 or'ed together, respectively. The arguments are evaluated from left to right, but only up to the point
-where the final value of the function becomes known. <TT
+where the final value of the function becomes known. <CODE
 CLASS="function"
->Not</TT
+>Not</CODE
 > does the logical not operation.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Eq</TT
->, <TT
+>Eq</CODE
+>, <CODE
 CLASS="function"
->ne</TT
->, <TT
+>ne</CODE
+>, <CODE
 CLASS="function"
->lt</TT
->, <TT
+>lt</CODE
+>, <CODE
 CLASS="function"
->le</TT
->, <TT
+>le</CODE
+>, <CODE
 CLASS="function"
->gt</TT
-> and <TT
+>gt</CODE
+> and <CODE
 CLASS="function"
->ge</TT
+>ge</CODE
 > evaluate the six ordering relationships between two integers.
 </P
 ></DIV
@@ -3563,8 +3281,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN760"
-></A
->Trigonometric and Spherical Calculations</H2
+>Trigonometric and Spherical Calculations</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -3572,25 +3290,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN765"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->sin</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT sin</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3606,25 +3316,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN775"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->cos</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT cos</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3640,25 +3342,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN785"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->tan</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT tan</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3674,25 +3368,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN795"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->arcsin</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT arcsin</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3708,25 +3394,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN805"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->arccos</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT arccos</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3742,25 +3420,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN815"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->arctan</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>FLOAT arctan</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -3776,43 +3446,20 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN825"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->dms2deg</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT degree</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT minute</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT second</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->FLOAT_V decimal</I
-></TT
->);</CODE
+>VOID dms2deg</CODE
+>(INT degree,
+INT minute,
+INT second,
+FLOAT_V decimal);</CODE
 ></P
 ><P
 ></P
@@ -3828,43 +3475,20 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN838"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void <TT
-CLASS="function"
->deg2dms</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT decimal</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V degree</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V minute</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V second</I
-></TT
->);</CODE
+>void deg2dms</CODE
+>(FLOAT decimal,
+INT_V degree,
+INT_V minute,
+INT_V second);</CODE
 ></P
 ><P
 ></P
@@ -3880,43 +3504,20 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN851"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->spdist</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT lat0</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->FLOAT long0</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->FLOAT lat1</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->FLOAT long1</I
-></TT
->);</CODE
+>FLOAT spdist</CODE
+>(FLOAT lat0,
+FLOAT long0,
+FLOAT lat1,
+FLOAT long1);</CODE
 ></P
 ><P
 ></P
@@ -3932,20 +3533,20 @@ CLASS="parameter"
 ></DIV
 ><P
 >&#13;The trigonometric functions specify angles using degrees.  The functions
-<TT
+<CODE
 CLASS="function"
->deg2dms</TT
-> and <TT
+>deg2dms</CODE
+> and <CODE
 CLASS="function"
->dms2deg</TT
+>dms2deg</CODE
 >
 are provided to convert between (degree,minute,second) notation and decimal
 degree representations for angles.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->spdist</TT
+>spdist</CODE
 > estimates the distance between two spherical
 coordinates.  The arguments provided are, in order, first latitude, first
 longitude, second latitude, second longitude.  The result is in kilometers.
@@ -3958,8 +3559,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN867"
-></A
->Person Functions</H2
+>Person Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -3967,34 +3568,21 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN872"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->name</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
+>STRING name</CODE
+>(INDI,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >BOOL</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -4013,43 +3601,20 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN884"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->fullname</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING fullname</CODE
+>(INDI,
+BOOL,
+BOOL,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -4065,25 +3630,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN897"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->surname</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>STRING surname</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4099,25 +3656,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN907"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->givens</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>STRING givens</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4133,31 +3682,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN917"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->trimname</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING trimname</CODE
+>(INDI,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -4173,25 +3709,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN928"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->birth</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>EVENT birth</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4207,25 +3735,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN938"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->death</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>EVENT death</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4241,25 +3761,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN948"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->burial</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>EVENT burial</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4275,25 +3787,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN958"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->father</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI father</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4309,25 +3813,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN968"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->mother</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI mother</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4343,25 +3839,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN978"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->nextsib</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI nextsib</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4377,25 +3865,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN988"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->prevsib</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI prevsib</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4411,25 +3891,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN998"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->sex</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>STRING sex</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4445,25 +3917,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1008"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->male</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>BOOL male</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4479,25 +3943,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1018"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->female</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>BOOL female</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4513,31 +3969,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1028"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->pn</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING pn</CODE
+>(INDI,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -4553,25 +3996,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1039"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->nspouses</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INT nspouses</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4587,25 +4022,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1049"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->nfamilies</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INT nfamilies</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4621,25 +4048,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1059"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->parents</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>FAM parents</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4655,25 +4074,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1069"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->title</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>STRING title</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4689,34 +4100,21 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1079"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->key</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->RECORD</I
-></TT
->,
+>STRING key</CODE
+>(RECORD,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >BOOL</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -4734,25 +4132,17 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1091"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->soundex</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>STRING soundex</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4768,25 +4158,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1101"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->inode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>NODE inode</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4802,25 +4184,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1111"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->root</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>NODE root</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4836,25 +4210,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1121"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->indi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>INDI indi</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -4870,19 +4236,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1131"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->firstindi</TT
-></CODE
+>INDI firstindi</CODE
 >(void);</CODE
 ></P
 ><P
@@ -4899,19 +4262,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1140"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->lastindi</TT
-></CODE
+>INDI lastindi</CODE
 >(void);</CODE
 ></P
 ><P
@@ -4928,25 +4288,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1149"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->nextindi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI nextindi</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -4962,25 +4314,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1159"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->previndi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI previndi</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -5280,18 +4624,16 @@ CLASS="replaceable"
 >&#13;These functions take a person as a parameter and return information about him or her.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Name</TT
-> returns the default name of a person; this is the name found on the first <TT
+>Name</CODE
+> returns the default name of a person; this is the name found on the first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > line in the
-person's record; the slashes are removed and the surname is made all capitals; <TT
+person's record; the slashes are removed and the surname is made all capitals; <CODE
 CLASS="function"
->name</TT
+>name</CODE
 > can take an
 optional second parameter - if it is <SPAN
 CLASS="returnvalue"
@@ -5303,9 +4645,9 @@ CLASS="returnvalue"
 kept exactly as it is in the record.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Fullname</TT
+>Fullname</CODE
 > returns the name of a person in a variety of formats. If the second parameter is <SPAN
 CLASS="returnvalue"
 >true</SPAN
@@ -5320,46 +4662,40 @@ maximum length field that can be used to show the name; various conversions occu
 shorten the name to fit this length.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Surname</TT
-> returns the surname of the person, as found in the first <TT
+>Surname</CODE
+> returns the surname of the person, as found in the first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
+>1 NAME</CODE
 > line; the slashes are
-removed. <TT
+removed. <CODE
 CLASS="function"
->Givens</TT
+>Givens</CODE
 > returns the given names of the person in the same order and format as found in the
-first <TT
+first <CODE
 CLASS="structfield"
-><I
->1 NAME</I
-></TT
-> line of the record. <TT
+>1 NAME</CODE
+> line of the record. <CODE
 CLASS="function"
->Trimname</TT
+>Trimname</CODE
 > returns the default name of the person trimmed to the
 maximum character length given in the second variable.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Birth</TT
->, <TT
+>Birth</CODE
+>, <CODE
 CLASS="function"
->death</TT
->, and <TT
+>death</CODE
+>, and <CODE
 CLASS="function"
->burial</TT
+>burial</CODE
 > return the first birth, death, and burial event in the
-person's record, respectively. An event is a level <TT
+person's record, respectively. An event is a level <CODE
 CLASS="structfield"
-><I
->1 GEDCOM</I
-></TT
+>1 GEDCOM</CODE
 > node. If there is no matching event these
 functions return <SPAN
 CLASS="returnvalue"
@@ -5367,35 +4703,35 @@ CLASS="returnvalue"
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Father</TT
->, <TT
+>Father</CODE
+>, <CODE
 CLASS="function"
->mother</TT
->, <TT
+>mother</CODE
+>, <CODE
 CLASS="function"
->nextsib</TT
-> and <TT
+>nextsib</CODE
+> and <CODE
 CLASS="function"
->prevsib</TT
+>prevsib</CODE
 > return the father, mother, next younger sibling and next older
-sibling of the person, respectively. If the person has more than one father (mother) the <TT
+sibling of the person, respectively. If the person has more than one father (mother) the <CODE
 CLASS="function"
->father</TT
+>father</CODE
 >
-(<TT
+(<CODE
 CLASS="function"
->mother</TT
+>mother</CODE
 >) function returns the first one. These functions return <SPAN
 CLASS="returnvalue"
 >null</SPAN
 > if there is no person in the role.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Sex</TT
+>Sex</CODE
 > returns the person's sex as the string <SPAN
 CLASS="returnvalue"
 >M</SPAN
@@ -5406,12 +4742,12 @@ CLASS="returnvalue"
 CLASS="returnvalue"
 >U</SPAN
 > if the
-sex of the person is not known. <TT
+sex of the person is not known. <CODE
 CLASS="function"
->Male</TT
-> and <TT
+>Male</CODE
+> and <CODE
 CLASS="function"
->female</TT
+>female</CODE
 > return <SPAN
 CLASS="returnvalue"
 >true</SPAN
@@ -5422,79 +4758,53 @@ CLASS="returnvalue"
 > if not.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Pn</TT
+>Pn</CODE
 > generates pronouns, useful when generating English text;
 the second parameter selects the type of pronoun:
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN1272"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >He/She</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >he/she</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >His/Her</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >his/her</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >him/her</TD
 ></TR
 ></TBODY
@@ -5503,34 +4813,32 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Nspouses</TT
-> returns the number of spouses the person has in the database, and <TT
+>Nspouses</CODE
+> returns the number of spouses the person has in the database, and <CODE
 CLASS="function"
->nfamilies</TT
+>nfamilies</CODE
 > returns the
 number of families the person is a parent/spouse in; these two values are not necessarily the same.
-<TT
+<CODE
 CLASS="function"
->Parents</TT
+>Parents</CODE
 > returns the first family that the person is a child in.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Title</TT
-> returns the value of the first <TT
+>Title</CODE
+> returns the value of the first <CODE
 CLASS="structfield"
-><I
->1 TITL</I
-></TT
+>1 TITL</CODE
 > line in the record. 
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Key</TT
+>Key</CODE
 > returns the key value of a person (or any record);
 if there is a second parameter and it is non-null, the leading <TT
 CLASS="literal"
@@ -5565,22 +4873,22 @@ CLASS="literal"
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Soundex</TT
+>Soundex</CODE
 >
 returns the Soundex code of the person.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Root</TT
-> and <TT
+>Root</CODE
+> and <CODE
 CLASS="function"
->Inode</TT
-> return the root node of the person's <SPAN
+>Inode</CODE
+> return the root node of the person's <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree. Note that an <SPAN
 CLASS="type"
 >INDI</SPAN
@@ -5589,28 +4897,28 @@ not a <SPAN
 CLASS="type"
 >NODE</SPAN
 > value. If you want to process the nodes within a person node tree, you must first use the
-<TT
+<CODE
 CLASS="function"
->root</TT
-> or <TT
+>root</CODE
+> or <CODE
 CLASS="function"
->inode</TT
-> function to get the root of the person node tree. <TT
+>inode</CODE
+> function to get the root of the person node tree. <CODE
 CLASS="function"
->Root</TT
-> and <TT
+>Root</CODE
+> and <CODE
 CLASS="function"
->inode</TT
+>inode</CODE
 > are synonyms.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Indi</TT
+>Indi</CODE
 > returns the person whose key is passed as an argument;
-if no person has the key <TT
+if no person has the key <CODE
 CLASS="function"
->indi</TT
+>indi</CODE
 > returns
 <SPAN
 CLASS="returnvalue"
@@ -5619,33 +4927,33 @@ CLASS="returnvalue"
 INDI  keys are accepted either as Innn or @Innn@.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Firstindi</TT
->, <TT
+>Firstindi</CODE
+>, <CODE
 CLASS="function"
->nextindi</TT
-> and <TT
+>nextindi</CODE
+> and <CODE
 CLASS="function"
->previndi</TT
-> allow you to iterate through all persons in the database. <TT
+>previndi</CODE
+> allow you to iterate through all persons in the database. <CODE
 CLASS="function"
->Firstindi</TT
+>Firstindi</CODE
 >
-returns the first person in the database in key order. <TT
+returns the first person in the database in key order. <CODE
 CLASS="function"
->Nextindi</TT
+>Nextindi</CODE
 > returns the next person after the
-argument person in key order. <TT
+argument person in key order. <CODE
 CLASS="function"
->Previndi</TT
+>Previndi</CODE
 > returns the previous person before the argument person in key
 order.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Spouses</TT
+>Spouses</CODE
 > is an iterator that loops through each spouse a person has. The first argument is a person. The
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
@@ -5654,9 +4962,9 @@ The spouses iterator skips any family that has no spouse, whereas the
 families iterator does not.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Families</TT
+>Families</CODE
 > is an iterator that loops through the families a person was a spouse/parent in. The first
 argument is a person. The second argument is a family variable that iterates through the families the
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
@@ -5664,33 +4972,33 @@ if there is no spouse in a particular family, the variable is set to null for th
 argument is an integer variable that counts the iterations.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Families</TT
-> and <TT
+>Families</CODE
+> and <CODE
 CLASS="function"
->Spouses</TT
+>Spouses</CODE
 > behave the same
 except for one situation.  If the person is a spouse in a family that only has
 one spouse identified,  that family does not show up with the 
-<TT
+<CODE
 CLASS="function"
->spouses</TT
+>spouses</CODE
 > iterator, but it does show up with the
-<TT
+<CODE
 CLASS="function"
->families</TT
+>families</CODE
 > iterator.  One caution, this situation causes
-the 3rd argument of the <TT
+the 3rd argument of the <CODE
 CLASS="function"
->families</TT
+>families</CODE
 > iterator to be set to
 null.  You must check for this.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Forindi</TT
+>Forindi</CODE
 > is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
@@ -5698,9 +5006,9 @@ parameter is an integer counter
 variable that counts the persons starting at one.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->mothers</TT
+>mothers</CODE
 > is an iterator that loops through every female
 parent of the specified individual. 
 Its first parameter is a person;
@@ -5711,9 +5019,9 @@ associated with the family in the third parameter;
 The fourth parameter is a variable that counts the families returned starting at one.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Parents</TT
+>Parents</CODE
 > is an iterator that loops through every family
 that a person is a child in.  Note: This iterator's name begins with a
 capital P.  There is another function of the same name that begins with a
@@ -5724,9 +5032,9 @@ that the person is a child in; and
 the third parameter is a variable that counts the families returned starting at one.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Forindi</TT
+>Forindi</CODE
 > is an iterator that loops through every person in
 the database in ascending key order. Its first
 parameter is a variable that iterates through the persons; its second 
@@ -5734,13 +5042,13 @@ parameter is an integer counter
 variable that counts the persons starting at one.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->fathers</TT
+>fathers</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->mothers</TT
+>mothers</CODE
 > are iterators that loop through each family
 the specified individual is in returns each father or mother found.
 If a non-traditional family is processed, there will be separate iterations
@@ -5753,8 +5061,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1353"
-></A
->Family Functions</H2
+>Family Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -5762,25 +5070,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1358"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->marriage</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>EVENT marriage</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5796,25 +5096,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1368"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->husband</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>INDI husband</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5830,25 +5122,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1378"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->wife</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>INDI wife</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5864,25 +5148,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1388"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->nchildren</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>INT nchildren</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5898,25 +5174,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1398"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->firstchild</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>INDI firstchild</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5932,25 +5200,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1408"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->lastchild</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>INDI lastchild</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -5966,34 +5226,21 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1418"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->key</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM|INDI</I
-></TT
->,
+>STRING key</CODE
+>(FAM|INDI,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >BOOL</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -6011,25 +5258,17 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1430"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->fnode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>NODE fnode</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -6045,25 +5284,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1440"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->root</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>NODE root</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -6079,25 +5310,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1450"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->fam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>FAM fam</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -6113,19 +5336,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1460"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->firstfam</TT
-></CODE
+>FAM firstfam</CODE
 >(void);</CODE
 ></P
 ><P
@@ -6142,19 +5362,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1469"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->lastfam</TT
-></CODE
+>FAM lastfam</CODE
 >(void);</CODE
 ></P
 ><P
@@ -6171,25 +5388,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1478"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->nextfam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>FAM nextfam</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -6205,25 +5414,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1488"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->prevfam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>FAM prevfam</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -6368,9 +5569,9 @@ CLASS="replaceable"
 >&#13;These functions take a family as an argument and return information about it.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Marriage</TT
+>Marriage</CODE
 > returns the first marriage event found in the family record, if any; it returns <SPAN
 CLASS="returnvalue"
 >null</SPAN
@@ -6378,12 +5579,12 @@ CLASS="returnvalue"
 no marriage event.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Husband</TT
-> returns the first husband/father of the family, if any; and <TT
+>Husband</CODE
+> returns the first husband/father of the family, if any; and <CODE
 CLASS="function"
->wife</TT
+>wife</CODE
 > returns the first
 wife/mother of the family, if any. Each returns <SPAN
 CLASS="returnvalue"
@@ -6391,36 +5592,36 @@ CLASS="returnvalue"
 > if the requested person is not in the family.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Nchildren</TT
+>Nchildren</CODE
 > returns the number of children in the family.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Firstchild</TT
-> and <TT
+>Firstchild</CODE
+> and <CODE
 CLASS="function"
->lastchild</TT
+>lastchild</CODE
 > return the first child and last child in a family, respectively.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Key</TT
+>Key</CODE
 > was described in the section on person functions.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Root</TT
-> and <TT
+>Root</CODE
+> and <CODE
 CLASS="function"
->fnode</TT
-> return the root node of a family <SPAN
+>fnode</CODE
+> return the root node of a family <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree. Note that a <SPAN
 CLASS="type"
 >FAM</SPAN
@@ -6428,29 +5629,29 @@ CLASS="type"
 <SPAN
 CLASS="type"
 >NODE</SPAN
-> value. If you want to process the nodes within a family node tree, you must first use <TT
+> value. If you want to process the nodes within a family node tree, you must first use <CODE
 CLASS="function"
->root</TT
+>root</CODE
 > or
-<TT
+<CODE
 CLASS="function"
->fnode</TT
-> function to get the root of the family node tree. <TT
+>fnode</CODE
+> function to get the root of the family node tree. <CODE
 CLASS="function"
->Root</TT
-> and <TT
+>Root</CODE
+> and <CODE
 CLASS="function"
->fnode</TT
+>fnode</CODE
 > are synonyms.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Fam</TT
+>Fam</CODE
 > returns the family who's key is passed as an argument;
-if no family has the key <TT
+if no family has the key <CODE
 CLASS="function"
->fam</TT
+>fam</CODE
 > 
 returns <SPAN
 CLASS="returnvalue"
@@ -6459,42 +5660,42 @@ CLASS="returnvalue"
 either as Fnnn or @Fnnn@.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Firstfam</TT
->, <TT
+>Firstfam</CODE
+>, <CODE
 CLASS="function"
->nextfam</TT
-> and <TT
+>nextfam</CODE
+> and <CODE
 CLASS="function"
->prevfam</TT
-> allow you to iterate through all families in the database. <TT
+>prevfam</CODE
+> allow you to iterate through all families in the database. <CODE
 CLASS="function"
->Firstfam</TT
+>Firstfam</CODE
 >
-returns the first family in the database in key order. <TT
+returns the first family in the database in key order. <CODE
 CLASS="function"
->Nextfam</TT
+>Nextfam</CODE
 > returns the next family after the
-argument family in key order. <TT
+argument family in key order. <CODE
 CLASS="function"
->Prevfam</TT
+>Prevfam</CODE
 > returns the previous family before the argument family in key
 order.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Children</TT
+>Children</CODE
 > is an iterator that loops through the children in a family. Its first parameter is a family
 expression; its second parameter is a variable that iterates through each child; its third parameter is
 an integer counter variable that counts the children starting at one. These two variables may be used
 within the loop body.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->spouses</TT
+>spouses</CODE
 > is an iterator that loops through all the
 husbands and wives of a family.
 Its first parameter is a family expression; its second parameter is a
@@ -6503,9 +5704,9 @@ an integer counter variable that counts the parents starting at one.
 These two variables may be used within the loop body.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Forfam</TT
+>Forfam</CODE
 > is an iterator that loops through every family in the database in ascending key order. Its first
 parameter is a variable that iterates through the families; its second parameter is an integer counter
 variable that counts the families starting at one.
@@ -6517,8 +5718,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1567"
-></A
->Other types of records</H2
+>Other types of records</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6642,23 +5843,23 @@ CLASS="replaceable"
 ></DL
 ></DIV
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->forsour</TT
+>forsour</CODE
 > is an iterator that loops through all the Source
 nodes in the database.  Its first argument is the SOUR record and its
 second parameter is an integer counter variable that counts the sources
 elements starting at one.
-<TT
+<CODE
 CLASS="function"
->foreven</TT
+>foreven</CODE
 > is an iterator that loops through all the Event
 nodes in the database.  Its first argument is the EVEN record and its
 second parameter is an integer counter variable that counts the events
 elements starting at one.
-<TT
+<CODE
 CLASS="function"
->forothr</TT
+>forothr</CODE
 > is an iterator that loops through all the Other
 nodes in the database.  Its first argument is the record (NOTE, etc.) and its
 second parameter is an integer counter variable that counts the nodes
@@ -6671,8 +5872,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1601"
-></A
->List Functions</H2
+>List Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -6680,25 +5881,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1606"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->list</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST_V</I
-></TT
->);</CODE
+>VOID list</CODE
+>(LIST_V);</CODE
 ></P
 ><P
 ></P
@@ -6714,25 +5907,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1616"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->clear</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>VOID clear</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -6748,25 +5933,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1626"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->empty</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>BOOL empty</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -6782,25 +5959,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1636"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->length</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>INT length</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -6816,31 +5985,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1646"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->enqueue</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID enqueue</CODE
+>(LIST,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -6856,25 +6012,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1657"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->ANY <TT
-CLASS="function"
->dequeue</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>ANY dequeue</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -6890,31 +6038,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1667"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->requeue</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID requeue</CODE
+>(LIST,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -6930,31 +6065,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1678"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->push</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID push</CODE
+>(LIST,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -6970,25 +6092,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1689"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->ANY <TT
-CLASS="function"
->pop</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>ANY pop</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -7004,37 +6118,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1699"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->setel</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID setel</CODE
+>(LIST,
+INT,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -7050,31 +6146,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1711"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->ANY <TT
-CLASS="function"
->getel</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>ANY getel</CODE
+>(LIST,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -7090,31 +6173,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1722"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->inlist</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>BOOL inlist</CODE
+>(LIST,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -7130,31 +6200,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1733"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->sort</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>VOID sort</CODE
+>(LIST,
+LIST);</CODE
 ></P
 ><P
 ></P
@@ -7170,31 +6227,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1744"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->rsort</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>VOID rsort</CODE
+>(LIST,
+LIST);</CODE
 ></P
 ><P
 ></P
@@ -7210,25 +6254,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1755"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->LIST <TT
-CLASS="function"
->dup</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->);</CODE
+>LIST dup</CODE
+>(LIST);</CODE
 ></P
 ><P
 ></P
@@ -7287,26 +6323,26 @@ CLASS="replaceable"
 ></DL
 ></DIV
 ><P
->&#13;<TT
+>&#13;<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > provides general purpose lists that can be accessed as queues, stacks or arrays. A
-list must be declared with the <TT
+list must be declared with the <CODE
 CLASS="function"
->list</TT
+>list</CODE
 > function before it can be used. Redeclaring an existing
-variable with the <TT
+variable with the <CODE
 CLASS="function"
->list</TT
+>list</CODE
 > clears it and restores it to being 
 an empty list.  If the argument to list() is the name of a
 parameter to the current routine, the reference to the calling routines
 list is removed and a new list is created.
 </P
 ><P
->&#13;A list can have any number of elements. <TT
+>&#13;A list can have any number of elements. <CODE
 CLASS="function"
->Empty</TT
+>Empty</CODE
 > returns <SPAN
 CLASS="returnvalue"
 >true</SPAN
@@ -7314,9 +6350,9 @@ CLASS="returnvalue"
 has no elements and <SPAN
 CLASS="returnvalue"
 >false</SPAN
-> otherwise. <TT
+> otherwise. <CODE
 CLASS="function"
->Length</TT
+>Length</CODE
 > returns the length of the
 list. The only parameter to both is a list.  The following diagram
 indicates how the various access functions for a list interact:
@@ -7329,76 +6365,76 @@ SRC="listops.jpg"></SPAN
 >
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Enqueue</TT
->, <TT
+>Enqueue</CODE
+>, <CODE
 CLASS="function"
->dequeue</TT
-> and <TT
+>dequeue</CODE
+> and <CODE
 CLASS="function"
->requeue</TT
+>requeue</CODE
 > provide queue access to a
-list.  <TT
+list.  <CODE
 CLASS="function"
->Enqueue</TT
-> adds an element to the back of a queue, <TT
+>Enqueue</CODE
+> adds an element to the back of a queue, <CODE
 CLASS="function"
->dequeue</TT
+>dequeue</CODE
 > removes and
-returns the element from the front of a queue, and <TT
+returns the element from the front of a queue, and <CODE
 CLASS="function"
->requeue</TT
+>requeue</CODE
 > adds an element to the front of a queue.
-The first parameter to all three is a list, and the second parameter to <TT
+The first parameter to all three is a list, and the second parameter to <CODE
 CLASS="function"
->enqueue</TT
+>enqueue</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->requeue</TT
+>requeue</CODE
 > is the value to be added to the queue and can be any value.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Push</TT
-> and <TT
+>Push</CODE
+> and <CODE
 CLASS="function"
->pop</TT
-> provide stack access to a list. <TT
+>pop</CODE
+> provide stack access to a list. <CODE
 CLASS="function"
->Push</TT
+>Push</CODE
 > pushes
-an element on the stack, and <TT
+an element on the stack, and <CODE
 CLASS="function"
->pop</TT
+>pop</CODE
 > removes and returns the most recently pushed element from the
-stack. The first parameter to both is a list, and the second parameter to <TT
+stack. The first parameter to both is a list, and the second parameter to <CODE
 CLASS="function"
->push</TT
+>push</CODE
 > is the value to be
 pushed on the stack and can be of any type.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Setel</TT
-> and <TT
+>Setel</CODE
+> and <CODE
 CLASS="function"
->getel</TT
-> provide array access to a list.  <TT
+>getel</CODE
+> provide array access to a list.  <CODE
 CLASS="function"
->Setel</TT
+>Setel</CODE
 >
-sets a value of an array element, and <TT
+sets a value of an array element, and <CODE
 CLASS="function"
->getel</TT
+>getel</CODE
 > returns the value of an array element. The first
 parameter to both is a list; the second parameter to both is an integer index into the array; and the third parameter to
-<TT
+<CODE
 CLASS="function"
->setel</TT
+>setel</CODE
 > is the value to assign to the array element and can be of any type. Array elements are
 indexed starting at one. Unassigned elements are assumed to be <SPAN
 CLASS="returnvalue"
@@ -7411,13 +6447,13 @@ CLASS="returnvalue"
 Passing 0 references the last element at the other end from 1, and -1 the one before it, etc. 
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->inlist</TT
+>inlist</CODE
 > compares the second argument with each element
-in the list.  If it finds a match <TT
+in the list.  If it finds a match <CODE
 CLASS="function"
->inlist</TT
+>inlist</CODE
 > returns
 <SPAN
 CLASS="returnvalue"
@@ -7425,27 +6461,27 @@ CLASS="returnvalue"
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->sort</TT
-> and <TT
+>sort</CODE
+> and <CODE
 CLASS="function"
->rsort</TT
+>rsort</CODE
 > sort a list, using the elements of the second array to
 determine the new order. Both lists are reordered, so essentially both are sorted using the sort order of the second
 argument. (If only one argument is given, it is sorted on its own elements.) 
 rsort sorts in order reverse of sort.
 The order that sort produces places the smallest element at position 1, and the
-largest element at the end of the list, such that <TT
+largest element at the end of the list, such that <CODE
 CLASS="function"
->dequeue</TT
+>dequeue</CODE
 > 
 will remove the smallest element.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->dup</TT
+>dup</CODE
 > creates a copy of a <SPAN
 CLASS="type"
 >list</SPAN
@@ -7453,9 +6489,9 @@ CLASS="type"
 <SPAN
 CLASS="type"
 >list</SPAN
->, the function <TT
+>, the function <CODE
 CLASS="function"
->set</TT
+>set</CODE
 >(a,b) makes the variable a a reference 
 to the <SPAN
 CLASS="type"
@@ -7465,18 +6501,18 @@ want to make a new <SPAN
 CLASS="type"
 >list</SPAN
 >, you must use 
-<TT
+<CODE
 CLASS="function"
->set</TT
->(a,<TT
+>set</CODE
+>(a,<CODE
 CLASS="function"
->dup</TT
+>dup</CODE
 >(b)).
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Forlist</TT
+>Forlist</CODE
 > is an iterator that loops through the element in a list. Its first parameter is a
 <SPAN
 CLASS="type"
@@ -7491,8 +6527,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1829"
-></A
->Table Functions</H2
+>Table Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7500,25 +6536,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1834"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->table</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->TABLE_V</I
-></TT
->);</CODE
+>VOID table</CODE
+>(TABLE_V);</CODE
 ></P
 ><P
 ></P
@@ -7534,37 +6562,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1844"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->insert</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->TABLE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID insert</CODE
+>(TABLE,
+STRING,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -7580,31 +6590,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1856"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->ANY <TT
-CLASS="function"
->lookup</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->TABLE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>ANY lookup</CODE
+>(TABLE,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -7620,25 +6617,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1867"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->length</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->TABLE</I
-></TT
->);</CODE
+>INT length</CODE
+>(TABLE);</CODE
 ></P
 ><P
 ></P
@@ -7654,25 +6643,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1877"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->empty</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->TABLE</I
-></TT
->);</CODE
+>BOOL empty</CODE
+>(TABLE);</CODE
 ></P
 ><P
 ></P
@@ -7687,33 +6668,33 @@ CLASS="parameter"
 ></DL
 ></DIV
 ><P
->&#13;These functions provide general purpose, keyed tables. A table must be declared with the <TT
+>&#13;These functions provide general purpose, keyed tables. A table must be declared with the <CODE
 CLASS="function"
->table</TT
+>table</CODE
 >
 function before it can be used.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Insert</TT
+>Insert</CODE
 > adds an object and its key to a table. Its first parameter is a table; the second parameter
 is the object's key; and the third parameter is the object itself. The key must be a string and the object can be any
 value. If there already is an object in the table with that key, the old object is replaced with the new.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Lookup</TT
+>Lookup</CODE
 > retrieves an object from a table. Its first parameter is a table, and the second parameter
 is the object's key. The function returns the object with that key from the table; if there is no such object,
 <SPAN
 CLASS="returnvalue"
 >null</SPAN
 > is returned.
-<TT
+<CODE
 CLASS="function"
->length</TT
+>length</CODE
 > returns the number of elements in the table.
 </P
 ></DIV
@@ -7723,8 +6704,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN1893"
-></A
->GEDCOM Node Functions</H2
+>GEDCOM Node Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -7732,25 +6713,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1898"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->xref</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>STRING xref</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7766,25 +6739,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1908"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->tag</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>STRING tag</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7800,25 +6765,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1918"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->value</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>STRING value</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7834,25 +6791,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1928"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->parent</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>NODE parent</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7868,25 +6817,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1938"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->child</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>NODE child</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7902,25 +6843,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1948"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->sibling</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>NODE sibling</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7936,25 +6869,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1958"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->savenode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>NODE savenode</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -7970,25 +6895,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN1968"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->level</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>INT level</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -8126,30 +7043,30 @@ CLASS="replaceable"
 ></DIV
 ><P
 >&#13;
-These functions provide access to the components of a <SPAN
+These functions provide access to the components of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
-> node. All take a <SPAN
+>GEDCOM</ACRONYM
+> node. All take a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node as their
 only parameter, and each returns a different value associated with the node.
 
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Xref</TT
-> returns the cross reference index of the node, if any; <TT
+>Xref</CODE
+> returns the cross reference index of the node, if any; <CODE
 CLASS="function"
->tag</TT
-> returns the tag of the node; and <TT
+>tag</CODE
+> returns the tag of the node; and <CODE
 CLASS="function"
->value</TT
+>value</CODE
 >
-returns the value of the node, if any. If there is no cross reference, <TT
+returns the value of the node, if any. If there is no cross reference, <CODE
 CLASS="function"
->xref</TT
+>xref</CODE
 > returns <SPAN
 CLASS="returnvalue"
 >null</SPAN
@@ -8160,69 +7077,69 @@ CLASS="returnvalue"
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Parent</TT
-> returns the parent node of the node, if any; <TT
+>Parent</CODE
+> returns the parent node of the node, if any; <CODE
 CLASS="function"
->child</TT
+>child</CODE
 > returns the first child node of the node, if any;
-and <TT
+and <CODE
 CLASS="function"
->sibling</TT
+>sibling</CODE
 > returns the next sibling node of the node, if any. Whenever there is no such related node,
 these functions return <SPAN
 CLASS="returnvalue"
 >null</SPAN
->. These three functions allow simple navigation through a <SPAN
+>. These three functions allow simple navigation through a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node
 tree.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Savenode</TT
+>Savenode</CODE
 > makes a copy of the node, and the substructure of nodes below the node, that is passed to it.
 Beware: the memory used to make the copy is never returned to the system.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->level</TT
+>level</CODE
 > function returns the level of the node.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Fornodes</TT
-> is an iterator that loops through the child nodes of a <SPAN
+>Fornodes</CODE
+> is an iterator that loops through the child nodes of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node. Its first argument is a
 node expression, and its second parameter is a variable that iterates through each direct child node of
 the first node.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Fornotes</TT
+>Fornotes</CODE
 > is an iterator that loops through the NOTE nodes 
-of a <SPAN
+of a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node. Its first argument is a
 node expression, and its second parameter is a variable that returns the
 value of the NOTE.  The value includes processed sub CONC and CONT records.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Traverse</TT
-> is an iterator providing a general method for traversing <SPAN
+>Traverse</CODE
+> is an iterator providing a general method for traversing <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > trees. Its first parameter is
 a node expression; its second parameter is a variable that iterates over every node under the first node
 in a top down, left to right manner; and its third parameter is a variable that is set to the level of the
@@ -8235,8 +7152,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2033"
-></A
->Event and Date Functions</H2
+>Event and Date Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -8244,25 +7161,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2038"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->date</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT</I
-></TT
->);</CODE
+>STRING date</CODE
+>(EVENT);</CODE
 ></P
 ><P
 ></P
@@ -8271,11 +7180,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;date of, value of first <TT
+>&#13;date of, value of first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line
 </P
 ></DD
@@ -8283,25 +7190,17 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2049"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->place</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT</I
-></TT
->);</CODE
+>STRING place</CODE
+>(EVENT);</CODE
 ></P
 ><P
 ></P
@@ -8310,11 +7209,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;place of, value of first <TT
+>&#13;place of, value of first <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line
 </P
 ></DD
@@ -8322,25 +7219,17 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2060"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->year</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT</I
-></TT
->);</CODE
+>STRING year</CODE
+>(EVENT);</CODE
 ></P
 ><P
 ></P
@@ -8349,11 +7238,9 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;year or, 1st string of 3-4 digits in 1st <TT
+>&#13;year or, 1st string of 3-4 digits in 1st <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line
 </P
 ></DD
@@ -8361,25 +7248,17 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2071"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->long</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT</I
-></TT
->);</CODE
+>STRING long</CODE
+>(EVENT);</CODE
 ></P
 ><P
 ></P
@@ -8388,16 +7267,12 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;date and place, values of 1st <TT
+>&#13;date and place, values of 1st <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines
 </P
 ></DD
@@ -8405,25 +7280,17 @@ CLASS="structfield"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2083"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->short</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT</I
-></TT
->);</CODE
+>STRING short</CODE
+>(EVENT);</CODE
 ></P
 ><P
 ></P
@@ -8439,19 +7306,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2093"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->gettoday</TT
-></CODE
+>EVENT gettoday</CODE
 >(void);</CODE
 ></P
 ><P
@@ -8468,30 +7332,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2102"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->setdate</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->VAR</I
-></TT
-><TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID setdate</CODE
+>(VAR, STRING);</CODE
 ></P
 ><P
 ></P
@@ -8507,25 +7358,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2113"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->dayformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID dayformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8541,25 +7384,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2123"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->monthformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID monthformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8575,25 +7410,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2133"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->yearformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID yearformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8609,25 +7436,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2143"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->eraformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID eraformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8643,25 +7462,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2153"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->dateformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID dateformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8677,25 +7488,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2163"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->datepic</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID datepic</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -8711,25 +7514,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2173"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->stddate</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT|STRING</I
-></TT
->);</CODE
+>STRING stddate</CODE
+>(EVENT|STRING);</CODE
 ></P
 ><P
 ></P
@@ -8745,25 +7540,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2183"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->complexformat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID complexformat</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -8779,31 +7566,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2193"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->complexpic</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID complexpic</CODE
+>(INT,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -8819,25 +7593,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2204"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->complexdate</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT|STRING</I
-></TT
->);</CODE
+>STRING complexdate</CODE
+>(EVENT|STRING);</CODE
 ></P
 ><P
 ></P
@@ -8853,25 +7619,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2214"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->dayofweek</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT|STRING</I
-></TT
->);</CODE
+>STRING dayofweek</CODE
+>(EVENT|STRING);</CODE
 ></P
 ><P
 ></P
@@ -8889,137 +7647,117 @@ CLASS="parameter"
 >&#13;These functions extract information about the dates and places of events.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Date</TT
-> returns the value of the first <TT
+>Date</CODE
+> returns the value of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> line in an event, a node in a <SPAN
+>DATE</CODE
+> line in an event, a node in a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
-> record tree. <TT
+>GEDCOM</ACRONYM
+> record tree. <CODE
 CLASS="function"
->Date</TT
+>Date</CODE
 >
-finds the first <TT
+finds the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> line one level deeper than the event node. <TT
+>DATE</CODE
+> line one level deeper than the event node. <CODE
 CLASS="function"
->Place</TT
+>Place</CODE
 > returns the value of the first
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
-> line in an event. <TT
+>PLAC</CODE
+> line in an event. <CODE
 CLASS="function"
->Year</TT
-> returns the first three or four digit number in the value of the first <TT
+>Year</CODE
+> returns the first three or four digit number in the value of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >
 line in an event; this number is assumed to be the year of the event.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Long</TT
-> returns the verbatim values of the first <TT
+>Long</CODE
+> returns the verbatim values of the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines in an event, concatenated together
-and separated by a comma. <TT
+and separated by a comma. <CODE
 CLASS="function"
->Short</TT
-> abbreviates information from the first <TT
+>Short</CODE
+> abbreviates information from the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
-> and <TT
+>DATE</CODE
+> and <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > lines, concatenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Gettoday</TT
-> creates an event that has today's date in the <TT
+>Gettoday</CODE
+> creates an event that has today's date in the <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line.
-<TT
+<CODE
 CLASS="function"
->Setdate</TT
-> creates an event that has the specified date in the <TT
+>Setdate</CODE
+> creates an event that has the specified date in the <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line,
 and assigns the new event to the specified variable.
 </P
 ><P
 >&#13;The next seven functions are used to format dates in a variety of ways.
-<TT
+<CODE
 CLASS="function"
->Dayformat</TT
->, <TT
+>Dayformat</CODE
+>, <CODE
 CLASS="function"
->monthformat</TT
+>monthformat</CODE
 >,
-<TT
+<CODE
 CLASS="function"
->yearformat</TT
->, <TT
+>yearformat</CODE
+>, <CODE
 CLASS="function"
->eraformat</TT
+>eraformat</CODE
 >, and
-<TT
+<CODE
 CLASS="function"
->dateformat</TT
+>dateformat</CODE
 > select style options for formatting the day,
-month, year, era, and overall date structure; <TT
+month, year, era, and overall date structure; <CODE
 CLASS="function"
->stddate</TT
+>stddate</CODE
 >
 returns dates in the selected style.
-<TT
+<CODE
 CLASS="function"
->datepic</TT
+>datepic</CODE
 > allows specifying a custom pattern that overrides
-the date format selected with <TT
+the date format selected with <CODE
 CLASS="function"
->dateformat</TT
+>dateformat</CODE
 >.  The string
 supplied specifies the placement of the day, month and year in the string with
 %d, %m and %y.  A null argument disables the overrided format.
-The argument to <TT
+The argument to <CODE
 CLASS="function"
->stddate</TT
+>stddate</CODE
 > is normally an event and the
 date is extracted from the event and formatted. If the argument is a 
 date string it is converted using the current date formats.
@@ -9027,81 +7765,65 @@ date string it is converted using the current date formats.
 ><P
 >&#13;The next three functions provide for more complex formatting of dates. Taking
 into account the abt, est, cal, bef, aft, fr and to qualifiers on GEDCOM dates. 
-<TT
+<CODE
 CLASS="function"
->complexformat</TT
+>complexformat</CODE
 > selects the format to use. The format
 effects only the complex picture, not the format of the date itself.
 The function
-<TT
+<CODE
 CLASS="function"
->complexpic</TT
+>complexpic</CODE
 > can be used to specify a custom picture string
 for any or all of the 9 custom format strings.  The custom string can be
 canceled by passing a null for the string.  When a custom picture string is
 provided it overrides both the abbreviated and full word picture strings.
-<TT
+<CODE
 CLASS="function"
->complexdate</TT
+>complexdate</CODE
 >
-formats the date similarly to <TT
+formats the date similarly to <CODE
 CLASS="function"
->stddate</TT
+>stddate</CODE
 >, but with the 
 addition of the complex date format string selected.
 </P
 ><P
->&#13;The day format codes passed to <TT
+>&#13;The day format codes passed to <CODE
 CLASS="function"
->dayformat</TT
+>dayformat</CODE
 > are: 
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2262"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >leave space before single digit days</TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading 0 before single digit days
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no space or leading 0 before single digit days
 </TD
 ></TR
@@ -9112,166 +7834,105 @@ VALIGN="MIDDLE"
 ></DIV
 ><P
 >&#13;
-The month format codes passed to <TT
+The month format codes passed to <CODE
 CLASS="function"
->monthformat</TT
+>monthformat</CODE
 > are:
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2277"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with space before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with leading zero before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;number with no space or zero before single digit months
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case abbreviation (eg, JAN, FEB) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;capitalized abbreviation (eg, Jan, Feb) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case full word (eg, JANUARY, FEBRUARY) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;capitalized full word (eg, January, February) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case abbreviation (eg, jan, feb) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case full word (eg, january, february) (localized)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case abbreviation in English per GEDCOM (eg, JAN, FEB)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;lower case roman letter (eg, i, ii)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;upper case roman letter (eg, I, II)
 </TD
 ></TR
@@ -9281,58 +7942,42 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;The year format codes passed to <TT
+>&#13;The year format codes passed to <CODE
 CLASS="function"
->yearformat</TT
+>yearformat</CODE
 > are:
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2319"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading spaces before years with less than four digits
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use leading 0 before years with less than four digits
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no space or leading 0 before years
 </TD
 ></TR
@@ -9342,130 +7987,84 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;The era format codes passed to <TT
+>&#13;The era format codes passed to <CODE
 CLASS="function"
->eraformat</TT
+>eraformat</CODE
 > are: 
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2334"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;no AD/BC markers
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing B.C. if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing A.D. or B.C.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing BC if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing AD or BC
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >21</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing B.C.E. if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >22</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing C.E. or B.C.E.
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >31</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing BC if appropriate
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >32</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;trailing CE or BCE
 </TD
 ></TR
@@ -9475,202 +8074,126 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;The full date formats passed to <TT
+>&#13;The full date formats passed to <CODE
 CLASS="function"
->stddate</TT
+>stddate</CODE
 > are:
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2367"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da mo yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo da, yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo/da/yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/mo/yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;mo-da-yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da-mo-yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;modayr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;damoyr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr mo da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >9</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr/mo/da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >10</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr-mo-da
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >11</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yrmoda
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >12</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;yr  (year only, omitting all else)
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >13</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;da/mo yr
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >14</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;(As in GEDCOM)
 </TD
 ></TR
@@ -9680,145 +8203,95 @@ VALIGN="MIDDLE"
 ></P
 ></DIV
 ><P
->&#13;The complex date formats selected by the <TT
+>&#13;The complex date formats selected by the <CODE
 CLASS="function"
->complexformat</TT
+>complexformat</CODE
 >
-and used by <TT
+and used by <CODE
 CLASS="function"
->complexdate</TT
+>complexdate</CODE
 > are: 
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2419"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Mode
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Example
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in uppercase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ABT  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in titlecase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Abt  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use uppercased full words 
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;ABOUT  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use titlecased full words
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;About  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use abbreviations in lowercase
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;abt  1 JAN 2002
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;use lowercase full words
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;about  1 JAN 2002
 </TD
 ></TR
@@ -9829,192 +8302,121 @@ VALIGN="MIDDLE"
 ></DIV
 ><P
 >&#13;The complex date string pictures that can be overridden with the
-<TT
+<CODE
 CLASS="function"
->complexpic</TT
+>complexpic</CODE
 > are:
 </P
 ><DIV
 CLASS="informaltable"
+><P
+></P
 ><A
 NAME="AEN2453"
 ></A
-><P
-></P
 ><TABLE
 BORDER="0"
-BGCOLOR="#E0E0E0"
-CELLSPACING="0"
-CELLPADDING="4"
+FRAME="void"
 CLASS="CALSTABLE"
-><TBODY
+><COL
+WIDTH="48"><COL><COL><TBODY
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&nbsp;</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Abbreviation
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;Full word
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >0</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;abt %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;about %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >1</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;est %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;estimated %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >2</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;cal %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;calculated %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >3</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;bef %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;before %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >4</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;aft %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;after %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >5</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;bet %1 and %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;between %1 and %2
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >6</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;from %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >7</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;to %1
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;to %1
 </TD
 ></TR
 ><TR
 ><TD
-WIDTH="48"
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >8</TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;fr %1 to %2
 </TD
 ><TD
-ALIGN="LEFT"
-VALIGN="MIDDLE"
 >&#13;from %1 to $2
 </TD
 ></TR
@@ -10034,8 +8436,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2498"
-></A
->Date Arithmetic</H2
+>Date Arithmetic</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10043,25 +8445,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2503"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FLOAT <TT
-CLASS="function"
->date2jd</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->EVENT|STRING</I
-></TT
->);</CODE
+>FLOAT date2jd</CODE
+>(EVENT|STRING);</CODE
 ></P
 ><P
 ></P
@@ -10077,25 +8471,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2513"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->jd2date</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->);</CODE
+>EVENT jd2date</CODE
+>(FLOAT);</CODE
 ></P
 ><P
 ></P
@@ -10113,13 +8499,13 @@ CLASS="parameter"
 >&#13;These functions allow adding or subtracting days from dates.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->date2jd</TT
+>date2jd</CODE
 > converts a date into a number of days, which can then be adjusted by simple arithmetic.
-Finally, <TT
+Finally, <CODE
 CLASS="function"
->jd2date</TT
+>jd2date</CODE
 > converts the number of days back into a date.
 </P
 ><P
@@ -10136,8 +8522,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2527"
-></A
->Value Extraction Functions</H2
+>Value Extraction Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10145,43 +8531,20 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2532"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->extractdate</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->);</CODE
+>VOID extractdate</CODE
+>(NODE,
+INT_V,
+INT_V,
+INT_V);</CODE
 ></P
 ><P
 ></P
@@ -10197,43 +8560,20 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2545"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->extractnames</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->LIST_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->);</CODE
+>VOID extractnames</CODE
+>(NODE,
+LIST_V,
+INT_V,
+INT_V);</CODE
 ></P
 ><P
 ></P
@@ -10249,37 +8589,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2558"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->extractplaces</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->LIST_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->);</CODE
+>VOID extractplaces</CODE
+>(NODE,
+LIST_V,
+INT_V);</CODE
 ></P
 ><P
 ></P
@@ -10295,43 +8617,20 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2570"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->extracttokens</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->LIST_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID extracttokens</CODE
+>(STRING,
+LIST_V,
+INT_V,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -10347,55 +8646,22 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2583"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->extractdatestr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->VARB</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->VARB</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->VARB</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->VARB</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->VARB</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID extractdatestr</CODE
+>(VARB,
+VARB,
+VARB,
+VARB,
+VARB,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -10413,33 +8679,25 @@ CLASS="parameter"
 >&#13;Value extraction functions read the values of certain lines and return those values in extracted form.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Extractdate</TT
+>Extractdate</CODE
 > extracts date values from either an event node
-or <TT
+or <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > node. The first parameter must be
-a node; if its tag is <TT
+a node; if its tag is <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >, the date is extracted 
-from the value of that node; if its tag is not <TT
+from the value of that node; if its tag is not <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 >,
-the date is extracted from the first <TT
+the date is extracted from the first <CODE
 CLASS="structfield"
-><I
->DATE</I
-></TT
+>DATE</CODE
 > line one 
 level below the argument node. The remaining three arguments are variables.
 The first is assigned the integer value of the extracted day; the second is
@@ -10447,41 +8705,29 @@ assigned the integer value of the extracted month; and the third is assigned
 the integer value of the extracted year.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Extractnames</TT
-> extracts name components from a <TT
+>Extractnames</CODE
+> extracts name components from a <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
-> line. Its first argument is either an <TT
+>NAME</CODE
+> line. Its first argument is either an <CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
+>INDI</CODE
 > or a
-<TT
+<CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
-> node. If it is a <TT
+>NAME</CODE
+> node. If it is a <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 > line, the components are extracted from the value of that node; if it is an
-<TT
+<CODE
 CLASS="structfield"
-><I
->INDI</I
-></TT
-> line, the components are extracted from the value of the first <TT
+>INDI</CODE
+> line, the components are extracted from the value of the first <CODE
 CLASS="structfield"
-><I
->NAME</I
-></TT
+>NAME</CODE
 > line in the person record.
 The second argument is a list that will hold the extracted components. The third argument is an integer
 variable that is set to the number of extracted components. The fourth argument is a variable that is set
@@ -10492,76 +8738,64 @@ CLASS="literal"
 surname component. If there is no surname this argument variable is set to zero.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Extractplaces</TT
+>Extractplaces</CODE
 > extracts place components
-from a <TT
+from a <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > node. The first
 argument is a node; if its tag is
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, the places are extracted from
 the value of the node; if its tag is not
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 >, places are extracted from the
-first <TT
+first <CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > line one level below the
 argument node. The second parameter is a list that will hold
 the extracted components. The third argument is an integer
 variable that is set to the number of extracted
 components. Place components are defined by the
 comma-separated portions of the
-<TT
+<CODE
 CLASS="structfield"
-><I
->PLAC</I
-></TT
+>PLAC</CODE
 > value; leading and trailing
 white space is removed from the components, while all internal
 white space is retained.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Extracttokens</TT
+>Extracttokens</CODE
 > extracts tokens from a
 string and places them in a list. The first argument is the
 string to extract tokens from. The second argument is the list
 to hold the tokens. The third argument is an integer variable
 that is set to the number of tokens extracted. The fourth
 parameter is the string of delimiter characters that
-<TT
+<CODE
 CLASS="function"
->extracttokens</TT
+>extracttokens</CODE
 > uses to break the input
 string into tokens.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->extractdatestr</TT
+>extractdatestr</CODE
 > extracts date values from a .
-<TT
+<CODE
 CLASS="structfield"
-><I
->STRING</I
-></TT
+>STRING</CODE
 >.  It is intended for internal verification
 of date extraction code.
 The remaining five arguments are variables.
@@ -10576,8 +8810,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2625"
-></A
->User Interaction Functions</H2
+>User Interaction Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -10585,34 +8819,21 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2630"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getindi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI_V</I
-></TT
->,
+>VOID getindi</CODE
+>(INDI_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -10630,34 +8851,21 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2642"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getindiset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET_V</I
-></TT
->,
+>VOID getindiset</CODE
+>(SET_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -10675,25 +8883,17 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2654"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getfam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM_V</I
-></TT
->);</CODE
+>VOID getfam</CODE
+>(FAM_V);</CODE
 ></P
 ><P
 ></P
@@ -10709,34 +8909,21 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2664"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getint</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
+>VOID getint</CODE
+>(INT_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -10754,34 +8941,21 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2676"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getstr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING_V</I
-></TT
->,
+>VOID getstr</CODE
+>(STRING_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -10799,25 +8973,17 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2688"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->choosechild</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI|FAM</I
-></TT
->);</CODE
+>INDI choosechild</CODE
+>(INDI|FAM);</CODE
 ></P
 ><P
 ></P
@@ -10833,25 +8999,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2698"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->FAM <TT
-CLASS="function"
->choosefam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>FAM choosefam</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -10867,25 +9025,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2708"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->chooseindi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>INDI chooseindi</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -10901,25 +9051,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2718"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INDI <TT
-CLASS="function"
->choosespouse</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>INDI choosespouse</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -10935,25 +9077,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2728"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->choosesubset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET choosesubset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -10969,34 +9103,21 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2738"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->menuchoose</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->LIST</I
-></TT
->,
+>INT menuchoose</CODE
+>(LIST,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -11016,58 +9137,71 @@ CLASS="replaceable"
 >&#13;These functions interact with the user to get information needed by the program.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Getindi</TT
+>Getindi</CODE
 > asks the user to identify a person. The first argument is a variable that is set to the person.
-The second is an optional string to use as a prompt. <TT
+The second is an optional string to use as a prompt. <CODE
 CLASS="function"
->Getindiset</TT
+>Getindiset</CODE
 > asks the user to identify a set of persons.
-<TT
+<CODE
 CLASS="function"
->Getfam</TT
-> asks the user identify a family. <TT
+>Getfam</CODE
+> asks the user identify a family. <CODE
 CLASS="function"
->Getint</TT
-> and <TT
+>Getint</CODE
+> and <CODE
 CLASS="function"
->getstr</TT
+>getstr</CODE
 > ask the user enter an integer and string,
 respectively.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Choosechild</TT
-> asks the user select a child of a family or person; its single argument is a person or family;
-it return the child. <TT
+>Choosechild</CODE
+> asks the user select a child of a family or
+person; its single argument is a person or family; it return the child. 
+
+<CODE
 CLASS="function"
->Choosefam</TT
-> has the user select a family that a person is in as a spouse; its argument
-is a person; it returns the family. <TT
+>Choosefam</CODE
+> has the user select a family that a
+person is in as a spouse; its argument is a person; it returns the
+family.
+
+<CODE
 CLASS="function"
->Chooseindi</TT
-> has the user select one person from a set of persons; its
-argument in a set of persons; it returns the chosen person. <TT
+>Chooseindi</CODE
+> has the user select one person from a
+set of persons; its argument in a set of persons; it returns the chosen
+person.
+
+<CODE
 CLASS="function"
->Choosespouse</TT
+>Choosespouse</CODE
 > has the user select a spouse of a
-person; its argument is a person; it returns the chosen spouse. <TT
+person or family; its argument is a person or family; it returns the
+chosen spouse. (Note: if a husband marries the same woman several times,
+she will appear multiple times if choosespouse is called for that
+husband, with the different marriage dates if known.)
+
+<CODE
 CLASS="function"
->Choosesubset</TT
+>Choosesubset</CODE
 > has the user select a subset of
 persons from a set of persons; its argument is the chosen subset.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Menuchoose</TT
+>Menuchoose</CODE
 > allows the user to select from an arbitrary menu. The first argument is a list of strings
 making up the items in the menu; the second, optional argument is a prompt string for the menu;
-<TT
+<CODE
 CLASS="function"
->menuchoose</TT
+>menuchoose</CODE
 > returns the integer index of the item selected by the user; if the user doesn't select an item,
 <SPAN
 CLASS="returnvalue"
@@ -11081,8 +9215,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN2765"
-></A
->String Functions</H2
+>String Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -11090,25 +9224,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2770"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->lower</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING lower</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11124,25 +9250,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2780"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->upper</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING upper</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11158,25 +9276,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2790"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->capitalize</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING capitalize</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11192,25 +9302,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2800"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->titlecase</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING titlecase</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11226,31 +9328,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2810"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->trim</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING trim</CODE
+>(STRING,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -11266,31 +9355,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2821"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->rjustify</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING rjustify</CODE
+>(STRING,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -11306,45 +9382,27 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2832"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->concat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
+>STRING concat</CODE
+>(STRING,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >...</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -11362,45 +9420,27 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2846"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->strconcat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
+>STRING strconcat</CODE
+>(STRING,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >...</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -11418,25 +9458,17 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2860"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->strlen</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>INT strlen</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11452,37 +9484,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2870"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->substring(</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING substring(</CODE
+>(STRING,
+INT,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -11498,37 +9512,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2882"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->index</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>INT index</CODE
+>(STRING,
+STRING,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -11544,25 +9540,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2894"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->d</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING d</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -11578,31 +9566,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2904"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->f</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FLOAT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING f</CODE
+>(FLOAT,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -11618,25 +9593,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2915"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->card</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING card</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -11655,25 +9622,17 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2926"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->ord</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING ord</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -11692,25 +9651,17 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2937"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->alpha</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING alpha</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -11729,25 +9680,17 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2948"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->roman</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>STRING roman</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -11766,25 +9709,17 @@ CLASS="literal"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2959"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->strsoundex</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING strsoundex</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11800,25 +9735,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2969"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->strtoint</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>INT strtoint</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11834,25 +9761,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2979"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->atoi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>INT atoi</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -11868,31 +9787,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN2989"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->strcmp</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>INT strcmp</CODE
+>(STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -11908,31 +9814,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3000"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->eqstr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>BOOL eqstr</CODE
+>(STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -11948,31 +9841,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3011"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->nestr</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>BOOL nestr</CODE
+>(STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -11994,139 +9874,139 @@ value it returned its buffer. In consequence the strings returned by these funct
 saved before the function was called again.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Lower</TT
-> and <TT
+>Lower</CODE
+> and <CODE
 CLASS="function"
->upper</TT
+>upper</CODE
 > convert the letters
 in their arguments to lower or upper case, respectively.
-<TT
+<CODE
 CLASS="function"
->Capitalize</TT
+>Capitalize</CODE
 > converts the first character of the argument,
-if it is a letter, to upper case. <TT
+if it is a letter, to upper case. <CODE
 CLASS="function"
->Lower</TT
+>Lower</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->upper</TT
+>upper</CODE
 > historically used the buffer return method;
-<TT
+<CODE
 CLASS="function"
->capitalize</TT
+>capitalize</CODE
 > operates on and returns its argument.
-<TT
+<CODE
 CLASS="function"
->titlecase</TT
+>titlecase</CODE
 > converts the first letter of each word if it is
 a letter, to upper case and all other characters to lower case.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Trim</TT
+>Trim</CODE
 > shortens a string to the length specified by the second parameter. If the string is already of that
-length or shorter the string is not changed. <TT
+length or shorter the string is not changed. <CODE
 CLASS="function"
->Rjustify</TT
+>Rjustify</CODE
 > right justifies a string into another string of the
 length specified by the second parameter. If the original string is shorter than the justified string,
 blanks are inserted to the left of the original string; if the string is longer than the justified string, the
-original string is truncated on the right. <TT
+original string is truncated on the right. <CODE
 CLASS="function"
->Trim</TT
-> historically used the buffer return method; <TT
+>Trim</CODE
+> historically used the buffer return method; <CODE
 CLASS="function"
->rjustify</TT
+>rjustify</CODE
 > creates and returns
 a new string.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Concat</TT
-> and <TT
+>Concat</CODE
+> and <CODE
 CLASS="function"
->strconcat</TT
+>strconcat</CODE
 > catenate strings and return the result. They are identical functions. They may
 take two to 32 string arguments; null arguments are allowed. The arguments are concatenated together into
 a single, newly allocated string, which is returned.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Strlen</TT
+>Strlen</CODE
 > returns the length of the string argument.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Substring</TT
+>Substring</CODE
 > returns a substring of the first argument string. The second and third arguments are the
 indices of the first and last characters in the argument string to use to form the substring. The indexes are relative one.
-<TT
+<CODE
 CLASS="function"
->Substring</TT
+>Substring</CODE
 > historically used the buffer return method.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Index</TT
+>Index</CODE
 > returns the character index of the nth occurrence of a substring within a string. The index is the
 relative one character offset to the beginning of the substring. The first argument is the string; the
 second argument is the substring; and the third argument is the occurrence number.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->D</TT
->, <TT
+>D</CODE
+>, <CODE
 CLASS="function"
->card</TT
->, <TT
+>card</CODE
+>, <CODE
 CLASS="function"
->ord</TT
+>ord</CODE
 >,
-<TT
+<CODE
 CLASS="function"
->alpha</TT
-> and <TT
+>alpha</CODE
+> and <CODE
 CLASS="function"
->roman</TT
+>roman</CODE
 > convert integers
-to strings. <TT
+to strings. <CODE
 CLASS="function"
->D</TT
+>D</CODE
 > converts an integer to a numeric string;
-<TT
+<CODE
 CLASS="function"
->card</TT
+>card</CODE
 > converts an integer to a cardinal number string 
 (eg, <TT
 CLASS="literal"
 >one, two, three</TT
->); <TT
+>); <CODE
 CLASS="function"
->ord</TT
+>ord</CODE
 > converts an
 integer to an ordinal number (eg, <TT
 CLASS="literal"
 >first, second, third</TT
 >);
-<TT
+<CODE
 CLASS="function"
->alpha</TT
+>alpha</CODE
 > converts an integer to a letter
 (eg, <TT
 CLASS="literal"
 >a, b, c</TT
->); and <TT
+>); and <CODE
 CLASS="function"
->roman</TT
+>roman</CODE
 > converts an 
 integer to a Roman numeral (eg, <TT
 CLASS="literal"
@@ -12134,54 +10014,54 @@ CLASS="literal"
 >).
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->f</TT
+>f</CODE
 > function converts a float to a string.  The
 optional second argument specifies the precision of the output.  The default
 precision is 2.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Strsoundex</TT
+>Strsoundex</CODE
 > converts an arbitrary string to a SOUNDEX value. Non-ASCII text characters are ignored
 in the string.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Strtoint</TT
-> converts a numeric string to an integer. <TT
+>Strtoint</CODE
+> converts a numeric string to an integer. <CODE
 CLASS="function"
->Atoi</TT
-> is identical to <TT
+>Atoi</CODE
+> is identical to <CODE
 CLASS="function"
->strtoint</TT
+>strtoint</CODE
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Strcmp</TT
+>Strcmp</CODE
 > compares two strings and returns an integer that is less than zero, equal to zero, or greater than
 zero, if, respectively, the first string is lexicographically less than, equal to, or greater than the second
-string. <TT
+string. <CODE
 CLASS="function"
->Eqstr</TT
-> and <TT
+>Eqstr</CODE
+> and <CODE
 CLASS="function"
->nestr</TT
+>nestr</CODE
 > return whether two strings are equal or not equal, respectively.
-<TT
+<CODE
 CLASS="function"
->Strcmp</TT
->, <TT
+>Strcmp</CODE
+>, <CODE
 CLASS="function"
->Eqstr</TT
->, and <TT
+>Eqstr</CODE
+>, and <CODE
 CLASS="function"
->nestr</TT
+>nestr</CODE
 > all treat null strings as empty strings,
 which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal.
 </P
@@ -12192,8 +10072,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3074"
-></A
->Output Mode Functions</H2
+>Output Mode Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -12201,19 +10081,16 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3079"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->linemode</TT
-></CODE
+>VOID linemode</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12230,31 +10107,18 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3088"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->pagemode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID pagemode</CODE
+>(INT,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -12270,25 +10134,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3099"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->col</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID col</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -12304,19 +10160,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3109"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->getcol</TT
-></CODE
+>INT getcol</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12333,25 +10186,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3118"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->row</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID row</CODE
+>(INT);</CODE
 ></P
 ><P
 ></P
@@ -12367,31 +10212,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3128"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->pos</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INT</I
-></TT
->);</CODE
+>VOID pos</CODE
+>(INT,
+INT);</CODE
 ></P
 ><P
 ></P
@@ -12407,19 +10239,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3139"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->pageout</TT
-></CODE
+>VOID pageout</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12436,19 +10265,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3148"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->nl</TT
-></CODE
+>STRING nl</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12465,19 +10291,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3157"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->sp</TT
-></CODE
+>STRING sp</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12494,19 +10317,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3166"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->qt</TT
-></CODE
+>STRING qt</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12523,31 +10343,18 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3175"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->newfile</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->);</CODE
+>VOID newfile</CODE
+>(STRING,
+BOOL);</CODE
 ></P
 ><P
 ></P
@@ -12563,19 +10370,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3186"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->outfile</TT
-></CODE
+>STRING outfile</CODE
 >(void);</CODE
 ></P
 ><P
@@ -12592,25 +10396,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3195"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->copyfile</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID copyfile</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -12626,30 +10422,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3205"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOLEAN <TT
-CLASS="function"
->test</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->, <TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>BOOLEAN test</CODE
+>(STRING, STRING);</CODE
 ></P
 ><P
 ></P
@@ -12665,45 +10448,27 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3217"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->print</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
+>VOID print</CODE
+>(STRING,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >...</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -12720,71 +10485,71 @@ CLASS="replaceable"
 ></DL
 ></DIV
 ><P
->&#13;Reports can be generated in two modes, line mode and page mode. <TT
+>&#13;Reports can be generated in two modes, line mode and page mode. <CODE
 CLASS="function"
->Linemode</TT
+>Linemode</CODE
 > selects line mode and
-<TT
+<CODE
 CLASS="function"
->pagemode</TT
-> selects page mode; line mode is the default. The first parameter to <TT
+>pagemode</CODE
+> selects page mode; line mode is the default. The first parameter to <CODE
 CLASS="function"
->pagemode</TT
+>pagemode</CODE
 > is the number
 of rows per page; the second parameter is the number of columns per page. When in the line mode report
 output is written directly to the output file as the program runs, line by line. When in page mode output
-is buffered into pages which are written to the output file when <TT
+is buffered into pages which are written to the output file when <CODE
 CLASS="function"
->pageout</TT
+>pageout</CODE
 > is called. Page mode is useful
 for generating charts (eg, pedigree charts or box charts) where it is convenient to compute the two-dimensional
 location of output.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Col</TT
+>Col</CODE
 > positions output to the given column. If the current 
 column is greater than the argument, col
-positions output to the given column on the next line. <TT
+positions output to the given column on the next line. <CODE
 CLASS="function"
->Col</TT
+>Col</CODE
 >
 works in both modes.
-<TT
+<CODE
 CLASS="function"
->Getcol</TT
+>Getcol</CODE
 > returns the current column in the output.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Row</TT
-> positions output to the first character in the given row; <TT
+>Row</CODE
+> positions output to the first character in the given row; <CODE
 CLASS="function"
->row</TT
+>row</CODE
 > can only be used in page mode.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Pos</TT
+>Pos</CODE
 > positions output to a specified row and column coordinate; the first argument specifies the row, and
-the second specifies the column. <TT
+the second specifies the column. <CODE
 CLASS="function"
->Pos</TT
+>Pos</CODE
 > can only be used in page mode.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Nl</TT
-> write a new line character to the output file; <TT
+>Nl</CODE
+> write a new line character to the output file; <CODE
 CLASS="function"
->sp</TT
-> writes a space character to the output file; and <TT
+>sp</CODE
+> writes a space character to the output file; and <CODE
 CLASS="function"
->qt</TT
+>qt</CODE
 >
 writes a quote character to the output file. Note that <TT
 CLASS="literal"
@@ -12796,45 +10561,45 @@ CLASS="literal"
 represent the newline and double quote characters.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Newfile</TT
+>Newfile</CODE
 > specifies the name of the report output file. Its first argument is the file's name; its second
 argument is an append flag - if its value is non-zero the report appends to this file; if its value is zero
-the report overwrites the contents of the file. <TT
+the report overwrites the contents of the file. <CODE
 CLASS="function"
->Newfile</TT
+>Newfile</CODE
 > can be called many times; this allows a single report program to generate many report output files during one execution. Programs are not required to
-use <TT
+use <CODE
 CLASS="function"
->newfile</TT
->; if it is not used then <TT
+>newfile</CODE
+>; if it is not used then <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > automatically asks for the name of the report output file.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Outfile</TT
+>Outfile</CODE
 > returns the name of the current report output file.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Copyfile</TT
+>Copyfile</CODE
 > copies the contents of a file to the report output file; its argument is a string whose value is
-the name of a file; if the file name is not absolute nor relative, then the <TT
+the name of a file; if the file name is not absolute nor relative, then the <CODE
 CLASS="envar"
->LLPROGRAMS</TT
+>LLPROGRAMS</CODE
 > environment
 variable, if set, will be used to search for the file; the file is opened and its contents copied to the report
 output file.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Test</TT
+>Test</CODE
 > will check for a specified property of the specified file.  The first argument is the property, the second argument is the filename.
 Supported properties are:
 r - file is readable
@@ -12849,12 +10614,12 @@ d - check if argument is a directory
 The return value is TRUE or FALSE, depending on whether the file had the specified property or not.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Print</TT
-> prints its argument string to the standard output window; <TT
+>Print</CODE
+> prints its argument string to the standard output window; <CODE
 CLASS="function"
->print</TT
+>print</CODE
 > may have one to 32 arguments.
 </P
 ></DIV
@@ -12864,8 +10629,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3265"
-></A
->Person Set Functions and GEDCOM Extraction</H2
+>Person Set Functions and GEDCOM Extraction</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -12873,25 +10638,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3270"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->indiset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET_V</I
-></TT
->);</CODE
+>VOID indiset</CODE
+>(SET_V);</CODE
 ></P
 ><P
 ></P
@@ -12907,37 +10664,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3280"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->addtoset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID addtoset</CODE
+>(SET,
+INDI,
+ANY);</CODE
 ></P
 ><P
 ></P
@@ -12953,37 +10692,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3292"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->deletefromset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->BOOL</I
-></TT
->);</CODE
+>VOID deletefromset</CODE
+>(SET,
+INDI,
+BOOL);</CODE
 ></P
 ><P
 ></P
@@ -12999,25 +10720,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3304"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->length</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>INT length</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13033,31 +10746,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3314"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->union</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET union</CODE
+>(SET,
+SET);</CODE
 ></P
 ><P
 ></P
@@ -13073,31 +10773,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3325"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->intersect</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET intersect</CODE
+>(SET,
+SET);</CODE
 ></P
 ><P
 ></P
@@ -13113,31 +10800,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3336"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->difference</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET difference</CODE
+>(SET,
+SET);</CODE
 ></P
 ><P
 ></P
@@ -13153,25 +10827,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3347"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->parentset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET parentset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13187,25 +10853,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3357"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->childset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET childset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13221,25 +10879,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3367"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->spouseset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET spouseset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13255,25 +10905,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3377"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->siblingset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET siblingset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13289,25 +10931,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3387"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->ancestorset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET ancestorset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13323,25 +10957,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3397"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->descendentset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET descendentset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13357,25 +10983,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3407"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->descendantset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET descendantset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13391,25 +11009,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3417"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
-CLASS="function"
->uniqueset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>SET uniqueset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13425,25 +11035,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3427"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->namesort</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID namesort</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13459,25 +11061,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3437"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->keysort</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID keysort</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13493,25 +11087,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3447"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->valuesort</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID valuesort</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -13527,31 +11113,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3457"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->genindiset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID genindiset</CODE
+>(STRING,
+SET);</CODE
 ></P
 ><P
 ></P
@@ -13567,31 +11140,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3468"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->inset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>BOOL inset</CODE
+>(SET,
+INDI);</CODE
 ></P
 ><P
 ></P
@@ -13660,20 +11220,20 @@ CLASS="replaceable"
 ><P
 >&#13;These functions allow you to manipulate person sets. A person set is a potentially large set of persons;
 each person may have an arbitrary value associated with him/her. A person set must be declared with
-the <TT
+the <CODE
 CLASS="function"
->indiset</TT
+>indiset</CODE
 > function before it can be used.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Addtoset</TT
+>Addtoset</CODE
 > adds a person to a set. The first argument is the set; the second argument is the person; and
 the third argument may be any value. The same person may be added to a set more than once, each time
-with a different value. <TT
+with a different value. <CODE
 CLASS="function"
->Deletefromset</TT
+>Deletefromset</CODE
 > removes a person from a set. The first argument is the set; the
 second argument is the person; if the third parameter is <SPAN
 CLASS="returnvalue"
@@ -13683,21 +11243,21 @@ from the set; if <SPAN
 CLASS="returnvalue"
 >false</SPAN
 > only the first entry is removed. 
-<TT
+<CODE
 CLASS="function"
->Length</TT
+>Length</CODE
 > returns the number of persons in a person set.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Union</TT
->, <TT
+>Union</CODE
+>, <CODE
 CLASS="function"
->intersect</TT
-> and <TT
+>intersect</CODE
+> and <CODE
 CLASS="function"
->difference</TT
+>difference</CODE
 >
 return the set union, set intersection and set difference, respectively, of two person sets.
 Each functions takes two person sets as arguments and returns a third person set. The
@@ -13706,128 +11266,131 @@ and removing any duplicates (these operations are necessary to easily implement 
 of set functions).
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Parentset</TT
->, <TT
+>Parentset</CODE
+>, <CODE
 CLASS="function"
->childset</TT
->, <TT
+>childset</CODE
+>, <CODE
 CLASS="function"
->spouseset</TT
-> and <TT
+>spouseset</CODE
+> and <CODE
 CLASS="function"
->siblingset</TT
+>siblingset</CODE
 > return the set of all parents, set of all children, set of
 all spouses and set of all siblings, respectively, of the set of persons in their argument. In all cases there
 is no change to the argument person set.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Ancestorset</TT
-> returns the set all ancestors of all persons in the argument set. <TT
+>Ancestorset</CODE
+> returns the set all ancestors of all persons in the argument set. <CODE
 CLASS="function"
->Descendentset</TT
+>Descendentset</CODE
 > returns the
-set of all descendents of all persons in the argument set. <TT
+set of all descendents of all persons in the argument set. <CODE
 CLASS="function"
->Descendantset</TT
-> is the same as <TT
+>Descendantset</CODE
+> is the same as <CODE
 CLASS="function"
->descendentset</TT
+>descendentset</CODE
 >; it allows an alternate spelling.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Uniqueset</TT
+>Uniqueset</CODE
 > sorts a person set by key value and then removes all entries with duplicate keys; the input
 set is modified and returned.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Namesort</TT
->, <TT
+>Namesort</CODE
+>, <CODE
 CLASS="function"
->keysort</TT
-> and <TT
+>keysort</CODE
+> and <CODE
 CLASS="function"
->valuesort</TT
+>valuesort</CODE
 > sort a set of persons by name, by key and by associated value,
 respectively.
 </P
 ><P
->&#13;Each person in a person set has an associated value. When a person is added to a set with <TT
+>&#13;Each person in a person set has an associated value. When a person is added to a set with <CODE
 CLASS="function"
->addtoset</TT
+>addtoset</CODE
 >, the
 value is explicitly assigned. When new sets are created by other functions, a number of rules are used to
-associate values with persons as they are added to the new sets. For <TT
+associate values with persons as they are added to the new sets. For <CODE
 CLASS="function"
->parentset</TT
->, <TT
+>parentset</CODE
+>, <CODE
 CLASS="function"
->childset</TT
+>childset</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->spouseset</TT
+>spouseset</CODE
 > the values are copied from the first input set person that causes the new person to be added
-to the set. For <TT
+to the set. For <CODE
 CLASS="function"
->union</TT
->, <TT
+>union</CODE
+>, <CODE
 CLASS="function"
->intersect</TT
-> and <TT
+>intersect</CODE
+> and <CODE
 CLASS="function"
->difference</TT
+>difference</CODE
 >, the values are copied from the values in the first input
-set, except in the case of <TT
+set, except in the case of <CODE
 CLASS="function"
->union</TT
+>union</CODE
 >, when persons are taken from the second set alone, in which case the
-values come from there. For <TT
+values come from there. For <CODE
 CLASS="function"
->ancestorset</TT
-> and <TT
+>ancestorset</CODE
+> and <CODE
 CLASS="function"
->descendantset</TT
+>descendantset</CODE
 > the value is set to the number of generations
-the new person is away from the <I
+the new person is away from the <SPAN
+CLASS="emphasis"
+><I
 CLASS="emphasis"
 >first</I
+></SPAN
 > person in the input set that the new person is related to. If the
 new person is related to more than one person in the input set, the value is set for the nearest
-relationship; that is, the value is as low as possible. <TT
+relationship; that is, the value is as low as possible. <CODE
 CLASS="function"
->Valuesort</TT
+>Valuesort</CODE
 > sorts a person set by the values of these
 auxiliary values.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Genindiset</TT
-> generates the set of persons that matches a string whose value is a name in <SPAN
+>Genindiset</CODE
+> generates the set of persons that matches a string whose value is a name in <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
-format. <TT
+format. <CODE
 CLASS="function"
->Genindiset</TT
+>Genindiset</CODE
 > uses the same algorithm that matches names entered at the browse prompt or by
-the user interaction <TT
+the user interaction <CODE
 CLASS="function"
->getindiset</TT
+>getindiset</CODE
 > function.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Inset</TT
+>Inset</CODE
 > returns <SPAN
 CLASS="returnvalue"
 >true</SPAN
@@ -13835,9 +11398,9 @@ CLASS="returnvalue"
 the specified individual is in the SET.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Forindiset</TT
+>Forindiset</CODE
 > is an iterator that loops through each person in an indiset. The first parameter is an indiset.
 The second parameter is a variable that iterates through each person in the set. The third parameter
 iterates through the values associated with the persons. The fourth parameter is an integer variable
@@ -13850,8 +11413,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3540"
-></A
->Record Update Functions</H2
+>Record Update Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -13859,31 +11422,18 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3545"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->createnode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>NODE createnode</CODE
+>(STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -13899,37 +11449,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3556"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->addnode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>VOID addnode</CODE
+>(NODE,
+NODE,
+NODE);</CODE
 ></P
 ><P
 ></P
@@ -13945,25 +11477,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3568"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->detachnode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>VOID detachnode</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -13979,25 +11503,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3578"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->writeindi</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>VOID writeindi</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -14013,25 +11529,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3588"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->writefam</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->FAM</I
-></TT
->);</CODE
+>VOID writefam</CODE
+>(FAM);</CODE
 ></P
 ><P
 ></P
@@ -14046,25 +11554,25 @@ CLASS="parameter"
 ></DL
 ></DIV
 ><P
->&#13;These functions allow you to modify an internal <SPAN
+>&#13;These functions allow you to modify an internal <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node tree.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Createnode</TT
-> creates a <SPAN
+>Createnode</CODE
+> creates a <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 > node; the two arguments are tag and value strings,
 respectively; the value string can be <SPAN
 CLASS="returnvalue"
 >null</SPAN
->. <TT
+>. <CODE
 CLASS="function"
->Addnode</TT
+>Addnode</CODE
 > adds a node to a
 node tree. The first argument is the new node; the second is the node in the tree that becomes the parent of the new
 node; the third is the node in the tree that becomes the previous sibling of the new node; this argument is
@@ -14072,27 +11580,27 @@ node; the third is the node in the tree that becomes the previous sibling of the
 CLASS="returnvalue"
 >null</SPAN
 > if the new node is to become the first child of the parent.
-<TT
+<CODE
 CLASS="function"
->Detachnode</TT
-> removes a node from a node tree. <TT
+>Detachnode</CODE
+> removes a node from a node tree. <CODE
 CLASS="function"
->writeindi</TT
+>writeindi</CODE
 > writes an individual
-record back to the database, and <TT
+record back to the database, and <CODE
 CLASS="function"
->writefam</TT
+>writefam</CODE
 > writes a family record back to the database, allowing the
 report to make permanent changes to the database.
 </P
 ><P
 >&#13;The node functions only change data in memory; there is no effect on the database until and unless
-<TT
+<CODE
 CLASS="function"
->writeindi</TT
-> or <TT
+>writeindi</CODE
+> or <CODE
 CLASS="function"
->writefam</TT
+>writefam</CODE
 > are called.
 </P
 ></DIV
@@ -14102,8 +11610,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3610"
-></A
->Record Linking Functions</H2
+>Record Linking Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -14111,25 +11619,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3615"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->BOOL <TT
-CLASS="function"
->reference</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>BOOL reference</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -14145,25 +11645,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3625"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->dereference</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>NODE dereference</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -14179,16 +11671,16 @@ CLASS="parameter"
 ></DIV
 ><P
 >&#13;These functions allow you to recognize values that are cross references and to read the records they refer
-to. <TT
+to. <CODE
 CLASS="function"
->Reference</TT
+>Reference</CODE
 > returns <SPAN
 CLASS="returnvalue"
 >true</SPAN
 > if its string argument is a cross reference value, that is, the internal key of
-one of the records in the database. <TT
+one of the records in the database. <CODE
 CLASS="function"
->Dereference</TT
+>Dereference</CODE
 > returns the node tree of the record referred to by its cross-reference string argument.
 </P
 ></DIV
@@ -14198,8 +11690,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3637"
-></A
->Miscellaneous Functions</H2
+>Miscellaneous Functions</A
+></H2
 ><DIV
 CLASS="glosslist"
 ><DL
@@ -14207,25 +11699,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3642"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->lock</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->RECORD|NODE</I
-></TT
->);</CODE
+>VOID lock</CODE
+>(RECORD|NODE);</CODE
 ></P
 ><P
 ></P
@@ -14241,25 +11725,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3652"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->unlock</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->RECORD|NODE</I
-></TT
->);</CODE
+>VOID unlock</CODE
+>(RECORD|NODE);</CODE
 ></P
 ><P
 ></P
@@ -14275,19 +11751,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3662"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->database</TT
-></CODE
+>STRING database</CODE
 >(void);</CODE
 ></P
 ><P
@@ -14304,19 +11777,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3671"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->program</TT
-></CODE
+>STRING program</CODE
 >(void);</CODE
 ></P
 ><P
@@ -14333,19 +11803,16 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3680"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->version</TT
-></CODE
+>STRING version</CODE
 >(void);</CODE
 ></P
 ><P
@@ -14355,9 +11822,9 @@ CLASS="function"
 ></DT
 ><DD
 ><P
->&#13;return version of <TT
+>&#13;return version of <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program
 </P
 ></DD
@@ -14365,25 +11832,17 @@ CLASS="application"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3690"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->system</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>VOID system</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -14399,19 +11858,16 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3700"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->heapused</TT
-></CODE
+>INT heapused</CODE
 >(void);</CODE
 ></P
 ><P
@@ -14428,25 +11884,17 @@ CLASS="function"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3709"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->getproperty</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING getproperty</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -14462,25 +11910,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3719"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->setlocale</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING setlocale</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -14496,31 +11936,18 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3729"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->bytecode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING bytecode</CODE
+>(STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -14536,37 +11963,19 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3740"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->convertcode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING convertcode</CODE
+>(STRING,
+STRING,
+STRING);</CODE
 ></P
 ><P
 ></P
@@ -14582,25 +11991,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3752"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->debug</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->BOOLEAN</I
-></TT
->);</CODE
+>VOID debug</CODE
+>(BOOLEAN);</CODE
 ></P
 ><P
 ></P
@@ -14616,25 +12017,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3762"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->pvalue</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>STRING pvalue</CODE
+>(ANY);</CODE
 ></P
 ><P
 ></P
@@ -14650,25 +12043,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3772"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->free</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->ANY</I
-></TT
->);</CODE
+>VOID free</CODE
+>(ANY);</CODE
 ></P
 ><P
 ></P
@@ -14684,86 +12069,86 @@ CLASS="parameter"
 ></DIV
 ><P
 >&#13;
-<TT
+<CODE
 CLASS="function"
->Lock</TT
-> and <TT
+>Lock</CODE
+> and <CODE
 CLASS="function"
->unlock</TT
+>unlock</CODE
 > are used to lock a
-person or family into <SPAN
+person or family into <ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 > memory, and to unlock a person or family
-from <SPAN
+from <ACRONYM
 CLASS="acronym"
->RAM</SPAN
+>RAM</ACRONYM
 > memory, respectively.
 
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Database</TT
+>Database</CODE
 > returns the name of the current database, useful
-in titling reports. <TT
+in titling reports. <CODE
 CLASS="function"
->program</TT
+>program</CODE
 > returns the
-name of the current report program. <TT
+name of the current report program. <CODE
 CLASS="function"
->Version</TT
+>Version</CODE
 > returns the
-version of the running <TT
+version of the running <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program, eg, <TT
 CLASS="literal"
->3.0.61</TT
+>3.0.62</TT
 >.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->System</TT
+>System</CODE
 > executes its string argument as a
-<SPAN
+<ACRONYM
 CLASS="acronym"
->UNIX</SPAN
-> (or <SPAN
+>UNIX</ACRONYM
+> (or <ACRONYM
 CLASS="acronym"
->MS-Windows</SPAN
+>MS-Windows</ACRONYM
 > as appropriate) shell
 command, by invoking the system shell. This will not occur if the user has
 chosen to disallow report system calls (via the DenySystemCalls user option).
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->heapused</TT
+>heapused</CODE
 > function returns the amount of system heap
 that is in use at the time.  This is implemented only on windows.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->getproperty</TT
+>getproperty</CODE
 > function extracts system or user
 properties.  Properties are named group.subgroup.property,
 group.property or even property.  The keys are available at the moment can 
 be found in the ll-userguide under System and User Properties.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->setlocale</TT
+>setlocale</CODE
 > function sets the locale and returns
 the previous setting of locale.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->bytecode</TT
+>bytecode</CODE
 > function converts the supplied string
 with escape codes to the current codeset from the internal codeset or
 from the codeset specified by the
@@ -14771,9 +12156,9 @@ optional second parameter if specified.  A escaped code is a dollar sign ($)
 followed by 2 hex characters, e.g. $C1.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->convertcode</TT
+>convertcode</CODE
 > function converts a string to another
 codeset.  In the two argument form, the second argument is the destination
 codeset, and the source codeset is the internal codeset.  In the 3 argument
@@ -14802,29 +12187,29 @@ html codes, like the less than or greater than, will be escaped when printing
 the second string, but not when printing the first string.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->debug</TT
+>debug</CODE
 > function turns on or off programming debugging.
 When enabled gobs of information is printed as a 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > program is run.  This can be useful
 to figure out why a program is not behaving as expected.
 </P
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->pvalue</TT
+>pvalue</CODE
 > function returns a string that represents
 the contents of a variable in the interpreter.  This is present for debug
 purposes.
 </P
 ><P
->&#13;The function <TT
+>&#13;The function <CODE
 CLASS="function"
->free</TT
+>free</CODE
 > deallocates space associated with the
 variable provided as argument 1. Care must be taken when free is used in a
 function on a variable which is a parameter to the function.  free will not
@@ -14837,18 +12222,18 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN3813"
-></A
->Deprecated Functions</H2
+>Deprecated Functions</A
+></H2
 ><P
->&#13;The <TT
+>&#13;The <CODE
 CLASS="function"
->baptism</TT
+>baptism</CODE
 > finds christening (CHR) events.  The types of
 events desired to be found, depend on the nature of the report being written.
 It is recommended that custom access routines be used instead of 
-<TT
+<CODE
 CLASS="function"
->baptism</TT
+>baptism</CODE
 >.
 </P
 ><DIV
@@ -14858,25 +12243,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3821"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->baptism</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
+>EVENT baptism</CODE
+>(INDI);</CODE
 ></P
 ><P
 ></P
@@ -14958,35 +12335,35 @@ func get_baptism(indi, prefs)
 ></DIV
 ><P
 >&#13;The functionality of the following three functions,
-<TT
+<CODE
 CLASS="function"
->getindimsg</TT
+>getindimsg</CODE
 >,
-<TT
+<CODE
 CLASS="function"
->getintmsg</TT
+>getintmsg</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->getstrmsg</TT
+>getstrmsg</CODE
 >
 is now available using the optional parameter of
-<TT
+<CODE
 CLASS="function"
->getindi</TT
+>getindi</CODE
 >,
-<TT
+<CODE
 CLASS="function"
->getint</TT
+>getint</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->getstr</TT
+>getstr</CODE
 >.
 These functions should no longer be used as they will be removed from a future
-version of <TT
+version of <SPAN
 CLASS="application"
->Lifelines</TT
+>Lifelines</SPAN
 >.
 </P
 ><DIV
@@ -14996,34 +12373,21 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3843"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getindimsg</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI_V</I
-></TT
->,
+>VOID getindimsg</CODE
+>(INDI_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -15041,34 +12405,21 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3855"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getintmsg</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INT_V</I
-></TT
->,
+>VOID getintmsg</CODE
+>(INT_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -15086,34 +12437,21 @@ CLASS="replaceable"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3867"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->getstrmsg</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING_V</I
-></TT
->,
+>VOID getstrmsg</CODE
+>(STRING_V,
 <TT
-CLASS="parameter"
-><I
-><TT
 CLASS="replaceable"
 ><I
 >STRING</I
-></TT
-></I
 ></TT
 >);</CODE
 ></P
@@ -15130,9 +12468,9 @@ CLASS="replaceable"
 ></DL
 ></DIV
 ><P
->&#13;Three functions are available for to generate <SPAN
+>&#13;Three functions are available for to generate <ACRONYM
 CLASS="acronym"
->GEDCOM</SPAN
+>GEDCOM</ACRONYM
 >
 format output to the report output file of all persons in the argument
 person set.  These functions do not in most cases generate consistent
@@ -15140,9 +12478,9 @@ and usable output.  This can be done with a program, but it is
 suggested that these routines are probably not what you really wanted.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Gengedcom</TT
+>Gengedcom</CODE
 > 
 output contains a person record for each person in the set,
 and all the family records that
@@ -15152,15 +12490,15 @@ Other(X) record pointers are output unmodified, but none of their records
 are output - this yields an inconsistent output.
 </P
 ><P
->&#13;<TT
+>&#13;<CODE
 CLASS="function"
->Gengedcomweak</TT
+>Gengedcomweak</CODE
 > 
 output does not contain Source, Event or Other(X) record pointers 
 or their records.
-<TT
+<CODE
 CLASS="function"
->Gengedcomstrong</TT
+>Gengedcomstrong</CODE
 > includes 
 the Source, Event and Other(X) record pointers and all top-level nodes
 referenced by them.
@@ -15172,25 +12510,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3887"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcom</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID gengedcom</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -15206,25 +12536,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3897"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcomweak</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID gengedcomweak</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -15240,25 +12562,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3907"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->gengedcomstrong</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>VOID gengedcomstrong</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -15273,25 +12587,25 @@ CLASS="parameter"
 ></DL
 ></DIV
 ><P
->&#13;By the release of version 3.0.6, all string values are local copies, and the <TT
+>&#13;By the release of version 3.0.6, all string values are local copies, and the <CODE
 CLASS="function"
->save</TT
+>save</CODE
 > and
-<TT
+<CODE
 CLASS="function"
->strsave</TT
+>strsave</CODE
 > functions should be entirely unnecessary.
-<TT
+<CODE
 CLASS="function"
->Save</TT
+>Save</CODE
 > is present only for compatibility reasons. Previously it duplicated its argument (to prevent strings
 from becoming stale; this is not currently necessary (and this function no longer does anything).
- <TT
+ <CODE
 CLASS="function"
->Strsave</TT
-> is the same function as <TT
+>Strsave</CODE
+> is the same function as <CODE
 CLASS="function"
->save</TT
+>save</CODE
 >.
 </P
 ><DIV
@@ -15301,25 +12615,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3924"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->save</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING save</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -15335,25 +12641,17 @@ CLASS="parameter"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3934"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->STRING <TT
-CLASS="function"
->strsave</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
+>STRING strsave</CODE
+>(STRING);</CODE
 ></P
 ><P
 ></P
@@ -15368,13 +12666,13 @@ CLASS="parameter"
 ></DL
 ></DIV
 ><P
->&#13;Use <TT
+>&#13;Use <CODE
 CLASS="function"
->detachnode</TT
+>detachnode</CODE
 > instead of
-<TT
+<CODE
 CLASS="function"
->deletenode</TT
+>deletenode</CODE
 >.
 </P
 ><DIV
@@ -15384,25 +12682,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3948"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->VOID <TT
-CLASS="function"
->deletenode</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->NODE</I
-></TT
->);</CODE
+>VOID deletenode</CODE
+>(NODE);</CODE
 ></P
 ><P
 ></P
@@ -15418,9 +12708,9 @@ CLASS="parameter"
 ></DIV
 ><P
 >&#13;In releases after version 3.0.39, the 
-<TT
+<CODE
 CLASS="function"
->length</TT
+>length</CODE
 > function accepts an argument of type 
 <SPAN
 CLASS="type"
@@ -15432,9 +12722,9 @@ CLASS="type"
 CLASS="type"
 >table</SPAN
 >.  the
-<TT
+<CODE
 CLASS="function"
->lengthset</TT
+>lengthset</CODE
 > function is no longer needed.
 </P
 ><DIV
@@ -15444,25 +12734,17 @@ CLASS="glosslist"
 ><B
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN3965"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->INT <TT
-CLASS="function"
->lengthset</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->SET</I
-></TT
->);</CODE
+>INT lengthset</CODE
+>(SET);</CODE
 ></P
 ><P
 ></P
@@ -15476,6 +12758,71 @@ CLASS="parameter"
 ></DD
 ></DL
 ></DIV
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN3973"
+>Debugging Reports</A
+></H2
+><P
+>&#13;
+The lifelines program includes in its report engine a small
+debugger feature. If the program parses successfully, but
+an error is found during execution, you will be prompted
+to either enter the debug or to quit.
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Report file: /home/user/lifelines/reports/test.ll
+Runtime Error at line 50: set: the arg #1 must be a variable. (arg: tag(node))
+Enter d for debugger, q to quit
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+><P
+>&#13;If you press d to enter the debugger, you will be presented
+with the debugger main menu, from which you can view
+the current (local) variables, or the global variables.
+
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;Report debugger (1/5)
+  &#62;1: Display locals (4 vars) [proc: checkrec]
+   2: Display global (1 var)
+   3: Call stack has 3 higher levels.  Go up one level(proc: rectest)
+   4: Call stack has 0 lower levels.
+   5: Quit debugger
+</PRE
+></TD
+></TR
+></TABLE
+>
+
+Examining these values might help you determine what went
+wrong with the program. Select the locals or the globals
+to view the values of those variables. If any non-empty
+lists, tables, or sets are displayed, they may be 
+selected, to view their contents.
+</P
 ></DIV
 ></DIV
 ></DIV

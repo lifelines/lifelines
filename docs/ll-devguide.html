@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,8 +7,7 @@ LifeLines Developer Documentation
 </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="book"
 BGCOLOR="#FFFFFF"
@@ -27,17 +26,17 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
-><TT
+><SPAN
 CLASS="application"
->LifeLines</TT
-> Developer Documentation</H1
+>LifeLines</SPAN
+> Developer Documentation</A
+></H1
 ><H2
 CLASS="subtitle"
-><TT
+><SPAN
 CLASS="application"
->LifeLines</TT
-> Version 3.0.61</H2
+>LifeLines</SPAN
+> Version 3.0.62</H2
 ><H3
 CLASS="author"
 ><A
@@ -53,17 +52,17 @@ CLASS="TOC"
 >Table of Contents</B
 ></DT
 ><DT
-><A
+>1. <A
 HREF="#AEN11"
 >Introduction to Lifelines Developers Manual</A
 ></DT
 ><DT
-><A
+>2. <A
 HREF="#AEN15"
 >btree module</A
 ></DT
 ><DT
-><A
+>3. <A
 HREF="#AEN39"
 >stdlib module</A
 ></DT
@@ -151,7 +150,7 @@ HREF="#AEN148"
 ></DL
 ></DD
 ><DT
-><A
+>4. <A
 HREF="#AEN151"
 >gedlib module</A
 ></DT
@@ -195,7 +194,7 @@ HREF="#AEN174"
 ></DL
 ></DD
 ><DT
-><A
+>5. <A
 HREF="#AEN177"
 >interp module</A
 ></DT
@@ -219,21 +218,21 @@ HREF="#AEN190"
 ></DL
 ></DD
 ><DT
-><A
+>6. <A
 HREF="#AEN195"
 >liflines module</A
 ></DT
 ><DT
-><A
+>7. <A
 HREF="#AEN198"
 >autotools build system</A
 ></DT
 ><DT
-><A
+>8. <A
 HREF="#AEN201"
->Building <TT
+>Building <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 ></A
 ></DT
 ><DD
@@ -292,16 +291,16 @@ CLASS="chapter"
 ><A
 NAME="AEN11"
 ></A
->
+>Chapter 1. 
 
 Introduction to Lifelines Developers Manual
 
 </H1
 ><P
 >&#13;
-     <TT
+     <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > source code is divided into
 	 several functional subdirectories, which will be discussed 
 	 individually below. They are chained together by an autotools
@@ -316,7 +315,7 @@ CLASS="chapter"
 ><A
 NAME="AEN15"
 ></A
->btree module</H1
+>Chapter 2. btree module</H1
 ><P
 >&#13;  The btree subdirectory contains the implementation for a btree
   database, using fixed length 8 letter keys (RKEY).
@@ -325,9 +324,7 @@ NAME="AEN15"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >nodes. </B
-></B
 >
   Each node in the btree is a separate file on disk (named, eg, "aa"),
   and the first 4096 (BUFLEN macro) bytes are the node header.
@@ -337,12 +334,10 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;
   index nodes
 
     . </B
-></B
 >
 
   These are the interior index nodes of the btree; they contain pointers
@@ -355,12 +350,10 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;
   block nodes
 
     . </B
-></B
 >
 
   These contain the actual data (keys and their associated records).
@@ -371,12 +364,10 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;
   keyfile
 
     . </B
-></B
 >
 
   One special file on the disk, the keyfile, contains some meta information
@@ -389,12 +380,10 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;
   traverse
 
     . </B
-></B
 >
 
   There is a traversal function implemented at the btree level, which uses
@@ -406,12 +395,10 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;
   bterrno
 
     . </B
-></B
 >
 
   There is a global integer error variable, bterrno, which is set by this
@@ -423,10 +410,8 @@ CLASS="formalpara"
 CLASS="formalpara"
 ><P
 ><B
-><B
 >&#13;  FUTURE DIRECTIONS
     . </B
-></B
 >
 
   bterrno must be removed for multi-threading. Traversal is more elegantly
@@ -441,12 +426,12 @@ CLASS="chapter"
 ><A
 NAME="AEN39"
 ></A
->stdlib module</H1
+>Chapter 3. stdlib module</H1
 ><P
 >&#13;The stdlib directory contains various utility functions not specifically
-related to <TT
+related to <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >, GEDCOM, or even genealogy.
 </P
 ><DIV
@@ -455,8 +440,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN43"
-></A
->String Functions</H2
+>String Functions</A
+></H2
 ><P
 >&#13;There has built up, over time, quite an assortment of string functions,
 split currently between mystring.c and stdstrng.c (and a few macros in
@@ -468,102 +453,46 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN46"
-></A
->String copy and concatenation</H3
+>String copy and concatenation</A
+></H3
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN48"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrncpy</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t n</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
+>char *llstrncpy</CODE
+>(char *dest,
+size_t n,
+int utf8,
+const char * fmt,
+va_list args);</CODE
 ></P
 ><P
 ></P
 ></DIV
 ><DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN58"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrncat</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t n</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
+>char *llstrncat</CODE
+>(char *dest,
+size_t n,
+int utf8,
+const char * fmt,
+va_list args);</CODE
 ></P
 ><P
 ></P
@@ -582,48 +511,25 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN69"
-></A
->String append (llstrapp)</H3
+>String append (llstrapp)</A
+></H3
 ><P
 >&#13;<DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN72"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrapps</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * src</I
-></TT
->);</CODE
+>char *llstrapps</CODE
+>(char *dest,
+size_t limit,
+int utf8,
+const char * src);</CODE
 ></P
 ><P
 ></P
@@ -632,37 +538,19 @@ CLASS="parameter"
 
 <DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN81"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappc</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->size_t limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->char ch</I
-></TT
->);</CODE
+>char *llstrappc</CODE
+>(char *dest,
+size_t limit,
+char ch);</CODE
 ></P
 ><P
 ></P
@@ -671,43 +559,20 @@ CLASS="parameter"
 
 <DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN89"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappc</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->);</CODE
+>char *llstrappc</CODE
+>(char *dest,
+int limit,
+int utf8,
+const char * fmt);</CODE
 ></P
 ><P
 ></P
@@ -716,49 +581,21 @@ CLASS="parameter"
 
 <DIV
 CLASS="funcsynopsis"
+><P
+></P
 ><A
 NAME="AEN98"
 ></A
 ><P
-></P
-><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->char *<TT
-CLASS="function"
->llstrappv</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->char *dest</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int limit</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->int utf8</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->const char * fmt</I
-></TT
->,
-<TT
-CLASS="parameter"
-><I
->va_list args</I
-></TT
->);</CODE
+>char *llstrappv</CODE
+>(char *dest,
+int limit,
+int utf8,
+const char * fmt,
+va_list args);</CODE
 ></P
 ><P
 ></P
@@ -836,8 +673,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN113"
-></A
->String append (appendstr)</H3
+>String append (appendstr)</A
+></H3
 ><P
 >&#13;    This is a family of functions similar in purpose to the strapp 
     family, but which uses an additional level of indirection, advancing
@@ -856,8 +693,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN117"
-></A
->char functions</H3
+>char functions</A
+></H3
 ><P
 >&#13;    There are character classification functions, which have handling
     particular to Latin-1 and to Finnish (if the Finnish compilation option
@@ -876,8 +713,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN121"
-></A
->string allocation functions</H3
+>string allocation functions</A
+></H3
 ><P
 >&#13;    TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
 </P
@@ -888,8 +725,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN124"
-></A
->string conversion functions</H3
+>string conversion functions</A
+></H3
 ><P
 >&#13;    TODO: (isnumeric, lower, upper, capitalize, titlecase)
 </P
@@ -900,8 +737,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN127"
-></A
->string equality functions</H3
+>string equality functions</A
+></H3
 ><P
 >&#13;    TODO: (eqstr, eqstr_ex, nestr, cmpstr)
 </P
@@ -912,8 +749,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN130"
-></A
->string comparison functions</H3
+>string comparison functions</A
+></H3
 ><P
 >&#13;    TODO: (cmpstrloc)
 </P
@@ -924,8 +761,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN133"
-></A
->string whitespace functions</H3
+>string whitespace functions</A
+></H3
 ><P
 >&#13;    TODO: (trim, striptrail, striplead, allwhite, chomp)
 </P
@@ -936,8 +773,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN136"
-></A
->string UTF-8 functions</H3
+>string UTF-8 functions</A
+></H3
 ><P
 >&#13;    These are the low-level functions used to do UTF-8 mechanics.
     These should only be called when in a database with internal
@@ -950,8 +787,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN139"
-></A
->printpic functions</H3
+>printpic functions</A
+></H3
 ><P
 >&#13;    These are simple printf style functions, except they only handle
     string format, and they do handle reordering the inputs. These 
@@ -968,8 +805,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN142"
-></A
->List Module</H2
+>List Module</A
+></H2
 ><P
 >&#13;list.c and list.h implement a simple, doubly-linked list type, which
 takes void pointers (VPTR) as elements. The list manages its own nodes
@@ -985,8 +822,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN145"
-></A
->Table Module</H2
+>Table Module</A
+></H2
 ><P
 >&#13;table.c and table.h implement a fixed size hash tree (with linear buckets).
 As of 2005-01, Perry has been changing the implementation of the table
@@ -999,8 +836,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN148"
-></A
->Balanced Binary Tree (rbtree) Module</H2
+>Balanced Binary Tree (rbtree) Module</A
+></H2
 ><P
 >&#13;rbtree.c and rbtree.h implement a generic red/black balanced binary tree.
 These are not currently used by lifelines, but are planned as a replacement
@@ -1014,12 +851,12 @@ CLASS="chapter"
 ><A
 NAME="AEN151"
 ></A
->gedlib module</H1
+>Chapter 4. gedlib module</H1
 ><P
 >&#13;This directory is a collection of routines for GEDCOM and for its use in
-a <TT
+a <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > btree database.
 </P
 ><DIV
@@ -1028,8 +865,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN155"
-></A
->names</H2
+>names</A
+></H2
 ><P
 >&#13;  This module implements indexing names.
   TODO: Explain soundex indexing.
@@ -1041,8 +878,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN158"
-></A
->refns</H2
+>refns</A
+></H2
 ><P
 >&#13;  This module implements indexing references (REFNs).
   TOD: Explain two character index.
@@ -1054,8 +891,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN161"
-></A
->xreffile</H2
+>xreffile</A
+></H2
 ><P
 >&#13;  This module stores lists of deleted record numbers for each type.
   When a record is deleted, its number is added to the appropriate
@@ -1070,8 +907,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN164"
-></A
->messages</H2
+>messages</A
+></H2
 ><P
 >&#13;  Traditionally all translatable strings have been stored in this file.
   This is not necessary with the current gettext scheme, but it would
@@ -1091,8 +928,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN168"
-></A
->translation tables (charmaps.c and translat.c)</H2
+>translation tables (charmaps.c and translat.c)</A
+></H2
 ><P
 >&#13;  The implementation of codeset translation is stored here (not to be 
   confused with language translation for the user interface, called
@@ -1107,8 +944,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN171"
-></A
->indiseq</H2
+>indiseq</A
+></H2
 ><P
 >&#13;  The indiseq type is implemented here, a list of records (which no longer
   need all be persons).
@@ -1120,8 +957,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN174"
-></A
->brwslist</H2
+>brwslist</A
+></H2
 ><P
 >&#13;  Named browse lists are implemented here (temporary record lists named by
   user during this session).
@@ -1134,11 +971,11 @@ CLASS="chapter"
 ><A
 NAME="AEN177"
 ></A
->interp module</H1
+>Chapter 5. interp module</H1
 ><P
->&#13;The <TT
+>&#13;The <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > reporting language parser and interpreter are stored here.
 A custom lexical analyzer is in lex.c, and a yacc parser generator is
 in yacc.y. 
@@ -1170,8 +1007,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN184"
-></A
->pvalues</H2
+>pvalues</A
+></H2
 ><P
 >&#13;  All variable values in report language interpretation are stored in a
   union type called pvalue.
@@ -1183,8 +1020,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN187"
-></A
->symtab</H2
+>symtab</A
+></H2
 ><P
 >&#13;  Symbol tables are a thin wrapper around the table type provided by
   stdlib, specialized to hold pvalues.
@@ -1196,14 +1033,14 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN190"
-></A
->date</H2
+>date</A
+></H2
 ><P
 >&#13;  A fairly complete GEDCOM date parser is also located here. It actually
   includes both a date parser, and a date formatter (which generates the
-  thousands of possible <TT
+  thousands of possible <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 > date formats).
 </P
 ><P
@@ -1223,7 +1060,7 @@ CLASS="chapter"
 ><A
 NAME="AEN195"
 ></A
->liflines module</H1
+>Chapter 6. liflines module</H1
 ><P
 >&#13;TODO:
 </P
@@ -1234,7 +1071,7 @@ CLASS="chapter"
 ><A
 NAME="AEN198"
 ></A
->autotools build system</H1
+>Chapter 7. autotools build system</H1
 ><P
 >&#13;todo
 </P
@@ -1245,15 +1082,15 @@ CLASS="chapter"
 ><A
 NAME="AEN201"
 ></A
->Building <TT
+>Chapter 8. Building <SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 ></H1
 ><P
 >&#13;This chapter gives an overview of one way you can build 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.  It is not intended to be
 a comprehensive list of all techniques, but rather enough to get you started.
 This section does not assume you are downloading the source tarball
@@ -1266,13 +1103,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN206"
-></A
->Checking the CVS source out</H2
+>Checking the CVS source out</A
+></H2
 ><P
 >&#13;If you are not a member of the 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
 development project, you can check out sources anonymously.
 In the following assume that CVS stands for
@@ -1387,8 +1224,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN218"
-></A
->automake and autoconf</H2
+>automake and autoconf</A
+></H2
 ><P
 >&#13;Many of the files you're used to editing by hand are automatically
 generated by automake and/or autoconf.  These include any file named
@@ -1431,8 +1268,8 @@ CLASS="sect2"
 CLASS="sect2"
 ><A
 NAME="AEN225"
-></A
->Which does what:</H3
+>Which does what:</A
+></H3
 ><P
 >&#13;At development (or package creation) time:
 </P
@@ -1467,13 +1304,13 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN235"
-></A
->Building the code on Unix/Linux</H2
+>Building the code on Unix/Linux</A
+></H2
 ><P
 >&#13;There are lots of dependencies required to build
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >.
 Of course you need a C Compiler and make, but also a number of other tools
 like autoconf, automake, byacc and flex. 
@@ -1502,9 +1339,9 @@ make
 </P
 ><P
 >&#13;This should build 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
 and leave the results in subdirectories of the the directory bld.
 </P
@@ -1515,8 +1352,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN242"
-></A
->Generating the source tarball</H2
+>Generating the source tarball</A
+></H2
 ><P
 >&#13;If you have build the code as described above, you can generate the
 source tarball as follows;
@@ -1539,9 +1376,9 @@ make dist
 ><P
 >&#13;While this is a source tarball it does contain a number of generated
 files that make it easier to generate 
-<TT
+<SPAN
 CLASS="application"
->LifeLines</TT
+>LifeLines</SPAN
 >
 from the source tarball.
 </P
@@ -1552,8 +1389,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN248"
-></A
->Generating the rpm package</H2
+>Generating the rpm package</A
+></H2
 ><P
 >&#13;The specification file to build a rpm for redhat linux is included in the
 cvs repository.  These notes show how you can use this to build the
@@ -1627,8 +1464,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN256"
-></A
->Making a release</H2
+>Making a release</A
+></H2
 ><P
 >&#13;To release a new version, run the build/setversions.sh script
 to set the version in the many necessary files.
@@ -1671,8 +1508,8 @@ CLASS="sect1"
 CLASS="sect1"
 ><A
 NAME="AEN261"
-></A
->Putting a release on sourceforge</H2
+>Putting a release on sourceforge</A
+></H2
 ><P
 >&#13;(Not all developers have the power to create or edit a file release
 on sourceforge, only Project Administrators and File Release Technicians.)
