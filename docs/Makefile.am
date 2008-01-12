@@ -58,7 +58,7 @@ all: @DOCS_TARGET@
 	-jw -f docbook -b pdf $^
 
 .xml.html:
-	-jw -f docbook -b html -V nochunks $^
+	-jw -f docbook -b html -V nochunks -d $(srcdir)/ll_html.dsl $^
 
 .html.txt:
 	if [ -f /usr/bin/lynx ] ; then \

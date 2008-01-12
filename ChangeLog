@@ -1,3 +1,11 @@
+2008-01-12 Perry Rapp
+
+	* ChangeLog docs/Makefile.am
+	*NEW docs/ll_html.dsl
+
+	Add custom html DSSL stylesheet to force shaded verbatim text
+	in output HTML docs.
+
 2008-01-10 Perry Rapp
 
 	* ChangeLog src/interp/write.c
