@@ -620,7 +620,11 @@ eq_conform_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg)
 	}
 	*eflg = TRUE;
 }
-static BOOLEAN get_pvalue_as_bool (PVALUE val)
+/*===========================================================
+ * get_pvalue_as_bool -- Return boolean equivalent of value
+ *=========================================================*/
+static BOOLEAN
+get_pvalue_as_bool (PVALUE val)
 {
 	switch(val->type)
 	{
@@ -629,6 +633,7 @@ static BOOLEAN get_pvalue_as_bool (PVALUE val)
 	case PFLOAT: return val->value.fxd != 0;
 	case PBOOL: return val->value.bxd;
 	case PSTRING: return val->value.sxd != 0;
+	case PGNODE: return val->value.nxd != 0;
 	case PINDI:
 	case PFAM:
 	case PSOUR:

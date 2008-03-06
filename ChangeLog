@@ -1,3 +1,9 @@
+2008-03-05 Perry Rapp
+
+	* ChangeLog src/interp/pvalue.c
+
+	Fix get_pvalue_as_bool to handle PGNODE, and add comment header.
+
 2008-01-12 Perry Rapp
 
 	* ChangeLog docs/Makefile.am
