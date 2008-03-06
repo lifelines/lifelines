@@ -9,7 +9,9 @@ Changes in 3.0.63
  - Report function choosespouse can be used with FAM
  - Expand ~ in database path when opening
  - New report gedmin.ll
+ - New report afg.ll
  - Fix error in pi constant value, improving trig function accuracy
+ - Fix boolean handling of nodes so "if (e, birth(p))" works
 
 Bug fixes in 3.0.62 (stable)
 ============================

@@ -1,8 +1,12 @@
-2008-03-05 Perry Rapp
+2008-03-06 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c
 
 	Fix get_pvalue_as_bool to handle PGNODE, and add comment header.
+
+	* ChangeLog NEWS
+
+	Document last bugfix in NEWS file.
 
 2008-01-12 Perry Rapp
 
