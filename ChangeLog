@@ -1,3 +1,9 @@
+2008-03-11 Perry Rapp
+
+	* ChangeLog src/liflines/scan.c
+
+	Fix prompt in scan_souce_by_title to say title not author.
+
 2008-03-06 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c

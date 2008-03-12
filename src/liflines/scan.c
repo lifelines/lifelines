@@ -162,7 +162,7 @@ scan_souce_by_title (STRING sts)
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_SRC_TITL, sts);
 	scanner_set_field(&scanner, "TITL");
-	do_sources_scan(&scanner, _("Enter pattern to match against author."));
+	do_sources_scan(&scanner, _("Enter pattern to match against title."));
 	return scanner_free_and_return_seq(&scanner);
 }
 /*==============================

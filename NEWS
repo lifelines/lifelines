@@ -10,8 +10,12 @@ Changes in 3.0.63
  - Expand ~ in database path when opening
  - New report gedmin.ll
  - New report afg.ll
+
+Bug fixes in 3.0.63 (stable)
+============================
  - Fix error in pi constant value, improving trig function accuracy
  - Fix boolean handling of nodes so "if (e, birth(p))" works
+ - Fixed prompt in full database scan by source title
 
 Bug fixes in 3.0.62 (stable)
 ============================
