@@ -55,6 +55,7 @@ typedef struct
 	char pattern[64];
 	INDISEQ seq;
 	STRING field; /* field to scan, eg "AUTH" for sources by author */
+	BOOLEAN conts; /* include CONC & CONT children tags? */
 } SCANNER;
 
 /*********************************************
@@ -80,6 +81,7 @@ static void scanner_add_result(SCANNER * scanner, CNSTRING key);
 static BOOLEAN scanner_does_pattern_match(SCANNER *scanner, CNSTRING text);
 static INDISEQ scanner_free_and_return_seq(SCANNER * scanner);
 static void scanner_init(SCANNER * scanner, INT scantype, CNSTRING statusmsg);
+static void scanner_scan_titles(SCANNER * scanner);
 static void scanner_set_field(SCANNER * scanner, STRING field);
 static BOOLEAN scanner_set_pattern(SCANNER * scanner, STRING pattern);
 
@@ -161,7 +163,7 @@ scan_souce_by_title (STRING sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_SRC_TITL, sts);
-	scanner_set_field(&scanner, "TITL");
+	scanner_scan_titles(&scanner);
 	do_sources_scan(&scanner, _("Enter pattern to match against title."));
 	return scanner_free_and_return_seq(&scanner);
 }
@@ -237,6 +239,22 @@ do_fields_scan (SCANNER * scanner, RECORD rec)
 				scanner_add_result(scanner, key);
 				return;
 			}
+			if (scanner->conts) {
+				NODE node2 = 0;
+				for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
+					STRING tag2 = ntag(node2);
+					if (tag2 && (eqstr(tag2, "CONC") || eqstr(tag2, "CONT"))) {
+						STRING val2 = nval(node2);
+						if (val2 && scanner_does_pattern_match(scanner, val2)) {
+							CNSTRING key = nzkey(rec);
+							scanner_add_result(scanner, key);
+							return;
+						}
+					} else {
+						break;
+					}
+				}
+			}
 		}
 	}
 }
@@ -251,6 +269,7 @@ scanner_init (SCANNER * scanner, INT scantype, CNSTRING statusmsg)
 	strcpy(scanner->pattern, "");
 	scanner->statusmsg = statusmsg;
 	scanner->field = NULL;
+	scanner->conts = FALSE;
 }
 /*==============================
  * free_scanner_and_return_seq -- Free scanner data, except return result sequence
@@ -286,12 +305,22 @@ scanner_set_pattern (SCANNER * scanner, STRING str)
 	return TRUE;
 }
 /*=================================================
- * scanner_set_field -- Store name of field to match
+ * scanner_set_field -- Search specified field
  *===============================================*/
 static void
 scanner_set_field (SCANNER * scanner, STRING field)
 {
 	strupdate(&scanner->field, field);
+}
+
+/*=================================================
+ * scanner_scan_titles -- Search titles (& CONT & CONC children)
+ *===============================================*/
+static void
+scanner_scan_titles (SCANNER * scanner)
+{
+	strupdate(&scanner->field, "TITL");
+	scanner->conts = TRUE;
 }
 /*=============================================
  * scanner_does_pattern_match -- Compare a name to a pattern

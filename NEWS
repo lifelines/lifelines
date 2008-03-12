@@ -16,6 +16,7 @@ Bug fixes in 3.0.63 (stable)
  - Fix error in pi constant value, improving trig function accuracy
  - Fix boolean handling of nodes so "if (e, birth(p))" works
  - Fixed prompt in full database scan by source title
+ - Fix full database scan by source title to also check CONC & CONT
 
 Bug fixes in 3.0.62 (stable)
 ============================

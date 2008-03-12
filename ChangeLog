@@ -4,6 +4,12 @@
 
 	Fix prompt in scan_souce_by_title to say title not author.
 
+	* ChangeLog NEWS src/liflines/scan.c
+
+	Add field conts to scanner, to check for CONT & CONC children
+	of title in full source title scan, and revise do_fields_scan 
+	accordingly.
+
 2008-03-06 Perry Rapp
 
 	* ChangeLog src/interp/pvalue.c
