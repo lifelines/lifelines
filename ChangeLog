@@ -1,3 +1,10 @@
+2008-04-16 Perry Rapp
+
+	* ChangeLog src/stdlib/icvt.c
+
+	Add internal counter of placeholder characters to iconv_trans (but
+	don't return it), and improve function header comment.
+
 2008-03-11 Perry Rapp
 
 	* ChangeLog src/liflines/scan.c NEWS

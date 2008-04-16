@@ -51,9 +51,9 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
  * iconv_trans -- Translate string via iconv
  *  src:     [IN]  source codeset
  *  dest:    [IN]  string to translate (& delete)
- *  zin:     [I/O] source string (may be returned if iconv can't translate)
- *  success: [OUT] success flag (optional)
- * Only called if HAVE_ICONV
+ *  sin:     [IN]  source string to be converted
+ *  zout:    [I/O] converted result
+ *  illegal: [IN]  character to use as placeholder for unconvertible input
  *=================================================*/
 BOOLEAN
 iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
@@ -70,6 +70,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 #endif
 	double expand=1.3;
 	int chwidth=1;
+	int badchars=0; /* count # illegal placeholders inserted */
 	int inlen = sin ? strlen(sin) : 0;
 
 	ASSERT(src);
@@ -164,6 +165,7 @@ cvting:
 			{
 				*outptr++ = illegal;
 			}
+			++badchars;
 			zs_set_len(zout, outptr-zs_str(zout));
 		}
 		/* update output variables */
