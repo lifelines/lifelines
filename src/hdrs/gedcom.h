@@ -425,7 +425,7 @@ NODE qkey_to_type(CNSTRING key);
 RECORD qkeynum_to_frecord(int keynum);
 NODE qkeynum_to_indi(int keynum);
 INT record_letter(CNSTRING);
-void record_to_date_place(RECORD record, STRING tag, STRING * date, STRING * plac);
+void record_to_date_place(RECORD record, STRING tag, STRING * date, STRING * plac, INT * count);
 NODE record_to_first_event(RECORD record, CNSTRING tag);
 NODE refn_to_record(STRING, INT);
 void register_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);

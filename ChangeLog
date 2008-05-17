@@ -1,3 +1,15 @@
+2008-05-17 Perry Rapp
+
+	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
+	src/liflines/show.c
+
+	Modify record_to_date_place to only use first instance of tag,
+	but to report #occurrences (added new param).
+	Rewrote disp_person_birthdeath entirely, to report only first of
+	each tag, and to add in parens when multiple occurrences.
+	Fix for sf bug#1966100.
+	Needs i18n.
+
 2008-04-16 Perry Rapp
 
 	* ChangeLog src/stdlib/icvt.c

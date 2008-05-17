@@ -654,18 +654,20 @@ fam_to_event (NODE node, STRING tag, STRING head
  *  tag:     [IN]  desired tag (eg, "BIRT")
  *  date:    [OUT] date found (optional)
  *  plac:    [OUT] place found (option)
+ *  count:   [I/O] #instances of tag found (caller must init)
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
 void
-record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac)
+record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac
+	, INT * count)
 {
-	NODE node;
+	NODE node=0;
 	for (node = record_to_first_event(record, tag)
 		; node
 		; node = node_to_next_event(node, tag)) {
-		event_to_date_place(node, date, plac);
-		if (date && *date && plac && *plac)
-			return;
+		if (++(*count) == 1)
+			/* only record first instance */
+			event_to_date_place(node, date, plac);
 	}
 }
 /*==============================================

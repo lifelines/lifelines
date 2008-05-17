@@ -225,63 +225,47 @@ disp_person_name (ZSTR zstr, STRING prefix, RECORD irec, INT width)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags
-	, RFMT rfmt)
+disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt)
 {
-	struct tag_prefix *tg, *tgdate=NULL, *tgplac=NULL;
-	STRING date=NULL, plac=NULL, td=NULL, tp=NULL;
-	STRING predate=NULL, preplac=NULL;
-	ZSTR zdate=zs_new();
+	struct tag_prefix *tg;
+	INT ct=0;
+	ZSTR ztemp=zs_new();
+	zs_clear(zstr);
 	for (tg = tags; tg->tag; ++tg) {
-		record_to_date_place(irec, tg->tag, &td, &tp);
-		if (!date) {
-			date=td;
-			tgdate=tg;
-		}
-		if (!plac) {
-			plac=tp;
-			tgplac=tg;
-		}
-		if (date && plac) break;
-	}
-	zs_sets(zstr, "  ");
-	/* prefix display labels */
-	if (date) {
-		predate = _(tgdate->prefix);
+		STRING date=NULL, place=NULL;
+		zs_clear(ztemp);
+		ct = 0;
+		record_to_date_place(irec, tg->tag, &date, &place, &ct);
+		if (!ct) continue;
 		if (rfmt && rfmt->rfmt_date)
 			date = (*rfmt->rfmt_date)(date);
-		zs_appf(zdate, "%s: %s", predate, date);
-	}
-	if (plac) {
-		ZSTR zplac=zs_new();
-		preplac = _(tgplac->prefix);
-		if (predate && eqstr(preplac, predate)) preplac=NULL;
-		if (rfmt && rfmt->rfmt_plac)
-			plac = (*rfmt->rfmt_plac)(plac);
-		if (preplac)
-			zs_setf(zplac, "%s: %s", preplac, plac);
-		else
-			zs_sets(zplac, plac);
-		if (zs_len(zdate)) {
-			/* have both date & place, so combine them */
-			static char scratch1[MAXLINELEN+1];
-			sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic
-				, zs_str(zdate), zs_str(zplac));
-			zs_apps(zstr, scratch1);
-		} else {
-			/* have only place, so just append it */
-			zs_appz(zstr, zplac);
+		zs_appf(ztemp, "%s: ", _(tg->prefix));
+
+		if (date) {
+			if (rfmt && rfmt->rfmt_date)
+				date = (*rfmt->rfmt_date)(date);
+			zs_apps(ztemp, date);
 		}
-		zs_free(&zplac);
-	} else {
-		/* have only date, so just append it */
-		zs_apps(zstr, zs_str(zdate));
+		if (place) {
+			if (date)
+				zs_appf(ztemp, ", ");
+			if (rfmt && rfmt->rfmt_plac)
+				place = (*rfmt->rfmt_plac)(place);
+			zs_apps(ztemp, place);
+		}
+		if (!date && !place) {
+			zs_apps(ztemp, "Y");
+		}
+		if (ct>1) {
+			zs_appf(ztemp, " (%d alt)", ct-1);
+		}
+		/* append current info to accumulated info */
+		if (zs_len(zstr)>0) {
+			zs_apps(zstr, ", ");
+		}
+		zs_appz(zstr, ztemp);
 	}
-	if (zs_len(zstr)<3) {
-		zs_apps(zstr, _(tags[0].prefix));
-		zs_apps(zstr, ": ");
-	}
-	zs_free(&zdate);
+	zs_free(&ztemp);
 }
 /*===============================================
  * init_display_indi -- Initialize display person
