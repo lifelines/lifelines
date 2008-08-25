@@ -1,19 +1,36 @@
 
 THE LIFELINES PROGRAMMING SUBSYSTEM AND REPORT GENERATOR
 
-LifeLines Version 3.0.51
+LifeLines Version 3.0.62
 
 Thomas T. Wetmore , IV
+
+   Converted to Docbook SGML by
+
+Rafal Prinke
+
+   Updated by
+
+Stephen Dum
+
+Matt Emmerton
+
+Marc Nozell
+
+Perry Rapp
+
+   and many other contributers from the lifelines mailing lists
      _____________________________________________________________
 
    Table of Contents
-   Report Programming Manual
+   1. Report Programming Manual
 
         Introduction
         Tutorial Ahnentafel report
         Template for creating new reports
+        Invoking Reports
 
-   LIFELINES PROGRAMMING REFERENCE
+   2. LIFELINES PROGRAMMING REFERENCE
 
         Procedures and Functions
         Comments
@@ -42,9 +59,14 @@ Thomas T. Wetmore , IV
         Record Linking Functions
         Miscellaneous Functions
         Deprecated Functions
+        Debugging Reports
+
+   List of Examples
+   1-1. Example of ahnentafel report
+   1-2. Example of ahnentafel report script
      _____________________________________________________________
 
-Report Programming Manual
+Chapter 1. Report Programming Manual
 
 Introduction
 
@@ -65,10 +87,12 @@ Introduction
 
 Tutorial Ahnentafel report
 
-   For example, say you want LifeLines to generate an ahnentafel. Such a
-   report might look like:
+   For example, say you want LifeLines to generate an ahnentafel (ancestor)
+   report  for Tom Wetmore. Such a report would show Tom Wetmore, his
+   parents, grandparents, great-grandparents, and so on. It would like like
+   the following:
 
-   Example 1. Example of ahnentafel report 
+   Example 1-1. Example of ahnentafel report 
 
    1. Thomas Trask WETMORE IV
    b. 18 December 1949, New London, Connecticut
@@ -96,7 +120,7 @@ Tutorial Ahnentafel report
 
    Here is a LifeLines program that generates this report:
 
-   Example 2. Example of ahnentafel report script 
+   Example 1-2. Example of ahnentafel report script 
 /*
  * @progname        ahnentafel_tutorial.ll
  * @version         1.0
@@ -113,13 +137,22 @@ proc main ()
     getindi(indi)
     list(ilist)
     list(alist)
-    enqueue(ilist, indi)
-    enqueue(alist, 1)
+    enqueue(ilist, indi)  /* list of people needing to be displayed */
+    enqueue(alist, 1)     /* ancestor numbers for people on ilist */
+
+        /*
+        Our basic loop is we take the next person who needs to be displayed
+,
+        display them, and then record their parents as needing to be displa
+yed.
+        */
     while (indi, dequeue(ilist)) {
+          /* display person we just pulled off list */
       set(ahnen, dequeue(alist))
       d(ahnen) ". " name(indi) nl()
       if (e, birth(indi)) { " b. " long(e) nl() }
       if (e, death(indi)) { " d. " long(e) nl() }
+          /* add person's parents to list to display */
       if (par, father(indi)) {
         enqueue(ilist, par)
         enqueue(alist, mul(2,ahnen))
@@ -291,7 +324,23 @@ proc main()
 }
      _____________________________________________________________
 
-LIFELINES PROGRAMMING REFERENCE
+Invoking Reports
+
+   As mentioned earlier, reports may be invoked interactively from the main
+   menu via the r option from the main menu.
+
+   Alternatively,  llines may be called with the -x option to have it
+   immediately run a report. For example, to have lifelines run the example
+   ahnentafel report above, on a database named wetmore, this command
+   llines -x ahnentafel_tutorial wetmore would be used.
+
+   For more efficient operation from scripts, the lifelines distribution
+   includes a smaller program llexec which includes all functionality of
+   lifelines except the curses GUI. llexec is made specifically, therefore,
+   for invocations such as llexec -x ahnentafel_tutorial wetmore
+     _____________________________________________________________
+
+Chapter 2. LIFELINES PROGRAMMING REFERENCE
 
    LifeLines programs are stored in files you edit with a screen editor.
    Programs are not edited from within the LifeLines program; edit them as
@@ -627,6 +676,15 @@ Iterators
    executed. The two variables indi and cnt will have the value null after
    the iteration has completed.
 
+   For the purpose of traversing all records in the database, the following
+   iterators may be used:
+
+   forindi Iterate over all people
+   forfam  Iterate over all families
+   forsour Iterate over all sources
+   foreven Iterate over all events
+   forothr Iterate over all other recoure types
+
    All the iterators are described in more detail later in the section
    where their definition occurs.
      _____________________________________________________________
@@ -872,9 +930,9 @@ Person Functions
 
           first title of
 
-   STRING key(INDI|FAM, BOOL);
+   STRING key(RECORD, BOOL);
 
-          internal key of (work for families also)
+          internal key of (works for any record type)
 
    STRING soundex(INDI);
 
@@ -985,9 +1043,13 @@ Parents (INDI, FAM, INT_V) { commands }
    parent/spouse in; these two values are not necessarily the same. Parents
    returns the first family that the person is a child in.
 
-   Title returns the value of the first 1 TITL line in the record. Key
-   returns  the key value of a person or family; it there is a second
-   parameter and it is non-null, the leading I or F will be stripped.
+   Title returns the value of the first 1 TITL line in the record.
+
+   Key returns the key value of a person (or any record); if there is a
+   second parameter and it is non-null, the leading I (or F or S or E or X)
+   will  be  stripped. For example, if key(curindi) returns I23, then
+   key(curindi,1) returns 23.
+
    Soundex returns the Soundex code of the person.
 
    Root and Inode return the root node of the person's GEDCOM node tree.
@@ -996,7 +1058,7 @@ Parents (INDI, FAM, INT_V) { commands }
    function to get the root of the person node tree. Root and inode are
    synonyms.
 
-   Indi returns the person who's key is passed as an argument; if no person
+   Indi returns the person whose key is passed as an argument; if no person
    has the key indi returns null. INDI keys are accepted either as Innn or
    @Innn@.
 
@@ -1478,7 +1540,7 @@ Event and Date Functions
 
           returns the `event' of the current date
 
-   VOID setdate(VARSTRING);
+   VOID setdate(VAR, STRING);
 
           creates an event with specified date and assigns to specified
           variable
@@ -1814,9 +1876,12 @@ User Interaction Functions
    argument is a person; it returns the family. Chooseindi has the user
    select  one person from a set of persons; its argument in a set of
    persons; it returns the chosen person. Choosespouse has the user select
-   a spouse of a person; its argument is a person; it returns the chosen
-   spouse. Choosesubset has the user select a subset of persons from a set
-   of persons; its argument is the chosen subset.
+   a spouse of a person or family; its argument is a person or family; it
+   returns the chosen spouse. (Note: if a husband marries the same woman
+   several times, she will appear multiple times if choosespouse is called
+   for  that  husband,  with  the different marriage dates if known.)
+   Choosesubset has the user select a subset of persons from a set of
+   persons; its argument is the chosen subset.
 
    Menuchoose allows the user to select from an arbitrary menu. The first
    argument is a list of strings making up the items in the menu; the
@@ -2194,6 +2259,10 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
 
           loop through all persons in person set
 
+   VOID gengedcomstrong(SET);
+
+          generate GEDCOM file from person set
+
    These functions allow you to manipulate person sets. A person set is a
    potentially large set of persons; each person may have an arbitrary
    value associated with him/her. A person set must be declared with the
@@ -2259,6 +2328,15 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    that  iterates through each person in the set. The third parameter
    iterates through the values associated with the persons. The fourth
    parameter is an integer variable that counts the iterations.
+
+   Gengedcomstrong generates GEDCOM format output to the report output file
+   of all pesons in the argument person set. The output contains a person
+   record for each person in the set, and all the family records that link
+   at least two of the persons in the set together. The Source, Event and
+   Other(X) record pointers and all top-level nodes referenced by them are
+   output. This function does not output header or trailer records required
+   for a valid GEDCOM file. They should be added by a report using this
+   function.
      _____________________________________________________________
 
 Record Update Functions
@@ -2319,13 +2397,13 @@ Record Linking Functions
 
 Miscellaneous Functions
 
-   VOID lock(INDI|FAM);
+   VOID lock(RECORD|NODE);
 
-          lock a person or family in memory
+          lock a record (or record containing specified node) in memory
 
-   VOID unlock(INDI|FAM);
+   VOID unlock(RECORD|NODE);
 
-          unlock a person or family from memory
+          unlock a record (or record containing specified node) from memory
 
    STRING database(void);
 
@@ -2380,7 +2458,7 @@ Miscellaneous Functions
 
    Database returns the name of the current database, useful in titling
    reports. program returns the name of the current report program. Version
-   returns the version of the running LifeLines program, eg, 3.0.51.
+   returns the version of the running LifeLines program, eg, 3.0.62.
 
    System  executes  its  string argument as a UNIX (or MS-Windows as
    appropriate) shell command, by invoking the system shell. This will not
@@ -2503,31 +2581,26 @@ func get_baptism(indi, prefs)
 
           get string through user interface
 
-   Three functions are available for to generate GEDCOM format output to
-   the report output file of all persons in the argument person set. These
-   functions do not in most cases generate consistent and usable output.
-   This can be done with a program, but it is suggested that these routines
-   are probably not what you really wanted.
-
-   Gengedcom output contains a person record for each person in the set,
-   and all the family records that link at least two of the persons in the
-   set together. This function is provided for backward compatibility.
-   Source, Event and Other(X) record pointers are output unmodified, but
-   none of their records are output - this yields an inconsistent output.
-
-   Gengedcomweak output does not contain Source, Event or Other(X) record
-   pointers or their records. Gengedcomstrong includes the Source, Event
-   and Other(X) record pointers and all top-level nodes referenced by them.
+   Three functions are available to generate GEDCOM format output to the
+   report output file of all persons in the argument person set. Two of
+   these functions do not in most cases generate consistent and usable
+   output. This can be done with a program, but it is suggested that these
+   routines are probably not what you really wanted. Gengedcom output
+   contains a person record for each person in the set, and all the family
+   records that link at least two of the persons in the set together. This
+   function is provided for backward compatibility. Source, Event and
+   Other(X)  record pointers are output unmodified, but none of their
+   records are output - this yields an inconsistent output. Gengedcomweak
+   output does not contain Source, Event or Other(X) record pointers or
+   their records. The function Gengedcomstrong includes the Source, Event
+   and Other(X) record pointers and all top-level nodes referenced by them
+   and is suggested instead of these two functions.
 
    VOID gengedcom(SET);
 
           generate GEDCOM file from person set
 
    VOID gengedcomweak(SET);
-
-          generate GEDCOM file from person set
-
-   VOID gengedcomstrong(SET);
 
           generate GEDCOM file from person set
 
@@ -2559,3 +2632,30 @@ func get_baptism(indi, prefs)
    INT lengthset(SET);
 
           size of a set
+     _____________________________________________________________
+
+Debugging Reports
+
+   The lifelines program includes in its report engine a small debugger
+   feature. If the program parses successfully, but an error is found
+   during execution, you will be prompted to either enter the debug or to
+   quit.
+Report file: /home/user/lifelines/reports/test.ll
+Runtime Error at line 50: set: the arg #1 must be a variable. (arg: tag(nod
+e))
+Enter d for debugger, q to quit
+
+   If you press d to enter the debugger, you will be presented with the
+   debugger  main  menu,  from which you can view the current (local)
+   variables, or the global variables.
+Report debugger (1/5)
+  >1: Display locals (4 vars) [proc: checkrec]
+   2: Display global (1 var)
+   3: Call stack has 3 higher levels.  Go up one level(proc: rectest)
+   4: Call stack has 0 lower levels.
+   5: Quit debugger
+
+   Examining these values might help you determine what went wrong with the
+   program. Select the locals or the globals to view the values of those
+   variables. If any non-empty lists, tables, or sets are displayed, they
+   may be selected, to view their contents.

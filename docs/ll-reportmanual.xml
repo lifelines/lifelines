@@ -63,11 +63,63 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
 
     <authorgroup>
       <author>
-     <firstname>Thomas T. </firstname>
-     <surname>Wetmore </surname>
-     <lineage>IV</lineage>
+        <firstname>Thomas T. </firstname>
+        <surname>Wetmore </surname>
+        <lineage>IV</lineage>
+      </author>
+      <author>
+        <affiliation><orgname>Converted to Docbook SGML by</orgname></affiliation>
+        </author>
+        <author>
+        <firstname>Rafal</firstname>
+        <surname>Prinke </surname>
+      </author>
+      <author>
+        <affiliation><orgname>Updated by</orgname></affiliation>
+      </author>
+      <author>
+        <firstname>Stephen</firstname>
+        <surname>Dum </surname>
+      </author>
+      <author>
+        <firstname>Matt</firstname>
+        <surname>Emmerton </surname>
+      </author>
+      <author>
+        <firstname>Marc</firstname>
+        <surname>Nozell </surname>
+      </author>
+      <author>
+        <firstname>Perry</firstname>
+        <surname>Rapp </surname>
+      </author>
+      <author>
+        <affiliation><orgname>and many other contributers from the lifelines
+        mailing lists</orgname></affiliation>
       </author>
     </authorgroup>
+    <!--
+    <legalnotice><para>
+    Originally written by Thomas T. Wetmore. Converted to Docbook SGML by 
+    Rafal Prinke
+    Updates by
+    Matt Emmerton,
+    Stephen Dum,
+    Perry Rapp,
+    Marc Nozell,
+    and many contributers from the lifelines mailing lists.
+    </para></legalnotice>
+    -->
+    <!--
+    Originally written by Thomas T. Wetmore. Converted to Docbook SGML by 
+    Rafal Prinke
+    Updates by
+    Matt Emmerton,
+    Stephen Dum,
+    Perry Rapp,
+    Marc Nozell,
+    and many contributers from the lifelines mailing lists.
+    -->
 
     <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
   </bookinfo>
@@ -4841,6 +4893,16 @@ loop through all persons in person set
 </para>
 
 </glossdef></glossentry>
+
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>VOID <function>gengedcomstrong</function></funcdef>
+<paramdef><parameter>SET</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+generate GEDCOM file from person set
+</para>
+</glossdef></glossentry>
 </glosslist>
 
 <para>
@@ -4918,6 +4980,18 @@ the specified individual is in the SET.
 The second parameter is a variable that iterates through each person in the set. The third parameter
 iterates through the values associated with the persons. The fourth parameter is an integer variable
 that counts the iterations.
+</para>
+
+<para>
+<function>Gengedcomstrong</function>  
+generates GEDCOM format output to the report output file of all pesons in the
+argument person set. The output contains a person record for each person 
+in the set, and all the family records that link at least two of the persons
+in the set together.
+The Source, Event and Other(X) record pointers and all top-level nodes
+referenced by them are output.  This function does not output
+header or trailer records required for a valid GEDCOM file.  They should
+be added by a report using this function.
 </para>
 
 </sect1>
@@ -5394,13 +5468,11 @@ get string through user interface
 </glosslist>
 
 <para>
-Three functions are available for to generate <acronym>GEDCOM</acronym>
+Three functions are available to generate <acronym>GEDCOM</acronym>
 format output to the report output file of all persons in the argument
-person set.  These functions do not in most cases generate consistent
+person set.  Two of these functions do not in most cases generate consistent
 and usable output.  This can be done with a program, but it is 
 suggested that these routines are probably not what you really wanted.
-</para>
-<para>
 <function>Gengedcom</function> 
 output contains a person record for each person in the set,
 and all the family records that
@@ -5408,15 +5480,12 @@ link at least two of the persons in the set together.
 This function is provided for backward compatibility. Source, Event and
 Other(X) record pointers are output unmodified, but none of their records
 are output - this yields an inconsistent output.
-</para>
-
-<para>
 <function>Gengedcomweak</function> 
 output does not contain Source, Event or Other(X) record pointers 
 or their records.
-<function>Gengedcomstrong</function> includes 
+The function <function>Gengedcomstrong</function> includes 
 the Source, Event and Other(X) record pointers and all top-level nodes
-referenced by them.
+referenced by them and is suggested instead of these two functions.
 </para>
 
 <glosslist>
@@ -5440,15 +5509,6 @@ generate GEDCOM file from person set
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><funcsynopsis><funcprototype>
-<funcdef>VOID <function>gengedcomstrong</function></funcdef>
-<paramdef><parameter>SET</parameter></paramdef>
-</funcprototype></funcsynopsis></glossterm><glossdef>
-
-<para>
-generate GEDCOM file from person set
-</para>
-</glossdef></glossentry>
 </glosslist>
 
 <para>
