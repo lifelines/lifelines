@@ -94,33 +94,10 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
         <surname>Rapp </surname>
       </author>
       <author>
-        <affiliation><orgname>and many other contributers from the lifelines
+        <affiliation><orgname>and many other contributors from the lifelines
         mailing lists</orgname></affiliation>
       </author>
     </authorgroup>
-    <!--
-    <legalnotice><para>
-    Originally written by Thomas T. Wetmore. Converted to Docbook SGML by 
-    Rafal Prinke
-    Updates by
-    Matt Emmerton,
-    Stephen Dum,
-    Perry Rapp,
-    Marc Nozell,
-    and many contributers from the lifelines mailing lists.
-    </para></legalnotice>
-    -->
-    <!--
-    Originally written by Thomas T. Wetmore. Converted to Docbook SGML by 
-    Rafal Prinke
-    Updates by
-    Matt Emmerton,
-    Stephen Dum,
-    Perry Rapp,
-    Marc Nozell,
-    and many contributers from the lifelines mailing lists.
-    -->
-
     <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
   </bookinfo>
 
@@ -1193,7 +1170,7 @@ This iterator will execute the block of commands for each child in the
 specified family.  The second argument is set to each child in the family
 in the order they are listed in the family and the third argument is the
 loop counter which starts at one and is incremented by one each time the
-the block of commands is executed.  The two variables indi and cnt will
+block of commands is executed.  The two variables indi and cnt will
 have the value null after the iteration has completed.
 </para>
 
@@ -1223,7 +1200,7 @@ iterators may be used:
 </row>
 <row>
 <entry>forothr</entry>
-<entry>Iterate over all other recoure types</entry>
+<entry>Iterate over all other record types</entry>
 </row>
 </tbody>
 </tgroup>
@@ -2017,7 +1994,7 @@ loop through all male parents of a person
 <glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
 
 <para>
-loop through all familes a person is a child of
+loop through all families a person is a child of
 </para>
 
 </glossdef></glossentry>
@@ -2183,7 +2160,7 @@ variable that counts the persons starting at one.
 <function>mothers</function> is an iterator that loops through every female
 parent of the specified individual. 
 Its first parameter is a person;
-its third parameter is a family variable that iterates through the familes
+its third parameter is a family variable that iterates through the families
 that the person is a child in;
 its second parameter is a person variable that is the female parent
 associated with the family in the third parameter;
@@ -2197,7 +2174,7 @@ that a person is a child in.  Note: This iterator's name begins with a
 capital P.  There is another function of the same name that begins with a
 lower case p.
 Its first parameter is a person;
-its second parameter is a family variable that iterates through the familes
+its second parameter is a family variable that iterates through the families
 that the person is a child in; and
 the third parameter is a variable that counts the families returned starting at one.
 </para>
@@ -3226,7 +3203,7 @@ returns dates in the selected style.
 <function>datepic</function> allows specifying a custom pattern that overrides
 the date format selected with <function>dateformat</function>.  The string
 supplied specifies the placement of the day, month and year in the string with
-%d, %m and %y.  A null argument disables the overrided format.
+%d, %m and %y.  A null argument disables the overridden format.
 The argument to <function>stddate</function> is normally an event and the
 date is extracted from the event and formatted. If the argument is a 
 date string it is converted using the current date formats.
@@ -4178,7 +4155,7 @@ right justify in field
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-catenate two strings
+concatenate two strings
 </para>
 </glossdef></glossentry>
 
@@ -4190,7 +4167,7 @@ catenate two strings
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-catenate two strings
+concatenate two strings
 </para>
 </glossdef></glossentry>
 
@@ -4383,7 +4360,7 @@ a new string.
 </para>
 
 <para>
-<function>Concat</function> and <function>strconcat</function> catenate strings and return the result. They are identical functions. They may
+<function>Concat</function> and <function>strconcat</function> concatenate strings and return the result. They are identical functions. They may
 take two to 32 string arguments; null arguments are allowed. The arguments are concatenated together into
 a single, newly allocated string, which is returned.
 </para>
@@ -4652,7 +4629,7 @@ output file.
 <function>Test</function> will check for a specified property of the specified file.  The first argument is the property, the second argument is the filename.
 Supported properties are:
 r - file is readable
-w - file is writeable
+w - file is writable
 x - file is executable
 s - file has non-zero size
 z - file has zero size
@@ -4972,7 +4949,7 @@ the user interaction <function>getindiset</function> function.
 
 <para>
 <function>Inset</function> returns <returnvalue>true</returnvalue> if the
-the specified individual is in the SET.
+specified individual is in the SET.
 </para>
 
 <para>
@@ -4984,7 +4961,7 @@ that counts the iterations.
 
 <para>
 <function>Gengedcomstrong</function>  
-generates GEDCOM format output to the report output file of all pesons in the
+generates GEDCOM format output to the report output file of all persons in the
 argument person set. The output contains a person record for each person 
 in the set, and all the family records that link at least two of the persons
 in the set together.
@@ -5237,7 +5214,7 @@ convert string from one codeset to another
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-set interperter debug mode
+set interpreter debug mode
 </para>
 </glossdef></glossentry>
 
@@ -5386,7 +5363,7 @@ can be used.
     return(0)
 }</synopsis>
 If you want to search for additional events or fewer events you can modify the
-string in the index call acccordingly.  Likewise, if you want the to prioritize
+string in the index call accordingly.  Likewise, if you want the to prioritize
 the results, finding a christening event if one exists, else finding
 a baptism event if one exists, then finding an LDS baptism event, and finally
 a christening event, the following function is suggested.
@@ -5562,7 +5539,7 @@ delete a node from a GEDCOM tree
 <para>
 In releases after version 3.0.39, the 
 <function>length</function> function accepts an argument of type 
-<type>list</type>, <type>set</type> or <type>table</type>.  the
+<type>list</type>, <type>set</type> or <type>table</type>.  The
 <function>lengthset</function> function is no longer needed.
 </para> 
 

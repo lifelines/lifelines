@@ -19,7 +19,7 @@ Marc Nozell
 
 Perry Rapp
 
-   and many other contributers from the lifelines mailing lists
+   and many other contributors from the lifelines mailing lists
      _____________________________________________________________
 
    Table of Contents
@@ -672,9 +672,9 @@ Iterators
    commands for each child in the specified family. The second argument is
    set to each child in the family in the order they are listed in the
    family and the third argument is the loop counter which starts at one
-   and  is  incremented by one each time the the block of commands is
-   executed. The two variables indi and cnt will have the value null after
-   the iteration has completed.
+   and is incremented by one each time the block of commands is executed.
+   The  two variables indi and cnt will have the value null after the
+   iteration has completed.
 
    For the purpose of traversing all records in the database, the following
    iterators may be used:
@@ -683,7 +683,7 @@ Iterators
    forfam  Iterate over all families
    forsour Iterate over all sources
    foreven Iterate over all events
-   forothr Iterate over all other recoure types
+   forothr Iterate over all other record types
 
    All the iterators are described in more detail later in the section
    where their definition occurs.
@@ -988,7 +988,7 @@ fathers (INDI, INDI_V, FAM_V, INT_V) { commands }
 
 Parents (INDI, FAM, INT_V) { commands }
 
-          loop through all familes a person is a child of
+          loop through all families a person is a child of
 
    These functions take a person as a parameter and return information
    about him or her.
@@ -1098,7 +1098,7 @@ Parents (INDI, FAM, INT_V) { commands }
 
    mothers is an iterator that loops through every female parent of the
    specified  individual.  Its first parameter is a person; its third
-   parameter is a family variable that iterates through the familes that
+   parameter is a family variable that iterates through the families that
    the person is a child in; its second parameter is a person variable that
    is the female parent associated with the family in the third parameter;
    The fourth parameter is a variable that counts the families returned
@@ -1108,9 +1108,9 @@ Parents (INDI, FAM, INT_V) { commands }
    a child in. Note: This iterator's name begins with a capital P. There is
    another function of the same name that begins with a lower case p. Its
    first parameter is a person; its second parameter is a family variable
-   that iterates through the familes that the person is a child in; and the
-   third parameter is a variable that counts the families returned starting
-   at one.
+   that iterates through the families that the person is a child in; and
+   the third parameter is a variable that counts the families returned
+   starting at one.
 
    Forindi is an iterator that loops through every person in the database
    in ascending key order. Its first parameter is a variable that iterates
@@ -1618,7 +1618,7 @@ Event and Date Functions
    specifying a custom pattern that overrides the date format selected with
    dateformat. The string supplied specifies the placement of the day,
    month  and  year in the string with %d, %m and %y. A null argument
-   disables the overrided format. The argument to stddate is normally an
+   disables the overridden format. The argument to stddate is normally an
    event and the date is extracted from the event and formatted. If the
    argument  is  a date string it is converted using the current date
    formats.
@@ -1918,11 +1918,11 @@ String Functions
 
    STRING concat(STRING, STRING ...);
 
-          catenate two strings
+          concatenate two strings
 
    STRING strconcat(STRING, STRING ...);
 
-          catenate two strings
+          concatenate two strings
 
    INT strlen(STRING);
 
@@ -2009,7 +2009,7 @@ String Functions
    the original string is truncated on the right. Trim historically used
    the buffer return method; rjustify creates and returns a new string.
 
-   Concat and strconcat catenate strings and return the result. They are
+   Concat and strconcat concatenate strings and return the result. They are
    identical functions. They may take two to 32 string arguments; null
    arguments are allowed. The arguments are concatenated together into a
    single, newly allocated string, which is returned.
@@ -2163,7 +2163,7 @@ Output Mode Functions
 
    Test will check for a specified property of the specified file. The
    first argument is the property, the second argument is the filename.
-   Supported properties are: r - file is readable w - file is writeable x -
+   Supported properties are: r - file is readable w - file is writable x -
    file is executable s - file has non-zero size z - file has zero size e -
    file exists f - check if argument is a file d - check if argument is a
    directory The return value is TRUE or FALSE, depending on whether the
@@ -2321,7 +2321,7 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    that  matches  names  entered  at the browse prompt or by the user
    interaction getindiset function.
 
-   Inset returns true if the the specified individual is in the SET.
+   Inset returns true if the specified individual is in the SET.
 
    Forindiset is an iterator that loops through each person in an indiset.
    The first parameter is an indiset. The second parameter is a variable
@@ -2330,7 +2330,7 @@ forindiset( SET, INDI_V, ANY_V, INT_V ) { commands }
    parameter is an integer variable that counts the iterations.
 
    Gengedcomstrong generates GEDCOM format output to the report output file
-   of all pesons in the argument person set. The output contains a person
+   of all persons in the argument person set. The output contains a person
    record for each person in the set, and all the family records that link
    at least two of the persons in the set together. The Source, Event and
    Other(X) record pointers and all top-level nodes referenced by them are
@@ -2443,7 +2443,7 @@ Miscellaneous Functions
 
    VOID debug(BOOLEAN);
 
-          set interperter debug mode
+          set interpreter debug mode
 
    STRING pvalue(ANY);
 
@@ -2533,8 +2533,8 @@ func get_baptism(indi) {
 }
 
           If you want to search for additional events or fewer events you
-          can modify the string in the index call acccordingly. Likewise,
-          if you want the to prioritize the results, finding a christening
+          can modify the string in the index call accordingly. Likewise, if
+          you want the to prioritize the results, finding a christening
           event if one exists, else finding a baptism event if one exists,
           then finding an LDS baptism event, and finally a christening
           event, the following function is suggested.
@@ -2626,7 +2626,7 @@ func get_baptism(indi, prefs)
           delete a node from a GEDCOM tree
 
    In  releases  after version 3.0.39, the length function accepts an
-   argument of type list, set or table. the lengthset function is no longer
+   argument of type list, set or table. The lengthset function is no longer
    needed.
 
    INT lengthset(SET);
