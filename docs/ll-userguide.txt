@@ -1,13 +1,13 @@
 
 LifeLines Documentation
 
-LifeLines Version 3.0.51
+LifeLines Version 3.0.62
 
 Thomas T. Wetmore , IV
      _____________________________________________________________
 
    Table of Contents
-   Users' Manual
+   1. Users' Manual
 
         INTRODUCTION
         INSTALLATION
@@ -39,10 +39,40 @@ Thomas T. Wetmore , IV
         HANDLING SOURCE, EVENT AND USER-DEFINED RECORDS
         FAMILY STRUCTURE AND MERGING PERSONS AND FAMILIES
         LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
+        LIFELINES REPORTS
         System and User Properties
+        Other Executables
+
+              dbverify
+              btedit
+              llexec
+
+   List of Examples
+   1-1. GEDCOM person record
+   1-2. Example of NAME formats
+   1-3. Example of searching on NAMEs
+   1-4. Example family record
+   1-5. Default person record template
+   1-6. Example editing of template record
+   1-7. Example of entering a name
+   1-8. Example of using wildcard in browsing
+   1-9. Example of using abbreviations
+   1-10. Example of replacing the default person record template
+   1-11. Example of replaced default person record template
+   1-12. Example of replaced single line default person record template
+   1-13. Example of bad NAME syntax (too many slashes in this case)
+   1-14. Example of XREF XYZ being defined twice
+   1-15. Example of person multiply defined
+   1-16. Example of family record missing key
+   1-17. Example of person record missing key
+   1-18. Example of level number which is too high
+   1-19. Example of lineage-linking line which is missing required value
+   1-20. Example of a source record
+   1-21. Example of referring events from a person record
+   1-22. Example of adding a new person
      _____________________________________________________________
 
-Users' Manual
+Chapter 1. Users' Manual
 
 INTRODUCTION
 
@@ -53,8 +83,9 @@ INTRODUCTION
    LifeLines database, nor on the amounts or kinds of data that can be kept
    in the records. LifeLines does not contain built-in reports. Instead it
    provides  a programming subsystem that you use to program your own
-   reports and charts. The programming subsystem also lets you query your
-   databases and process your data in any way. LifeLines uses the terminal
+   reports and charts (which has a separate manual -- the lifelines report
+   manual). The programming subsystem also lets you query your databases
+   and  process  your  data  in  any way. LifeLines uses the terminal
    independent features of UNIX to provide a screen and menu based user
    interface.
 
@@ -88,10 +119,8 @@ INTRODUCTION
    enhancements, please sign up on sourceforge and contact Marc Nozell who
    is currently managing the project.
 
-   Note
-
-   Prior to 1999, Lifelines was available on the ftp sites, ftp.cac.psu.edu
-   and hoth.stsci.edu. Please use sourceforge instead.
+     Note:  Prior to 1999, Lifelines was available on the ftp sites,
+     ftp.cac.psu.edu and hoth.stsci.edu. Please use sourceforge instead.
 
    Other sources of information include:
 
@@ -104,12 +133,13 @@ INTRODUCTION
 INSTALLATION
 
    You may be installing LifeLines from a source distribution package or as
-   an executable program already prepared for your UNIX (or MS-Windows)
+   an executable program already prepared for your UNIX or MS-Windows
    system. The source distribution comes with the readme, build script and
    make files necessary to build LifeLines. Follow the instructions in the
    readme file. A number of executables are built which can be put it in a
    directory in your execution path. If you get the program in executable
-   form, follow whatever instructions came with it.
+   form,  follow  whatever  instructions  came with it. The following
+   executables are included:
 
    btedit
           a low-level editor for advanced debugging of broken LifeLines
@@ -126,24 +156,23 @@ INSTALLATION
           the LifeLines program with full user interface
 
    The source distribution package also contains documentation and some
-   LifeLines programs. Included with these in the reports directory is a
-   brief overview of the reports in the file index.html.
+   LifeLines  programs  to demonstrate the capabilities of the report
+   language.  Included with these in the reports directory is a brief
+   overview of the reports in the file index.html.
      _____________________________________________________________
 
 STARTING LIFELINES AND CREATING DATABASES
 
-   You normally start LifeLines with the command: lines database where
+   You normally start LifeLines with the command: llines database where
    database is the name of a LifeLines database. If LifeLines finds the
    database, LifeLines opens the database and takes you to the program's
    main menu. If the database doesn't exist, LifeLines asks whether it
    should create it, and if you answer yes, does so. You may create any
    number of databases, but only one can be accessed by LifeLines at a
-   time. If you built the LifeLines executable from the source package, the
-   executable may be named llines rather than lines. You may either change
-   its name or invoke LifeLines by using the command llines instead.
+   time.
 
    The full command line interface to LifeLines is:
-        lines [-acdfiklnortuwxzCFI][database]
+        llines [-acdfiklnortuwxzCFI][database]
 
    The following options are supported:
 
@@ -169,7 +198,7 @@ STARTING LIFELINES AND CREATING DATABASES
    access)
    -t trace function calls in report programs (for debugging)
    -u specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
-   -w open database with writeable access (protect against other writer or
+   -w open database with writable access (protect against other writer or
    reader access)
    -x execute a single lifelines report program directly
    -z Use normal ASCII characters for drawing lines in user interface
@@ -181,26 +210,26 @@ STARTING LIFELINES AND CREATING DATABASES
 
    The -r option opens the database with read-only access. When in this
    mode LifeLines will not let you modify the database; no other operations
-   are affected. The -w option opens the database with writeable access. If
+   are affected. The -w option opens the database with writable access. If
    the database cannot be opened with the requested mode LifeLines quits
    immediately. When you open a database with neither the -r or -w options,
-   LifeLines first tries to open the database with writeable access; if not
+   LifeLines first tries to open the database with writable access; if not
    possible  LifeLines then tries to open the database with read-only
    access;  and  if this is not possible LifeLines quits. A LifeLines
    database may be open simultaneously by any number of programs with
    read-only access; however, if a database is open by a program with
-   writeable access, then it cannot be opened by any other other program.
+   writable access, then it cannot be opened by any other other program.
 
    In rare situations the read/write mode mechanism can fail; when this
    happens a database may appear unopenable. If this happens use the -f
    option to force open the database; this will open the database and reset
    the mode mechanism. This is a dangerous feature; you can use it to open
-   the same database with writeable access more than once; the results are
+   the same database with writable access more than once; the results are
    unpredictable and generally disastrous.
 
    The multiuser protection supplied by this reader/writer access mechanism
    is provided via a flag setting in the database, so both read-only and
-   writeable access actually alter the database (read-only access only
+   writable access actually alter the database (read-only access only
    alters the value of this flag). For truly read-only access, e.g., for
    use  with  read-only media, the best solution is to lock (-ly) the
    database before copying it to the read-only media. This annotates the
@@ -275,7 +304,7 @@ INTRODUCTION TO GEDCOM
 
    Here is an example GEDCOM person record:
 
-   Example 1. GEDCOM person record 
+   Example 1-1. GEDCOM person record 
   0 @I25@ INDI
   1 NAME Thomas Trask /Wetmore/ Sr
   1 SEX M
@@ -337,7 +366,7 @@ INTRODUCTION TO GEDCOM
    name, must be separated from the rest of the name by one or two slashes.
    For example:
 
-   Example 2. Example of NAME formats 
+   Example 1-2. Example of NAME formats 
 1 NAME John/Smith
 1 NAME John /Smith/
 1 NAME John/Smith/Jr.
@@ -347,7 +376,7 @@ INTRODUCTION TO GEDCOM
    you don't know a person's surname, or the person doesn't have a surname,
    you may use / or // or no slashes at all. For example:
 
-   Example 3. Example of searching on NAMEs 
+   Example 1-3. Example of searching on NAMEs 
 1 NAME Mary//
 1 NAME Mary/
 1 NAME Mary
@@ -402,7 +431,7 @@ INTRODUCTION TO GEDCOM
 
    Here is an example family record:
 
-   Example 4. Example family record 
+   Example 1-4. Example family record 
   0 @F6@ FAM
   1 HUSB @I25@
   1 WIFE @I26@
@@ -551,7 +580,7 @@ ENTERING THE FIRST PERSON
    template of a GEDCOM person record, and puts you in a screen editor to
    edit the template. The default template is:
 
-   Example 5. Default person record template 
+   Example 1-5. Default person record template 
   0 INDI
   1 NAME Fname /Surname/
   1 SEX MF
@@ -579,7 +608,7 @@ ENTERING THE FIRST PERSON
    Here is how I might edit the template when creating a record about
    myself:
 
-   Example 6. Example editing of template record 
+   Example 1-6. Example editing of template record 
   0 INDI
   1 NAME Thomas Trask /Wetmore/ IV
   1 SEX M
@@ -741,7 +770,7 @@ Enter name, key, refn or list:
    surname by another slash. Here are a few of the ways I can enter my
    name:
 
-   Example 7. Example of entering a name 
+   Example 1-7. Example of entering a name 
 
    Thomas Trask /Wetmore/ IV
    thomas/wetmore/iv
@@ -752,7 +781,7 @@ Enter name, key, refn or list:
    You may browse to the list of all persons with the same surname by using
    the * character as the first initial. For example:
 
-   Example 8. Example of using wildcard in browsing 
+   Example 1-8. Example of using wildcard in browsing 
 
    */wetmore
    matches all persons with surname Wetmore. This is the only wildcard
@@ -778,7 +807,7 @@ Enter name, key, refn or list:
    are an I followed by digits. When you enter a key value you may omit the
    I. If LifeLines finds a person with the key value you provide, LifeLines
    enters the person browsing mode displaying that person. You can also
-   browse to a Family, Source, or Note by entering it's key, but you must
+   browse to a Family, Source, or Note by entering its key, but you must
    include the letter identifing the key type, thus F11, S1, or N3 would
    browse to the family, source or note corresponding to the key if it
    exists.
@@ -1245,7 +1274,7 @@ LifeLines - Two Person Browse Screen
           Replace the top person with his/her mother.
 
    s Browse top spouse/s.
-          Replace the the top person with his/her spouse. If the person has
+          Replace the top person with his/her spouse. If the person has
           more than one spouse, LifeLines asks you to identify one.
 
    c Browse top children.
@@ -1495,7 +1524,7 @@ Search Patterns
    ? Matches any single character
    * Matches zero or more occurrences of any character
    SUB a control Z (^Z) is similar to '*', this matches zero or more
-   occurences of any characters other than '.'. (of course you probably
+   occurrences of any characters other than '.'. (of course you probably
    can't type this on unix)
    [ab] A set of characters enclosed in square brackets matches the single
    characters listed between the brackets. If the dash '-' character is to
@@ -1610,7 +1639,7 @@ CODESET CONVERSION
    ASCII letters for the Russian letters. You could do this by temporarily
    altering the configuration variable ReportCodesetOut to be "ASCII"
    (actually, if any of your data has characters in it that are reserved in
-   HTML, such as the less than sign, or the ampersand, you would probaby
+   HTML, such as the less than sign, or the ampersand, you would probably
    want "ASCII//HTML").
 
    The  second  way to change codeset conversion, and the only way in
@@ -1663,7 +1692,7 @@ Which character mapping do you want to edit?
    Files of the form <codeset>__<subcodeset>.tt apply a conversion within
    the  codeset, for example, UTF-8__html.tt is a sub-conversion that
    converts UTF-8 characters that have special escape codes within html to
-   those special codes. For example, specifing the report codeset to be
+   those special codes. For example, specifying the report codeset to be
    UTF-8//html will apply the html sub-conversion to all the data being
    written. Probably not what you really wanted. See the report language
    function convertcode() in the reportmanual for details.
@@ -1764,7 +1793,7 @@ Which character mapping do you want to edit?
    same  results,  and  be shared across databases, by naming it, eg,
    UTF-8__latex.tt. The double underscore ("__") signifies that this is a
    conversion to be applied to text which is in UTF-8, and to trigger
-   lifelinesn  to use this, one must specify a report codeset such as
+   Lifelines  to  use this, one must specify a report codeset such as
    "UTF-8//latex"  (if  UTF-8  output  is desired, but with the latex
    conversion first applied), or "ISO-8859-1//latex" (if ISO-8859-1 output
    is desired, but with the latex conversion first applied).
@@ -1811,11 +1840,11 @@ What utility do you want to perform?
 
           Normally, LifeLines will replace the XREF's (the identifiers for
           individuals, families, sources, notes, etc.) in the GEDCOM with
-          it's  own. These identifiers are reserved by the GEDCOM for
+          its  own.  These identifiers are reserved by the GEDCOM for
           internal use of genealogy programs. However, if the identifiers
           are compatible with LifeLines internal representation and there
           are no conflicts with existing identifiers, LifeLines will ask
-          you if you want to perserve the identifiers in the GEDCOM file
+          you if you want to preserve the identifiers in the GEDCOM file
           rather than assign new values.
 
    k Find a person's key value.
@@ -1846,7 +1875,7 @@ word:
           abbreviation. The word and its abbreviation are separated by a
           colon. For example:
 
-          Example 9. Example of using abbreviations 
+          Example 1-9. Example of using abbreviations 
 
           Connecticut:Conn.
           Massachusetts:Mass.
@@ -1884,21 +1913,21 @@ option=value
    For example if you would like to replace the default person record
    template with the following:
 
-   Example 10. Example of replacing the default person record template 
+   Example 1-10. Example of replacing the default person record template 
   0 INDI
   1 NAME //
   1 SEX
 
    you would edit the user option file to contain:
 
-   Example 11. Example of replaced default person record template 
+   Example 1-11. Example of replaced default person record template 
 
    INDIREC=0 INDI\
      1 NAME //\
      1 SEX
    or, using the \n escape so as to keep the entry on one line:
 
-   Example  12. Example of replaced single line default person record
+   Example 1-12. Example of replaced single line default person record
    template 
 
    INDIREC=0 INDI\n1 NAME //\n1 SEX
@@ -1914,14 +1943,15 @@ IMPORT ERRORS
 
    A number of errors are related to having an incorrect XREF value. An
    XREF is the internal name used to Identify a family, individual, note,
-   source or other record. An XREF is bracked by two @ signs. As an example
+   source or other record. An XREF is bracketed by two @ signs. As an
+   example
   0 @F6@ FAM
   1 HUSB @I25@
   1 WIFE @I26@
   1 CHIL @I17@
 
    Here F6 is the internal name of this family. The family refers to other
-   individuals by specifing their XREF values. Also I25, I26 and I17 are
+   individuals by specifying their XREF values. Also I25, I26 and I17 are
    XREF values of individuals.
 
    XREF values used within LifeLines are totally under the control of
@@ -1936,8 +1966,8 @@ IMPORT ERRORS
           A level 1 NAME record must have a value, and the value must not
           be a pointer, and may have no more than two slashes.
 
-          Example 13. Example of bad NAME syntax (too many slashes in this
-          case) 
+          Example 1-13. Example of bad NAME syntax (too many slashes in
+          this case) 
 
   0 @I99@ INDI
   1 NAME Mary /Smith/ nee /Jones/
@@ -1950,7 +1980,7 @@ IMPORT ERRORS
           For example, the XREF for a family is the same as one for an
           individual.
 
-          Example 14. Example of XREF XYZ being defined twice 
+          Example 1-14. Example of XREF XYZ being defined twice 
 
   0 @XYZ@ INDI
   1 NAME Mary /Smith/ nee /Jones/
@@ -1965,7 +1995,7 @@ IMPORT ERRORS
           No XREF value of an INDI may be reused. This message indicates
           that INDI_XYZ has been used to identify two different persons.
 
-          Example 15. Example of person multiply defined 
+          Example 1-15. Example of person multiply defined 
 
   0 @INDI_XYZ@ INDI
   1 NAME John /Smith/
@@ -1976,7 +2006,7 @@ IMPORT ERRORS
           Each FAM record must have an XREF value. (The XREF is the letters
           between "0" and "FAM".)
 
-          Example 16. Example of family record missing key 
+          Example 1-16. Example of family record missing key 
 
   0 FAM
   1 HUSB @I1@
@@ -1989,7 +2019,7 @@ IMPORT ERRORS
           Each  INDI record must have an XREF value. (The XREF is the
           letters between "0" and "INDI".)
 
-          Example 17. Example of person record missing key 
+          Example 1-17. Example of person record missing key 
 
   0 INDI
   1 NAME John /Smith/
@@ -1997,7 +2027,7 @@ IMPORT ERRORS
    This line has a level number that is too large.
           A child level must be one higher than its parent level.
 
-          Example 18. Example of level number which is too high 
+          Example 1-18. Example of level number which is too high 
 
   0 @I99@ INDI
   1 NAME //
@@ -2007,7 +2037,7 @@ IMPORT ERRORS
           Lineage-linking tags must have a value, including tags FAMC,
           FAMS, FATH, MOTH, HUSB, WIFE, CHIL.
 
-          Example 19. Example of lineage-linking line which is missing
+          Example 1-19. Example of lineage-linking line which is missing
           required value 
 
   0 @I99@ INDI
@@ -2097,7 +2127,7 @@ What activity do you want to perform?
           level, via the user options, or globally, via the configuration
           file). Here is how I recorded one of the sources in my database:
 
-          Example 20. Example of a source record 
+          Example 1-20. Example of a source record 
 
 0 SOUR
   1 REFN jcw
@@ -2393,7 +2423,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    this is referring events within a person record to the record of the
    information source for the event. For example:
 
-   Example 21. Example of referring events from a person record 
+   Example 1-21. Example of referring events from a person record 
 0 @I23@ INDI
   1 NAME Thomas/Whitmore/
   1 BIRT
@@ -2426,7 +2456,7 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    internal key value. For example, when adding the person in the previous
    example you could edit the new record as follows:
 
-   Example 22. Example of adding a new person 
+   Example 1-22. Example of adding a new person 
 0 INDI
   1 NAME Thomas/Whitmore/
   1 BIRT
@@ -2442,6 +2472,16 @@ LINKING RECORDS TOGETHER AND USING THE REFN FEATURE
    The REFN value may also be used when searching for person, source, event
    and user-defined records. You should not add more than one REFN line to
    a record, and every REFN value should be unique.
+     _____________________________________________________________
+
+LIFELINES REPORTS
+
+   Lifelines comes with some prewritten reports, in the reports directory.
+   See the file index.html in the reports directory, for a list and summary
+   of these reports. Lifelines also has a built-in report language for
+   writing your own reports, and comes with a report manual describing how
+   to  write  reports:  see  the  separate  lifelines  report  manual
+   (ll-reportmanual.html, or ll-reportmanual.pdf).
      _____________________________________________________________
 
 System and User Properties
@@ -2486,7 +2526,7 @@ System and User Properties
    2c. If the file .linesrc exists in the current directory read parameters
    from it.
    2d If LLCONFIGFILE is defined in the command line or database table and
-   it's value is the name of a file, load parameters from that file.
+   its value is the name of a file, load parameters from that file.
 
    When LifeLines searches for a property it looks for it as follows:
 
@@ -2588,7 +2628,7 @@ System and User Properties
           input. If either of these is not specified GuiCodeset is used.
 
    LongDisplayDate
-          Six comma separated numbers. Specifing the format for days,
+          Six comma separated numbers. Specifying the format for days,
           months, years, date format, era format, and complex format. If
           string does not contain 6 comma separated numbers all formats are
           set to 0, except date format is set to 14. These formats are used
@@ -2600,7 +2640,7 @@ System and User Properties
           picture is used by LifeLines to display dates in long format.
 
    ShortDisplayDate
-          Six comma separated numbers. Specifing the format for days,
+          Six comma separated numbers. Specifying the format for days,
           months, years, date format, era format, and complex format. If
           string does not contain 6 comma separated numbers all formats are
           set to 0, except date format is set to 14. These formats are used
@@ -2648,7 +2688,7 @@ System and User Properties
    AnnotatePointers
           If set to 1 a descriptive comment is added to pointers when
           editing family or individual records to help identify who is
-          being  refered  to. These tags are removed when the edit is
+          being  referred to. These tags are removed when the edit is
           finished and not stored in the database.
 
    TTPATH
@@ -2680,19 +2720,19 @@ System and User Properties
 
    SOURREC
           The default template to use whenever creating a new source. If
-          not specified, the following is used in english:
+          not specified, the following is used in English:
 
 "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
 
    EVENREC
           The default template to use whenever creating a new event. If not
-          specified, the following is used in english:
+          specified, the following is used in English:
 
 "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
 
    OTHR
           The default template to use whenever creating a new other record.
-          If not specified, the following is used in english:
+          If not specified, the following is used in English:
 
 "0 XXXX\n1 REFN"
 
@@ -2708,10 +2748,14 @@ System and User Properties
 "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED".
 
    HDR_CHAR
-          String containing the CHAR block for the header record when
-          exporting GEDCOM. The default is
-
-"1 CHAR ASCII".
+          Normally lifelines will populate the CHAR block in the header
+          record automatically when exporting GEDCOM, with the actual
+          character encoding being used in the export; this can be found in
+          the settings displayed in the u(ser) c(harset settings) page.
+          However,  if  desired, the HDR_CHAR variable may be used to
+          overwrite the entire CHAR line. String containing the CHAR block
+          for the header record when exporting GEDCOM. An example HDR_CHAR
+          value would be "1 CHAR ASCII".
 
    ReportLog
           name of file to print report program errors to, if not specified
@@ -2755,3 +2799,65 @@ System and User Properties
 
    user.url
           URL to the users home page.
+     _____________________________________________________________
+
+Other Executables
+
+dbverify
+
+   dbverify  is a utility to check an existing database and report on
+   various inconsistencies. It can also repair a number of issues found.
+
+   dbverify supports the following options:
+
+   -a Perform all checks (does not include fixes)
+   -D Fix bad delete entries
+   -e Check events
+   -f Check families
+   -F Alter any bad family lineage pointers (to _badptr)
+   -g Check for ghosts (names/refns)
+   -G Check for & fix ghosts (names/refns)
+   -h Display help text (this text)
+   -i Check individuals
+   -l Check database structure
+   -m Check for records missing data entries
+   -M Fix records missing data entries
+   -n Noisy (echo every record processed)
+   -s Check sours
+   -x Check others
+     _____________________________________________________________
+
+btedit
+
+   This program edits raw binary btree blocks in a LifeLines lifelines
+   database file. Some information about its usage is provided by running:
+   btedit -h
+
+   Do NOT use this unless you know what you are doing and you have backed
+   up your database.
+
+   The LifeLines database has proven rather robust over the years. However,
+   it  is  important to make frequent backups of any database. If you
+   experience  database  corruption, make sure you save a copy of the
+   database before trying any recovery process. Only work on a copy of the
+   data so that the data is not further damaged.
+
+   Try exporting the database to a gedcom file from within llines. Compare
+   the saved file with previously saved versions. Editing the gedcom file
+   to correct issues is often easier than using btedit.
+     _____________________________________________________________
+
+llexec
+
+   llexec invokes the LifeLines report execution program without a GUI for
+   non-interactive processing of report programs. The supported options are
+   the same as for llines.
+
+   An example usage, which will open the database 'myfamily' and run the
+   report eol.ll is:
+   llexec myfamily -x eol
+
+   Programs that require input, will prompt for that data and read from
+   standard input. If a program required the input of a 0 or 1 to control
+   the output, the following is one way to allow use of llexec in a script:
+   echo "1" | llexec myfamily -x myprog

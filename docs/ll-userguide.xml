@@ -434,7 +434,7 @@ specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
 <row>
 <entry>-w</entry>
 <entry>
-open database with writeable access (protect against other
+open database with writable access (protect against other
 writer or reader access)
 </entry>
 </row>
@@ -471,20 +471,20 @@ programs.
      access. When in this mode
      <application>LifeLines</application> will not let you modify
      the database; no other operations are affected. The
-     <option>-w</option> option opens the database with writeable
+     <option>-w</option> option opens the database with writable
      access. If the database cannot be opened with the requested
      mode <application>LifeLines</application> quits
      immediately. When you open a database with neither the
      <option>-r</option> or <option>-w</option> options,
      <application>LifeLines</application> first tries to open the
-     database with writeable access; if not possible
+     database with writable access; if not possible
      <application>LifeLines</application> then tries to open the
      database with read-only access; and if this is not possible
      <application>LifeLines</application> quits. A
      <application>LifeLines</application> database may be open
      simultaneously by any number of programs with read-only
      access; however, if a database is open by a program with
-     writeable access, then it cannot be opened by any other other
+     writable access, then it cannot be opened by any other other
      program.
 
 </para>
@@ -498,7 +498,7 @@ programs.
      happens use the <option>-f</option> option to force open the
      database; this will open the database and reset the mode
      mechanism. This is a dangerous feature; you can use it to open
-     the same database with writeable access more than once; the
+     the same database with writable access more than once; the
      results are unpredictable and generally disastrous.
 
 </para>
@@ -507,7 +507,7 @@ programs.
 
      The multiuser protection supplied by this reader/writer access
      mechanism is provided via a flag setting in the database, so both
-     read-only and writeable access actually alter the database (read-only
+     read-only and writable access actually alter the database (read-only
      access only alters the value of this flag). For truly read-only
      access, e.g., for use with read-only media, the best solution is to
      lock (-ly) the      database before copying it to the read-only media. This
@@ -2715,7 +2715,7 @@ LifeLines - Two Person Browse Screen
 
 <para>
 
-     Replace the the top person with his/her spouse. If the person
+     Replace the top person with his/her spouse. If the person
      has more than one spouse, <application>LifeLines</application>
      asks you to identify one.
 
@@ -3208,7 +3208,7 @@ Matches zero or more occurrences of any character
 <entry>SUB</entry>
 <entry>
 a control Z (^Z) is similar to '*', this matches zero
-or more occurences of any characters other than '.'.
+or more occurrences of any characters other than '.'.
 (of course you probably can't type this on unix)
 </entry>
 </row>
@@ -3466,7 +3466,7 @@ CODESET CONVERSION
      the Russian letters. You could do this by temporarily altering the
      configuration variable ReportCodesetOut to be "ASCII" (actually, if any of
      your data has characters in it that are reserved in HTML, such as the less
-     than sign, or the ampersand, you would probaby want "ASCII//HTML").
+     than sign, or the ampersand, you would probably want "ASCII//HTML").
 
 </para>
 
@@ -3576,7 +3576,7 @@ for records read in from or written out to GEDCOM
      Files of the form &lt;codeset&gt;__&lt;subcodeset&gt;.tt apply a
      conversion within the codeset, for example, UTF-8__html.tt is a
      sub-conversion that converts UTF-8 characters that have special escape
-     codes within html to those special codes.  For example, specifing the
+     codes within html to those special codes.  For example, specifying the
      report codeset to be UTF-8//html will apply the html sub-conversion to
      all the data being written.  Probably not what you really wanted.
      See the report language function convertcode() in the reportmanual for
@@ -3776,7 +3776,7 @@ represents the \ character
      the same results, and be shared across databases, by naming it, eg,
      UTF-8__latex.tt. The double underscore ("__") signifies that this
      is a conversion to be applied to text which is in UTF-8, and to 
-     trigger lifelinesn to use this, one must specify a report codeset
+     trigger Lifelines to use this, one must specify a report codeset
      such as "UTF-8//latex" (if UTF-8 output is desired, but with the
      latex conversion first applied), or "ISO-8859-1//latex" (if 
      ISO-8859-1 output is desired, but with the latex conversion first
@@ -3854,7 +3854,7 @@ These identifiers are reserved by the <acronym>GEDCOM</acronym> for internal
 use of genealogy programs.  However, if the identifiers are compatible with
 <application>LifeLines</application> internal representation and there are no
 conflicts with existing identifiers, <application>LifeLines</application> will
-ask you if you want to perserve the identifiers in the 
+ask you if you want to preserve the identifiers in the 
 <acronym>GEDCOM</acronym> 
 file rather than assign new values.
 </para>
@@ -4026,7 +4026,7 @@ by default named errs.log.
 <para>
 A number of errors are related to having an incorrect XREF value.
 An XREF is the internal name used to Identify a family, individual, note,
-source or other record.  An XREF is bracked by two @ signs.  As an example
+source or other record.  An XREF is bracketed by two @ signs.  As an example
 </para>
 <programlisting>  0 @F6@ FAM
   1 HUSB @I25@
@@ -4034,7 +4034,7 @@ source or other record.  An XREF is bracked by two @ signs.  As an example
   1 CHIL @I17@</programlisting>
 <para>
 Here F6 is the internal name of this family.  The family refers
-to other individuals by specifing their XREF values.  Also I25, I26 and I17
+to other individuals by specifying their XREF values.  Also I25, I26 and I17
 are XREF values of individuals. 
 </para>
 <para>
@@ -5282,7 +5282,7 @@ not specified <glossterm>GuiCodeset</glossterm> is used.
 <glossentry><glossterm>LongDisplayDate</glossterm><glossdef>
 
 <para>
-Six comma separated numbers. Specifing the format for
+Six comma separated numbers. Specifying the format for
 days, months, years, date format, era format, and complex format.
 If string does not contain 6 comma separated numbers all formats are
 set to 0, except date format is set to 14.
@@ -5302,7 +5302,7 @@ This picture is used by <application>LifeLines</application> to display dates in
 <glossentry><glossterm>ShortDisplayDate</glossterm><glossdef>
 
 <para>
-Six comma separated numbers. Specifing the format for
+Six comma separated numbers. Specifying the format for
 days, months, years, date format, era format, and complex format.
 If string does not contain 6 comma separated numbers all formats are
 set to 0, except date format is set to 14.
@@ -5396,7 +5396,7 @@ on-screen.
 
 <para>
 If set to 1 a descriptive comment is added to pointers when editing family or
-individual records to help identify who is being refered to.  These tags
+individual records to help identify who is being referred to.  These tags
 are removed when the edit is finished and not stored in the database.
 </para>
 
@@ -5454,7 +5454,7 @@ include the 0 level FAM tag.)
 
 <para>
 The default template to use whenever creating a new source.
-If not specified, the following is used in english:
+If not specified, the following is used in English:
 <programlisting>
 "0 SOUR\n1 REFN\n1 TITL Title\n1 AUTH Author"
 </programlisting>
@@ -5465,7 +5465,7 @@ If not specified, the following is used in english:
 
 <para>
 The default template to use whenever creating a new event.
-If not specified, the following is used in english:
+If not specified, the following is used in English:
 <programlisting>
 "0 EVEN\n1 REFN\n1 DATE\n1 PLAC\n1 INDI\n  2 NAME\n  2 ROLE\n1 SOUR"
 </programlisting>
@@ -5476,7 +5476,7 @@ If not specified, the following is used in english:
 
 <para>
 The default template to use whenever creating a new other record.
-If not specified, the following is used in english:
+If not specified, the following is used in English:
 <programlisting>
 "0 XXXX\n1 REFN"
 </programlisting>
@@ -5730,7 +5730,7 @@ issues is often easier than using btedit.
 llexec
 </title>
 <para>
-llexec envokes the LifeLines report execution program without a GUI
+llexec invokes the LifeLines report execution program without a GUI
 for non-interactive processing of report programs.  The supported options are
 the same as for <command>llines</command>.  
 </para>
