@@ -4,6 +4,15 @@
 	Dates were being truncated with locale set to fr.
 	Patch from Patrick Texier
 
+2008-08-26 Stephen Dum 
+        * Changelog ll-reportmanual.xml ll-reportmanual.txt ll-reportmanual.pdf
+	  ll-reportmanual.html ll-userguide.xml ll-userguide.html
+	  ll-userguide.txt ll-userguide.pdf
+
+	Fix various spelling errors in the docs and move gengedcomstrong
+	out of the depricated section.  Most changes suggested by Patrick
+	Texier.
+
 2008-05-17 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
