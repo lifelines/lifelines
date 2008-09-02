@@ -242,8 +242,6 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 		zs_appf(ztemp, "%s: ", _(tg->prefix));
 
 		if (date) {
-			if (rfmt && rfmt->rfmt_date)
-				date = (*rfmt->rfmt_date)(date);
 			zs_apps(ztemp, date);
 		}
 		if (place) {
