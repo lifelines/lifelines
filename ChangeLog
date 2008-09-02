@@ -1,3 +1,9 @@
+2008-09-01 Stephen Dum 
+        * Changelog src/gedlib/gstrings.c src/liflines/show.c
+
+	Dates were being truncated with locale set to fr.
+	Patch from Patrick Texier
+
 2008-05-17 Perry Rapp
 
 	* ChangeLog src/gedlib/node.c src/hdrs/gedcom.h
