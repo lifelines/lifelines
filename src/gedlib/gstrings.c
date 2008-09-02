@@ -235,6 +235,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
+	STRING tempname;
 	INT mylen=len;
 	char counts[32];
 	INT husbands=0, wives=0, children=0;
@@ -269,7 +270,9 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 				templen = (mylen-4)/2;
 			else
 				templen = mylen;
-			llstrcatn(&p, indi_to_name(node, templen), &mylen);
+			tempname = indi_to_name(node, templen);
+			limit_width(tempname, templen, uu8);
+			llstrcatn(&p, tempname, &mylen);
 			if (wives)
 				llstrcatn(&p, " m. ", &mylen);
 		}
