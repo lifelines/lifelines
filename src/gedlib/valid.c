@@ -53,6 +53,7 @@ extern STRING qSbadmul,qSbadenm,qSbadparsex,qSbadirefn;
 BOOLEAN
 valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 {
+	NODE refn;
 	NODE name1, refn1, sex1, body1, famc1, fams1, node;
 	NODE name0, refn0, sex0, body0, famc0, fams0;
 	INT isex, num;
@@ -103,12 +104,15 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
-	ukey = (refn1 ? nval(refn1) : NULL);
-	get_refns(ukey, &num, &keys, 'I');
-	if (num > 1 || (num == 1 && (!orig ||
-	    nestr(keys[0], rmvat(nxref(indi1)))))) {
-		*pmsg = _(qSbadirefn);
-		goto bad1;
+	/* if there are more than one refn should check each */
+	for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
+	    ukey = nval(refn);
+	    get_refns(ukey, &num, &keys, 'I');
+	    if (num > 1 || (num == 1 && (!orig ||
+		nestr(keys[0], rmvat(nxref(indi1)))))) {
+		    *pmsg = _(qSbadirefn);
+		    goto bad1;
+	    }
 	}
 	if (orig)
 		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
