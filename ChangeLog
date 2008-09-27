@@ -1,16 +1,22 @@
+2008-09-27 Perry Rapp
+
+	* ChangeLog docs/ll-reportmanual.html
+
+	Fix typo. Also make uniform tabs in recent ChangeLog entries.
+
 2008-09-20 Stephen Dum 
 	* ChangeLog src/gedlib/valid.c
 
 	Check All refn's when editing an individual not just the first one.
 
 2008-09-01 Stephen Dum 
-        * ChangeLog src/gedlib/gstrings.c src/liflines/show.c
+	* ChangeLog src/gedlib/gstrings.c src/liflines/show.c
 
 	Dates were being truncated with locale set to fr.
 	Patch from Patrick Texier
 
 2008-08-26 Stephen Dum 
-        * ChangeLog ll-reportmanual.xml ll-reportmanual.txt ll-reportmanual.pdf
+	* ChangeLog ll-reportmanual.xml ll-reportmanual.txt ll-reportmanual.pdf
 	  ll-reportmanual.html ll-userguide.xml ll-userguide.html
 	  ll-userguide.txt ll-userguide.pdf
 

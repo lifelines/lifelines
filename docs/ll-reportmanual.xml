@@ -5363,7 +5363,7 @@ can be used.
     return(0)
 }</synopsis>
 If you want to search for additional events or fewer events you can modify the
-string in the index call accordingly.  Likewise, if you want the to prioritize
+string in the index call accordingly.  Likewise, if you want to prioritize
 the results, finding a christening event if one exists, else finding
 a baptism event if one exists, then finding an LDS baptism event, and finally
 a christening event, the following function is suggested.
