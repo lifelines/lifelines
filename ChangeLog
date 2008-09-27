@@ -4,6 +4,10 @@
 
 	Fix typo. Also make uniform tabs in recent ChangeLog entries.
 
+	* ChangeLog src/gedlib/valid.c
+
+	Cosmetic: Make indents uniform.
+
 2008-09-20 Stephen Dum 
 	* ChangeLog src/gedlib/valid.c
 

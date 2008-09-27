@@ -106,13 +106,13 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 	}
 	/* if there are more than one refn should check each */
 	for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
-	    ukey = nval(refn);
-	    get_refns(ukey, &num, &keys, 'I');
-	    if (num > 1 || (num == 1 && (!orig ||
-		nestr(keys[0], rmvat(nxref(indi1)))))) {
-		    *pmsg = _(qSbadirefn);
-		    goto bad1;
-	    }
+		ukey = nval(refn);
+		get_refns(ukey, &num, &keys, 'I');
+		if (num > 1 || (num == 1 && (!orig ||
+			nestr(keys[0], rmvat(nxref(indi1)))))) {
+			*pmsg = _(qSbadirefn);
+			goto bad1;
+		}
 	}
 	if (orig)
 		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
