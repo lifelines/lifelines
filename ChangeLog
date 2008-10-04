@@ -5,6 +5,10 @@
 	Fix from Patrick Texier (on LINES-L list 2008-07-03) to fix
 	disp_person_birthdeath to reformat date.
 
+	* ChangeLog po/fr.po
+
+	Updated French translation from Patrix Texier.
+
 2008-09-27 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.html
