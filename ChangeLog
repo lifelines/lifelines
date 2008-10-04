@@ -17,7 +17,8 @@
 	* ChangeLog src/gedlib/gstrings.c src/liflines/show.c
 
 	Dates were being truncated with locale set to fr.
-	Patch from Patrick Texier
+	Patch from Patrick Texier (add limit_width after indi_to_name
+	and before llstrcatn, in fam_to_list_string).
 
 2008-08-26 Stephen Dum 
 	* ChangeLog ll-reportmanual.xml ll-reportmanual.txt ll-reportmanual.pdf
