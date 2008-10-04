@@ -9,6 +9,11 @@
 
 	Updated French translation from Patrix Texier.
 
+	* ChangeLog src/gedlib/names.c
+
+	Fix manip_name to call limit_width so it doesn't leave broken
+	(partial) UTF-8 at end.
+
 2008-09-27 Perry Rapp
 
 	* ChangeLog docs/ll-reportmanual.html

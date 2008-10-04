@@ -984,8 +984,13 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 	name = scratch;
 	if (captype == DOSURCAP) name = upsurname(name);
 	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
-	if (surorder == REGORDER) return trim(name_string(name), len);
-	return trim(name_surfirst(name), len);
+	if (surorder == REGORDER) 
+		name = trim(name_string(name), len);
+	else
+		name = trim(name_surfirst(name), len);
+	/* trim doesn't respect UTF-8, so ensure we don't leave broken end */
+	limit_width(name, len, uu8);
+	return name;
 }
 /*===============================================
  * name_string -- Remove slashes from GEDCOM name
