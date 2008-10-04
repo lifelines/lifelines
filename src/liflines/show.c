@@ -237,19 +237,17 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 		ct = 0;
 		record_to_date_place(irec, tg->tag, &date, &place, &ct);
 		if (!ct) continue;
-		if (rfmt && rfmt->rfmt_date)
+		if (rfmt && rfmt->rfmt_date) /* format date */
 			date = (*rfmt->rfmt_date)(date);
 		zs_appf(ztemp, "%s: ", _(tg->prefix));
 
 		if (date) {
-			if (rfmt && rfmt->rfmt_date)
-				date =(*rfmt->rfmt_date)(date);
 			zs_apps(ztemp, date);
 		}
 		if (place) {
 			if (date)
 				zs_appf(ztemp, ", ");
-			if (rfmt && rfmt->rfmt_plac)
+			if (rfmt && rfmt->rfmt_plac) /* format place */
 				place = (*rfmt->rfmt_plac)(place);
 			zs_apps(ztemp, place);
 		}

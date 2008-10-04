@@ -2,8 +2,8 @@
 
 	* ChangeLog src/liflines/show.c
 
-	Fix from Patrick Texier (on LINES-L list 2008-07-03) to fix
-	disp_person_birthdeath to reformat date.
+	Accidentally remove fix from Patrick Texier (on LINES-L list 
+	2008-07-03) to fix disp_person_birthdeath to reformat date.
 
 	* ChangeLog po/fr.po
 
@@ -13,6 +13,12 @@
 
 	Fix manip_name to call limit_width so it doesn't leave broken
 	(partial) UTF-8 at end.
+
+	* ChangeLog src/liflines/show.c
+
+	Reapply fix from Patrick Texier (on LINES-L list 2008-07-03)
+	to fix disp_person_birthdeath to reformat date.
+
 
 2008-09-27 Perry Rapp
 
