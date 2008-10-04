@@ -3,7 +3,7 @@
 	* ChangeLog src/liflines/show.c
 
 	Accidentally remove fix from Patrick Texier (on LINES-L list 
-	2008-07-03) to fix disp_person_birthdeath to reformat date.
+	2008-07-03) to fix disp_person_birthdeath to not doubly reformat date.
 
 	* ChangeLog po/fr.po
 
@@ -17,12 +17,11 @@
 	* ChangeLog src/liflines/show.c
 
 	Reapply fix from Patrick Texier (on LINES-L list 2008-07-03)
-	to fix disp_person_birthdeath to reformat date.
+	to fix disp_person_birthdeath to not doubly reformat date.
 
 	* ChangeLog src/gedlib/messages.c src/liflines/show.c
 
 	Patrick Texier's path to display MARC & ENGA info when MARR missing.
-
 
 2008-09-27 Perry Rapp
 
@@ -45,6 +44,8 @@
 	Dates were being truncated with locale set to fr.
 	Patch from Patrick Texier (add limit_width after indi_to_name
 	and before llstrcatn, in fam_to_list_string).
+	Also apply fix from Patrick Texier (on LINES-L list 2008-07-03)
+	to fix disp_person_birthdeath to not doubly reformat date.
 
 2008-08-26 Stephen Dum 
 	* ChangeLog ll-reportmanual.xml ll-reportmanual.txt ll-reportmanual.pdf
