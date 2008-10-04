@@ -365,6 +365,11 @@ ZST qSdspl_child  = N_("child");
 /* &&begin display abbreviations */
 	/* m.: married */
 ZST qSdspa_mar    = N_("m. ");
+	/* eng. : engaged */
+ZST qSdspa_eng    = N_("eng. ");
+	/* mc. : marriage contract */
+ZST qSdspa_marc   = N_("m.c. ");
+
 	/* div.: divorced */
 ZST qSdspa_div    = N_("div. ");
 	/* b.: born */
@@ -379,6 +384,8 @@ ZST qSdspa_bur    = N_("bur. ");
 ZST qSdspa_chbr   = N_("cb. ");
 /* &&end display abbreviations, begin long forms */
 ZST qSdspl_mar    = N_("married: ");
+ZST qSdspl_eng    = N_("engaged: ");
+ZST qSdspl_marc   = N_("marr.ct: ");
 ZST qSdspl_bir    = N_("born: ");
 ZST qSdspl_chr    = N_("bapt: ");
 ZST qSdspl_dea    = N_("died: ");

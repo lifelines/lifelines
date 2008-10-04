@@ -19,6 +19,10 @@
 	Reapply fix from Patrick Texier (on LINES-L list 2008-07-03)
 	to fix disp_person_birthdeath to reformat date.
 
+	* ChangeLog src/gedlib/messages.c src/liflines/show.c
+
+	Patrick Texier's path to display MARC & ENGA info when MARR missing.
+
 
 2008-09-27 Perry Rapp
 

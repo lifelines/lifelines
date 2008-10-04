@@ -64,6 +64,8 @@ extern STRING qSdspl_indi,qSdspl_fath,qSdspl_moth,qSdspl_spouse,qSdspl_child;
 extern STRING qSdspa_resi,qSdspa_div;
 extern STRING qSdspa_mar,qSdspa_bir,qSdspa_chr,qSdspa_dea,qSdspa_bur,qSdspa_chbr;
 extern STRING qSdspl_mar,qSdspl_bir,qSdspl_chr,qSdspl_dea,qSdspl_bur;
+extern STRING qSdspa_eng,qSdspa_marc;
+extern STRING qSdspl_eng,qSdspl_marc;
 
 /*********************************************
  * local types
@@ -496,9 +498,13 @@ init_display_fam (RECORD frec, INT width)
 	disp_person_birthdeath(Swbirt, iwife, f_birth_tags, &disp_long_rfmt);
 	disp_person_birthdeath(Swdeat, iwife, f_death_tags, &disp_long_rfmt);
 
+	/* Find marriage (or marital contract, or engagement) */
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
+	if (!s) s = sh_indi_to_event_long(fam, "MARC", _(qSdspl_marc), width-3);
+	if (!s) s = sh_indi_to_event_long(fam, "ENGA", _(qSdspl_eng), width-3);
 	if (s) llstrncpyf(Smarr, liwidth, uu8, s);
 	else llstrncpyf(Smarr, liwidth, uu8, _(qSdspl_mar));
+
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
 	wtemp = width-5 - strlen(Smarr);
@@ -725,9 +731,24 @@ family_events (STRING outstr, NODE indi, NODE fam, INT len)
 	STRING p = outstr;
 	INT mylen = len;
 	p[0] = 0;
-	evt = sh_fam_to_event_shrt(fam, "MARR", _(qSdspa_mar), mylen);
-	if (evt && !append_event(&p, evt, &mylen, 10))
-		return;
+
+	/* find marriage (or marital contract, or engagement) */
+	if (!evt) {
+		evt = sh_fam_to_event_shrt(fam, "MARR", _(qSdspa_mar), mylen);
+		if (evt && !append_event(&p, evt, &mylen, 10))
+			return;
+	}
+	if (!evt) {
+		evt = sh_fam_to_event_shrt(fam, "MARC", _(qSdspa_marc), mylen);
+		if (evt && !append_event(&p, evt, &mylen, 10))
+			return;
+	}
+	if (!evt) {
+		evt = sh_fam_to_event_shrt(fam, "ENGA", _(qSdspa_eng), mylen);
+		if (evt && !append_event(&p, evt, &mylen, 10))
+			return;
+	}
+
 /*
 	mylen is up-to-date how many chars left we have
 	(we keep passing mylen-2 because events are prefixed with ", ")
