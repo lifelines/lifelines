@@ -1,3 +1,9 @@
+2008-10-06 Perry Rapp
+
+	* ChangeLog po/fr.po
+
+	Updated French translation from Patrick Texier.
+
 2008-10-04 Perry Rapp
 
 	* ChangeLog src/liflines/show.c
