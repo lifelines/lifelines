@@ -89,6 +89,9 @@ INTRODUCTION
    independent features of UNIX to provide a screen and menu based user
    interface.
 
+   The database is created by entering data with LifeLines. Data can also
+   be imported from GEDCOM files or exported to GEDCOM files.
+
    LifeLines is a non-commercial, experimental system that is use at your
    own risk software. I developed LifeLines for personal use and shared it
    with  friends.  Enough of a demand arose through word of mouth and
@@ -291,9 +294,12 @@ INTRODUCTION TO GEDCOM
    structuring and formatting your data. But it also means that the way you
    store data in your databases can be different from the way that someone
    else stores their data. This can be a problem if you share data with
-   others  or  share  report  programs with other LifeLines users. My
-   recommendation is to use GEDCOM lineage-linking conventions wherever
-   possible.
+   others  or share report programs with other LifeLines users. It is
+   recommended to use GEDCOM lineage-linking conventions wherever possible.
+   LifeLines  allows you to export it's database to a GEDCOM file for
+   archival purposes or to exchange data with others. You can also import
+   data from GEDCOM files into a LifeLines database. (See Miscellaneous
+   Utilities for details.)
 
    LifeLines does not use forms or screens to guide you through entering or
    changing data. Instead you use a screen editor and directly edit the
@@ -316,7 +322,7 @@ INTRODUCTION TO GEDCOM
     2 NAME Thomas T. Wetmore
     2 DATE 26 October 1888
     2 PLAC Norwich, New London, Connecticut
-    2 AGE 22 years
+    2 AGE 22y
     2 COUR New London County Court of Common Pleas
     2 SOUR court record from National Archives
   1 OCCU Antiques Dealer
@@ -324,7 +330,7 @@ INTRODUCTION TO GEDCOM
     2 NAME Thomas Trask Wetmore
     2 DATE 17 February 1947
     2 PLAC New London, New London, Connecticut
-    2 AGE 80 years, 11 months, 4 days
+    2 AGE 80y11m4d
     2 CAUS Heart Attack
     2 SOUR New London Death Records
   1 FAMC @F11@

@@ -1,3 +1,10 @@
+2008-11-13 Stephen Dum 
+	* ChangeLog docs/ll-userguide.xml ll-userguide.html
+	  ll-userguide.txt ll-userguide.pdf
+
+	Document difference between database and GEDCOM file.
+	Update gedcom example to conform to standard for AGE arguments
+
 2008-10-06 Perry Rapp
 
 	* ChangeLog po/fr.po

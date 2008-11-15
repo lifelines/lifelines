@@ -111,7 +111,14 @@ INTRODUCTION
 
 </para>
 
+<para>
 
+     The database is created by entering data with 
+     <application>LifeLines</application>.  
+     Data can also be imported from <acronym>GEDCOM</acronym> 
+     files or exported to <acronym>GEDCOM</acronym> files.
+
+</para>
 
 <para>
 
@@ -575,8 +582,8 @@ INTRODUCTION TO <acronym>GEDCOM</acronym>
      <acronym>GEDCOM</acronym> format; you organize, edit and
      maintain your data in this format. <acronym>GEDCOM</acronym>
      is a standard that defines a file format for moving
-     genealogical data between computer
-     systems. <application>LifeLines</application> has adopted this
+     genealogical data between computer systems. 
+     <application>LifeLines</application> has adopted this
      format for structuring the records in its databases. This
      approach provides a structured yet flexible method for storing
      all the data you wish to record. There are few restrictions on
@@ -624,9 +631,15 @@ INTRODUCTION TO <acronym>GEDCOM</acronym>
      databases can be different from the way that someone else
      stores their data.  This can be a problem if you share data
      with others or share report programs with other
-     <application>LifeLines</application> users. My recommendation
-     is to use <acronym>GEDCOM</acronym> lineage-linking
+     <application>LifeLines</application> users. It is recommended
+     to use <acronym>GEDCOM</acronym> lineage-linking
      conventions wherever possible.
+     <application>LifeLines</application> allows you to export
+     it's database to a <acronym>GEDCOM</acronym> file for
+     archival purposes or to exchange data with others.  You can
+     also import data from <acronym>GEDCOM</acronym> files into
+     a <application>LifeLines</application> database. (See Miscellaneous
+     Utilities for details.)
 
 </para>
 
@@ -674,7 +687,7 @@ INTRODUCTION TO <acronym>GEDCOM</acronym>
     2 NAME <userinput>Thomas T. Wetmore</userinput>
     2 DATE <userinput>26 October 1888</userinput>
     2 PLAC <userinput>Norwich, New London, Connecticut</userinput>
-    2 AGE <userinput>22 years</userinput>
+    2 AGE <userinput>22y</userinput>
     2 COUR <userinput>New London County Court of Common Pleas</userinput>
     2 SOUR <userinput>court record from National Archives</userinput>
   1 OCCU <userinput>Antiques Dealer</userinput>
@@ -682,7 +695,7 @@ INTRODUCTION TO <acronym>GEDCOM</acronym>
     2 NAME <userinput>Thomas Trask Wetmore</userinput>
     2 DATE <userinput>17 February 1947</userinput>
     2 PLAC <userinput>New London, New London, Connecticut</userinput>
-    2 AGE <userinput>80 years, 11 months, 4 days</userinput>
+    2 AGE <userinput>80y11m4d</userinput>
     2 CAUS <userinput>Heart Attack</userinput>
     2 SOUR <userinput>New London Death Records</userinput>
   1 FAMC @F11@
