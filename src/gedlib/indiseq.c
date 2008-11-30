@@ -797,9 +797,10 @@ canonkeysort_indiseq (INDISEQ seq)
 static BOOLEAN
 is_locale_current (INDISEQ seq)
 {
-	if (are_locales_supported())
+	if (are_locales_supported()) {
+		if (! ILocale(seq)) return TRUE;
 		return eqstr(ILocale(seq), llsetlocale(LC_COLLATE, NULL));
-	else
+	} else
 		return TRUE;
 }
 /*============================================

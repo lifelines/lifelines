@@ -1,4 +1,12 @@
+2008-11-30 Stephen Dum 
+
+	* ChangeLog src/gedlib/indiseq.c
+
+	Fix null pointer dereference - now if indiseq's locale is not set,
+	it is assumed to match current locale rather than crashing.
+
 2008-11-13 Stephen Dum 
+
 	* ChangeLog docs/ll-userguide.xml ll-userguide.html
 	  ll-userguide.txt ll-userguide.pdf
 
