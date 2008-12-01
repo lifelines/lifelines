@@ -1,5 +1,12 @@
 2008-11-30 Stephen Dum 
 
+	* ChangeLog src/liflines/lines_usage.c
+
+	Correct usage message for -o option, and add i18n string for
+	-x[REPORT]
+
+2008-11-29 Stephen Dum 
+
 	* ChangeLog src/gedlib/indiseq.c
 
 	Fix null pointer dereference - now if indiseq's locale is not set,

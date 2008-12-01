@@ -67,7 +67,7 @@ print_lines_usage (CNSTRING exename)
 	printf(_("lock a database (for use on read-only media)"));
 	printf("\n\t-n\n\t\t");
 	printf(_("do not use traditional family rules"));
-	printf("\n\t-O[FILE]\n\t\t");
+	printf("\n\t-o[FILE]\n\t\t");
 	printf(_("Specify program output filename (eg, -o/tmp/mytests)"));
 	printf("\n\t-r\n\t\t");
 	printf(_("open database with read-only access (prohibiting other\n"
@@ -84,7 +84,7 @@ print_lines_usage (CNSTRING exename)
 	printf("\n\t-w\n\t\t");
 	printf(_("open database with writeable access (this is the default)"));
 	printf("\n\t");
-	printf("-x[REPORT]");
+	printf(_("-x[REPORT]"));
 	printf("\n\t\t");
 	printf(_("execute a single lifelines report program directly"));
 	printf("\n\t-z\n\t\t");
