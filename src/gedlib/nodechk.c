@@ -53,6 +53,7 @@ nodechk (NODE node, CNSTRING scope)
 	CNSTRING key = 0;
 
 	if (!nodechecking) return;
+	if (!root) return;
 
 	while (nparent(root)) {
 		root = nparent(root);

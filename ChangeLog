@@ -1,3 +1,9 @@
+2008-12-26 Stephen Dum 
+
+	* ChangeLog src/gedlib/nodechk.c src/liflines/newrecs.c
+
+	fix null pointer dereference in nodechk.
+
 2008-11-30 Stephen Dum 
 
 	* ChangeLog src/liflines/lines_usage.c

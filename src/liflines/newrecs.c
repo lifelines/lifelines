@@ -116,6 +116,7 @@ edit_add_other (void)
  * edit_add_record -- Add record to database by editing
  *  recstr:  [IN] default record
  *  redt:    [IN] re-edit message
+ *  redtopt: [IN] re-edit message for non critical faults
  *  ntype,   [IN] S, E, or X
  *  cfrm:    [IN] confirm message
  *==============================================*/
