@@ -10,5 +10,6 @@ libuicli_a_SOURCES = ui_cli.c
 # $(top_srcdir)/intl     for intl headers
 # ../../intl             for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_srcdir) -I$(top_srcdir)/intl -I../../intl -I$(top_srcdir)/src/hdrs
+
+AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/intl -I../../intl -I$(top_srcdir)/src/hdrs
 

@@ -15,16 +15,16 @@ libinterp_a_SOURCES = alloc.c builtin.c builtin_list.c eval.c \
 # $(top_srcdir)/intl     for intl headers
 # $(top_builddir)/intl   for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
+
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 AM_YFLAGS = -d
 
 # pvalue.c with -O2 triggers a gcc error in gcc version 2.95.2 19991024 (release) 
 # The CFLAGS below is gcc specific.  Sorry. -marc
-AM_CFLAGS = -g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
+AM_CFLAGS=-g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
 
 EXTRA_DIST = yacc.h interpi.h parse.h rptui.h
 
 lex.o: yacc.h parse.h
-
 

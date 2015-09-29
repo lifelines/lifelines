@@ -7,13 +7,13 @@ dnl **************************************************************
 dnl Autoconf Preamble
 dnl **************************************************************
 
-AC_INIT(src/liflines/main.c)
+AC_INIT(lifelines, 3.0.62)
 AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE(lifelines, 3.0.62)
+AM_INIT_AUTOMAKE
 
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE

@@ -36,7 +36,8 @@ llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 # $(top_srcdir)/intl     for intl headers
 # $(top_builddir)/intl   for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
-INCLUDES=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
+
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 # Locale information for gettext
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
