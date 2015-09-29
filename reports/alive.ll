@@ -21,7 +21,6 @@ Version 6, 27 Aug   1997, by Jim Eggert, fixed bug in print_header()
 
 ** SourceForge Versions:
 **
-** $Log$
 ** Revision 1.6  2004/07/19 05:54:54  dr_doom
 ** Merge Vincent Broman Changes to reports
 **

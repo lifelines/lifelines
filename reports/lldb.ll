@@ -54,7 +54,6 @@
  *   V1.02					  10-Nov-2000
  *   Updated URLs
  * 
- *  $Log$
  *  Revision 1.7  2004/07/19 05:54:55  dr_doom
  *  Merge Vincent Broman Changes to reports
  *

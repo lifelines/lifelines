@@ -10,11 +10,8 @@
 ** read like a book. Includes source citation, footnotes, etc. Register
 ** reports are either descendant or ancestor/ahnentafel style.
 
-** $Id$
-** 
 ** SourceForge Versions:
 **
-** $Log$
 ** Revision 1.14  2005/11/19 05:30:30  memmerto
 ** - Add missing </PARA> tags, as per SF Patch 551968.
 ** - Add "usepackage{isolatin1}" to register-tex.ll, as per SF Patch # 402021.
