@@ -1,5 +1,7 @@
 LifeLines Source Release, Version 3.0.62
-http://lifelines.sourceforge.net
+https://github.com/MarcNo/lifelines
+(formerly http://lifelines.sourceforge.net)
+
 -------------------------------------------------------------------------
 
 This is the source distribution of the LifeLines system, a genealogy
@@ -21,5 +23,5 @@ LifeLines is now maintained by the open source community, and is the
 result of much effort by many people.  For a list of contributors, see
 AUTHORS.
 
-Please visit http://lifelines.sourceforge.net to check for updates,
-report bugs, or to contribute to LifeLines.
+We are migrating away from http://lifelines.sourceforge.net to
+github.com
