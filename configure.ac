@@ -283,6 +283,9 @@ AC_OUTPUT(Makefile \
         src/ui/Makefile \
         src/hdrs/Makefile \
         src/hdrs/mswin/Makefile \
+        docs/man/Makefile \
+        docs/manual/Makefile \
+        docs/editor/Makefile \
         docs/Makefile \
         reports/Makefile \
         reports/st/Makefile \
