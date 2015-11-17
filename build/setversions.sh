@@ -129,10 +129,10 @@ function applyversion {
   SEDPAT2="s/\(<\!entity llversion[[:space:]]*\"\)[0-9][[:alnum:].\-]*/\1$VERSION/"
   alterfile ../docs/ll-reportmanual.xml "$SEDPAT" "$SEDPAT2"
   alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
-  altermansrc btedit.1 btedit
-  altermansrc dbverify.1 dbverify
-  altermansrc llines.1 llines
-  altermansrc llexec.1 llexec
+  altermansrc ../docs/man/btedit.1 btedit
+  altermansrc ../docs/man/dbverify.1 dbverify
+  altermansrc ../docs/man/llines.1 llines
+  altermansrc ../docs/man/llexec.1 llexec
   alterwinversions ../build/msvc6/dbverify/dbVerify.rc
   alterwinversions ../build/msvc6/llexec/llexec.rc
   alterwinversions ../build/msvc6/llines/llines.rc
@@ -161,8 +161,10 @@ function restore {
   restorefile ../docs/ll-devguide.xml
   restorefile ../docs/ll-reportmanual.xml
   restorefile ../docs/ll-userguide.xml
-  restorefile ../docs/llines.1
-  restorefile ../docs/llexec.1
+  restorefile ../docs/man/btedit.1
+  restorefile ../docs/man/dbverify.1
+  restorefile ../docs/man/llines.1
+  restorefile ../docs/man/llexec.1
   restorefile ../build/msvc6/dbverify/dbVerify.rc
   restorefile ../build/msvc6/llexec/llexec.rc
   restorefile ../build/msvc6/llines/llines.rc

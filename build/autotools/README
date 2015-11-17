@@ -1,19 +1,21 @@
-This directory holds a bunch of GNU autotools related files.
+This directory holds a bunch of GNU autotools helper files.
+This directory will be populated automatically by automake,
+but note that some of the content is LifeLines-specific.
 
-This file is intended to show where they came from, and what the versions
-of the files are.
+The current set of helper tools are from automake-1.15
+and autoconf-2.69.
 
-File			Parent Program		Version
----------------------------------------------------
-config.sub              autoconf
-config.guess            autoconf
-missing                 autoconf
-mkinstalldirs           autoconf
-installs-h              autoconf
+File			Source
+-----------------------------------------------
+acinclude.m4            LifeLines
+config.rpath            LifeLines
 
-depcomp                 automake
-
-config.rpath            ??                       ??
-
-acinclude.m4            LifeLines                n/a
-
+compile			autotools
+config.guess            autotools
+config.sub              autotools
+depcomp                 autotools
+install-sh              autotools
+missing                 autotools
+mkinstalldirs           autotools
+test-driver		autotools
+ylwrap			autotools

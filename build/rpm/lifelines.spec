@@ -92,17 +92,14 @@ install -m 644 reports/ps-fan/ps-fan* $RPM_BUILD_ROOT%{reports_dir}/ps-fan
 install -d -m 755 $RPM_BUILD_ROOT%{tt_dir}
 install -m 644 tt/*.tt $RPM_BUILD_ROOT%{tt_dir}
 install -d -m 755 $RPM_BUILD_ROOT/usr/local/man/man1
-install -m 644 docs/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
-install -m 644 docs/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
-install -m 644 docs/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
-install -m 644 docs/llexec.1 $RPM_BUILD_ROOT/usr/local/man/man1/llexec.1
-
+install -m 644 docs/man/btedit.1 $RPM_BUILD_ROOT/usr/local/man/man1/btedit.1
+install -m 644 docs/man/dbverify.1 $RPM_BUILD_ROOT/usr/local/man/man1/dbverify.1
+install -m 644 docs/man/llines.1 $RPM_BUILD_ROOT/usr/local/man/man1/llines.1
+install -m 644 docs/man/llexec.1 $RPM_BUILD_ROOT/usr/local/man/man1/llexec.1
 
 %files
 %defattr(-,root,root)
-%doc README ChangeLog NEWS AUTHORS LICENSE
-%doc README.AUTOCONF README.DEVELOPERS README.INTERNATIONAL README.LAYOUT
-%doc README.MAINTAINERS README.MAINTAINERS.rpm README.MAINTAINERS.win32
+%doc README NEWS AUTHORS LICENSE
 %doc .linesrc docs/lifelines.vim
 %doc docs/ll-reportmanual.xml docs/ll-reportmanual.html docs/ll-reportmanual.pdf docs/ll-reportmanual.txt
 %doc docs/ll-userguide.xml docs/ll-userguide.html docs/ll-userguide.pdf docs/ll-userguide.txt
@@ -154,4 +151,3 @@ install -m 644 docs/llexec.1 $RPM_BUILD_ROOT/usr/local/man/man1/llexec.1
 - Implement patch by Karl DeBisschop: adds build root, list reports as group instead of individually
 - Add dbverify, de.po, fr.po, sv.po
 - (lifelines-3.0.19-1)
-

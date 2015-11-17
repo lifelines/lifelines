@@ -4,6 +4,8 @@
 
 INCLUDE="-I build/autotools -I build/gettext"
 
+cd ..
+
 echo "Running aclocal..."
 aclocal $INCLUDE
 
