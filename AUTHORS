@@ -1,13 +1,36 @@
-LifeLines Source Release, Version 3.0.6
+LifeLines Source Release, Version 3.0.62
 http://lifelines.sourceforge.net
 -------------------------------------------------------------------------
 
 Tom Wetmore (ttw@shore.net) - original author
 
-Matt Emmerton (matt@gsicomp.on.ca) - bug fixes & code cleaning
-Rob Fugina (robf@geekthing.com) - added autoconfig support
-Paul B. McBride (pbmcbride@rcn.com) - added win32 related bug fixes and features
-Marc Nozell (marc@nozell.com) - misc, project coordination
-Perry Rapp (prapp@erols.com) - win32 development, bug fixes and features, paging&resizing menus, config file, desc view, gedcom views, cross-referencing, pvalue memory issues
-Petter Reinholdtsen (pere@hungry.com) - code cleaning, insulation layer
-Stephen Dum (stephen.dum@verizon.net) - code cleaning, leak checking, xml docs, bug fixes.
+Matt Emmerton (matt@gsicomp.on.ca)
+- bug fixes & code cleaning
+- porting
+
+Rob Fugina (robf@geekthing.com)
+- added autoconfig support
+
+Paul B. McBride (pbmcbride@rcn.com, pmcbride@tiac.net)
+- added win32 related bug fixes and features
+
+Marc Nozell (marc@nozell.com)
+ - misc, project coordination
+
+Perry Rapp (prapp@erols.com, puddle@users.sourceforge.net)
+- win32 development
+- bug fixes and features, pvalue memory issues
+- paging & resizing menus, desc view, gedcom views, cross-referencing
+- config file
+
+Petter Reinholdtsen (pere@hungry.com, pere@td.org.uit.no)
+- code cleaning, insulation layer
+
+Stephen Dum (stephen.dum@verizon.net)
+- code cleaning, leak checking, xml docs, bug fixes.
+
+John F. Chandler (jchbn@cuvmb.cc.columbia.edu)
+- code cleanup, btree fixes
+
+David A. Bright (dabright@users.sourceforge.net)
+- book-latex.ll and other report improvements

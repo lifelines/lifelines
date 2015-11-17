@@ -13,7 +13,8 @@ AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE
+dnl Use 'foreign' to avoid requiring GNU files in top-level.
+AM_INIT_AUTOMAKE([foreign])
 
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
