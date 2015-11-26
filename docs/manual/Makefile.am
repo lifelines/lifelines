@@ -12,36 +12,34 @@ MANUALS_en =	ll-reportmanual.html \
 		ll-userguide.html \
 		ll-userguide.pdf \
 		ll-userguide.txt \
-		ll-devguide.html \
-		ll-index.html \
-		ll-index.sv.html
+		ll-devguide.html
 
 MANUALS_sv =	ll-reportmanual.sv.html \
 		ll-userguide.sv.html
 
 MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 
+MANUALSSRC_en = ll-reportmanual.xml \
+		ll-userguide.xml \
+		ll-devguide.xml
+
+MANUALSSRC_sv = ll-reportmanual.sv.xml \
+		ll-userguide.sv.xml
+
+MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
+
 IMAGES =	listops.jpg
 
-MANUALSSRC =	ll-reportmanual.xml \
-		ll-userguide.xml \
-		ll-reportmanual.sv.xml \
-		ll-userguide.sv.xml \
-		ll-devguide.xml
+MANUALS_static = ll-index.html \
+		 ll-index.sv.html
 
 ###################
 # Rules
 ###################
 
-EXTRA_DIST = $(MANUALS) $(IMAGES)
-
 CONFIG_CLEAN_FILES = $(MANUALS)
 
-docdir = $(datarootdir)/doc/lifelines
-doc_DATA = $(MANUALSSRC) $(MANUALS) 
-dist_pkgdata_DATA = $(MANUALS)
-
-all: @DOCS_TARGET@
+dist_doc_DATA = $(MANUALS) $(MANUALS_static)
 
 .xml.pdf:
 	-jw -f docbook -b pdf $^
