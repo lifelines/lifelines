@@ -37,7 +37,6 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "gedcomi.h"
-#include "version.h"
 #include "lloptions.h"
 #include "codesets.h"
 #include "menuitem.h"
@@ -200,41 +199,6 @@ init_lifelines_postdb (void)
 	transl_load_xlats();
 
 	return TRUE;
-}
-/*===============================================
- * get_lifelines_version -- Return version string
- *  returns static buffer
- *=============================================*/
-STRING
-get_lifelines_version (INT maxlen)
-{
-	static char version[48];
-	INT len=sizeof(version);
-	if (len>maxlen)
-		len=maxlen;
-	llstrncpyf(version, len, 0, LIFELINES_VERSION);
-	return version;
-}
-/*===============================================
- * print_version -- display program version
- *  displays to stdout
- *=============================================*/
-void
-print_version (CNSTRING program)
-{
-	printf("%s (lifelines) %s\n", program, LIFELINES_VERSION);
-	printf("\n");
-
-	printf(_("Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."));
-	printf("\n");
-	printf(_("This is free software; see the source for copying conditions.  There is NO\n"
-		"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."));
-	printf("\n");
-	printf("\n");
-
-	printf(_("Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."));
-	printf("\n");
-
 }
 /*===================================
  * close_lifelines -- Close LifeLines

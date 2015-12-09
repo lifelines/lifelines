@@ -25,6 +25,7 @@
 #include "feedback.h"
 #include "ui.h"
 #include "llinesi.h"
+#include "version.h"
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H

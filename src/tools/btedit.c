@@ -54,7 +54,6 @@ STRING int_codeset=0;     /* internal codeset */
 /* alphabetical */
 static int llsystem(const char * cmd);
 static void print_usage(void);
-static void print_version(CNSTRING program);
 
 /*********************************************
  * local function definitions
@@ -193,27 +192,6 @@ __fatal (STRING file, int line, CNSTRING details)
 	}
 	printf("%s: line %d\n", file, line);
 	exit(1);
-}
-/*===============================================
- * print_version -- display program version
- *  displays to stdout
- *=============================================*/
-static void
-print_version (CNSTRING program)
-{
-	printf("%s (lifelines) %s\n", program, LIFELINES_VERSION);
-	printf("\n");
-
-	printf(_("Copyright (C) 1991-2007 Thomas T. Wetmore IV et al."));
-	printf("\n");
-	printf(_("This is free software; see the source for copying conditions.  There is NO\n"
-		"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."));
-	printf("\n");
-	printf("\n");
-
-	printf(_("Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."));
-	printf("\n");
-
 }
 /*===============================================
  * print_usage -- display program help/usage

@@ -44,6 +44,7 @@
 #include "arch.h"
 #include "lloptions.h"
 #include "interp.h"
+#include "version.h"
 
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */

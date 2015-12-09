@@ -1,12 +1,14 @@
 #ifndef _VERSION_H
 #define _VERSION_H
 
-/*
-	This is isolated for convenience in marking
-	a private build version. But this should be
-	changed to default to the variable from configure.in.
-*/
+/* This is the public build version, from configure */
+#define LIFELINES_VERSION PACKAGE_VERSION
 
-#define LIFELINES_VERSION "3.0.62"
+/* This is the private build version, appended to the public version */
+#define LIFELINES_VERSION_EXTRA "(official)"
+
+/* Function prototypes */
+STRING get_lifelines_version (INT maxlen);
+void print_version (CNSTRING program);
 
 #endif /* _VERSION_H */

@@ -4,7 +4,11 @@
 
 INCLUDE="-I build/autotools -I build/gettext"
 
-cd ..
+if [ ! -f configure.ac ]
+then
+  echo "ERROR: Must be run from the directory containing configure.ac!"
+  exit 1
+fi
 
 echo "Running aclocal..."
 aclocal $INCLUDE

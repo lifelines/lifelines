@@ -6,7 +6,6 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "gedcomi.h"
-#include "version.h"
 #include "lloptions.h"
 #include "codesets.h"
 #include "menuitem.h"

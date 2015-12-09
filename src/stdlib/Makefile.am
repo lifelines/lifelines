@@ -16,7 +16,7 @@ libstdlib_a_SOURCES = appendstr.c array.c \
 	signals.c sprintpic.c stack.c \
 	stdlib.c stdlibi.h stdstrng.c \
 	stralloc.c strapp.c strcvt.c strset.c strutf8.c strwhite.c \
-	table.c vtable.c zstr.c
+	table.c version.c vtable.c zstr.c
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/intl     for intl headers

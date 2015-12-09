@@ -42,6 +42,7 @@
 #include "cache.h"
 #include "arch.h"
 #include "gedcom.h"
+#include "version.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
