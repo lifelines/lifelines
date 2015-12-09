@@ -37,7 +37,6 @@ _________________________________________________________
 
     Marc Nozell <marc@nozell.com>  21-Sep-2000
     - updated license info
-    - point to lifelines.sourceforge.net
     - change references from lines302 to llines
     - make most lines less than 80 characters wide
 
@@ -163,8 +162,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <para>
 
      The source code, documentation and a collection of report
-     scripts are located at <ulink url="http://lifelines.sourceforge.net/">
-     http://lifelines.sourceforge.net/</ulink>.  You can also find
+     scripts are located at <ulink url="http://marcno.github.io/lifelines/">
+     http://marcno.github.io/lifelines/</ulink>.  You can also find
      binary kits for some platforms.  If you are a developer and
      wish to contribute enhancements, please sign up on sourceforge
      and contact <ulink url="mailto:marc@nozell.com"> Marc
@@ -189,14 +188,14 @@ Other sources of information include:
 <row>
 <entry>lifelines homepage
 </entry><entry>
-<ulink url="http://lifelines.sourceforge.net/">
-http://lifelines.sourceforge.net/</ulink>.
+<ulink url="http://marcno.github.io/lifelines/">
+http://marcno.github.io/lifelines/
 </entry>
 </row><row>
 <entry>lifelines FAQ
 </entry><entry>
-<ulink url="http://lifelines.sourceforge.net/faq.html">
-http://lifelines.sourceforge.net/faq.html</ulink>.
+<ulink url="http://marcno.github.io/lifelines/faq.html">
+http://marcno.github.io/lifelines/faq.html</ulink>.
 </entry>
 </row><row>
 <entry>LINES-L mailing list

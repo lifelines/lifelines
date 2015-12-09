@@ -8,7 +8,6 @@
 /*===========================================================
  * translat.c -- LifeLines character mapping functions
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
- *   http://lifelines.sourceforge.net
  *=========================================================*/
 
 #include <errno.h>

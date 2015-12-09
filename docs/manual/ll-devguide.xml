@@ -765,48 +765,32 @@ and building it, Those instructions are in the file INSTALL.
 We are assuming you are checking out the sources from CVS.
 </para>
 <sect1>
-<title>Checking the CVS source out</title>
+<title>Cloning the source tree</title>
 <para>
-If you are not a member of the 
+Anyone can clone the 
 <application>LifeLines</application>
-development project, you can check out sources anonymously.
-In the following assume that CVS stands for
+source tree, using the following commands:
 <programlisting>
-cvs -d:pserver:anonymous@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
+git clone https://github.com/MarcNo/lifelines.git
 </programlisting>
-If you are a project developer, you will be checking the files out under your 
-user_id.  so CVS will stand for
-<programlisting>
-cvs -d:ext:user_id@cvs.lifelines.sourceforge.net:/cvsroot/lifelines
-</programlisting>
-You will also need to export CVS_RSH
-<programlisting>
-CVS_RSH=ssh
-export CVS_RSH
-</programlisting>
-The first time you check out sources into a build area:
-<programlisting>
-CVS login anonymous
-CVS checkout lifelines
-</programlisting>
-When prompted for a password for anonymous, simply press the Enter key.
-</para>
 <para>
-Once you have checked out the sources, cvs hides information in the CVS
-sub directories about how you accessed sourceforge so the -d option
-isn't needed to be typed in.  After the first checkout, if you want to 
-update your sources, you can just type:
+Once you have cloned the sources, git hides information in the .git
+subdirectories so all information about the repository is retained.
+After the initial clone, if you want to update your sources, you can just type:
 <programlisting>
-cvs update lifelines
+git pull
 </programlisting>
 </para>
 <para>
-The cvs login command stashes information in .cvspass for remote repository
-access.  If this is the only remote cvs archive you access, you may be able
-to skip the cvs login command on future access attempts.  If you work on 
-multiple projects you can logout when you are finished with
+If you want to contribute (check-in) code to the main repository, please
+contact Marc Nozell (see github for contact information) to gain project
+access.  Once you do this, you can submit your changes using the following
+commands:
 <programlisting>
-cvs logout
+git add &lt;filename&gt;    # to add files
+git remove &lt;filename&gt; # to remove files
+git commit                  # to commit changes
+git push                    # to push files to remote repository
 </programlisting>
 </para>
 </sect1>
@@ -837,8 +821,8 @@ run the script autogen.sh:
 
 <para>
 autogen *must* be run after freshly checking a copy of the
-project out of CVS -- the files generated automatically are no longer
-included in the CVS repository.
+project out of git -- the files generated automatically are no longer
+included in the git repository.
 </para>
 
 <sect2>
@@ -985,15 +969,9 @@ Finally, Send an announcement to the LINES-L mailing list
 </para>
 </sect1>
 <sect1>
-<title>Putting a release on sourceforge</title>
+<title>Putting a release on github</title>
 <para>
-(Not all developers have the power to create or edit a file release
-on sourceforge, only Project Administrators and File Release Technicians.)
-</para>
-<para>
-The instructions at
-http://sourceforge.net/docman/display_doc.php?docid=6445&amp;group_id=1
-are the ones that Perry followed to make many of the releases.
+This process is still being developed.
 </para>
 </sect1>
 

@@ -1,11 +1,16 @@
 LifeLines Source Release, Version 3.0.54
-http://lifelines.sourceforge.net
+http://marcno.github.io/lifelines/
 -------------------------------------------------------------------------
 
 This is a brief description of the directory layout.
 
 Source Code Directories
 -----------------------
+
+./build/
+
+    Scripts used to set up the development environment and to build and
+    package LifeLines.
 
 ./build/autotools
 
@@ -15,10 +20,6 @@ Source Code Directories
 ./build/gettext
 
     m4 macro files needed by gettext (the GNU internationalization package)
-
-./build/gnu
-
-    Unused & empty
 
 ./build/msvc6
 
@@ -107,12 +108,6 @@ Source Code Directories
 
     Will contain UI-specific code for obtaining input and displaying
     output
-
-./win32/ (OBSOLETE)
-
-    Nothing is here anymore. This used to house Microsoft Windows
-	specific code, but it was moved to ./src/arch/mswin and
-	./src/hdrs/win32.
 
 
 Non-Source Code Directories

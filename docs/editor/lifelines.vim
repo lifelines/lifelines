@@ -1,5 +1,5 @@
 " Vim syntax file
-" Language:	LifeLines (v 3.0.50) http://lifelines.sourceforge.net
+" Language:	LifeLines http://marcno.github.io/lifelines/
 " Maintainer:	Patrick Texier <p.texier@genindre.org>
 " Location:	http://www.genindre.org/ftp/lifelines/lifelines.vim
 " Last Change:	2005 Dec 22.

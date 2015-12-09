@@ -27,16 +27,14 @@ _________________________________________________________
 _________________________________________________________
 
 
-    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-200
+    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-2000
     - Converted original LifeLines Reference Guide to DocBook SGML.
-
 
     Marc Nozell <marc@nozell.com>  26-Jul-2001
     - Changed <simpara> to <para>.  Newer docbook likes it better.
 
     Marc Nozell <marc@nozell.com>  21-Sep-2000
     - updated license info
-    - point to lifelines.sourceforge.net
     - change references from lines302 to llines
     - make most lines less than 80 characters wide
 

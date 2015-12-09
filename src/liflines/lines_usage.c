@@ -121,7 +121,7 @@ print_lines_usage (CNSTRING exename)
 	}
 	printf(_("REPORTING BUGS"));
 	printf("\n\t");
-	printf(_("Report bugs to lifelines.sourceforge.net"));
+	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
 	printf("\n\n");
 	printf(_("COPYRIGHT"));
 	printf("\n\t");

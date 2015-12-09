@@ -8,7 +8,6 @@
 /*==========================================================
  * charmaps.c -- LifeLines character mapping feature
  * Copyright(c) 1994 by T.T. Wetmore IV; all rights reserved
- *   http://lifelines.sourceforge.net
  *========================================================*/
 
 #include "sys_inc.h"

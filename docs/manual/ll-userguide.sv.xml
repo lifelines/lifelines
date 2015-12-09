@@ -37,7 +37,6 @@ _________________________________________________________
 
     Marc Nozell <marc@nozell.com>  21-Sep-2000
     - updated license info
-    - point to lifelines.sourceforge.net
     - change references from lines302 to llines
     - make most lines less than 80 characters wide
 
@@ -156,7 +155,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	Källkoden, dokumentationen och en samling rapportskript finns
 	tillgängliga vid <ulink
-	url="http://lifelines.sourceforge.net/">http://lifelines.sourceforge.net/</ulink>.
+	url="http://marcno.github.io/lifelines/">http://marcno.github.io/lifelines/</ulink>.
 	Där finns också förkompilerade programpaket för några
 	plattformar. Om du är en utvecklare och vill bidra med
 	förbättringar, så anmäl dig på Sourceforge och kontakta <ulink

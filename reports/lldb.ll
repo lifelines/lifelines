@@ -21,7 +21,7 @@
  *   PalmOS app.  
  * 
  * 0) Obtain Tom Wetmore's LifeLines genealogy program for Unix.
- *    See http://lifelines.sourceforge.net/
+ *    See http://marcno.github.io/lifelines/
  * 
  * 1) Obtain Kenneth Albanowski's <kjahds@kjahds.com> pilot-link
  *    package.  The Microsoft Windows-based Palm desktop should also

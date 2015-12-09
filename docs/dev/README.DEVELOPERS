@@ -9,10 +9,10 @@ Table of Contents
 
 1) Software required for developers:
 
-In order to compile lifelines from the cvs sources,
+In order to compile lifelines from the git sources,
 the developer needs to have a number of tools available.
 
-cvs, ssh: to access sourceforge repository
+git, ssh: to access git repository
 make: build process requires gmake
 gcc (or another compiler): to compile c source
 libintl, gettext: (libs and tools) to compile source and translations
@@ -31,7 +31,7 @@ jw: Is used to compile the documentation.  It is at least
    and the Redhat docbook-utils package. Lack of this tool
    is not critical, however, and the make will continue,
    only listing these lacks as warnings.  The generated
-   documention is included in both the cvs and src distributions.
+   documention is included in both the git and src distributions.
    This will only prevent regeneration of the documention.
 jadetex: Is used to produce pdf versions of the documentation.
    It is at least available in the Redhat jadetext package.
@@ -40,7 +40,7 @@ lynx: Is used to compile text versions of documentation. See
    jw above.
 
 Note: These requirements are for compiling from
-the cvs sources, not from a distribution tarball.
+the git sources, not from a distribution tarball.
 Distribution tarballs are built so as not to require
 autotools or bison.  However, m4 and perl are required.
 
@@ -64,8 +64,8 @@ Makefile.am or configure.ac.  To regenerate the build system explicitly,
  sh autogen.sh
 
 The autogen script *must* be run after freshly checking a copy of the
-project out of CVS -- the files generated automatically are no longer
-included in the CVS repository.
+project out of git -- the files generated automatically are no longer
+included in the git repository.
 
 I'm happy to help anyone who needs help adjusting the automake/autoconf
 build system to suit your development needs...
@@ -102,17 +102,14 @@ configure will generate config.h and Makefile files from Makefile.in files.
 
 4) Building the code
 
-1. check out the code from cvs - there is a link off 
-   http://lifelines.sourceforge.net
-   which gives instructions for checking out the code.  If you're not a 
-   sourceforge developer, you can use the anonymous checkout procedure.
+1. check out the code from git: git clone https://github.com/MarcNo/lifelines.git
 2. For building, refer to the README.MAINTAINERS file and execute the
    commands under 'Run autotools:' and 'Build local copy in ./bld subdirectory:'
    Note: these commands describe one way to proceed.  There are many other
    approaches which will also work.
 3. The language files po/*.po get updated when you build code; they are also
-   updated from CVS.  If you find that conflicts occur with these files,
-   you can simply remove them and update them from CVS again.  Then your build
+   updated from git.  If you find that conflicts occur with these files,
+   you can simply remove them and update them from git again.  Then your build
    should proceed as normal.
 4. curses.h.  It seems that every distribution places curses.h and
    libcurses.so in different places or has slightly different names 

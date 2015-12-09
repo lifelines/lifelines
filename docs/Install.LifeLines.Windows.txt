@@ -81,7 +81,7 @@ directory.
 References:
 
 LifeLines on the web:
-  http://lifelines.sourceforge.net/
+  http://marcno.github.io/lifelines/
 
 Mailing list:
   To subscribe to the list, send email to

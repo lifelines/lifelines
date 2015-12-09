@@ -20,7 +20,7 @@ Release: 1
 License: X11
 Group: Utilities/System
 Source:         http://download.sourceforge.net/lifelines/lifelines-%{lifelines_version}.tar.gz
-URL:            http://lifelines.sourceforge.net/
+URL:            http://marcno.github.io/lifelines/
 Packager:       Marc Nozell <marc@nozell.com>
 Provides:       lifelines
 BuildRoot: %{_tmppath}/%{name}-%{version}-root

@@ -27,7 +27,7 @@
 **  GETTING THIS FILE
 **
 **  The ps-anc final release versions are available via the Internet:
-**   (1) http://lifelines.sourceforge.net/
+**   (1) http://marcno.github.io/lifelines/
 **   (1) ftp://ftp.cac.psu.edu/pub/genealogy/lines/reports/
 **   (2) http://www.math.clemson.edu/~rsimms/genealogy/ll/
 **
