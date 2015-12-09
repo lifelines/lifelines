@@ -90,14 +90,10 @@ notes from previous beta release, updating md5
 signatures to those of new release files.
 
 Upload the release files (tarball etc.) to
-uploads.sourceforge.net. From the release page
-(above, opened from project admin), refresh
-and attach the release files, and set properties
-appropriately (can look at previous releases to
-see how to set them).
+http://marcno.github.io/lifelines/ using the gh-pages branch.
 
-Tag the cvs source via (for example, for version 3.0.25)
-  cvs tag v3_0_25
+Tag the git sources by (for exampel, for version 3.0.25)
+  git tag v3_0_25
 
 Send an announcement to the LINES-L mailing list
  (send to user LINES-L at domain LISTSERV.NODAK.EDU).

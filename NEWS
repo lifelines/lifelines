@@ -88,7 +88,7 @@ New features added in 3.0.52 (beta)
 
 Bug fixes in 3.0.52 (beta)
 ============================
- - Fix buffer overflow in browse list (sourceforge patch by Andreas Kirschbaum)
+ - Fix buffer overflow in browse list (patch by Andreas Kirschbaum)
 
 New features added in 3.0.51 (beta)
 ============================

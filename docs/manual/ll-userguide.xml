@@ -165,7 +165,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      scripts are located at <ulink url="http://marcno.github.io/lifelines/">
      http://marcno.github.io/lifelines/</ulink>.  You can also find
      binary kits for some platforms.  If you are a developer and
-     wish to contribute enhancements, please sign up on sourceforge
+     wish to contribute enhancements, please obtain a github account
      and contact <ulink url="mailto:marc@nozell.com"> Marc
      Nozell</ulink> who is currently managing the project.
      </para>
@@ -175,7 +175,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      Prior to 1999, Lifelines was available on the ftp sites,
      <ulink url="ftp://ftp.cac.psu.edu">ftp.cac.psu.edu</ulink> and
      <ulink url="ftp://hoth.stsci.edu">hoth.stsci.edu</ulink>.
-     Please use sourceforge instead.
+     Please use github instead.
+     </para>
+     <para>
+     From 1999 to 2015, Lifelines was available from sourceforge.
+     Please use github instead.
      </para>
      </note>
 
@@ -3462,7 +3466,7 @@ CODESET CONVERSION
 
      However, you may encounter situations where you wish to alter the codeset
      behavior, or the codeset conversion is not operating correctly (in which case
-     we hope you will report the problem to the mailing list and/or sourceforge
+     we hope you will report the problem to the mailing list and/or github
      bugs list).
 
 </para>
