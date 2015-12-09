@@ -122,8 +122,6 @@ function applyversion {
   alterfile ../configure.ac "$SEDPAT"
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile ../build/rpm/lifelines.spec "$SEDPAT"
-  SEDPAT="s/\(#define LIFELINES_VERSION \"\)[0-9][[:alnum:].\-]*\"$/\1$VERSION\\\"/"
-  alterfile ../src/hdrs/version.h "$SEDPAT"
   SEDPAT="s/\(\[<!ENTITY llversion '\)[0-9][[:alnum:].\-]*/\1$VERSION/"
   alterfile ../docs/ll-devguide.xml "$SEDPAT"
   SEDPAT2="s/\(<\!entity llversion[[:space:]]*\"\)[0-9][[:alnum:].\-]*/\1$VERSION/"
@@ -157,7 +155,6 @@ function restore {
   restorefile ../README
   restorefile ../configure.ac
   restorefile ../build/rpm/lifelines.spec
-  restorefile ../src/hdrs/version.h
   restorefile ../docs/ll-devguide.xml
   restorefile ../docs/ll-reportmanual.xml
   restorefile ../docs/ll-userguide.xml
