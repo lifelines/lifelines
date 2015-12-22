@@ -1,25 +1,21 @@
 #!/bin/bash
 # Created: 2005-10-08, Perry Rapp
 # Edited:  2007-05-12, Perry Rapp
+# Edited:  2015-12-22, Matt Emmerton
+#
 # Apply new version number to relevant lifelines source files
 # Invoke this script like so:
 #  sh setversions.sh 3.0.99
 
+##
+## SUBROUTINES
+##
+
 function showusage {
-  script_parameters="3.0.xx (desired version number)"
-  echo "Usage: sh `basename $0` $script_parameters"
-  echo "  or: sh `basename $0` restore (to undo versions just applied"
+  echo "Usage: sh `basename $0` X.Y.Z   # to change to specified version number"
+  echo "   or: sh `basename $0` restore # to undo version number just applied"
 }
 
-# Check that user passed exactly one parameter
-E_WRONG_ARGS=65
-if [ $# -ne 1 ] || [ -z "$1" ]
-then
-  showusage
-  exit $E_WRONG_ARGS
-fi
-
-# Function to handle parsing argument
 function checkparm {
   if [ $1 = "restore" ]
   then
@@ -29,7 +25,7 @@ function checkparm {
 
   # Store argument as $VERSION and check it is valid version
   VERSION=$1
-  VPATTERN="^3\.0\.[[:alnum:]][[:alnum:]\.\-]*$"
+  VPATTERN="^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$"
   if ! echo $VERSION | grep -q $VPATTERN
   then
     showusage
@@ -41,10 +37,6 @@ function failexit {
   echo $1
   exit 99
 }
-
-# Parse argument (should be a version, or "restore")
-# (exits if failure)
-checkparm $1
 
 # Function to apply version to one file
 # Argument#1 is filename (eg, "NEWS")
@@ -60,19 +52,21 @@ function alterfile {
   do
     # sed doesn't seem to set its return value, so we don't check
     # that it found its match, unfortunately
-    sed $FILEPATH -e "$1" > $FILEPATH.tmp
+    sed -e "$1" $FILEPATH > $FILEPATH.tmp
     mv $FILEPATH.tmp $FILEPATH || failexit "mv failed in alterfile: $FILEPATH.tmp"
     shift
   done
 }
 
-# Function to restore file from last backup
-# Argument#1: file to restore (from .bak version)
-function restorefile {
-  if [ -e $1.bak ]
-  then
-    cp $1.bak $1
-  fi
+function altermansrc {
+  [ ! -z "$1" ] || failexit "Missing first argument to altermansrc"
+  [ ! -z "$2" ] || failexit "Missing first argument to altermansrc"
+  MANFILE=$1
+  PROGNAME=$2
+  SEDPAT="s/\(^\.TH $PROGNAME 1 \"\)[0-9]\{4\}/\1$YEAR/"
+  SEDPAT2="s/\(^\.TH $PROGNAME 1 \"$YEAR \)[[:alpha:]]\{3\}/\1$MONTHABBR/"
+  SEDPAT3="s/\(^\.TH $PROGNAME 1 \"$YEAR $MONTHABBR\" \"Lifelines \)[0-9][[:alnum:].\-]*/\1$VERSION/"
+  alterfile $MANFILE "$SEDPAT" "$SEDPAT2" "$SEDPAT3"
 }
 
 # Fix versions in an MS-Windows resource (rc) file
@@ -86,11 +80,17 @@ function alterwinversions {
   alterfile $FILEPATH "$SEDPAT1" "$SEDPAT2" "$SEDPAT3" "$SEDPAT4"
 }
 
-# Main function
-function applyversion {
+# Function to restore file from last backup
+# Argument#1: file to restore (from .bak version)
+function restorefile {
+  if [ -e $1.bak ]
+  then
+    cp $1.bak $1
+  fi
+}
 
-  # Compute some numbers needed later
-
+# Extract and compute new version numbers
+function getversion {
   YEAR=`date +%Y`
   MONTHABBR=`date +%b`
   DAY=`date +%d`
@@ -110,63 +110,97 @@ function applyversion {
  echo "Full version=<$VERSION>"
  echo "Numeric version=<$VERSION1.$VERSION2.$VERSION3>"
  echo "Windows version=<$VERSION1.$VERSION2.$VERSION3.$JULIANVERSION>"
-
-  # Now do version substitutions in each file
-  # Call alterfile with an sed command for each file
-
-  SEDPAT="1s/^\(LifeLines Source Release, Version \)[[:alnum:].\-]*$/\1$VERSION/" 
-  alterfile ../NEWS "$SEDPAT"
-  alterfile ../INSTALL "$SEDPAT"
-  alterfile ../README "$SEDPAT"
-  SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
-  alterfile ../configure.ac "$SEDPAT"
-  SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
-  alterfile ../build/rpm/lifelines.spec "$SEDPAT"
-  SEDPAT="s/\(\[<!ENTITY llversion '\)[0-9][[:alnum:].\-]*/\1$VERSION/"
-  alterfile ../docs/ll-devguide.xml "$SEDPAT"
-  SEDPAT2="s/\(<\!entity llversion[[:space:]]*\"\)[0-9][[:alnum:].\-]*/\1$VERSION/"
-  alterfile ../docs/ll-reportmanual.xml "$SEDPAT" "$SEDPAT2"
-  alterfile ../docs/ll-userguide.xml "$SEDPAT" "$SEDPAT2"
-  altermansrc ../docs/man/btedit.1 btedit
-  altermansrc ../docs/man/dbverify.1 dbverify
-  altermansrc ../docs/man/llines.1 llines
-  altermansrc ../docs/man/llexec.1 llexec
-  alterwinversions ../build/msvc6/dbverify/dbVerify.rc
-  alterwinversions ../build/msvc6/llexec/llexec.rc
-  alterwinversions ../build/msvc6/llines/llines.rc
-  alterwinversions ../build/msvc6/btedit/btedit.rc
 }
 
-function altermansrc {
-  [ ! -z "$1" ] || failexit "Missing first argument to altermansrc"
-  [ ! -z "$2" ] || failexit "Missing first argument to altermansrc"
-  MANFILE=$1
-  PROGNAME=$2
-  SEDPAT="s/\(^\.TH $PROGNAME 1 \"\)[0-9]\{4\}/\1$YEAR/"
-  SEDPAT2="s/\(^\.TH $PROGNAME 1 \"$YEAR \)[[:alpha:]]\{3\}/\1$MONTHABBR/"
-  SEDPAT3="s/\(^\.TH $PROGNAME 1 \"$YEAR $MONTHABBR\" \"Lifelines \)[0-9][[:alnum:].\-]*/\1$VERSION/"
-  alterfile ../docs/$MANFILE "$SEDPAT" "$SEDPAT2" "$SEDPAT3"
+# Call alterfile with an sed command for each file
+function applyversion {
+  SEDPAT="s/^\(LifeLines Source Release, Version \)[[:alnum:].\-]*$/\1$VERSION/" 
+  alterfile $ROOTDIR/AUTHORS "$SEDPAT"
+  alterfile $ROOTDIR/ChangeLog "$SEDPAT"
+  alterfile $ROOTDIR/INSTALL "$SEDPAT"
+  alterfile $ROOTDIR/NEWS "$SEDPAT"
+  alterfile $ROOTDIR/README "$SEDPAT"
+
+  SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
+  alterfile $ROOTDIR/configure.ac "$SEDPAT"
+
+  SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
+  alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
+  alterwinversions $ROOTDIR/build/msvc6/btedit/btedit.rc
+  alterwinversions $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
+  alterwinversions $ROOTDIR/build/msvc6/llexec/llexec.rc
+  alterwinversions $ROOTDIR/build/msvc6/llines/llines.rc
+
+  altermansrc $ROOTDIR/docs/man/btedit.1 btedit
+  altermansrc $ROOTDIR/docs/man/dbverify.1 dbverify
+  altermansrc $ROOTDIR/docs/man/llines.1 llines
+  altermansrc $ROOTDIR/docs/man/llexec.1 llexec
+
+  SEDPAT="s/\(<\!ENTITY llversion[[:space:]]*['\"']\)[0-9][[:alnum:].\-]*/\1$VERSION/i"
+  alterfile $ROOTDIR/docs/manual/ll-devguide.xml "$SEDPAT"
+  alterfile $ROOTDIR/docs/manual/ll-userguide.xml "$SEDPAT"
+  alterfile $ROOTDIR/docs/manual/ll-userguide.sv.xml "$SEDPAT"
+  alterfile $ROOTDIR/docs/manual/ll-reportmanual.xml "$SEDPAT"
+  alterfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml "$SEDPAT"
 }
 
 # Restore, for user to reverse last application
 function restore {
-  restorefile ../NEWS
-  restorefile ../INSTALL
-  restorefile ../README
-  restorefile ../configure.ac
-  restorefile ../build/rpm/lifelines.spec
-  restorefile ../docs/ll-devguide.xml
-  restorefile ../docs/ll-reportmanual.xml
-  restorefile ../docs/ll-userguide.xml
-  restorefile ../docs/man/btedit.1
-  restorefile ../docs/man/dbverify.1
-  restorefile ../docs/man/llines.1
-  restorefile ../docs/man/llexec.1
-  restorefile ../build/msvc6/dbverify/dbVerify.rc
-  restorefile ../build/msvc6/llexec/llexec.rc
-  restorefile ../build/msvc6/llines/llines.rc
-  restorefile ../build/msvc6/btedit/btedit.rc
+  restorefile $ROOTDIR/AUTHORS
+  restorefile $ROOTDIR/ChangeLog
+  restorefile $ROOTDIR/INSTALL
+  restorefile $ROOTDIR/NEWS
+  restorefile $ROOTDIR/README
+  restorefile $ROOTDIR/configure.ac
+  restorefile $ROOTDIR/build/msvc6/btedit/btedit.rc
+  restorefile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
+  restorefile $ROOTDIR/build/msvc6/llexec/llexec.rc
+  restorefile $ROOTDIR/build/msvc6/llines/llines.rc
+  restorefile $ROOTDIR/build/rpm/lifelines.spec
+  restorefile $ROOTDIR/docs/man/btedit.1
+  restorefile $ROOTDIR/docs/man/dbverify.1
+  restorefile $ROOTDIR/docs/man/llines.1
+  restorefile $ROOTDIR/docs/man/llexec.1
+  restorefile $ROOTDIR/docs/manual/ll-devguide.xml
+  restorefile $ROOTDIR/docs/manual/ll-reportmanual.xml
+  restorefile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
+  restorefile $ROOTDIR/docs/manual/ll-userguide.xml
+  restorefile $ROOTDIR/docs/manual/ll-userguide.sv.xml
 }
+
+##
+## MAIN PROGRAM
+##
+
+# Determine root of repository
+if [ ! -f AUTHORS ]
+then
+  if [ ! -f ../AUTHORS ]
+  then
+    echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
+    exit 1
+  else
+    ROOTDIR=..
+  fi
+else
+  ROOTDIR=.
+fi
+
+# Check that user passed exactly one parameter
+E_WRONG_ARGS=65
+if [ $# -ne 1 ] || [ -z "$1" ]
+then
+  showusage
+  exit $E_WRONG_ARGS
+fi
+
+# Function to handle parsing argument
+# Parse argument (should be a version, or "restore")
+# (exits if failure)
+checkparm $1
+
+# Compute new version numbers (esp for Windows)
+getversion
 
 # Invoke whichever functionality was requested
 if [ -z "$RESTORE" ]

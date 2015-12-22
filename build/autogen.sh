@@ -4,11 +4,23 @@
 
 INCLUDE="-I build/autotools -I build/gettext"
 
+# Determine root of repository
 if [ ! -f configure.ac ]
 then
-  echo "ERROR: Must be run from the directory containing configure.ac!"
-  exit 1
+  if [ ! -f ../configure.ac ]
+  then
+    echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
+    exit 1
+  else
+    ROOTDIR=..
+  fi
+else
+  ROOTDIR=.
 fi
+
+SAVEDIR=`pwd`
+
+cd $ROOTDIR
 
 echo "Running aclocal..."
 aclocal $INCLUDE
@@ -22,3 +34,4 @@ automake --add-missing
 echo "Running autoconf..."
 autoconf $INCLUDE
 
+cd $SAVEDIR

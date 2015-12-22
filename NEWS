@@ -2,7 +2,7 @@ LifeLines Source Release, Version 3.0.63
 http://marcno.github.io/lifelines/
 -------------------------------------------------------------------------
 
-Changes in 3.0.63
+Changes in 3.0.63 (unreleased)
 ===========================
  - Browse to family picklist now lists multiple spouses for
    non-traditional families with more than 2 spouses
