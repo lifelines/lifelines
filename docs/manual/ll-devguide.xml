@@ -773,6 +773,7 @@ source tree, using the following commands:
 <programlisting>
 git clone https://github.com/MarcNo/lifelines.git
 </programlisting>
+</para>
 <para>
 Once you have cloned the sources, git hides information in the .git
 subdirectories so all information about the repository is retained.
