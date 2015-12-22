@@ -5,8 +5,9 @@ These instructions are for building a new lifelines
 release, in your cvs working directory, and actually
 releasing it.
 
-Fetch latest cvs if desired, eg 
-  $ cvs -z3 up -d
+Fetch latest cvs if desired, eg:
+$ git checkout master
+$ git pull
 
 Compile and test current source, using report st/st_all.
 
@@ -60,17 +61,16 @@ Add an entry mentioning the new version in the
   ChangeLog
 
 Commit changes (new version number, new message catalogs):
-  $ cvs -z3 ci
+$ git add ...
+$ git commit
 
 Announce new version to Free Translation Project.
-Per: http://www.iro.umontreal.ca/translation/HTML/maintainers.html
- <Merely send the URL of a packaged distribution to
-  translation@iro.umontreal.ca. Use the string
-  "DOMAIN-VERSION.pot" somewhere in the subject line
-  of your invoice. Beware that a POT file may only
-  be processed once by the Translation Project.>
-Free Translation Project page for lifelines:
-  http://www.iro.umontreal.ca/translation/registry.cgi?domain=lifelines
+Per: http://translationproject.org/html/maintainers.html
+
+<< Whenever you make a new release of your package, you should announce
+   it to the TP coordinators at <coordinator@translationproject.org> by
+   sending them the URL of the release tarball -- this tarball should
+   contain an up to date POT file. >>
 
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
@@ -80,22 +80,18 @@ rpm:  See README.MAINTAINERS.rpm
 debian: lifelines is a supported debian package
          and has a debian maintainer (q.v.)
 
+FreeBSD: lifelines is a support FreeBsd port
+         and has a FreeBSD maintainer.
+
 MS-Windows: See README.MAINTAINERS.win32
 
+Tag the repository at github using the version number used.
 
-Go to lifelines admin page, and create a new
-beta release. Paste in top part of ./NEWS file
-for ChangeLog entry, and copy & paste release
-notes from previous beta release, updating md5
-signatures to those of new release files.
+$ git tag X.Y.Z
 
-Upload the release files (tarball etc.) to
-http://marcno.github.io/lifelines/ using the gh-pages branch.
-
-Tag the git sources by (for exampel, for version 3.0.25)
-  git tag v3_0_25
+Create a release at github, and upload the release packages.
+(Should be at least a source tgz, but there could be Windows and MacOSX binaries).
 
 Send an announcement to the LINES-L mailing list
  (send to user LINES-L at domain LISTSERV.NODAK.EDU).
-
 
