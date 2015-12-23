@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+*.[oa]
+.deps
+btedit
+dbverify

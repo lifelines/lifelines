@@ -1,0 +1,5 @@
+Makefile
+Makefile.in
+*.[oa]
+yacc.[ch]
+.deps
