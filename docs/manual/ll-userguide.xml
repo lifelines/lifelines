@@ -4,41 +4,21 @@
                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
 [<!ENTITY llversion '3.0.62'>]>
 
-  <book id="docbook">
-
-  <bookinfo>
-
-
+<!-- ================================================= -->
+<!-- ChangeLog                                         -->
+<!-- ================================================= -->
 <!--
 
-    this is lifelines.xml
-
-    To use this file with SGML software, replace the text above
-    this comments section with the following:
-
-_________________________________________________________
-
-<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.62">
-]>	
-	
-<book id="docbook">
-  <?dbhtml filename="ll-doc.htm">
-  <bookinfo>
-_________________________________________________________
-
-
-    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-200
+    Rafal Prinke <rafalp@amu.edu.pl> 1-Apr-2000
     - Converted original LifeLines Reference Guide to DocBook SGML.
-
-
-    Marc Nozell <marc@nozell.com>  26-Jul-2001
-    - Changed <simpara> to <para>.  Newer docbook likes it better.
 
     Marc Nozell <marc@nozell.com>  21-Sep-2000
     - updated license info
     - change references from lines302 to llines
     - make most lines less than 80 characters wide
+
+    Marc Nozell <marc@nozell.com>  26-Jul-2001
+    - Changed <simpara> to <para>.  Newer docbook likes it better.
 
     Rafal Prinke <rafalp@amu.edu.pl> 30-Dec-2001
     - Converted to XML.
@@ -49,11 +29,14 @@ _________________________________________________________
           - replaced ampersands with entities
           - added space at end of line
           - parsed against DocBook 4.1.2 DTD
-
                                                        -->
 <!-- ================================================= -->
 
-    <title>
+<book id="docbook">
+
+<bookinfo>
+
+<title>
 
 <application>LifeLines</application> Documentation
 </title>

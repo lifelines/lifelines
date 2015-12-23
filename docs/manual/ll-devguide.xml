@@ -10,7 +10,6 @@ This is only an outline, not a parseable XML file.
 
 2005-02-12, Perry Rapp
 
-
 * stdlib directory
 The stdlib directory contains various utility functions not specifically
 related to LifeLines, GEDCOM, or even genealogy.
@@ -223,36 +222,18 @@ TODO:
 
 -->
 
-
-
-  <book id="docbook">
-
-  <bookinfo>
-
-
+<!-- ================================================= -->
+<!-- ChangeLog                                         -->
+<!-- ================================================= -->
 <!--
-
-    this is ll-devguide.xml
-
-    To use this file with SGML software, replace the text above
-    this comments section with the following:
-
-_________________________________________________________
-
-<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-	<!entity llversion	"3.0.52">
-]>	
-	
-<book id="docbook">
-  <?dbhtml filename="ll-doc.htm">
-  <bookinfo>
-_________________________________________________________
-
-
                                                        -->
 <!-- ================================================= -->
 
-    <title>
+<book id="docbook">
+
+<bookinfo>
+
+<title>
 
 <application>LifeLines</application> Developer Documentation
 </title>
