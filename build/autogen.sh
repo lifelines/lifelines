@@ -22,6 +22,13 @@ SAVEDIR=`pwd`
 
 cd $ROOTDIR
 
+echo "Cleaning up old files..."
+rm -f aclocal.m4
+rm -rf autom4te.cache
+rm -f config.*
+rm -f configure
+rm -f stamp-h1
+
 echo "Running aclocal..."
 aclocal $INCLUDE
 
