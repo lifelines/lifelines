@@ -116,6 +116,14 @@ extern INT cur_screen;
 extern UIWINDOW stdout_win;
 extern UIWINDOW main_win;
 
+/* Keep this in sync with llinesi.h */
+typedef struct tag_llrect {
+        INT top;
+        INT bottom;
+        INT left;
+        INT right;
+} *LLRECT;
+
 enum {
         BROWSE_INDI
         , BROWSE_FAM

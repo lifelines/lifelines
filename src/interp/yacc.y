@@ -43,6 +43,7 @@
 #include "indiseq.h"
 #include "interpi.h"
 #include "liflines.h"
+#include "screen.h"
 #include "parse.h"
 #include <stdlib.h>
 
