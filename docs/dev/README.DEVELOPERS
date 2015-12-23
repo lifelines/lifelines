@@ -13,7 +13,7 @@ In order to compile lifelines from the git sources,
 the developer needs to have a number of tools available.
 
 git, ssh: to access git repository
-make: build process requires gmake
+gmake: build process requires gmake
 gcc (or another compiler): to compile c source
 libintl, gettext: (libs and tools) to compile source and translations
 libncurses (or libcurses): for GUI code
@@ -36,8 +36,6 @@ jw: Is used to compile the documentation.  It is at least
 jadetex: Is used to produce pdf versions of the documentation.
    It is at least available in the Redhat jadetext package.
    See jw above.
-lynx: Is used to compile text versions of documentation. See
-   jw above.
 
 Note: These requirements are for compiling from
 the git sources, not from a distribution tarball.

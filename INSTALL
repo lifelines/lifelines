@@ -88,7 +88,6 @@ how you build lifelines. (Avoid gcc version 2.7.2.1)
    and text.  Currently the tools being used are 
    docbook
    docbook-utils
-   lynx
 4. Multiple Language support - processed files are checked into cvs, but
    to rebuild the language files:
    gettext
