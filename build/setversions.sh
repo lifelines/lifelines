@@ -173,9 +173,9 @@ function restore {
 ##
 
 # Determine root of repository
-if [ ! -f AUTHORS ]
+if [ ! -f ChangeLog ]
 then
-  if [ ! -f ../AUTHORS ]
+  if [ ! -f ../ChangeLog ]
   then
     echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
     exit 1

@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Determine root of repository
-if [ ! -f build_dist.sh ]
+if [ ! -f ChangeLog ]
 then
-  if [ ! -f ../build_dist.sh ]
+  if [ ! -f ../ChangeLog ]
   then
     echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
     exit 1
@@ -17,7 +17,7 @@ fi
 UNAME=`uname`
 if [ $UNAME != "Linux" ]
 then
-  echo "ERROR: Release tools only work on Linux due to bash-isms."
+  echo "ERROR: Release tools only work on Linux due to dependency on bash and gnumake."
   exit 1
 fi
 
@@ -30,7 +30,8 @@ echo "STATUS: Updating local git repository..."
 git checkout master
 git pull
 
-read -p 'Enter new version number (format X.Y.Z): ' newversion
+newversion=`grep AC_INIT configure.ac | sed -e 's/AC_INIT//g' -e 's/lifelines,//g' -e 's/[\(\), ]//g'`
+echo "New version number, as parsed from configure.ac: $newversion"
 
 echo ${newversion} | grep -E '^[[:digit:]]{1,2}\.[[:digit:]]{1,2}\.[[:digit:]]{1,2}$' > /dev/null
 if [ $? -eq 0 ]
@@ -41,45 +42,43 @@ else
   exit 1
 fi
 
+read -p 'Press key to change version number across the distribution'
+
 echo "STATUS: Changing version number to $newversion..."
-$ROOTDIR/build/setversions.sh $newversion
+sh $ROOTDIR/build/setversions.sh $newversion
 
 read -p 'Press key to run autotools:'
 
 echo "STATUS: Generating new makefiles and configure script..."
-$ROOTDIR/build/autogen.sh
+sh $ROOTDIR/build/autogen.sh
 
-read -p 'Press key to recreate local build subdirectory:'
+read -p 'Press key to clean local repository'
 
-echo "STATUS: Creating local build subdirectory..."
-rm -rf bld
-mkdir bld
+echo "STATUS: Cleaning local repository..."
+./configure
+make distclean
+
+read -p 'Press key to recreate staging area for release build:'
+
+echo "STATUS: Creating staging area for release build..."
+rm -rf staging
+mkdir staging
 
 read -p 'Press key to run configure:'
 
 echo "STATUS: Running ./configure..."
-cd bld
+cd staging
 ../configure
 
 read -p 'Press key to build:'
 
 echo "STATUS: Building..."
-cd ..
 make
-
-read -p 'Press key to build new language files:'
-
-echo "STATUS: Building language files..."
-mv po/lifelines.pot po/lifelines.pot.old
-cd po
-make lifelines.pot
-cd ..
 
 read -p 'Press key to build distribution tarball:'
 
 echo "STATUS: Creating distribution tarball..."
 make dist
-cd ..
 
 echo "STATUS: Almost done..."
 echo "You must read docs/dev/README.MAINTAINERS and finish the rest of the process!"
