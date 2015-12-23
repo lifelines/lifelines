@@ -48,6 +48,4 @@ dist_doc_DATA = $(MANUALS) $(MANUALS_static)
 	-jw -f docbook -b html -V nochunks -d $(srcdir)/ll_html.dsl $^
 
 .html.txt:
-	if [ -f /usr/bin/lynx ] ; then \
-	/usr/bin/lynx -force_html -dump -nolist -width=76 $^ > $@ ;\
-	fi
+	-jw -f docbook -b txt $^
