@@ -60,14 +60,14 @@ dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
   # -ansi breaks compile of liflines/askprogram.c [pere 2000-12-31]
   for flag in \
-	-W \
-	-Wall \
-	-Wcast-align \
-	-Wmissing-declarations \
-	-Wmissing-prototypes \
-	-Wreturn-type \
-	-Wstrict-prototypes \
-	-pedantic
+        -W \
+        -Wall \
+        -Wcast-align \
+        -Wmissing-declarations \
+        -Wmissing-prototypes \
+        -Wreturn-type \
+        -Wstrict-prototypes \
+        -pedantic
   do
     JAPHAR_GREP_CFLAGS($flag,    [ CFLAGS="$CFLAGS $flag"    ])
   done
@@ -95,28 +95,24 @@ dnl **************************************************************
 
 # Shall we build the docs?
 AC_ARG_WITH(docs,
-    [  --with-docs             Build the docs (requires sgmltools) ],
-    [with_docs=$withval],
-    [with_docs=no]
-)
+    [  --with-docs             Build the docs from source (requires jw) ],
+    [build_docs=$withval],
+    [build_docs=no])
 
-DOCS_TARGET=""
-if test "$with_docs" = "yes"
+if test "$build_docs" = "yes"
 then
-   	echo Looking for sgmltools
-	AC_PATH_PROG(SGMLTOOLS, sgmltools, FAIL)
-	if test "$SGMLTOOLS" = "FAIL"; then
-		AC_MSG_RESULT( ******************************************************************* )
-		AC_MSG_RESULT( *** Cannot find sgmltools to build docs. skipping building docs *** )
-		AC_MSG_RESULT( *** Visit http://sgmltools-lite.sourceforge.net and install it. *** )
-		AC_MSG_RESULT( ******************************************************************* )
-	else
-		DOCS_TARGET="simple"
-
-	fi
+    echo "Looking for jadewrapper (jw)"
+    AC_PATH_PROG(JW, jw, FAIL)
+    if test "$JW" = "FAIL"; then
+        AC_MSG_RESULT( ************************************************************************ )
+        AC_MSG_RESULT( *** Cannot find jw (jadewrapper) to build docs. Will not build docs. *** )
+        AC_MSG_RESULT( ******* (jw is commonly part of docbook-utils or docbook-tools.) ******* )
+        AC_MSG_RESULT( ************************************************************************ )
+        build_docs=no 
+    fi
 fi
 
-AC_SUBST(DOCS_TARGET)
+AM_CONDITIONAL(BUILD_DOCS, test "$build_docs" = "yes")
 
 dnl **************************************************************
 dnl Handle Profiling Target

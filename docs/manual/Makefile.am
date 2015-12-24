@@ -39,7 +39,9 @@ MANUALS_static = ll-index.html \
 
 CONFIG_CLEAN_FILES = $(MANUALS)
 
+if BUILD_DOCS
 dist_doc_DATA = $(MANUALS) $(MANUALS_static)
+endif
 
 .xml.pdf:
 	-jw -f docbook -b pdf $^
