@@ -797,7 +797,7 @@ Makefiles generated will be able to regenerate any file dependent on a
 Makefile.am or configure.ac.  To regenerate the build system explicitly
 run the script autogen.sh:
 <programlisting>
- sh autogen.sh
+sh build/autogen.sh
 </programlisting>
 </para>
 
@@ -807,57 +807,42 @@ project out of git -- the files generated automatically are no longer
 included in the git repository.
 </para>
 
-<sect2>
-<title>Which does what:</title>
-
 <para>
-At development (or package creation) time:
-</para>
-
-<para>
-aclocal: This generates aclocal.m4 from acinclude.m4.
-</para>
-
-<para>
-Please run 'aclocal -I build/autotools -I build/autotools' in order to get all 
-the autoconf, automake and gettext macros into aclocal.m4.
-[ The autogen.sh script has been updated to do this. ]
-</para>
-
-<para>
-autoheader: This generates acconfig.h.
-</para>
-
-<para>
-automake: This generates Makefile.in files from Makefile.am files.
-</para>
-
-<para>
-autoconf: This generates configure from configure.ac.
-</para>
-
-<para>
-On remote machine compiling a source distribution package:
-</para>
-
-<para>
-configure will generate config.h and Makefile files from Makefile.in files.
+autogen.sh does the following:
+* Calls aclocal to generate aclocal.m4 from acinclude.m4, and populate build/autotools.
+* Calls autoheader to generate acconfig.h.
+* Calls automake to generate Makefile.in files from Makefile.am
+* Calls autoconf to generate configure from configure.ac
 </para>
 </sect2>
 </sect1>
+
+<title>configure</title>
+<para>
+From a source distribution package, or a regenerated development environment,
+the 'configure' script will generate config.h and generate Makefiles from
+every Makefile.in.  At this point your source tree is properly configured
+for your machine and can be built.
+</para>
+</sect1>
+
 <sect1>
 <title>Building the code on Unix/Linux</title>
 <para>
 There are lots of dependencies required to build
-<application>LifeLines</application>.
-Of course you need a C Compiler and make, but also a number of other tools
-like autoconf, automake, byacc and flex. 
+<application>LifeLines</application>. These include:
+* C compiler (gcc, clang, etc)
+* GNU make
+* GNU bison
+* GNU flex
+* GNU autoconf and automake
 One way to build the code is to make a subdirectory, lets say called bld
 in your lifelines directory, (where the toplevel Makefile.am is located)
 and then build all the code there.  This keeps the objects and executables
-out of the source directories.  This is the process shown here.
+out of the source directories.  This is the process shown here, and the
+process used by the build/build_dist.sh script.
 <programlisting>
-sh autogen.sh
+sh build/autogen.sh
 mkdir bld
 cd bld
 ../configure
@@ -883,15 +868,16 @@ make dist
 <para>
 While this is a source tarball it does contain a number of generated
 files that make it easier to generate 
-<application>LifeLines</application>
-from the source tarball.
+<application>LifeLines</application> from the source tarball and/or
+package for third-party distribution.  This includes the configure
+script, the makefiles, and the HTML/PDF documentation.
 </para>
 </sect1>
 <sect1>
 <title>Generating the rpm package</title>
 <para>
 The specification file to build a rpm for redhat linux is included in the
-cvs repository.  These notes show how you can use this to build the
+git repository.  These notes show how you can use this to build the
 source and binary rpm for redhat linux.
 </para>
 <para>
@@ -943,9 +929,9 @@ Add an entry mentioning the new version in the
 <programlisting>
   ChangeLog
 </programlisting>
-Tag the cvs source via (for example, for version 3.0.25)
+Tag the git source via (for example, for version X.Y.Z)
 <programlisting>
-  cvs tag v3_0_25
+  git tag vX_Y_Z
 </programlisting>
 Finally, Send an announcement to the LINES-L mailing list
 </para>
