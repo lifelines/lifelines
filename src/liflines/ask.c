@@ -178,7 +178,7 @@ ask_for_file_worker (STRING mode,
 		rtn = ask_for_output_filename(ttl, path, prompt, fname, sizeof(fname));
 	
 	if (pfname) {
-		if (fname && fname[0])
+		if (fname[0])
 			*pfname = strdup(fname);
 		else
 			*pfname = 0;
@@ -297,7 +297,7 @@ ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
 		*prc = RC_DONE;
 		if (!ask_for_string(ttl, _(qSidbrws), name, sizeof(name)))
 			return NULL;
-		if (!name || *name == 0) return NULL;
+		if (*name == 0) return NULL;
 		*prc = RC_NOSELECT;
 		if (eqstr(name, "@")) {
 			seq = invoke_search_menu();
@@ -483,9 +483,9 @@ ask_for_record (STRING idstr, INT letr)
 {
 	RECORD rec;
 	char answer[MAXPATHLEN];
-	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer))
-		|| !answer[0])
+	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer)))
 		return NULL;
+	if (!answer[0]) return NULL;
 
 	rec = key_possible_to_record(answer, letr);
 	if (!rec) {
@@ -507,6 +507,6 @@ ask_for_record_key (STRING title, STRING prompt)
 	char answer[MAXPATHLEN];
 	if (!ask_for_string(title, prompt, answer, sizeof(answer)))
 		return NULL;
-	if (!answer) return NULL;
+	if (!answer[0]) return NULL;
 	return strsave(answer);
 }

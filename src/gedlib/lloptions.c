@@ -201,13 +201,13 @@ load_config_file (STRING file, STRING * pmsg, STRING *chain)
 		expand_variables(valbuf, sizeof(valbuf));
 		key = buffer; /* key is in beginning of buffer, we zero-terminated it */
 		val = valbuf;
-		if (strcmp(buffer,"LLCONFIGFILE") == 0) {
+		if (strcmp(key,"LLCONFIGFILE") == 0) {
 		    /* LLCONFIGFILE is not entered in table, only used to 
 		     * chain to another config file
 		     */
 		    *chain = strsave(val);
 		} else {
-		    insert_table_str(f_global, buffer, val);
+		    insert_table_str(f_global, key, val);
 		}
 	}
 	failed = !feof(fp);

@@ -261,7 +261,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
 		/* translate & write out current line */
 		/* TODO (2002-11-28): modify to use dynamic string */
 		translate_string(ttm, intmp, out, MAXLINELEN+2);
-		if (out && strlen(out)) {
+		if (ofp && strlen(out)) {
 			int outbytes = fwrite(out, 1, strlen(out), ofp);
 			if (!outbytes || ferror(ofp)) {
 				crashlog("outbytes=%d, errno=%d, outstr=%s"

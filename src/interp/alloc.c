@@ -1183,7 +1183,6 @@ clear_call_node (PNODE node)
 	str = node->vars.ipcall.fname;
 	if (str) {
 		stdfree(str);
-		node->vars.ipcall.fname;
 	}
 }
 /*================================

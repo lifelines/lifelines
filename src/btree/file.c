@@ -185,7 +185,7 @@ write_record_to_file_impl (BTREE btree, RKEY rkey, STRING file
 	 * \n to \r\n
 	 */
 	siz = fwrite(record, 1, len, fp);
-	if (ferror(fp)) {
+	if (ferror(fp) || (siz != len)) {
 		stdfree(record);
 		fclose(fp);
 		return RECORD_ERROR;

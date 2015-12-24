@@ -483,9 +483,11 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 		memset(f_BrowseScreenInfo, 0, sizeof(f_BrowseScreenInfo));
 		for (i=1; i<=MAX_SCREEN; i++)
 		{
+                        /*
 			DYNMENU dynmenu;
-			sinfo = &f_BrowseScreenInfo[i];
 			dynmenu = get_screen_dynmenu(i);
+                        */
+			sinfo = &f_BrowseScreenInfo[i];
 			memset(sinfo, 0, sizeof(*sinfo));
 			sinfo->title = strsave(_("Missing title"));
 		}
