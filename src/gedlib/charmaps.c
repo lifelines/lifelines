@@ -46,6 +46,14 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
  *********************************************/
 
 /* nodes that make up the tree that is a custom character translation table */
+/* MTE: Notes 12/24/2015
+ * achar is defined as a SHORT (int16) here.
+ * However, it is assigned from an INT parameter in create_xnode and step_xnode;
+ * Compared with INT and uchar in translate_match;
+ * Displayed as a uchar in show_xnode.
+ * This needs to be cleaned up to be more consistent, possibly with different APIs
+ * for translations between ASCII (8-bit) and  UTF-8, UTF-16 or Unicode encodings.
+ */
 typedef struct tag_xnode *XNODE;
 struct tag_xnode {
 	XNODE parent;	/* parent node */
