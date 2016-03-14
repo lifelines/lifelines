@@ -102,15 +102,15 @@ AC_ARG_WITH(docs,
 if test "$build_docs" = "yes"
 then
     echo "Looking for xmlto"
-    AC_PATH_PROG(TOOL, xmlto, FAIL)
-    if test "$TOOL" = "FAIL"; then
+    AC_PATH_PROG(TOOL_XMLTO, xmlto, FAIL)
+    if test "$TOOL_XMLTO" = "FAIL"; then
         AC_MSG_RESULT( ************************************************************************ )
         AC_MSG_RESULT( ******** Cannot find xmlto to build docs.  Will not build docs. ******** )
         AC_MSG_RESULT( ************************************************************************ )
         build_docs=no 
     fi
-    AC_PATH_PROG(TOOL, dblatex, FAIL)
-    if test "$TOOL" = "FAIL"; then
+    AC_PATH_PROG(TOOL_DBLATEX, dblatex, FAIL)
+    if test "$TOOL_DBLATEX" = "FAIL"; then
         AC_MSG_RESULT( ************************************************************************ )
         AC_MSG_RESULT( ******* Cannot find dblatex to build docs.  Will not build docs. ******* )
         AC_MSG_RESULT( ************************************************************************ )
