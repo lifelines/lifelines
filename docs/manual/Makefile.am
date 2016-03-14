@@ -44,10 +44,10 @@ dist_doc_DATA = $(MANUALS) $(MANUALS_static)
 endif
 
 .xml.pdf:
-	-jw -f docbook -b pdf $^
+	-dblatex $^
 
 .xml.html:
-	-jw -f docbook -b html -V nochunks -d $(srcdir)/ll_html.dsl $^
+	-xmlto -x ll_html.dsl xhtml-nochunks $^
 
 .html.txt:
-	-jw -f docbook -b txt $^
+	-xmlto txt $^

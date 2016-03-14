@@ -95,18 +95,24 @@ dnl **************************************************************
 
 # Shall we build the docs?
 AC_ARG_WITH(docs,
-    [  --with-docs             Build the docs from source (requires jw) ],
+    [  --with-docs             Build the docs from source (requires xmlto and dblatex) ],
     [build_docs=$withval],
     [build_docs=no])
 
 if test "$build_docs" = "yes"
 then
-    echo "Looking for jadewrapper (jw)"
-    AC_PATH_PROG(JW, jw, FAIL)
-    if test "$JW" = "FAIL"; then
+    echo "Looking for xmlto"
+    AC_PATH_PROG(TOOL, xmlto, FAIL)
+    if test "$TOOL" = "FAIL"; then
         AC_MSG_RESULT( ************************************************************************ )
-        AC_MSG_RESULT( *** Cannot find jw (jadewrapper) to build docs. Will not build docs. *** )
-        AC_MSG_RESULT( ******* (jw is commonly part of docbook-utils or docbook-tools.) ******* )
+        AC_MSG_RESULT( ******** Cannot find xmlto to build docs.  Will not build docs. ******** )
+        AC_MSG_RESULT( ************************************************************************ )
+        build_docs=no 
+    fi
+    AC_PATH_PROG(TOOL, dblatex, FAIL)
+    if test "$TOOL" = "FAIL"; then
+        AC_MSG_RESULT( ************************************************************************ )
+        AC_MSG_RESULT( ******* Cannot find dblatex to build docs.  Will not build docs. ******* )
         AC_MSG_RESULT( ************************************************************************ )
         build_docs=no 
     fi

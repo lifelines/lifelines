@@ -26,22 +26,21 @@ m4: Is required by the autotools suite as well as for
     prototypes.
 perl: Is required to generate the file index.html in the
    reports directory, as well as for generation of lines.cfg.
-jw: Is used to compile the documentation.  It is at least 
-   available in the debian text/docbook-utils package
-   and the Redhat docbook-utils package. Lack of this tool
-   is not critical, however, and the make will continue,
-   only listing these lacks as warnings.  The generated
-   documention is included in both the git and src distributions.
-   This will only prevent regeneration of the documention.
-jadetex: Is used to produce pdf versions of the documentation.
-   It is at least available in the Redhat jadetext package.
-   See jw above.
-
+xmlto: is used to build the documentation in text or html format.
+   It is available on RedHat, Debian, *BSD platforms, and most
+   likely others.  This is available for anyone wishing to
+   rebuild documentation, as well as generation of release
+   tarballs.
+dblatex: is used to build the documentation in text or html format.
+   It is available on RedHat, Debian, *BSD platforms, and most
+   likely others.  This is available for anyone wishing to
+   rebuild documentation, as well as generation of release
+   tarballs.
+  
 Note: These requirements are for compiling from
 the git sources, not from a distribution tarball.
 Distribution tarballs are built so as not to require
 autotools or bison.  However, m4 and perl are required.
-
 
 ***************************
 

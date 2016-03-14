@@ -49,10 +49,14 @@ and install the LifeLines programs.  You will end up with the following
 executables (installed in various places, depending on your platform):
 
 llines   -- main LifeLines system program
+llexec   -- non-interactive version, useful for running reports
 btedit   -- general purpose btree edit program
 dbverify -- checks a LifeLines database for problems
 
 llines is the main LifeLines program.
+
+lllexec is a non-interactive version of the main program, and is
+handy for automatically running reports against a given database.
 
 dverify can be used to verify the correctness of a LifeLines database.
 This is handy if you're storing databases on floppies, or just for
@@ -62,46 +66,36 @@ btedit is a administration tool used for unmangling mangled databases,
 and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
 
-
 docs:
-The make process will attempt to generate html, pdf, and text 
-documentation from the xml source files. If the jw tools are
-not found, errors will display, but the make will continue. 
 Pregenerated versions of the documentation are included, in
 html, pdf, and text formats, so it is not necessary to have
-these tools installed. It is simply beneficial to ensure that
-they are absolutely up-to-date.
+these tools installed.
+
+If you are tracking the git repository and want to be able to rebuild
+your documentation as changes are made, you must run configure
+with the "--with-docs" option.  This has some large dependencies;
+see below for more information.
 
 ******************************
 1a) Dependencies
 ******************************
 lifelines has a number of dependencies and they vary depending on
 how you build lifelines. (Avoid gcc version 2.7.2.1)
-1. General dependencies
+1. General dependencies:
    ncurses
-2. Building from CVS
+2. Building from source code repository:
    automake
    autoconf
    bison
-3. Document Generation - see above about docs.
+3. Document Generation
    Regeneration of the docs requires tools to convert from xml to html, pdf,
-   and text.  Currently the tools being used are 
-   docbook
-   docbook-utils
+   and text.  Currently the tools being used are:
+   xmlto
+   dblatex
 4. Multiple Language support - processed files are checked into cvs, but
    to rebuild the language files:
    gettext
    iconv
-
-Some notes on our document generation.  The makefiles currently are setup to 
-use the  "docbook-utils" package -- part of the "docbook-tools" package at RedHat.
-More tools are becoming available to convert xml to html and/or pdf formats.
-On FreeBSD systems it is possible to use Xerces and Xalan -- a XML parser 
-and XSLT transformer, respectively, from the Apache XML project:
-http://xml.apache.org/
-    $ xalan -o ll-userguide.html ll-userguide.xml .../docbook-xsl/html/docbook.xsl
-    $ htmldoc -f ll-userguide.pdf ll-userguide.html
-DarwinPorts has xercesc, xalanc, docbook-xml, and docbook-xsl.
 
 ******************************
 1b) Specific Issues
