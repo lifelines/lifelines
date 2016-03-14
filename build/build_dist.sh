@@ -1,5 +1,12 @@
 #!/bin/sh
 
+function prompt {
+  echo "----------------------------------------"
+  echo $1
+  echo "----------------------------------------"
+  read -p "Press ENTER to continue..." 
+}
+
 # Determine root of repository
 if [ ! -f ChangeLog ]
 then
@@ -24,9 +31,8 @@ fi
 SAVEDIR=`pwd`
 cd $ROOTDIR
 
-read -p 'Press key to fetch latest code from git:'
+prompt '1) Fetch latest code from git'
 
-echo "STATUS: Updating local git repository..."
 git checkout master
 git pull
 
@@ -42,47 +48,38 @@ else
   exit 1
 fi
 
-read -p 'Press key to change version number across the distribution'
+prompt '2) Change version number in documentation and build metadata'
 
-echo "STATUS: Changing version number to $newversion..."
-sh $ROOTDIR/build/setversions.sh $newversion
+sh build/setversions.sh $newversion
 
-read -p 'Press key to run autotools:'
+prompt '3) Run autotools and configure'
 
-echo "STATUS: Generating new makefiles and configure script..."
-sh $ROOTDIR/build/autogen.sh
-
-read -p 'Press key to clean local repository'
-
-echo "STATUS: Cleaning local repository..."
+sh build/autogen.sh
 ./configure
+
+prompt '4) Clean local respository for release'
+
 make distclean
 
-read -p 'Press key to recreate staging area for release build:'
+prompt '5) Configure staging area for release'
 
-echo "STATUS: Creating staging area for release build..."
 rm -rf staging
 mkdir staging
-
-read -p 'Press key to run configure:'
-
-echo "STATUS: Running ./configure..."
 cd staging
 ../configure
 
-read -p 'Press key to build:'
+prompt '6) Build in staging area for release'
 
-echo "STATUS: Building..."
 make
 
-read -p 'Press key to build distribution tarball:'
+prompt '7) Build release tarball in staging area'
 
-echo "STATUS: Creating distribution tarball..."
 make dist
 
-echo "STATUS: Almost done..."
+echo "Almost done..."
 echo "You must read docs/dev/README.MAINTAINERS and finish the rest of the process!"
 echo "Things to do include:"
+echo "- checking in changes due to version number change"
 echo "- tagging repo at github"
 echo "- creating a release at github and uploading release packages"
 echo "- sending message files to the translation project and updating message catalogs"
