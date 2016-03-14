@@ -143,9 +143,6 @@ function applyversion {
   alterfile $ROOTDIR/NEWS "$SEDPAT"
   alterfile $ROOTDIR/README "$SEDPAT"
 
-  SEDPAT="s/^\(AM_INIT_AUTOMAKE(lifelines, \)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
-  alterfile $ROOTDIR/configure.ac "$SEDPAT"
-
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
   alterwinversions $ROOTDIR/build/msvc6/btedit/btedit.rc
