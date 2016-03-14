@@ -49,7 +49,7 @@ endif
 	@TOOL_DBLATEX@ $^
 
 .xml.html:
-	@TOOL_XMLTO@ -x ll_html.dsl xhtml-nochunks $^
+	@TOOL_XMLTO@ -x ll-html.xsl xhtml-nochunks $^
 
 .xml.txt:
 	%TOOL_XMLTO@ txt $^
