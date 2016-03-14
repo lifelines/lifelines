@@ -14,6 +14,18 @@
 function showusage {
   echo "Usage: sh `basename $0` X.Y.Z   # to change to specified version number"
   echo "   or: sh `basename $0` restore # to undo version number just applied"
+  echo "   or: sh `basename $0` cleanup # to remove backup files"
+}
+
+function usageexit {
+  echo $1
+  showusage
+  exit $2
+}
+
+function failexit {
+  echo $1
+  exit 99
 }
 
 function checkparm {
@@ -23,19 +35,19 @@ function checkparm {
     return
   fi
 
+  if [ $1 = "cleanup" ]
+  then
+    CLEANUP=1
+    return
+  fi
+
   # Store argument as $VERSION and check it is valid version
   VERSION=$1
   VPATTERN="^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$"
   if ! echo $VERSION | grep -q $VPATTERN
   then
-    showusage
-    exit $E_WRONG_ARGS
+    usageexit "ERROR: Missing or invalid version number" $E_WRONG_ARGS
   fi
-}
-
-function failexit {
-  echo $1
-  exit 99
 }
 
 # Function to apply version to one file
@@ -48,6 +60,7 @@ function alterfile {
   shift
   cp $FILEPATH $FILEPATH.bak || failexit "Error backing up file "$FILEPATH
   # Now apply each remaining argument as sed command
+  echo "Updating version number in $FILEPATH..."
   until [ -z "$1" ]
   do
     # sed doesn't seem to set its return value, so we don't check
@@ -86,6 +99,15 @@ function restorefile {
   if [ -e $1.bak ]
   then
     cp $1.bak $1
+  fi
+}
+
+# Function to remove backup files
+# Argument#1: file to remove
+function cleanupfile {
+  if [ -e $1.bak ]
+  then
+    rm $1.bak
   fi
 }
 
@@ -168,6 +190,30 @@ function restore {
   restorefile $ROOTDIR/docs/manual/ll-userguide.sv.xml
 }
 
+# Cleanup, for user to remove backup files
+function cleanup {
+  cleanupfile $ROOTDIR/AUTHORS
+  cleanupfile $ROOTDIR/ChangeLog
+  cleanupfile $ROOTDIR/INSTALL
+  cleanupfile $ROOTDIR/NEWS
+  cleanupfile $ROOTDIR/README
+  cleanupfile $ROOTDIR/configure.ac
+  cleanupfile $ROOTDIR/build/msvc6/btedit/btedit.rc
+  cleanupfile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
+  cleanupfile $ROOTDIR/build/msvc6/llexec/llexec.rc
+  cleanupfile $ROOTDIR/build/msvc6/llines/llines.rc
+  cleanupfile $ROOTDIR/build/rpm/lifelines.spec
+  cleanupfile $ROOTDIR/docs/man/btedit.1
+  cleanupfile $ROOTDIR/docs/man/dbverify.1
+  cleanupfile $ROOTDIR/docs/man/llines.1
+  cleanupfile $ROOTDIR/docs/man/llexec.1
+  cleanupfile $ROOTDIR/docs/manual/ll-devguide.xml
+  cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.xml
+  cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
+  cleanupfile $ROOTDIR/docs/manual/ll-userguide.xml
+  cleanupfile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+}
+
 ##
 ## MAIN PROGRAM
 ##
@@ -177,8 +223,7 @@ if [ ! -f ChangeLog ]
 then
   if [ ! -f ../ChangeLog ]
   then
-    echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
-    exit 1
+    failexit "ERROR: Must be run from either the root of the source tree or the build/ directory!"
   else
     ROOTDIR=..
   fi
@@ -190,23 +235,22 @@ fi
 E_WRONG_ARGS=65
 if [ $# -ne 1 ] || [ -z "$1" ]
 then
-  showusage
-  exit $E_WRONG_ARGS
+  usageexit "ERROR: Wrong number of arguments!" $E_WRONG_ARGS
 fi
 
 # Function to handle parsing argument
-# Parse argument (should be a version, or "restore")
+# Parse argument (should be a version, or "restore" or "cleanup")
 # (exits if failure)
 checkparm $1
 
-# Compute new version numbers (esp for Windows)
-getversion
-
 # Invoke whichever functionality was requested
-if [ -z "$RESTORE" ]
+if [ ! -z "$RESTORE" ]
 then
-  applyversion
-else
   restore
-fi
-
+elif [ ! -z "$CLEANUP" ]
+then
+  cleanup
+else
+  getversion
+  applyversion
+fi 
