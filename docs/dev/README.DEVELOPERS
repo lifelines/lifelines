@@ -36,6 +36,8 @@ dblatex: is used to build the documentation in text or html format.
    likely others.  This is available for anyone wishing to
    rebuild documentation, as well as generation of release
    tarballs.
+texlive-cmap: provides character map tables, used by dblatex,
+   to create searchable PDFs.
   
 Note: These requirements are for compiling from
 the git sources, not from a distribution tarball.

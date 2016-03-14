@@ -15,7 +15,9 @@ MANUALS_en =	ll-reportmanual.html \
 		ll-devguide.html
 
 MANUALS_sv =	ll-reportmanual.sv.html \
-		ll-userguide.sv.html
+		ll-reportmanual.sv.pdf \
+		ll-userguide.sv.html \
+		ll-userguide.sv.pdf
 
 MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 
@@ -44,10 +46,10 @@ dist_doc_DATA = $(MANUALS) $(MANUALS_static)
 endif
 
 .xml.pdf:
-	-dblatex $^
+	@TOOL_DBLATEX@ $^
 
 .xml.html:
-	-xmlto -x ll_html.dsl xhtml-nochunks $^
+	@TOOL_XMLTO@ -x ll_html.dsl xhtml-nochunks $^
 
-.html.txt:
-	-xmlto txt $^
+.xml.txt:
+	%TOOL_XMLTO@ txt $^
