@@ -7,7 +7,7 @@ dnl **************************************************************
 dnl Autoconf Preamble
 dnl **************************************************************
 
-AC_INIT(lifelines, 3.0.62)
+AC_INIT(lifelines, 3.1.0)
 AC_PREREQ(2.50)
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
