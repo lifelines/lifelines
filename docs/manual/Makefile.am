@@ -52,4 +52,4 @@ endif
 	@TOOL_XMLTO@ -x ll-html.xsl xhtml-nochunks $^
 
 .xml.txt:
-	%TOOL_XMLTO@ txt $^
+	@TOOL_XMLTO@ txt $^
