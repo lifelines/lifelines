@@ -41,11 +41,16 @@ MANUALS_static = ll-index.html \
 # Rules
 ###################
 
-CONFIG_CLEAN_FILES = $(MANUALS)
+# By default, end-users just install documentation and never clean it.
+doc_DATA = $(MANUALS_static) $(MANUALS)
+CLEANFILES =
 
+# When creating a distribution, include the sources
+dist_doc_DATA = $(doc_DATA) $(MANUALSSRC)
+
+# When using --with-docs, provide the power to destroy and the rules to recreate.
 if BUILD_DOCS
-dist_doc_DATA = $(MANUALS) $(MANUALS_static)
-endif
+CLEANFILES += $(MANUALS)
 
 .xml.pdf:
 	@TOOL_DBLATEX@ $^
@@ -55,3 +60,4 @@ endif
 
 .xml.txt:
 	@TOOL_XMLTO@ txt $^
+endif
