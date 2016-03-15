@@ -6,6 +6,11 @@ This is a high-level view of changes made to the source tree.
 For details on files changed and the changes themselves, consult the git
 commit logs.
 
+2016-03-14 Matt Emmerton
+
+	More improvements to build/release tools, mainly to handle version number bumps.
+	Update docbook toolchain and update to docbook 4.5
+
 2015-12-22 Matt Emmerton
 
         Improve build/release tools.
