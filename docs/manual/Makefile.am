@@ -56,7 +56,7 @@ CLEANFILES += $(MANUALS)
 	@TOOL_DBLATEX@ $^
 
 .xml.html:
-	@TOOL_XMLTO@ -x ll-html.xsl xhtml-nochunks $^
+	@TOOL_XMLTO@ -x @srcdir@/ll-html.xsl xhtml-nochunks $^
 
 .xml.txt:
 	@TOOL_XMLTO@ txt $^
