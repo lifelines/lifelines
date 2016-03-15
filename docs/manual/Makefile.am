@@ -46,7 +46,7 @@ doc_DATA = $(MANUALS_static) $(MANUALS)
 CLEANFILES =
 
 # When creating a distribution, include the sources
-dist_doc_DATA = $(doc_DATA) $(MANUALSSRC)
+EXTRA_DIST = $(MANUALSSRC)
 
 # When using --with-docs, provide the power to destroy and the rules to recreate.
 if BUILD_DOCS

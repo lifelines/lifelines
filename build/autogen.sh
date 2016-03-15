@@ -29,16 +29,8 @@ rm -f config.*
 rm -f configure
 rm -f stamp-h1
 
-echo "Running aclocal..."
-aclocal $INCLUDE
-
-echo "Running autoheader..."
-autoheader $INCLUDE
-
-echo "Running automake..."
-automake --add-missing
-
-echo "Running autoconf..."
-autoconf $INCLUDE
+echo "Running autoreconf..."
+echo "(This replaces aclocal, autoheader, automake, autoconf, and others)"
+autoreconf $INCLUDE -i
 
 cd $SAVEDIR
