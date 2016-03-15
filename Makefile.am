@@ -5,8 +5,9 @@ ACLOCAL_AMFLAGS = -I build/autotools -I build/gettext
 # intl must come before src since we link with it!
 SUBDIRS = build intl po src docs reports tt
 
-EXTRA_DIST = .linesrc lines.cfg \
-             LICENSE INSTALL NEWS README AUTHORS 
+EXTRA_DIST = .linesrc lines.cfg lines.cfg.m4 \
+             AUTHORS INSTALL LICENSE NEWS README \
+             ChangeLog
 
 CLEANFILES = .linesrc lines.cfg
 

@@ -28,12 +28,14 @@ MANUALSSRC_en = ll-reportmanual.xml \
 MANUALSSRC_sv = ll-reportmanual.sv.xml \
 		ll-userguide.sv.xml
 
-MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
+MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv) \
+		ll-html.xsl
 
 IMAGES =	listops.jpg
 
 MANUALS_static = ll-index.html \
-		 ll-index.sv.html
+		 ll-index.sv.html \
+		 $(IMAGES)
 
 ###################
 # Rules

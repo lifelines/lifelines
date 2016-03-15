@@ -80,6 +80,8 @@ prompt '7) Build release tarball in staging area'
 
 make dist
 
+cd $SAVEDIR
+
 echo "The distribution tarball can be found here:"
 ls -al staging/lifelines*gz
 echo
@@ -88,12 +90,10 @@ echo "You must read docs/dev/README.MAINTAINERS and finish the rest of the proce
 echo "Things to do (for pre-release) include:"
 echo "- sending message files to the translation project and updating message catalogs"
 echo "Things to do (for release) include:"
-echo "1) Source
+echo "1) Source"
 echo "- checking in changes due to version number changes"
 echo "- changing in changes to language files due to source line number shifts"
 echo "- cleaning up from the version number changes (sh setversions.sh cleanup)"
-echo "2) Repository
+echo "2) Repository"
 echo "- tagging repo at github"
 echo "- creating a release at github and uploading release packages"
-
-cd $SAVEDIR
