@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [<!ENTITY llversion '3.0.62'>]>
 
 <!-- ================================================= -->
@@ -1933,50 +1933,65 @@ next person in database in key order
 <para>
 previous person in database in key order
 </para>
-</glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis>
-</glossterm><glossdef>
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>spouses</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-loop through all spouses of
-</para>
-</glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
-
-<para>
-loop through all families (as spouse) of
+all spouses of a person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>families</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>FAM_V</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-loop through all persons in database
+all families
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>forindi</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-loop through all female parents of a person
+all persons
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>mothers</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-loop through all male parents of a person
+all female parents of a person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>fathers</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-loop through all families a person is a child of
+all male parents of a person
+</para>
+
+</glossdef></glossentry>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>parents</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
+<para>
+all families a person is a child of
 </para>
 
 </glossdef></glossentry>
@@ -2325,21 +2340,30 @@ previous family in database in key order
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>children</function></funcdef>
+<paramdef><parameter>FAM</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through children of family
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>spouses</function></funcdef>
+<paramdef><parameter>FAM</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all husbands and wives of a family
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>forfam</function></funcdef>
+<paramdef><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all families in database
@@ -2425,21 +2449,28 @@ Other types of records
 </title>
 
 <glosslist>
-<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SOUR <function>forsour</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all sources in database
 </para>
 </glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>EVEN <function>foreven</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all EVEN nodes in database
 </para>
 </glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>OTHR <function>forothr</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all other (notes, etc.) nodes in database
@@ -2631,7 +2662,10 @@ duplicate a list
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LIST</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>forlist</function></funcdef>
+<paramdef><parameter>LIST</parameter><parameter>ANY_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all elements of list
@@ -2885,22 +2919,29 @@ copy a node structure
 level of a node
 </para>
 </glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>fornodes</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>NODE_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through child nodes
 </para>
 </glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>NODE</replaceable>, <replaceable>STRING_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>fornotes</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>STRING_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through notes on a node
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NODE</replaceable>, <replaceable>NODE_V</replaceable>, <replaceable>INT_V</replaceable>) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>traverse</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all descendent nodes
@@ -4844,8 +4885,10 @@ generate indiset from GEDCOM name string
 </para>
 </glossdef></glossentry>
 
-
-<glossentry><glossterm><synopsis><command>forindiset</command>( <replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>ANY_V</replaceable>, <replaceable>INT_V</replaceable> ) { <replaceable>commands</replaceable> } </synopsis></glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>forindiset</function></funcdef>
+<paramdef><parameter>SET</parameter><parameter>INDI_V</parameter><parameter>ANY_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loop through all persons in person set

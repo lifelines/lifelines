@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [<!ENTITY llversion '3.0.62'>]>
 
 <!--
@@ -814,9 +814,9 @@ autogen.sh does the following:
 * Calls automake to generate Makefile.in files from Makefile.am
 * Calls autoconf to generate configure from configure.ac
 </para>
-</sect2>
 </sect1>
 
+<sect1>
 <title>configure</title>
 <para>
 From a source distribution package, or a regenerated development environment,

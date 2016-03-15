@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [<!ENTITY llversion '3.0.62'>]>
 
 <!-- ================================================= -->
@@ -1840,8 +1840,10 @@ föregående person i databasen i nyckelordning
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>spouses</command> (<replaceable>INDI</replaceable>, <replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>spouses</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1850,8 +1852,10 @@ loopa igenom alla makar till
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>families</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>INDI</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>families</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>FAM_V</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1860,8 +1864,10 @@ loopa igenom alla familjer (som maka/make) för
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>forindi</command> (<replaceable>INDI</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>forindi</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -1869,25 +1875,31 @@ loopa igenom alla personer i databasen
 
 </para>
 </glossdef></glossentry>
-
-<glossentry><glossterm><synopsis><command>mothers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>mothers</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom alla kvinnliga föräldrar till en person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>fathers</command> (<replaceable>INDI</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>FAM_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>fathers</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
+
 
 <para>
 loopa igenom alla manliga föräldrar till en person
 </para>
 
 </glossdef></glossentry>
-<glossentry><glossterm><synopsis><command>Parents</command> (<replaceable>INDI</replaceable>, <replaceable>FAM</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>parents</function></funcdef>
+<paramdef><parameter>INDI</parameter><parameter>INDI_V</parameter><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom alla familjer en person är ett barn i
@@ -2331,8 +2343,10 @@ föregående familj i databasen i nyckelordning
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>children</command> (<replaceable>FAM</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>children</function></funcdef>
+<paramdef><parameter>FAM</parameter><parameter>INDI_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -2341,8 +2355,10 @@ loopa igenom barn i familj
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>forfam</command> (<replaceable>FAM_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>FAM <function>forfam</function></funcdef>
+<paramdef><parameter>FAM_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -2478,24 +2494,30 @@ Andra typer av poster
 </title>
 
 <glosslist>
-<glossentry><glossterm><synopsis><command>forsour</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>SOUR <function>forsour</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom alla källor i databasen
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>foreven</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>EVEN <function>foreven</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom alla EVEN-noder in databasen
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>forothr</command> (<replaceable>NOD_V</replaceable>, <replaceable>HELTAL</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>OTHR <function>forothr</function></funcdef>
+<paramdef><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom alla övriga (notiser, etc.) noder i databasen
@@ -2703,8 +2725,10 @@ duplicera en lista
 
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>forlist</command> (<replaceable>LISTA</replaceable>, <replaceable>VALFRI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>forlist</function></funcdef>
+<paramdef><parameter>LIST</parameter><parameter>ANY_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -3029,9 +3053,10 @@ nivå för en nod
 </para>
 </glossdef></glossentry>
 
-
-<glossentry><glossterm><synopsis><command>fornodes</command> (<replaceable>NOD</replaceable>, <replaceable>NOD_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>fornodes</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>NODE_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -3040,16 +3065,20 @@ loopa igenom barnnoder
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>fornotes</command> (<replaceable>VALFRI</replaceable>, <replaceable>STRÄNG</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>fornotes</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>STRING_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 loopa igenom notiser i en nod
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm><synopsis><command>traverse</command> (<replaceable>NOD</replaceable>, <replaceable>NOD_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>NODE <function>traverse</function></funcdef>
+<paramdef><parameter>NODE</parameter><parameter>NODE_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 
@@ -5278,9 +5307,10 @@ skapa indiset från namnsträng i GEDCOM-form
 </para>
 </glossdef></glossentry>
 
-
-<glossentry><glossterm><synopsis><command>forindiset</command> (<replaceable>SET</replaceable>, <replaceable>INDI_V</replaceable>, <replaceable>VALFRI_V</replaceable>, <replaceable>HELTAL_V</replaceable>) { <replaceable>kommandon</replaceable> }</synopsis>
-</glossterm><glossdef>
+<glossentry><glossterm><funcsynopsis><funcprototype>
+<funcdef>INDI <function>forindiset</function></funcdef>
+<paramdef><parameter>SET</parameter><parameter>INDI_V</parameter><parameter>ANY_V</parameter><parameter>INT_V</parameter></paramdef>
+</funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
 

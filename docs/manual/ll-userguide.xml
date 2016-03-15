@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
 [<!ENTITY llversion '3.0.62'>]>
 
 <!-- ================================================= -->
@@ -5656,7 +5656,7 @@ dbverify supports the following options:
 </row>
 <row>
 <entry>-G </entry>
-<entry>Check for & fix ghosts (names/refns)</entry>
+<entry>Check for and fix ghosts (names/refns)</entry>
 </row>
 <row>
 <entry>-h </entry>
