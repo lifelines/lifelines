@@ -52,13 +52,17 @@ prompt '2) Change version number in documentation and build metadata'
 
 sh build/setversions.sh $newversion
 
-prompt '3) Run autotools and configure'
+prompt '3) Run autotools'
 
 sh build/autogen.sh
-./configure
 
-prompt '4) Clean local respository for release'
+prompt '4) Build distribution copy of repo for release building'
 
+# Why is this important?  We want anyone to be able to rebuild a release from
+# a source-only tarball, which is what our releases are.  If we can't do this
+# ourselves, how can we expect anyone else to do so?
+
+./configure --with-docs
 make distclean
 
 prompt '5) Configure staging area for release'
@@ -66,7 +70,7 @@ prompt '5) Configure staging area for release'
 rm -rf staging
 mkdir staging
 cd staging
-../configure
+../configure --with-docs
 
 prompt '6) Build in staging area for release'
 
@@ -76,13 +80,20 @@ prompt '7) Build release tarball in staging area'
 
 make dist
 
-echo "Almost done..."
+echo "The distribution tarball can be found here:"
+ls -al staging/lifelines*gz
+echo
+echo "But there is more to be done!"
 echo "You must read docs/dev/README.MAINTAINERS and finish the rest of the process!"
-echo "Things to do include:"
-echo "- checking in changes due to version number change"
+echo "Things to do (for pre-release) include:"
+echo "- sending message files to the translation project and updating message catalogs"
+echo "Things to do (for release) include:"
+echo "1) Source
+echo "- checking in changes due to version number changes"
+echo "- changing in changes to language files due to source line number shifts"
+echo "- cleaning up from the version number changes (sh setversions.sh cleanup)"
+echo "2) Repository
 echo "- tagging repo at github"
 echo "- creating a release at github and uploading release packages"
-echo "- sending message files to the translation project and updating message catalogs"
-echo "- testing"
 
 cd $SAVEDIR
