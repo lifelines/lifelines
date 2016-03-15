@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lifelines 3.0.62\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 18:17-0500\n"
+"POT-Creation-Date: 2016-03-14 14:55-0400\n"
 "PO-Revision-Date: 2007-10-06 14:25+0200\n"
 "Last-Translator: Jens Arvidsson <ulmiwallius@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -26,7 +26,7 @@ msgstr "Misslyckades (errno=%d) med att öppna blockfil (rkey=%s): %s"
 msgid "Btree lookup looped back to master (%ld)!"
 msgstr "Btreesökning loopades tillbaka till huvud (%ld)!"
 
-#: src/gedlib/charmaps.c:771
+#: src/gedlib/charmaps.c:779
 msgid "<unnamed>"
 msgstr "<namnlös>"
 
@@ -3717,7 +3717,7 @@ msgstr "%o  Lägg till övrig"
 msgid "B  Browse new family"
 msgstr "B  Bläddra i ny familj"
 
-#: src/liflines/brwsmenu.c:490
+#: src/liflines/brwsmenu.c:492
 msgid "Missing title"
 msgstr "Titel saknas"
 

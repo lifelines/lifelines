@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LifeLines 3.0.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 18:17-0500\n"
+"POT-Creation-Date: 2016-03-14 14:55-0400\n"
 "PO-Revision-Date: 2005-07-08 01:17-0700\n"
 "Last-Translator: Chip Richards <karchjo@niestu.com>\n"
 "Language-Team: Esperantistoj <karchjo@niestu.com>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Btree lookup looped back to master (%ld)!"
 msgstr ""
 
-#: src/gedlib/charmaps.c:771
+#: src/gedlib/charmaps.c:779
 msgid "<unnamed>"
 msgstr "<sennomita>"
 
@@ -3735,7 +3735,7 @@ msgstr "%o  Aldonu alian"
 msgid "B  Browse new family"
 msgstr "B  Krozu novan familion"
 
-#: src/liflines/brwsmenu.c:490
+#: src/liflines/brwsmenu.c:492
 msgid "Missing title"
 msgstr "Mankanta titolo"
 
