@@ -23,6 +23,8 @@ while (defined($_=$ARGV[0]) && /^-/) {
     /-h/ && usage();
 }
 
+my @files = sort @ARGV;
+
 open OUT,">temp.html" or die "Unable to open temp.html for output";
 print_header();
 read_files();
@@ -115,7 +117,7 @@ sub read_files {
     my $output;
     my $description;
     my $char_encoding;
-    while ($file = shift @ARGV ) {
+    while ($file = shift @files ) {
 	print  $file . "\n" if $debug;
 	next if $file =~ /\.li$/;
 	if ($file eq "least_related.ll") {
