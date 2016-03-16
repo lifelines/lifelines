@@ -12,7 +12,9 @@ MANUALS_en =	ll-reportmanual.html \
 		ll-userguide.html \
 		ll-userguide.pdf \
 		ll-userguide.txt \
-		ll-devguide.html
+		ll-devguide.html \
+		ll-devguide.pdf \
+		ll-devguide.txt
 
 MANUALS_sv =	ll-reportmanual.sv.html \
 		ll-reportmanual.sv.pdf \
@@ -41,12 +43,14 @@ MANUALS_static = ll-index.html \
 # Rules
 ###################
 
-# By default, end-users just install documentation and never clean it.
+# Install static index files and generated manuals
 doc_DATA = $(MANUALS_static) $(MANUALS)
-CLEANFILES =
 
-# When creating a distribution, include the sources
-EXTRA_DIST = $(MANUALSSRC)
+# We distribute the above, plus sources.
+EXTRA_DIST = $(doc_DATA) $(MANUALSSRC)
+
+# By default, documentation cannot be cleaned.
+CLEANFILES =
 
 # When using --with-docs, provide the power to destroy and the rules to recreate.
 if BUILD_DOCS
