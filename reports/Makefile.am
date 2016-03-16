@@ -33,7 +33,7 @@ LL_REPORTS = \
 	html.dn.ll htmlfam.ll html.ll igi-filter.ll igi-import.ll       \
 	igi-merge.ll igi-search.ll index1.ll index_html.ll index_mm.ll  \
 	interestset.li indiv.ll infant_mortality.ll ldsgedcom.li        \
-	line.ll listsour.ll ll2html.ll ll2visio.ll    lldb.ll          \
+	line.ll listsour.ll ll2html.ll ll2visio.ll lldb.ll              \
 	longlines.ll maritalinfo.ll marriages.ll marriages1.ll menu.ll  \
 	name2html.ll                                                    \
 	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll            \
@@ -49,7 +49,7 @@ LL_REPORTS = \
 	select.ll sgsgen.ll shorten.li showlines1.ll simpleged.ll 	\
 	soundex1.ll soundex-isfm.ll sour.li                             \
 	sour2.li sources.ll sources_bib.ll                              \
-	sour.li span.ll src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll    \
+	span.ll src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll            \
 	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll           \
 	tinytafel1.ll tools.li                                          \
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll             \
@@ -73,7 +73,7 @@ OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c              \
         ps-pedigree.ps tree.tex
 
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) 
-pkg_REPORTS_MISC = index.html CREDIT README tree.tex
+pkg_REPORTS_MISC = index.html CREDIT README
 
 EXTRA_DIST = $(pkg_REPORTS) \
 	     $(pkg_REPORTS_MISC)
