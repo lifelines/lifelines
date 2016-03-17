@@ -12,9 +12,6 @@ OTHER_REPORTS = pedtex.readme setup.tex tree.tex
 
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
 
-EXTRA_DIST = $(pkg_REPORTS)
-
-dist_pkgdata_DATA = $(EXTRA_DIST)
-
 subreportdir = $(pkgdatadir)/pedtex
-subreport_DATA = $(EXTRA_DIST)
+subreport_DATA = $(pkg_REPORTS)
+dist_subreport_DATA = $(pkg_REPORTS)

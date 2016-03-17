@@ -20,9 +20,6 @@ OTHER_REPORTS = \
 
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
 
-EXTRA_DIST = $(pkg_REPORTS)
-
-dist_pkgdata_DATA = $(EXTRA_DIST)
-
 subreportdir = $(pkgdatadir)/desc-tex2
-subreport_DATA = $(EXTRA_DIST)
+subreport_DATA = $(pkg_REPORTS)
+dist_subreport_DATA = $(pkg_REPORTS)

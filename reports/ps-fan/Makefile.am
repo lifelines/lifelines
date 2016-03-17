@@ -12,9 +12,6 @@ OTHER_REPORTS = ps-fan.ps
 
 pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
 
-EXTRA_DIST = $(pkg_REPORTS)
-
-dist_pkgdata_DATA = $(EXTRA_DIST)
-
 subreportdir = $(pkgdatadir)/ps-fan
-subreport_DATA = $(EXTRA_DIST)
+subreport_DATA = $(pkg_REPORTS)
+dist_subreport_DATA = $(pkg_REPORTS)

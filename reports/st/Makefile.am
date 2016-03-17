@@ -32,16 +32,13 @@ TEST_ITER_DB = ti.ged
 TEST_OUTPUTS = $(SELFTEST_OUTPUTS) $(TEST_ITER_OUTPUTS)
 
 TESTS = selftest
-pkg_REPORTS = $(SELFTEST_REPORTS) \
-              $(TEST_ITER_REPORTS)
-EXTRA_DIST =  $(SELFTEST_REPORTS) $(SELFTEST_REFERENCE) \
+pkg_REPORTS = $(SELFTEST_REPORTS) $(SELFTEST_REFERENCE) \
               $(TEST_ITER_REPORTS) $(TEST_ITER_REFERENCE) $(TEST_ITER_DB)
 CLEANFILES =  $(TEST_OUTPUTS) errs.log llines.leak_log selftest
 
-dist_pkgdata_DATA = $(EXTRA_DIST)
-
 subreportdir = $(pkgdatadir)/st
-subreport_DATA = $(EXTRA_DIST)
+subreport_DATA = $(pkg_REPORTS)
+dist_subreport_DATA = $(pkg_REPORTS)
 
 LLEXEC = ../../src/liflines/llexec
 LLINES = ../../src/liflines/llines
