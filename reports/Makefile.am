@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = st
+SUBDIRS = desc-tex2 novel pedtex ps-fan st
 
 # LL_REPORTS is to hold the actual report files
 # (included files go in a different target below)
@@ -37,11 +37,11 @@ LL_REPORTS = \
 	longlines.ll maritalinfo.ll marriages.ll marriages1.ll menu.ll  \
 	name2html.ll                                                    \
 	namefreq.ll names_freq.ll namesformat1.ll net-ped.ll            \
-        novel/novel.ll nonpatronymics.ll outsources.li paf-export.ll    \
+        nonpatronymics.ll outsources.li paf-export.ll                   \
 	pafcompat.ll partition.ll pdesc.ll paf-import.ll ped.ll         \
 	pedigreel.ll pedigree_html.ll pedigreelhs.ll pedigree.ll        \
-	pedtex/pedtex.ll places.ll pointers.ll prompt.li ps-anc.ll      \
-	ps-circle.ll ps-fan/ps-fan.ll ps-pedigree.ll refn.ll reg_html.ll \
+        places.ll pointers.ll prompt.li ps-anc.ll                       \
+	ps-circle.ll ps-pedigree.ll refn.ll reg_html.ll                 \
 	register-rtf.ll register-tex.ll register1.ll register1-dot.ll	\
 	regvital.ll relate.ll related_spouses.ll relation.ll relink.ll  \
 	rfc.ll rllgen.ll rootset.ll rslgen.ll rtflib.li sealing_line.ll \
@@ -50,7 +50,7 @@ LL_REPORTS = \
 	soundex1.ll soundex-isfm.ll sour.li                             \
 	sour2.li sources.ll sources_bib.ll                              \
 	span.ll src.ll src-rtf.ll ssdi_aid.ll ssdi-import.ll            \
-	ssdi-search-list.ll stats.ll st/st_all.ll surname1.ll           \
+	ssdi-search-list.ll stats.ll surname1.ll                        \
 	tinytafel1.ll tools.li                                          \
 	tree_density.ll ttable.ll upl2.li verify.ll wife.ll             \
 	xml-dtd.ll xmlize.ll zombies.ll
@@ -58,21 +58,19 @@ LL_REPORTS = \
 # OTHER_REPORTS is to hold included files besides actual report files
 # (eg, supporting files, graphics, included files)
 OTHER_REPORTS = boc.gif ll.png gen_index bib2html.c bury.c              \
-        desc-tex2/drtree.tex desc-tex2/extree2.tex                      \
-	desc-tex2/poster2.tex                                           \
-        desc-tex2/pstricks.con desc-tex2/README                         \
-        desc-tex2/ex1.tex desc-tex2/mysetup.tex desc-tex2/poster.doc    \
-        desc-tex2/pstricks.pro desc-tex2/setup.tex                      \
-        desc-tex2/drsetup.tex desc-tex2/extree1.tex                     \
-	desc-tex2/poster1.tex                                           \
-        desc-tex2/poster.tex desc-tex2/pstricks.tex desc-tex2/tree.tex  \
-	gen_index                                                       \
-        novel/novel.intro novel/novel.README                            \
-        pedtex/pedtex.readme pedtex/setup.tex pedtex/tree.tex           \
-        ps-fan/ps-fan.ps                                                \
         ps-pedigree.ps tree.tex
 
-pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS) 
+# LL_SUBREPORTS is to hold reports that live in subdirectories.
+# They are built and installed by the makefiles in their respective
+# directories, but are included here as a separate target so that they
+# can be included in the generated directory.
+LL_SUBREPORTS = \
+	desc-tex2/desc-tex.ll desc-tex2/desc-tex2.ll                    \
+	novel/novel.ll                                                  \
+	pedtex/pedtex.ll ps-fan/ps-fan.ll                               \
+	st/st_all.ll
+
+pkg_REPORTS = $(LL_REPORTS) $(OTHER_REPORTS)
 pkg_REPORTS_MISC = index.html CREDIT README
 
 EXTRA_DIST = $(pkg_REPORTS) \
@@ -83,5 +81,5 @@ dist_pkgdata_DATA = $(EXTRA_DIST)
 CLEANFILES = index.html
 
 PERL = perl
-index.html: $(LL_REPORTS)
+index.html: $(LL_REPORTS) $(LL_SUBREPORTS)
 	-$(PERL) $(top_srcdir)/reports/gen_index $^
