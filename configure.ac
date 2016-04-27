@@ -43,11 +43,8 @@ dnl Check for Internationalization Support (gettext and iconv)
 dnl **************************************************************
 
 dnl Internationalization (gettext)
-dnl ALL_LINGUAS is not needed with latest autotools
-dnl but debian maintainer still needs it
-dnl These languages should be a copy of po/LINGUAS
-ALL_LINGUAS="da de el eo es fr it nl pl rw sv"
 AM_GNU_GETTEXT(,need-ngettext)
+AM_GNU_GETTEXT_VERSION([0.11.5])
 
 dnl codeset conversion library
 AM_ICONV
@@ -216,20 +213,6 @@ case $host in
     ;;
 esac
 
-dnl ngettext function missing from 0.10.35
-echo Looking for ngettext
-saved_libs="$LIBS"
-LIBS="$LIBS $LIBINTL"
-AC_TRY_LINK([#include <libintl.h>], [ngettext("","",0);],
-    ac_cv_func_ngettext=yes, ac_cv_func_ngettext=no)
-  if test "$ac_cv_func_ngettext" = yes; then
-    echo "found ngettext"
-    AC_DEFINE(HAVE_NGETTEXT, 1, [Define if you have the ngettext() function.])
-  else
-    echo "couldn't find ngettext"
-    LIBS="$saved_libs"
-  fi
-
 case $host_os in
   *windows*)
     AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
@@ -238,35 +221,6 @@ case $host_os in
     AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
     ;;
 esac
-
-dnl bind_textdomain_codeset function missing from 0.10.35
-echo Looking for bind_textdomain_codeset
-saved_libs="$LIBS"
-LIBS="$LIBS $LIBINTL"
-AC_TRY_LINK([#include <libintl.h>], [bind_textdomain_codeset("","");],
-    ac_cv_func_bind_textdomain_codeset=yes, ac_cv_func_bind_textdomain_codeset=no)
-  if test "$ac_cv_func_bind_textdomain_codeset" = yes; then
-    echo "found bind_textdomain_codeset"
-    AC_DEFINE(HAVE_BIND_TEXTDOMAIN_CODESET, 1, [Define if you have the bind_textdomain_codeset() function.])
-  else
-    echo "couldn't find bind_textdomain_codeset"
-    LIBS="$saved_libs"
-  fi
-
-dnl **************************************************************
-dnl Backwards-compatibility hacks for older autoconf (pre-2.60)
-dnl 1) datadir is obsolete and has been replaced by datarootdir.
-dnl 2) localedir is new, was previously set based on datadir
-dnl
-dnl We set these up here to avoid warnings from newer tools.
-dnl All Makefile.am files have been updated to use the new vars.
-dnl **************************************************************
-if test -z $datarootdir; then
-  datarootdir=$datadir
-fi
-if test -z $localedir; then
-  localedir=$datarootdir/locale
-fi
 
 dnl **************************************************************
 dnl Build Makefiles

@@ -160,7 +160,6 @@ void
 set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 {
 #if ENABLE_NLS
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 	if (eqstr_ex(gt_codeset, codeset))
 		return;
 	if (codeset && codeset[0]) {
@@ -186,14 +185,6 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 	bind_textdomain_codeset(domain, gt_codeset);
 	if (eqstr(domain, PACKAGE))
 		locales_notify_uicodeset_changes();
-#else /* HAVE_BIND_TEXTDOMAIN_CODESET */
-	/*
-	local gettext doesn't give us an interface to specify codeset
-	so nothing to do here
-	*/
-	domain = domain; /* unused */
-	codeset = codeset; /* unused */
-#endif /* HAVE_BIND_TEXTDOMAIN_CODESET */
 #else
 	domain = domain; /* unused */
 	codeset = codeset; /* unused */

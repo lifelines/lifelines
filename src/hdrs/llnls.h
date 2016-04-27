@@ -32,12 +32,7 @@
 #define _(String) gettext(String)
 
 /* _pl() is used for strings varying depending on a number, eg "error" vs "errors" */
-#ifdef HAVE_NGETTEXT
 #define _pl(Singular, Plural, Num) ngettext(Singular, Plural, Num) 
-#else
-#define _pl(Singular, Plural, Num) (Num > 1 ? Plural : Singular)
-#endif
-
 
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
 
