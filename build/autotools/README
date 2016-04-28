@@ -1,21 +1,16 @@
-This directory holds a bunch of GNU autotools helper files.
-This directory will be populated automatically by automake,
-but note that some of the content is LifeLines-specific.
+This directory holds a bunch of GNU autotools and gettext helper files.
+This directory will be populated automatically by build/autogen.sh
+using whatever version of autotools and gettext are present on your
+system.
 
-The current set of helper tools are from automake-1.15
-and autoconf-2.69.
+Note that ONE FILE is LifeLInes-specific.
+
+The current set of helper tools are from:
+- automake-1.13.4
+- autoconf-2.69
+- gettext-0.18.2
 
 File			Source
 -----------------------------------------------
 acinclude.m4            LifeLines
-config.rpath            LifeLines
-
-compile			autotools
-config.guess            autotools
-config.sub              autotools
-depcomp                 autotools
-install-sh              autotools
-missing                 autotools
-mkinstalldirs           autotools
-test-driver		autotools
-ylwrap			autotools
+<everything else>	autotools or gettext

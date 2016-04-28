@@ -43,7 +43,7 @@ dnl Check for Internationalization Support (gettext and iconv)
 dnl **************************************************************
 
 dnl Internationalization (gettext)
-AM_GNU_GETTEXT(,need-ngettext)
+AM_GNU_GETTEXT([external],[need-ngettext])
 AM_GNU_GETTEXT_VERSION([0.11.5])
 
 dnl codeset conversion library
@@ -251,5 +251,4 @@ AC_OUTPUT(Makefile \
         reports/st/Makefile \
         tt/Makefile \
         build/Makefile \
-        intl/Makefile \
         po/Makefile.in)
