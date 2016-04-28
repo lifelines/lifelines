@@ -1,0 +1,2 @@
+This directory is still required by aclocal, even though it is not
+populated by autopoint (formerly gettextize).

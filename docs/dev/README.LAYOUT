@@ -30,18 +30,6 @@ Source Code Directories
     spec file used to create rpm (source & binary) distributions
     (rpm is RedHat package distribution format)
 
-./intl/
-
-    Local gettext implementation, which substitutes in appropriate language
-    translation strings on the fly.
-
-./m4/
-
-    m4 language macros for the Autoconf/Automake system, mostly
-    for the gettext intl subdirectory.
-    The contents of this directory will be entirely created by 
-    the autotools during development.
-
 ./po/
 
     Translations (gettext message catalogs).

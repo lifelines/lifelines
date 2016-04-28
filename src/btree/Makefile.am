@@ -16,11 +16,9 @@ libbtree_a_SOURCES = \
 	btreei.h
 
 # $(top_builddir)        for config.h
-# $(top_srcdir)/intl     for intl headers
-# $(top_builddir)intl    for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
 
-AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/src/hdrs
 
 EXTRA_DIST = btreei.h
 

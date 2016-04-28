@@ -3,14 +3,7 @@ This directory will be populated automatically by build/autogen.sh
 using whatever version of autotools and gettext are present on your
 system.
 
-Note that ONE FILE is LifeLInes-specific.
-
 The current set of helper tools are from:
 - automake-1.13.4
 - autoconf-2.69
 - gettext-0.18.2
-
-File			Source
------------------------------------------------
-acinclude.m4            LifeLines
-<everything else>	autotools or gettext
