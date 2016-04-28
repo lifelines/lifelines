@@ -4,7 +4,7 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 
 dnl **************************************************************
-dnl Autoconf Preamble
+dnl Autoconf Section
 dnl **************************************************************
 
 AC_INIT(lifelines, 3.1.1)
@@ -13,14 +13,28 @@ AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
 
+dnl **************************************************************
+dnl Automake Section
+dnl **************************************************************
+
 dnl Use 'foreign' to avoid requiring GNU files in top-level.
 AM_INIT_AUTOMAKE([foreign])
-
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 dnl **************************************************************
-dnl Check for Compile-Chain Programs
+dnl Gettext Section
+dnl **************************************************************
+
+dnl Internationalization (gettext)
+AM_GNU_GETTEXT([external],[need-ngettext])
+AM_GNU_GETTEXT_VERSION([0.11.5])
+
+dnl codeset conversion library
+AM_ICONV
+
+dnl **************************************************************
+dnl Compile-Chain Section
 dnl **************************************************************
 
 dnl Checks for programs.
@@ -39,18 +53,7 @@ then
 fi
 
 dnl **************************************************************
-dnl Check for Internationalization Support (gettext and iconv)
-dnl **************************************************************
-
-dnl Internationalization (gettext)
-AM_GNU_GETTEXT([external],[need-ngettext])
-AM_GNU_GETTEXT_VERSION([0.11.5])
-
-dnl codeset conversion library
-AM_ICONV
-
-dnl **************************************************************
-dnl Apply OS/Compiler-Specific Settings
+dnl OS/Compiler-Specific Section
 dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
