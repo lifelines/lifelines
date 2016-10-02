@@ -52,10 +52,12 @@ INT Yival;
 FLOAT Yfval;
 
 static void join (PNODE list, PNODE last);
-#define yyerror(msg) parse_error(pactx, msg)
+// MTE: Bison3 doesn't like this; need to figure out how to get the parse cntext into our error routine
+//#define yyerror(msg) parse_error(pactx, msg)
 
 %}
-%pure_parser
+%pure-parser
+%parse-param {PACTX pactx}
 
 
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF

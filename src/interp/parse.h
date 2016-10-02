@@ -13,19 +13,14 @@
 #ifndef parse_h_included
 #define parse_h_included
 
-
 /* semantic value type used by bison parser -- needs to hold any pointer */
 #define YYSTYPE void *
-
-/* data to be tunnelled through parser to lexical analyzer */
-#define YYPARSE_PARAM pactx
-#define YYLEX_PARAM pactx
 
 /* lexical analyzer function (provided by lifelines code in lex.c */
 int yylex(YYSTYPE * lvalp, void * parm);
 
 /* parser entry point (for bison parser generated from yacc.y */
-int yyparse(void * YYPARSE_PARM);
+int yyparse(PACTX pactx);
 
 /* function to report parse errors */
 void parse_error(PACTX pactx, STRING str);
