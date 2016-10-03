@@ -22,7 +22,6 @@
    SOFTWARE.
 */
 /* 07 Jan 2000 Modified by Paul B. McBride pmcbride@tiac.net
- * add "#define YACC_C" so function prototypes could be suppressed.
  * Casts on function arguments and return values need to be added
  * if prototypes are to be used, or pointers and integers are of
  * different sizes. */
@@ -33,8 +32,12 @@
  *   3.0.0 - 12 Sep 94    3.0.2 - 22 Dec 94
  *   3.0.3 - 08 Aug 95
  *===========================================================*/
+
+/*===========================================================*/
+/* Bison Prologue (Part 1)                                   */
+/*===========================================================*/
+
 %{
-/*#define YACC_C */
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -44,24 +47,69 @@
 #include "interpi.h"
 #include "liflines.h"
 #include "screen.h"
-#include "parse.h"
 #include <stdlib.h>
 
 static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
 
+// Bison 2.7
+#define YYSTYPE PNODE*
+
+/* Local Functions */
 static void join (PNODE list, PNODE last);
-#define yyerror(msg) parse_error(pactx, msg)
+
+/* Global Prototypes (Part 1) */
+
+/* Parser: Provided by Bison in yacc.c (generated from yacc.y) */
+int yyparse(PACTX pactx);
+
+/* Parser Error Handler: Provided by LifeLines in interp.c */
+void parse_error(PACTX pactx, STRING str);
+#define yyerror(pactx, msg) parse_error(pactx, msg)
 
 %}
-%pure_parser
 
+/*===========================================================*/
+/* Bison Declarations (Part 1)                               */
+/*===========================================================*/
 
+// Bison 3.x.
+//%define api.value.type {PNODE}
+
+/*===========================================================*/
+/* Bison Prologue (Part 2)                                   */
+/*===========================================================*/
+
+%{
+
+/* Global Prototypes (Part 2) */
+
+/* Lexer: Provided by LifeLines in lex.c */
+int yylex(YYSTYPE * lvalp, PACTX pactx);
+
+%}
+
+/*===========================================================*/
+/* Bison Declarations (Part 2)                               */
+/*===========================================================*/
+
+// Declare pure parser
+%define api.pure full
+
+// Additional parameters to parser and lexer
+%parse-param {PACTX pactx}
+%lex-param {PACTX pactx}
+
+// Tokens
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
 %token  TRAVERSE FORNODES FORLIST_TOK FORFAM FORSOUR FOREVEN FOROTHR
 %token  BREAK CONTINUE RETURN FATHERS MOTHERS PARENTS FCONS
+
+/*===========================================================*/
+/* Grammar Rules                                             */
+/*===========================================================*/
 
 %%
 
@@ -337,10 +385,24 @@ secondo	:	/* empty */ {
 		}
 	;
 m	:	/* empty */ {
+/* MTE: Is YYSTYPE correct here?
+ *
+ * This expands:
+ *  = (void *)((struct *tag_pactx)pactx)->lineno
+ *  = (void *)(pactx->lineno)
+ *
+ * which treats the integer value as a void*.  Hmm.
+ * Basicaly attempts to make a node out of a line number.
+ *
+ */
 			$$ = (YYSTYPE)((PACTX)pactx)->lineno;
 		}
 	;
 %%
+
+/*===========================================================*/
+/* Bison Epilogue                                            */
+/*===========================================================*/
 
 void
 join (PNODE list,
