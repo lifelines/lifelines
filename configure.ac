@@ -142,13 +142,13 @@ AC_CHECK_HEADERS( math.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
-AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha)
-AC_CHECK_LIB( m, sin )
-AC_CHECK_LIB( m, cos )
-AC_CHECK_LIB( m, tan )
-AC_CHECK_LIB( m, asin )
-AC_CHECK_LIB( m, acos )
-AC_CHECK_LIB( m, atan )
+AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
+AC_SEARCH_LIBS( sin, m )
+AC_SEARCH_LIBS( cos, m )
+AC_SEARCH_LIBS( tan, m )
+AC_SEARCH_LIBS( asin, m )
+AC_SEARCH_LIBS( acos, m )
+AC_SEARCH_LIBS( atan, m )
 
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
