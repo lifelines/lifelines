@@ -22,7 +22,6 @@
    SOFTWARE.
 */
 /* 07 Jan 2000 Modified by Paul B. McBride pmcbride@tiac.net
- * add "#define YACC_C" so function prototypes could be suppressed.
  * Casts on function arguments and return values need to be added
  * if prototypes are to be used, or pointers and integers are of
  * different sizes. */
@@ -39,7 +38,6 @@
 /*===========================================================*/
 
 %{
-/*#define YACC_C */
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -68,8 +66,7 @@ int yyparse(PACTX pactx);
 
 /* Parser Error Handler: Provided by LifeLines in interp.c */
 void parse_error(PACTX pactx, STRING str);
-// MTE: Bison3 doesn't like this; need to figure out how to get the parse cntext into our error routine
-//#define yyerror(msg) parse_error(pactx, msg)
+#define yyerror(pactx, msg) parse_error(pactx, msg)
 
 %}
 
@@ -89,7 +86,7 @@ void parse_error(PACTX pactx, STRING str);
 /* Global Prototypes (Part 2) */
 
 /* Lexer: Provided by LifeLines in lex.c */
-int yylex(YYSTYPE lvalp, PACTX pactx);
+int yylex(YYSTYPE * lvalp, PACTX pactx);
 
 %}
 
@@ -97,9 +94,14 @@ int yylex(YYSTYPE lvalp, PACTX pactx);
 /* Bison Declarations (Part 2)                               */
 /*===========================================================*/
 
-%pure-parser
-%parse-param {PACTX pactx}
+// Declare pure parser
+%define api.pure full
 
+// Additional parameters to parser and lexer
+%parse-param {PACTX pactx}
+%lex-param {PACTX pactx}
+
+// Tokens
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
 %token  TRAVERSE FORNODES FORLIST_TOK FORFAM FORSOUR FOREVEN FOROTHR
