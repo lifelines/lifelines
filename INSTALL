@@ -81,20 +81,32 @@ see below for more information.
 ******************************
 lifelines has a number of dependencies and they vary depending on
 how you build lifelines. (Avoid gcc version 2.7.2.1)
+
 1. General dependencies:
-   ncurses
-2. Building from source code repository:
+
+   ncursesw (or any curses with wide character support)
+
+2. Building from source code repository
+
+   If you are building directly from the source code repository, and
+   not from a release package, you will require these tools:
+
    automake
    autoconf
    bison
+
 3. Document Generation
+
    Regeneration of the docs requires tools to convert from xml to html, pdf,
    and text.  Currently the tools being used are:
+
    xmlto
    dblatex
    texlive-cmap
+
 4. Multiple Language support - processed files are checked into cvs, but
    to rebuild the language files:
+
    gettext
    iconv
 
