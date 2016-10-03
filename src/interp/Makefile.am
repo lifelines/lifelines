@@ -24,5 +24,5 @@ AM_CFLAGS=-g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -
 
 EXTRA_DIST = yacc.h yacc.c interpi.h rptui.h
 
-lex.o: yacc.h parse.h
+lex.o: yacc.h
 
