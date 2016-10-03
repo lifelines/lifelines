@@ -33,6 +33,11 @@
  *   3.0.0 - 12 Sep 94    3.0.2 - 22 Dec 94
  *   3.0.3 - 08 Aug 95
  *===========================================================*/
+
+/*===========================================================*/
+/* Bison Prologue (Part 1)                                   */
+/*===========================================================*/
+
 %{
 /*#define YACC_C */
 #include "llstdlib.h"
@@ -44,26 +49,65 @@
 #include "interpi.h"
 #include "liflines.h"
 #include "screen.h"
-#include "parse.h"
 #include <stdlib.h>
 
 static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
 
+// Bison 2.7
+#define YYSTYPE PNODE*
+
+/* Local Functions */
 static void join (PNODE list, PNODE last);
+
+/* Global Prototypes (Part 1) */
+
+/* Parser: Provided by Bison in yacc.c (generated from yacc.y) */
+int yyparse(PACTX pactx);
+
+/* Parser Error Handler: Provided by LifeLines in interp.c */
+void parse_error(PACTX pactx, STRING str);
 // MTE: Bison3 doesn't like this; need to figure out how to get the parse cntext into our error routine
 //#define yyerror(msg) parse_error(pactx, msg)
 
 %}
+
+/*===========================================================*/
+/* Bison Declarations (Part 1)                               */
+/*===========================================================*/
+
+// Bison 3.x.
+//%define api.value.type {PNODE}
+
+/*===========================================================*/
+/* Bison Prologue (Part 2)                                   */
+/*===========================================================*/
+
+%{
+
+/* Global Prototypes (Part 2) */
+
+/* Lexer: Provided by LifeLines in lex.c */
+int yylex(YYSTYPE lvalp, PACTX pactx);
+
+%}
+
+/*===========================================================*/
+/* Bison Declarations (Part 2)                               */
+/*===========================================================*/
+
 %pure-parser
 %parse-param {PACTX pactx}
-
 
 %token  PROC FUNC_TOK IDEN SCONS CHILDREN SPOUSES IF ELSE ELSIF
 %token  FAMILIES ICONS WHILE CALL FORINDISET FORINDI FORNOTES
 %token  TRAVERSE FORNODES FORLIST_TOK FORFAM FORSOUR FOREVEN FOROTHR
 %token  BREAK CONTINUE RETURN FATHERS MOTHERS PARENTS FCONS
+
+/*===========================================================*/
+/* Grammar Rules                                             */
+/*===========================================================*/
 
 %%
 
@@ -339,10 +383,24 @@ secondo	:	/* empty */ {
 		}
 	;
 m	:	/* empty */ {
+/* MTE: Is YYSTYPE correct here?
+ *
+ * This expands:
+ *  = (void *)((struct *tag_pactx)pactx)->lineno
+ *  = (void *)(pactx->lineno)
+ *
+ * which treats the integer value as a void*.  Hmm.
+ * Basicaly attempts to make a node out of a line number.
+ *
+ */
 			$$ = (YYSTYPE)((PACTX)pactx)->lineno;
 		}
 	;
 %%
+
+/*===========================================================*/
+/* Bison Epilogue                                            */
+/*===========================================================*/
 
 void
 join (PNODE list,

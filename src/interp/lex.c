@@ -30,7 +30,7 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
-/*#define YYSTYPE PNODE*/
+/* Note that YYSTYPE is PNODE *, as defined in yacc.y */
 
 #ifdef __OpenBSD__
 #define _XOPEN_SOURCE
@@ -43,7 +43,6 @@
 #include "gedcom.h"
 #include "cache.h"
 #include "interpi.h"
-#include "parse.h"
 #include "yacc.h"
 
 static INT Lexmode = FILEMODE;
@@ -75,7 +74,7 @@ initlex (struct parseinfo *pinfo, int mode)
  *  yaccparm: [IN]  pointer to data passed by interp.c to bison's yyparse 
  *=================================================*/
 int
-yylex (YYSTYPE * lvalp, void * pactx)
+yylex (YYSTYPE * lvalp, PACTX pactx)
 {
 	INT lex = lowyylex(pactx, lvalp);
 

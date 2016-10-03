@@ -22,7 +22,7 @@ AM_YFLAGS = -d
 # The CFLAGS below is gcc specific.  Sorry. -marc
 AM_CFLAGS=-g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
 
-EXTRA_DIST = yacc.h yacc.c interpi.h parse.h rptui.h
+EXTRA_DIST = yacc.h yacc.c interpi.h rptui.h
 
 lex.o: yacc.h parse.h
 
