@@ -6,6 +6,13 @@ This is a high-level view of changes made to the source tree.
 For details on files changed and the changes themselves, consult the git
 commit logs.
 
+XXXX-YY-ZZ Matt Emmerton
+
+	Release 3.1.2 (under development)
+
+	Improve curses detection to ensure that we can detect environments
+	  without wide character support.
+	
 2016-03-16 Matt Emmerton
 
 	Release 3.1.1
