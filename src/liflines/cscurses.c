@@ -168,7 +168,7 @@ vccprintf (const char *fmt, va_list args)
 	int rtn;
 	ZSTR zstr = zs_newvf(fmt, args);
 	int_to_disp(zstr);
-	rtn = printf(zs_str(zstr));
+	rtn = printf("%s", zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;
 }

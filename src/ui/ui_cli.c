@@ -68,7 +68,7 @@ llvwprintf (STRING fmt, va_list args)
 void
 rpt_print (STRING str)
 {
-	printf(str);
+	printf("%s", str);
 }
 void
 refresh_stdout (void)
@@ -155,7 +155,7 @@ BOOLEAN
 ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
 {
 	outputln(ttl);
-	printf(prmpt);
+	printf("%s", prmpt);
 	fgets(buffer, buflen, stdin);
 	chomp(buffer);
 	return strlen(buffer)>0;
@@ -365,14 +365,14 @@ invoke_search_menu (void)
 static void
 outputln (const char * txt)
 {
-	printf(txt);
+	printf("%s", txt);
 	printf("\n");
 }
 /* send string to output */
 static void
 output (const char * txt)
 {
-	printf(txt);
+	printf("%s", txt);
 }
 static INT
 interact (CNSTRING ptrn)

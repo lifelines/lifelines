@@ -39,8 +39,8 @@ ll_optional_abort (STRING msg)
 {
 	INT ch;
 	if (msg)
-		printf(msg);
-	printf(_(qScoredump));
+		printf("%s", msg);
+	printf("%s", _(qScoredump));
 	fflush(stdout);
 
 	/* TODO: how do we i18n this ? This getchar assumes that 

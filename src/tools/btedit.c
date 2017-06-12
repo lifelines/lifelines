@@ -187,7 +187,7 @@ __fatal (STRING file, int line, CNSTRING details)
 {
 	printf("FATAL ERROR: ");
 	if (details && details[0]) {
-		printf(details);
+		printf("%s", details);
 		printf("\nAT: ");
 	}
 	printf("%s: line %d\n", file, line);

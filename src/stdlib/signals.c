@@ -149,7 +149,7 @@ on_signals (int sig)
 	/* TODO: Shouldn't we be logging this ? */
 	/* now print report msg if we had one */
 	if (zs_len(zstr))
-		printf(zs_str(zstr));
+		printf("%s", zs_str(zstr));
 	zs_free(&zstr);
 	/* now build description of signal (# and name) */
 	/* name is not translated til sprint'd into msg */

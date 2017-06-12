@@ -1173,7 +1173,7 @@ llrpt_ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i > 12)
 		sprintf(scratch, _("%ldth"), i);
 	else
-		sprintf(scratch, _(ordinals[i - 1]));
+		sprintf(scratch, "%s", _(ordinals[i - 1]));
 	return create_pvalue_from_string(scratch);
 }
 /*==================================================+
@@ -1201,7 +1201,7 @@ llrpt_card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i < 0 || i > 12)
 		sprintf(scratch, "%ld", i);
 	else
-		sprintf(scratch, _(cardinals[i]));
+		sprintf(scratch, "%s", _(cardinals[i]));
 	return create_pvalue_from_string(scratch);
 }
 /*==========================================+
