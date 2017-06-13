@@ -1416,7 +1416,7 @@ main (int argc, char **argv)
 	}
 
 	if (!init_lifelines_postdb()) {
-		printf(_(qSbaddb));
+		printf("%s", _(qSbaddb));
 		goto done;
 	}
 	printf(_("Checking %s"), dbname);
@@ -1507,7 +1507,7 @@ __fatal (STRING file, int line, CNSTRING details)
 
 	printf(_("FATAL ERROR: "));
 	if (details && details[0]) {
-		printf(details);
+		printf("%s", details);
 	}
 	printf("\n");
 	printf(_("In file <%s> at line %d"), file, line);

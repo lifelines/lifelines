@@ -98,7 +98,7 @@ void
 show_database_stats (void)
 {
 	char msg[80];
-	snprintf(msg, sizeof(msg), _(qSdbrecords));
+	snprintf(msg, sizeof(msg), "%s", _(qSdbrecords));
 	strcat(msg, ": ");
 	snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg)
 		, _(qSdbrecstats), num_indis(), num_fams()

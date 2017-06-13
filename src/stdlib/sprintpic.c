@@ -60,7 +60,7 @@ printpic_arg (STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen)
 void
 sprintpic0 (STRING buffer, INT len, INT utf8, CNSTRING pic)
 {
-	if (len == snprintf(buffer, len, pic)) {
+	if (len == snprintf(buffer, len, "%s", pic)) {
 		/* overflowed -- back up to last character that fits */
 		INT width=0;
 		STRING prev = find_prev_char(&buffer[len-1], &width, buffer, utf8);
