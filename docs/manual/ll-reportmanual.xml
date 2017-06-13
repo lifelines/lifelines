@@ -1,9 +1,6 @@
-<?xml version='1.0' encoding='iso-8859-1'?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook">
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
-[<!ENTITY llversion '3.1.1'>]>
-
+<info>
 <!-- ================================================= -->
 <!-- ChangeLog                                         -->
 <!-- ================================================= -->
@@ -30,12 +27,11 @@
           - added space at end of line
           - parsed against DocBook 4.1.2 DTD
 
+    Samuel Leathers <disasm@gmail.com> 12-Jun-2017
+    - Converted to docbook 5
+
                                                        -->
 <!-- ================================================= -->
-
-<book id="docbook">
-
-<bookinfo>
 
 <title>
 
@@ -44,44 +40,19 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
 </title>
 
     <authorgroup>
-      <author>
-        <firstname>Thomas T. </firstname>
-        <surname>Wetmore </surname>
-        <lineage>IV</lineage>
-      </author>
-      <author>
-        <affiliation><orgname>Converted to Docbook SGML by</orgname></affiliation>
-        </author>
-        <author>
-        <firstname>Rafal</firstname>
-        <surname>Prinke </surname>
-      </author>
-      <author>
-        <affiliation><orgname>Updated by</orgname></affiliation>
-      </author>
-      <author>
-        <firstname>Stephen</firstname>
-        <surname>Dum </surname>
-      </author>
-      <author>
-        <firstname>Matt</firstname>
-        <surname>Emmerton </surname>
-      </author>
-      <author>
-        <firstname>Marc</firstname>
-        <surname>Nozell </surname>
-      </author>
-      <author>
-        <firstname>Perry</firstname>
-        <surname>Rapp </surname>
-      </author>
-      <author>
-        <affiliation><orgname>and many other contributors from the lifelines
-        mailing lists</orgname></affiliation>
-      </author>
+      <author><personname><firstname>Thomas T. </firstname><surname>Wetmore </surname><lineage>IV</lineage></personname></author>
+      <author><personname/><affiliation><orgname>Converted to Docbook SGML by</orgname></affiliation></author>
+        <author><personname><firstname>Rafal</firstname><surname>Prinke </surname></personname></author>
+      <author><personname/><affiliation><orgname>Updated by</orgname></affiliation></author>
+      <author><personname><firstname>Stephen</firstname><surname>Dum </surname></personname></author>
+      <author><personname><firstname>Matt</firstname><surname>Emmerton </surname></personname></author>
+      <author><personname><firstname>Marc</firstname><surname>Nozell </surname></personname></author>
+      <author><personname><firstname>Perry</firstname><surname>Rapp </surname></personname></author>
+      <author><personname/><affiliation><orgname>and many other contributors from the lifelines
+        mailing lists</orgname></affiliation></author>
     </authorgroup>
-    <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
-  </bookinfo>
+    <subtitle><application>LifeLines</application> Version 3.1.1</subtitle>
+  </info>
 
   <chapter>
 
@@ -89,7 +60,7 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
 Report Programming Manual
 </title>
 
-<sect1>
+<section>
     
 <title>
 Introduction
@@ -130,7 +101,7 @@ Introduction
 </para>
 
 
-</sect1><sect1>
+</section><section>
     
 <title>
 Tutorial Ahnentafel report
@@ -470,8 +441,8 @@ curly brackets) of the <type>if</type> statement is executed. The
 statements: a literal, and calls to the <function>long</function> and
 <function>nl</function> functions. <function>Long</function> takes an
 <parameter>event</parameter> and returns the values of
-the first <structfield>DATE</structfield> and
-<structfield>PLAC</structfield> lines in the <type>event</type>.
+the first <varname remap="structfield">DATE</varname> and
+<varname remap="structfield">PLAC</varname> lines in the <type>event</type>.
 
 </para>
 
@@ -503,7 +474,7 @@ These values are computed with the <function>mul</function> and <function>add</f
 
 </para>
 
-</sect1><sect1>
+</section><section>
 
 <title>
 Template for creating new reports
@@ -537,7 +508,7 @@ proc main()
 }
 </programlisting>
 
-</sect1><sect1>
+</section><section>
 
 <title>
 Invoking Reports
@@ -567,7 +538,7 @@ therefore, for invocations such as
 <command>llexec -x ahnentafel_tutorial wetmore</command>
 </para>
 
-</sect1>
+</section>
 
 </chapter><chapter>
 
@@ -591,7 +562,7 @@ search for programs when you request program execution.
 
 
 
-<sect1>
+<section>
 
 
 
@@ -605,7 +576,7 @@ Procedures and Functions
 
 <para>
 
-A <application>LifeLines</application> program is made up of one or more <type>procedures</type> and <type>functions</type>. A <type>procedure</type> has format:<synopsis>proc name(params) { statements }</synopsis>
+A <application>LifeLines</application> program is made up of one or more <type>procedures</type> and <type>functions</type>. A <type>procedure</type> has format:<synopsis format="linespecific">proc name(params) { statements }</synopsis>
 
 </para>
 
@@ -625,7 +596,7 @@ the first <type>statement</type> in the <type>procedure</type> named <literal>ma
 
 <para>
 
-A function has format:<synopsis>func name(params) { statements }</synopsis>
+A function has format:<synopsis format="linespecific">func name(params) { statements }</synopsis>
 
 </para>
 
@@ -653,11 +624,11 @@ in the scope of the caller.
 <para>
 </para>
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -718,11 +689,11 @@ that have program constructs. Comments may span many lines. Comments may not be 
 
 
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -747,10 +718,10 @@ Statements
      to be a <type>string</type>, and written to the program output
      file. If its value is <returnvalue>null</returnvalue>, nothing
      is written to the output file. For example, the expression
-     <synopsis>name(indi)</synopsis>, where <symbol>indi</symbol>
+     <synopsis format="linespecific">name(indi)</synopsis>, where <symbol>indi</symbol>
      is a person, returns the person's name and writes it to the
      output file. On the other hand, the expression
-     <synopsis>set(n, nspouses(indi))</synopsis> assigns the
+     <synopsis format="linespecific">set(n, nspouses(indi))</synopsis> assigns the
      variable <varname>n</varname> the number of spouses that
      person <varname>indi</varname> has, but since
      <function>set</function> returns
@@ -767,14 +738,14 @@ Statements
      <type>while</type> statements and <type>procedure call</type>
      statements, with the following formats:
 
-     <synopsis>if ([varb,] expr) { statements }
+     <synopsis format="linespecific">if ([varb,] expr) { statements }
                [ elsif ([varb], expr) { statements } ]*
                     [ else { statements } ]
      </synopsis>
 
-     <synopsis>while ([varb,] expr ) { statements }</synopsis>
+     <synopsis format="linespecific">while ([varb,] expr ) { statements }</synopsis>
 
-     <synopsis>call name(args)</synopsis>
+     <synopsis format="linespecific">call name(args)</synopsis>
 
 </para>
 
@@ -833,11 +804,11 @@ resumes with the first item after the call.
 <para>
 
 The following report language statements are commonly encountered only near the top of a report:
-<synopsis>char_encoding(string)</synopsis>
-<synopsis>require(string)</synopsis>
-<synopsis>option(string)</synopsis>
-<synopsis>include(string)</synopsis>
-<synopsis>global(varb)</synopsis>
+<synopsis format="linespecific">char_encoding(string)</synopsis>
+<synopsis format="linespecific">require(string)</synopsis>
+<synopsis format="linespecific">option(string)</synopsis>
+<synopsis format="linespecific">include(string)</synopsis>
+<synopsis format="linespecific">global(varb)</synopsis>
 
 </para>
 
@@ -869,10 +840,10 @@ must be used outside the scope of any <type>procedure</type> or <type>function</
 
 The report language also includes the following statements, which mimic some common programming languages:
 
-<synopsis>set(varb, expr)</synopsis>
-<synopsis>continue()</synopsis>
-<synopsis>break()</synopsis>
-<synopsis>return([expr])</synopsis>
+<synopsis format="linespecific">set(varb, expr)</synopsis>
+<synopsis format="linespecific">continue()</synopsis>
+<synopsis format="linespecific">break()</synopsis>
+<synopsis format="linespecific">return([expr])</synopsis>
 
 </para>
 
@@ -891,11 +862,11 @@ effect on program output.
 
 </para>
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -931,11 +902,11 @@ built-in function or a <type>call</type> to a user-defined function.
 
 
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -950,7 +921,7 @@ Include Feature
 <para>
 
 The <application>LifeLines</application> programming language provides an <type>include</type> feature. Using this feature one <application>LifeLines</application>
-program can refer to other <application>LifeLines</application> programs. This feature is provided by the include statement:<synopsis>include(string)</synopsis>where <symbol>string</symbol> is a quoted string that is the name of another <application>LifeLines</application> program file. When an include
+program can refer to other <application>LifeLines</application> programs. This feature is provided by the include statement:<synopsis format="linespecific">include(string)</synopsis>where <symbol>string</symbol> is a quoted string that is the name of another <application>LifeLines</application> program file. When an include
 statement is encountered, the program that it refers to is read at that point, exactly as if the contents of
 included file had been in the body of the original file at that point. This allows you to create <application>LifeLines</application>
 program library files that can be used by many programs. Included files may in turn contain <type>include</type>
@@ -970,11 +941,11 @@ is not run.
 </para>
 
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -997,11 +968,11 @@ separated into logical categories and described.
 
 
 
-</sect1>
+</section>
 
 
 
-<sect1>
+<section>
 
 
 
@@ -1118,9 +1089,9 @@ a reference type.
 
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Iterators
@@ -1145,7 +1116,7 @@ increased by one for each iteration of the loop.
 After completion of the iteration, these variables have the value null.
 </para>
 <para>
-     <synopsis>children(afam,indi,cnt) { commands }</synopsis>
+     <synopsis format="linespecific">children(afam,indi,cnt) { commands }</synopsis>
 For example, the first argument to
 <type>children</type> is the family that the iterator will operate on.
 This iterator will execute the block of commands for each child in the
@@ -1160,9 +1131,9 @@ have the value null after the iteration has completed.
 For the purpose of traversing all records in the database, the following
 iterators may be used:
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='1in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="1in"/>
 <tbody>
 <row>
 <entry>forindi</entry>
@@ -1196,9 +1167,9 @@ All the iterators are described in more detail later in the section where
 their definition occurs.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Arithmetic and Logic Functions
@@ -1508,9 +1479,9 @@ where the final value of the function becomes known. <function>Not</function> do
 <function>Eq</function>, <function>ne</function>, <function>lt</function>, <function>le</function>, <function>gt</function> and <function>ge</function> evaluate the six ordering relationships between two integers.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Trigonometric and Spherical Calculations
@@ -1630,9 +1601,9 @@ longitude, second latitude, second longitude.  The result is in kilometers.
 
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Person Functions
@@ -2002,7 +1973,7 @@ These functions take a person as a parameter and return information about him or
 </para>
 
 <para>
-<function>Name</function> returns the default name of a person; this is the name found on the first <structfield>1 NAME</structfield> line in the
+<function>Name</function> returns the default name of a person; this is the name found on the first <varname remap="structfield">1 NAME</varname> line in the
 person's record; the slashes are removed and the surname is made all capitals; <function>name</function> can take an
 optional second parameter - if it is <returnvalue>true</returnvalue> the function acts as described above; if <returnvalue>false</returnvalue>, the surname is
 kept exactly as it is in the record.
@@ -2018,15 +1989,15 @@ shorten the name to fit this length.
 </para>
 
 <para>
-<function>Surname</function> returns the surname of the person, as found in the first <structfield>1 NAME</structfield> line; the slashes are
+<function>Surname</function> returns the surname of the person, as found in the first <varname remap="structfield">1 NAME</varname> line; the slashes are
 removed. <function>Givens</function> returns the given names of the person in the same order and format as found in the
-first <structfield>1 NAME</structfield> line of the record. <function>Trimname</function> returns the default name of the person trimmed to the
+first <varname remap="structfield">1 NAME</varname> line of the record. <function>Trimname</function> returns the default name of the person trimmed to the
 maximum character length given in the second variable.
 </para>
 
 <para>
 <function>Birth</function>, <function>death</function>, and <function>burial</function> return the first birth, death, and burial event in the
-person's record, respectively. An event is a level <structfield>1 GEDCOM</structfield> node. If there is no matching event these
+person's record, respectively. An event is a level <varname remap="structfield">1 GEDCOM</varname> node. If there is no matching event these
 functions return <returnvalue>null</returnvalue>.
 </para>
 
@@ -2047,9 +2018,9 @@ respectively, or <returnvalue>false</returnvalue> if not.
 the second parameter selects the type of pronoun:
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -2082,7 +2053,7 @@ number of families the person is a parent/spouse in; these two values are not ne
 </para>
 
 <para>
-<function>Title</function> returns the value of the first <structfield>1 TITL</structfield> line in the record. 
+<function>Title</function> returns the value of the first <varname remap="structfield">1 TITL</varname> line in the record. 
 </para>
 
 <para>
@@ -2192,9 +2163,9 @@ If a non-traditional family is processed, there will be separate iterations
 for each father or mother found.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Family Functions
@@ -2439,10 +2410,10 @@ parameter is a variable that iterates through the families; its second parameter
 variable that counts the families starting at one.
 </para>
 
-</sect1>
+</section>
 
 
-<sect1>
+<section>
 
 <title>
 Other types of records
@@ -2493,9 +2464,9 @@ second parameter is an integer counter variable that counts the nodes
 starting at one.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 List Functions
@@ -2750,9 +2721,9 @@ want to make a new <type>list</type>, you must use
 parameter is an integer counter variable that counts the list elements starting at one.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Table Functions
@@ -2831,9 +2802,9 @@ is the object's key. The function returns the object with that key from the tabl
 <function>length</function> returns the number of elements in the table.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 GEDCOM Node Functions
@@ -3001,9 +2972,9 @@ in a top down, left to right manner; and its third parameter is a variable that 
 current node in the iteration.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Event and Date Functions
@@ -3016,7 +2987,7 @@ Event and Date Functions
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-date of, value of first <structfield>DATE</structfield> line
+date of, value of first <varname remap="structfield">DATE</varname> line
 </para>
 </glossdef></glossentry>
 
@@ -3026,7 +2997,7 @@ date of, value of first <structfield>DATE</structfield> line
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-place of, value of first <structfield>PLAC</structfield> line
+place of, value of first <varname remap="structfield">PLAC</varname> line
 </para>
 </glossdef></glossentry>
 
@@ -3036,7 +3007,7 @@ place of, value of first <structfield>PLAC</structfield> line
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-year or, 1st string of 3-4 digits in 1st <structfield>DATE</structfield> line
+year or, 1st string of 3-4 digits in 1st <varname remap="structfield">DATE</varname> line
 </para>
 </glossdef></glossentry>
 
@@ -3046,7 +3017,7 @@ year or, 1st string of 3-4 digits in 1st <structfield>DATE</structfield> line
 </funcprototype></funcsynopsis></glossterm><glossdef>
 
 <para>
-date and place, values of 1st <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines
+date and place, values of 1st <varname remap="structfield">DATE</varname> and <varname remap="structfield">PLAC</varname> lines
 </para>
 </glossdef></glossentry>
 
@@ -3197,22 +3168,22 @@ These functions extract information about the dates and places of events.
 </para>
 
 <para>
-<function>Date</function> returns the value of the first <structfield>DATE</structfield> line in an event, a node in a <acronym>GEDCOM</acronym> record tree. <function>Date</function>
-finds the first <structfield>DATE</structfield> line one level deeper than the event node. <function>Place</function> returns the value of the first
-<structfield>PLAC</structfield> line in an event. <function>Year</function> returns the first three or four digit number in the value of the first <structfield>DATE</structfield>
+<function>Date</function> returns the value of the first <varname remap="structfield">DATE</varname> line in an event, a node in a <acronym>GEDCOM</acronym> record tree. <function>Date</function>
+finds the first <varname remap="structfield">DATE</varname> line one level deeper than the event node. <function>Place</function> returns the value of the first
+<varname remap="structfield">PLAC</varname> line in an event. <function>Year</function> returns the first three or four digit number in the value of the first <varname remap="structfield">DATE</varname>
 line in an event; this number is assumed to be the year of the event.
 </para>
 
 <para>
-<function>Long</function> returns the verbatim values of the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines in an event, concatenated together
-and separated by a comma. <function>Short</function> abbreviates information from the first <structfield>DATE</structfield> and <structfield>PLAC</structfield> lines, concatenates the shortened information together with a comma separator and returns it. An abbreviated
+<function>Long</function> returns the verbatim values of the first <varname remap="structfield">DATE</varname> and <varname remap="structfield">PLAC</varname> lines in an event, concatenated together
+and separated by a comma. <function>Short</function> abbreviates information from the first <varname remap="structfield">DATE</varname> and <varname remap="structfield">PLAC</varname> lines, concatenates the shortened information together with a comma separator and returns it. An abbreviated
 date is its year; an abbreviated place is the last component in the value, further abbreviated if the
 component has an entry in the place abbreviation table.
 </para>
 
 <para>
-<function>Gettoday</function> creates an event that has today's date in the <structfield>DATE</structfield> line.
-<function>Setdate</function> creates an event that has the specified date in the <structfield>DATE</structfield> line,
+<function>Gettoday</function> creates an event that has today's date in the <varname remap="structfield">DATE</varname> line.
+<function>Setdate</function> creates an event that has the specified date in the <varname remap="structfield">DATE</varname> line,
 and assigns the new event to the specified variable.
 </para>
 
@@ -3250,9 +3221,9 @@ addition of the complex date format string selected.
 <para>
 The day format codes passed to <function>dayformat</function> are: 
 </para>
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -3278,9 +3249,9 @@ no space or leading 0 before single digit days
 
 The month format codes passed to <function>monthformat</function> are:
 </para>
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -3362,9 +3333,9 @@ upper case roman letter (eg, I, II)
 The year format codes passed to <function>yearformat</function> are:
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -3392,9 +3363,9 @@ no space or leading 0 before years
 The era format codes passed to <function>eraformat</function> are: 
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -3458,9 +3429,9 @@ trailing CE or BCE
 The full date formats passed to <function>stddate</function> are:
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='2'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="2">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry>0</entry>
@@ -3561,9 +3532,9 @@ The complex date formats selected by the <function>complexformat</function>
 and used by <function>complexdate</function> are: 
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='3'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="3">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry> </entry>
@@ -3637,9 +3608,9 @@ The complex date string pictures that can be overridden with the
 <function>complexpic</function> are:
 </para>
 
-<informaltable pgwide='0' frame='none'>
-<tgroup cols='3'>
-<colspec colwidth='0.5in'></colspec>
+<informaltable pgwide="0" frame="none">
+<tgroup cols="3">
+<colspec colwidth="0.5in"/>
 <tbody>
 <row>
 <entry> </entry>
@@ -3740,9 +3711,9 @@ The function dayofweek is a way to access the (localized) day name, eg, "Thursda
 for a given date.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Date Arithmetic
@@ -3790,9 +3761,9 @@ As with other date functions, calendar escapes (eg, "@#DRENCH R#@") are not resp
 and the only the first date of the DATE record is used.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Value Extraction Functions
@@ -3873,10 +3844,10 @@ Value extraction functions read the values of certain lines and return those val
 
 <para>
 <function>Extractdate</function> extracts date values from either an event node
-or <structfield>DATE</structfield> node. The first parameter must be
-a node; if its tag is <structfield>DATE</structfield>, the date is extracted 
-from the value of that node; if its tag is not <structfield>DATE</structfield>,
-the date is extracted from the first <structfield>DATE</structfield> line one 
+or <varname remap="structfield">DATE</varname> node. The first parameter must be
+a node; if its tag is <varname remap="structfield">DATE</varname>, the date is extracted 
+from the value of that node; if its tag is not <varname remap="structfield">DATE</varname>,
+the date is extracted from the first <varname remap="structfield">DATE</varname> line one 
 level below the argument node. The remaining three arguments are variables.
 The first is assigned the integer value of the extracted day; the second is
 assigned the integer value of the extracted month; and the third is assigned
@@ -3884,9 +3855,9 @@ the integer value of the extracted year.
 </para>
 
 <para>
-<function>Extractnames</function> extracts name components from a <structfield>NAME</structfield> line. Its first argument is either an <structfield>INDI</structfield> or a
-<structfield>NAME</structfield> node. If it is a <structfield>NAME</structfield> line, the components are extracted from the value of that node; if it is an
-<structfield>INDI</structfield> line, the components are extracted from the value of the first <structfield>NAME</structfield> line in the person record.
+<function>Extractnames</function> extracts name components from a <varname remap="structfield">NAME</varname> line. Its first argument is either an <varname remap="structfield">INDI</varname> or a
+<varname remap="structfield">NAME</varname> node. If it is a <varname remap="structfield">NAME</varname> line, the components are extracted from the value of that node; if it is an
+<varname remap="structfield">INDI</varname> line, the components are extracted from the value of the first <varname remap="structfield">NAME</varname> line in the person record.
 The second argument is a list that will hold the extracted components. The third argument is an integer
 variable that is set to the number of extracted components. The fourth argument is a variable that is set
 to the index (starting at one) of the surname component; the <literal>/</literal> characters are removed from around the
@@ -3895,18 +3866,18 @@ surname component. If there is no surname this argument variable is set to zero.
 
 <para>
 <function>Extractplaces</function> extracts place components
-from a <structfield>PLAC</structfield> node. The first
+from a <varname remap="structfield">PLAC</varname> node. The first
 argument is a node; if its tag is
-<structfield>PLAC</structfield>, the places are extracted from
+<varname remap="structfield">PLAC</varname>, the places are extracted from
 the value of the node; if its tag is not
-<structfield>PLAC</structfield>, places are extracted from the
-first <structfield>PLAC</structfield> line one level below the
+<varname remap="structfield">PLAC</varname>, places are extracted from the
+first <varname remap="structfield">PLAC</varname> line one level below the
 argument node. The second parameter is a list that will hold
 the extracted components. The third argument is an integer
 variable that is set to the number of extracted
 components. Place components are defined by the
 comma-separated portions of the
-<structfield>PLAC</structfield> value; leading and trailing
+<varname remap="structfield">PLAC</varname> value; leading and trailing
 white space is removed from the components, while all internal
 white space is retained.
 </para>
@@ -3924,7 +3895,7 @@ string into tokens.
 
 <para>
 <function>extractdatestr</function> extracts date values from a .
-<structfield>STRING</structfield>.  It is intended for internal verification
+<varname remap="structfield">STRING</varname>.  It is intended for internal verification
 of date extraction code.
 The remaining five arguments are variables.
 The second is assigned the integer value of the extracted day; the third is
@@ -3933,9 +3904,9 @@ the integer value of the extracted year.
 </para>
 
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 User Interaction Functions
@@ -4099,9 +4070,9 @@ making up the items in the menu; the second, optional argument is a prompt strin
 <returnvalue>zero</returnvalue> is returned.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 String Functions
@@ -4438,9 +4409,9 @@ string. <function>Eqstr</function> and <function>nestr</function> return whether
 which is to say they pretend that a null string is actually "". This means that all null and empty strings compare as equal.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Output Mode Functions
@@ -4667,9 +4638,9 @@ The return value is TRUE or FALSE, depending on whether the file had the specifi
 <function>Print</function> prints its argument string to the standard output window; <function>print</function> may have one to 32 arguments.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Person Set Functions and GEDCOM Extraction
@@ -4996,9 +4967,9 @@ header or trailer records required for a valid GEDCOM file.  They should
 be added by a report using this function.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Record Update Functions
@@ -5079,9 +5050,9 @@ The node functions only change data in memory; there is no effect on the databas
 <function>writeindi</function> or <function>writefam</function> are called.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Record Linking Functions
@@ -5115,9 +5086,9 @@ to. <function>Reference</function> returns <returnvalue>true</returnvalue> if it
 one of the records in the database. <function>Dereference</function> returns the node tree of the record referred to by its cross-reference string argument.
 </para>
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Miscellaneous Functions
@@ -5277,7 +5248,7 @@ from <acronym>RAM</acronym> memory, respectively.
 <function>Database</function> returns the name of the current database, useful
 in titling reports. <function>program</function> returns the
 name of the current report program. <function>Version</function> returns the
-version of the running <application>LifeLines</application> program, eg, <literal>&llversion;</literal>.
+version of the running <application>LifeLines</application> program, eg, <literal>3.1.1</literal>.
 </para>
 
 <para>
@@ -5350,9 +5321,9 @@ effect the variable in the calling program.
 </para>
 
 
-</sect1>
+</section>
 
-<sect1>
+<section>
 
 <title>
 Deprecated Functions
@@ -5379,7 +5350,7 @@ If you want a routine that returns the first event for an individual that is a
 baptism, LDS baptism, Christening or Adult Christening, the following routine
 can be used.
 
-    <synopsis>func get_baptism(indi) {
+    <synopsis format="linespecific">func get_baptism(indi) {
     fornodes(indi,node) {
         if (index(" BAPM BAPL CHR CHRA ",upper(tag(node)),1)) {
             return(node)
@@ -5393,7 +5364,7 @@ the results, finding a christening event if one exists, else finding
 a baptism event if one exists, then finding an LDS baptism event, and finally
 a christening event, the following function is suggested.
 
-    <synopsis>/* get_baptism(indi) returns a baptism event if found
+    <synopsis format="linespecific">/* get_baptism(indi) returns a baptism event if found
    events CHR, BAPM, BAPL, and CHRA are considered, in that order
 */
 func get_baptism(indi, prefs)
@@ -5581,8 +5552,8 @@ size of a set
 </glosslist>
 
 
-</sect1>
-<sect1>
+</section>
+<section>
     
 <title>
 Debugging Reports
@@ -5609,7 +5580,7 @@ the current (local) variables, or the global variables.
 
 <screen>
 Report debugger (1/5)
-  >1: Display locals (4 vars) [proc: checkrec]
+  &gt;1: Display locals (4 vars) [proc: checkrec]
    2: Display global (1 var)
    3: Call stack has 3 higher levels.  Go up one level(proc: rectest)
    4: Call stack has 0 lower levels.
@@ -5623,8 +5594,7 @@ lists, tables, or sets are displayed, they may be
 selected, to view their contents.
 </para>
 
-</sect1>
+</section>
 
 </chapter>
 </book>
-
