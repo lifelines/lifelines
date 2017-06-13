@@ -51,7 +51,7 @@ THE <application>LIFELINES</application> PROGRAMMING SUBSYSTEM AND REPORT GENERA
       <author><personname/><affiliation><orgname>and many other contributors from the lifelines
         mailing lists</orgname></affiliation></author>
     </authorgroup>
-    <subtitle><application>LifeLines</application> Version 3.1.1</subtitle>
+    <subtitle><application>LifeLines</application> Version <xi:include href="version" parse="text" /></subtitle>
   </info>
 
   <chapter>
@@ -5248,7 +5248,7 @@ from <acronym>RAM</acronym> memory, respectively.
 <function>Database</function> returns the name of the current database, useful
 in titling reports. <function>program</function> returns the
 name of the current report program. <function>Version</function> returns the
-version of the running <application>LifeLines</application> program, eg, <literal>3.1.1</literal>.
+version of the running <application>LifeLines</application> program, eg, <literal><xi:include href="version" parse="text" /></literal>.
 </para>
 
 <para>

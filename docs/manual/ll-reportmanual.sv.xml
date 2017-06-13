@@ -46,7 +46,7 @@ RAPPORTGENERATOR
       <author><personname><firstname>Thomas T. </firstname><surname>Wetmore </surname><lineage>IV</lineage></personname></author>
     </authorgroup>
 
-    <subtitle><application>LifeLines</application> Version 3.1.1</subtitle>
+    <subtitle><application>LifeLines</application> Version <xi:include href="version" parse="text" /></subtitle>
   </info>
 
 
@@ -5834,7 +5834,7 @@ fritt utrymme associerat med en variabel
 	aktuella databasen; användbart för rubriksättning av
 	rapporter. <function>Version</function> returnerar vilken
 	version av <application>LifeLines</application> som körs, t.
-	ex. <literal>3.1.1</literal>.
+	ex. <literal><xi:include href="version" parse="text" /></literal>.
 
 </para>
 

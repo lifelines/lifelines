@@ -1,4 +1,5 @@
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook">
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <info>
 <!--
@@ -237,7 +238,7 @@ TODO:
       <author><personname><firstname>Perry</firstname><surname>Rapp </surname></personname></author>
     </authorgroup>
 
-    <subtitle><application>LifeLines</application> Version 3.1.1</subtitle>
+    <subtitle><application>LifeLines</application> Version <xi:include href="version" parse="text" /></subtitle>
   </info>
 
 
