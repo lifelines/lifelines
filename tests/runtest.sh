@@ -2,7 +2,7 @@
 #
 # Generic Test Runner
 #
-# Using $1, run test $2 in directory $3.
+# In directory $1 run test $2
 
 testprog=`pwd`/../src/liflines/llines
 testdir=$1

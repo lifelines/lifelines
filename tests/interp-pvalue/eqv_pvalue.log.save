@@ -1,0 +1,30 @@
+Starting Test
+PASS: Both args null
+PASS: First arg null
+PASS: Second arg null
+PASS: String equality
+PASS: String inequality
+PASS: Float equality
+PASS: Float inequality
+PASS: Integer equality
+PASS: Integer inequality
+PASS: Boolean equality
+PASS: Boolean inequality
+PASS: INDI equality
+PASS: INDI inequality
+PASS: FAM equality
+PASS: FAM inequality
+PASS: SOUR equality
+PASS: SOUR inequality
+PASS: EVEN equality
+PASS: EVEN inequality
+PASS: OTHR equality
+PASS: OTHR inequality
+PASS: LIST equality (pointer)
+PASS: LIST inequality (pointer)
+PASS: INDISET equality (pointer)
+PASS: INDISET inequality (pointer)
+PASS: LIST equality (pointer)
+PASS: LIST inequality (pointer)
+PASS: NODE equality (pointer)
+PASS: NODE inequality (pointer)
