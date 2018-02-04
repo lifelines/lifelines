@@ -589,7 +589,7 @@ BOOLEAN
 is_numeric_pvalue (PVALUE val)
 {
 	INT type = ptype(val);
-	return type == PINT || type == PFLOAT || type == PNULL;
+	return type == PINT || type == PFLOAT || type == PBOOL || type == PNULL;
 }
 /*===========================================================
  * eq_conform_pvalues -- Make the types of two values conform
@@ -840,6 +840,7 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		    else rel = (rec1  == rec2);
 		    break;
 		 }
+		/* types with pointer semantics do pointer comparison */
 		case PLIST:
 			return pvalue_to_list(val1) == pvalue_to_list(val2);
 		case PTABLE:
@@ -847,7 +848,9 @@ eqv_pvalues (VPTR ptr1, VPTR ptr2)
 		case PSET:
 			return pvalue_to_seq(val1) == pvalue_to_seq(val2);
 		case PARRAY:
-			return val1->value.axd == val2->value.axd;
+			return pvalue_to_array(val1) == pvalue_to_array(val2);
+		case PGNODE:
+			return pvalue_to_node(val1) == pvalue_to_node(val2);
 		}
 	}
 	return rel;
