@@ -42,8 +42,8 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 
 EXTRA_DIST = llinesi.h screeni.h
 
-# these dependencies are so that building parts ('make btedit' or 'make
-# lines') will work
+# these dependencies are so that building parts ('make llines' or 'make
+# llexec') will work
 
 ../btree/libbtree.a :
 	$(MAKE) -C ../btree libbtree.a
