@@ -59,7 +59,7 @@ print_version (CNSTRING program)
         printf("%s (lifelines) %s\n", program, get_lifelines_version(48));
         printf("\n");
 
-        printf(_("Copyright (C) 1991-2015 Thomas T. Wetmore IV and contributors."));
+        printf(_("Copyright (C) 1991-2018 Thomas T. Wetmore IV and contributors."));
         printf("\n");
         printf(_("This is free software; see the source for copying conditions.  There is NO\n"
                 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."));
