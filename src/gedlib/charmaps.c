@@ -47,7 +47,7 @@ extern STRING qSbaddec,qSbadhex,qSnorplc,qSbadesc,qSnoorig,qSmaperr;
 
 /* nodes that make up the tree that is a custom character translation table */
 /* MTE: Notes 12/24/2015
- * achar is defined as a SHORT (int16) here.
+ * achar is defined as an INT16 here.
  * However, it is assigned from an INT parameter in create_xnode and step_xnode;
  * Compared with INT and uchar in translate_match;
  * Displayed as a uchar in show_xnode.
@@ -59,8 +59,8 @@ struct tag_xnode {
 	XNODE parent;	/* parent node */
 	XNODE sibling;	/* next sib node */
 	XNODE child;	/* first child node */
-	SHORT achar;	/* my character */
-	SHORT count;	/* translation length */
+	INT16 achar;	/* my character */
+	INT16 count;	/* translation length */
 	STRING replace;	/* translation string */
 };
 

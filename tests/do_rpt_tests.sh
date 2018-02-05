@@ -16,7 +16,7 @@ do
   TESTNAME=`echo $TESTSCR | sed -e 's/.llscr//g'`
   ((TOTALCNT++))
   echo "Running test $i..."
-  ./runtest.sh $TESTDIR $TESTSCR
+  ./run_rpt_test.sh $TESTDIR $TESTSCR
   if [ -f $TESTDIR/$TESTNAME.diff ]
   then
     if [ -z $FAILED ]

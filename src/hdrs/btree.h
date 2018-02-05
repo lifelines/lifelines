@@ -51,7 +51,7 @@ typedef struct {
 }  RKEY; /*record key*/
 
 
-typedef INT FKEY; /*file key*/
+typedef INT32 FKEY; /*file key*/
 
 typedef char *RAWRECORD;
 
@@ -82,14 +82,21 @@ typedef struct {
 /*==============================================
  * INDEX -- Data structure for BTREE index files
  *  The constant NOENTS above depends on this exact contents:
- * 12=4+2+4+2=sizeof(FKEY)+sizeof(SHORT)+sizeof(FKEY)+sizeof(SHORT)
+ * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
  * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
+ *
+ * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
+ * This comment assumes 16-bit packing which is not
+ * the case on modern systems. Because of this,
+ * databases created on 16-bit, 32-bit or 64-bit
+ * systems will not be binary compatible.
+ * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *============================================*/
 typedef struct {
 	FKEY  ix_self;		/*fkey of index*/
-	SHORT ix_type;           /*block/file type*/
+	INT16 ix_type;           /*block/file type*/
 	FKEY  ix_parent;         /*parent file's fkey*/
-	SHORT ix_nkeys;          /*num of keys in index*/
+	INT16 ix_nkeys;          /*num of keys in index*/
 	RKEY  ix_rkeys[NOENTS];  /*rkeys in index*/
 	FKEY  ix_fkeys[NOENTS];  /*fkeys in index*/
 } *INDEX, INDEXSTRUCT;
@@ -120,17 +127,24 @@ typedef struct {
 /*======================================================
  * BLOCK -- Data structure for BTREE record file headers
  *  The constant NORECS above depends on this exact contents:
- * 12=4+2+4+2=sizeof(FKEY)+sizeof(SHORT)+sizeof(FKEY)+sizeof(SHORT)
- * 16=8+4+4=sizeof(RKEY)+sizeof(INT)+sizeof(INT)
+ * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
+ * 16=8+4+4=sizeof(RKEY)+sizeof(INT32)+sizeof(INT32)
+ *
+ * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
+ * This comment assumes 16-bit packing which is not
+ * the case on modern systems. Because of this,
+ * databases created on 16-bit, 32-bit or 64-bit
+ * systems will not be binary compatible.
+ * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *====================================================*/
 typedef struct {
 	FKEY   ix_self;             /*fkey of this block*/
-	SHORT  ix_type;		/*block/file type*/
+	INT16  ix_type;		/*block/file type*/
 	FKEY   ix_parent;           /*parent file's fkey*/
-	SHORT  ix_nkeys;            /*num of keys in block*/
+	INT16  ix_nkeys;            /*num of keys in block*/
 	RKEY   ix_rkeys[NORECS];    /*rkeys in block/file*/
-	INT    ix_offs[NORECS];     /*offsets for data in file*/
-	INT    ix_lens[NORECS];     /*lengths for data in file*/
+	INT32  ix_offs[NORECS];     /*offsets for data in file*/
+	INT32  ix_lens[NORECS];     /*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
 
 /*============================================

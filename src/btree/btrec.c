@@ -97,7 +97,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	INDEX index;
 	BLOCK old, newb, xtra;
 	FKEY nfkey, last = 0, parent;
-	SHORT i, j, k, l, n, lo, hi;
+	INT i, j, k, l, n, lo, hi;
 	BOOLEAN found = FALSE;
 	INT off = 0;
 	FILE *fo=NULL, *ft1=NULL, *ft2=NULL;
@@ -140,7 +140,7 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	hi = nkeys(old) - 1;
 	found = FALSE;
 	while (lo <= hi) {
-		SHORT md = (lo + hi)/2;
+		INT md = (lo + hi)/2;
 		INT rel = cmpkeys(&rkey, &rkeys(old, md));
 		if (rel < 0)
 			hi = --md;
@@ -410,7 +410,7 @@ RAWRECORD
 bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 {
 	INDEX index;
-	SHORT i, n, lo, hi;
+	INT i, n, lo, hi;
 	FKEY nfkey;
 	BLOCK block;
 	BOOLEAN found = FALSE;
@@ -446,7 +446,7 @@ bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 	lo = 0;
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
-		SHORT md = (lo + hi)/2;
+		INT md = (lo + hi)/2;
 		INT rel = cmpkeys(rkey, &rkeys(block, md));
 		if (rel < 0)
 			hi = --md;
@@ -493,7 +493,7 @@ isrecord (BTREE btree,
           RKEY rkey)
 {
 	INDEX index;
-	SHORT i, n, lo, hi;
+	INT i, n, lo, hi;
 	FKEY nfkey;
 	BLOCK block;
 
@@ -515,7 +515,7 @@ isrecord (BTREE btree,
 	lo = 0;
 	hi = nkeys(block) - 1;
 	while (lo <= hi) {
-		SHORT md = (lo + hi)/2;
+		INT md = (lo + hi)/2;
 		INT rel = cmpkeys(&rkey, &rkeys(block, md));
 		if (rel < 0)
 			hi = --md;
