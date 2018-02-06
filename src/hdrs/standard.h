@@ -113,7 +113,6 @@ typedef unsigned char uchar;
 */
 #define INT	int32_t 
 #define INT16	int16_t
-#define SHORT   INT16	/* going away... */
 #define INT32	int32_t 
 #define INT64	int64_t
 #define FLOAT	double
