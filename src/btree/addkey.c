@@ -44,7 +44,7 @@ void
 addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 {
 	INDEX index;
-	SHORT lo, hi;
+	INT lo, hi;
 
 #ifdef DEBUG
 	llwprintf("ADDKEY: ikey, rkey = %s, %s;", fkey2path(ikey), rkey2str(rkey));
@@ -66,7 +66,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
 	lo = 1;
 	hi = nkeys(index);
 	while (lo <= hi) {
-		SHORT md = (lo + hi)/2;
+		INT md = (lo + hi)/2;
 		INT rel = cmpkeys(&rkey, &rkeys(index, md));
 		if (rel < 0)
 			hi = --md;
@@ -92,7 +92,7 @@ addkey (BTREE btree, FKEY ikey, RKEY rkey, FKEY fkey)
    /* If index is now full split it */
 	if (nkeys(index) >= NOENTS - 1) {
 		INDEX newdex = crtindex(btree);
-		SHORT n = NOENTS/2 - 1;
+		INT n = NOENTS/2 - 1;
 		nkeys(newdex) = nkeys(index) - n - 1;
 		nkeys(index) = n;
 		putindex(btree, index);

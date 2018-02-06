@@ -23,7 +23,7 @@
 #include <dir.h>
 #include <dos.h>
 #define int32 int32_t
-#define int16 int32_t
+#define int16 int16_t
 #endif /* __BORLANDC__ */
 
 /* WIN32 - MSVC INCLUDES */

@@ -42,7 +42,7 @@ STRING
 rkey2str (RKEY rkey)
 {
 	static char rbuf[RKEYLEN+1];
-	SHORT i;
+	INT i;
 	for (i = 0; i < RKEYLEN; i++)
 		rbuf[i] = rkey.r_rkey[i];
 	rbuf[RKEYLEN] = 0;
@@ -58,7 +58,7 @@ RKEY
 str2rkey (CNSTRING str)
 {
 	RKEY rkey;
-	SHORT i = 0, n = strlen(str);
+	INT i = 0, n = strlen(str);
 	ASSERT(n > 0);
 	n = RKEYLEN - n;
 	i = 0;
@@ -75,9 +75,9 @@ str2rkey (CNSTRING str)
 FKEY
 path2fkey (STRING path)
 {
-	SHORT hi = (path[0] -'a')*26 + path[1] - 'a';
-	SHORT lo = (path[3] -'a')*26 + path[4] - 'a';
-	return (hi<<16) + lo;
+	INT16 hi = (path[0] - 'a') * 26 + (path[1] - 'a');
+	INT16 lo = (path[3] - 'a') * 26 + (path[4] - 'a');
+	return (FKEY)((hi<<16) + lo);
 }
 /*======================================
  * fkey2path -- Convert file key to path
@@ -86,34 +86,68 @@ STRING
 fkey2path (FKEY fkey)
 {
 	static char path[6];
-	SHORT hi = (fkey & 0xffff0000) >> 16;
-	SHORT lo = fkey & 0xffff;
-	path[0] = hi/26 + 'a';
-	path[1] = hi%26 + 'a';
+	INT16 hi = (fkey & 0xffff0000) >> 16;
+	INT16 lo = fkey & 0x0000ffff;
+	path[0] = (hi / 26) + 'a';
+	path[1] = (hi % 26) + 'a';
 	path[2] = LLCHRDIRSEPARATOR;
-	path[3] = lo/26 + 'a';
-	path[4] = lo%26 + 'a';
+	path[3] = (lo / 26) + 'a';
+	path[4] = (lo % 26) + 'a';
 	path[5] = 0;
 	return path;
 }
 /*==============================================
  * nextfkey -- Increment next file key for BTREE
  *============================================*/
+/* Explanation of FKEY algorithm, by example.
+ *
+ * Iter  Text    Hex (HI/LO)  Text   Hex (HI/LO)  Notes 
+ * ----+-------+------------+------+------------+------------
+ *  00                        ab/ab  0x00010001   First index key
+ *  01   ab/ab   0x00010001   aa/ab  0x00000001   Case 1
+ *  02   aa/ab   0x00000001   ac/aa  0x00020000   Case 4
+ *  03   ac/aa   0x00020000   ac/ab  0x00020001   Case 2
+ *  04   ac/ab   0x00020001   ac/ac  0x00020002   Case 2
+ *  05   ac/ac   0x00020002   aa/ac  0x00000002   Case 1
+ *  06   aa/ac   0x00000002   ab/ac  0x00010002   Case 3
+ *  07   ab/ac   0x00010002   ad/aa  0x00030000   Case 4
+ *  08   ad/aa   0x00030000   ad/ab  0x00030001   Case 2
+ *  09   ad/ab   0x00030001   ad/ac  0x00030002   Case 2
+ *  10   ad/ac   0x00030002   ad/ad  0x00030003   Case 2
+ *  11   ad/ad   0x00030003   aa/ad  0x00000003   Case 1
+ *  12   aa/ad   0x00000003   ab/ad  0x00010003   Case 3
+ *  13   ab/ad   0x00010003   ac/ad  0x00020003   Case 3
+ *  14   ac/ad   0x00020003   ae/aa  0x00040000   Case 4
+ *  15   ae/aa   0x00040000   ae/ab  0x00040001   Case 2
+ * 
+ * and so on ...
+ * 
+ * This is curious pattern and will be difficult to optimize.
+ */
 void
 nextfkey (BTREE btree)
 {
 	FKEY fkey = btree->b_kfile.k_fkey;
-	SHORT hi = (fkey & 0xffff0000) >> 16;
-	SHORT lo = fkey & 0xffff;
+	INT16 hi = (fkey & 0xffff0000) >> 16;
+	INT16 lo = fkey & 0x0000ffff;
 	char scratch[200];
-	if (lo == hi)
+
+	/* Case 1: HI=0000 LO=xxxx */
+	if (hi == lo)
 		fkey = lo;
+
+	/* Case 2: HI=HI, LO=LO+1 */
 	else if (hi > lo)
 		++fkey;
+
+	/* Case 3: HI++, LO=LO */
 	else if (hi < lo-1)
-		fkey += 0x10000;
-	else {
-		fkey += 0x20000;
+		fkey += 0x00010000;
+
+	/* Case 4: HI+=2, LO=00 */
+	else /* (hi == lo-1) */
+        {
+		fkey += 0x00020000;
 		fkey &= 0xffff0000;
 		sprintf(scratch, "%s/%s", btree->b_basedir, fkey2path(fkey));
 		if (!mkalldirs(scratch))
