@@ -4,9 +4,16 @@
 #
 # In directory $1 run test $2
 
-testprog=`pwd`/../src/liflines/llines
 testdir=$1
 testscr=$2
+
+if [ -z $1 -o -z $2 ]
+then
+  echo "Syntax: $0 <directory> <script>"
+  exit
+fi
+
+testprog=`pwd`/../src/liflines/llines
 origdir=`pwd`
 testname=`echo $testscr | sed -e 's/.llscr//g'`
  
