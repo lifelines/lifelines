@@ -2745,7 +2745,7 @@ llrpt_jd2date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	} else {
 		mo = (INT)(e - 13);
 	}
-	if (mo >= 2) {
+	if (mo > 2) {
 		yr = (INT)(c - 4716);
 	} else {
 		yr = (INT)(c - 4715);
