@@ -1,0 +1,12 @@
+string: A쎥쎤쎶B쎅쎄쎖C (9 characters, 15 bytes)
+index of the 1st character, A: 1
+index of the 2nd character, 쎥: 2
+index of the 5th character, B: 11
+index of the 8th character, 쎖: 18
+index of the 9th character, C: 21
+extracttokens with separator B: A쎥쎤쎶 쎅쎄쎖C
+extracttokens with separator 쎖: A = 
+substring [1:5]: A쎥�, strlen 5
+substring [1:6]: A쎥�, strlen 6
+substring [1:7]: A쎥쎤, strlen 7
+substring [1:8]: A쎥쎤�, strlen 8
