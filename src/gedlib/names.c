@@ -983,7 +983,6 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
 	if (captype == DOSURCAP) name = upsurname(name);
-	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
 	if (surorder == REGORDER) 
 		name = trim(name_string(name), len);
 	else
@@ -1003,7 +1002,8 @@ name_string (STRING name)
 	STRING p = scratch;
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
-		if (*name != NAMESEP) *p++ = *name;
+		if (*name != NAMESEP) { *p++ = *name; }
+		else { *p++ = ' '; }
 		name++;
 	}
 	*p-- = 0;

@@ -322,6 +322,7 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
+	/* NOTE: the 68 here is arbitrary */
 	outname = manip_name(nval(name), captype, REGORDER, 68);
 	return create_pvalue_from_string(outname);
 }
@@ -341,7 +342,7 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING outname=0;
 
 	indi = eval_indi(argvar, stab, eflg, NULL);
-	if (*eflg || !indi) {
+	if (*eflg) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, argvar, NULL, nonindx, "fullname", "1");
 		return NULL;
@@ -370,6 +371,13 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
+
+	/* invalid indi (eg, fullname(husb(fam)) when fam has no husb) */
+        if (!indi) {
+		return create_pvalue_from_string(0);
+        }
+
+	/* indi without a name (eg, HUSB/WIFE/CHIL node without a NAME record, or an empty NAME record */
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
@@ -378,6 +386,8 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
+
+	/* indi with a name record, or a permitted empty record (via RequireNames=0) */
 	outname = manip_name(nval(name), caps, regorder, len);
 	return create_pvalue_from_string(outname);
 }

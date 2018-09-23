@@ -16,10 +16,15 @@ gengedcomstrong/test1
 -- Issue: n/a 
 -- Purpose: Validate gengedcomstrong() on sparse database
 
-interp-pvalue/eqv_pvalue
+interp/eqv_pvalue
 -- Status: Partially Complete
 -- Issue: 316
 -- Purpose: Fix eq() and ne() for type PGNODE
+
+interp/fullname
+-- Status: Complete
+-- Issue: 284
+-- Purpose: Tests fullname in all edge cases, including invalid INDI
 
 string/string-unicode
 -- Status: WIP (inspiration from Seppo)
