@@ -1,0 +1,2 @@
+This "script" works but since we currently have no way of capturing
+screen output there's no way to validate that it actually passes.
