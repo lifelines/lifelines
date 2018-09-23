@@ -1,0 +1,34 @@
+TEST: index()
+string: A쎥쎤쎶B쎅쎄쎖C (9 characters, 15 bytes)
+index of the 1st character, A: 1
+index of the 2nd character, 쎥: 2
+index of the 3rd character, 쎤: 3
+index of the 4th character, 쎶: 4
+index of the 5th character, B: 5
+index of the 6th character, 쎅: 6
+index of the 7th character, 쎄: 7
+index of the 8th character, 쎖: 9
+index of the 9th character, C: 9
+
+TEST: extracttokens()
+extracttokens with separator B: 'A쎥쎤쎶' and '쎅쎄쎖C'
+extracttokens with separator 쎖: 'A쎥쎤쎶B쎅쎄' and 'C'
+
+TEST: substring()
+substring [1:1]: A
+substring [1:2]: A쎥
+substring [1:3]: A쎥쎤
+substring [1:4]: A쎥쎤쎶
+substring [1:5]: A쎥쎤쎶B
+substring [1:6]: A쎥쎤쎶B쎅
+substring [1:7]: A쎥쎤쎶B쎅쎄
+substring [1:8]: A쎥쎤쎶B쎅쎄쎖
+substring [1:9]: A쎥쎤쎶B쎅쎄쎖C
+substring [2:9]: 쎥쎤쎶B쎅쎄쎖C
+substring [3:9]: 쎤쎶B쎅쎄쎖C
+substring [4:9]: 쎶B쎅쎄쎖C
+substring [5:9]: B쎅쎄쎖C
+substring [6:9]: 쎄쎖C
+substring [7:9]: 쎖C
+substring [8:9]: 쎖C
+substring [9:9]: C
