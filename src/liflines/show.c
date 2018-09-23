@@ -687,16 +687,16 @@ indi_to_ped_fix (NODE indi, INT len)
 	if (keyflag) {
 		key = key_of_record(indi);
 		if(getlloptint("DisplayKeyTags", 0) > 0) {
-			sprintf(tmp1, " [%s-%s] (i%s)", bevt, devt, key);
+			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
 		} else {
-			sprintf(tmp1, " [%s-%s] (%s)", bevt, devt, key);
+			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (%s)", bevt, devt, key);
 		}
 	}
 	else
-		sprintf(tmp1, " (%s-%s)", bevt, devt);
+		snprintf(tmp1, ARRSIZE(tmp1), " (%s-%s)", bevt, devt);
 	name = indi_to_name(indi, len - strlen(tmp1));
-	strcpy(scratch, name);
-	strcat(scratch, tmp1);
+	strncpy(scratch, name, ARRSIZE(scratch));
+	strncat(scratch, tmp1, ARRSIZE(scratch));
 	return scratch;
 }
 /*=============================================
@@ -970,15 +970,9 @@ static void
 put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 {
 	WINDOW * win = uiw_win(uiwin);
-	static LINESTRING buffer=0; /* local buffer resized when needed */
-	static INT buflen=0;
-	INT maxlen = maxcol - x + 1;
-	/* ensure enough room in buffer */
-	if (!buflen || buflen < maxlen+1) {
-		if (buffer) stdfree(buffer);
-		buflen = maxlen+1;
-		buffer = (LINESTRING)stdalloc(buflen);
-	}
+	INT buflen = (maxcol - x + 1) + 1;
+	LINESTRING buffer = (LINESTRING)stdalloc(buflen);
+
 	/* TODO: Should convert to output codeset now, before limiting text */
 
 	/* copy into local buffer (here we enforce maxcol) */
@@ -997,6 +991,7 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, STRING string, INT maxcol, INT flag)
 		buffer[i++] = '\0';
 	}
 	mvccwaddstr(win, y, x, buffer);
+	stdfree(buffer);
 }
 /*==================================================================
  * show_childnumbers - toggle display of numbers for children
