@@ -1,2 +1,34 @@
-string/string-unicode -- WIP (inspiration from Seppo) regarding handling of mutli-byte strings
-annotated-pointers -- WIP (inspiration from Seppo) regarding multi-byte strings in annotations
+This file provides context about the various test programs that exist.
+As always, more tests (and better tests) are needed.
+
+annotated-pointers
+-- Status: WIP (inspiration from Seppo)
+-- Issue: 320
+-- Purpose: validate handling of multi-byte character strings in annotations
+
+date/checkj2date
+-- Status: Complete
+-- Issue: 321
+-- Purpose: Fix bug in j2date() 
+
+gengedcomstrong/test1
+-- Status: Partially Complete
+-- Issue: n/a 
+-- Purpose: Validate gengedcomstrong() on sparse database
+
+interp-pvalue/eqv_pvalue
+-- Status: Partially Complete
+-- Issue: 316
+-- Purpose: Fix eq() and ne() for type PGNODE
+
+string/string-unicode
+-- Status: WIP (inspiration from Seppo)
+-- Issue: 320
+-- Purpose: validate handling of mutli-byte character strings
+
+view-history/view-history
+-- Status: Complete
+-- Issue: 260
+-- Purpose: avoid core dump when viewing history
+
+

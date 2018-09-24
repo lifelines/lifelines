@@ -6,16 +6,34 @@
 
 testdir=$1
 testscr=$2
+testname=`echo $testscr | sed -e 's/.llscr$//g'`
 
-if [ -z $1 -o -z $2 ]
+if [ -z $testdir -o -z $testscr ]
 then
   echo "Syntax: $0 <directory> <script>"
   exit
 fi
 
+if [ ! -d $testdir ]
+then
+  echo "ERROR: Directory $1 not found!"
+  exit
+fi
+
+if [ ! -f $testdir/$testscr ]
+then
+  echo "ERROR: Script $testscr not found!"
+  exit
+fi
+
+if [ "$testscr" == "$testname" ]
+then
+  echo "ERROR: Script $testscr is not a script (llscr) file!"
+  exit
+fi
+
 testprog=`pwd`/../src/liflines/llines
 origdir=`pwd`
-testname=`echo $testscr | sed -e 's/.llscr//g'`
  
 # change to test directory
 cd $testdir
