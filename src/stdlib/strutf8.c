@@ -248,7 +248,7 @@ chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8)
 void
 limit_width (STRING str, size_t width, BOOLEAN utf8)
 {
-	if (strlen(str) < width) return;
+	if (strlen(str) <= width) return;
 	chopstr_utf8(str, width-1, utf8);
 }
 

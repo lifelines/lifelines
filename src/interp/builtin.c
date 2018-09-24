@@ -322,6 +322,7 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
+	/* NOTE: the 68 here is arbitrary */
 	outname = manip_name(nval(name), captype, REGORDER, 68);
 	return create_pvalue_from_string(outname);
 }

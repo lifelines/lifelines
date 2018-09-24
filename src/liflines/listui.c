@@ -809,6 +809,7 @@ manufacture a listdisp here
 			SURCAPTYPE surcaptype = DOSURCAP;
 			if (!getlloptint("UppercaseSurnames", 1))
 				surcaptype = NOSURCAP;
+			/* NOTE: the 40 here is arbitrary */
 			name = manip_name(name, surcaptype, REGORDER, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
