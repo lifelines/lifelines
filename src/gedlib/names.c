@@ -1007,6 +1007,7 @@ name_string (STRING name)
 		name++;
 	}
 	*p-- = 0;
+	striptrail(scratch);
 	return scratch;
 }
 /*==========================================================
