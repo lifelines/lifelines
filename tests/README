@@ -30,5 +30,3 @@ view-history/view-history
 -- Status: Complete
 -- Issue: 260
 -- Purpose: avoid core dump when viewing history
-
-
