@@ -693,10 +693,12 @@ indi_to_ped_fix (NODE indi, INT len)
 		}
 	}
 	else
+	{
 		snprintf(tmp1, ARRSIZE(tmp1), " (%s-%s)", bevt, devt);
+	}
 	name = indi_to_name(indi, len - strlen(tmp1));
 	strncpy(scratch, name, ARRSIZE(scratch));
-	strncat(scratch, tmp1, ARRSIZE(scratch));
+	strncat(scratch, tmp1, ARRSIZE(scratch) - strlen(name) - 1);
 	return scratch;
 }
 /*=============================================

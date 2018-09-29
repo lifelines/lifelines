@@ -26,6 +26,11 @@ interp/fullname
 -- Issue: 284
 -- Purpose: Tests fullname in all edge cases, including invalid INDI
 
+pedigree-longname/test1
+-- Status: Complete (but must run manually as it tests UI)
+-- Issue: 323
+-- Purpose: Ensure that long names are properly displayed in pedigree mode
+
 string/string-unicode
 -- Status: WIP (inspiration from Seppo)
 -- Issue: 320
