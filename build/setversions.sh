@@ -115,7 +115,7 @@ function cleanupfile {
 function getversion {
   YEAR=`date +%Y`
   MONTHABBR=`date +%b`
-  DAY=`date +%d`
+  YMD=`date +%Y-%m-%d`
   JULIANDAY=`date +%-j`
   JULIANVERSION=$((($YEAR-1990)*1000 + $JULIANDAY))
   if [[ $VERSION =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]
@@ -145,6 +145,10 @@ function applyversion {
 
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
+  SEDPAT="s/\(release version=\)\"[0-9][[:alnum:].\-]*\"/\1\"$VERSION\"/"
+  SEDPAT2="s/\(release.*date=\)\"[0-9]*-[0-9]*-[0-9]*\"/\1\"$YMD\"/"
+  alterfile $ROOTDIR/build/appdata/lifelines.appdata.xml "$SEDPAT" "$SEDPAT2"
+
   alterwinversions $ROOTDIR/build/msvc6/btedit/btedit.rc
   alterwinversions $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
   alterwinversions $ROOTDIR/build/msvc6/llexec/llexec.rc
