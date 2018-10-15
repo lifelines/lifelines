@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>LifeLines</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>MIT</project_license>
+  <name>LifeLines</name>
+  <summary>Curses-based genealogy program with powerful reporting language</summary>
+
+  <description>
+    <p>
+      LifeLines is a curses-based genealogy program that allows you to create,
+      edit and view genealogical information.  GEDCOM import and export are
+      available, and a powerful reporting language with a larger library of
+      reports included.
+    </p>
+  </description>
+
+  <url type="homepage">http://marcno.github.io/lifelines/</url>
+
+  <provides>
+    <binary>liflines</binary>
+  </provides>
+
+  <releases>
+    <release version="3.1.1" date="2016-03-16">
+      <description>
+        <p>Fixes documentation and report install issues.</p>
+      </description>
+    </release>
+  </releases>
+</component>
