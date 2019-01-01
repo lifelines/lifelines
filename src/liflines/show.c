@@ -695,13 +695,13 @@ indi_to_ped_fix (NODE indi, INT len)
 	}
 	tmp1[ARRSIZE(tmp1) - 1] = 0;
 	
-    //  a long name may need to be truncated to fit on the screen
+	// a long name may need to be truncated to fit on the screen
 	len = min(len, (ARRSIZE(scratch) - 1));
-    INT tmp1_length = (INT)strlen(tmp1);
-    INT name_length = len - tmp1_length - 1;
-    name_length = max(0, name_length);
+	INT tmp1_length = (INT)strlen(tmp1);
+	INT name_length = len - tmp1_length - 1;
+	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
-    ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
+	ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
 	strcpy(scratch, name);
 	strcat(scratch, tmp1);
 	return scratch;
