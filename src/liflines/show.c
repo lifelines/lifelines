@@ -537,7 +537,7 @@ void
 show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	, INT width, INT *scroll, BOOLEAN reuse)
 {
-	INT i, len;
+	INT i;
 	INT localrow;
 	INT overflow;
 	char buf[132];
@@ -580,7 +580,6 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 		overflow = ((i+1 == hgt-7+*scroll)&&(i+1 != Solen));
 		if (*scroll && (i == *scroll))
 			overflow = 1;
-		len = strlen(Sothers[i]+1);
 		put_out_line(uiwin, localrow+7+i, 1, Sothers[i]+1, maxcol, overflow);
 	}
 	listbadkeys = 0;
@@ -672,10 +671,8 @@ STRING
 indi_to_ped_fix (NODE indi, INT len)
 {
 	STRING bevt, devt, name, key;
-	static char scratch[100];
-	char tmp1[100];
-
-/*	return person_display(indi, 0, len); */
+	static char scratch[200];
+	char tmp1[200]; // holds birth, death, key string
 
 	if (!indi) return (STRING) "------------";
 	bevt = event_to_date(BIRT(indi), TRUE);
@@ -696,9 +693,17 @@ indi_to_ped_fix (NODE indi, INT len)
 	{
 		snprintf(tmp1, ARRSIZE(tmp1), " (%s-%s)", bevt, devt);
 	}
-	name = indi_to_name(indi, len - strlen(tmp1));
-	strncpy(scratch, name, ARRSIZE(scratch));
-	strncat(scratch, tmp1, ARRSIZE(scratch) - strlen(name) - 1);
+	tmp1[ARRSIZE(tmp1) - 1] = 0;
+	
+    //  a long name may need to be truncated to fit on the screen
+	len = min(len, (ARRSIZE(scratch) - 1));
+    INT tmp1_length = (INT)strlen(tmp1);
+    INT name_length = len - tmp1_length - 1;
+    name_length = max(0, name_length);
+	name = indi_to_name(indi, name_length);
+    ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
+	strcpy(scratch, name);
+	strcat(scratch, tmp1);
 	return scratch;
 }
 /*=============================================
