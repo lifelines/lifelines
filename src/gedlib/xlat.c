@@ -63,7 +63,7 @@ typedef struct xlat_step_s {
 
 /* alphabetical */
 static void add_dyntt_step(XLAT xlat, DYNTT dyntt);
-static INT check_tt_name(CNSTRING filename, ZSTR zsrc, ZSTR zdest);
+static INT check_tt_name(CNSTRING filename);
 static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(BOOLEAN adhoc);
@@ -467,8 +467,7 @@ load_dynttlist_from_dir (STRING dir)
 		CNSTRING ttfile = programs[i]->d_name;
 		/* filename without extension */
 		ZSTR zfile = zs_newsubs(ttfile, strlen(ttfile)-(sizeof(f_ttext)-1));
-		ZSTR zsrc=zs_new(), zdest=zs_new();
-		INT ntype = check_tt_name(zs_str(zfile), zsrc, zdest);
+		INT ntype = check_tt_name(zs_str(zfile));
 		/*
 		Valid names are like so:
 			UTF-8_ISO-8859-1 (type 1; code conversion)
@@ -490,8 +489,6 @@ load_dynttlist_from_dir (STRING dir)
 			}
 		}
 		zs_free(&zfile);
-		zs_free(&zsrc);
-		zs_free(&zdest);
 	}
 	if (n>0) {
 		for (i=0; i<n; ++i) {
@@ -505,10 +502,9 @@ load_dynttlist_from_dir (STRING dir)
  *  returns 1 if codeset-codeset conversion
  *  returns 2 if codeset subcoding conversion
  *  returns 0 if not valid name for tt
- *  we leave case of filename alone, but zsrc and zdest are made uppercase
  *==========================================================*/
 static INT
-check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
+check_tt_name (CNSTRING filename)
 {
 	CNSTRING ptr;
 	CNSTRING underbar=0;
@@ -530,13 +526,10 @@ check_tt_name (CNSTRING filename, ZSTR zsrc, ZSTR zdest)
 		return 0;
 	}
 	ztemp = zs_newsubs(filename, underbar-filename);
-	zsrc = ll_toupperz(zs_str(ztemp),0);
 	zs_free(&ztemp);
 	if (underbar[1]=='_') {
-		zdest = ll_toupperz(underbar+2,0);
 		return 2;
 	} else {
-		zdest = ll_toupperz(underbar+1,0);
 		return 1;
 	}
 }
