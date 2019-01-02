@@ -157,11 +157,7 @@ typedef unsigned char uchar;
 #endif
 
 /* FLOATING POINT TYPES */
-=======
->>>>>>> Update tools to use printf format macros; add format macros for size_t
 #define FLOAT		double
-=======
->>>>>>> Restructure integer types and format code; prepare for native 64-bit support
 
 /* INTEGER PRINTF FORMAT DEFINITIONS */
 #define FMT_INTPTR	"%" PRIdPTR
@@ -171,11 +167,13 @@ typedef unsigned char uchar;
 #if __WORDSIZE == 64
 #define FMT_INT		"%" PRId32
 #define FMT_INT_HEX	"%" PRIx32
+#define FMT_INT_02	"%02" PRId32
 #define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT64
 #else
 #define FMT_INT		"%" PRId32
 #define FMT_INT_HEX	"%" PRIx32
+#define FMT_INT_02	"%02" PRId32
 #define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT32
 #endif
