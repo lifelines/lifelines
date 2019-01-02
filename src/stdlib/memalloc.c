@@ -109,7 +109,7 @@ void *
 __reallocate (void *ptr, INT size, STRING file, int line)
 {
 	if (alloclog) {
-		sprintf(scratch, "%8p R (%ld) %s\t%d", ptr, size, file, line);
+		sprintf(scratch, "%8p R (" FMT_INT ") %s\t%d", ptr, size, file, line);
 		alloc_out(scratch);
 	}
 	return realloc(ptr, size);
@@ -146,7 +146,7 @@ report_alloc_live_count (STRING str)
 {
 	char buffer[64];
 	alloc_out(str);
-	snprintf(buffer, sizeof(buffer), "Live count: %ld", live_allocs);
+	snprintf(buffer, sizeof(buffer), "Live count: " FMT_INT, live_allocs);
 	alloc_out(buffer);
 }
 
