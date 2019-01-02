@@ -764,7 +764,7 @@ get_trantable_desc (TRANTABLE tt)
 	} else {
 		zs_apps(zstr, "(Unnamed table)");
 	}
-	sprintf(buffer, " [%ld]", tt->total);
+	sprintf(buffer, " [" FMT_INT "]", tt->total);
 	zs_apps(zstr, buffer);
 	return zstr;
 }
