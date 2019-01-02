@@ -82,6 +82,39 @@ case $host in
     ;;
 esac
 
+dnl Specify bit width if requrested
+AC_ARG_WITH(32bit,
+    [  --with-32bit             Build in 32-bit mode ],
+    [build_32bit=$withval],
+    [build_32bit=no])
+
+AC_ARG_WITH(64bit,
+    [  --with-64bit             Build in 64-bit mode ],
+    [build_64bit=$withval],
+    [build_64bit=no])
+
+if test "$build_32bit" = "yes"
+then
+  if test "${ac_cv_prog_gcc}" = "yes"; then
+    CFLAGS="${CFLAGS} -m32"
+    LDFLAGS="${LDFLAGS} -m32"
+  else
+    echo "The use of --with-32bit is only supported when using gcc!"
+    exit
+  fi
+fi
+
+if test "$build_64bit" = "yes"
+then
+  if test "${ac_cv_prog_gcc}" = "yes"; then
+    CFLAGS="${CFLAGS} -m64"
+    LDFLAGS="${LDFLAGS} -m64"
+  else
+    echo "The use of --with-64bit is only supported when using gcc!"
+    exit
+  fi
+fi
+
 dnl **************************************************************
 dnl Handle Docs Target
 dnl **************************************************************
