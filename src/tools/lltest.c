@@ -242,6 +242,14 @@ test_nextfkey(BTREE btree)
 
 	if (verbose) { printf("\n"); }
 
+	/* Abort test if initial fkey doesn't match our assumptions */
+	if (fkey != fkey_compare[0])
+	{
+		if (verbose) { printf("ERROR: Can't perform test since database is too large.  This test assumes a database with a single file key.\n"); }
+		rc = 1;
+		return rc;
+	}
+
 	/* Display current FKEY */
 	if (verbose) { print_old_and_new_fkey(i, oldfkey, fkey, fkey_compare[i]); }
 
