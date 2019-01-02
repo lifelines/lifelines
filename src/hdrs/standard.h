@@ -158,6 +158,23 @@ typedef unsigned char uchar;
 
 /* FLOATING POINT TYPES */
 #define FLOAT		double
+=======
+#define INT	int32_t 	/* FUTUREFIX: int */
+#define INTPTR	intptr_t
+#define INT16	int16_t
+#define INT32	int32_t 
+#define INT64	int64_t
+#define FLOAT	double
+>>>>>>> Add macros for printf/scanf integer formats
+
+#define FMT_INT		"%" PRId32	/* FUTUREFIX: ?? */
+#define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
+#define FMT_INTPTR	"%" PRIdPTR
+#define FMT_INT16	"%" PRId16
+#define FMT_INT32	"%" PRId32
+#define FMT_INT64	"%" PRId64
+
+#define SCN_INT		"%" SCNd32	/* FUTUREFIX: ?? */
 
 /* VOID TYPE */
 typedef void *VPTR;
