@@ -159,6 +159,15 @@ typedef unsigned char uchar;
 /* FLOATING POINT TYPES */
 #define FLOAT		double
 
+#define FMT_INT		"%" PRId32	/* FUTUREFIX: ?? */
+#define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
+#define FMT_INTPTR	"%" PRIdPTR
+#define FMT_INT16	"%" PRId16
+#define FMT_INT32	"%" PRId32
+#define FMT_INT64	"%" PRId64
+
+#define SCN_INT		"%" SCNd32	/* FUTUREFIX: ?? */
+
 /* VOID TYPE */
 typedef void *VPTR;
 #define VPTRSIZE sizeof(VPTR)
