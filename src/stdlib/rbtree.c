@@ -881,6 +881,7 @@ FindFirst (RBTREE tree, RBKEY low)
 	return lastBest;
 }
 
+#if UNUSED
 /***********************************************************************
  * FUNCTION: FindLast
  *
@@ -905,6 +906,7 @@ FindLast (RBTREE tree, RBKEY high)
 	}
 	return lastBest;
 }
+#endif
 
 int
 RbNext (RBITER rbit, RBKEY * pkey, RBVALUE * pinfo)
