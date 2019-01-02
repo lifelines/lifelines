@@ -30,7 +30,7 @@
  *   3.0.3 - 21 Sep 95
  *===========================================================*/
 
-/* Note that YYSTYPE is PNODE *, as defined in yacc.y */
+/* Note that YYSTYPE is PNODE, as defined in yacc.y */
 
 #ifdef __OpenBSD__
 #define _XOPEN_SOURCE
