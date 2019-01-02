@@ -103,7 +103,7 @@ typedef unsigned char uchar;
 #define FALSE	0
 #endif
 
-/* INTEGER AND FLOATING POINT TYPES */
+/* INTEGER TYPES */
 /*
  * INT represents a 'native' integer.
  *   This is to be used for any in-memory computation where size doesn't matter.
@@ -117,30 +117,44 @@ typedef unsigned char uchar;
  *   These are to be used for on-disk structures and unicode where size matters.
  *
 */
-#define INT		int32_t 	/* FUTUREFIX: int */
+
+/* INTEGER TYPE DEFINITIONS */
+#if __WORDSIZE == 64
+#define INT		int32_t
+#else
+#define INT		int32_t
+#endif
 #define INTPTR		intptr_t
 #define INT16		int16_t
 #define INT32		int32_t
 #define INT64		int64_t
-#define FLOAT		double
 
-#define FMT_INT		"%" PRId32	/* FUTUREFIX: ?? */
+/* INTEGER PRINTF FORMAT DEFINITIONS */
 #define FMT_INTPTR	"%" PRIdPTR
 #define FMT_INT16	"%" PRId16
 #define FMT_INT32	"%" PRId32
 #define FMT_INT64	"%" PRId64
-
 #if __WORDSIZE == 64
+#define FMT_INT		"%" PRId32
+#define FMT_INT_HEX	"%" PRIx32
+#define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT64
 #else
+#define FMT_INT		"%" PRId32
+#define FMT_INT_HEX	"%" PRIx32
+#define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT32
 #endif
 
-#define SCN_INT		"%" SCNd32	/* FUTUREFIX: ?? */
+/* INTEGER SCANF FORMAT DEFINITIONS */
+#if __WORDSIZE == 64
+#define SCN_INT		"%" SCNd32
+#else
+#define SCN_INT		"%" SCNd32
+#endif
 
-/* Special formatting macros */
-#define FMT_INT_HEX	"%" PRIx32	/* FUTUREFIX: ?? */
-#define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
+/* FLOATING POINT TYPES */
+#define FLOAT		double
 
 /* VOID TYPE */
 typedef void *VPTR;
