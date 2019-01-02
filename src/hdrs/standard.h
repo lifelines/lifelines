@@ -139,6 +139,7 @@ typedef unsigned char uchar;
 #define SCN_INT		"%" SCNd32	/* FUTUREFIX: ?? */
 
 /* Special formatting macros */
+#define FMT_INT_HEX	"%" PRIx32	/* FUTUREFIX: ?? */
 #define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
 
 /* VOID TYPE */
