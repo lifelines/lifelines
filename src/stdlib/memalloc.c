@@ -71,14 +71,14 @@ __allocate (int len, STRING file, int line)
 	if (len == 0) return NULL;
 	p = malloc(len);
 	if((p == NULL) && alloclog) {
-		sprintf(scratch, "%8p ? %s\t%d\t%d", p, file, line, len);
+		sprintf(scratch, "%8p ? %s\t%d\t%d", (void *)p, file, line, len);
 		alloc_out(scratch);
 	}
 	ASSERT(p);
 	live_allocs++;
 	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
-		sprintf(scratch, "%8p A %s\t%d\t%d", p, file, line, len);
+		sprintf(scratch, "%8p A %s\t%d\t%d", (void *)p, file, line, len);
 		alloc_out(scratch);
 	}
 	return (void*)p;
