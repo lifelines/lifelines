@@ -415,6 +415,9 @@ test_index(void)
 	/* This test code assumes 32-bit alignment.  This may */
 	/* not be accurate for databases created on older DOS */
 	/* or Windows 3.x systems which used 16-bit alignment.*/
+        /* This does NOT apply to newer systems with 64-bit   */
+        /* LifeLines as the structures (thankfully) maintain  */
+        /* their 32-bit alignment.                            */
 	/* WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!  */
 
 	if (verbose)
@@ -461,6 +464,9 @@ int test_block(void)
 	/* This test code assumes 32-bit alignment.  This may */
 	/* not be accurate for databases created on older DOS */
 	/* or Windows 3.x systems which used 16-bit alignment.*/
+        /* This does NOT apply to newer systems with 64-bit   */
+        /* LifeLines as the structures (thankfully) maintain  */
+        /* their 32-bit alignment.                            */
 	/* WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!  */
 
 	if (verbose)
