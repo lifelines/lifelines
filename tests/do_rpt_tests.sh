@@ -14,7 +14,7 @@ do
   TESTDIR=`dirname $i`
   TESTSCR=`basename $i`
   TESTNAME=`echo $TESTSCR | sed -e 's/.llscr//g'`
-  ((TOTALCNT++))
+  TOTALCNT=$((TOTALCNT+1))
   echo "Running test $i..."
   ./run_rpt_test.sh $TESTDIR $TESTSCR
   if [ -f $TESTDIR/$TESTNAME.diff ]
@@ -25,7 +25,7 @@ do
     else
       FAILED="${FAILED},$i"   
     fi
-    ((FAILCNT++))
+    FAILCNT=$((FAILCNT+1))
   fi
 done
 
