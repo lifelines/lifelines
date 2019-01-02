@@ -48,7 +48,7 @@
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
-
+int yylex (YYSTYPE * lvalp, PACTX pactx);
 static INT inchar(PACTX pactx);
 static int lowyylex(PACTX pactx, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
@@ -210,7 +210,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		p = tokbuf;
 		while (TRUE) {
 			while ((c = inchar(pactx)) != EOF && c != '"' && c != '\\') {
-				if (p-tokbuf > sizeof(tokbuf)/sizeof(tokbuf[0]) - 3) {
+				if ((int)(p-tokbuf) > (int)(sizeof(tokbuf)/sizeof(tokbuf[0]) - 3)) {
 					/* Overflowing tokbuf buffer */
 					/* TODO: (Perry, 2006-06-30) I don't know how to fail gracefully from here inside parser */
 					char msg[512];

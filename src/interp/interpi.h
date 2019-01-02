@@ -569,6 +569,7 @@ NODE eval_indi2(PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel, PVALUE *p
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 PNODE families_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE fathers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE fdef_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 PNODE foreven_node(PACTX pactx, STRING, STRING, PNODE);
@@ -601,8 +602,8 @@ void pa_handle_global(STRING iden);
 void pa_handle_option(CNSTRING optname);
 void pa_handle_proc(PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body);
 void pa_handle_require(PACTX pactx, PNODE node);
-PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+void parse_error (PACTX pactx, STRING str);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 STRING prot(STRING str);
