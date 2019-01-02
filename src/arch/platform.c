@@ -117,3 +117,13 @@ GetWinSysError (INT nerr)
 }
 
 #endif /* defined(_WIN32) || defined(__CYGWIN__) */
+
+/*
+ * This function does any initialize required for the arch library.
+ */
+
+int init_arch(void)
+{
+  _llnull();
+  return 0;
+}
