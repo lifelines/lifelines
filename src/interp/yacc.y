@@ -75,7 +75,7 @@ void parse_error(PACTX pactx, STRING str);
 /*===========================================================*/
 
 // Bison 3.x.
-//%define api.value.type {PNODE}
+%define api.value.type {PNODE}
 
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */
