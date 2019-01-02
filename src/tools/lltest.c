@@ -456,7 +456,7 @@ int test_block(void)
 	/* Validate Assumptions */
 	if (sizeof(FKEY) != sizeof(INT32)) { rc=1; goto exit; }
 	if (sizeof(RKEY) != RKEYLEN)       { rc=2; goto exit; }
-	if (NORECS != 255)                 { rc=3; goto exit; }
+	if (NOENTS != 340)                 { rc=3; goto exit; }
 
 	/* Validate Size and Offsets */
 
