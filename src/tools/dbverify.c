@@ -1067,7 +1067,7 @@ check_set (INDISEQ seq, char ctype)
 				, ctype, i);
 			if (todo.fix_deletes) {
 				char key[33];
-				sprintf(key, "%c%ld", ctype, i);
+				sprintf(key, "%c" FMT_INT, ctype, i);
 				if (mark_deleted_record_as_deleted(key)) {
 					report_fix(ERR_UNDELETED
 						, _("Fixed missing undeleted record %c%d")
@@ -1117,7 +1117,7 @@ check_btree (BTREE btr)
 	INT mk1 = bkfile(btr).k_mkey;
 	if (ixself(index) != mk1) {
 		printf(_("Master fkey misaligned"));
-		printf("(%ld != %ld\n", ixself(index), mk1);
+		printf("(" FMT_INT32 " != " FMT_INT ")\n", ixself(index), mk1);
 		return FALSE;
 	}
 	check_index(btr, index, fkeytab, NULL, NULL);
@@ -1151,7 +1151,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		newix = readindex(btr, fkey, TRUE);
 		if (!newix) {
 			printf(_("Error loading index at key"));
-			printf("%ld\n", i);
+			printf(FMT_INT "\n", i);
 			printblock((BLOCK)index);
 		}
 		/* figure upper & lower bounds of what keys should be in the child */
@@ -1215,7 +1215,7 @@ check_keys (BLOCK block, RKEY * lo, RKEY * hi)
 			INT rel = cmpkeys(&rkeys(block, i), &rkeys(block, i+1));
 			if (rel >= 0) {
 				printf(_("Key not below next key"));
-				printf(": %ld\n", i);
+				printf(": " FMT_INT "\n", i);
 				printblock(block);
 				ok = FALSE;
 			}
