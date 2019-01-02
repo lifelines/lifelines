@@ -1154,7 +1154,7 @@ llrpt_alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i < 1 || i > 26)
 		sprintf(scratch, "%c", '_');
 	else
-		sprintf(scratch, "%c", 'a' + i - 1);
+		sprintf(scratch, "%c", (int)('a' + i - 1));
 	return create_pvalue_from_string(scratch);
 }
 /*================================================+
@@ -2229,7 +2229,7 @@ llrpt_print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 		if (*eflg || !val) {
 			char nargstr[33];
-			sprintf(nargstr, "%d", narg);
+			sprintf(nargstr, FMT_INT, narg);
 			prog_var_error(node, stab, argvar, val, nonstrx, "print", nargstr);
 			delete_pvalue(val);
 			return NULL;

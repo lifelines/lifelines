@@ -210,7 +210,7 @@ print_old_and_new_fkey(INT iter, FKEY old, FKEY new, FKEY compare)
 	char *result = (new == compare) ? "OK" : "ERROR";
 	char *oldpath = (old != -1) ? fkey2path(old) : "     ";
 
-	printf("%02d %s 0x%08x %s 0x%08x %s\n",iter, oldpath, old, fkey2path(new), new, result);
+	printf(FMT_INT_02 " %s 0x" FMT_INT32_HEX " %s 0x" FMT_INT32_HEX " %s\n",iter, oldpath, old, fkey2path(new), new, result);
 }
 
 /*===============================================

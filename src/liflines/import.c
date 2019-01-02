@@ -258,8 +258,8 @@ retry_input_codeset:
 		if((totkeys-totused) > 0) {
 			INT delkeys = totkeys-totused;
 			snprintf(msgbuf, sizeof(msgbuf)
-				, _pl("Using original keys, %d deleted record will be in the database."
-					, "Using original keys, %d deleted records will be in the database."
+				, _pl("Using original keys, " FMT_INT " deleted record will be in the database."
+					, "Using original keys, " FMT_INT " deleted records will be in the database."
 					, delkeys)
 				, delkeys
 				);
