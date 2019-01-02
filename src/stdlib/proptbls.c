@@ -25,10 +25,10 @@ add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
 	STRING str = valueof_str(props, "dn");
 	INT n = ll_atoi(str, 0)+1;
 	char temp[20];
-	sprintf(temp, "d%ld", n);
+	sprintf(temp, "d" FMT_INT, n);
 	insert_table_str(props, temp, name);
 	insert_table_str(props, name, value);
-	sprintf(temp, "%ld", n);
+	sprintf(temp, FMT_INT, n);
 	replace_table_str(props, "dn", temp);
 }
 /*==========================================================
@@ -40,11 +40,11 @@ set_prop_dnum (TABLE props, INT n, CNSTRING name, CNSTRING value)
 	STRING str = valueof_str(props, "dn");
 	INT max = ll_atoi(str, 0);
 	char temp[20];
-	sprintf(temp, "d%ld", n);
+	sprintf(temp, "d" FMT_INT, n);
 	replace_table_str(props, temp, name);
 	replace_table_str(props, name, value);
 	if (n>max) {
-		sprintf(temp, "%ld", n);
+		sprintf(temp, FMT_INT, n);
 		replace_table_str(props, "dn", temp);
 	}
 }
