@@ -875,10 +875,9 @@ cel_rptlocks (CACHEEL cel)
 void
 lock_record_in_cache (RECORD rec)
 {
-	NODE node=0;
 	CACHEEL cel=0;
 	ASSERT(rec);
-	node = nztop(rec); /* force record to be loaded in cache */
+	(void)nztop(rec); /* force record to be loaded in cache */
 	cel = nzcel(rec);
 	++cclock(cel);
 	ASSERT(cclock(cel) > 0);
