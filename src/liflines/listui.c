@@ -579,7 +579,6 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i, j, row, lines;
 	INT rows = ld->rectList.bottom - ld->rectList.top + 1;
-	INT overflag=FALSE;
 	char buffer[120];
 	INT width = uiw_cols(ld->uiwin);
 	if (width > (INT)sizeof(buffer)-1)
@@ -614,8 +613,6 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		temp = width-6-nlen;
 		llstrncpy(buffer, strings[i], temp, uu8);
 		if ((INT)strlen(buffer) > temp-2) {
-			if (i==ld->cur)
-				overflag=TRUE;
 			strcpy(&buffer[temp-3], "...");
 		}
 		mvccwaddstr(win, row, 4+nlen, buffer);
