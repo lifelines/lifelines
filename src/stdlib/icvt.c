@@ -60,7 +60,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 {
 #ifdef HAVE_ICONV
 	iconv_t ict;
-	const char * inptr;
+	char * inptr;
 	char * outptr;
 	size_t inleft;
 	size_t outleft;
@@ -114,7 +114,7 @@ iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
 #endif
 
 
-	inptr = sin;
+	inptr = (char *)sin;
 	outptr = zs_str(zout);
 	inleft = inlen;
 	/* we are terminating with 4 zero bytes just in case dest is UCS-4 */
