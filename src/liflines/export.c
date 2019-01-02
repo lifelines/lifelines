@@ -169,7 +169,7 @@ copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, char cty
 {
 	char in[BUFLEN]="";
 	char *inp=0;
-	int remlen=0, num=0;
+	INT remlen=0, num=0;
 	FILE * fn = travparm->fp;
 	struct tag_export_feedback * efeed = travparm->efeed;
 	

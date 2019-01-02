@@ -281,7 +281,7 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 		STRING detail = arrdets->lines[row];
 		char temp[20];
 		STRING name=0, value=0;
-		sprintf(temp, "d%d", i+1);
+		sprintf(temp, "d" FMT_INT, i+1);
 		name = valueof_str(props, temp);
 		detail[0]=0;
 		if (name) {
