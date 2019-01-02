@@ -268,9 +268,9 @@
 	while (__node) {\
 		if (!eqstr(ntag(__node), "FAMC")) break;\
 		__key = rmvat(nval(__node));\
-		 __node = nsibling(__node);\
-		 ++num;\
-	    if (!__key || !(frec=qkey_to_frecord(__key)) || !(fam=nztop(frec))) {\
+		__node = nsibling(__node);\
+		++num;\
+		if (!__key || !(frec=qkey_to_frecord(__key)) || !(fam=nztop(frec))) {\
 			 continue;\
 		}\
 		fath = fam_to_husb_node(fam);\
