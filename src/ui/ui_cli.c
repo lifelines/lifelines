@@ -318,7 +318,7 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 		INT j;
 		INT rv;
 		for (j=i; j<i+10 && j<no; ++j) {
-			printf("%ld: %s\n", j-i, pstrngs[j]);
+			printf(FMT_INT ": %s\n", j-i, pstrngs[j]);
 		}
 		printf("%s\n", promptline);
 		rv = interact(responses);
