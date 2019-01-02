@@ -1152,7 +1152,7 @@ llrpt_alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	i = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
 	if (i < 1 || i > 26)
-		sprintf(scratch, "_");
+		sprintf(scratch, "%c", '_');
 	else
 		sprintf(scratch, "%c", 'a' + i - 1);
 	return create_pvalue_from_string(scratch);
