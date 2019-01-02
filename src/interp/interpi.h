@@ -109,6 +109,8 @@ typedef struct tag_ipcall_data {
 	PNODE fargs;
 } IPCALL_DATA;
 
+typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
+
 struct tag_pnode {
 	char     i_type;       /* type of node */
 	PNODE    i_prnt;       /* parent of this node */
@@ -121,6 +123,7 @@ struct tag_pnode {
 	VPTR     i_word3;
 	VPTR     i_word4;
 	VPTR     i_word5;
+	PFUNC    i_func;
 	union {
 		struct {
 			PVALUE value;
@@ -215,7 +218,7 @@ PNODE ipcall_args(PNODE node);
 PNODE ifdefn_args(PNODE node);
 PNODE ifcall_args(PNODE node);
 
-#define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
+#define ifunc(i)     ((i)->i_func)      /* func and builtin reference */
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */
 #define ispouse(i)   ((i)->i_word2)     /* var in families and spouses loop */
 #define ifamily(i)   ((i)->i_word3)     /* var in all families type loops */
@@ -229,8 +232,6 @@ PNODE ifcall_args(PNODE node);
 #define ibody(i)     ((i)->i_word5)     /* body of proc, func, loops */
 #define inum(i)      ((i)->i_word4)     /* counter used by many loops */
 
-typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
-
 #define pitype(i)	ptype(ivalue(i))
 #define pivalue(i)	pvalue(ivalue(i))
 
@@ -238,7 +239,7 @@ typedef struct {
 	char *ft_name;
 	INT ft_nparms_min;
 	INT ft_nparms_max;
-	PVALUE (*ft_eval)(PNODE, SYMTAB, BOOLEAN *);
+	PFUNC ft_eval;
 } BUILTINS;
 
 #define INTERPTYPE INT

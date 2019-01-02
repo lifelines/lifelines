@@ -924,7 +924,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
 		node->i_flags = PN_INAME_HSTR;
-		ifunc(node) = func;
+		ifunc(node) = ifunc(func);
 		return node;
 	} else if (count) {
 		/* ambiguous call */
@@ -962,7 +962,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		node = create_pnode(pactx, IBCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
-		ifunc(node) = (VPTR) builtins[md].ft_eval;
+		ifunc(node) = builtins[md].ft_eval;
 		node->i_flags = PN_INAME_HSTR;
 		return node;
 		
