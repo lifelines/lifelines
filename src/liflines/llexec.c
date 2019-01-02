@@ -254,9 +254,6 @@ main (int argc, char **argv)
 		case 'o': /* output directory */
 			progout = optarg;
 			break;
-		case 'z': /* nongraphical box */
-			/* graphical = FALSE; */ /* default */
-			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
 			break;
