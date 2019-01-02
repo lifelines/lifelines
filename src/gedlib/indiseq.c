@@ -1395,6 +1395,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
  */
 #if 0
 			INT spkeynum=0;
+			INT num2=0;
 			/* look for a spouse besides indi */
 			FORFAMSPOUSES(fam, spouse, num2)
 			{
