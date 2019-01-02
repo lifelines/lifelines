@@ -422,7 +422,7 @@ disp_list (LIST list)
 		while (next_list_ptr(listit, &ptr)) {
 			PVALUE val = ptr;
 			char key[10];
-			snprintf(key, sizeof(key), "%d", sdata.current+1);
+			snprintf(key, sizeof(key), FMT_INT, sdata.current+1);
 			format_dbgsymtab_val(key, val, &sdata);
 		}
 		end_list_iter(&listit);

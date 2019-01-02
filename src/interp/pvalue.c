@@ -566,7 +566,7 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	case POTHR: cptype = 'X'; break;
 	default: ASSERT(0); break;
 	}
-	sprintf(key, "%c%d", cptype, i);
+	sprintf(key, "%c" FMT_INT, cptype, i);
 	return create_pvalue_from_key_impl(key, ptype);
 }
 /*==================================

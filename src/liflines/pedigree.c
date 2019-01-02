@@ -439,7 +439,7 @@ print_to_screen (INT gen, INT indent, INT * row, LINEPRINT_FNC fnc
 {
 	char buffer[140], *ptr=buffer;
 	STRING line;
-	int mylen = sizeof(buffer);
+	INT mylen = sizeof(buffer);
 	INT width = canvas->rect->right - canvas->rect->left;
 	/* NODE indi = 0; */
 	INT drow = *row - canvas->scroll; /* effective display row */
