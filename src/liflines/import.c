@@ -348,7 +348,7 @@ restore_record (NODE node, INT type, INT num)
 	if (!node) return;
 	ASSERT(old = nxref(node));
 	new = translate_key(rmvat(old));
-	sprintf(scratch, "%6ld", num);
+	sprintf(scratch, FMT_INT_6, num);
 	switch (type) {
 	case INDI_REC: break;
 	case FAM_REC:  break;

@@ -111,7 +111,7 @@ update_rec_count (INT pass, char ctype, STRING tag, INT count)
 		row = 5;
 		break;
 	}
-	snprintf(msg, sizeof(msg), "%6ld %s", count, numstr);
+	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
 	if (row == 5 && tag && tag[0])
 		llstrappf(msg, sizeof(msg), uu8, " (%s)", tag);
 	row += offset;
@@ -162,13 +162,13 @@ import_validating (void)
 
 	numstr = _pl("Error", "Errors", count);
 	row = 6;
-	snprintf(msg, sizeof(msg), "%6ld %s", count, numstr);
+	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
 	clear_stdout_hseg(row, 1, 70);
 	wfield(row, 1, msg);
 
 	numstr = _pl("Warning", "Warnings", count);
 	row = 7;
-	snprintf(msg, sizeof(msg), "%6ld %s", count, numstr);
+	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
 	clear_stdout_hseg(row, 1, 70);
 	wfield(row, 1, msg);
 }
