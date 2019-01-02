@@ -1635,7 +1635,7 @@ static void
 save_nkey_list (STRING key, struct hist * histp)
 {
 	FILE * fp=0;
-	INT next, prev, count, temp;
+	INT next, count, temp;
 	size_t rtn;
 
 	count = get_hist_count(histp);
@@ -1649,7 +1649,6 @@ save_nkey_list (STRING key, struct hist * histp)
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 
-	prev = -1;
 	next = histp->start;
 	while (1) {
 		/* write type & number, 4 bytes each */
@@ -1657,7 +1656,6 @@ save_nkey_list (STRING key, struct hist * histp)
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
 		temp = histp->list[next].keynum;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
-		prev = next;
 		next = (next+1) % histp->size;
 		if (next == histp->past_end)
 			break; /* finished them all */
@@ -1684,7 +1682,7 @@ static void
 history_record (RECORD rec, struct hist * histp)
 {
 	NKEY nkey = nkey_zero();
-	INT prev, next, i;
+	INT next, i;
 	INT count = get_hist_count(histp);
 	INT protect = getlloptint("HistoryBounceSuppress", 0);
 	if (!histp->size) return;
@@ -1704,13 +1702,11 @@ history_record (RECORD rec, struct hist * histp)
 	if (protect>count)
 		protect=count;
 	/* traverse from most recent back (bounce suppression) */
-	prev = -1;
 	next = (histp->past_end-1);
 	if (next < 0) next += histp->size;
 	for (i=0; i<protect; ++i) {
 		if (nkey_eq(&nkey, &histp->list[next]))
 			return;
-		prev = next;
 		if (--next < 0) next += histp->size;
 	}
 	/* it is a new one so add it to circular list */
@@ -1828,13 +1824,12 @@ static INDISEQ
 get_history_list (struct hist * histp)
 {
 	INDISEQ seq=0;
-	INT next, prev;
+	INT next;
 	if (!histp->size || histp->start==-1) {
 		return NULL;
 	}
 	/* add all items of history to seq */
 	seq = create_indiseq_null();
-	prev = -1;
 	next = histp->start;
 	while (1) {
 		NODE node=0;
@@ -1843,7 +1838,6 @@ get_history_list (struct hist * histp)
 			STRING key = node_to_key(node);
 			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 		}
-		prev = next;
 		next = (next+1) % histp->size;
 		if (next == histp->past_end)
 			break; /* finished them all */
