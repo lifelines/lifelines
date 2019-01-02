@@ -2045,13 +2045,13 @@ INDISEQ
 get_all_sour (void)
 {
 	INDISEQ seq=NULL;
-	int i=0;
+	INT i=0;
 	while ((i=xref_nexts(i)))
 	{
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "S%d", i);
+		sprintf(skey, "S" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2070,7 +2070,7 @@ get_all_even (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "E%ld", i);
+		sprintf(skey, "E" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2089,7 +2089,7 @@ get_all_othe (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "X%ld", i);
+		sprintf(skey, "X" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
