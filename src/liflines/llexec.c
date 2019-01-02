@@ -255,7 +255,7 @@ main (int argc, char **argv)
 			progout = optarg;
 			break;
 		case 'z': /* nongraphical box */
-//			graphical = FALSE;
+			/* graphical = FALSE; */ /* default */
 			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
