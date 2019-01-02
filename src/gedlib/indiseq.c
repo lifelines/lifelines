@@ -1389,8 +1389,12 @@ indi_to_families (NODE indi, BOOLEAN fams)
 	if (fams) {
 		FORFAMS(indi, fam, num)
 		{
-			INT spkeynum=0;
 			STRING fkey = strsave(fam_to_key(fam));
+/* MTE: When processing FAMS, we don't care if there is a spouse
+ * or not, the FAMS key is enough.
+ */
+#if 0
+			INT spkeynum=0;
 			/* look for a spouse besides indi */
 			FORFAMSPOUSES(fam, spouse, num2)
 			{
@@ -1399,6 +1403,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
 					spkeynum = temp;
 			}
 			ENDFAMSPOUSES
+#endif
 			append_indiseq_ival(seq, fkey, NULL, mykeynum, TRUE, FALSE);
 			strfree(&fkey);
 		}
@@ -1607,7 +1612,7 @@ descendent_indiseq (INDISEQ seq)
 		FORFAMS(indi, fam, num1)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
-				goto a;
+				continue;
 			insert_table_ptr(ftab, fkey, 0);
 			FORCHILDRENx(fam, child, num2)
 					/* only do people not processed */
@@ -1623,7 +1628,6 @@ descendent_indiseq (INDISEQ seq)
 					insert_table_ptr(itab, dkey, 0);
 				}
 			ENDCHILDRENx
-		a:;
 		ENDFAMS
 	}
 	destroy_table(itab);
