@@ -36,10 +36,21 @@
 #include "standard.h"
 
 #define BUFLEN 4096
+
 /* see comment at declaration of INDEX below for explanation */
+
+#if __WORDSIZE == 16
 #define NOENTS ((BUFLEN-12)/12)
+#else
+#define NOENTS ((BUFLEN-16)/12)
+#endif
+
 /* see comment at declaration of BLOCK below for explanation */
+#if __WORDSIZE == 16
 #define NORECS ((BUFLEN-12)/16)
+#else
+#define NORECS ((BUFLEN-16)/16)
+#endif
 
 /*
 All records in a LifeLines btree are indexed on 8 character keys
@@ -83,24 +94,38 @@ typedef struct {
 /*==============================================
  * INDEX -- Data structure for BTREE index files
  *  The constant NOENTS above depends on this exact contents:
- * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
+ *
+ * 16-bit systems:
+ * 12=4+2+4+2+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
+ * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
+ *
+ * 32-bit and 64-bit systems:
+ * 16=4+2+2+4+2+2=sizeof(FKEY)+sizeof(INT16)*2+sizeof(FKEY)+sizeof(INT16)*2
  * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
  *
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
- * This comment assumes 16-bit packing which is not
- * the case on modern systems. Because of this,
- * databases created on 16-bit, 32-bit or 64-bit
- * systems will not be binary compatible.
+ * This structure assumes 16-bit packing (on 16-bit platforms) and 32-bit
+ * packing (on 32-bit and 64-bit platforms).  Beacuse of this, databases
+ * created on 16-bit platforms will NOT be binary compatible with those
+ * created on 32-bit or 64-bit platforms.
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *============================================*/
 typedef struct {
-	FKEY  ix_self;		/*fkey of index*/
+	FKEY  ix_self;           /*fkey of index*/
 	INT16 ix_type;           /*block/file type*/
+#if __WORDSIZE != 16
+	INT16 ix_pad1;
+#endif
 	FKEY  ix_parent;         /*parent file's fkey*/
 	INT16 ix_nkeys;          /*num of keys in index*/
+	/* no implicit padding here since ix_rkeys is a char array! */
 	RKEY  ix_rkeys[NOENTS];  /*rkeys in index*/
+#if __WORDSIZE != 16
+	INT16 ix_pad2;
+#endif
 	FKEY  ix_fkeys[NOENTS];  /*fkeys in index*/
 } *INDEX, INDEXSTRUCT;
+
 /*=======================================
  * BTREE -- Internal BTREE data structure
  *=====================================*/
@@ -128,22 +153,35 @@ typedef struct {
 /*======================================================
  * BLOCK -- Data structure for BTREE record file headers
  *  The constant NORECS above depends on this exact contents:
+ *
+ * 16-bit systems:
  * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
  * 16=8+4+4=sizeof(RKEY)+sizeof(INT32)+sizeof(INT32)
  *
+ * 32-bit and 64-bit systems:
+ * 16=4+2+2+4+2+2=sizeof(FKEY)+sizeof(INT16)*2+sizeof(FKEY)+sizeof(INT16)*2
+ * 16=8+4+4=sizeof(RKEY)+sizeof(INT32)+sizeof(INT32)
+ *
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
- * This comment assumes 16-bit packing which is not
- * the case on modern systems. Because of this,
- * databases created on 16-bit, 32-bit or 64-bit
- * systems will not be binary compatible.
+ * This structure assumes 16-bit packing (on 16-bit platforms) and 32-bit
+ * packing (on 32-bit and 64-bit platforms).  Beacuse of this, databases
+ * created on 16-bit platforms will NOT be binary compatible with those
+ * created on 32-bit or 64-bit platforms.
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *====================================================*/
 typedef struct {
 	FKEY   ix_self;             /*fkey of this block*/
-	INT16  ix_type;		/*block/file type*/
+	INT16  ix_type;             /*block/file type*/
+#if __WORDSIZE != 16
+	INT16  ix_pad1;
+#endif
 	FKEY   ix_parent;           /*parent file's fkey*/
 	INT16  ix_nkeys;            /*num of keys in block*/
+	/* no implicit padding here since ix_rkeys is a char array! */
 	RKEY   ix_rkeys[NORECS];    /*rkeys in block/file*/
+#if __WORDSIZE != 16
+	INT16  ix_pad2;
+#endif
 	INT32  ix_offs[NORECS];     /*offsets for data in file*/
 	INT32  ix_lens[NORECS];     /*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
