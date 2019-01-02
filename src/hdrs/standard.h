@@ -159,35 +159,6 @@ typedef unsigned char uchar;
 /* FLOATING POINT TYPES */
 #define FLOAT		double
 
-/* INTEGER PRINTF FORMAT DEFINITIONS */
-#define FMT_INTPTR	"%" PRIdPTR
-#define FMT_INT16	"%" PRId16
-#define FMT_INT32	"%" PRId32
-#define FMT_INT64	"%" PRId64
-#if __WORDSIZE == 64
-#define FMT_INT		"%" PRId32
-#define FMT_INT_HEX	"%" PRIx32
-#define FMT_INT_02	"%02" PRId32
-#define FMT_INT_6	"%6" PRId32
-#define FMT_SIZET	FMT_INT64
-#else
-#define FMT_INT		"%" PRId32
-#define FMT_INT_HEX	"%" PRIx32
-#define FMT_INT_02	"%02" PRId32
-#define FMT_INT_6	"%6" PRId32
-#define FMT_SIZET	FMT_INT32
-#endif
-
-/* INTEGER SCANF FORMAT DEFINITIONS */
-#if __WORDSIZE == 64
-#define SCN_INT		"%" SCNd32
-#else
-#define SCN_INT		"%" SCNd32
-#endif
-
-/* FLOATING POINT TYPES */
-#define FLOAT		double
-
 /* VOID TYPE */
 typedef void *VPTR;
 #define VPTRSIZE sizeof(VPTR)
