@@ -111,7 +111,6 @@ main (int argc, char **argv)
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
 	STRING progout=NULL;
-	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
 	STRING crashlog=NULL;
 	int i=0;
@@ -254,9 +253,6 @@ main (int argc, char **argv)
 			break;
 		case 'o': /* output directory */
 			progout = optarg;
-			break;
-		case 'z': /* nongraphical box */
-			graphical = FALSE;
 			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
