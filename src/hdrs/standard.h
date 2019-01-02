@@ -157,16 +157,26 @@ typedef unsigned char uchar;
 #endif
 
 /* FLOATING POINT TYPES */
+=======
+>>>>>>> Update tools to use printf format macros; add format macros for size_t
 #define FLOAT		double
 
 #define FMT_INT		"%" PRId32	/* FUTUREFIX: ?? */
-#define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
 #define FMT_INTPTR	"%" PRIdPTR
 #define FMT_INT16	"%" PRId16
 #define FMT_INT32	"%" PRId32
 #define FMT_INT64	"%" PRId64
 
+#if __WORDSIZE == 64
+#define FMT_SIZET	FMT_INT64
+#else
+#define FMT_SIZET	FMT_INT32
+#endif
+
 #define SCN_INT		"%" SCNd32	/* FUTUREFIX: ?? */
+
+/* Special formatting macros */
+#define FMT_INT_6	"%6" PRId32	/* FUTUREFIX: ??.  Used in import, load and save routines. */
 
 /* VOID TYPE */
 typedef void *VPTR;
