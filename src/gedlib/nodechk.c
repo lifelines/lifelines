@@ -97,6 +97,6 @@ static void
 failreport (CNSTRING msg, INT level, CNSTRING key, CNSTRING scope)
 {
 	char buffer[512];
-	snprintf(buffer, 512, "(%s:%s level %ld) %s", scope, key, level, msg);
+	snprintf(buffer, 512, "(%s:%s level " FMT_INT ") %s", scope, key, level, msg);
 	FATAL2(buffer);
 }

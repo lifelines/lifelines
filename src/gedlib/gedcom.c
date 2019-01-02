@@ -273,7 +273,7 @@ nkey_load_key (NKEY * nkey)
 	char key[MAXKEYWIDTH+1];
 	if (nkey->key)
 		return;
-	sprintf(key, "%c%ld", nkey->ntype, nkey->keynum);
+	sprintf(key, "%c" FMT_INT, nkey->ntype, nkey->keynum);
 	strcpy(nkey->key, key);
 }
 /*==================================================

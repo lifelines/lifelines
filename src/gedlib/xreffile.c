@@ -244,7 +244,7 @@ getxref (DELETESET set)
 {
 	INT keynum = getxrefnum(set);
 	static char scratch[12];
-	sprintf(scratch, "@%c%ld@", set->ctype, keynum);
+	sprintf(scratch, "@%c" FMT_INT "@", set->ctype, keynum);
 	return scratch;
 }
 /*===================================================
@@ -470,7 +470,7 @@ add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
 		if (dups==DUPSOK) 
 			return FALSE;
 		snprintf(msg, sizeof(msg)/sizeof(msg[0])
-			, _("Tried to add already-deleted record (%ld) to xref (%c)!")
+			, _("Tried to add already-deleted record (" FMT_INT ") to xref (%c)!")
 			, keynum, set->ctype);
 		FATAL2(msg); /* deleting a deleted record! */
 	}
@@ -923,7 +923,7 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 	}
 	for (i=0; i<5; ++i) {
 		if (fread(&ndels[i], sizeof(INT), 1, fp) != 1) {
-			snprintf(errstr, sizeof(errstr), "ndels[%ld] bad", i);
+			snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "] bad", i);
 			*errptr = errstr;
 			fclose(fp);
 			return FALSE;
@@ -934,7 +934,7 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 		for (j=0; j<ndels[i]; ++j) {
 			INT k;
 			if (fread(&k, sizeof(INT), 1, fp) != 1) {
-				snprintf(errstr, sizeof(errstr), "ndels[%ld]#%ld bad", i, j);
+				snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "]#" FMT_INT " bad", i, j);
 				*errptr = errstr;
 				fclose(fp);
 				return FALSE;
