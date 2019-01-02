@@ -20,13 +20,13 @@ then
   exit
 fi
 
-if [ ! -f $testdir/$testscr ]
+if [ ! -f "$testdir/$testscr" ]
 then
   echo "ERROR: Script $testscr not found!"
   exit
 fi
 
-if [ "$testscr" == "$testname" ]
+if [ "$testscr" = "$testname" ]
 then
   echo "ERROR: Script $testscr is not a script (llscr) file!"
   exit
