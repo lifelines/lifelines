@@ -136,8 +136,6 @@ typedef union {
 
 #define MAXLINELEN 512
 
-/*typedef VPTR (*FUNC)();*/
-
 #ifndef max
 #define max(x,y) ((x)>(y)?(x):(y))
 #endif
