@@ -147,7 +147,6 @@ main (int argc,
 	      rc = test_nextfkey(btree);
 	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
 
-finish:
 	closebtree(btree);
 	btree = 0;
 	return rtn;
@@ -303,7 +302,7 @@ test_fkey2path2fkey(void)
 	if (sizeof(FKEY) != sizeof(INT32)) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_fkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		char *path = fkey2path(tests[i].fkey);
 		FKEY fkey = path2fkey(tests[i].path);
@@ -341,7 +340,7 @@ test_rkey2str(void)
 	if (RKEYLEN != 8) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_rkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		char *str = rkey2str(tests[i].rkey);
 
@@ -379,7 +378,7 @@ test_str2rkey(void)
 	if (RKEYLEN != 8) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_rkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		RKEY rkey = str2rkey(tests[i].rkeystr);
 
@@ -420,13 +419,13 @@ test_index(void)
 
 	if (verbose)
 	{
-		printf("%s %d\n", "ix_self",    offsetof(INDEXSTRUCT,ix_self));
-		printf("%s %d\n", "ix_type",    offsetof(INDEXSTRUCT,ix_type));
-		printf("%s %d\n", "ix_parent",  offsetof(INDEXSTRUCT,ix_parent));
-		printf("%s %d\n", "ix_nkeys",   offsetof(INDEXSTRUCT,ix_nkeys));
-		printf("%s %d\n", "ix_rkeys",   offsetof(INDEXSTRUCT,ix_rkeys));
-		printf("%s %d\n", "ix_fkeys",   offsetof(INDEXSTRUCT,ix_fkeys));
-		printf("%s %d\n", "INDEXTRUCT", sizeof(INDEXSTRUCT));
+		printf("%s " FMT_SIZET "\n", "ix_self",    offsetof(INDEXSTRUCT,ix_self));
+		printf("%s " FMT_SIZET "\n", "ix_type",    offsetof(INDEXSTRUCT,ix_type));
+		printf("%s " FMT_SIZET "\n", "ix_parent",  offsetof(INDEXSTRUCT,ix_parent));
+		printf("%s " FMT_SIZET "\n", "ix_nkeys",   offsetof(INDEXSTRUCT,ix_nkeys));
+		printf("%s " FMT_SIZET "\n", "ix_rkeys",   offsetof(INDEXSTRUCT,ix_rkeys));
+		printf("%s " FMT_SIZET "\n", "ix_fkeys",   offsetof(INDEXSTRUCT,ix_fkeys));
+		printf("%s " FMT_SIZET "\n", "INDEXTRUCT", sizeof(INDEXSTRUCT));
 	}
 
 	if (offsetof(INDEXSTRUCT, ix_self)   != 0)  { rc=4; goto exit; }
@@ -466,14 +465,14 @@ int test_block(void)
 
 	if (verbose)
 	{
-		printf("%s %d\n", "ix_self",    offsetof(BLOCKSTRUCT,ix_self));
-		printf("%s %d\n", "ix_type",    offsetof(BLOCKSTRUCT,ix_type));
-		printf("%s %d\n", "ix_parent",  offsetof(BLOCKSTRUCT,ix_parent));
-		printf("%s %d\n", "ix_nkeys",   offsetof(BLOCKSTRUCT,ix_nkeys));
-		printf("%s %d\n", "ix_rkeys",   offsetof(BLOCKSTRUCT,ix_rkeys));
-		printf("%s %d\n", "ix_offs",    offsetof(BLOCKSTRUCT,ix_offs));
-		printf("%s %d\n", "ix_lens",    offsetof(BLOCKSTRUCT,ix_lens));
-		printf("%s %d\n", "BLOCKSTRUCT", sizeof(BLOCKSTRUCT));
+		printf("%s " FMT_SIZET "\n", "ix_self",    offsetof(BLOCKSTRUCT,ix_self));
+		printf("%s " FMT_SIZET "\n", "ix_type",    offsetof(BLOCKSTRUCT,ix_type));
+		printf("%s " FMT_SIZET "\n", "ix_parent",  offsetof(BLOCKSTRUCT,ix_parent));
+		printf("%s " FMT_SIZET "\n", "ix_nkeys",   offsetof(BLOCKSTRUCT,ix_nkeys));
+		printf("%s " FMT_SIZET "\n", "ix_rkeys",   offsetof(BLOCKSTRUCT,ix_rkeys));
+		printf("%s " FMT_SIZET "\n", "ix_offs",    offsetof(BLOCKSTRUCT,ix_offs));
+		printf("%s " FMT_SIZET "\n", "ix_lens",    offsetof(BLOCKSTRUCT,ix_lens));
+		printf("%s " FMT_SIZET "\n", "BLOCKSTRUCT", sizeof(BLOCKSTRUCT));
 	}
 
 	if (offsetof(BLOCKSTRUCT, ix_self)   != 0)    { rc=4;  goto exit; }
