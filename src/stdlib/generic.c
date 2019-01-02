@@ -348,7 +348,8 @@ is_generic_float (GENERIC *gen)
 BOOLEAN
 is_generic_string (GENERIC *gen)
 {
-	return gen->selector == GENERIC_STRING || GENERIC_STRING_SHARED;
+	return (gen->selector == GENERIC_STRING) ||
+               (gen->selector == GENERIC_STRING_SHARED);
 }
 /*=================================================
  * is_generic_vptr -- return TRUE if generic is a vptr (void pointer)
