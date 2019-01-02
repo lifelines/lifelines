@@ -137,6 +137,9 @@ main (int argc, char **argv)
 	STRING crashlog=NULL;
 	int i=0;
 
+	/* initialize all the low-level platform code */
+	init_arch();
+
 	/* initialize all the low-level library code */
 	init_stdlib();
 
