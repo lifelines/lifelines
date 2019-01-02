@@ -1379,7 +1379,7 @@ INDISEQ
 indi_to_families (NODE indi, BOOLEAN fams)
 {
 	INDISEQ seq=0;
-	INT num, num2, val;
+	INT num, val;
 	STRING key=0;
 	INT mykeynum=0;
 	if (!indi) return NULL;
@@ -1395,6 +1395,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
  */
 #if 0
 			INT spkeynum=0;
+			INT num2=0;
 			/* look for a spouse besides indi */
 			FORFAMSPOUSES(fam, spouse, num2)
 			{
@@ -1528,7 +1529,7 @@ ancestor_indiseq (INDISEQ seq)
 	INDISEQ anc=0;
 	NODE indi=0;
 	STRING key, pkey;
-	INT gen=0;
+	INTPTR gen=0;
 	INT fnum=0, snum=0;
 	UNION uval;
 	if (!seq) return NULL;
@@ -1540,11 +1541,11 @@ ancestor_indiseq (INDISEQ seq)
 	anc = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		enqueue_list(anclist, (VPTR)skey(el));
-		enqueue_list(genlist, (VPTR)0);
+		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
 	while (!is_empty_list(anclist)) {
 		key = (STRING) dequeue_list(anclist);
-		gen = (INT) dequeue_list(genlist) + 1;
+		gen = (INTPTR)dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
 
 		FORFAMCS(indi, fam, fath, moth, fnum)
@@ -1573,7 +1574,7 @@ ancestor_indiseq (INDISEQ seq)
 INDISEQ
 descendent_indiseq (INDISEQ seq)
 {
-	INT gen;
+	INTPTR gen = 0;
 	/* itab lists people already entered, ftab families
 	(values in both are unused) */
 	TABLE itab, ftab;
@@ -1601,13 +1602,13 @@ descendent_indiseq (INDISEQ seq)
 		/* add everyone from original seq to processing list */
 	FORINDISEQ(seq, el, num)
 		enqueue_list(deslist, (VPTR)skey(el));
-		enqueue_list(genlist, (VPTR)0);
+		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
 		/* loop until processing list is empty */
 	while (!is_empty_list(deslist)) {
 		INT num1, num2;
 		key = (STRING) dequeue_list(deslist);
-		gen = (INT) dequeue_list(genlist) + 1;
+		gen = (INTPTR)dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
 		FORFAMS(indi, fam, num1)
 				/* skip families already processed */
@@ -2194,7 +2195,7 @@ default_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 	valtype = valtype; /* unused */
 	/* We don't know how to deal with ptrs here */
 	/* Let's just sort them in memory order */
-	return (INT)ptr1 - (INT)ptr2;
+	return (INTPTR)ptr1 - (INTPTR)ptr2;
 }
 /*=======================================================
  * calc_indiseq_names -- fill in element names
