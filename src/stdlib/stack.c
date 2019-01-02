@@ -56,7 +56,7 @@ void StackInitModule(void (*AssertFunc)(int assertion, const char* error),
 
 int StackNotEmpty(STKSTACK theStack)
 {
-  return( theStack ? (int) theStack->top : 0);
+  return( theStack ? ( theStack->top ? 1 : 0 ) : 0 );
 }
 
 STKSTACK StackJoin(STKSTACK stack1, STKSTACK stack2)

@@ -25,12 +25,12 @@
  */
 
 #include <string.h>
-
 #ifdef TEST
 #include <stdio.h>
 #include <locale.h>
 #include <langinfo.h>
 #endif
+#include "llstdlib.h"
 
 #define digit(x) ((x) >= '0' && (x) <= '9')
 
