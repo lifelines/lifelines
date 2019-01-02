@@ -123,10 +123,18 @@ msg_width (void)
 void
 call_system_cmd (STRING cmd)
 {
+	int rtn=-1;
+
 #ifndef WIN32
-	system("clear");
+	rtn = system("clear");
 #endif
-	system(cmd);
+	rtn = system(cmd);
+
+	if (rtn != 0) {
+		printf(_("Editor or system call failed."));
+		puts("");
+		sleep(2);
+        }
 }
 /*=============================================================
  * ASK Routines
@@ -154,11 +162,19 @@ ask_for_program (STRING mode,
 BOOLEAN
 ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
 {
+	char *rtn=NULL;
+	int len=0;
+
 	outputln(ttl);
 	printf("%s", prmpt);
-	fgets(buffer, buflen, stdin);
-	chomp(buffer);
-	return strlen(buffer)>0;
+	rtn = fgets(buffer, buflen, stdin);
+	if (rtn)
+	{
+		chomp(buffer);
+		len = strlen(buffer);
+	}
+
+	return (len>0);
 }
 BOOLEAN
 ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen)
@@ -379,8 +395,11 @@ interact (CNSTRING ptrn)
 {
 	char buffer[8];
 	CNSTRING t=0;
+	char *rtn=NULL;
+
 	while (1) {
-		fgets(buffer, sizeof(buffer), stdin);
+		rtn = fgets(buffer, sizeof(buffer), stdin);
+		if (!rtn) return 0;
 		if (!ptrn) return buffer[0];
 		for (t=ptrn; *t; ++t) {
 			if (buffer[0]==*t)
@@ -389,4 +408,3 @@ interact (CNSTRING ptrn)
 		printf("Invalid option: choose one of %s\n", ptrn);
 	}
 }
-
