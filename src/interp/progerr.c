@@ -453,7 +453,7 @@ disp_table (TABLE tab)
 		TABLE_ITER tabit = begin_table_iter(tab);
 		STRING key=0;
 		VPTR ptr = 0;
-		while (next_table_ptr(tabit, &key, &ptr)) {
+		while (next_table_ptr(tabit, (CNSTRING *)&key, &ptr)) {
 			PVALUE val = ptr;
 			format_dbgsymtab_val(key, val, &sdata);
 		}
