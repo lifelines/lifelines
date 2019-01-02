@@ -120,7 +120,7 @@ typedef unsigned char uchar;
 
 /* INTEGER TYPE DEFINITIONS */
 #if __WORDSIZE == 64
-#define INT		int32_t
+#define INT		int64_t
 #else
 #define INT		int32_t
 #endif
@@ -136,10 +136,10 @@ typedef unsigned char uchar;
 #define FMT_INT32_HEX	"%08" PRIx32
 #define FMT_INT64	"%" PRId64
 #if __WORDSIZE == 64
-#define FMT_INT		"%" PRId32
-#define FMT_INT_HEX	"%" PRIx32
-#define FMT_INT_02	"%02" PRId32
-#define FMT_INT_6	"%6" PRId32
+#define FMT_INT		"%" PRId64
+#define FMT_INT_HEX	"%" PRIx64
+#define FMT_INT_02	"%02" PRId64
+#define FMT_INT_6	"%6" PRId64
 #define FMT_SIZET	FMT_INT64
 #else
 #define FMT_INT		"%" PRId32
@@ -151,7 +151,7 @@ typedef unsigned char uchar;
 
 /* INTEGER SCANF FORMAT DEFINITIONS */
 #if __WORDSIZE == 64
-#define SCN_INT		"%" SCNd32
+#define SCN_INT		"%" SCNd64
 #else
 #define SCN_INT		"%" SCNd32
 #endif
