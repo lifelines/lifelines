@@ -211,10 +211,10 @@ closexref (void)
  *  generic for all 5 types
  * Created: 2001/02/04, Perry Rapp
  *=======================================*/
-static INT
+static INT32
 getxrefnum (DELETESET set)
 {
-	INT keynum;
+	INT32 keynum;
 	ASSERT(xreffp);
 	ASSERT(set->n >= 1);
 	if (set->n == 1) {
@@ -258,8 +258,11 @@ STRING getxxref (void) { return getxref(&xrecs); }
 /*===================================================
  * get?xrefnum -- Wrappers for each type to getxrefnum (qv)
  * Created: 2001/02/04, Perry Rapp
+ * MTE: 2019-01-05: Why do INDIs have this special
+ * interface that exposes the internal xref type?
+ * Should try to revert back to getixref as above.
  *=================================================*/
-INT getixrefnum (void) { return getxrefnum(&irecs); }
+INT32 getixrefnum (void) { return getxrefnum(&irecs); }
 /*======================================
  * sortxref -- Sort xrefs after reading
  *====================================*/
