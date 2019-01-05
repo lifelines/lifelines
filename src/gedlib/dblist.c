@@ -98,7 +98,7 @@ add_dbs_to_list (LIST dblist, LIST dbdesclist, STRING dir)
 static CNSTRING
 getdbdesc (STRING path, STRING userpath)
 {
-	INT32 nindis=0, nfams=0, nsours=0, nevens=0, nothrs=0;
+	INT nindis=0, nfams=0, nsours=0, nevens=0, nothrs=0;
 	char desc[MAXPATHLEN] = "";
 	char * errptr = 0;
 	if (xrefs_get_counts_from_unopened_db(path, &nindis, &nfams
