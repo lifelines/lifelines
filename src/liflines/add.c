@@ -169,12 +169,12 @@ add_new_indi_to_db (RECORD indi0)
 {
 	NODE name, refn, sex, body, dumb, node;
 	char key[MAXKEYWIDTH]="";
-	INT keynum=0;
+	INT32 keynum=0;
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
-	sprintf(key, "I" FMT_INT, keynum);
+	sprintf(key, "I" FMT_INT32, keynum);
 	init_new_record(indi0, key);
 	for (node = name; node; node = nsibling(node)) {
 		add_name(nval(node), key);

@@ -292,7 +292,7 @@ STRING get_property(STRING opt);
 void get_refns(STRING, INT*, STRING**, INT);
 STRING getexref(void);
 STRING getfxref(void);
-INT getixrefnum(void);
+INT32 getixrefnum(void);
 STRING getsxref(void);
 STRING getxxref(void);
 BOOLEAN getrefnrec(CNSTRING refn);
