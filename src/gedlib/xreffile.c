@@ -680,7 +680,7 @@ freexref (DELETESET set)
  * num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-static INT num_set (DELETESET set)
+static INT32 num_set (DELETESET set)
 {
 	ASSERT(set);
 	/* next key value less number of deleted keys */
