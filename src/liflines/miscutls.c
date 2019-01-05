@@ -93,9 +93,6 @@ who_is_he_she (void)
 }
 /*===========================================
  * show_database_stats -- Show database stats
- * FIXME: num_XXX() is the number of *unused*
- *        XXX keys in the database, *not*
- *        the total number of XXX keys!
  *=========================================*/
 void
 show_database_stats (void)
