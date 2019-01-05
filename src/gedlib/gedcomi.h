@@ -36,7 +36,7 @@ void record_remove_cel(RECORD rec, CACHEEL cel);
 void record_set_cel(RECORD rec, CACHEEL cel);
 
 /* xreffile.c */
-BOOLEAN xrefs_get_counts_from_unopened_db(CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr);
+BOOLEAN xrefs_get_counts_from_unopened_db(CNSTRING path, INT32 *nindis, INT32 *nfams
+	, INT32 *nsours, INT32 *nevens, INT32 *nothrs, char ** errptr);
 
 #endif /* _GEDCOM_PRIV_H */
