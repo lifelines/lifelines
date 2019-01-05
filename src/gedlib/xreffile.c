@@ -79,9 +79,9 @@ typedef enum { DUPSOK, NODUPS } DUPS;
  *==================================*/
 struct deleteset_s
 {
-	INT n; /* num keys + 1, ie, starts at 1 */
-	INT * recs;
-	INT max;
+	INT32 n; /* num keys + 1, ie, starts at 1 */
+	INT32 * recs;
+	INT32 max;
 	char ctype;
 };
 typedef struct deleteset_s *DELETESET;
@@ -311,11 +311,11 @@ static BOOLEAN
 readxrefs (void)
 {
 	ASSERT(xreffp);
-	ASSERT(fread(&irecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&frecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&erecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&srecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fread(&xrecs.n, sizeof(INT), 1, xreffp) == 1);
+	ASSERT(fread(&irecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fread(&frecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fread(&erecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fread(&srecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fread(&xrecs.n, sizeof(INT32), 1, xreffp) == 1);
 	ASSERT(irecs.n > 0);
 	ASSERT(frecs.n > 0);
 	ASSERT(erecs.n > 0);
@@ -340,7 +340,7 @@ readxrefs (void)
 static void
 readrecs (DELETESET set)
 {
-	ASSERT((INT)fread(set->recs, sizeof(INT), set->n, xreffp) == set->n);
+	ASSERT((INT32)fread(set->recs, sizeof(INT32), set->n, xreffp) == set->n);
 }
 /*================================
  * writexrefs -- Write xrefs file.
@@ -352,16 +352,16 @@ writexrefs (void)
 	ASSERT(!xrefReadonly);
 	ASSERT(xreffp);
 	rewind(xreffp);
-	ASSERT(fwrite(&irecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&frecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&erecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&srecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT(fwrite(&xrecs.n, sizeof(INT), 1, xreffp) == 1);
-	ASSERT((INT)fwrite(irecs.recs, sizeof(INT), irecs.n, xreffp) == irecs.n);
-	ASSERT((INT)fwrite(frecs.recs, sizeof(INT), frecs.n, xreffp) == frecs.n);
-	ASSERT((INT)fwrite(erecs.recs, sizeof(INT), erecs.n, xreffp) == erecs.n);
-	ASSERT((INT)fwrite(srecs.recs, sizeof(INT), srecs.n, xreffp) == srecs.n);
-	ASSERT((INT)fwrite(xrecs.recs, sizeof(INT), xrecs.n, xreffp) == xrecs.n);
+	ASSERT(fwrite(&irecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fwrite(&frecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fwrite(&erecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fwrite(&srecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fwrite(&xrecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT((INT)fwrite(irecs.recs, sizeof(INT32), irecs.n, xreffp) == irecs.n);
+	ASSERT((INT)fwrite(frecs.recs, sizeof(INT32), frecs.n, xreffp) == frecs.n);
+	ASSERT((INT)fwrite(erecs.recs, sizeof(INT32), erecs.n, xreffp) == erecs.n);
+	ASSERT((INT)fwrite(srecs.recs, sizeof(INT32), srecs.n, xreffp) == srecs.n);
+	ASSERT((INT)fwrite(xrecs.recs, sizeof(INT32), xrecs.n, xreffp) == xrecs.n);
 	fflush(xreffp);
 	return TRUE;
 }
@@ -905,14 +905,14 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
  * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
 BOOLEAN
-xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
+xrefs_get_counts_from_unopened_db (CNSTRING path, INT32 *nindis, INT32 *nfams
+	, INT32 *nsours, INT32 *nevens, INT32 *nothrs, char ** errptr)
 {
 	char scratch[100];
 	static char errstr[256];
 	FILE * fp = 0;
 	INT i;
-	INT ndels[5], nmax[5];
+	INT32 ndels[5], nmax[5];
 
 	*errptr = 0;
 
@@ -922,7 +922,7 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 		return FALSE;
 	}
 	for (i=0; i<5; ++i) {
-		if (fread(&ndels[i], sizeof(INT), 1, fp) != 1) {
+		if (fread(&ndels[i], sizeof(INT32), 1, fp) != 1) {
 			snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "] bad", i);
 			*errptr = errstr;
 			fclose(fp);
@@ -930,11 +930,11 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 		}
 	}
 	for (i=0; i<5; ++i) {
-		INT j;
+		INT32 j;
 		for (j=0; j<ndels[i]; ++j) {
-			INT k;
-			if (fread(&k, sizeof(INT), 1, fp) != 1) {
-				snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "]#" FMT_INT " bad", i, j);
+			INT32 k;
+			if (fread(&k, sizeof(INT32), 1, fp) != 1) {
+				snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "]#" FMT_INT32 " bad", i, j);
 				*errptr = errstr;
 				fclose(fp);
 				return FALSE;
