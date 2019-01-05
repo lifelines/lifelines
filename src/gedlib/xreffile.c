@@ -106,7 +106,7 @@ static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
-static INT32 num_set(DELETESET set);
+static INT num_set(DELETESET set);
 static BOOLEAN parse_key(CNSTRING key, char * ktype, INT32 * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
@@ -635,16 +635,17 @@ freexref (DELETESET set)
  * num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-static INT32 num_set (DELETESET set)
+static INT num_set (DELETESET set)
 {
 	ASSERT(set);
-	return set->recs[0] - set->n;
+	/* next key value less number of deleted keys */
+	return (INT)(set->recs[0] - set->n);
 }
-INT32 num_indis (void) { return num_set(&irecs); }
-INT32 num_fams (void)  { return num_set(&frecs); }
-INT32 num_sours (void) { return num_set(&srecs); }
-INT32 num_evens (void) { return num_set(&erecs); }
-INT32 num_othrs (void) { return num_set(&xrecs); }
+INT num_indis (void) { return num_set(&irecs); }
+INT num_fams (void)  { return num_set(&frecs); }
+INT num_sours (void) { return num_set(&srecs); }
+INT num_evens (void) { return num_set(&erecs); }
+INT num_othrs (void) { return num_set(&xrecs); }
 /*========================================================
  * max_????s -- Return max key number of object type in db
  * 5 symmetric versions
@@ -864,8 +865,8 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
  * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
 BOOLEAN
-xrefs_get_counts_from_unopened_db (CNSTRING path, INT32 *nindis, INT32 *nfams
-	, INT32 *nsours, INT32 *nevens, INT32 *nothrs, char ** errptr)
+xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
+	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
 {
 	char scratch[100];
 	static char errstr[256];
@@ -902,11 +903,12 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT32 *nindis, INT32 *nfams
 				nmax[i] = k;
 		}
 	}
-	*nindis = nmax[0] - ndels[0];
-	*nfams = nmax[1] - ndels[1];
-	*nevens = nmax[2] - ndels[2];
-	*nsours = nmax[3] - ndels[3];
-	*nothrs = nmax[4] - ndels[4];
+	/* This logic is similar to what is in num_set() */
+	*nindis = (INT)(nmax[0] - ndels[0]);
+	*nfams  = (INT)(nmax[1] - ndels[1]);
+	*nevens = (INT)(nmax[2] - ndels[2]);
+	*nsours = (INT)(nmax[3] - ndels[3]);
+	*nothrs = (INT)(nmax[4] - ndels[4]);
 	fclose(fp);
 	return TRUE;
 }
