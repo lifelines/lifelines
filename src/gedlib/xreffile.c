@@ -911,8 +911,8 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
  * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
 BOOLEAN
-xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
+xrefs_get_counts_from_unopened_db (CNSTRING path, INT32 *nindis, INT32 *nfams
+	, INT32 *nsours, INT32 *nevens, INT32 *nothrs, char ** errptr)
 {
 	char scratch[100];
 	static char errstr[256];
