@@ -23,15 +23,18 @@ AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 dnl **************************************************************
-dnl Gettext Section
+dnl Internationalization Section
 dnl **************************************************************
 
-dnl Internationalization (gettext)
+dnl gettext
 AM_GNU_GETTEXT([external],[need-ngettext])
 AM_GNU_GETTEXT_VERSION([0.11.5])
 
-dnl codeset conversion library
+dnl iconv
 AM_ICONV
+
+dnl langinfo
+AM_LANGINFO_CODESET
 
 dnl **************************************************************
 dnl Compile-Chain Section
