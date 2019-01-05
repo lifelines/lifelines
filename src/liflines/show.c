@@ -831,7 +831,7 @@ indi_events (STRING outstr, NODE indi, INT len)
 static INT
 max_keywidth (void)
 {
-	INT maxkey = xref_max_any();
+	INT32 maxkey = xref_max_any();
 	if (maxkey>9999) {
 		if (maxkey>999999)
 			return 7;
