@@ -104,7 +104,7 @@ static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
-static INT num_set(DELETESET set);
+static INT32 num_set(DELETESET set);
 static BOOLEAN parse_key(CNSTRING key, char * ktype, INT * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
@@ -628,16 +628,16 @@ freexref (DELETESET set)
  * num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-static INT num_set (DELETESET set)
+static INT32 num_set (DELETESET set)
 {
 	ASSERT(set);
 	return set->recs[0] - set->n;
 }
-INT num_indis (void) { return num_set(&irecs); }
-INT num_fams (void) { return num_set(&frecs); }
-INT num_sours (void) { return num_set(&srecs); }
-INT num_evens (void) { return num_set(&erecs); }
-INT num_othrs (void) { return num_set(&xrecs); }
+INT32 num_indis (void) { return num_set(&irecs); }
+INT32 num_fams (void)  { return num_set(&frecs); }
+INT32 num_sours (void) { return num_set(&srecs); }
+INT32 num_evens (void) { return num_set(&erecs); }
+INT32 num_othrs (void) { return num_set(&xrecs); }
 /*========================================================
  * max_????s -- Return max key number of object type in db
  * 5 symmetric versions
