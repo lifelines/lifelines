@@ -70,7 +70,7 @@ typedef struct {
 	FKEY k_mkey;  /* current master key*/
 	FKEY k_fkey;  /* current file key*/
 	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
-	INT k_ostat;
+	INT32 k_ostat;
 } KEYFILE1;
 
 /*
@@ -82,8 +82,8 @@ add it to any database that does not yet have it.
 */
 typedef struct {
 	char name[18]; /* KF_NAME */
-	INT magic;     /* KF_MAGIC */ /* byte alignment check */
-	INT version;   /* KF_VER */
+	INT32 magic;   /* KF_MAGIC */ /* byte alignment check */
+	INT32 version; /* KF_VER */
 } KEYFILE2;
 
 #define KF2_NAME "LifeLines Keyfile"
