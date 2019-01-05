@@ -91,24 +91,24 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN addixref_impl(INT key, DUPS dups);
-static BOOLEAN addfxref_impl(INT key, DUPS dups);
-static BOOLEAN addsxref_impl(INT key, DUPS dups);
-static BOOLEAN addexref_impl(INT key, DUPS dups);
+static BOOLEAN addixref_impl(INT32 key, DUPS dups);
+static BOOLEAN addfxref_impl(INT32 key, DUPS dups);
+static BOOLEAN addsxref_impl(INT32 key, DUPS dups);
+static BOOLEAN addexref_impl(INT32 key, DUPS dups);
 static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
-static BOOLEAN addxxref_impl(INT key, DUPS dups);
+static BOOLEAN addxxref_impl(INT32 key, DUPS dups);
 static void dumpxrecs(STRING type, DELETESET set, INT *offset);
-static INT find_slot(INT keynum, DELETESET set);
+static INT32 find_slot(INT32 keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
 static INT32 num_set(DELETESET set);
-static BOOLEAN parse_key(CNSTRING key, char * ktype, INT * kval);
+static BOOLEAN parse_key(CNSTRING key, char * ktype, INT32 * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
-static BOOLEAN xref_isvalid_impl(DELETESET set, INT keynum);
+static BOOLEAN xref_isvalid_impl(DELETESET set, INT32 keynum);
 static INT xref_last(DELETESET set);
 
 /*********************************************
@@ -158,7 +158,8 @@ void
 initxref (void)
 {
 	char scratch[100];
-	INT i = 1, j;
+	INT32 i = 1;
+	INT j;
 	ASSERT(!xrefReadonly);
 	initdsets();
 	ASSERT(!xreffp);
@@ -242,9 +243,9 @@ getxrefnum (DELETESET set)
 static STRING
 getxref (DELETESET set)
 {
-	INT keynum = getxrefnum(set);
+	INT32 keynum = getxrefnum(set);
 	static char scratch[12];
-	sprintf(scratch, "@%c" FMT_INT "@", set->ctype, keynum);
+	sprintf(scratch, "@%c" FMT_INT32 "@", set->ctype, keynum);
 	return scratch;
 }
 /*===================================================
@@ -280,18 +281,19 @@ sortxref (DELETESET set)
 	they should normally already be sorted, 
 	so use watchful bubble-sort for O(n)
 	*/
-	INT i,j, temp, ct;
+	INT32 i, j, temp;
+	BOOLEAN sorted;
 	for (i=1; i<set->n; i++) {
-		ct=0;
+		sorted = TRUE;
 		for (j=i+1; j<set->n; j++) {
 			if (set->recs[i] < set->recs[j]) {
-				ct++;
+				sorted = FALSE;
 				temp = set->recs[j];
 				set->recs[j] = set->recs[i];
 				set->recs[i] = temp;
 			}
 		}
-		if (i==1 && !ct) return; /* already sorted */
+		if (i==1 && sorted) return; /* already sorted */
 	}
 }
 /*======================================
@@ -360,11 +362,11 @@ writexrefs (void)
 	ASSERT(fwrite(&erecs.n, sizeof(INT32), 1, xreffp) == 1);
 	ASSERT(fwrite(&srecs.n, sizeof(INT32), 1, xreffp) == 1);
 	ASSERT(fwrite(&xrecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT((INT)fwrite(irecs.recs, sizeof(INT32), irecs.n, xreffp) == irecs.n);
-	ASSERT((INT)fwrite(frecs.recs, sizeof(INT32), frecs.n, xreffp) == frecs.n);
-	ASSERT((INT)fwrite(erecs.recs, sizeof(INT32), erecs.n, xreffp) == erecs.n);
-	ASSERT((INT)fwrite(srecs.recs, sizeof(INT32), srecs.n, xreffp) == srecs.n);
-	ASSERT((INT)fwrite(xrecs.recs, sizeof(INT32), xrecs.n, xreffp) == xrecs.n);
+	ASSERT((INT32)fwrite(irecs.recs, sizeof(INT32), irecs.n, xreffp) == irecs.n);
+	ASSERT((INT32)fwrite(frecs.recs, sizeof(INT32), frecs.n, xreffp) == frecs.n);
+	ASSERT((INT32)fwrite(erecs.recs, sizeof(INT32), erecs.n, xreffp) == erecs.n);
+	ASSERT((INT32)fwrite(srecs.recs, sizeof(INT32), srecs.n, xreffp) == srecs.n);
+	ASSERT((INT32)fwrite(xrecs.recs, sizeof(INT32), xrecs.n, xreffp) == xrecs.n);
 	fflush(xreffp);
 	return TRUE;
 }
@@ -419,14 +421,14 @@ dumpxrecs (STRING type, DELETESET set, INT *offset)
 /*=====================================
  * find_slot -- Find slot at which to add key
  *===================================*/
-static INT
-find_slot (INT keynum, DELETESET set)
+static INT32
+find_slot (INT32 keynum, DELETESET set)
 {
-	INT lo=1;
-	INT hi=(set->n)-1;
+	INT32 lo=1;
+	INT32 hi=(set->n)-1;
 	/* binary search to find where to insert key */
 	while (lo<=hi) {
-		INT md = (lo + hi)/2;
+		INT32 md = (lo + hi)/2;
 		if (keynum > (set->recs)[md])
 			hi=--md;
 		else if (keynum < (set->recs)[md])
@@ -442,9 +444,9 @@ find_slot (INT keynum, DELETESET set)
  *  generic for all types
  *===================================*/
 static BOOLEAN
-add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
+add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 {
-	INT lo, i;
+	INT32 lo, i;
 	if (keynum <= 0 || !xreffp || (set->n) < 1) {
 		char msg[128];
 		snprintf(msg, sizeof(msg)/sizeof(msg[0])
@@ -473,7 +475,7 @@ add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
 		if (dups==DUPSOK) 
 			return FALSE;
 		snprintf(msg, sizeof(msg)/sizeof(msg[0])
-			, _("Tried to add already-deleted record (" FMT_INT ") to xref (%c)!")
+			, _("Tried to add already-deleted record (" FMT_INT32 ") to xref (%c)!")
 			, keynum, set->ctype);
 		FATAL2(msg); /* deleting a deleted record! */
 	}
@@ -490,20 +492,20 @@ add_xref_to_set_impl (INT keynum, DELETESET set, DUPS dups)
  * add?xref_impl -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-static BOOLEAN addixref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
-static BOOLEAN addfxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
-static BOOLEAN addsxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
-static BOOLEAN addexref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
-static BOOLEAN addxxref_impl (INT key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
+static BOOLEAN addixref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
+static BOOLEAN addfxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
+static BOOLEAN addsxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
+static BOOLEAN addexref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
+static BOOLEAN addxxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
 /*===================================================
  * add?xref -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-void addixref (INT key) { addixref_impl(key, NODUPS); }
-void addfxref (INT key) { addfxref_impl(key, NODUPS); }
-void addsxref (INT key) { addsxref_impl(key, NODUPS); }
-void addexref (INT key) { addexref_impl(key, NODUPS); }
-void addxxref (INT key) { addxxref_impl(key, NODUPS); }
+void addixref (INT key) { addixref_impl((INT32)key, NODUPS); }
+void addfxref (INT key) { addfxref_impl((INT32)key, NODUPS); }
+void addsxref (INT key) { addsxref_impl((INT32)key, NODUPS); }
+void addexref (INT key) { addexref_impl((INT32)key, NODUPS); }
+void addxxref (INT key) { addxxref_impl((INT32)key, NODUPS); }
 /*===================================================
  * addxref_impl -- Mark key free (accepts string key, any type)
  *  key:    [IN]  key to delete (add to free set)
@@ -513,7 +515,7 @@ static BOOLEAN
 addxref_impl (CNSTRING key, DUPS dups)
 {
 	char ktype=0;
-	INT keynum=0;
+	INT32 keynum=0;
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
 		snprintf(msg, sizeof(msg)/sizeof(msg[0]), "Bad key passed to addxref_impl: %s", key);
@@ -556,7 +558,7 @@ growxrefs (DELETESET set)
 		set->max = 64;
 	while (set->max <= set->n)
 		set->max = set->max << 1;
-	newp = (INT *) stdalloc((set->max)*sizeof(INT32));
+	newp = (INT32 *) stdalloc((set->max)*sizeof(INT32));
 	if (m) {
 		for (i = 0; i < set->n; i++)
 			newp[i] = set->recs[i];
@@ -588,9 +590,9 @@ BOOLEAN
 delete_xref_if_present (CNSTRING key)
 {
 	DELETESET set=0;
-	INT keynum=0;
-	INT lo=0;
-	INT i=0;
+	INT32 keynum=0;
+	INT32 lo=0;
+	INT32 i=0;
 
 	ASSERT(key);
 	ASSERT(key[0]);
@@ -618,7 +620,7 @@ delete_xref_if_present (CNSTRING key)
  * parse_key("I44") => 'I', 44
  *========================================*/
 static BOOLEAN
-parse_key (CNSTRING key, char * ktype, INT * kval)
+parse_key (CNSTRING key, char * ktype, INT32 * kval)
 {
 	if (!key || !key[0] || !key[1])
 		return FALSE;
@@ -636,7 +638,7 @@ BOOLEAN
 is_key_in_use (CNSTRING key)
 {
 	DELETESET set=0;
-	INT keynum=0;
+	INT32 keynum=0;
 	char ktype=0;
 	CNSTRING barekey=0;
 	BOOLEAN result=FALSE;
@@ -731,7 +733,7 @@ xref_max_any (void)
 static STRING
 newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 {
-	INT keynum;
+	INT32 keynum;
 	BOOLEAN changed;
 	static char scratch[12];
 	if(flag) {
@@ -784,9 +786,9 @@ newxxref (STRING xrefp, BOOLEAN flag)
  * (internal use)
  *==============================================*/
 static BOOLEAN
-xref_isvalid_impl (DELETESET set, INT keynum)
+xref_isvalid_impl (DELETESET set, INT32 keynum)
 {
-	INT lo,hi,md;
+	INT32 lo,hi,md;
 	if (set->n == set->recs[0]) return FALSE; /* no valids */
 	if (set->n == 1) return TRUE; /* all valid */
 	/* binary search deleteds */
