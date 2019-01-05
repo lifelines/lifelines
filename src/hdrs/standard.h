@@ -105,16 +105,20 @@ typedef unsigned char uchar;
 
 /* INTEGER AND FLOATING POINT TYPES */
 /* MTE: Notes on a possible scheme for 64-bit porting.
+ *
  * INT represents a 'native' size integer.  This is useful for any in-memory computation where size doesn't matter.
+ * INTPTR represents a 'native' size integer.  This is useful when you are stuffing an integer into a pointer.
  * INT16 represents a 16-bit (2-byte) integer.  This is useful for on-disk structures where size matters.
  * INT32 represents a 32-bit (4-byte) integer.  This is useful for on-disk structures where size matters.
  * INT64 represents a 64-bit (8-byte) integer.  This is useful for on-disk structures where size matters.
- * I would expect INT to be used in most places, and INT16/INT32/INT64 only used in btree and charset functions.
+ * I would expect INT to be used in most places, INTPTR to be used sparingly due to API issues, and
+ * INT16/INT32/INT64 only used in btree and charset functions which have dependencies on the number of bits.
 */
 #define INT	int32_t 
 #define INT16	int16_t
 #define INT32	int32_t 
 #define INT64	int64_t
+#define INTPTR	intptr_t
 #define FLOAT	double
 
 /* VOID TYPE */

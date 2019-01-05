@@ -54,7 +54,7 @@ INT Yival;
 FLOAT Yfval;
 
 // Bison 2.7
-#define YYSTYPE PNODE*
+#define YYSTYPE PNODE
 
 /* Local Functions */
 static void join (PNODE list, PNODE last);
@@ -75,7 +75,7 @@ void parse_error(PACTX pactx, STRING str);
 /*===========================================================*/
 
 // Bison 3.x.
-//%define api.value.type {PNODE}
+%define api.value.type {PNODE}
 
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */
@@ -178,101 +178,101 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = children_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = familyspouses_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = spouses_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FAMILIES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = families_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FATHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = fathers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	MOTHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = mothers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	PARENTS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = parents_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORINDISET m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = forindiset_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORLIST_TOK m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = forlist_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORINDI m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forindi_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORNOTES m '(' expr ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 */
 			$$ = fornotes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORFAM m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forfam_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORSOUR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forsour_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FOREVEN m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = foreven_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FOROTHR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forothr_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	TRAVERSE m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}' {
 			/* consumes $6 */
 			$$ = traverse_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	FORNODES m '(' expr ',' IDEN ')' '{' tmplts '}' {
 			/* consumes $6 */
 			$$ = fornodes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	IF m '(' expr secondo ')' '{' tmplts '}' elsifso elseo {
 			inext(((PNODE)$4)) = (PNODE)$5;
@@ -288,29 +288,29 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			} else
 				$$ = if_node(pactx, (PNODE)$4, (PNODE)$8,
 				    (PNODE)$11);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	WHILE m '(' expr secondo ')' '{' tmplts '}' {
 			inext(((PNODE)$4)) = (PNODE)$5;
 			$$ = while_node(pactx, (PNODE)$4, (PNODE)$8);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	CALL IDEN m '(' exprso ')' {
 			/* consumes $2 */
 			$$ = create_call_node(pactx, (STRING)$2, (PNODE)$5);
-			((PNODE)$$)->i_line = (INT) $3;
+			((PNODE)$$)->i_line = (INTPTR)$3;
 		}
 	|	BREAK m '(' ')' {
 			$$ = break_node(pactx);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	CONTINUE m '(' ')' {
 			$$ = continue_node(pactx);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	RETURN m '(' exprso ')' {
 			$$ = return_node(pactx, (PNODE)$4);
-			((PNODE)$$)->i_line = (INT) $2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	expr {
 			$$ = $1;
@@ -350,7 +350,7 @@ expr	:	IDEN {
 	|	IDEN m '(' exprso ')' {
 			/* consumes $1 */
 			$$ = func_node(pactx, (STRING)$1, (PNODE)$4);
-			((PNODE)$$)->i_line = (INT)$2;
+			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	SCONS {
 			$$ = $1;
@@ -385,17 +385,7 @@ secondo	:	/* empty */ {
 		}
 	;
 m	:	/* empty */ {
-/* MTE: Is YYSTYPE correct here?
- *
- * This expands:
- *  = (void *)((struct *tag_pactx)pactx)->lineno
- *  = (void *)(pactx->lineno)
- *
- * which treats the integer value as a void*.  Hmm.
- * Basicaly attempts to make a node out of a line number.
- *
- */
-			$$ = (YYSTYPE)((PACTX)pactx)->lineno;
+			$$ = (YYSTYPE)(INTPTR)pactx->lineno;
 		}
 	;
 %%
