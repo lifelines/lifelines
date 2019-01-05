@@ -49,6 +49,9 @@ extern BTREE BTR;
  *   rest are keys of deleted records
  * nixrefs==1 means there are no deleted INDI keys
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
+ *
+ * NOTE: These words are 32-bit words on-disk.  At some point this
+ * will become a limitation and migration will need to happen.
  *=================================================================*/
 /*
  In memory, data is kept in a DELETESET
@@ -121,7 +124,7 @@ static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 static FILE *xreffp=0;	/* open xref file pointer */
 static BOOLEAN xrefReadonly = FALSE;
 
-static INT maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
+static INT32 maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
 
 /*********************************************
  * local & exported function definitions
@@ -165,7 +168,7 @@ initxref (void)
 	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
 	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
 	for (j = 0; j < 10; j++) {
-		ASSERT(fwrite(&i, sizeof(INT), 1, xreffp) == 1);
+		ASSERT(fwrite(&i, sizeof(INT32), 1, xreffp) == 1);
 	}
 	fclose(xreffp); xreffp=0;
 }
@@ -503,12 +506,12 @@ BOOLEAN addxref_if_missing (CNSTRING key)
 static void
 growxrefs (DELETESET set)
 {
-	INT i, m = set->max, *newp;
+	INT32 i, m = set->max, *newp;
 	if (set->max == 0)
 		set->max = 64;
 	while (set->max <= set->n)
 		set->max = set->max << 1;
-	newp = (INT *) stdalloc((set->max)*sizeof(INT));
+	newp = (INT *) stdalloc((set->max)*sizeof(INT32));
 	if (m) {
 		for (i = 0; i < set->n; i++)
 			newp[i] = set->recs[i];
@@ -645,19 +648,19 @@ INT32 num_othrs (void) { return num_set(&xrecs); }
  * max_????s -- Return max key number of object type in db
  * 5 symmetric versions
  *======================================================*/
-static INT max_set (DELETESET set)
+static INT32 max_set (DELETESET set)
 {
 	return set->recs[0];
 }
-INT xref_max_indis (void) { return max_set(&irecs); }
-INT xref_max_fams (void) { return max_set(&frecs); }
-INT xref_max_sours (void) { return max_set(&srecs); }
-INT xref_max_evens (void) { return max_set(&erecs); }
-INT xref_max_othrs (void) { return max_set(&xrecs); }
+INT32 xref_max_indis (void) { return max_set(&irecs); }
+INT32 xref_max_fams (void)  { return max_set(&frecs); }
+INT32 xref_max_sours (void) { return max_set(&srecs); }
+INT32 xref_max_evens (void) { return max_set(&erecs); }
+INT32 xref_max_othrs (void) { return max_set(&xrecs); }
 /*======================================================
  * xref_max_any -- Return largest key number of any type
  *====================================================*/
-INT
+INT32
 xref_max_any (void)
 {
 	if (maxkeynum>=0)
