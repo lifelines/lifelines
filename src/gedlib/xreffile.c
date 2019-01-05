@@ -812,13 +812,13 @@ xref_isvalid_impl (DELETESET set, INT32 keynum)
  *  this could be more efficient (after first one work
  *  thru tree)
  *=======================================================*/
-static INT
-xref_next_impl (DELETESET set, INT i)
+static INT32
+xref_next_impl (DELETESET set, INT32 i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (++i < set->recs[0])
 	{
-		if (xref_isvalid_impl(set, i)) return i;
+		if (xref_isvalid_impl(set, i)) return (INT)i;
 	}
 	return 0;
 }
@@ -827,8 +827,8 @@ xref_next_impl (DELETESET set, INT i)
  *  returns 0 if none found
  *  generic for all 5 types
  *========================================================*/
-static INT
-xref_prev_impl (DELETESET set, INT i)
+static INT32
+xref_prev_impl (DELETESET set, INT32 i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (--i)
@@ -842,11 +842,11 @@ xref_prev_impl (DELETESET set, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *=============================================*/
-INT xref_nexti (INT i) { return xref_next_impl(&irecs, i); }
-INT xref_nextf (INT i) { return xref_next_impl(&frecs, i); }
-INT xref_nexts (INT i) { return xref_next_impl(&srecs, i); }
-INT xref_nexte (INT i) { return xref_next_impl(&erecs, i); }
-INT xref_nextx (INT i) { return xref_next_impl(&xrecs, i); }
+INT xref_nexti (INT i) { return (INT)xref_next_impl(&irecs, (INT32)i); }
+INT xref_nextf (INT i) { return (INT)xref_next_impl(&frecs, (INT32)i); }
+INT xref_nexts (INT i) { return (INT)xref_next_impl(&srecs, (INT32)i); }
+INT xref_nexte (INT i) { return (INT)xref_next_impl(&erecs, (INT32)i); }
+INT xref_nextx (INT i) { return (INT)xref_next_impl(&xrecs, (INT32)i); }
 INT xref_next (char ntype, INT i)
 {
 	switch(ntype) {
@@ -863,11 +863,11 @@ INT xref_next (char ntype, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *==============================================*/
-INT xref_previ (INT i) { return xref_prev_impl(&irecs, i); }
-INT xref_prevf (INT i) { return xref_prev_impl(&frecs, i); }
-INT xref_prevs (INT i) { return xref_prev_impl(&srecs, i); }
-INT xref_preve (INT i) { return xref_prev_impl(&erecs, i); }
-INT xref_prevx (INT i) { return xref_prev_impl(&xrecs, i); }
+INT xref_previ (INT i) { return (INT)xref_prev_impl(&irecs, (INT32)i); }
+INT xref_prevf (INT i) { return (INT)xref_prev_impl(&frecs, (INT32)i); }
+INT xref_prevs (INT i) { return (INT)xref_prev_impl(&srecs, (INT32)i); }
+INT xref_preve (INT i) { return (INT)xref_prev_impl(&erecs, (INT32)i); }
+INT xref_prevx (INT i) { return (INT)xref_prev_impl(&xrecs, (INT32)i); }
 INT xref_prev (char ntype, INT i)
 {
 	switch(ntype) {
@@ -896,7 +896,7 @@ INT xref_firstx (void) { return xref_nextx(0); }
  *=====================================*/
 static INT xref_last (DELETESET set)
 {
-	return xref_prev_impl(set, set->recs[0]);
+	return (INT)xref_prev_impl(set, set->recs[0]);
 }
 INT xref_lasti (void) { return xref_last(&irecs); }
 INT xref_lastf (void) { return xref_last(&frecs); }
