@@ -104,7 +104,7 @@ static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
-static INT32 num_set(DELETESET set);
+static INT num_set(DELETESET set);
 static BOOLEAN parse_key(CNSTRING key, char * ktype, INT32 * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
@@ -911,8 +911,8 @@ INT xref_lastx (void) { return xref_last(&xrecs); }
  * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
 BOOLEAN
-xrefs_get_counts_from_unopened_db (CNSTRING path, INT32 *nindis, INT32 *nfams
-	, INT32 *nsours, INT32 *nevens, INT32 *nothrs, char ** errptr)
+xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
+	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
 {
 	char scratch[100];
 	static char errstr[256];
