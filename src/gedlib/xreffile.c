@@ -104,7 +104,7 @@ static DELETESET get_deleteset_from_type(char ctype);
 static STRING getxref(DELETESET set);
 static void growxrefs(DELETESET set);
 static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
-static INT num_set(DELETESET set);
+static INT32 num_set(DELETESET set);
 static BOOLEAN parse_key(CNSTRING key, char * ktype, INT32 * kval);
 static void readrecs(DELETESET set);
 static BOOLEAN readxrefs(void);
