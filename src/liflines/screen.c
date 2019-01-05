@@ -1930,8 +1930,6 @@ uopt_validate (TABLE tab, void * param)
 	*/
 	if (!eqstr_ex(codeset, original_codeset)
 		&& !eqstr_ex(codeset, int_codeset)) {
-                /* FIXME: num_XXX() is the number of *unused* XXX keys in the database,
-                 *        *not* the total number of XXX keys! */
 		if (num_indis()+num_fams()+num_sours()+num_evens()+num_othrs())
 			return _("Impermissible to change codeset in a populated database");
 	}
