@@ -268,7 +268,6 @@ void dump_keyfile(STRING dir)
 	int kf1size = 0;
 	int kf2size = 0;
 
-
 	sprintf(scratch, "%s/key", dir);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 		printf("Error opening keyfile\n");
