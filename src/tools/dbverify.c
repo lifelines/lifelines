@@ -235,7 +235,7 @@ print_usage (void)
 #endif
 	llstrncpyf(verstr, sizeof(verstr), uu8, title
 		, get_lifelines_version(sizeof(verstr)-1-strlen(title)));
-	printf(_("usage: dbverify -(flags) <btree>\n"));
+	printf(_("usage: dbverify [flags] <btree>\n"));
 	printf(_("flags:\n"));
 	printf(_("\t-a = Perform all checks (does not include fixes)\n"));
 	printf(_("\t-g = Check for ghosts (names/refns)\n"));
