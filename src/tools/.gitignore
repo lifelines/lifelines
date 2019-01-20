@@ -4,4 +4,5 @@ Makefile.in
 .deps
 btedit
 dbverify
+ldump
 lltest

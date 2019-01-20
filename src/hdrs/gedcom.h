@@ -250,6 +250,7 @@ BOOLEAN create_database(STRING dbused, INT *lldberr);
 NODE create_node(STRING, STRING, STRING, NODE);
 NODE create_temp_node(STRING, STRING, STRING, NODE);
 void delete_metarec(STRING key);
+void dumpxrefs(void);
 BOOLEAN edit_mapping(INT);
 BOOLEAN edit_valtab_from_db(STRING, TABLE*, INT sep, STRING, STRING (*validator)(TABLE tab, void * param), void *param);
 BOOLEAN equal_tree(NODE, NODE);
