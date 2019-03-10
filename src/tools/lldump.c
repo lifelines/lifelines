@@ -66,8 +66,8 @@ void dump_keyfile(STRING dir);
 void dump_xref(STRING dir);
 void print_block(BLOCK block);
 void print_index(INDEX index);
-void print_keyfile1(void *kf1, int kf1size);
-void print_keyfile2(void *kf2, int kf2size);
+void print_keyfile1(KEYFILE1 kfile1);
+void print_keyfile2(KEYFILE2 kfile2);
 static void print_usage(void);
 void print_xrefs(void);
 static void vcrashlog (int newline, const char * fmt, va_list args);
@@ -257,16 +257,10 @@ void dump_keyfile(STRING dir)
 {
 	char scratch[200];
 	struct stat sbuf;
-	KEYFILE1_n32 kfile1_n32;
-	KEYFILE1_n64 kfile1_n64;
-	KEYFILE2_n32 kfile2_n32;
-	KEYFILE2_n64 kfile2_n64;
-	void *kf1 = NULL;
-	void *kf2 = NULL;
+	KEYFILE1 kfile1;
+	KEYFILE2 kfile2;
 	FILE *fk;
 	long size;
-	int kf1size = 0;
-	int kf2size = 0;
 
 	sprintf(scratch, "%s/key", dir);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
@@ -291,53 +285,26 @@ void dump_keyfile(STRING dir)
 		goto error1;
 	}
 
-	/*
-	 * Valid keyfile sizes:
-	 * 12		(32-bit KEYFILE1 only)
-	 * 12 + 28 = 40	(32-bit KEYFILE1 + KEYFILE2)
-	 * 16		(64-bit KEYFILE1 only)
-	 * 16 + 42 = 56 (64-bit KEYFILE1 + KEYFILE2)
-	 */
-
-	switch (size)
-	{
-		case 12:
-			kf1size = 12;
-			kf1 = &kfile1_n32;
-			break;
-		case 40:
-			kf1size = 12;
-			kf1 = &kfile1_n32;
-			kf2size = 28;
-			kf2 = &kfile2_n32;
-			break;
-		case 16:
-			kf1size = 16;
-			kf1 = &kfile1_n64;
-			break;
-		case 56:
-			kf1size = 16;
-			kf1 = &kfile1_n64;
-			kf2size = 40;
-			kf2 = &kfile2_n64;
-			break;
-		default:
-			break;
+	if (size != sizeof(kfile1) &&
+            size != (sizeof(kfile1) + sizeof(kfile2))) {
+		printf("Error: keyfile size invalid (%d), valid sizes are %d and %d\n",
+		       size, sizeof(kfile1), sizeof(kfile1)+sizeof(kfile2));
+		goto error1;
 	}
 
-        if (fread(kf1, kf1size, 1, fk) != 1) {
+        if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
 		printf("Error reading keyfile\n");
 		goto error1;
         }
 
-	print_keyfile1(kf1, kf1size);
+	print_keyfile1(kfile1);
 
-        if (fread(kf2, kf2size, 1, fk) != 1) {
+        if (fread(&kfile2, sizeof(kfile2), 1, fk) != 1) {
 		printf("Error reading keyfile2\n");
 		goto error1;
         }
 
-	print_keyfile2(kf2, kf2size);
+	print_keyfile2(kfile2);
 
 error1:
 	fclose(fk);
@@ -347,55 +314,30 @@ error2:
 /*===============================
  * print_keyfile1 -- print KEYFILE1 to stdout
  *=============================*/
-void print_keyfile1(void *kf1, int kf1size)
+void print_keyfile1(KEYFILE1 kfile1)
 {
 	printf("KEYFILE1\n");
 	printf("========\n");
-	printf("length: %d\n", kf1size);
-	if (kf1size == 12)
-	{
-		KEYFILE1_n32 *kfile1 = (KEYFILE1_n32 *) kf1;
-		printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x%08x (%d)\n",
-		       kfile1->k_mkey, kfile1->k_mkey,
-		       kfile1->k_fkey, kfile1->k_fkey,
-		       kfile1->k_ostat, kfile1->k_ostat);
-	} else if (kf1size == 16) {
-		KEYFILE1_n64 *kfile1 = (KEYFILE1_n64 *) kf1;
-		printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x%016llx (%lld)\n",
-		       kfile1->k_mkey, kfile1->k_mkey,
-		       kfile1->k_fkey, kfile1->k_fkey,
-		       kfile1->k_ostat, kfile1->k_ostat);
-	} else {
-		printf("Error printing keyfile1; invalid size (%d)\n",kf1size);
-	}
+	printf("length: %d\n", sizeof(kfile1));
+	printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x%08x (%d)\n",
+	       kfile1.k_mkey, kfile1.k_mkey,
+	       kfile1.k_fkey, kfile1.k_fkey,
+	       kfile1.k_ostat, kfile1.k_ostat);
 	printf("\n");
 }
 /*===============================
  * print_keyfile2 -- print KEYFILE2 to stdout
  *=============================*/
-void print_keyfile2(void *kf2, int kf2size)
+void print_keyfile2(KEYFILE2 kfile2)
 {
 	printf("KEYFILE2\n");
 	printf("========\n");
-	printf("length: %d\n", kf2size);
-	if (kf2size == 28) {
-		KEYFILE2_n32 *kfile2 = (KEYFILE2_n32 *) kf2;
-		printf("name: '%-18s' pad: 0x%02x 0x%02x magic: 0x%08x version: 0x%08x (%d)\n",
- 		       kfile2->name,
-		       kfile2->pad[0], kfile2->pad[1],
-		       kfile2->magic,
-		       kfile2->version, kfile2->version);
-	} else if (kf2size == 40) {
-		KEYFILE2_n64 *kfile2 = (KEYFILE2_n64 *) kf2;
-		printf("name: '%-18s' pad: 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x magic: 0x%016llx version: 0x%016llx (%d)\n",
- 		       kfile2->name,
-		       kfile2->pad[0], kfile2->pad[1], kfile2->pad[2],
-		       kfile2->pad[3], kfile2->pad[4], kfile2->pad[5],
-		       kfile2->magic,
-		       kfile2->version, kfile2->version);
-	} else {
-		printf("Error printing keyfile2; invalid size (%d)\n",kf2size);
-	}
+	printf("length: %d\n", sizeof(kfile2));
+	printf("name: '%-18s' pad: 0x%02x 0x%02x magic: 0x%08x version: 0x%08x (%d)\n",
+ 	       kfile2.name,
+	       kfile2.pad[0], kfile2.pad[1],
+	       kfile2.magic,
+	       kfile2.version, kfile2.version);
 	printf("\n");
 }
 /*===============================
