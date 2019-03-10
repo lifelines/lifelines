@@ -62,6 +62,22 @@ typedef struct {
 	INT k_ostat;
 } KEYFILE1;
 
+/* 32-bit native format: 12 bytes */
+typedef struct {
+	FKEY k_mkey;  /* current master key*/
+	FKEY k_fkey;  /* current file key*/
+	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
+	INT32 k_ostat;
+} KEYFILE1_n32;
+
+/* 64-bit native format: 16 bytes */
+typedef struct {
+	FKEY k_mkey;  /* current master key*/
+	FKEY k_fkey;  /* current file key*/
+	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
+	INT64 k_ostat;
+} KEYFILE1_n64;
+
 /*
 Additional data added to keyfile by Perry in winter of 2000-2001
 in order to trap attempt to open a non-keyfile, or an incorrect
@@ -71,13 +87,40 @@ add it to any database that does not yet have it.
 */
 typedef struct {
 	char name[18]; /* KF_NAME */
+        char pad[2];   /* matches padding added by compiler */
 	INT magic;     /* KF_MAGIC */ /* byte alignment check */
 	INT version;   /* KF_VER */
 } KEYFILE2;
 
+/* 32-bit format: 28 bytes */
+typedef struct {
+	char name[18]; /* KF_NAME */
+        char pad[2];   /* matches padding added by compiler */
+	INT32 magic;   /* KF_MAGIC */ /* byte alignment check */
+	INT32 version; /* KF_VER */
+} KEYFILE2_n32;
+
+/* 64-bit format: 40 bytes */
+typedef struct {
+	char name[18]; /* KF_NAME */
+        char pad[6];   /* matches padding added by compiler */
+	INT64 magic;   /* KF_MAGIC */ /* byte alignment check */
+	INT64 version; /* KF_VER */
+} KEYFILE2_n64;
+
 #define KF2_NAME "LifeLines Keyfile"
 #define KF2_MAGIC 0x12345678
 #define KF2_VER 1
+
+/*
+ * Notes on 32-/64-bit portability.
+ * There exist databases in the wild with both 32-bit and 64-bit
+ * native formats.  These must be accepted and converted to the
+ * new width-insensitve format.
+ *
+ * 32-bit keyfile will be 12+28=40 bytes.
+ * 64-bit keyfile will be 16+40=56 bytes.
+ */
 
 /*==============================================
  * INDEX -- Data structure for BTREE index files

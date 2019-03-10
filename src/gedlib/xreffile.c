@@ -47,8 +47,8 @@ extern BTREE BTR;
  *   and other keys in file; remaining words are keys, in respective
  *   order, for the records; first in each group is next unused key;
  *   rest are keys of deleted records
- * nixrefs==1 means there are no deleted INDI keys
- * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
+ * n==1 means there are no deleted INDI keys
+ * n==2 means there is one deleted INDI key (ixrefs[1])
  *=================================================================*/
 /*
  In memory, data is kept in a DELETESET
@@ -373,6 +373,8 @@ void
 dumpxrefs (void)
 {
 	printf("XREFS\n");
+        printf("n is always the number of deleted keys PLUS ONE.\n");
+        printf("Each entry indicates the next available key value.\n\n");
 	dumpxrecs("I", &irecs);
 	dumpxrecs("F", &frecs);
 	dumpxrecs("E", &erecs);
