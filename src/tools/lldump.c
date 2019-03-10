@@ -361,7 +361,7 @@ void print_keyfile1(void *kf1, int kf1size)
 		       kfile1->k_ostat, kfile1->k_ostat);
 	} else if (kf1size == 16) {
 		KEYFILE1_n64 *kfile1 = (KEYFILE1_n64 *) kf1;
-		printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x16x (%d)\n",
+		printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x%016llx (%lld)\n",
 		       kfile1->k_mkey, kfile1->k_mkey,
 		       kfile1->k_fkey, kfile1->k_fkey,
 		       kfile1->k_ostat, kfile1->k_ostat);
@@ -387,11 +387,11 @@ void print_keyfile2(void *kf2, int kf2size)
 		       kfile2->version, kfile2->version);
 	} else if (kf2size == 40) {
 		KEYFILE2_n64 *kfile2 = (KEYFILE2_n64 *) kf2;
-		printf("name: '%-18s' pad: 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x magic: 0x%16x version: 0x%16x (%d)\n",
+		printf("name: '%-18s' pad: 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x magic: 0x%016llx version: 0x%016llx (%d)\n",
  		       kfile2->name,
-		       kfile2->magic,
 		       kfile2->pad[0], kfile2->pad[1], kfile2->pad[2],
 		       kfile2->pad[3], kfile2->pad[4], kfile2->pad[5],
+		       kfile2->magic,
 		       kfile2->version, kfile2->version);
 	} else {
 		printf("Error printing keyfile2; invalid size (%d)\n",kf2size);
