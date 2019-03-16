@@ -82,7 +82,8 @@ add it to any database that does not yet have it.
 */
 typedef struct {
 	char name[18]; /* KF_NAME */
-	INT32 magic;   /* KF_MAGIC */ /* byte alignment check */
+	INT16 pad;     /* matches padding added by compiler */
+	INT32 magic;   /* KF_MAGIC, byte alignment check */
 	INT32 version; /* KF_VER */
 } KEYFILE2;
 
