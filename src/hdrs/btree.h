@@ -81,7 +81,7 @@ occurs directly after KEYFILE1, and the program will silently
 add it to any database that does not yet have it.
 */
 typedef struct {
-	char name[18]; /* KF_NAME */
+	char name[18];	/* KF_NAME */
 #if __WORDSIZE != 16
 	INT16 pad;     /* matches padding added by compiler */
 #endif
