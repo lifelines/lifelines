@@ -79,9 +79,9 @@ typedef enum { DUPSOK, NODUPS } DUPS;
  *==================================*/
 struct deleteset_s
 {
-	INT32 n; /* num keys + 1, ie, starts at 1 */
-	INT32 * recs;
-	INT32 max;
+	INT n; /* num keys + 1, ie, starts at 1 */
+	INT * recs;
+	INT max;
 	char ctype;
 };
 typedef struct deleteset_s *DELETESET;
@@ -340,7 +340,7 @@ readxrefs (void)
 static void
 readrecs (DELETESET set)
 {
-	ASSERT((INT)fread(set->recs, sizeof(INT32), set->n, xreffp) == set->n);
+	ASSERT((INT)fread(set->recs, sizeof(INT), set->n, xreffp) == set->n);
 }
 /*================================
  * writexrefs -- Write xrefs file.
@@ -391,15 +391,15 @@ dumpxrefs (void)
 
 	/* Dump "recs" values */
 	dumpxrecs("I", &irecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT32));
+	offset += sizeof(irecs.n * sizeof(INT));
 	dumpxrecs("F", &frecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT32));
+	offset += sizeof(irecs.n * sizeof(INT));
 	dumpxrecs("E", &erecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT32));
+	offset += sizeof(irecs.n * sizeof(INT));
 	dumpxrecs("S", &srecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT32));
+	offset += sizeof(irecs.n * sizeof(INT));
 	dumpxrecs("X", &xrecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT32));
+	offset += sizeof(irecs.n * sizeof(INT));
 
 	/* Dump size */
 	printf("0x%02x: EOF (0x%02x)\n", offset, offset);
