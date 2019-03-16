@@ -319,9 +319,9 @@ void print_keyfile1(KEYFILE1 kfile1)
 	printf("KEYFILE1\n");
 	printf("========\n");
 	printf("length: %d\n", sizeof(kfile1));
-	printf("mkey: 0x%08x (%d) fkey: 0x%08x (%d) ostat: 0x%08x (%d)\n",
+	printf("mkey: 0x%08x (%d) fkey: 0x%08x ostat: 0x%08x (%d)\n",
 	       kfile1.k_mkey, kfile1.k_mkey,
-	       kfile1.k_fkey, kfile1.k_fkey,
+	       kfile1.k_fkey,
 	       kfile1.k_ostat, kfile1.k_ostat);
 	printf("\n");
 }
@@ -333,9 +333,9 @@ void print_keyfile2(KEYFILE2 kfile2)
 	printf("KEYFILE2\n");
 	printf("========\n");
 	printf("length: %d\n", sizeof(kfile2));
-	printf("name: '%-18s' pad: 0x%02x 0x%02x magic: 0x%08x version: 0x%08x (%d)\n",
+	printf("name: '%-18s' pad: 0x%04x magic: 0x%08x version: 0x%08x (%d)\n",
  	       kfile2.name,
-	       kfile2.pad[0], kfile2.pad[1],
+	       kfile2.pad,
 	       kfile2.magic,
 	       kfile2.version, kfile2.version);
 	printf("\n");
