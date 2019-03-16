@@ -49,9 +49,6 @@ extern BTREE BTR;
  *   rest are keys of deleted records
  * nixrefs==1 means there are no deleted INDI keys
  * nixrefs==2 means there is one deleted INDI key (ixrefs[1])
- *
- * NOTE: These words are 32-bit words on-disk.  At some point this
- * will become a limitation and migration will need to happen.
  *=================================================================*/
 /*
  In memory, data is kept in a DELETESET
