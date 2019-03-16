@@ -97,7 +97,7 @@ static BOOLEAN addsxref_impl(INT key, DUPS dups);
 static BOOLEAN addexref_impl(INT key, DUPS dups);
 static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
 static BOOLEAN addxxref_impl(INT key, DUPS dups);
-static void dumpxrecs(STRING type, DELETESET set, INT offset);
+static void dumpxrecs(STRING type, DELETESET set, INT *offset);
 static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
@@ -390,16 +390,11 @@ dumpxrefs (void)
 	offset += sizeof(xrecs.n); 
 
 	/* Dump "recs" values */
-	dumpxrecs("I", &irecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT));
-	dumpxrecs("F", &frecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT));
-	dumpxrecs("E", &erecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT));
-	dumpxrecs("S", &srecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT));
-	dumpxrecs("X", &xrecs, offset);
-	offset += sizeof(irecs.n * sizeof(INT));
+	dumpxrecs("I", &irecs, &offset);
+	dumpxrecs("F", &frecs, &offset);
+	dumpxrecs("E", &erecs, &offset);
+	dumpxrecs("S", &srecs, &offset);
+	dumpxrecs("X", &xrecs, &offset);
 
 	/* Dump size */
 	printf("0x%02x: EOF (0x%02x)\n", offset, offset);
@@ -408,14 +403,14 @@ dumpxrefs (void)
  * dumpxrecs -- Print DELETESET to stdout
  *==============================*/
 static void
-dumpxrecs (STRING type, DELETESET set, INT offset)
+dumpxrecs (STRING type, DELETESET set, INT *offset)
 {
 	INT i;
 
 	for (i=0; i<set->n; i++)
 	{
-		printf("0x%02x: %s[%02d]: 0x%08x (%d)\n", offset, type, i, (set->recs)[i], (set->recs)[i]);
-		offset += sizeof((set->recs)[i]);
+		printf("0x%02x: %s[%02d]: 0x%08x (%d)\n", *offset, type, i, (set->recs)[i], (set->recs)[i]);
+		*offset += sizeof((set->recs)[i]);
 	}
 }
 /*=====================================
