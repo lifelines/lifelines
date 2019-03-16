@@ -186,10 +186,10 @@ print_usage (void)
 	printf("\n\n");
         printf(_("options:\n"));
         printf(_("\t-a = Dump ALL records\n"));
-        printf(_("\t-b = Dump btree\n"));
-        printf(_("\t-k = Dump key files\n"));
-        printf(_("\t-x = Dump xref file\n"));
-        printf(_("\t-r = Dump records\n"));
+        printf(_("\t-b = Dump btree (INDEX)\n"));
+        printf(_("\t-k = Dump key files (KEYFILE1, KEYFILE2)\n"));
+        printf(_("\t-x = Dump xref file (DELETESET)\n"));
+        printf(_("\t-r = Dump records (BLOCK)\n"));
 	printf("\n");
 	printf(_("\t--help\tdisplay this help and exit"));
 	printf("\n");
@@ -316,13 +316,21 @@ error2:
  *=============================*/
 void print_keyfile1(KEYFILE1 kfile1)
 {
+	INT offset = 0;
+
 	printf("KEYFILE1\n");
 	printf("========\n");
-	printf("length: %d\n", sizeof(kfile1));
-	printf("mkey: 0x%08x (%d) fkey: 0x%08x ostat: 0x%08x (%d)\n",
-	       kfile1.k_mkey, kfile1.k_mkey,
-	       kfile1.k_fkey,
-	       kfile1.k_ostat, kfile1.k_ostat);
+
+	printf("0x%02x: mkey:  0x%08x (%d)\n", offset, kfile1.k_mkey, kfile1.k_mkey);
+	offset += sizeof(kfile1.k_mkey);
+
+	printf("0x%02x: fkey:  0x%08x\n", offset, kfile1.k_fkey);
+	offset += sizeof(kfile1.k_fkey);
+
+	printf("0x%02x: ostat: 0x%08x (%d)\n", offset, kfile1.k_ostat, kfile1.k_ostat);
+	offset += sizeof(kfile1.k_ostat);
+
+	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile1));
 	printf("\n");
 }
 /*===============================
@@ -330,14 +338,24 @@ void print_keyfile1(KEYFILE1 kfile1)
  *=============================*/
 void print_keyfile2(KEYFILE2 kfile2)
 {
+	INT offset = 0;
+
 	printf("KEYFILE2\n");
 	printf("========\n");
-	printf("length: %d\n", sizeof(kfile2));
-	printf("name: '%-18s' pad: 0x%04x magic: 0x%08x version: 0x%08x (%d)\n",
- 	       kfile2.name,
-	       kfile2.pad,
-	       kfile2.magic,
-	       kfile2.version, kfile2.version);
+
+	printf("0x%02x: name:    '%-18s'\n", offset, kfile2.name);
+	offset += sizeof(kfile2.name);
+#if WORDSIZE != 16
+	printf("0x%02x: pad:     0x%04x\n", offset, kfile2.pad);
+	offset += sizeof(kfile2.pad);
+#endif
+	printf("0x%02x: magic:   0x%08x\n", offset, kfile2.magic);
+	offset += sizeof(kfile2.magic);
+
+	printf("0x%02x: version: 0x%08x (%d)\n", offset, kfile2.version, kfile2.version);
+	offset += sizeof(kfile2.version);
+
+	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile2));
 	printf("\n");
 }
 /*===============================

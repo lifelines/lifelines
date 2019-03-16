@@ -79,13 +79,12 @@ typedef enum { DUPSOK, NODUPS } DUPS;
  *==================================*/
 struct deleteset_s
 {
-	INT n; /* num keys + 1, ie, starts at 1 */
-	INT * recs;
-	INT max;
+	INT32 n; /* num keys + 1, ie, starts at 1 */
+	INT32 * recs;
+	INT32 max;
 	char ctype;
 };
 typedef struct deleteset_s *DELETESET;
-
 
 /*********************************************
  * local function prototypes
@@ -98,7 +97,7 @@ static BOOLEAN addsxref_impl(INT key, DUPS dups);
 static BOOLEAN addexref_impl(INT key, DUPS dups);
 static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
 static BOOLEAN addxxref_impl(INT key, DUPS dups);
-static void dumpxrecs(STRING type, DELETESET set);
+static void dumpxrecs(STRING type, DELETESET set, INT offset);
 static INT find_slot(INT keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
@@ -341,7 +340,7 @@ readxrefs (void)
 static void
 readrecs (DELETESET set)
 {
-	ASSERT((INT)fread(set->recs, sizeof(INT), set->n, xreffp) == set->n);
+	ASSERT((INT)fread(set->recs, sizeof(INT32), set->n, xreffp) == set->n);
 }
 /*================================
  * writexrefs -- Write xrefs file.
@@ -368,34 +367,56 @@ writexrefs (void)
 }
 /*================================
  * dumpxrefs -- Print xrefs to stdout
+ *  storage order: IFESX
  *==============================*/
 void
 dumpxrefs (void)
 {
-	printf("XREFS\n");
-        printf("n is always the number of deleted keys PLUS ONE.\n");
-        printf("Each entry indicates the next available key value.\n\n");
-	dumpxrecs("I", &irecs);
-	dumpxrecs("F", &frecs);
-	dumpxrecs("E", &erecs);
-	dumpxrecs("S", &srecs);
-	dumpxrecs("X", &xrecs);
+	INT offset = 0;
+
+        printf("NOTE: n is always the number of deleted keys PLUS ONE.\n");
+        printf("NOTE: Each entry indicates the next available key value.\n\n");
+
+	/* Dump "n" values */
+	printf("0x%02x: I n: 0x%08x (%d)\n", offset, irecs.n, irecs.n);
+	offset += sizeof(irecs.n); 
+	printf("0x%02x: F n: 0x%08x (%d)\n", offset, frecs.n, frecs.n);
+	offset += sizeof(frecs.n); 
+	printf("0x%02x: E n: 0x%08x (%d)\n", offset, erecs.n, erecs.n);
+	offset += sizeof(erecs.n); 
+	printf("0x%02x: S n: 0x%08x (%d)\n", offset, srecs.n, srecs.n);
+	offset += sizeof(srecs.n); 
+	printf("0x%02x: X n: 0x%08x (%d)\n", offset, xrecs.n, xrecs.n);
+	offset += sizeof(xrecs.n); 
+
+	/* Dump "recs" values */
+	dumpxrecs("I", &irecs, offset);
+	offset += sizeof(irecs.n * sizeof(INT32));
+	dumpxrecs("F", &frecs, offset);
+	offset += sizeof(irecs.n * sizeof(INT32));
+	dumpxrecs("E", &erecs, offset);
+	offset += sizeof(irecs.n * sizeof(INT32));
+	dumpxrecs("S", &srecs, offset);
+	offset += sizeof(irecs.n * sizeof(INT32));
+	dumpxrecs("X", &xrecs, offset);
+	offset += sizeof(irecs.n * sizeof(INT32));
+
+	/* Dump size */
+	printf("0x%02x: EOF (0x%02x)\n", offset, offset);
 }
 /*================================
  * dumpxrecs -- Print DELETESET to stdout
  *==============================*/
 static void
-dumpxrecs (STRING type, DELETESET set)
+dumpxrecs (STRING type, DELETESET set, INT offset)
 {
 	INT i;
 
-	printf("Type: %s\n", type);
-	printf("n: 0x%08x (%d)\n", set->n, set->n);
 	for (i=0; i<set->n; i++)
 	{
-		printf("%d: 0x%08x (%d)\n", i, (set->recs)[i], (set->recs)[i]);
+		printf("0x%02x: %s[%02d]: 0x%08x (%d)\n", offset, type, i, (set->recs)[i], (set->recs)[i]);
+		offset += sizeof((set->recs)[i]);
 	}
-	printf("\n");
 }
 /*=====================================
  * find_slot -- Find slot at which to add key
