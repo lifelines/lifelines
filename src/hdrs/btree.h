@@ -80,16 +80,6 @@ typedef struct {
 #define KF2_MAGIC 0x12345678
 #define KF2_VER 1
 
-/*
- * Notes on 32-/64-bit portability.
- * There exist databases in the wild with both 32-bit and 64-bit
- * native formats.  These must be accepted and converted to the
- * new width-insensitve format.
- *
- * 32-bit keyfile will be 12+28=40 bytes.
- * 64-bit keyfile will be 16+40=56 bytes.
- */
-
 /*==============================================
  * INDEX -- Data structure for BTREE index files
  *  The constant NOENTS above depends on this exact contents:
