@@ -119,6 +119,7 @@ static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 
 static FILE *xreffp=0;	/* open xref file pointer */
 static BOOLEAN xrefReadonly = FALSE;
+static INT xrefsize=0; /* xref file size */
 
 static INT32 maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
 
@@ -177,6 +178,7 @@ openxref (BOOLEAN readonly)
 {
 	char scratch[100];
 	STRING fmode;
+	BOOLEAN success;
 
 	initdsets();
 	ASSERT(!xreffp);
@@ -186,7 +188,12 @@ openxref (BOOLEAN readonly)
 	if (!(xreffp = fopen(scratch, fmode))) {
 		return FALSE;
 	}
-	return readxrefs();
+
+	success = readxrefs();
+
+	xrefsize = ftell(xreffp);
+
+	return success;
 }
 /*==============================
  * closexref -- Close xrefs file
@@ -376,21 +383,21 @@ writexrefs (void)
 void
 dumpxrefs (void)
 {
-	INT offset = 0;
+	INT32 offset = 0;
 
         printf("NOTE: n is always the number of deleted keys PLUS ONE.\n");
         printf("NOTE: Each entry indicates the next available key value.\n\n");
 
 	/* Dump "n" values */
-	printf("0x%02x: I n: 0x%08x (%d)\n", offset, irecs.n, irecs.n);
+	printf(FMT_INT32_HEX ": I n: " FMT_INT32_HEX " (" FMT_INT32 ")\n", offset, irecs.n, irecs.n);
 	offset += sizeof(irecs.n); 
-	printf("0x%02x: F n: 0x%08x (%d)\n", offset, frecs.n, frecs.n);
+	printf(FMT_INT32_HEX ": F n: " FMT_INT32_HEX " (" FMT_INT32 ")\n", offset, frecs.n, frecs.n);
 	offset += sizeof(frecs.n); 
-	printf("0x%02x: E n: 0x%08x (%d)\n", offset, erecs.n, erecs.n);
+	printf(FMT_INT32_HEX ": E n: " FMT_INT32_HEX " (" FMT_INT32 ")\n", offset, erecs.n, erecs.n);
 	offset += sizeof(erecs.n); 
-	printf("0x%02x: S n: 0x%08x (%d)\n", offset, srecs.n, srecs.n);
+	printf(FMT_INT32_HEX ": S n: " FMT_INT32_HEX " (" FMT_INT32 ")\n", offset, srecs.n, srecs.n);
 	offset += sizeof(srecs.n); 
-	printf("0x%02x: X n: 0x%08x (%d)\n", offset, xrecs.n, xrecs.n);
+	printf(FMT_INT32_HEX ": X n: " FMT_INT32_HEX " (" FMT_INT32 ")\n", offset, xrecs.n, xrecs.n);
 	offset += sizeof(xrecs.n); 
 
 	/* Dump "recs" values */
@@ -401,20 +408,20 @@ dumpxrefs (void)
 	dumpxrecs("X", &xrecs, &offset);
 
 	/* Dump size */
-	printf("0x%02x: EOF (0x%02x)\n", offset, offset);
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ")\n", offset, (INT32)xrefsize);
 }
 /*================================
  * dumpxrecs -- Print DELETESET to stdout
  *==============================*/
 static void
-dumpxrecs (STRING type, DELETESET set, INT *offset)
+dumpxrecs (STRING type, DELETESET set, INT32 *offset)
 {
 	INT i;
 
 	for (i=0; i<set->n; i++)
 	{
-		printf("0x%02x: %s[%02d]: 0x%08x (%d)\n", *offset, type, i, (set->recs)[i], (set->recs)[i]);
-		*offset += sizeof((set->recs)[i]);
+		printf(FMT_INT32_HEX ": %s[" FMT_INT_04 "]: " FMT_INT32_HEX " (" FMT_INT32 ")\n", *offset, type, i, (set->recs)[i], (set->recs)[i]);
+		*offset += (INT32)sizeof((set->recs)[i]);
 	}
 }
 /*=====================================
