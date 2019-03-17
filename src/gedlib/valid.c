@@ -234,7 +234,7 @@ valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 	}
 	if (orig)
 	{
-		// validation unimplemented
+		/* validation unimplemented */
 		*pmsg = _(qSbadsr0);
 		return FALSE;
 	}
@@ -260,7 +260,7 @@ valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 	}
 	if (orig)
 	{
-		// validation unimplemented
+		/* validation unimplemented */
 		*pmsg = _(qSbadev0);
 		return FALSE;
 	}
@@ -287,7 +287,7 @@ valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 	}
 	if (orig)
 	{
-		// validation unimplemented
+		/* validation unimplemented */
 		*pmsg = _(qSbadothr0);
 		return FALSE;
 	}
