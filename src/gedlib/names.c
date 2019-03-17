@@ -447,9 +447,9 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	p = rec = (STRING) stdalloc(NRsize + sizeof(RKEY) +
 	    sizeof(INT) + strlen(name) + 10);
 	len = 0;
-	memcpy(p, &NRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	memcpy(p, &NRcount, sizeof(INT32));
+	p += sizeof(INT32);
+	len += sizeof(INT32);
 	for (i = 0; i < NRcount; i++) {
 		memcpy(p, &NRkeys[i], sizeof(RKEY));
 		p += sizeof(RKEY);
@@ -457,9 +457,9 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	}
 	off = 0;
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(INT32));
+		p += sizeof(INT32);
+		len += sizeof(INT32);
 		off += strlen(NRnames[i]) + 1;
 	}
 	for (i = 0; i < NRcount; i++) {
