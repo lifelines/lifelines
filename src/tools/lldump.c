@@ -61,11 +61,12 @@ static struct work todo;
 /* alphabetical */
 void crashlog (STRING fmt, ...);
 void crashlogn (STRING fmt, ...);
-void dump_btree(BTREE btree);
+void dump_block(STRING dir);
+void dump_index(STRING dir);
 void dump_keyfile(STRING dir);
 void dump_xref(STRING dir);
-void print_block(BLOCK block);
-void print_index(INDEX index);
+void print_block(BLOCK block, INT *offset);
+void print_index(INDEX index, INT *offset);
 void print_keyfile1(KEYFILE1 kfile1);
 void print_keyfile2(KEYFILE2 kfile2);
 static void print_usage(void);
@@ -142,10 +143,10 @@ main (int argc,
 
 	rtn = 0;
 
-	if (todo.dump_btree) { }
-	if (todo.dump_key) { dump_keyfile(dbname); }
-	if (todo.dump_record) { }
-	if (todo.dump_xref) { dump_xref(dbname); }
+	if (todo.dump_btree)  { dump_index(dbname);   }
+	if (todo.dump_key)    { dump_keyfile(dbname); }
+	if (todo.dump_record) { dump_block(dbname);   }
+	if (todo.dump_xref)   { dump_xref(dbname);    }
 
 finish:
 	closebtree(BTR);
@@ -203,51 +204,175 @@ print_usage (void)
 	printf("\n");
 }
 /*===============================================
- * dump_btree -- open and print btree to stdout
+ * dump_index -- open and print index to stdout
  *=============================================*/
-void dump_btree(BTREE btree)
+void dump_index(STRING dir)
 {
-        INDEX index;
-        INT i, n, lo, hi;
-        FKEY nfkey;
-        BLOCK block;
-        BOOLEAN found = FALSE;
-        RAWRECORD rawrec;
+	char scratch[200];
+	struct stat sbuf;
+        char buffer[BUFLEN];
+	FILE *fi;
+	INDEX index;
+	INT offset = 0;
 
-        ASSERT(index = bmaster(btree));
+	sprintf(scratch, "%s/aa/aa", dir);
+        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
+		printf("Error opening master index\n");
+		goto error2;
+	}
 
-// loop over nodes
-	if (ixtype(index) == BTINDEXTYPE) {
+        if (!(fi = fopen(scratch, LLREADBINARY))) {
+		printf("Error opening master index\n");
+		goto error2;
 	}
-	if (ixtype(index) == BTBLOCKTYPE) {
-	}
+
+        if (fread(&buffer, BUFLEN, 1, fi) != 1) {
+		printf("Error reading master index\n");
+		goto error1;
+        }
+
+	index = (INDEX)buffer;
+
+	print_index(index, &offset);
+
+error1:
+	fclose(fi);
+error2:
+	return;
 }
 /*===============================
  * print_index -- print INDEX to stdout
  *=============================*/
-void print_index(INDEX index)
+void print_index(INDEX index, INT *offset)
 {
 	INT n;
 
 	printf("INDEX\n");
-	printf("fkey: %d type: %d parent: %d nkeys: %d\n", index->ix_self, index->ix_type, index->ix_parent, index->ix_nkeys);
+	printf("0x%04x: ix_self: %d\n", *offset, index->ix_self);
+	*offset += sizeof(index->ix_self);
+
+	printf("0x%04x: ix_type: %d\n", *offset, index->ix_type);
+	*offset += sizeof(index->ix_type);
+
+#if 0
+#if __WORDSIZE != 16
+	printf("0x%04x: ix_pad1: %d\n", *offset, index->ix_pad1);
+	*offset += sizeof(index->ix_pad1);
+#endif
+#endif
+
+	printf("0x%04x: ix_parent: %d\n", *offset, index->ix_parent);
+	*offset += sizeof(index->ix_parent);
+
+	printf("0x%04x: ix_nkeys: %d\n", *offset, index->ix_nkeys);
+	*offset += sizeof(index->ix_nkeys);
+
 	for (n=0; n<NOENTS; n++) {
-		printf("  %d: rkey: '%s' fkey: %d\n", n, index->ix_rkeys[n], index->ix_fkeys[n]);
+		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &index->ix_rkeys[n]);
+		*offset += sizeof(index->ix_rkeys[n]);
 	}
+
+#if 0
+#if __WORDSIZE != 16
+	printf("0x%04x: ix_pad2: %d\n", *offset, index->ix_pad2);
+	*offset += sizeof(index->ix_pad2);
+#endif
+#endif
+
+	for (n=0; n<NOENTS; n++) {
+		printf("0x%04x: ix_fkey[%04d]: 0x%08x\n", *offset, n, index->ix_fkeys[n]);
+		*offset += sizeof(index->ix_fkeys[n]);
+	}
+
+	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
 }
+/*===============================================
+ * dump_block -- open and print block to stdout
+ *=============================================*/
+void dump_block(STRING dir)
+{
+	char scratch[200];
+	struct stat sbuf;
+        char buffer[BUFLEN];
+	FILE *fb;
+	BLOCK block;
+	INT offset = 0;
+
+	sprintf(scratch, "%s/ab/aa", dir);
+        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
+		printf("Error opening master block\n");
+		goto error2;
+	}
+
+        if (!(fb = fopen(scratch, LLREADBINARY))) {
+		printf("Error opening master block\n");
+		goto error2;
+	}
+
+        if (fread(&buffer, BUFLEN, 1, fb) != 1) {
+		printf("Error reading master bock\n");
+		goto error1;
+        }
+
+	block = (BLOCK)buffer;
+
+	print_block(block, &offset);
+
+error1:
+	fclose(fb);
+error2:
+	return;
+}
+
 /*===============================
  * print_block -- print BLOCK to stdout
  *=============================*/
-void print_block(BLOCK block)
+void print_block(BLOCK block, INT *offset)
 {
 	INT n;
 
 	printf("BLOCK\n");
-	printf("fkey: %d type: %d parent: %d nkeys: %d\n", block->ix_self, block->ix_type, block->ix_parent, block->ix_nkeys);
+	printf("0x%04x: ix_self: %d\n", *offset, block->ix_self);
+	*offset += sizeof(block->ix_self);
+
+	printf("0x%04x: ix_type: %d\n", *offset, block->ix_type);
+	*offset += sizeof(block->ix_type);
+
+#if 0
+#if __WORDSIZE != 16
+	printf("0x%04x: ix_pad1: %d\n", *offset, block->ix_pad1);
+	*offset += sizeof(block->ix_pad1);
+#endif
+#endif
+
+	printf("0x%04x: ix_parent: %d\n", *offset, block->ix_parent);
+	*offset += sizeof(block->ix_parent);
+
+	printf("0x%04x: ix_nkeys: %d\n", *offset, block->ix_nkeys);
+	*offset += sizeof(block->ix_nkeys);
+
 	for (n=0; n<NORECS; n++) {
-		printf("  %d: rkey: '%s' offs: %d lens: %d\n", n, block->ix_rkeys[n], block->ix_offs[n], block->ix_lens[n]);
+		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &block->ix_rkeys[n]);
+		*offset += sizeof(block->ix_rkeys[n]);
 	}
+
+#if 0
+#if __WORDSIZE != 16
+	printf("0x%04x: ix_pad2: %d\n", *offset, block->ix_pad2);
+	*offset += sizeof(block->ix_pad2);
+#endif
+#endif
+
+	for (n=0; n<NORECS; n++) {
+		printf("0x%04x: ix_offs[%04d]: 0x%08x\n", *offset, n, block->ix_offs[n]);
+		*offset += sizeof(block->ix_offs[n]);
+
+		printf("0x%04x: ix_lens[%04d]: 0x%08x\n", *offset, n, block->ix_lens[n]);
+		*offset += sizeof(block->ix_lens[n]);
+	}
+
+	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
 }
 /*===============================
@@ -343,7 +468,7 @@ void print_keyfile2(KEYFILE2 kfile2)
 	printf("KEYFILE2\n");
 	printf("========\n");
 
-	printf("0x%02x: name:    '%-18s'\n", offset, kfile2.name);
+	printf("0x%02x: name:    '%-18.18s'\n", offset, kfile2.name);
 	offset += sizeof(kfile2.name);
 #if WORDSIZE != 16
 	printf("0x%02x: pad:     0x%04x\n", offset, kfile2.pad);
@@ -363,11 +488,6 @@ void print_keyfile2(KEYFILE2 kfile2)
  *=============================*/
 void dump_xref(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
-	FILE *xfp;
-	INT xrecs[5];
-
 	if (!openxref(FALSE))
 	{
 		printf("Error opening/reading xrefs\n");
@@ -378,7 +498,6 @@ void dump_xref(STRING dir)
 
 error1:
 	closexref();
-error2:
 	return;
 }
 /*===============================
