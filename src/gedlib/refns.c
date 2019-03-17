@@ -300,11 +300,11 @@ add_refn (CNSTRING refn, CNSTRING key)
 	RRrefns[RRcount] = refn;
 	RRcount++;
 	p = rec = (STRING) stdalloc(RRsize + sizeof(RKEY) +
-	    sizeof(INT) + strlen(refn) + 10);
+	    sizeof(INT32) + strlen(refn) + 10);
 	len = 0;
-	memcpy(p, &RRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	memcpy(p, &RRcount, sizeof(INT32));
+	p += sizeof(INT32);
+	len += sizeof(INT32);
 	for (i = 0; i < RRcount; i++) {
 		memcpy(p, &RRkeys[i], sizeof(RKEY));
 		p += sizeof(RKEY);
@@ -312,9 +312,9 @@ add_refn (CNSTRING refn, CNSTRING key)
 	}
 	off = 0;
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(INT32));
+		p += sizeof(INT32);
+		len += sizeof(INT32);
 		off += strlen(RRrefns[i]) + 1;
 	}
 	for (i = 0; i < RRcount; i++) {
