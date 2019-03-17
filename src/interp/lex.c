@@ -155,7 +155,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 
 		if (reserved(tokbuf, &retval))  return retval;
 		/* IDEN values have to be passed from yacc.y to free_iden */
-		*lvalp = (PNODE) strsave(tokbuf);
+		*lvalp = (YYSTYPE) strsave(tokbuf);
 		return IDEN;
 	}
 	if (t == '-' || t == DIGIT || t == '.') {
@@ -180,7 +180,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		if (t != '.') {
 			unreadchar(pactx, c);
 			Yival *= mul;
-			*lvalp = NULL;
+			*lvalp = (YYSTYPE)NULL;
 			return ICONS;
 		}
 		t = chartype(c = inchar(pactx));
@@ -202,7 +202,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 				return '.';
 		}
 		Yfval = mul*(Yival + Yfval/fdiv);
-		*lvalp = NULL;
+		*lvalp = (YYSTYPE)NULL;
 		return FCONS;
 	}
 	if (c == '"') {
@@ -227,7 +227,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 			}
 			if (c == 0 || c == '"') {
 				*p = 0;
-				*lvalp = make_internal_string_node(pactx, tokbuf);
+				*lvalp = (YYSTYPE) make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			}
 			switch (c = inchar(pactx)) {
@@ -241,7 +241,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				*lvalp = make_internal_string_node(pactx, tokbuf);
+				*lvalp = (YYSTYPE) make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			default:
 				*p++ = c; break;
