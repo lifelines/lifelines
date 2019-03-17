@@ -254,10 +254,12 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 			zs_apps(ztemp, place);
 		}
 		if (!date && !place) {
-                        // Git #308: INDI with BIRT/DEAT without DATE/PLAC displays "Y"
-                        // The 3.0.62 behaviour was to display nothing.
-                        // This sounds more appropriate so reverting to that behaviour.
-			//zs_apps(ztemp, "Y");
+			/*
+                         * Git #308: INDI with BIRT/DEAT without DATE/PLAC displays "Y"
+                         * The 3.0.62 behaviour was to display nothing.
+                         * This sounds more appropriate so reverting to that behaviour.
+			 */
+			/* zs_apps(ztemp, "Y"); */
 		}
 		if (ct>1) {
 			zs_appf(ztemp, " (%d alt)", ct-1);
@@ -671,8 +673,9 @@ STRING
 indi_to_ped_fix (NODE indi, INT len)
 {
 	STRING bevt, devt, name, key;
+	INT tmp1_length, name_length;
 	static char scratch[200];
-	char tmp1[200]; // holds birth, death, key string
+	char tmp1[200]; /* holds birth, death, key string */
 
 	if (!indi) return (STRING) "------------";
 	bevt = event_to_date(BIRT(indi), TRUE);
@@ -695,10 +698,10 @@ indi_to_ped_fix (NODE indi, INT len)
 	}
 	tmp1[ARRSIZE(tmp1) - 1] = 0;
 	
-	// a long name may need to be truncated to fit on the screen
+	/* a long name may need to be truncated to fit on the screen */
 	len = min(len, (ARRSIZE(scratch) - 1));
-	INT tmp1_length = (INT)strlen(tmp1);
-	INT name_length = len - tmp1_length - 1;
+	tmp1_length = (INT)strlen(tmp1);
+	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
 	ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
