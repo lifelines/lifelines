@@ -132,19 +132,23 @@ typedef unsigned char uchar;
 /* INTEGER PRINTF FORMAT DEFINITIONS */
 #define FMT_INTPTR	"%" PRIdPTR
 #define FMT_INT16	"%" PRId16
+#define FMT_INT16_HEX	"0x%04" PRIx16
 #define FMT_INT32	"%" PRId32
-#define FMT_INT32_HEX	"%08" PRIx32
+#define FMT_INT32_HEX	"0x%08" PRIx32
 #define FMT_INT64	"%" PRId64
+#define FMT_INT64_HEX	"0x%016" PRIx64
 #if __WORDSIZE == 64
-#define FMT_INT		"%" PRId64
-#define FMT_INT_HEX	"%" PRIx64
+#define FMT_INT		FMT_INT64
+#define FMT_INT_HEX	FMT_INT64_HEX
 #define FMT_INT_02	"%02" PRId64
+#define FMT_INT_04	"%04" PRId64
 #define FMT_INT_6	"%6" PRId64
 #define FMT_SIZET	FMT_INT64
 #else
-#define FMT_INT		"%" PRId32
-#define FMT_INT_HEX	"%" PRIx32
+#define FMT_INT		FMT_INT32
+#define FMT_INT_HEX	FMT_INT32_HEX
 #define FMT_INT_02	"%02" PRId32
+#define FMT_INT_04	"%04" PRId32
 #define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT32
 #endif

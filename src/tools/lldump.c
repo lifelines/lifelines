@@ -65,8 +65,8 @@ void dump_block(STRING dir);
 void dump_index(STRING dir);
 void dump_keyfile(STRING dir);
 void dump_xref(STRING dir);
-void print_block(BLOCK block, INT *offset);
-void print_index(INDEX index, INT *offset);
+void print_block(BLOCK block, INT32 *offset);
+void print_index(INDEX index, INT32 *offset);
 void print_keyfile1(KEYFILE1 kfile1);
 void print_keyfile2(KEYFILE2 kfile2);
 static void print_usage(void);
@@ -85,9 +85,7 @@ int
 main (int argc,
       char **argv)
 {
-	char cmdbuf[512];
 	char *ptr, *flags, *dbname;
-	RECORD_STATUS recstat;
 	BOOLEAN cflag=FALSE; /* create new db if not found */
 	BOOLEAN writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
@@ -213,7 +211,7 @@ void dump_index(STRING dir)
         char buffer[BUFLEN];
 	FILE *fi;
 	INDEX index;
-	INT offset = 0;
+	INT32 offset = 0;
 
 	sprintf(scratch, "%s/aa/aa", dir);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
@@ -243,48 +241,44 @@ error2:
 /*===============================
  * print_index -- print INDEX to stdout
  *=============================*/
-void print_index(INDEX index, INT *offset)
+void print_index(INDEX index, INT32 *offset)
 {
 	INT n;
 
 	printf("INDEX\n");
-	printf("0x%04x: ix_self: %d\n", *offset, index->ix_self);
+	printf(FMT_INT32_HEX ": ix_self: %d\n", *offset, index->ix_self);
 	*offset += sizeof(index->ix_self);
 
-	printf("0x%04x: ix_type: %d\n", *offset, index->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: %d\n", *offset, index->ix_type);
 	*offset += sizeof(index->ix_type);
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad1: %d\n", *offset, index->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1: " FMT_INT16_HEX "\n", *offset, index->ix_pad1);
 	*offset += sizeof(index->ix_pad1);
 #endif
-#endif
 
-	printf("0x%04x: ix_parent: %d\n", *offset, index->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: %d\n", *offset, index->ix_parent);
 	*offset += sizeof(index->ix_parent);
 
-	printf("0x%04x: ix_nkeys: %d\n", *offset, index->ix_nkeys);
+	printf(FMT_INT32_HEX ": ix_nkeys: %d\n", *offset, index->ix_nkeys);
 	*offset += sizeof(index->ix_nkeys);
 
 	for (n=0; n<NOENTS; n++) {
-		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &index->ix_rkeys[n]);
+		printf(FMT_INT32_HEX ": ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n", *offset, n, (char *)&index->ix_rkeys[n]);
 		*offset += sizeof(index->ix_rkeys[n]);
 	}
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad2: %d\n", *offset, index->ix_pad2);
+	printf(FMT_INT32_HEX ": ix_pad2: " FMT_INT16_HEX "\n", *offset, index->ix_pad2);
 	*offset += sizeof(index->ix_pad2);
-#endif
 #endif
 
 	for (n=0; n<NOENTS; n++) {
-		printf("0x%04x: ix_fkey[%04d]: 0x%08x\n", *offset, n, index->ix_fkeys[n]);
+		printf(FMT_INT32_HEX ": ix_fkey[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, index->ix_fkeys[n]);
 		*offset += sizeof(index->ix_fkeys[n]);
 	}
 
-	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
+	printf(FMT_INT32_HEX ": EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
 }
 /*===============================================
@@ -297,7 +291,7 @@ void dump_block(STRING dir)
         char buffer[BUFLEN];
 	FILE *fb;
 	BLOCK block;
-	INT offset = 0;
+	INT32 offset = 0;
 
 	sprintf(scratch, "%s/ab/aa", dir);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
@@ -328,51 +322,47 @@ error2:
 /*===============================
  * print_block -- print BLOCK to stdout
  *=============================*/
-void print_block(BLOCK block, INT *offset)
+void print_block(BLOCK block, INT32 *offset)
 {
 	INT n;
 
 	printf("BLOCK\n");
-	printf("0x%04x: ix_self: %d\n", *offset, block->ix_self);
+	printf(FMT_INT32_HEX ": ix_self: %d\n", *offset, block->ix_self);
 	*offset += sizeof(block->ix_self);
 
-	printf("0x%04x: ix_type: %d\n", *offset, block->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: %d\n", *offset, block->ix_type);
 	*offset += sizeof(block->ix_type);
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad1: %d\n", *offset, block->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1: %d\n", *offset, block->ix_pad1);
 	*offset += sizeof(block->ix_pad1);
 #endif
-#endif
 
-	printf("0x%04x: ix_parent: %d\n", *offset, block->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: %d\n", *offset, block->ix_parent);
 	*offset += sizeof(block->ix_parent);
 
-	printf("0x%04x: ix_nkeys: %d\n", *offset, block->ix_nkeys);
+	printf(FMT_INT32_HEX ": ix_nkeys: %d\n", *offset, block->ix_nkeys);
 	*offset += sizeof(block->ix_nkeys);
 
 	for (n=0; n<NORECS; n++) {
-		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &block->ix_rkeys[n]);
+		printf(FMT_INT32_HEX ": ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n", *offset, n, (char *)&block->ix_rkeys[n]);
 		*offset += sizeof(block->ix_rkeys[n]);
 	}
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad2: %d\n", *offset, block->ix_pad2);
+	printf(FMT_INT32_HEX ": ix_pad2: %d\n", *offset, block->ix_pad2);
 	*offset += sizeof(block->ix_pad2);
-#endif
 #endif
 
 	for (n=0; n<NORECS; n++) {
-		printf("0x%04x: ix_offs[%04d]: 0x%08x\n", *offset, n, block->ix_offs[n]);
+		printf(FMT_INT32_HEX ": ix_offs[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, block->ix_offs[n]);
 		*offset += sizeof(block->ix_offs[n]);
 
-		printf("0x%04x: ix_lens[%04d]: 0x%08x\n", *offset, n, block->ix_lens[n]);
+		printf(FMT_INT32_HEX ": ix_lens[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, block->ix_lens[n]);
 		*offset += sizeof(block->ix_lens[n]);
 	}
 
-	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
+	printf(FMT_INT32_HEX ": EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
 }
 /*===============================
@@ -385,7 +375,7 @@ void dump_keyfile(STRING dir)
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	FILE *fk;
-	long size;
+	size_t size;
 
 	sprintf(scratch, "%s/key", dir);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
@@ -412,7 +402,7 @@ void dump_keyfile(STRING dir)
 
 	if (size != sizeof(kfile1) &&
             size != (sizeof(kfile1) + sizeof(kfile2))) {
-		printf("Error: keyfile size invalid (%d), valid sizes are %d and %d\n",
+		printf("Error: keyfile size invalid (" FMT_SIZET "), valid sizes are " FMT_SIZET " and " FMT_SIZET "\n",
 		       size, sizeof(kfile1), sizeof(kfile1)+sizeof(kfile2));
 		goto error1;
 	}
@@ -441,21 +431,21 @@ error2:
  *=============================*/
 void print_keyfile1(KEYFILE1 kfile1)
 {
-	INT offset = 0;
+	INT16 offset = 0;
 
 	printf("KEYFILE1\n");
 	printf("========\n");
 
-	printf("0x%02x: mkey:  0x%08x (%d)\n", offset, kfile1.k_mkey, kfile1.k_mkey);
+	printf(FMT_INT16_HEX ": mkey:  " FMT_INT32_HEX " (%d)\n", offset, kfile1.k_mkey, kfile1.k_mkey);
 	offset += sizeof(kfile1.k_mkey);
 
-	printf("0x%02x: fkey:  0x%08x\n", offset, kfile1.k_fkey);
+	printf(FMT_INT16_HEX ": fkey:  " FMT_INT32_HEX "\n", offset, kfile1.k_fkey);
 	offset += sizeof(kfile1.k_fkey);
 
-	printf("0x%02x: ostat: 0x%08x (%d)\n", offset, kfile1.k_ostat, kfile1.k_ostat);
+	printf(FMT_INT16_HEX ": ostat: " FMT_INT32_HEX " (%d)\n", offset, kfile1.k_ostat, kfile1.k_ostat);
 	offset += sizeof(kfile1.k_ostat);
 
-	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile1));
+	printf(FMT_INT16_HEX ": EOF (" FMT_INT16_HEX ")\n", offset, (INT16)sizeof(kfile1));
 	printf("\n");
 }
 /*===============================
@@ -463,24 +453,24 @@ void print_keyfile1(KEYFILE1 kfile1)
  *=============================*/
 void print_keyfile2(KEYFILE2 kfile2)
 {
-	INT offset = 0;
+	INT16 offset = 0;
 
 	printf("KEYFILE2\n");
 	printf("========\n");
 
-	printf("0x%02x: name:    '%-18.18s'\n", offset, kfile2.name);
+	printf(FMT_INT16_HEX ": name:    '%-18.18s'\n", offset, kfile2.name);
 	offset += sizeof(kfile2.name);
 #if WORDSIZE != 16
-	printf("0x%02x: pad:     0x%04x\n", offset, kfile2.pad);
-	offset += sizeof(kfile2.pad);
+	printf(FMT_INT16_HEX ": pad:     " FMT_INT16_HEX "\n", offset, kfile2.pad1);
+	offset += sizeof(kfile2.pad1);
 #endif
-	printf("0x%02x: magic:   0x%08x\n", offset, kfile2.magic);
+	printf(FMT_INT16_HEX ": magic:   " FMT_INT32_HEX "\n", offset, kfile2.magic);
 	offset += sizeof(kfile2.magic);
 
-	printf("0x%02x: version: 0x%08x (%d)\n", offset, kfile2.version, kfile2.version);
+	printf(FMT_INT16_HEX ": version: " FMT_INT32_HEX " (%d)\n", offset, kfile2.version, kfile2.version);
 	offset += sizeof(kfile2.version);
 
-	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile2));
+	printf(FMT_INT16_HEX ": EOF (" FMT_INT16_HEX ")\n", offset, (INT16)sizeof(kfile2));
 	printf("\n");
 }
 /*===============================
