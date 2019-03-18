@@ -229,6 +229,7 @@ getrefnrec (CNSTRING refn)
 	if (!RRrec) {
 		RRcount = 0;
 		if (RRmax == 0) {
+			RRmax = 10;
 			allocrefnrec();
 		}
 		return FALSE;
