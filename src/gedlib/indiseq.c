@@ -1740,7 +1740,7 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 static STRING
 famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
-	NODE fam=0, spouse=0;
+	NODE fam=0;
 	STRING key=0, name=0, str=0;
 	INT val=0, num1=0;
 	INT spkeynum=0;

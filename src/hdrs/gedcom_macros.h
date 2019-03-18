@@ -85,6 +85,14 @@
   Now that NODE has a pointer to its parent RECORD,
   and RECORD has a pointer to the cacheel, it is possible 
 */
+
+/*
+  All of the FOR* macros are written with the following assumptions:
+  1) First argument is the input variable, provided by the caller
+  2) Middle arguments are data variables, local to the macro
+  3) Last argument is a count variable, provided by the caller
+*/
+
 /*
  FORCHILDRENx takes a node as its first arg
  FORCHILDREN takes a record as its first arg
@@ -262,7 +270,7 @@
 	{\
 	RECORD frec=0; \
 	NODE __node = find_tag(nchild(indi),"FAMC");\
-	NODE fam, fath, moth;\
+	NODE fam=0, fath=0, moth=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
