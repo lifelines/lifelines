@@ -27,6 +27,7 @@
 
 #include "llstdlib.h"
 #include "btree.h"
+#include "../btree/btreei.h"	/* path2fkey */
 #include "gedcom.h"
 #include "version.h"
 
@@ -41,7 +42,7 @@ BOOLEAN writeable = FALSE;      /* normally defined in liflines/main.c */
 BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
 int opt_finnish = 0;
 int opt_mychar = 0;
-BTREE BTR;
+extern BTREE BTR;
 
 /*==================================
  * work -- what the user wants to do
@@ -65,7 +66,9 @@ void dump_block(STRING dir);
 void dump_index(STRING dir);
 void dump_keyfile(STRING dir);
 void dump_xref(STRING dir);
+BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param);
 void print_block(BLOCK block, INT32 *offset);
+BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param);
 void print_index(INDEX index, INT32 *offset);
 void print_keyfile1(KEYFILE1 kfile1);
 void print_keyfile2(KEYFILE2 kfile2);
@@ -92,6 +95,8 @@ main (int argc,
 	INT lldberrnum=0;
 	int rtn=0;
 	int i=0;
+
+	set_signals(SIGMODE_CMDLINE);
 
 	/* TODO: needs locale & gettext initialization */
 
@@ -206,37 +211,24 @@ print_usage (void)
  *=============================================*/
 void dump_index(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
-        char buffer[BUFLEN];
-	FILE *fi;
 	INDEX index;
-	INT32 offset = 0;
+	FKEY mkey = path2fkey("aa/aa");
+        
+	bbasedir(BTR) = dir;
+	index = readindex(BTR, mkey, TRUE);
 
-	sprintf(scratch, "%s/aa/aa", dir);
-        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		printf("Error opening master index\n");
-		goto error2;
-	}
+	traverse_index_blocks(BTR, index, NULL, tf_print_index, NULL);
 
-        if (!(fi = fopen(scratch, LLREADBINARY))) {
-		printf("Error opening master index\n");
-		goto error2;
-	}
-
-        if (fread(&buffer, BUFLEN, 1, fi) != 1) {
-		printf("Error reading master index\n");
-		goto error1;
-        }
-
-	index = (INDEX)buffer;
-
-	print_index(index, &offset);
-
-error1:
-	fclose(fi);
-error2:
 	return;
+}
+/*===============================
+ * tf_print_index -- traversal function wrapper for print_index
+ *=============================*/
+BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
+{
+	INT32 offset = 0;
+	print_index(index, &offset);
+	return TRUE;
 }
 /*===============================
  * print_index -- print INDEX to stdout
@@ -246,10 +238,11 @@ void print_index(INDEX index, INT32 *offset)
 	INT n;
 
 	printf("INDEX\n");
-	printf(FMT_INT32_HEX ": ix_self: %d\n", *offset, index->ix_self);
+	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, index->ix_self, fkey2path(index->ix_self));
 	*offset += sizeof(index->ix_self);
 
-	printf(FMT_INT32_HEX ": ix_type: %d\n", *offset, index->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: " FMT_INT32 " (%s)\n", *offset, index->ix_type,
+               (index->ix_type == 1 ? "INDEX" : (index->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
 	*offset += sizeof(index->ix_type);
 
 #if __WORDSIZE != 16
@@ -257,10 +250,10 @@ void print_index(INDEX index, INT32 *offset)
 	*offset += sizeof(index->ix_pad1);
 #endif
 
-	printf(FMT_INT32_HEX ": ix_parent: %d\n", *offset, index->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: " FMT_INT32_HEX " (%s)\n", *offset, index->ix_parent, fkey2path(index->ix_parent));
 	*offset += sizeof(index->ix_parent);
 
-	printf(FMT_INT32_HEX ": ix_nkeys: %d\n", *offset, index->ix_nkeys);
+	printf(FMT_INT32_HEX ": ix_nkeys: " FMT_INT16 "\n", *offset, index->ix_nkeys);
 	*offset += sizeof(index->ix_nkeys);
 
 	for (n=0; n<NOENTS; n++) {
@@ -286,39 +279,25 @@ void print_index(INDEX index, INT32 *offset)
  *=============================================*/
 void dump_block(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
-        char buffer[BUFLEN];
-	FILE *fb;
-	BLOCK block;
-	INT32 offset = 0;
+	INDEX index;
+	FKEY mkey = path2fkey("aa/aa");
+        
+	bbasedir(BTR) = dir;
+	index = readindex(BTR, mkey, TRUE);
 
-	sprintf(scratch, "%s/ab/aa", dir);
-        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		printf("Error opening master block\n");
-		goto error2;
-	}
+	traverse_index_blocks(BTR, index, NULL, NULL, tf_print_block);
 
-        if (!(fb = fopen(scratch, LLREADBINARY))) {
-		printf("Error opening master block\n");
-		goto error2;
-	}
-
-        if (fread(&buffer, BUFLEN, 1, fb) != 1) {
-		printf("Error reading master bock\n");
-		goto error1;
-        }
-
-	block = (BLOCK)buffer;
-
-	print_block(block, &offset);
-
-error1:
-	fclose(fb);
-error2:
 	return;
 }
-
+/*===============================
+ * tf_print_block -- traversal function wrapper for print_block
+ *=============================*/
+BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
+{
+	INT32 offset = 0;
+	print_block(block, &offset);
+	return TRUE;
+}
 /*===============================
  * print_block -- print BLOCK to stdout
  *=============================*/
@@ -327,18 +306,19 @@ void print_block(BLOCK block, INT32 *offset)
 	INT n;
 
 	printf("BLOCK\n");
-	printf(FMT_INT32_HEX ": ix_self: %d\n", *offset, block->ix_self);
+	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, block->ix_self, fkey2path(block->ix_self));
 	*offset += sizeof(block->ix_self);
 
-	printf(FMT_INT32_HEX ": ix_type: %d\n", *offset, block->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: " FMT_INT32 " (%s)\n", *offset, block->ix_type,
+               (block->ix_type == 1 ? "INDEX" : (block->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
 	*offset += sizeof(block->ix_type);
 
 #if __WORDSIZE != 16
-	printf(FMT_INT32_HEX ": ix_pad1: %d\n", *offset, block->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1:" FMT_INT16_HEX "\n", *offset, block->ix_pad1);
 	*offset += sizeof(block->ix_pad1);
 #endif
 
-	printf(FMT_INT32_HEX ": ix_parent: %d\n", *offset, block->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: " FMT_INT32_HEX " (%s)\n", *offset, block->ix_parent, fkey2path(block->ix_parent));
 	*offset += sizeof(block->ix_parent);
 
 	printf(FMT_INT32_HEX ": ix_nkeys: %d\n", *offset, block->ix_nkeys);
