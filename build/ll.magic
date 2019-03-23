@@ -1,0 +1,17 @@
+# LifeLines Genealogy KEY File
+0	long	x
+>4	long	x
+>8	long	x
+>12	string	LifeLines\ Keyfile	LifeLines Key File,
+>32	long	0x12345678		little endian,
+>32	long	0x78563412		big endian,
+>36	long	0x1			version 1
+
+# LifeLines Genealogy INDEX File
+0	long	x
+>4	short	0x1			LifeLines INDEX File
+
+# LifeLines Genealogy BLOCK File
+0	long	x
+>4	short	0x2			LifeLines BLOCK File
+
