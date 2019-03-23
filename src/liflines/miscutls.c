@@ -36,11 +36,12 @@
 #include "indiseq.h"
 #include "liflines.h"
 #include "feedback.h"
-
+#include "interp.h"
+#include "zstr.h"
 #include "llinesi.h"
 
 extern STRING qSdbrecstats,qSdbrecords;
-
+extern STRING qSprogsig,qSsignal;
 
 /*======================================
  * key_util -- Return person's key value
@@ -104,4 +105,37 @@ show_database_stats (void)
 		, _(qSdbrecstats), num_indis(), num_fams()
 		, num_sours(), num_evens(), num_othrs());
 	msg_info(msg);
+}
+/*======================================
+ * sighand_cursesui -- Catch and handle signal (UI)
+ *====================================*/
+void
+sighand_cursesui(int sig)
+{
+	char signum[20];
+	STRING signame;
+	ZSTR zstr=0;
+
+	/* Ok, we'll want the descriptive name of the signal */
+	load_signames();
+
+	/* We don't know whether curses is up or not right now */
+	/* so we build the report msg, then close curses, then print it */
+	zstr = get_report_error_msg(qSprogsig);
+	close_lifelines();
+	shutdown_ui(TRUE); /* pause */
+
+	/* TODO: Shouldn't we be logging this ? */
+	/* now print report msg if we had one */
+	if (zs_len(zstr))
+		printf("%s", zs_str(zstr));
+	zs_free(&zstr);
+	/* now build description of signal (# and name) */
+	/* name is not translated til sprint'd into msg */
+	snprintf(signum, sizeof(signum), "%d", sig);
+	signame = get_signame(sig);
+	zstr = zprintpic2(_(qSsignal), signum, signame); 
+	ll_optional_abort(zs_str(zstr));
+	zs_free(&zstr);
+	exit(1);
 }

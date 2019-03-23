@@ -30,6 +30,7 @@
 #include "../btree/btreei.h"	/* path2fkey */
 #include "gedcom.h"
 #include "version.h"
+#include "toolsi.h"
 
 /*********************************************
  * required global variables
@@ -96,7 +97,7 @@ main (int argc,
 	int rtn=0;
 	int i=0;
 
-	set_signals(SIGMODE_CMDLINE);
+	set_signals(sighand_cmdline);
 
 	/* TODO: needs locale & gettext initialization */
 
@@ -227,6 +228,10 @@ void dump_index(STRING dir)
 BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
 {
 	INT32 offset = 0;
+
+	btree = btree;	/* UNUSED */
+	param = param;	/* UNUSED */
+
 	print_index(index, &offset);
 	return TRUE;
 }
@@ -237,7 +242,7 @@ void print_index(INDEX index, INT32 *offset)
 {
 	INT n;
 
-	printf("INDEX\n");
+	printf("INDEX - DIRECTORY\n");
 	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, index->ix_self, fkey2path(index->ix_self));
 	*offset += sizeof(index->ix_self);
 
@@ -295,6 +300,10 @@ void dump_block(STRING dir)
 BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
 {
 	INT32 offset = 0;
+
+	btree = btree;	/* UNUSED */
+	param = param;	/* UNUSED */
+
 	print_block(block, &offset);
 	return TRUE;
 }
@@ -305,7 +314,7 @@ void print_block(BLOCK block, INT32 *offset)
 {
 	INT n;
 
-	printf("BLOCK\n");
+	printf("BLOCK - DIRECTORY\n");
 	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, block->ix_self, fkey2path(block->ix_self));
 	*offset += sizeof(block->ix_self);
 
@@ -344,6 +353,16 @@ void print_block(BLOCK block, INT32 *offset)
 
 	printf(FMT_INT32_HEX ": EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
+
+#if 0
+	printf("BLOCK - DATA\n");
+	for (n=0; n<NORECS; n++) {
+		/* TODO: Read the actual data! */
+		printf(FMT_INT32_HEX ": rkey[" FMT_INT_04 "]: '%-8.8s' off: " FMT_INT32_HEX " len: " FMT_INT32_HEX " '%s'\n", *offset, n, (char *)&block->ix_rkeys[n], block->ix_offs[n], block->ix_lens[n], "");
+		*offset += block->ix_lens[n];
+	}
+	printf("\n");
+#endif
 }
 /*===============================
  * dump_keyfile -- open and print KEYFILE1 and KEYFILE2 to stdout
@@ -458,6 +477,8 @@ void print_keyfile2(KEYFILE2 kfile2)
  *=============================*/
 void dump_xref(STRING dir)
 {
+	dir = dir;	/* UNUSED */
+
 	if (!openxref(FALSE))
 	{
 		printf("Error opening/reading xrefs\n");
