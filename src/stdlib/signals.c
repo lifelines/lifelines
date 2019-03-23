@@ -39,29 +39,22 @@
 #include "feedback.h"
 #include "zstr.h"
 
-
 /*********************************************
  * external/imported variables
  *********************************************/
-extern STRING qSprogsig, qSsignal,qSsigunk;
 extern STRING qSsig00, qSsig01, qSsig02, qSsig03, qSsig04;
 extern STRING qSsig05, qSsig06, qSsig07, qSsig08, qSsig09;
 extern STRING qSsig10, qSsig11, qSsig12, qSsig13, qSsig14;
 extern STRING qSsig15, qSsig16, qSsig17, qSsig18, qSsig19;
-extern STRING qSsig20;
+extern STRING qSsig20, qSsigunk;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-/* alphabetical */
-static void load_signames(void);
-static void on_signals(int);
-
 /*********************************************
  * local variables
  *********************************************/
-
 static char *sig_msgs[21];
 
 /*********************************************
@@ -72,7 +65,7 @@ static char *sig_msgs[21];
 /*======================================
  * load_signames -- Load descriptive signal names
  *====================================*/
-static void
+void
 load_signames (void)
 {
 	sig_msgs[ 0] = _(qSsig00);
@@ -101,65 +94,44 @@ load_signames (void)
  * set_signals -- Install signal handler
  *====================================*/
 void
-set_signals (void)
+set_signals (__sighandler_t handler)
 {
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
-		signal(SIGINT, on_signals);
+		signal(SIGINT, handler);
 #ifdef SIGHUP
-	signal(SIGHUP, on_signals);
+	signal(SIGHUP, handler);
 #endif
 #ifdef SIGQUIT
-	signal(SIGQUIT, on_signals);
+	signal(SIGQUIT, handler);
 #endif
-	signal(SIGILL, on_signals);
+	signal(SIGILL, handler);
 #ifdef SIGEMT
-	signal(SIGEMT, on_signals);
+	signal(SIGEMT, handler);
 #endif
-	signal(SIGFPE, on_signals);
+	signal(SIGFPE, handler);
 #ifdef SIGBUS
-	signal(SIGBUS, on_signals);
+	signal(SIGBUS, handler);
 #endif
-	signal(SIGSEGV, on_signals);
+	signal(SIGSEGV, handler);
 #ifdef SIGSYS
-	signal(SIGSYS, on_signals);
+	signal(SIGSYS, handler);
 #endif
 #ifdef SIGPIPE
-	signal(SIGPIPE, on_signals);
+	signal(SIGPIPE, handler);
 #endif
 }
 /*======================================
- * on_signals -- Catch and handle signal
+ * get_signame -- Get signal name
  *====================================*/
-static void
-on_signals (int sig)
+char *
+get_signame (int sig)
 {
-	char signum[20];
-	STRING signame;
-	ZSTR zstr=0;
+	char *signame;
 
-	/* Ok, we'll want the descriptive name of the signal */
-	load_signames();
+        if (sig>=0 && sig<ARRSIZE(sig_msgs))
+                signame = sig_msgs[sig];
+        else
+                signame = _(qSsigunk);
 
-	/* We don't know whether curses is up or not right now */
-	/* so we build the report msg, then close curses, then print it */
-	zstr = get_report_error_msg(qSprogsig);
-	close_lifelines();
-	shutdown_ui(TRUE); /* pause */
-
-	/* TODO: Shouldn't we be logging this ? */
-	/* now print report msg if we had one */
-	if (zs_len(zstr))
-		printf("%s", zs_str(zstr));
-	zs_free(&zstr);
-	/* now build description of signal (# and name) */
-	/* name is not translated til sprint'd into msg */
-	snprintf(signum, sizeof(signum), "%d", sig);
-	if (sig>=0 && sig<ARRSIZE(sig_msgs))
-		signame = sig_msgs[sig];
-	else
-		signame = _(qSsigunk);
-	zstr = zprintpic2(_(qSsignal), signum, signame); 
-	ll_optional_abort(zs_str(zstr));
-	zs_free(&zstr);
-	exit(1);
+	return signame;
 }

@@ -10,7 +10,7 @@ bin_PROGRAMS = btedit dbverify lldump lltest
 btedit_SOURCES = btedit.c wprintf.c
 dbverify_SOURCES = dbverify.c wprintf.c
 lltest_SOURCES = lltest.c wprintf.c
-lldump_SOURCES = lldump.c wprintf.c
+lldump_SOURCES = lldump.c wprintf.c misc.c
 
 # what libraries do btedit, dbverify and lltest need?
 btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
