@@ -310,6 +310,16 @@ splitting:
 		}
 	}
 
+/* now that block has been split, rewrite first block header to zero out entries that were moved */
+	for (i = n/2; i <= n; i++) {
+		RKEY_INIT(rkeys(newb, i));
+		lens(newb, i) = 0;
+		offs(newb, i) = 0;
+	}
+	ASSERT(fseek(ft1, 0, SEEK_SET) == 0);
+	ASSERT(fwrite(newb, BUFLEN, 1, ft1) == 1);
+	putheader(btree, newb);
+
 /* make changes permanent in database */
 	fclose(fo); /* was opened read-only */
 	CHECKED_fclose(ft1, scratch1);
