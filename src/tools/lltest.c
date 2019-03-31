@@ -393,7 +393,7 @@ test_str2rkey(void)
 			printf("'%.8s' -> '%.8s' expected '%.8s'\n", tests[i].rkeystr, rkey.r_rkey, tests[i].rkey.r_rkey);
 		}
 
-		if (strncmp(rkey.r_rkey, tests[i].rkey.r_rkey, RKEYLEN)) { rc = 2+i; break; }
+		if (cmpkeys(&rkey, &tests[i].rkey)) { rc = 2+i; break; }
 	}
 
 exit:
