@@ -38,6 +38,45 @@
 #include "btreei.h"
 
 /*********************************************
+ * local variables
+ *********************************************/
+
+struct _lldberrstr
+{
+  STRING errstr;
+} lldberrstr[] = {
+  { "" }, /* 0 */
+  { "" }, /* 1 */
+  { "" }, /* 2 */
+  { "" }, /* 3 */
+  { "" }, /* 4 */
+  { "" }, /* 5 */
+  { "" }, /* 6 */
+  { "" }, /* 7 */
+  { "no db directory" },
+  { "db directory is file, not directory" },
+  { "failed to create db directory" },
+  { "access error to db directory" },
+  { "no keyfile" },
+  { "problem with the key file" },
+  { "problem with the key file trying to alter a db" },
+  { "problem with an index file" },
+  { "problem with master index file" },
+  { "problem with a data block file" },
+  { "base directory name too long" },
+  { "can't open database because writer has it & -w was specified" },
+  { "error because db was locked" },
+  { "error because db was unlocked" },
+  { "illegal keyfile" },
+  { "wrong alignment key file" },
+  { "wrong version key file" },
+  { "previous database found (create was specified)" },
+  { "db locked by readers (string in custom string)" },
+  { "new db properties invalid" },
+  { "" }, /* 27 */
+};
+
+/*********************************************
  * local function prototypes
  *********************************************/
 
@@ -426,4 +465,17 @@ exit_closebtree:
 		stdfree(btree);
 	}
 	return result;
+}
+/*============================================
+ * getlldberrstr - Get string for lldberr value
+ *==========================================*/
+STRING
+getlldberrstr (BTERR errnum)
+{
+	STRING err = "";
+
+	if (errnum > BTERR_MIN || errnum < BTERR_MAX)
+		err = lldberrstr[errnum].errstr;
+
+	return err;
 }

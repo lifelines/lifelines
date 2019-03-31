@@ -32,6 +32,7 @@
 #include "version.h"
 #include "btree.h"
 #include "../btree/btreei.h"
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -58,6 +59,7 @@ static int test_rkey2str(void);
 static int test_str2rkey(void);
 static int test_index(void);
 static int test_block(void);
+static int test_lldberr(void);
 
 /*********************************************
  * local function definitions
@@ -147,6 +149,10 @@ main (int argc,
 	      rc = test_nextfkey(btree);
 	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
 
+	printf("Testing lldberr...");
+		rc = test_lldberr();
+	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
+	
 	closebtree(btree);
 	btree = 0;
 	return rtn;
@@ -494,3 +500,24 @@ exit:
 	return rc;
 }
 
+int test_lldberr(void)
+{
+	INT rc=0;
+	INT n=0;
+	STRING err;
+
+	/* test invalid errors: BTERR_MIN and BTERR_MAX */
+	err = getlldberrstr(BTERR_MIN);
+	if (!(strcmp(err,"") == 0)) { rc=BTERR_MIN; goto exit; } 
+
+	err = getlldberrstr(BTERR_MAX);
+	if (!(strcmp(err,"") == 0)) { rc=BTERR_MAX; goto exit; } 
+
+	/* test valid errors */
+	for (n=BTERR_MIN+1; n<BTERR_MAX; n++) {
+		err = getlldberrstr(n);
+		if (!(strcmp(err,"") != 0)) { rc=n; goto exit; } 
+	}
+exit:
+	return rc;
+}

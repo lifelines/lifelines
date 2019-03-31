@@ -246,9 +246,11 @@ STRING rkey2str(RKEY);
 RKEY   str2rkey(CNSTRING);
 STRING fkey2path(FKEY);
 
+/* opnbtree.c */
 
-enum {
-  BTERR_NODB=8            /* no db directory */
+enum _BTERR {
+  BTERR_MIN=7
+, BTERR_NODB=8            /* no db directory */
 , BTERR_DBBLOCKEDBYFILE   /* db directory is file, not directory */
 , BTERR_DBCREATEFAILED    /* failed to create db directory */
 , BTERR_DBACCESS          /* access error to db directory */
@@ -268,9 +270,12 @@ enum {
 , BTERR_EXISTS            /* previous database found (create was specified) */
 , BTERR_READERS           /* db locked by readers (string in custom string) */
 , BTERR_BADPROPS          /* new db properties invalid */
-
+, BTERR_MAX
 };
 
+typedef enum _BTERR BTERR;
+
+STRING getlldberrstr (BTERR err);
 
 #define BTINDEXTYPE 1
 #define BTBLOCKTYPE 2
