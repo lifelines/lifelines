@@ -390,7 +390,7 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	rawrec = (RAWRECORD) stdalloc(len + 1);
 	if (!(fread(rawrec, len, 1, fd) == 1)) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Read for " FMT_INT "bytes failed for blockfile (rkey=%s)"
+		sprintf(msg, "Read for " FMT_INT " bytes failed for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
