@@ -272,7 +272,7 @@ void print_index(INDEX index, INT32 *offset)
 #endif
 
 	for (n=0; n<NOENTS; n++) {
-		printf(FMT_INT32_HEX ": ix_fkey[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, index->ix_fkeys[n]);
+		printf(FMT_INT32_HEX ": ix_fkey[" FMT_INT_04 "]: " FMT_INT32_HEX " (%s)\n", *offset, n, index->ix_fkeys[n], fkey2path(index->ix_fkeys[n]));
 		*offset += sizeof(index->ix_fkeys[n]);
 	}
 
@@ -323,7 +323,7 @@ void print_block(BLOCK block, INT32 *offset)
 	*offset += sizeof(block->ix_type);
 
 #if __WORDSIZE != 16
-	printf(FMT_INT32_HEX ": ix_pad1:" FMT_INT16_HEX "\n", *offset, block->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1: " FMT_INT16_HEX "\n", *offset, block->ix_pad1);
 	*offset += sizeof(block->ix_pad1);
 #endif
 
@@ -339,7 +339,7 @@ void print_block(BLOCK block, INT32 *offset)
 	}
 
 #if __WORDSIZE != 16
-	printf(FMT_INT32_HEX ": ix_pad2: %d\n", *offset, block->ix_pad2);
+	printf(FMT_INT32_HEX ": ix_pad2: " FMT_INT16_HEX "\n", *offset, block->ix_pad2);
 	*offset += sizeof(block->ix_pad2);
 #endif
 
@@ -435,10 +435,10 @@ void print_keyfile1(KEYFILE1 kfile1)
 	printf("KEYFILE1\n");
 	printf("========\n");
 
-	printf(FMT_INT16_HEX ": mkey:  " FMT_INT32_HEX " (%d)\n", offset, kfile1.k_mkey, kfile1.k_mkey);
+	printf(FMT_INT16_HEX ": mkey:  " FMT_INT32_HEX " (%s)\n", offset, kfile1.k_mkey, fkey2path(kfile1.k_mkey));
 	offset += sizeof(kfile1.k_mkey);
 
-	printf(FMT_INT16_HEX ": fkey:  " FMT_INT32_HEX "\n", offset, kfile1.k_fkey);
+	printf(FMT_INT16_HEX ": fkey:  " FMT_INT32_HEX " (%s)\n", offset, kfile1.k_fkey, fkey2path(kfile1.k_fkey));
 	offset += sizeof(kfile1.k_fkey);
 
 	printf(FMT_INT16_HEX ": ostat: " FMT_INT32_HEX " (%d)\n", offset, kfile1.k_ostat, kfile1.k_ostat);
@@ -460,7 +460,7 @@ void print_keyfile2(KEYFILE2 kfile2)
 	printf(FMT_INT16_HEX ": name:    '%-18.18s'\n", offset, kfile2.name);
 	offset += sizeof(kfile2.name);
 #if WORDSIZE != 16
-	printf(FMT_INT16_HEX ": pad:     " FMT_INT16_HEX "\n", offset, kfile2.pad1);
+	printf(FMT_INT16_HEX ": pad1:    " FMT_INT16_HEX "\n", offset, kfile2.pad1);
 	offset += sizeof(kfile2.pad1);
 #endif
 	printf(FMT_INT16_HEX ": magic:   " FMT_INT32_HEX "\n", offset, kfile2.magic);
