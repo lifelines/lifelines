@@ -408,7 +408,7 @@ dumpxrefs (void)
 	dumpxrecs("X", &xrecs, &offset);
 
 	/* Dump size */
-	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ")\n", offset, (INT32)xrefsize);
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", offset, (INT32)xrefsize, (offset == (INT32)xrefsize) ? "GOOD" : "BAD");
 }
 /*================================
  * dumpxrecs -- Print DELETESET to stdout
