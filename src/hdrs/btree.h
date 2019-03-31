@@ -249,28 +249,28 @@ STRING fkey2path(FKEY);
 /* opnbtree.c */
 
 enum _BTERR {
-  BTERR_MIN=7
-, BTERR_NODB=8            /* no db directory */
-, BTERR_DBBLOCKEDBYFILE   /* db directory is file, not directory */
-, BTERR_DBCREATEFAILED    /* failed to create db directory */
-, BTERR_DBACCESS          /* access error to db directory */
-, BTERR_NOKEY             /* no keyfile */
-, BTERR_KFILE             /*problem with the key file*/
-, BTERR_KFILE_ALTERDB     /*problem with the key file trying to alter a db*/
-, BTERR_INDEX             /*problem with an index file*/
-, BTERR_MASTER_INDEX      /*problem with master index file*/
-, BTERR_BLOCK             /*problem with a data block file*/
-, BTERR_LNGDIR            /*base directory name too long*/
-, BTERR_WRITER            /*can't open database because writer has it & -w was specified*/
-, BTERR_LOCKED            /* error because db was locked */
-, BTERR_UNLOCKED          /* error because db was unlocked */
-, BTERR_ILLEGKF           /* illegal keyfile */
-, BTERR_ALIGNKF           /* wrong alignment key file */
-, BTERR_VERKF             /* wrong version key file */
-, BTERR_EXISTS            /* previous database found (create was specified) */
-, BTERR_READERS           /* db locked by readers (string in custom string) */
-, BTERR_BADPROPS          /* new db properties invalid */
-, BTERR_MAX
+  BTERR_MIN=7             /* 7: MIN placeholder */
+, BTERR_NODB=8            /* 8: no db directory */
+, BTERR_DBBLOCKEDBYFILE   /* 9: db directory is file, not directory */
+, BTERR_DBCREATEFAILED    /* 10: failed to create db directory */
+, BTERR_DBACCESS          /* 11: access error to db directory */
+, BTERR_NOKEY             /* 12: no keyfile */
+, BTERR_KFILE             /* 13: problem with the key file*/
+, BTERR_KFILE_ALTERDB     /* 14: problem with the key file trying to alter a db*/
+, BTERR_INDEX             /* 15: problem with an index file*/
+, BTERR_MASTER_INDEX      /* 16: problem with master index file*/
+, BTERR_BLOCK             /* 17: problem with a data block file*/
+, BTERR_LNGDIR            /* 18: base directory name too long*/
+, BTERR_WRITER            /* 19: can't open database because writer has it & -w was specified*/
+, BTERR_LOCKED            /* 20: error because db was locked */
+, BTERR_UNLOCKED          /* 21: error because db was unlocked */
+, BTERR_ILLEGKF           /* 22: illegal keyfile */
+, BTERR_ALIGNKF           /* 23: wrong alignment key file */
+, BTERR_VERKF             /* 24: wrong version key file */
+, BTERR_EXISTS            /* 25: previous database found (create was specified) */
+, BTERR_READERS           /* 26: db locked by readers (string in custom string) */
+, BTERR_BADPROPS          /* 27: new db properties invalid */
+, BTERR_MAX               /* 28: MAX placeholder */
 };
 
 typedef enum _BTERR BTERR;
