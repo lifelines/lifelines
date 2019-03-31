@@ -61,6 +61,7 @@ typedef struct {
 	char r_rkey[RKEYLEN];
 }  RKEY; /*record key*/
 
+#define RKEY_INIT(r) memset((r).r_rkey, 0, RKEYLEN)
 
 typedef INT32 FKEY; /*file key*/
 
