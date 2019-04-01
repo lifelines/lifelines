@@ -90,6 +90,8 @@ int do_checked_fclose(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fflush(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fseek(FILE *fp, long offset, int whence, STRING filename, STRING srcfile, int srcline);
 size_t do_checked_fwrite(const void *buf, size_t size, size_t count, FILE *fp, STRING filename, STRING srcfile, int srcline);
+void filecopy (FILE* fpsrc, INT len, FILE* fpdest);
+void movefiles (STRING from_file, STRING to_file);
 
 /* listener.c */
 	/* callback for language change */
