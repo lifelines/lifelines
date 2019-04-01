@@ -97,6 +97,8 @@ struct work {
 	INT check_othes;
 	INT fix_deletes;
 	INT fix_alter_pointers;
+	INT check_block_splits;
+	INT fix_block_splits;
 	INT check_missing_data_records; /* record in index, but no data */
 	INT fix_missing_data_records;
 	INT pass; /* =1 is checking, =2 is fixing */
@@ -121,7 +123,7 @@ static NAMEREFN_REC * alloc_namerefn(CNSTRING namerefn, CNSTRING key, INT err);
 static BOOLEAN cgn_callback(TRAV_NAMES_FUNC_ARGS(key, name, newset, param));
 static BOOLEAN cgr_callback(TRAV_REFNS_FUNC_ARGS(key, refn, newset, param));
 static void check_and_fix_records(void);
-static BOOLEAN check_block(BLOCK block, RKEY * lo, RKEY * hi);
+static BOOLEAN check_block(BTREE btr, BLOCK block, RKEY * lo, RKEY * hi);
 static BOOLEAN check_btree(BTREE btr);
 static BOOLEAN check_even(CNSTRING key, RECORD rec);
 static BOOLEAN check_fam(CNSTRING key, RECORD rec);
@@ -162,7 +164,7 @@ static void vcrashlog(int newline, const char * fmt, va_list args);
  *********************************************/
 
 enum {
-	ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME, ERR_DUPREFN
+	  ERR_ORPHANNAME,  ERR_GHOSTNAME, ERR_DUPNAME, ERR_DUPREFN
 	, ERR_NONINDINAME, ERR_DUPINDI, ERR_DUPFAM
 	, ERR_DUPSOUR, ERR_DUPEVEN, ERR_DUPOTHE
 	, ERR_UNDELETED, ERR_DELETED, ERR_BADNAME
@@ -170,11 +172,11 @@ enum {
 	, ERR_BADHUSBREF, ERR_BADWIFEREF, ERR_BADCHILDREF
 	, ERR_EXTRAHUSB, ERR_EXTRAWIFE, ERR_EXTRACHILD
 	, ERR_EMPTYFAM, ERR_SOLOFAM, ERR_BADPOINTER
-	, ERR_MISSINGREC
+	, ERR_MISSINGREC, ERR_STALEBLOCKENTRY
 };
 
 static struct errinfo errs[] = {
-	{ ERR_ORPHANNAME, 0, 0, N_("Orphan names") }
+	  { ERR_ORPHANNAME, 0, 0, N_("Orphan names") }
 	, { ERR_GHOSTNAME, 0, 0, N_("Ghost names") }
 	, { ERR_DUPNAME, 0, 0, N_("Duplicate names") }
 	, { ERR_DUPREFN, 0, 0, N_("Duplicate names") }
@@ -200,6 +202,7 @@ static struct errinfo errs[] = {
 	, { ERR_SOLOFAM, 0, 0, N_("Single person family") }
 	, { ERR_BADPOINTER, 0, 0, N_("Bad pointer") }
 	, { ERR_MISSINGREC, 0, 0, N_("Missing data records") }
+	, { ERR_STALEBLOCKENTRY, 0, 0, N_("Stale block directory entry") }
 };
 static struct work todo;
 static LIST tofix=0;
@@ -208,7 +211,7 @@ static INDISEQ soundexseq=0;
 static BOOLEAN noisy=FALSE;
 static INDISEQ seq_indis, seq_fams, seq_sours, seq_evens, seq_othes;
 static STRING lineage_tags[] = {
-	"FAMC"
+	  "FAMC"
 	, "FAMS"
 	, "WIFE"
 	, "HUSB"
@@ -239,7 +242,7 @@ print_usage (void)
 	printf(_("flags:\n"));
 	printf(_("\t-a = Perform all checks (does not include fixes)\n"));
 	printf(_("\t-g = Check for ghosts (names/refns)\n"));
-	printf(_("\t-G = Check for & fix ghosts (names/refns)\n"));
+	printf(_("\t-G = Fix ghosts (names/refns)\n"));
 	printf(_("\t-i = Check individuals\n"));
 	printf(_("\t-f = Check families\n"));
 	printf(_("\t-F = Alter any bad family lineage pointers (to _badptr)\n"));
@@ -251,6 +254,7 @@ print_usage (void)
 	printf(_("\t-m = Check for records missing data entries\n"));
 	printf(_("\t-M = Fix records missing data entries\n"));
 	printf(_("\t-D = Fix bad delete entries\n"));
+	printf(_("\t-B = Fix block splits with stale data\n"));
 	printf(_("\t-n = Noisy (echo every record processed)\n"));
 	printf(_("example: dbverify -ifsex \"%s\"\n"), fname);
 	printf("%s\n", verstr);
@@ -423,7 +427,7 @@ cgn_callback (TRAV_NAMES_FUNC_ARGS(key, name, newset, param))
 	}
 
 	if (noisy)
-		report_progress("Name: %s", name);
+		report_progress("Checking Name: %s", name);
 
 	return 1; /* continue traversal */
 }
@@ -454,7 +458,7 @@ cgr_callback (TRAV_REFNS_FUNC_ARGS(key, refn, newset, param))
 	} else {
 	}
 	if (noisy)
-		report_progress("Refn: %s", refn);
+		report_progress("Checking Refn: %s", refn);
 
 	return 1; /* continue traversal */
 }
@@ -599,7 +603,7 @@ nodes_callback(TRAV_RECORDS_FUNC_ARGS(key, rec, param))
 {
 	param=param;	/* NOTUSED */
 	if (noisy)
-		report_progress("Node: %s", key);
+		report_progress("Checking Node: %s", key);
 	switch (key[0]) {
 	case 'I': return todo.check_indis ? check_indi((CNSTRING)key, (RECORD)rec) : TRUE;
 	case 'F': return todo.check_fams ? check_fam((CNSTRING)key, (RECORD)rec) : TRUE;
@@ -1110,19 +1114,32 @@ check_set (INDISEQ seq, char ctype)
 static BOOLEAN
 check_btree (BTREE btr)
 {
+	BOOLEAN ret = TRUE;
+
 	/* keep track of which files we've visited */
 	TABLE fkeytab = create_table_int();
+
 	/* check that master index has its fkey correct */
 	INDEX index = bmaster(BTR);
-	INT mk1 = bkfile(btr).k_mkey;
+	FKEY mk1 = bkfile(btr).k_mkey;
 	if (ixself(index) != mk1) {
 		printf(_("Master fkey misaligned"));
-		printf("(" FMT_INT32 " != " FMT_INT ")\n", ixself(index), mk1);
-		return FALSE;
+		printf("(" FMT_INT32 " != " FMT_INT32 ")\n", ixself(index), mk1);
+		ret = FALSE;
+		goto exit;
 	}
-	check_index(btr, index, fkeytab, NULL, NULL);
+
+	/* check index (and block) keys */
+	if (!check_index(btr, index, fkeytab, NULL, NULL)) {
+		printf(_("Index or block keys invalid\n"));
+		ret = FALSE;
+		goto exit;
+	}
+
+exit:
 	destroy_table(fkeytab);
-	return TRUE;
+
+	return ret;
 }
 /*=========================================
  * check_index -- Validate one index node of btree
@@ -1161,7 +1178,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 			if (!check_index(btr, newix, fkeytab, lox, hix))
 				return FALSE;
 		} else {
-			if (!check_block((BLOCK)newix, lox, hix))
+			if (!check_block(btr, (BLOCK)newix, lox, hix))
 				return FALSE;
 		}
 	}
@@ -1173,10 +1190,86 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
  * Created: 2003/09/05, Perry Rapp
  *=======================================*/
 static BOOLEAN
-check_block (BLOCK block, RKEY * lo, RKEY * hi)
+check_block (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
 {
+	INT n = nkeys(block);
+	INT i;
+	RKEY nullrkey;
+	BOOLEAN altered=FALSE;
+
+	RKEY_INIT(nullrkey);
+
 	if (!check_keys(block, lo, hi))
 		return FALSE;
+
+	if (!todo.check_block_splits)
+		goto exit;
+
+	/* check for block splits that didn't clean up */
+	/* NOTE: block keys are 0..n-1 */
+	for (i = n; i < NORECS; i++) {
+		if (noisy)
+			report_progress("Checking File: %s Entry %d", fkey2path(ixself(block)), i);
+		if ((cmpkeys(&rkeys(block, i), &nullrkey) != 0) ||
+		    (offs(block, i) != 0) ||
+		    (lens(block, i) != 0)) {
+			report_error(ERR_STALEBLOCKENTRY
+				, _("Found stale block directory entry (%s, %d)"), fkey2path(ixself(block)), i);
+			if (todo.fix_block_splits) {
+				RKEY_INIT(rkeys(block, i));
+				offs(block, i) = 0;
+				lens(block, i) = 0;
+				report_fix(ERR_STALEBLOCKENTRY
+					, _("Fixed stale block directory entry (%s, %d)"), fkey2path(ixself(block)), i);
+				altered=TRUE;
+			}
+		}
+	}
+
+
+	/* must rewrite data block with new header */
+	if (altered) {
+		char scratch0[MAXPATHLEN], scratch1[MAXPATHLEN];
+		FILE *fo, *fn;
+
+		/* open original file */
+		sprintf(scratch0, "%s/%s", bbasedir(btr), fkey2path(ixself(block)));
+		if (!(fo = fopen(scratch0, LLREADBINARY LLFILERANDOM))) {
+			char msg[sizeof(scratch0)+64];
+			sprintf(msg, "Corrupt db  -- failed to open blockfile: %s", scratch0);
+			FATAL2(msg);
+		}
+	
+		/* open new file */
+		sprintf(scratch1, "%s/tmp1", bbasedir(btr));
+		if (!(fn = fopen(scratch1, LLWRITEBINARY LLFILETEMP LLFILERANDOM))) {
+			char msg[sizeof(scratch1)+64];
+			sprintf(msg, "Corrupt db  -- failed to open blockfile: %s", scratch1);
+			FATAL2(msg);
+		}
+
+		/* write updated header to new file */
+		ASSERT(fwrite(block, BUFLEN, 1, fn) == 1);
+
+		/* copy records from old file to new file */
+		/* NOTE: block keys are 0..n-1 */
+		for (i = 0; i < n; i++) {
+			if (fseek(fo, (long)(offs(block, i) + BUFLEN), 0))
+				FATAL();
+
+			/* NOTE: Assumes that fn is positioned properly */
+			filecopy(fo, lens(block, i), fn);
+		}
+
+		/* close files */
+		fclose(fn);
+		fclose(fo);
+
+		/* move new file over top of old file */
+		movefiles(scratch1, scratch0);
+        }
+
+exit:
 	return TRUE;
 }
 /*=========================================
@@ -1281,7 +1374,7 @@ check_typed_missing_data_records (char ntype)
 		if (!keynum) return;
 		sprintf(key, "%c%d", ntype, keynum);
 		if (noisy)
-			report_progress("Check data record presence: %s", key);
+			report_progress("Check Data Record: %s", key);
 		if (is_record_missing_data_entry(key)) {
 			if (todo.pass == 1) {
 				report_error(ERR_MISSINGREC, _("Missing data record (%s)"), key);
@@ -1370,6 +1463,8 @@ main (int argc, char **argv)
 		case 'm': todo.check_missing_data_records=TRUE; break;
 		case 'M': todo.fix_missing_data_records=TRUE; break;
 		case 'D': todo.fix_deletes=TRUE; break;
+		case 'b': todo.check_block_splits=TRUE; break;
+		case 'B': todo.fix_block_splits=TRUE; break;
 		case 'v': print_version("llexec"); goto done;
 		case 'h':
 		default: print_usage(); goto done;
@@ -1383,6 +1478,8 @@ main (int argc, char **argv)
 	/* Enable any checks needed for fixes selected */
 	if (todo.fix_missing_data_records)
 		todo.check_missing_data_records = 1;
+	if (todo.fix_block_splits)
+		todo.check_block_splits = 1;
 
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
@@ -1427,16 +1524,22 @@ main (int argc, char **argv)
 		todo.check_indis=todo.check_fams=todo.check_sours=TRUE;
 		todo.check_evens=todo.check_othes=TRUE;
 		todo.find_ghosts=TRUE;
+		todo.check_block_splits=TRUE;
 	}
+
+	/* if database is not writable then disable fixes */
+	if (!(bwrite(BTR))) {
+		todo.fix_alter_pointers = FALSE;
+		todo.fix_ghosts = FALSE;
+		todo.fix_block_splits = FALSE;
+	}
+
+	if (todo.check_block_splits || todo.fix_block_splits)
+		check_btree(BTR);
 
 	if (todo.find_ghosts || todo.fix_ghosts)
 		check_ghosts();
 
-
-	if (!(bwrite(BTR))) {
-		todo.fix_alter_pointers = FALSE;
-		todo.fix_ghosts = FALSE;
-	}
 
 	if (todo.check_indis
 		|| todo.check_fams
@@ -1452,6 +1555,7 @@ main (int argc, char **argv)
 
 	report_results();
 
+done:
 	closebtree(BTR);
 
 	/* TODO: probably should call lldb_close, Perry 2005-10-07 */
@@ -1459,7 +1563,6 @@ main (int argc, char **argv)
 	BTR = 0;
 	returnvalue = 0;
 
-done:
 	return returnvalue;
 }
 /*===============================================
