@@ -43,8 +43,6 @@
 
 /* alphabetical */
 static void check_offset(BLOCK block, RKEY rkey, INT i);
-static void filecopy(FILE*fpsrc, INT len, FILE*fpdest);
-static void movefiles(STRING, STRING);
 
 /*********************************************
  * local function definitions
@@ -336,26 +334,6 @@ splitting:
 	addkey(btree, parent, rkeys(xtra, 0), ixself(xtra));
 	return TRUE;
 }
-/*======================================================
- * filecopy -- Copy record from one data file to another
- * Copy from source file (already opened) to destination
- * file (already opened).
- *====================================================*/
-static void
-filecopy (FILE* fpsrc, INT len, FILE* fpdest)
-{
-	char buffer[BUFLEN];
-	INT blklen;
-	while (len) {
-		/* copy BUFLEN at a time til the last little bit */
-		/* assumes full buffer copy each time, so only appropriate
-		for binary file copies (because of \r\n translation on Win32) */
-		blklen = (len > BUFLEN) ? BUFLEN : len;
-		ASSERT(fread(buffer, blklen, 1, fpsrc) == 1);
-		ASSERT(fwrite(buffer, blklen, 1, fpdest) == 1);
-		len -= blklen;
-	}
-}
 /*==================================
  * readrec -- read record from block
  *  btree: [in]  database pointer
@@ -476,24 +454,6 @@ bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 		rawrec=NULL;
 	}
 	return rawrec;
-}
-/*=======================================
- * movefiles -- Move first file to second
- * failure handled with FATAL2 macro, which exits
- *=====================================*/
-static void
-movefiles (STRING from_file, STRING to_file)
-{
-	INT rtn;
-	unlink(to_file);
-	rtn = rename(from_file, to_file);
-	if (rtn) {
-		char temp[1024];
-		snprintf(temp, sizeof(temp),
-			"rename failed code " FMT_INT ", from <%s> to <%s>",
-			rtn, from_file, to_file);
-		FATAL2(temp);
-	}
 }
 /*====================================================
  * isrecord -- See if there is a record with given key
