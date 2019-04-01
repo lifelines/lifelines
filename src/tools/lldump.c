@@ -368,14 +368,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 	/* Step 3: Dump BLOCK data */
 	/* Note that this mechanism is horribly inefficient from an I/O perspective. */
 	printf("BLOCK - DATA\n");
-
-	/* NOTE: This *should* be NORECS, but this will cause fatal errors in */
-	/* readrec() because stale directory entries are being processed.     */
-	/* Stale directory entries come as a result of block splitting, where */
-	/* the directory entries in the source block that are moved to a new  */
-	/* are not zeroed out. */
-	for (n=0; n<block->ix_nkeys; n++) {
-
+	for (n=0; n<NORECS; n++) {
 		INT len;
 		RAWRECORD rec = readrec(btree, block, n, &len);
 
