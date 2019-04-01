@@ -94,13 +94,14 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	index = (INDEX) stdalloc(BUFLEN);
 	if (fread(index, BUFLEN, 1, fi) != 1) {
 		if (robust) {
+			/* fall to end & return NULL */
 			goto readindex_end;
 		}
 		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
 		FATAL2(scratch);
 	}
-	if (fi) fclose(fi);
 readindex_end:
+	if (fi) fclose(fi);
 	return index;
 }
 /*=================================
