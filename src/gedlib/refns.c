@@ -123,9 +123,9 @@ static INT32   RMcount = 0;
 static void
 allocrefnrec(void)
 {
-        RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
         RRoffs = (INT32 *) stdalloc((RRmax)*sizeof(INT32));
-        RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(STRING));
+        RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
+        RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(CNSTRING));
 }
 
 /*====================================================
@@ -136,7 +136,7 @@ freerefnrec(void)
 {
         stdfree(RRkeys);
         stdfree(RRoffs);
-        stdfree((STRING)RRrefns);
+        stdfree((CNSTRING)RRrefns);
         RRmax = 0;
 }
 
@@ -177,7 +177,7 @@ freerefnmrec(void)
 	if (RMcount)
 		stdfree(RMkeys);
 	RMcount = 0;
-        RMmax = 0;
+	RMmax = 0;
 }
 
 /*====================================================
@@ -187,7 +187,7 @@ static void
 reallocrefnmrec(void)
 {
 	freerefnmrec();
-        allocrefnmrec();
+	allocrefnmrec();
 }
 
 /*====================================================
@@ -199,8 +199,8 @@ parserefnrec (RKEY rkey, CNSTRING p)
 	INT i;
 	RRkey = rkey;
 /* Store refn record in data structures */
-	memcpy (&RRcount, p, sizeof(INT));
-	p += sizeof(INT);
+	memcpy (&RRcount, p, sizeof(INT32));
+	p += sizeof(INT32);
 	if (RRcount >= RRmax - 1) {
 		reallocrefnrec();
 	}
@@ -356,9 +356,9 @@ remove_refn (CNSTRING refn,       /* record's refn */
 	}
 	p = rec = (STRING) stdalloc(RRsize);
 	len = 0;
-	memcpy(p, &RRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	memcpy(p, &RRcount, sizeof(INT32));
+	p += sizeof(INT32);
+	len += sizeof(INT32);
 	for (i = 0; i < RRcount; i++) {
 		memcpy(p, &RRkeys[i], sizeof(RKEY));
 		p += sizeof(RKEY);
@@ -366,9 +366,9 @@ remove_refn (CNSTRING refn,       /* record's refn */
 	}
 	off = 0;
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(INT32));
+		p += sizeof(INT32);
+		len += sizeof(INT32);
 		off += strlen(RRrefns[i]) + 1;
 	}
 	for (i = 0; i < RRcount; i++) {
