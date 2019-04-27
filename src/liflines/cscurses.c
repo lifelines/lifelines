@@ -139,10 +139,13 @@ mvccwprintw (WINDOW *wp, int y, int x, ...)
 {
 	va_list args;
 	char * fmt;
+	int ret;
 	va_start(args, x);
 	wmove(wp, y, x);
 	fmt = va_arg(args, char *);
-	return vccwprintw(wp, fmt, args);
+	ret = vccwprintw(wp, fmt, args);
+	va_end(args);
+	return ret;
 }	
 /*============================
  * vccwprintw -- vwprintw with codeset convert from internal to GUI
