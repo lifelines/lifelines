@@ -17,7 +17,7 @@ wget http://localhost:9000/static/cpp/build-wrapper-linux-x86.zip
 unzip build-wrapper-linux-x86.zip
 
 # Build with build wrapper
-#(cd ..; build/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build/sonar_build_wrapper_output make clean all)
+(cd ..; build/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build/sonar_build_wrapper_output make clean all)
 
 # Run analysis
 # NOTE: This assumes that:
