@@ -1010,11 +1010,21 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 	if (!name || *name == 0) return NULL;
 	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
+
+	/* Convert surname to uppercase if requested */
 	if (captype == DOSURCAP) name = upsurname(name);
+
+	/* Do initial trimming of name.  Account for the comma that is required */
+	/* in SURFIRST mode.  We do this here since we are actually parsing the */
+	/* the name parts and will truncate intelligently. */
+	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
+
+	/* Produce name in desired order. */
 	if (surorder == REGORDER) 
 		name = trim(name_string(name), len);
 	else
 		name = trim(name_surfirst(name), len);
+
 	/* trim doesn't respect UTF-8, so ensure we don't leave broken end */
 	limit_width(name, len, uu8);
 	return name;
@@ -1031,7 +1041,6 @@ name_string (STRING name)
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
 		if (*name != NAMESEP) { *p++ = *name; }
-		else { *p++ = ' '; }
 		name++;
 	}
 	*p-- = 0;
