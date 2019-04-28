@@ -97,6 +97,7 @@ static BOOLEAN addsxref_impl(INT32 key, DUPS dups);
 static BOOLEAN addexref_impl(INT32 key, DUPS dups);
 static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
 static BOOLEAN addxxref_impl(INT32 key, DUPS dups);
+static void dumpxrecs (STRING type, DELETESET set, INT32 *offset);
 static INT32 find_slot(INT32 keynum, DELETESET set);
 static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
