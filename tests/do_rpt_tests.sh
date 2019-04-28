@@ -15,10 +15,7 @@ do
   TESTSCR=`basename $i`
   TESTNAME=`echo $TESTSCR | sed -e 's/.llscr//g'`
   TOTALCNT=$((TOTALCNT+1))
-<<<<<<< HEAD
 
-=======
->>>>>>> af65572c5a8e890e73d79ccb0dcd34e503b13c68
   echo "Running test $i..."
   ./run_rpt_test.sh $TESTDIR $TESTSCR
 
