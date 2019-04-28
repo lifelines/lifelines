@@ -41,7 +41,6 @@ INT
 get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 {
 	STRING dirs=0;
-	INT ndirs=0;
 	STRING p=0;
 	ASSERT(!(*dblist));
 	ASSERT(!(*dbdesclist));
@@ -51,7 +50,6 @@ get_dblist (STRING path, LIST * dblist, LIST * dbdesclist)
 		return 0;
 	dirs = (STRING)stdalloc(strlen(path)+2);
 	/* find directories in dirs & delimit with zeros */
-	ndirs = chop_path(path, dirs);
 	/* now process each directory */
 	for (p=dirs; *p; p+=strlen(p)+1) {
 		add_dbs_to_list(*dblist, *dbdesclist, p);
