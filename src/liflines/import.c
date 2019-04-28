@@ -343,12 +343,10 @@ static void
 restore_record (NODE node, INT type, INT num)
 {
 	STRING old, new, str, key;
-	char scratch[10];
 
 	if (!node) return;
 	ASSERT(old = nxref(node));
 	new = translate_key(rmvat(old));
-	sprintf(scratch, "%6ld", num);
 	switch (type) {
 	case INDI_REC: break;
 	case FAM_REC:  break;

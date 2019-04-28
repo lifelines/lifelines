@@ -303,7 +303,7 @@ clear_generic (GENERIC *gen)
 	case GENERIC_INT: break;
 	case GENERIC_FLOAT:
 		stdfree(gen->data.fval);
-		gen->data.fval = 0;
+		gen->data.fval = 0; // TODO fall through OK??
 	case GENERIC_STRING:
 		stdfree(gen->data.sval);
 		gen->data.sval = 0;

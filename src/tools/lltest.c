@@ -72,10 +72,7 @@ main (int argc,
 	    char **argv)
 {
 	BTREE btree;
-	char cmdbuf[512];
-	char *editor;
-	char *dbname, *key;
-	RECORD_STATUS recstat;
+	char *dbname;
 	BOOLEAN cflag=FALSE; /* create new db if not found */
 	BOOLEAN writ=1; /* request write access to database */
 	BOOLEAN immut=FALSE; /* immutable access to database */
