@@ -1,0 +1,158 @@
+Using the automake test Parallel Harness
+1. Running tests
+2. Adding a new test
+3. Files in a test directory
+4. Support for lltest, lldump, dbverify, llexec
+
+1. Running tests
+In the build area where the code was built, from either the 
+top level build directory or preferably in the tests subdirectory, run
+   make check 
+running 'make clean' in the tests directory will remove the generated files
+in the test subdirectories so that make check will re-run the tests.
+If you want to debug the running of a test, the following command
+will add lots of debug info in the test's directory testname.log file
+   VERBOSE=1 make check
+or
+   VERBOSE=1 make clean check
+
+The automake test structure is used to run the tests.
+When done a file is created in the tests directory named test-suite.log.
+It will summarize the results of running all the tests.  Passing tests
+are just counted, failing tests include the contents of testname.log file.
+testname.log files in the individual test sub directories, have more 
+details about each part of the tests run, and which parts pass and which fail.
+
+2. Adding a new test:
+The intent is to isolate testing from the users normal environment, so 
+the .linesrc (or lines.src) file isn't read. Also building in the source
+area or in a separate build area is supported, so there are a few things
+that must be done - see below.
+
+To add a test or group of similar tests, 
+a. create a new subdirectory to put the test data
+   (or add a test to an existing directory if it's related).
+b. edit Makefile.am in this directory (the tests directory)
+   a. add directory name to the testsubdir definition
+   b. add the names of the llscr files (see below) to TESTS.
+c. generate files described below. first a testname.llscr file to drive llines,
+   a testname.ged if you need data for llines to manipulate, a testname.ll if
+   you need to run a report (You probably do, as it's needed to generate a 
+   .out file.)
+d. and of course once you have the test running, copy the testname.*out
+   files to testname.out.ref to save the reference results, so the test
+   can generate a PASS. (or to testname.32.out.ref and testname.64.out.ref
+   if the files are different for 32 and 64 bit llines.  (Repeat for 
+   any other reference files.)
+
+3. Files in a test directory
+The organization of the tests is a collection of directories that contain 
+tests.  In each directory, there can be 1 or more tests. Each test consists
+of the following:
+   testname.ged           Optional. some tests can be run without ged data
+   testname.ll            A lifelines script that is to be run
+   testname.llscr         required. commands to feed to llines 
+                          If script runs any .ll files, the output should
+                          be written to testname.out, as this is what is 
+                          expected and is diff'ed with the reference output.
+                          one catch. If the .llscr file loads a gedcom file
+                          (testname.ged in the src area), say with a line
+                          urmytest.ged
+                          The testname (here mytest) must be replaced with
+                          TESTNAME. The test environment replaces TESTNAME
+                          with the name of the gedcom file, including path.
+                          This way the gedcom file can be found when building
+                          in separate build areas.  Thus that line would become
+                          urTESTNAME.ged
+   testname.out.ref       expected output from running testname.llscr
+
+if the expected output differs for 32 and 64 bit compiled programs, instead
+of the testname.out.ref file, the following two are created
+   testname.out.32.ref    expected output for 32 bits
+   testname.out.32.ref    expected output for 64 bits 
+   lines.src              if the tests in a subdir needs to pass environmental
+                          data to llines, if this file exists, the tests
+                          will read this file.
+   testname.config        optional file contains test configuration data
+      env NAME=Value      set environment variables when running the test
+      pre command args    run command before running llines (not implemented)
+      post command args   run command after running llines
+                          command is the name of a program to run. Typically
+                          it is looked for in the tools or liflines directory
+                          command is just the name, not a path and name
+                          see Royal92 for examples
+In addition to the above mentioned testname.out, testname.out.ref file
+which checks the output from running the .llscr script, there are other
+files to capture output and reference files 
+testname.command.out      stdout from running a post command.
+testname.command.out.ref  reference file (in the source area)
+
+There is one more out file. The output of running llines is captured
+So that changes in the gui can be detected.
+testname.llines.out       raw output from test 
+testname.llines.out.filter  Filtered output from the test, which tediously
+                            identifies each control sequence output
+                            (assumes TERM is gnome or xterm)
+testname.llines.out.filter.ref  the reference. 
+                            note one of the strings llines outputs is
+                            "Import time 01s (ui 00s)" with appropriate times
+                            it is anonomized to "Import time xxs (ui xxs)"
+
+
+   Note, the following files are generated by the test environment in the
+   build area test sub directories when you do a 'make check' in the tests
+   directory.
+   testname.out           hopefully output from running the .ll script
+                          which is diff'ed with the reference files to
+                          determine success or failure.
+   testname.log           log file with output from running the
+                          run_a_test script (which runs the test and provides
+                          the test environment with pass fail information
+   testname.trs           test stats that the test environment uses
+   testname.*diff          a diff of the output of the test, vs expected output
+   testname.llscr.fix     this is the llsrc script that is fed to llines.
+   testdb                 the name of the data base created for the test
+   
+each test is run, by doing essentially
+   LLPROGRAMS=<path to src directory where this test resides>
+    sed -e s@TESTNAME@<path to src area>/testname@ < testname.llscr \
+        > testname.llscr.fix 
+    llines -C <path_to_test_src_dir>/lines.src  testdb < testname.llscr.fix > testname.llout 
+The -C <path_to_test_src_dir>/lines.src prevents llines configuration files 
+from creating non-standard environments.  Typically there is no lines.src
+in the source directory for the test, so there is no .linesrc or lines.src 
+file read. But if you need to say add some lang settings for a test,
+you can create a lines.src file in the source of the test directory.
+
+The TESTNAME magic is not needed for reading the testname.ll file, as
+LLPROGRAMS is set to default the location where llines looks for .ll files
+to the directory where the src of the tests is.
+Do not use TESTNAME.log as this file should be written to the current
+directory.
+
+Sample testname.llscr file:
+y
+urTESTNAME
+y
+y
+rtestname
+testname.log
+q
+q
+
+Just look at the existing tests for examples.
+
+
+4. Support for lltest, lldump, dbverify, llexec
+   See above, the testname.config files, post commands allow running
+   programs in the src/tools and src/liflines directories, like
+
+    post dbverify -a testdb
+    post lldump -a testdb 
+    post lltest testdb
+    post llexec   -o testname.out -x TESTNAME.ll testdb
+
+    with whatever options you need, assuming they are supported..
+    llexec is a bit more tricky, as you probably want it to
+    read the testname.ll file for this test, and put the output to testname.out
+

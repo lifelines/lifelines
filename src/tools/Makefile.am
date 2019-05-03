@@ -4,13 +4,14 @@
 # AUTOMAKE_OPTIONS = no-dependencies
 
 # what are we going to build?
-bin_PROGRAMS = btedit dbverify lldump lltest
+bin_PROGRAMS = btedit dbverify lldump lltest xterm_decode
 
 # what goes into btedit, dbverify and lltest?
 btedit_SOURCES = btedit.c wprintf.c
 dbverify_SOURCES = dbverify.c wprintf.c
 lltest_SOURCES = lltest.c wprintf.c
 lldump_SOURCES = lldump.c wprintf.c
+xterm_decode_SOURCES = xterm_decode.c
 
 # what libraries do btedit, dbverify and lltest need?
 btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \

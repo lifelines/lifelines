@@ -1,0 +1,59 @@
+Capturing and analyzing llines output so we can detect UI changes`
+ 
+   I suggest there are many solutions
+   1. Wrap all curses calls with debug code that could capture what's
+      happening
+   2. trap all the curses calls with an interpose library, and 
+      log the calls before passing the calls to the curses library.
+   3. see man curs_trace - apparently the curses lib can be built so that
+      with no change to our code, other than linking the debug curses library
+      it will log all curses calls. Much nicer solution, and perhaps a bit
+      more of an abstraction.`Unfortunately it seems the debug libraries
+      aren't distributed by ubuntu or fedora releases. Meaning one would
+      have to build the library, and create a special version of llines
+      since we statically link with libncursesw.
+   4. capture and compare the terminal output. Ideally identifing control
+      char's and replacing them with a english rendition. If we do
+      the tests always for the same TERM type it should be non intrusive
+      and relatively easy to do.
+
+For now, I have included a program xterm_decode that strictly speaking
+can read xterm outout and explain what everything is doing.  Since 
+most terminal control sequences are VT100 based (or VTxxx) explicit
+setting of the TERM environment variable may not even be needed.
+One issue, is while curses is designed to convert an abstract conceptual
+interface into what ever terminal you have, the output of libncurses
+may not always be the same.  We are at the whim of ncurses developers
+and their optimizations (or bug fixes). Of course, if a developer decides to
+make some changes, it's likely libncurses won't change while the work is being
+done. I'd argue is better than nothing, and if someone comes up with a 
+better solution good.
+
+Here is an example of variations we can see from ncurses libraries:
+
+example:Ubuntu 18.10 aka Cosmic Cuttlefish, uses libncurses6  6.1+20180210-4
+   while fedora release 28 uses ncurses-libs-6.1-5.20180224.fc28
+   The builds were only 14 days apart.
+
+   The ubuntu version uses a vt100 command to position to a given column
+   and the fedora version replaced that with use of tabs (and I suspect
+   spaces if necessary) which resulted in a slight character savings.
+
+   as an example (data after the ': ' is the text sent, where control 
+   characters are represented like <TAB> or <ESC>. (Also some of the
+   ISO 6429 and ISO 2022 nomenclature like CSI and C0 can just be ignored.)
+
+
+< CSI Cursor to Column 73: '<ESC>[73G'
+---
+> C0 Control Character (Ctrl-I) Horizontal Tab: '<TAB>'
+> C0 Control Character (Ctrl-I) Horizontal Tab: '<TAB>'
+> C0 Control Character (Ctrl-I) Horizontal Tab: '<TAB>'
+> C0 Control Character (Ctrl-I) Horizontal Tab: '<TAB>'`
+
+in both of these the ncurses lib is figuring out how to get to col 73
+and issuing some character sequences that will get there. 
+the second with tabs is 1 char shorter, but relies on ncurses knowing
+where it is in the line.
+
+
