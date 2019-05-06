@@ -282,15 +282,15 @@ proc main ()
      " quick check of  dms2deg deg2dms spdist\n"
     /* Las Vegas, Clark County, Nevada, USA
      * N36.1699412 W115.1398296
-     * Degrees Lat Long 	36.1699412Â°, -115.1398296Â°
-     * Degrees Minutes	36Â°10.19647', -115Â°08.38978'
-     * Degrees Minutes Seconds 	36Â°10'11.7883", -115Â°08'23.3866"
+     * Degrees Lat Long 	36.1699412°, -115.1398296°
+     * Degrees Minutes	36°10.19647', -115°08.38978'
+     * Degrees Minutes Seconds 	36°10'11.7883", -115°08'23.3866"
      *
      * Chicago, Cook County, Illinois, USA
      * N41.8781136 W87.6297982
-     * Degrees Lat Long 	41.8781136Â°, -087.6297982Â°
-     * Degrees Minutes	41Â°52.68682', -087Â°37.78789'
-     * Degrees Minutes Seconds 	41Â°52'41.2090", -087Â°37'47.2735"
+     * Degrees Lat Long 	41.8781136°, -087.6297982°
+     * Degrees Minutes	41°52.68682', -087°37.78789'
+     * Degrees Minutes Seconds 	41°52'41.2090", -087°37'47.2735"
      */
     dms2deg(36,10,11.7883,flt)
     "dms2deg 35.10.11.7883 -> " f(flt,7) nl()
@@ -309,7 +309,7 @@ proc main ()
     set(dst,spdist(36.1599412, -115.1398296,41.8781136,-87.6297982))
     "Distance from 36.1599412, -115.1398296 to 41.8781136,-87.6297982 is "
     f(dst,2) " km" nl()
-    "   or " f(mul(dst,0.62137),2)
+    "   or " f(mul(dst,0.62137),2) nl()
     /* google says its 1747 miles if you stay on the roads.*/
 
 }

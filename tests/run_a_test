@@ -324,14 +324,14 @@ if [[ ${#postcmds[@]} > 0 ]] ; then
         args=${args/TESTNAME/$testsrcdir/$testname}
         args=${args/SRCDIR/$testsrcdir}
         cmdout=
-        if [[ fcmd = "llexec" ]] ; then
+        if [[ $cmd = "llexec" ]] ; then
             if [[ $args =~ .*-o\ *"$testname.out".* ]] ; then
                 cmdout=$testname.out
             fi
         fi
         #run_a_command cmd cmdin cmdout cmdout2 filter
         #run_a_command "$fcmd ${postargs[$i]}" ""  "$testname.$cmd.out" "" ""
-        run_a_command "$fcmd ${args}" "$cmdout"  "$testname.$cmd.out" "" ""
+        run_a_command "$fcmd ${args}" ""  "$testname.$cmd.out" "$cmdout" ""
         ret1=$?
         if [[ $ret < $ret1 ]] ; then
             ret=$ret1
