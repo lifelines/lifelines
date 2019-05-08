@@ -1,29 +1,27 @@
 #!/bin/sh
 
 # NOTE: This script assumes that:
-# - the sonarqube server is running on the default port
-# - the C/C++ module has been installed in SonciQube
+# - the lifelines project is set up in sonarcloud
+# - the lifelines project configuration is in sonar-project.properties
 # - the sonar-scanner is installed and in $PATH
+#   (see https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)
 
 # Check for configuration file
 if [ ! -f sonar-project.properties ]
 then
-  echo "ERROR: Could not find sonarqube properties file!"
+  echo "ERROR: Could not find sonar-project.properties file!"
   exit
 fi
 
 # Get and unzip build wrapper
-wget http://localhost:9000/static/cpp/build-wrapper-linux-x86.zip 
+wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
 unzip build-wrapper-linux-x86.zip
 
 # Build with build wrapper
 (cd ..; build/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build/sonar_build_wrapper_output make clean all)
 
 # Run analysis
-# NOTE: This assumes that:
-# - the sonarqube server is running on the default port
-# - the sonar-scanner is installed and in $PATH
-(cd ..; sonar-scanner -Dproject.settings=build/sonar-project.properties -Dsonar.cfamily.build-wrapper-output=build/sonar_build_wrapper_output)
+(cd ..; sonar-scanner -Dproject.settings=build/sonar-project.properties)
 
 # Remove build wrapper and scanner files
 rm -rf sonar_build_wrapper_output
