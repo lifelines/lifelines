@@ -139,7 +139,7 @@ typedef unsigned char uchar;
 #define FMT_INT64_HEX	"0x%016" PRIx64
 #if __WORDSIZE == 64
 #define FMT_INT		FMT_INT64
-#define FMT_INT_LEN	22		// sign + 20 digits + NULL
+#define FMT_INT_LEN	22		/* sign + 20 digits + NULL */
 #define FMT_INT_HEX	FMT_INT64_HEX
 #define FMT_INT_02	"%02" PRId64
 #define FMT_INT_04	"%04" PRId64
@@ -147,7 +147,7 @@ typedef unsigned char uchar;
 #define FMT_SIZET	FMT_INT64
 #else
 #define FMT_INT		FMT_INT32
-#define FMT_INT_LEN	12		// sign + 10 digits + NULL
+#define FMT_INT_LEN	12		/* sign + 10 digits + NULL */
 #define FMT_INT_HEX	FMT_INT32_HEX
 #define FMT_INT_02	"%02" PRId32
 #define FMT_INT_04	"%04" PRId32
