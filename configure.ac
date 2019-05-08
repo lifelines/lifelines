@@ -298,4 +298,5 @@ AC_OUTPUT(Makefile \
         reports/st/Makefile \
         tt/Makefile \
         build/Makefile \
+        tests/Makefile \
         po/Makefile.in)
