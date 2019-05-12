@@ -68,7 +68,7 @@ main (int argc,
       char **argv)
 {
 	BTREE btree;
-	char cmdbuf[512];
+	char cmdbuf[MAXPATHLEN];
 	char *editor;
 	char *dbname, *key;
 	RECORD_STATUS recstat;
@@ -129,7 +129,7 @@ main (int argc,
 	}
 
 	editor = environ_determine_editor(PROGRAM_BTEDIT);
-	sprintf(cmdbuf, "%s btedit.tmp", editor);
+	snprintf(cmdbuf, sizeof(cmdbuf), "%s btedit.tmp", editor);
 	if (llsystem(cmdbuf) != 0) {
 		printf(_("Editor or system call failed."));
 		puts("");

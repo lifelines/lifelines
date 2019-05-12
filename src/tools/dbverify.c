@@ -1071,7 +1071,7 @@ check_set (INDISEQ seq, char ctype)
 				, ctype, i);
 			if (todo.fix_deletes) {
 				char key[33];
-				sprintf(key, "%c" FMT_INT, ctype, i);
+				snprintf(key, sizeof(key), "%c" FMT_INT, ctype, i);
 				if (mark_deleted_record_as_deleted(key)) {
 					report_fix(ERR_UNDELETED
 						, _("Fixed missing undeleted record %c%d")
@@ -1158,7 +1158,7 @@ check_index (BTREE btr, INDEX index, TABLE fkeytab, RKEY * lo, RKEY * hi)
 		FKEY fkey = fkeys(index, i);
 		RKEY *lox, *hix;
 
-		get_index_file(scratch, btr, fkey);
+		get_index_file(scratch, sizeof(scratch), btr, fkey);
 		if (in_table(fkeytab, scratch)) {
 			printf(_("Cycle in indexes, file %s found again!\n"), scratch);
 			return FALSE;
@@ -1233,18 +1233,18 @@ check_block (BTREE btr, BLOCK block, RKEY * lo, RKEY * hi)
 		FILE *fo, *fn;
 
 		/* open original file */
-		sprintf(scratch0, "%s/%s", bbasedir(btr), fkey2path(ixself(block)));
+		snprintf(scratch0, sizeof(scratch0), "%s/%s", bbasedir(btr), fkey2path(ixself(block)));
 		if (!(fo = fopen(scratch0, LLREADBINARY LLFILERANDOM))) {
 			char msg[sizeof(scratch0)+64];
-			sprintf(msg, "Corrupt db  -- failed to open blockfile: %s", scratch0);
+			snprintf(msg, sizeof(msg), "Corrupt db  -- failed to open blockfile: %s", scratch0);
 			FATAL2(msg);
 		}
 	
 		/* open new file */
-		sprintf(scratch1, "%s/tmp1", bbasedir(btr));
+		snprintf(scratch1, sizeof(scratch1), "%s/tmp1", bbasedir(btr));
 		if (!(fn = fopen(scratch1, LLWRITEBINARY LLFILETEMP LLFILERANDOM))) {
 			char msg[sizeof(scratch1)+64];
-			sprintf(msg, "Corrupt db  -- failed to open blockfile: %s", scratch1);
+			snprintf(msg, sizeof(msg), "Corrupt db  -- failed to open blockfile: %s", scratch1);
 			FATAL2(msg);
 		}
 
@@ -1372,7 +1372,7 @@ check_typed_missing_data_records (char ntype)
 		char key[33];
 		keynum = xref_next(ntype, keynum);
 		if (!keynum) return;
-		sprintf(key, "%c%d", ntype, keynum);
+		snprintf(key, sizeof(key), "%c%d", ntype, keynum);
 		if (noisy)
 			report_progress("Check Data Record: %s", key);
 		if (is_record_missing_data_entry(key)) {

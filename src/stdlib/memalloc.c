@@ -71,14 +71,14 @@ __allocate (int len, STRING file, int line)
 	if (len == 0) return NULL;
 	p = malloc(len);
 	if((p == NULL) && alloclog) {
-		sprintf(scratch, "%8p ? %s\t%d\t%d", (void *)p, file, line, len);
+		snprintf(scratch, sizeof(scratch), "%8p ? %s\t%d\t%d", (void *)p, file, line, len);
 		alloc_out(scratch);
 	}
 	ASSERT(p);
 	live_allocs++;
 	for(i = 0; i <len; i++) p[i] = '\0';
 	if (alloclog) {
-		sprintf(scratch, "%8p A %s\t%d\t%d", (void *)p, file, line, len);
+		snprintf(scratch, sizeof(scratch), "%8p A %s\t%d\t%d", (void *)p, file, line, len);
 		alloc_out(scratch);
 	}
 	return (void*)p;
@@ -94,7 +94,7 @@ __deallocate (const void *ptr, STRING file, int line)
 {
 	if (ptr) live_allocs--;
 	if (alloclog) {
-		sprintf(scratch, "%8p F %s\t%d", ptr, file, line);
+		snprintf(scratch, sizeof(scratch), "%8p F %s\t%d", ptr, file, line);
 		alloc_out(scratch);
 	}
 	if(ptr) free((void *)ptr);
@@ -109,7 +109,7 @@ void *
 __reallocate (void *ptr, INT size, STRING file, int line)
 {
 	if (alloclog) {
-		sprintf(scratch, "%8p R (" FMT_INT ") %s\t%d", ptr, size, file, line);
+		snprintf(scratch, sizeof(scratch), "%8p R (" FMT_INT ") %s\t%d", ptr, size, file, line);
 		alloc_out(scratch);
 	}
 	return realloc(ptr, size);

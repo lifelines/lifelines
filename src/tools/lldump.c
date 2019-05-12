@@ -394,13 +394,13 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
  *=============================*/
 void dump_keyfile(STRING dir)
 {
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	FILE *fk;
 	size_t size;
 
-	sprintf(scratch, "%s/key", dir);
+	snprintf(scratch, sizeof(scratch), "%s/key", dir);
 
 	size = getfilesize(dir, "key");
 
@@ -554,10 +554,10 @@ getfilesize (STRING dir, STRING filename)
 {
 	FILE *fp;
 	size_t size = 0;
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	struct stat sbuf;
 
-	sprintf(scratch, "%s/%s", dir, filename);
+	snprintf(scratch, sizeof(scratch), "%s/%s", dir, filename);
         if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 		printf("Invalid filename (%d: %s)\n", errno, scratch);
 		goto error2;
