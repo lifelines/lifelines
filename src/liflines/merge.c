@@ -769,7 +769,7 @@ check_indi_lineage_links (NODE indi)
 		famkey = rmvat(nval(curs));
 		if (!eqstr(ntag(curs), "FAMS")) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad spouse tag: %s"), ntag(curs));
+			snprintf(msg, sizeof(msg), _("Bad spouse tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
 		increment_table_int(memtab, famkey);
@@ -796,7 +796,7 @@ check_indi_lineage_links (NODE indi)
 		}
 		if (count != occur) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			snprintf(msg, sizeof(msg)
 				, _("Mismatched lineage spouse links between %s and %s: " FMT_INT " and " FMT_INT)
 				, ikey, famkey, count, occur);
 			FATAL2(msg);
@@ -813,7 +813,7 @@ check_indi_lineage_links (NODE indi)
 		famkey = rmvat(nval(curs));
 		if (!eqstr(ntag(curs), "FAMC")) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad child tag: %s"), ntag(curs));
+			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
 		increment_table_int(memtab, famkey);
@@ -840,7 +840,7 @@ check_indi_lineage_links (NODE indi)
 		}
 		if (count != occur) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			snprintf(msg, sizeof(msg)
 				, _("Mismatched lineage child links between %s and %s: " FMT_INT " and " FMT_INT)
 				, ikey, famkey, count, occur);
 			FATAL2(msg);
@@ -879,7 +879,7 @@ check_fam_lineage_links (NODE fam)
 		indikey = rmvat(nval(curs));
 		if (!eqstr(ntag(curs), "HUSB")) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad HUSB tag: %s"), ntag(curs));
+			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
 		increment_table_int(memtab, indikey);
@@ -888,7 +888,7 @@ check_fam_lineage_links (NODE fam)
 		indikey = rmvat(nval(curs));
 		if (!eqstr(ntag(curs), "WIFE")) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad HUSB tag: %s"), ntag(curs));
+			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
 		increment_table_int(memtab, indikey);
@@ -915,7 +915,7 @@ check_fam_lineage_links (NODE fam)
 		}
 		if (count != occur) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			snprintf(msg, sizeof(msg)
 				, _("Mismatched lineage spouse links between %s and %s: " FMT_INT " and " FMT_INT)
 				, fkey, indikey, count, occur);
 			FATAL2(msg);
@@ -932,7 +932,7 @@ check_fam_lineage_links (NODE fam)
 		indikey = rmvat(nval(curs));
 		if (!eqstr(ntag(curs), "CHIL")) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0]), _("Bad child tag: %s"), ntag(curs));
+			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
 		increment_table_int(memtab, indikey);
@@ -959,7 +959,7 @@ check_fam_lineage_links (NODE fam)
 		}
 		if (count != occur) {
 			char msg[512];
-			snprintf(msg, sizeof(msg)/sizeof(msg[0])
+			snprintf(msg, sizeof(msg)
 				, _("Mismatched lineage child links between %s and %s: " FMT_INT " and " FMT_INT)
 				, fkey, indikey, count, occur);
 			FATAL2(msg);

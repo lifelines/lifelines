@@ -586,7 +586,7 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
-		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
+		snprintf(buf, sizeof(buf), "WARNING: missing keys: %.40s", badkeylist);
 		message(buf);
 	}
 }
@@ -687,14 +687,14 @@ indi_to_ped_fix (NODE indi, INT len)
 	if (keyflag) {
 		key = key_of_record(indi);
 		if(getlloptint("DisplayKeyTags", 0) > 0) {
-			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
+			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
 		} else {
-			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (%s)", bevt, devt, key);
+			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (%s)", bevt, devt, key);
 		}
 	}
 	else
 	{
-		snprintf(tmp1, ARRSIZE(tmp1), " (%s-%s)", bevt, devt);
+		snprintf(tmp1, sizeof(tmp1), " (%s-%s)", bevt, devt);
 	}
 	tmp1[ARRSIZE(tmp1) - 1] = 0;
 	
