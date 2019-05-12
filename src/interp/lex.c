@@ -214,7 +214,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 					/* Overflowing tokbuf buffer */
 					/* TODO: (Perry, 2006-06-30) I don't know how to fail gracefully from here inside parser */
 					char msg[512];
-					snprintf(msg, ARRSIZE(msg)
+					snprintf(msg, sizeof(msg)
 						, _("String constant overflowing internal buffer tokbuf len=" FMT_SIZET ", file: %s, start line: " FMT_INT)
 						, ARRSIZE(tokbuf)
 						, pactx->fullpath

@@ -1346,18 +1346,6 @@ hleave:
 	return irc;
 }
 /*========================================+
- * printkey -- Make key from keynum
- *=======================================*/
-#ifdef UNUSED_CODE
-static void
-printkey (STRING key, char type, INT keynum)
-{
-	if (keynum>9999999 || keynum<0)
-		keynum=0;
-	sprintf(key, "%c%d", type, keynum);
-}
-#endif
-/*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
  * 2001/03/18 Revised by Perry Rapp
@@ -2152,7 +2140,7 @@ void clean_orphaned_rptlocks (void)
 	int ct = free_all_rprtlocks();
 	if (ct) {
 		char msg[256];
-		sprintf(msg, _pl("Program forgot to unlock %d record",
+		snprintf(msg, sizeof(msg), _pl("Program forgot to unlock %d record",
 			"Program forgot to unlock %d records", ct), ct);
 		progmessage(MSG_ERROR, msg);
 

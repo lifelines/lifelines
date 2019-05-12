@@ -1095,7 +1095,7 @@ llrpt_d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	i = pvalue_to_int(val);
-	sprintf(scratch, FMT_INT, i);
+	snprintf(scratch, sizeof(scratch), FMT_INT, i);
 	set_pvalue_string(val, scratch);
 	return val;
 }
@@ -1128,9 +1128,9 @@ llrpt_f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		if (prec < 0) prec = 0;
 		if (prec > 10) prec = 10;
 	}
-	sprintf(format, "%%." FMT_INT "f", prec);
+	snprintf(format, sizeof(format), "%%." FMT_INT "f", prec);
 
-	sprintf(scratch, format, fval);
+	snprintf(scratch, sizeof(scratch), format, fval);
 	set_pvalue_string(val, scratch);
 	return val;
 }
@@ -1152,9 +1152,9 @@ llrpt_alpha (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	i = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
 	if (i < 1 || i > 26)
-		sprintf(scratch, "%c", '_');
+		snprintf(scratch, sizeof(scratch), "%c", '_');
 	else
-		sprintf(scratch, "%c", (int)('a' + i - 1));
+		snprintf(scratch, sizeof(scratch), "%c", (int)('a' + i - 1));
 	return create_pvalue_from_string(scratch);
 }
 /*================================================+
@@ -1181,9 +1181,9 @@ llrpt_ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	delete_pvalue_ptr(&val);
 	if (*eflg || i < 1) return NULL;
 	if (i > 12)
-		sprintf(scratch, _(FMT_INT "th"), i);
+		snprintf(scratch, sizeof(scratch), _(FMT_INT "th"), i);
 	else
-		sprintf(scratch, "%s", _(ordinals[i - 1]));
+		snprintf(scratch, sizeof(scratch), "%s", _(ordinals[i - 1]));
 	return create_pvalue_from_string(scratch);
 }
 /*==================================================+
@@ -1209,9 +1209,9 @@ llrpt_card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	i = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
 	if (i < 0 || i > 12)
-		sprintf(scratch, FMT_INT, i);
+		snprintf(scratch, sizeof(scratch), FMT_INT, i);
 	else
-		sprintf(scratch, "%s", _(cardinals[i]));
+		snprintf(scratch, sizeof(scratch), "%s", _(cardinals[i]));
 	return create_pvalue_from_string(scratch);
 }
 /*==========================================+
@@ -1249,7 +1249,7 @@ llrpt_roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	i = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
 	if (i < 1 || i > 3999)
-		sprintf(scratch, FMT_INT, i);
+		snprintf(scratch, sizeof(scratch), FMT_INT, i);
 	else {
 		int t;
 		int m = i/1000;
@@ -1257,8 +1257,8 @@ llrpt_roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		t = i/100;
 		i = i%100;
 
-		sprintf(scratch, "%s%s%s%s", rothou[m], rohuns[t],
-		                             rotens[i/10], rodigits[i%10]);
+		snprintf(scratch, sizeof(scratch), "%s%s%s%s",
+                         rothou[m], rohuns[t], rotens[i/10], rodigits[i%10]);
 	}
 	return create_pvalue_from_string(scratch);
 }
@@ -2070,7 +2070,7 @@ llrpt_concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 		if (*eflg) {
 			char argnum[8];
-			sprintf(argnum, FMT_INT, argcnt+1);
+			snprintf(argnum, sizeof(argnum), FMT_INT, argcnt+1);
 			prog_var_error(node, stab, argvar, val, nonstrx, "concat", argnum);
 			return NULL;
 		}
@@ -2229,7 +2229,7 @@ llrpt_print (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 		if (*eflg || !val) {
 			char nargstr[33];
-			sprintf(nargstr, FMT_INT, narg);
+			snprintf(nargstr, sizeof(nargstr), FMT_INT, narg);
 			prog_var_error(node, stab, argvar, val, nonstrx, "print", nargstr);
 			delete_pvalue(val);
 			return NULL;
@@ -2761,7 +2761,7 @@ llrpt_jd2date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		yr = (INT)(c - 4715);
 	}
 	/* Now print GEDCOM style date string */
-	sprintf(str, FMT_INT " %s " FMT_INT, dy, gedmonths[mo - 1], yr);
+	snprintf(str, sizeof(str), FMT_INT " %s " FMT_INT, dy, gedmonths[mo - 1], yr);
 	/* Create an EVEN node with subordinate DATE node */
 	prnt = create_temp_node(NULL, "EVEN", NULL, NULL);
 	chil = create_temp_node(NULL, "DATE", str, prnt);
