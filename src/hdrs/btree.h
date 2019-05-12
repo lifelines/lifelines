@@ -228,7 +228,7 @@ BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldb
 BOOLEAN validate_keyfile2(KEYFILE2 * kfile2, INT *lldberr);
 
 /* index.c */
-void get_index_file(STRING path, BTREE btr, FKEY ikey);
+void get_index_file(STRING path, INT len, BTREE btr, FKEY ikey);
 INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 
 /* names.c */

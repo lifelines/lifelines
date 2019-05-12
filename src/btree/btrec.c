@@ -62,8 +62,9 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 
 	if (!(i>=0 && i<nkeys(block))) {
 		char msg[256];
-		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
-		sprintf(msg+strlen(msg), "Bad index (" FMT_INT ") passed to check_offset", i);
+		snprintf(msg, sizeof(msg),
+                         "Working on rkey=%s Bad index (" FMT_INT ") passed to check_offset",
+                         rkey2str(rkey), i);
 		FATAL2(msg);
 	}
 	
@@ -74,10 +75,9 @@ check_offset (BLOCK block, RKEY rkey, INT i)
 	if (offlo + lenlo != offhi) {
 		char msg[256];
 		INT blocknum = ixself(block);
-		sprintf(msg, "Working on rkey=%s ", rkey2str(rkey));
-		sprintf(msg+strlen(msg)
-			, "Found corrupt block#" FMT_INT_HEX ": index(" FMT_INT ") off=" FMT_INT ", len=" FMT_INT ", key(" FMT_INT ") off=" FMT_INT
-			, blocknum, i-1, offlo, lenlo, i, offhi);
+		snprintf(msg, sizeof(msg),
+                         "Working on rkey=%s Found corrupt block#" FMT_INT_HEX ": index(" FMT_INT ") off=" FMT_INT ", len=" FMT_INT ", key(" FMT_INT ") off=" FMT_INT,
+                         rkey2str(rkey), blocknum, i-1, offlo, lenlo, i, offhi);
 		FATAL2(msg);
 	}
 }
@@ -128,8 +128,9 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	old = (BLOCK) index;
 	if (!(nkeys(old) < NORECS)) {
 		char msg[256];
-		sprintf(msg, "Corrupt block (rkey=%s): nkeys (%d) exceeds maximum (%d)"
-			, rkey2str(rkey), nkeys(old), NORECS-1);
+		snprintf(msg, sizeof(msg),
+                         "Corrupt block (rkey=%s): nkeys (%d) exceeds maximum (%d)",
+			 rkey2str(rkey), nkeys(old), NORECS-1);
 		FATAL2(msg);
 	}
 
@@ -192,18 +193,20 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 	if (!found) nkeys(newb) = n + 1;
 
 /* must rewrite data block with new record; open original and new */
-	sprintf(scratch0, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
+	snprintf(scratch0, sizeof(scratch0), "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	if (!(fo = fopen(scratch0, LLREADBINARY LLFILERANDOM))) {
 		char msg[sizeof(scratch0)+64];
-		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open blockfile: %s"
-			, rkey2str(rkey), scratch0);
+		snprintf(msg, sizeof(msg),
+                         "Corrupt db (rkey=%s) -- failed to open blockfile: %s",
+			 rkey2str(rkey), scratch0);
 		FATAL2(msg);
 	}
-	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
+	snprintf(scratch1, sizeof(scratch1), "%s/tmp1", bbasedir(btree));
 	if (!(ft1 = fopen(scratch1, LLWRITEBINARY LLFILETEMP LLFILERANDOM))) {
 		char msg[sizeof(scratch1)+64];
-		sprintf(msg, "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s"
-			, rkey2str(rkey), scratch1);
+		snprintf(msg, sizeof(msg),
+                         "Corrupt db (rkey=%s) -- failed to open temp blockfile: %s",
+			 rkey2str(rkey), scratch1);
 		FATAL2(msg);
 	}
 
@@ -240,15 +243,15 @@ bt_addrecord (BTREE btree, RKEY rkey, RAWRECORD rec, INT len)
 /* make changes permanent in database */
 	CHECKED_fclose(ft1, scratch1);
 	fclose(fo); /* was opened read-only */
-	sprintf(scratch0, "%s/tmp1", bbasedir(btree));
-	sprintf(scratch1, "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
+	snprintf(scratch0, sizeof(scratch0), "%s/tmp1", bbasedir(btree));
+	snprintf(scratch1, sizeof(scratch1), "%s/%s", bbasedir(btree), fkey2path(ixself(old)));
 	stdfree(old);
 	movefiles(scratch0, scratch1);
 	return TRUE;	/* return point for non-splitting case */
 
 /* data block must be split for new record; open second temp file */
 splitting:
-	sprintf(scratch2, "%s/tmp2", bbasedir(btree));
+	snprintf(scratch2, sizeof(scratch2), "%s/tmp2", bbasedir(btree));
 	ASSERT(ft2 = fopen(scratch2, LLWRITEBINARY LLFILETEMP LLFILERANDOM));
 
 /* write header and 1st half of records; don't worry where new record goes */
@@ -323,11 +326,11 @@ splitting:
 	CHECKED_fclose(ft1, scratch1);
 	CHECKED_fclose(ft2, scratch2);
 	stdfree(old);
-	sprintf(scratch1, "%s/tmp1", bbasedir(btree));
-	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(nfkey));
+	snprintf(scratch1, sizeof(scratch1), "%s/tmp1", bbasedir(btree));
+	snprintf(scratch2, sizeof(scratch2), "%s/%s", bbasedir(btree), fkey2path(nfkey));
 	movefiles(scratch1, scratch2);
-	sprintf(scratch1, "%s/tmp2", bbasedir(btree));
-	sprintf(scratch2, "%s/%s", bbasedir(btree), fkey2path(ixself(xtra)));
+	snprintf(scratch1, sizeof(scratch1), "%s/tmp2", bbasedir(btree));
+	snprintf(scratch2, sizeof(scratch2), "%s/%s", bbasedir(btree), fkey2path(ixself(xtra)));
 	movefiles(scratch1, scratch2);
 
 /* add index of new data block to its parent (may cause more splitting) */
@@ -354,13 +357,15 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 		, bbasedir(btree), LLCHRDIRSEPARATOR, fkey2path(ixself(block)));
 	if (!(fd = fopen(scratch, LLREADBINARY LLFILERANDOM))) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, _("Failed (errno=%d) to open blockfile (rkey=%s): %s")
+		snprintf( msg, sizeof(scratch)+64
+                        , _("Failed (errno=%d) to open blockfile (rkey=%s): %s")
 			, errno, rkey2str(rkeys(block, i)), scratch);
 		FATAL2(msg);
 	}
 	if (fseek(fd, (long)(offs(block, i) + BUFLEN), 0)) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Seek to offset (" FMT_INT32 ") failed for blockfile (rkey=%s)"
+		snprintf( msg, sizeof(scratch)+64
+                        , "Seek to offset (" FMT_INT32 ") failed for blockfile (rkey=%s)"
 			, offs(block,i), rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
@@ -371,14 +376,16 @@ readrec (BTREE btree, BLOCK block, INT i, INT *plen)
 	}
 	if (len < 0) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Bad len (" FMT_INT ") for blockfile (rkey=%s)"
+		snprintf( msg, sizeof(scratch)+64
+                        , "Bad len (" FMT_INT ") for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
 	rawrec = (RAWRECORD) stdalloc(len + 1);
 	if (!(fread(rawrec, len, 1, fd) == 1)) {
 		char msg[sizeof(scratch)+64];
-		sprintf(msg, "Read for " FMT_INT " bytes failed for blockfile (rkey=%s)"
+		snprintf( msg, sizeof(scratch)+64
+                        , "Read for " FMT_INT " bytes failed for blockfile (rkey=%s)"
 			, len, rkey2str(rkeys(block, i)));
 		FATAL2(msg);
 	}
@@ -423,8 +430,7 @@ bt_getrecord (BTREE btree, const RKEY * rkey, INT *plen)
 		/* should never revisit the master node */
 		if (ixself(index) == ixself(bmaster(btree))) {
 			char msg[400];
-			sprintf(msg, _("Btree lookup looped back to master (" FMT_INT32 ")!"), ixself(index));
-
+			snprintf(msg, sizeof(msg), _("Btree lookup looped back to master (" FMT_INT32 ")!"), ixself(index));
 			FATAL2(msg);
 		}
 	}

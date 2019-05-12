@@ -155,7 +155,7 @@ BTREE
 bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldberr)
 {
 	BTREE btree;
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	FILE *fk=NULL;
 	struct stat sbuf;
 	KEYFILE1 kfile1;
@@ -177,7 +177,7 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldberr)
 			goto failopenbtree;
 		}
 		/* create flag set, so try to create it & stat again */
-		sprintf(scratch, "%s/", dir);
+		snprintf(scratch, sizeof(scratch), "%s/", dir);
 		if (!mkalldirs(scratch) || stat(dir, &sbuf)) {
 			*lldberr = BTERR_DBCREATEFAILED;
 			goto failopenbtree;
@@ -194,7 +194,7 @@ bt_openbtree (STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldberr)
 	}
 
 /* See if key file exists */
-	sprintf(scratch, "%s/key", dir);
+	snprintf(scratch, sizeof(scratch), "%s/key", dir);
 	if (stat(scratch, &sbuf)) {
 		/* no keyfile */
 		if (!cflag) {
@@ -316,26 +316,26 @@ initbtree (STRING basedir, INT *lldberr)
 	INDEX master=0;
 	BLOCK block=0;
 	FILE *fk=NULL, *fi=NULL, *fd=NULL;
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	BOOLEAN result=FALSE; /* only set to good at end */
 	INT rtn=0;
 
 /* Open file for writing keyfile */
-	sprintf(scratch, "%s/key", basedir);
+	snprintf(scratch, sizeof(scratch), "%s/key", basedir);
 	if ((fk = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		*lldberr = BTERR_KFILE;
 		goto initbtree_exit;
 	}
 
 /* Open file for writing master index */
-	sprintf(scratch, "%s/aa/aa", basedir);
+	snprintf(scratch, sizeof(scratch), "%s/aa/aa", basedir);
 	if (!mkalldirs(scratch) || (fi = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		*lldberr = BTERR_INDEX;
 		goto initbtree_exit;
 	}
 
 /* Open file for writing first data block */
-	sprintf(scratch, "%s/ab/aa", basedir);
+	snprintf(scratch, sizeof(scratch), "%s/ab/aa", basedir);
 	if (!mkalldirs(scratch) || (fd = fopen(scratch, LLWRITEBINARY)) == NULL) {
 		*lldberr = BTERR_BLOCK;
 		goto initbtree_exit;
