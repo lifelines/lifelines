@@ -158,13 +158,13 @@ initdsets (void)
 void
 initxref (void)
 {
-	char scratch[100];
+	char scratch[MAXPATHLEN];
 	INT32 i = 1;
 	INT j;
 	ASSERT(!xrefReadonly);
 	initdsets();
 	ASSERT(!xreffp);
-	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
+	snprintf(scratch, sizeof(scratch), "%s/xrefs", BTR->b_basedir);
 	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
 	for (j = 0; j < 10; j++) {
 		ASSERT(fwrite(&i, sizeof(INT32), 1, xreffp) == 1);
@@ -177,13 +177,13 @@ initxref (void)
 BOOLEAN
 openxref (BOOLEAN readonly)
 {
-	char scratch[100];
+	char scratch[MAXPATHLEN];
 	STRING fmode;
 	BOOLEAN success;
 
 	initdsets();
 	ASSERT(!xreffp);
-	sprintf(scratch, "%s/xrefs", BTR->b_basedir);
+	snprintf(scratch, sizeof(scratch), "%s/xrefs", BTR->b_basedir);
 	xrefReadonly = readonly;
 	fmode = xrefReadonly ? LLREADBINARY : LLREADBINARYUPDATE;
 	if (!(xreffp = fopen(scratch, fmode))) {
@@ -252,7 +252,7 @@ getxref (DELETESET set)
 {
 	INT32 keynum = getxrefnum(set);
 	static char scratch[12];
-	sprintf(scratch, "@%c" FMT_INT32 "@", set->ctype, keynum);
+	snprintf(scratch, sizeof(scratch), "@%c" FMT_INT32 "@", set->ctype, keynum);
 	return scratch;
 }
 /*===================================================
@@ -456,7 +456,7 @@ add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 	INT32 lo, i;
 	if (keynum <= 0 || !xreffp || (set->n) < 1) {
 		char msg[128];
-		snprintf(msg, sizeof(msg)/sizeof(msg[0])
+		snprintf(msg, sizeof(msg)
 			, _("Corrupt DELETESET %c"), set->ctype);
 		FATAL2(msg);
 	}
@@ -481,7 +481,7 @@ add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 		char msg[96];
 		if (dups==DUPSOK) 
 			return FALSE;
-		snprintf(msg, sizeof(msg)/sizeof(msg[0])
+		snprintf(msg, sizeof(msg)
 			, _("Tried to add already-deleted record (" FMT_INT32 ") to xref (%c)!")
 			, keynum, set->ctype);
 		FATAL2(msg); /* deleting a deleted record! */
@@ -525,7 +525,7 @@ addxref_impl (CNSTRING key, DUPS dups)
 	INT32 keynum=0;
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
-		snprintf(msg, sizeof(msg)/sizeof(msg[0]), "Bad key passed to addxref_impl: %s", key);
+		snprintf(msg, sizeof(msg), "Bad key passed to addxref_impl: %s", key);
 		FATAL2(msg);
 	}
 	switch(ktype) {
@@ -652,7 +652,7 @@ is_key_in_use (CNSTRING key)
 
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
-		snprintf(msg, sizeof(msg)/sizeof(msg[0]), "Bad key passed to is_key_in_use: %s", key);
+		snprintf(msg, sizeof(msg), "Bad key passed to is_key_in_use: %s", key);
 		FATAL2(msg);
 	}
 
@@ -753,7 +753,7 @@ newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
 			set->recs[0] = keynum+1;	/* next available */
 		if(changed)
 			ASSERT(writexrefs());
-		sprintf(scratch, "@%s@", xrefp);
+		snprintf(scratch, sizeof(scratch), "@%s@", xrefp);
 		return(scratch);
 	}
 	return(getxref(set));
@@ -921,7 +921,7 @@ BOOLEAN
 xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
 {
-	char scratch[100];
+	char scratch[MAXPATHLEN];
 	static char errstr[256];
 	FILE * fp = 0;
 	INT i;
@@ -930,7 +930,7 @@ xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
 	*errptr = 0;
 
 	ASSERT(!xreffp);
-	sprintf(scratch, "%s/xrefs", path);
+	snprintf(scratch, sizeof(scratch), "%s/xrefs", path);
 	if (!(fp = fopen(scratch, LLREADBINARY))) {
 		return FALSE;
 	}

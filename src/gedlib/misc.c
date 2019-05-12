@@ -48,7 +48,7 @@ addat (STRING str)
 	static INT dex = 0;
 	if (++dex > 2) dex = 0;
 	p = buffer[dex];
-	sprintf(p, "@%s@", str);
+	snprintf(p, sizeof(buffer[dex]), "@%s@", str);
 	return p;
 }
 /*===========================================

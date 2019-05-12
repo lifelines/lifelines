@@ -2051,7 +2051,7 @@ get_all_sour (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "S" FMT_INT, i);
+		snprintf(skey, sizeof(skey), "S" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2070,7 +2070,7 @@ get_all_even (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "E" FMT_INT, i);
+		snprintf(skey, sizeof(skey), "E" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2089,7 +2089,7 @@ get_all_othe (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "X" FMT_INT, i);
+		snprintf(skey, sizeof(skey), "X" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;

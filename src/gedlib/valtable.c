@@ -134,7 +134,7 @@ init_valtab_from_string (CNSTRING str, TABLE tab, INT sep, STRING *pmsg)
 		while ((c = *q++ = *p++) && c != sep && c != '\n')
 			;
 		if (c == 0 || c =='\n') {
-			sprintf(errmsg, "line " FMT_INT ": no value", n);
+			snprintf(errmsg, sizeof(errmsg), "line " FMT_INT ": no value", n);
 			*pmsg = errmsg;
 			goto endinitvaltab;
 		}

@@ -133,13 +133,13 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 
 	*pmsg = *pxref = *pval = 0;
 	if (!p || *p == 0) {
-		sprintf(scratch, _(qSreremp), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSreremp), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	striptrail(p);
 	if (strlen(p) > MAXLINELEN) {
-		sprintf(scratch, _(qSrerlng), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrerlng), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -147,7 +147,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 /* Get level number */
 	skipws(&p);
 	if (chartype((uchar)*p) != DIGIT) {
-		sprintf(scratch, _(qSrernlv), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrernlv), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -159,26 +159,26 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 /* Get cross reference, if there */
 	skipws(&p);
 	if (*p == 0) {
-		sprintf(scratch, _(qSrerinc), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (*p != '@') goto gettag;
 	*pxref = p++;
 	if (*p == '@') {
-		sprintf(scratch, _(qSrerbln), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrerbln), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	while (*p != '@') p++;
 	p++;
 	if (*p == 0) {
-		sprintf(scratch, _(qSrerinc), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
 	if (!iswhite((uchar)*p)) {
-		sprintf(scratch, _(qSrernwt), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrernwt), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -188,7 +188,7 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 gettag:
 	skipws(&p);
 	if (*p == 0) {
-		sprintf(scratch, _(qSrerinc), flineno);
+		snprintf(scratch, sizeof(scratch), _(qSrerinc), flineno);
 		*pmsg = scratch;
 		return ERROR;
 	}
@@ -244,7 +244,7 @@ file_to_node (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 	*pmsg = NULL;
 	*pemp = FALSE;
 	if (!(fp = fopen(fname, LLREADTEXT))) {
-		sprintf(scratch, "Could not open file %s",  fname);
+		snprintf(scratch, sizeof(scratch), "Could not open file %s",  fname);
 		*pmsg = scratch;
 		return NULL;
 	}
@@ -391,7 +391,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				sprintf(scratch, _(qSrerilv), flineno);
+				snprintf(scratch, sizeof(scratch), _(qSrerilv), flineno);
 				*pmsg = scratch;
 				bcode = ERROR;
 				break;
@@ -408,7 +408,7 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			sprintf(scratch, _(qSrerilv), flineno);
+			snprintf(scratch, sizeof(scratch), _(qSrerilv), flineno);
 			*pmsg = scratch;
 			bcode = ERROR;
 			break;
@@ -595,7 +595,7 @@ swrite_node (INT levl,       /* level */
 {
 	char scratch[600];
 	STRING q = scratch;
-	sprintf(q, FMT_INT " ", levl);
+	snprintf(q, sizeof(scratch), FMT_INT " ", levl);
 	q += strlen(q);
 	if (nxref(node)) {
 		strcpy(q, nxref(node));
