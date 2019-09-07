@@ -43,7 +43,7 @@ repository directly, do the following:
 	make
 	make install
 
-In both cases, various dependnecies are required.  (See section 1a.)
+In both cases, various dependencies are required.  (See section 1a.)
 
 This will generate Makefiles suitable for your platform and then build
 and install the LifeLines programs.  You will end up with the following
