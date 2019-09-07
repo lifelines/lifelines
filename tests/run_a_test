@@ -1,0 +1,341 @@
+#/bin/bash
+# automake test enviroment, test return values:
+#    0 success
+#    77 test skipped
+#    99 hard error
+#    1 failure
+# called in the build area tests directory
+# called with 1 argument - the relative path of the llsrc file to run
+#           this gives us srcdir as well as target name, with assumption
+#           we have rule testdir/testname.log: testname.llsrc
+
+# environment variables (usually from make)
+# VERBOSE     if set (to 1) turns on lots of messages from this script
+#             written to testname.log, can be enabled with
+#             VERBOSE=1 make check
+#             VERBOSE=1 make testdir/testname.log
+# srcdir -    relative path to the src area 'tests' directory
+#
+# variables local to this script
+# arrays to collect 'configuration' data
+# addtoenv   array of name=value pairs to add to environment
+# precmds    array of names of pre commands to run
+# preargs    array of rest of the pre command lines of these commands
+# postcmds    array of names of post commands to run
+# postargs    array of rest of the post command lines of these commands
+#
+# testsrcdir  relative path to src directory of this test, from the test dir
+# scriptname  testname.llscr (no path, name of the test to execute.
+# testname    name of the test, no path, no extension.
+# testdir     name of the directory the test is run in
+# llines      path to llines executable from within testdir
+# bits        set to 32 or 64 the architecture size used to compile llines
+#    reference file - note 3 possible names for reference files
+#    testname.out.ref testname.out.32.ref testname.out.64.ref
+#    refout below points to the one we need for this test
+# refout      path to reference file from test subdir
+# trefout     path to reference file from 'tests'dir
+
+# compare_file(base) using base name of file, compare output file (.out)
+#              with reference (.ref)
+function compare_file { 
+    base=$1
+    refout=$testsrcdir/$base.ref       # refout path from test subdir
+    trefout=$srcdir/$testdir/$base.ref # refout path from 'tests' dir
+    if [[ ! -f $refout ]] ; then
+        if [[ ! -f $testsrcdir/$base.$bits.ref ]] ; then
+            echo "FAIL $testdir/$testname $base, didn't find reference file $trefout"
+            echo "     or $srcdir/$testdir/$base.$bits.ref"
+            return 99
+        else 
+            refout=$testsrcdir/$base.$bits.ref 
+            trefout=$srcdir/$testdir/$base.$bits.ref
+        fi
+    fi
+    diff $base $refout > $base.diff
+    case $? in
+    0)
+        echo "PASS $testdir/$testname $base"
+        rm $base.diff
+        return 0
+        ;;
+    1)
+        echo "FAIL $testdir/$testname $base output didn't match reference"
+        echo "    check $testdir/$base.diff or"
+        echo "    run diff $testdir/$base $trefout"
+        return 1
+        ;;
+    2)
+        echo "FAIL $testdir/$testname FAILED maybe missing file"
+        return 99
+        ;;
+    *)
+        echo "FAIL $testdir/$testname unknown diff failure"
+        return 99
+        ;;
+    esac
+}
+
+# run_a_command (cmd cmdin cmdout cmdout2 filter) 
+# cmd      - command to execute
+# cmdin    - name of stdin file if any
+#            if none no stdin redirection is done
+# cmdout   - output files, typically end in .out
+#            reference files have .ref appended
+#            baseout is name w/o the .out or .ref
+#            if filter is defined, cmdout is filtered with output to
+#            cmdout.out.filter (expecting a similarly named .ref file)
+# cmdout2  - second output file  (if one exists)
+#            (e.g. llines scripts generate $testname.out)
+# filter     filter cmdout.out with this filter     
+# Note: we don't exit on error, but rather just return the return value
+#   and let caller  accumulate status, so all tests are tried
+function run_a_command {
+    cmd=$1
+    cmdin=$2
+    cmdout=$3
+    cmdout2=$4
+    filter=$5
+    rac=0
+    # note: use of import filter should be an option, but for now there is
+    #     only one use of filter so punt until it's needed
+    import_filter="sed -r -e 's/(Import time )([0-9]*)(s \(ui )([[:digit:]]+)/\1xx\3xx/'"
+    [[ -n $VERBOSE ]] && echo "run_a_cmd $cmd $cmdin $cmdout $cmdout2 $filter"
+    
+
+    # remember cmdout since if we filter it name is differnt
+    defout=$cmdout
+    # build up the command name to execute
+    cmdstr=$cmd
+    if [[ -n $cmdin ]] ; then
+        cmdstr="$cmdstr < $cmdin"
+    fi
+    cmdstr="${addtoenv[@]} $cmdstr > $cmdout"
+    # now run the command (use eval to allow addtoenv working, and < and >)
+    [[ -n $VERBOSE ]] && echo "eval $cmdstr"
+    eval $cmdstr
+    rac=$?
+    if [[ $rac != 0 ]] ; then 
+        echo "FAIL $testdir/$testname command ($cmdstr) exited with status $rac"
+        return 1
+    fi
+    if [[ -n $filter ]] ; then
+        defout=$cmdout.filter
+        cmdstr="${addtoenv[@]} $filter < $cmdout | $import_filter > $defout"
+        eval $cmdstr
+        rac=$?
+        if [[ $rac != 0 ]] ; then
+            echo "FAIL $testdir/$testname filter($filter) failed with exit $ret"
+            return 1
+        fi
+    fi
+    compare_file $defout
+    rac=$?
+
+    # now diff cmdout2 output if one exists
+    if [[ -n $cmdout2 ]] ; then
+        compare_file $cmdout2
+        ret1=$?
+        if [[ $rac < "$ret1" ]] ; then
+            rac=$ret1
+        fi
+    fi
+    return $rac;
+}
+
+if [[ -n $VERBOSE ]] ; then
+    echo args "$@"
+    echo in directory "'$PWD'"
+    echo srcdir is "'$srcdir'"
+    echo \$0 is "'$0'"
+    echo in directory "'$PWD'"
+    set -x   # more debug info
+    #set -vx # even more info about commands executed
+fi
+
+
+scriptname=${1##*/}        # strip off pathname
+testname=${scriptname%.*}  # strip of suffix of script leaving name of test
+testdir=${1%/*}            # strip off script name
+testdir=${testdir##*/}     # strip off leading path
+thistest=$testdir/$testname # convience for messaging
+
+# do we have a separate build area
+if [[ -z $srcdir || $srcdir = . ]] ; then # no
+    testsrcdir=.
+else # yes
+    testsrcdir=../$srcdir/$testdir
+fi
+if [[ ! -d $srcdir ]] ; then
+    echo "FAIL $thistest couldn't determine srcdir, aborting"
+    exit 99
+fi
+
+cd $testdir         # run the test inside the build area tests subdir
+llines=../../src/liflines/llines
+if [[ ! -x $llines ]] ; then
+    echo "Error, $llines not found, aborting"
+    exit 99
+fi
+# figure out if we are using 32 bit or 64 bit version of llines
+#     Note in bash pattern matching, with [[ and ]], = and == 
+#     pattern match checking if 1st arg matches pattern in second arg
+#     but if second arg is quoted with double quotes it's a string compare
+#     we can optimize by removing the double quotes only if want pattern match
+bits=`file $llines`
+if [[ "${bits#*32-bit}" == "$bits" ]] ; then  
+    bits=64
+else 
+    bits=32
+fi
+
+if [[ -n $VERBOSE ]] ; then
+    echo script name=$scriptname
+    echo testdir=$testdir
+    echo testname=$testname
+    echo testsrcdir=$testsrcdir
+    echo llines=$llines
+    echo bits=$bits
+fi
+
+addtoenv=()
+postcmds=()
+postargs=()
+precmds=()
+preargs=()
+ret=0
+
+# start every test database with a clean slate
+# and set LLPROGRAMS to point to the source directory
+rm -rf testdb
+addtoenv+=( LLPROGRAMS=$testsrcdir )
+
+if [[ -f $testsrcdir/$testname.config ]] ; then
+    cnt=0
+    while read key name rest ; do
+        #[[ -n $VERBOSE ]] && echo "key='$key' name='$name' rest='$rest'"
+        case $key in
+        env)
+            if [[ (${name#*=} != $name) && (${name#*=*=} == $name) && -z $rest ]] ; then
+                addtoenv+=( $name )
+            else 
+                (( cnt += 1 ))
+                if [[ -z $rest ]] ; then
+                    echo "$testname.config env '$name' not a name=value syntax"
+                else
+                    echo "$testname.config env '$name' '$rest' has extra stuff on line"
+                fi
+            fi
+            ;;
+        pre)
+            precmds+=($name)
+            preargs+=("$rest")
+            ;;
+        post)
+            postcmds+=($name)
+            postargs+=("$rest")
+            ;;
+        \#*)
+            #echo "skipping comment $key $name $rest"
+            ;;
+        *)
+            echo "skipping unrecognized $key $name $rest"
+            (( cnt += 1 ))
+            ;;
+        esac
+    done < $testsrcdir/$testname.config
+    if [[ $cnt != 0 ]] ; then
+       echo "FAIL $thistest $cnt errors found parsing $testsrcdir/$testname.config"
+       ret=99
+   fi
+fi
+
+if [[ -n $VERBOSE && 1 == 0 ]] ; then
+    if [[ ${#addtoenv[@]} ]] ; then
+        echo "Environment adjustments"
+        for i in ${addtoenv[@]}; do
+            echo "    $i"
+        done
+    fi
+    if [[ ${#precmds[@]} > 0 ]] ; then
+        echo "pre commands"
+        for i in ${!precmds[@]}; do
+            echo "    ${precmds[$i]} ${preargs[$i]}"
+        done
+    fi
+    if [[ ${#postcmds[@]} > 0 ]] ; then
+        echo "post commands"
+        for i in ${!postcmds[@]}; do
+            echo "    ${postcmds[$i]} ${postargs[$i]}"
+        done
+    fi
+fi
+# run llines with $testname.llscr, replacing TESTNAME with name with path to it
+# also prevent linesrc files from effecting the test
+if [[ ! -f $testsrcdir/$scriptname ]] ; then
+    echo "FAIL $thistest $scriptname not found"
+    ret=99
+fi
+[[ -n $VERBOSE ]] && echo "sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname >$scriptname.fix"
+sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname > $scriptname.fix
+# some tests don't need to write out a $testname.out file
+#    so check if one is necessary
+scriptout=""
+if grep $testname.out $scriptname.fix >& /dev/null ; then
+    scriptout=$testname.out
+fi
+if [[ ! -f ../../src/tools/xterm_decode ]] ; then
+    echo "FAIL $thistest ../../src/tools/xterm_decode doesn't exist"
+    ret=99
+else
+    # tell llines to use non-existant file in test source directory
+    # so not affected by any user settings. Also test writer can
+    # always add a $testname.lines.src if needed for a test
+    #run_a_command cmd cmdin cmdout cmdout2 filter
+    run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "$scriptout" ../../src/tools/xterm_decode
+    ret1=$?
+    if [[ $ret < $ret1 ]] ; then
+        ret=$ret1
+    fi
+fi
+
+# post processing commands
+#   Look for commands in tools and liflines directories, otherwise ?? use path
+
+if [[ ${#postcmds[@]} > 0 ]] ; then
+    echo "post commands"
+    for i in ${!postcmds[@]}; do
+        cmd=${postcmds[$i]}    # get the command name
+        if [[ -x ../../src/tools/$cmd ]] ; then
+            fcmd=../../src/tools/$cmd
+        elif [[ -x ../../src/liflines/$cmd ]] ; then
+            fcmd=../../src/liflines/$cmd
+        else
+            fcmd=`which $cmd`
+            if [[ $? == 1 ]] ; then
+                echo "FAIL $thistest post command $cmd not found aborting"
+                if [[ $ret < "1" ]] ; then
+                    ret=1
+                fi
+            fi
+            echo "$thistest Warning post command found outside build tree"
+        fi
+        args=${postargs[$i]}
+        args=${args/TESTNAME/$testsrcdir/$testname}
+        args=${args/SRCDIR/$testsrcdir}
+        cmdout=
+        if [[ $cmd = "llexec" ]] ; then
+            if [[ $args =~ .*-o\ *"$testname.out".* ]] ; then
+                cmdout=$testname.out
+            fi
+        fi
+        #run_a_command cmd cmdin cmdout cmdout2 filter
+        #run_a_command "$fcmd ${postargs[$i]}" ""  "$testname.$cmd.out" "" ""
+        run_a_command "$fcmd ${args}" ""  "$testname.$cmd.out" "$cmdout" ""
+        ret1=$?
+        if [[ $ret < $ret1 ]] ; then
+            ret=$ret1
+        fi
+    done
+fi
+exit $ret

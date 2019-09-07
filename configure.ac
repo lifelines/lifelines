@@ -115,6 +115,22 @@ then
   fi
 fi
 
+dnl Specify code coverage if requested
+AC_ARG_WITH(coverage,
+    [  --with-coverage             Build with code coverage ],
+    [build_coverage=$withval],
+    [build_coverage=no])
+
+if test "$build_coverage" = "yes"
+then
+  if test "${ac_cv_prog_gcc}" = "yes"; then
+    CFLAGS="${CFLAGS} --coverage"
+  else
+    echo "The use of --with-coverage is only supported when using gcc!"
+    exit
+  fi
+fi
+
 dnl **************************************************************
 dnl Handle Docs Target
 dnl **************************************************************
@@ -298,4 +314,5 @@ AC_OUTPUT(Makefile \
         reports/st/Makefile \
         tt/Makefile \
         build/Makefile \
+        tests/Makefile \
         po/Makefile.in)
