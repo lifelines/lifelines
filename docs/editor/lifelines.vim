@@ -1,5 +1,5 @@
 " Vim syntax file
-" Language:	LifeLines http://marcno.github.io/lifelines/
+" Language:	LifeLines https://lifelines.github.io/lifelines/
 " Maintainer:	Patrick Texier <p.texier@genindre.org>
 " Location:	http://www.genindre.org/ftp/lifelines/lifelines.vim
 " Last Change:	2005 Dec 22.

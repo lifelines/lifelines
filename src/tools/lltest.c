@@ -32,6 +32,9 @@
 #include "version.h"
 #include "btree.h"
 #include "../btree/btreei.h"
+
+extern STRING qSgen_bugreport;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -198,7 +201,7 @@ print_usage (void)
 	printf("\n");
 	printf(_("\tlltest %s --verbose"), fname);
 	printf("\n\t\t");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf(_(qSgen_bugreport));
 	printf("\n");
 }
 

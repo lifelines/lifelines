@@ -746,7 +746,7 @@ Anyone can clone the
 <application>LifeLines</application>
 source tree, using the following commands:
 <programlisting>
-git clone https://github.com/MarcNo/lifelines.git
+git clone https://github.com/lifelines/lifelines.git
 </programlisting>
 </para>
 <para>
