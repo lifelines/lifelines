@@ -64,7 +64,7 @@ static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
  *   refn records; all records with user keys starting with the same first
  *   two characters are indexed together
  *=========================================================================
- * database record format -- The first INT of the record holds the
+ * database record format -- The first INT32 of the record holds the
  *   number of refns indexed in the record
  *-------------------------------------------------------------------
  *        1 INT32 nrefns - number of refns indexed in this record
