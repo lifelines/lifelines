@@ -74,7 +74,6 @@ robf@geekthing.com
 
 (Perry added autogen.sh, 2002.06.04)
 
-
 ***************************
 
 3) Which does what:
@@ -118,6 +117,3 @@ configure will generate config.h and Makefile files from Makefile.in files.
    step.  For example if your curses.h was in /usr/local/ncurses and it wasn't
    being found, you could add to the configure step
    ../configure CPPFLAGS=-I/usr/local/ncurses
-   
-   
-

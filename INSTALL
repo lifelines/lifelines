@@ -18,31 +18,32 @@ Contents:
  2h) Mac OS X
 ********************************
 
-
-
 ******************************
 1. General (UNIX) installation
 ******************************
 
-
 This is the source distribution of the LifeLines system, a genealogy
 software system.
-
-(If you are building from cvs sources, you will not have a configure
-script, and you should be reading the README.DEVELOPERS instructions.)
 
 LifeLines should compile correctly using GNU gcc or any native C compiler.
 It also will build using the Cygnus tools on Windows (but see note in the
 platform notes section below).
 
-To build and install LifeLines, do the following:
+If you have downloaded a "release" package, do the following:
 
-	./configure (if that does't work, try 'sh ./configure')
+	sh ./configure
 	make
 	make install
 
-If you do not have gettext & iconv installed, you may need to use
-	./configure --disable-nls
+If you have downloaded a "source code" package, or have cloned the git
+repository directly, do the following:
+
+	sh build/autogen.sh
+	sh ./configure
+	make
+	make install
+
+In both cases, various dependencies are required.  (See section 1a.)
 
 This will generate Makefiles suitable for your platform and then build
 and install the LifeLines programs.  You will end up with the following
@@ -66,21 +67,12 @@ btedit is a administration tool used for unmangling mangled databases,
 and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
 
-docs:
-Pregenerated versions of the documentation are included, in
-html, pdf, and text formats, so it is not necessary to have
-these tools installed.
-
-If you are tracking the git repository and want to be able to rebuild
-your documentation as changes are made, you must run configure
-with the "--with-docs" option.  This has some large dependencies;
-see below for more information.
-
 ******************************
 1a) Dependencies
 ******************************
+
 lifelines has a number of dependencies and they vary depending on
-how you build lifelines. (Avoid gcc version 2.7.2.1)
+how you build lifelines.
 
 1. General dependencies:
 
@@ -104,11 +96,18 @@ how you build lifelines. (Avoid gcc version 2.7.2.1)
    dblatex
    texlive-cmap
 
-4. Multiple Language support - processed files are checked into cvs, but
-   to rebuild the language files:
+   By default, these tools are not required.  If you want to edit and rebuild
+   documentation, run configure with the '--with-docs' option.
+
+4. National Language Support (NLS)
+
+   Use of NLS, or regeneration of the language files, requires the following:
 
    gettext
    iconv
+
+   By default, NLS support is enabled.  If you want to disable NLS support,
+   run configure with the '--disable-nls' option.
 
 ******************************
 1b) Specific Issues
@@ -144,7 +143,6 @@ Reported successes include:
    FreeBSD 4.11-STABLE
    OS X 10.3.9
  
-
 *********************
 2b) Microsoft Windows
 *********************
@@ -160,7 +158,6 @@ below). If using MS Visual C++, you may use the project files
 included in the subdirectories beneath /win32/msvc6 (which are
 currently used by Perry to generate the binaries in the MS-Windows
 binary distribution).
-
 
 **********
 2c) Cygwin
@@ -183,7 +180,6 @@ To compile libiconv on cygwin, I had to compile it statically, eg,
 (in libiconv directory)
    ./configure --enable-static --disable-shared
 
-
 ***************
 2d) rpm packages
 ***************
@@ -199,17 +195,12 @@ Christian Perrier maintains a Debian port of linux.
 See:
 http://packages.debian.org/cgi-bin/search_packages.pl?searchon=names&version=all&exact=1&keywords=lifelines
 
-
 ***************
-2f) gcc 2.7.2.1
+2f) compilers
 ***************
 
-gcc 2.7.2.1 does not understand -Wreturn-type, so this
-must be removed from configure and from CFLAGS in
-interp/Makefile* files. This must be done before configuring,
-because it causes configure tests to fail spuriously.
-(Jan, 2002)
-
+Currently lifelines compiles well with gcc.
+Your experience with other compilers may vary.
 
 **********
 2g) curses
@@ -223,7 +214,6 @@ to the LIBS line in liflines/Makefile. (The symptom was
 However, I wound up core dumping at run-time, so I don't know
 what is going on. 
 (Perry, Jan, 2002)
-
 
 ************
 2h) Mac OS X
@@ -240,5 +230,4 @@ an argument to configure, eg,
    ./configure ppc
 There is no specific code needed for Darwin; this is just to avoid
 the macros getting angry at the unknown output from "uname -a".
-
 
