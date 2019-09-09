@@ -86,7 +86,7 @@ static INT num_errors;
 static INT num_warns;
 static INT defline;
 static BOOLEAN f_logopen = FALSE;
-static FILE *f_flog = 0;
+static FILE *f_flog = NULL;
 static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
@@ -125,6 +125,7 @@ static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
 static BOOLEAN openlog(void);
+static void closelog(void);
 static void handle_warn(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void handle_err(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void set_import_log(STRING logpath);
@@ -147,8 +148,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
 	f_logopen = FALSE;
-	f_flog = 0;
+	f_flog = NULL;
 	set_import_log(getlloptstr("ImportLog", "errs.log"));
+	openlog();
+
 	defline = 0;
 	curlev = 0;
 	clear_structures();
@@ -252,11 +255,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	if (rec_type == INDI_REC && !named)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
-	if (f_logopen) {
-		fclose(f_flog);
-		f_logopen = FALSE;
-		f_flog = 0;
-	}
+	closelog();
 	strfree(&tag0);
 	return num_errors == 0;
 }
@@ -915,7 +914,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
-	if (openlog()) {
+	if (f_logopen) {
 		va_list args;
 		fprintf(f_flog, "%s: ", _("error"));
 		va_start(args, fmt);
@@ -943,7 +942,7 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
-	if (openlog()) {
+	if (f_logopen) {
 		va_list args;
 		fprintf(f_flog, "%s: ", _("warning"));
 		va_start(args, fmt);
@@ -978,6 +977,18 @@ openlog (void)
 	f_flog = fopen(f_logpath, LLWRITETEXT);
 	f_logopen = (f_flog != 0);
 	return f_logopen;
+}
+/*=====================================
+ * closelog -- close import error log
+ *===================================*/
+static void
+closelog (void)
+{
+	if (f_logopen) {
+		fclose(f_flog);
+		f_logopen = FALSE;
+		f_flog = NULL;
+	}
 }
 /*=========================================
  * xref_to_index - Convert pointer to index
