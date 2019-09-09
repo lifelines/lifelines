@@ -35,6 +35,8 @@
 #include "btree.h"
 #include "version.h"
 
+extern STRING qSgen_bugreport;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -225,6 +227,6 @@ print_usage (void)
 	printf("\n\t\t");
 	printf(_("edit raw btree block for person I34"));
 	printf("\n\n");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf(_(qSgen_bugreport));
 	printf("\n");
 }

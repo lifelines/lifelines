@@ -1,5 +1,5 @@
 LifeLines Source Release, Version 3.1.1
-http://marcno.github.io/lifelines/
+https://lifelines.github.io/lifelines/
 -------------------------------------------------------------------------
 
 This is a high-level view of changes made to the source tree.
@@ -8,10 +8,14 @@ commit logs.
 
 XXXX-YY-ZZ Matt Emmerton
 
-	Release 3.1.2 (under development)
+	Release 3.2.0 (under development)
 
 	Improve curses detection to ensure that we can detect environments
 	  without wide character support.
+
+	Purge reference to MarcNo github URls, use the new lifelines URLs
+
+	TBD
 	
 2016-03-16 Matt Emmerton
 

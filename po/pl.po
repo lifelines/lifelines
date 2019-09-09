@@ -1,4 +1,4 @@
-# Polish messages for Lifelines <http://lifelines.sourceforge.net>
+# Polish messages for Lifelines <https://lifelines.github.io/lifelines>
 # Copyright (C) 2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the lifelines package.
 # Translation by Piotr Bolek <Piotr.Bolek@7bulls.com>, 2004.
@@ -4081,7 +4081,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:228
 #, c-format
-msgid "Report bugs to https://github.com/MarcNo/lifelines/issues"
+msgid "Report bugs to https://github.com/lifelines/lifelines/issues"
 msgstr ""
 
 #: src/liflines/lines_usage.c:126

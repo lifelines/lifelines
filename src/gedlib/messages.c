@@ -689,3 +689,12 @@ ZST qSmon_fr12A   = N_("fruc");
 ZST qSmon_fr12B   = N_("fructidor");
 ZST qSmon_fr13A   = N_("comp");
 ZST qSmon_fr13B   = N_("jour_complementairs");
+
+/* Copyright, warranty, contact information, etc. */
+ZST qSgen_copyright = N_("Copyright (C) 1991-2019 Thomas T. Wetmore IV and contributors.");
+ZST qSgen_warranty  = N_("This is free software; see the source for copying conditions.  There is NO\n"
+                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+ZST qSgen_license   = N_("Lifelines is distributed under an X/MIT Open Source license.\n"
+                         "\tSee file LICENSE in the program directory.");
+ZST qSgen_website   = N_("For more information, visit our web site at https://lifelines.github.io/lifelines/");
+ZST qSgen_bugreport = N_("Please peport bugs to https://github.com/lifelines/lifelines/issues");
