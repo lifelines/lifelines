@@ -144,7 +144,7 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 
 /* signals.c */
-void set_signals(__sighandler_t handler);
+void set_signals(sighandler_t handler);
 void ll_optional_abort(STRING);
 void load_signames(void);
 char *get_signame(int);

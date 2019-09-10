@@ -32,7 +32,6 @@
 
 #include "llstdlib.h"
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include <signal.h>
 #include "translat.h"
 #include "interp.h"
 #include "liflines.h"
@@ -94,7 +93,7 @@ load_signames (void)
  * set_signals -- Install signal handler
  *====================================*/
 void
-set_signals (__sighandler_t handler)
+set_signals (sighandler_t handler)
 {
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, handler);
