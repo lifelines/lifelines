@@ -198,8 +198,7 @@ that you install Perl: http://www.activestate.com/Products/ActivePerl/.
 References:
 
 LifeLines on the web:
-  http://lifelines.sf.net/
-
+  https://lifelines.github.io/lifelines/
 
 Mailing list:
   To subscribe to the list, send email to

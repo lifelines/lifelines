@@ -15,7 +15,7 @@
     </p>
   </description>
 
-  <url type="homepage">http://marcno.github.io/lifelines/</url>
+  <url type="homepage">https://lifelines.github.io/lifelines/</url>
 
   <provides>
     <binary>liflines</binary>

@@ -34,6 +34,8 @@
 #include "arch.h"
 #include "version.h"
 
+extern STRING qSgen_copyright, qSgen_warranty, qSgen_website;
+
 /*===============================================
  * get_lifelines_version -- Return version string
  *  returns static buffer
@@ -59,13 +61,11 @@ print_version (CNSTRING program)
         printf("%s (lifelines) %s\n", program, get_lifelines_version(48));
         printf("\n");
 
-        printf(_("Copyright (C) 1991-2019 Thomas T. Wetmore IV and contributors."));
+        printf(_(qSgen_copyright));
         printf("\n");
-        printf(_("This is free software; see the source for copying conditions.  There is NO\n"
-                "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."));
+        printf(_(qSgen_warranty));
         printf("\n");
-
-        printf(_("For more information, visit our web site at http://marcno.github.io/lifelines/"));
+        printf(_(qSgen_website));
         printf("\n");
 
 }

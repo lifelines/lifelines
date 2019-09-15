@@ -33,6 +33,8 @@
 #include "toolsi.h"
 #include "errno.h"
 
+extern STRING qSgen_bugreport;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -206,7 +208,7 @@ print_usage (void)
 	printf("\n");
 	printf(_("\tlldump %s"), fname);
 	printf("\n\n");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf(_(qSgen_bugreport));
 	printf("\n");
 }
 /*===============================================
