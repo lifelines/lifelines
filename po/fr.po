@@ -1,4 +1,4 @@
-# Lifelines <http://lifelines.sourceforge.net>
+# Lifelines <https://lifelines.github.io/lifelines>
 # Copyright (C) 1991-2007 Thomas T. Wetmore IV and al.
 # French translation by Patrick Texier <p.texier@genindre.org>, 2002-2007.
 # <http://www.genindre.org/ftp/lifelines/llfr.zip>.
@@ -4081,8 +4081,8 @@ msgstr "RECENSEMENT DES BOGUES"
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:228
 #, c-format
-msgid "Report bugs to https://github.com/MarcNo/lifelines/issues"
-msgstr ""
+msgid "Report bugs to https://github.com/lifelines/lifelines/issues"
+msgstr "Envoyez les bogues à https://github.com/lifelines/lifelines/issues"
 
 #: src/liflines/lines_usage.c:126
 #, c-format
@@ -5384,9 +5384,6 @@ msgstr "Dans le fichier <%s> à la ligne %d"
 
 #~ msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
 #~ msgstr "Écrit par Tom Wetmore. Maintenu à lifelines.sourceforge.net."
-
-#~ msgid "Report bugs to lifelines.sourceforge.net"
-#~ msgstr "Envoyez les bogues à lifefelines.sourceforge.net."
 
 #~ msgid "illegal call to pos."
 #~ msgstr "Appel invalide à la pos."

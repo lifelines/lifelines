@@ -74,7 +74,6 @@ robf@geekthing.com
 
 (Perry added autogen.sh, 2002.06.04)
 
-
 ***************************
 
 3) Which does what:
@@ -101,7 +100,7 @@ configure will generate config.h and Makefile files from Makefile.in files.
 
 4) Building the code
 
-1. check out the code from git: git clone https://github.com/MarcNo/lifelines.git
+1. check out the code from git: git clone https://github.com/lifelines/lifelines.git
 2. For building, refer to the README.MAINTAINERS file and execute the
    commands under 'Run autotools:' and 'Build local copy in ./bld subdirectory:'
    Note: these commands describe one way to proceed.  There are many other
@@ -118,6 +117,3 @@ configure will generate config.h and Makefile files from Makefile.in files.
    step.  For example if your curses.h was in /usr/local/ncurses and it wasn't
    being found, you could add to the configure step
    ../configure CPPFLAGS=-I/usr/local/ncurses
-   
-   
-

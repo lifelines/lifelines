@@ -501,13 +501,13 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	if (!pactx->Pinfp) {
 		llwprintf(_("Error: file <%s> not found: %s\n"), fname, fullpath);
 		Perrors++;
-		return;
+		goto error_filenotopen;
 	}
 
 	if ((unistr=check_file_for_unicode(pactx->Pinfp)) && !eqstr(unistr, "UTF-8")) {
 		msg_error(_(qSunsupuniv), unistr);
 		Perrors++;
-		return;
+		goto error_fileopen;
 	}
 
 	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
@@ -517,8 +517,11 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	pactx->charpos = 0;
 
 	yyparse(pactx);
-	
+
+error_fileopen:
 	closefp(&pactx->Pinfp);
+
+error_filenotopen:
 	pactx->ifile = 0;
 	pactx->fullpath = 0;
 	pactx->lineno = 0;

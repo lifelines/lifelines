@@ -1,4 +1,4 @@
-# Spanish minimal catalog for Lifelines <http://lifelines.sourceforge.net>
+# Spanish minimal catalog for Lifelines <https://lifelines.github.io/lifelines>
 # Copyright (C) YEAR Tom T. Wetmore IV
 # This file is distributed under the same license as the PACKAGE package.
 # Perry Rapp <elsapo@users.sourceforge.net>, 2005.
@@ -4095,7 +4095,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:228
 #, c-format
-msgid "Report bugs to https://github.com/MarcNo/lifelines/issues"
+msgid "Report bugs to https://github.com/lifelines/lifelines/issues"
 msgstr ""
 
 #: src/liflines/lines_usage.c:126

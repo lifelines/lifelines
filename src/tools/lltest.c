@@ -33,6 +33,8 @@
 #include "btree.h"
 #include "../btree/btreei.h"
 
+extern STRING qSgen_bugreport;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -152,7 +154,7 @@ main (int argc,
 	printf("Testing lldberr...");
 		rc = test_lldberr();
 	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
-	
+
 	closebtree(btree);
 	btree = 0;
 	return rtn;
@@ -203,7 +205,7 @@ print_usage (void)
 	printf("\n");
 	printf(_("\tlltest %s --verbose"), fname);
 	printf("\n\t\t");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf(_(qSgen_bugreport));
 	printf("\n");
 }
 
