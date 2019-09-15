@@ -49,6 +49,8 @@
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
 
+// for parser debugging
+extern int yydebug;
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -304,11 +306,18 @@ prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (!debugmode)
+	{
 		set_signals();
-	else /* developer wants to drive without seatbelt! */
+	}
+	/* developer wants to drive without seatbelt! */
+	else
+	{
 		stdstring_hardfail();
+		//yydebug = 1;
+	}
 
 	set_displaykeys(keyflag);
+
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {

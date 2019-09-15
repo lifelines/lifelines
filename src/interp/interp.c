@@ -599,7 +599,11 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		}
 		switch (itype(node)) {
 		case IICONS:
-			prog_error(node, _("integer constant not allowed here\n"));
+			prog_error(node, _("integer constant not allowed here.  Use d(constant) instead.\n"));
+			goto interp_fail;
+			break;
+		case IFCONS:
+			prog_error(node, _("floating-point constant not allowed here.  Use f(constant) instead.\n"));
 			goto interp_fail;
 			break;
 		case ISCONS:

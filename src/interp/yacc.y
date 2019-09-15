@@ -77,6 +77,15 @@ void parse_error(PACTX pactx, STRING str);
 // Bison 3.x.
 %define api.value.type {PNODE}
 
+// Debugging
+%verbose
+%printer { fprintf (yyo, "IDEN", $$); } IDEN;
+%printer { fprintf (yyo, "PROC", $$); } PROC;
+%printer { fprintf (yyo, "FUNC", $$); } FUNC_TOK;
+%printer { fprintf (yyo, "%g",   $$); } FCONS;
+%printer { fprintf (yyo, "%d",   $$); } ICONS;
+%printer { fprintf (yyo, "%s",   $$); } SCONS;
+
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */
 /*===========================================================*/
