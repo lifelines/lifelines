@@ -8,9 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#define __USE_GNU
 #include <signal.h>
-#undef __USE_GNU
 
 #ifdef WIN32
 

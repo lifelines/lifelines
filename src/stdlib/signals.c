@@ -93,7 +93,7 @@ load_signames (void)
  * set_signals -- Install signal handler
  *====================================*/
 void
-set_signals (sighandler_t handler)
+set_signals (void (*handler)(int))
 {
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
 		signal(SIGINT, handler);
