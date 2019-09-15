@@ -154,7 +154,7 @@ main (int argc,
 	printf("Testing lldberr...");
 		rc = test_lldberr();
 	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
-	
+
 	closebtree(btree);
 	btree = 0;
 	return rtn;
