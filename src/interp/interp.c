@@ -240,7 +240,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 				if (i==1)
 					strupdate(&rootfilepath, pathinfo->fullpath);
 			} else {
-				enqueue_parse_error(_("Report not found: %s "), progfile);
+				enqueue_parse_error(_("Report not found: %s"), progfile);
 			}
 		}
 	} else {
@@ -598,6 +598,9 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 			trace_endl();
 		}
 		switch (itype(node)) {
+		case IICONS:
+			prog_error(node, _("integer constant not allowed here\n"));
+			break;
 		case ISCONS:
 			poutput(pvalue_to_string(node->vars.iscons.value), &eflg);
 			if (eflg)
@@ -882,8 +885,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				prog_error(node, "in return statement");
 			return INTRETURN;
 		default:
-			llwprintf("itype(node) is %d\n", itype(node));
-			llwprintf("HUH, HUH, HUH, HUNH!\n");
+			prog_error(node, _("Unexpected node type (%d)"), itype(node));
 			goto interp_fail;
 		}
 		node = inext(node);
