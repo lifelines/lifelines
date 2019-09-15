@@ -600,6 +600,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		switch (itype(node)) {
 		case IICONS:
 			prog_error(node, _("integer constant not allowed here\n"));
+			goto interp_fail;
 			break;
 		case ISCONS:
 			poutput(pvalue_to_string(node->vars.iscons.value), &eflg);
