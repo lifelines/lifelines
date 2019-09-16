@@ -414,7 +414,7 @@ ZST qSbadirefn    = N_("REFN key is already in use.");
 ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
 	/* I,F,S,E,X are conventional letters, so leave them as is) */
 ZST qSdbrecords   = N_("Database records");
-ZST qSdbrecstats  = N_("%dI, %dF, %dS, %dE, %dX");
+ZST qSdbrecstats  = N_(FMT_INT "I, " FMT_INT "F, " FMT_INT "S," FMT_INT "E, " FMT_INT "X");
 
 /* menus */
 ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");

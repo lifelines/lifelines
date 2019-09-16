@@ -1349,18 +1349,6 @@ hleave:
 	return irc;
 }
 /*========================================+
- * printkey -- Make key from keynum
- *=======================================*/
-#ifdef UNUSED_CODE
-static void
-printkey (STRING key, char type, INT keynum)
-{
-	if (keynum>9999999 || keynum<0)
-		keynum=0;
-	sprintf(key, "%c%d", type, keynum);
-}
-#endif
-/*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
  * 2001/03/18 Revised by Perry Rapp
@@ -2140,7 +2128,7 @@ get_report_error_msg (STRING msg)
 
 	if (progrunning) {
 		char line[20];
-		snprintf(line, sizeof(line), "%ld", iline(Pnode)+1);
+		snprintf(line, sizeof(line), FMT_INT, iline(Pnode)+1);
 		zstr = zprintpic2(_(msg), irptinfo(Pnode)->fullpath, line);
         }
 	return zstr;
@@ -2155,7 +2143,7 @@ void clean_orphaned_rptlocks (void)
 	int ct = free_all_rprtlocks();
 	if (ct) {
 		char msg[256];
-		sprintf(msg, _pl("Program forgot to unlock %d record",
+		snprintf(msg, sizeof(msg), _pl("Program forgot to unlock %d record",
 			"Program forgot to unlock %d records", ct), ct);
 		progmessage(MSG_ERROR, msg);
 

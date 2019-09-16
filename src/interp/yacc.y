@@ -53,7 +53,7 @@ static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
 
-// Bison 2.7
+/* Bison 2.7 */
 #define YYSTYPE PNODE
 
 /* Local Functions */

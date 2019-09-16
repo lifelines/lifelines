@@ -109,6 +109,8 @@ typedef struct tag_ipcall_data {
 	PNODE fargs;
 } IPCALL_DATA;
 
+typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
+
 struct tag_pnode {
 	char     i_type;       /* type of node */
 	PNODE    i_prnt;       /* parent of this node */
@@ -121,6 +123,7 @@ struct tag_pnode {
 	VPTR     i_word3;
 	VPTR     i_word4;
 	VPTR     i_word5;
+	PFUNC    i_func;
 	union {
 		struct {
 			PVALUE value;
@@ -215,7 +218,7 @@ PNODE ipcall_args(PNODE node);
 PNODE ifdefn_args(PNODE node);
 PNODE ifcall_args(PNODE node);
 
-#define ifunc(i)     ((i)->i_word3)     /* func and builtin reference */
+#define ifunc(i)     ((i)->i_func)      /* func and builtin reference */
 #define ichild(i)    ((i)->i_word2)     /* var in children loop */
 #define ispouse(i)   ((i)->i_word2)     /* var in families and spouses loop */
 #define ifamily(i)   ((i)->i_word3)     /* var in all families type loops */
@@ -229,8 +232,6 @@ PNODE ifcall_args(PNODE node);
 #define ibody(i)     ((i)->i_word5)     /* body of proc, func, loops */
 #define inum(i)      ((i)->i_word4)     /* counter used by many loops */
 
-typedef PVALUE (*PFUNC)(PNODE, SYMTAB, BOOLEAN *);
-
 #define pitype(i)	ptype(ivalue(i))
 #define pivalue(i)	pvalue(ivalue(i))
 
@@ -238,7 +239,7 @@ typedef struct {
 	char *ft_name;
 	INT ft_nparms_min;
 	INT ft_nparms_max;
-	PVALUE (*ft_eval)(PNODE, SYMTAB, BOOLEAN *);
+	PFUNC ft_eval;
 } BUILTINS;
 
 #define INTERPTYPE INT
@@ -569,6 +570,7 @@ NODE eval_indi2(PNODE expr, SYMTAB stab, BOOLEAN *eflg, CACHEEL *pcel, PVALUE *p
 NODE eval_fam(PNODE, SYMTAB, BOOLEAN*, CACHEEL*);
 PVALUE eval_without_coerce(PNODE node, SYMTAB stab, BOOLEAN *eflg);
 PNODE families_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
+PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE fathers_node(PACTX pactx, PNODE, STRING, STRING, STRING, PNODE);
 PNODE fdef_node(PACTX pactx, CNSTRING, PNODE, PNODE);
 PNODE foreven_node(PACTX pactx, STRING, STRING, PNODE);
@@ -601,8 +603,8 @@ void pa_handle_global(STRING iden);
 void pa_handle_option(CNSTRING optname);
 void pa_handle_proc(PACTX pactx, CNSTRING procname, PNODE nd_args, PNODE nd_body);
 void pa_handle_require(PACTX pactx, PNODE node);
-PNODE familyspouses_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
 PNODE parents_node(PACTX pactx, PNODE, STRING, STRING, PNODE);
+void parse_error (PACTX pactx, STRING str);
 void prog_error(PNODE, STRING, ...);
 void prog_var_error(PNODE node, SYMTAB stab, PNODE arg, PVALUE val, STRING fmt, ...);
 STRING prot(STRING str);

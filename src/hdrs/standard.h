@@ -103,23 +103,67 @@ typedef unsigned char uchar;
 #define FALSE	0
 #endif
 
-/* INTEGER AND FLOATING POINT TYPES */
-/* MTE: Notes on a possible scheme for 64-bit porting.
+/* INTEGER TYPES */
+/*
+ * INT represents a 'native' integer.
+ *   This is to be used for any in-memory computation where size doesn't matter.
  *
- * INT represents a 'native' size integer.  This is useful for any in-memory computation where size doesn't matter.
- * INTPTR represents a 'native' size integer.  This is useful when you are stuffing an integer into a pointer.
+ * INTPTR represents a 'native' integer that has the same size as a pointer.
+ *   This is to be used where an integer is being passed around via a VPTR.
+ *
  * INT16 represents a 16-bit (2-byte) integer.  This is useful for on-disk structures where size matters.
  * INT32 represents a 32-bit (4-byte) integer.  This is useful for on-disk structures where size matters.
  * INT64 represents a 64-bit (8-byte) integer.  This is useful for on-disk structures where size matters.
- * I would expect INT to be used in most places, INTPTR to be used sparingly due to API issues, and
- * INT16/INT32/INT64 only used in btree and charset functions which have dependencies on the number of bits.
+ *   These are to be used for on-disk structures and unicode where size matters.
+ *
 */
-#define INT	int32_t 
-#define INT16	int16_t
-#define INT32	int32_t 
-#define INT64	int64_t
-#define INTPTR	intptr_t
-#define FLOAT	double
+
+/* INTEGER TYPE DEFINITIONS */
+#if __WORDSIZE == 64
+#define INT		int64_t
+#else
+#define INT		int32_t
+#endif
+#define INTPTR		intptr_t
+#define INT16		int16_t
+#define INT32		int32_t
+#define INT64		int64_t
+
+/* INTEGER PRINTF FORMAT DEFINITIONS */
+#define FMT_INTPTR	"%" PRIdPTR
+#define FMT_INT16	"%" PRId16
+#define FMT_INT16_HEX	"0x%04" PRIx16
+#define FMT_INT32	"%" PRId32
+#define FMT_INT32_HEX	"0x%08" PRIx32
+#define FMT_INT64	"%" PRId64
+#define FMT_INT64_HEX	"0x%016" PRIx64
+#if __WORDSIZE == 64
+#define FMT_INT		FMT_INT64
+#define FMT_INT_LEN	22		/* sign + 20 digits + NULL */
+#define FMT_INT_HEX	FMT_INT64_HEX
+#define FMT_INT_02	"%02" PRId64
+#define FMT_INT_04	"%04" PRId64
+#define FMT_INT_6	"%6" PRId64
+#define FMT_SIZET	FMT_INT64
+#else
+#define FMT_INT		FMT_INT32
+#define FMT_INT_LEN	12		/* sign + 10 digits + NULL */
+#define FMT_INT_HEX	FMT_INT32_HEX
+#define FMT_INT_02	"%02" PRId32
+#define FMT_INT_04	"%04" PRId32
+#define FMT_INT_6	"%6" PRId32
+#define FMT_SIZET	FMT_INT32
+#endif
+
+/* INTEGER SCANF FORMAT DEFINITIONS */
+#if __WORDSIZE == 64
+#define SCN_INT		"%" SCNd64
+#else
+#define SCN_INT		"%" SCNd32
+#endif
+
+/* FLOATING POINT TYPES */
+#define FLOAT		double
 
 /* VOID TYPE */
 typedef void *VPTR;
@@ -135,8 +179,6 @@ typedef union {
 } UNION;
 
 #define MAXLINELEN 512
-
-/*typedef VPTR (*FUNC)();*/
 
 #ifndef max
 #define max(x,y) ((x)>(y)?(x):(y))
@@ -196,7 +238,6 @@ typedef STRING (*TRANSLFNC)(STRING str, INT len);
 #define ISNULL(k)	(!k || *k == 0)
 
 #include "list.h"
-
 
 /*
 	ARRSIZE is to make compiler insert size of

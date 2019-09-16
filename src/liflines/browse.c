@@ -971,11 +971,11 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	}
 	if (candidate) {
 		if (keyflag) {
-			sprintf(scratch, "%s%s (%s)", _(qSissnew),
+			snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSissnew),
 				 indi_to_name(nztop(candidate), 56),
 				 rmvat(nxref(nztop(candidate)))+1);
 		} else {
-			sprintf(scratch, "%s%s", _(qSissnew),
+			snprintf(scratch, sizeof(scratch), "%s%s", _(qSissnew),
 				 indi_to_name(nztop(candidate), 56));
 		}
 		if (!ask_yes_or_no(scratch)) {
@@ -1004,16 +1004,16 @@ prompt_add_child_check_save (NODE fam, NODE save)
 	if (save) {
 		if (keyflag)
 			if(getlloptint("DisplayKeyTags", 0) > 0) {
-				sprintf(scratch, "%s%s (i%s)", _(qSiscnew),
+				snprintf(scratch, sizeof(scratch), "%s%s (i%s)", _(qSiscnew),
 				 	indi_to_name(save, 56),
 				 	rmvat(nxref(save))+1);
 			} else {
-				sprintf(scratch, "%s%s (%s)", _(qSiscnew),
+				snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSiscnew),
 				 	indi_to_name(save, 56),
 				 	rmvat(nxref(save))+1);
 			}
 		else
-			sprintf(scratch, "%s%s", _(qSiscnew),
+			snprintf(scratch, sizeof(scratch), "%s%s", _(qSiscnew),
 				 indi_to_name(save, 56));
 		if (!ask_yes_or_no(scratch))
 			save = NULL;
@@ -1595,7 +1595,7 @@ load_nkey_list (STRING key, struct hist * histp)
 			continue;
 		if (keynum<1 || keynum>MAXKEYNUMBER)
 			continue;
-		snprintf(key, sizeof(key), "%c%ld", ntype, keynum);
+		snprintf(key, sizeof(key), "%c" FMT_INT, ntype, keynum);
 		strcpy(histp->list[temp].key, key);
 		histp->list[temp].ntype = ntype;
 		histp->list[temp].keynum = keynum;
@@ -1860,7 +1860,7 @@ ask_clear_history (struct hist * histp)
 		return;
 	}
 	count = get_hist_count(histp);
-	sprintf(buffer, _(qShistclr), count);
+	snprintf(buffer, sizeof(buffer), _(qShistclr), count);
 	if (ask_yes_or_no(buffer))
 		histp->start = -1;
 }
@@ -1972,7 +1972,7 @@ add_new_rec_maybe_ref (RECORD current, char ntype)
 		return newrec;
 	}
 	/* now ask the user how to connect the new node */
-	sprintf(title, _(qSnewrecis), nxref(newnode));
+	snprintf(title, sizeof(title), _(qSnewrecis), nxref(newnode));
 	msg_info(title);
 	/* keep new node # in status so it will be visible during edit */
 	lock_status_msg(TRUE);

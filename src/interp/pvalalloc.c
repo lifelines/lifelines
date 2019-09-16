@@ -298,7 +298,7 @@ free_all_pvalues (void)
 			fprintf(fp, "\n");
 			while (next_table_int(tabit, &key, &ival)) {
 				fprintf(fp, "  %s: ", key);
-				fprintf(fp, _pl("%d item leaked", "%d items leaked", ival), ival);
+				fprintf(fp, _pl(FMT_INT " item leaked", FMT_INT " items leaked", ival), ival);
 				fprintf(fp, "\n");
 			}
 			end_table_iter(&tabit);

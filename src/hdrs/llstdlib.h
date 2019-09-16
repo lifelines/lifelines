@@ -90,6 +90,8 @@ int do_checked_fclose(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fflush(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fseek(FILE *fp, long offset, int whence, STRING filename, STRING srcfile, int srcline);
 size_t do_checked_fwrite(const void *buf, size_t size, size_t count, FILE *fp, STRING filename, STRING srcfile, int srcline);
+void filecopy (FILE* fpsrc, INT len, FILE* fpdest);
+void movefiles (STRING from_file, STRING to_file);
 
 /* listener.c */
 	/* callback for language change */
@@ -142,8 +144,10 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 
 /* signals.c */
-void set_signals(void);
+void set_signals(void (*handler)(int));
 void ll_optional_abort(STRING);
+void load_signames(void);
+char *get_signame(int);
 
 /* sprintpic.c */
 void sprintpic0(STRING buffer, INT len, INT utf8, CNSTRING pic);

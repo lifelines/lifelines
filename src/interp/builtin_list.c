@@ -37,13 +37,6 @@
 static VPTR create_list_value_pvalue(LIST list);
 
 /*********************************************
- * local variables
- *********************************************/
-
-static struct tag_rfmt rpt_long_rfmt; /* short form report format */
-static struct tag_rfmt rpt_shrt_rfmt; /* long form report format */
-
-/*********************************************
  * local function definitions
  * body of module
  *********************************************/

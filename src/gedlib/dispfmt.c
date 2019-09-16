@@ -72,7 +72,7 @@ disp_long_format_date (STRING date)
 	fmts = getlloptstr("LongDisplayDate", NULL);
 	if (fmts) {
 		/* try to use user-specified format */
-		n = sscanf(fmts, "%ld,%ld,%ld,%ld,%ld,%ld" 
+		n = sscanf(fmts, SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT
 			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
 	}
 	if (n != 6) {
@@ -105,7 +105,7 @@ disp_shrt_format_date (STRING date)
 	fmts = getlloptstr("ShortDisplayDate", NULL);
 	if (fmts) {
 		/* try to use user-specified format */
-		n = sscanf(fmts, "%ld,%ld,%ld,%ld,%ld,%ld"
+		n = sscanf(fmts, SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT "," SCN_INT
 			, &dfmt, &mfmt, &yfmt, &sfmt, &efmt, &cmplx);
 	}
 	if (n != 6) {

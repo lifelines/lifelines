@@ -61,6 +61,7 @@ static int test_rkey2str(void);
 static int test_str2rkey(void);
 static int test_index(void);
 static int test_block(void);
+static int test_lldberr(void);
 
 /*********************************************
  * local function definitions
@@ -150,7 +151,10 @@ main (int argc,
 	      rc = test_nextfkey(btree);
 	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
 
-finish:
+	printf("Testing lldberr...");
+		rc = test_lldberr();
+	printf("%s %d\n",(rc==0?"PASS":"FAIL"),rc);
+
 	closebtree(btree);
 	btree = 0;
 	return rtn;
@@ -214,7 +218,7 @@ print_old_and_new_fkey(INT iter, FKEY old, FKEY new, FKEY compare)
 	char *result = (new == compare) ? "OK" : "ERROR";
 	char *oldpath = (old != -1) ? fkey2path(old) : "     ";
 
-	printf("%02d %s 0x%08x %s 0x%08x %s\n",iter, oldpath, old, fkey2path(new), new, result);
+	printf(FMT_INT_02 " %s 0x" FMT_INT32_HEX " %s 0x" FMT_INT32_HEX " %s\n",iter, oldpath, old, fkey2path(new), new, result);
 }
 
 /*===============================================
@@ -306,7 +310,7 @@ test_fkey2path2fkey(void)
 	if (sizeof(FKEY) != sizeof(INT32)) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_fkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		char *path = fkey2path(tests[i].fkey);
 		FKEY fkey = path2fkey(tests[i].path);
@@ -344,7 +348,7 @@ test_rkey2str(void)
 	if (RKEYLEN != 8) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_rkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		char *str = rkey2str(tests[i].rkey);
 
@@ -382,7 +386,7 @@ test_str2rkey(void)
 	if (RKEYLEN != 8) { rc = 1; goto exit; }
 
 	/* Validate Behaviour */
-	for (i=0; i<sizeof(tests)/sizeof(struct tc_rkey); i++)
+	for (i=0; i<ARRSIZE(tests); i++)
 	{
 		RKEY rkey = str2rkey(tests[i].rkeystr);
 
@@ -391,7 +395,7 @@ test_str2rkey(void)
 			printf("'%.8s' -> '%.8s' expected '%.8s'\n", tests[i].rkeystr, rkey.r_rkey, tests[i].rkey.r_rkey);
 		}
 
-		if (strncmp(rkey.r_rkey, tests[i].rkey.r_rkey, RKEYLEN)) { rc = 2+i; break; }
+		if (cmpkeys(&rkey, &tests[i].rkey)) { rc = 2+i; break; }
 	}
 
 exit:
@@ -419,17 +423,20 @@ test_index(void)
 	/* This test code assumes 32-bit alignment.  This may */
 	/* not be accurate for databases created on older DOS */
 	/* or Windows 3.x systems which used 16-bit alignment.*/
+        /* This does NOT apply to newer systems with 64-bit   */
+        /* LifeLines as the structures (thankfully) maintain  */
+        /* their 32-bit alignment.                            */
 	/* WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!  */
 
 	if (verbose)
 	{
-		printf("%s %d\n", "ix_self",    offsetof(INDEXSTRUCT,ix_self));
-		printf("%s %d\n", "ix_type",    offsetof(INDEXSTRUCT,ix_type));
-		printf("%s %d\n", "ix_parent",  offsetof(INDEXSTRUCT,ix_parent));
-		printf("%s %d\n", "ix_nkeys",   offsetof(INDEXSTRUCT,ix_nkeys));
-		printf("%s %d\n", "ix_rkeys",   offsetof(INDEXSTRUCT,ix_rkeys));
-		printf("%s %d\n", "ix_fkeys",   offsetof(INDEXSTRUCT,ix_fkeys));
-		printf("%s %d\n", "INDEXTRUCT", sizeof(INDEXSTRUCT));
+		printf("%s " FMT_SIZET "\n", "ix_self",    offsetof(INDEXSTRUCT,ix_self));
+		printf("%s " FMT_SIZET "\n", "ix_type",    offsetof(INDEXSTRUCT,ix_type));
+		printf("%s " FMT_SIZET "\n", "ix_parent",  offsetof(INDEXSTRUCT,ix_parent));
+		printf("%s " FMT_SIZET "\n", "ix_nkeys",   offsetof(INDEXSTRUCT,ix_nkeys));
+		printf("%s " FMT_SIZET "\n", "ix_rkeys",   offsetof(INDEXSTRUCT,ix_rkeys));
+		printf("%s " FMT_SIZET "\n", "ix_fkeys",   offsetof(INDEXSTRUCT,ix_fkeys));
+		printf("%s " FMT_SIZET "\n", "INDEXTRUCT", sizeof(INDEXSTRUCT));
 	}
 
 	if (offsetof(INDEXSTRUCT, ix_self)   != 0)  { rc=4; goto exit; }
@@ -457,7 +464,7 @@ int test_block(void)
 	/* Validate Assumptions */
 	if (sizeof(FKEY) != sizeof(INT32)) { rc=1; goto exit; }
 	if (sizeof(RKEY) != RKEYLEN)       { rc=2; goto exit; }
-	if (NORECS != 255)                 { rc=3; goto exit; }
+	if (NOENTS != 340)                 { rc=3; goto exit; }
 
 	/* Validate Size and Offsets */
 
@@ -465,18 +472,21 @@ int test_block(void)
 	/* This test code assumes 32-bit alignment.  This may */
 	/* not be accurate for databases created on older DOS */
 	/* or Windows 3.x systems which used 16-bit alignment.*/
+        /* This does NOT apply to newer systems with 64-bit   */
+        /* LifeLines as the structures (thankfully) maintain  */
+        /* their 32-bit alignment.                            */
 	/* WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!  */
 
 	if (verbose)
 	{
-		printf("%s %d\n", "ix_self",    offsetof(BLOCKSTRUCT,ix_self));
-		printf("%s %d\n", "ix_type",    offsetof(BLOCKSTRUCT,ix_type));
-		printf("%s %d\n", "ix_parent",  offsetof(BLOCKSTRUCT,ix_parent));
-		printf("%s %d\n", "ix_nkeys",   offsetof(BLOCKSTRUCT,ix_nkeys));
-		printf("%s %d\n", "ix_rkeys",   offsetof(BLOCKSTRUCT,ix_rkeys));
-		printf("%s %d\n", "ix_offs",    offsetof(BLOCKSTRUCT,ix_offs));
-		printf("%s %d\n", "ix_lens",    offsetof(BLOCKSTRUCT,ix_lens));
-		printf("%s %d\n", "BLOCKSTRUCT", sizeof(BLOCKSTRUCT));
+		printf("%s " FMT_SIZET "\n", "ix_self",    offsetof(BLOCKSTRUCT,ix_self));
+		printf("%s " FMT_SIZET "\n", "ix_type",    offsetof(BLOCKSTRUCT,ix_type));
+		printf("%s " FMT_SIZET "\n", "ix_parent",  offsetof(BLOCKSTRUCT,ix_parent));
+		printf("%s " FMT_SIZET "\n", "ix_nkeys",   offsetof(BLOCKSTRUCT,ix_nkeys));
+		printf("%s " FMT_SIZET "\n", "ix_rkeys",   offsetof(BLOCKSTRUCT,ix_rkeys));
+		printf("%s " FMT_SIZET "\n", "ix_offs",    offsetof(BLOCKSTRUCT,ix_offs));
+		printf("%s " FMT_SIZET "\n", "ix_lens",    offsetof(BLOCKSTRUCT,ix_lens));
+		printf("%s " FMT_SIZET "\n", "BLOCKSTRUCT", sizeof(BLOCKSTRUCT));
 	}
 
 	if (offsetof(BLOCKSTRUCT, ix_self)   != 0)    { rc=4;  goto exit; }
@@ -492,3 +502,24 @@ exit:
 	return rc;
 }
 
+int test_lldberr(void)
+{
+	INT rc=0;
+	INT n=0;
+	STRING err;
+
+	/* test invalid errors: BTERR_MIN and BTERR_MAX */
+	err = getlldberrstr(BTERR_MIN);
+	if (!(strcmp(err,"") == 0)) { rc=BTERR_MIN; goto exit; } 
+
+	err = getlldberrstr(BTERR_MAX);
+	if (!(strcmp(err,"") == 0)) { rc=BTERR_MAX; goto exit; } 
+
+	/* test valid errors */
+	for (n=BTERR_MIN+1; n<BTERR_MAX; n++) {
+		err = getlldberrstr(n);
+		if (!(strcmp(err,"") != 0)) { rc=n; goto exit; } 
+	}
+exit:
+	return rc;
+}

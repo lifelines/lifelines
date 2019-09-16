@@ -162,23 +162,23 @@ main (int argc, char **argv)
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					INT icsz_indi=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_indi, &icsz_indi);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_indi, &icsz_indi);
 				}
 				else if(*optarg == 'f') {
 					INT icsz_fam=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_fam, &icsz_fam);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_fam, &icsz_fam);
 				}
 				else if(*optarg == 's') {
 					INT icsz_sour=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_sour, &icsz_sour);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_sour, &icsz_sour);
 				}
 				else if(*optarg == 'e') {
 					INT icsz_even=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_even, &icsz_even);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_even, &icsz_even);
 				}
 				else if((*optarg == 'o') || (*optarg == 'x')) {
 					INT icsz_othr=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_othr, &icsz_othr);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_othr, &icsz_othr);
 				}
 				optarg++;
 				while(*optarg && isdigit((uchar)*optarg)) optarg++;
@@ -254,9 +254,6 @@ main (int argc, char **argv)
 		case 'o': /* output directory */
 			progout = optarg;
 			break;
-		case 'z': /* nongraphical box */
-//			graphical = FALSE;
-			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
 			break;
@@ -277,7 +274,7 @@ prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (!debugmode)
-		set_signals();
+		set_signals(sighand_cursesui);
 	else /* developer wants to drive without seatbelt! */
 		stdstring_hardfail();
 

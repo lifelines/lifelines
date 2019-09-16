@@ -81,11 +81,11 @@ add_gedcom_props (TABLE fileprops)
 
 	if (!stat(filepath, &sbuf)) {
 		if (sbuf.st_size > 9999999)
-			sprintf(str, "%ldMb", (long)(sbuf.st_size/1000000));
+			snprintf(str, sizeof(str), "%ldMb", (long)(sbuf.st_size/1000000));
 		else if (sbuf.st_size > 9999)
-			sprintf(str, "%ldKb", (long)(sbuf.st_size/1000));
+			snprintf(str, sizeof(str), "%ldKb", (long)(sbuf.st_size/1000));
 		else
-			sprintf(str, "%ldb", (long)sbuf.st_size);
+			snprintf(str, sizeof(str), "%ldb", (long)sbuf.st_size);
 
 		add_prop_dnum(fileprops, "bytes", str);
 	}
