@@ -16,13 +16,12 @@ libinterp_a_SOURCES = alloc.c builtin.c builtin_list.c eval.c \
 
 AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/src/hdrs
 
-AM_YFLAGS = -d
-
-# pvalue.c with -O2 triggers a gcc error in gcc version 2.95.2 19991024 (release) 
-# The CFLAGS below is gcc specific.  Sorry. -marc
-AM_CFLAGS=-g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
+# We want a header file (-d) and debugging support (-t)
+AM_YFLAGS = -d -t
 
 EXTRA_DIST = yacc.h yacc.c interpi.h rptui.h
+
+MAINTAINERCLEANFILES = yacc.output
 
 lex.o: yacc.h
 interp.o: yacc.h

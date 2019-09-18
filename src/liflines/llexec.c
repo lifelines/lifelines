@@ -51,6 +51,8 @@ extern INT csz_othr;
 
 extern int opterr;
 
+extern int yydebug;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -274,9 +276,15 @@ prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (!debugmode)
-		set_signals(sighand_cursesui);
-	else /* developer wants to drive without seatbelt! */
+	{
+		set_signals();
+	}
+	/* developer wants to drive without seatbelt! */
+	else
+	{
 		stdstring_hardfail();
+		//yydebug = 1;
+	}
 
 	platform_init();
 	set_displaykeys(keyflag);
