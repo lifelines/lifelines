@@ -175,6 +175,7 @@ function restore {
   restorefile $ROOTDIR/NEWS
   restorefile $ROOTDIR/README
   restorefile $ROOTDIR/configure.ac
+  restorefile $ROOTDIR/build/appdata/lifelines.appdata.xml
   restorefile $ROOTDIR/build/msvc6/btedit/btedit.rc
   restorefile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
   restorefile $ROOTDIR/build/msvc6/llexec/llexec.rc
@@ -199,6 +200,7 @@ function cleanup {
   cleanupfile $ROOTDIR/NEWS
   cleanupfile $ROOTDIR/README
   cleanupfile $ROOTDIR/configure.ac
+  cleanupfile $ROOTDIR/build/appdata/lifelines.appdata.xml
   cleanupfile $ROOTDIR/build/msvc6/btedit/btedit.rc
   cleanupfile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
   cleanupfile $ROOTDIR/build/msvc6/llexec/llexec.rc
