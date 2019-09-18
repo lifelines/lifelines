@@ -53,7 +53,7 @@ static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
 
-// Bison 2.7
+/* Bison 2.7 */
 #define YYSTYPE PNODE
 
 /* Local Functions */
@@ -321,7 +321,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			$$ = return_node(pactx, (PNODE)$4);
 			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
-	|	expr {
+	|	expro {
 			$$ = $1;
 		}
 	;
@@ -369,6 +369,13 @@ expr	:	IDEN {
 		}
 	|	FCONS {
 			$$ = create_fcons_node(pactx, Yfval);
+		}
+	;
+expro	:	/* empty */ {
+			$$ = 0;
+		}
+	|	expr {
+			$$ = $1;
 		}
 	;
 exprso	:	/* empty */ {

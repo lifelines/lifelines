@@ -227,7 +227,7 @@ process_node_value (CLOSURE * closure, STRING v)
 			int skeynum;
 			char skeybuff[MAXKEYWIDTH+1];
 			skeynum = atoi(&v[2]);
-			sprintf(skeybuff, "%c%d", v[1], skeynum);
+			snprintf(skeybuff, sizeof(skeybuff), "%c%d", v[1], skeynum);
 			if (v[1]=='S')
 				closure_add_key(closure, skeybuff, "SOUR");
 			else if (v[1]=='E')
@@ -286,7 +286,7 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 				int skeynum;
 				char skeybuff[MAXKEYWIDTH+1];
 				skeynum = atoi(&v[2]);
-				sprintf(skeybuff, "%c%d", v[1], skeynum);
+				snprintf(skeybuff, sizeof(skeybuff), "%c%d", v[1], skeynum);
 				if (!closure_has_key(closure, skeybuff))
 				{
 					if (closure_is_dump(closure))
@@ -323,23 +323,30 @@ output_any_node (CLOSURE * closure, NODE node, STRING toptag
 	if (!dump)
 	{
 		char scratch[MAXLINELEN+1];
+		INT buflen = sizeof(scratch);
 		STRING pq = scratch;
-		sprintf(pq, "%ld", lvl);
+		snprintf(pq, buflen, FMT_INT, lvl);
+		buflen -= strlen(pq);
 		pq += strlen(pq);
 		if (nxref(node)) {
-			sprintf(pq, " %s", nxref(node));
+			snprintf(pq, buflen, " %s", nxref(node));
+			buflen -= strlen(pq);
 			pq += strlen(pq);
 		}
-		sprintf(pq, " %s", ntag(node));
+		snprintf(pq, buflen, " %s", ntag(node));
+		buflen -= strlen(pq);
 		pq += strlen(pq);
 		if (newval[0])
 		{
+			ASSERT(buflen > 0);
 			strcpy(pq, " ");
+			buflen--;
 			pq++;
-			strcpy(pq, newval);
+			strncpy(pq, newval, buflen);
+			buflen -= strlen(pq);
 			pq += strlen(pq);
 		}
-		sprintf(pq, "\n");
+		snprintf(pq, buflen, "\n");
 		poutput(scratch, eflg);
 		if (*eflg)
 			return;

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
 
 #ifdef WIN32
 

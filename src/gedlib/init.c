@@ -158,7 +158,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	}
 	editfile = strsave(editfile );
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
-	sprintf(editstr, "%s %s", e, editfile);
+	snprintf(editstr, strlen(e) + strlen(editfile) + 2, "%s %s", e, editfile);
 	set_usersort(custom_sort);
 	suppress_reload = FALSE;
 	update_useropts(0);

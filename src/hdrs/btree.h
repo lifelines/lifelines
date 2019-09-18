@@ -36,10 +36,21 @@
 #include "standard.h"
 
 #define BUFLEN 4096
+
 /* see comment at declaration of INDEX below for explanation */
+
+#if __WORDSIZE == 16
 #define NOENTS ((BUFLEN-12)/12)
+#else
+#define NOENTS ((BUFLEN-16)/12)
+#endif
+
 /* see comment at declaration of BLOCK below for explanation */
+#if __WORDSIZE == 16
 #define NORECS ((BUFLEN-12)/16)
+#else
+#define NORECS ((BUFLEN-16)/16)
+#endif
 
 /*
 All records in a LifeLines btree are indexed on 8 character keys
@@ -50,6 +61,8 @@ typedef struct {
 	char r_rkey[RKEYLEN];
 }  RKEY; /*record key*/
 
+#define RKEY_NULL "\0\0\0\0\0\0\0\0"
+#define RKEY_INIT(r) memcpy((r).r_rkey, RKEY_NULL, RKEYLEN)
 
 typedef INT32 FKEY; /*file key*/
 
@@ -59,7 +72,7 @@ typedef struct {
 	FKEY k_mkey;  /* current master key*/
 	FKEY k_fkey;  /* current file key*/
 	/* ostat: -2=immutable, -1=writer, 0=closed, 1+=reader count */
-	INT k_ostat;
+	INT32 k_ostat;
 } KEYFILE1;
 
 /*
@@ -70,10 +83,12 @@ occurs directly after KEYFILE1, and the program will silently
 add it to any database that does not yet have it.
 */
 typedef struct {
-	char name[18]; /* KF_NAME */
-        char pad[2];   /* matches padding added by compiler */
-	INT magic;     /* KF_MAGIC */ /* byte alignment check */
-	INT version;   /* KF_VER */
+	char name[18];	/* KF_NAME */
+#if __WORDSIZE != 16
+	INT16 pad1;     /* matches padding added by compiler */
+#endif
+	INT32 magic;   /* KF_MAGIC, byte alignment check */
+	INT32 version; /* KF_VER */
 } KEYFILE2;
 
 #define KF2_NAME "LifeLines Keyfile"
@@ -83,24 +98,38 @@ typedef struct {
 /*==============================================
  * INDEX -- Data structure for BTREE index files
  *  The constant NOENTS above depends on this exact contents:
- * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
+ *
+ * 16-bit systems:
+ * 12=4+2+4+2+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
+ * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
+ *
+ * 32-bit and 64-bit systems:
+ * 16=4+2+2+4+2+2=sizeof(FKEY)+sizeof(INT16)*2+sizeof(FKEY)+sizeof(INT16)*2
  * 12=8+4=sizeof(RKEY)+sizeof(FKEY)
  *
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
- * This comment assumes 16-bit packing which is not
- * the case on modern systems. Because of this,
- * databases created on 16-bit, 32-bit or 64-bit
- * systems will not be binary compatible.
+ * This structure assumes 16-bit packing (on 16-bit platforms) and 32-bit
+ * packing (on 32-bit and 64-bit platforms).  Beacuse of this, databases
+ * created on 16-bit platforms will NOT be binary compatible with those
+ * created on 32-bit or 64-bit platforms.
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *============================================*/
 typedef struct {
-	FKEY  ix_self;		/*fkey of index*/
+	FKEY  ix_self;           /*fkey of index*/
 	INT16 ix_type;           /*block/file type*/
+#if __WORDSIZE != 16
+	INT16 ix_pad1;
+#endif
 	FKEY  ix_parent;         /*parent file's fkey*/
 	INT16 ix_nkeys;          /*num of keys in index*/
+	/* no implicit padding here since ix_rkeys is a char array! */
 	RKEY  ix_rkeys[NOENTS];  /*rkeys in index*/
+#if __WORDSIZE != 16
+	INT16 ix_pad2;
+#endif
 	FKEY  ix_fkeys[NOENTS];  /*fkeys in index*/
 } *INDEX, INDEXSTRUCT;
+
 /*=======================================
  * BTREE -- Internal BTREE data structure
  *=====================================*/
@@ -128,22 +157,35 @@ typedef struct {
 /*======================================================
  * BLOCK -- Data structure for BTREE record file headers
  *  The constant NORECS above depends on this exact contents:
+ *
+ * 16-bit systems:
  * 12=4+2+4+2=sizeof(FKEY)+sizeof(INT16)+sizeof(FKEY)+sizeof(INT16)
  * 16=8+4+4=sizeof(RKEY)+sizeof(INT32)+sizeof(INT32)
  *
+ * 32-bit and 64-bit systems:
+ * 16=4+2+2+4+2+2=sizeof(FKEY)+sizeof(INT16)*2+sizeof(FKEY)+sizeof(INT16)*2
+ * 16=8+4+4=sizeof(RKEY)+sizeof(INT32)+sizeof(INT32)
+ *
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
- * This comment assumes 16-bit packing which is not
- * the case on modern systems. Because of this,
- * databases created on 16-bit, 32-bit or 64-bit
- * systems will not be binary compatible.
+ * This structure assumes 16-bit packing (on 16-bit platforms) and 32-bit
+ * packing (on 32-bit and 64-bit platforms).  Beacuse of this, databases
+ * created on 16-bit platforms will NOT be binary compatible with those
+ * created on 32-bit or 64-bit platforms.
  * WARNING!! WARNING!! WARNING!! WARNING!! WARNING!!
  *====================================================*/
 typedef struct {
 	FKEY   ix_self;             /*fkey of this block*/
-	INT16  ix_type;		/*block/file type*/
+	INT16  ix_type;             /*block/file type*/
+#if __WORDSIZE != 16
+	INT16  ix_pad1;
+#endif
 	FKEY   ix_parent;           /*parent file's fkey*/
 	INT16  ix_nkeys;            /*num of keys in block*/
+	/* no implicit padding here since ix_rkeys is a char array! */
 	RKEY   ix_rkeys[NORECS];    /*rkeys in block/file*/
+#if __WORDSIZE != 16
+	INT16  ix_pad2;
+#endif
 	INT32  ix_offs[NORECS];     /*offsets for data in file*/
 	INT32  ix_lens[NORECS];     /*lengths for data in file*/
 } *BLOCK, BLOCKSTRUCT;
@@ -186,7 +228,7 @@ BTREE bt_openbtree(STRING dir, BOOLEAN cflag, INT writ, BOOLEAN immut, INT *lldb
 BOOLEAN validate_keyfile2(KEYFILE2 * kfile2, INT *lldberr);
 
 /* index.c */
-void get_index_file(STRING path, BTREE btr, FKEY ikey);
+void get_index_file(STRING path, INT len, BTREE btr, FKEY ikey);
 INDEX readindex(BTREE btr, FKEY ikey, BOOLEAN robust);
 
 /* names.c */
@@ -206,31 +248,36 @@ STRING rkey2str(RKEY);
 RKEY   str2rkey(CNSTRING);
 STRING fkey2path(FKEY);
 
+/* opnbtree.c */
 
-enum {
-  BTERR_NODB=8            /* no db directory */
-, BTERR_DBBLOCKEDBYFILE   /* db directory is file, not directory */
-, BTERR_DBCREATEFAILED    /* failed to create db directory */
-, BTERR_DBACCESS          /* access error to db directory */
-, BTERR_NOKEY             /* no keyfile */
-, BTERR_KFILE             /*problem with the key file*/
-, BTERR_KFILE_ALTERDB     /*problem with the key file trying to alter a db*/
-, BTERR_INDEX             /*problem with an index file*/
-, BTERR_MASTER_INDEX      /*problem with master index file*/
-, BTERR_BLOCK             /*problem with a data block file*/
-, BTERR_LNGDIR            /*base directory name too long*/
-, BTERR_WRITER            /*can't open database because writer has it & -w was specified*/
-, BTERR_LOCKED            /* error because db was locked */
-, BTERR_UNLOCKED          /* error because db was unlocked */
-, BTERR_ILLEGKF           /* illegal keyfile */
-, BTERR_ALIGNKF           /* wrong alignment key file */
-, BTERR_VERKF             /* wrong version key file */
-, BTERR_EXISTS            /* previous database found (create was specified) */
-, BTERR_READERS           /* db locked by readers (string in custom string) */
-, BTERR_BADPROPS          /* new db properties invalid */
-
+enum _BTERR {
+  BTERR_MIN=7             /* 7: MIN placeholder */
+, BTERR_NODB=8            /* 8: no db directory */
+, BTERR_DBBLOCKEDBYFILE   /* 9: db directory is file, not directory */
+, BTERR_DBCREATEFAILED    /* 10: failed to create db directory */
+, BTERR_DBACCESS          /* 11: access error to db directory */
+, BTERR_NOKEY             /* 12: no keyfile */
+, BTERR_KFILE             /* 13: problem with the key file*/
+, BTERR_KFILE_ALTERDB     /* 14: problem with the key file trying to alter a db*/
+, BTERR_INDEX             /* 15: problem with an index file*/
+, BTERR_MASTER_INDEX      /* 16: problem with master index file*/
+, BTERR_BLOCK             /* 17: problem with a data block file*/
+, BTERR_LNGDIR            /* 18: base directory name too long*/
+, BTERR_WRITER            /* 19: can't open database because writer has it & -w was specified*/
+, BTERR_LOCKED            /* 20: error because db was locked */
+, BTERR_UNLOCKED          /* 21: error because db was unlocked */
+, BTERR_ILLEGKF           /* 22: illegal keyfile */
+, BTERR_ALIGNKF           /* 23: wrong alignment key file */
+, BTERR_VERKF             /* 24: wrong version key file */
+, BTERR_EXISTS            /* 25: previous database found (create was specified) */
+, BTERR_READERS           /* 26: db locked by readers (string in custom string) */
+, BTERR_BADPROPS          /* 27: new db properties invalid */
+, BTERR_MAX               /* 28: MAX placeholder */
 };
 
+typedef enum _BTERR BTERR;
+
+STRING getlldberrstr (BTERR err);
 
 #define BTINDEXTYPE 1
 #define BTBLOCKTYPE 2

@@ -27,8 +27,11 @@
 
 #include "llstdlib.h"
 #include "btree.h"
+#include "../btree/btreei.h"	/* path2fkey */
 #include "gedcom.h"
 #include "version.h"
+#include "toolsi.h"
+#include "errno.h"
 
 extern STRING qSgen_bugreport;
 
@@ -40,10 +43,11 @@ STRING readpath_file = NULL;    /* normally defined in liflines/main.c */
 STRING readpath = NULL;         /* normally defined in liflines/main.c */
 BOOLEAN readonly = FALSE;       /* normally defined in liflines/main.c */
 BOOLEAN writeable = FALSE;      /* normally defined in liflines/main.c */
-BOOLEAN immutable = FALSE;  /* normally defined in liflines/main.c */
+BOOLEAN immutable = FALSE;     /* normally defined in liflines/main.c */
+STRING dbname = NULL;
 int opt_finnish = 0;
 int opt_mychar = 0;
-BTREE BTR;
+extern BTREE BTR;
 
 /*==================================
  * work -- what the user wants to do
@@ -67,13 +71,15 @@ void dump_block(STRING dir);
 void dump_index(STRING dir);
 void dump_keyfile(STRING dir);
 void dump_xref(STRING dir);
-void print_block(BLOCK block, INT *offset);
-void print_index(INDEX index, INT *offset);
-void print_keyfile1(KEYFILE1 kfile1);
-void print_keyfile2(KEYFILE2 kfile2);
+BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param);
+void print_block(BTREE btree, BLOCK block, INT32 *offset);
+BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param);
+void print_index(INDEX index, INT32 *offset);
+void print_keyfile(KEYFILE1* kfile1, KEYFILE2* kfile2, INT32 size);
 static void print_usage(void);
 void print_xrefs(void);
 static void vcrashlog (int newline, const char * fmt, va_list args);
+static size_t getfilesize(STRING dir, STRING filename);
 
 /*********************************************
  * local function definitions
@@ -87,15 +93,15 @@ int
 main (int argc,
       char **argv)
 {
-	char cmdbuf[512];
-	char *ptr, *flags, *dbname;
-	RECORD_STATUS recstat;
+	char *ptr, *flags;
 	BOOLEAN cflag=FALSE; /* create new db if not found */
-	BOOLEAN writ=1; /* request write access to database */
-	BOOLEAN immut=FALSE; /* immutable access to database */
+	BOOLEAN writ=0; /* request write access to database */
+	BOOLEAN immut=TRUE; /* immutable access to database */
 	INT lldberrnum=0;
 	int rtn=0;
 	int i=0;
+
+	set_signals(sighand_cmdline);
 
 	/* TODO: needs locale & gettext initialization */
 
@@ -138,7 +144,7 @@ main (int argc,
         }
 
 	if (!(BTR = bt_openbtree(dbname, cflag, writ, immut, &lldberrnum))) {
-		printf(_("Failed to open btree: %s."), dbname);
+		printf(_("Failed to open btree: %s (" FMT_INT ": %s)."), dbname, lldberrnum, getlldberrstr(lldberrnum));
 		puts("");
 		return 20;
 	}
@@ -210,83 +216,76 @@ print_usage (void)
  *=============================================*/
 void dump_index(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
-        char buffer[BUFLEN];
-	FILE *fi;
 	INDEX index;
-	INT offset = 0;
+	FKEY mkey = path2fkey("aa/aa");
+        
+	bbasedir(BTR) = dir;
+	index = readindex(BTR, mkey, TRUE);
 
-	sprintf(scratch, "%s/aa/aa", dir);
-        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		printf("Error opening master index\n");
-		goto error2;
-	}
+	traverse_index_blocks(BTR, index, NULL, tf_print_index, NULL);
 
-        if (!(fi = fopen(scratch, LLREADBINARY))) {
-		printf("Error opening master index\n");
-		goto error2;
-	}
+	return;
+}
+/*===============================
+ * tf_print_index -- traversal function wrapper for print_index
+ *=============================*/
+BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
+{
+	INT32 offset = 0;
 
-        if (fread(&buffer, BUFLEN, 1, fi) != 1) {
-		printf("Error reading master index\n");
-		goto error1;
-        }
-
-	index = (INDEX)buffer;
+	btree = btree;	/* UNUSED */
+	param = param;	/* UNUSED */
 
 	print_index(index, &offset);
-
-error1:
-	fclose(fi);
-error2:
-	return;
+	return TRUE;
 }
 /*===============================
  * print_index -- print INDEX to stdout
  *=============================*/
-void print_index(INDEX index, INT *offset)
+void print_index(INDEX index, INT32 *offset)
 {
 	INT n;
+	INT32 size=0;
 
-	printf("INDEX\n");
-	printf("0x%04x: ix_self: %d\n", *offset, index->ix_self);
+	/* Step 1: Get length of file */
+	size = (INT32)getfilesize(dbname, fkey2path(index->ix_self));
+
+	/* Step 2: Print INDEX directory */
+	printf("INDEX - DIRECTORY\n");
+	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, index->ix_self, fkey2path(index->ix_self));
 	*offset += sizeof(index->ix_self);
 
-	printf("0x%04x: ix_type: %d\n", *offset, index->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: " FMT_INT32 " (%s)\n", *offset, index->ix_type,
+               (index->ix_type == 1 ? "INDEX" : (index->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
 	*offset += sizeof(index->ix_type);
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad1: %d\n", *offset, index->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1: " FMT_INT16_HEX "\n", *offset, index->ix_pad1);
 	*offset += sizeof(index->ix_pad1);
 #endif
-#endif
 
-	printf("0x%04x: ix_parent: %d\n", *offset, index->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: " FMT_INT32_HEX " (%s)\n", *offset, index->ix_parent, fkey2path(index->ix_parent));
 	*offset += sizeof(index->ix_parent);
 
-	printf("0x%04x: ix_nkeys: %d\n", *offset, index->ix_nkeys);
+	printf(FMT_INT32_HEX ": ix_nkeys: " FMT_INT16 "\n", *offset, index->ix_nkeys);
 	*offset += sizeof(index->ix_nkeys);
 
 	for (n=0; n<NOENTS; n++) {
-		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &index->ix_rkeys[n]);
+		printf(FMT_INT32_HEX ": ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n", *offset, n, (char *)&index->ix_rkeys[n]);
 		*offset += sizeof(index->ix_rkeys[n]);
 	}
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad2: %d\n", *offset, index->ix_pad2);
+	printf(FMT_INT32_HEX ": ix_pad2: " FMT_INT16_HEX "\n", *offset, index->ix_pad2);
 	*offset += sizeof(index->ix_pad2);
-#endif
 #endif
 
 	for (n=0; n<NOENTS; n++) {
-		printf("0x%04x: ix_fkey[%04d]: 0x%08x\n", *offset, n, index->ix_fkeys[n]);
+		printf(FMT_INT32_HEX ": ix_fkey[" FMT_INT_04 "]: " FMT_INT32_HEX " (%s)\n", *offset, n, index->ix_fkeys[n], fkey2path(index->ix_fkeys[n]));
 		*offset += sizeof(index->ix_fkeys[n]);
 	}
 
-	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", *offset, size, (*offset == size) ? "GOOD" : "BAD");
 	printf("\n");
 }
 /*===============================================
@@ -294,144 +293,150 @@ void print_index(INDEX index, INT *offset)
  *=============================================*/
 void dump_block(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
-        char buffer[BUFLEN];
-	FILE *fb;
-	BLOCK block;
-	INT offset = 0;
+	INDEX index;
+	FKEY mkey = path2fkey("aa/aa");
+        
+	bbasedir(BTR) = dir;
+	index = readindex(BTR, mkey, TRUE);
 
-	sprintf(scratch, "%s/ab/aa", dir);
-        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		printf("Error opening master block\n");
-		goto error2;
-	}
+	traverse_index_blocks(BTR, index, NULL, NULL, tf_print_block);
 
-        if (!(fb = fopen(scratch, LLREADBINARY))) {
-		printf("Error opening master block\n");
-		goto error2;
-	}
-
-        if (fread(&buffer, BUFLEN, 1, fb) != 1) {
-		printf("Error reading master bock\n");
-		goto error1;
-        }
-
-	block = (BLOCK)buffer;
-
-	print_block(block, &offset);
-
-error1:
-	fclose(fb);
-error2:
 	return;
 }
+/*===============================
+ * tf_print_block -- traversal function wrapper for print_block
+ *=============================*/
+BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
+{
+	INT32 offset = 0;
 
+	btree = btree;	/* UNUSED */
+	param = param;	/* UNUSED */
+
+	print_block(btree, block, &offset);
+	return TRUE;
+}
 /*===============================
  * print_block -- print BLOCK to stdout
  *=============================*/
-void print_block(BLOCK block, INT *offset)
+void print_block(BTREE btree, BLOCK block, INT32 *offset)
 {
 	INT n;
+	INT32 size=0;
 
-	printf("BLOCK\n");
-	printf("0x%04x: ix_self: %d\n", *offset, block->ix_self);
+	/* Step 1: Get length of file */
+	size = (INT32)getfilesize(dbname, fkey2path(block->ix_self));
+
+	/* Step 2: Dump BLOCK structure */
+	printf("BLOCK - DIRECTORY\n");
+	printf(FMT_INT32_HEX ": ix_self: " FMT_INT32_HEX " (%s)\n", *offset, block->ix_self, fkey2path(block->ix_self));
 	*offset += sizeof(block->ix_self);
 
-	printf("0x%04x: ix_type: %d\n", *offset, block->ix_type);
+	printf(FMT_INT32_HEX ": ix_type: " FMT_INT32 " (%s)\n", *offset, block->ix_type,
+               (block->ix_type == 1 ? "INDEX" : (block->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
 	*offset += sizeof(block->ix_type);
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad1: %d\n", *offset, block->ix_pad1);
+	printf(FMT_INT32_HEX ": ix_pad1: " FMT_INT16_HEX "\n", *offset, block->ix_pad1);
 	*offset += sizeof(block->ix_pad1);
 #endif
-#endif
 
-	printf("0x%04x: ix_parent: %d\n", *offset, block->ix_parent);
+	printf(FMT_INT32_HEX ": ix_parent: " FMT_INT32_HEX " (%s)\n", *offset, block->ix_parent, fkey2path(block->ix_parent));
 	*offset += sizeof(block->ix_parent);
 
-	printf("0x%04x: ix_nkeys: %d\n", *offset, block->ix_nkeys);
+	printf(FMT_INT32_HEX ": ix_nkeys: %d\n", *offset, block->ix_nkeys);
 	*offset += sizeof(block->ix_nkeys);
 
 	for (n=0; n<NORECS; n++) {
-		printf("0x%04x: ix_rkey[%04d]: '%-8.8s'\n", *offset, n, &block->ix_rkeys[n]);
+		printf(FMT_INT32_HEX ": ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n", *offset, n, (char *)&block->ix_rkeys[n]);
 		*offset += sizeof(block->ix_rkeys[n]);
 	}
 
-#if 0
 #if __WORDSIZE != 16
-	printf("0x%04x: ix_pad2: %d\n", *offset, block->ix_pad2);
+	printf(FMT_INT32_HEX ": ix_pad2: " FMT_INT16_HEX "\n", *offset, block->ix_pad2);
 	*offset += sizeof(block->ix_pad2);
-#endif
 #endif
 
 	for (n=0; n<NORECS; n++) {
-		printf("0x%04x: ix_offs[%04d]: 0x%08x\n", *offset, n, block->ix_offs[n]);
+		printf(FMT_INT32_HEX ": ix_offs[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, block->ix_offs[n]);
 		*offset += sizeof(block->ix_offs[n]);
 
-		printf("0x%04x: ix_lens[%04d]: 0x%08x\n", *offset, n, block->ix_lens[n]);
+		printf(FMT_INT32_HEX ": ix_lens[" FMT_INT_04 "]: " FMT_INT32_HEX "\n", *offset, n, block->ix_lens[n]);
 		*offset += sizeof(block->ix_lens[n]);
 	}
 
-	printf("0x%04x: EOF (0x%04x)\n", *offset, BUFLEN);
 	printf("\n");
+
+	/* Step 3: Dump BLOCK data */
+	/* Note that this mechanism is horribly inefficient from an I/O perspective. */
+	printf("BLOCK - DATA\n");
+	for (n=0; n<NORECS; n++) {
+		INT len;
+		RAWRECORD rec = readrec(btree, block, n, &len);
+
+		printf(FMT_INT32_HEX ": rkey[" FMT_INT_04 "]: '%-8.8s' off: " FMT_INT32_HEX " len: " FMT_INT32_HEX "\n",
+                       *offset, n, (char *)&block->ix_rkeys[n], block->ix_offs[n], block->ix_lens[n]);
+		if (rec != NULL)
+                	printf(">>\n%s<<\n", rec);
+		else
+			printf(">><<\n");
+
+		*offset += block->ix_lens[n];
+
+		stdfree(rec);
+	}
+	printf("\n");
+
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", *offset, size, (*offset == size) ? "GOOD" : "BAD");
+	printf("\n");
+
 }
 /*===============================
  * dump_keyfile -- open and print KEYFILE1 and KEYFILE2 to stdout
  *=============================*/
 void dump_keyfile(STRING dir)
 {
-	char scratch[200];
-	struct stat sbuf;
+	char scratch[MAXPATHLEN];
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	FILE *fk;
-	long size;
+	size_t size;
 
-	sprintf(scratch, "%s/key", dir);
-        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
-		printf("Error opening keyfile\n");
-		goto error2;
-	}
+	snprintf(scratch, sizeof(scratch), "%s/key", dir);
+
+	size = getfilesize(dir, "key");
 
         if (!(fk = fopen(scratch, LLREADBINARY))) {
-		printf("Error opening keyfile\n");
+		printf("Error opening keyfile (%d: %s)\n", errno, scratch);
 		goto error2;
-	}
-
-	if (fseek(fk, 0, SEEK_END)) {
-		printf("Error seeking to end of keyfile\n");
-		goto error1;
-	}
-
-        size = ftell(fk);
-
-	if (fseek(fk, 0, SEEK_SET)) {
-		printf("Error seeking to start of keyfile\n");
-		goto error1;
 	}
 
 	if (size != sizeof(kfile1) &&
             size != (sizeof(kfile1) + sizeof(kfile2))) {
-		printf("Error: keyfile size invalid (%d), valid sizes are %d and %d\n",
+		printf("Error: keyfile size invalid (" FMT_SIZET "), valid sizes are " FMT_SIZET " and " FMT_SIZET "\n",
 		       size, sizeof(kfile1), sizeof(kfile1)+sizeof(kfile2));
 		goto error1;
 	}
 
         if (fread(&kfile1, sizeof(kfile1), 1, fk) != 1) {
-		printf("Error reading keyfile\n");
+		printf("Error reading keyfile (%d: %s)\n", errno, scratch);
 		goto error1;
         }
 
-	print_keyfile1(kfile1);
+	/* only attempt to read kfile2 if the file size indicates that it is present */
+	if (size != sizeof(kfile1))
+	{
+        	if (fread(&kfile2, sizeof(kfile2), 1, fk) != 1) {
+			printf("Error reading keyfile (%d: %s)\n", errno, scratch);
+			goto error1;
+        	}
 
-        if (fread(&kfile2, sizeof(kfile2), 1, fk) != 1) {
-		printf("Error reading keyfile2\n");
-		goto error1;
+		print_keyfile(&kfile1, &kfile2, size);
         }
-
-	print_keyfile2(kfile2);
+	else
+	{
+		print_keyfile(&kfile1, NULL, size);
+	}
 
 error1:
 	fclose(fk);
@@ -439,50 +444,45 @@ error2:
 	return;
 }
 /*===============================
- * print_keyfile1 -- print KEYFILE1 to stdout
+ * print_keyfile -- print KEYFILE1 and KEYFILE2 to stdout
  *=============================*/
-void print_keyfile1(KEYFILE1 kfile1)
+void print_keyfile(KEYFILE1* kfile1, KEYFILE2* kfile2, INT32 size)
 {
-	INT offset = 0;
+	INT32 offset = 0;
 
 	printf("KEYFILE1\n");
 	printf("========\n");
 
-	printf("0x%02x: mkey:  0x%08x (%d)\n", offset, kfile1.k_mkey, kfile1.k_mkey);
-	offset += sizeof(kfile1.k_mkey);
+	printf(FMT_INT16_HEX ": mkey:  " FMT_INT32_HEX " (%s)\n", offset, kfile1->k_mkey, fkey2path(kfile1->k_mkey));
+	offset += sizeof(kfile1->k_mkey);
 
-	printf("0x%02x: fkey:  0x%08x\n", offset, kfile1.k_fkey);
-	offset += sizeof(kfile1.k_fkey);
+	printf(FMT_INT16_HEX ": fkey:  " FMT_INT32_HEX " (%s)\n", offset, kfile1->k_fkey, fkey2path(kfile1->k_fkey));
+	offset += sizeof(kfile1->k_fkey);
 
-	printf("0x%02x: ostat: 0x%08x (%d)\n", offset, kfile1.k_ostat, kfile1.k_ostat);
-	offset += sizeof(kfile1.k_ostat);
+	printf(FMT_INT16_HEX ": ostat: " FMT_INT32_HEX " (%d)\n", offset, kfile1->k_ostat, kfile1->k_ostat);
+	offset += sizeof(kfile1->k_ostat);
 
-	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile1));
 	printf("\n");
-}
-/*===============================
- * print_keyfile2 -- print KEYFILE2 to stdout
- *=============================*/
-void print_keyfile2(KEYFILE2 kfile2)
-{
-	INT offset = 0;
 
-	printf("KEYFILE2\n");
-	printf("========\n");
+	if (kfile2)
+	{
+		printf("KEYFILE2\n");
+		printf("========\n");
 
-	printf("0x%02x: name:    '%-18.18s'\n", offset, kfile2.name);
-	offset += sizeof(kfile2.name);
+		printf(FMT_INT16_HEX ": name:    '%-18.18s'\n", offset, kfile2->name);
+		offset += sizeof(kfile2->name);
 #if WORDSIZE != 16
-	printf("0x%02x: pad:     0x%04x\n", offset, kfile2.pad);
-	offset += sizeof(kfile2.pad);
+		printf(FMT_INT16_HEX ": pad1:    " FMT_INT16_HEX "\n", offset, kfile2->pad1);
+		offset += sizeof(kfile2->pad1);
 #endif
-	printf("0x%02x: magic:   0x%08x\n", offset, kfile2.magic);
-	offset += sizeof(kfile2.magic);
+		printf(FMT_INT16_HEX ": magic:   " FMT_INT32_HEX "\n", offset, kfile2->magic);
+		offset += sizeof(kfile2->magic);
 
-	printf("0x%02x: version: 0x%08x (%d)\n", offset, kfile2.version, kfile2.version);
-	offset += sizeof(kfile2.version);
+		printf(FMT_INT16_HEX ": version: " FMT_INT32_HEX " (%d)\n", offset, kfile2->version, kfile2->version);
+		offset += sizeof(kfile2->version);
+	}
 
-	printf("0x%02x: EOF (0x%02x)\n", offset, sizeof(kfile2));
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", offset, size, (offset == size) ? "GOOD" : "BAD");
 	printf("\n");
 }
 /*===============================
@@ -490,6 +490,8 @@ void print_keyfile2(KEYFILE2 kfile2)
  *=============================*/
 void dump_xref(STRING dir)
 {
+	dir = dir;	/* UNUSED */
+
 	if (!openxref(FALSE))
 	{
 		printf("Error opening/reading xrefs\n");
@@ -546,4 +548,38 @@ crashlogn (STRING fmt, ...)
         vcrashlog(1, fmt, args);
         va_end(args);
 }
+/*===============================
+ * getfilesize -- Get length of file
+ *=============================*/
+size_t
+getfilesize (STRING dir, STRING filename)
+{
+	FILE *fp;
+	size_t size = 0;
+	char scratch[MAXPATHLEN];
+	struct stat sbuf;
 
+	snprintf(scratch, sizeof(scratch), "%s/%s", dir, filename);
+        if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
+		printf("Invalid filename (%d: %s)\n", errno, scratch);
+		goto error2;
+	}
+
+        if (!(fp = fopen(scratch, LLREADBINARY))) {
+                printf("Error opening file (%d: %s)\n", errno, scratch);
+                goto error2;
+        }
+
+        if (fseek(fp, 0, SEEK_END)) {
+                printf("Error seeking to end of file\n");
+                goto error1;
+        }
+
+        size = ftell(fp);
+
+error1:
+	fclose(fp);
+
+error2:
+	return size;
+}

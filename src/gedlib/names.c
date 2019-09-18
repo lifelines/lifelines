@@ -82,15 +82,15 @@ static STRING upsurname(STRING);
  *   same first letter in their first given name, are indexed
  *   together
  *===================================================================
- * database record format -- The first INT of the record holds the
+ * database record format -- The first INT32 of the record holds the
  *   number of names indexed in the record
  *-------------------------------------------------------------------
- *        1 INT  nnames  - number of names indexed in this record
- *   nnames RKEY rkeys   - RKEYs of the INDI records with the names
- *   nnames INT  noffs   - offsets into following strings where names
- *			   begin
- *   nnames STRING names - char buffer where the names are stored
- *			   based on char offsets
+ *        1 INT32  nnames - number of names indexed in this record
+ *   nnames RKEY   rkeys  - RKEYs of the INDI records with the names
+ *   nnames INT32  noffs  - offsets into following strings where names
+ *			    begin
+ *   nnames STRING names  - char buffer where the names are stored
+ *			    based on char offsets
  *-------------------------------------------------------------------
  * internal format -- At any time there can be only one name record
  *   stored internally; the data is stored in global data structures
@@ -98,33 +98,72 @@ static STRING upsurname(STRING);
  *   RKEY    NRkey   - RKEY of the current name record
  *   STRING  NRrec   - current name record
  *   INT     NRsize  - size of current name record
- *   INT     NRcount - number of entries in current name record
- *   INT    *NRoffs  - char offsets to names in current name
+ *   INT32   NRmax   - max allocation size of internal arrays
+ *   INT32   NRcount - number of entries in current name record
+ *   INT32  *NRoffs  - char offsets to names in current name
  *			  record
  *   RKEY   *NRkeys  - RKEYs of the INDI records with the names
  *   CNSTRING *NRnames - name values from INDI records that the
  *			  index is based upon
- *   INT     NRmax   - max allocation size of internal arrays
  *-------------------------------------------------------------------
  * When a name record is used to match a search name, the internal
  *   structures are modified to remove all entries that don't match
  *   the name; in addition, other global data structures are used
  *=================================================================*/
 
+/* Current name record - raw */
 static RKEY    NRkey;
 static STRING  NRrec = NULL;
 static INT     NRsize;
-static INT     NRcount;
-static INT    *NRoffs;
+
+/* Current name record - parsed */
+static INT     NRmax = 0;
+static INT32   NRcount;
+static INT32  *NRoffs;
 static RKEY   *NRkeys;
 static CNSTRING *NRnames;
-static INT     NRmax = 0;
 
 
 /*********************************************
  * local function definitions
  * body of module
  *********************************************/
+
+/*====================================================
+ * allocnamerec -- Allocate internal name record
+ *==================================================*/
+static void
+allocnamerec(void)
+{
+	NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
+	NRoffs = (INT32 *) stdalloc((NRmax)*sizeof(INT32));
+	NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
+}
+
+/*====================================================
+ * freenamerec -- Free internal name record
+ *==================================================*/
+static void
+freenamerec(void)
+{
+	stdfree(NRkeys);
+	stdfree(NRoffs);
+	stdfree((STRING)NRnames);
+	NRmax = 0;
+}
+
+/*====================================================
+ * reallocnamerec -- Reallocate internal name record
+ *==================================================*/
+static void
+reallocnamerec(void)
+{
+	if (NRmax != 0) {
+		freenamerec();
+	}
+	NRmax = NRcount + 10;
+	allocnamerec();
+}
 
 /*====================================================
  * parsenamerec -- Store name rec in file buffers
@@ -135,27 +174,19 @@ parsenamerec (const RKEY * rkey, CNSTRING p)
 	INT i;
 	memcpy(&NRkey, rkey, sizeof(*rkey));
 /* Store name record in data structures */
-	memcpy (&NRcount, p, sizeof(INT));
+	memcpy (&NRcount, p, sizeof(INT32));
 	ASSERT(NRcount < 1000000); /* 1000000 names in a given slot ? */
-	p += sizeof(INT);
+	p += sizeof(INT32);
 	if (NRcount >= NRmax - 1) {
-		if (NRmax != 0) {
-			stdfree(NRkeys);
-			stdfree(NRoffs);
-			stdfree((STRING)NRnames);
-		}
-		NRmax = NRcount + 10;
-		NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
-		NRoffs = (INT *) stdalloc((NRmax)*sizeof(INT));
-		NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
+		reallocnamerec();
 	}
 	for (i = 0; i < NRcount; i++) {
 		memcpy(&NRkeys[i], p, sizeof(RKEY));
 		p += sizeof(RKEY);
 	}
 	for (i = 0; i < NRcount; i++) {
-		memcpy(&NRoffs[i], p, sizeof(INT));
-		p += sizeof(INT);
+		memcpy(&NRoffs[i], p, sizeof(INT32));
+		p += sizeof(INT32);
 	}
 	for (i = 0; i < NRcount; i++)
 		NRnames[i] = p + NRoffs[i];
@@ -179,11 +210,8 @@ across database reloads
 	if (!NRrec) {
 		NRcount = 0;
 		if (NRmax == 0) {
-			
 			NRmax = 10;
-			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
-			NRoffs = (INT *) stdalloc(10*sizeof(INT));
-			NRnames = (CNSTRING *) stdalloc(10*sizeof(STRING));
+			allocnamerec();
 		}
 		return;
 	}
@@ -419,9 +447,9 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	p = rec = (STRING) stdalloc(NRsize + sizeof(RKEY) +
 	    sizeof(INT) + strlen(name) + 10);
 	len = 0;
-	memcpy(p, &NRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	memcpy(p, &NRcount, sizeof(INT32));
+	p += sizeof(INT32);
+	len += sizeof(INT32);
 	for (i = 0; i < NRcount; i++) {
 		memcpy(p, &NRkeys[i], sizeof(RKEY));
 		p += sizeof(RKEY);
@@ -429,9 +457,9 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	}
 	off = 0;
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(INT32));
+		p += sizeof(INT32);
+		len += sizeof(INT32);
 		off += strlen(NRnames[i]) + 1;
 	}
 	for (i = 0; i < NRcount; i++) {
@@ -982,11 +1010,21 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 	if (!name || *name == 0) return NULL;
 	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
+
+	/* Convert surname to uppercase if requested */
 	if (captype == DOSURCAP) name = upsurname(name);
+
+	/* Do initial trimming of name.  Account for the comma that is required */
+	/* in SURFIRST mode.  We do this here since we are actually parsing the */
+	/* the name parts and will truncate intelligently. */
+	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
+
+	/* Produce name in desired order. */
 	if (surorder == REGORDER) 
 		name = trim(name_string(name), len);
 	else
 		name = trim(name_surfirst(name), len);
+
 	/* trim doesn't respect UTF-8, so ensure we don't leave broken end */
 	limit_width(name, len, uu8);
 	return name;
@@ -1003,7 +1041,6 @@ name_string (STRING name)
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
 		if (*name != NAMESEP) { *p++ = *name; }
-		else { *p++ = ' '; }
 		name++;
 	}
 	*p-- = 0;

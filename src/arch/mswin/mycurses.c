@@ -803,6 +803,8 @@ static int mycur_init(int fullscreen)
 			COLS = ConScreenBuffer.srWindow.Right;
 		}
 		adjust_linescols();
+
+		platform_postcurses_init();
 	}
 	return 1;
 }

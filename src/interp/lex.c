@@ -48,7 +48,7 @@
 static INT Lexmode = FILEMODE;
 static STRING Lp;	/* pointer into program string */
 
-
+int yylex (YYSTYPE * lvalp, PACTX pactx);
 static INT inchar(PACTX pactx);
 static int lowyylex(PACTX pactx, YYSTYPE * lvalp);
 static BOOLEAN reserved(STRING, INT*);
@@ -155,7 +155,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 
 		if (reserved(tokbuf, &retval))  return retval;
 		/* IDEN values have to be passed from yacc.y to free_iden */
-		*lvalp = (PNODE) strsave(tokbuf);
+		*lvalp = (YYSTYPE) strsave(tokbuf);
 		return IDEN;
 	}
 	if (t == '-' || t == DIGIT || t == '.') {
@@ -180,7 +180,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		if (t != '.') {
 			unreadchar(pactx, c);
 			Yival *= mul;
-			*lvalp = NULL;
+			*lvalp = (YYSTYPE)NULL;
 			return ICONS;
 		}
 		t = chartype(c = inchar(pactx));
@@ -202,7 +202,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 				return '.';
 		}
 		Yfval = mul*(Yival + Yfval/fdiv);
-		*lvalp = NULL;
+		*lvalp = (YYSTYPE)NULL;
 		return FCONS;
 	}
 	if (c == '"') {
@@ -210,13 +210,13 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 		p = tokbuf;
 		while (TRUE) {
 			while ((c = inchar(pactx)) != EOF && c != '"' && c != '\\') {
-				if (p-tokbuf > (int)(sizeof(tokbuf)/sizeof(tokbuf[0]) - 3)) {
+				if ((int)(p-tokbuf) > (int)(sizeof(tokbuf)/sizeof(tokbuf[0]) - 3)) {
 					/* Overflowing tokbuf buffer */
 					/* TODO: (Perry, 2006-06-30) I don't know how to fail gracefully from here inside parser */
 					char msg[512];
-					snprintf(msg, sizeof(msg)/sizeof(msg[0])
-						, _("String constant overflowing internal buffer tokbuf len=%d, file: %s, start line: %ld")
-						, sizeof(tokbuf)/sizeof(tokbuf[0])
+					snprintf(msg, sizeof(msg)
+						, _("String constant overflowing internal buffer tokbuf len=" FMT_SIZET ", file: %s, start line: " FMT_INT)
+						, ARRSIZE(tokbuf)
 						, pactx->fullpath
 						, start_line + 1
 						);
@@ -227,7 +227,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 			}
 			if (c == 0 || c == '"') {
 				*p = 0;
-				*lvalp = make_internal_string_node(pactx, tokbuf);
+				*lvalp = (YYSTYPE) make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			}
 			switch (c = inchar(pactx)) {
@@ -241,7 +241,7 @@ lextok (PACTX pactx, YYSTYPE * lvalp, INT c, INT t)
 			case '\\': *p++ = '\\'; break;
 			case EOF:
 				*p = 0;
-				*lvalp = make_internal_string_node(pactx, tokbuf);
+				*lvalp = (YYSTYPE) make_internal_string_node(pactx, tokbuf);
 				return SCONS;
 			default:
 				*p++ = c; break;

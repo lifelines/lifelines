@@ -280,6 +280,7 @@ init_screen (char * errmsg, int errsize)
 	int rtn = resize_screen_impl(errmsg, errsize);
 	if (rtn) { /* success */
 		register_screen_lang_callbacks(TRUE);
+		platform_postcurses_init();
 	}
 	return rtn;
 }
@@ -331,7 +332,7 @@ resize_screen_impl (char * errmsg, int errsize)
 		newcols = winx;
 		if (newcols > COLS || newlines > LINES) {
 			snprintf(errmsg, errsize
-				, _("The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n")
+				, _("The requested window size (" FMT_INT "," FMT_INT ") is too large for your terminal (%d,%d).\n")
 				, newcols, newlines, COLS, LINES);
 			return 0; /* fail */
 		}
@@ -339,7 +340,7 @@ resize_screen_impl (char * errmsg, int errsize)
 	/* check that terminal meet minimum requirements */
 	if (newcols < COLSREQ || newlines < LINESREQ) {
 		snprintf(errmsg, errsize
-			, _("The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n")
+			, _("The requested window size (" FMT_INT "," FMT_INT ") is too small for LifeLines (%d,%d).\n")
 			, newcols, newlines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
@@ -2253,13 +2254,21 @@ dbprintf (STRING fmt, ...)
 void
 do_edit (void)
 {
+	int rtn=-1;
+
 	endwin();
 #ifdef WIN32
 	/* use w32system, because it will wait for the editor to finish */
-	w32system(editstr);
+	rtn = w32system(editstr);
 #else
-	system(editstr);
+	rtn = system(editstr);
 #endif
+	if (rtn != 0) {
+		printf(_("Editor or system call failed."));
+		puts("");
+		sleep(2);
+	}
+
 	clearok(curscr, 1);
 	place_cursor_main();
 	wrefresh(curscr);
@@ -2895,12 +2904,21 @@ refresh_stdout (void)
 void
 call_system_cmd (STRING cmd)
 {
+	int rtn=-1;
+
 	endwin();
 #ifndef WIN32
-	system("clear");
+	rtn = system("clear");
 #endif
-	system(cmd);
-	touchwin(curscr);
+	rtn = system(cmd);
+
+	if (rtn != 0) {
+		printf(_("System command failed."));
+		puts("");
+		sleep(2);
+	}
+	clearok(curscr, 1);
+	place_cursor_main();
 	wrefresh(curscr);
 }
 /*============================
