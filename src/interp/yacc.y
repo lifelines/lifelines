@@ -77,6 +77,15 @@ void parse_error(PACTX pactx, STRING str);
 // Bison 3.x.
 %define api.value.type {PNODE}
 
+// Debugging
+%verbose
+%printer { fprintf (yyo, "IDEN", $$); } IDEN;
+%printer { fprintf (yyo, "PROC", $$); } PROC;
+%printer { fprintf (yyo, "FUNC", $$); } FUNC_TOK;
+%printer { fprintf (yyo, "%g",   $$); } FCONS;
+%printer { fprintf (yyo, "%d",   $$); } ICONS;
+%printer { fprintf (yyo, "%s",   $$); } SCONS;
+
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */
 /*===========================================================*/
@@ -312,7 +321,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			$$ = return_node(pactx, (PNODE)$4);
 			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
-	|	expr {
+	|	expro {
 			$$ = $1;
 		}
 	;
@@ -360,6 +369,13 @@ expr	:	IDEN {
 		}
 	|	FCONS {
 			$$ = create_fcons_node(pactx, Yfval);
+		}
+	;
+expro	:	/* empty */ {
+			$$ = 0;
+		}
+	|	expr {
+			$$ = $1;
 		}
 	;
 exprso	:	/* empty */ {
