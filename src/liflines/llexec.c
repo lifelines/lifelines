@@ -277,7 +277,7 @@ prompt_for_db:
 	/* catch any fault, so we can close database */
 	if (!debugmode)
 	{
-		set_signals();
+		set_signals(sighand_cmdline);
 	}
 	/* developer wants to drive without seatbelt! */
 	else

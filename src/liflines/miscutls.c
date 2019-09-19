@@ -39,9 +39,12 @@
 #include "interp.h"
 #include "zstr.h"
 #include "llinesi.h"
+#include "btree.h"
 
 extern STRING qSdbrecstats,qSdbrecords;
 extern STRING qSprogsig,qSsignal;
+
+extern BTREE BTR;
 
 /*======================================
  * key_util -- Return person's key value
@@ -138,4 +141,15 @@ sighand_cursesui(int sig)
 	ll_optional_abort(zs_str(zstr));
 	zs_free(&zstr);
 	exit(1);
+}
+/*======================================
+ * sighand_cmdline - Catch and handle signal cleanly (command-line)
+ *====================================*/
+void
+sighand_cmdline(int sig)
+{
+	sig = sig;	/* UNUSED */
+
+	closebtree(BTR);
+        exit(1);
 }

@@ -97,6 +97,8 @@ RECORD merge_two_fams(NODE, NODE);
 void key_util(void);
 void show_database_stats(void);
 void who_is_he_she(void);
+void sighand_cursesui(int sig);
+void sighand_cmdline(int sig);
 
 /* newrecs.c */
 RECORD edit_add_event(void);
