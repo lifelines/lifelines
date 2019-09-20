@@ -12,9 +12,9 @@
 ##
 
 function showusage {
-  echo "Usage: sh `basename $0` X.Y.Z   # to change to specified version number"
-  echo "   or: sh `basename $0` restore # to undo version number just applied"
-  echo "   or: sh `basename $0` cleanup # to remove backup files"
+  echo "Usage: sh `basename $0` X.Y.Z [tag]  # to change to specified version number (with optional tag)"
+  echo "   or: sh `basename $0` restore      # to undo version number just applied"
+  echo "   or: sh `basename $0` cleanup      # to remove backup files"
 }
 
 function usageexit {
@@ -47,6 +47,15 @@ function checkparm {
   if ! echo $VERSION | grep -q $VPATTERN
   then
     usageexit "ERROR: Missing or invalid version number" $E_WRONG_ARGS
+  fi
+
+  TAG=$2
+  if [ ! -z $2 ]
+  then
+    if [ $2 != "alpha" -a $2 != "beta" -a $2 != "RC" ]
+    then
+      usageexit "ERROR: Invalid tag (must be 'alpha', 'beta' or 'RC'" $E_WRONG_ARGS
+    fi
   fi
 }
 
@@ -143,8 +152,12 @@ function applyversion {
   alterfile $ROOTDIR/NEWS "$SEDPAT"
   alterfile $ROOTDIR/README "$SEDPAT"
 
+  SEDPAT="s/\(AC_INIT(lifelines,[ ]*\)[0-9][[:alnum:].\-]*)$/\1$VERSION-$TAG)/"
+  alterfile $ROOTDIR/configure.ac "$SEDPAT"
+
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
+
   SEDPAT="s/\(release version=\)\"[0-9][[:alnum:].\-]*\"/\1\"$VERSION\"/"
   SEDPAT2="s/\(release.*date=\)\"[0-9]*-[0-9]*-[0-9]*\"/\1\"$YMD\"/"
   alterfile $ROOTDIR/build/appdata/lifelines.appdata.xml "$SEDPAT" "$SEDPAT2"
@@ -236,7 +249,7 @@ fi
 
 # Check that user passed exactly one parameter
 E_WRONG_ARGS=65
-if [ $# -ne 1 ] || [ -z "$1" ]
+if ( [ $# -ne 1 ] && [ $# -ne 2 ] ) || [ -z "$1" ]
 then
   usageexit "ERROR: Wrong number of arguments!" $E_WRONG_ARGS
 fi
@@ -244,7 +257,7 @@ fi
 # Function to handle parsing argument
 # Parse argument (should be a version, or "restore" or "cleanup")
 # (exits if failure)
-checkparm $1
+checkparm $1 $2
 
 # Invoke whichever functionality was requested
 if [ ! -z "$RESTORE" ]
