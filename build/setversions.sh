@@ -12,7 +12,8 @@
 ##
 
 function showusage {
-  echo "Usage: sh `basename $0` X.Y.Z [tag]  # to change to specified version number (with optional tag)"
+  echo "Usage: sh `basename $0` X.Y.Z        # to change to specified version number"
+  echo "   or: sh `basename $0` TAG          # to change to specific version tag"
   echo "   or: sh `basename $0` restore      # to undo version number just applied"
   echo "   or: sh `basename $0` cleanup      # to remove backup files"
 }
@@ -41,27 +42,33 @@ function checkparm {
     return
   fi
 
-  # Store argument as $VERSION and check it is valid version
-  VERSION=$1
+  # Check for valid version
+  VERSIONFOUND=0
   VPATTERN="^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$"
-  if ! echo $VERSION | grep -q $VPATTERN
+  if echo $1 | grep -q $VPATTERN
   then
-    usageexit "ERROR: Missing or invalid version number" $E_WRONG_ARGS
+    VERSION=$1
+    VERSIONFOUND=1
   fi
 
-  TAG=$2
-  if [ ! -z $2 ]
+  # Check for valid tag
+  TAGFOUND=0
+  TPATTERN="^(alpha|beta|rc[1-9][0-9]*|release)$"
+  if echo $1 | grep -qE $TPATTERN
   then
-    if [ $2 != "alpha" -a $2 != "beta" -a $2 != "RC" ]
-    then
-      usageexit "ERROR: Invalid tag (must be 'alpha', 'beta' or 'RC'" $E_WRONG_ARGS
-    fi
+    TAG=$1
+    TAGFOUND=1
+  fi
+
+  if ( [ $VERSIONFOUND -eq 0 ] && [ $TAGFOUND -eq 0 ] )
+  then
+    usageexit "ERROR: Missing or invalid version number or tag" $E_WRONG_ARGS
   fi
 }
 
 # Function to apply version to one file
 # Argument#1 is filename (eg, "NEWS")
-# Arguments#2-? sed patterns, applied one after another
+# Arguments#2-N sed patterns, applied one after another
 function alterfile {
   [ ! -z "$1" ] || failexit "Missing first argument to alterfile"
   [ ! -z "$2" ] || failexit "Missing second argument to alterfile"
@@ -69,7 +76,7 @@ function alterfile {
   shift
   cp $FILEPATH $FILEPATH.bak || failexit "Error backing up file "$FILEPATH
   # Now apply each remaining argument as sed command
-  echo "Updating version number in $FILEPATH..."
+  echo "Updating $FILEPATH..."
   until [ -z "$1" ]
   do
     # sed doesn't seem to set its return value, so we don't check
@@ -152,10 +159,10 @@ function applyversion {
   alterfile $ROOTDIR/NEWS "$SEDPAT"
   alterfile $ROOTDIR/README "$SEDPAT"
 
-  SEDPAT="s/\(AC_INIT(lifelines,[ ]*\)[0-9][[:alnum:].\-]*)$/\1$VERSION-$TAG)/"
+  SEDPAT="s/\(AC_INIT(lifelines,[ ]*\)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
   alterfile $ROOTDIR/configure.ac "$SEDPAT"
 
-  SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
+  SEDPAT="s/\(#define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
 
   SEDPAT="s/\(release version=\)\"[0-9][[:alnum:].\-]*\"/\1\"$VERSION\"/"
@@ -178,6 +185,12 @@ function applyversion {
   alterfile $ROOTDIR/docs/manual/ll-userguide.sv.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml "$SEDPAT"
+}
+
+# Call alterfile with an sed command for each file
+function applytag {
+  SEDPAT="s/^\(#define LIFELINES_VERSION_EXTRA \)\"([[:alnum:]]*)\"$/\1\"($TAG)\"/"
+  alterfile $ROOTDIR/src/hdrs/version.h "$SEDPAT"
 }
 
 # Restore, for user to reverse last application
@@ -203,6 +216,7 @@ function restore {
   restorefile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
   restorefile $ROOTDIR/docs/manual/ll-userguide.xml
   restorefile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  restorefile $ROOTDIR/src/hdrs/version.h
 }
 
 # Cleanup, for user to remove backup files
@@ -228,6 +242,7 @@ function cleanup {
   cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
   cleanupfile $ROOTDIR/docs/manual/ll-userguide.xml
   cleanupfile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  cleanupfile $ROOTDIR/src/hdrs/version.h
 }
 
 ##
@@ -267,6 +282,16 @@ elif [ ! -z "$CLEANUP" ]
 then
   cleanup
 else
-  getversion
-  applyversion
+  if [ $VERSIONFOUND -eq 1 ]
+  then
+    echo "Applying version change..."
+    getversion
+    applyversion
+  fi
+
+  if [ $TAGFOUND -eq 1 ] 
+  then
+    echo "Appyling tag change..."
+    applytag
+  fi
 fi 
