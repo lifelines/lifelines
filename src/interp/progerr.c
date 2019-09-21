@@ -131,8 +131,10 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 
 	if (dbg_mode != -99 && dbg_mode != 3) {
 		INT ch = 0;
-		while (!(ch=='d' || ch=='q'))
+		while (!(ch=='d' || ch=='q')) {
 			ch = rptui_prompt_stdout(_("Enter d for debugger, q to quit"));
+                        if (ch == 0) ch = 'q'; 
+                }
 		if (ch == 'q')
 			dbg_mode = -99;
 	}
