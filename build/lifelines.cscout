@@ -1,0 +1,94 @@
+workspace lifelines {
+	cd "src"
+	ro_prefix "/usr/include"
+	define HAVE_CONFIG_H
+	project lifelines {
+		directory arch {
+			ipath "../.."
+			ipath "../hdrs"
+		}
+		directory btree {
+			ipath "../.."
+			ipath "../hdrs"
+			file addkey.c block.c btrec.c
+			file file.c index.c opnbtree.c
+			file traverse.c utils.c
+		}
+		directory gedlib {
+			ipath "../.."
+			ipath "../hdrs"
+			file  brwslist.c
+			file charmaps.c charprops.c
+			file choose.c codesets.c dispfmt.c
+			file datei.c dateparse.c dateprint.c
+			file dbcontext.c dbfuncs.c dblist.c
+			file editmap.c editvtab.c equaliso.c
+			file gedcom.c gengedc.c gstrings.c
+			file indiseq.c  init.c intrface.c
+			file keytonod.c locales.c
+			file lldatabase.c llgettext.c lloptions.c
+			file messages.c misc.c
+			file names.c node.c
+			file nodechk.c nodeio.c nodeutls.c
+			file place.c property.c
+			file record.c refns.c remove.c replace.c
+			file soundex.c spltjoin.c translat.c
+			file valid.c valtable.c
+			file xlat.c xreffile.c
+		}
+		directory interp {
+			ipath "../.."
+			ipath "../hdrs"
+			file alloc.c builtin.c builtin_list.c
+			file eval.c functab.c heapused.c
+			file interp.c intrpseq.c lex.c
+			file more.c progerr.c
+			file pvalalloc.c pvalmath.c pvalue.c
+			file rassa.c rptsort.c rptui.c
+			file symtab.c write.c yacc.c
+		}
+		directory liflines {
+			ipath "../.."
+			ipath "../hdrs"
+			file add.c advedit.c
+			file ask.c askgedc.c askprogram.c
+			file browse.c brwsmenu.c cscurses.c
+			file delete.c dynmenu.c
+			file edit.c error.c export.c
+			file import.c interact.c
+			file lbrowse.c lines_usage.c listui.c llexec.c loadsave.c
+			file main.c menuset.c merge.c miscutls.c
+			file newrecs.c pedigree.c
+			file scan.c screen.c searchui.c selectdb.c show.c swap.c
+			file tandem.c valgdcom.c
+		}
+		directory stdlib {
+			ipath "../.."
+			ipath "../hdrs"
+			file appendstr.c array.c
+			file dirs.c
+			file environ.c errlog.c
+			file fileops.c fpattern.c
+			file generic.c hashtab.c icvt.c
+			file list.c listener.c log.c
+			file llabort.c lldate.c llstrcmp.c
+			file mychar_funcs.c mychar_tables.c mystring.c
+			file memalloc.c norm_charmap.c object.c
+			file path.c proptbls.c rbtree.c
+			file sequence.c signals.c sprintpic.c stack.c
+			file stdlib.c stdstrng.c stralloc.c strapp.c
+			file strcvt.c strset.c strutf8.c strwhite.c
+			file table.c version.c vtable.c zstr.c
+		}
+	}
+	project tools {
+		directory tools {
+			ipath "../.."
+			ipath "../hdrs"
+			file btedit.c dbverify.c lldump.c
+			file dispcode.c xterm_decode.c
+			file lltest.c
+			file misc.c prettytt.c wprintf.c
+		}
+	}
+}
