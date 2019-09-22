@@ -22,7 +22,12 @@ unzip build-wrapper-linux-x86.zip
 
 # Run analysis (on current branch, assuming that the target branch will be master)
 MYBRANCH=`git status | head -1 | cut -f4 -d' '`
-(cd ..; sonar-scanner -Dproject.settings=build/sonar-project.properties -Dsonar.branch.target=master -Dsonar.branch.name=${MYBRANCH})
+if [ "master" = "$MYBRANCH" ]
+then
+  (cd ..; sonar-scanner -Dproject.settings=build/sonar-project.properties -Dsonar.branch.name=master)
+else
+  (cd ..; sonar-scanner -Dproject.settings=build/sonar-project.properties -Dsonar.branch.name=${MYBRANCH} -Dsonar.branch.target=master)
+fi
 
 # Remove build wrapper and scanner files
 rm -rf sonar_build_wrapper_output
