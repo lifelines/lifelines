@@ -24,7 +24,7 @@ add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
 {
 	STRING str = valueof_str(props, "dn");
 	INT n = ll_atoi(str, 0)+1;
-	char temp[20];
+	char temp[FMT_INT_LEN+1];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
 	insert_table_str(props, temp, name);
 	insert_table_str(props, name, value);

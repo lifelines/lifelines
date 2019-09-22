@@ -265,7 +265,7 @@ typedef struct tag_vtable ** OBJECT;
    0 filled DD,HH, and MM
 */
 typedef struct tag_lldate {
-	char datestr[21];
+	char datestr[6*FMT_INT_LEN+6+1];
 } LLDATE;
 
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
