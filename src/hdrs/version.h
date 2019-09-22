@@ -5,7 +5,7 @@
 #define LIFELINES_VERSION PACKAGE_VERSION
 
 /* This is the private build version, appended to the public version */
-#define LIFELINES_VERSION_EXTRA "(official)"
+#define LIFELINES_VERSION_EXTRA "(alpha)"
 
 /* Function prototypes */
 STRING get_lifelines_version (INT maxlen);
