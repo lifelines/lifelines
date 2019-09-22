@@ -1602,24 +1602,26 @@ __fatal (STRING file, int line, CNSTRING details)
 {
 	/* avoid reentrancy */
 	static BOOLEAN failing=FALSE;
-	if (failing) return;
-	failing=TRUE;
+	if (failing)
+	{
+		failing=TRUE;
 
-	/* send to error log if one is specified */
-	errlog_out(_("Fatal Error"), details, file, line);
+		/* send to error log if one is specified */
+		errlog_out(_("Fatal Error"), details, file, line);
 
-	printf(_("FATAL ERROR: "));
-	if (details && details[0]) {
-		printf("%s", details);
+		printf(_("FATAL ERROR: "));
+		if (details && details[0]) {
+			printf("%s", details);
+		}
+		printf("\n");
+		printf(_("In file <%s> at line %d"), file, line);
+		printf("\n");
+
+		/* offer crash dump before closing database */
+		ll_optional_abort(_("ASSERT failure"));
+
+		failing=FALSE;
 	}
-	printf("\n");
-	printf(_("In file <%s> at line %d"), file, line);
-	printf("\n");
-
-	/* offer crash dump before closing database */
-	ll_optional_abort(_("ASSERT failure"));
-
-	failing=FALSE;
 	exit(1);
 }
 /*===============================
