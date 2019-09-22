@@ -286,10 +286,8 @@ typedef const ZSTR ZCSTR;
  */
 #if defined __GNUC__
 #define HINT_VAR_UNUSED    __attribute__ ((unused))
+#define HINT_PARAM_UNUSED  __attribute__ ((unused))
 #define HINT_FUNC_NORETURN __attribute__ ((noreturn))
-#else
-#define HINT_VAR_UNUSED
-#define HINT_FUNC_NORETURN
 #endif
 
 
