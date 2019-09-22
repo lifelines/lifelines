@@ -59,7 +59,7 @@ They must also implement crashlog, but it may do nothing, or
 it may just print its printf style args to the screen. It 
 should return.
 */
-void __fatal(STRING file, int line, CNSTRING details) __attribute__ ((noreturn));
+void __fatal(STRING file, int line, CNSTRING details) HINT_FUNC_NORETURN;
 void crashlog(STRING fmt, ...);
 void crashlogn(STRING fmt, ...);
 
