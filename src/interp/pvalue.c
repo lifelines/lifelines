@@ -978,6 +978,7 @@ describe_pvalue (PVALUE val)
 	switch (type) {
 	case PNULL:
 		zs_appf(zstr, "<NULL>");
+		break;
 	case PINT:
 		zs_appf(zstr, "%d", pvalue_to_int(val));
 		break;
