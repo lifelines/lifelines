@@ -14,6 +14,10 @@
 #             written to testname.log, can be enabled with
 #             VERBOSE=1 make check
 #             VERBOSE=1 make testdir/testname.log
+# NOCAPTUREOUT Don't caputure output of running the command
+#             NOCAPTUREOUT=1 skips this check
+#             the output is highly dependent on curses which seems to tweek
+#             things frequently in ways that don't represent failures.
 # srcdir -    relative path to the src area 'tests' directory
 #
 # variables local to this script
@@ -129,8 +133,12 @@ function run_a_command {
             return 1
         fi
     fi
-    compare_file $defout
-    rac=$?
+    if [[ -z $NOCAPTUREOUT ]] ; then
+        compare_file $defout
+        rac=$?
+    else
+        echo "SKIP $testdir/$testname $base"
+    fi
 
     # now diff cmdout2 output if one exists
     if [[ -n $cmdout2 ]] ; then
@@ -284,18 +292,26 @@ scriptout=""
 if grep $testname.out $scriptname.fix >& /dev/null ; then
     scriptout=$testname.out
 fi
-if [[ ! -f ../../src/tools/xterm_decode ]] ; then
-    echo "FAIL $thistest ../../src/tools/xterm_decode doesn't exist"
-    ret=99
-else
-    # tell llines to use non-existant file in test source directory
-    # so not affected by any user settings. Also test writer can
-    # always add a $testname.lines.src if needed for a test
-    #run_a_command cmd cmdin cmdout cmdout2 filter
-    run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "$scriptout" ../../src/tools/xterm_decode
+if [[ -n $NOCAPTUREOUT ]] ; then
+    run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "" ""
     ret1=$?
     if [[ $ret < $ret1 ]] ; then
         ret=$ret1
+    fi
+else
+    if [[ ! -f ../../src/tools/xterm_decode ]] ; then
+        echo "FAIL $thistest ../../src/tools/xterm_decode doesn't exist"
+        ret=99
+    else
+        # tell llines to use non-existant file in test source directory
+        # so not affected by any user settings. Also test writer can
+        # always add a $testname.lines.src if needed for a test
+        #run_a_command cmd cmdin cmdout cmdout2 filter
+        run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "$scriptout" ../../src/tools/xterm_decode
+        ret1=$?
+        if [[ $ret < $ret1 ]] ; then
+            ret=$ret1
+        fi
     fi
 fi
 
