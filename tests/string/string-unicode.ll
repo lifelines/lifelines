@@ -110,7 +110,7 @@ proc main()
   "\n"
 
   /* NOTE: substring() is broken because it is not UTF-8 aware, searching on bytes rather than characters */
-  "TEST: substring()\n"
+  "TEST: substring() of string " s "\n"
   "substring [1:1]: " substring(s,1,1) "  len=" d(strlen(substring(s,1,1)))"\n"
   "substring [1:2]: " substring(s,1,2) "  len=" d(strlen(substring(s,1,2)))"\n"
   "substring [1:3]: " substring(s,1,3) "  len=" d(strlen(substring(s,1,3)))"\n"
@@ -130,4 +130,18 @@ proc main()
   "substring [19:20]: " substring(s,19,20) "  len=" d(strlen(substring(s,19,20))) "\n"
   "substring [20:20]: " substring(s,20,20) "  len=" d(strlen(substring(s,20,20))) "\n"
   "string: " s " (20 characters, 35 bytes)\n"
+
+
+  "\n"
+  set(s,"eéée")
+  "TEST: substring() '" s "' -- letter e, e with acute, e + composing acute, e\n"
+  "      7 bytes, 5 UTF-8 chars, 4 grapheme's (preceived visable characters \n"
+  "substring [1:1]: " substring(s,1,1) "  len=" d(strlen(substring(s,1,1)))"\n"
+  "substring [1:2]: " substring(s,1,2) "  len=" d(strlen(substring(s,1,2)))"\n"
+  "substring [1:3]: " substring(s,1,3) "  len=" d(strlen(substring(s,1,3)))"\n"
+  "substring [1:4]: " substring(s,1,4) "  len=" d(strlen(substring(s,1,4)))"\n"
+  "substring [1:5]: " substring(s,1,5) "  len=" d(strlen(substring(s,1,5)))"\n"
+  "substring [1:6]: " substring(s,1,6) "  len=" d(strlen(substring(s,1,6)))"\n"
+  "substring [1:7]: " substring(s,1,7) "  len=" d(strlen(substring(s,1,7)))"\n"
+  "substring [1:8]: " substring(s,1,8) "  len=" d(strlen(substring(s,1,8)))"\n"
 }
