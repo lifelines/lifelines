@@ -446,7 +446,7 @@ add_name (CNSTRING name, CNSTRING key)
 static void
 add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 {
-	INT i, len;
+	INT i, len, recsize;
 	INT32 off;
 	STRING p, rec;
 
@@ -468,7 +468,7 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	NRcount++;
 
 	/* allocate new record */
-	INT recsize = sizeof(RKEY) + sizeof(INT32) + strlen(name) + 10;
+	recsize = sizeof(RKEY) + sizeof(INT32) + strlen(name) + 10;
 	p = rec = (STRING) stdalloc(NRsize + recsize);
 	len = off = 0;
 

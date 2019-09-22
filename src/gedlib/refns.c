@@ -300,9 +300,9 @@ refn_hi (void)
 BOOLEAN
 add_refn (CNSTRING refn, CNSTRING key)
 {
-	STRING rec, p;
-	INT i, len;
+	INT i, len, recsize;
 	INT32 off;
+	STRING rec, p;
 	RKEY rkey;
 
 	/* load up local refn record buffers */
@@ -324,7 +324,7 @@ add_refn (CNSTRING refn, CNSTRING key)
 	RRcount++;
 
 	/* allocate new record */
-	INT recsize = sizeof(RKEY) + sizeof(INT32) + strlen(refn) + 10;
+	recsize = sizeof(RKEY) + sizeof(INT32) + strlen(refn) + 10;
 	p = rec = (STRING) stdalloc(RRsize + recsize);
 	len = off = 0;
 

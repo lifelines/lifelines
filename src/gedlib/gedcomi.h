@@ -4,7 +4,7 @@
 #ifndef _GEDCOM_PRIV_H
 #define _GEDCOM_PRIV_H
 
-#include "btree.h" // for RKEY
+#include "btree.h" /* for RKEY */
 
 /* charmaps.c */
 ZSTR custom_translate(CNSTRING str, TRANTABLE tt);
