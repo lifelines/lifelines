@@ -56,4 +56,10 @@ and issuing some character sequences that will get there.
 the second with tabs is 1 char shorter, but relies on ncurses knowing
 where it is in the line.
 
+If checking the output is not relevant to your checking, it can 
+be disabled when running the tests by setting NOCAPTUREOUT=1
+That is, if you cd into the build area, tests directory, you can run
 
+NOCAPTUREOUT=1 make clean check
+
+This will skip checking the output of llines (or llexec) 

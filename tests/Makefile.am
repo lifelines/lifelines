@@ -17,7 +17,6 @@ TESTS   =               date/checkjd2date.llscr         \
 			math/test2.llscr                \
 			pedigree-longname/test1.llscr   \
 			string/string-unicode.llscr     \
-			string/string-utf8.llscr        \
 			view-history/view-history.llscr \
 			Royal92/Royal92.llscr
 # make runs run_a_test file.llscr to generate file.log

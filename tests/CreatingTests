@@ -15,6 +15,9 @@ will add lots of debug info in the test's directory testname.log file
    VERBOSE=1 make check
 or
    VERBOSE=1 make clean check
+If your not intereste in debugging the gui with the detailed character
+output from running a test with llines/llexec you can run the tests with
+   NOCAPTUREOUT=1 make clean check
 
 The automake test structure is used to run the tests.
 When done a file is created in the tests directory named test-suite.log.
