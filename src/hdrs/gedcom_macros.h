@@ -270,7 +270,9 @@
 	{\
 	RECORD frec=0; \
 	NODE __node = find_tag(nchild(indi),"FAMC");\
-	NODE fam=0, fath=0, moth=0;\
+	NODE HINT_VAR_UNUSED fam=0;\
+ 	NODE HINT_VAR_UNUSED fath=0;\
+	NODE HINT_VAR_UNUSED moth=0;\
 	STRING __key=0;\
 	num = 0;\
 	while (__node) {\
@@ -372,7 +374,8 @@
 
 #define FORTAGVALUES(root,tag,node,value)\
 	{\
-	NODE node, __node = nchild(root);\
+	NODE HINT_VAR_UNUSED node;\
+	NODE __node = nchild(root);\
 	STRING value, __value;\
 	while (__node) {\
 		while (__node && nestr(tag, ntag(__node)))\

@@ -246,7 +246,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	STRING name, p=scratch;
 	STRING tempname;
 	INT mylen=len;
-	char counts[32];
+	char counts[FMT_INT_LEN+2+FMT_INT_LEN+2+FMT_INT_LEN+2+1];
 	INT husbands=0, wives=0, children=0;
 	INT templen=0;
 	NODE refn, husb, wife, chil, rest, node;

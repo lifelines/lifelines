@@ -55,10 +55,10 @@
 
 /* Identification */
 
-static const char	id[] =
+static const char __attribute__ ((unused)) id[] =
     "@(#)lib/fpattern.c 1.08";
 
-static const char	copyright[] =
+static const char __attribute__ ((unused)) copyright[] =
     "Copyright (C) 1997-1998 David R. Tribble\n";
 
 

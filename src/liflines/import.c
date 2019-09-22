@@ -340,7 +340,7 @@ end_import:
  * restore_record -- Restore record to database
  *===========================================*/
 static void
-restore_record (NODE node, INT type, INT num)
+restore_record (NODE node, INT type, HINT_PARAM_UNUSED INT num)
 {
 	STRING old, new, str, key;
 

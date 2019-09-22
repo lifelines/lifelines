@@ -56,23 +56,27 @@ __fatal (STRING file, int line, CNSTRING details)
 {
 	/* avoid reentrancy */
 	static BOOLEAN failing=FALSE;
-	if (failing) return;
-	failing=TRUE;
+	if (!failing)
+	{
+		failing=TRUE;
 
-	/* send to error log if one is specified */
-	errlog_out(_("Fatal Error"), details, file, line);
+		/* send to error log if one is specified */
+		errlog_out(_("Fatal Error"), details, file, line);
 
-	/* send to screen */
-	llwprintf("%s\n", _("FATAL ERROR"));
-	if (details && details[0]) {
-		llwprintf("  %s\n", details);
+		/* send to screen */
+		llwprintf("%s\n", _("FATAL ERROR"));
+		if (details && details[0]) {
+			llwprintf("  %s\n", details);
+		}
+		llwprintf(_("  in file <%s> at line %d\n"), file, line);
+
+		/* offer crash dump before closing database */
+		ll_optional_abort(_("ASSERT failure"));
+		close_lifelines();
+		shutdown_ui(TRUE); /* pause */
+
+		failing=FALSE;
 	}
-	llwprintf(_("  in file <%s> at line %d\n"), file, line);
-	/* offer crash dump before closing database */
-	ll_optional_abort(_("ASSERT failure"));
-	close_lifelines();
-	shutdown_ui(TRUE); /* pause */
-	failing=FALSE;
 	exit(1);
 }
 /*===============================

@@ -2134,7 +2134,7 @@ get_report_error_msg (STRING msg)
 	ZSTR zstr=0;
 
 	if (progrunning) {
-		char line[20];
+		char line[FMT_INT_LEN+1];
 		snprintf(line, sizeof(line), FMT_INT, iline(Pnode)+1);
 		zstr = zprintpic2(_(msg), irptinfo(Pnode)->fullpath, line);
         }

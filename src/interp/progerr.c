@@ -423,7 +423,7 @@ disp_list (LIST list)
 		VPTR ptr = 0;
 		while (next_list_ptr(listit, &ptr)) {
 			PVALUE val = ptr;
-			char key[10];
+			char key[FMT_INT_LEN+1];
 			snprintf(key, sizeof(key), FMT_INT, sdata.current+1);
 			format_dbgsymtab_val(key, val, &sdata);
 		}

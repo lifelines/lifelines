@@ -265,7 +265,7 @@ typedef struct tag_vtable ** OBJECT;
    0 filled DD,HH, and MM
 */
 typedef struct tag_lldate {
-	char datestr[21];
+	char datestr[6*FMT_INT_LEN+6+1];
 } LLDATE;
 
 typedef enum { RECORD_ERROR, RECORD_NOT_FOUND, RECORD_SUCCESS } 
@@ -280,5 +280,15 @@ typedef const ZSTR ZCSTR;
  Pull in declarations & macros for NLS (National Language Support)
 */
 #include "llnls.h"
+
+/*
+ * Compiler attributes
+ */
+#if defined __GNUC__
+#define HINT_VAR_UNUSED    __attribute__ ((unused))
+#define HINT_PARAM_UNUSED  __attribute__ ((unused))
+#define HINT_FUNC_NORETURN __attribute__ ((noreturn))
+#endif
+
 
 #endif

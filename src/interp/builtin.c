@@ -1085,7 +1085,7 @@ llrpt_prevsib (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	static char scratch[FMT_INT_LEN];
+	static char scratch[FMT_INT_LEN+1];
 	PNODE argvar = builtin_args(node);
 	PVALUE val=0;
 	INT i=0;
@@ -1106,7 +1106,7 @@ llrpt_d (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_f (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	char scratch[FMT_INT_LEN];
+	char scratch[FMT_INT_LEN+3+1];
 	char format[10]="";
 	INT prec = 2;
 	PNODE argvar = builtin_args(node);
@@ -1238,7 +1238,7 @@ static char *rothou[] = {
 PVALUE
 llrpt_roman (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	static char scratch[FMT_INT_LEN];
+	static char scratch[FMT_INT_LEN+1];
 	INT i;
 	PNODE argvar = builtin_args(node);
 	PVALUE val = eval_and_coerce(PINT, argvar, stab, eflg);
@@ -2069,7 +2069,7 @@ llrpt_concat (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	while (argvar) {
 		val = eval_and_coerce(PSTRING, argvar, stab, eflg);
 		if (*eflg) {
-			char argnum[8];
+			char argnum[FMT_INT_LEN+1];
 			snprintf(argnum, sizeof(argnum), FMT_INT, argcnt+1);
 			prog_var_error(node, stab, argvar, val, nonstrx, "concat", argnum);
 			return NULL;

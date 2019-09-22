@@ -124,7 +124,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 	if (mitem->Command == CMD_CHILD_DIRECT0) {
 		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
 		for (i=1; i<=9; i++) {
-			char choice[2];
+			char choice[FMT_INT_LEN+1];
 			snprintf(choice, sizeof(choice), FMT_INT, i);
 			insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+i, display);
 		}
