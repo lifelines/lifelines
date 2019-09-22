@@ -36,8 +36,8 @@ char textbuf[MAXTEXT];
 int textlen=0;
 char charsetname[80] = "";
 char shortcharsetname[80] = "";
-char msg[120];  // buffer to assemble messages
-char msg1[120]; // buffer to assemble messages
+char msg[150];  // buffer to assemble messages
+char msg1[100]; // buffer to assemble messages
 
 // C0 Codes
 char *controlchars[32] = 
@@ -62,11 +62,28 @@ char *linedrawingchars[31] =
      //(you can spot pprryyzz{{||}} in a lot of AT&T terminfo strings).
      "not equal","uk pound sign","bullet",      //|}~     0x7c-0x7e
      };
+
 /* Teletype 5410v1 symbols begin here 2B,2C,2D,2E,  30 (+,-.x0)*/
 char *ldc2[6] =
     {"right pointing arrow","left pointing arrow",
      "up pointing arrow","down pointing arrow",
      "","solid square block"};
+
+/* Compiler hints */
+#if defined __GNUC__
+#define HINT_PARAM_UNUSED __attribute__ ((unused))
+#endif
+
+/* Function prototypes */
+void usage(int e);
+void flushtext(char *label);
+void addCharToText(char *label, char text);
+void addStrToText(char *label, char *text);
+void printtoST(char *label, FILE *fd);
+void readOSC(char* label, FILE *fd);
+void processCSI(char *label, FILE *fd);
+void parse(int c, char* name, FILE* fd);
+void decode(char *name, FILE *fd);
 
 void usage(int e) {
     printf("usage:xterm_decode input... \n");
@@ -77,7 +94,7 @@ void usage(int e) {
 }
 
 // flushtext - look at character set and decode line drawing characters
-void flushtext( char *label) {
+void flushtext(char *label) {
     char textname[90];
     if(textlen == 0) return;
     textbuf[textlen] = 0;
@@ -144,7 +161,8 @@ void addCharToText(char *label, char text) {
     if (textlen >= MAXTEXT) flushtext(label);
     textbuf[textlen++] = text;
 }
-void addStrToText(char *label, char *text) {
+
+void addStrToText(HINT_PARAM_UNUSED char *label, char *text) {
     while (*text) {
         if (textlen >= MAXTEXT) flushtext("text");
         textbuf[textlen++] = *text++;
@@ -152,7 +170,7 @@ void addStrToText(char *label, char *text) {
 }
 
 //STring terminator is <ESC> \ or <ESC> 0x9c
-void printtoST(char *label,FILE * fd) {
+void printtoST(char *label, FILE *fd) {
     char c;
     while ((c = getc(fd)) != EOF) {
         if (c != ESC) {
@@ -160,7 +178,7 @@ void printtoST(char *label,FILE * fd) {
             continue;
         } else {
             addStrToText(label, "<ESC>");
-            if (c = getc(fd) != EOF) { 
+            if ((c = getc(fd)) != EOF) { 
                 if (c <= 127) {
                     addCharToText("text",c);
                 } else {
@@ -183,14 +201,14 @@ void printtoST(char *label,FILE * fd) {
 }
 //readOSC - 2 nums  terminated by ST or BEL
 // Read operating system command
-void readOSC(char *label,FILE * fd) {
+void readOSC(char* label, FILE *fd) {
     char c;
     while ((c = getc(fd)) != EOF) {
         if (c != ESC) {
             addCharToText(label,c);
             continue;
         } else {
-            if (c = getc(fd) != EOF) {
+            if ((c = getc(fd)) != EOF) {
                 if (c <= 127) {
                     addCharToText("text",c);
                 } else {
@@ -215,7 +233,7 @@ void readOSC(char *label,FILE * fd) {
 }
 
 //processCSI
-void processCSI(char *label,FILE *fd) {
+void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
     int buf[10];    //collection of parameter values
     char c;
     char lead = ' ';
@@ -2286,10 +2304,8 @@ void processCSI(char *label,FILE *fd) {
     }
 }
 
-void parse( int c, char *name, FILE *fd) {
+void parse(int c, HINT_PARAM_UNUSED char *name, HINT_PARAM_UNUSED FILE *fd) {
     int c1;
-    char *codename;
-    //char tmp[80];
     if (c < 32 && c != ESC) {
         flushtext("text");
         switch(c) {
@@ -2326,11 +2342,13 @@ void parse( int c, char *name, FILE *fd) {
             flushtext("C0 Control Character (Ctrl-M) Carriage Return");
             break;
         case SO:
-                // invokes the G1 character set.
             addStrToText("text","<SO>");
-                snprintf(msg,sizeof(msg),"C0 Control Character (Ctrl-%c)",
-                                 c+0x40);
-                flushtext(msg);
+            flushtext("C0 Control Character (Ctrl-N) Switch to Alternate Character Set (G1)");
+            break;
+        case SI:
+            addStrToText("text","<SI>");
+            flushtext("C0 Control Character (Ctrl-O) Switch to Standard Character Set (G0)");
+            break;
         default:
                 snprintf(msg,sizeof(msg),"<0x%2x>",c);
                 addStrToText("text",msg);
@@ -2384,6 +2402,7 @@ void parse( int c, char *name, FILE *fd) {
             default:
                 flushtext("Invalid '<ESC> ' sequence");
             }
+            break;
         case '#':
             // ESC # 3  DEC double-height line, top half (DECDHL)
             // ESC # 4  DEC double-height line, bottom half (DECDHL)
@@ -2682,14 +2701,13 @@ void parse( int c, char *name, FILE *fd) {
     }
 }
 
-void decode( char *name, FILE *fd) {
+void decode(char *name, FILE *fd) {
     int c;
 
     while((c = getc(fd)) != EOF) {
         parse(c, name, fd);
     }
 }
-
 
 int main( int argc, char *argv[]) {
     char *p;
