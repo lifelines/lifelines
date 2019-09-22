@@ -4,11 +4,12 @@
 #ifndef _GEDCOM_PRIV_H
 #define _GEDCOM_PRIV_H
 
+#include "btree.h" // for RKEY
+
 /* charmaps.c */
 ZSTR custom_translate(CNSTRING str, TRANTABLE tt);
 void custom_translatez(ZSTR zstr, TRANTABLE tt);
 BOOLEAN init_map_from_file(CNSTRING file, CNSTRING mapname, TRANTABLE*, ZSTR zerr);
-
 
 /* keytonod.c */
 void cel_remove_record(CACHEEL cel, RECORD rec);
@@ -21,6 +22,7 @@ void update_textdomain_localedir(CNSTRING domain, CNSTRING prefix);
 
 /* names.c */
 RECORD id_by_key(CNSTRING name, char ctype);
+BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
 
 /* node.c */
 void check_node_leaks(void);
