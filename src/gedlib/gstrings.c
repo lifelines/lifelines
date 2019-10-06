@@ -160,12 +160,10 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	    else hasfamily = 0;
 	    if(hasfamily || hasparents) {
 		ASSERT(linelen > 5);
-		*p++ = ' '; linelen--;
-		*p++ = '['; linelen--;
-		if(hasparents) { *p++ = 'P'; linelen--; }
-		if(hasfamily) { *p++ = 'S'; linelen--; }
-		*p++ = ']'; linelen--;
-		*p = '\0';
+		char *value = (hasparents ? (hasfamily ? "PS" : "P")
+                                          : (hasfamily ? "S"  : "" ));
+		snprintf(p, linelen, " [%s]", value);
+		linelen -= (3 + strlen (value));
 		ASSERT(linelen > 0);
 	    }
 	}
