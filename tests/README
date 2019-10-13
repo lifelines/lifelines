@@ -40,3 +40,8 @@ view-history/view-history
 -- Status: Complete
 -- Issue: 260
 -- Purpose: avoid core dump when viewing history
+
+interp/ifelse
+-- Status: In progress
+-- Issue: 374
+-- Purpose: Ensure that all forms of if/else/then work properly

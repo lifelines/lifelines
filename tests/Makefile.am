@@ -13,6 +13,7 @@ TESTS   =               date/checkjd2date.llscr         \
 			gengedcomstrong/test1.llscr     \
 			interp/eqv_pvalue.llscr         \
 			interp/fullname.llscr           \
+			interp/ifelse.llscr             \
 			math/test1.llscr                \
 			math/test2.llscr                \
 			pedigree-longname/test1.llscr   \
