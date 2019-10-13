@@ -36,8 +36,6 @@ extern BTREE BTR;
 void
 sighand_cmdline (int sig)
 {
-	sig = sig;	/* UNUSED */
-
 	closebtree(BTR);
         exit(1);
 }
