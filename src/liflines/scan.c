@@ -136,7 +136,6 @@ refn_scan (STRING sts)
 	}
 	msg_status(sts);
 	traverse_refns(rs_callback, &scanner);
-	msg_status("");
 
 	return scanner_free_and_return_seq(&scanner);
 }
@@ -186,7 +185,6 @@ do_name_scan (SCANNER * scanner, STRING prompt)
 	}
 	msg_status((STRING)scanner->statusmsg);
 	traverse_names(ns_callback, scanner);
-	msg_status("");
 }
 /*==============================
  * do_sources_scan -- traverse sources looking for pattern matching
@@ -218,7 +216,6 @@ do_sources_scan (SCANNER * scanner, CNSTRING prompt)
 		rec = keynum_to_srecord(keynum);
 		do_fields_scan(scanner, rec);
 	}
-	msg_status("");
 }
 /*==============================
  * do_fields_scan -- traverse top nodes looking for desired field value
