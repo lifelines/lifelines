@@ -289,11 +289,10 @@ typedef const ZSTR ZCSTR;
  * Compiler attributes
  */
 #if defined __GNUC__
-#define HINT_VAR_UNUSED    __attribute__ ((unused))
-#define HINT_PARAM_UNUSED  __attribute__ ((unused))
-#define HINT_FUNC_NORETURN __attribute__ ((noreturn))
+#define HINT_VAR_UNUSED        __attribute__ ((unused))
+#define HINT_PARAM_UNUSED      __attribute__ ((unused))
+#define HINT_FUNC_NORETURN     __attribute__ ((noreturn))
 #define HINT_PRINTF(fmt, args) __attribute__ ((format (printf, (fmt), (args))))
 #endif
-
 
 #endif
