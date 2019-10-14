@@ -142,7 +142,9 @@ typedef unsigned char uchar;
 #define FMT_INT_LEN	22		/* sign + 20 digits + NULL */
 #define FMT_INT_HEX	FMT_INT64_HEX
 #define FMT_INT_02	"%02" PRId64
+#define FMT_INT_03	"%03" PRId64
 #define FMT_INT_04	"%04" PRId64
+#define FMT_INT_2	"%2" PRId64
 #define FMT_INT_6	"%6" PRId64
 #define FMT_SIZET	FMT_INT64
 #else
@@ -150,7 +152,9 @@ typedef unsigned char uchar;
 #define FMT_INT_LEN	12		/* sign + 10 digits + NULL */
 #define FMT_INT_HEX	FMT_INT32_HEX
 #define FMT_INT_02	"%02" PRId32
+#define FMT_INT_03	"%03" PRId32
 #define FMT_INT_04	"%04" PRId32
+#define FMT_INT_2	"%2" PRId32
 #define FMT_INT_6	"%6" PRId32
 #define FMT_SIZET	FMT_INT32
 #endif
@@ -288,6 +292,7 @@ typedef const ZSTR ZCSTR;
 #define HINT_VAR_UNUSED    __attribute__ ((unused))
 #define HINT_PARAM_UNUSED  __attribute__ ((unused))
 #define HINT_FUNC_NORETURN __attribute__ ((noreturn))
+#define HINT_PRINTF(fmt, args) __attribute__ ((format (printf, (fmt), (args))))
 #endif
 
 

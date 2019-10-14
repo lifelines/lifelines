@@ -149,18 +149,19 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		INT n=0;
 		/* 0: display local variable(s) */
 		n = (curstab->tab ? get_table_count(curstab->tab) : 0);
-		zs_setf(zstr, _pl("Display local (%d var)",
-			"Display locals (%d vars)", n), n);
+		zs_setf(zstr, _pl("Display local (" FMT_INT" var)",
+				  "Display locals (" FMT_INT " vars)", n), n);
 		zs_appf(zstr, " [%s]", curstab->title);
 		choices[0] = strsave(zs_str(zstr));
 		/* 1: display global variables */
 		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
-		zs_setf(zstr, _pl("Display global (%d var)",
-			"Display globals (%d vars)", n), n);
+		zs_setf(zstr, _pl("Display global (" FMT_INT " var)",
+				  "Display globals (" FMT_INT " vars)", n), n);
 		choices[1] = strsave(zs_str(zstr));
 		/* 2: up call stack */
 		n = nlevels - curlevel - 1;
-		zs_setf(zstr, _pl("Call stack has %d higher level", "Call stack has %d higher levels", n), n);
+		zs_setf(zstr, _pl("Call stack has " FMT_INT " higher level",
+				  "Call stack has " FMT_INT " higher levels", n), n);
 		zs_apps(zstr, ". ");
 		if (n > 0) {
 			zs_apps(zstr, _(" Go up one level"));
@@ -169,7 +170,8 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		choices[2] = strsave(zs_str(zstr));
 		/* 3: down call stack */
 		n = curlevel;
-		zs_setf(zstr, _pl("Call stack has %d lower level", "Call stack has %d lower levels", n), n);
+		zs_setf(zstr, _pl("Call stack has " FMT_INT " lower level",
+				  "Call stack has " FMT_INT " lower levels", n), n);
 		zs_apps(zstr, ". ");
 		if (n > 0) {
 			CNSTRING title = get_symtab_ancestor(stab, n-1)->title;
@@ -548,9 +550,9 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		if (vprog_prevline != lineno) {
 			vprog_prevline = lineno;
 			if (progparsing)
-				zs_appf(zstr, _("Parsing Error at line %d: "), lineno);
+				zs_appf(zstr, _("Parsing Error at line " FMT_INT ": "), lineno);
 			else
-				zs_appf(zstr, _("Runtime Error at line %d: "), lineno);
+				zs_appf(zstr, _("Runtime Error at line " FMT_INT ": "), lineno);
 		}
 	} else {
 		zs_apps(zstr, _("Aborting: "));

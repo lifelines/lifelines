@@ -56,11 +56,11 @@ INT choose_one_from_indiseq (STRING ttl, INDISEQ seq);
 INT choose_one_or_list_from_indiseq(STRING ttl, INDISEQ seq, BOOLEAN multi); /* XXX */
 INT choose_or_view_array(STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable);
 void llvwprintf (STRING fmt, va_list args);
-void llwprintf (char *fmt, ...);
-void msg_error (char *fmt, ...);
-void msg_info (char *fmt, ...);
-void msg_status (char *fmt, ...);
-void msg_output (MSG_LEVEL level, STRING fmt, ...);
+void llwprintf (char *fmt, ...) HINT_PRINTF(1,2);
+void msg_error (char *fmt, ...) HINT_PRINTF(1,2);
+void msg_info (char *fmt, ...) HINT_PRINTF(1,2);
+void msg_status (char *fmt, ...) HINT_PRINTF(1,2);
+void msg_output (MSG_LEVEL level, STRING fmt, ...) HINT_PRINTF(2,3);
 INT msg_width (void);
 INT prompt_stdout (STRING prompt);
 void refresh_stdout (void);

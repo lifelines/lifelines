@@ -60,8 +60,8 @@ it may just print its printf style args to the screen. It
 should return.
 */
 void __fatal(STRING file, int line, CNSTRING details) HINT_FUNC_NORETURN;
-void crashlog(STRING fmt, ...);
-void crashlogn(STRING fmt, ...);
+void crashlog(STRING fmt, ...) HINT_PRINTF(1,2);
+void crashlogn(STRING fmt, ...) HINT_PRINTF(1,2);
 
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);
@@ -175,7 +175,7 @@ INT ll_toupper(INT);
 INT ll_tolower(INT);
 char *llstrncat(char *dest, const char *src, size_t n, int utf8);
 char *llstrncpy(char *dest, const char *src, size_t n, int utf8);
-char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...);
+char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...) HINT_PRINTF(4,5);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 int make8char(int c);
@@ -193,13 +193,13 @@ void strupdate(STRING * str, CNSTRING value);
 /* strapp.c */
 char *llstrapps(char *dest, size_t limit, int utf8, const char *src);
 char *llstrappc(char *dest, size_t limit, char ch);
-char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...);
+char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...) HINT_PRINTF(4,5);
 char *llstrappvf(char *dest, int limit, int utf8, const char *fmt, va_list args);
 
 /* strset.c */
 char *llstrsets(char *dest, size_t limit, int utf8, const char *src);
 char *llstrsetc(char *dest, size_t limit, char ch);
-char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...);
+char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...) HINT_PRINTF(4,5);
 char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list args);
 
 /* strcvt.c */

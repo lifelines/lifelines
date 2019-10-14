@@ -953,8 +953,8 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 	if (found) {
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			llwprintf(_("Error: file \"%s\": line %d: "), pactx->ifile, pactx->lineno);
-			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
+			llwprintf(_("Error: file \"%s\": line " FMT_INT ": "), pactx->ifile, pactx->lineno);
+			llwprintf("%s: must have " FMT_INT " to " FMT_INT " parameters (found with " FMT_INT ").\n"
 				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
 				, n);
 			Perrors++;
@@ -1290,7 +1290,7 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 	switch (itype(node)) {
 
 	case IICONS:
-		zs_appf(zstr, "%d", pvalue_to_int(node->vars.iicons.value));
+		zs_appf(zstr, FMT_INT, pvalue_to_int(node->vars.iicons.value));
 		break;
 	case IFCONS:
 		zs_appf(zstr, "%f", pvalue_to_float(node->vars.ifcons.value));
@@ -1335,7 +1335,7 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 		zs_apps(zstr, "*PDefn *");
 		break;
 	case IPCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;
@@ -1343,12 +1343,12 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 		zs_apps(zstr, "*FDefn *");
 		break;
 	case IFCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;
 	case IBCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;

@@ -498,7 +498,7 @@ llrpt_bytecode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	zstr = decode(str, &offset);
 	if (offset >= 0) {
 		prog_var_error(node, stab, argvar, val
-			, _("Bad escape code at offset %d in bytecode string <%s>")
+			, _("Bad escape code at offset " FMT_INT " in bytecode string <%s>")
 			, offset+1, str);
 		*eflg = TRUE;
 		goto bytecode_exit;

@@ -854,7 +854,7 @@ show_node_rec (INT levl,
 	if (!node) return;
 	for (i = 1;  i < levl;  i++)
 		llwprintf("  ");
-	llwprintf("%d", levl);
+	llwprintf(FMT_INT, levl);
 	if (nxref(node)) llwprintf(" %s", nxref(node));
 	llwprintf(" %s", ntag(node));
 	if (nval(node)) llwprintf(" %s", nval(node));

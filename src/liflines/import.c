@@ -216,8 +216,8 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	warnings = validate_get_warning_count();
 	if (warnings) {
 		ZSTR zstr=zs_new();
-		zs_setf(zstr, _pl("%d warning during import",
-			"%d warnings during import", warnings), warnings);
+		zs_setf(zstr, _pl(FMT_INT " warning during import",
+			          FMT_INT " warnings during import", warnings), warnings);
 		if (!ask_yes_or_no_msg(zs_str(zstr), _(qSproceed))) {
 			goto end_import;
 		}

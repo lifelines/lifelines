@@ -811,7 +811,7 @@ update_browse_menu (INT screen)
 			dynmenu->cur_x = strlen(_(qSplschs))+3;
 			dynmenu->cur_y = dynmenu->top - 1;
 			llstrapps(prompt, sizeof(prompt), uu8, "             ");
-			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
+			llstrappf(prompt, sizeof(prompt), uu8, _("(pg " FMT_INT "/" FMT_INT ")")
 				, dynmenu->page+1, dynmenu->pages);
 			/* display line across */
 			show_horz_line(uiwin, dynmenu->top-2, 0, width);

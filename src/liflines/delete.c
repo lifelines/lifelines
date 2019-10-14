@@ -82,10 +82,10 @@ choose_and_remove_family (void)
 	/* build confirm string */
 	n = ISize(spseq);
 	llstrsetf(spouses, sizeof(spouses), uu8
-		, _pl("%d spouse", "%d spouses", n), n);
+		, _pl(FMT_INT " spouse", FMT_INT " spouses", n), n);
 	n = ISize(chseq);
 	llstrsetf(children, sizeof(children), uu8
-		, _pl("%d child", "%d children", n), n);
+		, _pl(FMT_INT " child", FMT_INT " children", n), n);
 	llstrsetf(members, sizeof(members), uu8
 		, _(qScffdeld), fam_to_key(fam), spouses, children);
 	llstrapps(confirm, sizeof(confirm), uu8, _(qScffdel));

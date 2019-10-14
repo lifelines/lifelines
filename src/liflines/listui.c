@@ -603,7 +603,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		/* for short lists, we show leading numbers */
 		if (ld->listlen<10) {
 			char numstr[12]="";
-			llstrncpyf(numstr, sizeof(numstr), uu8, "%d: ", i+1);
+			llstrncpyf(numstr, sizeof(numstr), uu8, FMT_INT ": ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvccwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);

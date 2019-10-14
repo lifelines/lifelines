@@ -262,7 +262,7 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 			/* zs_apps(ztemp, "Y"); */
 		}
 		if (ct>1) {
-			zs_appf(ztemp, " (%d alt)", ct-1);
+			zs_appf(ztemp, " (" FMT_INT " alt)", ct-1);
 		}
 		/* append current info to accumulated info */
 		if (zs_len(zstr)>0) {
@@ -421,9 +421,9 @@ add_child_line (INT num, RECORD irec, INT width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(nztop(irec), NULL, width-15);
 	if (number_child_enable)
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "  %2d%s: %s", num, child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "    %s: %s", child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  "           "%s: %s",      child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
