@@ -936,7 +936,7 @@ void
 show_pvalue (PVALUE val)
 {
 	ZSTR zstr = describe_pvalue(val);
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 	zs_free(&zstr);
 }
 /*=================================================
@@ -1013,7 +1013,7 @@ describe_pvalue (PVALUE val)
 		{
 			RECORD rec = pvalue_to_record(val);
 			if (rec)
-				zs_appf(zstr, nzkey(rec));
+				zs_appf(zstr, "%s", nzkey(rec));
 			else
 				zs_appf(zstr, "NULL");
 		}

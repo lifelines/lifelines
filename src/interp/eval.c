@@ -195,7 +195,7 @@ evaluate_cond (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return FALSE;
 	}
 #ifdef DEBUG
-	llwprintf("interp_if: cond = ");
+	llwprintf("%s", "interp_if: cond = ");
 	show_pvalue(val);
 	wprintf("\n");
 #endif
@@ -271,7 +271,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	case INTRETURN:
 	case INTOKAY:
 #ifdef DEBUG
-	llwprintf("Successful ufunc call -- val returned was ");
+	llwprintf("%s", "Successful ufunc call -- val returned was ");
 	show_pvalue(val);
 	llwprintf("\n");
 #endif

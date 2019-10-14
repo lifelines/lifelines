@@ -107,7 +107,7 @@ show_database_stats (void)
 	snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg)
 		, _(qSdbrecstats), num_indis(), num_fams()
 		, num_sours(), num_evens(), num_othrs());
-	msg_info(msg);
+	msg_info("%s", msg);
 }
 /*======================================
  * sighand_cursesui -- Catch and handle signal (UI)

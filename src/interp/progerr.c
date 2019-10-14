@@ -126,7 +126,7 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		describe_pnode(arg, zstr, max);
 		zs_apps(zstr, ")");
 	}
-	prog_error(node, zs_str(zstr));
+	prog_error(node, "%s", zs_str(zstr));
 	zs_free(&zstr);
 
 	if (dbg_mode != -99 && dbg_mode != 3) {
@@ -367,7 +367,7 @@ disp_pvalue (PVALUE val)
 				if (nval(node)) {
 					llstrapps(str, len, uu8, nval(node));
 				}
-				msg_info(str);
+				msg_info("%s", str);
 			}
 			return;
 		case PINDI:
@@ -380,7 +380,7 @@ disp_pvalue (PVALUE val)
 				NODE node = nztop(rec);
 				size_t len = 128;
 				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
-				msg_info(txt);
+				msg_info("%s", txt);
 			}
 			return;
 		case PLIST:
@@ -414,7 +414,7 @@ disp_list (LIST list)
 	struct dbgsymtab_s sdata;
 	INT nels = length_list(list);
 	if (!nels) {
-		msg_info(_("list is empty"));
+		msg_info("%s", _("list is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -447,7 +447,7 @@ disp_table (TABLE tab)
 	struct dbgsymtab_s sdata;
 	INT nels = get_table_count(tab);
 	if (!nels) {
-		msg_info(_("table is empty"));
+		msg_info("%s", _("table is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -481,7 +481,7 @@ disp_seq (INDISEQ seq)
 	INT nels = length_indiseq(seq);
 	INT i=0;
 	if (!nels) {
-		msg_info(_("sequence is empty"));
+		msg_info("%s", _("sequence is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -559,7 +559,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 	}
 	zs_appvf(zstr, fmt, args);
 	llwprintf("\n");
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 	++progerror;
 	/* if user specified a report error log (in config file) */
 	if (rptfile && rptfile[0]) {

@@ -134,7 +134,7 @@ refn_scan (STRING sts)
 		if (scanner_set_pattern(&scanner, request))
 			break;
 	}
-	msg_status(sts);
+	msg_status("%s", sts);
 	traverse_refns(rs_callback, &scanner);
 
 	return scanner_free_and_return_seq(&scanner);
@@ -183,7 +183,7 @@ do_name_scan (SCANNER * scanner, STRING prompt)
 		if (scanner_set_pattern(scanner, request))
 			break;
 	}
-	msg_status((STRING)scanner->statusmsg);
+	msg_status("%s", (STRING)scanner->statusmsg);
 	traverse_names(ns_callback, scanner);
 }
 /*==============================
@@ -206,7 +206,7 @@ do_sources_scan (SCANNER * scanner, CNSTRING prompt)
 			break;
 	}
 	/* msg_status takes STRING arg, should take CNSTRING - const declaration error */
-	msg_status((STRING)scanner->statusmsg);
+	msg_status("%s", (STRING)scanner->statusmsg);
 
 	while (1) {
 		RECORD rec = 0;

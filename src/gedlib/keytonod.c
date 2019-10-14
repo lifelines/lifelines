@@ -696,7 +696,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 				zs_apps(zstr, keybuf[j]);
 			}
 		}
-		crashlogn(zs_str(zstr));
+		crashlogn("%s", zs_str(zstr));
 		zs_free(&zstr);
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}

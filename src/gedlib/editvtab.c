@@ -67,14 +67,14 @@ edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*va
 	unlink(editfile);
 
 	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
-		msg_error(_(qSdataerr));
+		msg_error("%s", _(qSdataerr));
 		return FALSE;
 	}
 	if (!edit_valtab_impl(ptab, sep, ermsg, validator, param))
 		return FALSE;
 
 	if (readonly) {
-		msg_error(_(qSronly));
+		msg_error("%s", _(qSronly));
 		return FALSE;
 	}
 	store_text_file_to_db(key, editfile, trans_edin);

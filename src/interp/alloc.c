@@ -1243,7 +1243,7 @@ show_pnodes (PNODE node)
 	while (node) {
 		debug_show_one_pnode(node);
 		node = inext(node);
-		if (node) llwprintf(",");
+		if (node) llwprintf("%c", ',');
 	}
 }
 /*==========================================================
@@ -1269,7 +1269,7 @@ debug_show_one_pnode (PNODE node)     /* node to print */
 	ZSTR zstr = zs_newn(512);
 	INT max = 512;
 	describe_pnode(node, zstr, max);
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 }
 /*====================================================
  * debug_show_one_pnode -- DEBUG routine to describe one node

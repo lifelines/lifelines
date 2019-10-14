@@ -33,7 +33,7 @@ void msg_output(MSG_LEVEL, STRING fmt, ...) HINT_PRINTF(2,3);
 void msg_outputv(MSG_LEVEL, STRING fmt, va_list args);
 	/* legacy */
 	/* message () is a macro -- does not localize */
-#define message(str) msg_error(str)
+void message(STRING fmt, ...) HINT_PRINTF(1,2);
 	/* report to stdout style output (uses embedded carriage returns */
 void llwprintf(STRING fmt, ...) HINT_PRINTF(1,2);
 void llvwprintf(STRING fmt, va_list args);

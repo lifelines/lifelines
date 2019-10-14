@@ -168,7 +168,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 	} else {
 		llstrcatn(&ptr, msg, &mylen);
 	}
-	msg_output(level, buf);
+	msg_output(level, "%s", buf);
 }
 /*=============================================+
  * new_pathinfo -- Return new, filled-out pathinfo object
@@ -301,7 +301,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		STRING str;
 		FORLIST(outstanding_parse_errors, el)
 			str = (STRING)el;
-			prog_error(NULL, str);
+			prog_error(NULL, "%s", str);
 			++Perrors;
 		ENDLIST
 		destroy_list(outstanding_parse_errors);

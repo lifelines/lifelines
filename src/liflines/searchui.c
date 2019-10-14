@@ -205,7 +205,7 @@ invoke_fullscan_menu (void)
 		}
 		deactivate_uiwin_and_touch_all();
 		if (!done)
-			msg_status(_(qSsts_sca_non));
+			msg_status("%s", _(qSsts_sca_non));
 	}
 	return seq;
 }
@@ -275,7 +275,7 @@ invoke_search_source_menu (void)
 
 		deactivate_uiwin_and_touch_all();
 		if (!done)
-			msg_status(_(qSsts_sca_non));
+			msg_status("%s", _(qSsts_sca_non));
 	}
 	return seq;
 }

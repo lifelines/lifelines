@@ -302,15 +302,15 @@ prompt_for_db:
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(_(qSnorwandro));
+		llwprintf("%s", _(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(_(qSnofandl));
+		llwprintf("%s", _(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(qSbdlkar));
+		llwprintf("%s", _(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -337,7 +337,7 @@ prompt_for_db:
 		}
 		if (!select_database(dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
-				llwprintf(errmsg);
+				llwprintf("%s", errmsg);
 			}
 			alldone = 0;
 			goto finish;
@@ -346,7 +346,7 @@ prompt_for_db:
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
-		llwprintf(_(qSbaddb));
+		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
 	/* does not use show module */

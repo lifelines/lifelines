@@ -160,7 +160,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	}
 
 	if (!scan_header(fp, metadatatab, &zerr)) {
-		msg_error(zs_str(zerr));
+		msg_error("%s", zs_str(zerr));
 		goto end_import;
 	}
 
@@ -316,7 +316,7 @@ TODO: why were these here ?
 		node = next_fp_to_node(fp, FALSE, ttm, &msg, &emp);
 	}
 	if (msg) {
-		msg_error(msg);
+		msg_error("%s", msg);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
 		if (ifeed && ifeed->adding_unused_keys_fnc)

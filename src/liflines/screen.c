@@ -733,7 +733,7 @@ main_menu (void)
 		{
 			RECORD rec = 0;
 			if (readonly) {
-				msg_error(_(qSronlya));
+				msg_error("%s", _(qSronlya));
 				break;
 			}
 			rec = invoke_add_menu();
@@ -744,7 +744,7 @@ main_menu (void)
 	case 'd':
 		{
 			if (readonly) {
-				msg_error(_(qSronlyr));
+				msg_error("%s", _(qSronlyr));
 				break;
 			}
 			invoke_del_menu();
@@ -1742,7 +1742,7 @@ load_tt_action (void)
 	STRING ttimportdir;
 
 	if (readonly) {
-		msg_error(_(qSronlye));
+		msg_error("%s", _(qSronlye));
 		return;
 	}
 
@@ -1750,7 +1750,7 @@ load_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 
@@ -1761,7 +1761,7 @@ load_tt_action (void)
 		fclose(fp);
 		/* Load it */
 		if (!load_new_tt(fname, ttnum))
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 	}
 	strfree(&fname);
 }
@@ -1781,11 +1781,11 @@ save_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 	if (!transl_get_legacy_tt(ttnum)) {
-		msg_error(_(qSnosuchtt));
+		msg_error("%s", _(qSnosuchtt));
 		return;
 	}
 	/* Ask whither to save it */
@@ -1795,7 +1795,7 @@ save_tt_action (void)
 		fclose(fp);
 		/* Save it */
 		if (!save_tt_to_file(ttnum, fname)) {
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 			strfree(&fname);
 			return;
 		}
@@ -2066,7 +2066,7 @@ place_std_msg (void)
 void
 rpt_print (STRING str)
 {
-	llwprintf(str);
+	llwprintf("%s", str);
 }
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
@@ -2475,6 +2475,19 @@ display_status (STRING text)
 	mvccwaddstr(win, row, 2, status_showing);
 	place_cursor_main();
 	wrefresh(win);
+}
+/*=========================================
+ * message -- handle generic message
+ * delegates to msg_outputv
+ * TODO: replace with msg_error/info/status
+ *=======================================*/
+void
+message (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_outputv(MSG_ERROR, fmt, args); 
+	va_end(args);
 }
 /*=========================================
  * msg_error -- handle error message

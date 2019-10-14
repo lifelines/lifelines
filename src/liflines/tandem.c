@@ -258,7 +258,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 					return BROWSE_TAND;
 				}
 			}
-			message(_(qStwohsb));
+			message("%s", _(qStwohsb));
 			break;
 		case CMD_BOTH_MOTHERS:	/* browse to wives/moths */
 			if ((tmp = choose_mother(NULL, current1, _(qSnowife),
@@ -270,7 +270,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 					return BROWSE_TAND;
 				}
 			}
-			message(_(qStwowif));
+			message("%s", _(qStwowif));
 			break;
 		case CMD_MERGE_BOTTOM_TO_TOP:	/* merge two fams */
 			if ((tmp = merge_two_fams(nztop(current2), nztop(current1))) != 0) {
