@@ -1223,6 +1223,7 @@ void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
                 break;
             case 20:
                 strncpy(msg,"CSI Reset Normal Linefeed",sizeof(msg));
+		break;
             default:
                 snprintf(msg,sizeof(msg),"Reset Mode, Oops %d invalid",buf[0]);
             }
@@ -2222,6 +2223,7 @@ void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
                 break;
             case 3:
                 strncpy(msg,"CSI Select Locator Events: don't report button up transitions",sizeof(msg));
+		break;
             default:
                 strncpy(msg,"CSI Select Locator Events: Invalid argument",sizeof(msg));
             }
