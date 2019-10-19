@@ -283,7 +283,7 @@ prompt_for_db:
 	else
 	{
 		stdstring_hardfail();
-		//yydebug = 1;
+		/* yydebug = 1; */
 	}
 
 	platform_init();

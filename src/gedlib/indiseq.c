@@ -1401,7 +1401,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
 			{
 				INT temp = atoi(indi_to_key(spouse) + 1);
 				if (temp && temp != mykeynum)
-					spkeynum = temp;  //TODO is this right? this loop doesn't do anything
+					spkeynum = temp;  /* TODO: is this right? this loop doesn't do anything */
 			}
 			ENDFAMSPOUSES
 #endif

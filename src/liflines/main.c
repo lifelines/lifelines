@@ -49,7 +49,7 @@
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
 
-// for parser debugging
+/* for parser debugging */
 extern int yydebug;
 
 #ifdef HAVE_GETOPT
@@ -316,7 +316,7 @@ prompt_for_db:
 	else
 	{
 		stdstring_hardfail();
-		//yydebug = 1;
+		/* yydebug = 1; */
 	}
 
 	set_displaykeys(keyflag);
