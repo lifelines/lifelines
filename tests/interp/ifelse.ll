@@ -32,5 +32,4 @@ proc main() {
   call elsifchain2(1)
   call elsifchain2(0)
   call elsifchain2(-1)
-
 }

@@ -53,6 +53,7 @@ crtindex (BTREE btree)
 	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1) {
 		char scratch[200];
 		snprintf(scratch, sizeof(scratch), "Error updating keyfile for new index");
+		fclose(bkfp(btree));
 		FATAL2(scratch);
 	}
 	writeindex(btree, index);
@@ -99,6 +100,7 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 			goto readindex_end;
 		}
 		snprintf(scratch, sizeof(scratch), "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
+		fclose(fi);
 		FATAL2(scratch);
 	}
 readindex_end:
@@ -122,9 +124,10 @@ writeindex (BTREE btr, INDEX index)
 	}
 	if (fwrite(index, BUFLEN, 1, fi) != 1) {
 		snprintf(scratch, sizeof(scratch), "Error writing index file: %s", fkey2path(ixself(index)));
+		fclose(fi);
 		FATAL2(scratch);
 	}
-	if (fclose(fi) != 0) FATAL2(scratch);
+	fclose(fi);
 }
 /*==============================================
  * initcache -- Initialize index cache for btree
