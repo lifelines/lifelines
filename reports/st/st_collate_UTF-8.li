@@ -61,6 +61,6 @@ proc testCollate_UTF_8()
 	call finnish_UTF_8()
 	call polish_UTF_8()
 	call spanish_UTF_8()
+	call set_default_locale()
 	call set_section("")
 }
-

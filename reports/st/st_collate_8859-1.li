@@ -46,7 +46,6 @@ proc testCollate_8859_1()
 {
 	call finnish_8859_1()
 	call spanish_8859_1()
+	call set_default_locale()
 	call set_section("")
 }
-
-

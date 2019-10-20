@@ -64,3 +64,7 @@ proc set_section(name)
 	set(section, name)
 }
 
+proc set_default_locale()
+{
+	set_and_check_locale("en_US", "English")
+}
