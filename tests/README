@@ -42,6 +42,6 @@ view-history/view-history
 -- Purpose: avoid core dump when viewing history
 
 interp/ifelse
--- Status: In progress
+-- Status: Complete
 -- Issue: 374
--- Purpose: Ensure that all ifelse works in varb and non-varb forms
+-- Purpose: Ensure that if/else and if/elsif/else works in varb and non-varb forms
