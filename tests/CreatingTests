@@ -52,9 +52,9 @@ d. and of course once you have the test running, copy the testname.*out
 The organization of the tests is a collection of directories that contain 
 tests.  In each directory, there can be 1 or more tests. Each test consists
 of the following:
-   testname.ged           Optional. some tests can be run without ged data
-   testname.ll            A lifelines script that is to be run
-   testname.llscr         required. commands to feed to llines 
+   testname.ged           Optional. Some tests can be run without ged data.
+   testname.ll            Required. A lifelines script that is to be run
+   testname.llscr         Required. Commands to feed to llines 
                           If script runs any .ll files, the output should
                           be written to testname.out, as this is what is 
                           expected and is diff'ed with the reference output.
@@ -67,36 +67,37 @@ of the following:
                           This way the gedcom file can be found when building
                           in separate build areas.  Thus that line would become
                           urTESTNAME.ged
-   testname.out.ref       expected output from running testname.llscr
+   testname.out.ref       Required. Expected output from running testname.llscr.
 
 if the expected output differs for 32 and 64 bit compiled programs, instead
 of the testname.out.ref file, the following two are created
-   testname.out.32.ref    expected output for 32 bits
-   testname.out.32.ref    expected output for 64 bits 
-   lines.src              if the tests in a subdir needs to pass environmental
-                          data to llines, if this file exists, the tests
-                          will read this file.
-   testname.config        optional file contains test configuration data
-      env NAME=Value      set environment variables when running the test
-      pre command args    run command before running llines (not implemented)
-      post command args   run command after running llines
-                          command is the name of a program to run. Typically
-                          it is looked for in the tools or liflines directory
-                          command is just the name, not a path and name
-                          see Royal92 for examples
+   testname.out.32.ref    Optional. Expected output for 32 bits.
+   testname.out.32.ref    Optional. Expected output for 64 bits .
+   lines.src              Optional. If the tests in a subdir needs to pass
+                          environmental data to llines, if this file exists,
+                          the tests will read this file.
+   testname.config        Optional. File that contains test configuration data
+      env NAME=Value      - set environment variables when running the test
+      pre command args    - run command before running llines (not implemented)
+      post command args   - run command after running llines
+                            command is the name of a program to run. Typically
+                            it is looked for in the tools or liflines directory
+                            command is just the name, not a path and name
+                            see Royal92 for examples
+
 In addition to the above mentioned testname.out, testname.out.ref file
 which checks the output from running the .llscr script, there are other
 files to capture output and reference files 
-testname.command.out      stdout from running a post command.
-testname.command.out.ref  reference file (in the source area)
+testname.command.out      Optional. stdout from running a post command.
+testname.command.out.ref  Optional. reference file (in the source area)
 
 There is one more out file. The output of running llines is captured
 So that changes in the gui can be detected.
-testname.llines.out       raw output from test 
-testname.llines.out.filter  Filtered output from the test, which tediously
-                            identifies each control sequence output
+testname.llines.out       Optional. raw output from test 
+testname.llines.out.filter  Optional. Filtered output from the test, which
+                            tediously identifies each control sequence output
                             (assumes TERM is gnome or xterm)
-testname.llines.out.filter.ref  the reference. 
+testname.llines.out.filter.ref  Optiona. The reference filtered output.
                             note one of the strings llines outputs is
                             "Import time 01s (ui 00s)" with appropriate times
                             it is anonomized to "Import time xxs (ui xxs)"

@@ -1,11 +1,15 @@
-/* tests for if/else */
+/*
+@progname ifelse.ll
+@author Matt Emmerton and Jimm Eggert
+@description Test if/else and if/elsif/else
+*/
 
 /* test 1a: single if/else, without varb */
 proc test1a(d) {
   set(r, "default")
   if (gt(d,3)) { set(r, " greater than 3") }
   else         { set(r, " not greater than 3") }
-  print("test1a ", d(d), r, "\n")
+  "test1a " d(d) r nl()
 }
 
 /* test 1b: single if/else, with varb */
@@ -13,7 +17,7 @@ proc test1b(d) {
   set(r, "default")
   if (gt(d,3)) { set(r, " greater than 3") }
   else         { set(r, " not greater than 3") }
-  print("test1b ", d(d), r, "\n")
+  "test1b " d(d) r nl()
 }
 
 /* test2a: multiple if/elsif/else, without varb */
@@ -24,7 +28,7 @@ proc test2a(d) {
   elsif (gt(d, 0)) { set(r, " is greater than 0") }
   elsif (eq(d, 0)) { set(r, " is equal to 0") }
   else                { set(r, " is negative") }
-  print("test2a ", d(d), r, "\n")
+  "test2a " d(d) r nl()
 }
 
 /* test2a: multiple if/elsif/else, with varb */
@@ -35,7 +39,7 @@ proc test2b(d) {
   elsif (m, gt(d, 0)) { set(r, " is greater than 0") }
   elsif (m, eq(d, 0)) { set(r, " is equal to 0") }
   else                { set(r, " is negative") }
-  print("test2b ", d(d), r, "\n")
+  "test2b " d(d) r nl()
 }
 
 proc main() {
