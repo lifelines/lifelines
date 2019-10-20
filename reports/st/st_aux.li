@@ -49,7 +49,7 @@ proc initSubsection()
 	set(testskip, 0)
 }
 
-/* report results of just completed subsectioin (testok...) */
+/* report results of just completed subsection (testok...) */
 proc reportSubsection(title)
 {
 	set(res, concat("Passed ", d(testok), "/", d(add(testok,testfail)), " "))

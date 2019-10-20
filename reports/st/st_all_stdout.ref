@@ -15,7 +15,7 @@ strcmp([udia],z) FAILED
 strcmp([eth],e) FAILED
 spanish_8859-1
 strcmp([Ntilde],O) FAILED
-Passed 31/40 collate tests
+Passed 35/44 collate tests
 Passed 39/39 string tests
 Passed 31/31 list tests
 Passed 9/9 table tests

@@ -42,10 +42,17 @@ proc spanish_8859_1()
 	call check_collate3("A", "N", "Z")
 	call check_collate3("N", "Ñ:[Ntilde]", "O")
 }
+proc english_8859_1()
+{
+	if (not(set_and_check_locale("en_US", "English"))) {
+		return()
+	}
+	call set_section("english_8859-1")
+	call check_collate3("A", "N", "Z")
+}
 proc testCollate_8859_1()
 {
 	call finnish_8859_1()
 	call spanish_8859_1()
-	call set_default_locale()
-	call set_section("")
+	call english_8859_1()
 }
