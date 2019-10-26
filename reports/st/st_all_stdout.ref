@@ -15,26 +15,24 @@ strcmp([udia],z) FAILED
 strcmp([eth],e) FAILED
 spanish_8859-1
 strcmp([Ntilde],O) FAILED
-Passed 31/40 collate tests
-ord(5) FAILED
-Passed 38/39 string tests
-Passed 28/28 list tests
+Passed 35/44 collate tests
+Passed 39/39 string tests
+Passed 31/31 list tests
 Passed 9/9 table tests
 upper(oe) FAILED
 lower(oe) FAILED
 Passed 20/22 string UTF-8 tests
 Passed 27/27 number tests
+Passed 5/5 trig tests
 Passed 10/10 name tests
 Passed 598/598 date tests
 convertcode(bytecode($C5$81,raw),UTF-8,ANSEL) <> bytecode($A1,raw) FAILURE
 convertcode(bytecode($A1,raw),ANSEL,UTF-8) <> bytecode($C5$81,raw) FAILURE
 convertcode(bytecode($C3$A6,raw),UTF-8,ANSEL) <> bytecode($B5,raw) FAILURE
 convertcode(bytecode($B5,raw),ANSEL,UTF-8) <> bytecode($C3$A6,raw) FAILURE
-convertcode(bytecode($C3$9E,raw),UTF-8,ISO-8859-1) <> bytecode($DE,raw) FAILURE
-convertcode(bytecode($DE,raw),ISO-8859-1,UTF-8) <> bytecode($C3$9E,raw) FAILURE
 convertcode(bytecode($C3$9E,raw),UTF-8,ANSEL) <> bytecode($A4,raw) FAILURE
 convertcode(bytecode($A4,raw),ANSEL,UTF-8) <> bytecode($C3$9E,raw) FAILURE
-Passed 28/36 convert tests
+Passed 30/36 convert tests
 What is the name of the output file?
 Default path: .
 enter file name: Program was run successfully.

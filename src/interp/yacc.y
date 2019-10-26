@@ -341,7 +341,7 @@ elsifs	:	elsif {
 		}
 	;
 elsif	:	ELSIF '(' expr secondo ')' '{' tmplts '}' {
-			((PNODE)$3)->vars.iif.ielse = (PNODE)$4;
+			inext(((PNODE)$3)) = (PNODE) $4;
 			$$ = if_node(pactx, (PNODE)$3, (PNODE)$7, (PNODE)NULL);
 		}
 	;

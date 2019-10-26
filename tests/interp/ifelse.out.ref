@@ -1,0 +1,16 @@
+test1a 5 greater than 3
+test1a 2 not greater than 3
+test1b 5 greater than 3
+test1b 2 not greater than 3
+test2a 4 is greater than 3
+test2a 3 is greater than 2
+test2a 2 is greater than 1
+test2a 1 is greater than 0
+test2a 0 is equal to 0
+test2a -1 is negative
+test2a 4 is greater than 3
+test2a 3 is greater than 2
+test2a 2 is greater than 1
+test2a 1 is greater than 0
+test2a 0 is equal to 0
+test2a -1 is negative
