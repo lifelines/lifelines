@@ -151,7 +151,7 @@ open_or_create_database (INT alteration, STRING *dbused)
 
 	if (readonly || immutable || alteration)
 	{
-		llwprintf(_("Cannot create new database with -r, -i, -l, or -f flags."));
+		llwprintf("%s", _("Cannot create new database with -r, -i, -l, or -f flags."));
 		return FALSE;
 	}
 	/*
@@ -196,7 +196,7 @@ show_open_error (INT dberr)
 {
 	char buffer[256];
 	describe_dberror(dberr, buffer, ARRSIZE(buffer));
-	llwprintf(buffer);
+	llwprintf("%s", buffer);
 	llwprintf("\n");
 	sleep(5);
 }

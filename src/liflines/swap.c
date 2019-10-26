@@ -68,7 +68,7 @@ swap_children (RECORD prnt, RECORD frec)
 	INT nfam, nchil;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 
@@ -78,7 +78,7 @@ swap_children (RECORD prnt, RECORD frec)
 	if (!prnt) return FALSE;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
-		message(_(qSntchld));
+		message("%s", _(qSntchld));
 		return FALSE;
 	}
 
@@ -93,7 +93,7 @@ gotfam:
 	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
-		message(_(qSless2c));
+		message("%s", _(qSless2c));
 		return FALSE;
 	}
 
@@ -126,7 +126,7 @@ gotfam:
 
 	if (!confirm_and_swap_children_impl(fam, one, two))
 		return FALSE;
-	message(_(qSokcswp));
+	message("%s", _(qSokcswp));
 	return TRUE;
 }
 /*=============================================
@@ -181,7 +181,7 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 	NODE fam, child;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 
@@ -191,7 +191,7 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 	if (!prnt) return FALSE;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
-		message(_(qSntchld));
+		message("%s", _(qSntchld));
 		return FALSE;
 	}
 
@@ -206,7 +206,7 @@ gotfam:
 	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
-		message(_(qSless2c));
+		message("%s", _(qSless2c));
 		return FALSE;
 	}
 
@@ -216,7 +216,7 @@ gotfam:
 		NODE two = nsibling(one);
 		if (!confirm_and_swap_children_impl(fam, one, two))
 			return FALSE;
-		message(_(qSokcswp));
+		message("%s", _(qSokcswp));
 		return TRUE;
 	}
 
@@ -279,7 +279,7 @@ swap_families (RECORD irec)
 	STRING str;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 
@@ -288,12 +288,12 @@ swap_families (RECORD irec)
 	if (!irec) return FALSE;
 	indi = nztop(irec);
 	if (!(fams = FAMS(indi))) {
-		message(_(qSntprnt));
+		message("%s", _(qSntprnt));
 		return FALSE;
 	}
 	nfam = num_families(indi);
 	if (nfam < 2) {
-		msg_error(_(qSless2f));
+		msg_error("%s", _(qSless2f));
 		return FALSE;
 	}
 
@@ -339,6 +339,6 @@ swap_families (RECORD irec)
 	nchild(one) = nchild(two);
 	nchild(two) = tmp;
 	indi_to_dbase(indi);
-	message(_(qSokfswp));
+	message("%s", _(qSokfswp));
 	return TRUE;
 }

@@ -122,15 +122,15 @@ print_lines_usage (CNSTRING exename)
 	}
 	printf(_("REPORTING BUGS"));
 	printf("\n\t");
-	printf(_(qSgen_bugreport));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n\n");
 	printf(_("COPYRIGHT"));
 	printf("\n\t");
-        printf(_(qSgen_copyright));
+        printf("%s", _(qSgen_copyright));
 	printf("\n\n");
 	printf(_("LICENSE"));
 	printf("\n\t");
-        printf(_(qSgen_license));
+        printf("%s", _(qSgen_license));
 	printf("\n\n");
 	printf(_("SEE ALSO"));
 	printf("\n\tllines(1), llexec(1), dbverify(1), btedit(1)");

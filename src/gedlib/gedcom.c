@@ -109,7 +109,7 @@ indi_to_indi (NODE indi)
 		nchild(indi) = node = name;
 	} else {
 		if (getlloptint("RequireNames", 0)) {
-			llwprintf(_("Missing NAME line in INDI record; record ignored.\n"));
+			llwprintf("%s", _("Missing NAME line in INDI record; record ignored.\n"));
 			return NULL;
 		}
 		nchild(indi) = node = 0;

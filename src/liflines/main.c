@@ -49,7 +49,7 @@
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
 
-// for parser debugging
+/* for parser debugging */
 extern int yydebug;
 
 #ifdef HAVE_GETOPT
@@ -316,7 +316,7 @@ prompt_for_db:
 	else
 	{
 		stdstring_hardfail();
-		//yydebug = 1;
+		/* yydebug = 1; */
 	}
 
 	set_displaykeys(keyflag);
@@ -347,15 +347,15 @@ prompt_for_db:
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(_(qSnorwandro));
+		llwprintf("%s", _(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(_(qSnofandl));
+		llwprintf("%s", _(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(qSbdlkar));
+		llwprintf("%s", _(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -382,7 +382,7 @@ prompt_for_db:
 		}
 		if (!select_database(dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
-				llwprintf(errmsg);
+				llwprintf("%s", errmsg);
 			}
 			alldone = 0;
 			goto finish;
@@ -391,13 +391,13 @@ prompt_for_db:
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
-		llwprintf(_(qSbaddb));
+		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
 	if (!int_codeset[0]) {
-		msg_info(_("Warning: database codeset unspecified"));
+		msg_info("%s", _("Warning: database codeset unspecified"));
 	} else if (!transl_are_all_conversions_ok()) {
-		msg_info(_("Warning: not all conversions available"));
+		msg_info("%s", _("Warning: not all conversions available"));
 	}
 
 	init_show_module();

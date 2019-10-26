@@ -227,6 +227,6 @@ print_usage (void)
 	printf("\n\t\t");
 	printf(_("edit raw btree block for person I34"));
 	printf("\n\n");
-	printf(_(qSgen_bugreport));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n");
 }

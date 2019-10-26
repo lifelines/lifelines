@@ -314,7 +314,7 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	RECORD rec=0;
 
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
@@ -542,7 +542,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if ((tmp = goto_indi_child(current, c-CMD_CHILD_DIRECT0)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnochil));
+				message("%s", _(qSnochil));
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			if ((tmp = choose_child(current, NULL, _(qSnocofp),
@@ -567,13 +567,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if ((tmp = indi_to_prev_sib(current)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnoosib));
+				message("%s", _(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
 			if ((tmp = indi_to_next_sib(current)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnoysib));
+				message("%s", _(qSnoysib));
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((tmp = choose_family(current, _(qSnoprnt),
@@ -690,7 +690,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					tmp = keynum_to_irecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnopers));
+					message("%s", _(qSnopers));
 				}
 			}
 			break;
@@ -701,7 +701,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					tmp = keynum_to_irecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnopers));
+					message("%s", _(qSnopers));
 				}
 			}
 			break;
@@ -868,7 +868,7 @@ reprocess_aux_cmd:
 					tmp = keynum_to_record(ntype, i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnorec));
+					message("%s", _(qSnorec));
 				}
 				break;
 			}
@@ -879,7 +879,7 @@ reprocess_aux_cmd:
 					tmp = keynum_to_record(ntype, i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnorec));
+					message("%s", _(qSnorec));
 				}
 				break;
 			}
@@ -914,12 +914,12 @@ pick_remove_spouse_from_family (RECORD frec)
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (!husb && !wife) {
-		message(_(qShasnei));
+		message("%s", _(qShasnei));
 		return;
 	}
 	i = 0;
@@ -935,7 +935,7 @@ pick_remove_spouse_from_family (RECORD frec)
 			 NULL, 66, &disp_shrt_rfmt, TRUE);
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
-			message(_(qSspover));
+			message("%s", _(qSspover));
 			break;
 		}
 	}
@@ -958,14 +958,14 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	BOOLEAN confirm;
 	char scratch[100];
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
 	join_fam(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
 		if (husb && wife) {
-			message(_(qShasbth));
+			message("%s", _(qShasbth));
 			return;
 		}
 	}
@@ -998,7 +998,7 @@ prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	if (save) {
@@ -1100,7 +1100,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if ((tmp = qkeynum_to_frecord(i)))
 					setrecord(&current, &tmp);
 				else
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 			}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
@@ -1171,7 +1171,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
 			if (readonly) {
-				message(_(qSronlye));
+				message("%s", _(qSronlye));
 				break;
 			}
 			if ((tmp = choose_child(NULL, current, _(qSnocinf),
@@ -1275,7 +1275,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				rtn = BROWSE_INDI;
 				goto exitbrowse;
 			}
-			message(_(qSnochil));
+			message("%s", _(qSnochil));
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
@@ -1283,7 +1283,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if (i && (tmp = qkeynum_to_frecord(i))) {
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 				}
 				break;
 			}
@@ -1294,7 +1294,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 					tmp = keynum_to_frecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 				}
 				break;
 			}
@@ -1461,7 +1461,7 @@ choose_any_source (void)
 	seq = get_all_sour();
 	if (!seq)
 	{
-		message(_(qSnosour));
+		message("%s", _(qSnosour));
 		return 0;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidsour), _(qSidsour));
@@ -1479,7 +1479,7 @@ choose_any_event (void)
 	seq = get_all_even();
 	if (!seq)
 	{
-		message(_(qSnoeven));
+		message("%s", _(qSnoeven));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSideven), _(qSideven));
@@ -1497,7 +1497,7 @@ choose_any_other (void)
 	seq = get_all_othe();
 	if (!seq)
 	{
-		message(_(qSnoothe));
+		message("%s", _(qSnoothe));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidothe), _(qSidothe));
@@ -1573,17 +1573,17 @@ load_nkey_list (STRING key, struct hist * histp)
 	temp = *ptr++;
 	if (temp<1 || temp > 9999) {
 		/* #records failed sanity check */
-		msg_error(_(qSbadhistcnt));
+		msg_error("%s", _(qSbadhistcnt));
 		goto end;
 	}
 	if (temp != *ptr++) {
 		/* 2nd copy of #records failed to match */
-		msg_error(_(qSbadhistcnt2));
+		msg_error("%s", _(qSbadhistcnt2));
 		goto end;
 	}
 	if (len != (temp+1)*8) {
 		/* length should be 8 bytes per record + 8 byte header */
-		msg_error(_(qSbadhistlen));
+		msg_error("%s", _(qSbadhistlen));
 	}
 	count = temp;
 	if (count > histp->size) count = histp->size;
@@ -1810,7 +1810,7 @@ do_disp_history_list (struct hist * histp)
 	RECORD rec=0;
 
 	if (!seq) {
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
@@ -1856,7 +1856,7 @@ ask_clear_history (struct hist * histp)
 	INT count;
 
 	if (!histp->size || histp->start==-1) {
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return;
 	}
 	count = get_hist_count(histp);
@@ -1881,7 +1881,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_BACK) {
@@ -1890,7 +1890,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_FWD) {
@@ -1899,7 +1899,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_FWD) {
@@ -1908,7 +1908,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_LIST) {
@@ -1968,12 +1968,12 @@ add_new_rec_maybe_ref (RECORD current, char ntype)
 	newnode = nztop(newrec);
 	/* sanity check for long tags in others */
 	if (strlen(ntag(newnode))>40) {
-		msg_info(_(qStag2lng2cnc));
+		msg_info("%s", _(qStag2lng2cnc));
 		return newrec;
 	}
 	/* now ask the user how to connect the new node */
 	snprintf(title, sizeof(title), _(qSnewrecis), nxref(newnode));
-	msg_info(title);
+	msg_info("%s", title);
 	/* keep new node # in status so it will be visible during edit */
 	lock_status_msg(TRUE);
 	choices[0] = _(qSautoxref);

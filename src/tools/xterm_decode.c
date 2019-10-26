@@ -171,7 +171,7 @@ void addStrToText(HINT_PARAM_UNUSED char *label, char *text) {
 
 //STring terminator is <ESC> \ or <ESC> 0x9c
 void printtoST(char *label, FILE *fd) {
-    char c;
+    int c;
     while ((c = getc(fd)) != EOF) {
         if (c != ESC) {
             addCharToText(label,c);
@@ -202,7 +202,7 @@ void printtoST(char *label, FILE *fd) {
 //readOSC - 2 nums  terminated by ST or BEL
 // Read operating system command
 void readOSC(char* label, FILE *fd) {
-    char c;
+    int c;
     while ((c = getc(fd)) != EOF) {
         if (c != ESC) {
             addCharToText(label,c);
@@ -235,7 +235,7 @@ void readOSC(char* label, FILE *fd) {
 //processCSI
 void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
     int buf[10];    //collection of parameter values
-    char c;
+    int c;
     char lead = ' ';
     char tail = ' ';
     int cnt = -1;  // next parameter to be filled
@@ -1223,6 +1223,7 @@ void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
                 break;
             case 20:
                 strncpy(msg,"CSI Reset Normal Linefeed",sizeof(msg));
+		break;
             default:
                 snprintf(msg,sizeof(msg),"Reset Mode, Oops %d invalid",buf[0]);
             }
@@ -2222,6 +2223,7 @@ void processCSI(HINT_PARAM_UNUSED char *label, FILE *fd) {
                 break;
             case 3:
                 strncpy(msg,"CSI Select Locator Events: don't report button up transitions",sizeof(msg));
+		break;
             default:
                 strncpy(msg,"CSI Select Locator Events: Invalid argument",sizeof(msg));
             }

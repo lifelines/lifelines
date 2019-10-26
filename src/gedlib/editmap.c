@@ -30,11 +30,11 @@ edit_mapping (INT trnum)
 	BOOLEAN rtn=FALSE;
 	ZSTR zstr=zs_new();
 	if (trnum < 0 || trnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		goto end_edit_mapping;
 	}
 	if (readonly) {
-		msg_error(_(qSronlye));
+		msg_error("%s", _(qSronlye));
 		goto end_edit_mapping;
 	}
 
@@ -42,7 +42,7 @@ edit_mapping (INT trnum)
 
 	if (transl_get_legacy_tt(trnum)) {
 		if (!save_tt_to_file(trnum, editfile)) {
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 			goto end_edit_mapping;
 		}
 	}
@@ -96,7 +96,7 @@ load_new_tt (CNSTRING filepath, INT trnum)
 	CNSTRING mapname = transl_get_map_name(trnum);
 	ZSTR zerr=zs_new();
 	if (!init_map_from_file(filepath, mapname, &tt, zerr)) {
-		llwprintf(zs_str(zerr));
+		llwprintf("%s", zs_str(zerr));
 		zs_free(&zerr);
 		if (tt)
 			remove_trantable(tt);

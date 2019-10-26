@@ -696,7 +696,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 				zs_apps(zstr, keybuf[j]);
 			}
 		}
-		crashlogn(zs_str(zstr));
+		crashlogn("%s", zs_str(zstr));
 		zs_free(&zstr);
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
@@ -941,7 +941,7 @@ get_cache_stats (CACHE ca)
 	INT lo=0;
 	cache_get_lock_counts(ca, &lo);
 	zs_appf(zstr
-		, "d:%d/%d (l:%d)"
+		, "d:" FMT_INT "/" FMT_INT " (l:" FMT_INT ")"
 		, cacsizedir(ca), cacmaxdir(ca), lo
 		);
 	return zstr;
@@ -1069,7 +1069,7 @@ get_free_cacheel (CACHE cache)
 		for (cel = caclastdir(cache); cel && cclock(cel); cel = cprev(cel)) {
 		}
 		if (!cel) {
-			crashlog(_("Cache [%s] overflowed its max size (%d)"), cacname(cache), cacmaxdir(cache));
+			crashlog(_("Cache [%s] overflowed its max size (" FMT_INT ")"), cacname(cache), cacmaxdir(cache));
 			ASSERT(0);
 		}
 		remove_from_cache(cache, ckey(cel));

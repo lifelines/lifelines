@@ -924,7 +924,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	zs_setf(zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
+	zs_setf(zstr, _pl(FMT_INT_6 " Error", FMT_INT_6 " Errors", num_errors), num_errors);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -952,7 +952,7 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 	
 	++num_warns;
-	zs_setf(zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
+	zs_setf(zstr, _pl(FMT_INT_6 " Warning", FMT_INT_6 " Warnings", num_warns), num_warns);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -1075,32 +1075,32 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		lastoff = ftell(fp);
 		curlev = lev;
 		if (linno==500) {
-			*zerr = zs_newf(_("Processed %d lines without finding end of HEAD"), linno);
+			*zerr = zs_newf(_("Processed " FMT_INT " lines without finding end of HEAD"), linno);
 			break;
 		}
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
 		if (rc==DONE) {
-			*zerr = zs_newf(_("End of file at line %d"), linno);
+			*zerr = zs_newf(_("End of file at line " FMT_INT), linno);
 			break;
 		}
 		if (rc==ERROR) {
-			*zerr = zs_newf(_("Error at line %d: %s"), linno, msg);
+			*zerr = zs_newf(_("Error at line " FMT_INT ": %s"), linno, msg);
 			break;
 		}
 		if (lev < 0 || lev > curlev+1) {
-			*zerr = zs_newf(_("Bad level at line %d"), linno);
+			*zerr = zs_newf(_("Bad level at line " FMT_INT), linno);
 			break;
 		}
 		if (lev==0) {
 			if (eqstr(tag, "HEAD")) {
 				if (head) {
-					*zerr = zs_newf(_("Duplicate HEAD line at line %d"), linno);
+					*zerr = zs_newf(_("Duplicate HEAD line at line " FMT_INT), linno);
 					break;
 				} else {
 					head=1;
 				}
 			} else if (!head) {
-				*zerr = zs_newf(_("Missing HEAD line at line %d"), linno);
+				*zerr = zs_newf(_("Missing HEAD line at line " FMT_INT), linno);
 				break;
 			} else {
 				fseek(fp, lastoff, SEEK_SET);

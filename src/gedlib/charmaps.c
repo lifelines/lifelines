@@ -588,7 +588,7 @@ hexvalue (INT c)
 static void
 maperror (CNSTRING errmsg)
 {
-	llwprintf((STRING)errmsg);
+	llwprintf("%s", (STRING)errmsg);
 }
 #ifdef DEBUG
 /*=======================================================
@@ -600,7 +600,7 @@ show_trantable (TRANTABLE tt)
 	INT i;
 	XNODE node;
 	if (tt == NULL) {
-		llwprintf("EMPTY TABLE\n");
+		llwprintf("%s\n", "EMPTY TABLE");
 		return;
 	}
 	for (i = 0; i < 256; i++) {
@@ -619,7 +619,7 @@ show_xnodes (INT indent, XNODE node)
 	INT i;
 	if (!node) return;
 	for (i = 0; i < indent; i++)
-		llwprintf("  ");
+		llwprintf("%s", "  ");
 	show_xnode(node);
 	show_xnodes(indent+1, node->child);
 	show_xnodes(indent,   node->sibling);

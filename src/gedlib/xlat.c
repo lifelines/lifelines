@@ -474,7 +474,7 @@ load_dynttlist_from_dir (STRING dir)
 			UTF-8__HTML (type 2; subcoding)
 		*/
 		if (getlloptint("TTPATH.debug", 0)) {
-			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
+			log_outf("ttpath.dbg", _("ttpath file <%s> typed as " FMT_INT), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);

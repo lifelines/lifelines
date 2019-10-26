@@ -208,7 +208,7 @@ print_usage (void)
 	printf("\n");
 	printf(_("\tlldump %s"), fname);
 	printf("\n\n");
-	printf(_(qSgen_bugreport));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n");
 }
 /*===============================================

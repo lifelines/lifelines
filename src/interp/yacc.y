@@ -79,12 +79,12 @@ void parse_error(PACTX pactx, STRING str);
 
 // Debugging
 %verbose
-%printer { fprintf (yyo, "IDEN", $$); } IDEN;
-%printer { fprintf (yyo, "PROC", $$); } PROC;
-%printer { fprintf (yyo, "FUNC", $$); } FUNC_TOK;
-%printer { fprintf (yyo, "%g",   $$); } FCONS;
-%printer { fprintf (yyo, "%d",   $$); } ICONS;
-%printer { fprintf (yyo, "%s",   $$); } SCONS;
+%printer { fprintf (yyo, "IDEN"); } IDEN;
+%printer { fprintf (yyo, "PROC"); } PROC;
+%printer { fprintf (yyo, "FUNC"); } FUNC_TOK;
+%printer { fprintf (yyo, "%g",    $$->vars.ifcons.value->value.fxd); } FCONS;
+%printer { fprintf (yyo, FMT_INT, $$->vars.iicons.value->value.ixd); } ICONS;
+%printer { fprintf (yyo, "%s",    $$->vars.iscons.value->value.sxd); } SCONS;
 
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */

@@ -22,20 +22,20 @@
 
 /* Ways for engine & code to report to ui */
 	/* report an error */
-void msg_error(STRING fmt, ...);
+void msg_error(STRING fmt, ...) HINT_PRINTF(1,2);
 	/* report a message */
-void msg_info(STRING fmt, ...);
+void msg_info(STRING fmt, ...) HINT_PRINTF(1,2);
 	/* report transitory state that should not be preserved */
-void msg_status(STRING fmt, ...);
+void msg_status(STRING fmt, ...) HINT_PRINTF(1,2);
 	/* more longwinded ways */
 typedef enum { MSG_ERROR=-1, MSG_INFO, MSG_STATUS } MSG_LEVEL;
-void msg_output(MSG_LEVEL, STRING fmt, ...);
+void msg_output(MSG_LEVEL, STRING fmt, ...) HINT_PRINTF(2,3);
 void msg_outputv(MSG_LEVEL, STRING fmt, va_list args);
 	/* legacy */
 	/* message () is a macro -- does not localize */
-#define message(str) msg_error(str)
+void message(STRING fmt, ...) HINT_PRINTF(1,2);
 	/* report to stdout style output (uses embedded carriage returns */
-void llwprintf(STRING fmt, ...);
+void llwprintf(STRING fmt, ...) HINT_PRINTF(1,2);
 void llvwprintf(STRING fmt, va_list args);
 	/* how many characters available for msg_xxx strings (-1 if unlimited) */
 INT msg_width(void);

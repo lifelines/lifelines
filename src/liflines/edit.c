@@ -77,7 +77,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 		BOOLEAN emp;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(indi1, indi2))
-			message(_(qSronlye));
+			message("%s", _(qSronlye));
 		free_nodes(indi2);
 		return FALSE;
 	}
@@ -155,7 +155,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 		irec = ask_for_indi(_(qSidspse), NOASK1);
 		if (!irec) return FALSE;
 		if (!FAMS(nztop(irec))) {
-			message(_(qSntprnt));
+			message("%s", _(qSntprnt));
 			goto end_edit_fam;
 		} 
 		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), TRUE);
@@ -172,7 +172,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 		BOOLEAN emp;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(fam1, fam2))
-			message(_(qSronlye));
+			message("%s", _(qSronlye));
 		goto end_edit_fam;
 	}
 	while (TRUE) {
@@ -223,7 +223,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 	replace_fam(fam1, fam2);
 	fam2 = NULL;
 
-	msg_status(_(qSgdfmod));
+	msg_status("%s", _(qSgdfmod));
 	changed = TRUE;
 
 end_edit_fam:

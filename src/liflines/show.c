@@ -262,7 +262,7 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 			/* zs_apps(ztemp, "Y"); */
 		}
 		if (ct>1) {
-			zs_appf(ztemp, " (%d alt)", ct-1);
+			zs_appf(ztemp, " (" FMT_INT " alt)", ct-1);
 		}
 		/* append current info to accumulated info */
 		if (zs_len(zstr)>0) {
@@ -389,7 +389,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	if(badkeylist[0]) {
 		char buf[132];
 		llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
-		message(buf);
+		message("%s", buf);
 	}
 }
 /*=============================================
@@ -421,9 +421,9 @@ add_child_line (INT num, RECORD irec, INT width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(nztop(irec), NULL, width-15);
 	if (number_child_enable)
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "  %2d%s: %s", num, child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "    %s: %s", child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  "           "%s: %s",      child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -507,8 +507,8 @@ init_display_fam (RECORD frec, INT width)
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "MARC", _(qSdspl_marc), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "ENGA", _(qSdspl_eng), width-3);
-	if (s) llstrncpyf(Smarr, liwidth, uu8, s);
-	else llstrncpyf(Smarr, liwidth, uu8, _(qSdspl_mar));
+	if (s) llstrncpyf(Smarr, liwidth, uu8, "%s", s);
+	else llstrncpyf(Smarr, liwidth, uu8, "%s", _(qSdspl_mar));
 
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
@@ -587,7 +587,7 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		snprintf(buf, sizeof(buf), "WARNING: missing keys: %.40s", badkeylist);
-		message(buf);
+		message("%s", buf);
 	}
 }
 /*================================================
@@ -1022,7 +1022,7 @@ display_cache_stats (void)
 	ZSTR zstr_fam = get_cache_stats_fam();
 	zs_appf(zstr, _("Cached: I:%s; F:%s")
 		, zs_str(zstr_ind), zs_str(zstr_fam));
-	msg_info(zs_str(zstr));
+	msg_info("%s", zs_str(zstr));
 	zs_free(&zstr);
 	zs_free(&zstr_ind);
 	zs_free(&zstr_fam);

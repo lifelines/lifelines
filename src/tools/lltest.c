@@ -205,7 +205,7 @@ print_usage (void)
 	printf("\n");
 	printf(_("\tlltest %s --verbose"), fname);
 	printf("\n\t\t");
-	printf(_(qSgen_bugreport));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n");
 }
 

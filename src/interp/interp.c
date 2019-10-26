@@ -168,7 +168,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 	} else {
 		llstrcatn(&ptr, msg, &mylen);
 	}
-	msg_output(level, buf);
+	msg_output(level, "%s", buf);
 }
 /*=============================================+
  * new_pathinfo -- Return new, filled-out pathinfo object
@@ -301,7 +301,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		STRING str;
 		FORLIST(outstanding_parse_errors, el)
 			str = (STRING)el;
-			prog_error(NULL, str);
+			prog_error(NULL, "%s", str);
 			++Perrors;
 		ENDLIST
 		destroy_list(outstanding_parse_errors);
@@ -333,7 +333,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
 	parm = ipdefn_args(first);
 	if (nargs != num_params(parm)) {
-		msg_error(_("Proc %s must be called with %d (not %d) parameters."),
+		msg_error(_("Proc %s must be called with " FMT_INT " (not " FMT_INT ") parameters."),
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
@@ -593,7 +593,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	while (node) {
 		Pnode = node;
 		if (prog_trace) {
-			trace_out("d%d: ", iline(node)+1);
+			trace_out("d" FMT_INT ": ", iline(node)+1);
 			trace_pnode(node);
 			trace_endl();
 		}
@@ -897,7 +897,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 interp_fail:
 	if (getlloptint("FullReportCallStack", 0) > 0) {
-		llwprintf("e%d: ", iline(node)+1);
+		llwprintf("e" FMT_INT ": ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
@@ -1794,7 +1794,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "``%s'': mismatched args and params\n", (char *)iname(node));
 		irc = INTERROR;
 		goto call_leave;
 	}
@@ -2055,7 +2055,7 @@ void
 parse_error (PACTX pactx, STRING str)
 {
 	/* TO DO - how to pass current pnode ? */
-	prog_error(NULL, "Syntax Error (%s): %s: line %d, char %d\n"
+	prog_error(NULL, "Syntax Error (%s): %s: line " FMT_INT ", char " FMT_INT "\n"
 		, str, pactx->fullpath, pactx->lineno+1, pactx->charpos+1);
 	Perrors++;
 }

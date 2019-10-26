@@ -489,7 +489,7 @@ string_to_node (STRING str)
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				llwprintf("Error: line %d: illegal level",
+				llwprintf("Error: line " FMT_INT ": illegal level",
 				    flineno);
 				goto string_to_node_fail;
 			}
@@ -501,7 +501,7 @@ string_to_node (STRING str)
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			llwprintf("Error: line %d: illegal level", flineno);
+			llwprintf("Error: line " FMT_INT ": illegal level", flineno);
 			goto string_to_node_fail;
 		}
 	}

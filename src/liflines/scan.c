@@ -134,9 +134,8 @@ refn_scan (STRING sts)
 		if (scanner_set_pattern(&scanner, request))
 			break;
 	}
-	msg_status(sts);
+	msg_status("%s", sts);
 	traverse_refns(rs_callback, &scanner);
-	msg_status("");
 
 	return scanner_free_and_return_seq(&scanner);
 }
@@ -184,9 +183,8 @@ do_name_scan (SCANNER * scanner, STRING prompt)
 		if (scanner_set_pattern(scanner, request))
 			break;
 	}
-	msg_status((STRING)scanner->statusmsg);
+	msg_status("%s", (STRING)scanner->statusmsg);
 	traverse_names(ns_callback, scanner);
-	msg_status("");
 }
 /*==============================
  * do_sources_scan -- traverse sources looking for pattern matching
@@ -208,7 +206,7 @@ do_sources_scan (SCANNER * scanner, CNSTRING prompt)
 			break;
 	}
 	/* msg_status takes STRING arg, should take CNSTRING - const declaration error */
-	msg_status((STRING)scanner->statusmsg);
+	msg_status("%s", (STRING)scanner->statusmsg);
 
 	while (1) {
 		RECORD rec = 0;
@@ -218,7 +216,6 @@ do_sources_scan (SCANNER * scanner, CNSTRING prompt)
 		rec = keynum_to_srecord(keynum);
 		do_fields_scan(scanner, rec);
 	}
-	msg_status("");
 }
 /*==============================
  * do_fields_scan -- traverse top nodes looking for desired field value
