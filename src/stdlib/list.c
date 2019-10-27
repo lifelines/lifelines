@@ -596,16 +596,10 @@ delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 	node = nth_in_list_from_tail(list, index1b, createels, 0);
 	if (!node) return FALSE;
 	if (llocks(node)) return FALSE;
-	if (llen(list) == 1) {
-		/* removing last element of list */
-		llen(list) = 0;
-		lhead(list) = ltail(list) = 0;
-		if (func)
-			(*func)(lelement(node));
-		stdfree(node);
-		return TRUE;
-	}
 	detach_node_from_list(list, node);
+	if (func)
+		(*func)(lelement(node));
+	stdfree(node);
 	return TRUE;
 }
 #endif
@@ -658,9 +652,11 @@ find_delete_list_elements (LIST list, VPTR param,
 			if (ltype(list) == LISTDOFREE) {
 				free_list_element(lelement(lnode));
 			}
+			stdfree(lnode);
 			if (!deleteall)
 				return count;
 		}
+		stdfree(lnode);
 		lnode = lnext;
 	}
 	return count;

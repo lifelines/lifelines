@@ -69,33 +69,34 @@ static void show_open_error(INT dberr);
  *  perrmsg - [OUT]  translated error message
  *================================================*/
 BOOLEAN
-select_database (STRING dbrequested, INT alteration, STRING * perrmsg)
+select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 {
 	STRING dbdir = getlloptstr("LLDATABASES", ".");
-	STRING dbused = 0;
+	STRING dbused = NULL;
+	ASSERT(dbrequested);
 
 	/* Get Database Name (Prompt or Command-Line) */
-	if (!dbrequested || !dbrequested[0]) {
+	if (!*dbrequested) {
 		char dbname[MAXPATHLEN];
 		/* ask_for_db_filename returns static buffer, we save it below */
 		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
 			|| !dbname[0]) {
-			dbrequested = NULL;
+			dbrequested = NULL;	// leak!
 			*perrmsg = _(qSiddbse);
 			return FALSE;
 		}
-		dbrequested = strsave(dbname);
-		if (eqstr(dbrequested, "?")) {
+		*dbrequested = strsave(dbname);
+		if (eqstr(*dbrequested, "?")) {
 			INT n=0;
 			LIST dblist=0, dbdesclist=0;
-			strfree(&dbrequested);
+			strfree(dbrequested);
 			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
 				INT i;
 				i = choose_from_list(
 					_("Choose database to open")
 					, dbdesclist);
 				if (i >= 0) {
-					dbrequested = strsave(get_list_element(dblist, i+1, NULL));
+					*dbrequested = strsave(get_list_element(dblist, i+1, NULL));
 				}
 				release_dblist(dblist);
 				release_dblist(dbdesclist);
@@ -103,7 +104,7 @@ select_database (STRING dbrequested, INT alteration, STRING * perrmsg)
 				*perrmsg = _("No databases found in database path");
 				return FALSE;
 			}
-			if (!dbrequested) {
+			if (!*dbrequested) {
 				*perrmsg = _(qSiddbse);
 				return FALSE;
 			}
@@ -112,14 +113,16 @@ select_database (STRING dbrequested, INT alteration, STRING * perrmsg)
 
 	/* search for database */
 	/* search for file in lifelines path */
-	dbused = filepath(dbrequested, "r", dbdir, NULL, uu8);
+	dbused = filepath(*dbrequested, "r", dbdir, NULL, uu8);
 	/* filepath returns alloc'd string */
-	if (!dbused) dbused = strsave(dbrequested);
+	if (!dbused) dbused = strsave(*dbrequested);
 
 	if (!open_or_create_database(alteration, &dbused)) {
+		strfree(&dbused);
 		return FALSE;
 	}
 
+	strfree(&dbused);
 	return TRUE;
 }
 /*==================================================

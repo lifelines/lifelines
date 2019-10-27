@@ -377,10 +377,8 @@ prompt_for_db:
 		STRING errmsg=0;
 		if (!alldone && c>0) {
 			dbrequested = strsave(argv[optind]);
-		} else {
-			strupdate(&dbrequested, "");
 		}
-		if (!select_database(dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
 				llwprintf("%s", errmsg);
 			}
