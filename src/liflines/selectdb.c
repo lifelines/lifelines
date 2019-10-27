@@ -81,7 +81,6 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 		/* ask_for_db_filename returns static buffer, we save it below */
 		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
 			|| !dbname[0]) {
-			dbrequested = NULL;	// leak!
 			*perrmsg = _(qSiddbse);
 			return FALSE;
 		}
