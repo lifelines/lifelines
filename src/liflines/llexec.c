@@ -335,7 +335,7 @@ prompt_for_db:
 		} else {
 			strupdate(&dbrequested, "");
 		}
-		if (!select_database(dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
 				llwprintf("%s", errmsg);
 			}
