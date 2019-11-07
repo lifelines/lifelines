@@ -140,6 +140,7 @@ open_or_create_database (INT alteration, STRING *dbused)
 {
 	INT lldberrnum=0;
 	char dbdir[MAXPATHLEN] = "";
+        char newmsg[MAXPATHLEN+100] = "";
 
 	/* Open Database */
 	if (open_database(alteration, *dbused, &lldberrnum))
@@ -181,7 +182,8 @@ open_or_create_database (INT alteration, STRING *dbused)
 	strupdate(dbused, dbdir);
 
 	/* Is user willing to make a new db ? */
-	if (!ask_yes_or_no_msg(_(qSnodbse), _(qScrdbse))) 
+        snprintf(newmsg,sizeof(newmsg),"%s '%s' ?",qScrdbse,*dbused);
+	if (!ask_yes_or_no_msg(_(qSnodbse), newmsg))
 		return FALSE;
 
 	/* try to make a new db */
