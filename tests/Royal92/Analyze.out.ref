@@ -1,0 +1,58 @@
+This test tries running various script constructs to check for
+basic functionality.
+In the process it generates some interesting statistics about the data
+
+Running INDI related constructs 
+   fathers, mothers, Parents, families function: nspouses
+Running FAM related constructs 
+   forfam, spouses, children, function: nchildren 
+Misc. iterators
+   firstfam, nextfam, prevfam, lastfam 
+   forsour, foreven, forothr
+   firstindi, nextindi, previndi, lastindi 
+first indi is I1
+last indi is I3010
+traverse found 17 nodes decendents of I3
+fornodes found 9 nodes decendents of I3
+
+Summary
+3010 individuals
+1422 families
+0 sources
+0 events
+1 Other
+992 Indi's with no Parents
+312 fam's with different number of fathers and mothers
+Histogram of number of families for each individual
+1 -> 2069
+2 -> 203
+3 -> 104
+4 -> 4
+5 -> 86
+6 -> 544
+Histogram of number of spouses for each family
+1 -> 284
+2 -> 1138
+Histogram of number of spouses for each individual
+1 -> 1798
+2 -> 198
+3 -> 103
+4 -> 4
+5 -> 90
+6 -> 817
+Histogram of number of children in each family
+1 -> 584
+2 -> 150
+3 -> 89
+4 -> 50
+5 -> 40
+6 -> 16
+7 -> 11
+8 -> 15
+9 -> 8
+10 -> 20
+11 -> 2
+12 -> 2
+13 -> 1
+14 -> 0
+15 -> 434

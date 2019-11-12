@@ -18,6 +18,12 @@
 #             NOCAPTUREOUT=1 skips this check
 #             the output is highly dependent on curses which seems to tweek
 #             things frequently in ways that don't represent failures.
+# TESTMEMCHECK If defined, run the test under valgrind, so
+#             cd tests; rm math/test1.log; TESTMEMCHECK=1 make math/test1.log
+#             will execute the test under valgrind, i.e.
+#             valgrind --log-file $testname.valgrind --num-callers=16 llines
+#             with valgrind output goint to testname.valgrind
+#
 # srcdir -    relative path to the src area 'tests' directory
 #
 # variables local to this script
@@ -25,8 +31,9 @@
 # addtoenv   array of name=value pairs to add to environment
 # precmds    array of names of pre commands to run
 # preargs    array of rest of the pre command lines of these commands
-# postcmds    array of names of post commands to run
-# postargs    array of rest of the post command lines of these commands
+# postcmds   array of names of post commands to run
+# postargs   array of rest of the post command lines of these commands
+# postskip   flag if non-zero exit with code 77 for test infrastructure
 #
 # testsrcdir  relative path to src directory of this test, from the test dir
 # scriptname  testname.llscr (no path, name of the test to execute.
@@ -104,12 +111,17 @@ function run_a_command {
     # note: use of import filter should be an option, but for now there is
     #     only one use of filter so punt until it's needed
     import_filter="sed -r -e 's/(Import time )([0-9]*)(s \(ui )([[:digit:]]+)/\1xx\3xx/'"
+    import_filter="$import_filter -e 's/(Report duration )([0-9]*)(s \(ui duration )([[:digit:]]+)/\1xx\3xx/'"
     [[ -n $VERBOSE ]] && echo "run_a_cmd $cmd $cmdin $cmdout $cmdout2 $filter"
     
 
     # remember cmdout since if we filter it name is differnt
     defout=$cmdout
     # build up the command name to execute
+
+    if [[ -n $TESTMEMCHECK ]] ; then
+        cmd="valgrind --log-file=$testname-%p.valgrind --num-callers=16 --leak-check=yes $cmd"
+    fi
     cmdstr=$cmd
     if [[ -n $cmdin ]] ; then
         cmdstr="$cmdstr < $cmdin"
@@ -243,6 +255,9 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
             postcmds+=($name)
             postargs+=("$rest")
             ;;
+        skip)
+            postskip=77
+            ;;
         \#*)
             #echo "skipping comment $key $name $rest"
             ;;
@@ -353,5 +368,8 @@ if [[ ${#postcmds[@]} > 0 ]] ; then
             ret=$ret1
         fi
     done
+fi
+if [[ -n $postskip ]] ; then
+    exit 77
 fi
 exit $ret

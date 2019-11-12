@@ -152,14 +152,12 @@ defn 	:	proc
 proc	:	PROC IDEN '(' idenso ')' '{' tmplts '}' {
 			/* consumes $2 */
 			pa_handle_proc(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
-			free_iden($2);
 		}
 
 	;
 func	:	FUNC_TOK IDEN '(' idenso ')' '{' tmplts '}' {
 			/* consumes $2 */
 			pa_handle_func(pactx, (STRING) $2, (PNODE) $4, (PNODE) $7);
-			free_iden($2);
 		}
 	;
 idenso	:	/* empty */ {
@@ -172,13 +170,11 @@ idenso	:	/* empty */ {
 idens	:	IDEN {
 			/* consumes $1 */
 			$$ = create_iden_node(pactx, (STRING)$1);
-			free_iden($1);
 		}
 	|	IDEN ',' idens {
 			/* consumes $1 */
 			$$ = create_iden_node(pactx, (STRING)$1);
 			inext(((PNODE)$$)) = (PNODE) $3;
-			free_iden($1);
 		}
 	;
 tmplts	:	tmplt {
@@ -194,16 +190,12 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 and $8 */
 			$$ = children_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = familyspouses_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
 		}
 	|	SPOUSES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
@@ -219,35 +211,24 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 and $8 and $10 */
 			$$ = families_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
-			free_iden($10);
 		}
 	|	FATHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = fathers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
-			free_iden($10);
 		}
 	|	MOTHERS m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 and $10 */
 			$$ = mothers_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
-			free_iden($10);
 		}
 	|	PARENTS m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $6 and $8 */
 			$$ = parents_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
 		}
 	|	FORINDISET m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
@@ -263,16 +244,12 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 and $8 */
 			$$ = forlist_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
 		}
 	|	FORINDI m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forindi_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($4);
-			free_iden($6);
 		}
 	|	FORNOTES m '(' expr ',' IDEN ')' '{' tmplts '}'
 		{
@@ -286,45 +263,34 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $4 and $6 */
 			$$ = forfam_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($4);
-			free_iden($6);
 		}
 	|	FORSOUR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forsour_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($4);
-			free_iden($6);
 		}
 	|	FOREVEN m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = foreven_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($4);
-			free_iden($6);
 		}
 	|	FOROTHR m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
 			/* consumes $4 and $6 */
 			$$ = forothr_node(pactx, (STRING)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($4);
-			free_iden($6);
 		}
 	|	TRAVERSE m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}' {
 			/* consumes $6 and $8 */
 			$$ = traverse_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
 		}
 	|	FORNODES m '(' expr ',' IDEN ')' '{' tmplts '}' {
 			/* consumes $6 */
 			$$ = fornodes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
 		}
 	|	IF m '(' expr secondo ')' '{' tmplts '}' elsifso elseo {
 			inext(((PNODE)$4)) = (PNODE)$5;
@@ -351,7 +317,6 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $2 */
 			$$ = create_call_node(pactx, (STRING)$2, (PNODE)$5);
 			((PNODE)$$)->i_line = (INTPTR)$3;
-			free_iden($2);
 		}
 	|	BREAK m '(' ')' {
 			$$ = break_node(pactx);
@@ -399,13 +364,11 @@ elseo	:	/* empty */ {
 expr	:	IDEN {
 			/* consumes $1 */
 			$$ = create_iden_node(pactx, (STRING)$1);
-			free_iden($1);
 		}
 	|	IDEN m '(' exprso ')' {
 			/* consumes $1 */
 			$$ = func_node(pactx, (STRING)$1, (PNODE)$4);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($1);
 		}
 	|	SCONS {
 			$$ = $1;

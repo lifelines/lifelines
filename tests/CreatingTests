@@ -10,21 +10,41 @@ top level build directory or preferably in the tests subdirectory, run
    make check 
 running 'make clean' in the tests directory will remove the generated files
 in the test subdirectories so that make check will re-run the tests.
+
+To run a single test, say Royal92/Royal92 the test harness considers
+a the file testname.log as the 'target' so remove it if it exists.
+   rm Royal92/Royal92.log
+   make Royal92/Royal92.log
+
 If you want to debug the running of a test, the following command
 will add lots of debug info in the test's directory testname.log file
    VERBOSE=1 make check
 or
    VERBOSE=1 make clean check
-If your not intereste in debugging the gui with the detailed character
+
+If your not interested in debugging the gui with the detailed character
 output from running a test with llines/llexec you can run the tests with
    NOCAPTUREOUT=1 make clean check
+
+To check for memory errors when running a test, if you have valgrind
+installed, do something like (say for the test Royal92/Royal92
+   rm Royal92/Royal92.log
+   TESTMEMCHECK=1  make Royal92/Royal92.log
+But beware, that 2 second test run when run under valgrind will be more
+like 20 seconds. The valgrind log would be in Royal92/Royal92-<pid>.valgrind.
+Also, you can pass in valgrind options using the VALGRIND_OPTS environment
+variable - but run_a_test envokes valgrind with the following options:
+   valgrind --log-file=$testname-%p.valgrind --num-callers=16 --leak-check=yes 
+You can use valgrind to do memory checks for all the tests if in the tests
+directory you run the tests with the command
+   TESTMEMCHECK=1  make clean check
 
 The automake test structure is used to run the tests.
 When done a file is created in the tests directory named test-suite.log.
 It will summarize the results of running all the tests.  Passing tests
 are just counted, failing tests include the contents of testname.log file.
 testname.log files in the individual test sub directories, have more 
-details about each part of the tests run, and which parts pass and which fail.
+details about each part of the tests run, and which parts pass and fail.
 
 2. Adding a new test:
 The intent is to isolate testing from the users normal environment, so 
@@ -42,7 +62,7 @@ c. generate files described below. first a testname.llscr file to drive llines,
    a testname.ged if you need data for llines to manipulate, a testname.ll if
    you need to run a report (You probably do, as it's needed to generate a 
    .out file.)
-d. and of course once you have the test running, copy the testname.*out
+d. and of course once you have the test running, copy the testname.out
    files to testname.out.ref to save the reference results, so the test
    can generate a PASS. (or to testname.32.out.ref and testname.64.out.ref
    if the files are different for 32 and 64 bit llines.  (Repeat for 
@@ -84,6 +104,8 @@ of the testname.out.ref file, the following two are created
                             it is looked for in the tools or liflines directory
                             command is just the name, not a path and name
                             see Royal92 for examples
+      skip                - Run test but exit with 77 telling test code
+                            to skip this test.
 
 In addition to the above mentioned testname.out, testname.out.ref file
 which checks the output from running the .llscr script, there are other
@@ -91,16 +113,25 @@ files to capture output and reference files
 testname.command.out      Optional. stdout from running a post command.
 testname.command.out.ref  Optional. reference file (in the source area)
 
-There is one more out file. The output of running llines is captured
-So that changes in the gui can be detected.
-testname.llines.out       Optional. raw output from test 
-testname.llines.out.filter  Optional. Filtered output from the test, which
+The output of running llines is captured so that changes in the gui 
+can be detected.
+testname.llines.out       Generated. raw output from test 
+testname.llines.out.filter  Generated. Filtered output from the test, which
                           tediously identifies each control sequence output
                           (assumes TERM is gnome or xterm)
 testname.llines.out.filter.ref  Required. The reference filtered output.
                           note one of the strings llines outputs is
                           "Import time 01s (ui 00s)" with appropriate times
                           it is anonomized to "Import time xxs (ui xxs)"
+testname-<pid>.valgrind   Generated - if test is run under valgrind.
+
+If the testname.config file includes running some post commands, i.e.
+a postcmd is named dbverify, lldump, lltest or llexec, then 
+The following .out is generated and the corresponding .ref must be added to
+the source test area.
+testname.postcmd.out     Generated if needed for post commands
+testname.postcmd.out.ref Required if needed for post commands
+
 
 
    The following files are generated by the test environment in the
@@ -118,15 +149,18 @@ testname.llines.out.filter.ref  Required. The reference filtered output.
    testdb                 the name of the data base created for the test
    
 each test is run, by doing essentially
-   LLPROGRAMS=<path to src directory where this test resides>
+   LLPROGRAMS=<path to source directory where this test resides>
     sed -e s@TESTNAME@<path to src area>/testname@ < testname.llscr \
         > testname.llscr.fix 
-    llines -C <path_to_test_src_dir>/lines.src  testdb < testname.llscr.fix > testname.llout 
+    llines -C <path_to_test_src_dir>/lines.src  testdb < testname.llscr.fix > testname.llines.out
 The -C <path_to_test_src_dir>/lines.src prevents llines configuration files 
 from creating non-standard environments.  Typically there is no lines.src
 in the source directory for the test, so there is no .linesrc or lines.src 
 file read. But if you need to say add some lang settings for a test,
 you can create a lines.src file in the source of the test directory.
+The testname.llines.out file is then filtered to remove run times and
+program version information, and convert the terminal escape sequences
+into a ascii description and written to testname.llines.out.filter
 
 The TESTNAME magic is not needed for reading the testname.ll file, as
 LLPROGRAMS is set to default the location where llines looks for .ll files

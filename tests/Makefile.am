@@ -20,6 +20,7 @@ TESTS   =               date/checkjd2date.llscr         \
 			string/string-unicode.llscr     \
 			view-history/view-history.llscr \
 			Royal92/Royal92.llscr           \
+			Royal92/Analyze.llscr           \
 			Royal92/check_lltest.llscr 
 # make runs run_a_test file.llscr to generate file.log
 TEST_EXTENSIONS = .llscr
@@ -27,4 +28,4 @@ LLSCR_LOG_COMPILER = $(srcdir)/run_a_test
 
 clean-local:
 	-rm -f */*.llout */*.out */*.diff */*.fix
-	-rm -rf */testdb */*.filter
+	-rm -rf */testdb */*.filter */*.valgrind
