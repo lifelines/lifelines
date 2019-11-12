@@ -44,8 +44,8 @@ STRING empstr71 = SS "                                                          
 ZST qSiddbse      = N_("You must identify a database.");
 ZST qSidldir      = N_("What directory holds (or will hold) the LifeLines database? (? to list)");
 ZST qSidldrp      = N_("enter path: ");
-ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
-ZST qScrdbse      = N_("Do you want to create a database there?");
+ZST qSnodbse      = N_("No LifeLines database found.");
+ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */

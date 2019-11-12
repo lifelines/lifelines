@@ -62,7 +62,6 @@ extern int yydebug;
  * external variables (no header)
  *********************************************/
 
-extern STRING qScrdbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb;
@@ -377,6 +376,8 @@ prompt_for_db:
 		STRING errmsg=0;
 		if (!alldone && c>0) {
 			dbrequested = strsave(argv[optind]);
+		} else {
+			strupdate(&dbrequested, "");
 		}
 		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
