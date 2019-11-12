@@ -182,7 +182,7 @@ open_or_create_database (INT alteration, STRING *dbused)
 	strupdate(dbused, dbdir);
 
 	/* Is user willing to make a new db ? */
-        snprintf(newmsg,sizeof(newmsg),"%s '%s' ?",qScrdbse,*dbused);
+        snprintf(newmsg,sizeof(newmsg),qScrdbse,*dbused);
 	if (!ask_yes_or_no_msg(_(qSnodbse), newmsg))
 		return FALSE;
 
