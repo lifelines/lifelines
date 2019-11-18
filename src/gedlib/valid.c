@@ -232,12 +232,14 @@ valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadsr0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
 	if (orig)
 	{
-		/* validation unimplemented */
 		*pmsg = _(qSbadsr0);
 		return FALSE;
 	}
+#endif
 	return TRUE;
 }
 /*======================================
@@ -258,12 +260,14 @@ valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadev0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
 	if (orig)
 	{
-		/* validation unimplemented */
 		*pmsg = _(qSbadev0);
 		return FALSE;
 	}
+#endif
 	return TRUE;
 }
 /*======================================
@@ -285,12 +289,14 @@ valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadothr0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
 	if (orig)
 	{
-		/* validation unimplemented */
 		*pmsg = _(qSbadothr0);
 		return FALSE;
 	}
+#endif
 	return TRUE;
 }
 /*=========================================
