@@ -5,6 +5,7 @@
 # January 2003 
 
 use strict;
+use POSIX qw(strftime);
 
 my $debug = 0;		#non-zero to enable debug output
 my $viewoutput = 0;	#non-zero to enable printing output information
@@ -93,7 +94,7 @@ have text identifying the person who generated the report.
 EOF
 }
 sub print_trailer {
-    my $today = `date "+%d %b %Y"`;
+    my $today = strftime("%Y-%m-%d", gmtime($ENV{SOURCE_DATE_EPOCH} || time));
     print OUT  <<EOF
 </DL>
 <center>
