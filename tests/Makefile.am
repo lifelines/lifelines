@@ -18,6 +18,10 @@ TESTS   =               date/checkjd2date.llscr         \
 			math/test2.llscr                \
 			pedigree-longname/test1.llscr   \
 			string/string-unicode.llscr     \
+			string/mc_llexec.llscr          \
+			string/mc_llexec1.llscr         \
+			string/mc_llines.llscr          \
+			string/mc_llines1.llscr         \
 			view-history/view-history.llscr \
 			Royal92/Royal92.llscr           \
 			Royal92/Analyze.llscr           \

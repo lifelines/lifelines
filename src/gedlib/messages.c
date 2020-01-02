@@ -442,7 +442,7 @@ ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
 
 /* list menu */
 
-ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit");
+ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, q Quit");
 ZST qSvwlistx     = N_("Commands:   u Page Up, d Page Down, q Quit");
 ZST qSerrlist     = N_("Messages:");
 

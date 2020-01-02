@@ -315,18 +315,21 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 {
-	/* TODO: The q ought to be localized */
 	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	STRING responses = selectable ? "0123456789udq" : "udq";
-	INT i=0;
 
-	ttl = ttl;	/* NOTUSED */
-
+	INT start=1;
 	while (1) {
+                INT end = start+(start == 1 ? 8 : 9);
+                if (end > no) {
+                        end = no;
+                }
 		INT j;
 		INT rv;
-		for (j=i; j<i+10 && j<no; ++j) {
-			printf(FMT_INT ": %s\n", j-i, pstrngs[j]);
+                printf("%s (" FMT_INT "/" FMT_INT ")\n", _(ttl),start,no);
+
+		for (j=start; j<=end; ++j) {
+			printf(FMT_INT ": %s\n", j%10, pstrngs[j-1]);
 		}
 		printf("%s\n", promptline);
 		rv = interact(responses);
@@ -341,19 +344,33 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 		case '7':
 		case '8':
 		case '9':
-			rv = i+rv-'0';
-			if (selectable && rv < no) {
+			rv = rv-'1' + (start/10)*10;
+			if (selectable && rv < no ) {
 				return rv;
 			}
 			break;
 		case 'd':
-			if (i+10 < no)
-				i += 10;
+                        // if end == no don't slide window down
+                        if (end != no) {
+                                if (start == 1) {
+                                        start += 9;
+                                } else {
+                                        start += 10;
+                                }
+                                if (start > no) {
+                                         start = no;
+                                }
+                        }
 			break;
 		case 'u':
-			if (i>9)
-				i -= 10;
+			if (start >9)  {
+                                start -= 10;
+                        }
+                        if (start < 1) {
+                                start = 1;
+                        }
 			break;
+                case 0: /* trap EOF and treat like a q */
 		case 'q': return -1;
 		}
 	}
@@ -413,6 +430,6 @@ interact (CNSTRING ptrn)
 			if (buffer[0]==*t)
 				return buffer[0];
 		}
-		printf("Invalid option: choose one of %s\n", ptrn);
+		printf("Invalid option(%c): choose one of %s\n",buffer[0], ptrn);
 	}
 }
