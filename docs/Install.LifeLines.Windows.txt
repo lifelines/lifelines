@@ -1,12 +1,13 @@
 LifeLines Genealogy Software installation for Windows
   Last Edited: 2003-03-05 by Perry Rapp
   Updated:     2005-10-20 by Larry Hamilton
+  Updated:     2020-01-04 by Larry Hamilton
 
 1) Extract the lifelines zip, eg, to c:\ which should result in all
 the lifelines programs & files appearing under c:\lifelines. If you
 do not have a program such as WinZip to work with zip files, a good
 free Open Source alternative is 7-Zip http://www.7-zip.org/.
-NOTE: Windows XP has the built-in capability to extract zip files,
+NOTE: MS-Windows has the built-in capability to extract zip files,
 but cannot create them.
 
 2) If your root lifelines directory is not c:\lifelines, edit
