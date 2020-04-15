@@ -656,7 +656,6 @@ find_delete_list_elements (LIST list, VPTR param,
 			if (!deleteall)
 				return count;
 		}
-		stdfree(lnode);
 		lnode = lnext;
 	}
 	return count;
