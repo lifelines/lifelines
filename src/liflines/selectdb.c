@@ -74,9 +74,10 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 	STRING dbdir = getlloptstr("LLDATABASES", ".");
 	STRING dbused = NULL;
 	ASSERT(dbrequested);
+	ASSERT(*dbrequested);
 
 	/* Get Database Name (Prompt or Command-Line) */
-	if (!*dbrequested) {
+	if ((*dbrequested)[0] == '\0') {
 		char dbname[MAXPATHLEN];
 		/* ask_for_db_filename returns static buffer, we save it below */
 		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
