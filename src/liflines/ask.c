@@ -449,7 +449,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
-	listbadkeys=1;
+	listbadkeys = 1;
 	/* which typed value indiseq is this ? */
 	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
 	{

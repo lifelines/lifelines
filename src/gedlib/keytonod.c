@@ -44,9 +44,7 @@
  *********************************************/
 
 char badkeylist[100] = "";
-int listbadkeys = 0;
-
-
+INT listbadkeys = 0;
 
 /*===============================
  * CACHEEL -- Cache element type.
