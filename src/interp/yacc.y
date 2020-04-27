@@ -202,9 +202,6 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 and $8 and $10 */
 			$$ = spouses_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
-			free_iden($10);
 		}
 	|	FAMILIES m '(' expr ',' IDEN ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
@@ -235,9 +232,6 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 and $8 and $10 */
 			$$ = forindiset_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (STRING)$10, (PNODE)$13);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
-			free_iden($8);
-			free_iden($10);
 		}
 	|	FORLIST_TOK m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
@@ -256,7 +250,6 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			/* consumes $6 */
 			$$ = fornotes_node(pactx, (PNODE)$4, (STRING)$6, (PNODE)$9);
 			((PNODE)$$)->i_line = (INTPTR)$2;
-			free_iden($6);
 		}
 	|	FORFAM m '(' IDEN ',' IDEN ')' '{' tmplts '}'
 		{
