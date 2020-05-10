@@ -1,0 +1,182 @@
+Results for: Eugene Louis Reimer
+             Iris Anne Reimer
+
+1/4: sibling:
+                    Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/4: sibling:
+                    Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/256: 3rd cousin:
+                    Abraham F. Reimer
+Peter R. Reimer                         Margaretha R. Reimer
+Klaas P. L. Reimer                      Peter R. Penner
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/256: 3rd cousin:
+                    Elisabeth Rempel
+Peter R. Reimer                         Margaretha R. Reimer
+Klaas P. L. Reimer                      Peter R. Penner
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/256: 3rd cousin:
+                    Abraham F. Reimer
+Margaretha R. Reimer                    Peter R. Reimer
+Peter R. Penner                         Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/256: 3rd cousin:
+                    Elisabeth Rempel
+Margaretha R. Reimer                    Peter R. Reimer
+Peter R. Penner                         Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/512: 3rd cousin once removed:
+                    Abraham F. Reimer
+Abraham R. Reimer                       Margaretha R. Reimer
+Abraham P. Reimer                       Peter R. Penner
+Anna B. Reimer                          Betty L. Penner
+Peter K. Reimer                         Iris Anne Reimer
+Eugene Louis Reimer                     
+
+1/512: 3rd cousin once removed:
+                    Elisabeth Rempel
+Abraham R. Reimer                       Margaretha R. Reimer
+Abraham P. Reimer                       Peter R. Penner
+Anna B. Reimer                          Betty L. Penner
+Peter K. Reimer                         Iris Anne Reimer
+Eugene Louis Reimer                     
+
+1/512: 3rd cousin once removed:
+                    Abraham F. Reimer
+Margaretha R. Reimer                    Abraham R. Reimer
+Peter R. Penner                         Abraham P. Reimer
+Betty L. Penner                         Anna B. Reimer
+Eugene Louis Reimer                     Peter K. Reimer
+                                        Iris Anne Reimer
+
+1/512: 3rd cousin once removed:
+                    Elisabeth Rempel
+Margaretha R. Reimer                    Abraham R. Reimer
+Peter R. Penner                         Abraham P. Reimer
+Betty L. Penner                         Anna B. Reimer
+Eugene Louis Reimer                     Peter K. Reimer
+                                        Iris Anne Reimer
+
+1/1024: 4th cousin:
+                    Isaak Loewen
+Sarah W. Loewen                         Isaac W. Loewen
+Maria L. Plett                          Peter W. Loewen
+Klaas P. L. Reimer                      Anna K. Loewen
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/1024: 4th cousin:
+                    Margaretha Wiens
+Sarah W. Loewen                         Isaac W. Loewen
+Maria L. Plett                          Peter W. Loewen
+Klaas P. L. Reimer                      Anna K. Loewen
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/1024: 4th cousin:
+                    Isaak Loewen
+Isaac W. Loewen                         Sarah W. Loewen
+Peter W. Loewen                         Maria L. Plett
+Anna K. Loewen                          Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/1024: 4th cousin:
+                    Margaretha Wiens
+Isaac W. Loewen                         Sarah W. Loewen
+Peter W. Loewen                         Maria L. Plett
+Anna K. Loewen                          Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/4096: 5th cousin:
+                    Elisabeth Fast
+Peter Bernhard Rempel                   Abraham Bernhard Rempel
+Elisabeth Rempel                        Katharina Rempel
+Peter R. Reimer                         Abraham R. Penner
+Klaas P. L. Reimer                      Peter R. Penner
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/4096: 5th cousin:
+                    Bernhard Rempel
+Peter Bernhard Rempel                   Abraham Bernhard Rempel
+Elisabeth Rempel                        Katharina Rempel
+Peter R. Reimer                         Abraham R. Penner
+Klaas P. L. Reimer                      Peter R. Penner
+Peter K. Reimer                         Betty L. Penner
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/4096: 5th cousin:
+                    Elisabeth Fast
+Abraham Bernhard Rempel                 Peter Bernhard Rempel
+Katharina Rempel                        Elisabeth Rempel
+Abraham R. Penner                       Peter R. Reimer
+Peter R. Penner                         Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/4096: 5th cousin:
+                    Bernhard Rempel
+Abraham Bernhard Rempel                 Peter Bernhard Rempel
+Katharina Rempel                        Elisabeth Rempel
+Abraham R. Penner                       Peter R. Reimer
+Peter R. Penner                         Klaas P. L. Reimer
+Betty L. Penner                         Peter K. Reimer
+Eugene Louis Reimer                     Iris Anne Reimer
+
+1/8192: 5th cousin once removed:
+                    Elisabeth Fast
+Peter Bernhard Rempel                   Abraham Bernhard Rempel
+Elisabeth Rempel                        Katharina Rempel
+Abraham R. Reimer                       Abraham R. Penner
+Abraham P. Reimer                       Peter R. Penner
+Anna B. Reimer                          Betty L. Penner
+Peter K. Reimer                         Iris Anne Reimer
+Eugene Louis Reimer                     
+
+1/8192: 5th cousin once removed:
+                    Bernhard Rempel
+Peter Bernhard Rempel                   Abraham Bernhard Rempel
+Elisabeth Rempel                        Katharina Rempel
+Abraham R. Reimer                       Abraham R. Penner
+Abraham P. Reimer                       Peter R. Penner
+Anna B. Reimer                          Betty L. Penner
+Peter K. Reimer                         Iris Anne Reimer
+Eugene Louis Reimer                     
+
+1/8192: 5th cousin once removed:
+                    Elisabeth Fast
+Abraham Bernhard Rempel                 Peter Bernhard Rempel
+Katharina Rempel                        Elisabeth Rempel
+Abraham R. Penner                       Abraham R. Reimer
+Peter R. Penner                         Abraham P. Reimer
+Betty L. Penner                         Anna B. Reimer
+Eugene Louis Reimer                     Peter K. Reimer
+                                        Iris Anne Reimer
+
+1/8192: 5th cousin once removed:
+                    Bernhard Rempel
+Abraham Bernhard Rempel                 Peter Bernhard Rempel
+Katharina Rempel                        Elisabeth Rempel
+Abraham R. Penner                       Abraham R. Reimer
+Peter R. Penner                         Abraham P. Reimer
+Betty L. Penner                         Anna B. Reimer
+Eugene Louis Reimer                     Peter K. Reimer
+                                        Iris Anne Reimer
+
+============
+Relatedness: 1083/2048 = 0.528809  (22 different paths)
+
