@@ -38,7 +38,7 @@ CLASS="subtitle"
 ><TT
 CLASS="application"
 >LifeLines</TT
-> Version 3.0.39</H2
+> Version 3.0.61</H2
 ><H3
 CLASS="author"
 ><A
@@ -63,13 +63,28 @@ HREF="#AEN12"
 ><DT
 ><A
 HREF="#AEN14"
->INTRODUCTION</A
+>Introduction</A
+></DT
+><DT
+><A
+HREF="#AEN28"
+>Tutorial Ahnentafel report</A
+></DT
+><DT
+><A
+HREF="#AEN141"
+>Template for creating new reports</A
+></DT
+><DT
+><A
+HREF="#AEN145"
+>Invoking Reports</A
 ></DT
 ></DL
 ></DD
 ><DT
 ><A
-HREF="#AEN136"
+HREF="#AEN155"
 ><TT
 CLASS="application"
 >LIFELINES</TT
@@ -79,122 +94,137 @@ CLASS="application"
 ><DL
 ><DT
 ><A
-HREF="#AEN145"
+HREF="#AEN164"
 >Procedures and Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN199"
+HREF="#AEN218"
 >Comments</A
 ></DT
 ><DT
 ><A
-HREF="#AEN207"
+HREF="#AEN229"
 >Statements</A
 ></DT
 ><DT
 ><A
-HREF="#AEN318"
+HREF="#AEN336"
 >Expressions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN334"
+HREF="#AEN352"
 >Include Feature</A
 ></DT
 ><DT
 ><A
-HREF="#AEN350"
+HREF="#AEN368"
 >Built-in Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN359"
+HREF="#AEN377"
 >Value Types</A
 ></DT
 ><DT
 ><A
-HREF="#AEN456"
+HREF="#AEN474"
+>Iterators</A
+></DT
+><DT
+><A
+HREF="#AEN505"
 >Arithmetic and Logic Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN709"
+HREF="#AEN760"
+>Trigonometric and Spherical Calculations</A
+></DT
+><DT
+><A
+HREF="#AEN867"
 >Person Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1188"
+HREF="#AEN1353"
 >Family Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1390"
+HREF="#AEN1567"
 >Other types of records</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1424"
+HREF="#AEN1601"
 >List Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1652"
+HREF="#AEN1829"
 >Table Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1695"
+HREF="#AEN1893"
 >GEDCOM Node Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN1835"
+HREF="#AEN2033"
 >Event and Date Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2276"
+HREF="#AEN2498"
+>Date Arithmetic</A
+></DT
+><DT
+><A
+HREF="#AEN2527"
 >Value Extraction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2374"
+HREF="#AEN2625"
 >User Interaction Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2514"
+HREF="#AEN2765"
 >String Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN2823"
+HREF="#AEN3074"
 >Output Mode Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3014"
+HREF="#AEN3265"
 >Person Set Functions and GEDCOM Extraction</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3289"
+HREF="#AEN3540"
 >Record Update Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3359"
+HREF="#AEN3610"
 >Record Linking Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3398"
+HREF="#AEN3637"
 >Miscellaneous Functions</A
 ></DT
 ><DT
 ><A
-HREF="#AEN3573"
+HREF="#AEN3813"
 >Deprecated Functions</A
 ></DT
 ></DL
@@ -208,9 +238,7 @@ CLASS="chapter"
 NAME="AEN12"
 ></A
 >
-
 Report Programming Manual
-
 </H1
 ><DIV
 CLASS="sect1"
@@ -219,7 +247,7 @@ CLASS="sect1"
 ><A
 NAME="AEN14"
 ></A
->INTRODUCTION</H2
+>Introduction</H2
 ><P
 >&#13;
      The <TT
@@ -278,24 +306,34 @@ CLASS="application"
      the program.
 
 </P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN28"
+></A
+>Tutorial Ahnentafel report</H2
 ><P
 >&#13;
      For example, say you want <TT
 CLASS="application"
 >LifeLines</TT
 >
-     to generate an ahnentafel. Such a report might look
-     like:
+     to generate an ahnentafel (ancestor) report for Tom Wetmore.
+	 Such a report would show Tom Wetmore, his parents, grandparents,
+	 great-grandparents, and so on. It would like like the following:
 
 <DIV
 CLASS="example"
 ><A
-NAME="AEN30"
+NAME="AEN32"
 ></A
 ><P
 ><B
 >Example 1. 
-Example of ahnentafel report   
+Example of ahnentafel report
 </B
 ></P
 ><P
@@ -339,7 +377,7 @@ CLASS="application"
 <DIV
 CLASS="example"
 ><A
-NAME="AEN35"
+NAME="AEN37"
 ></A
 ><P
 ><B
@@ -356,18 +394,36 @@ WIDTH="100%"
 ><PRE
 CLASS="programlisting"
 >&#13;
+/*
+ * @progname        ahnentafel_tutorial.ll
+ * @version         1.0
+ * @author          Wetmore
+ * @category        sample
+ * @output          text
+ * @description
+ *
+ * Generate an ahnentafel chart for the selected person (tutorial sample).
+ */
+
 proc main ()
   {
     getindi(indi)
     list(ilist)
     list(alist)
-    enqueue(ilist, indi)
-    enqueue(alist, 1)
+    enqueue(ilist, indi)  /* list of people needing to be displayed */
+    enqueue(alist, 1)     /* ancestor numbers for people on ilist */
+	
+	/*
+	Our basic loop is we take the next person who needs to be displayed,
+	display them, and then record their parents as needing to be displayed.
+	*/
     while (indi, dequeue(ilist)) {
+	  /* display person we just pulled off list */
       set(ahnen, dequeue(alist))
       d(ahnen) ". " name(indi) nl()
       if (e, birth(indi)) { " b. " long(e) nl() }
       if (e, death(indi)) { " d. " long(e) nl() }
+	  /* add person's parents to list to display */
       if (par, father(indi)) {
         enqueue(ilist, par)
         enqueue(alist, mul(2,ahnen))
@@ -377,7 +433,9 @@ proc main ()
         enqueue(alist, add(1,mul(2,ahnen)))
       }
     }
-  }</PRE
+  }
+
+</PRE
 ></TD
 ></TR
 ></TABLE
@@ -390,7 +448,7 @@ proc main ()
      Say this program is in the file
      <TT
 CLASS="filename"
->ahnen</TT
+>ahnentafel_tutorial</TT
 >. When you choose the
      <B
 CLASS="keycap"
@@ -426,7 +484,7 @@ CLASS="userinput"
 ><B
 ><TT
 CLASS="literal"
->ahnen</TT
+>ahnentafel_tutorial</TT
 ></B
 ></TT
 >. Since the
@@ -529,6 +587,19 @@ CLASS="type"
 
 </P
 ><P
+>&#13;     In the example program, there are some comments at the top,
+     to tell the reader a bit about the program. The comments run
+     from <TT
+CLASS="literal"
+>/*</TT
+> to <TT
+CLASS="literal"
+>*/</TT
+>, and are
+     not necessary (but are suggested).
+
+</P
+><P
 >&#13;
      A <SPAN
 CLASS="type"
@@ -537,7 +608,7 @@ CLASS="type"
      <SPAN
 CLASS="type"
 >statements</SPAN
->. In the example program the first five
+>. In the example program, the first five
      <SPAN
 CLASS="type"
 >statements</SPAN
@@ -936,12 +1007,102 @@ CLASS="function"
 
 </P
 ></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN141"
+></A
+>Template for creating new reports</H2
+><P
+>&#13;The following is a good template to use when creating a new report from scratch.
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/*
+ * @progname reportname
+ * @version Version Number.
+ * @author report author and possible email address
+ * @category ????
+ * @output Format of Report Output
+ * @description The following paragraph is used to populate index.html.
+ *
+ * This report .... (Note, the text in the 1st paragraph following the @keyword
+ * lines is used as a description in the automatically generated index.html 
+ * file. The text following the @description is not used for this purpose.)
+ * The description lines can be written with or without the *'s on the left
+ * they will be removed when generating index.html.
+ * 
+ * Additional descriptive text
+*/
+
+proc main()
+{
+
+}
+</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN145"
+></A
+>Invoking Reports</H2
+><P
+>&#13;As mentioned earlier, reports may be invoked interactively from the main
+menu via the <B
+CLASS="keycap"
+>r</B
+> option from the main menu. 
+</P
+><P
+>&#13;Alternatively, llines may be called with the -x option to have it
+immediately run a report. For example, to have lifelines run the
+example ahnentafel report above, on a database named wetmore, 
+this command
+<B
+CLASS="command"
+>llines -x ahnentafel_tutorial wetmore</B
+>
+would be used.
+</P
+><P
+>&#13;For more efficient operation from scripts, the lifelines
+distribution includes a smaller program
+<B
+CLASS="command"
+>llexec</B
+>
+which includes all functionality of lifelines except the
+curses GUI. <B
+CLASS="command"
+>llexec</B
+> is made specifically,
+therefore, for invocations such as
+<B
+CLASS="command"
+>llexec -x ahnentafel_tutorial wetmore</B
+>
+</P
+></DIV
 ></DIV
 ><DIV
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN136"
+NAME="AEN155"
 ></A
 >
 
@@ -980,7 +1141,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN145"
+NAME="AEN164"
 ></A
 >Procedures and Functions</H2
 ><P
@@ -1183,7 +1344,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN199"
+NAME="AEN218"
 ></A
 >Comments</H2
 ><P
@@ -1208,6 +1369,43 @@ CLASS="programlisting"
 
 </P
 ><P
+>&#13;These comments may be inserted anywhere in the program file.
+</P
+><P
+>&#13;You should put in some report header comments, because they will provide useful text for your report
+when it is included in the report list seen by the user who uses the lifelines pick report menu
+function. Report header comments are some specific comments at the top of the report, with keywords
+preceded by @ signs. The following is an illustration of report header comments, with explanations
+inside them:
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;/*
+* @progname The name of the report without the
+extension. This shows in the pick report option.
+* @version Version Number of the report. This
+is stored here and not in the report name.
+* @author Name of the author of this report
+and email address if he/she desires.
+* @category ????
+* @output Modifies Database | text | HTML |
+GEDCOM | RTF | XML | PostScript | etc.
+* @description The first paragraph after this is
+used to generate the description in the index.html.
+
+This report ....
+*/
+</PRE
+></TD
+></TR
+></TABLE
+><P
 >&#13;
 Comments begin with a <TT
 CLASS="literal"
@@ -1225,7 +1423,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN207"
+NAME="AEN229"
 ></A
 >Statements</H2
 ><P
@@ -1799,33 +1997,13 @@ effect on program output.
 
 
 </P
-><P
->&#13;
-In addition to these conventional statements, the report generator provides other iterator statements
-for looping through genealogical and other types of data. For example, the <SPAN
-CLASS="type"
->children</SPAN
-> statement
-iterates through the children of a family, the <SPAN
-CLASS="type"
->spouses</SPAN
-> statement iterates through the spouses of a
-person, and the <SPAN
-CLASS="type"
->families</SPAN
-> statement iterates through the families that a person is a spouse or parent in.
-A number of arguments to the iterator are set with values for each iteration.
-After completion of the iteration, these variables have the value null.
-These iterators and others are described in more detail later under the appropriate data types.
-
-</P
 ></DIV
 ><DIV
 CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN318"
+NAME="AEN336"
 ></A
 >Expressions</H2
 ><P
@@ -1888,7 +2066,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN334"
+NAME="AEN352"
 ></A
 >Include Feature</H2
 ><P
@@ -1963,7 +2141,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN350"
+NAME="AEN368"
 ></A
 >Built-in Functions</H2
 ><P
@@ -1998,7 +2176,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN359"
+NAME="AEN377"
 ></A
 >Value Types</H2
 ><DIV
@@ -2148,7 +2326,7 @@ CLASS="type"
 ></DT
 ><DD
 ><P
->&#13;arbitrary length set of persons (reference)
+>&#13;a collection of persons each with a value (see person sets below).
 </P
 ></DD
 ><DT
@@ -2267,7 +2445,154 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN456"
+NAME="AEN474"
+></A
+>Iterators</H2
+><P
+>&#13;
+The report generator provides a number of iterator statements
+for looping through genealogical and other types of data.
+For example, the <SPAN
+CLASS="type"
+>children</SPAN
+> statement
+iterates through the children of a family,
+the <SPAN
+CLASS="type"
+>spouses</SPAN
+> statement iterates through the spouses of a
+person, and the <SPAN
+CLASS="type"
+>families</SPAN
+> statement iterates through the families that a person is a spouse or parent in.
+</P
+><P
+>&#13;Usually the first argument to the iterator is an expression that evaluates to an
+individual or a family.
+The other arguments of the iterator are variable names that are set with values for each iteration.
+The last argument is often a variable name used as a counter.
+It starts with the value of one and is
+increased by one for each iteration of the loop.  
+After completion of the iteration, these variables have the value null.
+</P
+><P
+>&#13;     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>children(afam,indi,cnt) { commands }</PRE
+></TD
+></TR
+></TABLE
+>
+For example, the first argument to
+<SPAN
+CLASS="type"
+>children</SPAN
+> is the family that the iterator will operate on.
+This iterator will execute the block of commands for each child in the
+specified family.  The second argument is set to each child in the family
+in the order they are listed in the family and the third argument is the
+loop counter which starts at one and is incremented by one each time the
+the block of commands is executed.  The two variables indi and cnt will
+have the value null after the iteration has completed.
+</P
+><P
+>&#13;For the purpose of traversing all records in the database, the following
+iterators may be used:
+
+<DIV
+CLASS="informaltable"
+><A
+NAME="AEN485"
+></A
+><P
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><TBODY
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>forindi</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Iterate over all people</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>forfam</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Iterate over all families</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>forsour</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Iterate over all sources</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>foreven</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Iterate over all events</TD
+></TR
+><TR
+><TD
+WIDTH="96"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>forothr</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Iterate over all other recoure types</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+>
+
+</P
+><P
+>&#13;All the iterators are described in more detail later in the section where
+their definition occurs.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN505"
 ></A
 >Arithmetic and Logic Functions</H2
 ><DIV
@@ -2278,7 +2603,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN461"
+NAME="AEN510"
 ></A
 ><P
 ></P
@@ -2324,7 +2649,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN473"
+NAME="AEN522"
 ></A
 ><P
 ></P
@@ -2366,7 +2691,7 @@ subtraction
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN484"
+NAME="AEN533"
 ></A
 ><P
 ></P
@@ -2414,7 +2739,7 @@ multiplication - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN496"
+NAME="AEN545"
 ></A
 ><P
 ></P
@@ -2456,7 +2781,7 @@ division
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN507"
+NAME="AEN556"
 ></A
 ><P
 ></P
@@ -2498,7 +2823,7 @@ modulus (remainder)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN518"
+NAME="AEN567"
 ></A
 ><P
 ></P
@@ -2540,7 +2865,7 @@ exponentiation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN529"
+NAME="AEN578"
 ></A
 ><P
 ></P
@@ -2576,7 +2901,7 @@ negation
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN539"
+NAME="AEN588"
 ></A
 ><P
 ></P
@@ -2612,7 +2937,7 @@ convert int to float
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN549"
+NAME="AEN598"
 ></A
 ><P
 ></P
@@ -2648,7 +2973,7 @@ convert float to int
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN559"
+NAME="AEN608"
 ></A
 ><P
 ></P
@@ -2665,6 +2990,11 @@ CLASS="parameter"
 ><I
 >NUMBER</I
 ></TT
+>,<TT
+CLASS="parameter"
+><I
+>NUMBER</I
+></TT
 >);</CODE
 ></P
 ><P
@@ -2675,7 +3005,7 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-increment variable by one
+increment variable by second argument (or by 1 if no second argument)
 
 </P
 ></DD
@@ -2684,7 +3014,7 @@ increment variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN569"
+NAME="AEN619"
 ></A
 ><P
 ></P
@@ -2701,6 +3031,11 @@ CLASS="parameter"
 ><I
 >NUMBER</I
 ></TT
+>,<TT
+CLASS="parameter"
+><I
+>NUMBER</I
+></TT
 >);</CODE
 ></P
 ><P
@@ -2711,7 +3046,7 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;
-decrement variable by one
+decrement variable by second argument (or by 1 if no second argument)
 
 </P
 ></DD
@@ -2720,7 +3055,7 @@ decrement variable by one
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN579"
+NAME="AEN630"
 ></A
 ><P
 ></P
@@ -2768,7 +3103,7 @@ logical and - two to 32 arguments
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN591"
+NAME="AEN642"
 ></A
 ><P
 ></P
@@ -2816,7 +3151,7 @@ logical or - two to 32 arguments
 > <DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN603"
+NAME="AEN654"
 ></A
 ><P
 ></P
@@ -2852,7 +3187,7 @@ logical not
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN613"
+NAME="AEN664"
 ></A
 ><P
 ></P
@@ -2894,7 +3229,7 @@ equality (not strings)
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN624"
+NAME="AEN675"
 ></A
 ><P
 ></P
@@ -2936,7 +3271,7 @@ non-equality
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN635"
+NAME="AEN686"
 ></A
 ><P
 ></P
@@ -2978,7 +3313,7 @@ less than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN646"
+NAME="AEN697"
 ></A
 ><P
 ></P
@@ -3021,7 +3356,7 @@ greater than
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN657"
+NAME="AEN708"
 ></A
 ><P
 ></P
@@ -3063,7 +3398,7 @@ less than or equal
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN668"
+NAME="AEN719"
 ></A
 ><P
 ></P
@@ -3182,7 +3517,9 @@ CLASS="function"
 CLASS="function"
 >decr</TT
 > increment by one and decrement by one, respectively, the value of a variable. The
-argument to both functions must be a variable.
+argument to both functions must be a variable.  These functions take an
+optional second argument which is the amount to increment or decrement the
+variable by. 
 </P
 ><P
 >&#13;<TT
@@ -3225,7 +3562,402 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN709"
+NAME="AEN760"
+></A
+>Trigonometric and Spherical Calculations</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN765"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>sin</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute sine of argument in degrees
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN775"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>cos</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute cosine of argument in degrees
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN785"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>tan</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute tangent of argument in degrees
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN795"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>arcsin</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute inverse sine of argument
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN805"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>arccos</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute inverse cosine of argument
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN815"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>arctan</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute inverse tangent of argument
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN825"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>dms2deg</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INT degree</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT minute</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT second</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>FLOAT_V decimal</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;convert (degree, minute, second) to decimal degrees
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN838"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <TT
+CLASS="function"
+>deg2dms</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT decimal</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT_V degree</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT_V minute</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>INT_V second</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;convert decimal degrees to (degree, minute, second)
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN851"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>spdist</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT lat0</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>FLOAT long0</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>FLOAT lat1</I
+></TT
+>,
+<TT
+CLASS="parameter"
+><I
+>FLOAT long1</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;compute distance between two locations
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;The trigonometric functions specify angles using degrees.  The functions
+<TT
+CLASS="function"
+>deg2dms</TT
+> and <TT
+CLASS="function"
+>dms2deg</TT
+>
+are provided to convert between (degree,minute,second) notation and decimal
+degree representations for angles.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>spdist</TT
+> estimates the distance between two spherical
+coordinates.  The arguments provided are, in order, first latitude, first
+longitude, second latitude, second longitude.  The result is in kilometers.
+
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN867"
 ></A
 >Person Functions</H2
 ><DIV
@@ -3236,7 +3968,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN714"
+NAME="AEN872"
 ></A
 ><P
 ></P
@@ -3282,7 +4014,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN726"
+NAME="AEN884"
 ></A
 ><P
 ></P
@@ -3334,7 +4066,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN739"
+NAME="AEN897"
 ></A
 ><P
 ></P
@@ -3368,7 +4100,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN749"
+NAME="AEN907"
 ></A
 ><P
 ></P
@@ -3402,7 +4134,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN759"
+NAME="AEN917"
 ></A
 ><P
 ></P
@@ -3442,7 +4174,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN770"
+NAME="AEN928"
 ></A
 ><P
 ></P
@@ -3476,7 +4208,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN780"
+NAME="AEN938"
 ></A
 ><P
 ></P
@@ -3510,41 +4242,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN790"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->EVENT <TT
-CLASS="function"
->baptism</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->INDI</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-></B
-></DT
-><DD
-><P
->&#13;first baptism event of
-</P
-></DD
-><DT
-><B
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN800"
+NAME="AEN948"
 ></A
 ><P
 ></P
@@ -3578,7 +4276,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN810"
+NAME="AEN958"
 ></A
 ><P
 ></P
@@ -3612,7 +4310,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN820"
+NAME="AEN968"
 ></A
 ><P
 ></P
@@ -3646,7 +4344,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN830"
+NAME="AEN978"
 ></A
 ><P
 ></P
@@ -3680,7 +4378,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN840"
+NAME="AEN988"
 ></A
 ><P
 ></P
@@ -3714,7 +4412,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN850"
+NAME="AEN998"
 ></A
 ><P
 ></P
@@ -3748,7 +4446,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN860"
+NAME="AEN1008"
 ></A
 ><P
 ></P
@@ -3782,7 +4480,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN870"
+NAME="AEN1018"
 ></A
 ><P
 ></P
@@ -3816,7 +4514,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN880"
+NAME="AEN1028"
 ></A
 ><P
 ></P
@@ -3856,7 +4554,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN891"
+NAME="AEN1039"
 ></A
 ><P
 ></P
@@ -3890,7 +4588,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN901"
+NAME="AEN1049"
 ></A
 ><P
 ></P
@@ -3924,7 +4622,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN911"
+NAME="AEN1059"
 ></A
 ><P
 ></P
@@ -3958,7 +4656,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN921"
+NAME="AEN1069"
 ></A
 ><P
 ></P
@@ -3992,7 +4690,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN931"
+NAME="AEN1079"
 ></A
 ><P
 ></P
@@ -4007,7 +4705,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->INDI|FAM</I
+>RECORD</I
 ></TT
 >,
 <TT
@@ -4029,7 +4727,7 @@ CLASS="replaceable"
 ></DT
 ><DD
 ><P
->&#13;internal key of (work for families also)
+>&#13;internal key of (works for any record type)
 </P
 ></DD
 ><DT
@@ -4037,7 +4735,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN943"
+NAME="AEN1091"
 ></A
 ><P
 ></P
@@ -4071,7 +4769,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN953"
+NAME="AEN1101"
 ></A
 ><P
 ></P
@@ -4105,7 +4803,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN963"
+NAME="AEN1111"
 ></A
 ><P
 ></P
@@ -4139,7 +4837,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN973"
+NAME="AEN1121"
 ></A
 ><P
 ></P
@@ -4173,7 +4871,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN983"
+NAME="AEN1131"
 ></A
 ><P
 ></P
@@ -4202,7 +4900,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN992"
+NAME="AEN1140"
 ></A
 ><P
 ></P
@@ -4231,7 +4929,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1001"
+NAME="AEN1149"
 ></A
 ><P
 ></P
@@ -4265,7 +4963,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1011"
+NAME="AEN1159"
 ></A
 ><P
 ></P
@@ -4315,24 +5013,24 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INDI</I
+>INDI_V</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->FAM</I
+>FAM_V</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -4365,24 +5063,24 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->FAM</I
+>FAM_V</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->INDI</I
+>INDI_V</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -4409,23 +5107,24 @@ CLASS="command"
 > (<TT
 CLASS="replaceable"
 ><I
->INDI</I
+>INDI_V</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
-></B
+>
+</B
 ></DT
 ><DD
 ><P
@@ -4463,14 +5162,14 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -4512,18 +5211,19 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
-></B
+>
+</B
 ></DT
 ><DD
 ><P
@@ -4556,14 +5256,14 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -4651,13 +5351,10 @@ CLASS="function"
 >, <TT
 CLASS="function"
 >death</TT
->, <TT
-CLASS="function"
->baptism</TT
-> and <TT
+>, and <TT
 CLASS="function"
 >burial</TT
-> return the first birth, death, baptism and burial event in the
+> return the first birth, death, and burial event in the
 person's record, respectively. An event is a level <TT
 CLASS="structfield"
 ><I
@@ -4734,7 +5431,7 @@ the second parameter selects the type of pronoun:
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN1125"
+NAME="AEN1272"
 ></A
 ><P
 ></P
@@ -4828,17 +5525,47 @@ CLASS="structfield"
 ><I
 >1 TITL</I
 ></TT
-> line in the record. <TT
+> line in the record. 
+</P
+><P
+>&#13;<TT
 CLASS="function"
 >Key</TT
-> returns the key value of a person or
-family; it there is a second parameter and it is non-null, the leading <TT
+> returns the key value of a person (or any record);
+if there is a second parameter and it is non-null, the leading <TT
 CLASS="literal"
 >I</TT
-> or <TT
+> (or <TT
 CLASS="literal"
 >F</TT
-> will be stripped. <TT
+> 
+or <TT
+CLASS="literal"
+>S</TT
+> or <TT
+CLASS="literal"
+>E</TT
+> or <TT
+CLASS="literal"
+>X</TT
+>) will be stripped. For example, if
+<TT
+CLASS="literal"
+>key(curindi)</TT
+> returns <TT
+CLASS="literal"
+>I23</TT
+>, then <TT
+CLASS="literal"
+>key(curindi,1)</TT
+>
+returns <TT
+CLASS="literal"
+>23</TT
+>.
+</P
+><P
+>&#13;<TT
 CLASS="function"
 >Soundex</TT
 >
@@ -4880,13 +5607,16 @@ CLASS="function"
 >&#13;<TT
 CLASS="function"
 >Indi</TT
-> returns the person who's key is passed as an argument; if no person has the key <TT
+> returns the person whose key is passed as an argument;
+if no person has the key <TT
 CLASS="function"
 >indi</TT
-> returns <SPAN
+> returns
+<SPAN
 CLASS="returnvalue"
 >null</SPAN
 >.
+INDI  keys are accepted either as Innn or @Innn@.
 </P
 ><P
 >&#13;<TT
@@ -4920,6 +5650,8 @@ CLASS="function"
 second argument is a person variable that iterates through the first person's spouses. The third
 argument is a family variable that iterates through the families the person and each spouse are in.
 The fourth argument is an integer variable that counts the iterations.
+The spouses iterator skips any family that has no spouse, whereas the
+families iterator does not.
 </P
 ><P
 >&#13;<TT
@@ -4930,6 +5662,30 @@ argument is a person. The second argument is a family variable that iterates thr
 first person was a spouse/parent in. The third argument iterates through the spouses from the families;
 if there is no spouse in a particular family, the variable is set to null for that iteration. The fourth
 argument is an integer variable that counts the iterations.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>Families</TT
+> and <TT
+CLASS="function"
+>Spouses</TT
+> behave the same
+except for one situation.  If the person is a spouse in a family that only has
+one spouse identified,  that family does not show up with the 
+<TT
+CLASS="function"
+>spouses</TT
+> iterator, but it does show up with the
+<TT
+CLASS="function"
+>families</TT
+> iterator.  One caution, this situation causes
+the 3rd argument of the <TT
+CLASS="function"
+>families</TT
+> iterator to be set to
+null.  You must check for this.
 </P
 ><P
 >&#13;<TT
@@ -4977,13 +5733,26 @@ parameter is a variable that iterates through the persons; its second
 parameter is an integer counter
 variable that counts the persons starting at one.
 </P
+><P
+>&#13;<TT
+CLASS="function"
+>fathers</TT
+> and
+<TT
+CLASS="function"
+>mothers</TT
+> are iterators that loop through each family
+the specified individual is in returns each father or mother found.
+If a non-traditional family is processed, there will be separate iterations
+for each father or mother found.
+</P
 ></DIV
 ><DIV
 CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1188"
+NAME="AEN1353"
 ></A
 >Family Functions</H2
 ><DIV
@@ -4994,7 +5763,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1193"
+NAME="AEN1358"
 ></A
 ><P
 ></P
@@ -5028,7 +5797,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1203"
+NAME="AEN1368"
 ></A
 ><P
 ></P
@@ -5062,7 +5831,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1213"
+NAME="AEN1378"
 ></A
 ><P
 ></P
@@ -5096,7 +5865,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1223"
+NAME="AEN1388"
 ></A
 ><P
 ></P
@@ -5130,7 +5899,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1233"
+NAME="AEN1398"
 ></A
 ><P
 ></P
@@ -5164,7 +5933,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1243"
+NAME="AEN1408"
 ></A
 ><P
 ></P
@@ -5198,7 +5967,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1253"
+NAME="AEN1418"
 ></A
 ><P
 ></P
@@ -5243,7 +6012,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1265"
+NAME="AEN1430"
 ></A
 ><P
 ></P
@@ -5277,7 +6046,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1275"
+NAME="AEN1440"
 ></A
 ><P
 ></P
@@ -5311,7 +6080,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1285"
+NAME="AEN1450"
 ></A
 ><P
 ></P
@@ -5345,7 +6114,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1295"
+NAME="AEN1460"
 ></A
 ><P
 ></P
@@ -5374,7 +6143,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1304"
+NAME="AEN1469"
 ></A
 ><P
 ></P
@@ -5403,7 +6172,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1313"
+NAME="AEN1478"
 ></A
 ><P
 ></P
@@ -5437,7 +6206,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1323"
+NAME="AEN1488"
 ></A
 ><P
 ></P
@@ -5499,7 +6268,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -5508,6 +6277,50 @@ CLASS="replaceable"
 ><DD
 ><P
 >&#13;loop through children of family
+</P
+></DD
+><DT
+><B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+><B
+CLASS="command"
+>spouses</B
+> (<TT
+CLASS="replaceable"
+><I
+>FAM</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INDI_V</I
+></TT
+>, <TT
+CLASS="replaceable"
+><I
+>INT_V</I
+></TT
+>) { <TT
+CLASS="replaceable"
+><I
+>commands</I
+></TT
+> } </PRE
+></TD
+></TR
+></TABLE
+></B
+></DT
+><DD
+><P
+>&#13;loop through all husbands and wives of a family
 </P
 ></DD
 ><DT
@@ -5538,7 +6351,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -5634,13 +6447,16 @@ CLASS="function"
 >&#13;<TT
 CLASS="function"
 >Fam</TT
-> returns the family who's key is passed as an argument; if no family has the key <TT
+> returns the family who's key is passed as an argument;
+if no family has the key <TT
 CLASS="function"
 >fam</TT
-> returns <SPAN
+> 
+returns <SPAN
 CLASS="returnvalue"
 >null</SPAN
->.
+>.  Family keys are accepted
+either as Fnnn or @Fnnn@.
 </P
 ><P
 >&#13;<TT
@@ -5678,6 +6494,17 @@ within the loop body.
 ><P
 >&#13;<TT
 CLASS="function"
+>spouses</TT
+> is an iterator that loops through all the
+husbands and wives of a family.
+Its first parameter is a family expression; its second parameter is a
+variable that iterates through each parent; its third parameter is
+an integer counter variable that counts the parents starting at one.
+These two variables may be used within the loop body.
+</P
+><P
+>&#13;<TT
+CLASS="function"
 >Forfam</TT
 > is an iterator that loops through every family in the database in ascending key order. Its first
 parameter is a variable that iterates through the families; its second parameter is an integer counter
@@ -5689,7 +6516,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1390"
+NAME="AEN1567"
 ></A
 >Other types of records</H2
 ><DIV
@@ -5716,14 +6543,14 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -5755,14 +6582,14 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -5794,14 +6621,14 @@ CLASS="replaceable"
 >, <TT
 CLASS="replaceable"
 ><I
->INT</I
+>INT_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -5843,7 +6670,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1424"
+NAME="AEN1601"
 ></A
 >List Functions</H2
 ><DIV
@@ -5854,7 +6681,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1429"
+NAME="AEN1606"
 ></A
 ><P
 ></P
@@ -5888,7 +6715,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1439"
+NAME="AEN1616"
 ></A
 ><P
 ></P
@@ -5922,7 +6749,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1449"
+NAME="AEN1626"
 ></A
 ><P
 ></P
@@ -5956,7 +6783,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1459"
+NAME="AEN1636"
 ></A
 ><P
 ></P
@@ -5990,7 +6817,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1469"
+NAME="AEN1646"
 ></A
 ><P
 ></P
@@ -6030,7 +6857,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1480"
+NAME="AEN1657"
 ></A
 ><P
 ></P
@@ -6064,7 +6891,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1490"
+NAME="AEN1667"
 ></A
 ><P
 ></P
@@ -6104,7 +6931,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1501"
+NAME="AEN1678"
 ></A
 ><P
 ></P
@@ -6144,7 +6971,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1512"
+NAME="AEN1689"
 ></A
 ><P
 ></P
@@ -6178,7 +7005,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1522"
+NAME="AEN1699"
 ></A
 ><P
 ></P
@@ -6224,7 +7051,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1534"
+NAME="AEN1711"
 ></A
 ><P
 ></P
@@ -6264,7 +7091,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1545"
+NAME="AEN1722"
 ></A
 ><P
 ></P
@@ -6304,7 +7131,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1556"
+NAME="AEN1733"
 ></A
 ><P
 ></P
@@ -6344,7 +7171,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1567"
+NAME="AEN1744"
 ></A
 ><P
 ></P
@@ -6384,7 +7211,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1578"
+NAME="AEN1755"
 ></A
 ><P
 ></P
@@ -6446,7 +7273,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -6663,7 +7490,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1652"
+NAME="AEN1829"
 ></A
 >Table Functions</H2
 ><DIV
@@ -6674,7 +7501,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1657"
+NAME="AEN1834"
 ></A
 ><P
 ></P
@@ -6708,7 +7535,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1667"
+NAME="AEN1844"
 ></A
 ><P
 ></P
@@ -6754,7 +7581,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1679"
+NAME="AEN1856"
 ></A
 ><P
 ></P
@@ -6789,6 +7616,74 @@ CLASS="parameter"
 >&#13;lookup and return entry from table
 </P
 ></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1867"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT <TT
+CLASS="function"
+>length</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>TABLE</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;size of the table
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1877"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>BOOL <TT
+CLASS="function"
+>empty</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>TABLE</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;check if table is empty
+</P
+></DD
 ></DL
 ></DIV
 ><P
@@ -6816,6 +7711,10 @@ is the object's key. The function returns the object with that key from the tabl
 CLASS="returnvalue"
 >null</SPAN
 > is returned.
+<TT
+CLASS="function"
+>length</TT
+> returns the number of elements in the table.
 </P
 ></DIV
 ><DIV
@@ -6823,7 +7722,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1695"
+NAME="AEN1893"
 ></A
 >GEDCOM Node Functions</H2
 ><DIV
@@ -6834,7 +7733,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1700"
+NAME="AEN1898"
 ></A
 ><P
 ></P
@@ -6868,7 +7767,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1710"
+NAME="AEN1908"
 ></A
 ><P
 ></P
@@ -6902,7 +7801,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1720"
+NAME="AEN1918"
 ></A
 ><P
 ></P
@@ -6936,7 +7835,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1730"
+NAME="AEN1928"
 ></A
 ><P
 ></P
@@ -6970,7 +7869,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1740"
+NAME="AEN1938"
 ></A
 ><P
 ></P
@@ -7004,7 +7903,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1750"
+NAME="AEN1948"
 ></A
 ><P
 ></P
@@ -7038,7 +7937,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1760"
+NAME="AEN1958"
 ></A
 ><P
 ></P
@@ -7072,7 +7971,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1770"
+NAME="AEN1968"
 ></A
 ><P
 ></P
@@ -7129,7 +8028,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -7156,19 +8055,19 @@ CLASS="command"
 > (<TT
 CLASS="replaceable"
 ><I
->ANY</I
+>NODE</I
 ></TT
 >, <TT
 CLASS="replaceable"
 ><I
->STRING</I
+>STRING_V</I
 ></TT
 >) { <TT
 CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -7212,7 +8111,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -7335,7 +8234,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN1835"
+NAME="AEN2033"
 ></A
 >Event and Date Functions</H2
 ><DIV
@@ -7346,7 +8245,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1840"
+NAME="AEN2038"
 ></A
 ><P
 ></P
@@ -7385,7 +8284,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1851"
+NAME="AEN2049"
 ></A
 ><P
 ></P
@@ -7424,7 +8323,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1862"
+NAME="AEN2060"
 ></A
 ><P
 ></P
@@ -7463,7 +8362,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1873"
+NAME="AEN2071"
 ></A
 ><P
 ></P
@@ -7507,7 +8406,7 @@ CLASS="structfield"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1885"
+NAME="AEN2083"
 ></A
 ><P
 ></P
@@ -7541,7 +8440,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1895"
+NAME="AEN2093"
 ></A
 ><P
 ></P
@@ -7570,7 +8469,46 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1904"
+NAME="AEN2102"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>VOID <TT
+CLASS="function"
+>setdate</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>VAR</I
+></TT
+><TT
+CLASS="parameter"
+><I
+>STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;creates an event with specified date and assigns to specified variable
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2113"
 ></A
 ><P
 ></P
@@ -7604,7 +8542,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1914"
+NAME="AEN2123"
 ></A
 ><P
 ></P
@@ -7638,7 +8576,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1924"
+NAME="AEN2133"
 ></A
 ><P
 ></P
@@ -7672,7 +8610,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1934"
+NAME="AEN2143"
 ></A
 ><P
 ></P
@@ -7706,7 +8644,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1944"
+NAME="AEN2153"
 ></A
 ><P
 ></P
@@ -7740,7 +8678,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1954"
+NAME="AEN2163"
 ></A
 ><P
 ></P
@@ -7774,7 +8712,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1964"
+NAME="AEN2173"
 ></A
 ><P
 ></P
@@ -7808,7 +8746,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1974"
+NAME="AEN2183"
 ></A
 ><P
 ></P
@@ -7842,7 +8780,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1984"
+NAME="AEN2193"
 ></A
 ><P
 ></P
@@ -7882,7 +8820,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN1995"
+NAME="AEN2204"
 ></A
 ><P
 ></P
@@ -7909,6 +8847,40 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;date of, in current complex format
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2214"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>STRING <TT
+CLASS="function"
+>dayofweek</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>EVENT|STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;day of week, in appropriate language
 </P
 ></DD
 ></DL
@@ -7999,6 +8971,16 @@ CLASS="structfield"
 >DATE</I
 ></TT
 > line.
+<TT
+CLASS="function"
+>Setdate</TT
+> creates an event that has the specified date in the <TT
+CLASS="structfield"
+><I
+>DATE</I
+></TT
+> line,
+and assigns the new event to the specified variable.
 </P
 ><P
 >&#13;The next seven functions are used to format dates in a variety of ways.
@@ -8077,7 +9059,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2041"
+NAME="AEN2262"
 ></A
 ><P
 ></P
@@ -8138,7 +9120,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2056"
+NAME="AEN2277"
 ></A
 ><P
 ></P
@@ -8307,7 +9289,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2098"
+NAME="AEN2319"
 ></A
 ><P
 ></P
@@ -8368,7 +9350,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2113"
+NAME="AEN2334"
 ></A
 ><P
 ></P
@@ -8501,7 +9483,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2146"
+NAME="AEN2367"
 ></A
 ><P
 ></P
@@ -8710,7 +9692,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2198"
+NAME="AEN2419"
 ></A
 ><P
 ></P
@@ -8855,7 +9837,7 @@ CLASS="function"
 ><DIV
 CLASS="informaltable"
 ><A
-NAME="AEN2232"
+NAME="AEN2453"
 ></A
 ><P
 ></P
@@ -9041,13 +10023,119 @@ VALIGN="MIDDLE"
 ><P
 ></P
 ></DIV
+><P
+>&#13;The function dayofweek is a way to access the (localized) day name, eg, "Thursday",
+for a given date.
+</P
 ></DIV
 ><DIV
 CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2276"
+NAME="AEN2498"
+></A
+>Date Arithmetic</H2
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2503"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>FLOAT <TT
+CLASS="function"
+>date2jd</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>EVENT|STRING</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;julian date number is number of days since origin (-4712/01/01 12h00 UT) of specified date
+</P
+></DD
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2513"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT <TT
+CLASS="function"
+>jd2date</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>FLOAT</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;Convert julian date number to date (actually to event structure with subordinate date)
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;These functions allow adding or subtracting days from dates.
+</P
+><P
+>&#13;<TT
+CLASS="function"
+>date2jd</TT
+> converts a date into a number of days, which can then be adjusted by simple arithmetic.
+Finally, <TT
+CLASS="function"
+>jd2date</TT
+> converts the number of days back into a date.
+</P
+><P
+>&#13;Julian calendar is used before 4 OCT 1582, and Gregorian calendar afterwards. 
+</P
+><P
+>&#13;As with other date functions, calendar escapes (eg, "@#DRENCH R#@") are not respected, 
+and the only the first date of the DATE record is used.
+</P
+></DIV
+><DIV
+CLASS="sect1"
+><HR><H2
+CLASS="sect1"
+><A
+NAME="AEN2527"
 ></A
 >Value Extraction Functions</H2
 ><DIV
@@ -9058,7 +10146,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2281"
+NAME="AEN2532"
 ></A
 ><P
 ></P
@@ -9110,7 +10198,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2294"
+NAME="AEN2545"
 ></A
 ><P
 ></P
@@ -9162,7 +10250,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2307"
+NAME="AEN2558"
 ></A
 ><P
 ></P
@@ -9208,7 +10296,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2319"
+NAME="AEN2570"
 ></A
 ><P
 ></P
@@ -9260,7 +10348,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2332"
+NAME="AEN2583"
 ></A
 ><P
 ></P
@@ -9487,7 +10575,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2374"
+NAME="AEN2625"
 ></A
 >User Interaction Functions</H2
 ><DIV
@@ -9498,7 +10586,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2379"
+NAME="AEN2630"
 ></A
 ><P
 ></P
@@ -9543,7 +10631,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2391"
+NAME="AEN2642"
 ></A
 ><P
 ></P
@@ -9588,7 +10676,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2403"
+NAME="AEN2654"
 ></A
 ><P
 ></P
@@ -9622,7 +10710,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2413"
+NAME="AEN2664"
 ></A
 ><P
 ></P
@@ -9667,7 +10755,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2425"
+NAME="AEN2676"
 ></A
 ><P
 ></P
@@ -9712,7 +10800,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2437"
+NAME="AEN2688"
 ></A
 ><P
 ></P
@@ -9746,7 +10834,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2447"
+NAME="AEN2698"
 ></A
 ><P
 ></P
@@ -9780,7 +10868,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2457"
+NAME="AEN2708"
 ></A
 ><P
 ></P
@@ -9814,7 +10902,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2467"
+NAME="AEN2718"
 ></A
 ><P
 ></P
@@ -9848,7 +10936,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2477"
+NAME="AEN2728"
 ></A
 ><P
 ></P
@@ -9882,7 +10970,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2487"
+NAME="AEN2738"
 ></A
 ><P
 ></P
@@ -9992,7 +11080,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2514"
+NAME="AEN2765"
 ></A
 >String Functions</H2
 ><DIV
@@ -10003,7 +11091,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2519"
+NAME="AEN2770"
 ></A
 ><P
 ></P
@@ -10037,7 +11125,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2529"
+NAME="AEN2780"
 ></A
 ><P
 ></P
@@ -10071,7 +11159,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2539"
+NAME="AEN2790"
 ></A
 ><P
 ></P
@@ -10105,7 +11193,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2549"
+NAME="AEN2800"
 ></A
 ><P
 ></P
@@ -10139,7 +11227,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2559"
+NAME="AEN2810"
 ></A
 ><P
 ></P
@@ -10179,7 +11267,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2570"
+NAME="AEN2821"
 ></A
 ><P
 ></P
@@ -10219,7 +11307,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2581"
+NAME="AEN2832"
 ></A
 ><P
 ></P
@@ -10275,7 +11363,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2595"
+NAME="AEN2846"
 ></A
 ><P
 ></P
@@ -10331,7 +11419,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2609"
+NAME="AEN2860"
 ></A
 ><P
 ></P
@@ -10365,7 +11453,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2619"
+NAME="AEN2870"
 ></A
 ><P
 ></P
@@ -10411,7 +11499,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2631"
+NAME="AEN2882"
 ></A
 ><P
 ></P
@@ -10457,7 +11545,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2643"
+NAME="AEN2894"
 ></A
 ><P
 ></P
@@ -10491,7 +11579,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2653"
+NAME="AEN2904"
 ></A
 ><P
 ></P
@@ -10531,7 +11619,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2664"
+NAME="AEN2915"
 ></A
 ><P
 ></P
@@ -10568,7 +11656,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2675"
+NAME="AEN2926"
 ></A
 ><P
 ></P
@@ -10605,7 +11693,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2686"
+NAME="AEN2937"
 ></A
 ><P
 ></P
@@ -10642,7 +11730,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2697"
+NAME="AEN2948"
 ></A
 ><P
 ></P
@@ -10679,7 +11767,7 @@ CLASS="literal"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2708"
+NAME="AEN2959"
 ></A
 ><P
 ></P
@@ -10713,7 +11801,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2718"
+NAME="AEN2969"
 ></A
 ><P
 ></P
@@ -10747,7 +11835,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2728"
+NAME="AEN2979"
 ></A
 ><P
 ></P
@@ -10781,7 +11869,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2738"
+NAME="AEN2989"
 ></A
 ><P
 ></P
@@ -10821,7 +11909,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2749"
+NAME="AEN3000"
 ></A
 ><P
 ></P
@@ -10861,7 +11949,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2760"
+NAME="AEN3011"
 ></A
 ><P
 ></P
@@ -11103,7 +12191,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN2823"
+NAME="AEN3074"
 ></A
 >Output Mode Functions</H2
 ><DIV
@@ -11114,7 +12202,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2828"
+NAME="AEN3079"
 ></A
 ><P
 ></P
@@ -11143,7 +12231,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2837"
+NAME="AEN3088"
 ></A
 ><P
 ></P
@@ -11183,7 +12271,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2848"
+NAME="AEN3099"
 ></A
 ><P
 ></P
@@ -11217,7 +12305,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2858"
+NAME="AEN3109"
 ></A
 ><P
 ></P
@@ -11246,7 +12334,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2867"
+NAME="AEN3118"
 ></A
 ><P
 ></P
@@ -11280,7 +12368,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2877"
+NAME="AEN3128"
 ></A
 ><P
 ></P
@@ -11320,7 +12408,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2888"
+NAME="AEN3139"
 ></A
 ><P
 ></P
@@ -11349,7 +12437,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2897"
+NAME="AEN3148"
 ></A
 ><P
 ></P
@@ -11378,7 +12466,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2906"
+NAME="AEN3157"
 ></A
 ><P
 ></P
@@ -11407,7 +12495,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2915"
+NAME="AEN3166"
 ></A
 ><P
 ></P
@@ -11436,7 +12524,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2924"
+NAME="AEN3175"
 ></A
 ><P
 ></P
@@ -11476,7 +12564,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2935"
+NAME="AEN3186"
 ></A
 ><P
 ></P
@@ -11505,7 +12593,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2944"
+NAME="AEN3195"
 ></A
 ><P
 ></P
@@ -11539,7 +12627,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2954"
+NAME="AEN3205"
 ></A
 ><P
 ></P
@@ -11578,7 +12666,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN2966"
+NAME="AEN3217"
 ></A
 ><P
 ></P
@@ -11775,7 +12863,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3014"
+NAME="AEN3265"
 ></A
 >Person Set Functions and GEDCOM Extraction</H2
 ><DIV
@@ -11786,7 +12874,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3019"
+NAME="AEN3270"
 ></A
 ><P
 ></P
@@ -11820,7 +12908,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3029"
+NAME="AEN3280"
 ></A
 ><P
 ></P
@@ -11828,7 +12916,7 @@ NAME="AEN3029"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
+>VOID <TT
 CLASS="function"
 >addtoset</TT
 ></CODE
@@ -11866,7 +12954,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3041"
+NAME="AEN3292"
 ></A
 ><P
 ></P
@@ -11874,7 +12962,7 @@ NAME="AEN3041"
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->SET <TT
+>VOID <TT
 CLASS="function"
 >deletefromset</TT
 ></CODE
@@ -11912,7 +13000,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3053"
+NAME="AEN3304"
 ></A
 ><P
 ></P
@@ -11922,7 +13010,7 @@ NAME="AEN3053"
 CLASS="FUNCDEF"
 >INT <TT
 CLASS="function"
->lengthset</TT
+>length</TT
 ></CODE
 >(<TT
 CLASS="parameter"
@@ -11946,7 +13034,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3063"
+NAME="AEN3314"
 ></A
 ><P
 ></P
@@ -11986,7 +13074,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3074"
+NAME="AEN3325"
 ></A
 ><P
 ></P
@@ -12026,7 +13114,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3085"
+NAME="AEN3336"
 ></A
 ><P
 ></P
@@ -12066,7 +13154,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3096"
+NAME="AEN3347"
 ></A
 ><P
 ></P
@@ -12100,7 +13188,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3106"
+NAME="AEN3357"
 ></A
 ><P
 ></P
@@ -12134,7 +13222,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3116"
+NAME="AEN3367"
 ></A
 ><P
 ></P
@@ -12168,7 +13256,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3126"
+NAME="AEN3377"
 ></A
 ><P
 ></P
@@ -12202,7 +13290,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3136"
+NAME="AEN3387"
 ></A
 ><P
 ></P
@@ -12236,7 +13324,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3146"
+NAME="AEN3397"
 ></A
 ><P
 ></P
@@ -12270,7 +13358,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3156"
+NAME="AEN3407"
 ></A
 ><P
 ></P
@@ -12304,7 +13392,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3166"
+NAME="AEN3417"
 ></A
 ><P
 ></P
@@ -12338,7 +13426,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3176"
+NAME="AEN3427"
 ></A
 ><P
 ></P
@@ -12372,7 +13460,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3186"
+NAME="AEN3437"
 ></A
 ><P
 ></P
@@ -12406,7 +13494,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3196"
+NAME="AEN3447"
 ></A
 ><P
 ></P
@@ -12440,7 +13528,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3206"
+NAME="AEN3457"
 ></A
 ><P
 ></P
@@ -12480,7 +13568,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3217"
+NAME="AEN3468"
 ></A
 ><P
 ></P
@@ -12556,7 +13644,7 @@ CLASS="replaceable"
 ><I
 >commands</I
 ></TT
-> }</PRE
+> } </PRE
 ></TD
 ></TR
 ></TABLE
@@ -12594,11 +13682,11 @@ CLASS="returnvalue"
 from the set; if <SPAN
 CLASS="returnvalue"
 >false</SPAN
-> only the first entry is removed. <TT
+> only the first entry is removed. 
+<TT
 CLASS="function"
->Lengthset</TT
-> returns the number of persons in a
-person set.
+>Length</TT
+> returns the number of persons in a person set.
 </P
 ><P
 >&#13;<TT
@@ -12761,7 +13849,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3289"
+NAME="AEN3540"
 ></A
 >Record Update Functions</H2
 ><DIV
@@ -12772,7 +13860,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3294"
+NAME="AEN3545"
 ></A
 ><P
 ></P
@@ -12812,7 +13900,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3305"
+NAME="AEN3556"
 ></A
 ><P
 ></P
@@ -12858,7 +13946,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3317"
+NAME="AEN3568"
 ></A
 ><P
 ></P
@@ -12892,7 +13980,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3327"
+NAME="AEN3578"
 ></A
 ><P
 ></P
@@ -12926,7 +14014,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3337"
+NAME="AEN3588"
 ></A
 ><P
 ></P
@@ -13013,7 +14101,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3359"
+NAME="AEN3610"
 ></A
 >Record Linking Functions</H2
 ><DIV
@@ -13024,7 +14112,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3364"
+NAME="AEN3615"
 ></A
 ><P
 ></P
@@ -13058,7 +14146,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3374"
+NAME="AEN3625"
 ></A
 ><P
 ></P
@@ -13087,40 +14175,6 @@ CLASS="parameter"
 >&#13;reference cross reference or key to node tree
 </P
 ></DD
-><DT
-><B
-><DIV
-CLASS="funcsynopsis"
-><A
-NAME="AEN3384"
-></A
-><P
-></P
-><P
-><CODE
-><CODE
-CLASS="FUNCDEF"
->NODE <TT
-CLASS="function"
->getrecord</TT
-></CODE
->(<TT
-CLASS="parameter"
-><I
->STRING</I
-></TT
->);</CODE
-></P
-><P
-></P
-></DIV
-></B
-></DT
-><DD
-><P
->&#13;same as dereference
-</P
-></DD
 ></DL
 ></DIV
 ><P
@@ -13135,14 +14189,7 @@ CLASS="returnvalue"
 one of the records in the database. <TT
 CLASS="function"
 >Dereference</TT
-> returns the node tree of the record referred to by its cross
-reference string argument. <TT
-CLASS="function"
->Getrecord</TT
-> is a synonym for <TT
-CLASS="function"
->dereference</TT
->.
+> returns the node tree of the record referred to by its cross-reference string argument.
 </P
 ></DIV
 ><DIV
@@ -13150,7 +14197,7 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3398"
+NAME="AEN3637"
 ></A
 >Miscellaneous Functions</H2
 ><DIV
@@ -13161,7 +14208,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3403"
+NAME="AEN3642"
 ></A
 ><P
 ></P
@@ -13176,7 +14223,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->INDI|FAM</I
+>RECORD|NODE</I
 ></TT
 >);</CODE
 ></P
@@ -13187,7 +14234,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;lock a person or family in memory
+>&#13;lock a record (or record containing specified node) in memory
 </P
 ></DD
 ><DT
@@ -13195,7 +14242,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3413"
+NAME="AEN3652"
 ></A
 ><P
 ></P
@@ -13210,7 +14257,7 @@ CLASS="function"
 >(<TT
 CLASS="parameter"
 ><I
->INDI|FAM</I
+>RECORD|NODE</I
 ></TT
 >);</CODE
 ></P
@@ -13221,7 +14268,7 @@ CLASS="parameter"
 ></DT
 ><DD
 ><P
->&#13;unlock a person or family from memory
+>&#13;unlock a record (or record containing specified node) from memory
 </P
 ></DD
 ><DT
@@ -13229,7 +14276,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3423"
+NAME="AEN3662"
 ></A
 ><P
 ></P
@@ -13258,7 +14305,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3432"
+NAME="AEN3671"
 ></A
 ><P
 ></P
@@ -13287,7 +14334,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3441"
+NAME="AEN3680"
 ></A
 ><P
 ></P
@@ -13319,7 +14366,7 @@ CLASS="application"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3451"
+NAME="AEN3690"
 ></A
 ><P
 ></P
@@ -13353,7 +14400,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3461"
+NAME="AEN3700"
 ></A
 ><P
 ></P
@@ -13382,7 +14429,7 @@ CLASS="function"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3470"
+NAME="AEN3709"
 ></A
 ><P
 ></P
@@ -13416,7 +14463,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3480"
+NAME="AEN3719"
 ></A
 ><P
 ></P
@@ -13450,7 +14497,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3490"
+NAME="AEN3729"
 ></A
 ><P
 ></P
@@ -13490,7 +14537,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3501"
+NAME="AEN3740"
 ></A
 ><P
 ></P
@@ -13536,7 +14583,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3513"
+NAME="AEN3752"
 ></A
 ><P
 ></P
@@ -13570,7 +14617,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3523"
+NAME="AEN3762"
 ></A
 ><P
 ></P
@@ -13604,7 +14651,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3533"
+NAME="AEN3772"
 ></A
 ><P
 ></P
@@ -13672,7 +14719,7 @@ CLASS="application"
 >LifeLines</TT
 > program, eg, <TT
 CLASS="literal"
->3.0.39</TT
+>3.0.61</TT
 >.
 </P
 ><P
@@ -13718,7 +14765,8 @@ the previous setting of locale.
 CLASS="function"
 >bytecode</TT
 > function converts the supplied string
-with escape codes to the current codeset, or to the codeset specified by the
+with escape codes to the current codeset from the internal codeset or
+from the codeset specified by the
 optional second parameter if specified.  A escaped code is a dollar sign ($)
 followed by 2 hex characters, e.g. $C1.
 </P
@@ -13730,7 +14778,28 @@ CLASS="function"
 codeset.  In the two argument form, the second argument is the destination
 codeset, and the source codeset is the internal codeset.  In the 3 argument
 form, the second argument is the source codeset and the third argument is the
-destination codeset.
+destination codeset.  (See the section of the LifeLines User Guide on codeset
+conversions.)  For example, if your internal codeset is UTF-8, and the report 
+codeset is UTF-8, the following code,
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>       "&#60;p&#62;\n"
+       convertcode(str,"UTF-8//html")
+</PRE
+></TD
+></TR
+></TABLE
+>
+writes the first line of output as it is written, but will apply the html
+sub-conversion to all the characters in the string str. The special
+html codes, like the less than or greater than, will be escaped when printing
+the second string, but not when printing the first string.
 </P
 ><P
 >&#13;The <TT
@@ -13767,9 +14836,126 @@ CLASS="sect1"
 ><HR><H2
 CLASS="sect1"
 ><A
-NAME="AEN3573"
+NAME="AEN3813"
 ></A
 >Deprecated Functions</H2
+><P
+>&#13;The <TT
+CLASS="function"
+>baptism</TT
+> finds christening (CHR) events.  The types of
+events desired to be found, depend on the nature of the report being written.
+It is recommended that custom access routines be used instead of 
+<TT
+CLASS="function"
+>baptism</TT
+>.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3821"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>EVENT <TT
+CLASS="function"
+>baptism</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>INDI</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;first baptism event of
+</P
+><P
+>&#13;If you want a routine that returns the first event for an individual that is a
+baptism, LDS baptism, Christening or Adult Christening, the following routine
+can be used.
+
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>func get_baptism(indi) {
+    fornodes(indi,node) {
+        if (index(" BAPM BAPL CHR CHRA ",upper(tag(node)),1)) {
+            return(node)
+        }
+    }
+    return(0)
+}</PRE
+></TD
+></TR
+></TABLE
+>
+If you want to search for additional events or fewer events you can modify the
+string in the index call acccordingly.  Likewise, if you want the to prioritize
+the results, finding a christening event if one exists, else finding
+a baptism event if one exists, then finding an LDS baptism event, and finally
+a christening event, the following function is suggested.
+
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>/* get_baptism(indi) returns a baptism event if found
+   events CHR, BAPM, BAPL, and CHRA are considered, in that order
+*/
+func get_baptism(indi, prefs)
+{
+    set(chr, 0)
+    set(bapm, 0)
+    set(bapl, 0)
+    set(chra, 0)
+    fornodes(indi,node)
+    {
+	if (and(eq(upper(tag(node)), "CHR"), not(chr)) { set(chr, node) }
+	if (and(eq(upper(tag(node)), "BAPM"), not(bapm)) { set(bapm, node) }
+	if (and(eq(upper(tag(node)), "BAPL"), not(bapl)) { set(bapl, node) }
+	if (and(eq(upper(tag(node)), "CHRA"), not(chra)) { set(chra, node) }
+    }
+    if (chr) { return(chr) }
+    if (bapm) { return(bapm) }
+    if (bapl) { return(bapl) }
+    return(chra)
+}</PRE
+></TD
+></TR
+></TABLE
+>
+
+</P
+></DD
+></DL
+></DIV
 ><P
 >&#13;The functionality of the following three functions,
 <TT
@@ -13811,7 +14997,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3586"
+NAME="AEN3843"
 ></A
 ><P
 ></P
@@ -13856,7 +15042,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3598"
+NAME="AEN3855"
 ></A
 ><P
 ></P
@@ -13901,7 +15087,7 @@ CLASS="replaceable"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3610"
+NAME="AEN3867"
 ></A
 ><P
 ></P
@@ -13987,7 +15173,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3630"
+NAME="AEN3887"
 ></A
 ><P
 ></P
@@ -14021,7 +15207,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3640"
+NAME="AEN3897"
 ></A
 ><P
 ></P
@@ -14055,7 +15241,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3650"
+NAME="AEN3907"
 ></A
 ><P
 ></P
@@ -14116,7 +15302,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3667"
+NAME="AEN3924"
 ></A
 ><P
 ></P
@@ -14150,7 +15336,7 @@ CLASS="parameter"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3677"
+NAME="AEN3934"
 ></A
 ><P
 ></P
@@ -14199,7 +15385,7 @@ CLASS="glosslist"
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN3691"
+NAME="AEN3948"
 ></A
 ><P
 ></P
@@ -14226,6 +15412,66 @@ CLASS="parameter"
 ><DD
 ><P
 >&#13;delete a node from a GEDCOM tree
+</P
+></DD
+></DL
+></DIV
+><P
+>&#13;In releases after version 3.0.39, the 
+<TT
+CLASS="function"
+>length</TT
+> function accepts an argument of type 
+<SPAN
+CLASS="type"
+>list</SPAN
+>, <SPAN
+CLASS="type"
+>set</SPAN
+> or <SPAN
+CLASS="type"
+>table</SPAN
+>.  the
+<TT
+CLASS="function"
+>lengthset</TT
+> function is no longer needed.
+</P
+><DIV
+CLASS="glosslist"
+><DL
+><DT
+><B
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3965"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>INT <TT
+CLASS="function"
+>lengthset</TT
+></CODE
+>(<TT
+CLASS="parameter"
+><I
+>SET</I
+></TT
+>);</CODE
+></P
+><P
+></P
+></DIV
+></B
+></DT
+><DD
+><P
+>&#13;size of a set
 </P
 ></DD
 ></DL
