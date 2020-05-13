@@ -35,8 +35,8 @@ MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv) \
 
 IMAGES =	listops.jpg
 
-MANUALS_static = ll-index.html \
-		 ll-index.sv.html \
+MANUALS_static = index.html \
+		 index.sv.html \
 		 $(IMAGES)
 
 ###################
