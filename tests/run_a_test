@@ -14,8 +14,8 @@
 #             written to testname.log, can be enabled with
 #             VERBOSE=1 make check
 #             VERBOSE=1 make testdir/testname.log
-# NOCAPTUREOUT Don't caputure output of running the command
-#             NOCAPTUREOUT=1 skips this check
+# CAPTUREOUT  compare caputured output of running the command with reference
+#             CAPTUREOUT=1 makes this check
 #             the output is highly dependent on curses which seems to tweek
 #             things frequently in ways that don't represent failures.
 # TESTMEMCHECK If defined, run the test under valgrind, so
@@ -145,7 +145,7 @@ function run_a_command {
             return 1
         fi
     fi
-    if [[ -z $NOCAPTUREOUT ]] ; then
+    if [[ -n $CAPTUREOUT ]] ; then
         compare_file $defout
         rac=$?
     else

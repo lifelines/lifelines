@@ -56,10 +56,15 @@ and issuing some character sequences that will get there.
 the second with tabs is 1 char shorter, but relies on ncurses knowing
 where it is in the line.
 
-If checking the output is not relevant to your checking, it can 
-be disabled when running the tests by setting NOCAPTUREOUT=1
-That is, if you cd into the build area, tests directory, you can run
+If you want to see how changes you make to lifelines affect the gui output
+you can update the test *.out.ref files before you start your work, and
+then you can compare those reference files with the current outputs
+by setting CAPTUREOUT=1 when you run the tests.  That is, if you cd into 
+the build area tests directory, you can run
 
-NOCAPTUREOUT=1 make clean check
+CAPTUREOUT=1 make clean check
 
-This will skip checking the output of llines (or llexec) 
+This will  check the output of llines (or llexec) against the references
+otherwise the output is not checked, as it is very sensitive to the 
+vcersion of the curses package and almost any changes curses will cause
+differences.

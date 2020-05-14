@@ -22,9 +22,9 @@ will add lots of debug info in the test's directory testname.log file
 or
    VERBOSE=1 make clean check
 
-If your not interested in debugging the gui with the detailed character
+If you are interested in debugging the gui with the detailed character
 output from running a test with llines/llexec you can run the tests with
-   NOCAPTUREOUT=1 make clean check
+   CAPTUREOUT=1 make clean check
 
 To check for memory errors when running a test, if you have valgrind
 installed, do something like (say for the test Royal92/Royal92
