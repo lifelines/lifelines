@@ -180,6 +180,7 @@ resize_win: /* we come back here if we resize the window */
 			continue;
 		if (handle_popup_list_resize(&ld, code)) {
 			deactivate_uiwin_and_touch_all();
+                        ld.uiwin=0;
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}

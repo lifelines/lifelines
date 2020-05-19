@@ -23,6 +23,8 @@
 #             will execute the test under valgrind, i.e.
 #             valgrind --log-file $testname.valgrind --num-callers=16 llines
 #             with valgrind output goint to testname.valgrind
+#             A summary of errors and malloc'ed memory usage is left in the
+#             file valgrind_summary
 #
 # srcdir -    relative path to the src area 'tests' directory
 #
@@ -120,7 +122,9 @@ function run_a_command {
     # build up the command name to execute
 
     if [[ -n $TESTMEMCHECK ]] ; then
-        cmd="valgrind --log-file=$testname-%p.valgrind --num-callers=16 --leak-check=yes $cmd"
+        basecmd=${cmd%% *}
+        basecmd=${basecmd##*/}
+        cmd="valgrind --log-file=$testname-$basecmd.valgrind --num-callers=16 --leak-check=yes $cmd"
     fi
     cmdstr=$cmd
     if [[ -n $cmdin ]] ; then
@@ -371,5 +375,241 @@ if [[ ${#postcmds[@]} > 0 ]] ; then
 fi
 if [[ -n $postskip ]] ; then
     exit 77
+fi
+if [[ -n $TESTMEMCHECK ]] ; then
+    # read valgrind output files and summarize outputs
+    #
+    # this runs after each test is run, there is no way to say
+    # run this after the last test. But it is quick enough that 
+    # compared to valgrind the time isn't noticeable.
+    # ... and the output file 'valgrind_summary' is updated atomically
+    # so you only end up with the last one that finished
+    cd ..
+
+    NAME=()     #Test name
+    ERRORS=()   #error count
+    DEF=()      #definitely lost bytes/incidents
+    INDIR=()    #indirectly lost bytes/incidents
+    POSS=()     #Possibly lost bytes/incidents
+    STILL=()    #still reachable bytes/incidents
+    SUPP=()     #suppressed bytes/incidents
+    TALLOC=()   #Total number of heap allocations made
+    TFREE=()    #Total number of frees
+    TBYTE=()    #Total number of bytes allocated
+    FILECNT=-1
+
+    for file in */*.valgrind ; do
+        (( FILECNT++ ))
+        n=${file%.*}
+        NAME[$FILECNT]=$n
+        ERRORS[$FILECNT]=0
+        while read pi tag more ; do
+            if [[ $tag = Invalid ]] ; then  # Invalid alloc/free... i.e. errors
+                (( ERRORS[$FILECNT]++ ))
+            elif [[ $tag = HEAP ]] ; then   # heap allocatons/frees
+                read pi tag more
+                read pi tag1 tag2 tag3 alloc str1 frees str2 bytes more
+                #==21784==   total heap usage: 268,453 allocs, 253,660 frees, 103,247,125 bytes allocated
+                alloc=${alloc//,}
+                free=${frees//,}
+                byte=${bytes//,}
+                TALLOC[$FILECNT]=$alloc
+                TFREE[$FILECNT]=$free
+                TBYTE[$FILECNT]=$byte
+            elif [[ $tag = LEAK ]] ; then
+                #==22974== LEAK SUMMARY:
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = definitely ]] ; then
+                    #==22974==    definitely lost: 29 bytes in 2 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    DEF[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = indirectly ]] ; then
+                    #==22974==    indirectly lost: 128 bytes in 1 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    INDIR[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = possibly ]] ; then
+                    #==22974==      possibly lost: 0 bytes in 0 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    POSS[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = still ]] ; then
+                    #==22974==    still reachable: 304,933 bytes in 500 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    STILL[$FILECNT]="$by/$bks"
+                fi
+                read pi tag by bys ins bks more 
+                if [[ $tag = suppressed: ]] ; then
+                    #==22974==         suppressed: 0 bytes in 0 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    SUPP[$FILECNT]="$by/$bks"
+                fi
+            #elif [[ $tag = ERROR ]] ; then
+            #    a=1
+            fi
+
+        done < $file
+    done
+
+    len=(0 0 0 0 0 0 0 0 0 0)
+    t1=("Test Name" "Malloc"  "Definitely" "Indirectly" "Possibly" "still"
+         "surpressed" "Total" "Total" "Total")
+    t2=("" "Errors" "lost" "lost" "lost" "reachable" "" "Allocs" "Frees" "Bytes")
+
+    # first compute length for each column
+    for (( i=0; i < ${#NAME[@]}; i++ )) do
+      (( len[0] = ( len[0] < ${#NAME[$i]} ) ?  ${#NAME[$i]} : len[0] ))
+      (( len[1] = ( len[1] < ${#ERRORS[$i]} ) ?  ${#ERRORS[$i]} : len[1] ))
+      if [[ ${DEF[$i]} != 0/0 ]] ;then
+          (( len[2] = ( len[2] < ${#DEF[$i]} ) ?  ${#DEF[$i]} : len[2] ))
+      fi
+      if [[ ${INDIR[$i]} != 0/0 ]] ;then
+          (( len[3] = ( len[3] < ${#INDIR[$i]} ) ?  ${#INDIR[$i]} : len[3] ))
+      fi
+      if [[ ${POSS[$i]} != 0/0 ]] ;then
+          (( len[4] = ( len[4] < ${#POSS[$i]} ) ?  ${#POSS[$i]} : len[4] ))
+      fi
+      if [[ ${STILL[$i]} != 0/0 ]] ;then
+          (( len[5] = ( len[5] < ${#STILL[$i]} ) ?  ${#STILL[$i]} : len[5] ))
+      fi
+      if [[ ${SUPP[$i]} != 0/0 ]] ;then
+          (( len[6] = ( len[6] < ${#SUPP[$i]} ) ?  ${#SUPP[$i]} : len[6] ))
+      fi
+      if [[ ${TALLOC[$i]} != 0 ]] ;then
+          (( len[7] = ( len[7] < ${#TALLOC[$i]} ) ?  ${#TALLOC[$i]} : len[7] ))
+      fi
+      if [[ ${TFREE[$i]} != 0 ]] ;then
+          (( len[8] = ( len[8] < ${#TFREE[$i]} ) ?  ${#TFREE[$i]} : len[8] ))
+      fi
+      if [[ ${TBYTE[$i]} != 0 ]] ;then
+          (( len[9] = ( len[9] < ${#TBYTE[$i]} ) ?  ${#TBYTE[$i]} : len[9] ))
+      fi
+    done
+    for (( i=0 ; i < 10; i++ )) ; do
+        if (( ${len[$i]} != 0 )) ; then
+            (( len[$i] = ( len[$i] < ${#t1[$i]} ) ? ${#t1[$i]} : len[$i] ))
+            (( len[$i] = ( len[$i] < ${#t2[$i]} ) ? ${#t2[$i]} : len[$i] ))
+        fi
+    done
+    echo >> valgrind_summary.out
+
+    if [[ -z $VSWRAP ]]; then   # define VSWRAP=80 or.. to wrap lines 
+        VSWRAP=200
+    fi
+        
+    sum=0
+    sum1=0
+    pos1=0
+    indent=0
+    for (( i=0 ; i < 10; i++ )) ; do
+        if (( sum1 == 0 &&  sum + len[$i] > $VSWRAP )) ; then
+            (( sum1 = sum ))
+            (( pos1 = i - 1 ))
+        fi
+        (( sum += len[$i] )) 
+    done
+    #/usr/bin/printf "sum1=%d pos1=%d sum=%d\n" $sum1 $pos1 $sum >> valgrind_summary.out
+    # width of 2nd part (sum - sum1) start at ( sum - (sum-sum1))
+    (( indent = sum1 + sum1 - sum -10 ))
+    # indent second row indent after printing data at pos1
+
+    #/usr/bin/printf "indent=%d after col %d\n" $indent $pos1 >> valgrind_summary.out
+    if (( $pos1 == 0 )) ; then
+        pos1=20
+    fi
+    (( len[0] = -len[0] ))
+    # print the title and column headers
+    echo "Summary of Valgrind Errors,   for memory stats numbers are num_bytes/num_events" >> valgrind_summary.out
+    echo >> valgrind_summary.out
+    for (( i=0 ; i < 10; i++ )) ; do
+        if [[ ${len[$i]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[$i]} "${t1[$i]}" >> valgrind_summary.out
+            if  (( i == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+
+        fi
+    done
+    /usr/bin/printf "\n" >> valgrind_summary.out
+    for (( i=0 ; i < 10; i++ )) ; do
+        if [[ ${len[$i]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[$i]} "${t2[$i]}" >> valgrind_summary.out
+            if  (( i == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+    done
+    /usr/bin/printf "\n" >> valgrind_summary.out
+    # or each test data we found, print values any tests had non-zero data
+    for (( i=0; i < ${#NAME[@]}; i++ )) do
+        # column zero ever elided.
+        /usr/bin/printf "%*s " ${len[0]} "${NAME[$i]}" >> valgrind_summary.out
+        if [[ ${len[1]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[1]} "${ERRORS[$i]}" >> valgrind_summary.out
+            if  (( 1 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[2]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[2]} "${DEF[$i]}" >> valgrind_summary.out
+            if  (( 2 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[3]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[3]} "${INDIR[$i]}" >> valgrind_summary.out
+            if  (( 3 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[4]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[4]} "${POSS[$i]}" >> valgrind_summary.out
+            if  (( 4 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[5]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[5]} "${STILL[$i]}" >> valgrind_summary.out
+            if  (( 5 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[6]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[6]} "${SUFF[$i]}" >> valgrind_summary.out
+            if  (( 6 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[7]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[7]} "${TALLOC[$i]}" >> valgrind_summary.out
+            if  (( 7 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[8]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[8]} "${TFREE[$i]}" >> valgrind_summary.out
+            if  (( 8 == pos1 )) ; then
+                /usr/bin/printf "%\n*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[9]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[9]} "${TBYTE[$i]}" >> valgrind_summary.out
+            if  (( 9 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        /usr/bin/printf "\n" >> valgrind_summary.out
+    done
+
+    mv valgrind_summary.out valgrind_summary
 fi
 exit $ret
