@@ -45,6 +45,11 @@ It will summarize the results of running all the tests.  Passing tests
 are just counted, failing tests include the contents of testname.log file.
 testname.log files in the individual test sub directories, have more 
 details about each part of the tests run, and which parts pass and fail.
+The script that runs the tests will also read the Valgrind data and produce
+a summary of Errors and heap memory usage in the file named valgrind_summary
+in the tests directory.  It produces really wide output over 110 characters
+wide. If you set the environment variable VSWRAP=80 it will generate no
+more than 80 char wide output (wrapping columns).
 
 2. Adding a new test:
 The intent is to isolate testing from the users normal environment, so 
