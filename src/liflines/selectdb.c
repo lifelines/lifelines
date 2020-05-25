@@ -122,8 +122,7 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 		return FALSE;
 	}
 
-	// NOTE: While dbused is a local, a pointer to it is saved in
-	// open_or_create_database() so don't free it here!
+	stdfree(dbused);
 	return TRUE;
 }
 /*==================================================

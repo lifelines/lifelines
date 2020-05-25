@@ -282,11 +282,12 @@ immutretry:
 
 /* Create BTREE structure */
 	btree = (BTREE) stdalloc(sizeof *btree);
-	bbasedir(btree) = dir;
+	bbasedir(btree) = strsave(dir);
 	bmaster(btree) = readindex(btree, kfile1.k_mkey, TRUE);
 
 	if (!(bmaster(btree)))
 	{
+		stdfree(bbasedir(btree));
 		stdfree(btree);
 		*lldberr = BTERR_MASTER_INDEX;
 		goto failopenbtree;
@@ -462,6 +463,7 @@ exit_closebtree:
 		if(bmaster(btree)) {
 			stdfree(bmaster(btree));
 		}
+		stdfree(bbasedir(btree));
 		stdfree(btree);
 	}
 	return result;

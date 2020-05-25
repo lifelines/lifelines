@@ -106,7 +106,6 @@ main (int argc, char **argv)
 	int c;
 	BOOLEAN ok=FALSE;
 	STRING dbrequested=NULL; /* database (path) requested */
-	STRING dbused=NULL; /* database (path) found */
 	BOOLEAN forceopen=FALSE, lockchange=FALSE;
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
@@ -372,7 +371,6 @@ finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
-	strfree(&dbused);
 	strfree(&dbrequested);
 	strfree(&readpath_file);
 	shutdown_interpreter();
