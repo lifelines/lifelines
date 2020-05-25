@@ -218,11 +218,11 @@ void dump_index(STRING dir)
 {
 	INDEX index;
 	FKEY mkey = path2fkey("aa/aa");
-        
+ 
 	if (strcmp(dir, bbasedir(BTR)) != 0) {
-            printf("Error, mismatch in btree file names, %s and %s\n",
-                   dir, bbasedir(BTR));
-        }
+		printf("Error, mismatch in btree file names, %s and %s\n",
+			dir, bbasedir(BTR));
+	}
 	index = readindex(BTR, mkey, TRUE);
 
 	traverse_index_blocks(BTR, index, NULL, tf_print_index, NULL);
@@ -259,7 +259,7 @@ void print_index(INDEX index, INT32 *offset)
 	*offset += sizeof(index->ix_self);
 
 	printf(FMT_INT32_HEX ": ix_type: " FMT_INT32 " (%s)\n", *offset, index->ix_type,
-               (index->ix_type == 1 ? "INDEX" : (index->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
+	    (index->ix_type == 1 ? "INDEX" : (index->ix_type == 2 ? "BLOCK" : "UNKNOWN")));
 	*offset += sizeof(index->ix_type);
 
 #if __WORDSIZE != 16
@@ -298,11 +298,11 @@ void dump_block(STRING dir)
 {
 	INDEX index;
 	FKEY mkey = path2fkey("aa/aa");
-        
+
 	if (strcmp(dir, bbasedir(BTR)) != 0) {
-            printf("Error, mismatch in btree file names, %s and %s\n",
-                   dir, bbasedir(BTR));
-        }
+		printf("Error, mismatch in btree file names, %s and %s\n",
+		    dir, bbasedir(BTR));
+	}
 	index = readindex(BTR, mkey, TRUE);
 
 	traverse_index_blocks(BTR, index, NULL, NULL, tf_print_block);
@@ -497,9 +497,9 @@ void print_keyfile(KEYFILE1* kfile1, KEYFILE2* kfile2, INT32 size)
 void dump_xref(STRING dir)
 {
 	if (strcmp(dir, bbasedir(BTR)) != 0) {
-            printf("Error, mismatch in btree file names, %s and %s\n",
-                   dir, bbasedir(BTR));
-        }
+		printf("Error, mismatch in btree file names, %s and %s\n",
+			dir, bbasedir(BTR));
+	}
 
 	if (!openxref(FALSE))
 	{

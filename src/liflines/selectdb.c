@@ -122,7 +122,7 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 		return FALSE;
 	}
 
-        stdfree(dbused);
+	stdfree(dbused);
 	return TRUE;
 }
 /*==================================================

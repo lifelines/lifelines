@@ -287,7 +287,7 @@ immutretry:
 
 	if (!(bmaster(btree)))
 	{
-                stdfree(bbasedir(btree));
+		stdfree(bbasedir(btree));
 		stdfree(btree);
 		*lldberr = BTERR_MASTER_INDEX;
 		goto failopenbtree;
@@ -462,8 +462,8 @@ exit_closebtree:
 		freecache(btree);
 		if(bmaster(btree)) {
 			stdfree(bmaster(btree));
-                }
-                stdfree(bbasedir(btree));
+		}
+		stdfree(bbasedir(btree));
 		stdfree(btree);
 	}
 	return result;
