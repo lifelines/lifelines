@@ -5,19 +5,22 @@
 #    99 hard error
 #    1 failure
 # called in the build area tests directory
-# called with 1 argument - the relative path of the llsrc file to run
+# called with 1 argument - the relative path of the llscr file to run
 #           this gives us srcdir as well as target name, with assumption
-#           we have rule testdir/testname.log: testname.llsrc
+#           we have rule testdir/testname.log: testname.llscr
+#           make thinks it's doing .../testname.llscr -> testdir/testname.log
 
 # environment variables (usually from make)
 # VERBOSE     if set (to 1) turns on lots of messages from this script
 #             written to testname.log, can be enabled with
 #             VERBOSE=1 make check
 #             VERBOSE=1 make testdir/testname.log
-# CAPTUREOUT  compare caputured output of running the command with reference
+# CAPTUREOUT  compare llines output from running the command with reference
 #             CAPTUREOUT=1 makes this check
 #             the output is highly dependent on curses which seems to tweek
 #             things frequently in ways that don't represent failures.
+#             so default if CAPTUREOUT not defined in environment is to
+#             not compare the output (but still collects it)
 # TESTMEMCHECK If defined, run the test under valgrind, so
 #             cd tests; rm math/test1.log; TESTMEMCHECK=1 make math/test1.log
 #             will execute the test under valgrind, i.e.
@@ -26,6 +29,7 @@
 #             A summary of errors and malloc'ed memory usage is left in the
 #             file valgrind_summary
 #
+llines_filter=../../src/tools/xterm_decode
 # srcdir -    relative path to the src area 'tests' directory
 #
 # variables local to this script
@@ -44,122 +48,230 @@
 # llines      path to llines executable from within testdir
 # bits        set to 32 or 64 the architecture size used to compile llines
 #    reference file - note 3 possible names for reference files
-#    testname.out.ref testname.out.32.ref testname.out.64.ref
+#    testname...out.ref testname...out.32.ref testname...out.64.ref
+#             the ... is progname.stdout or progname.out
 #    refout below points to the one we need for this test
 # refout      path to reference file from test subdir
 # trefout     path to reference file from 'tests'dir
+diffcnt=0     # count number of file diffs
+failcnt=0     # count number of failed file diffs
+skipcnt=0     # count of files skipped
+
+declare -A repeatcmd  # if same command run more than once add _n to
+                      # succesive runs i.e. dbverify.log, dbverify_2.log ...
 
 # compare_file(base) using base name of file, compare output file (.out)
-#              with reference (.ref)
-function compare_file { 
-    base=$1
-    refout=$testsrcdir/$base.ref       # refout path from test subdir
-    trefout=$srcdir/$testdir/$base.ref # refout path from 'tests' dir
-    if [[ ! -f $refout ]] ; then
+#   with reference (.ref), return values:
+# 0 success
+# 1 files differ
+# 2 file missing
+# 99 unknown error
+# cmpmsg -- will contain a message indicating why it passed or failed
+#    messages begin with either PASS or FAIL followed by what happened.
+# intrepretation of these results depends on the situation
+# see comments where compare_file is called.
+function compare_file {
+    (( diffcnt++ ))    # count everything
+    base=$1   # basename of file to compare 
+    cmpmsg=
+
+    trefout=$testsrcdir/$base.ref       # refout path from tests/subdir
+    refout=$srcdir/$testdir/$base.ref # refout path from tests 
+    if [[ ! -f $base ]] ; then
+        cmpmsg="FAIL test output missing $base"
+        return 10
+    fi
+    if [[ ! -f $trefout ]] ; then
         if [[ ! -f $testsrcdir/$base.$bits.ref ]] ; then
-            echo "FAIL $testdir/$testname $base, didn't find reference file $trefout"
-            echo "     or $srcdir/$testdir/$base.$bits.ref"
-            return 99
+            cmpmsg="FAIL missing $refout or $srcdir/$testdir/$base.$bits.ref"
+            (( failcnt++ ))
+            return 10
         else 
-            refout=$testsrcdir/$base.$bits.ref 
-            trefout=$srcdir/$testdir/$base.$bits.ref
+            trefout=$testsrcdir/$base.$bits.ref 
+            refout=$srcdir/$testdir/$base.$bits.ref
         fi
     fi
-    diff $base $refout > $base.diff
+    diff $base $trefout > $base.diff
     case $? in
     0)
-        echo "PASS $testdir/$testname $base"
+        cmpmsg="PASS $testdir/$base"
         rm $base.diff
         return 0
         ;;
     1)
-        echo "FAIL $testdir/$testname $base output didn't match reference"
-        echo "    check $testdir/$base.diff or"
-        echo "    run diff $testdir/$base $trefout"
+        cmpmsg="FAIL $testdir/$base output didn't match reference: check $testdir/$base.diff or run diff $testdir/$base $refout"
+        (( failcnt++ ))
         return 1
         ;;
     2)
-        echo "FAIL $testdir/$testname FAILED maybe missing file"
+        cmpmsg="FAIL $testdir/$base FAILED maybe missing file"
+        (( failcnt++ ))
         return 99
         ;;
     *)
-        echo "FAIL $testdir/$testname unknown diff failure"
+        cmpmsg="FAIL $testdir/$base unknown diff failure"
+        (( failcnt++ ))
         return 99
         ;;
     esac
 }
 
-# run_a_command (cmd cmdin cmdout cmdout2 filter) 
-# cmd      - command to execute
-# cmdin    - name of stdin file if any
-#            if none no stdin redirection is done
-# cmdout   - output files, typically end in .out
-#            reference files have .ref appended
-#            baseout is name w/o the .out or .ref
-#            if filter is defined, cmdout is filtered with output to
-#            cmdout.out.filter (expecting a similarly named .ref file)
-# cmdout2  - second output file  (if one exists)
-#            (e.g. llines scripts generate $testname.out)
-# filter     filter cmdout.out with this filter     
+# run_a_command cmd args
+# cmd      - command name to execute (no path)
+# args     - arguments to command
 # Note: we don't exit on error, but rather just return the return value
-#   and let caller  accumulate status, so all tests are tried
+#   and let caller accumulate status, so all tests are tried
 function run_a_command {
-    cmd=$1
-    cmdin=$2
-    cmdout=$3
-    cmdout2=$4
-    filter=$5
+    cmd=$1     
+    args=$2
     rac=0
     # note: use of import filter should be an option, but for now there is
     #     only one use of filter so punt until it's needed
     import_filter="sed -r -e 's/(Import time )([0-9]*)(s \(ui )([[:digit:]]+)/\1xx\3xx/'"
     import_filter="$import_filter -e 's/(Report duration )([0-9]*)(s \(ui duration )([[:digit:]]+)/\1xx\3xx/'"
-    [[ -n $VERBOSE ]] && echo "run_a_cmd $cmd $cmdin $cmdout $cmdout2 $filter"
-    
+#  we have either ../../../tests/gengedcomstrong/test1 or gengedcom...
+    import_filter="$import_filter -e 's, $testsrcdir, TESTS/$testdir,' -e 's, $testdir, TESTS/$testdir,'"
+    [[ -n $VERBOSE ]] && echo "run_a_command $cmd $args"
 
-    # remember cmdout since if we filter it name is differnt
-    defout=$cmdout
-    # build up the command name to execute
-
-    if [[ -n $TESTMEMCHECK ]] ; then
-        basecmd=${cmd%% *}
-        basecmd=${basecmd##*/}
-        cmd="valgrind --log-file=$testname-$basecmd.valgrind --num-callers=16 --leak-check=yes $cmd"
+    # compute full (but relative) path to the cmd
+    if [[ ${cmd##*/}  != "$cmd" ]] ; then
+        echo "Error, $cmd contains pathname"
+        exit 99
+    fi    
+    if [[ -x ../../src/tools/$cmd ]] ; then
+        fcmd=../../src/tools/$cmd
+    elif [[ -x ../../src/liflines/$cmd ]] ; then
+        fcmd=../../src/liflines/$cmd
+    else
+        fcmd=`which $cmd`
+        if [[ $? == 1 ]] ; then
+            echo "FAIL $thistest post command $cmd not found aborting"
+            if [[ $ret < "1" ]] ; then
+                ret=1
+            fi
+        fi
+        echo "$thistest Warning post command found outside build tree"
     fi
-    cmdstr=$cmd
+
+    # log files are testname.cmd.out and testname.cmd.stdout
+    # .stdout is used for captured standard out always
+    # if there is script output written to a file other than stdout
+    # the name used is testname.cmd.out
+    # likewise for programs run via the config file naming is the same
+    # testname.cmd.stdout - stdout from running cmd
+    # testname.cmd.out    - output from command if command has OUTPUT in it
+    #
+    # if a program is called more than once, from config file, add suffix
+    # _to $cmd _2, _3 ... to repeated invocations
+    # Only 1 occurance of llines is allowed - i.e. llines not allowed in
+    # .config file
+    if [[ ${repeatcmd[$cmd]} = '' ]] ; then
+        repeatcmd[$cmd]=1
+        cmdsuf=''
+    else
+        (( repeatcmd[$cmd] = repeatcmd[$cmd] + 1 ))
+        cmdsuf=_${repeatcmd[$cmd]}
+    fi
+    stdout_name=$testname.$cmd$cmdsuf.stdout
+    testout_name=$testname.$cmd$cmdsuf.out
+
+    # deal with OUTPUT and TESTNAME
+    # see if OUTPUT in args needs replaced with output file name
+    # or if OUTPUT in llines script needs replaced
+    # if not found assume everything goes to stdout
+    # 
+    if [[ ${args#*OUTPUT} != "$args" ]] ; then
+        args=${args//OUTPUT/$testout_name}
+        cmdin=
+    elif [[ $cmd == "llines" ]] ; then 
+        # see if OUTPUT in llines script and replace OUTPUT and TESTNAME
+        if [[ -n $VERBOSE ]] ; then
+            echo "sed -e \"s@TESTNAME@$testsrcdir/$testname@\" -e \"s@OUTPUT@$testout_name@\" < $testsrcdir/$scriptname >$scriptname.fix"
+        fi
+        sed -e "s@TESTNAME@$testsrcdir/$testname@" -e "s@OUTPUT@$testout_name@" < $testsrcdir/$scriptname >$scriptname.fix
+        grep -q OUTPUT $testsrcdir/$scriptname
+        if [[ $? != 0 ]] ; then
+            testout_name=
+        fi
+        cmdin=$scriptname.fix
+    else
+        testout_name=
+        cmdin=
+    fi
+
+    cmdstr=
+    if [[ -n $TESTMEMCHECK ]] ; then
+        #cmdstr="valgrind --log-file=$testname-$cmd$cmdsuf-%p.valgrind --num-callers=16 --leak-check=yes"
+        # we really don't need %p as all programs are single thread now
+        cmdstr="valgrind --log-file=$testname-$cmd$cmdsuf.valgrind --num-callers=16 --leak-check=yes"
+    fi
+    cmdstr="$cmdstr $fcmd $args"
+
     if [[ -n $cmdin ]] ; then
         cmdstr="$cmdstr < $cmdin"
     fi
-    cmdstr="${addtoenv[@]} $cmdstr > $cmdout"
+    cmdstr="${addtoenv[@]} $cmdstr > $stdout_name"
     # now run the command (use eval to allow addtoenv working, and < and >)
     [[ -n $VERBOSE ]] && echo "eval $cmdstr"
     eval $cmdstr
     rac=$?
     if [[ $rac != 0 ]] ; then 
-        echo "FAIL $testdir/$testname command ($cmdstr) exited with status $rac"
+        echo "FAIL $testdir/$testname command \($cmdstr\) exited with status $rac"
+
         return 1
     fi
-    if [[ -n $filter ]] ; then
-        defout=$cmdout.filter
-        cmdstr="${addtoenv[@]} $filter < $cmdout | $import_filter > $defout"
+    if [[ $cmd == "llines" ]] ; then
+        if [[ ! -f $llines_filter ]] ; then
+            echo "FAIL $thistest $llines_filter doesn't exist"
+            ret=99
+        fi
+        cmdstr="$llines_filter < $stdout_name | $import_filter > $stdout_name.filter"
         eval $cmdstr
         rac=$?
         if [[ $rac != 0 ]] ; then
-            echo "FAIL $testdir/$testname filter($filter) failed with exit $ret"
-            return 1
+            echo "FAIL $testdir/$testname $llines_filter failed with exit $ret"
         fi
+        stdout_name=$stdout_name.filter
     fi
-    if [[ -n $CAPTUREOUT ]] ; then
-        compare_file $defout
+    if [[ -n $CAPTUREOUT || $cmd != "llines" ]] ; then
+        # CAPTUREOUT is set || cmd is not llines 
+        compare_file $stdout_name
         rac=$?
+        if [[ -n $postskip ]] ; then
+            echo "SKIP $cmpmsg"
+            (( skipcnt++ ))
+        else
+            echo "$cmpmsg"
+        fi
     else
-        echo "SKIP $testdir/$testname $base"
+        # CAPTUREOUT not is set and file is llines 
+        # do compare anyway, but only report results as SKIP
+        # and don't count failures
+        compare_file $stdout_name
+        rac=$?
+        (( skipcnt++ ))
+        if [[ $rac == 0 ]] ; then
+            # I think this is a failure- either the bug
+            # the caused SKIP to be added has been fixed, or reference
+            # file was incorrectly updated. But it's possible that
+            # some tests pass, and some fail, to warrent a SKIP
+            # we can flag that in final log file message
+            echo "SKIP $cmpmsg *** but file matched reference ***"
+        else
+            echo "SKIP $cmpmsg"
+        fi
+        rac=0;
     fi
 
-    # now diff cmdout2 output if one exists
-    if [[ -n $cmdout2 ]] ; then
-        compare_file $cmdout2
+    # now diff prog output if test output was redirected to a file
+    if [[ -n $testout_name ]] ; then
+        compare_file $testout_name
         ret1=$?
+        if [[ -n $postskip ]] ; then
+            echo "SKIP $cmpmsg"
+        else
+            echo "$cmpmsg"
+        fi
         if [[ $rac < "$ret1" ]] ; then
             rac=$ret1
         fi
@@ -167,22 +279,29 @@ function run_a_command {
     return $rac;
 }
 
+# start of script
 if [[ -n $VERBOSE ]] ; then
     echo args "$@"
     echo in directory "'$PWD'"
     echo srcdir is "'$srcdir'"
     echo \$0 is "'$0'"
     echo in directory "'$PWD'"
-    set -x   # more debug info
-    #set -vx # even more info about commands executed
+    if [[ $VERBOSE -gt 1 ]] ; then
+        set -x   # more debug info
+    fi
 fi
 
 
-scriptname=${1##*/}        # strip off pathname
-testname=${scriptname%.*}  # strip of suffix of script leaving name of test
-testdir=${1%/*}            # strip off script name
-testdir=${testdir##*/}     # strip off leading path
-thistest=$testdir/$testname # convience for messaging
+# $1 is make 'src' for example  ../../tests/math/test1.llscr
+#     and make target is math/test1.log
+#     comments reflect this example
+scriptname=${1##*/}        # strip off pathname leaving (test1.llscr)
+testname=${scriptname%.*}  # strip of suffix (.llscr) leaving name of test
+                           # (test1)
+testdir=${1%/*}            # strip off script name (../../tests/math)
+testdir=${testdir##*/}     # strip off leading path leaving dir test is in
+                           # (math)
+thistest=$testdir/$testname # convience for messaging e.g. math/test1
 
 # do we have a separate build area
 if [[ -z $srcdir || $srcdir = . ]] ; then # no
@@ -214,7 +333,7 @@ else
 fi
 
 if [[ -n $VERBOSE ]] ; then
-    echo script name=$scriptname
+    echo $scriptname
     echo testdir=$testdir
     echo testname=$testname
     echo testsrcdir=$testsrcdir
@@ -240,7 +359,7 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
         #[[ -n $VERBOSE ]] && echo "key='$key' name='$name' rest='$rest'"
         case $key in
         env)
-            if [[ (${name#*=} != $name) && (${name#*=*=} == $name) && -z $rest ]] ; then
+            if [[ (${name#*=} != $name) && (${name#*=*=} == "$name") && -z $rest ]] ; then
                 addtoenv+=( $name )
             else 
                 (( cnt += 1 ))
@@ -277,7 +396,7 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
    fi
 fi
 
-if [[ -n $VERBOSE && 1 == 0 ]] ; then
+if [[ -n $VERBOSE && 1 == 0 ]] ; then # skip this, renable to debug
     if [[ ${#addtoenv[@]} ]] ; then
         echo "Environment adjustments"
         for i in ${addtoenv[@]}; do
@@ -286,95 +405,48 @@ if [[ -n $VERBOSE && 1 == 0 ]] ; then
     fi
     if [[ ${#precmds[@]} > 0 ]] ; then
         echo "pre commands"
-        for i in ${!precmds[@]}; do
+        for (( i=0; i < ${#precmds[@]}; i++ )) ; do
             echo "    ${precmds[$i]} ${preargs[$i]}"
         done
     fi
     if [[ ${#postcmds[@]} > 0 ]] ; then
         echo "post commands"
-        for i in ${!postcmds[@]}; do
+        for (( i=0; i < ${#postcmds[@]}; i++ )) ; do
             echo "    ${postcmds[$i]} ${postargs[$i]}"
         done
     fi
 fi
-# run llines with $testname.llscr, replacing TESTNAME with name with path to it
-# also prevent linesrc files from effecting the test
-if [[ ! -f $testsrcdir/$scriptname ]] ; then
-    echo "FAIL $thistest $scriptname not found"
-    ret=99
-fi
-[[ -n $VERBOSE ]] && echo "sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname >$scriptname.fix"
-sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname > $scriptname.fix
-# some tests don't need to write out a $testname.out file
-#    so check if one is necessary
-scriptout=""
-if grep $testname.out $scriptname.fix >& /dev/null ; then
-    scriptout=$testname.out
-fi
-if [[ -n $NOCAPTUREOUT ]] ; then
-    run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "" ""
-    ret1=$?
-    if [[ $ret < $ret1 ]] ; then
-        ret=$ret1
-    fi
-else
-    if [[ ! -f ../../src/tools/xterm_decode ]] ; then
-        echo "FAIL $thistest ../../src/tools/xterm_decode doesn't exist"
-        ret=99
-    else
-        # tell llines to use non-existant file in test source directory
-        # so not affected by any user settings. Also test writer can
-        # always add a $testname.lines.src if needed for a test
-        #run_a_command cmd cmdin cmdout cmdout2 filter
-        run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "$scriptout" ../../src/tools/xterm_decode
-        ret1=$?
-        if [[ $ret < $ret1 ]] ; then
-            ret=$ret1
-        fi
-    fi
-fi
+# run llines using $testname.llscr to drive llines
+# the -C tell llines to use non-existant file in test source directory
+# so not affected by any user settings. Also test writer can
+# always add a testname.lines.src if needed for a test
+# run_a_command figures out input and output file setup, and filtering
+#run_a_command cmd args
+run_a_command "llines" "-C $testsrcdir/$testname.lines.src testdb" 
+ret=$?
 
 # post processing commands
 #   Look for commands in tools and liflines directories, otherwise ?? use path
-
-if [[ ${#postcmds[@]} > 0 ]] ; then
+#   to resolve command name
+if [[ ${#postcmds[@]} > 0 ]] ; then 
     echo "post commands"
     for i in ${!postcmds[@]}; do
         cmd=${postcmds[$i]}    # get the command name
-        if [[ -x ../../src/tools/$cmd ]] ; then
-            fcmd=../../src/tools/$cmd
-        elif [[ -x ../../src/liflines/$cmd ]] ; then
-            fcmd=../../src/liflines/$cmd
-        else
-            fcmd=`which $cmd`
-            if [[ $? == 1 ]] ; then
-                echo "FAIL $thistest post command $cmd not found aborting"
-                if [[ $ret < "1" ]] ; then
-                    ret=1
-                fi
-            fi
-            echo "$thistest Warning post command found outside build tree"
-        fi
         args=${postargs[$i]}
-        args=${args/TESTNAME/$testsrcdir/$testname}
-        args=${args/SRCDIR/$testsrcdir}
-        cmdout=
-        if [[ $cmd = "llexec" ]] ; then
-            if [[ $args =~ .*-o\ *"$testname.out".* ]] ; then
-                cmdout=$testname.out
-            fi
-        fi
-        #run_a_command cmd cmdin cmdout cmdout2 filter
-        #run_a_command "$fcmd ${postargs[$i]}" ""  "$testname.$cmd.out" "" ""
-        run_a_command "$fcmd ${args}" ""  "$testname.$cmd.out" "$cmdout" ""
+        # if args contains string TESTNAME, SRCDIR or OUTPUT replace 
+        # replace TESTNAME with path to srcdir/testname
+        # replace SRCDIR with path to source dir 
+        # let run_a_command handle OUTPUT as it does output file nameing
+        args=${args//TESTNAME/$testsrcdir/$testname}
+        args=${args//SRCDIR/$testsrcdir}
+        #
+        #run_a_command cmd args
+        run_a_command "$cmd" "${args}"
         ret1=$?
         if [[ $ret < $ret1 ]] ; then
             ret=$ret1
         fi
     done
-fi
-if [[ -n $postskip ]] ; then
-    exit 77
 fi
 if [[ -n $TESTMEMCHECK ]] ; then
     # read valgrind output files and summarize outputs
@@ -523,7 +595,7 @@ if [[ -n $TESTMEMCHECK ]] ; then
     # indent second row indent after printing data at pos1
 
     #/usr/bin/printf "indent=%d after col %d\n" $indent $pos1 >> valgrind_summary.out
-    if (( $pos1 == 0 )) ; then
+    if (( pos1 == 0 )) ; then
         pos1=20
     fi
     (( len[0] = -len[0] ))
@@ -612,4 +684,36 @@ if [[ -n $TESTMEMCHECK ]] ; then
 
     mv valgrind_summary.out valgrind_summary
 fi
-exit $ret
+# if postskip is set and there are no failures this is an error condition
+# either log file inadvertently updated or issue is fixed and SKIP need to
+# be removed.
+if [[ -n $postskip ]] ; then
+    if [[ $ret == 0 ]] ; then
+        echo -n "FAIL SKIP - config file marks test as forced SKIP but passing"
+        echo " $skipcnt diffs skipped, $failcnt failed, $passed passed, $diffcnt compared"
+        exit 1
+    else 
+        echo -n "SKIP - test marked as forced SKIP in config file"
+        echo " $skipcnt diffs skipped, $failcnt failed, $passed passed, $diffcnt compared"
+        exit 77
+    fi
+fi
+
+if [[ $ret == 0 ]] ; then
+    echo -n "PASS"
+else 
+    echo -n "FAIL"
+fi
+if [[ $skipcnt != 0 ]] ; then
+    echo -n " $testdir/$testname, $skipcnt diff's skipped"
+else 
+    echo -n " $testdir/$testname, no diff's skipped"
+fi
+
+(( passed = diffcnt - $failcnt))
+if [[ $failcnt != 0 ]] ; then
+    echo ", $failcnt failed, $passed passed, $diffcnt compared"
+else 
+    echo ", no failed, $passed passed, $diffcnt compared"
+fi
+exit $ret;

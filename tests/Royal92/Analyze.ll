@@ -1,8 +1,7 @@
 /*
 @programe Analyze.ll
 @author Stephen Dum
-@description run thru a bunch of iterators 
-             This test is attempting to call as many different iterators
+@description This test is attempting to call as many different iterators
              as it can for indi's, fam's, and children.
 */
 proc main ()
