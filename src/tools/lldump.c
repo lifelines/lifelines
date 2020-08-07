@@ -63,6 +63,10 @@ struct work {
 	INT dump_record;
 	INT dump_xref;
 };
+int autoskip = 0;	// 0 print unused directory entries
+					// 1 print summary of unused entries
+					// they are typically all 0, but when a INDEX is 
+					// split the 'deleted' entries remain
 static struct work todo;
 
 typedef struct {
@@ -152,6 +156,7 @@ main (int argc,
 		case 'b': todo.dump_btree=TRUE; break;
 		case 'k': todo.dump_key=TRUE; break;
 		case 'r': todo.dump_record=TRUE; break;
+		case 's': autoskip=1; break;
 		case 'x': todo.dump_xref=TRUE; break;
 		default: print_usage(); goto finish;
 		}
@@ -213,6 +218,8 @@ print_usage (void)
 	printf(_("\t-k = Dump key files (KEYFILE1, KEYFILE2)\n"));
 	printf(_("\t-x = Dump xref file (DELETESET)\n"));
 	printf(_("\t-r = Dump records (BLOCK)\n"));
+	printf(_("\t-s = summarize unused INDEX and BLOCK directory entries\n"));
+	printf(_("\t     default dump all entries\n"));
 	printf("\n");
 	printf(_("\t--help\tdisplay this help and exit"));
 	printf("\n");
@@ -256,7 +263,7 @@ check_rkey(keytype *kt, RKEY *key) {
 	if (*(INT64*)key == 0) {
 		// special case zero key
 		strncpy(kt->rkey,"8 x 0x00",9);  // null key in 8 chars
-		strncpy(kt->rname,"Bad",6);
+		strncpy(kt->rname,"Zero",6);
 		kt->rkeyfirst = kt->rkey;
 		return;
 	}
@@ -410,17 +417,21 @@ void print_index(INDEX index, INT32 *offset)
 	NRcount = nkeys(index);
 
 	//print data in 2 column  rkey,pad2 & fkey  
+	// the 0th entries are a backstop for btree searching
+	// regular key entries are 1..ix_nkeys
+	// There are a total of NOENTS (340) entries.
+	// INDEX Directory is 4096 bytes in size
 	INT32 offfkey = *offset + sizeof(index->ix_rkeys)+2;
-	for (n=0; n<=NRcount; n++) {
-		if (*(INT64*)&rkeys(index,n) != 0) {
-		    check_rkey(&akey,&rkeys(index,n));
-			printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
-				*offset, n, (char *)&rkeys(index,n));
-		} else {
-			// hack a value to represent a zero filled key
-			printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
-				*offset, n, "8 x 0x00");
+	for (n=0; n<NOENTS; n++) {
+		if (n == NRcount+1) {
+			if (n < NOENTS - 1) {
+				printf("\ndeleted/unused entries\n");
+			}
+			if (autoskip) break;
 		}
+		check_rkey(&akey,&rkeys(index,n));
+		printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
+				*offset, n, akey.rkey);
 		*offset += sizeof(rkeys(index,n));
 		printf(FMT_INT32_HEX_06 ":ix_fkeys[" FMT_INT_04 "]:" 
 			FMT_INT32_HEX "(%s)\n", 
@@ -428,41 +439,42 @@ void print_index(INDEX index, INT32 *offset)
 		offfkey += sizeof(fkeys(index,n));
 	}
 	// process unused entries
-	printf("\n");
-	printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
-		":ix_rkeys[" FMT_INT_04 "-" FMT_INT_04 
-		"] default value 0x0000000000000000\n",
-		*offset,
-		*offset+(INT32)(sizeof(rkeys(index,n))*(NOENTS-NRcount-1)- 1),
-		NRcount,(INT)NOENTS-1);
-	printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
-		":ix_fkeys[" FMT_INT_04 "-" FMT_INT_04 
-		"] default value 0x00000000\n",
-		offfkey,
-		offfkey+(INT32)(sizeof(fkeys(index,0))*(NOENTS-NRcount-1) - 1),
-		NRcount,(INT)NOENTS-1);
-	// now check that they really are zero'ed
-	int found_deleted = 0;
-	for (n=NRcount+1; n<NOENTS; n++) {
-		if (*(INT64*)&rkeys(index,n) != 0 || fkeys(index,n) != 0) {
-			if (found_deleted++ == 0) { 
-				printf("deleted index rkey/fkey pairs\n");
+	if (autoskip) {
+		printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
+			":ix_rkeys[" FMT_INT_04 "-" FMT_INT_04 
+			"] default value 0x0000000000000000\n",
+			*offset,
+			*offset+(INT32)(sizeof(rkeys(index,n))*(NOENTS-NRcount-1)- 1),
+			NRcount+1,(INT)NOENTS-1);
+		printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
+			":ix_fkeys[" FMT_INT_04 "-" FMT_INT_04 
+			"] default value 0x00000000\n",
+			offfkey,
+			offfkey+(INT32)(sizeof(fkeys(index,0))*(NOENTS-NRcount-1) - 1),
+			NRcount+1,(INT)NOENTS-1);
+		// now check that they really are zero'ed
+		int found_deleted = 0;
+		for (n=NRcount+1; n<NOENTS; n++) {
+			if (*(INT64*)&rkeys(index,n) != 0 || fkeys(index,n) != 0) {
+				if (found_deleted++ == 0) { 
+					printf("\ndeleted index rkey/fkey pairs\n");
+				}
+				if (*(INT64*)&rkeys(index,n) != 0) {
+					check_rkey(&akey,&rkeys(index,n));
+					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
+						*offset, n, akey.rkey);
+				} else {
+					// hack a value to represent a zero filled key
+					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
+						*offset, n, "8 x 0x00");
+				}
+				printf(FMT_INT32_HEX_06 ":ix_fkeys[" FMT_INT_04 "]:" 
+					FMT_INT32_HEX "(%s)\n", 
+					offfkey, n, fkeys(index,n), fkey2path(fkeys(index,n)));
 			}
-			if (*(INT64*)&rkeys(index,n) != 0) {
-				check_rkey(&akey,&rkeys(index,n));
-				printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
-					*offset, n, (char *)&rkeys(index,n));
-			} else {
-				// hack a value to represent a zero filled key
-				printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
-					*offset, n, "8 x 0x00");
-			}
-			printf(FMT_INT32_HEX_06 ":ix_fkeys[" FMT_INT_04 "]:" 
-				FMT_INT32_HEX "(%s)\n", 
-				offfkey, n, fkeys(index,n), fkey2path(fkeys(index,n)));
+			*offset += sizeof(rkeys(index,0));
+			offfkey += sizeof(fkeys(index,0));
 		}
-		*offset += sizeof(rkeys(index,0));
-		offfkey += sizeof(fkeys(index,0));
 	}
 
 #if __WORDSIZE != 16
@@ -515,7 +527,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 
 	/* Step 2: Dump BLOCK structure */
 	printf("BLOCK - DIRECTORY %s\n",fkey2path(ixself(block)));
-        // BLOCK header
+	// BLOCK header
 	printf(FMT_INT32_HEX ":ix_self:   " FMT_INT32_HEX " (%s)\n", *offset, 
 		ixself(block), fkey2path(ixself(block)));
 	*offset += sizeof(ixself(block));
@@ -539,26 +551,38 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 	*offset += sizeof(nkeys(block));
 
 	// print out block Directory Keys
-	for (n=0; n<NRcount; n++) {
+	// as opposed to index Directory for block Directory 
+	// there are ix_nkeys entries, indexed 0..ix_nkeys-1; total of 
+	// There are a total of NORECS (255) entries.
+	// BLOCK Directory is 4096 bytes in size 
+	for (n=0; n<NORECS; n++) {
+		if (n == NRcount) {
+			if (n < NORECS - 1) {
+				printf("\ndeleted/unused entries\n");
+			}
+			if (autoskip) break;
+		}
 		check_rkey(&akey,&rkeys(block,n));
 		printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n",
-			*offset, n, (char *)&rkeys(block,n));
+			*offset, n, akey.rkey);
 		*offset += sizeof(rkeys(block,n));
 	}
-	if (NRcount != NORECS) {
-		printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
-			":ix_rkey[" FMT_INT_04 "-" FMT_INT_04 
-			"] default value 0x0000000000000000\n",
-			*offset,
-			*offset + (INT32)((NORECS-NRcount)*sizeof(rkeys(block,0)) - 1),
-			NRcount,(INT)NORECS-1);
-		for (n=NRcount; n<NORECS; n++) {
-			if (*(INT64*)&rkeys(block,n) != 0) {
-				printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]:"
-					FMT_INT64_HEX " value not zero\n",
-					*offset, n, *(INT64*)&rkeys(block,n));
+	if (autoskip) {
+		if (NRcount != NORECS) {
+			printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
+				":ix_rkey[" FMT_INT_04 "-" FMT_INT_04 
+				"] default value 0x0000000000000000\n",
+				*offset,
+				*offset + (INT32)((NORECS-NRcount)*sizeof(rkeys(block,0)) - 1),
+				NRcount,(INT)NORECS-1);
+			for (n=NRcount; n<NORECS; n++) {
+				if (*(INT64*)&rkeys(block,n) != 0) {
+					printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]:"
+						FMT_INT64_HEX " value not zero\n",
+						*offset, n, *(INT64*)&rkeys(block,n));
+				}
+				*offset += sizeof(rkeys(block,0));
 			}
-			*offset += sizeof(rkeys(block,0));
 		}
 	}
 

@@ -73,8 +73,9 @@ INDEX - DIRECTORY aa/aa
 0x00011e:ix_rkeys[0034]:'  NJS152'  0x000b38:ix_fkeys[0034]:0x00030000(ad/aa)
 0x000126:ix_rkeys[0035]:'  NPV514'  0x000b3c:ix_fkeys[0035]:0x00010004(ab/ae)
 
-0x0000012e-0x00000aad:ix_rkeys[0035-0339] default value 0x0000000000000000
-0x00000b40-0x00000fff:ix_fkeys[0035-0339] default value 0x00000000
+deleted/unused entries
+0x0000012e-0x00000aad:ix_rkeys[0036-0339] default value 0x0000000000000000
+0x00000b40-0x00000fff:ix_fkeys[0036-0339] default value 0x00000000
 0x00000aae:ix_pad2: 0x0000
 0x00001000: EOF (0x00001000) GOOD
 
@@ -245,6 +246,8 @@ BLOCK - DIRECTORY ab/aa
 0x000004fe:ix_rkey[0158]: '     I59'
 0x00000506:ix_rkey[0159]: '     I60'
 0x0000050e:ix_rkey[0160]: '     I61'
+
+deleted/unused entries
 0x00000516-0x00000805:ix_rkey[0161-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000005f
@@ -2612,6 +2615,8 @@ Warning, embedded null in RKEY R9 (0x2020202020523900)
 0x000005de:ix_rkey[0186]: '    F236'
 0x000005e6:ix_rkey[0187]: '    F237'
 0x000005ee:ix_rkey[0188]: '    F238'
+
+deleted/unused entries
 0x000005f6-0x00000805:ix_rkey[0189-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000007c
@@ -4823,6 +4828,8 @@ BLOCK - DIRECTORY af/af
 0x0000061e:ix_rkey[0194]: '    F433'
 0x00000626:ix_rkey[0195]: '    F434'
 0x0000062e:ix_rkey[0196]: '    F435'
+
+deleted/unused entries
 0x00000636-0x00000805:ix_rkey[0197-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000037
@@ -6943,6 +6950,8 @@ BLOCK - DIRECTORY aa/af
 0x00000536:ix_rkey[0165]: '    F601'
 0x0000053e:ix_rkey[0166]: '    F602'
 0x00000546:ix_rkey[0167]: '    F603'
+
+deleted/unused entries
 0x0000054e-0x00000805:ix_rkey[0168-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000c6
@@ -8781,6 +8790,8 @@ BLOCK - DIRECTORY ab/af
 0x000005fe:ix_rkey[0190]: '    F794'
 0x00000606:ix_rkey[0191]: '    F795'
 0x0000060e:ix_rkey[0192]: '    F796'
+
+deleted/unused entries
 0x00000616-0x00000805:ix_rkey[0193-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000002b
@@ -10849,6 +10860,8 @@ BLOCK - DIRECTORY ac/af
 0x000006fe:ix_rkey[0222]: '    I119'
 0x00000706:ix_rkey[0223]: '    I120'
 0x0000070e:ix_rkey[0224]: '    I121'
+
+deleted/unused entries
 0x00000716-0x00000805:ix_rkey[0225-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000076
@@ -13012,6 +13025,8 @@ BLOCK - DIRECTORY ab/ab
 0x000003ee:ix_rkey[0124]: '    I246'
 0x000003f6:ix_rkey[0125]: '    I247'
 0x000003fe:ix_rkey[0126]: '    I248'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000080
@@ -14892,6 +14907,8 @@ BLOCK - DIRECTORY aa/ab
 0x000003ee:ix_rkey[0124]: '    I373'
 0x000003f6:ix_rkey[0125]: '    I374'
 0x000003fe:ix_rkey[0126]: '    I375'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000f1
@@ -16664,6 +16681,8 @@ BLOCK - DIRECTORY ac/ab
 0x000003ee:ix_rkey[0124]: '    I500'
 0x000003f6:ix_rkey[0125]: '    I501'
 0x000003fe:ix_rkey[0126]: '    I502'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000038
@@ -18447,6 +18466,8 @@ BLOCK - DIRECTORY ac/ac
 0x000003ee:ix_rkey[0124]: '    I627'
 0x000003f6:ix_rkey[0125]: '    I628'
 0x000003fe:ix_rkey[0126]: '    I629'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000069
@@ -20050,6 +20071,8 @@ BLOCK - DIRECTORY aa/ac
 0x000003ee:ix_rkey[0124]: '    I754'
 0x000003f6:ix_rkey[0125]: '    I755'
 0x000003fe:ix_rkey[0126]: '    I756'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000042
@@ -21811,6 +21834,8 @@ BLOCK - DIRECTORY ab/ac
 0x000003ee:ix_rkey[0124]: '    I881'
 0x000003f6:ix_rkey[0125]: '    I882'
 0x000003fe:ix_rkey[0126]: '    I883'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000110
@@ -23528,6 +23553,8 @@ BLOCK - DIRECTORY ad/ab
 0x000003f6:ix_rkey[0125]: '   F1009'
 0x000003fe:ix_rkey[0126]: '   F1010'
 0x00000406:ix_rkey[0127]: '   F1011'
+
+deleted/unused entries
 0x0000040e-0x00000805:ix_rkey[0128-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000053
@@ -25030,6 +25057,8 @@ BLOCK - DIRECTORY ad/af
 0x000003f6:ix_rkey[0125]: '   F1137'
 0x000003fe:ix_rkey[0126]: '   F1138'
 0x00000406:ix_rkey[0127]: '   F1139'
+
+deleted/unused entries
 0x0000040e-0x00000805:ix_rkey[0128-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000002c
@@ -26124,6 +26153,8 @@ BLOCK - DIRECTORY ae/af
 0x000003fe:ix_rkey[0126]: '   F1266'
 0x00000406:ix_rkey[0127]: '   F1267'
 0x0000040e:ix_rkey[0128]: '   F1268'
+
+deleted/unused entries
 0x00000416-0x00000805:ix_rkey[0129-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000002c
@@ -27294,6 +27325,8 @@ BLOCK - DIRECTORY ag/aa
 0x0000051e:ix_rkey[0162]: '   I1008'
 0x00000526:ix_rkey[0163]: '   I1009'
 0x0000052e:ix_rkey[0164]: '   I1010'
+
+deleted/unused entries
 0x00000536-0x00000805:ix_rkey[0165-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000006c
@@ -28980,6 +29013,8 @@ BLOCK - DIRECTORY ad/ac
 0x000003ee:ix_rkey[0124]: '   I1135'
 0x000003f6:ix_rkey[0125]: '   I1136'
 0x000003fe:ix_rkey[0126]: '   I1137'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000057
@@ -30602,6 +30637,8 @@ BLOCK - DIRECTORY ad/ad
 0x000003ee:ix_rkey[0124]: '   I1262'
 0x000003f6:ix_rkey[0125]: '   I1263'
 0x000003fe:ix_rkey[0126]: '   I1264'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000e4
@@ -32417,6 +32454,8 @@ BLOCK - DIRECTORY aa/ad
 0x000003ee:ix_rkey[0124]: '   I1389'
 0x000003f6:ix_rkey[0125]: '   I1390'
 0x000003fe:ix_rkey[0126]: '   I1391'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000ab
@@ -34224,6 +34263,8 @@ BLOCK - DIRECTORY ab/ad
 0x000003ee:ix_rkey[0124]: '   I1516'
 0x000003f6:ix_rkey[0125]: '   I1517'
 0x000003fe:ix_rkey[0126]: '   I1518'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000f4
@@ -35898,6 +35939,8 @@ BLOCK - DIRECTORY ac/ad
 0x000003ee:ix_rkey[0124]: '   I1643'
 0x000003f6:ix_rkey[0125]: '   I1644'
 0x000003fe:ix_rkey[0126]: '   I1645'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000051
@@ -37560,6 +37603,8 @@ BLOCK - DIRECTORY ae/aa
 0x000003ee:ix_rkey[0124]: '   I1770'
 0x000003f6:ix_rkey[0125]: '   I1771'
 0x000003fe:ix_rkey[0126]: '   I1772'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000006e
@@ -39231,6 +39276,8 @@ BLOCK - DIRECTORY ae/ab
 0x000003ee:ix_rkey[0124]: '   I1897'
 0x000003f6:ix_rkey[0125]: '   I1898'
 0x000003fe:ix_rkey[0126]: '   I1899'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000003a
@@ -40615,6 +40662,8 @@ BLOCK - DIRECTORY ae/ac
 0x000003ee:ix_rkey[0124]: '   I2024'
 0x000003f6:ix_rkey[0125]: '   I2025'
 0x000003fe:ix_rkey[0126]: '   I2026'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000047
@@ -41976,6 +42025,8 @@ BLOCK - DIRECTORY ae/ad
 0x000003ee:ix_rkey[0124]: '   I2151'
 0x000003f6:ix_rkey[0125]: '   I2152'
 0x000003fe:ix_rkey[0126]: '   I2153'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000049
@@ -43387,6 +43438,8 @@ BLOCK - DIRECTORY ae/ae
 0x000003ee:ix_rkey[0124]: '   I2278'
 0x000003f6:ix_rkey[0125]: '   I2279'
 0x000003fe:ix_rkey[0126]: '   I2280'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000004d
@@ -44765,6 +44818,8 @@ BLOCK - DIRECTORY ac/ae
 0x000003ee:ix_rkey[0124]: '   I2405'
 0x000003f6:ix_rkey[0125]: '   I2406'
 0x000003fe:ix_rkey[0126]: '   I2407'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000004f
@@ -46219,6 +46274,8 @@ BLOCK - DIRECTORY ad/ae
 0x000003ee:ix_rkey[0124]: '   I2532'
 0x000003f6:ix_rkey[0125]: '   I2533'
 0x000003fe:ix_rkey[0126]: '   I2534'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000004c
@@ -47841,6 +47898,8 @@ BLOCK - DIRECTORY af/aa
 0x000003ee:ix_rkey[0124]: '   I2659'
 0x000003f6:ix_rkey[0125]: '   I2660'
 0x000003fe:ix_rkey[0126]: '   I2661'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000071
@@ -49424,6 +49483,8 @@ BLOCK - DIRECTORY af/ab
 0x000003ee:ix_rkey[0124]: '   I2786'
 0x000003f6:ix_rkey[0125]: '   I2787'
 0x000003fe:ix_rkey[0126]: '   I2788'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000005f
@@ -50981,6 +51042,8 @@ BLOCK - DIRECTORY af/ac
 0x000003ee:ix_rkey[0124]: '   I2913'
 0x000003f6:ix_rkey[0125]: '   I2914'
 0x000003fe:ix_rkey[0126]: '   I2915'
+
+deleted/unused entries
 0x00000406-0x00000805:ix_rkey[0127-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000005c
@@ -52639,6 +52702,8 @@ BLOCK - DIRECTORY af/ad
 0x000005f6:ix_rkey[0189]: '  NAW635'
 0x000005fe:ix_rkey[0190]: '  NAZ121'
 0x00000606:ix_rkey[0191]: '  NAZ652'
+
+deleted/unused entries
 0x0000060e-0x00000805:ix_rkey[0192-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000073
@@ -54807,6 +54872,8 @@ BLOCK - DIRECTORY ac/aa
 0x000005a6:ix_rkey[0179]: '  NEW342'
 0x000005ae:ix_rkey[0180]: '  NEW350'
 0x000005b6:ix_rkey[0181]: '  NEW414'
+
+deleted/unused entries
 0x000005be-0x00000805:ix_rkey[0182-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000016c9
@@ -58263,6 +58330,8 @@ BLOCK - DIRECTORY aa/ae
 0x000005e6:ix_rkey[0187]: '  NJR352'
 0x000005ee:ix_rkey[0188]: '  NJR452'
 0x000005f6:ix_rkey[0189]: '  NJS120'
+
+deleted/unused entries
 0x000005fe-0x00000805:ix_rkey[0190-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x000000dd
@@ -61764,6 +61833,8 @@ BLOCK - DIRECTORY ad/aa
 0x0000054e:ix_rkey[0168]: '  NPR551'
 0x00000556:ix_rkey[0169]: '  NPS532'
 0x0000055e:ix_rkey[0170]: '  NPT240'
+
+deleted/unused entries
 0x00000566-0x00000805:ix_rkey[0171-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x0000007e
@@ -64989,6 +65060,8 @@ BLOCK - DIRECTORY ab/ae
 0x000004e6:ix_rkey[0155]: '  NZP412'
 0x000004ee:ix_rkey[0156]: '  NZR212'
 0x000004f6:ix_rkey[0157]: '  NZZ999'
+
+deleted/unused entries
 0x000004fe-0x00000805:ix_rkey[0158-0254] default value 0x0000000000000000
 0x00000806:ix_pad2: 0x0000
 0x00000808:ix_offs[0000]: 0x00000000  0x00000c04:ix_lens[0000]: 0x00000029
