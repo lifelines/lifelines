@@ -63,11 +63,12 @@ struct work {
 	INT dump_record;
 	INT dump_xref;
 };
-int autoskip = 0;	// 0 print unused directory entries
-					// 1 print summary of unused entries
-					// they are typically all 0, but when a INDEX is 
-					// split the 'deleted' entries remain
+int summarize = 0;	// 0 print unused directory entries
+                        // 1 print summary of unused entries
+                        // they are typically all 0, but when a INDEX is 
+                        // split the 'deleted' entries remain
 static struct work todo;
+static INT lead_char[26]; 
 
 typedef struct {
 	char rkey[9];	// XREF value as found in database (usually 
@@ -156,7 +157,7 @@ main (int argc,
 		case 'b': todo.dump_btree=TRUE; break;
 		case 'k': todo.dump_key=TRUE; break;
 		case 'r': todo.dump_record=TRUE; break;
-		case 's': autoskip=1; break;
+		case 's': summarize=1; break;
 		case 'x': todo.dump_xref=TRUE; break;
 		default: print_usage(); goto finish;
 		}
@@ -218,7 +219,7 @@ print_usage (void)
 	printf(_("\t-k = Dump key files (KEYFILE1, KEYFILE2)\n"));
 	printf(_("\t-x = Dump xref file (DELETESET)\n"));
 	printf(_("\t-r = Dump records (BLOCK)\n"));
-	printf(_("\t-s = summarize unused INDEX and BLOCK directory entries\n"));
+	printf(_("\t-s = Summarize unused INDEX and BLOCK directory entries\n"));
 	printf(_("\t     default dump all entries\n"));
 	printf("\n");
 	printf(_("\t--help\tdisplay this help and exit"));
@@ -259,7 +260,7 @@ print_usage (void)
  *=============================================*/
 
 static void
-check_rkey(keytype *kt, RKEY *key) {
+check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 	if (*(INT64*)key == 0) {
 		// special case zero key
 		strncpy(kt->rkey,"8 x 0x00",9);  // null key in 8 chars
@@ -278,6 +279,9 @@ check_rkey(keytype *kt, RKEY *key) {
 			printf("%2.2x",kt->rkey[i]);
 		}
 		printf(")\n");
+	}
+	if (in_data && *p >= 'A' && *p <= 'Z') {
+	    lead_char[*p - 'A']++;
 	}
 	switch (*p) {
 	case 'E': strncpy(kt->rname,"EVEN",6);  break;
@@ -427,9 +431,9 @@ void print_index(INDEX index, INT32 *offset)
 			if (n < NOENTS - 1) {
 				printf("\ndeleted/unused entries\n");
 			}
-			if (autoskip) break;
+			if (summarize) break;
 		}
-		check_rkey(&akey,&rkeys(index,n));
+		check_rkey(&akey,&rkeys(index,n),FALSE);
 		printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
 				*offset, n, akey.rkey);
 		*offset += sizeof(rkeys(index,n));
@@ -439,7 +443,7 @@ void print_index(INDEX index, INT32 *offset)
 		offfkey += sizeof(fkeys(index,n));
 	}
 	// process unused entries
-	if (autoskip) {
+	if (summarize) {
 		printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
 			":ix_rkeys[" FMT_INT_04 "-" FMT_INT_04 
 			"] default value 0x0000000000000000\n",
@@ -460,7 +464,7 @@ void print_index(INDEX index, INT32 *offset)
 					printf("\ndeleted index rkey/fkey pairs\n");
 				}
 				if (*(INT64*)&rkeys(index,n) != 0) {
-					check_rkey(&akey,&rkeys(index,n));
+					check_rkey(&akey,&rkeys(index,n),FALSE);
 					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
 						*offset, n, akey.rkey);
 				} else {
@@ -496,6 +500,16 @@ void dump_block(STRING dir)
 
 	traverse_index_blocks(BTR, bmaster(BTR), NULL, NULL, tf_print_block);
 
+	printf("\n\nSummary of data entries by key type (includes deleted entries)\n");
+	printf("Deleted Items remain in the database. ISEXF records are marked\n");
+	printf("as deleted in xrefs file, soundex entries (N) has a record\n");
+	printf("but the count of INDI's with this soundex value is 0.\n");
+	char c;
+	for (c = 'A'; c <= 'Z'; c++) {
+	    if (lead_char[c - 'A'] != 0) {
+		printf( "   %c " FMT_INT_6 "\n",c,lead_char[c - 'A']);
+	    }
+	}
 	return;
 }
 /*===============================
@@ -560,14 +574,14 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			if (n < NORECS - 1) {
 				printf("\ndeleted/unused entries\n");
 			}
-			if (autoskip) break;
+			if (summarize) break;
 		}
-		check_rkey(&akey,&rkeys(block,n));
+		check_rkey(&akey,&rkeys(block,n),FALSE);
 		printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]: '%-8.8s'\n",
 			*offset, n, akey.rkey);
 		*offset += sizeof(rkeys(block,n));
 	}
-	if (autoskip) {
+	if (summarize) {
 		if (NRcount != NORECS) {
 			printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
 				":ix_rkey[" FMT_INT_04 "-" FMT_INT_04 
@@ -677,7 +691,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 					*offset, size - *offset-rlen);
 			}
 		}
-		check_rkey(&akey,&rkeys(block,n));
+		check_rkey(&akey,&rkeys(block,n),TRUE);
 		/* keys start with I,F,S,E,X and N R V */
 		printf("[" FMT_INT_04 "] %s rkey: %s offs: " FMT_INT32_HEX
 			" lens: " FMT_INT32_HEX "\n",
@@ -722,7 +736,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			printf("      Assembled data for %s\n",akey.rkeyfirst);
 			int keylen = 0;
 			for(m = 0; m < Ncount; m++) {
-				check_rkey(&akey,(RKEY *)&rec[col1]);
+				check_rkey(&akey,(RKEY *)&rec[col1],FALSE);
 				INT l = strlen(akey.rkeyfirst);
 				if (keylen < l) keylen = l;
 				col1 += sizeof(RKEY);
@@ -734,7 +748,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				//  print keys,strings
 				char *p = &rec[col1];
 				while (*p == ' ') ++p;
-				check_rkey(&akey,(RKEY *)&rec[col1]);
+				check_rkey(&akey,(RKEY *)&rec[col1],FALSE);
 				printf("    " FMT_INT_3 ". %-*s %s %s%s\n" ,
 					m+1, keylen, akey.rkeyfirst,
 					(first == 'N' ? " name " :

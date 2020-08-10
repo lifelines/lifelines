@@ -67508,3 +67508,14 @@ BLOCK - DATA
       3. I2596  name  Zwentibold  //
 
 0x00005605: EOF (0x00005605) GOOD
+
+
+Summary of data entries by key type (includes deleted entries)
+Deleted Items remain in the database. ISEXF records are marked
+as deleted in xrefs file, soundex entries (N) has a record
+but the count of INDI's with this soundex value is 0.
+   F   1422
+   I   3010
+   N    798
+   R     12
+   X      1
