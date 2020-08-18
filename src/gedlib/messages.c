@@ -697,4 +697,4 @@ ZST qSgen_warranty  = N_("This is free software; see the source for copying cond
 ZST qSgen_license   = N_("Lifelines is distributed under an X/MIT Open Source license.\n"
                          "\tSee file LICENSE in the program directory.");
 ZST qSgen_website   = N_("For more information, visit our web site at https://lifelines.github.io/lifelines/");
-ZST qSgen_bugreport = N_("Please peport bugs to https://github.com/lifelines/lifelines/issues");
+ZST qSgen_bugreport = N_("Please report bugs to https://github.com/lifelines/lifelines/issues");

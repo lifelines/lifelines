@@ -130,7 +130,7 @@ proc main ()
     "- 1 "  d(y) "(" hexout(y,nibbles) ")" nl()
     "- 3 "  d(x) "(" hexout(x,nibbles) ")" nl()
     "- 5 "  d(w) "(" hexout(w,nibbles) ")" nl()
-    
+
 
     "\nCheck results of simple 2 arg integer add, sub, mult, div\n"
     rjustify("i",10)  rjustify("j",10)  rjustify("add",10)
@@ -345,14 +345,14 @@ func hexout(n,w) {
     set(cnt,0)
     if (lt(n,0)) {
         incr(n)
-        while(gt(w,0)) {      
+        while(gt(w,0)) {
             decr(w)
             set(b,add(15,mod(n,16)))
             set(n,div(n,16))
             set(s, concat(getel(hex,add(b,1)),s))
         }
     } else {
-        while(gt(w,0)) {      
+        while(gt(w,0)) {
             decr(w)
             set(b,mod(n,16))
             set(n,div(n,16))

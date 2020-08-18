@@ -32,23 +32,22 @@
  *    enter a digit 0 thru 9.
  *
  */
-
 proc main () 
 {
     list(options)
     setel(options,1,"Are you happy today")
     setel(options,2,"or is it a sad day for you")
     set(resp, menuchoose(options,"select your mood - try 0:"))
-    print("response was ",d(resp),"\n")
+    "response was " d(resp) "\n"
 
     set(resp, menuchoose(options,"select your mood - try 1:"))
-    print("response was ",d(resp),"\n")
+    "response was " d(resp) "\n"
 
     set(resp, menuchoose(options,"select your mood - try 2:"))
-    print("response was ",d(resp),"\n")
+    "response was " d(resp) "\n"
 
     set(resp, menuchoose(options,"select your mood - try 3:"))
-    print("response was ",d(resp),"\n")
+    "response was " d(resp) "\n"
 
     list(options)
     setel(options,1,"Are you happy today")
@@ -82,5 +81,5 @@ proc main ()
     push(options,"Option 24")
     push(options,"Option 25")
     set(resp, menuchoose(options,"select your mood - try 0:"))
-    print("response was ",d(resp),"\n")
+    "response was " d(resp) "\n"
 }

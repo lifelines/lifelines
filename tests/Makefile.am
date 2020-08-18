@@ -31,5 +31,5 @@ TEST_EXTENSIONS = .llscr
 LLSCR_LOG_COMPILER = $(srcdir)/run_a_test
 
 clean-local:
-	-rm -f */*.llout */*.out */*.diff */*.fix
-	-rm -rf */testdb */*.filter */*.valgrind
+	-rm -f */*.llout */*.out */*.stdout */*.diff */*.fix
+	-rm -rf */testdb */*.filter */*.valgrind */errs.log

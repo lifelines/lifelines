@@ -404,7 +404,8 @@ cgn_callback (TRAV_NAMES_FUNC_ARGS(key, name, newset, param))
 
 	append_indiseq_sval(soundexseq, strsave(key), (STRING)name, strsave(name)
 		, TRUE, TRUE); /* sure, alloc */
-
+	indi = nztop(indi0);	// reload, in case finish_and_delete_nameset
+				// caused indi to drop out of cache
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, _("Orphaned name: %s"), name);
 		if (todo.fix_ghosts)

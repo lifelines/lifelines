@@ -1,4 +1,7 @@
 /*
+ * NOTE: output is done using print -- i.e. to stdout
+ *       -x has no effect as there is no 'output'
+ *
  * @progname       mc_llexec
  * @version        1.0
  * @author         Stephen Dum
