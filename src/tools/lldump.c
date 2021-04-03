@@ -250,6 +250,7 @@ print_usage (void)
  * 3c. N  6 chars long, N[A-Z$][A-Z][0-9]{3,3}
  *     Name
  * 3d. V is VUOPT (only V key I am aware of)
+ * 3e. H is HISTV or HISTC
  * messages to stdout - errors, warnings are printed and ignored
  * 
  *WARNING: item 2 is broken for Keys starting with a R, ie REFN data.
@@ -263,7 +264,7 @@ static void
 check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 	if (*(INT64*)key == 0) {
 		// special case zero key
-		strncpy(kt->rkey,"8 x 0x00",9);  // null key in 8 chars
+		strncpy(kt->rkey,"0x00 x 8",9);  // null key in 8 chars
 		strncpy(kt->rname,"Zero",6);
 		kt->rkeyfirst = kt->rkey;
 		return;
@@ -292,6 +293,7 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 	case 'S': strncpy(kt->rname,"SOUR",6);  break;
 	case 'V': strncpy(kt->rname,"VUOPT",6); break;
 	case 'X': strncpy(kt->rname,"Other",6); break;
+	case 'H': strncpy(kt->rname,"HIST",6);  break;
 	default:
 		printf("Error, unrecognized RKEY %s\n",p);
 		strncpy(kt->rname,"Bad",6); 
@@ -302,7 +304,8 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 //    R,N are letter followed by A-Za-z0-9
 //       well really N is [A-Z]{3}[0-9]{3}
 //    REFN Name
-//    V is VUOPT`
+//    V is VUOPT
+//    H is HIST[VC]
 	switch (*p) {
 	case 'E': 
 	case 'F': 
@@ -348,6 +351,11 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 		break;
 	case 'V': 
 		if (strcmp(p,"VUOPT") != 0) {
+			printf("Error, invalid letter in RKEY(%s)\n",kt->rkey);
+		}
+		break;
+	case 'H':
+		if (strcmp(p,"HISTV") != 0 && strcmp(p,"HISTC") != 0) {
 			printf("Error, invalid letter in RKEY(%s)\n",kt->rkey);
 		}
 		break;
@@ -692,7 +700,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			}
 		}
 		check_rkey(&akey,&rkeys(block,n),TRUE);
-		/* keys start with I,F,S,E,X and N R V */
+		/* keys start with I,F,S,E,X and N R V H */
 		printf("[" FMT_INT_04 "] %s rkey: %s offs: " FMT_INT32_HEX
 			" lens: " FMT_INT32_HEX "\n",
 			n,akey.rname, akey.rkeyfirst,
@@ -757,6 +765,40 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				lennames += strlen(&rec[stroff])+1;
 				col1 += sizeof(RKEY);
 				col2 += sizeof(INT32);
+			}
+		} else if (*akey.rkeyfirst == 'H') {
+			// HIST data consists of
+			// INT16 count : number of history records
+			// INT16 count : number of history records (again)
+			// .. foreach ..
+			// INT16 ntype : node type (from char)
+			// INT16 nkey  : node key (from INT)
+			//
+			// See save_nkey_list and load_nkey_list
+			//
+			INT32 *ptr = &rec[0];
+			INT32 count1 = *ptr++;
+			INT32 count2 = *ptr++;
+			INT32 count = ((count1>count2) ? count2 : count1);
+			INT i;
+
+			// print out count
+			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
+				*offset,count1);
+			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
+				*offset+sizeof(INT32),count2);
+
+			// print out entries
+			for (i=0; i<count; i++)
+			{
+				INT32 type = *ptr++;
+				INT32 offset1 = (i+1)*8;
+				INT32 num = *ptr++;
+				INT32 offset2 = (i+1)*8 + 4;
+				printf("    " FMT_INT_3 ". " FMT_INT32_HEX ":type '%c' "
+				                             FMT_INT32_HEX ":keynum " FMT_INT "\n",
+					i, *offset + offset1, (char)type,
+					   *offset + offset2, (INT)num);
 			}
 		} else {
 			// handle all but N,R - E F I P S V X 
