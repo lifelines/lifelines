@@ -760,7 +760,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				printf("    " FMT_INT_3 ". %-*s %s %s%s\n" ,
 					m+1, keylen, akey.rkeyfirst,
 					(first == 'N' ? " name " :
-				  	" identified by 'REFN "), &rec[stroff],
+					" identified by 'REFN "), &rec[stroff],
 					(first == 'N' ? "" : "'"));
 				lennames += strlen(&rec[stroff])+1;
 				col1 += sizeof(RKEY);
@@ -776,7 +776,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			//
 			// See save_nkey_list and load_nkey_list
 			//
-			INT32 *ptr = &rec[0];
+			INT32 *ptr = (INT32 *)&rec[0];
 			INT32 count1 = *ptr++;
 			INT32 count2 = *ptr++;
 			INT32 count = ((count1>count2) ? count2 : count1);
@@ -786,7 +786,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
 				*offset,count1);
 			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
-				*offset+sizeof(INT32),count2);
+				*offset+(INT32)sizeof(INT32),count2);
 
 			// print out entries
 			for (i=0; i<count; i++)
@@ -801,7 +801,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 					   *offset + offset2, (INT)num);
 			}
 		} else {
-			// handle all but N,R - E F I P S V X 
+			// handle all but N,R,H - E F I P S V X
 			// these have just text data
 			if (rec != NULL)
 				printf(FMT_INT32_HEX "-" FMT_INT32_HEX 
