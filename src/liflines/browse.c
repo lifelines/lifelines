@@ -1573,7 +1573,7 @@ load_nkey_list (STRING key, struct hist * histp)
 		return;
 	ptr = (INT32 *)rawrec;
 	temp = *ptr++;
-	if (temp<1 || temp > 9999) {
+	if (temp<0 || temp > 9999) {
 		/* #records failed sanity check */
 		msg_error("%s", _(qSbadhistcnt));
 		goto end;
