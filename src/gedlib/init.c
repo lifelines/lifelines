@@ -195,7 +195,6 @@ init_lifelines_postdb (void)
 	if (!openxref(readonly))
 		return FALSE;
 
-
 	transl_load_xlats();
 
 	return TRUE;
@@ -209,6 +208,7 @@ void
 close_lifelines (void)
 {
 	lldb_close(&def_lldb); /* make sure database closed */
+	term_browse_lists();
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
