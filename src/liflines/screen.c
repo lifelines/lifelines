@@ -598,6 +598,13 @@ destroy_windows (void)
 	delete_uiwindow(&debug_win);
 	delete_uiwindow(&debug_box_win);
 	delete_uiwindow(&stdout_win);
+	delete_uiwindow(&utils_menu_win);
+	delete_uiwindow(&extra_menu_win);
+#ifdef UNUSED_CODE
+	delete_uiwindow(&trans_menu_win);
+#endif
+	delete_uiwindow(&add_menu_win);
+	delete_uiwindow(&del_menu_win);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -1703,7 +1710,7 @@ invoke_trans_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!trans_menu_win) {
-		trans_menu_win = create_newwin2("trans_menu", 10,66);
+		create_newwin2(&trans_menu_win,"trans_menu",10,66);
 	}
 	uiwin = trans_menu_win;
 
