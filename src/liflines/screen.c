@@ -530,11 +530,18 @@ delete_uiwindow (UIWINDOW * uiw)
 {
 	if (*uiw) {
 		UIWINDOW w = *uiw;
+		// remove window from master list
 		remove_uiwin(w);
+		// delete window (curses)
 		ASSERT(uiw_win(w));
 		delwin(uiw_win(w));
+		// delete boxwin (curses)
+		if (uiw_boxwin(w))
+			delwin(uiw_boxwin(w));
+		// delete window name
 		ASSERT(w->name);
 		stdfree((STRING)w->name);
+		// delete window
 		stdfree(w);
 		*uiw = 0;
 	}
