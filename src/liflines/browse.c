@@ -1561,17 +1561,19 @@ static void
 load_nkey_list (STRING key, struct hist * histp)
 {
 	STRING rawrec;
-	INT * ptr;
-	INT count, len, i, temp;
+	INT32 * ptr;
+	INT32 count;
+	INT32 temp;
+	INT len, i;
 
 	count = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return;
 	if (len < 8 || (len % 8) != 0)
 		return;
-	ptr = (INT *)rawrec;
+	ptr = (INT32 *)rawrec;
 	temp = *ptr++;
-	if (temp<1 || temp > 9999) {
+	if (temp<0 || temp > 9999) {
 		/* #records failed sanity check */
 		msg_error("%s", _(qSbadhistcnt));
 		goto end;
@@ -1635,7 +1637,9 @@ static void
 save_nkey_list (STRING key, struct hist * histp)
 {
 	FILE * fp=0;
-	INT next, count, temp;
+	INT i, next;
+	INT32 count;	// write buffer for histp->count value
+	INT32 temp;	// write buffer for histp->list[] values
 	size_t rtn;
 
 	count = get_hist_count(histp);
@@ -1649,9 +1653,12 @@ save_nkey_list (STRING key, struct hist * histp)
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 
+	/* write entries */
 	next = histp->start;
-	while (1) {
+	for (i=0; i<count; ++i)
+	{
 		/* write type & number, 4 bytes each */
+		/* type = char, keynum = INT (truncated!) */
 		temp = histp->list[next].ntype;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
 		temp = histp->list[next].keynum;
@@ -2031,7 +2038,7 @@ get_vhist_len (void)
 	return get_hist_count(&vhist);
 }
 /*==================================================
- * get_vhist_len -- how many records currently in change history list ?
+ * get_chist_len -- how many records currently in change history list ?
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
 INT
