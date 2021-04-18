@@ -489,6 +489,10 @@ remove_uiwin (UIWINDOW uiwin)
 	BOOLEAN deleteall = FALSE;
 	ASSERT(list_uiwin);
 	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
+	// If the list is empty, then delete the list.  This avoids a memory leak.
+	// The list will be created again in add_uiwin if needed.
+	if (is_empty_list(list_uiwin))
+		destroy_empty_list(list_uiwin);
 }
 /*==========================================
  * does_match -- Used as callback to remove_uiwin
