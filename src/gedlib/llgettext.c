@@ -74,6 +74,7 @@ llgettext_term (void)
 	}
 	strfree(&gt_codeset);
 #endif
+	strfree(&gt_defLocaleDir);
 }
 
 /*==================================================
