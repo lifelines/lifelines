@@ -79,6 +79,7 @@ NODE parents_nodes(NODE faml);
  *********************************************/
 
 /* node allocator's free list */
+static NDALLOC alloc_blck = (NDALLOC) 0;
 static NDALLOC first_blck = (NDALLOC) 0;
 static int live_count = 0;
 
@@ -139,16 +140,22 @@ alloc_node (void)
 	NODE node;
 	NDALLOC blck;
 	int i;
-	if (first_blck == (NDALLOC) 0) {
-		node = (NODE) stdalloc(100*sizeof(*node));
-		first_blck = (NDALLOC) node;
-		for (i = 1; i <= 99; i++) {
+
+	// Allocate block of nodes
+	if (alloc_blck == (NDALLOC) 0) {
+		first_blck = alloc_blck = (NDALLOC) stdalloc(100*sizeof(*node));
+		node = (NODE) first_blck;
+		// set up next pointers for first 99 nodes
+		for (i = 0; i < 99; i++) {
 			blck = (NDALLOC) node;
 			blck->next = (NDALLOC) (node + 1);
 			node++;
 		}
+		// set up next pointer for last node
 		((NDALLOC) node)->next = (NDALLOC) 0;
 	}
+
+	// Use first free node in block
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
 	++live_count;
@@ -1175,4 +1182,12 @@ check_node_leaks (void)
 			fp = 0;
 		}
 	}
+}
+/*=================================================
+ * term_node_allocator -- Called to free all nodes in the free list
+ *===============================================*/
+void
+term_node_allocator (void)
+{
+	stdfree(alloc_blck);
 }

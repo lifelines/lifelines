@@ -28,6 +28,7 @@ BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
 /* node.c */
 void check_node_leaks(void);
 void set_record_key_info(RECORD rec, CNSTRING key);
+void term_node_allocator(void);
 
 /* record.c */
 void check_record_leaks(void);
