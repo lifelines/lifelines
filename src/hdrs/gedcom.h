@@ -472,6 +472,8 @@ BOOLEAN store_record(CNSTRING key, STRING rec, INT len);
 RECORD string_to_record(STRING str, CNSTRING key, INT len);
 void termlocale(void);
 void term_browse_lists(void);
+void term_namerec(void);
+void term_refnrec(void);
 BOOLEAN traverse_nodes(NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param);
 void traverse_refns(TRAV_REFNS_FUNC func, void *param);
 INT tree_strlen(INT, NODE);

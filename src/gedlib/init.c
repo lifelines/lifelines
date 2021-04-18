@@ -209,6 +209,8 @@ close_lifelines (void)
 {
 	lldb_close(&def_lldb); /* make sure database closed */
 	term_browse_lists();
+	term_refnrec();
+	term_namerec();
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);

@@ -1257,9 +1257,16 @@ traverse_names (TRAV_NAMES_FUNC func, void *param)
  * flush_name_cache -- Clear any cached name records
  *==================================================*/
 static
-void flush_name_cache ()
+void flush_name_cache(void)
 {
 	if (NRrec) {
 		strfree(&NRrec);
 	}
+}
+/*====================================================
+ * term_namerec -- Free memory for parsing name records
+ *==================================================*/
+void term_namerec(void)
+{
+	freenamerec();
 }
