@@ -61,6 +61,22 @@ llgettext_init (CNSTRING domain, CNSTRING codeset)
 #endif /* ENABLE_NLS */
 }
 /*==================================================
+ * llgettext_term -- cleans up memory allocation
+ * that may have been performed in llgettext_init
+ *================================================*/
+void
+llgettext_term (void)
+{
+#if ENABLE_NLS
+	if (gt_localeDirs) {
+		destroy_table(gt_localeDirs);
+		gt_localeDirs = 0;
+	}
+	strfree(&gt_codeset);
+#endif
+}
+
+/*==================================================
  * update_textdomain_localedir --
  *  call bindtextdomain with current localedir
  *  domain:  [IN] package domain (eg, "lifelines")

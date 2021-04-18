@@ -220,6 +220,7 @@ close_lifelines (void)
 	}
 	term_lloptions();
 	term_date();
+	llgettext_term();
 	term_codesets();
 	strfree(&int_codeset);
 	xlat_shutdown();
