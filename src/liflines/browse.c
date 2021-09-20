@@ -106,6 +106,7 @@ static RECORD history_back(struct hist * histp);
 static RECORD do_disp_history_list(struct hist * histp);
 static void history_record(RECORD rec, struct hist * histp);
 static RECORD history_fwd(struct hist * histp);
+static void init_hist_lists(void);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
@@ -115,6 +116,8 @@ static void pick_remove_spouse_from_family(RECORD frec);
 static void save_hist_lists(void);
 static void save_nkey_list(STRING key, struct hist * histp);
 static void setrecord(RECORD * dest, RECORD * src);
+static void term_hist_lists(void);
+static void term_hist(struct hist * histp);
 
 /*********************************************
  * local variables
@@ -314,7 +317,7 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	RECORD rec=0;
 
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
@@ -542,7 +545,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if ((tmp = goto_indi_child(current, c-CMD_CHILD_DIRECT0)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnochil));
+				message("%s", _(qSnochil));
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
 			if ((tmp = choose_child(current, NULL, _(qSnocofp),
@@ -567,13 +570,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if ((tmp = indi_to_prev_sib(current)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnoosib));
+				message("%s", _(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
 			if ((tmp = indi_to_next_sib(current)) != 0)
 				setrecord(&current, &tmp);
 			else
-				message(_(qSnoysib));
+				message("%s", _(qSnoysib));
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((tmp = choose_family(current, _(qSnoprnt),
@@ -690,7 +693,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					tmp = keynum_to_irecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnopers));
+					message("%s", _(qSnopers));
 				}
 			}
 			break;
@@ -701,7 +704,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 					tmp = keynum_to_irecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnopers));
+					message("%s", _(qSnopers));
 				}
 			}
 			break;
@@ -868,7 +871,7 @@ reprocess_aux_cmd:
 					tmp = keynum_to_record(ntype, i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnorec));
+					message("%s", _(qSnorec));
 				}
 				break;
 			}
@@ -879,7 +882,7 @@ reprocess_aux_cmd:
 					tmp = keynum_to_record(ntype, i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnorec));
+					message("%s", _(qSnorec));
 				}
 				break;
 			}
@@ -914,12 +917,12 @@ pick_remove_spouse_from_family (RECORD frec)
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (!husb && !wife) {
-		message(_(qShasnei));
+		message("%s", _(qShasnei));
 		return;
 	}
 	i = 0;
@@ -935,7 +938,7 @@ pick_remove_spouse_from_family (RECORD frec)
 			 NULL, 66, &disp_shrt_rfmt, TRUE);
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
-			message(_(qSspover));
+			message("%s", _(qSspover));
 			break;
 		}
 	}
@@ -958,24 +961,24 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	BOOLEAN confirm;
 	char scratch[100];
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
 	join_fam(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
 		if (husb && wife) {
-			message(_(qShasbth));
+			message("%s", _(qShasbth));
 			return;
 		}
 	}
 	if (candidate) {
 		if (keyflag) {
-			sprintf(scratch, "%s%s (%s)", _(qSissnew),
+			snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSissnew),
 				 indi_to_name(nztop(candidate), 56),
 				 rmvat(nxref(nztop(candidate)))+1);
 		} else {
-			sprintf(scratch, "%s%s", _(qSissnew),
+			snprintf(scratch, sizeof(scratch), "%s%s", _(qSissnew),
 				 indi_to_name(nztop(candidate), 56));
 		}
 		if (!ask_yes_or_no(scratch)) {
@@ -998,22 +1001,22 @@ prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return;
 	}
 	if (save) {
 		if (keyflag)
 			if(getlloptint("DisplayKeyTags", 0) > 0) {
-				sprintf(scratch, "%s%s (i%s)", _(qSiscnew),
+				snprintf(scratch, sizeof(scratch), "%s%s (i%s)", _(qSiscnew),
 				 	indi_to_name(save, 56),
 				 	rmvat(nxref(save))+1);
 			} else {
-				sprintf(scratch, "%s%s (%s)", _(qSiscnew),
+				snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSiscnew),
 				 	indi_to_name(save, 56),
 				 	rmvat(nxref(save))+1);
 			}
 		else
-			sprintf(scratch, "%s%s", _(qSiscnew),
+			snprintf(scratch, sizeof(scratch), "%s%s", _(qSiscnew),
 				 indi_to_name(save, 56));
 		if (!ask_yes_or_no(scratch))
 			save = NULL;
@@ -1100,7 +1103,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if ((tmp = qkeynum_to_frecord(i)))
 					setrecord(&current, &tmp);
 				else
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 			}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
@@ -1171,7 +1174,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
 			if (readonly) {
-				message(_(qSronlye));
+				message("%s", _(qSronlye));
 				break;
 			}
 			if ((tmp = choose_child(NULL, current, _(qSnocinf),
@@ -1275,7 +1278,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				rtn = BROWSE_INDI;
 				goto exitbrowse;
 			}
-			message(_(qSnochil));
+			message("%s", _(qSnochil));
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
@@ -1283,7 +1286,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				if (i && (tmp = qkeynum_to_frecord(i))) {
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 				}
 				break;
 			}
@@ -1294,7 +1297,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 					tmp = keynum_to_frecord(i);
 					setrecord(&current, &tmp);
 				} else {
-					message(_(qSnofam));
+					message("%s", _(qSnofam));
 				}
 				break;
 			}
@@ -1461,7 +1464,7 @@ choose_any_source (void)
 	seq = get_all_sour();
 	if (!seq)
 	{
-		message(_(qSnosour));
+		message("%s", _(qSnosour));
 		return 0;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidsour), _(qSidsour));
@@ -1479,7 +1482,7 @@ choose_any_event (void)
 	seq = get_all_even();
 	if (!seq)
 	{
-		message(_(qSnoeven));
+		message("%s", _(qSnoeven));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSideven), _(qSideven));
@@ -1497,12 +1500,26 @@ choose_any_other (void)
 	seq = get_all_othe();
 	if (!seq)
 	{
-		message(_(qSnoothe));
+		message("%s", _(qSnoothe));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidothe), _(qSidothe));
 	remove_indiseq(seq);
 	return rec;
+}
+/*==================================================
+ * init_hist_lists -- initialize history lists
+ * Created: 2021/04/18, Matt Emmerton
+ *================================================*/
+static void
+init_hist_lists (void)
+{
+	/* V for visit history, planning to also have a change history */
+	INT count = getlloptint("HistorySize", 20);
+	if (count<0 || count > 9999)
+		count = 20;
+	init_hist(&vhist, count);
+	init_hist(&chist, count);
 }
 /*==================================================
  * load_hist_lists -- Load previous history from database
@@ -1511,12 +1528,6 @@ choose_any_other (void)
 static void
 load_hist_lists (void)
 {
-	/* V for visit history, planning to also have a change history */
-	INT count = getlloptint("HistorySize", 20);
-	if (count<0 || count > 9999)
-		count = 20;
-	init_hist(&vhist, count);
-	init_hist(&chist, count);
 	if (getlloptint("SaveHistory", 0)) {
 		load_nkey_list("HISTV", &vhist);
 		load_nkey_list("HISTC", &chist);
@@ -1535,6 +1546,16 @@ save_hist_lists (void)
 	save_nkey_list("HISTC", &chist);
 }
 /*==================================================
+ * term_hist_lists -- destroy history lists
+ * Created: 2021/04/18, Matt Emmerton
+ *=================================================*/
+static void
+term_hist_lists (void)
+{
+	term_hist(&vhist);
+	term_hist(&chist);
+}
+/*==================================================
  * init_hist -- create & initialize a history list
  * Created: 2001/12/23, Perry Rapp
  *=================================================*/
@@ -1550,6 +1571,16 @@ init_hist (struct hist * histp, INT count)
 	histp->past_end = 0;
 }
 /*==================================================
+ * term_hist -- destroy a history list
+ * Created: 2021/04/18, Matt Emmerton
+ *=================================================*/
+static void
+term_hist (struct hist * histp)
+{
+	stdfree(histp->list);
+	histp->size = 0;
+}
+/*==================================================
  * load_nkey_list -- Load node list from record into NKEY array
  *  key:   [IN]  key used to store list in database
  *  histp: [IN]  history list to save
@@ -1561,29 +1592,31 @@ static void
 load_nkey_list (STRING key, struct hist * histp)
 {
 	STRING rawrec;
-	INT * ptr;
-	INT count, len, i, temp;
+	INT32 * ptr;
+	INT32 count;
+	INT32 temp;
+	INT len, i;
 
 	count = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return;
 	if (len < 8 || (len % 8) != 0)
 		return;
-	ptr = (INT *)rawrec;
+	ptr = (INT32 *)rawrec;
 	temp = *ptr++;
-	if (temp<1 || temp > 9999) {
+	if (temp<0 || temp > 9999) {
 		/* #records failed sanity check */
-		msg_error(_(qSbadhistcnt));
+		msg_error("%s", _(qSbadhistcnt));
 		goto end;
 	}
 	if (temp != *ptr++) {
 		/* 2nd copy of #records failed to match */
-		msg_error(_(qSbadhistcnt2));
+		msg_error("%s", _(qSbadhistcnt2));
 		goto end;
 	}
 	if (len != (temp+1)*8) {
 		/* length should be 8 bytes per record + 8 byte header */
-		msg_error(_(qSbadhistlen));
+		msg_error("%s", _(qSbadhistlen));
 	}
 	count = temp;
 	if (count > histp->size) count = histp->size;
@@ -1595,7 +1628,7 @@ load_nkey_list (STRING key, struct hist * histp)
 			continue;
 		if (keynum<1 || keynum>MAXKEYNUMBER)
 			continue;
-		snprintf(key, sizeof(key), "%c%ld", ntype, keynum);
+		snprintf(key, sizeof(key), "%c" FMT_INT, ntype, keynum);
 		strcpy(histp->list[temp].key, key);
 		histp->list[temp].ntype = ntype;
 		histp->list[temp].keynum = keynum;
@@ -1635,7 +1668,9 @@ static void
 save_nkey_list (STRING key, struct hist * histp)
 {
 	FILE * fp=0;
-	INT next, count, temp;
+	INT i, next;
+	INT32 count;	// write buffer for histp->count value
+	INT32 temp;	// write buffer for histp->list[] values
 	size_t rtn;
 
 	count = get_hist_count(histp);
@@ -1649,9 +1684,12 @@ save_nkey_list (STRING key, struct hist * histp)
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 
+	/* write entries */
 	next = histp->start;
-	while (1) {
+	for (i=0; i<count; ++i)
+	{
 		/* write type & number, 4 bytes each */
+		/* type = char, keynum = INT (truncated!) */
 		temp = histp->list[next].ntype;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
 		temp = histp->list[next].keynum;
@@ -1810,7 +1848,7 @@ do_disp_history_list (struct hist * histp)
 	RECORD rec=0;
 
 	if (!seq) {
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
@@ -1856,11 +1894,11 @@ ask_clear_history (struct hist * histp)
 	INT count;
 
 	if (!histp->size || histp->start==-1) {
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return;
 	}
 	count = get_hist_count(histp);
-	sprintf(buffer, _(qShistclr), count);
+	snprintf(buffer, sizeof(buffer), _(qShistclr), count);
 	if (ask_yes_or_no(buffer))
 		histp->start = -1;
 }
@@ -1881,7 +1919,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_BACK) {
@@ -1890,7 +1928,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_FWD) {
@@ -1899,7 +1937,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_CHISTORY_FWD) {
@@ -1908,7 +1946,7 @@ handle_history_cmds (INT c, RECORD * prec1)
 			*prec1 = rec;
 			return -1; /* handled, change pages */
 		}
-		message(_(qSnohist));
+		message("%s", _(qSnohist));
 		return 1; /* handled, stay here */
 	}
 	if (c == CMD_VHISTORY_LIST) {
@@ -1968,12 +2006,12 @@ add_new_rec_maybe_ref (RECORD current, char ntype)
 	newnode = nztop(newrec);
 	/* sanity check for long tags in others */
 	if (strlen(ntag(newnode))>40) {
-		msg_info(_(qStag2lng2cnc));
+		msg_info("%s", _(qStag2lng2cnc));
 		return newrec;
 	}
 	/* now ask the user how to connect the new node */
-	sprintf(title, _(qSnewrecis), nxref(newnode));
-	msg_info(title);
+	snprintf(title, sizeof(title), _(qSnewrecis), nxref(newnode));
+	msg_info("%s", title);
 	/* keep new node # in status so it will be visible during edit */
 	lock_status_msg(TRUE);
 	choices[0] = _(qSautoxref);
@@ -2031,7 +2069,7 @@ get_vhist_len (void)
 	return get_hist_count(&vhist);
 }
 /*==================================================
- * get_vhist_len -- how many records currently in change history list ?
+ * get_chist_len -- how many records currently in change history list ?
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
 INT
@@ -2048,6 +2086,7 @@ get_chist_len (void)
 void
 init_browse_module (void)
 {
+	init_hist_lists();
 	load_hist_lists();
 }
 /*==================================================
@@ -2059,4 +2098,5 @@ void
 term_browse_module (void)
 {
 	save_hist_lists();
+	term_hist_lists();
 }

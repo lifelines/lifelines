@@ -694,7 +694,7 @@ get_todays_date (void)
 	initialize_if_needed();
 	/* TODO: Should this be one of the customizable formats ? */
 	month = gedkeys[pt->tm_mon].keyword;
-	sprintf(dat, "%d %s %d", pt->tm_mday, month, 1900 + pt->tm_year);
+	snprintf(dat, sizeof(dat), "%d %s %d", pt->tm_mday, month, 1900 + pt->tm_year);
 	return dat;
 }
 /*=============================

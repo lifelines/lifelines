@@ -130,7 +130,7 @@ nextfkey (BTREE btree)
 	FKEY fkey = btree->b_kfile.k_fkey;
 	INT16 hi = (fkey & 0xffff0000) >> 16;
 	INT16 lo = fkey & 0x0000ffff;
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 
 	/* Case 1: HI=0000 LO=xxxx */
 	if (hi == lo)
@@ -149,7 +149,7 @@ nextfkey (BTREE btree)
         {
 		fkey += 0x00020000;
 		fkey &= 0xffff0000;
-		sprintf(scratch, "%s/%s", btree->b_basedir, fkey2path(fkey));
+		snprintf(scratch, sizeof(scratch), "%s/%s", btree->b_basedir, fkey2path(fkey));
 		if (!mkalldirs(scratch))
 			FATAL();
 	}
@@ -169,7 +169,7 @@ newmaster (BTREE btree, INDEX master)
 	rewind(btree->b_kfp);
 	if (fwrite(&btree->b_kfile, sizeof(btree->b_kfile), 1, btree->b_kfp) != 1) {
 		char scratch[400];
-		sprintf(scratch, "Error rewriting master block: %s", fkey2path(ixself(master)));
+		snprintf(scratch, sizeof(scratch), "Error rewriting master block: %s", fkey2path(ixself(master)));
 		FATAL2(scratch);
 	}
 	btree->b_master = master;

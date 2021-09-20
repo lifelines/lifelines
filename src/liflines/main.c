@@ -49,6 +49,8 @@
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
 
+/* for parser debugging */
+extern int yydebug;
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -60,7 +62,6 @@
  * external variables (no header)
  *********************************************/
 
-extern STRING qScrdbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb;
@@ -137,6 +138,9 @@ main (int argc, char **argv)
 	STRING crashlog=NULL;
 	int i=0;
 
+	/* initialize all the low-level platform code */
+	init_arch();
+
 	/* initialize all the low-level library code */
 	init_stdlib();
 
@@ -182,23 +186,23 @@ main (int argc, char **argv)
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					INT icsz_indi=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_indi, &icsz_indi);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_indi, &icsz_indi);
 				}
 				else if(*optarg == 'f') {
 					INT icsz_fam=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_fam, &icsz_fam);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_fam, &icsz_fam);
 				}
 				else if(*optarg == 's') {
 					INT icsz_sour=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_sour, &icsz_sour);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_sour, &icsz_sour);
 				}
 				else if(*optarg == 'e') {
 					INT icsz_even=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_even, &icsz_even);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_even, &icsz_even);
 				}
 				else if((*optarg == 'o') || (*optarg == 'x')) {
 					INT icsz_othr=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_othr, &icsz_othr);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_othr, &icsz_othr);
 				}
 				optarg++;
 				while(*optarg && isdigit((uchar)*optarg)) optarg++;
@@ -256,7 +260,7 @@ main (int argc, char **argv)
 			prog_trace = TRUE;
 			break;
 		case 'u': /* specify screen dimensions */
-			sscanf(optarg, "%ld,%ld", &winx, &winy);
+			sscanf(optarg, SCN_INT "," SCN_INT, &winx, &winy);
 			break;
 		case 'x': /* execute program */
 			if (!exprogs) {
@@ -304,11 +308,18 @@ prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (!debugmode)
-		set_signals();
-	else /* developer wants to drive without seatbelt! */
+	{
+		set_signals(sighand_cursesui);
+	}
+	/* developer wants to drive without seatbelt! */
+	else
+	{
 		stdstring_hardfail();
+		/* yydebug = 1; */
+	}
 
 	set_displaykeys(keyflag);
+
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -335,15 +346,15 @@ prompt_for_db:
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(_(qSnorwandro));
+		llwprintf("%s", _(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(_(qSnofandl));
+		llwprintf("%s", _(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(qSbdlkar));
+		llwprintf("%s", _(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -368,24 +379,25 @@ prompt_for_db:
 		} else {
 			strupdate(&dbrequested, "");
 		}
-		if (!select_database(dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
-				llwprintf(errmsg);
+				llwprintf("%s", errmsg);
 			}
 			alldone = 0;
 			goto finish;
 		}
 	}
+	strfree(&dbrequested);
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
-		llwprintf(_(qSbaddb));
+		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
 	if (!int_codeset[0]) {
-		msg_info(_("Warning: database codeset unspecified"));
+		msg_info("%s", _("Warning: database codeset unspecified"));
 	} else if (!transl_are_all_conversions_ok()) {
-		msg_info(_("Warning: not all conversions available"));
+		msg_info("%s", _("Warning: not all conversions available"));
 	}
 
 	init_show_module();
@@ -414,7 +426,6 @@ finish:
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
 	strfree(&dbused);
-	strfree(&dbrequested);
 	strfree(&readpath_file);
 	shutdown_interpreter();
 	close_lifelines();
@@ -469,11 +480,9 @@ shutdown_ui (BOOLEAN pause)
 	term_screen();
 	if (pause) /* if error, give user a second to read it */
 		sleep(1);
-	/* TO DO - signals also calls into here -- how do we figure out
-	whether or not we should call endwin ? In case something happened
-	before curses was invoked, or after it already closed ? */
 	/* Terminate Curses UI */
-	endwin();
+	if (!isendwin())
+		endwin();
 }
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other

@@ -15,14 +15,14 @@
     </p>
   </description>
 
-  <url type="homepage">http://marcno.github.io/lifelines/</url>
+  <url type="homepage">https://lifelines.github.io/lifelines/</url>
 
   <provides>
     <binary>liflines</binary>
   </provides>
 
   <releases>
-    <release version="3.1.1" date="2016-03-16">
+    <release version="3.2.0" date="2019-09-17">
       <description>
         <p>Fixes documentation and report install issues.</p>
       </description>

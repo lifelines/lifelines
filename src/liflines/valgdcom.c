@@ -86,7 +86,7 @@ static INT num_errors;
 static INT num_warns;
 static INT defline;
 static BOOLEAN f_logopen = FALSE;
-static FILE *f_flog = 0;
+static FILE *f_flog = NULL;
 static char f_logpath[MAXPATHLEN] = "import.log";
 
 static STRING qSundrec      = N_("Record %s is referred to but not defined.");
@@ -125,6 +125,7 @@ static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
 static void handle_value(STRING, INT);
 static BOOLEAN openlog(void);
+static void closelog(void);
 static void handle_warn(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void handle_err(IMPORT_FEEDBACK ifeed, STRING, ...);
 static void set_import_log(STRING logpath);
@@ -147,8 +148,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
 	f_logopen = FALSE;
-	f_flog = 0;
+	f_flog = NULL;
 	set_import_log(getlloptstr("ImportLog", "errs.log"));
+	openlog();
+
 	defline = 0;
 	curlev = 0;
 	clear_structures();
@@ -252,11 +255,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	if (rec_type == INDI_REC && !named)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
-	if (f_logopen) {
-		fclose(f_flog);
-		f_logopen = FALSE;
-		f_flog = 0;
-	}
+	closelog();
 	strfree(&tag0);
 	return num_errors == 0;
 }
@@ -915,7 +914,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
-	if (openlog()) {
+	if (f_logopen) {
 		va_list args;
 		fprintf(f_flog, "%s: ", _("error"));
 		va_start(args, fmt);
@@ -925,7 +924,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	zs_setf(zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
+	zs_setf(zstr, _pl(FMT_INT_6 " Error", FMT_INT_6 " Errors", num_errors), num_errors);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -943,7 +942,7 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
-	if (openlog()) {
+	if (f_logopen) {
 		va_list args;
 		fprintf(f_flog, "%s: ", _("warning"));
 		va_start(args, fmt);
@@ -953,7 +952,7 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 	
 	++num_warns;
-	zs_setf(zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
+	zs_setf(zstr, _pl(FMT_INT_6 " Warning", FMT_INT_6 " Warnings", num_warns), num_warns);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -978,6 +977,18 @@ openlog (void)
 	f_flog = fopen(f_logpath, LLWRITETEXT);
 	f_logopen = (f_flog != 0);
 	return f_logopen;
+}
+/*=====================================
+ * closelog -- close import error log
+ *===================================*/
+static void
+closelog (void)
+{
+	if (f_logopen) {
+		fclose(f_flog);
+		f_logopen = FALSE;
+		f_flog = NULL;
+	}
 }
 /*=========================================
  * xref_to_index - Convert pointer to index
@@ -1064,32 +1075,32 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		lastoff = ftell(fp);
 		curlev = lev;
 		if (linno==500) {
-			*zerr = zs_newf(_("Processed %d lines without finding end of HEAD"), linno);
+			*zerr = zs_newf(_("Processed " FMT_INT " lines without finding end of HEAD"), linno);
 			break;
 		}
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
 		if (rc==DONE) {
-			*zerr = zs_newf(_("End of file at line %d"), linno);
+			*zerr = zs_newf(_("End of file at line " FMT_INT), linno);
 			break;
 		}
 		if (rc==ERROR) {
-			*zerr = zs_newf(_("Error at line %d: %s"), linno, msg);
+			*zerr = zs_newf(_("Error at line " FMT_INT ": %s"), linno, msg);
 			break;
 		}
 		if (lev < 0 || lev > curlev+1) {
-			*zerr = zs_newf(_("Bad level at line %d"), linno);
+			*zerr = zs_newf(_("Bad level at line " FMT_INT), linno);
 			break;
 		}
 		if (lev==0) {
 			if (eqstr(tag, "HEAD")) {
 				if (head) {
-					*zerr = zs_newf(_("Duplicate HEAD line at line %d"), linno);
+					*zerr = zs_newf(_("Duplicate HEAD line at line " FMT_INT), linno);
 					break;
 				} else {
 					head=1;
 				}
 			} else if (!head) {
-				*zerr = zs_newf(_("Missing HEAD line at line %d"), linno);
+				*zerr = zs_newf(_("Missing HEAD line at line " FMT_INT), linno);
 				break;
 			} else {
 				fseek(fp, lastoff, SEEK_SET);

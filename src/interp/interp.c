@@ -168,7 +168,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 	} else {
 		llstrcatn(&ptr, msg, &mylen);
 	}
-	msg_output(level, buf);
+	msg_output(level, "%s", buf);
 }
 /*=============================================+
  * new_pathinfo -- Return new, filled-out pathinfo object
@@ -240,7 +240,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 				if (i==1)
 					strupdate(&rootfilepath, pathinfo->fullpath);
 			} else {
-				enqueue_parse_error(_("Report not found: %s "), progfile);
+				enqueue_parse_error(_("Report not found: %s"), progfile);
 			}
 		}
 	} else {
@@ -301,7 +301,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		STRING str;
 		FORLIST(outstanding_parse_errors, el)
 			str = (STRING)el;
-			prog_error(NULL, str);
+			prog_error(NULL, "%s", str);
 			++Perrors;
 		ENDLIST
 		destroy_list(outstanding_parse_errors);
@@ -333,7 +333,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
 	parm = ipdefn_args(first);
 	if (nargs != num_params(parm)) {
-		msg_error(_("Proc %s must be called with %d (not %d) parameters."),
+		msg_error(_("Proc %s must be called with " FMT_INT " (not " FMT_INT ") parameters."),
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
@@ -501,13 +501,13 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	if (!pactx->Pinfp) {
 		llwprintf(_("Error: file <%s> not found: %s\n"), fname, fullpath);
 		Perrors++;
-		return;
+		goto error_filenotopen;
 	}
 
 	if ((unistr=check_file_for_unicode(pactx->Pinfp)) && !eqstr(unistr, "UTF-8")) {
 		msg_error(_(qSunsupuniv), unistr);
 		Perrors++;
-		return;
+		goto error_fileopen;
 	}
 
 	/* Assumption -- pactx->fullpath stays live longer than all pnodes */
@@ -517,8 +517,11 @@ parse_file (PACTX pactx, STRING fname, STRING fullpath)
 	pactx->charpos = 0;
 
 	yyparse(pactx);
-	
+
+error_fileopen:
 	closefp(&pactx->Pinfp);
+
+error_filenotopen:
 	pactx->ifile = 0;
 	pactx->fullpath = 0;
 	pactx->lineno = 0;
@@ -590,11 +593,17 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	while (node) {
 		Pnode = node;
 		if (prog_trace) {
-			trace_out("d%d: ", iline(node)+1);
+			trace_out("d" FMT_INT ": ", iline(node)+1);
 			trace_pnode(node);
 			trace_endl();
 		}
 		switch (itype(node)) {
+		case IICONS:
+			prog_error(node, _("integer constant not allowed here.  Use d(constant) instead.\n"));
+			goto interp_fail;
+		case IFCONS:
+			prog_error(node, _("floating-point constant not allowed here.  Use f(constant) instead.\n"));
+			goto interp_fail;
 		case ISCONS:
 			poutput(pvalue_to_string(node->vars.iscons.value), &eflg);
 			if (eflg)
@@ -879,8 +888,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 				prog_error(node, "in return statement");
 			return INTRETURN;
 		default:
-			llwprintf("itype(node) is %d\n", itype(node));
-			llwprintf("HUH, HUH, HUH, HUNH!\n");
+			prog_error(node, _("Unexpected node type (%d)"), itype(node));
 			goto interp_fail;
 		}
 		node = inext(node);
@@ -889,7 +897,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 interp_fail:
 	if (getlloptint("FullReportCallStack", 0) > 0) {
-		llwprintf("e%d: ", iline(node)+1);
+		llwprintf("e" FMT_INT ": ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
@@ -1346,18 +1354,6 @@ hleave:
 	return irc;
 }
 /*========================================+
- * printkey -- Make key from keynum
- *=======================================*/
-#ifdef UNUSED_CODE
-static void
-printkey (STRING key, char type, INT keynum)
-{
-	if (keynum>9999999 || keynum<0)
-		keynum=0;
-	sprintf(key, "%c%d", type, keynum);
-}
-#endif
-/*========================================+
  * interp_forindi -- Interpret forindi loop
  *  usage: forindi(INDI_V,INT_V) {...}
  * 2001/03/18 Revised by Perry Rapp
@@ -1798,7 +1794,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "``%s'': mismatched args and params\n", (char *)iname(node));
 		irc = INTERROR;
 		goto call_leave;
 	}
@@ -2059,7 +2055,7 @@ void
 parse_error (PACTX pactx, STRING str)
 {
 	/* TO DO - how to pass current pnode ? */
-	prog_error(NULL, "Syntax Error (%s): %s: line %d, char %d\n"
+	prog_error(NULL, "Syntax Error (%s): %s: line " FMT_INT ", char " FMT_INT "\n"
 		, str, pactx->fullpath, pactx->lineno+1, pactx->charpos+1);
 	Perrors++;
 }
@@ -2136,8 +2132,8 @@ get_report_error_msg (STRING msg)
 	ZSTR zstr=0;
 
 	if (progrunning) {
-		char line[20];
-		snprintf(line, sizeof(line), "%ld", iline(Pnode)+1);
+		char line[FMT_INT_LEN+1];
+		snprintf(line, sizeof(line), FMT_INT, iline(Pnode)+1);
 		zstr = zprintpic2(_(msg), irptinfo(Pnode)->fullpath, line);
         }
 	return zstr;
@@ -2152,7 +2148,7 @@ void clean_orphaned_rptlocks (void)
 	int ct = free_all_rprtlocks();
 	if (ct) {
 		char msg[256];
-		sprintf(msg, _pl("Program forgot to unlock %d record",
+		snprintf(msg, sizeof(msg), _pl("Program forgot to unlock %d record",
 			"Program forgot to unlock %d records", ct), ct);
 		progmessage(MSG_ERROR, msg);
 

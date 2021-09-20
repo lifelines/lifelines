@@ -1,0 +1,7 @@
+testing block data structure...PASS 0
+testing index data structure...PASS 0
+testing rkey2str...PASS 0
+testing str2rkey...PASS 0
+testing fkey2path and path2fkey...PASS 0
+Testing nextfkey...PASS 0
+Testing lldberr...PASS 0

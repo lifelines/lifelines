@@ -223,7 +223,6 @@ valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
 BOOLEAN
 valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
@@ -233,6 +232,14 @@ valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadsr0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
+	if (orig)
+	{
+		*pmsg = _(qSbadsr0);
+		return FALSE;
+	}
+#endif
 	return TRUE;
 }
 /*======================================
@@ -244,7 +251,6 @@ valid_sour_tree (NODE node, STRING *pmsg, NODE orig)
 BOOLEAN
 valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
@@ -254,6 +260,14 @@ valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadev0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
+	if (orig)
+	{
+		*pmsg = _(qSbadev0);
+		return FALSE;
+	}
+#endif
 	return TRUE;
 }
 /*======================================
@@ -265,7 +279,6 @@ valid_even_tree (NODE node, STRING *pmsg, NODE orig)
 BOOLEAN
 valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 {
-	orig = NULL;         /* keep compiler happy */
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
@@ -276,6 +289,14 @@ valid_othr_tree (NODE node, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadothr0);
 		return FALSE;
 	}
+#if 0
+	/* validation unimplemented */
+	if (orig)
+	{
+		*pmsg = _(qSbadothr0);
+		return FALSE;
+	}
+#endif
 	return TRUE;
 }
 /*=========================================

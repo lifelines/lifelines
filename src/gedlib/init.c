@@ -158,7 +158,7 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	}
 	editfile = strsave(editfile );
 	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
-	sprintf(editstr, "%s %s", e, editfile);
+	snprintf(editstr, strlen(e) + strlen(editfile) + 2, "%s %s", e, editfile);
 	set_usersort(custom_sort);
 	suppress_reload = FALSE;
 	update_useropts(0);
@@ -195,7 +195,6 @@ init_lifelines_postdb (void)
 	if (!openxref(readonly))
 		return FALSE;
 
-
 	transl_load_xlats();
 
 	return TRUE;
@@ -209,6 +208,7 @@ void
 close_lifelines (void)
 {
 	lldb_close(&def_lldb); /* make sure database closed */
+	term_browse_lists();
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
@@ -220,6 +220,7 @@ close_lifelines (void)
 	}
 	term_lloptions();
 	term_date();
+	llgettext_term();
 	term_codesets();
 	strfree(&int_codeset);
 	xlat_shutdown();

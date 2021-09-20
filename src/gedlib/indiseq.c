@@ -1379,7 +1379,7 @@ INDISEQ
 indi_to_families (NODE indi, BOOLEAN fams)
 {
 	INDISEQ seq=0;
-	INT num, num2, val;
+	INT num, val;
 	STRING key=0;
 	INT mykeynum=0;
 	if (!indi) return NULL;
@@ -1389,16 +1389,22 @@ indi_to_families (NODE indi, BOOLEAN fams)
 	if (fams) {
 		FORFAMS(indi, fam, num)
 		{
-			INT spkeynum=0;
 			STRING fkey = strsave(fam_to_key(fam));
+/* MTE: When processing FAMS, we don't care if there is a spouse
+ * or not, the FAMS key is enough.
+ */
+#if 0
+			INT spkeynum=0;
+			INT num2=0;
 			/* look for a spouse besides indi */
 			FORFAMSPOUSES(fam, spouse, num2)
 			{
 				INT temp = atoi(indi_to_key(spouse) + 1);
 				if (temp && temp != mykeynum)
-					spkeynum = temp;  //TODO is this right? this loop doesn't do anything
+					spkeynum = temp;  /* TODO: is this right? this loop doesn't do anything */
 			}
 			ENDFAMSPOUSES
+#endif
 			append_indiseq_ival(seq, fkey, NULL, mykeynum, TRUE, FALSE);
 			strfree(&fkey);
 		}
@@ -1523,7 +1529,7 @@ ancestor_indiseq (INDISEQ seq)
 	INDISEQ anc=0;
 	NODE indi=0;
 	STRING key, pkey;
-	INT gen=0;
+	INTPTR gen=0;
 	INT fnum=0, snum=0;
 	UNION uval;
 	if (!seq) return NULL;
@@ -1535,11 +1541,11 @@ ancestor_indiseq (INDISEQ seq)
 	anc = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 	FORINDISEQ(seq, el, num)
 		enqueue_list(anclist, (VPTR)skey(el));
-		enqueue_list(genlist, (VPTR)0);
+		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
 	while (!is_empty_list(anclist)) {
 		key = (STRING) dequeue_list(anclist);
-		gen = (INT) dequeue_list(genlist) + 1;
+		gen = (INTPTR)dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
 
 		FORFAMCS(indi, fam, fath, moth, fnum)
@@ -1568,7 +1574,7 @@ ancestor_indiseq (INDISEQ seq)
 INDISEQ
 descendent_indiseq (INDISEQ seq)
 {
-	INT gen;
+	INTPTR gen = 0;
 	/* itab lists people already entered, ftab families
 	(values in both are unused) */
 	TABLE itab, ftab;
@@ -1596,18 +1602,18 @@ descendent_indiseq (INDISEQ seq)
 		/* add everyone from original seq to processing list */
 	FORINDISEQ(seq, el, num)
 		enqueue_list(deslist, (VPTR)skey(el));
-		enqueue_list(genlist, (VPTR)0);
+		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
 		/* loop until processing list is empty */
 	while (!is_empty_list(deslist)) {
 		INT num1, num2;
 		key = (STRING) dequeue_list(deslist);
-		gen = (INT) dequeue_list(genlist) + 1;
+		gen = (INTPTR)dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
 		FORFAMS(indi, fam, num1)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
-				goto a;
+				continue;
 			insert_table_ptr(ftab, fkey, 0);
 			FORCHILDRENx(fam, child, num2)
 					/* only do people not processed */
@@ -1623,7 +1629,6 @@ descendent_indiseq (INDISEQ seq)
 					insert_table_ptr(itab, dkey, 0);
 				}
 			ENDCHILDRENx
-		a:;
 		ENDFAMS
 	}
 	destroy_table(itab);
@@ -1735,7 +1740,7 @@ spouseseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 static STRING
 famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
-	NODE fam=0, spouse=0;
+	NODE fam=0;
 	STRING key=0, name=0, str=0;
 	INT val=0, num1=0;
 	INT spkeynum=0;
@@ -2040,13 +2045,13 @@ INDISEQ
 get_all_sour (void)
 {
 	INDISEQ seq=NULL;
-	int i=0;
+	INT i=0;
 	while ((i=xref_nexts(i)))
 	{
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "S%d", i);
+		snprintf(skey, sizeof(skey), "S" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2065,7 +2070,7 @@ get_all_even (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "E%ld", i);
+		snprintf(skey, sizeof(skey), "E" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2084,7 +2089,7 @@ get_all_othe (void)
 		static char skey[10];
 		if (!seq)
 			seq = create_indiseq_ival();
-		sprintf(skey, "X%ld", i);
+		snprintf(skey, sizeof(skey), "X" FMT_INT, i);
 		append_indiseq_ival(seq, skey, NULL, i, TRUE, FALSE);
 	}
 	return seq;
@@ -2190,7 +2195,7 @@ default_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
 	valtype = valtype; /* unused */
 	/* We don't know how to deal with ptrs here */
 	/* Let's just sort them in memory order */
-	return (INT)ptr1 - (INT)ptr2;
+	return (INTPTR)ptr1 - (INTPTR)ptr2;
 }
 /*=======================================================
  * calc_indiseq_names -- fill in element names

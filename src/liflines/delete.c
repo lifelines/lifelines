@@ -82,10 +82,10 @@ choose_and_remove_family (void)
 	/* build confirm string */
 	n = ISize(spseq);
 	llstrsetf(spouses, sizeof(spouses), uu8
-		, _pl("%d spouse", "%d spouses", n), n);
+		, _pl(FMT_INT " spouse", FMT_INT " spouses", n), n);
 	n = ISize(chseq);
 	llstrsetf(children, sizeof(children), uu8
-		, _pl("%d child", "%d children", n), n);
+		, _pl(FMT_INT " child", FMT_INT " children", n), n);
 	llstrsetf(members, sizeof(members), uu8
 		, _(qScffdeld), fam_to_key(fam), spouses, children);
 	llstrapps(confirm, sizeof(confirm), uu8, _(qScffdel));
@@ -163,7 +163,7 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 	NODE fam;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 
@@ -171,7 +171,7 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
 	if (!irec) return FALSE;
 	if (!FAMS(nztop(irec))) {
-		message(_(qSntprnt));
+		message("%s", _(qSntprnt));
 		return FALSE;
 	}
 
@@ -180,17 +180,17 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 	if (!frec) return FALSE;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(_(qSnormls));
+		message("%s", _(qSnormls));
 		return FALSE;
 	}
 	if (!ask_yes_or_no(_(qScfsrmv))) return FALSE;
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
 	if (!remove_spouse(nztop(irec), fam)) {
-		message(_(qSntsinf));
+		message("%s", _(qSntsinf));
 		return FALSE;
 	}
-	message(_(qSoksrmv));
+	message("%s", _(qSoksrmv));
 	return TRUE;
 }
 /*===========================================
@@ -205,7 +205,7 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 	NODE fam;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 		
@@ -213,7 +213,7 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);
 	if (!irec) return FALSE;
 	if (!FAMC(nztop(irec))) {
-		message(_(qSntchld));
+		message("%s", _(qSntchld));
 		return FALSE;
 	}
 
@@ -222,16 +222,16 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 	if (!frec) return FALSE;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
-		message(_(qSnormls));
+		message("%s", _(qSnormls));
 		return FALSE;
 	}
 	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
 
 	if (!remove_child(nztop(irec), fam)) {
-		message(_(qSntcinf));
+		message("%s", _(qSntcinf));
 		return FALSE;
 	}
 
-	message(_(qSokcrmv));
+	message("%s", _(qSokcrmv));
 	return TRUE;
 }

@@ -109,17 +109,18 @@ STRING
 indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 {
 	char scratch[MAXLINELEN];
+	INT linelen = MAXLINELEN;
 	STRING name, evt = NULL, p = scratch;
 	int hasparents;
 	int hasfamily;
-	if (len>(INT)sizeof(scratch))
-		len = sizeof(scratch);
+	if (len>linelen)
+		len = linelen;
 	if (indi) {
 		ASSERT(name = indi_to_name(indi, len));
 	} else
 		name = _(qSunksps);
-	sprintf(p, "%s", name);
-	/* TODO: Shouldn't we len -= strlen(p) first ? Perry, 2007-09-29 */
+	snprintf(p, linelen, "%s", name);
+	linelen -= strlen(p);
 	p += strlen(p);
 	if (fam)  evt = fam_to_event(fam, "MARR", _(qSdspa_mar), len, rfmt);
 	if (!evt) evt = indi_to_event(indi, "BIRT", _(qSdspa_bir), len, rfmt);
@@ -127,23 +128,29 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	if (!evt) evt = indi_to_event(indi, "DEAT", _(qSdspa_dea), len, rfmt);
 	if (!evt) evt = indi_to_event(indi, "BURI", _(qSdspa_bur), len, rfmt);
 	if (evt) {
-		sprintf(p, ", %s", evt);
+		snprintf(p, linelen, ", %s", evt);
+		linelen -= strlen(p);
+		ASSERT(linelen > 0);
 		p += strlen(p);
 	}
 	if (appkey && indi && displaykeys) {
 		if (getlloptint("DisplayKeyTags", 0) > 0) {
-			sprintf(p, " (i%s)", key_of_record(indi));
+			snprintf(p, linelen, " (i%s)", key_of_record(indi));
 		} else {
-			sprintf(p, " (%s)", key_of_record(indi));
+			snprintf(p, linelen, " (%s)", key_of_record(indi));
 		}
+		linelen -= strlen(p);
+		ASSERT(linelen > 0);
 		p += strlen(p);
 	}
 	if (appkey && fam && displaykeys) {
 		if (getlloptint("DisplayKeyTags", 0) > 0) {
-			sprintf(p, " (f%s)", key_of_record(fam));
+			snprintf(p, linelen, " (f%s)", key_of_record(fam));
 		} else {
-			sprintf(p, " (%s)", key_of_record(fam));
+			snprintf(p, linelen, " (%s)", key_of_record(fam));
 		}
+		linelen -= strlen(p);
+		ASSERT(linelen > 0);
 		p += strlen(p);
 	}
 	if(indi) {
@@ -152,12 +159,13 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	    if(FAMS(indi)) hasfamily = 1;
 	    else hasfamily = 0;
 	    if(hasfamily || hasparents) {
-		*p++ = ' ';
-		*p++ = '[';
-		if(hasparents) *p++ = 'P';
-		if(hasfamily) *p++ = 'S';
-		*p++ = ']';
-		*p = '\0';
+		ASSERT(linelen > 5);
+		char *with_p_fam    = (hasfamily ? "PS" : "P");
+		char *without_p_fam = (hasfamily ? "S"  : "" );
+		char *value = (hasparents ? with_p_fam : without_p_fam);
+		snprintf(p, linelen, " [%s]", value);
+		linelen -= (3 + strlen (value));
+		ASSERT(linelen > 0);
 	    }
 	}
 	limit_width(scratch, len, uu8);
@@ -237,7 +245,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 	STRING name, p=scratch;
 	STRING tempname;
 	INT mylen=len;
-	char counts[32];
+	char counts[FMT_INT_LEN+2+FMT_INT_LEN+2+FMT_INT_LEN+2+1];
 	INT husbands=0, wives=0, children=0;
 	INT templen=0;
 	NODE refn, husb, wife, chil, rest, node;
@@ -259,7 +267,7 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
 		wives++;
 	for (node=chil; node; node=nsibling(node))
 		children++;
-	sprintf(counts, "%ldh,%ldw,%ldch", husbands, wives, children);
+	snprintf(counts, sizeof(counts), FMT_INT "h," FMT_INT "w," FMT_INT "ch", husbands, wives, children);
 	llstrcatn(&p, " ", &mylen);
 	llstrcatn(&p, counts, &mylen);
 	if (husbands) {

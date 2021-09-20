@@ -44,9 +44,7 @@
  *********************************************/
 
 char badkeylist[100] = "";
-int listbadkeys = 0;
-
-
+INT listbadkeys = 0;
 
 /*===============================
  * CACHEEL -- Cache element type.
@@ -163,14 +161,14 @@ NODE
 keynum_to_indi (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"I%d",keynum);
+	snprintf(keystr, sizeof(keystr), "I%d", keynum);
 	return key_to_indi(keystr);
 }
 RECORD
 keynum_to_irecord (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"I%d",keynum);
+	snprintf(keystr, sizeof(keystr), "I%d", keynum);
 	return key_to_irecord(keystr);
 }
 /*=========================================================
@@ -182,7 +180,7 @@ NODE
 qkeynum_to_indi (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"I%d",keynum);
+	snprintf(keystr, sizeof(keystr), "I%d", keynum);
 	return qkey_to_indi(keystr);
 }
 /*================================================
@@ -193,14 +191,14 @@ NODE
 keynum_to_fam (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"F%d",keynum);
+	snprintf(keystr, sizeof(keystr), "F%d", keynum);
 	return key_to_fam(keystr);
 }
 RECORD
 keynum_to_frecord (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"F%d",keynum);
+	snprintf(keystr, sizeof(keystr), "F%d", keynum);
 	return key_to_frecord(keystr);
 }
 /*======================================================
@@ -212,7 +210,7 @@ RECORD
 qkeynum_to_frecord (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"F%d",keynum);
+	snprintf(keystr, sizeof(keystr), "F%d", keynum);
 	return qkey_to_frecord(keystr);
 }
 /*================================================
@@ -228,7 +226,7 @@ RECORD
 keynum_to_srecord (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"S%d",keynum);
+	snprintf(keystr, sizeof(keystr), "S%d", keynum);
 	return key_to_srecord(keystr);
 }
 /*================================================
@@ -244,7 +242,7 @@ RECORD
 keynum_to_erecord (int keynum)
 {
 	char keystr[MAXKEYWIDTH+1];
-	sprintf(keystr,"E%d",keynum);
+	snprintf(keystr, sizeof(keystr), "E%d", keynum);
 	return key_to_erecord(keystr);
 }
 /*================================================
@@ -255,14 +253,14 @@ NODE
 keynum_to_othr (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"X%d",keynum);
+	snprintf(keystr, sizeof(keystr), "X%d", keynum);
 	return key_to_othr(keystr);
 }
 RECORD
 keynum_to_orecord (int keynum)
 {
 	char keystr[20];
-	sprintf(keystr,"X%d",keynum);
+	snprintf(keystr, sizeof(keystr), "X%d", keynum);
 	return key_to_orecord(keystr);
 }
 /*=====================================
@@ -696,7 +694,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 				zs_apps(zstr, keybuf[j]);
 			}
 		}
-		crashlogn(zs_str(zstr));
+		crashlogn("%s", zs_str(zstr));
 		zs_free(&zstr);
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
@@ -875,10 +873,9 @@ cel_rptlocks (CACHEEL cel)
 void
 lock_record_in_cache (RECORD rec)
 {
-	NODE node=0;
 	CACHEEL cel=0;
 	ASSERT(rec);
-	node = nztop(rec); /* force record to be loaded in cache */
+	(void)nztop(rec); /* force record to be loaded in cache */
 	cel = nzcel(rec);
 	++cclock(cel);
 	ASSERT(cclock(cel) > 0);
@@ -942,7 +939,7 @@ get_cache_stats (CACHE ca)
 	INT lo=0;
 	cache_get_lock_counts(ca, &lo);
 	zs_appf(zstr
-		, "d:%d/%d (l:%d)"
+		, "d:" FMT_INT "/" FMT_INT " (l:" FMT_INT ")"
 		, cacsizedir(ca), cacmaxdir(ca), lo
 		);
 	return zstr;
@@ -1070,7 +1067,7 @@ get_free_cacheel (CACHE cache)
 		for (cel = caclastdir(cache); cel && cclock(cel); cel = cprev(cel)) {
 		}
 		if (!cel) {
-			crashlog(_("Cache [%s] overflowed its max size (%d)"), cacname(cache), cacmaxdir(cache));
+			crashlog(_("Cache [%s] overflowed its max size (" FMT_INT ")"), cacname(cache), cacmaxdir(cache));
 			ASSERT(0);
 		}
 		remove_from_cache(cache, ckey(cel));

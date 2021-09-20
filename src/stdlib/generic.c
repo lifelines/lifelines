@@ -303,7 +303,8 @@ clear_generic (GENERIC *gen)
 	case GENERIC_INT: break;
 	case GENERIC_FLOAT:
 		stdfree(gen->data.fval);
-		gen->data.fval = 0; // TODO fall through OK??
+		gen->data.fval = 0;
+		break;
 	case GENERIC_STRING:
 		stdfree(gen->data.sval);
 		gen->data.sval = 0;
@@ -348,7 +349,8 @@ is_generic_float (GENERIC *gen)
 BOOLEAN
 is_generic_string (GENERIC *gen)
 {
-	return gen->selector == GENERIC_STRING || GENERIC_STRING_SHARED;
+	return (gen->selector == GENERIC_STRING) ||
+               (gen->selector == GENERIC_STRING_SHARED);
 }
 /*=================================================
  * is_generic_vptr -- return TRUE if generic is a vptr (void pointer)

@@ -44,8 +44,8 @@ STRING empstr71 = SS "                                                          
 ZST qSiddbse      = N_("You must identify a database.");
 ZST qSidldir      = N_("What directory holds (or will hold) the LifeLines database? (? to list)");
 ZST qSidldrp      = N_("enter path: ");
-ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
-ZST qScrdbse      = N_("Do you want to create a database there?");
+ZST qSnodbse      = N_("No LifeLines database found.");
+ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
@@ -414,7 +414,7 @@ ZST qSbadirefn    = N_("REFN key is already in use.");
 ZST qStag2lng2cnc = N_("Tag is too long to connect automatically.");
 	/* I,F,S,E,X are conventional letters, so leave them as is) */
 ZST qSdbrecords   = N_("Database records");
-ZST qSdbrecstats  = N_("%dI, %dF, %dS, %dE, %dX");
+ZST qSdbrecstats  = N_(FMT_INT "I, " FMT_INT "F, " FMT_INT "S," FMT_INT "E, " FMT_INT "X");
 
 /* menus */
 ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
@@ -442,7 +442,7 @@ ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
 
 /* list menu */
 
-ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit");
+ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, q Quit");
 ZST qSvwlistx     = N_("Commands:   u Page Up, d Page Down, q Quit");
 ZST qSerrlist     = N_("Messages:");
 
@@ -689,3 +689,12 @@ ZST qSmon_fr12A   = N_("fruc");
 ZST qSmon_fr12B   = N_("fructidor");
 ZST qSmon_fr13A   = N_("comp");
 ZST qSmon_fr13B   = N_("jour_complementairs");
+
+/* Copyright, warranty, contact information, etc. */
+ZST qSgen_copyright = N_("Copyright (C) 1991-2019 Thomas T. Wetmore IV and contributors.");
+ZST qSgen_warranty  = N_("This is free software; see the source for copying conditions.  There is NO\n"
+                         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+ZST qSgen_license   = N_("Lifelines is distributed under an X/MIT Open Source license.\n"
+                         "\tSee file LICENSE in the program directory.");
+ZST qSgen_website   = N_("For more information, visit our web site at https://lifelines.github.io/lifelines/");
+ZST qSgen_bugreport = N_("Please report bugs to https://github.com/lifelines/lifelines/issues");

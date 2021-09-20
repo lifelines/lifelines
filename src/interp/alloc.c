@@ -924,7 +924,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
 		node->i_flags = PN_INAME_HSTR;
-		ifunc(node) = func;
+		ifunc(node) = ifunc(func);
 		return node;
 	} else if (count) {
 		/* ambiguous call */
@@ -953,8 +953,8 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 	if (found) {
 		if ((n = num_params(elist)) < builtins[md].ft_nparms_min
 		    || n > builtins[md].ft_nparms_max) {
-			llwprintf(_("Error: file \"%s\": line %d: "), pactx->ifile, pactx->lineno);
-			llwprintf("%s: must have %d to %d parameters (found with %d).\n"
+			llwprintf(_("Error: file \"%s\": line " FMT_INT ": "), pactx->ifile, pactx->lineno);
+			llwprintf("%s: must have " FMT_INT " to " FMT_INT " parameters (found with " FMT_INT ").\n"
 				, name, builtins[md].ft_nparms_min, builtins[md].ft_nparms_max
 				, n);
 			Perrors++;
@@ -962,7 +962,7 @@ func_node (PACTX pactx, STRING name, PNODE elist)
 		node = create_pnode(pactx, IBCALL);
 		iname(node) = (VPTR) name;
 		iargs(node) = (VPTR) elist;
-		ifunc(node) = (VPTR) builtins[md].ft_eval;
+		ifunc(node) = builtins[md].ft_eval;
 		node->i_flags = PN_INAME_HSTR;
 		return node;
 		
@@ -1110,16 +1110,15 @@ verify_builtins (void)
 	INT i;
 	for (i=0; i<nobuiltins-1; ++i) {
 		if (strcmp(builtins[i].ft_name, builtins[i+1].ft_name)>0) {
-			char msg[64];
-			sprintf(msg, "builtins array out of order ! (entries %ld,%ld)"
-				, i, i+1);
+			char msg[39+FMT_INT_LEN+1+FMT_INT_LEN+1+1];
+			snprintf(msg, sizeof(msg), "builtins array out of order ! (entries " FMT_INT "," FMT_INT ")",
+				 i, i+1);
 			FATAL2(msg);
 		}
 		if (builtins[i].ft_nparms_min > builtins[i].ft_nparms_max) {
-			char msg[64];
-			sprintf(msg, "builtins array bad min,max (%ld,%ld, entry %ld)"
-				, builtins[i].ft_nparms_min, builtins[i].ft_nparms_max
-				, i);
+			char msg[28+FMT_INT_LEN+1+FMT_INT_LEN+8+FMT_INT_LEN+1+1];
+			snprintf(msg, sizeof(msg), "builtins array bad min,max (" FMT_INT "," FMT_INT ", entry " FMT_INT ")",
+			 	 builtins[i].ft_nparms_min, builtins[i].ft_nparms_max, i);
 			FATAL2(msg);
 		}
 	}
@@ -1244,7 +1243,7 @@ show_pnodes (PNODE node)
 	while (node) {
 		debug_show_one_pnode(node);
 		node = inext(node);
-		if (node) llwprintf(",");
+		if (node) llwprintf("%c", ',');
 	}
 }
 /*==========================================================
@@ -1270,7 +1269,7 @@ debug_show_one_pnode (PNODE node)     /* node to print */
 	ZSTR zstr = zs_newn(512);
 	INT max = 512;
 	describe_pnode(node, zstr, max);
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 }
 /*====================================================
  * debug_show_one_pnode -- DEBUG routine to describe one node
@@ -1291,7 +1290,7 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 	switch (itype(node)) {
 
 	case IICONS:
-		zs_appf(zstr, "%d", pvalue_to_int(node->vars.iicons.value));
+		zs_appf(zstr, FMT_INT, pvalue_to_int(node->vars.iicons.value));
 		break;
 	case IFCONS:
 		zs_appf(zstr, "%f", pvalue_to_float(node->vars.ifcons.value));
@@ -1336,7 +1335,7 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 		zs_apps(zstr, "*PDefn *");
 		break;
 	case IPCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;
@@ -1344,12 +1343,12 @@ describe_pnode (PNODE node, ZSTR zstr, INT max)
 		zs_apps(zstr, "*FDefn *");
 		break;
 	case IFCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;
 	case IBCALL:
-		zs_appf(zstr, "%s(", iname(node));
+		zs_appf(zstr, "%s(", (char*)iname(node));
 		describe_pnodes(iargs(node), zstr, max);
 		zs_apps(zstr, ")");
 		break;

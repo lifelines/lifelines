@@ -566,7 +566,7 @@ create_pvalue_from_keynum_impl (INT i, INT ptype)
 	case POTHR: cptype = 'X'; break;
 	default: ASSERT(0); break;
 	}
-	sprintf(key, "%c%d", cptype, i);
+	snprintf(key, sizeof(key), "%c" FMT_INT, cptype, i);
 	return create_pvalue_from_key_impl(key, ptype);
 }
 /*==================================
@@ -936,7 +936,7 @@ void
 show_pvalue (PVALUE val)
 {
 	ZSTR zstr = describe_pvalue(val);
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 	zs_free(&zstr);
 }
 /*=================================================
@@ -978,8 +978,9 @@ describe_pvalue (PVALUE val)
 	switch (type) {
 	case PNULL:
 		zs_appf(zstr, "<NULL>");
+		break;
 	case PINT:
-		zs_appf(zstr, "%d", pvalue_to_int(val));
+		zs_appf(zstr, FMT_INT, pvalue_to_int(val));
 		break;
 	case PFLOAT:
 		zs_appf(zstr, "%f", pvalue_to_float(val));
@@ -1012,7 +1013,7 @@ describe_pvalue (PVALUE val)
 		{
 			RECORD rec = pvalue_to_record(val);
 			if (rec)
-				zs_appf(zstr, nzkey(rec));
+				zs_appf(zstr, "%s", nzkey(rec));
 			else
 				zs_appf(zstr, "NULL");
 		}
@@ -1021,32 +1022,32 @@ describe_pvalue (PVALUE val)
 		{
 			LIST list = pvalue_to_list(val);
 			INT n = length_list(list);
-			zs_appf(zstr, _pl("%d item", "%d items", n), n);
+			zs_appf(zstr, _pl(FMT_INT " item", FMT_INT " items", n), n);
 		}
 		break;
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
 			INT n = get_table_count(table);
-			zs_appf(zstr, _pl("%d entry", "%d entries", n), n);
+			zs_appf(zstr, _pl(FMT_INT " entry", FMT_INT " entries", n), n);
 		}
 		break;
 	case PSET:
 		{
 			INDISEQ seq = pvalue_to_seq(val);
 			INT n = length_indiseq(seq);
-			zs_appf(zstr, _pl("%d record", "%d records", n), n);
+			zs_appf(zstr, _pl(FMT_INT " record", FMT_INT " records", n), n);
 		}
 		break;
 	case PARRAY:
 		{
 			ARRAY arr = pvalue_to_array(val);
 			INT n = get_array_size(arr);
-			zs_appf(zstr, _pl("%d element", "%d elements", n), n);
+			zs_appf(zstr, _pl(FMT_INT " element", FMT_INT " elements", n), n);
 		}
 		break;
 	default:
-		zs_appf(zstr, "%p", pvalvv(val));
+		zs_appf(zstr, "%p", (void*)&pvalvv(val));
 		break;
 	}
 	zs_appc(zstr, '>');

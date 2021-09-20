@@ -1,5 +1,8 @@
-<!-- Converted by db4-upgrade version 1.1 -->
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook">
+<?xml version="1.0"?>
+<book xmlns="http://docbook.org/ns/docbook"
+      version="5.0"
+      xml:id="docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <info>
 <!-- ================================================= -->
@@ -138,8 +141,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <para>
 
      The source code, documentation and a collection of report
-     scripts are located at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://lifelines.github.io/lifelines/">
-     http://lifelines.github.io/lifelines/</link>.  You can also find
+     scripts are located at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://lifelines.github.io/lifelines/">
+     https://lifelines.github.io/lifelines/</link>.  You can also find
      binary kits for some platforms.  If you are a developer and
      wish to contribute enhancements, please obtain a github account
      and contact <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="mailto:marc@nozell.com"> Marc
@@ -168,15 +171,15 @@ Other sources of information include:
 <row>
 <entry>lifelines homepage
 </entry><entry>
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://lifelines.github.io/lifelines/">
-http://lifelines.github.io/lifelines/
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://lifelines.github.io/lifelines/">
+https://lifelines.github.io/lifelines/
 </link>
 </entry>
 </row><row>
 <entry>lifelines FAQ
 </entry><entry>
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://lifelines.github.io/lifelines/faq.html">
-http://lifelines.github.io/lifelines/faq.html</link>.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://lifelines.github.io/lifelines/faq.html">
+https://lifelines.github.io/lifelines/faq.html</link>.
 </entry>
 </row><row>
 <entry>LINES-L mailing list

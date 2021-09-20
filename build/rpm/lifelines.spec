@@ -9,7 +9,7 @@
 # Add comment to top of comments at bottom if you revise this file.
 #
 
-%define lifelines_version       3.1.1
+%define lifelines_version       3.2.0
 %define reports_dir /usr/local/share/lifelines-%{lifelines_version}/reports
 %define tt_dir /usr/local/share/lifelines-%{lifelines_version}/tt
 
@@ -19,8 +19,8 @@ Version: %{lifelines_version}
 Release: 1
 License: X11
 Group: Utilities/System
-Source:         http://download.sourceforge.net/lifelines/lifelines-%{lifelines_version}.tar.gz
-URL:            http://marcno.github.io/lifelines/
+Source:         https://github.com/lifelines/lifelines/releases/download/%{lifelines_version}/lifelines-%{lifelines_version}.tar.gz
+URL:            https://lifelines.github.io/lifelines/
 Packager:       Marc Nozell <marc@nozell.com>
 Provides:       lifelines
 BuildRoot: %{_tmppath}/%{name}-%{version}-root

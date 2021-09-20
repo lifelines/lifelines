@@ -1,0 +1,120 @@
+TEST: index()
+string: A쎥쎤쎶B쎅쎄쎖C (9 characters, 15 bytes)
+index of the 1st character, A: 1
+index of the 2nd character, 쎥: 2
+index of the 3rd character, 쎤: 3
+index of the 4th character, 쎶: 4
+index of the 5th character, B: 5
+index of the 6th character, 쎅: 6
+index of the 7th character, 쎄: 7
+index of the 8th character, 쎖: 8
+index of the 9th character, C: 9
+
+extracttokens from 'A쎥쎤쎶B쎅쎄쎖C' with separator 'B' found 2 tokens:
+   'A쎥쎤쎶'   '쎅쎄쎖C'
+extracttokens from 'A쎥쎤쎶B쎅쎄쎖C' with separator '쎖' found 2 tokens:
+   'A쎥쎤쎶B쎅쎄'   'C'
+
+check sugstring and strlen
+substring [1:1]: A  len=1
+substring [1:2]: A쎥  len=2
+substring [1:3]: A쎥쎤  len=3
+substring [1:4]: A쎥쎤쎶  len=4
+substring [1:5]: A쎥쎤쎶B  len=5
+substring [1:6]: A쎥쎤쎶B쎅  len=6
+substring [1:7]: A쎥쎤쎶B쎅쎄  len=7
+substring [1:8]: A쎥쎤쎶B쎅쎄쎖  len=8
+substring [1:9]: A쎥쎤쎶B쎅쎄쎖C  len=9
+substring [2:9]: 쎥쎤쎶B쎅쎄쎖C  len=8
+substring [3:9]: 쎤쎶B쎅쎄쎖C  len=7
+substring [4:9]: 쎶B쎅쎄쎖C  len=6
+substring [5:9]: B쎅쎄쎖C  len=5
+substring [6:9]: 쎅쎄쎖C  len=4
+substring [7:9]: 쎄쎖C  len=3
+substring [8:9]: 쎖C  len=2
+substring [9:9]: C  len=1
+TEST: index()
+string: AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC (20 characters, 35 bytes)
+index of the 1st character, A:1
+index of the 2nd character, À:2
+index of the 3nd character, Á:3
+index of the 4th character, Â:4
+index of the 5th character, Ã:5
+index of the 6th character, Ä:6
+index of the 7th character, Å:7
+index of the 8th character, Æ:8
+index of the 9th character, E:9
+index of the 10th character, È:10
+index of the 11th character, Ê:11
+index of the 12th character, Ë:12
+index of the 13th character, I:13
+index of the 14th character, Ì:14
+index of the 15th character, Í:15
+index of the 16th character, Î:16
+index of the 17th character, Ï:17
+index of the 18th character, ƒ:18
+index of the 19th character, ϴ:19
+index of the 20th character, C:20
+
+TEST: extracttokens()
+extracttokens from 'AÄa' with separator 'ÄA' found 3 tokens:
+   ''   ''   'a'
+extracttokens from 'aÄa' with separator 'ÄA' found 2 tokens:
+   'a'   'a'
+extracttokens from 'ÄAa' with separator 'ÄA' found 3 tokens:
+   ''   ''   'a'
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'A' found 2 tokens:
+   ''   'ÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC'
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'Ë' found 2 tokens:
+   'AÀÁÂÃÄÅÆEÈÊ'   'IÌÍÎÏƒϴC'
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'I' found 2 tokens:
+   'AÀÁÂÃÄÅÆEÈÊË'   'ÌÍÎÏƒϴC'
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'ϴ' found 2 tokens:
+   'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒ'   'C'
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'C' found 2 tokens:
+   'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴ'   ''
+extracttokens from 'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC' with separator 'c' found 1 tokens:
+   'AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC'
+extracttokens from 'one,two,:three,:=end' with separator ',:=' found 7 tokens:
+   'one'   'two'   ''   'three'   ''   ''   'end'
+extracttokens from 'Hi there folks!' with separator ',' found 1 tokens:
+   'Hi there folks!'
+extracttokens from 'Hi there folks!' with separator '!' found 2 tokens:
+   'Hi there folks'   ''
+extracttokens from 'one,two,,three,,,end,' with separator ',' found 8 tokens:
+   'one'   'two'   ''   'three'   ''   ''   'end'   ''
+
+
+TEST: substring()
+substring [1:1]: A  len=1
+substring [1:2]: AÀ  len=2
+substring [1:3]: AÀÁ  len=3
+substring [1:4]: AÀÁÂ  len=4
+substring [1:5]: AÀÁÂÃ  len=5
+substring [1:6]: AÀÁÂÃÄ  len=6
+substring [1:7]: AÀÁÂÃÄÅ  len=7
+substring [1:8]: AÀÁÂÃÄÅÆ  len=8
+substring [1:9]: AÀÁÂÃÄÅÆE  len=9
+substring [2:9]: ÀÁÂÃÄÅÆE  len=8
+substring [3:9]: ÁÂÃÄÅÆE  len=7
+substring [4:9]: ÂÃÄÅÆE  len=6
+substring [5:9]: ÃÄÅÆE  len=5
+substring [6:9]: ÄÅÆE  len=4
+substring [7:9]: ÅÆE  len=3
+substring [8:9]: ÆE  len=2
+substring [19:20]: ϴC  len=2
+substring [20:20]: C  len=1
+string: AÀÁÂÃÄÅÆEÈÊËIÌÍÎÏƒϴC (20 characters, 35 bytes)
+
+/usr1/lifelines/src/builds/github_ll/lifelines/bld64/tests
+
+TEST: substring() 'eéée' -- letter e, e with acute, e + composing acute, e
+      7 bytes, 5 UTF-8 chars, 4 grapheme's (preceived visable characters 
+substring [1:1]: e  len=1
+substring [1:2]: eé  len=2
+substring [1:3]: eéée  len=3
+substring [1:4]: eéée  len=4
+substring [1:5]: eéée  len=4
+substring [1:6]: eéée  len=4
+substring [1:7]: eéée  len=4
+substring [1:8]: eéée  len=4

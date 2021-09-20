@@ -279,9 +279,9 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 	/* print tags & values */
 	for (i=scroll; i<dnum && row<count; ++i, ++row) {
 		STRING detail = arrdets->lines[row];
-		char temp[20];
+		char temp[FMT_INT_LEN+1];
 		STRING name=0, value=0;
-		sprintf(temp, "d%d", i+1);
+		snprintf(temp, sizeof(temp), "d" FMT_INT, i+1);
 		name = valueof_str(props, temp);
 		detail[0]=0;
 		if (name) {

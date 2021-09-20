@@ -209,7 +209,7 @@ set_record_key_info (RECORD rec, CNSTRING key)
 	NODE node=0;
 	INT keynum = atoi(key+1);
 	char ntype = key[0];
-	sprintf(xref, "@%s@", key);
+	snprintf(xref, sizeof(xref), "@%s@", key);
 	strcpy(rec->rec_nkey.key, key);
 	rec->rec_nkey.keynum = keynum;
 	rec->rec_nkey.ntype = ntype;

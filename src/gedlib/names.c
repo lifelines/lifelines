@@ -67,7 +67,7 @@ static STRING parts_to_name(STRING*);
 static BOOLEAN piecematch(STRING, STRING);
 static void remove_namekey(const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid);
 /* static void rkey_cpy(const RKEY * src, RKEY * dest);*/
-static BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
+BOOLEAN rkey_eq(const RKEY * rkey1, const RKEY * rkey2);
 static void soundex2rkey(char finitial, CNSTRING sdex, RKEY * rkey);
 static void squeeze(CNSTRING, STRING);
 static STRING upsurname(STRING);
@@ -82,15 +82,15 @@ static STRING upsurname(STRING);
  *   same first letter in their first given name, are indexed
  *   together
  *===================================================================
- * database record format -- The first INT of the record holds the
+ * database record format -- The first INT32 of the record holds the
  *   number of names indexed in the record
  *-------------------------------------------------------------------
- *        1 INT  nnames  - number of names indexed in this record
- *   nnames RKEY rkeys   - RKEYs of the INDI records with the names
- *   nnames INT  noffs   - offsets into following strings where names
- *			   begin
- *   nnames STRING names - char buffer where the names are stored
- *			   based on char offsets
+ *        1 INT32  nnames - number of names indexed in this record
+ *   nnames RKEY   rkeys  - RKEYs of the INDI records with the names
+ *   nnames INT32  noffs  - offsets into following strings where names
+ *			    begin
+ *   nnames STRING names  - char buffer where the names are stored
+ *			    based on char offsets
  *-------------------------------------------------------------------
  * internal format -- At any time there can be only one name record
  *   stored internally; the data is stored in global data structures
@@ -98,27 +98,29 @@ static STRING upsurname(STRING);
  *   RKEY    NRkey   - RKEY of the current name record
  *   STRING  NRrec   - current name record
  *   INT     NRsize  - size of current name record
- *   INT     NRcount - number of entries in current name record
- *   INT    *NRoffs  - char offsets to names in current name
- *			  record
+ *   INT32   NRmax   - max allocation size of internal arrays
+ *   INT32   NRcount - number of entries in current name record
  *   RKEY   *NRkeys  - RKEYs of the INDI records with the names
+ *   INT32  *NRoffs  - char offsets to names in current name record
  *   CNSTRING *NRnames - name values from INDI records that the
  *			  index is based upon
- *   INT     NRmax   - max allocation size of internal arrays
  *-------------------------------------------------------------------
  * When a name record is used to match a search name, the internal
  *   structures are modified to remove all entries that don't match
  *   the name; in addition, other global data structures are used
  *=================================================================*/
 
+/* Current name record - raw */
 static RKEY    NRkey;
 static STRING  NRrec = NULL;
 static INT     NRsize;
-static INT     NRcount;
-static INT    *NRoffs;
+
+/* Current name record - parsed */
+static INT     NRmax = 0;
+static INT32   NRcount;
+static INT32  *NRoffs;
 static RKEY   *NRkeys;
 static CNSTRING *NRnames;
-static INT     NRmax = 0;
 
 
 /*********************************************
@@ -127,36 +129,76 @@ static INT     NRmax = 0;
  *********************************************/
 
 /*====================================================
+ * allocnamerec -- Allocate internal name record
+ *==================================================*/
+static void
+allocnamerec(void)
+{
+	NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
+	NRoffs = (INT32 *) stdalloc((NRmax)*sizeof(INT32));
+	NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
+}
+
+/*====================================================
+ * freenamerec -- Free internal name record
+ *==================================================*/
+static void
+freenamerec(void)
+{
+	stdfree(NRkeys);
+	stdfree(NRoffs);
+	stdfree((STRING)NRnames);
+	NRmax = 0;
+}
+
+/*====================================================
+ * reallocnamerec -- Reallocate internal name record
+ *==================================================*/
+static void
+reallocnamerec(void)
+{
+	if (NRmax != 0) {
+		freenamerec();
+	}
+	NRmax = NRcount + 10;
+	allocnamerec();
+}
+
+/*====================================================
  * parsenamerec -- Store name rec in file buffers
  *==================================================*/
 static void
 parsenamerec (const RKEY * rkey, CNSTRING p)
 {
 	INT i;
-	memcpy(&NRkey, rkey, sizeof(*rkey));
-/* Store name record in data structures */
-	memcpy (&NRcount, p, sizeof(INT));
+
 	ASSERT(NRcount < 1000000); /* 1000000 names in a given slot ? */
-	p += sizeof(INT);
+
+	/* update name record key */
+	memcpy(&NRkey, rkey, sizeof(*rkey));
+
+	/* copy record count */
+	memcpy (&NRcount, p, sizeof(NRcount));
+	p += sizeof(NRcount);
+
+	/* reallocate backing storage if needed */
 	if (NRcount >= NRmax - 1) {
-		if (NRmax != 0) {
-			stdfree(NRkeys);
-			stdfree(NRoffs);
-			stdfree((STRING)NRnames);
-		}
-		NRmax = NRcount + 10;
-		NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
-		NRoffs = (INT *) stdalloc((NRmax)*sizeof(INT));
-		NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
+		reallocnamerec();
 	}
+
+	/* copy keys */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(&NRkeys[i], p, sizeof(RKEY));
-		p += sizeof(RKEY);
+		memcpy(&NRkeys[i], p, sizeof(NRkeys[i]));
+		p += sizeof(NRkeys[i]);
 	}
+
+	/* copy offsets */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(&NRoffs[i], p, sizeof(INT));
-		p += sizeof(INT);
+		memcpy(&NRoffs[i], p, sizeof(NRoffs[i]));
+		p += sizeof(NRoffs[i]);
 	}
+
+	/* copy names */
 	for (i = 0; i < NRcount; i++)
 		NRnames[i] = p + NRoffs[i];
 }
@@ -173,20 +215,24 @@ across database reloads
 	if (NRrec && eqrkey(rkey, &NRKEY))
 		return NRcount>0;
 */
+	/* update name record key */
 	memcpy(&NRkey, rkey, sizeof(*rkey));
+
+	/* free existing record storage */
 	strfree(&NRrec);
+
+	/* get record by key */
 	p = NRrec = bt_getrecord(BTR, rkey, &NRsize);
 	if (!NRrec) {
 		NRcount = 0;
 		if (NRmax == 0) {
-			
 			NRmax = 10;
-			NRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
-			NRoffs = (INT *) stdalloc(10*sizeof(INT));
-			NRnames = (CNSTRING *) stdalloc(10*sizeof(STRING));
+			allocnamerec();
 		}
 		return;
 	}
+
+	/* parse name record */
 	parsenamerec(rkey, p);
 }
 /*============================================
@@ -224,7 +270,7 @@ soundex2rkey (char finitial, CNSTRING sdex, RKEY * rkey)
 /*============================================
  * eqrkey - Are two rkeys the same ?
  *==========================================*/
-static BOOLEAN
+BOOLEAN
 rkey_eq (const RKEY * rkey1, const RKEY * rkey2)
 {
 	INT i;
@@ -400,8 +446,9 @@ add_name (CNSTRING name, CNSTRING key)
 static void
 add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 {
-	INT i=0, len=0, off=0;
-	STRING p=0, rec=0;
+	INT i, len, recsize;
+	INT32 off;
+	STRING p, rec;
 
 	/* load up local name record buffers */
 	getnamerec(rkeyname);
@@ -412,37 +459,53 @@ add_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 		    eqstr(name, NRnames[i]))
 			return;
 	}
+
+	/* update directory */
 	NRkeys[NRcount] = *rkeyid;
 	NRnames[NRcount] = name;
 
+	/* increase record count */
 	NRcount++;
-	p = rec = (STRING) stdalloc(NRsize + sizeof(RKEY) +
-	    sizeof(INT) + strlen(name) + 10);
-	len = 0;
-	memcpy(p, &NRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+
+	/* allocate new record */
+	recsize = sizeof(RKEY) + sizeof(INT32) + strlen(name) + 10;
+	p = rec = (STRING) stdalloc(NRsize + recsize);
+	len = off = 0;
+
+	/* copy record count */
+	memcpy(p, &NRcount, sizeof(NRcount));
+	p += sizeof(NRcount);
+	len += sizeof(NRcount);
+
+	/* copy keys */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &NRkeys[i], sizeof(RKEY));
-		p += sizeof(RKEY);
-		len += sizeof(RKEY);
+		memcpy(p, &NRkeys[i], sizeof(NRkeys[i]));
+		p += sizeof(NRkeys[i]);
+		len += sizeof(NRkeys[i]);
 	}
-	off = 0;
+
+	/* recompute offsets */
+	ASSERT(sizeof(off) == sizeof(*NRoffs));
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(off));
+		p += sizeof(off);
+		len += sizeof(off);
 		off += strlen(NRnames[i]) + 1;
 	}
+
+	/* copy names */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, NRnames[i], strlen(NRnames[i]) + 1);
-		p += strlen(NRnames[i]) + 1;
-		len += strlen(NRnames[i]) + 1;
+		INT namelen = strlen(NRnames[i]) + 1;
+		memcpy(p, NRnames[i], namelen);
+		p += namelen;
+		len += namelen;
 	}
+
+	/* update record in btree, free record storage */
 	bt_addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
 
-	/* NRnames[NRcount] doesn't point into record */
+	/* flush cache as name record has changed */
 	flush_name_cache();
 }
 /*=============================================
@@ -486,14 +549,15 @@ remove_name (STRING name, CNSTRING key)
 static void
 remove_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 {
-	INT i=0, len=0, off=0;
-	STRING p=0, rec=0;
-	BOOLEAN found;
+	INT i, len;
+	INT32 off;
+	STRING p, rec;
+	BOOLEAN found = FALSE;
 
 	/* load up local name record buffers */
 	getnamerec(rkeyname);
 
-	found = FALSE;
+	/* check if name already present in name record */
 	for (i = 0; i < NRcount; i++) {
 		if (rkey_eq(rkeyid, &NRkeys[i]) &&
 			eqstr(name, NRnames[i])) {
@@ -503,35 +567,55 @@ remove_namekey (const RKEY * rkeyname, CNSTRING name, const RKEY * rkeyid)
 	}
 	if (!found) return;
 
-	NRcount--;
-	for ( ; i < NRcount; i++) {
+	/* update directory */
+	for ( ; i < NRcount-1; i++) {
 		NRkeys[i] = NRkeys[i+1];
 		NRnames[i] = NRnames[i+1];
 	}
+
+	/* decrease record count */
+	NRcount--;
+
+	/* allocate new record */
 	p = rec = (STRING) stdalloc(NRsize);
-	len = 0;
-	memcpy(p, &NRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	len = off = 0;
+
+	/* copy record count */
+	memcpy(p, &NRcount, sizeof(NRcount));
+	p += sizeof(NRcount);
+	len += sizeof(NRcount);
+
+	/* copy keys */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &NRkeys[i], sizeof(RKEY));
-		p += sizeof(RKEY);
-		len += sizeof(RKEY);
+		memcpy(p, &NRkeys[i], sizeof(NRkeys[i]));
+		p += sizeof(NRkeys[i]);
+		len += sizeof(NRkeys[i]);
 	}
+
+	/* recompute offsets */
+	ASSERT(sizeof(off) == sizeof(*NRoffs));
 	off = 0;
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(off));
+		p += sizeof(off);
+		len += sizeof(off);
 		off += strlen(NRnames[i]) + 1;
 	}
+
+	/* copy names */
 	for (i = 0; i < NRcount; i++) {
-		memcpy(p, NRnames[i], strlen(NRnames[i]) + 1);
-		p += strlen(NRnames[i]) + 1;
-		len += strlen(NRnames[i]) + 1;
+		INT namelen = strlen(NRnames[i]) + 1;
+		memcpy(p, NRnames[i], namelen);
+		p += namelen;
+		len += namelen;
 	}
+
+	/* update record in btree, free record storage */
 	bt_addrecord(BTR, NRkey, rec, len);
 	stdfree(rec);
+
+	/* flush cache as name record has changed */
+	flush_name_cache();
 }
 /*=========================================================
  * exactmatch -- Check if first name is contained in second
@@ -982,11 +1066,21 @@ manip_name (STRING name, SURCAPTYPE captype, SURORDER surorder, INT len)
 	if (!name || *name == 0) return NULL;
 	llstrsets(scratch, sizeof(scratch), uu8, name);
 	name = scratch;
+
+	/* Convert surname to uppercase if requested */
 	if (captype == DOSURCAP) name = upsurname(name);
+
+	/* Do initial trimming of name.  Account for the comma that is required */
+	/* in SURFIRST mode.  We do this here since we are actually parsing the */
+	/* the name parts and will truncate intelligently. */
+	name = trim_name(name, (surorder == REGORDER) ? len: len-1);
+
+	/* Produce name in desired order. */
 	if (surorder == REGORDER) 
 		name = trim(name_string(name), len);
 	else
 		name = trim(name_surfirst(name), len);
+
 	/* trim doesn't respect UTF-8, so ensure we don't leave broken end */
 	limit_width(name, len, uu8);
 	return name;
@@ -1003,7 +1097,6 @@ name_string (STRING name)
 	ASSERT(strlen(name) <= MAXGEDNAMELEN);
 	while (*name) {
 		if (*name != NAMESEP) { *p++ = *name; }
-		else { *p++ = ' '; }
 		name++;
 	}
 	*p-- = 0;

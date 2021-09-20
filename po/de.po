@@ -4085,8 +4085,8 @@ msgstr "Fehler melden:"
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:228
 #, c-format
-msgid "Report bugs to https://github.com/MarcNo/lifelines/issues"
-msgstr ""
+msgid "Report bugs to https://github.com/lifelines/lifelines/issues"
+msgstr "Melden Sie Fehler (auf Englisch) an https://github.com/lifelines/lifelines/issues"
 
 #: src/liflines/lines_usage.c:126
 #, c-format
@@ -5384,9 +5384,9 @@ msgstr "In Datei <%s> in Zeile %d"
 #~ "gibt keine Garantie; auch nicht für VERKAUFBARKEIT oder FÜR SPEZIELLE "
 #~ "ZWECKE."
 
-#~ msgid "Written by Tom Wetmore. Maintained at lifelines.sourceforge.net."
+#~ msgid "Written by Tom Wetmore. Maintained at https://lifelines.github.io/lifelines."
 #~ msgstr ""
-#~ "Geschrieben von Tom Wetmore. Weiterentwickelt unter lifelines.sourceforge."
+#~ "Geschrieben von Tom Wetmore. Weiterentwickelt unter https://lifelines.github.io/lifelines."
 #~ "net."
 
 #~ msgid "illegal call to pos."
@@ -5397,10 +5397,6 @@ msgstr "In Datei <%s> in Zeile %d"
 
 #~ msgid "Second argument to (r)sort must be list or array"
 #~ msgstr "Zweites Argument für (r)sort muss eine Liste oder ein Feld sein"
-
-#~ msgid "Report bugs to lifelines.sourceforge.net"
-#~ msgstr ""
-#~ "Melden Sie Fehler (auf Englisch) an http://lifelines.sourceforge.net/"
 
 #~ msgid "Program"
 #~ msgstr "Programm"

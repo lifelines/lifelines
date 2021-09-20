@@ -10,3 +10,4 @@ stamp-h1
 build/autotools/compile
 *~
 *.swp
+.DS_Store

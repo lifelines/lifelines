@@ -153,7 +153,7 @@ create_symtab (CNSTRING title, SYMTAB parstab)
 
 	symtab->tab = create_table_custom_vptr(delete_vptr_pvalue);
 	symtab->parent = parstab;
-	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, title);
+	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, "%s", title);
 
 	record_live_symtab(symtab);
 

@@ -657,7 +657,7 @@ format_year (struct tag_dnum yr, INT yfmt)
 		}
 	}
 	if (yrval > 999 || yfmt == 2) {
-		sprintf(scratch, "%ld", yrval);
+		snprintf(scratch, sizeof(scratch), FMT_INT, yrval);
 		return scratch;
 	}
 	p = (yfmt==1 ? "000" : "   ");
@@ -667,7 +667,7 @@ format_year (struct tag_dnum yr, INT yfmt)
 		llstrncpy(scratch, p, 2+1, uu8);
 	else
 		llstrncpy(scratch, p, 1+1, uu8);
-	sprintf(scratch+strlen(scratch), "%ld", yrval);
+	snprintf(scratch+strlen(scratch), sizeof(scratch)-strlen(scratch), FMT_INT, yrval);
 	return scratch;
 }
 /*=============================
@@ -780,29 +780,29 @@ approx_time (INT seconds)
 	minutes = seconds/60;
 	if (!minutes) {
 		/* TRANSLATORS: seconds time interval */
-		return zs_newf(_("%02ds"), seconds);
+		return zs_newf(_(FMT_INT_02 "s"), seconds);
 	}
 	seconds = seconds - minutes*60;
 	hours = minutes/60;
 	if (!hours) {
 		/* TRANSLATORS: minutes & seconds time interval */
-		return zs_newf(_("%dm%02ds"), minutes, seconds);
+		return zs_newf(_(FMT_INT "m" FMT_INT_02 "s"), minutes, seconds);
 	}
 	minutes = minutes - hours*60;
 	days = hours/60;
 	if (!days) {
 		/* TRANSLATORS: hours & minutes time interval */
-		return zs_newf(_("%dh%02dm"), hours, minutes);
+		return zs_newf(_(FMT_INT "h" FMT_INT_02 "m"), hours, minutes);
 	}
 	hours = hours - days*24;
 	years = days/365.2425;
 	if (!years) {
 		/* TRANSLATORS: days & hours time interval */
-		return zs_newf(_("%dd%02dh"), days, hours);
+		return zs_newf(_(FMT_INT "d" FMT_INT_02 "h"), days, hours);
 	}
 	days = days - years*365.2425;
 	/* TRANSLATORS: years & days time interval */
-	return zs_newf( _("%dy%03dd"), years, days);
+	return zs_newf( _(FMT_INT "y" FMT_INT_03 "d"), years, days);
 }
 /*====================================+
  * is_valid_dayfmt -- return FALSE if not a valid day format

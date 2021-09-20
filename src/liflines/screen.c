@@ -280,6 +280,7 @@ init_screen (char * errmsg, int errsize)
 	int rtn = resize_screen_impl(errmsg, errsize);
 	if (rtn) { /* success */
 		register_screen_lang_callbacks(TRUE);
+		platform_postcurses_init();
 	}
 	return rtn;
 }
@@ -331,7 +332,7 @@ resize_screen_impl (char * errmsg, int errsize)
 		newcols = winx;
 		if (newcols > COLS || newlines > LINES) {
 			snprintf(errmsg, errsize
-				, _("The requested window size (%ld,%ld) is too large for your terminal (%d,%d).\n")
+				, _("The requested window size (" FMT_INT "," FMT_INT ") is too large for your terminal (%d,%d).\n")
 				, newcols, newlines, COLS, LINES);
 			return 0; /* fail */
 		}
@@ -339,7 +340,7 @@ resize_screen_impl (char * errmsg, int errsize)
 	/* check that terminal meet minimum requirements */
 	if (newcols < COLSREQ || newlines < LINESREQ) {
 		snprintf(errmsg, errsize
-			, _("The requested window size (%ld,%ld) is too small for LifeLines (%d,%d).\n")
+			, _("The requested window size (" FMT_INT "," FMT_INT ") is too small for LifeLines (%d,%d).\n")
 			, newcols, newlines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
@@ -488,6 +489,10 @@ remove_uiwin (UIWINDOW uiwin)
 	BOOLEAN deleteall = FALSE;
 	ASSERT(list_uiwin);
 	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
+	// If the list is empty, then delete the list.  This avoids a memory leak.
+	// The list will be created again in add_uiwin if needed.
+	if (is_empty_list(list_uiwin))
+		destroy_empty_list(list_uiwin);
 }
 /*==========================================
  * does_match -- Used as callback to remove_uiwin
@@ -525,11 +530,18 @@ delete_uiwindow (UIWINDOW * uiw)
 {
 	if (*uiw) {
 		UIWINDOW w = *uiw;
+		// remove window from master list
 		remove_uiwin(w);
+		// delete window (curses)
 		ASSERT(uiw_win(w));
 		delwin(uiw_win(w));
+		// delete boxwin (curses)
+		if (uiw_boxwin(w))
+			delwin(uiw_boxwin(w));
+		// delete window name
 		ASSERT(w->name);
 		stdfree((STRING)w->name);
+		// delete window
 		stdfree(w);
 		*uiw = 0;
 	}
@@ -732,7 +744,7 @@ main_menu (void)
 		{
 			RECORD rec = 0;
 			if (readonly) {
-				msg_error(_(qSronlya));
+				msg_error("%s", _(qSronlya));
 				break;
 			}
 			rec = invoke_add_menu();
@@ -743,7 +755,7 @@ main_menu (void)
 	case 'd':
 		{
 			if (readonly) {
-				msg_error(_(qSronlyr));
+				msg_error("%s", _(qSronlyr));
 				break;
 			}
 			invoke_del_menu();
@@ -810,7 +822,7 @@ update_browse_menu (INT screen)
 			dynmenu->cur_x = strlen(_(qSplschs))+3;
 			dynmenu->cur_y = dynmenu->top - 1;
 			llstrapps(prompt, sizeof(prompt), uu8, "             ");
-			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
+			llstrappf(prompt, sizeof(prompt), uu8, _("(pg " FMT_INT "/" FMT_INT ")")
 				, dynmenu->page+1, dynmenu->pages);
 			/* display line across */
 			show_horz_line(uiwin, dynmenu->top-2, 0, width);
@@ -1741,7 +1753,7 @@ load_tt_action (void)
 	STRING ttimportdir;
 
 	if (readonly) {
-		msg_error(_(qSronlye));
+		msg_error("%s", _(qSronlye));
 		return;
 	}
 
@@ -1749,7 +1761,7 @@ load_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 
@@ -1760,7 +1772,7 @@ load_tt_action (void)
 		fclose(fp);
 		/* Load it */
 		if (!load_new_tt(fname, ttnum))
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 	}
 	strfree(&fname);
 }
@@ -1780,11 +1792,11 @@ save_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 	if (!transl_get_legacy_tt(ttnum)) {
-		msg_error(_(qSnosuchtt));
+		msg_error("%s", _(qSnosuchtt));
 		return;
 	}
 	/* Ask whither to save it */
@@ -1794,7 +1806,7 @@ save_tt_action (void)
 		fclose(fp);
 		/* Save it */
 		if (!save_tt_to_file(ttnum, fname)) {
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 			strfree(&fname);
 			return;
 		}
@@ -2065,7 +2077,7 @@ place_std_msg (void)
 void
 rpt_print (STRING str)
 {
-	llwprintf(str);
+	llwprintf("%s", str);
 }
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
@@ -2253,13 +2265,21 @@ dbprintf (STRING fmt, ...)
 void
 do_edit (void)
 {
+	int rtn=-1;
+
 	endwin();
 #ifdef WIN32
 	/* use w32system, because it will wait for the editor to finish */
-	w32system(editstr);
+	rtn = w32system(editstr);
 #else
-	system(editstr);
+	rtn = system(editstr);
 #endif
+	if (rtn != 0) {
+		printf(_("Editor or system call failed."));
+		puts("");
+		sleep(2);
+	}
+
 	clearok(curscr, 1);
 	place_cursor_main();
 	wrefresh(curscr);
@@ -2466,6 +2486,19 @@ display_status (STRING text)
 	mvccwaddstr(win, row, 2, status_showing);
 	place_cursor_main();
 	wrefresh(win);
+}
+/*=========================================
+ * message -- handle generic message
+ * delegates to msg_outputv
+ * TODO: replace with msg_error/info/status
+ *=======================================*/
+void
+message (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_outputv(MSG_ERROR, fmt, args); 
+	va_end(args);
 }
 /*=========================================
  * msg_error -- handle error message
@@ -2895,12 +2928,21 @@ refresh_stdout (void)
 void
 call_system_cmd (STRING cmd)
 {
+	int rtn=-1;
+
 	endwin();
 #ifndef WIN32
-	system("clear");
+	rtn = system("clear");
 #endif
-	system(cmd);
-	touchwin(curscr);
+	rtn = system(cmd);
+
+	if (rtn != 0) {
+		printf(_("System command failed."));
+		puts("");
+		sleep(2);
+	}
+	clearok(curscr, 1);
+	place_cursor_main();
 	wrefresh(curscr);
 }
 /*============================

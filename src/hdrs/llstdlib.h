@@ -59,10 +59,9 @@ They must also implement crashlog, but it may do nothing, or
 it may just print its printf style args to the screen. It 
 should return.
 */
-void __fatal(STRING file, int line, CNSTRING details);
-void crashlog(STRING fmt, ...);
-void crashlogn(STRING fmt, ...);
-
+void __fatal(STRING file, int line, CNSTRING details) HINT_FUNC_NORETURN;
+void crashlog(STRING fmt, ...) HINT_PRINTF(1,2);
+void crashlogn(STRING fmt, ...) HINT_PRINTF(1,2);
 
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);
@@ -90,6 +89,8 @@ int do_checked_fclose(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fflush(FILE *fp, STRING filename, STRING srcfile, int srcline);
 int do_checked_fseek(FILE *fp, long offset, int whence, STRING filename, STRING srcfile, int srcline);
 size_t do_checked_fwrite(const void *buf, size_t size, size_t count, FILE *fp, STRING filename, STRING srcfile, int srcline);
+void filecopy (FILE* fpsrc, INT len, FILE* fpdest);
+void movefiles (STRING from_file, STRING to_file);
 
 /* listener.c */
 	/* callback for language change */
@@ -142,8 +143,10 @@ BOOLEAN path_match(CNSTRING path1, CNSTRING path2);
 
 
 /* signals.c */
-void set_signals(void);
+void set_signals(void (*handler)(int));
 void ll_optional_abort(STRING);
+void load_signames(void);
+char *get_signame(int);
 
 /* sprintpic.c */
 void sprintpic0(STRING buffer, INT len, INT utf8, CNSTRING pic);
@@ -172,7 +175,7 @@ INT ll_toupper(INT);
 INT ll_tolower(INT);
 char *llstrncat(char *dest, const char *src, size_t n, int utf8);
 char *llstrncpy(char *dest, const char *src, size_t n, int utf8);
-char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...);
+char *llstrncpyf(char *dest, size_t n, int utf8, const char * fmt, ...) HINT_PRINTF(4,5);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 char *llstrncpyvf(char *dest, size_t n, int utf8, const char * fmt, va_list args);
 int make8char(int c);
@@ -190,13 +193,13 @@ void strupdate(STRING * str, CNSTRING value);
 /* strapp.c */
 char *llstrapps(char *dest, size_t limit, int utf8, const char *src);
 char *llstrappc(char *dest, size_t limit, char ch);
-char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...);
+char *llstrappf(char *dest, int limit, int utf8, const char *fmt, ...) HINT_PRINTF(4,5);
 char *llstrappvf(char *dest, int limit, int utf8, const char *fmt, va_list args);
 
 /* strset.c */
 char *llstrsets(char *dest, size_t limit, int utf8, const char *src);
 char *llstrsetc(char *dest, size_t limit, char ch);
-char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...);
+char *llstrsetf(char * dest, int limit, int utf8, const char * fmt, ...) HINT_PRINTF(4,5);
 char *llstrsetvf(char * dest, int limit, int utf8, const char * fmt, va_list args);
 
 /* strcvt.c */

@@ -35,6 +35,8 @@
 #include "btree.h"
 #include "version.h"
 
+extern STRING qSgen_bugreport;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -68,7 +70,7 @@ main (int argc,
       char **argv)
 {
 	BTREE btree;
-	char cmdbuf[512];
+	char cmdbuf[MAXPATHLEN];
 	char *editor;
 	char *dbname, *key;
 	RECORD_STATUS recstat;
@@ -129,7 +131,7 @@ main (int argc,
 	}
 
 	editor = environ_determine_editor(PROGRAM_BTEDIT);
-	sprintf(cmdbuf, "%s btedit.tmp", editor);
+	snprintf(cmdbuf, sizeof(cmdbuf), "%s btedit.tmp", editor);
 	if (llsystem(cmdbuf) != 0) {
 		printf(_("Editor or system call failed."));
 		puts("");
@@ -225,6 +227,6 @@ print_usage (void)
 	printf("\n\t\t");
 	printf(_("edit raw btree block for person I34"));
 	printf("\n\n");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n");
 }

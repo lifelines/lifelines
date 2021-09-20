@@ -51,6 +51,8 @@ extern INT csz_othr;
 
 extern int opterr;
 
+extern int yydebug;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -104,7 +106,6 @@ main (int argc, char **argv)
 	int c;
 	BOOLEAN ok=FALSE;
 	STRING dbrequested=NULL; /* database (path) requested */
-	STRING dbused=NULL; /* database (path) found */
 	BOOLEAN forceopen=FALSE, lockchange=FALSE;
 	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
@@ -162,23 +163,23 @@ main (int argc, char **argv)
 					*optarg = tolower((uchar)*optarg);
 				if(*optarg == 'i') {
 					INT icsz_indi=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_indi, &icsz_indi);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_indi, &icsz_indi);
 				}
 				else if(*optarg == 'f') {
 					INT icsz_fam=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_fam, &icsz_fam);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_fam, &icsz_fam);
 				}
 				else if(*optarg == 's') {
 					INT icsz_sour=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_sour, &icsz_sour);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_sour, &icsz_sour);
 				}
 				else if(*optarg == 'e') {
 					INT icsz_even=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_even, &icsz_even);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_even, &icsz_even);
 				}
 				else if((*optarg == 'o') || (*optarg == 'x')) {
 					INT icsz_othr=0;
-					sscanf(optarg+1, "%ld,%ld", &csz_othr, &icsz_othr);
+					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_othr, &icsz_othr);
 				}
 				optarg++;
 				while(*optarg && isdigit((uchar)*optarg)) optarg++;
@@ -254,9 +255,6 @@ main (int argc, char **argv)
 		case 'o': /* output directory */
 			progout = optarg;
 			break;
-		case 'z': /* nongraphical box */
-//			graphical = FALSE;
-			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
 			break;
@@ -277,9 +275,15 @@ prompt_for_db:
 
 	/* catch any fault, so we can close database */
 	if (!debugmode)
-		set_signals();
-	else /* developer wants to drive without seatbelt! */
+	{
+		set_signals(sighand_cmdline);
+	}
+	/* developer wants to drive without seatbelt! */
+	else
+	{
 		stdstring_hardfail();
+		/* yydebug = 1; */
+	}
 
 	platform_init();
 	set_displaykeys(keyflag);
@@ -297,15 +301,15 @@ prompt_for_db:
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(_(qSnorwandro));
+		llwprintf("%s", _(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(_(qSnofandl));
+		llwprintf("%s", _(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(qSbdlkar));
+		llwprintf("%s", _(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -330,9 +334,9 @@ prompt_for_db:
 		} else {
 			strupdate(&dbrequested, "");
 		}
-		if (!select_database(dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
-				llwprintf(errmsg);
+				llwprintf("%s", errmsg);
 			}
 			alldone = 0;
 			goto finish;
@@ -341,7 +345,7 @@ prompt_for_db:
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
-		llwprintf(_(qSbaddb));
+		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
 	/* does not use show module */
@@ -367,7 +371,6 @@ finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
-	strfree(&dbused);
 	strfree(&dbrequested);
 	strfree(&readpath_file);
 	shutdown_interpreter();

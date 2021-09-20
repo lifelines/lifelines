@@ -109,7 +109,7 @@ indi_to_indi (NODE indi)
 		nchild(indi) = node = name;
 	} else {
 		if (getlloptint("RequireNames", 0)) {
-			llwprintf(_("Missing NAME line in INDI record; record ignored.\n"));
+			llwprintf("%s", _("Missing NAME line in INDI record; record ignored.\n"));
 			return NULL;
 		}
 		nchild(indi) = node = 0;
@@ -271,10 +271,10 @@ void
 nkey_load_key (NKEY * nkey)
 {
 	char key[MAXKEYWIDTH+1];
-	if (nkey->key)
+	if (nkey->key[0])
 		return;
-	sprintf(key, "%c%ld", nkey->ntype, nkey->keynum);
-	strcpy(nkey->key, key);
+	snprintf(key, MAXKEYWIDTH, "%c" FMT_INT, nkey->ntype, nkey->keynum);
+	strncpy(nkey->key, key, MAXKEYWIDTH);
 }
 /*==================================================
  * nkey_eq -- compare two NKEYs

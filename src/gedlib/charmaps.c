@@ -88,6 +88,7 @@ static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, 
 static void maperror(CNSTRING errmsg);
 static void remove_xnodes(XNODE);
 #ifdef DEBUG
+void show_trantable (TRANTABLE tt);
 static void show_xnode(XNODE node);
 static void show_xnodes(INT indent, XNODE node);
 #endif
@@ -587,7 +588,7 @@ hexvalue (INT c)
 static void
 maperror (CNSTRING errmsg)
 {
-	llwprintf((STRING)errmsg);
+	llwprintf("%s", (STRING)errmsg);
 }
 #ifdef DEBUG
 /*=======================================================
@@ -599,7 +600,7 @@ show_trantable (TRANTABLE tt)
 	INT i;
 	XNODE node;
 	if (tt == NULL) {
-		llwprintf("EMPTY TABLE\n");
+		llwprintf("%s\n", "EMPTY TABLE");
 		return;
 	}
 	for (i = 0; i < 256; i++) {
@@ -609,7 +610,6 @@ show_trantable (TRANTABLE tt)
 		}
 	}
 }
-
 /*===============================================
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/
@@ -619,7 +619,7 @@ show_xnodes (INT indent, XNODE node)
 	INT i;
 	if (!node) return;
 	for (i = 0; i < indent; i++)
-		llwprintf("  ");
+		llwprintf("%s", "  ");
 	show_xnode(node);
 	show_xnodes(indent+1, node->child);
 	show_xnodes(indent,   node->sibling);
@@ -640,7 +640,6 @@ show_xnode (XNODE node)
 		llwprintf("\n");
 }
 #endif /* DEBUG */
-
 /*===================================================
  * custom_translatez -- Translate string via custom translation table
  *  zstr: [I/O] string to be translated (in-place)
@@ -765,7 +764,7 @@ get_trantable_desc (TRANTABLE tt)
 	} else {
 		zs_apps(zstr, "(Unnamed table)");
 	}
-	sprintf(buffer, " [%ld]", tt->total);
+	snprintf(buffer, sizeof(buffer), " [" FMT_INT "]", tt->total);
 	zs_apps(zstr, buffer);
 	return zstr;
 }

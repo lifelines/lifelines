@@ -12,9 +12,10 @@
 ##
 
 function showusage {
-  echo "Usage: sh `basename $0` X.Y.Z   # to change to specified version number"
-  echo "   or: sh `basename $0` restore # to undo version number just applied"
-  echo "   or: sh `basename $0` cleanup # to remove backup files"
+  echo "Usage: sh `basename $0` X.Y.Z        # to change to specified version number"
+  echo "   or: sh `basename $0` TAG          # to change to specific version tag"
+  echo "   or: sh `basename $0` restore      # to undo version number just applied"
+  echo "   or: sh `basename $0` cleanup      # to remove backup files"
 }
 
 function usageexit {
@@ -41,18 +42,33 @@ function checkparm {
     return
   fi
 
-  # Store argument as $VERSION and check it is valid version
-  VERSION=$1
+  # Check for valid version
+  VERSIONFOUND=0
   VPATTERN="^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$"
-  if ! echo $VERSION | grep -q $VPATTERN
+  if echo $1 | grep -q $VPATTERN
   then
-    usageexit "ERROR: Missing or invalid version number" $E_WRONG_ARGS
+    VERSION=$1
+    VERSIONFOUND=1
+  fi
+
+  # Check for valid tag
+  TAGFOUND=0
+  TPATTERN="^(alpha|beta|rc[1-9][0-9]*|release)$"
+  if echo $1 | grep -qE $TPATTERN
+  then
+    TAG=$1
+    TAGFOUND=1
+  fi
+
+  if ( [ $VERSIONFOUND -eq 0 ] && [ $TAGFOUND -eq 0 ] )
+  then
+    usageexit "ERROR: Missing or invalid version number or tag" $E_WRONG_ARGS
   fi
 }
 
 # Function to apply version to one file
 # Argument#1 is filename (eg, "NEWS")
-# Arguments#2-? sed patterns, applied one after another
+# Arguments#2-N sed patterns, applied one after another
 function alterfile {
   [ ! -z "$1" ] || failexit "Missing first argument to alterfile"
   [ ! -z "$2" ] || failexit "Missing second argument to alterfile"
@@ -60,7 +76,7 @@ function alterfile {
   shift
   cp $FILEPATH $FILEPATH.bak || failexit "Error backing up file "$FILEPATH
   # Now apply each remaining argument as sed command
-  echo "Updating version number in $FILEPATH..."
+  echo "Updating $FILEPATH..."
   until [ -z "$1" ]
   do
     # sed doesn't seem to set its return value, so we don't check
@@ -143,8 +159,12 @@ function applyversion {
   alterfile $ROOTDIR/NEWS "$SEDPAT"
   alterfile $ROOTDIR/README "$SEDPAT"
 
+  SEDPAT="s/\(AC_INIT(lifelines,[ ]*\)[0-9][[:alnum:].\-]*)$/\1$VERSION)/"
+  alterfile $ROOTDIR/configure.ac "$SEDPAT"
+
   SEDPAT="s/\(%define lifelines_version [ ]*\)[0-9][[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/build/rpm/lifelines.spec "$SEDPAT"
+
   SEDPAT="s/\(release version=\)\"[0-9][[:alnum:].\-]*\"/\1\"$VERSION\"/"
   SEDPAT2="s/\(release.*date=\)\"[0-9]*-[0-9]*-[0-9]*\"/\1\"$YMD\"/"
   alterfile $ROOTDIR/build/appdata/lifelines.appdata.xml "$SEDPAT" "$SEDPAT2"
@@ -165,6 +185,18 @@ function applyversion {
   alterfile $ROOTDIR/docs/manual/ll-userguide.sv.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml "$SEDPAT"
+
+  SEDPAT="s/\(version: \)[0-9][[:alnum:].\-]*/\1$VERSION/i"
+  alterfile $ROOTDIR/reports/st/st_all.ref "$SEDPAT"
+}
+
+# Call alterfile with an sed command for each file
+function applytag {
+  SEDPAT="s/^\(#define LIFELINES_VERSION_EXTRA \)\"([[:alnum:]]*)\"$/\1\"($TAG)\"/"
+  alterfile $ROOTDIR/src/hdrs/version.h "$SEDPAT"
+
+  SEDPAT="s/\(version: [0-9][[:alnum:].\-]*\).*/\1 ($TAG)/i"
+  alterfile $ROOTDIR/reports/st/st_all.ref "$SEDPAT"
 }
 
 # Restore, for user to reverse last application
@@ -175,6 +207,7 @@ function restore {
   restorefile $ROOTDIR/NEWS
   restorefile $ROOTDIR/README
   restorefile $ROOTDIR/configure.ac
+  restorefile $ROOTDIR/build/appdata/lifelines.appdata.xml
   restorefile $ROOTDIR/build/msvc6/btedit/btedit.rc
   restorefile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
   restorefile $ROOTDIR/build/msvc6/llexec/llexec.rc
@@ -189,6 +222,7 @@ function restore {
   restorefile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
   restorefile $ROOTDIR/docs/manual/ll-userguide.xml
   restorefile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  restorefile $ROOTDIR/src/hdrs/version.h
 }
 
 # Cleanup, for user to remove backup files
@@ -199,6 +233,7 @@ function cleanup {
   cleanupfile $ROOTDIR/NEWS
   cleanupfile $ROOTDIR/README
   cleanupfile $ROOTDIR/configure.ac
+  cleanupfile $ROOTDIR/build/appdata/lifelines.appdata.xml
   cleanupfile $ROOTDIR/build/msvc6/btedit/btedit.rc
   cleanupfile $ROOTDIR/build/msvc6/dbverify/dbVerify.rc
   cleanupfile $ROOTDIR/build/msvc6/llexec/llexec.rc
@@ -213,6 +248,7 @@ function cleanup {
   cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
   cleanupfile $ROOTDIR/docs/manual/ll-userguide.xml
   cleanupfile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  cleanupfile $ROOTDIR/src/hdrs/version.h
 }
 
 ##
@@ -234,7 +270,7 @@ fi
 
 # Check that user passed exactly one parameter
 E_WRONG_ARGS=65
-if [ $# -ne 1 ] || [ -z "$1" ]
+if ( [ $# -ne 1 ] && [ $# -ne 2 ] ) || [ -z "$1" ]
 then
   usageexit "ERROR: Wrong number of arguments!" $E_WRONG_ARGS
 fi
@@ -242,7 +278,7 @@ fi
 # Function to handle parsing argument
 # Parse argument (should be a version, or "restore" or "cleanup")
 # (exits if failure)
-checkparm $1
+checkparm $1 $2
 
 # Invoke whichever functionality was requested
 if [ ! -z "$RESTORE" ]
@@ -252,6 +288,16 @@ elif [ ! -z "$CLEANUP" ]
 then
   cleanup
 else
-  getversion
-  applyversion
+  if [ $VERSIONFOUND -eq 1 ]
+  then
+    echo "Applying version change..."
+    getversion
+    applyversion
+  fi
+
+  if [ $TAGFOUND -eq 1 ] 
+  then
+    echo "Appyling tag change..."
+    applytag
+  fi
 fi 

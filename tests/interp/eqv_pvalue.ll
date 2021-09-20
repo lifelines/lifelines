@@ -67,10 +67,10 @@ proc main ()
   /* pointer cases - GEDCOM types */
   list(list1)
   push(list1, indi1)
-  push(list1, indi2)  
+  push(list1, indi2)
   list(list2)
   push(list1, indi1)
-  push(list1, indi2)  
+  push(list1, indi2)
   call testeq(eq(list1,list1), TRUE, "LIST equality (pointer)")
   call testeq(ne(list1,list2), TRUE, "LIST inequality (pointer)")
 

@@ -79,6 +79,14 @@ refresh_stdout (void)
  * Message output functions
  *===========================================================*/
 void
+message (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
 msg_error (char *fmt, ...)
 {
 	va_list args;
@@ -123,10 +131,18 @@ msg_width (void)
 void
 call_system_cmd (STRING cmd)
 {
+	int rtn=-1;
+
 #ifndef WIN32
-	system("clear");
+	rtn = system("clear");
 #endif
-	system(cmd);
+	rtn = system(cmd);
+
+	if (rtn != 0) {
+		printf(_("Editor or system call failed."));
+		puts("");
+		sleep(2);
+        }
 }
 /*=============================================================
  * ASK Routines
@@ -154,11 +170,19 @@ ask_for_program (STRING mode,
 BOOLEAN
 ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
 {
+	char *rtn=NULL;
+	int len=0;
+
 	outputln(ttl);
 	printf("%s", prmpt);
-	fgets(buffer, buflen, stdin);
-	chomp(buffer);
-	return strlen(buffer)>0;
+	rtn = fgets(buffer, buflen, stdin);
+	if (rtn)
+	{
+		chomp(buffer);
+		len = strlen(buffer);
+	}
+
+	return (len>0);
 }
 BOOLEAN
 ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen)
@@ -291,18 +315,21 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 {
-	/* TODO: The q ought to be localized */
 	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	STRING responses = selectable ? "0123456789udq" : "udq";
-	INT i=0;
 
-	ttl = ttl;	/* NOTUSED */
-
+	INT start=1;
 	while (1) {
+                INT end = start+(start == 1 ? 8 : 9);
+                if (end > no) {
+                        end = no;
+                }
 		INT j;
 		INT rv;
-		for (j=i; j<i+10 && j<no; ++j) {
-			printf("%ld: %s\n", j-i, pstrngs[j]);
+                printf("%s (" FMT_INT "/" FMT_INT ")\n", _(ttl),start,no);
+
+		for (j=start; j<=end; ++j) {
+			printf(FMT_INT ": %s\n", j%10, pstrngs[j-1]);
 		}
 		printf("%s\n", promptline);
 		rv = interact(responses);
@@ -317,19 +344,33 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 		case '7':
 		case '8':
 		case '9':
-			rv = i+rv-'0';
-			if (selectable && rv < no) {
+			rv = rv-'1' + (start/10)*10;
+			if (selectable && rv < no ) {
 				return rv;
 			}
 			break;
 		case 'd':
-			if (i+10 < no)
-				i += 10;
+                        // if end == no don't slide window down
+                        if (end != no) {
+                                if (start == 1) {
+                                        start += 9;
+                                } else {
+                                        start += 10;
+                                }
+                                if (start > no) {
+                                         start = no;
+                                }
+                        }
 			break;
 		case 'u':
-			if (i>9)
-				i -= 10;
+			if (start >9)  {
+                                start -= 10;
+                        }
+                        if (start < 1) {
+                                start = 1;
+                        }
 			break;
+                case 0: /* trap EOF and treat like a q */
 		case 'q': return -1;
 		}
 	}
@@ -379,14 +420,16 @@ interact (CNSTRING ptrn)
 {
 	char buffer[8];
 	CNSTRING t=0;
+	char *rtn=NULL;
+
 	while (1) {
-		fgets(buffer, sizeof(buffer), stdin);
+		rtn = fgets(buffer, sizeof(buffer), stdin);
+		if (!rtn) return 0;
 		if (!ptrn) return buffer[0];
 		for (t=ptrn; *t; ++t) {
 			if (buffer[0]==*t)
 				return buffer[0];
 		}
-		printf("Invalid option: choose one of %s\n", ptrn);
+		printf("Invalid option(%c): choose one of %s\n",buffer[0], ptrn);
 	}
 }
-

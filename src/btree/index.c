@@ -52,7 +52,8 @@ crtindex (BTREE btree)
 	rewind(bkfp(btree));
 	if (fwrite(&bkfile(btree), sizeof(bkfile(btree)), 1, bkfp(btree)) != 1) {
 		char scratch[200];
-		sprintf(scratch, "Error updating keyfile for new index");
+		snprintf(scratch, sizeof(scratch), "Error updating keyfile for new index");
+		fclose(bkfp(btree));
 		FATAL2(scratch);
 	}
 	writeindex(btree, index);
@@ -61,13 +62,14 @@ crtindex (BTREE btree)
 /*=================================
  * get_index_file - Read index from file
  *  path:    [OUT] path for this index file
+ *  path:    [IN]  length of path output variable
  *  btr:     [IN]  database btree
  *  ikey:    [IN]  index file key (number which indicates a file)
  *===============================*/
 void
-get_index_file (STRING path, BTREE btr, FKEY ikey)
+get_index_file (STRING path, INT len, BTREE btr, FKEY ikey)
 {
-	sprintf(path, "%s/%s", bbasedir(btr), fkey2path(ikey));
+	snprintf(path, len, "%s/%s", bbasedir(btr), fkey2path(ikey));
 }
 /*=================================
  * readindex - Read index from file
@@ -82,25 +84,27 @@ readindex (BTREE btr, FKEY ikey, BOOLEAN robust)
 	FILE *fi=NULL;
 	INDEX index=NULL;
 	char scratch[400];
-	get_index_file(scratch, btr, ikey);
+	get_index_file(scratch, sizeof(scratch), btr, ikey);
 	if ((fi = fopen(scratch, LLREADBINARY LLFILERANDOM)) == NULL) {
 		if (robust) {
 			/* fall to end & return NULL */
 			goto readindex_end;
 		}
-		sprintf(scratch, "Missing index file: %s", fkey2path(ikey));
+		snprintf(scratch, sizeof(scratch), "Missing index file: %s", fkey2path(ikey));
 		FATAL2(scratch);
 	}
 	index = (INDEX) stdalloc(BUFLEN);
 	if (fread(index, BUFLEN, 1, fi) != 1) {
 		if (robust) {
+			/* fall to end & return NULL */
 			goto readindex_end;
 		}
-		sprintf(scratch, "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
+		snprintf(scratch, sizeof(scratch), "Undersized (<%d) index file: %s", BUFLEN, fkey2path(ikey));
+		fclose(fi);
 		FATAL2(scratch);
 	}
-	if (fi) fclose(fi);
 readindex_end:
+	if (fi) fclose(fi);
 	return index;
 }
 /*=================================
@@ -113,16 +117,17 @@ writeindex (BTREE btr, INDEX index)
 {
 	FILE *fi=NULL;
 	char scratch[400];
-	get_index_file(scratch, btr, ixself(index));
+	get_index_file(scratch, sizeof(scratch), btr, ixself(index));
 	if ((fi = fopen(scratch, LLWRITEBINARY LLFILERANDOM)) == NULL) {
-		sprintf(scratch, "Error opening index file: %s", fkey2path(ixself(index)));
+		snprintf(scratch, sizeof(scratch), "Error opening index file: %s", fkey2path(ixself(index)));
 		FATAL2(scratch);
 	}
 	if (fwrite(index, BUFLEN, 1, fi) != 1) {
-		sprintf(scratch, "Error writing index file: %s", fkey2path(ixself(index)));
+		snprintf(scratch, sizeof(scratch), "Error writing index file: %s", fkey2path(ixself(index)));
+		fclose(fi);
 		FATAL2(scratch);
 	}
-	if (fclose(fi) != 0) FATAL2(scratch);
+	fclose(fi);
 }
 /*==============================================
  * initcache -- Initialize index cache for btree

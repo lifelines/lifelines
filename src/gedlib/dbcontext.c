@@ -84,13 +84,13 @@ alterdb (INT alteration, INT *lldberr)
 	But do check keyfile2 checks first (in case it is a
 	database from a different alignment).
 	*/
-	char scratch[200];
+	char scratch[MAXPATHLEN];
 	FILE *fp=NULL;
 	BOOLEAN result=FALSE;
 	KEYFILE1 kfile1;
 	KEYFILE2 kfile2;
 	struct stat sbuf;
-	sprintf(scratch, "%s/key", readpath);
+	snprintf(scratch, sizeof(scratch), "%s/key", readpath);
 	if (stat(scratch, &sbuf) || !S_ISREG(sbuf.st_mode)) {
 		*lldberr = BTERR_KFILE_ALTERDB;
 		goto force_open_db_exit;

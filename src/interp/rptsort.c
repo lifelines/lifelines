@@ -59,7 +59,13 @@ sortpaircmp (SORTEL el1, SORTEL el2, VPTR param)
 	return pvalues_collate(sp1->key, sp2->key);
 }
 #endif
-static INT
+/* IMPORTANT NOTE
+ * This function must use a return type of "int", not "INT", in order to be
+ * compatible with the definition of qsort().  Since qsort is only expecting
+ * a return value of -1, 0 or 1 from this routine, a down-cast from int64_t
+ * to int32_t is acceptable.
+ */
+static int
 sortpair_bin (const void * el1, const void * el2)
 {
 	SORTPAIR sp1, sp2;
@@ -69,7 +75,7 @@ sortpair_bin (const void * el1, const void * el2)
 	sp2 = *(SORTPAIR *)el2;
 	ASSERT(sp1->key);
 	ASSERT(sp2->key);
-	return pvalues_collate(sp1->key, sp2->key);
+	return (int)pvalues_collate(sp1->key, sp2->key);
 }
 static PVALUE
 sortimpl (PNODE node, SYMTAB stab, BOOLEAN *eflg, BOOLEAN fwd)

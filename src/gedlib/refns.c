@@ -37,6 +37,7 @@
 #include "lloptions.h"
 #include "zstr.h"
 #include "cache.h"
+#include "gedcomi.h"
 
 /*********************************************
  * external/imported variables
@@ -64,12 +65,12 @@ static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
  *   refn records; all records with user keys starting with the same first
  *   two characters are indexed together
  *=========================================================================
- * database record format -- The first INT of the record holds the
+ * database record format -- The first INT32 of the record holds the
  *   number of refns indexed in the record
  *-------------------------------------------------------------------
- *        1 INT  nrefns  - number of refns indexed in this record
- *   nrefns RKEY rkeys   - RKEYs of the INDI records with the refns
- *   nrefns INT  noffs   - offsets into following strings where refns
+ *        1 INT32 nrefns - number of refns indexed in this record
+ *   nrefns RKEY  rkeys  - RKEYs of the INDI records with the refns
+ *   nrefns INT32 noffs  - offsets into following strings where refns
  *			   begin
  *   nrefns STRING refns - char buffer where the refns are stored
  *			   based on char offsets
@@ -80,39 +81,115 @@ static BOOLEAN resolve_node(NODE node, BOOLEAN annotate_pointers);
  *   RKEY    RRkey   - RKEY of the current refn record
  *   STRING  RRrec   - current refn record
  *   INT     RRsize  - size of current refn record
- *   INT     RRcount - number of entries in current refn record
- *   INT    *RRoffs  - char offsets to refnl in current refn record
+ *   INT32   RRmax   - max allocation size of internal arrays
+ *   INT32   RRcount - number of entries in current refn record
  *   RKEY   *RRkeys  - RKEYs of the INDI records with the refn
+ *   INT32  *RRoffs  - char offsets to refnl in current refn record
  *   CNSTRING *RRrefns - refn values from INDI records that the
  *			  index is based upon
- *   INT     RRmax   - max allocation size of internal arrays
  *-------------------------------------------------------------------
  * When a refn record is used to match a search refn, the internal
  *   structures are modified to remove all entries that don't match
  *   the refn; in addition, other global data structures are used
  *-------------------------------------------------------------------
  *   STRING *RMkeys  - keys (strings) of all INDI records that match
- *   INT     RMcount - number of entries in modified record arrays
- *   INT     RMmax   - max allocation size of RMkeys array
+ *   INT32   RMmax   - max allocation size of RMkeys array
+ *   INT32   RMcount - number of entries in modified record arrays
  *=================================================================*/
 
+/* Current refns record - raw */
 static RKEY    RRkey;
 static STRING  RRrec = NULL;
 static INT     RRsize;
-static INT     RRcount;
-static INT    *RRoffs;
+
+/* Current refns record - parsed */
+static INT32   RRmax = 0;
+static INT32   RRcount;
+static INT32  *RRoffs;
 static RKEY   *RRkeys;
 static CNSTRING *RRrefns;
-static INT     RRmax = 0;
 
 static STRING *RMkeys = NULL;
-static INT     RMcount = 0;
-static INT     RMmax = 0;
+static INT32   RMmax = 0;
+static INT32   RMcount = 0;
 
 /*********************************************
  * local function definitions
  * body of module
  *********************************************/
+
+/*====================================================
+ * allocrefnrec -- Allocate internal refn record
+ *==================================================*/
+static void
+allocrefnrec(void)
+{
+        RRoffs = (INT32 *) stdalloc((RRmax)*sizeof(INT32));
+        RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
+        RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(CNSTRING));
+}
+
+/*====================================================
+ * freerefnrec -- Free internal refn record
+ *==================================================*/
+static void
+freerefnrec(void)
+{
+        stdfree(RRkeys);
+        stdfree(RRoffs);
+        stdfree((CNSTRING)RRrefns);
+        RRmax = 0;
+}
+
+/*====================================================
+ * reallocrefnrec -- Reallocate internal refn record
+ *==================================================*/
+static void
+reallocrefnrec(void)
+{
+        if (RRmax != 0) {
+                freerefnrec();
+        }
+        RRmax = RRcount + 10;
+        allocrefnrec();
+}
+
+/*====================================================
+ * allocrefnmrec -- Allocate internal refn match record
+ *==================================================*/
+static void
+allocrefnmrec(void)
+{
+	RMkeys = (STRING *) stdalloc(RRcount*sizeof(STRING));
+	RMcount = RRcount;
+	RMmax = RRcount;
+}
+
+/*====================================================
+ * freerefnmrec -- Free internal refn match record
+ *==================================================*/
+static void
+freerefnmrec(void)
+{
+	INT i;
+
+	for (i = 0; i < RMcount; i++)
+		stdfree(RMkeys[i]);
+	if (RMcount)
+		stdfree(RMkeys);
+	RMcount = 0;
+	RMmax = 0;
+}
+
+/*====================================================
+ * reallocrefnmrec -- Reallocate internal refn match record
+ *==================================================*/
+static void
+reallocrefnmrec(void)
+{
+	freerefnmrec();
+	allocrefnmrec();
+}
 
 /*====================================================
  * parserefnrec -- Store refn rec in file buffers
@@ -121,29 +198,34 @@ static void
 parserefnrec (RKEY rkey, CNSTRING p)
 {
 	INT i;
+
+	ASSERT(RRcount < 1000000); /* 1000000 renfs in a given slot ? */
+
+	/* update refn record key */
 	RRkey = rkey;
-/* Store refn record in data structures */
-	memcpy (&RRcount, p, sizeof(INT));
-	p += sizeof(INT);
+
+	/* copy record count */
+	memcpy (&RRcount, p, sizeof(RRcount));
+	p += sizeof(RRcount);
+
+	/* reallocate backing storage if needed */
 	if (RRcount >= RRmax - 1) {
-		if (RRmax != 0) {
-			stdfree(RRkeys);
-			stdfree(RRoffs);
-			stdfree((STRING)RRrefns);
-		}
-		RRmax = RRcount + 10;
-		RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
-		RRoffs = (INT *) stdalloc((RRmax)*sizeof(INT));
-		RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(STRING));
+		reallocrefnrec();
 	}
+
+	/* copy keys */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(&RRkeys[i], p, sizeof(RKEY));
-		p += sizeof(RKEY);
+		memcpy(&RRkeys[i], p, sizeof(RRkeys[i]));
+		p += sizeof(RRkeys[i]);
 	}
+
+	/* copy offsets */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(&RRoffs[i], p, sizeof(INT));
-		p += sizeof(INT);
+		memcpy(&RRoffs[i], p, sizeof(RRoffs[i]));
+		p += sizeof(RRoffs[i]);
 	}
+
+	/* copy refns */
 	for (i = 0; i < RRcount; i++)
 		RRrefns[i] = p + RRoffs[i];
 }
@@ -162,9 +244,7 @@ getrefnrec (CNSTRING refn)
 		RRcount = 0;
 		if (RRmax == 0) {
 			RRmax = 10;
-			RRkeys = (RKEY *) stdalloc(10*sizeof(RKEY));
-			RRoffs = (INT *) stdalloc(10*sizeof(INT));
-			RRrefns = (CNSTRING *) stdalloc(10*sizeof(STRING));
+			allocrefnrec();
 		}
 		return FALSE;
 	}
@@ -220,45 +300,67 @@ refn_hi (void)
 BOOLEAN
 add_refn (CNSTRING refn, CNSTRING key)
 {
+	INT i, len, recsize;
+	INT32 off;
 	STRING rec, p;
-	INT i, len, off;
 	RKEY rkey;
 
+	/* load up local refn record buffers */
 	rkey = str2rkey(key);
 	(void) getrefnrec(refn);
+
+	/* check if refn already present in refn record */
 	for (i = 0; i < RRcount; i++) {
-		if (!ll_strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
+		if (rkey_eq(&rkey, &RRkeys[i]) &&
 		    eqstr(refn, RRrefns[i]))
 			return TRUE;
 	}
+
+	/* update directory */
 	RRkeys[RRcount] = rkey;
 	RRrefns[RRcount] = refn;
+
+	/* increase record count */
 	RRcount++;
-	p = rec = (STRING) stdalloc(RRsize + sizeof(RKEY) +
-	    sizeof(INT) + strlen(refn) + 10);
-	len = 0;
-	memcpy(p, &RRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+
+	/* allocate new record */
+	recsize = sizeof(RKEY) + sizeof(INT32) + strlen(refn) + 10;
+	p = rec = (STRING) stdalloc(RRsize + recsize);
+	len = off = 0;
+
+	/* copy record count */
+	memcpy(p, &RRcount, sizeof(RRcount));
+	p += sizeof(RRcount);
+	len += sizeof(RRcount);
+
+	/* copy keys */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &RRkeys[i], sizeof(RKEY));
-		p += sizeof(RKEY);
-		len += sizeof(RKEY);
+		memcpy(p, &RRkeys[i], sizeof(RRkeys[i]));
+		p += sizeof(RRkeys[i]);
+		len += sizeof(RRkeys[i]);
 	}
-	off = 0;
+
+        /* recompute offsets */
+        ASSERT(sizeof(off) == sizeof(*RRoffs));
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(off));
+		p += sizeof(off);
+		len += sizeof(off);
 		off += strlen(RRrefns[i]) + 1;
 	}
+
+	/* copy refns */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, RRrefns[i], strlen(RRrefns[i]) + 1);
-		p += strlen(RRrefns[i]) + 1;
-		len += strlen(RRrefns[i]) + 1;
+		INT refnlen = strlen(RRrefns[i]) + 1;
+		memcpy(p, RRrefns[i], refnlen);
+		p += refnlen;
+		len += refnlen;
 	}
+
+	/* update record in btree, free record storage */
 	bt_addrecord(BTR, RRkey, rec, len);
 	stdfree(rec);
+
 	return TRUE;
 }
 /*=============================================
@@ -269,49 +371,71 @@ remove_refn (CNSTRING refn,       /* record's refn */
              CNSTRING key)        /* record's GEDCOM key */
 {
 	STRING rec, p;
-	INT i, len, off;
-	BOOLEAN found;
+	INT i, len;
+	INT32 off;
+	BOOLEAN found = FALSE;
 	RKEY rkey;
+
+	/* load up local name record buffers */
 	rkey = str2rkey(key);
 	(void) getrefnrec(refn);
-	found = FALSE;
+
+	/* check if refn already present in refn record */
 	for (i = 0; i < RRcount; i++) {
-		if (!ll_strncmp(rkey.r_rkey, RRkeys[i].r_rkey, 8) &&
+		if (rkey_eq(&rkey, &RRkeys[i]) &&
 		    eqstr(refn, RRrefns[i])) {
 			found = TRUE;
 			break;
 		}
 	}
 	if (!found) return FALSE;
-	RRcount--;
-	for ( ; i < RRcount; i++) {
+
+	/* update directory */
+	for ( ; i < RRcount-1; i++) {
 		RRkeys[i] = RRkeys[i+1];
 		RRrefns[i] = RRrefns[i+1];
 	}
+
+	/* decrease record count */
+	RRcount--;
+
+	/* allocate new record */
 	p = rec = (STRING) stdalloc(RRsize);
-	len = 0;
-	memcpy(p, &RRcount, sizeof(INT));
-	p += sizeof(INT);
-	len += sizeof(INT);
+	len = off = 0;
+
+	/* copy record count */
+	memcpy(p, &RRcount, sizeof(RRcount));
+	p += sizeof(RRcount);
+	len += sizeof(RRcount);
+
+	/* copy keys */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &RRkeys[i], sizeof(RKEY));
-		p += sizeof(RKEY);
-		len += sizeof(RKEY);
+		memcpy(p, &RRkeys[i], sizeof(RRkeys[i]));
+		p += sizeof(RRkeys[i]);
+		len += sizeof(RRkeys[i]);
 	}
-	off = 0;
+
+        /* recompute offsets */
+        ASSERT(sizeof(off) == sizeof(*RRoffs));
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, &off, sizeof(INT));
-		p += sizeof(INT);
-		len += sizeof(INT);
+		memcpy(p, &off, sizeof(off));
+		p += sizeof(off);
+		len += sizeof(off);
 		off += strlen(RRrefns[i]) + 1;
 	}
+
+	/* copy refns */
 	for (i = 0; i < RRcount; i++) {
-		memcpy(p, RRrefns[i], strlen(RRrefns[i]) + 1);
-		p += strlen(RRrefns[i]) + 1;
-		len += strlen(RRrefns[i]) + 1;
+		INT refnlen = strlen(RRrefns[i]) + 1;
+		memcpy(p, RRrefns[i], refnlen);
+		p += refnlen;
+		len += refnlen;
 	}
+
+	/* update record in btree, free record storage */
 	bt_addrecord(BTR, RRkey, rec, len);
 	stdfree(rec);
+
 	return TRUE;
 }
 /*====================================================
@@ -330,11 +454,7 @@ get_refns (STRING refn,
 
 /* Clean up allocated memory from last call */
 
-	if (RMcount) {
-		for (i = 0; i < RMcount; i++)
-			stdfree(RMkeys[i]);
-	}
-	RMcount = 0;
+	freerefnmrec();
 
 /* Load static refn buffers; return if no match */
 
@@ -357,9 +477,7 @@ get_refns (STRING refn,
 	}
 	*pnum = RRcount = n;
 	if (RRcount > RMmax) {
-		if (RMmax) stdfree(RMkeys);
-		RMkeys = (STRING *) stdalloc(RRcount*sizeof(STRING));
-		RMmax = RRcount;
+		reallocrefnmrec();
 	}
 	for (i = 0; i < RRcount; i++)
 		RMkeys[i] = strsave(rkey2str(RRkeys[i]));

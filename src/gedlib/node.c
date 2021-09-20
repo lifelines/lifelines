@@ -285,7 +285,7 @@ node_strlen (INT levl,       /* level */
 {
 	INT len;
 	char scratch[10];
-	sprintf(scratch, "%ld", levl);
+	snprintf(scratch, sizeof(scratch), FMT_INT, levl);
 	len = strlen(scratch) + 1;
 	if (nxref(node)) len += strlen(nxref(node)) + 1;
 	len += strlen(ntag(node));
@@ -840,7 +840,7 @@ event_to_plac (NODE node, BOOLEAN shrt)
 void
 show_node (NODE node)
 {
-	if (!node) llwprintf("(NIL)");
+	if (!node) llwprintf("%s", "(NIL)");
 	show_node_rec(0, node);
 }
 /*================================================
@@ -853,12 +853,12 @@ show_node_rec (INT levl,
 	INT i;
 	if (!node) return;
 	for (i = 1;  i < levl;  i++)
-		llwprintf("  ");
-	llwprintf("%d", levl);
+		llwprintf("%s", "  ");
+	llwprintf(FMT_INT, levl);
 	if (nxref(node)) llwprintf(" %s", nxref(node));
 	llwprintf(" %s", ntag(node));
 	if (nval(node)) llwprintf(" %s", nval(node));
-	llwprintf("\n");
+	llwprintf("%s", "\n");
 	show_node_rec(levl + 1, nchild(node));
 	show_node_rec(levl    , nsibling(node));
 }

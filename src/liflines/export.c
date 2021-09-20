@@ -99,9 +99,9 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 
 	curtime = time(NULL);
 	pt = localtime(&curtime);
-	sprintf(dat, "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
+	snprintf(dat, sizeof(dat), "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
 	    1900 + pt->tm_year);
-	sprintf(tim, "%d:%.2d", pt->tm_hour, pt->tm_min);
+	snprintf(tim, sizeof(tim), "%d:%.2d", pt->tm_hour, pt->tm_min);
 	fprintf(fp, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n"
 		, get_lifelines_version(80));
 	/* header date & time */
@@ -144,7 +144,7 @@ archive (BTREE btree, BLOCK block, void * param)
 	FILE *fo=0;
 	struct tag_trav_parm * travparm = (struct tag_trav_parm *)param;
 
-	sprintf(scratch, "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
+	snprintf(scratch, sizeof(scratch), "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
 	fo = fopen(scratch, LLREADBINARY);
 	ASSERT(fo);
 	n = nkeys(block);
@@ -169,7 +169,7 @@ copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, char cty
 {
 	char in[BUFLEN]="";
 	char *inp=0;
-	int remlen=0, num=0;
+	INT remlen=0, num=0;
 	FILE * fn = travparm->fp;
 	struct tag_export_feedback * efeed = travparm->efeed;
 	

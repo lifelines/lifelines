@@ -2,7 +2,7 @@
 
 ACLOCAL_AMFLAGS = -I build/autotools -I build/gettext
 
-SUBDIRS = build po src docs reports tt
+SUBDIRS = build po src docs reports tt tests
 
 EXTRA_DIST = .linesrc lines.cfg lines.cfg.m4 \
              AUTHORS INSTALL LICENSE NEWS README \

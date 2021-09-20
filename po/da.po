@@ -4110,7 +4110,7 @@ msgstr ""
 
 #: src/liflines/lines_usage.c:124 src/tools/btedit.c:228
 #, c-format
-msgid "Report bugs to https://github.com/MarcNo/lifelines/issues"
+msgid "Report bugs to https://github.com/lifelines/lifelines/issues"
 msgstr ""
 
 #: src/liflines/lines_usage.c:126

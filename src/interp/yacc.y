@@ -53,7 +53,7 @@ static PNODE this, prev;
 INT Yival;
 FLOAT Yfval;
 
-// Bison 2.7
+/* Bison 2.7 */
 #define YYSTYPE PNODE
 
 /* Local Functions */
@@ -76,6 +76,15 @@ void parse_error(PACTX pactx, STRING str);
 
 // Bison 3.x.
 %define api.value.type {PNODE}
+
+// Debugging
+%verbose
+%printer { fprintf (yyo, "IDEN"); } IDEN;
+%printer { fprintf (yyo, "PROC"); } PROC;
+%printer { fprintf (yyo, "FUNC"); } FUNC_TOK;
+%printer { fprintf (yyo, "%g",    $$->vars.ifcons.value->value.fxd); } FCONS;
+%printer { fprintf (yyo, FMT_INT, $$->vars.iicons.value->value.ixd); } ICONS;
+%printer { fprintf (yyo, "%s",    $$->vars.iscons.value->value.sxd); } SCONS;
 
 /*===========================================================*/
 /* Bison Prologue (Part 2)                                   */
@@ -120,12 +129,14 @@ rspec	:	defn
 defn 	:	proc
 	|	func
 	|	IDEN '(' IDEN ')' {
+			/* consumes $1 and $3 */
 			if (eqstr("global", (STRING) $1))
 				pa_handle_global((STRING) $3);
-				free_iden($1);
-				free_iden($3);
+			free_iden($1);
+			free_iden($3);
 		}
 	|	IDEN '(' SCONS ')' {
+			/* consumes $1 */
 			if (eqstr("include", (STRING) $1))
 				pa_handle_include(pactx, (PNODE) $3);
 			if (eqstr("option", (STRING) $1))
@@ -265,7 +276,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
 	|	TRAVERSE m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}' {
-			/* consumes $6 */
+			/* consumes $6 and $8 */
 			$$ = traverse_node(pactx, (PNODE)$4, (STRING)$6, (STRING)$8, (PNODE)$11);
 			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
@@ -312,7 +323,7 @@ tmplt	:	CHILDREN m '(' expr ',' IDEN ',' IDEN ')' '{' tmplts '}'
 			$$ = return_node(pactx, (PNODE)$4);
 			((PNODE)$$)->i_line = (INTPTR)$2;
 		}
-	|	expr {
+	|	expro {
 			$$ = $1;
 		}
 	;
@@ -332,7 +343,7 @@ elsifs	:	elsif {
 		}
 	;
 elsif	:	ELSIF '(' expr secondo ')' '{' tmplts '}' {
-			((PNODE)$3)->vars.iif.ielse = (PNODE)$4;
+			inext(((PNODE)$3)) = (PNODE) $4;
 			$$ = if_node(pactx, (PNODE)$3, (PNODE)$7, (PNODE)NULL);
 		}
 	;
@@ -360,6 +371,13 @@ expr	:	IDEN {
 		}
 	|	FCONS {
 			$$ = create_fcons_node(pactx, Yfval);
+		}
+	;
+expro	:	/* empty */ {
+			$$ = 0;
+		}
+	|	expr {
+			$$ = $1;
 		}
 	;
 exprso	:	/* empty */ {

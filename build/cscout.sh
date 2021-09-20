@@ -1,31 +1,38 @@
 #!/bin/sh
 
-# This script will build and analyze the LifeLIines source code using the
+# This script will build and analyze the LifeLiines source code using the
 # CScout program.  See http://www.spinellis.gr/cscout/
 
 # Determine root of repository
 if [ ! -f configure.ac ]
 then
-  if [ ! -f ../configure.ac ]
-  then
-    echo "ERROR: Must be run from either the root of the source tree or the build/ directory!"
-    exit 1
-  else
-    ROOTDIR=..
-  fi
+  echo "ERROR: Must be run from the root of the source tree!"
+  exit 1
 else
-  ROOTDIR=.
+  ROOTDIR=`pwd`
 fi
 
-SAVEDIR=`pwd`
+CSDIR=$ROOTDIR/build/cscout
 
-cd $ROOTDIR
+# Create directory for cscout database
+if [ ! -d $CSDIR ]
+then
+  mkdir $CSDIR
+fi
 
-build/autogen.sh
-./configure
-csmake
-cscout make.cs
-# goes into daemon mode until killed
-rm make.cs
+# Run configure if needed
+if [ ! -f config.h ]
+then
+  build/autogen.sh
+  ./configure
+fi
 
-cd $SAVEDIR
+# Compile workspace
+cswc build/lifelines.cscout > $CSDIR/lifelines.cs
+
+# Run Web Daemon
+cscout $CSDIR/lifelines.cs
+
+# Clean up
+rm $CSDIR/lifelines.cs
+

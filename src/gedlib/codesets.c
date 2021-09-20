@@ -82,7 +82,7 @@ init_codesets (void)
 	*/
 	char wincs[32];
 	int n = w_get_codepage();
-	sprintf(wincs, "CP%d", n);
+	snprintf(wincs, sizeof(wincs), "CP%d", n);
 	strupdate(&defcodeset, wincs);
 #else
 	STRING defval = nl_langinfo (CODESET);
@@ -117,7 +117,7 @@ init_codesets (void)
 #ifdef WIN32
 		char temp[32];
 		int cs = (w_get_has_console() ? w_get_oemout_codepage() : w_get_codepage());
-		sprintf(temp, "CP%d", cs);
+		snprintf(temp, sizeof(temp), "CP%d", cs);
 		e = temp;
 #else
 		e = defcodeset;
@@ -137,7 +137,7 @@ init_codesets (void)
 #ifdef WIN32
 		char temp[32];
 		int cs = (w_get_has_console() ? w_get_oemin_codepage() : w_get_codepage());
-		sprintf(temp, "CP%d", cs);
+		snprintf(temp, sizeof(temp), "CP%d", cs);
 		e = temp;
 #else
 		e = defcodeset;
@@ -194,6 +194,7 @@ term_codesets (void)
 	strfree(&gui_codeset_in);
 	strfree(&report_codeset_out);
 	strfree(&report_codeset_in);
+	strfree(&defcodeset);
 }
 /*=================================================
  * get_defcodeset -- Return user's default codeset

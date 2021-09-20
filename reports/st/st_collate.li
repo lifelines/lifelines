@@ -30,6 +30,7 @@ proc testCollate()
 	call testCollate_UTF_8()
 	call testCollate_8859_1()
 	call reportSubsection("collate tests")
+	call set_section("")
 }
 
 proc check_collate2(str1, str2)
@@ -53,6 +54,7 @@ proc check_collate2(str1, str2)
 		call reportfail(fstr)
 	} else { incr(testok) }
 }
+
 proc check_collate3(str1, str2, str3)
 {
 	call check_collate2(str1, str2)
@@ -63,4 +65,3 @@ proc set_section(name)
 {
 	set(section, name)
 }
-

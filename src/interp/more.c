@@ -693,7 +693,7 @@ llrpt_menuchoose (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	INT nsize=0;
 	val = eval_and_coerce(PLIST, argvar, stab, eflg);
 	if (*eflg) {
-		prog_var_error(node, stab, argvar, val, "menuchoose", "1");
+		prog_var_error(node, stab, argvar, val, nonstrx, "menuchoose", "1");
 		delete_pvalue_ptr(&val);
 		return NULL;
 	}

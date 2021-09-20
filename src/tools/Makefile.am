@@ -10,11 +10,12 @@ bin_PROGRAMS = btedit dbverify lldump lltest xterm_decode
 btedit_SOURCES = btedit.c wprintf.c
 dbverify_SOURCES = dbverify.c wprintf.c
 lltest_SOURCES = lltest.c wprintf.c
-lldump_SOURCES = lldump.c wprintf.c
+lldump_SOURCES = lldump.c wprintf.c misc.c
 xterm_decode_SOURCES = xterm_decode.c
 
 # what libraries do btedit, dbverify and lltest need?
-btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
+btedit_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
+	../stdlib/libstdlib.a \
 	@LIBINTL@ @LIBICONV@
 
 dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
@@ -25,7 +26,8 @@ lldump_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 	../stdlib/libstdlib.a ../arch/libarch.a \
 	@LIBINTL@ @LIBICONV@
 
-lltest_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
+lltest_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
+	../stdlib/libstdlib.a \
 	@LIBINTL@ @LIBICONV@
 
 # 2002.06.29 Perry commented these out -- we don't need them I think

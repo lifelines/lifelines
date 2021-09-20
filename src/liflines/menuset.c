@@ -84,6 +84,7 @@ menuset_init (MENUSET menuset, STRING title, MenuItem ** MenuItems, MenuItem ** 
 	menuset_clear(menuset);
 	menuset->Commands = cmds;
 	menuset->items = MenuItems;
+	menuset->extraItems = extraItems;
 	for (i=0; MenuItems[i]; ++i)
 		add_menu_item(cmds, MenuItems[i]);
 	for (i=0; extraItems[i]; ++i)
@@ -98,9 +99,18 @@ menuset_init (MENUSET menuset, STRING title, MenuItem ** MenuItems, MenuItem ** 
 void
 menuset_clear (MENUSET menuset)
 {
+	INT i;
 	if (menuset->Commands) {
 		free_cmds(menuset->Commands);
 		menuset->Commands = 0;
+	}
+	if (menuset->items) {
+		for (i=0; menuset->items[i]; ++i)
+			strfree(&menuset->items[i]->LocalizedDisplay);
+	}
+	if (menuset->extraItems) {
+		for (i=0; menuset->extraItems[i]; ++i)
+			strfree(&menuset->extraItems[i]->LocalizedDisplay);
 	}
 }
 /*============================
@@ -124,8 +134,8 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 	if (mitem->Command == CMD_CHILD_DIRECT0) {
 		/* CMD_CHILD_DIRECT0 is always hooked up to digits */
 		for (i=1; i<=9; i++) {
-			char choice[2];
-			sprintf(choice, "%ld", i);
+			char choice[FMT_INT_LEN+1];
+			snprintf(choice, sizeof(choice), FMT_INT, i);
 			insert_cmd(cmds, choice, CMD_CHILD_DIRECT0+i, display);
 		}
 	} else {

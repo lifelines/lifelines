@@ -1,0 +1,18 @@
+Starting Test
+Valid INDI (DOSURCAP, REGORDER): 'James SMITH'
+Valid INDI (NOSURCAP, REGORDER): 'James Smith'
+Valid INDI (DOSURCAP, SURFIRST): 'SMITH, James'
+Valid INDI (NOSURCAP, SURFIRST): 'Smith, James'
+Valid INDI (NOSURCAP, REGORDER truncation, varying lengths):
+Partial First Name:   'J SM'
+Full First Name:      'J SMI'
+Full including Space: 'J SMIT'
+Full including Last:  'J SMITH'
+Valid INDI (DOSURCAP, SURFIRST truncation, varying lengths):
+Partial Last Name     'SMIT'
+Full Last Name:       'SMITH'
+Full including Comma: 'SMITH,'
+Full including Space: 'SMITH, '
+Full including First: 'SMITH, J'
+Invalid INDI: ''
+Ending Test

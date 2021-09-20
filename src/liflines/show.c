@@ -254,13 +254,15 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
 			zs_apps(ztemp, place);
 		}
 		if (!date && !place) {
-                        // Git #308: INDI with BIRT/DEAT without DATE/PLAC displays "Y"
-                        // The 3.0.62 behaviour was to display nothing.
-                        // This sounds more appropriate so reverting to that behaviour.
-			//zs_apps(ztemp, "Y");
+			/*
+                         * Git #308: INDI with BIRT/DEAT without DATE/PLAC displays "Y"
+                         * The 3.0.62 behaviour was to display nothing.
+                         * This sounds more appropriate so reverting to that behaviour.
+			 */
+			/* zs_apps(ztemp, "Y"); */
 		}
 		if (ct>1) {
-			zs_appf(ztemp, " (%d alt)", ct-1);
+			zs_appf(ztemp, " (" FMT_INT " alt)", ct-1);
 		}
 		/* append current info to accumulated info */
 		if (zs_len(zstr)>0) {
@@ -387,7 +389,7 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
 	if(badkeylist[0]) {
 		char buf[132];
 		llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
-		message(buf);
+		message("%s", buf);
 	}
 }
 /*=============================================
@@ -419,9 +421,9 @@ add_child_line (INT num, RECORD irec, INT width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(nztop(irec), NULL, width-15);
 	if (number_child_enable)
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "  %2d%s: %s", num, child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "    %s: %s", child, line);
+		llstrncpyf(Sothers[Solen], liwidth, uu8, "  "           "%s: %s",      child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -505,8 +507,8 @@ init_display_fam (RECORD frec, INT width)
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "MARC", _(qSdspl_marc), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "ENGA", _(qSdspl_eng), width-3);
-	if (s) llstrncpyf(Smarr, liwidth, uu8, s);
-	else llstrncpyf(Smarr, liwidth, uu8, _(qSdspl_mar));
+	if (s) llstrncpyf(Smarr, liwidth, uu8, "%s", s);
+	else llstrncpyf(Smarr, liwidth, uu8, "%s", _(qSdspl_mar));
 
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
@@ -584,8 +586,8 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
 	}
 	listbadkeys = 0;
 	if(badkeylist[0]) {
-		sprintf(buf, "WARNING: missing keys: %.40s", badkeylist);
-		message(buf);
+		snprintf(buf, sizeof(buf), "WARNING: missing keys: %.40s", badkeylist);
+		message("%s", buf);
 	}
 }
 /*================================================
@@ -671,8 +673,9 @@ STRING
 indi_to_ped_fix (NODE indi, INT len)
 {
 	STRING bevt, devt, name, key;
+	INT tmp1_length, name_length;
 	static char scratch[200];
-	char tmp1[200]; // holds birth, death, key string
+	char tmp1[200]; /* holds birth, death, key string */
 
 	if (!indi) return (STRING) "------------";
 	bevt = event_to_date(BIRT(indi), TRUE);
@@ -684,21 +687,21 @@ indi_to_ped_fix (NODE indi, INT len)
 	if (keyflag) {
 		key = key_of_record(indi);
 		if(getlloptint("DisplayKeyTags", 0) > 0) {
-			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
+			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
 		} else {
-			snprintf(tmp1, ARRSIZE(tmp1), " [%s-%s] (%s)", bevt, devt, key);
+			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (%s)", bevt, devt, key);
 		}
 	}
 	else
 	{
-		snprintf(tmp1, ARRSIZE(tmp1), " (%s-%s)", bevt, devt);
+		snprintf(tmp1, sizeof(tmp1), " (%s-%s)", bevt, devt);
 	}
 	tmp1[ARRSIZE(tmp1) - 1] = 0;
 	
-	// a long name may need to be truncated to fit on the screen
+	/* a long name may need to be truncated to fit on the screen */
 	len = min(len, (ARRSIZE(scratch) - 1));
-	INT tmp1_length = (INT)strlen(tmp1);
-	INT name_length = len - tmp1_length - 1;
+	tmp1_length = (INT)strlen(tmp1);
+	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
 	ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
@@ -831,7 +834,7 @@ indi_events (STRING outstr, NODE indi, INT len)
 static INT
 max_keywidth (void)
 {
-	INT maxkey = xref_max_any();
+	INT32 maxkey = xref_max_any();
 	if (maxkey>9999) {
 		if (maxkey>999999)
 			return 7;
@@ -1019,7 +1022,7 @@ display_cache_stats (void)
 	ZSTR zstr_fam = get_cache_stats_fam();
 	zs_appf(zstr, _("Cached: I:%s; F:%s")
 		, zs_str(zstr_ind), zs_str(zstr_fam));
-	msg_info(zs_str(zstr));
+	msg_info("%s", zs_str(zstr));
 	zs_free(&zstr);
 	zs_free(&zstr_ind);
 	zs_free(&zstr_fam);

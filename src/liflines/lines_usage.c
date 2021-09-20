@@ -8,6 +8,7 @@
 /* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
 #include "llinesi.h"
 
+extern STRING qSgen_bugreport, qSgen_copyright, qSgen_license;
 
 /*===============================================
  * print_lines_usage -- display program help/usage
@@ -121,12 +122,15 @@ print_lines_usage (CNSTRING exename)
 	}
 	printf(_("REPORTING BUGS"));
 	printf("\n\t");
-	printf(_("Report bugs to https://github.com/MarcNo/lifelines/issues"));
+	printf("%s", _(qSgen_bugreport));
 	printf("\n\n");
 	printf(_("COPYRIGHT"));
 	printf("\n\t");
-	printf("Lifelines is distributed under an X/MIT Open Source license.\n"
-		"\tSee file COPYING in the program directory.");
+        printf("%s", _(qSgen_copyright));
+	printf("\n\n");
+	printf(_("LICENSE"));
+	printf("\n\t");
+        printf("%s", _(qSgen_license));
 	printf("\n\n");
 	printf(_("SEE ALSO"));
 	printf("\n\tllines(1), llexec(1), dbverify(1), btedit(1)");

@@ -7,8 +7,9 @@ handle a 'ar cru libarch.a' without any objects being specified
 to build this library, and later on link with it.
 */
 
-static void _llnull(void)
+void _llnull(void);
+
+void _llnull(void)
 {
-  _llnull(); /* Avoid 'warning: `_llnull' defined but not used' */
   return;
 }

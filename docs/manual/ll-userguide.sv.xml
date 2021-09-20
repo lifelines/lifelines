@@ -1,5 +1,9 @@
-<!-- Converted by db4-upgrade version 1.1 -->
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook" xml:lang="sv">
+<?xml version="1.0"?>
+<book xmlns="http://docbook.org/ns/docbook"
+      version="5.0"
+      xml:id="docbook"
+      xml:lang="sv"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <info>
 <!-- ================================================= -->
@@ -131,7 +135,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <para>
 
 	Källkoden, dokumentationen och en samling rapportskript finns
-	tillgängliga vid <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://lifelines.github.io/lifelines/">http://lifelines.github.io/lifelines/</link>.
+	tillgängliga vid <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://lifelines.github.io/lifelines/">https://lifelines.github.io/lifelines/</link>.
 	Där finns också förkompilerade programpaket för några
 	plattformar. Om du är en utvecklare och vill bidra med
 	förbättringar, så anmäl dig på Sourceforge och kontakta <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="mailto:marc@nozell.com"> Marc Nozell</link> som är den

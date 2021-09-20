@@ -1,5 +1,5 @@
-LifeLines Source Release, Version 3.1.1
-http://marcno.github.io/lifelines/
+LifeLines Source Release, Version 3.2.0
+https://lifelines.github.io/lifelines/
 -------------------------------------------------------------------------
 
 This is a high-level view of changes made to the source tree.
@@ -8,10 +8,39 @@ commit logs.
 
 XXXX-YY-ZZ Matt Emmerton
 
-	Release 3.1.2 (under development)
+	Release 3.2.0 (under development)
 
-	Improve curses detection to ensure that we can detect environments
-	  without wide character support.
+	This release includes full 64-bit support, without database migration!
+
+	Main Program:
+	- Make LifeLines 64-bit clean
+	- Improve parser error for random out-of-palce number
+	- Allow empty block bodies in reports
+	- Allow fullname() to be used with an invalid INDI
+	- Make manip_name() UTF-8 aware (fixes to limit_width and name_string)
+	- Fix bug in j2date()
+	- Massive cleanup of compiler warnings
+
+	Infrastructure:
+	- Improve curses detection for wide character support
+	- Add support for GNU Bison 3.x
+	- Add configure support for --with-32bit and --with-64bit
+	- Add support for cscope, cscout, gcov and sonarqube
+
+	Documentation:
+	- Remove SourceForge and GitHub (MarcNo) refs, replace with GitHub (Lifelines) refs
+	- Update docs to docbook 5 format
+
+	Tools:
+	- Add lldump tool
+
+	Tests:
+	- Add tests for fullname, eqv_pvalue, gengedcomstrong, checkjd2date and math
+	- Add royal92 test for gedcom import
+	- Add view-history and pedigree-longname test
+	- Add string-unicode and string-utf8 tests
+	- Add standalone C test programa and fix nextfkey test
+	- Integrate tests to run with automake Parallel test Harness
 	
 2016-03-16 Matt Emmerton
 

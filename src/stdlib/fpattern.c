@@ -1,7 +1,6 @@
 /*
- from http://home.flash.net/~dtribble/text/fpattern.htm
- 2000/12/12
- by Perry
+ from http://home.flash.net/~dtribble/text/fpattern.htm (2000/12/12)
+ from http://david.tribble.com/src/src.html (2019/01/02)
  License statement is in comments below
 */
 
@@ -56,11 +55,11 @@
 
 /* Identification */
 
-static const char	id[] =
+static const char __attribute__ ((unused)) id[] =
     "@(#)lib/fpattern.c 1.08";
 
-static const char	copyright[] =
-    "Copyright ©1997-1998 David R. Tribble\n";
+static const char __attribute__ ((unused)) copyright[] =
+    "Copyright (C) 1997-1998 David R. Tribble\n";
 
 
 /* System includes */

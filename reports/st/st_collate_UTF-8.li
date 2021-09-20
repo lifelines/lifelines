@@ -15,7 +15,6 @@ char_encoding("UTF-8")
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
 
-
 proc finnish_UTF_8()
 {
 	if (not(set_and_check_locale("fi_FI", "Finnish"))) {
@@ -56,11 +55,19 @@ proc spanish_UTF_8()
 	/* ennay is between N and O */
 	call check_collate3("N", "Ñ:[Ntilde]", "O")
 }
+proc english_UTF_8()
+{
+	if (not(set_and_check_locale("en_US", "English"))) {
+		return()
+	}
+	call set_section("english_UTF-8")
+	/* sanity check */
+	call check_collate3("A", "N", "Z")
+}
 proc testCollate_UTF_8()
 {
 	call finnish_UTF_8()
 	call polish_UTF_8()
 	call spanish_UTF_8()
-	call set_section("")
+	call english_UTF_8()
 }
-

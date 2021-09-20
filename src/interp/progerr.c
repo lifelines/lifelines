@@ -126,13 +126,15 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		describe_pnode(arg, zstr, max);
 		zs_apps(zstr, ")");
 	}
-	prog_error(node, zs_str(zstr));
+	prog_error(node, "%s", zs_str(zstr));
 	zs_free(&zstr);
 
 	if (dbg_mode != -99 && dbg_mode != 3) {
 		INT ch = 0;
-		while (!(ch=='d' || ch=='q'))
+		while (!(ch=='d' || ch=='q')) {
 			ch = rptui_prompt_stdout(_("Enter d for debugger, q to quit"));
+                        if (ch == 0) ch = 'q'; 
+                }
 		if (ch == 'q')
 			dbg_mode = -99;
 	}
@@ -147,18 +149,19 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		INT n=0;
 		/* 0: display local variable(s) */
 		n = (curstab->tab ? get_table_count(curstab->tab) : 0);
-		zs_setf(zstr, _pl("Display local (%d var)",
-			"Display locals (%d vars)", n), n);
+		zs_setf(zstr, _pl("Display local (" FMT_INT" var)",
+				  "Display locals (" FMT_INT " vars)", n), n);
 		zs_appf(zstr, " [%s]", curstab->title);
 		choices[0] = strsave(zs_str(zstr));
 		/* 1: display global variables */
 		n = (globtab->tab ? get_table_count(globtab->tab) : 0);
-		zs_setf(zstr, _pl("Display global (%d var)",
-			"Display globals (%d vars)", n), n);
+		zs_setf(zstr, _pl("Display global (" FMT_INT " var)",
+				  "Display globals (" FMT_INT " vars)", n), n);
 		choices[1] = strsave(zs_str(zstr));
 		/* 2: up call stack */
 		n = nlevels - curlevel - 1;
-		zs_setf(zstr, _pl("Call stack has %d higher level", "Call stack has %d higher levels", n), n);
+		zs_setf(zstr, _pl("Call stack has " FMT_INT " higher level",
+				  "Call stack has " FMT_INT " higher levels", n), n);
 		zs_apps(zstr, ". ");
 		if (n > 0) {
 			zs_apps(zstr, _(" Go up one level"));
@@ -167,7 +170,8 @@ prog_var_error_zstr (PNODE node, SYMTAB stab, PNODE arg, PVALUE val, ZSTR zstr)
 		choices[2] = strsave(zs_str(zstr));
 		/* 3: down call stack */
 		n = curlevel;
-		zs_setf(zstr, _pl("Call stack has %d lower level", "Call stack has %d lower levels", n), n);
+		zs_setf(zstr, _pl("Call stack has " FMT_INT " lower level",
+				  "Call stack has " FMT_INT " lower levels", n), n);
 		zs_apps(zstr, ". ");
 		if (n > 0) {
 			CNSTRING title = get_symtab_ancestor(stab, n-1)->title;
@@ -363,7 +367,7 @@ disp_pvalue (PVALUE val)
 				if (nval(node)) {
 					llstrapps(str, len, uu8, nval(node));
 				}
-				msg_info(str);
+				msg_info("%s", str);
 			}
 			return;
 		case PINDI:
@@ -376,7 +380,7 @@ disp_pvalue (PVALUE val)
 				NODE node = nztop(rec);
 				size_t len = 128;
 				STRING txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
-				msg_info(txt);
+				msg_info("%s", txt);
 			}
 			return;
 		case PLIST:
@@ -410,7 +414,7 @@ disp_list (LIST list)
 	struct dbgsymtab_s sdata;
 	INT nels = length_list(list);
 	if (!nels) {
-		msg_info(_("list is empty"));
+		msg_info("%s", _("list is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -421,8 +425,8 @@ disp_list (LIST list)
 		VPTR ptr = 0;
 		while (next_list_ptr(listit, &ptr)) {
 			PVALUE val = ptr;
-			char key[10];
-			snprintf(key, sizeof(key), "%d", sdata.current+1);
+			char key[FMT_INT_LEN+1];
+			snprintf(key, sizeof(key), FMT_INT, sdata.current+1);
 			format_dbgsymtab_val(key, val, &sdata);
 		}
 		end_list_iter(&listit);
@@ -443,7 +447,7 @@ disp_table (TABLE tab)
 	struct dbgsymtab_s sdata;
 	INT nels = get_table_count(tab);
 	if (!nels) {
-		msg_info(_("table is empty"));
+		msg_info("%s", _("table is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -453,7 +457,7 @@ disp_table (TABLE tab)
 		TABLE_ITER tabit = begin_table_iter(tab);
 		STRING key=0;
 		VPTR ptr = 0;
-		while (next_table_ptr(tabit, &key, &ptr)) {
+		while (next_table_ptr(tabit, (CNSTRING *)&key, &ptr)) {
 			PVALUE val = ptr;
 			format_dbgsymtab_val(key, val, &sdata);
 		}
@@ -477,7 +481,7 @@ disp_seq (INDISEQ seq)
 	INT nels = length_indiseq(seq);
 	INT i=0;
 	if (!nels) {
-		msg_info(_("sequence is empty"));
+		msg_info("%s", _("sequence is empty"));
 		return;
 	}
 	init_dbgsymtab_arrays(&sdata, nels);
@@ -546,16 +550,16 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 		if (vprog_prevline != lineno) {
 			vprog_prevline = lineno;
 			if (progparsing)
-				zs_appf(zstr, _("Parsing Error at line %d: "), lineno);
+				zs_appf(zstr, _("Parsing Error at line " FMT_INT ": "), lineno);
 			else
-				zs_appf(zstr, _("Runtime Error at line %d: "), lineno);
+				zs_appf(zstr, _("Runtime Error at line " FMT_INT ": "), lineno);
 		}
 	} else {
 		zs_apps(zstr, _("Aborting: "));
 	}
 	zs_appvf(zstr, fmt, args);
 	llwprintf("\n");
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 	++progerror;
 	/* if user specified a report error log (in config file) */
 	if (rptfile && rptfile[0]) {
