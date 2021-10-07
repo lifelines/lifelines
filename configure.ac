@@ -202,11 +202,6 @@ AC_SEARCH_LIBS( asin, m )
 AC_SEARCH_LIBS( acos, m )
 AC_SEARCH_LIBS( atan, m )
 
-dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
-AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
-AC_REPLACE_FUNCS( _llnull )
-
 dnl **************************************************************
 dnl Check for curses
 dnl **************************************************************
@@ -249,6 +244,11 @@ else
     fi
   fi
 fi
+
+dnl Check for replacement functions
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
+AC_REPLACE_FUNCS( _llnull )
 
 dnl Check for headers
 echo Looking for curses headers
