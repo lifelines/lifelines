@@ -22,6 +22,7 @@ TESTS   =               date/checkjd2date.llscr         \
 			string/mc_llexec1.llscr         \
 			string/mc_llines.llscr          \
 			string/mc_llines1.llscr         \
+			string/mc_llines2.llscr         \
 			view-history/view-history.llscr \
 			Royal92/Royal92.llscr           \
 			Royal92/Analyze.llscr           \

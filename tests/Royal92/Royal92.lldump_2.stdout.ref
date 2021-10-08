@@ -36,7 +36,7 @@ INDEX - DIRECTORY aa/aa
 0x00000006:ix_pad1:   0x0000
 0x00000008:ix_parent: 0x00000000 (aa/aa)
 0x0000000c:ix_nkeys:  35
-0x00000e:ix_rkeys[0000]:'8 x 0x00'  0x000ab0:ix_fkeys[0000]:0x00010000(ab/aa)
+0x00000e:ix_rkeys[0000]:'0x00 x 8'  0x000ab0:ix_fkeys[0000]:0x00010000(ab/aa)
 0x000016:ix_rkeys[0001]:'     I62'  0x000ab4:ix_fkeys[0001]:0x00050004(af/ae)
 0x00001e:ix_rkeys[0002]:'    F239'  0x000ab8:ix_fkeys[0002]:0x00050005(af/af)
 0x000026:ix_rkeys[0003]:'    F436'  0x000abc:ix_fkeys[0003]:0x00000005(aa/af)
