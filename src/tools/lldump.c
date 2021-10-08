@@ -340,17 +340,17 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 		// see refns.c R's are R char char or R char  2/3 char only
 		// see refn2rkey in refns.c
 		// each Rxx key is a table of all the REFN values starting
-                // with xx. (so '1 REFN German Born' is under key RGe.)
-                // Note '1 REFN Q Royal92-I1' results in key 'RQ '
-                // so 2nd char can be a space for R keys
+		// with xx. (so '1 REFN German Born' is under key RGe.)
+		// Note '1 REFN Q Royal92-I1' results in key 'RQ '
+		// so 2nd char can be a space for R keys
 		if (strlen(p) > 3) {
 			printf("Error, REFN RKEY more than 3 characters long, %s\n",kt->rkey);
 		}
 		while (*++p && isalnum(*p)) ;
 		if (p < &kt->rkey[8] && *p != 0) {
 			// we already flagged null in 1st 8 chars so don't report it here
-                        if (*p != ' ') {
-                            printf("Error, REFN RKEY has invalid character, %s\n",kt->rkey);
+			if (*p != ' ') {
+				printf("Error, REFN RKEY has invalid character, %s\n",kt->rkey);
                         }
 		}
 		break;

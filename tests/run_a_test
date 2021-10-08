@@ -149,10 +149,10 @@ function run_a_command {
             if [[ $ret < "1" ]] ; then
                 ret=1
             fi
-            # escape is now optional package for debian (required for redhat)
+            # expect is now optional package for debian (required for redhat)
             if [[ $cmd = expect* ]] ; then
                 echo "make sure the package containing $cmd is loaded on your system"
-                fi
+            fi
             exit 99
         else
             echo "$thistest Warning post command '$cmd' found outside build tree"
@@ -187,7 +187,6 @@ function run_a_command {
     # or if OUTPUT in llines script needs replaced
     # if not found assume everything goes to stdout
     # 
-### what's up xxx if removes output, skips elif which processes OUTPUT again
     if [[ ${args#*OUTPUT} != "$args" ]] ; then
         args=${args//OUTPUT/$basetest_name}
         cmdin=
@@ -197,7 +196,7 @@ function run_a_command {
             echo "sed -e \"s@TESTNAME@$testsrcdir/$testname@\" -e \"s@OUTPUT@$basetest_name@\" < $testsrcdir/$scriptname >$scriptname.fix"
         fi
         sed -e "s@TESTNAME@$testsrcdir/$testname@" -e "s@OUTPUT@$basetest_name@" < $testsrcdir/$scriptname >$scriptname.fix
-        grep -q OUTPUT $testsrcdir/$scriptname
+        grep -q OUTPUT.out $testsrcdir/$scriptname
         if [[ $? != 0 ]] ; then
             testout_name=
         fi
