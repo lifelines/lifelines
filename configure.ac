@@ -245,14 +245,14 @@ else
   fi
 fi
 
+dnl Check for headers
+echo Looking for curses headers
+AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
+
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
 AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
 AC_REPLACE_FUNCS( _llnull )
-
-dnl Check for headers
-echo Looking for curses headers
-AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
 
 dnl **************************************************************
 dnl Platform/Version-Specific Checks
