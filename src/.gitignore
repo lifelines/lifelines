@@ -1,0 +1,7 @@
+##
+## GLOBAL PATTERNS FOR SRC
+##
+
+# build artifacts
+**/*.[oa]
+**/.deps

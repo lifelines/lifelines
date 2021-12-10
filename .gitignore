@@ -13,10 +13,6 @@
 **/Makefile
 **/Makefile.in
 
-# build artifacts
-**/*.[oa]
-**/.deps
-
 ##
 ## ROOT DIRECTORY PATTERNS
 ##
