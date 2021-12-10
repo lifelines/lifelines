@@ -425,9 +425,9 @@ repaint_main_menu (UIWINDOW uiwin)
 	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
-		wprintw(win, _(qSdbimmut));
+		wprintw(win, "%s", _(qSdbimmut));
 	else if (readonly)
-		wprintw(win, _(qSdbrdonly));
+		wprintw(win, "%s", _(qSdbrdonly));
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
 	mvccwaddstr(win, row++, 2, _(qSplschs));
