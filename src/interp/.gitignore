@@ -1,6 +1,2 @@
-Makefile
-Makefile.in
-*.[oa]
 yacc.[ch]
 yacc.output
-.deps

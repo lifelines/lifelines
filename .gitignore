@@ -1,13 +1,28 @@
-Makefile
-Makefile.in
-.linesrc
-lines.cfg
+##
+## GLOBAL PATTERNS
+##
+
+# editor temp files
+**/*~
+**/*.swp
+
+# MacOSX
+**/.DS_Store
+
+# generated makefiles
+**/Makefile
+**/Makefile.in
+
+##
+## ROOT DIRECTORY PATTERNS
+##
+
+# generated configure scripts
 aclocal.m4
 autom4te.cache
-config.*
 configure
 stamp-h1
-build/autotools/compile
-*~
-*.swp
-.DS_Store
+
+# configuration files
+.linesrc
+lines.cfg
