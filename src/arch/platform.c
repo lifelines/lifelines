@@ -124,6 +124,5 @@ GetWinSysError (INT nerr)
 
 int init_arch(void)
 {
-  _llnull();
   return 0;
 }

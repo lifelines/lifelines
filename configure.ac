@@ -245,14 +245,21 @@ else
   fi
 fi
 
-dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
-AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
-AC_REPLACE_FUNCS( _llnull )
-
 dnl Check for headers
 echo Looking for curses headers
 AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
+
+dnl **************************************************************
+dnl Check for Replacement Fucntions for Standard Libraries/Curses
+dnl **************************************************************
+
+echo Checking for replacement functions
+dnl Standard libraries
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+dnl Standard libraries - internationalization / wchar
+AC_REPLACE_FUNCS( nl_langinfo wcslen )
+dnl Standard libraries - curses
+AC_REPLACE_FUNCS( has_key )
 
 dnl **************************************************************
 dnl Platform/Version-Specific Checks
