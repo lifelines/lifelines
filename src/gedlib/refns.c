@@ -124,6 +124,7 @@ static INT32   RMcount = 0;
 static void
 allocrefnrec(void)
 {
+	ASSERT(RRmax);
         RRoffs = (INT32 *) stdalloc((RRmax)*sizeof(INT32));
         RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
         RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(CNSTRING));
@@ -160,6 +161,7 @@ reallocrefnrec(void)
 static void
 allocrefnmrec(void)
 {
+	ASSERT(RRcount);
 	RMkeys = (STRING *) stdalloc(RRcount*sizeof(STRING));
 	RMcount = RRcount;
 	RMmax = RRcount;
@@ -175,8 +177,7 @@ freerefnmrec(void)
 
 	for (i = 0; i < RMcount; i++)
 		stdfree(RMkeys[i]);
-	if (RMcount)
-		stdfree(RMkeys);
+	stdfree(RMkeys);
 	RMcount = 0;
 	RMmax = 0;
 }
@@ -827,5 +828,7 @@ traverse_refns (TRAV_REFNS_FUNC func, void *param)
  *==================================================*/
 void term_refnrec(void)
 {
+	strfree(&RRrec);
+	freerefnmrec();
         freerefnrec();
 }

@@ -134,6 +134,7 @@ static CNSTRING *NRnames;
 static void
 allocnamerec(void)
 {
+	ASSERT(NRmax);
 	NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
 	NRoffs = (INT32 *) stdalloc((NRmax)*sizeof(INT32));
 	NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
@@ -1268,5 +1269,6 @@ void flush_name_cache(void)
  *==================================================*/
 void term_namerec(void)
 {
+	strfree(&NRrec);
 	freenamerec();
 }
