@@ -1,26 +1,26 @@
-Program is running...select your mood - try 0: (1/2)
+Program is running...select your mood - menu 1: (1/2)
 1: Are you happy today
 2: or is it a sad day for you
 Commands:   Select by number, u Page Up, d Page Down, q Quit
-select your mood - try 1: (1/2)
+select your mood - menu 2: (1/2)
 1: Are you happy today
 2: or is it a sad day for you
 Commands:   Select by number, u Page Up, d Page Down, q Quit
-select your mood - try 2: (1/2)
+select your mood - menu 3: (1/2)
 1: Are you happy today
 2: or is it a sad day for you
 Commands:   Select by number, u Page Up, d Page Down, q Quit
 Invalid option([): choose one of 0123456789udq
-select your mood - try 3: (1/2)
+select your mood - menu 4: (1/2)
 1: Are you happy today
 2: or is it a sad day for you
 Commands:   Select by number, u Page Up, d Page Down, q Quit
-select your mood - try 4: (1/3)
+select your mood - menu 5: (1/3)
 1: Are you happy today
 2: <NULL>
 3: or is it a sad day for you
 Commands:   Select by number, u Page Up, d Page Down, q Quit
-select your mood - try 0: (1/25)
+select your mood - menu 1: (1/25)
 1: Option 1
 2: Option 2
 3: Option 3
