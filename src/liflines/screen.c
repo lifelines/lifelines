@@ -1717,7 +1717,7 @@ invoke_trans_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!trans_menu_win) {
-		trans_menu_win = create_newwin2("trans_menu", 10,66);
+		create_newwin2(&trans_menu_win,"trans_menu",10,66);
 	}
 	uiwin = trans_menu_win;
 

@@ -256,7 +256,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
 	closelog();
+
+	// cleanup
 	strfree(&tag0);
+	strfree(&xref0);
 	return num_errors == 0;
 }
 /*=======================================
@@ -1041,6 +1044,7 @@ clear_structures (void)
 		index_data[i] = 0;
 		free_elmnt(el);
 	}
+	stdfree(index_data);
 	struct_len = 0;
 }
 /*=====================================
