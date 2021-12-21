@@ -822,3 +822,10 @@ traverse_refns (TRAV_REFNS_FUNC func, void *param)
 	tparam.func = func;
 	traverse_db_rec_rkeys(BTR, refn_lo(), refn_hi(), &traverse_refn_callback, &tparam);
 }
+/*====================================================
+ * term_refnrec -- Free memory for parsing refn records
+ *==================================================*/
+void term_refnrec(void)
+{
+        freerefnrec();
+}

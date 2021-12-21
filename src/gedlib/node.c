@@ -79,6 +79,7 @@ NODE parents_nodes(NODE faml);
  *********************************************/
 
 /* node allocator's free list */
+LIST alloc_block_list = (LIST) 0;
 static NDALLOC first_blck = (NDALLOC) 0;
 static int live_count = 0;
 
@@ -131,24 +132,62 @@ change_node_tag (NODE node, STRING newtag)
 	ntag(node) = fixtag(newtag);
 }
 /*=====================================
+ * free_node_block -- Node block deallocator
+ *===================================*/
+static void
+free_node_block(NDALLOC blck)
+{
+	stdfree(blck);
+}
+
+/*=====================================
+ * alloc_node_block -- Node block allocator
+ *===================================*/
+static NDALLOC
+alloc_node_block(void)
+{
+	NDALLOC alloc_block;
+	NDALLOC blck;
+	NODE node;
+	int i;
+
+	// Allocate list to hold block allocations
+	if (!alloc_block_list) {
+		alloc_block_list = create_list3((ELEMENT_DESTRUCTOR)free_node_block);
+	}
+
+	// Allocate block
+	alloc_block = (NDALLOC) stdalloc(100*sizeof(*node));
+	enqueue_list(alloc_block_list, alloc_block);
+
+	// Set up next pointers for first 99 nodes
+	node = (NODE) alloc_block;
+	for (i = 1; i <= 99; i++) {
+		blck = (NDALLOC) node;
+		blck->next = (NDALLOC) (node + 1);
+		node++;
+	}
+
+	// Set up next pointer for 100th node
+	((NDALLOC) node)->next = (NDALLOC) 0;
+
+	return alloc_block;
+}
+
+/*=====================================
  * alloc_node -- Special node allocator
  *===================================*/
 static NODE
 alloc_node (void)
 {
 	NODE node;
-	NDALLOC blck;
-	int i;
+
+	// Allocate block of nodes
 	if (first_blck == (NDALLOC) 0) {
-		node = (NODE) stdalloc(100*sizeof(*node));
-		first_blck = (NDALLOC) node;
-		for (i = 1; i <= 99; i++) {
-			blck = (NDALLOC) node;
-			blck->next = (NDALLOC) (node + 1);
-			node++;
-		}
-		((NDALLOC) node)->next = (NDALLOC) 0;
+		first_blck = alloc_node_block();
 	}
+
+	// Use first free node in block
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
 	++live_count;
@@ -1175,4 +1214,12 @@ check_node_leaks (void)
 			fp = 0;
 		}
 	}
+}
+/*=================================================
+ * term_node_allocator -- Called to free all nodes in the free list
+ *===============================================*/
+void
+term_node_allocator (void)
+{
+	destroy_list(alloc_block_list);
 }
