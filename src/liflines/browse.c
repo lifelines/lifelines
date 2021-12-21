@@ -1688,6 +1688,13 @@ save_nkey_list (STRING key, struct hist * histp)
 	next = histp->start;
 	for (i=0; i<count; ++i)
 	{
+		/*
+		 * Note that while keynum is an INT, the maximum (integer) key
+		 * length allowed in LifeLines is 7 bytes - 9,999,999 - which
+		 * is well below the max signed 32-bit integer value, so there
+		 * will be no actual data truncation here.
+		 */
+
 		/* write type & number, 4 bytes each */
 		/* type = char, keynum = INT (truncated!) */
 		temp = histp->list[next].ntype;
