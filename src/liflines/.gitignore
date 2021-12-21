@@ -1,6 +1,2 @@
-Makefile
-Makefile.in
-*.[oa]
-.deps
 llines
 llexec

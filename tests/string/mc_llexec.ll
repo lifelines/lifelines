@@ -17,11 +17,9 @@
  *     (this wasn't printed prior to lifelines llexec v. 3.0.2)
  * 2. llexec prints index numbers that can be selected. it lists
  *    items 1..9 initially and user an scroll down to 10..19, 20..29 etc
- *    The indexes listed are 1..9 to start and 0..9 for options whose
- *    index is > 9. Essentially what's listed is index % 10.
- *    but full value is returned. (the current range start is listed
- *    at the end of the prompt string.
- *    using the u can d key strokes. menuchoice scrolls the index values
+ *    Essentially what's listed is index % 10, but full value is returned.
+ *    (the current range start is listed at the end of the prompt string.)
+ *    Using the u and d key strokes, menuchoice scrolls the index values
  *    listed. one of 1..m based on your selection
  *    prior to lifelines 3.0.2 the numbers were listed 0..(m-1)
  *    but 1..m was returned.
@@ -41,22 +39,23 @@ proc main ()
     list(options)
     setel(options,1,"Are you happy today")
     setel(options,2,"or is it a sad day for you")
-    set(resp, menuchoose(options,"select your mood - try 0:"))
+    set(resp, menuchoose(options,"select your mood - menu 0:"))
     print("response was ",d(resp),"\n")
 
-    set(resp, menuchoose(options,"select your mood - try 1:"))
+    set(resp, menuchoose(options,"select your mood - menu 1:"))
     print("response was ",d(resp),"\n")
 
-    set(resp, menuchoose(options,"select your mood - try 2:"))
+    set(resp, menuchoose(options,"select your mood - menu 2:"))
     print("response was ",d(resp),"\n")
 
-    set(resp, menuchoose(options,"select your mood - try 3:"))
+    set(resp, menuchoose(options,"select your mood - menu 3:"))
     print("response was ",d(resp),"\n")
 
     list(options)
     setel(options,1,"Are you happy today")
     setel(options,3,"or is it a sad day for you")
-    set(resp, menuchoose(options,"select your mood - try 4:"))
+    set(resp, menuchoose(options,"select your mood - menu 4:"))
+    print("response was ",d(resp),"\n")
 
     list(options)
     push(options,"Option 1")
@@ -84,6 +83,6 @@ proc main ()
     push(options,"Option 23")
     push(options,"Option 24")
     push(options,"Option 25")
-    set(resp, menuchoose(options,"select your mood - try 0:"))
+    set(resp, menuchoose(options,"select your mood - menu 5:"))
     print("response was ",d(resp),"\n")
 }

@@ -145,12 +145,18 @@ function run_a_command {
     else
         fcmd=`which $cmd`
         if [[ $? == 1 ]] ; then
-            echo "FAIL $thistest post command $cmd not found aborting"
+            echo "FAIL $thistest post command '$cmd' not found aborting"
             if [[ $ret < "1" ]] ; then
                 ret=1
             fi
+            # expect is now optional package for debian (required for redhat)
+            if [[ $cmd = expect* ]] ; then
+                echo "make sure the package containing $cmd is loaded on your system"
+            fi
+            exit 99
+        else
+            echo "$thistest Warning post command '$cmd' found outside build tree"
         fi
-        echo "$thistest Warning post command found outside build tree"
     fi
 
     # log files are testname.cmd.out and testname.cmd.stdout
@@ -159,7 +165,7 @@ function run_a_command {
     # the name used is testname.cmd.out
     # likewise for programs run via the config file naming is the same
     # testname.cmd.stdout - stdout from running cmd
-    # testname.cmd.out    - output from command if command has OUTPUT in it
+    # testname.cmd.out    - output from command 
     #
     # if a program is called more than once, from config file, add suffix
     # _to $cmd _2, _3 ... to repeated invocations
@@ -174,6 +180,7 @@ function run_a_command {
     fi
     stdout_name=$testname.$cmd$cmdsuf.stdout
     testout_name=$testname.$cmd$cmdsuf.out
+    basetest_name=$testname.$cmd$cmdsuf
 
     # deal with OUTPUT and TESTNAME
     # see if OUTPUT in args needs replaced with output file name
@@ -181,15 +188,15 @@ function run_a_command {
     # if not found assume everything goes to stdout
     # 
     if [[ ${args#*OUTPUT} != "$args" ]] ; then
-        args=${args//OUTPUT/$testout_name}
+        args=${args//OUTPUT/$basetest_name}
         cmdin=
     elif [[ $cmd == "llines" ]] ; then 
         # see if OUTPUT in llines script and replace OUTPUT and TESTNAME
         if [[ -n $VERBOSE ]] ; then
-            echo "sed -e \"s@TESTNAME@$testsrcdir/$testname@\" -e \"s@OUTPUT@$testout_name@\" < $testsrcdir/$scriptname >$scriptname.fix"
+            echo "sed -e \"s@TESTNAME@$testsrcdir/$testname@\" -e \"s@OUTPUT@$basetest_name@\" < $testsrcdir/$scriptname >$scriptname.fix"
         fi
-        sed -e "s@TESTNAME@$testsrcdir/$testname@" -e "s@OUTPUT@$testout_name@" < $testsrcdir/$scriptname >$scriptname.fix
-        grep -q OUTPUT $testsrcdir/$scriptname
+        sed -e "s@TESTNAME@$testsrcdir/$testname@" -e "s@OUTPUT@$basetest_name@" < $testsrcdir/$scriptname >$scriptname.fix
+        grep -q OUTPUT.out $testsrcdir/$scriptname
         if [[ $? != 0 ]] ; then
             testout_name=
         fi
@@ -233,8 +240,15 @@ function run_a_command {
         fi
         stdout_name=$stdout_name.filter
     fi
-    if [[ -n $CAPTUREOUT || $cmd != "llines" ]] ; then
-        # CAPTUREOUT is set || cmd is not llines 
+    lcmd=0
+    if [[ $cmd = llines?(\d) ]] ; then
+        lcmd=1
+    fi
+    if [[ $cmd = expect?(\d) ]] ; then
+        lcmd=1
+    fi
+    if [[ -n $CAPTUREOUT ||  $lcmd != 1 ]] ; then
+        # CAPTUREOUT is set || cmd is not llines or expect
         compare_file $stdout_name
         rac=$?
         if [[ -n $postskip ]] ; then

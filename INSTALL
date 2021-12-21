@@ -29,6 +29,8 @@ LifeLines should compile correctly using GNU gcc or any native C compiler.
 It also will build using the Cygnus tools on Windows (but see note in the
 platform notes section below).
 
+In each case, various dependencies are required.  (See section 1a.)
+
 If you have downloaded a "release" package, do the following:
 
 	sh ./configure
@@ -43,7 +45,16 @@ repository directly, do the following:
 	make
 	make install
 
-In both cases, various dependencies are required.  (See section 1a.)
+If you want to keep the build area separate from the source area
+replace the configure and make commands with
+
+      mkdir bld64
+      cd bld64
+      ../configure --with-64bit
+      make
+      make install
+
+and likewise you can build a 32 bit executables by replacing 64 with 32 above.
 
 This will generate Makefiles suitable for your platform and then build
 and install the LifeLines programs.  You will end up with the following
@@ -125,6 +136,12 @@ then you probably do not have the gettext tools -- the commandline
 tools needed for development, which are needed to compile, and
 are generally a separate package from the runtime libraries needed
 by running programs.
+
+Expect
+
+The test suite needs expect to be installed. It's the default for
+redhat, but ubuntu has make it optional.  You'll need to install
+expect if it's not installed.
 
 **************************
 2. Platform specific notes
