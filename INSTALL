@@ -152,6 +152,11 @@ how you obtain and build lifelines.
   yacc.c and yacc.h and rebuild.  These files will be regenerated using the
   bison that is installed on your system which should resolve the problem.
 
+3. expect
+
+  The test suite needs expect to be installed. It's the default for
+  redhat, but ubuntu has make it optional.  You'll need to install
+  expect if it's not installed.
 
 **************************
 2. Platform specific notes
