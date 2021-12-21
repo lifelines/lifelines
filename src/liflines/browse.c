@@ -168,7 +168,7 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 	ASSERT(prec);
 	ASSERT(pseq);
 	*prec = 0;
-	*pseq =0;
+	*pseq = 0;
 
 	if (*code == BROWSE_INDI) {
 		/* ctype of 'B' means any type but check persons first */
@@ -178,7 +178,7 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
 			*prec = qkey_to_record(key);
-			/* leaking sequence here, Perry, 2005-09-25 */
+			remove_indiseq(*pseq);
 			*pseq = NULL;
 			*code = BROWSE_UNK; /* not sure what we got above */
 		} else {
@@ -207,8 +207,9 @@ main_browse (RECORD rec1, INT code)
 	RECORD rec2=0;
 	INDISEQ seq = NULL;
 
-	if (!rec1)
+	if (!rec1) {
 		prompt_for_browse(&rec1, &code, &seq);
+	}
 
 	if (!rec1) {
 		if (!seq) return;
@@ -217,8 +218,6 @@ main_browse (RECORD rec1, INT code)
 			return;
 		}
 	}
-			
-
 
 	/*
 	loop here handle user browsing around through
@@ -255,8 +254,11 @@ main_browse (RECORD rec1, INT code)
 			}
 		}
 	}
+
 	setrecord(&rec1, NULL);
 	setrecord(&rec2, NULL);
+
+	ASSERT(!seq);
 }
 /*================================================
  * goto_indi_child - jump to child by number
