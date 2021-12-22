@@ -661,17 +661,22 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	STRING rawrec=0;
 	INT len=0;
 	CACHEEL cel=0;
-	RECORD rec=0;
+	NODE node=0;
 	int i, j;
 
 	ASSERT(cache);
 	ASSERT(key);
-	rec = NULL;
-	if ((rawrec = retrieve_raw_record(key, &len))) 
-		/* 2003-11-22, we should use string_to_node here */
-		rec = string_to_record(rawrec, key, len);
-	if (!rec)
+
+	/* retrieve record and create node from it */
+	if ((rawrec = retrieve_raw_record(key, &len)))
 	{
+		node = string_to_node(rawrec);
+	}
+
+	stdfree(rawrec);
+
+	/* handle failure to create node */
+	if (!node) {
 		ZSTR zstr=zs_newn(256);
 		if(listbadkeys) {
 			if(strlen(badkeylist) < 80 - strlen(key) - 2) {
@@ -682,6 +687,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 			return(NULL);
 		}
 		if (reportmode) return(NULL);
+
 		crashlogn(_("Database error caused by reference to nonexisting key <%s>."), (char *)key);
 		crashlogn(_("It might be possible to fix this with btedit."));
 		zs_sets(zstr, _("Neighboring keys include:"));
@@ -696,17 +702,13 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 		}
 		crashlogn("%s", zs_str(zstr));
 		zs_free(&zstr);
-		/* deliberately fall through to let ASSERT(rec) fail */
+		/* deliberately fall through to let ASSERT(node) fail */
 	}
-	ASSERT(rec);
-	/* record was just loaded, nztop should not need to load it */
-	cel = node_to_cache(cache, nztop(rec));
-	ASSERT(!crecord(cel));
-	/* node_to_cache did a first_direct call, so record in cache */
-	record_set_cel(rec, cel);
-	/* our new rec above has one reference, which is held by cel */
-	crecord(cel) = rec;
-	stdfree(rawrec);
+
+	ASSERT(node);
+
+	/* add node to cache */
+	cel = node_to_cache(cache, node);
 	ASSERT(cel->c_magic == cel_magic);
 	return cel;
 }
@@ -736,8 +738,6 @@ key_to_cacheel (CACHE cache, CNSTRING key, STRING tag, INT reportmode)
 	cel = add_to_direct(cache, key, reportmode);
 	if (cel && tag) {
 		ASSERT(eqstr(tag, ntag(cnode(cel))));
-		ASSERT(crecord(cel));
-		ASSERT(eqstr(key, nzkey(crecord(cel))));
 	}
 	return cel;
 }
