@@ -727,7 +727,9 @@ find_indis_by_name (CNSTRING name)
 	if ((rec = id_by_key(name, 'I'))) {
 		STRING key = rmvat(nxref(nztop(rec)));
 		enqueue_list(list, strsave(key));
-		return list;
+		/* no longer need the record */
+		release_record(rec);
+		goto finish;
 	}
 
 	for (i=0; i<soundex_count(); ++i) 	{
@@ -751,6 +753,8 @@ find_indis_by_name (CNSTRING name)
 			find_indis_worker(name, finitial, sdex, donetab, list);
 		}
 	}
+
+finish:
 	destroy_table(donetab);
 	strfree(&surname);
 	return list;
