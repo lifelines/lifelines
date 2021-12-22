@@ -648,6 +648,9 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 		nval(node) = strsave(zs_str(zstr));
 		zs_free(&zstr);
 	}
+
+	/* release the (temporary) record created in key_possible_to_record() */
+	release_record(rec);
 }
 /*===============================================
  * symbolic_link -- See if value is symbolic link
