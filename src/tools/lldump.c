@@ -105,6 +105,13 @@ static size_t getfilesize(STRING dir, STRING filename);
  * body of module
  *********************************************/
 
+// Direct assignment can trigger cast-align warnings.
+// Only use these when the input is guaranteed to be aligned properly!
+#define CASTPTR_INT32(in) (INT32*)((void*)(in))
+#define EXTRACT_INT32(in) *(CASTPTR_INT32(in))
+#define CASTPTR_INT64(in) (INT64*)((void*)(in))
+#define EXTRACT_INT64(in) *(CASTPTR_INT64(in))
+
 /*=========================================
  * main -- Main procedure of lldump command
  *=======================================*/
@@ -209,7 +216,7 @@ print_usage (void)
 	char * fname = _("/home/users/myname/lifelines/databases/myfamily");
 #endif
 
-	printf(_("lifelines `lldump' dumpss a lifelines database file.\n"));
+	printf(_("lifelines `lldump' dumps a lifelines database file.\n"));
 	printf("\n\n");
 	printf(_("Usage lldump [options] <database>"));
 	printf("\n\n");
@@ -717,7 +724,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			// we reuse akey buffer to check rkeys in sublists
 			//    so save first letter of this record's key
 			char first = *akey.rkeyfirst;
-			INT32 Ncount = *(INT32 *) &rec[0];
+			INT32 Ncount = EXTRACT_INT32(&rec[0]);
 			INT32 col1 = sizeof(INT32);
 			INT32 col2 = col1 + Ncount * sizeof(RKEY);
 			INT32 lennames = 0;
@@ -729,11 +736,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			INT strbase = sizeof(INT32) + (sizeof(RKEY) +
 				sizeof(INT32))*Ncount;
 			for(m = 0; m < Ncount; m++) {
-				INT32 stroff = strbase + *(INT32*)&rec[col2];
+				INT32 recoff = EXTRACT_INT32(&rec[col2]);
+				INT32 stroff = strbase + recoff;
 				printf("    " FMT_INT_3 ". " FMT_INT32_HEX ":RKEY %8.8s "
 				    FMT_INT32_HEX ":offset " FMT_INT32_HEX "\n",
 					m+1, *offset + col1, &rec[col1],
-					(INT32)*offset+col2, *(INT32*)&rec[col2]);
+					     *offset + col2, recoff);
 				printf("         " FMT_INT32_HEX ":string '%s'\n",
 					*offset+stroff, &rec[stroff]);
 				col1 += sizeof(RKEY);
@@ -752,7 +760,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			}
 			col1 = sizeof(INT32);
 			for(m = 0; m < Ncount; m++) {
-				INT stroff = strbase + *(INT32*)&rec[col2];
+				INT stroff = strbase + EXTRACT_INT32(&rec[col2]);
 
 				//  print keys,strings
 				char *p = &rec[col1];
@@ -777,7 +785,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			//
 			// See save_nkey_list and load_nkey_list
 			//
-			INT32 *ptr = (INT32 *)&rec[0];
+			INT32 *ptr = CASTPTR_INT32(&rec[0]);
 			INT32 count1 = *ptr++;
 			INT32 count2 = *ptr++;
 			INT32 count = ((count1>count2) ? count2 : count1);
