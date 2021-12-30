@@ -261,8 +261,8 @@ print_usage (void)
  *=============================================*/
 
 static void
-check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
-	if (*(INT64*)key == 0) {
+check_rkey(keytype *kt, RKEY *key, BOOLEAN in_data) {
+	if (RKEY_IS_NULL(*key)) {
 		// special case zero key
 		strncpy(kt->rkey,"0x00 x 8",9);  // null key in 8 chars
 		strncpy(kt->rname,"Zero",6);
@@ -469,11 +469,11 @@ void print_index(INDEX index, INT32 *offset)
 		// now check that they really are zero'ed
 		int found_deleted = 0;
 		for (n=NRcount+1; n<NOENTS; n++) {
-			if (*(INT64*)&rkeys(index,n) != 0 || fkeys(index,n) != 0) {
+			if (!RKEY_IS_NULL(rkeys(index,n)) || fkeys(index,n) != 0) {
 				if (found_deleted++ == 0) { 
 					printf("\ndeleted index rkey/fkey pairs\n");
 				}
-				if (*(INT64*)&rkeys(index,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(index,n))) {
 					check_rkey(&akey,&rkeys(index,n),FALSE);
 					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
 						*offset, n, akey.rkey);
@@ -597,10 +597,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				*offset + (INT32)((NORECS-NRcount)*sizeof(rkeys(block,0)) - 1),
 				NRcount,(INT)NORECS-1);
 			for (n=NRcount; n<NORECS; n++) {
-				if (*(INT64*)&rkeys(block,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(block,n))) {
+					INT64 v;
+					RKEY_AS_INT64(rkeys(block,n), v);
 					printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]:"
 						FMT_INT64_HEX " value not zero\n",
-						*offset, n, *(INT64*)&rkeys(block,n));
+						*offset, n, v);
 				}
 				*offset += sizeof(rkeys(block,0));
 			}
@@ -669,8 +671,8 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 		INT len;
 		INT32 roff = offs(block, n);
 		INT32 rlen = lens(block,n);
-		if (roff == 0 && rlen == 0 && *(INT64*)&rkeys(block,n) == 0) {
-			printf("[" FMT_INT "], found unexpected unitialized key\n",
+		if (roff == 0 && rlen == 0 && RKEY_IS_NULL(rkeys(block,n))) {
+			printf("[" FMT_INT "], found unexpected uninitialized key\n",
 				n );
 			continue;  // blank entry skip it.
 		}
@@ -715,7 +717,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			// we reuse akey buffer to check rkeys in sublists
 			//    so save first letter of this record's key
 			char first = *akey.rkeyfirst;
-			INT32 Ncount = *(INT32 *) &rec[0]; 
+			INT32 Ncount = *(INT32 *) &rec[0];
 			INT32 col1 = sizeof(INT32);
 			INT32 col2 = col1 + Ncount * sizeof(RKEY);
 			INT32 lennames = 0;
