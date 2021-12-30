@@ -63,8 +63,8 @@ typedef struct {
 
 #define RKEY_NULL "\0\0\0\0\0\0\0\0"
 #define RKEY_INIT(r) memcpy((r).r_rkey, RKEY_NULL, RKEYLEN)
-#define RKEY_IS_NULL(r) memcmp((r).r_rkey, RKEY_NULL, RKEYLEN)
-#define RKEY_AS_INT64(r,v) memcpy(&(v), (r).r_rkey, RKEYLEN);
+#define RKEY_IS_NULL(r) (memcmp((r).r_rkey, RKEY_NULL, RKEYLEN) == 0)
+#define RKEY_AS_INT64(r,v) memcpy(&(v), (r).r_rkey, RKEYLEN)
 
 typedef INT32 FKEY; /*file key*/
 

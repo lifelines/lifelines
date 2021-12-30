@@ -277,7 +277,7 @@ check_rkey(keytype *kt, RKEY *key, BOOLEAN in_data) {
 		return;
 	}
 	memcpy(kt->rkey,key,9);  // grab string and 1 more char.
-	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key,force 9th char to null
+	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key, force 9th char to null
 	char *p = kt->rkey;
 	while (*p == ' ') p++;   // p points to 1st non-space char
 	kt->rkeyfirst = p;
@@ -302,7 +302,7 @@ check_rkey(keytype *kt, RKEY *key, BOOLEAN in_data) {
 	case 'X': strncpy(kt->rname,"Other",6); break;
 	case 'H': strncpy(kt->rname,"HIST",6);  break;
 	default:
-		printf("Error, unrecognized RKEY %s\n",p);
+		printf("Error, unrecognized RKEY '%s'\n",p);
 		strncpy(kt->rname,"Bad",6); 
 	}
 	//validity checks
