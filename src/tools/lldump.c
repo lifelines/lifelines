@@ -386,12 +386,9 @@ void dump_index(STRING dir)
 /*===============================
  * tf_print_index -- traversal function wrapper for print_index
  *=============================*/
-BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
+BOOLEAN tf_print_index(HINT_PARAM_UNUSED BTREE btree, INDEX index, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_index(index, &offset);
 	return TRUE;
@@ -528,12 +525,9 @@ void dump_block(STRING dir)
 /*===============================
  * tf_print_block -- traversal function wrapper for print_block
  *=============================*/
-BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
+BOOLEAN tf_print_block(HINT_PARAM_UNUSED BTREE btree, BLOCK block, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_block(btree, block, &offset);
 	return TRUE;

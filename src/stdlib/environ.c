@@ -74,7 +74,11 @@ environ_determine_tempfile (void)
  * Created: 2000/12/23, Perry Rapp
  *==========================================================*/
 STRING
+#ifdef WIN32
 environ_determine_editor (INT program)
+#else
+environ_determine_editor (HINT_PARAM_UNUSED INT program)
+#endif
 {
 	STRING e;
 
@@ -90,7 +94,6 @@ environ_determine_editor (INT program)
 		if (ISNULL(e)) e = (STRING) "vi";
 	}
 #else
-	program=program; /* unused */
 	/* unix fallback is vi for all programs */
 	if (ISNULL(e)) e = (STRING) "vi";
 #endif

@@ -244,9 +244,8 @@ remove_spouse (NODE indi, NODE fam)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 BOOLEAN
-remove_fam_record (RECORD frec)
+remove_fam_record (HINT_PARAM_UNUSED RECORD frec)
 {
-	frec=frec; /* unused */
 	message("%s", _("Families may not yet be removed in this fashion."));
 	return FALSE;
 }

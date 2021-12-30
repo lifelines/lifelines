@@ -142,7 +142,11 @@ set_usersort (usersortfnc fnc)
  * widecmp -- Perform unicode string comparison, if available
  *=================================================*/
 static BOOLEAN
+#ifdef HAVE_WCSCOLL
 widecmp (CNSTRING str1, CNSTRING str2, INT *rtn)
+#else
+widecmp (HINT_PARAM_UNUSED CNSTRING str1, HINT_PARAM_UNUSED CNSTRING str2, HINT_PARAM_UNUSED INT *rtn)
+#endif
 {
 	ZSTR zws1=0, zws2=0;
 	BOOLEAN success = FALSE;
@@ -158,13 +162,9 @@ widecmp (CNSTRING str1, CNSTRING str2, INT *rtn)
 		*rtn = wcscoll(wfs1, wfs2);
 		success = TRUE;
 	}
-#else
-	str1=str1; /* unused */
-	str2=str2; /* unused */
-	rtn=rtn; /* unused */
-#endif /* HAVE_WCSCOLL */
-
 	zs_free(&zws1);
 	zs_free(&zws2);
+#endif /* HAVE_WCSCOLL */
+
 	return success;
 }

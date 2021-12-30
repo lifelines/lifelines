@@ -426,11 +426,10 @@ zstr_destructor (VTABLE *obj)
  * zstr_copy -- copy for zstr
  *===============================================*/
 static OBJECT
-zstr_copy (OBJECT obj, int deep)
+zstr_copy (OBJECT obj, HINT_PARAM_UNUSED int deep)
 {
 	ZSTR zstr = (ZSTR)obj, znew=0;
 	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
-	deep=deep; /* unused */
 	ASSERT((*obj)->vtable_class == vtable_for_zstr.vtable_class);
 	znew = zs_newz(zstr);
 	return (OBJECT)znew;

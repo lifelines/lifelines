@@ -203,11 +203,8 @@ set_pvalue (PVALUE val, INT type, PVALUE_DATA pvd)
  * Created: 2003-02-04 (Perry Rapp)
  *======================================*/
 void
-dolock_node_in_cache (NODE node, BOOLEAN lock)
+dolock_node_in_cache (HINT_PARAM_UNUSED NODE node, HINT_PARAM_UNUSED BOOLEAN lock)
 {
-	node = node;	/* NOTUSED */
-	lock = lock;	/* NOTUSED */
-
 #if NOT_WORKING_ON_LARGE_DATA_SETS
 /* This leads to cache overflow, so there is something
 wrong here - Perry, 2003-03-07 */
@@ -332,10 +329,9 @@ clear_pv_indiseq (INDISEQ seq)
  *======================================*/
 #ifdef UNUSED
 static void
-table_pvcleaner (CNSTRING key, UNION uval)
+table_pvcleaner (HINT_PARAM_UNUSED CNSTRING key, UNION uval)
 {
 	PVALUE val = uval.w;
-	key=key; /* unused */
 	delete_pvalue(val);
 	uval.w = NULL;
 }
@@ -1195,9 +1191,8 @@ CACHEEL
 pvalue_to_cel (PVALUE val)
 {
 	RECORD rec = pvalue_to_record(val);
-	NODE root = nztop(rec); /* force record into cache */
+	HINT_VAR_UNUSED NODE root = nztop(rec); /* force record into cache */
 	CACHEEL cel = nzcel(rec);
-	root = root;	/* NOTUSED */
 	return cel;
 }
 /*==================================

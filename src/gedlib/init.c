@@ -243,9 +243,8 @@ is_codeset_utf8 (CNSTRING codename)
  * dependent on user options
  *=================================================*/
 void
-update_useropts (VPTR uparm)
+update_useropts (HINT_PARAM_UNUSED VPTR uparm)
 {
-	uparm = uparm; /* unused */
 	if (suppress_reload)
 		return;
 	/* deal with db-specific options */

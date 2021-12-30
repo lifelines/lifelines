@@ -802,7 +802,6 @@ traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
-	len=len; /* unused */
 
 	parserefnrec(rkey, data);
 

@@ -209,7 +209,7 @@ typedef BOOLEAN(*TRAV_INDEX_FUNC)(BTREE, INDEX, void*);
 typedef BOOLEAN(*TRAV_BLOCK_FUNC)(BTREE, BLOCK, void*);
 
 typedef BOOLEAN(*TRAV_RECORD_FUNC_BYKEY)(RKEY, STRING, INT, void*);
-#define TRAV_RECORD_FUNC_BYKEY_ARGS(a,b,c,d) RKEY a, STRING b, INT c, void* d
+#define TRAV_RECORD_FUNC_BYKEY_ARGS(a,b,c,d) RKEY a, STRING b, HINT_PARAM_UNUSED INT c, void* d
 
 /*====================================
  * BTREE library function declarations 

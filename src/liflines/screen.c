@@ -1094,9 +1094,8 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
 BOOLEAN
-ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING basedir, STRING buffer, INT buflen)
 {
-	basedir=basedir; /* unused */
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
@@ -1652,11 +1651,15 @@ invoke_cset_display (void)
  * add_shims_info -- Add information about gettext and iconv dlls
  *====================================*/
 static void
+#if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
 add_shims_info (LIST list)
+#else
+add_shims_info (HINT_PARAM_UNUSED LIST list)
+#endif
 {
+#if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
 	ZSTR zstr=zs_newn(80);
-	list=list; /* only used on MS-Windows */
-#ifdef WIN32_INTL_SHIM
+#if defined WIN32_INTL_SHIM
 	{
 		char value[MAXPATHLEN];
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
@@ -1679,7 +1682,7 @@ add_shims_info (LIST list)
 		}
 	}
 #endif
-#ifdef WIN32_ICONV_SHIM
+#if defined WIN32_ICONV_SHIM
 	{
 		char value[MAXPATHLEN];
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
@@ -1703,6 +1706,7 @@ add_shims_info (LIST list)
 	}
 #endif
 	zs_free(&zstr);
+#endif
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
@@ -3083,14 +3087,13 @@ register_screen_lang_callbacks (BOOLEAN registering)
 	}
 }
 /*============================
- * screen_on_lang_change -- UI language  or codeset has changed
+ * screen_on_lang_change -- UI language or codeset has changed
  *==========================*/
 static void
-screen_on_lang_change (VPTR uparm)
+screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 {
 	LIST_ITER listit=0;
 	VPTR ptr=0;
-	uparm = uparm; /* unused */
 	listit = begin_list(list_uiwin);
 	while (next_list_ptr(listit, &ptr)) {
 		UIWINDOW uiwin = (UIWINDOW)ptr;
