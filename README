@@ -6,14 +6,6 @@ This is the source distribution of the LifeLines system, a genealogy
 software system.  To build and install LifeLines, please refer to
 the installation instructions located in the INSTALL file.
 
-GUI Versions of LifeLines for Windows and UNIX/GNOME are under
-development.  Visit the LifeLines home page
-(see end of file for URL) for details on how to obtain pre-compiled
-or beta (test) copies of these versions.
-
-The DOS text mode version has been integrated into the primary
-distribution.
-
 The original author of LifeLines is Thomas T. Wetmore IV, who released
 it to the open source community under a MIT-style licence (see LICENCE).
 
