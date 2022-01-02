@@ -85,7 +85,7 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 			*perrmsg = _(qSiddbse);
 			return FALSE;
 		}
-		*dbrequested = strsave(dbname);
+		strupdate(dbrequested, dbname);
 		if (eqstr(*dbrequested, "?")) {
 			INT n=0;
 			LIST dblist=0, dbdesclist=0;

@@ -216,14 +216,18 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				*prec2 = cand2;
 				return BROWSE_2FAM;
 			} else {
-				message("%s", _("Tandom browse only compatible with persons or families."));
+				message("%s", _("Tandem browse only compatible with persons or families."));
 				break;
 			}
 		}
 		case 'b':        /* Browse new persons */
 			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			/* If no new indiseq was created, then the previous indiseq is still in effect. */
 			if (!newseq) break;
-			/* TODO: should we free *pseq & repoint it to newseq ? */
+			/* Otherwise, if a new indiseq was created, then the previous indiseq must be freed. */
+			if (current_seq) {
+				remove_indiseq(current_seq);
+			}
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
 			if ((len = length_indiseq(seq)) == 1) {
@@ -268,6 +272,8 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			if (cur > top + VIEWABLE - 1) top = cur;
 			break;
 		case 'q':        /* Return to main menu */
+			if (current_seq)
+				remove_indiseq(current_seq);
 			current_seq = NULL;
 			return BROWSE_QUIT;
 		}

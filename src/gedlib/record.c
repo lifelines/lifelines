@@ -61,6 +61,7 @@ alloc_new_record (void)
 {
 	RECORD rec;
 	++f_nrecs;
+	/* allocate and clear record */
 	rec = (RECORD)stdalloc(sizeof(*rec));
 	memset(rec, 0, sizeof(*rec));
 	/* these must be filled in by caller */
@@ -68,7 +69,9 @@ alloc_new_record (void)
 	strcpy(rec->rec_nkey.key, "");
 	rec->rec_nkey.keynum = 0;
 	rec->rec_nkey.ntype = 0;
-	++rec->refcnt;
+	/* increment refcount */
+	addref_record(rec);
+	/* return */
 	return rec;
 }
 /*===================================

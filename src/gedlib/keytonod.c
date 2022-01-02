@@ -666,10 +666,13 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 
 	ASSERT(cache);
 	ASSERT(key);
-	rec = NULL;
-	if ((rawrec = retrieve_raw_record(key, &len))) 
+
+	/* retrieve raw record and create record from it */
+	if ((rawrec = retrieve_raw_record(key, &len)))
 		/* 2003-11-22, we should use string_to_node here */
 		rec = string_to_record(rawrec, key, len);
+
+	/* handle failure to create record */
 	if (!rec)
 	{
 		ZSTR zstr=zs_newn(256);
@@ -682,6 +685,7 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 			return(NULL);
 		}
 		if (reportmode) return(NULL);
+
 		crashlogn(_("Database error caused by reference to nonexisting key <%s>."), (char *)key);
 		crashlogn(_("It might be possible to fix this with btedit."));
 		zs_sets(zstr, _("Neighboring keys include:"));
@@ -698,7 +702,9 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 		zs_free(&zstr);
 		/* deliberately fall through to let ASSERT(rec) fail */
 	}
+
 	ASSERT(rec);
+
 	/* record was just loaded, nztop should not need to load it */
 	cel = node_to_cache(cache, nztop(rec));
 	ASSERT(!crecord(cel));
