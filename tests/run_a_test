@@ -149,10 +149,6 @@ function run_a_command {
             if [[ $ret < "1" ]] ; then
                 ret=1
             fi
-            # expect is now optional package for debian (required for redhat)
-            if [[ $cmd = expect* ]] ; then
-                echo "make sure the package containing $cmd is loaded on your system"
-            fi
             exit 99
         else
             echo "$thistest Warning post command '$cmd' found outside build tree"
@@ -258,7 +254,7 @@ function run_a_command {
             echo "$cmpmsg"
         fi
     else
-        # CAPTUREOUT not is set and file is llines 
+        # CAPTUREOUT is not set and file is llines or expect
         # do compare anyway, but only report results as SKIP
         # and don't count failures
         compare_file $stdout_name
