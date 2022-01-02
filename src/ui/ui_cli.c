@@ -111,10 +111,9 @@ msg_status (char *fmt, ...)
 	va_end(args);
 }
 void
-msg_output (MSG_LEVEL level, STRING fmt, ...)
+msg_output (HINT_PARAM_UNUSED MSG_LEVEL level, STRING fmt, ...)
 {
 	va_list args;
-	level=level;
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
@@ -148,22 +147,14 @@ call_system_cmd (STRING cmd)
  * ASK Routines
  *===========================================================*/
 BOOLEAN
-ask_for_program (STRING mode,
-                 STRING ttl,
-                 STRING *pfname,
-                 STRING *pfullpath,
-                 STRING path,
-                 STRING ext,
-                 BOOLEAN picklist)
+ask_for_program (HINT_PARAM_UNUSED STRING mode,
+                 HINT_PARAM_UNUSED STRING ttl,
+                 HINT_PARAM_UNUSED STRING *pfname,
+                 HINT_PARAM_UNUSED STRING *pfullpath,
+                 HINT_PARAM_UNUSED STRING path,
+                 HINT_PARAM_UNUSED STRING ext,
+                 HINT_PARAM_UNUSED BOOLEAN picklist)
 {
-	mode = mode;		/* NOTUSED */
-	ttl = ttl;		/* NOTUSED */
-	pfname = pfname;	/* NOTUSED */
-	pfullpath = pfullpath;	/* NOTUSED */
-	path = path;		/* NOTUSED */
-	ext = ext;		/* NOTUSED */
-	picklist = picklist;	/* NOTUSED */
-
 	/* TODO: We probably want to use the real implementation in askprogram.c */
 	return FALSE;
 }
@@ -218,9 +209,8 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 	return yes_no_value(c);
 }
 BOOLEAN
-ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING basedir, STRING buffer, INT buflen)
 {
-	basedir = basedir;	/* NOTUSED */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
 BOOLEAN
@@ -297,11 +287,8 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
 }
 INT
-choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
+choose_one_or_list_from_indiseq (HINT_PARAM_UNUSED STRING ttl, INDISEQ seq, HINT_PARAM_UNUSED BOOLEAN multi)
 {
-	ttl = ttl;	/* NOTUSED */
-	multi = multi;	/* NOTUSED */
-
 	calc_indiseq_names(seq); /* we certainly need the names */
 
 	/* TODO: imitate choose_from_list & delegate to array chooser */

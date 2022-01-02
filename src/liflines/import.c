@@ -408,10 +408,9 @@ translate_key (STRING key)    /* key does not have surrounding @ chars */
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
 static BOOLEAN
-translate_values (NODE node, VPTR param)
+translate_values (NODE node, HINT_PARAM_UNUSED VPTR param)
 {
 	STRING new;
-	param=param; /* unused */
 	if (!pointer_value(nval(node))) return TRUE;
 	new = translate_key(rmvat(nval(node)));
 	stdfree(nval(node));

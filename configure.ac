@@ -61,7 +61,7 @@ dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
-  CFLAGS="${CFLAGS} -W -Wall"
+  CFLAGS="${CFLAGS} -W -Wall -Wextra"
   CFLAGS="${CFLAGS} -Wcast-align -Wmissing-declarations -Wmissing-prototypes"
   CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
 

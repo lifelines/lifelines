@@ -318,12 +318,14 @@ pop_list (LIST list)
  * validate_list -- Verify list ends don't disagree
  *======================================*/
 static void
+#ifdef LIST_ASSERTS
 validate_list (LIST list)
+#else
+validate_list (HINT_PARAM_UNUSED LIST list)
+#endif
 {
 #ifdef LIST_ASSERTS
 	ASSERT(!list || (lhead(list)&&ltail(list)) || (!lhead(list)&&!ltail(list)));
-#else
-	list=list; /* unused */
 #endif
 }
 /*========================================

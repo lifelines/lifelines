@@ -726,9 +726,8 @@ xl_is_xlat_valid (XLAT xlat)
  * Created: 2002/12/15 (Perry Rapp)
  *========================================================*/
 void
-xl_release_xlat (XLAT xlat)
+xl_release_xlat (HINT_PARAM_UNUSED XLAT xlat)
 {
-	xlat=xlat; /* unused */
 	/*
 	TODO: If it is an adhoc xlat, free it
 	Have to remove it from cache list, which is slightly annoying

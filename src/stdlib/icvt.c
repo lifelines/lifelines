@@ -31,7 +31,11 @@
  * iconv_can_trans -- Can iconv do this translation ?
  *=================================================*/
 BOOLEAN
+#ifdef HAVE_ICONV
 iconv_can_trans (CNSTRING src, CNSTRING dest)
+#else
+iconv_can_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest)
+#endif
 {
 #ifdef HAVE_ICONV
 	iconv_t ict;
@@ -39,11 +43,9 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
 	ict = iconv_open(dest, src);
 	if (ict == (iconv_t)-1)
 		return FALSE;
-    iconv_close(ict);
+	iconv_close(ict);
 	return TRUE;
 #else
-	src=src; /* unused */
-	dest=dest; /* unused */
 	return FALSE;
 #endif
 }
@@ -56,7 +58,11 @@ iconv_can_trans (CNSTRING src, CNSTRING dest)
  *  illegal: [IN]  character to use as placeholder for unconvertible input
  *=================================================*/
 BOOLEAN
+#ifdef HAVE_ICONV
 iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
+#else
+iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HINT_PARAM_UNUSED CNSTRING sin, HINT_PARAM_UNUSED ZSTR zout, HINT_PARAM_UNUSED char illegal)
+#endif
 {
 #ifdef HAVE_ICONV
 	iconv_t ict;
@@ -191,11 +197,6 @@ icvt_terminate_and_exit:
 	iconv_close(ict);
 	return TRUE;
 #else
-	src=src; /* unused */
-	dest=dest; /* unused */
-	sin=sin; /* unused */
-	zout=zout; /* unused */
-	illegal=illegal; /* unused */
 	return FALSE;
 #endif /* HAVE_ICONV */
 }
@@ -203,12 +204,14 @@ icvt_terminate_and_exit:
  * init_win32_iconv_shim -- Helper for loading iconv.dll on win32
  *=================================================*/
 void
+#ifdef WIN32_ICONV_SHIM
 init_win32_iconv_shim (CNSTRING dllpath)
+#else
+init_win32_iconv_shim (HINT_PARAM_UNUSED CNSTRING dllpath)
+#endif
 {
 #ifdef WIN32_ICONV_SHIM
 	if (dllpath && dllpath[0])
 		iconvshim_set_property("dll_path", dllpath);
-#else
-	dllpath=dllpath; /* unused */
 #endif
 }

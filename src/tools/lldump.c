@@ -105,6 +105,13 @@ static size_t getfilesize(STRING dir, STRING filename);
  * body of module
  *********************************************/
 
+// Direct assignment can trigger cast-align warnings.
+// Only use these when the input is guaranteed to be aligned properly!
+#define CASTPTR_INT32(in) (INT32*)((void*)(in))
+#define EXTRACT_INT32(in) *(CASTPTR_INT32(in))
+#define CASTPTR_INT64(in) (INT64*)((void*)(in))
+#define EXTRACT_INT64(in) *(CASTPTR_INT64(in))
+
 /*=========================================
  * main -- Main procedure of lldump command
  *=======================================*/
@@ -209,7 +216,7 @@ print_usage (void)
 	char * fname = _("/home/users/myname/lifelines/databases/myfamily");
 #endif
 
-	printf(_("lifelines `lldump' dumpss a lifelines database file.\n"));
+	printf(_("lifelines `lldump' dumps a lifelines database file.\n"));
 	printf("\n\n");
 	printf(_("Usage lldump [options] <database>"));
 	printf("\n\n");
@@ -261,8 +268,8 @@ print_usage (void)
  *=============================================*/
 
 static void
-check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
-	if (*(INT64*)key == 0) {
+check_rkey(keytype *kt, RKEY *key, BOOLEAN in_data) {
+	if (RKEY_IS_NULL(*key)) {
 		// special case zero key
 		strncpy(kt->rkey,"0x00 x 8",9);  // null key in 8 chars
 		strncpy(kt->rname,"Zero",6);
@@ -270,7 +277,7 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 		return;
 	}
 	memcpy(kt->rkey,key,9);  // grab string and 1 more char.
-	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key,force 9th char to null
+	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key, force 9th char to null
 	char *p = kt->rkey;
 	while (*p == ' ') p++;   // p points to 1st non-space char
 	kt->rkeyfirst = p;
@@ -295,7 +302,7 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 	case 'X': strncpy(kt->rname,"Other",6); break;
 	case 'H': strncpy(kt->rname,"HIST",6);  break;
 	default:
-		printf("Error, unrecognized RKEY %s\n",p);
+		printf("Error, unrecognized RKEY '%s'\n",p);
 		strncpy(kt->rname,"Bad",6); 
 	}
 	//validity checks
@@ -386,12 +393,9 @@ void dump_index(STRING dir)
 /*===============================
  * tf_print_index -- traversal function wrapper for print_index
  *=============================*/
-BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
+BOOLEAN tf_print_index(HINT_PARAM_UNUSED BTREE btree, INDEX index, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_index(index, &offset);
 	return TRUE;
@@ -472,11 +476,11 @@ void print_index(INDEX index, INT32 *offset)
 		// now check that they really are zero'ed
 		int found_deleted = 0;
 		for (n=NRcount+1; n<NOENTS; n++) {
-			if (*(INT64*)&rkeys(index,n) != 0 || fkeys(index,n) != 0) {
+			if (!RKEY_IS_NULL(rkeys(index,n)) || fkeys(index,n) != 0) {
 				if (found_deleted++ == 0) { 
 					printf("\ndeleted index rkey/fkey pairs\n");
 				}
-				if (*(INT64*)&rkeys(index,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(index,n))) {
 					check_rkey(&akey,&rkeys(index,n),FALSE);
 					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
 						*offset, n, akey.rkey);
@@ -528,12 +532,9 @@ void dump_block(STRING dir)
 /*===============================
  * tf_print_block -- traversal function wrapper for print_block
  *=============================*/
-BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
+BOOLEAN tf_print_block(HINT_PARAM_UNUSED BTREE btree, BLOCK block, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_block(btree, block, &offset);
 	return TRUE;
@@ -603,10 +604,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				*offset + (INT32)((NORECS-NRcount)*sizeof(rkeys(block,0)) - 1),
 				NRcount,(INT)NORECS-1);
 			for (n=NRcount; n<NORECS; n++) {
-				if (*(INT64*)&rkeys(block,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(block,n))) {
+					INT64 v;
+					RKEY_AS_INT64(rkeys(block,n), v);
 					printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]:"
 						FMT_INT64_HEX " value not zero\n",
-						*offset, n, *(INT64*)&rkeys(block,n));
+						*offset, n, v);
 				}
 				*offset += sizeof(rkeys(block,0));
 			}
@@ -675,8 +678,8 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 		INT len;
 		INT32 roff = offs(block, n);
 		INT32 rlen = lens(block,n);
-		if (roff == 0 && rlen == 0 && *(INT64*)&rkeys(block,n) == 0) {
-			printf("[" FMT_INT "], found unexpected unitialized key\n",
+		if (roff == 0 && rlen == 0 && RKEY_IS_NULL(rkeys(block,n))) {
+			printf("[" FMT_INT "], found unexpected uninitialized key\n",
 				n );
 			continue;  // blank entry skip it.
 		}
@@ -721,7 +724,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			// we reuse akey buffer to check rkeys in sublists
 			//    so save first letter of this record's key
 			char first = *akey.rkeyfirst;
-			INT32 Ncount = *(INT32 *) &rec[0]; 
+			INT32 Ncount = EXTRACT_INT32(&rec[0]);
 			INT32 col1 = sizeof(INT32);
 			INT32 col2 = col1 + Ncount * sizeof(RKEY);
 			INT32 lennames = 0;
@@ -733,11 +736,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			INT strbase = sizeof(INT32) + (sizeof(RKEY) +
 				sizeof(INT32))*Ncount;
 			for(m = 0; m < Ncount; m++) {
-				INT32 stroff = strbase + *(INT32*)&rec[col2];
+				INT32 recoff = EXTRACT_INT32(&rec[col2]);
+				INT32 stroff = strbase + recoff;
 				printf("    " FMT_INT_3 ". " FMT_INT32_HEX ":RKEY %8.8s "
 				    FMT_INT32_HEX ":offset " FMT_INT32_HEX "\n",
 					m+1, *offset + col1, &rec[col1],
-					(INT32)*offset+col2, *(INT32*)&rec[col2]);
+					     *offset + col2, recoff);
 				printf("         " FMT_INT32_HEX ":string '%s'\n",
 					*offset+stroff, &rec[stroff]);
 				col1 += sizeof(RKEY);
@@ -756,7 +760,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			}
 			col1 = sizeof(INT32);
 			for(m = 0; m < Ncount; m++) {
-				INT stroff = strbase + *(INT32*)&rec[col2];
+				INT stroff = strbase + EXTRACT_INT32(&rec[col2]);
 
 				//  print keys,strings
 				char *p = &rec[col1];
@@ -781,7 +785,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			//
 			// See save_nkey_list and load_nkey_list
 			//
-			INT32 *ptr = (INT32 *)&rec[0];
+			INT32 *ptr = CASTPTR_INT32(&rec[0]);
 			INT32 count1 = *ptr++;
 			INT32 count2 = *ptr++;
 			INT32 count = ((count1>count2) ? count2 : count1);

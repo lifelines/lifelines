@@ -86,8 +86,7 @@ msg_status (char *fmt, ...)
  * this would not be needed here. - Perry, 2001/11/11
  *====================================*/
 void
-poutput (char *str, BOOLEAN *eflg)
+poutput (char *str, HINT_PARAM_UNUSED BOOLEAN *eflg)
 {
-	eflg=eflg; /* unused */
 	printf("%s", str);
 }

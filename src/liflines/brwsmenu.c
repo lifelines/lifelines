@@ -615,9 +615,8 @@ register_brwsmenu_lang_callbacks (BOOLEAN registering)
  * brwsmenu_on_lang_change -- UI language or codeset has changed
  *==========================*/
 static void
-brwsmenu_on_lang_change (VPTR uparm)
+brwsmenu_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 {
-	uparm = uparm; /* unused */
 	f_reloading = TRUE;
 	menuitem_terminate();
 	brwsmenu_initialize(0, 0); /* 0 means use stored values */

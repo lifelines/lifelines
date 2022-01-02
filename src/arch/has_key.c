@@ -11,8 +11,7 @@
  *  contains a special hardware key code
  * Created: 2003/01/02 (Perry Rapp)
  *===============================================*/
-int has_key(int ch)
+int has_key(HINT_PARAM_UNUSED int ch)
 {
-	ch=ch; /* unused */
 	return 0;
 }

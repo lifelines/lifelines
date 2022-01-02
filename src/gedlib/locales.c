@@ -458,7 +458,11 @@ is_msgcategory (int category)
  * win32_setlocale -- handle MS-Windows goofed up locale names
  *========================================*/
 static char *
+#if defined(_WIN32) && !defined(__CYGWIN__)
 win32_setlocale (int category, char * locale)
+#else
+win32_setlocale (HINT_PARAM_UNUSED int category, HINT_PARAM_UNUSED char * locale)
+#endif
 {
 	char * rtn = 0;
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -489,9 +493,6 @@ win32_setlocale (int category, char * locale)
 		at least unless int_codeset == 0 */
 		rtn = setlocale(category, w32loc);
 	}
-#else
-	category=category; /* unused */
-	locale=locale; /* unused */
 #endif /* _WIN32 */
 	return rtn;
 }

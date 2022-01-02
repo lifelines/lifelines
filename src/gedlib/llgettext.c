@@ -174,7 +174,11 @@ init_win32_gettext_shim (void)
  * Created: 2002/11/28 (Perry Rapp)
  *===============================*/
 void
+#if ENABLE_NLS
 set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
+#else
+set_gettext_codeset (HINT_UNUSED_PARAM CNSTRING domain, HINT_UNUSED_PARAM CNSTRING codeset)
+#endif
 {
 #if ENABLE_NLS
 	if (eqstr_ex(gt_codeset, codeset))
@@ -202,9 +206,6 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 	bind_textdomain_codeset(domain, gt_codeset);
 	if (eqstr(domain, PACKAGE))
 		locales_notify_uicodeset_changes();
-#else
-	domain = domain; /* unused */
-	codeset = codeset; /* unused */
 #endif /* ENABLE_NLS */
 }
 /*=================================
