@@ -137,8 +137,11 @@ static void
 freerefnrec(void)
 {
         stdfree(RRkeys);
+	RRkeys = NULL;
         stdfree(RRoffs);
+	RRoffs = NULL;
         stdfree((CNSTRING)RRrefns);
+	RRrefns = NULL;
         RRmax = 0;
 }
 
@@ -176,8 +179,12 @@ freerefnmrec(void)
 	INT i;
 
 	for (i = 0; i < RMcount; i++)
+	{
 		stdfree(RMkeys[i]);
+		RMkeys[i] = NULL;
+	}
 	stdfree(RMkeys);
+	RMkeys = NULL;
 	RMcount = 0;
 	RMmax = 0;
 }
@@ -239,7 +246,10 @@ getrefnrec (CNSTRING refn)
 	STRING p;
 /* Convert refn to key and read refn record */
 	RRkey = refn2rkey(refn);
-	if (RRrec) stdfree(RRrec);
+	if (RRrec) {
+		stdfree(RRrec);
+		RRrec = NULL;
+	}
 	p = RRrec = bt_getrecord(BTR, &RRkey, &RRsize);
 	if (!RRrec) {
 		RRcount = 0;
