@@ -147,8 +147,11 @@ static void
 freenamerec(void)
 {
 	stdfree(NRkeys);
+	NRkeys = NULL;
 	stdfree(NRoffs);
+	NRoffs = NULL;
 	stdfree((STRING)NRnames);
+	NRnames = NULL;
 	NRmax = 0;
 }
 
