@@ -1034,11 +1034,13 @@ clear_structures (void)
 	}
 	for (i = 0; i < struct_len; i++) {
 		ELMNT el = index_data[i];
-		index_data[i] = 0;
+		index_data[i] = NULL;
 		free_elmnt(el);
 	}
 	stdfree(index_data);
+	index_data = NULL;
 	struct_len = 0;
+	struct_max = 0;
 }
 /*=====================================
  * set_import_log -- Specify where import errors logged
