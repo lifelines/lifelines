@@ -668,9 +668,11 @@ add_to_direct (CACHE cache, CNSTRING key, INT reportmode)
 	ASSERT(key);
 
 	/* retrieve raw record and create record from it */
-	if ((rawrec = retrieve_raw_record(key, &len)))
+	if ((rawrec = retrieve_raw_record(key, &len))) {
+		ASSERT(rawrec);
 		/* 2003-11-22, we should use string_to_node here */
 		rec = string_to_record(rawrec, key, len);
+	}
 
 	/* handle failure to create record */
 	if (!rec)
