@@ -43,10 +43,23 @@
 STRING
 addat (STRING str)
 {
-	STRING p;
-	static char buffer[3][20];
+	/*
+	 * This static buffer is an array of buffers that can be used for
+	 * addat'ed strings.  We need to use an array here since we may have
+	 * nested calls within a single operation and we don't want to overwrite
+	 * values that haven't been copied or otherwise made permanent.
+	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
+	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
+	 * little extra.
+	 *
+	 * Currently we need to support up to 3 nested addat() calls.
+	 */
+#define ADDAT_SIZE 3
+	static char buffer[ADDAT_SIZE][32];
 	static INT dex = 0;
-	if (++dex > 2) dex = 0;
+	STRING p;
+	dex++;
+	if (dex == ADDAT_SIZE) dex = 0;
 	p = buffer[dex];
 	snprintf(p, sizeof(buffer[dex]), "@%s@", str);
 	return p;
@@ -59,16 +72,35 @@ addat (STRING str)
 static STRING
 rmvat_char (CNSTRING str, char c, char d)
 {
+	/*
+	 * This static buffer is an array of buffers that can be used for
+	 * addat'ed strings.  We need to use an array here since we may have
+	 * nested calls within a single operation and we don't want to overwrite
+	 * values that haven't been copied or otherwise made permanent.
+	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
+	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
+	 * little extra.
+	 *
+	 * Currently we need to support a large number of nested rmvat() calls.
+	 *
+	 * The previous limit of 32 (and before that, 10) were insufficient when
+	 * parsing INDI records that have a lot of keys in them.  For example,
+	 * https://github.com/lifelines/lifelines/issues/439 reported errors
+	 * editing (or importing) INDI records with more than 32 ASSO values;
+	 * the 33rd would wrap and use the first entry again, thus "corrupting"
+	 * the value there, resulting in bad data being stored to the database.
+	 */
+#define RMVAT_SIZE 32
+	static char buffer[RMVAT_SIZE][32];
+	static INT dex = 0;
+
 	STRING p;
 	int len;
-	/* WARNING: GEDCOM 5.5 specifies that the resulting string (XREF) can be
-	 * 1 to 22 characters. Allow a little extra. */
-	static char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
-	static INT dex = 0;
 	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);
 	if (str[0] != c) return NULL;
-	if (++dex > 31) dex = 0;	/* was 9 pbm 11-jun-96*/
+	dex++;
+	if (dex == RMVAT_SIZE) dex = 0;
 	p = buffer[dex];
 	len = strlen(str+1);
 	if (str[len] != d) return NULL;
@@ -95,6 +127,14 @@ STRING
 rmvbrackets (CNSTRING str)
 {
 	return rmvat_char(str, '<', '>');
+}
+/*=============================================
+ * get_rmvat_size -- max number of rmvat calls
+ *===========================================*/
+INT
+get_rmvat_size (void)
+{
+	return RMVAT_SIZE;
 }
 /*=============================================
  * node_to_keynum -- key # of a 0 level node
