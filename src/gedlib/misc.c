@@ -36,6 +36,9 @@
 #include "gedcom.h"
 #include "zstr.h"
 
+static INT addat_count = 0;
+static INT rmvat_count = 0;
+
 /*========================================
  * addat -- Add @'s to both ends of string
  *  returns static buffer
@@ -58,6 +61,7 @@ addat (STRING str)
 	static char buffer[ADDAT_SIZE][32];
 	static INT dex = 0;
 	STRING p;
+	addat_count++;
 	dex++;
 	if (dex == ADDAT_SIZE) dex = 0;
 	p = buffer[dex];
@@ -99,6 +103,7 @@ rmvat_char (CNSTRING str, char c, char d)
 	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);
 	if (str[0] != c) return NULL;
+	rmvat_count++;
 	dex++;
 	if (dex == RMVAT_SIZE) dex = 0;
 	p = buffer[dex];
@@ -129,12 +134,20 @@ rmvbrackets (CNSTRING str)
 	return rmvat_char(str, '<', '>');
 }
 /*=============================================
- * get_rmvat_size -- max number of rmvat calls
+ * get_rmvat_size -- size of rmvat static array
  *===========================================*/
 INT
 get_rmvat_size (void)
 {
 	return RMVAT_SIZE;
+}
+/*=============================================
+ * get_rmvat_count -- count of rmvat calls
+ *===========================================*/
+INT
+get_rmvat_count (void)
+{
+	return rmvat_count;
 }
 /*=============================================
  * node_to_keynum -- key # of a 0 level node

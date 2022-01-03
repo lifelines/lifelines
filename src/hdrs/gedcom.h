@@ -292,6 +292,7 @@ STRING get_original_locale_msgs(void);
 STRING get_property(STRING opt);
 void get_refns(STRING, INT*, STRING**, INT);
 INT get_rmvat_size(void);
+INT get_rmvat_count(void);
 STRING getexref(void);
 STRING getfxref(void);
 INT32 getixrefnum(void);
