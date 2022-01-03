@@ -201,7 +201,7 @@ add_indi_no_cache (NODE indi)
 	STRING str, key;
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	key = rmvat(nxref(indi));
+	key = strsave(rmvat(nxref(indi)));
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
@@ -211,6 +211,7 @@ add_indi_no_cache (NODE indi)
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
 	stdfree(str);
+	stdfree(key);
 	return TRUE;
 }
 /*========================================================
