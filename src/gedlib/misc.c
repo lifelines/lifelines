@@ -79,20 +79,23 @@ rmvat_char (CNSTRING str, char c, char d)
 	/*
 	 * This static buffer is an array of buffers that can be used for
 	 * addat'ed strings.  We need to use an array here since we may have
-	 * multiple calls within a single operation and we don't want to overwrite
-	 * values that haven't been copied or otherwise made permanent.
+	 * multiple calls within a single operation and we don't want to
+	 * overwrite values that haven't been copied or made permanent.
 	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
 	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
 	 * little extra.
 	 *
 	 * Currently we need to support a large number of rmvat() calls.
 	 *
-	 * The previous limit of 32 (and before that, 10) were insufficient when
-	 * parsing INDI records that have a lot of keys in them.  For example,
-	 * https://github.com/lifelines/lifelines/issues/439 reported errors
-	 * editing (or importing) INDI records with more than 32 ASSO values;
-	 * the 33rd would wrap and use the first entry again, thus "corrupting"
-	 * the value there, resulting in bad data being stored to the database.
+	 * The current limit of 32 appears sufficient, but there may be cases
+	 * where static buffer reuse causes data corruption of various types.
+	 * The solutions are to a) ensure that the values returned by rmvat()
+	 * are saved, or b) increase the buffer size.
+	 *
+	 * Refer to https://github.com/lifelines/lifelines/issues/439 for one
+	 * such scenario; a single INDI with 32 ASSO tags caused the INDI key
+	 * to become corrupted because the ASSO tag processing caused the rmvat
+	 * buffer to wrap.
 	 */
 #define RMVAT_SIZE 32
 	static char buffer[RMVAT_SIZE][32];
