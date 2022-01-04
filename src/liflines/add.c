@@ -201,6 +201,8 @@ add_indi_no_cache (NODE indi)
 	STRING str, key;
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	// get stable value for key in case rmvat static array gets corrupted
+	// this prevents us writing the record using the wrong key.
 	key = strsave(rmvat(nxref(indi)));
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);

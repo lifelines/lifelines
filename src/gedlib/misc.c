@@ -49,13 +49,13 @@ addat (STRING str)
 	/*
 	 * This static buffer is an array of buffers that can be used for
 	 * addat'ed strings.  We need to use an array here since we may have
-	 * nested calls within a single operation and we don't want to overwrite
+	 * multiple calls within a single operation and we don't want to overwrite
 	 * values that haven't been copied or otherwise made permanent.
 	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
 	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
 	 * little extra.
 	 *
-	 * Currently we need to support up to 3 nested addat() calls.
+	 * Currently we need to support up to 3 addat() calls.
 	 */
 #define ADDAT_SIZE 3
 	static char buffer[ADDAT_SIZE][32];
@@ -79,13 +79,13 @@ rmvat_char (CNSTRING str, char c, char d)
 	/*
 	 * This static buffer is an array of buffers that can be used for
 	 * addat'ed strings.  We need to use an array here since we may have
-	 * nested calls within a single operation and we don't want to overwrite
+	 * multiple calls within a single operation and we don't want to overwrite
 	 * values that haven't been copied or otherwise made permanent.
 	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
 	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
 	 * little extra.
 	 *
-	 * Currently we need to support a large number of nested rmvat() calls.
+	 * Currently we need to support a large number of rmvat() calls.
 	 *
 	 * The previous limit of 32 (and before that, 10) were insufficient when
 	 * parsing INDI records that have a lot of keys in them.  For example,
@@ -132,22 +132,6 @@ STRING
 rmvbrackets (CNSTRING str)
 {
 	return rmvat_char(str, '<', '>');
-}
-/*=============================================
- * get_rmvat_size -- size of rmvat static array
- *===========================================*/
-INT
-get_rmvat_size (void)
-{
-	return RMVAT_SIZE;
-}
-/*=============================================
- * get_rmvat_count -- count of rmvat calls
- *===========================================*/
-INT
-get_rmvat_count (void)
-{
-	return rmvat_count;
 }
 /*=============================================
  * node_to_keynum -- key # of a 0 level node
