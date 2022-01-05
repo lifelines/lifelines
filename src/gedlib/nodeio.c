@@ -452,6 +452,7 @@ string_to_record (STRING str, CNSTRING key, HINT_PARAM_UNUSED INT len)
 	}
 	if (node) {
 		rec = create_record_for_keyed_node(node, key);
+		ASSERT(rec);
 	}
 	return rec;
 }

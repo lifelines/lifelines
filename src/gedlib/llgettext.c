@@ -177,7 +177,7 @@ void
 #if ENABLE_NLS
 set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 #else
-set_gettext_codeset (HINT_UNUSED_PARAM CNSTRING domain, HINT_UNUSED_PARAM CNSTRING codeset)
+set_gettext_codeset (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRING codeset)
 #endif
 {
 #if ENABLE_NLS

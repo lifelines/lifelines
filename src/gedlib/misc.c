@@ -36,6 +36,9 @@
 #include "gedcom.h"
 #include "zstr.h"
 
+static INT addat_count = 0;
+static INT rmvat_count = 0;
+
 /*========================================
  * addat -- Add @'s to both ends of string
  *  returns static buffer
@@ -43,10 +46,24 @@
 STRING
 addat (STRING str)
 {
-	STRING p;
-	static char buffer[3][20];
+	/*
+	 * This static buffer is an array of buffers that can be used for
+	 * addat'ed strings.  We need to use an array here since we may have
+	 * multiple calls within a single operation and we don't want to overwrite
+	 * values that haven't been copied or otherwise made permanent.
+	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
+	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
+	 * little extra.
+	 *
+	 * Currently we need to support up to 3 addat() calls.
+	 */
+#define ADDAT_SIZE 3
+	static char buffer[ADDAT_SIZE][32];
 	static INT dex = 0;
-	if (++dex > 2) dex = 0;
+	STRING p;
+	addat_count++;
+	dex++;
+	if (dex == ADDAT_SIZE) dex = 0;
 	p = buffer[dex];
 	snprintf(p, sizeof(buffer[dex]), "@%s@", str);
 	return p;
@@ -59,16 +76,39 @@ addat (STRING str)
 static STRING
 rmvat_char (CNSTRING str, char c, char d)
 {
+	/*
+	 * This static buffer is an array of buffers that can be used for
+	 * addat'ed strings.  We need to use an array here since we may have
+	 * multiple calls within a single operation and we don't want to
+	 * overwrite values that haven't been copied or made permanent.
+	 * Since GEDCOM 5.5 spefies that XREF values can be up to 22 chars,
+	 * the static buffer needs to be at least 22+2+1=25 chars, but leave a
+	 * little extra.
+	 *
+	 * Currently we need to support a large number of rmvat() calls.
+	 *
+	 * The current limit of 32 appears sufficient, but there may be cases
+	 * where static buffer reuse causes data corruption of various types.
+	 * The solutions are to a) ensure that the values returned by rmvat()
+	 * are saved, or b) increase the buffer size.
+	 *
+	 * Refer to https://github.com/lifelines/lifelines/issues/439 for one
+	 * such scenario; a single INDI with 32 ASSO tags caused the INDI key
+	 * to become corrupted because the ASSO tag processing caused the rmvat
+	 * buffer to wrap.
+	 */
+#define RMVAT_SIZE 32
+	static char buffer[RMVAT_SIZE][32];
+	static INT dex = 0;
+
 	STRING p;
 	int len;
-	/* WARNING: GEDCOM 5.5 specifies that the resulting string (XREF) can be
-	 * 1 to 22 characters. Allow a little extra. */
-	static char buffer[32][32];	/* was [10][20] pbm 11-jun-96*/
-	static INT dex = 0;
 	/* Watch out for bad pointers */
 	if((str == NULL) || (*str == '\0')) return(NULL);
 	if (str[0] != c) return NULL;
-	if (++dex > 31) dex = 0;	/* was 9 pbm 11-jun-96*/
+	rmvat_count++;
+	dex++;
+	if (dex == RMVAT_SIZE) dex = 0;
 	p = buffer[dex];
 	len = strlen(str+1);
 	if (str[len] != d) return NULL;
