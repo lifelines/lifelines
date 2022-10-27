@@ -11,8 +11,7 @@
 #include "gedcomi.h"
 #include "vtable.h"
 #include "cache.h"
-#include "lloptions.h"
-
+#include "leaksi.h"
 
 /*==============================
  * RECORD -- in-memory representation of GEDCOM record
@@ -30,8 +29,10 @@ struct tag_record { /* RECORD */
  * local function prototypes
  *********************************************/
 
-static RECORD alloc_new_record(void);
-static void free_rec(RECORD rec);
+#define alloc_new_record(msg) alloc_new_record_int(msg,__FILE__,__LINE__)
+static RECORD alloc_new_record_int (char *msg, char *file, int line);
+#define free_rec(r,m) free_rec_int(r,m,__FILE__,__LINE__)
+static void free_rec_int (RECORD rec, char *msg, char* file, int line);
 static BOOLEAN is_record_loaded (RECORD rec);
 static void record_destructor(VTABLE *obj);
 
@@ -57,7 +58,7 @@ static int f_nrecs=0;
  * returns addref'd record
  *=================================*/
 static RECORD
-alloc_new_record (void)
+alloc_new_record_int (char *msg, char *file, int line)
 {
 	RECORD rec;
 	++f_nrecs;
@@ -71,6 +72,8 @@ alloc_new_record (void)
 	rec->rec_nkey.ntype = 0;
 	/* increment refcount */
 	addref_record(rec);
+	/* trace */
+	TRACE_RECORD(rec, 1, msg, file, line);
 	/* return */
 	return rec;
 }
@@ -81,9 +84,11 @@ alloc_new_record (void)
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 static void
-free_rec (RECORD rec)
+free_rec_int (RECORD rec, char *msg, char* file, int line)
 {
 	--f_nrecs;
+	/* trace */
+	TRACE_RECORD(rec, 2, msg, file, line);
 	if (rec->rec_cel) {
 		/* cached record */
 		/* cel memory belongs to cache, but we must tell it
@@ -196,7 +201,7 @@ record_remove_cel (RECORD rec, CACHEEL cel)
 RECORD
 make_new_record_with_info (CNSTRING key, CACHEEL cel)
 {
-	RECORD rec = alloc_new_record();
+	RECORD rec = alloc_new_record("make_new_record_with_info");
 	set_record_key_info(rec, key);
 	record_set_cel(rec, cel);
 	return rec;
@@ -289,7 +294,7 @@ init_new_record (RECORD rec, CNSTRING key)
 RECORD
 create_record_for_keyed_node (NODE node, CNSTRING key)
 {
-	RECORD rec = alloc_new_record();
+	RECORD rec = alloc_new_record("create_record_for_keyed_node");
 	if (!key)
 		key = nxref(node);
 	rec->rec_top = node;
@@ -304,7 +309,7 @@ create_record_for_keyed_node (NODE node, CNSTRING key)
 RECORD
 create_record_for_unkeyed_node (NODE node)
 {
-	RECORD rec = alloc_new_record();
+	RECORD rec = alloc_new_record("create_record_for_unkeyed_node");
 	rec->rec_top = node;
 	return rec;
 }
@@ -329,7 +334,7 @@ release_record (RECORD rec)
 	ASSERT(rec->vtable == &vtable_for_record);
 	--rec->refcnt;
 	if (!rec->refcnt) {
-		free_rec(rec);
+		free_rec(rec,"release_record");
 	}
 }
 /*=================================================
@@ -341,7 +346,7 @@ record_destructor (VTABLE *obj)
 {
 	RECORD rec = (RECORD)obj;
 	ASSERT((*obj) == &vtable_for_record);
-	free_rec(rec);
+	free_rec(rec,"record_destructor");
 }
 /*=================================================
  * check_record_leaks -- Called when database closing
@@ -351,20 +356,14 @@ void
 check_record_leaks (void)
 {
 	if (f_nrecs) {
-		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
-		FILE * fp=0;
-		if (report_leak_path)
-			fp = fopen(report_leak_path, LLAPPENDTEXT);
-		if (fp) {
+		if (fpleaks) {
 			LLDATE date;
 			get_current_lldate(&date);
-			fprintf(fp, _("Record memory leaks:"));
-			fprintf(fp, " %s", date.datestr);
-			fprintf(fp, "\n  ");
-			fprintf(fp, _pl("%d item leaked", "%d items leaked", f_nrecs), f_nrecs);
-			fprintf(fp, "\n");
-			fclose(fp);
-			fp = 0;
+			fprintf(fpleaks, _("Record memory leaks:"));
+			fprintf(fpleaks, " %s", date.datestr);
+			fprintf(fpleaks, "\n  ");
+			fprintf(fpleaks, _pl("%d item leaked", "%d items leaked", f_nrecs), f_nrecs);
+			fprintf(fpleaks, "\n");
 		}
 	}
 }

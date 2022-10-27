@@ -276,7 +276,8 @@ NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, CNSTRING);
-void free_node(NODE);
+#define free_node(n,msg) free_node_int(n,msg,__FILE__,__LINE__)
+void free_node_int(NODE node, char *msg, char *file, int line);
 void free_nodes(NODE);
 void free_temp_node_tree(NODE);
 STRING full_value(NODE, STRING sep);
