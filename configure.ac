@@ -131,6 +131,22 @@ then
   fi
 fi
 
+dnl Enable full debugging
+AC_ARG_WITH(full-debug,
+    [  --with-full-debug           Build with full debug support ],
+    [build_full_debug=$withval],
+    [build_full_debug=no])
+
+if test "$build_full_debug" = "yes"
+then
+  if test "${ac_cv_prog_gcc}" = "yes"; then
+    CFLAGS="${CFLAGS} -rdynamic"
+  else
+    echo "The use of --with-full-debug only supported when using gcc!"
+    exit
+  fi
+fi
+
 dnl **************************************************************
 dnl Handle testing requirements
 dnl **************************************************************
@@ -210,6 +226,7 @@ AC_CHECK_HEADERS( math.h )
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
 AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
+AC_CHECK_FUNCS( backtrace backtrace_symbols )
 AC_SEARCH_LIBS( sin, m )
 AC_SEARCH_LIBS( cos, m )
 AC_SEARCH_LIBS( tan, m )

@@ -63,6 +63,9 @@ void __fatal(STRING file, int line, CNSTRING details) HINT_FUNC_NORETURN;
 void crashlog(STRING fmt, ...) HINT_PRINTF(1,2);
 void crashlogn(STRING fmt, ...) HINT_PRINTF(1,2);
 
+/* backtrace.c */
+void dump_backtrace(FILE*);
+
 /* dirs.c */
 BOOLEAN mkalldirs(STRING);
 
