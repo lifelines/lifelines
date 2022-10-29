@@ -1873,6 +1873,8 @@ key_to_indiseq (STRING name, char ctype)
 	rec = id_by_key(name, ctype);
 	if (!rec) return NULL;
 	key = rmvat(nxref(nztop(rec)));
+	/* MTE: We are calling release_record() but free_record() isn't being called. */
+	/* We must still have > refcnt here. */
 	release_record(rec); /* done with record */
 	seq = create_indiseq_null();
 	append_indiseq_null(seq, key, NULL, FALSE, FALSE);

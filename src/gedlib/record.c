@@ -58,7 +58,7 @@ static int f_nrecs=0;
  * returns addref'd record
  *=================================*/
 static RECORD
-alloc_new_record_int (char *msg, char *file, int line)
+alloc_new_record_int (HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED int line)
 {
 	RECORD rec;
 	++f_nrecs;
@@ -84,7 +84,7 @@ alloc_new_record_int (char *msg, char *file, int line)
  * Created: 2000/12/30, Perry Rapp
  *=================================*/
 static void
-free_rec_int (RECORD rec, char *msg, char* file, int line)
+free_rec_int (RECORD rec, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char* file, HINT_PARAM_UNUSED int line)
 {
 	--f_nrecs;
 	/* trace */
@@ -322,6 +322,7 @@ addref_record (RECORD rec)
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	++rec->refcnt;
+	//fprintf(fpleaks,"ADDREF_RECORD called for %p with refcnt %ld->%ld\n", (void*)rec, rec->refcnt-1,rec->refcnt);
 }
 /*=================================================
  * release_record -- decrement reference count of record
@@ -333,6 +334,7 @@ release_record (RECORD rec)
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	--rec->refcnt;
+	//fprintf(fpleaks,"RELEASE_RECORD called for %p with refcnt %ld->%ld\n", (void*)rec, rec->refcnt+1,rec->refcnt);
 	if (!rec->refcnt) {
 		free_rec(rec,"release_record");
 	}

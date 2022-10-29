@@ -180,7 +180,7 @@ alloc_node_block(void)
  * alloc_node -- Special node allocator
  *===================================*/
 static NODE
-alloc_node_int (char* msg, char* file, int line)
+alloc_node_int (HINT_PARAM_UNUSED char* msg, HINT_PARAM_UNUSED char* file, HINT_PARAM_UNUSED int line)
 {
 	NODE node;
 
@@ -200,7 +200,7 @@ alloc_node_int (char* msg, char* file, int line)
  * free_node -- Special node deallocator
  *====================================*/
 void
-free_node_int (NODE node, char *msg, char *file, int line)
+free_node_int (NODE node, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED int line)
 {
 	if (nxref(node)) stdfree(nxref(node));
 	if (nval(node)) stdfree(nval(node));
