@@ -583,8 +583,10 @@ delete_cache (CACHE * pcache)
 	if (!cache) return;
 
 	num = get_table_count(cacdata(cache));
-	fprintf(fpleaks, "DELETE_CACHE: name: %s cache: %p num: " FMT_INT "\n",
-                cacname(cache), (void*)cache, num);
+	if (fpleaks) {
+		fprintf(fpleaks, "DELETE_CACHE: name: %s cache: %p num: " FMT_INT "\n",
+		        cacname(cache), (void*)cache, num);
+	}
 
 	/* Loop through all cached elements on free list, clearing each */
 	/* NOTE: Anything on the free list should have already been cleared */
