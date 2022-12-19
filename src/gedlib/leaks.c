@@ -68,7 +68,7 @@ close_leak_log (void)
 void
 track_record(RECORD rec, int op, char *msg, char *file, int line)
 {
-	char *t = (op == TRACE_OP_ALLOC ? "ALLOC" : (op == TRACE_OP_FREE ? "FREE" : "UNKNOWN" ) );
+	char *t = (op == TRACK_OP_ALLOC ? "ALLOC" : (op == TRACK_OP_FREE ? "FREE" : "UNKNOWN" ) );
 
 	fprintf(fpleaks, "RECORD(%s,%d): %s: %p %s\n", file, line, t, (void*)rec, msg);
 	dump_backtrace(fpleaks);
@@ -77,8 +77,8 @@ track_record(RECORD rec, int op, char *msg, char *file, int line)
 void
 track_record_refcnt(RECORD rec, int op, INT refcnt, char *file, int line)
 {
-	char *t = (op == TRACE_OP_REFCNT_INC ? "INC" : (op == TRACE_OP_REFCNT_DEC ? "DEC" : "UNKNOWN" ) );
-	INT adj = (op == TRACE_OP_REFCNT_INC ? -1    : (op == TRACE_OP_REFCNT_DEC ? 1     : 0 ) );
+	char *t = (op == TRACK_OP_REFCNT_INC ? "INC" : (op == TRACK_OP_REFCNT_DEC ? "DEC" : "UNKNOWN" ) );
+	INT adj = (op == TRACK_OP_REFCNT_INC ? -1    : (op == TRACK_OP_REFCNT_DEC ? 1     : 0 ) );
 
 	fprintf(fpleaks,"RECORD(%s,%d): %s: %p " FMT_INT "->" FMT_INT "\n", file, line, t, (void*)rec, refcnt+adj, refcnt);
 	dump_backtrace(fpleaks);

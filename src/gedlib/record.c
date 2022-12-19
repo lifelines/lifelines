@@ -73,7 +73,7 @@ alloc_new_record_int (HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *file,
 	/* increment refcount */
 	addref_record(rec);
 	/* trace */
-	TRACE_RECORD(rec, TRACE_OP_ALLOC, msg, file, line);
+	TRACK_RECORD(rec, TRACK_OP_ALLOC, msg, file, line);
 	/* return */
 	return rec;
 }
@@ -88,7 +88,7 @@ free_rec_int (RECORD rec, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char* f
 {
 	--f_nrecs;
 	/* trace */
-	TRACE_RECORD(rec, TRACE_OP_FREE, msg, file, line);
+	TRACK_RECORD(rec, TRACK_OP_FREE, msg, file, line);
 	if (rec->rec_cel) {
 		/* cached record */
 		/* cel memory belongs to cache, but we must tell it
@@ -322,7 +322,7 @@ addref_record_int (RECORD rec, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED i
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	++rec->refcnt;
-	TRACE_RECORD_REFCNT(rec, TRACE_OP_REFCNT_INC, file, line);
+	TRACK_RECORD_REFCNT(rec, TRACK_OP_REFCNT_INC, file, line);
 }
 /*=================================================
  * release_record -- decrement reference count of record
@@ -334,7 +334,7 @@ release_record_int (RECORD rec, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED 
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	--rec->refcnt;
-	TRACE_RECORD_REFCNT(rec, TRACE_OP_REFCNT_DEC, file, line);
+	TRACK_RECORD_REFCNT(rec, TRACK_OP_REFCNT_DEC, file, line);
 	if (!rec->refcnt) {
 		free_rec(rec,"release_record");
 	}

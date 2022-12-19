@@ -193,7 +193,7 @@ alloc_node_int (HINT_PARAM_UNUSED char* msg, HINT_PARAM_UNUSED char* file, HINT_
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
 	++live_count;
-	TRACE_NODE(node,1,msg,file,line);
+	TRACK_NODE(node, TRACK_OP_ALLOC, msg, file, line);
 	return node;
 }
 /*======================================
@@ -212,7 +212,7 @@ free_node_int (NODE node, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *f
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
 	--live_count;
-	TRACE_NODE(node,2,msg,file,line);
+	TRACK_NODE(node, TRACK_OP_FREE, msg, file, line);
 }
 /*===========================
  * create_node -- Create NODE
