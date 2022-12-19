@@ -61,9 +61,9 @@ dump_backtrace(FILE* fp)
 	{
 		fprintf(fp,"NOTE: Could not collect symbols.\n");
 	}
-	
+
 	for (int frameno=0; frameno<actual_num_frames; frameno++)
-	{	
+	{
 		fprintf(fp,"%d: %p %s\n",frameno,frames[frameno],symbols[frameno]?symbols[frameno]:"(none)");
 	}
 	fprintf(fp,"---------------\n");
