@@ -583,10 +583,12 @@ delete_cache (CACHE * pcache)
 	if (!cache) return;
 
 	num = get_table_count(cacdata(cache));
-	fprintf(fpleaks, "DELETE_CACHE: name: %s cache: %p num: " FMT_INT " (clear direct)\n", cacname(cache), (void*)cache, num);
+	fprintf(fpleaks, "DELETE_CACHE: name: %s cache: %p num: " FMT_INT "\n",
+                cacname(cache), (void*)cache, num);
 
-	/* Loop through all cached elements on free list, freeing each */
-	/* NOTE: Anything on free list should have already been cleaned up when added to free list */
+	/* Loop through all cached elements on free list, clearing each */
+	/* NOTE: Anything on the free list should have already been cleared */
+	/*       when added to the free list originally. */
 	frst = cacfree(cache);
 	while (frst != 0) {
 		clear_cel(cache, frst);
@@ -806,11 +808,6 @@ get_record_for_cel (CACHEEL cel)
 	ASSERT(cel);
 	if (crecord(cel)) {
 		rec = crecord(cel);
-		/*
-		 * MTE: In the key_typed_to_record path we addref the record twice;
-		 * once in add_to_direct path (string_to_record) and again here.
-		 * If we used string_to_node we'd avoid this.
-		 */
 		addref_record(rec);
 		return rec;
 	}
