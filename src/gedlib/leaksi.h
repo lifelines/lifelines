@@ -4,6 +4,8 @@
 #define TRACK_RECORD_OPS 0
 #define TRACK_NODE_OPS   0
 
+#define TRACK_BACKTRACE  0
+
 extern FILE* fpleaks;
 
 #define TRACK_OP_ALLOC      1
@@ -15,7 +17,7 @@ void track_record(RECORD rec, int op, char *msg, char* file, int line);
 void track_record_refcnt(RECORD rec, int op, INT refcnt, char* file, int line);
 void track_node(NODE node, int op, char *msg, char* file, int line);
 
-#if defined TRACK_RECORD_OPS
+#if TRACK_RECORD_OPS
 #define TRACK_RECORD(rec,op,msg,file,line)    if (fpleaks) { track_record(rec,op,msg,file,line); }
 #define TRACK_RECORD_REFCNT(rec,op,file,line) if (fpleaks) { track_record_refcnt(rec,op,rec->refcnt,file,line); }
 #else
@@ -23,7 +25,7 @@ void track_node(NODE node, int op, char *msg, char* file, int line);
 #define TRACK_RECORD_REFCNT(rec,op,msg,file,line)
 #endif
 
-#if defined TRACK_NODE_OPS
+#if TRACK_NODE_OPS
 #define TRACK_NODE(n,op,msg,file,line) if (fpleaks) { track_node(n,op,msg,file,line); }
 #else
 #define TRACK_NODE(n,op,msg,file,line)
