@@ -295,6 +295,7 @@ RECORD
 create_record_for_keyed_node (NODE node, CNSTRING key)
 {
 	RECORD rec = alloc_new_record("create_record_for_keyed_node");
+	ASSERT(rec);
 	if (!key)
 		key = nxref(node);
 	rec->rec_top = node;
