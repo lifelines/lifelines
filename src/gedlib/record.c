@@ -73,7 +73,7 @@ alloc_new_record_int (HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *file,
 	/* increment refcount */
 	addref_record(rec);
 	/* trace */
-	TRACE_RECORD(rec, 1, msg, file, line);
+	TRACE_RECORD(rec, TRACE_OP_ALLOC, msg, file, line);
 	/* return */
 	return rec;
 }
@@ -88,7 +88,7 @@ free_rec_int (RECORD rec, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char* f
 {
 	--f_nrecs;
 	/* trace */
-	TRACE_RECORD(rec, 2, msg, file, line);
+	TRACE_RECORD(rec, TRACE_OP_FREE, msg, file, line);
 	if (rec->rec_cel) {
 		/* cached record */
 		/* cel memory belongs to cache, but we must tell it
@@ -317,24 +317,24 @@ create_record_for_unkeyed_node (NODE node)
  * addref_record -- increment reference count of record
  *===============================================*/
 void
-addref_record (RECORD rec)
+addref_record_int (RECORD rec, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED int line)
 {
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	++rec->refcnt;
-	//fprintf(fpleaks,"ADDREF_RECORD called for %p with refcnt %ld->%ld\n", (void*)rec, rec->refcnt-1,rec->refcnt);
+	TRACE_RECORD_REFCNT(rec, TRACE_OP_REFCNT_INC, file, line);
 }
 /*=================================================
  * release_record -- decrement reference count of record
  *  and free if appropriate (ref count hits zero)
  *===============================================*/
 void
-release_record (RECORD rec)
+release_record_int (RECORD rec, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED int line)
 {
 	if (!rec) return;
 	ASSERT(rec->vtable == &vtable_for_record);
 	--rec->refcnt;
-	//fprintf(fpleaks,"RELEASE_RECORD called for %p with refcnt %ld->%ld\n", (void*)rec, rec->refcnt+1,rec->refcnt);
+	TRACE_RECORD_REFCNT(rec, TRACE_OP_REFCNT_DEC, file, line);
 	if (!rec->refcnt) {
 		free_rec(rec,"release_record");
 	}
