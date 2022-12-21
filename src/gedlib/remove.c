@@ -175,7 +175,7 @@ remove_child (NODE indi, NODE fam)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(fam) = nsibling(node);
-	free_node(node);
+	free_node(node,"remove_child CHIL");
 
 /* Remove FAMC line from child */
 	node = find_node(indi, "FAMC", nxref(fam), &last);
@@ -183,7 +183,7 @@ remove_child (NODE indi, NODE fam)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(indi) = nsibling(node);
-	free_node(node);
+	free_node(node,"remove_child FAMC");
 
 /* Update database with changed records */
 	indi_to_dbase(indi);
@@ -215,7 +215,7 @@ remove_spouse (NODE indi, NODE fam)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(fam) = nsibling(node);
-	free_node(node);
+	free_node(node,"remove_spouse");
 	node = NULL;
 
 /* Remove (one) FAMS line from spouse */
@@ -223,7 +223,7 @@ remove_spouse (NODE indi, NODE fam)
 	ASSERT(node);
 	ASSERT(last);
 	nsibling(last) = nsibling(node);
-	free_node(node);
+	free_node(node,"remove_spouse FAMS");
 	node = NULL;
 
 /* Update database with change records */

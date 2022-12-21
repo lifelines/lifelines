@@ -223,7 +223,8 @@ STRING addat(STRING);
 void addixref(INT key);
 void addexref(INT key);
 void addfxref(INT key);
-void addref_record(RECORD rec);
+#define addref_record(n) addref_record_int(n,__FILE__,__LINE__)
+void addref_record_int(RECORD rec, char *file, int line);
 void addsxref(INT key);
 void addxref(CNSTRING key);
 void addxxref(INT key);
@@ -276,7 +277,8 @@ NODE file_to_node(STRING, XLAT, STRING*, BOOLEAN*);
 INT file_to_line(FILE*, XLAT, INT*, STRING*, STRING*, STRING*, STRING*);
 NODE find_node(NODE, STRING, STRING, NODE*);
 NODE find_tag(NODE, CNSTRING);
-void free_node(NODE);
+#define free_node(n,msg) free_node_int(n,msg,__FILE__,__LINE__)
+void free_node_int(NODE node, char *msg, char *file, int line);
 void free_nodes(NODE);
 void free_temp_node_tree(NODE);
 STRING full_value(NODE, STRING sep);
@@ -431,7 +433,8 @@ NODE record_to_first_event(RECORD record, CNSTRING tag);
 NODE refn_to_record(STRING, INT);
 void register_uicodeset_callback(CALLBACK_FNC fncptr, VPTR uparm);
 void register_uilang_callback(CALLBACK_FNC fncptr, VPTR uparm);
-void release_record(RECORD rec);
+#define release_record(n) release_record_int(n,__FILE__,__LINE__)
+void release_record_int(RECORD rec, char *file, int line);
 BOOLEAN remove_child(NODE indi, NODE fam);
 BOOLEAN remove_empty_fam(NODE);
 BOOLEAN remove_any_record(RECORD record);

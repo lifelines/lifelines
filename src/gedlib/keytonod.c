@@ -38,6 +38,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "zstr.h"
+#include "leaksi.h"
 
 /*********************************************
  * global variables (no header)
@@ -98,6 +99,7 @@ typedef struct {
 /* static void add_record_to_direct(CACHE cache, RECORD rec, STRING key); */
 static void cache_get_lock_counts(CACHE ca, INT * locks);
 static CACHE create_cache(STRING name, INT dirsize);
+static void clear_cel (CACHE cache, CACHEEL cel);
 static void delete_cache(CACHE * pcache);
 static void ensure_cel_has_record(CACHEEL cel);
 static ZSTR get_cache_stats(CACHE ca);
@@ -579,14 +581,31 @@ delete_cache (CACHE * pcache)
 	CACHE cache = *pcache;
 	CACHEEL frst=0;
 	if (!cache) return;
-	/* Loop through all cache elements, freeing each */
+
+	num = get_table_count(cacdata(cache));
+	if (fpleaks) {
+		fprintf(fpleaks, "DELETE_CACHE: name: %s cache: %p num: " FMT_INT "\n",
+		        cacname(cache), (void*)cache, num);
+	}
+
+	/* Loop through all cached elements on free list, clearing each */
+	/* NOTE: Anything on the free list should have already been cleared */
+	/*       when added to the free list originally. */
+	frst = cacfree(cache);
+	while (frst != 0) {
+		clear_cel(cache, frst);
+		frst = cnext(frst);
+	}
+
+	/* Loop through all direct cache elements, freeing each */
 	while ((frst = cacfirstdir(cache)) != 0) {
 		BOOLEAN delcache = TRUE;
 		remove_cel_from_cache(cache, frst, delcache);
 	}
-	/* TODO: Need to delete cache elements on free list */
+
 	num = get_table_count(cacdata(cache));
 	ASSERT(num == 0);
+
 	destroy_table(cacdata(cache));
 	stdfree(cacarray(cache));
 	stdfree(cache);
@@ -777,7 +796,7 @@ key_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	ASSERT(key);
 	if (!(cel = key_to_cacheel(cache, key, tag, FALSE)))
 		return NULL;
-	return get_record_for_cel(cel);
+	return get_record_for_cel(cel); /* addref'd */
 }
 /*===================================
  * get_record_for_cel -- get or create new record from cacheel
@@ -841,7 +860,7 @@ qkey_typed_to_record (CACHE cache, CNSTRING key, STRING tag)
 	ASSERT(key);
 	if (!(cel = key_to_cacheel(cache, key, tag, TRUE)))
 		return NULL;
-	rec = get_record_for_cel(cel);
+	rec = get_record_for_cel(cel); /* addref'd */
 	return rec;
 }
 /*======================================
@@ -1089,6 +1108,7 @@ get_free_cacheel (CACHE cache)
 	cacfree(cache) = celnext;
 	if (celnext)
 		cprev(celnext) = 0;
+
 	/* reinitialize entry */
 	init_cel(cel);
 
@@ -1209,9 +1229,9 @@ static void
 remove_cel_from_cache (CACHE cache, CACHEEL cel, BOOLEAN delcache)
 {
 	CACHEEL celnext=0;
-	STRING key = ckey(cel);
 
-	/* caller ensured cache && key are non-null */
+	/* caller ensured cache && cel are non-null */
+	ASSERT(cache);
 	ASSERT(cel);
 
 	if (cclock(cel)) {
@@ -1234,24 +1254,42 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel, BOOLEAN delcache)
 		FATAL2(msg);
 	}
 	ASSERT(!cclock(cel)); 
-	ASSERT(cnode(cel));
+
+	/* remove entry from cache */
 	remove_direct(cache, cel);
 
-	/* Clear all node tree info */
-	if (1) {
-		NODE node = cnode(cel);
-		if (node)
-			set_all_nodetree_to_cel(node, 0);
-		cnode(cel) = 0;
-		free_nodes(node);
-	}
+	/* clear the cache element */
+	clear_cel(cache, cel);
 
+	/* add to free list */
 	celnext = cacfree(cache);
 	cnext(cel) = celnext;
 	if (celnext)
 		cprev(celnext) = cel;
 	cprev(cel) = 0;
 	ckey(cel) = 0;
+	cacfree(cache) = cel;
+}
+/*================================================================
+ * clear_cel -- Clears all content of a cache element
+ *==============================================================*/
+static void
+clear_cel (CACHE cache, CACHEEL cel)
+{
+	/* caller ensured cache && cel are non-null */
+	ASSERT(cache);
+	ASSERT(cel);
+
+	/* Clear all node tree info */
+	if (cnode(cel)) {
+		NODE node = cnode(cel);
+		set_all_nodetree_to_cel(node, 0);
+		free_nodes(node);
+		cnode(cel) = 0;
+	}
+	ASSERT(!cnode(cel));
+
+	/* Clear all record info */
 	if (crecord(cel)) {
 		/* cel holds the original reference to the record */
 		RECORD rec = crecord(cel);
@@ -1259,9 +1297,16 @@ remove_cel_from_cache (CACHE cache, CACHEEL cel, BOOLEAN delcache)
 		release_record(rec);
 		crecord(cel) = 0;
 	}
-	cacfree(cache) = cel;
-	delete_table_element(cacdata(cache), key);
-	stdfree(key); /* alloc'd when assigned to ckey(cel) */
+	ASSERT(!crecord(cel));
+
+	/* Remove key from cache key table and backing memory */
+	if (ckey(cel)) {
+		STRING key = ckey(cel);
+		delete_table_element(cacdata(cache), key);
+		stdfree(key); /* alloc'd when assigned to ckey(cel) */
+		ckey(cel) = 0;
+	}
+	ASSERT(!ckey(cel));
 }
 /*================================================================
  * value_to_xref -- Converts a string to a record key, if possible

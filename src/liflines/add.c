@@ -262,7 +262,11 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 
 /* Identify child if caller did not */
 
-	if (!child) child = nztop(ask_for_indi(_(qSidchld), DOASK1));
+	if (!child) {
+		RECORD rec = ask_for_indi(_(qSidchld), DOASK1);
+		child = nztop(rec);
+		release_record(rec);
+	}
 	if (!child) return NULL;
 
 /* Warn if child to add is already in some family */
@@ -273,7 +277,11 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 
 /* Identify family if caller did not */
 
-	if (!fam) fam = nztop(ask_for_fam(_(qSidprnt), _(qSidsbln)));
+	if (!fam) {
+		RECORD rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
+		fam = nztop(rec);
+		release_record(rec);
+	}
 	if (!fam) return NULL;
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
