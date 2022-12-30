@@ -110,9 +110,7 @@ how you obtain and build lifelines.
 
    xmlto
    dblatex
-   lynx or links
-   texlive-lang-european (Debian / Ubuntu)
-   texlive-cmap (Fedora / RHEL / CentOS / SLES)
+   texlive-cmap
 
    By default, these tools are not required.  If you want to edit and rebuild
    documentation, run configure with the '--with-docs' option.
