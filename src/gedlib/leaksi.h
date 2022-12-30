@@ -22,7 +22,7 @@ void track_node(NODE node, int op, char *msg, char* file, int line);
 #define TRACK_RECORD_REFCNT(rec,op,file,line) if (fpleaks) { track_record_refcnt(rec,op,rec->refcnt,file,line); }
 #else
 #define TRACK_RECORD(rec,op,msg,file,line)
-#define TRACK_RECORD_REFCNT(rec,op,msg,file,line)
+#define TRACK_RECORD_REFCNT(rec,op,file,line)
 #endif
 
 #if TRACK_NODE_OPS
