@@ -75,7 +75,7 @@ llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=======================================
  * llrpt_addnode -- Add a node to a GEDCOM tree
  * usage: addnode(NODE, NODE, NODE) -> VOID
- * args: (node being added, parent, previous child)
+ * args: (node being added, parent, previous sibling)
  *=====================================*/
 PVALUE
 llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -116,7 +116,6 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	prev = remove_node_and_delete_pvalue(&val);
-
 	if (prev) {
 		/* Check that previous sibling actually is child of new parent */
 		if (prnt != nparent(prev)) {
@@ -178,8 +177,8 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	nparent(dead) = NULL;
 	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
-	/* we don't actually delete the node, garbage collection must get it */
-	/* leak pvalue val ? */
+	/* delete pvalue and the node that it contains */
+	delete_pvalue(val);
 	return NULL;
 }
 /*======================================
