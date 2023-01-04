@@ -259,23 +259,29 @@ create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
 void
 free_temp_node_tree (NODE node)
 {
-	// It is an error to delete a node tree if it still has a parent.
+	// It is an error to pass a NULL node
+	ASSERT(node != NULL);
+
+	// It is an error to delete a node if it still has a parent.
 	ASSERT(nparent(node) == NULL);
 
 	// It is an error to delete a node that has a positive refcnt
 	ASSERT(nrefcnt(node) == 0);
 
 	NODE n2;
+
 	if ((n2 = nchild(node))) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
 		nchild(node) = NULL;
 	}
+
 	if ((n2 = nsibling(node))) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
 		nsibling(node) = NULL;
 	}
+
 	free_node(node,"free_temp_node_tree");
 }
 /*===================================
@@ -336,23 +342,25 @@ set_temp_node (NODE node, BOOLEAN temp)
 void
 free_nodes (NODE node)
 {
-	// It is an error to delete a node tree if it still has a parent.
-	ASSERT(nparent(node) == NULL);
-
-	// It is an error to delete a node that has a positive refcnt
-	ASSERT(nrefcnt(node) == 0);
+	// The strict checks used in free_temp_node_tree are not used
+	// here as they break too many assumptions.
 
 	NODE n2;
+
+	if (!node) return;
+
 	if ((n2 = nchild(node))) {
 		nparent(n2) = NULL;
 		free_nodes(n2);
 		nchild(node) = NULL;
 	}
+
 	if ((n2 = nsibling(node))) {
 		nparent(n2) = NULL;
 		free_nodes(n2);
 		nsibling(node) = NULL;
 	}
+
 	free_node(node,"free_nodes");
 }
 /*==============================================================
