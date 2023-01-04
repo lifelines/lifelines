@@ -296,21 +296,24 @@ validate_temp_node_tree (NODE node, BOOLEAN temp)
 {
 	// All siblings / children of this node must be temp (or not).
 	// The parent can be different so it is not checked.
-	BOOLEAN valid = true;
 	NODE n2;
 	if ((n2 = nchild(node))) {
-		if (temp != is_temp_node(n2)) {
-			return false;
+		if (is_temp_node(n2) != temp) {
+			return FALSE;
 		}
-		valid = validate_temp_node_tree(n2,temp);
+		if (!validate_temp_node_tree(n2,temp)) {
+			return FALSE;
+		}
 	}
 	if ((n2 = nsibling(node))) {
 		if (temp != is_temp_node(n2)) {
-			return false;
+			return FALSE;
 		}
-		valid = validate_temp_node_tree(n2,temp);
+		if (!validate_temp_node_tree(n2,temp)) {
+			return FALSE;
+		}
 	}
-	return valid;
+	return TRUE;
 }
 /*===================================
  * set_temp_node -- make node temp (or not)
@@ -325,32 +328,7 @@ set_temp_node (NODE node, BOOLEAN temp)
 	}
 
 	// Validate that all sibling and child nodes are the same
-	ASSERT(validate_temp_node_tree(node,temp);
-}
-/*===================================
- * validate_temp_node_tree -- validate that node tree has consistent temp marking
- * Created: 2022-12-30 (Matt Emmerton)
- *=================================*/
-static BOOLEAN
-validate_temp_node_tree (NODE node, BOOLEAN temp)
-{
-	// All siblings / children of this node must be temp (or not).
-	// The parent can be different so it is not checked.
-	BOOLEAN valid = true;
-	NODE n2;
-	if ((n2 = nchild(node))) {
-		if (temp != is_temp_node(n2)) {
-			return false;
-		}
-		valid = validate_temp_node_tree(n2,temp);
-	}
-	if ((n2 = nsibling(node))) {
-		if (temp != is_temp_node(n2)) {
-			return false;
-		}
-		valid = validate_temp_node_tree(n2,temp);
-	}
-	return valid;
+	ASSERT(validate_temp_node_tree(node,temp));
 }
 /*=====================================
  * free_nodes -- Free all NODEs in tree
