@@ -101,7 +101,7 @@ how you obtain and build lifelines.
 
    automake
    autoconf
-   bison
+   bison (2.7+ or 3.1+)
 
 3. Document Generation
 
@@ -110,7 +110,9 @@ how you obtain and build lifelines.
 
    xmlto
    dblatex
-   texlive-cmap
+   lynx or links
+   texlive-lang-european (Debian / Ubuntu)
+   texlive-cmap (Fedora / RHEL / CentOS / SLES)
 
    By default, these tools are not required.  If you want to edit and rebuild
    documentation, run configure with the '--with-docs' option.
@@ -148,9 +150,10 @@ how you obtain and build lifelines.
   incompatibility between the generated files created by bison that are
   shipped with the release packages and checked into the github repo.
 
-  To resolve these problems, ensure that you have bison installed, remove
-  yacc.c and yacc.h and rebuild.  These files will be regenerated using the
-  bison that is installed on your system which should resolve the problem.
+  To resolve these problems, ensure that you have a supported version of
+  bison installed, remove yacc.c and yacc.h and rebuild.  These files will
+  be regenerated using the bison that is installed on your system which
+  should resolve the problem.
 
 3. expect
 
@@ -243,9 +246,9 @@ However, I wound up core dumping at run-time, so I don't know
 what is going on.
 (Perry, Jan, 2002)
 
-************
-2h) Mac OS X
-************
+********************
+2h) Mac OS X / macOS
+********************
 
 Please see the following page about LifeLines on Mac OS X:
     http://homepage.mac.com/shrubbery/LifeLines
@@ -259,3 +262,14 @@ an argument to configure, eg,
 There is no specific code needed for Darwin; this is just to avoid
 the macros getting angry at the unknown output from "uname -a".
 
+If you get this error while building lifelines from source:
+
+lifelines/src/interp/yacc.y:78.9-22: syntax error, unexpected identifier, expecting string
+
+Then your installed version of bison is too old.  (For example,
+macOS 10.15 "Catalina" only has bison 2.3 in the base system.)
+You must install bison 2.7 or later and then recompile.
+
+  brew install bison
+  echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.bash_profile
+  export LDFLAGS="-L/usr/local/opt/bison/lib"
