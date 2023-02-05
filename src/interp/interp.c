@@ -339,11 +339,12 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 	}
 	stab = create_symtab_proc(proc, NULL);
 	for (i = 0; i < nargs; i++) {
-		insert_symtab(stab, iident_name(parm), args[0]);
+		insert_symtab(stab, iident_name(parm), args[i]);
 		parm = inext(parm);
 	}
 
    /* Interpret top procedure */
+
 	ranit = 1;
 	progparsing = FALSE;
 	progrunning = TRUE;
