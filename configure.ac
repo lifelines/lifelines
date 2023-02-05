@@ -49,7 +49,7 @@ dnl MTE: 01/11/04: Force the use of GNU Bison only.
 dnl MTE: AC_PROG_YACC will find any YACC, but only
 dnl MTE: Bison works for us.
 AC_PROG_YACC
-if test "$YACC" != "bison -o y.tab.c";
+if test "$YACC" != "bison -y";
 then
   echo "LifeLines requires GNU Bison to compile src/interp/yacc.y."
   exit
