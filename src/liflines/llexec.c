@@ -75,7 +75,6 @@ BOOLEAN showusage = FALSE;     /* show usage */
 BOOLEAN showversion = FALSE;   /* show version */
 STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
-STRING  ext_codeset = 0;       /* default codeset from locale */
 INT screen_width = 20; /* TODO */
 
 /*********************************************
@@ -116,6 +115,9 @@ main (int argc, char **argv)
 	STRING crashlog=NULL;
 	int i=0;
 
+	/* initialize all the low-level platform code */
+	init_arch();
+
 	/* initialize all the low-level library code */
 	init_stdlib();
 
@@ -123,10 +125,6 @@ main (int argc, char **argv)
 	/* initialize locales */
 	setlocale(LC_ALL, "");
 #endif /* HAVE_SETLOCALE */
-	
-	/* capture user's default codeset */
-	ext_codeset = strsave(ll_langinfo());
-	/* TODO: We can use this info for default conversions */
 
 #if ENABLE_NLS
 	/* setup gettext translation */
@@ -348,6 +346,11 @@ prompt_for_db:
 		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
+	if (!int_codeset[0]) {
+		msg_info("%s", _("Warning: database codeset unspecified"));
+	} else if (!transl_are_all_conversions_ok()) {
+		msg_info("%s", _("Warning: not all conversions available"));
+	}
 	/* does not use show module */
 	/* does not use browse module */
 	if (exargs) {
@@ -379,7 +382,6 @@ finish:
 	if (alldone == 2)
 		goto prompt_for_db; /* changing databases */
 	termlocale();
-	strfree(&ext_codeset);
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
