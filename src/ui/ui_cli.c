@@ -29,6 +29,9 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#define UI_ENABLE_ASK
+#define UI_ENABLE_CHOOSE
+#define UI_ENABLE_OTHER
 #include "ui.h"
 
 /*********************************************
@@ -49,6 +52,15 @@ static INT interact(CNSTRING ptrn);
 /*=============================================================
  * Initialization and Termination
  *===========================================================*/
+
+/*===================================================
+ * startup_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+BOOLEAN
+startup_ui (void)
+{
+	return TRUE;
+}
 
 /*===================================================
  * shutdown_ui -- (Placeholder, we don't need it)
@@ -154,7 +166,7 @@ call_system_cmd (STRING cmd)
 		printf(_("Editor or system call failed."));
 		puts("");
 		sleep(2);
-        }
+	}
 }
 /*=============================================================
  * ASK Routines

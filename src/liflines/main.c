@@ -48,6 +48,10 @@
 
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
+#include "ui.h"
+
+/* for UI */
+extern BOOLEAN graphical;
 
 /* for parser debugging */
 extern int yydebug;
@@ -133,7 +137,6 @@ main (int argc, char **argv)
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
 	STRING progout=NULL;
-	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
 	STRING crashlog=NULL;
 	int i=0;
@@ -332,17 +335,10 @@ prompt_for_db:
 	crash_setcrashlog(crashlog);
 
 	/* start (n)curses and create windows */
+	if (!startup_ui())
 	{
-		char errmsg[512];
-		if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
-		{
-			endwin();
-			fprintf(stderr, "%s", errmsg);
-			goto finish;
-		}
-		set_screen_graphical(graphical);
+		goto finish;
 	}
-	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -399,6 +395,7 @@ prompt_for_db:
 		msg_info("%s", _("Warning: not all conversions available"));
 	}
 
+	init_interpreter(); /* give interpreter its turn at initialization */
 	init_show_module();
 	init_browse_module();
 	if (exargs) {

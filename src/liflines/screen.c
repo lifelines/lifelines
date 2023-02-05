@@ -48,6 +48,8 @@
 #include "codesets.h"
 #include "charprops.h"
 #include "listui.h"
+#define UI_ENABLE_CURSES
+#include "ui.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -225,50 +227,11 @@ static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 static LIST list_uiwin = 0; /* list of all uiwindows */
 
-/* we ought to use chtype, but only if it is typedef'd, but there is no
-test to see if a type is typedef'd */
-static llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
-static llchtype gr_hline='-', gr_vline= '|';
-static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
-
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
-/*============================
- * set_screen_graphical -- Specify whether to use ncurses box characters
- *  graphical:   [IN]  whether to use ncurses graphical box lines
- *==========================*/
-void
-set_screen_graphical (BOOLEAN graphical)
-{
-	if (graphical) {
-		gr_btee = ACS_BTEE;
-		gr_hline = ACS_HLINE;
-		gr_ltee = ACS_LTEE;
-		gr_rtee = ACS_RTEE;
-		gr_ttee = ACS_TTEE;
-		gr_vline = ACS_VLINE;
-		gr_llx = ACS_LLCORNER;
-		gr_lrx = ACS_LRCORNER;
-		gr_ulx = ACS_ULCORNER;
-		gr_urx = ACS_URCORNER;
-	}
-	else {
-		gr_btee = '+';
-		gr_hline = '-';
-		gr_ltee = '+';
-		gr_rtee = '+';
-		gr_ttee = '+';
-		gr_vline = '|';
-		gr_llx = '*';
-		gr_lrx = '*';
-		gr_ulx = '*';
-		gr_urx = '*';
-	}
-	
-}
 /*============================
  * init_screen -- Init screens
  *  returns 0 if current terminal is not large enough, or size requested too small
@@ -3048,14 +3011,6 @@ INT
 get_main_screen_width (void)
 {
 	return MAINWIN_WIDTH;
-}
-/*==================================================
- * get_gr_ttee -- current character used for box corners
- *================================================*/
-llchtype
-get_gr_ttee (void)
-{
-	return gr_ttee; /* eg, '+' */
 }
 /*==================================================
  * clear_status_display -- clear any lingering status display

@@ -30,6 +30,7 @@
 
 #include "mycurses.h"
 #include "llstdlib.h"
+#define UI_ENABLE_CURSES
 #include "ui.h"
 
 /*********************************************
@@ -40,14 +41,49 @@
  * external functions
  *********************************************/
 extern void term_screen(void);
+extern int init_screen(char *, int);
+
+/*********************************************
+ * global/exported variables
+ *********************************************/
+BOOLEAN graphical=TRUE;
+
+/* we ought to use chtype, but only if it is typedef'd, but there is no
+test to see if a type is typedef'd */
+llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
+llchtype gr_hline='-', gr_vline= '|';
+llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
 
 /*********************************************
  * local function prototypes
  *********************************************/
+static void set_screen_graphical (BOOLEAN graphical);
 
 /*=============================================================
  * Initialization and Termination
  *===========================================================*/
+
+/*===================================================
+ * startup_ui -- Do whatever is necessary to open GUI
+ *=================================================*/
+BOOLEAN
+startup_ui (void)
+{
+	char errmsg[512];
+	BOOLEAN success = FALSE;
+
+	if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
+	{
+		endwin();
+		fprintf(stderr, "%s", errmsg);
+		goto finish;
+	}
+	set_screen_graphical(graphical);
+	success = TRUE;
+
+finish:
+	return success;
+}
 
 /*===================================================
  * shutdown_ui -- Do whatever is necessary to close GUI
@@ -65,4 +101,45 @@ shutdown_ui (BOOLEAN pause)
 	/* Terminate Curses UI */
 	if (!isendwin())
 		endwin();
+}
+/*============================
+ * set_screen_graphical -- Specify whether to use ncurses box characters
+ *  graphical:   [IN]  whether to use ncurses graphical box lines
+ *==========================*/
+static void
+set_screen_graphical (BOOLEAN graphical)
+{
+	if (graphical) {
+		gr_btee = ACS_BTEE;
+		gr_hline = ACS_HLINE;
+		gr_ltee = ACS_LTEE;
+		gr_rtee = ACS_RTEE;
+		gr_ttee = ACS_TTEE;
+		gr_vline = ACS_VLINE;
+		gr_llx = ACS_LLCORNER;
+		gr_lrx = ACS_LRCORNER;
+		gr_ulx = ACS_ULCORNER;
+		gr_urx = ACS_URCORNER;
+	}
+	else {
+		gr_btee = '+';
+		gr_hline = '-';
+		gr_ltee = '+';
+		gr_rtee = '+';
+		gr_ttee = '+';
+		gr_vline = '|';
+		gr_llx = '*';
+		gr_lrx = '*';
+		gr_ulx = '*';
+		gr_urx = '*';
+	}
+
+}
+/*==================================================
+ * get_gr_ttee -- current character used for box corners
+ *================================================*/
+llchtype
+get_gr_ttee (void)
+{
+	return gr_ttee; /* eg, '+' */
 }
