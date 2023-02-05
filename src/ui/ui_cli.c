@@ -47,6 +47,19 @@ static void output(const char * txt);
 static INT interact(CNSTRING ptrn);
 
 /*=============================================================
+ * Initialization and Termination
+ *===========================================================*/
+
+/*===================================================
+ * shutdown_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+void
+shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
+{
+	return;
+}
+
+/*=============================================================
  * Xprintf() implementations
  *===========================================================*/
 void

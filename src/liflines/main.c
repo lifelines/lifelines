@@ -470,20 +470,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 		}
 	}
 }
-/*===================================================
- * shutdown_ui -- Do whatever is necessary to close GUI
- * Created: 2001/11/08, Perry Rapp
- *=================================================*/
-void
-shutdown_ui (BOOLEAN pause)
-{
-	term_screen();
-	if (pause) /* if error, give user a second to read it */
-		sleep(1);
-	/* Terminate Curses UI */
-	if (!isendwin())
-		endwin();
-}
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
  * databases. 

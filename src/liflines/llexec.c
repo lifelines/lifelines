@@ -417,13 +417,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 		}
 	}
 }
-/*===================================================
- * shutdown_ui -- (Placeholder, we don't need it)
- *=================================================*/
-void
-shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
-{
-}
 /*==================================================
  * platform_init -- platform specific initialization
  *================================================*/
