@@ -86,7 +86,6 @@ static void print_usage(void);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
-static void platform_init(void);
 
 /*********************************************
  * local function definitions
@@ -283,7 +282,6 @@ prompt_for_db:
 		/* yydebug = 1; */
 	}
 
-	platform_init();
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
@@ -425,15 +423,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 void
 shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
 {
-}
-/*==================================================
- * platform_init -- platform specific initialization
- *================================================*/
-static void
-platform_init (void)
-{
-	/* TODO: We could do wtitle just like llines, but its declaration needs
-	to be moved somewhere more sensible for that (ie, not in curses.h!) */
 }
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
