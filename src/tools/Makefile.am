@@ -15,31 +15,29 @@ xterm_decode_SOURCES = xterm_decode.c
 
 # what libraries do btedit, dbverify and lltest need?
 btedit_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
-	../stdlib/libstdlib.a \
-	@LIBINTL@ @LIBICONV@
+	../stdlib/libstdlib.a
 
 dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
-	../stdlib/libstdlib.a ../arch/libarch.a \
-	@LIBINTL@ @LIBICONV@
+	../stdlib/libstdlib.a ../arch/libarch.a
 
 lldump_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
-	../stdlib/libstdlib.a ../arch/libarch.a \
-	@LIBINTL@ @LIBICONV@
+	../stdlib/libstdlib.a ../arch/libarch.a
 
 lltest_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
-	../stdlib/libstdlib.a \
-	@LIBINTL@ @LIBICONV@
+	../stdlib/libstdlib.a
 
-# 2002.06.29 Perry commented these out -- we don't need them I think
-# how do btedit and dbverify get built?
-# (this is set up explicitly so they don't get $(LIBS) (no curses!)
-# btedit$(EXEEXT): $(btedit_OBJECTS) $(btedit_DEPENDENCIES)
-#	@rm -f btedit$(EXEEXT)
-#	$(LINK) $(btedit_LDFLAGS) $(btedit_OBJECTS) $(btedit_LDADD)
-#
-#dbverify$(EXEEXT): $(dbverify_OBJECTS) $(dbverify_DEPENDENCIES)
-#	@rm -f dbverify$(EXEEXT)
-#	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
+# add static/shared libintl/libiconv
+if WITH_STATIC_NLS
+btedit_LDADD += @LIBINTL@ @LIBICONV@
+dbverify_LDADD += @LIBINTL@ @LIBICONV@
+lldump_LDADD += @LIBINTL@ @LIBICONV@
+lltest_LDADD += @LIBINTL@ @LIBICONV@
+else
+btedit_LDADD += @LTLIBINTL@ @LTLIBICONV@
+dbverify_LDADD += @LTLIBINTL@ @LTLIBICONV@
+lldump_LDADD += @LTLIBINTL@ @LTLIBICONV@
+lltest_LDADD += @LTLIBINTL@ @LTLIBICONV@
+endif
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/src/hdrs for headers
@@ -62,9 +60,11 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 ../gedlib/libgedcom.a :
 	$(MAKE) -C ../gedlib libgedcom.a
 
+../arch/libarch.a :
+	$(MAKE) -C ../arch libarch.a
+
 # since we're not doing dependencies automagically...
 btedit.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 dbverify.o: ../hdrs/standard.h ../hdrs/btree.h ../hdrs/gedcom.h
 lldump.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 lltest.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
-
