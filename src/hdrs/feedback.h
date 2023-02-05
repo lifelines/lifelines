@@ -46,9 +46,6 @@ void rpt_print(STRING str);
 BOOLEAN ask_for_input_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 BOOLEAN ask_for_output_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
 
-/* called by signal handler before invoking exit() */
-void shutdown_ui(BOOLEAN pause);
-
 /* called by edit routines for translation maps &
  edit routines for tables for user options & abbreviations */
 void do_edit(void);

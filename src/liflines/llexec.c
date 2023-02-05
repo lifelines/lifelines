@@ -39,9 +39,7 @@
 
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
-extern STRING qSbaddb,qSdefttl,qSiddefpath;
-extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
-extern STRING qSchlistx,qSvwlistx;
+extern STRING qSbaddb;
 
 extern INT csz_indi;
 extern INT csz_fam;
@@ -297,7 +295,11 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llexec", NULL);
 	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
-	init_interpreter(); /* give interpreter its turn at initialization */
+
+	if (!startup_ui())
+	{
+		goto finish;
+	}
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -348,8 +350,9 @@ prompt_for_db:
 		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
-	/* does not use show module */
-	/* does not use browse module */
+
+	init_interpreter(); /* give interpreter its turn at initialization */
+
 	if (exargs) {
 		set_cmd_options(exargs);
 		release_table(exargs);
@@ -416,13 +419,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 
 		}
 	}
-}
-/*===================================================
- * shutdown_ui -- (Placeholder, we don't need it)
- *=================================================*/
-void
-shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
-{
 }
 /*==================================================
  * platform_init -- platform specific initialization
