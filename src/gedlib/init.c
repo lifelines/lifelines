@@ -195,7 +195,6 @@ init_lifelines_postdb (void)
 	if (!openxref(readonly))
 		return FALSE;
 
-
 	transl_load_xlats();
 
 	return TRUE;
@@ -209,6 +208,9 @@ void
 close_lifelines (void)
 {
 	lldb_close(&def_lldb); /* make sure database closed */
+	term_browse_lists();
+	term_refnrec();
+	term_namerec();
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
@@ -220,6 +222,7 @@ close_lifelines (void)
 	}
 	term_lloptions();
 	term_date();
+	llgettext_term();
 	term_codesets();
 	strfree(&int_codeset);
 	xlat_shutdown();
@@ -240,9 +243,8 @@ is_codeset_utf8 (CNSTRING codename)
  * dependent on user options
  *=================================================*/
 void
-update_useropts (VPTR uparm)
+update_useropts (HINT_PARAM_UNUSED VPTR uparm)
 {
-	uparm = uparm; /* unused */
 	if (suppress_reload)
 		return;
 	/* deal with db-specific options */

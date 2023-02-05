@@ -717,11 +717,10 @@ gdateval_isdual (GDATEVAL gdv)
  * Created: 2001/12/28 (Perry Rapp)
  *===========================*/
 static BOOLEAN
-is_valid_day (struct tag_gdate * pdate, struct tag_dnum day)
+is_valid_day (HINT_PARAM_UNUSED struct tag_gdate * pdate, struct tag_dnum day)
 {
 	/* To consider: Fancy code with calendars */
 	/* for now, use max (all cals all months), which is 31 */
-	pdate=pdate; /* unused */
 	return (day.val>=1 && day.val2<=31);
 }
 /*=============================

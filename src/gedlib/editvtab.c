@@ -139,12 +139,11 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
  * Created: 2001/07/22 (Perry Rapp)
  *============================================*/
 static STRING
-trans_edin (STRING input, INT len)
+trans_edin (STRING input, HINT_PARAM_UNUSED INT len)
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN); /* editor to internal */
 	ZSTR zstr = translate_string_to_zstring(ttmi, input);
 	STRING str = strdup(zs_str(zstr));
-	len=len; /* unused */
 	zs_free(&zstr);
 	return str;
 }
@@ -156,12 +155,11 @@ trans_edin (STRING input, INT len)
  * Created: 2001/07/22 (Perry Rapp)
  *============================================*/
 static STRING
-trans_ined (STRING input, INT len)
+trans_ined (STRING input, HINT_PARAM_UNUSED INT len)
 {
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	ZSTR zstr = translate_string_to_zstring(ttmo, input);
 	STRING str = strdup(zs_str(zstr));
-	len=len; /* unused */
 	zs_free(&zstr);
 	return str;
 }

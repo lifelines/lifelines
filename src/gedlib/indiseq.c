@@ -675,9 +675,8 @@ name_compare (SORTEL el1, SORTEL el2, VPTR param)
  * also used for integer value sort
  *==============================*/
 INT
-key_compare (SORTEL el1, SORTEL el2, VPTR param)
+key_compare (SORTEL el1, SORTEL el2, HINT_PARAM_UNUSED VPTR param)
 {
-	param = param; /* unused */
 	return spri(el1) - spri(el2);
 }
 /*===========================================
@@ -702,10 +701,9 @@ canonkey_order (char c)
  * Created: 2001/01/06, Perry Rapp
  *==============================*/
 static INT
-canonkey_compare (SORTEL el1, SORTEL el2, VPTR param)
+canonkey_compare (SORTEL el1, SORTEL el2, HINT_PARAM_UNUSED VPTR param)
 {
 	char c1=skey(el1)[0], c2=skey(el2)[0];
-	param = param; /* unused */
 	if (c1 == c2)
 		return spri(el1) - spri(el2);
 	return canonkey_order(c1) - canonkey_order(c2);
@@ -821,9 +819,8 @@ update_locale (INDISEQ seq)
  * valuesort_indiseq -- Sort sequence by value
  *==========================================*/
 void
-valuesort_indiseq (INDISEQ seq, BOOLEAN *eflg)
+valuesort_indiseq (INDISEQ seq, HINT_PARAM_UNUSED BOOLEAN *eflg)
 {
-	eflg = eflg; /* unused */
 	if ((IFlags(seq) & VALUESORT) && is_locale_current(seq)) return;
 	partition_sort(IData(seq), ISize(seq), value_compare, seq);
 	IFlags(seq) &= ~ALLSORTS;
@@ -2190,9 +2187,8 @@ default_create_gen_value (INT gen, INT * valtype)
  * Created: 2002/02/19, Perry Rapp
  *=========================================================*/
 INT
-default_compare_values (VPTR ptr1, VPTR ptr2, INT valtype)
+default_compare_values (VPTR ptr1, VPTR ptr2, HINT_PARAM_UNUSED INT valtype)
 {
-	valtype = valtype; /* unused */
 	/* We don't know how to deal with ptrs here */
 	/* Let's just sort them in memory order */
 	return (INTPTR)ptr1 - (INTPTR)ptr2;

@@ -124,6 +124,7 @@ static INT32   RMcount = 0;
 static void
 allocrefnrec(void)
 {
+	ASSERT(RRmax);
         RRoffs = (INT32 *) stdalloc((RRmax)*sizeof(INT32));
         RRkeys = (RKEY *) stdalloc((RRmax)*sizeof(RKEY));
         RRrefns = (CNSTRING *) stdalloc((RRmax)*sizeof(CNSTRING));
@@ -136,8 +137,11 @@ static void
 freerefnrec(void)
 {
         stdfree(RRkeys);
+	RRkeys = NULL;
         stdfree(RRoffs);
+	RRoffs = NULL;
         stdfree((CNSTRING)RRrefns);
+	RRrefns = NULL;
         RRmax = 0;
 }
 
@@ -160,6 +164,7 @@ reallocrefnrec(void)
 static void
 allocrefnmrec(void)
 {
+	ASSERT(RRcount);
 	RMkeys = (STRING *) stdalloc(RRcount*sizeof(STRING));
 	RMcount = RRcount;
 	RMmax = RRcount;
@@ -174,9 +179,12 @@ freerefnmrec(void)
 	INT i;
 
 	for (i = 0; i < RMcount; i++)
+	{
 		stdfree(RMkeys[i]);
-	if (RMcount)
-		stdfree(RMkeys);
+		RMkeys[i] = NULL;
+	}
+	stdfree(RMkeys);
+	RMkeys = NULL;
 	RMcount = 0;
 	RMmax = 0;
 }
@@ -238,7 +246,10 @@ getrefnrec (CNSTRING refn)
 	STRING p;
 /* Convert refn to key and read refn record */
 	RRkey = refn2rkey(refn);
-	if (RRrec) stdfree(RRrec);
+	if (RRrec) {
+		stdfree(RRrec);
+		RRrec = NULL;
+	}
 	p = RRrec = bt_getrecord(BTR, &RRkey, &RRsize);
 	if (!RRrec) {
 		RRcount = 0;
@@ -647,6 +658,9 @@ annotate_node (NODE node, BOOLEAN expand_refns, BOOLEAN annotate_pointers, RFMT 
 		nval(node) = strsave(zs_str(zstr));
 		zs_free(&zstr);
 	}
+
+	/* release the (temporary) record created in key_possible_to_record() */
+	release_record(rec);
 }
 /*===============================================
  * symbolic_link -- See if value is symbolic link
@@ -802,7 +816,6 @@ traverse_refn_callback ( TRAV_RECORD_FUNC_BYKEY_ARGS(rkey, data, len, param) )
 {
 	TRAV_REFN_PARAM *tparam = (TRAV_REFN_PARAM *)param;
 	INT i;
-	len=len; /* unused */
 
 	parserefnrec(rkey, data);
 
@@ -821,4 +834,13 @@ traverse_refns (TRAV_REFNS_FUNC func, void *param)
 	tparam.param = param;
 	tparam.func = func;
 	traverse_db_rec_rkeys(BTR, refn_lo(), refn_hi(), &traverse_refn_callback, &tparam);
+}
+/*====================================================
+ * term_refnrec -- Free memory for parsing refn records
+ *==================================================*/
+void term_refnrec(void)
+{
+	strfree(&RRrec);
+	freerefnmrec();
+        freerefnrec();
 }

@@ -1,6 +1,3 @@
-Makefile
-Makefile.in
-*.o
 bib2html
 bury
 index.html

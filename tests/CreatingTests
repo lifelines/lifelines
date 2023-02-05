@@ -31,16 +31,22 @@ For EVEN MORE debug info (i.e. running the run_a_test with set -x
    or
    VERBOSE=2 make clean check
 
-If you are interested in debugging the gui with the detailed character
-output from running a test with llines/llexec you can run the tests with
+If you are interested in debugging the GUI with the detailed character
+output from running a test with llines you can run the tests with
    CAPTUREOUT=1 make clean check
+Normally the llines STDOUT is captured but output isn't required to match
+the reference file as it varies with every tweak of curses. So if your 
+looking at GUI output, it's best to run the test before you start making
+changes and check in the ...llines.out file as ...llines.out.ref, and
+then make your changes and run the test again with CAPTUREOUT=1 to have
+the differences checked.
 
 To check for memory errors when running a test, install valgrind if it's not
 installed, and run (for example: for the test Royal92/Royal92
    rm Royal92/Royal92.log
    TESTMEMCHECK=1  make Royal92/Royal92.log
 But beware, that a 2 second run time test when run under valgrind will be more
-like 20 seconds. Still thats not too bad.
+like 20 seconds. Still that's not too bad.
 
 The valgrind log would be in Royal92/Royal92-prog.valgrind.
 Also, you can pass in valgrind options using the VALGRIND_OPTS environment
@@ -95,8 +101,8 @@ of the following:
                           If script runs any .ll files, the output file name
                           should be indicated as OUTPUT, and the run_a_command
                           script will replace OUTPUT the correct file name
-                          expected and it is diff'ed with the reference output.
-                          If the .llscr file loads a gedcom file
+                          expected and it is diffed with the reference output.
+                          If the .llscr file loads a GEDCOM file
                           (testname.ged in the src area), say with a line
                           urmytest.ged
                           The testname (here mytest) must be replaced with
@@ -122,7 +128,7 @@ of the following:
                             command is just the name, not a path and name
                             see Royal92 for examples. Typical commands
                             are lltest, lldump, dbverify.  If an output file
-                            is speified in args it must be written as OUTPUT
+                            is specified in args it must be written as OUTPUT
       skip                - Run test but exit with 77 telling test code
                             we are skipping this test. (Typically indicating
                             the test shows known bugs, that haven't been
@@ -131,16 +137,19 @@ of the following:
                             than skip, since something is fishy?
 Output files.             the run_a_test script generates output file names.
                           each program run (llines, llexec, lldump, ...)
-                          will capture stdout from the program and data
+                          will capture STDOUT from the program and data
                           from at most one specified output file. Filenames
                           are of the form
 testname.prog.stdout      standard out of the program 'prog'
-testname.prog.stdout.filter filtered stdout (for llines)
+testname.prog.stdout.filter filtered STDOUT (if prog is llines)
 testname.prog.out         name for output of script data. But .llsrc files
                           and command names in .config post commands
                           need to use OUTPUT. The run_a_test script will
                           translate OUTPUT to the proper filename.
-                          to make this even more complicated, if a program
+                          You will need to use OUTPUT.out or OUTPUT.stdout
+                          if your test generates both test output data
+                          and test output on STDOUT.
+                          To make this even more complicated, if a program
                           (e.g. lldump is called more than once, the OUTPUT
                           is disambiguated, by appending _2, _3 ... to prog.
                           so prog becomes, prog, prog_2, prog_3 ...
@@ -159,6 +168,7 @@ testname.prog.valgrind      Valgrind output if test run under valgrind
    directory.
    testname.trs           test stats that the test environment uses
    testname.prog.*.diff   a diff of the output of the test, vs expected output
+                              STDOUT data 
    testname.llscr.fix     this is the .llsrc script that is fed to llines.
                           it has TESTNAME and SRCDIR processing applied
                           to reflect a pathname from the object area to
@@ -166,8 +176,10 @@ testname.prog.valgrind      Valgrind output if test run under valgrind
    testdb                 the name of the lifelines data base for the test
 
 There are 3 strings that are replaced in test source information
-OUTPUT   name of the outputfile - relaced with testname.prog.stdout or
-         testname.prog.out when assembling a command to execute
+OUTPUT   name of the outputfile - relaced with testname.prog or
+         testname.prog when assembling a command to execute (you must
+         use OUTPUT.out or OUTPUT.stdout depending on which type of output it
+         is.
 TESTNAME name of the test - replaced with path/testname
          likewise when assembling a command to exectute
 SRCDIR   the path to the source directory of the test
@@ -195,7 +207,8 @@ to the directory where the src of the tests is.
 Similarly the word OUTPUT is replaced with the name of the output file.
 This is necessary as the program name has a sequence number attached to it.
 so for example testname.lldump, testname.lldump_2, ...
-Do not use TESTNAME.prog.out but rather OUTPUT as the file to be written out.
+Do not use TESTNAME.prog.out but rather OUTPUT.out as the file to be
+written out.
 
 Sample testname.llscr file:
 y
@@ -203,19 +216,24 @@ urTESTNAME
 y
 y
 rtestname
-OUTPUT
+OUTPUT.out
 q
 q
 
 Just look at the existing working tests for examples.
+There are tests that run llines or llexec, even one that uses the expect
+Input to llines or llexec is normally just 'cat file|llines', same for llexec.
+but llines requires the input to be a tty (on linux/unix machines) in order
+for curses to recognize and translate special characters like
+UP ARROW and DOWN ARROW correctly. llexec just ignores these characters.
 
 
 4. Support for lltest, lldump, dbverify, llexec
    See above, the testname.config files, post commands allow running
-   programs in the src/tools and src/liflines directories, like
-   stdout is captured as testname.prog.stdout, if the word OUTPUT
+   programs in the src/tools and src/liflines directories and 
+   STDOUT is captured as testname.prog.stdout, if the word OUTPUT.stdout
    is seen in the command args, a file testname.prog.out is also
-   captured and OUTPUT is replaced by testname.prog.out before running
+   captured and OUTPUT.out is replaced by testname.prog.out before running
    the command.
 
     post dbverify -a testdb
@@ -227,9 +245,9 @@ Just look at the existing working tests for examples.
         either using TESTNAME.ll or letting the LLPROGRAMS setting
         resolve the location.
 5. Notes on why the complexity of OUTPUT, SRCDIR, TESTNAME
- . The Gnu automake system allows two ways to build code.
-   1. The simplest way, check out the code and follow the
-      instructions in the INSTALL file.
+   The Gnu automake system allows two ways to build code.
+   1. The simplest way, build code in the source area.
+      check out the code and follow the instructions in the INSTALL file.
       sh build/autogen.sh
       sh ./configure
       make
@@ -237,7 +255,7 @@ Just look at the existing working tests for examples.
       make check
       Here all the object files are co-mingled with the corresponding
       source files. It builds whatever the default is for your machine,
-      now-a-days a 64 bit version. Only one version can be build in
+      now-a-days a 64 bit version. Only one version can be built in
       a given source area.
    2. The other build method supported by automake, is to create separate
       directories say bld32 and bld64 at the top level (or anywhere else),
@@ -259,9 +277,10 @@ Just look at the existing working tests for examples.
       script builds a few files in the source area. All the object code
       and executables are in bld32 and bld64
 
-      When running tests in this second method none of the source data used
-      to run tests is in the object area. As described  here, the bld64/tests
-      or bld32/tests directory. to run the tests you do something like
+      When running tests in this second method most of the source data used
+      to run tests is in the object area. As described  here, thats the
+      bld64/tests or bld32/tests directory. to run the tests you do something 
+      like:
       cd bld64/tests
       make clean check
       and the output data is stored, in this tests area with the source
@@ -269,15 +288,19 @@ Just look at the existing working tests for examples.
       split of information. In particular the script that runs
       the tests, tests/run_a_test is launched out of the source
       area, and all the tests are run in the object area (bld64/tests/...)
-      The script knows where to find everything it needs.
-      But...
+      The script knows where to find everything it needs. One exception
+      is the prog.llsrc input file may need to have name of the output file
+      embedded in the file(using the string OUTPUT.out). The test script copies
+      the file to the build area and names it prog.llscr.fix for use in
+      running the test.
+
       llines, and llexec have no knowledge of this split and they
       shouldn't.  This the magic described above of abstracting
-      names of various files by using OUTPUT, SRCDIR and TESTNAME
+      names of various files by using OUTPUT, SRCDIR and TESTNAME.
       For example if your running math/test1, the .ll script
       is either test1.ll for the build in source area, or
-      ../../../math/test1.ll this is handled by the LLPROGRAMS
-      environment variable.
+      ../../../math/test1.ll with build areas separate as described above.
+      This is handled by the LLPROGRAMS environment variable.
       Another variation is for output files,
       if your test runs dbverify twice, the first time the output
       file might be test1.dbverify.stdout, but the second run it uses
@@ -286,7 +309,7 @@ Just look at the existing working tests for examples.
       the run_a_command script will compute unique names for
       test file output and standard output without the test writter
       having to deal with the naming.
-      Findally in cases where you need to access a file in the src
+      Finally in cases where you need to access a file in the src
       area, like llexec accessing a llines.src file with
       -C SRCDIR/llines.src
       This is required even if you don't have a llines.src file

@@ -1,9 +1,2 @@
-Makefile
-Makefile.in
-test_forindi.out
-test_forfam.out
-test_indi_it.out
-test_fam_it.out
-test_othr_it.out
-st_all.out
-st_all.stdout
+*.out
+*.stdout

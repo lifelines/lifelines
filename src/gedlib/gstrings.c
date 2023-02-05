@@ -210,12 +210,11 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
  * Created: 2001/12/16, Perry Rapp
  *==============================================*/
 STRING
-even_to_list_string (NODE even, INT len, STRING delim)
+even_to_list_string (NODE even, INT len, HINT_PARAM_UNUSED STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -304,13 +303,12 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 STRING
-other_to_list_string(NODE node, INT len, STRING delim)
+other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
 	NODE child;
-	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;

@@ -29,6 +29,8 @@ LifeLines should compile correctly using GNU gcc or any native C compiler.
 It also will build using the Cygnus tools on Windows (but see note in the
 platform notes section below).
 
+In all cases, various dependencies are required.  (See section 1a.)
+
 If you have downloaded a "release" package, do the following:
 
 	sh ./configure
@@ -43,7 +45,16 @@ repository directly, do the following:
 	make
 	make install
 
-In both cases, various dependencies are required.  (See section 1a.)
+If you want to keep the build area separate from the source area
+replace the configure and make commands with
+
+      mkdir bld64
+      cd bld64
+      ../configure --with-64bit
+      make
+      make install
+
+and likewise you can build a 32 bit executables by replacing 64 with 32 above.
 
 This will generate Makefiles suitable for your platform and then build
 and install the LifeLines programs.  You will end up with the following
@@ -51,50 +62,57 @@ executables (installed in various places, depending on your platform):
 
 llines   -- main LifeLines system program
 llexec   -- non-interactive version, useful for running reports
-btedit   -- general purpose btree edit program
 dbverify -- checks a LifeLines database for problems
+btedit   -- general purpose btree edit program
+lldump   -- dumps the database contents in symbolic format
 
 llines is the main LifeLines program.
 
 lllexec is a non-interactive version of the main program, and is
 handy for automatically running reports against a given database.
 
-dverify can be used to verify the correctness of a LifeLines database.
-This is handy if you're storing databases on floppies, or just for
-peace of mind.
+dverify can be used to verify the correctness of a LifeLines database. This
+is handy if you're storing databases on floppies, a USB stick (which may have
+been improperly removed at some point), or just for peace of mind.
 
-btedit is a administration tool used for unmangling mangled databases, 
+btedit is an administration tool used for unmangling mangled databases,
 and is extremely powerful.  You should only use this program under the
 expert guidance of a LifeLines developer.
+
+lldump is an administration tool used for diagnosing mangled databases.
+You should only use this program under the expert guidance of a LifeLines
+developer, or if you're curious about the internal database format.
 
 ******************************
 1a) Dependencies
 ******************************
 
 lifelines has a number of dependencies and they vary depending on
-how you build lifelines.
+how you obtain and build lifelines.
 
-1. General dependencies:
+1. General
 
    ncursesw (or any curses with wide character support)
 
-2. Building from source code repository
+2. Build Tools
 
    If you are building directly from the source code repository, and
    not from a release package, you will require these tools:
 
    automake
    autoconf
-   bison
+   bison (2.7+ or 3.1+)
 
 3. Document Generation
 
-   Regeneration of the docs requires tools to convert from xml to html, pdf,
-   and text.  Currently the tools being used are:
+   Generation of the documentation requires tools to convert from xml to html,
+   pdf, and text.  Currently the tools being used are:
 
    xmlto
    dblatex
-   texlive-cmap
+   lynx or links
+   texlive-lang-european (Debian / Ubuntu)
+   texlive-cmap (Fedora / RHEL / CentOS / SLES)
 
    By default, these tools are not required.  If you want to edit and rebuild
    documentation, run configure with the '--with-docs' option.
@@ -113,18 +131,35 @@ how you build lifelines.
 1b) Specific Issues
 ******************************
 
-GETTEXT
+1. gettext
 
-If configure succeeds, but make fails very early with an error like so:
+  If configure succeeds, but make fails very early with an error like so:
 
   cd ../../po && rm -f da.gmo && : -c --statistics -o da.gmo da.po
   mv: cannot stat `t-da.gmo': No such file or directory
   ...
 
-then you probably do not have the gettext tools -- the commandline
-tools needed for development, which are needed to compile, and
-are generally a separate package from the runtime libraries needed
-by running programs.
+  Then you probably do not have the gettext tools -- the commandline
+  tools needed for development, which are needed to compile, and
+  are generally a separate package from the runtime libraries needed
+  by running programs.
+
+2. bison
+
+  If you run into problems compiling yacc.c, this is likely due to an
+  incompatibility between the generated files created by bison that are
+  shipped with the release packages and checked into the github repo.
+
+  To resolve these problems, ensure that you have a supported version of
+  bison installed, remove yacc.c and yacc.h and rebuild.  These files will
+  be regenerated using the bison that is installed on your system which
+  should resolve the problem.
+
+3. expect
+
+  The test suite needs expect to be installed. It's the default for
+  redhat, but ubuntu has make it optional.  You'll need to install
+  expect if it's not installed.
 
 **************************
 2. Platform specific notes
@@ -134,15 +169,11 @@ by running programs.
 2a) Platforms supported out-of-the-box
 *********************
 
-Many unix systems should be supported out-of-the-box with the tarball
+Many UNIX systems should be supported out-of-the-box with the tarball
 (lifelines-x.y.z.tar.gz) distribution.
 
-Reported successes include:
- lifelines-3.0.46:
-   Fedora Core 3
-   FreeBSD 4.11-STABLE
-   OS X 10.3.9
- 
+The primary development platforms are Ubuntu 20.04 and FreeBSD 12.2.
+
 *********************
 2b) Microsoft Windows
 *********************
@@ -163,7 +194,7 @@ binary distribution).
 2c) Cygwin
 **********
 
-Cygwin is a UNIX environment for MS-Windows. 
+Cygwin is a UNIX environment for MS-Windows.
     http://sources.redhat.com/cygwin
 The lines around the boxes in the lifelines curses GUI use OEM
 box characters, and so only display correctly with this setting:
@@ -173,7 +204,7 @@ ASCII, this solution may work fine for you. Otherwise, you may
 invoke llines with the -z switch to suppress curses graphics, and
 use primitive ASCII graphics. This is not particularly attractive,
 but is usable. Suggestions are welcome.
-Note that the -z commandline switch was added after the 3.0.9 
+Note that the -z commandline switch was added after the 3.0.9
 release.
 
 To compile libiconv on cygwin, I had to compile it statically, eg,
@@ -212,12 +243,12 @@ I had to add
 to the LIBS line in liflines/Makefile. (The symptom was
 "unknown symbol... _tputs.)
 However, I wound up core dumping at run-time, so I don't know
-what is going on. 
+what is going on.
 (Perry, Jan, 2002)
 
-************
-2h) Mac OS X
-************
+********************
+2h) Mac OS X / macOS
+********************
 
 Please see the following page about LifeLines on Mac OS X:
     http://homepage.mac.com/shrubbery/LifeLines
@@ -231,3 +262,14 @@ an argument to configure, eg,
 There is no specific code needed for Darwin; this is just to avoid
 the macros getting angry at the unknown output from "uname -a".
 
+If you get this error while building lifelines from source:
+
+lifelines/src/interp/yacc.y:78.9-22: syntax error, unexpected identifier, expecting string
+
+Then your installed version of bison is too old.  (For example,
+macOS 10.15 "Catalina" only has bison 2.3 in the base system.)
+You must install bison 2.7 or later and then recompile.
+
+  brew install bison
+  echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.bash_profile
+  export LDFLAGS="-L/usr/local/opt/bison/lib"

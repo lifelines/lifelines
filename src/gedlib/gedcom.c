@@ -274,7 +274,7 @@ nkey_load_key (NKEY * nkey)
 	if (nkey->key[0])
 		return;
 	snprintf(key, MAXKEYWIDTH, "%c" FMT_INT, nkey->ntype, nkey->keynum);
-	strncpy(nkey->key, key, MAXKEYWIDTH);
+	strncpy(nkey->key, key, sizeof(nkey->key));
 }
 /*==================================================
  * nkey_eq -- compare two NKEYs

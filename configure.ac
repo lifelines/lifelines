@@ -61,7 +61,7 @@ dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
-  CFLAGS="${CFLAGS} -W -Wall"
+  CFLAGS="${CFLAGS} -W -Wall -Wextra"
   CFLAGS="${CFLAGS} -Wcast-align -Wmissing-declarations -Wmissing-prototypes"
   CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
 
@@ -139,6 +139,37 @@ then
   fi
 fi
 
+dnl Enable full debugging
+AC_ARG_WITH(full-debug,
+    [  --with-full-debug           Build with full debug support ],
+    [build_full_debug=$withval],
+    [build_full_debug=no])
+
+if test "$build_full_debug" = "yes"
+then
+  if test "${ac_cv_prog_gcc}" = "yes"; then
+    CFLAGS="${CFLAGS} -rdynamic"
+  else
+    echo "The use of --with-full-debug only supported when using gcc!"
+    exit
+  fi
+fi
+
+dnl **************************************************************
+dnl Handle testing requirements
+dnl **************************************************************
+
+dnl Some tests need the 'expect' program.
+echo "Looking for expect"
+AC_PATH_PROG(TOOL_EXPECT, expect, FAIL)
+if test "$TOOL_EXPECT" = "FAIL"; then
+    AC_MSG_RESULT( ************************************************************************ )
+    AC_MSG_RESULT( ******** Cannot find expect.  Some tests will be skipped. ************** )
+    AC_MSG_RESULT( ************************************************************************ )
+fi
+
+AM_CONDITIONAL(HAVE_EXPECT, test "$TOOL_EXPECT" != "FAIL")
+
 dnl **************************************************************
 dnl Handle Docs Target
 dnl **************************************************************
@@ -157,14 +188,14 @@ then
         AC_MSG_RESULT( ************************************************************************ )
         AC_MSG_RESULT( ******** Cannot find xmlto to build docs.  Will not build docs. ******** )
         AC_MSG_RESULT( ************************************************************************ )
-        build_docs=no 
+        build_docs=no
     fi
     AC_PATH_PROG(TOOL_DBLATEX, dblatex, FAIL)
     if test "$TOOL_DBLATEX" = "FAIL"; then
         AC_MSG_RESULT( ************************************************************************ )
         AC_MSG_RESULT( ******* Cannot find dblatex to build docs.  Will not build docs. ******* )
         AC_MSG_RESULT( ************************************************************************ )
-        build_docs=no 
+        build_docs=no
     fi
 fi
 
@@ -201,8 +232,9 @@ AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
 
 echo Looking for library functions
-AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
+AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
 AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
+AC_CHECK_FUNCS( backtrace backtrace_symbols )
 AC_SEARCH_LIBS( sin, m )
 AC_SEARCH_LIBS( cos, m )
 AC_SEARCH_LIBS( tan, m )
@@ -210,10 +242,23 @@ AC_SEARCH_LIBS( asin, m )
 AC_SEARCH_LIBS( acos, m )
 AC_SEARCH_LIBS( atan, m )
 
-dnl Check for replacement functions
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
-AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
-AC_REPLACE_FUNCS( _llnull )
+echo Looking for header files and libraries to support heap walking
+dnl We need to cheat on OSX/Darwin.  The standard configure
+dnl check brings in a C++ header which bombs and causes
+dnl configure to display a particularly nasty warning, which
+dnl we don't want to expose to end-users.
+case $host in
+  *apple-darwin*)
+    HAVE_ALLOC_H=no
+    HAVE_MALLOC_H=no
+    HAVE_HEAPWALK=no
+    HAVE__HEAPWALK=no
+    ;;
+  *)
+    AC_CHECK_HEADERS( alloc.h malloc.h )
+    AC_CHECK_FUNCS( heapwalk _heapwalk )
+    ;;
+esac
 
 dnl **************************************************************
 dnl Check for curses
@@ -263,26 +308,20 @@ echo Looking for curses headers
 AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
 
 dnl **************************************************************
-dnl Platform/Version-Specific Checks
+dnl Check for Replacement Functions for Standard Libraries/Curses
 dnl **************************************************************
 
-echo Looking for header files and libraries to support heap walking
-dnl We need to cheat on OSX/Darwin.  The standard configure
-dnl check brings in a C++ header which bombs and causes
-dnl configure to display a particularly nasty warning, which
-dnl we don't want to expose to end-users.
-case $host in
-  *apple-darwin*)
-    HAVE_ALLOC_H=no
-    HAVE_MALLOC_H=no
-    HAVE_HEAPWALK=no
-    HAVE__HEAPWALK=no
-    ;;
-  *)
-    AC_CHECK_HEADERS( alloc.h malloc.h )
-    AC_CHECK_FUNCS( heapwalk _heapwalk )
-    ;;
-esac
+echo Checking for replacement functions
+dnl Standard libraries
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+dnl Standard libraries - internationalization / wchar
+AC_REPLACE_FUNCS( nl_langinfo wcslen )
+dnl Standard libraries - curses
+AC_REPLACE_FUNCS( has_key )
+
+dnl **************************************************************
+dnl Platform-Specific Configuration
+dnl **************************************************************
 
 case $host_os in
   *windows*)
@@ -294,7 +333,7 @@ case $host_os in
 esac
 
 dnl **************************************************************
-dnl Build Makefiles
+dnl Generate Makefiles
 dnl **************************************************************
 
 AC_OUTPUT(Makefile \

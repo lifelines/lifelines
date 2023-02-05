@@ -23,3 +23,20 @@ int getopt(int argc, char **argv, char *optstring)
 
   POSIX, implemented for Win32.
 
+int snprintf(char *str, size_t size, const char *format, ...)
+int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args)
+
+  POSIX, implemented for Unix and Win32.
+
+char *nl_langinfo(nl_item item)
+
+  SUSv2, implemented for Unix.
+
+size_t wcslen (const wchar_t *s)
+
+  POSIX, implemented for Unix and Win32.
+
+int has_key(int ch)
+
+  POSIX, implemented for Win32.
+

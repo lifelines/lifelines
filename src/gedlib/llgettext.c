@@ -61,6 +61,23 @@ llgettext_init (CNSTRING domain, CNSTRING codeset)
 #endif /* ENABLE_NLS */
 }
 /*==================================================
+ * llgettext_term -- cleans up memory allocation
+ * that may have been performed in llgettext_init
+ *================================================*/
+void
+llgettext_term (void)
+{
+#if ENABLE_NLS
+	if (gt_localeDirs) {
+		destroy_table(gt_localeDirs);
+		gt_localeDirs = 0;
+	}
+	strfree(&gt_codeset);
+#endif
+	strfree(&gt_defLocaleDir);
+}
+
+/*==================================================
  * update_textdomain_localedir --
  *  call bindtextdomain with current localedir
  *  domain:  [IN] package domain (eg, "lifelines")
@@ -157,7 +174,11 @@ init_win32_gettext_shim (void)
  * Created: 2002/11/28 (Perry Rapp)
  *===============================*/
 void
+#if ENABLE_NLS
 set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
+#else
+set_gettext_codeset (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRING codeset)
+#endif
 {
 #if ENABLE_NLS
 	if (eqstr_ex(gt_codeset, codeset))
@@ -185,9 +206,6 @@ set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
 	bind_textdomain_codeset(domain, gt_codeset);
 	if (eqstr(domain, PACKAGE))
 		locales_notify_uicodeset_changes();
-#else
-	domain = domain; /* unused */
-	codeset = codeset; /* unused */
 #endif /* ENABLE_NLS */
 }
 /*=================================
