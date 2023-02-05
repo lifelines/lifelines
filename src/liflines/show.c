@@ -396,11 +396,10 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
  * add_spouse_line -- Add spouse line to others
  *===========================================*/
 static void
-add_spouse_line (INT num, NODE indi, NODE fam, INT width)
+add_spouse_line (HINT_PARAM_UNUSED INT num, NODE indi, NODE fam, INT width)
 {
 	STRING line, ptr=Sothers[Solen];
 	INT mylen=liwidth;
-	num=num; /* unused */
 	if (Solen >= MAXOTHERS) return;
 	if (mylen>width) mylen=width;
 	llstrcatn(&ptr, " ", &mylen);

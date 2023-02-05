@@ -476,7 +476,7 @@ getlldberrstr (BTERR errnum)
 {
 	STRING err = "";
 
-	if (errnum > BTERR_MIN || errnum < BTERR_MAX)
+	if ((errnum > BTERR_MIN) && (errnum < BTERR_MAX))
 		err = lldberrstr[errnum].errstr;
 
 	return err;

@@ -24,6 +24,7 @@
 #include "lloptions.h"
 #include "date.h"
 #include "vtable.h"
+#include "leaksi.h"
 
 /*********************************************
  * global/exported variables
@@ -55,7 +56,8 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  * local function prototypes, alphabetical
  *********************************************/
 
-static NODE alloc_node(void);
+#define alloc_node(msg) alloc_node_int(msg,__FILE__,__LINE__)
+static NODE alloc_node_int(char* msg, char *file, int line);
 static STRING fixup(STRING str);
 static STRING fixtag (STRING tag);
 static RECORD indi_to_prev_sib_impl(NODE indi);
@@ -79,6 +81,7 @@ NODE parents_nodes(NODE faml);
  *********************************************/
 
 /* node allocator's free list */
+LIST alloc_block_list = (LIST) 0;
 static NDALLOC first_blck = (NDALLOC) 0;
 static int live_count = 0;
 
@@ -131,34 +134,73 @@ change_node_tag (NODE node, STRING newtag)
 	ntag(node) = fixtag(newtag);
 }
 /*=====================================
+ * free_node_block -- Node block deallocator
+ *===================================*/
+static void
+free_node_block(NDALLOC blck)
+{
+	stdfree(blck);
+}
+
+/*=====================================
+ * alloc_node_block -- Node block allocator
+ *===================================*/
+static NDALLOC
+alloc_node_block(void)
+{
+	NDALLOC alloc_block;
+	NDALLOC blck;
+	NODE node;
+	int i;
+
+	// Allocate list to hold block allocations
+	if (!alloc_block_list) {
+		alloc_block_list = create_list3((ELEMENT_DESTRUCTOR)free_node_block);
+	}
+
+	// Allocate block
+	alloc_block = (NDALLOC) stdalloc(100*sizeof(*node));
+	enqueue_list(alloc_block_list, alloc_block);
+
+	// Set up next pointers for first 99 nodes
+	node = (NODE) alloc_block;
+	for (i = 1; i <= 99; i++) {
+		blck = (NDALLOC) node;
+		blck->next = (NDALLOC) (node + 1);
+		node++;
+	}
+
+	// Set up next pointer for 100th node
+	((NDALLOC) node)->next = (NDALLOC) 0;
+
+	return alloc_block;
+}
+
+/*=====================================
  * alloc_node -- Special node allocator
  *===================================*/
 static NODE
-alloc_node (void)
+alloc_node_int (HINT_PARAM_UNUSED char* msg, HINT_PARAM_UNUSED char* file, HINT_PARAM_UNUSED int line)
 {
 	NODE node;
-	NDALLOC blck;
-	int i;
+
+	// Allocate block of nodes
 	if (first_blck == (NDALLOC) 0) {
-		node = (NODE) stdalloc(100*sizeof(*node));
-		first_blck = (NDALLOC) node;
-		for (i = 1; i <= 99; i++) {
-			blck = (NDALLOC) node;
-			blck->next = (NDALLOC) (node + 1);
-			node++;
-		}
-		((NDALLOC) node)->next = (NDALLOC) 0;
+		first_blck = alloc_node_block();
 	}
+
+	// Use first free node in block
 	node = (NODE) first_blck;
 	first_blck = first_blck->next;
 	++live_count;
+	TRACK_NODE(node, TRACK_OP_ALLOC, msg, file, line);
 	return node;
 }
 /*======================================
  * free_node -- Special node deallocator
  *====================================*/
 void
-free_node (NODE node)
+free_node_int (NODE node, HINT_PARAM_UNUSED char *msg, HINT_PARAM_UNUSED char *file, HINT_PARAM_UNUSED int line)
 {
 	if (nxref(node)) stdfree(nxref(node));
 	if (nval(node)) stdfree(nval(node));
@@ -170,6 +212,7 @@ free_node (NODE node)
 	((NDALLOC) node)->next = first_blck;
 	first_blck = (NDALLOC) node;
 	--live_count;
+	TRACK_NODE(node, TRACK_OP_FREE, msg, file, line);
 }
 /*===========================
  * create_node -- Create NODE
@@ -182,7 +225,7 @@ free_node (NODE node)
 NODE
 create_node (STRING xref, STRING tag, STRING val, NODE prnt)
 {
-	NODE node = alloc_node();
+	NODE node = alloc_node("create_node");
 	memset(node, 0, sizeof(*node));
 	nxref(node) = fixup(xref);
 	ntag(node) = fixtag(tag);
@@ -225,7 +268,7 @@ free_temp_node_tree (NODE node)
 		free_temp_node_tree(n2);
 		nsibling(node) = 0;
 	}
-	free_node(node);
+	free_node(node,"free_temp_node_tree");
 }
 /*===================================
  * is_temp_node -- Return whether node is a temp
@@ -256,7 +299,7 @@ free_nodes (NODE node)
 	while (node) {
 		if (nchild(node)) free_nodes(nchild(node));
 		sib = nsibling(node);
-		free_node(node);
+		free_node(node,"free_nodes");
 		node = sib;
 	}
 }
@@ -1149,7 +1192,7 @@ node_destructor (VTABLE *obj)
 {
 	NODE node = (NODE)obj;
 	ASSERT((*obj) == &vtable_for_node);
-	free_node(node);
+	free_node(node,"node_destructor");
 }
 /*=================================================
  * check_node_leaks -- Called when database closing
@@ -1159,20 +1202,22 @@ void
 check_node_leaks (void)
 {
 	if (live_count) {
-		STRING report_leak_path = getlloptstr("ReportLeakLog", NULL);
-		FILE * fp=0;
-		if (report_leak_path)
-			fp = fopen(report_leak_path, LLAPPENDTEXT);
-		if (fp) {
+		if (fpleaks) {
 			LLDATE date;
 			get_current_lldate(&date);
-			fprintf(fp, _("Node memory leaks:"));
-			fprintf(fp, " %s", date.datestr);
-			fprintf(fp, "\n  ");
-			fprintf(fp, _pl("%d item leaked", "%d items leaked", live_count), live_count);
-			fprintf(fp, "\n");
-			fclose(fp);
-			fp = 0;
+			fprintf(fpleaks, _("Node memory leaks:"));
+			fprintf(fpleaks, " %s", date.datestr);
+			fprintf(fpleaks, "\n  ");
+			fprintf(fpleaks, _pl("%d item leaked", "%d items leaked", live_count), live_count);
+			fprintf(fpleaks, "\n");
 		}
 	}
+}
+/*=================================================
+ * term_node_allocator -- Called to free all nodes in the free list
+ *===============================================*/
+void
+term_node_allocator (void)
+{
+	destroy_list(alloc_block_list);
 }

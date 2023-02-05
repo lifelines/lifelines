@@ -412,7 +412,9 @@ ask_for_indi_key (STRING ttl, ASK1Q ask1)
 {
 	RECORD indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
-	return rmvat(nxref(nztop(indi)));
+	NODE node = nztop(indi);
+	release_record(indi);
+	return rmvat(nxref(node));
 }
 /*===============================================================
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases

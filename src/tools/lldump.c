@@ -105,6 +105,13 @@ static size_t getfilesize(STRING dir, STRING filename);
  * body of module
  *********************************************/
 
+// Direct assignment can trigger cast-align warnings.
+// Only use these when the input is guaranteed to be aligned properly!
+#define CASTPTR_INT32(in) (INT32*)((void*)(in))
+#define EXTRACT_INT32(in) *(CASTPTR_INT32(in))
+#define CASTPTR_INT64(in) (INT64*)((void*)(in))
+#define EXTRACT_INT64(in) *(CASTPTR_INT64(in))
+
 /*=========================================
  * main -- Main procedure of lldump command
  *=======================================*/
@@ -209,7 +216,7 @@ print_usage (void)
 	char * fname = _("/home/users/myname/lifelines/databases/myfamily");
 #endif
 
-	printf(_("lifelines `lldump' dumpss a lifelines database file.\n"));
+	printf(_("lifelines `lldump' dumps a lifelines database file.\n"));
 	printf("\n\n");
 	printf(_("Usage lldump [options] <database>"));
 	printf("\n\n");
@@ -250,6 +257,7 @@ print_usage (void)
  * 3c. N  6 chars long, N[A-Z$][A-Z][0-9]{3,3}
  *     Name
  * 3d. V is VUOPT (only V key I am aware of)
+ * 3e. H is HISTV or HISTC
  * messages to stdout - errors, warnings are printed and ignored
  * 
  *WARNING: item 2 is broken for Keys starting with a R, ie REFN data.
@@ -260,16 +268,16 @@ print_usage (void)
  *=============================================*/
 
 static void
-check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
-	if (*(INT64*)key == 0) {
+check_rkey(keytype *kt, RKEY *key, BOOLEAN in_data) {
+	if (RKEY_IS_NULL(*key)) {
 		// special case zero key
-		strncpy(kt->rkey,"8 x 0x00",9);  // null key in 8 chars
+		strncpy(kt->rkey,"0x00 x 8",9);  // null key in 8 chars
 		strncpy(kt->rname,"Zero",6);
 		kt->rkeyfirst = kt->rkey;
 		return;
 	}
 	memcpy(kt->rkey,key,9);  // grab string and 1 more char.
-	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key,force 9th char to null
+	kt->rkey[8] = 0;         // RKEY is 1st 8 char of key, force 9th char to null
 	char *p = kt->rkey;
 	while (*p == ' ') p++;   // p points to 1st non-space char
 	kt->rkeyfirst = p;
@@ -292,8 +300,9 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 	case 'S': strncpy(kt->rname,"SOUR",6);  break;
 	case 'V': strncpy(kt->rname,"VUOPT",6); break;
 	case 'X': strncpy(kt->rname,"Other",6); break;
+	case 'H': strncpy(kt->rname,"HIST",6);  break;
 	default:
-		printf("Error, unrecognized RKEY %s\n",p);
+		printf("Error, unrecognized RKEY '%s'\n",p);
 		strncpy(kt->rname,"Bad",6); 
 	}
 	//validity checks
@@ -302,7 +311,8 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 //    R,N are letter followed by A-Za-z0-9
 //       well really N is [A-Z]{3}[0-9]{3}
 //    REFN Name
-//    V is VUOPT`
+//    V is VUOPT
+//    H is HIST[VC]
 	switch (*p) {
 	case 'E': 
 	case 'F': 
@@ -335,19 +345,29 @@ check_rkey(keytype *kt, RKEY *key,BOOLEAN in_data) {
 		break;
 	case 'R': 
 		// see refns.c R's are R char char or R char  2/3 char only
-		//  see refn2rkey in refns.c
-		// need to generate more ... or check code
+		// see refn2rkey in refns.c
+		// each Rxx key is a table of all the REFN values starting
+		// with xx. (so '1 REFN German Born' is under key RGe.)
+		// Note '1 REFN Q Royal92-I1' results in key 'RQ '
+		// so 2nd char can be a space for R keys
 		if (strlen(p) > 3) {
 			printf("Error, REFN RKEY more than 3 characters long, %s\n",kt->rkey);
 		}
 		while (*++p && isalnum(*p)) ;
 		if (p < &kt->rkey[8] && *p != 0) {
 			// we already flagged null in 1st 8 chars so don't report it here
-			printf("Error, REFN RKEY has invalid character, %s\n",kt->rkey);
+			if (*p != ' ') {
+				printf("Error, REFN RKEY has invalid character, %s\n",kt->rkey);
+                        }
 		}
 		break;
 	case 'V': 
 		if (strcmp(p,"VUOPT") != 0) {
+			printf("Error, invalid letter in RKEY(%s)\n",kt->rkey);
+		}
+		break;
+	case 'H':
+		if (strcmp(p,"HISTV") != 0 && strcmp(p,"HISTC") != 0) {
 			printf("Error, invalid letter in RKEY(%s)\n",kt->rkey);
 		}
 		break;
@@ -373,12 +393,9 @@ void dump_index(STRING dir)
 /*===============================
  * tf_print_index -- traversal function wrapper for print_index
  *=============================*/
-BOOLEAN tf_print_index(BTREE btree, INDEX index, void *param)
+BOOLEAN tf_print_index(HINT_PARAM_UNUSED BTREE btree, INDEX index, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_index(index, &offset);
 	return TRUE;
@@ -459,11 +476,11 @@ void print_index(INDEX index, INT32 *offset)
 		// now check that they really are zero'ed
 		int found_deleted = 0;
 		for (n=NRcount+1; n<NOENTS; n++) {
-			if (*(INT64*)&rkeys(index,n) != 0 || fkeys(index,n) != 0) {
+			if (!RKEY_IS_NULL(rkeys(index,n)) || fkeys(index,n) != 0) {
 				if (found_deleted++ == 0) { 
 					printf("\ndeleted index rkey/fkey pairs\n");
 				}
-				if (*(INT64*)&rkeys(index,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(index,n))) {
 					check_rkey(&akey,&rkeys(index,n),FALSE);
 					printf(FMT_INT32_HEX_06 ":ix_rkeys[" FMT_INT_04 "]:'%-8.8s'  ", 
 						*offset, n, akey.rkey);
@@ -515,12 +532,9 @@ void dump_block(STRING dir)
 /*===============================
  * tf_print_block -- traversal function wrapper for print_block
  *=============================*/
-BOOLEAN tf_print_block(BTREE btree, BLOCK block, void *param)
+BOOLEAN tf_print_block(HINT_PARAM_UNUSED BTREE btree, BLOCK block, HINT_PARAM_UNUSED void *param)
 {
 	INT32 offset = 0;
-
-	btree = btree;	/* UNUSED */
-	param = param;	/* UNUSED */
 
 	print_block(btree, block, &offset);
 	return TRUE;
@@ -590,10 +604,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				*offset + (INT32)((NORECS-NRcount)*sizeof(rkeys(block,0)) - 1),
 				NRcount,(INT)NORECS-1);
 			for (n=NRcount; n<NORECS; n++) {
-				if (*(INT64*)&rkeys(block,n) != 0) {
+				if (!RKEY_IS_NULL(rkeys(block,n))) {
+					INT64 v;
+					RKEY_AS_INT64(rkeys(block,n), v);
 					printf(FMT_INT32_HEX ":ix_rkey[" FMT_INT_04 "]:"
 						FMT_INT64_HEX " value not zero\n",
-						*offset, n, *(INT64*)&rkeys(block,n));
+						*offset, n, v);
 				}
 				*offset += sizeof(rkeys(block,0));
 			}
@@ -662,8 +678,8 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 		INT len;
 		INT32 roff = offs(block, n);
 		INT32 rlen = lens(block,n);
-		if (roff == 0 && rlen == 0 && *(INT64*)&rkeys(block,n) == 0) {
-			printf("[" FMT_INT "], found unexpected unitialized key\n",
+		if (roff == 0 && rlen == 0 && RKEY_IS_NULL(rkeys(block,n))) {
+			printf("[" FMT_INT "], found unexpected uninitialized key\n",
 				n );
 			continue;  // blank entry skip it.
 		}
@@ -692,7 +708,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			}
 		}
 		check_rkey(&akey,&rkeys(block,n),TRUE);
-		/* keys start with I,F,S,E,X and N R V */
+		/* keys start with I,F,S,E,X and N R V H */
 		printf("[" FMT_INT_04 "] %s rkey: %s offs: " FMT_INT32_HEX
 			" lens: " FMT_INT32_HEX "\n",
 			n,akey.rname, akey.rkeyfirst,
@@ -708,7 +724,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			// we reuse akey buffer to check rkeys in sublists
 			//    so save first letter of this record's key
 			char first = *akey.rkeyfirst;
-			INT32 Ncount = *(INT32 *) &rec[0]; 
+			INT32 Ncount = EXTRACT_INT32(&rec[0]);
 			INT32 col1 = sizeof(INT32);
 			INT32 col2 = col1 + Ncount * sizeof(RKEY);
 			INT32 lennames = 0;
@@ -720,11 +736,12 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			INT strbase = sizeof(INT32) + (sizeof(RKEY) +
 				sizeof(INT32))*Ncount;
 			for(m = 0; m < Ncount; m++) {
-				INT32 stroff = strbase + *(INT32*)&rec[col2];
+				INT32 recoff = EXTRACT_INT32(&rec[col2]);
+				INT32 stroff = strbase + recoff;
 				printf("    " FMT_INT_3 ". " FMT_INT32_HEX ":RKEY %8.8s "
 				    FMT_INT32_HEX ":offset " FMT_INT32_HEX "\n",
 					m+1, *offset + col1, &rec[col1],
-					(INT32)*offset+col2, *(INT32*)&rec[col2]);
+					     *offset + col2, recoff);
 				printf("         " FMT_INT32_HEX ":string '%s'\n",
 					*offset+stroff, &rec[stroff]);
 				col1 += sizeof(RKEY);
@@ -743,7 +760,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			}
 			col1 = sizeof(INT32);
 			for(m = 0; m < Ncount; m++) {
-				INT stroff = strbase + *(INT32*)&rec[col2];
+				INT stroff = strbase + EXTRACT_INT32(&rec[col2]);
 
 				//  print keys,strings
 				char *p = &rec[col1];
@@ -752,14 +769,48 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 				printf("    " FMT_INT_3 ". %-*s %s %s%s\n" ,
 					m+1, keylen, akey.rkeyfirst,
 					(first == 'N' ? " name " :
-				  	" identified by 'REFN "), &rec[stroff],
+					" identified by 'REFN "), &rec[stroff],
 					(first == 'N' ? "" : "'"));
 				lennames += strlen(&rec[stroff])+1;
 				col1 += sizeof(RKEY);
 				col2 += sizeof(INT32);
 			}
+		} else if (*akey.rkeyfirst == 'H') {
+			// HIST data consists of
+			// INT16 count : number of history records
+			// INT16 count : number of history records (again)
+			// .. foreach ..
+			// INT16 ntype : node type (from char)
+			// INT16 nkey  : node key (from INT)
+			//
+			// See save_nkey_list and load_nkey_list
+			//
+			INT32 *ptr = CASTPTR_INT32(&rec[0]);
+			INT32 count1 = *ptr++;
+			INT32 count2 = *ptr++;
+			INT32 count = ((count1>count2) ? count2 : count1);
+			INT i;
+
+			// print out count
+			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
+				*offset,count1);
+			printf("   " FMT_INT32_HEX ": count1 " FMT_INT32 "\n",
+				*offset+(INT32)sizeof(INT32),count2);
+
+			// print out entries
+			for (i=0; i<count; i++)
+			{
+				INT32 type = *ptr++;
+				INT32 offset1 = (i+1)*8;
+				INT32 num = *ptr++;
+				INT32 offset2 = (i+1)*8 + 4;
+				printf("    " FMT_INT_3 ". " FMT_INT32_HEX ":type '%c' "
+				                             FMT_INT32_HEX ":keynum " FMT_INT "\n",
+					i, *offset + offset1, (char)type,
+					   *offset + offset2, (INT)num);
+			}
 		} else {
-			// handle all but N,R - E F I P S V X 
+			// handle all but N,R,H - E F I P S V X
 			// these have just text data
 			if (rec != NULL)
 				printf(FMT_INT32_HEX "-" FMT_INT32_HEX 

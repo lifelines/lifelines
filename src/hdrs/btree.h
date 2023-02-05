@@ -63,6 +63,8 @@ typedef struct {
 
 #define RKEY_NULL "\0\0\0\0\0\0\0\0"
 #define RKEY_INIT(r) memcpy((r).r_rkey, RKEY_NULL, RKEYLEN)
+#define RKEY_IS_NULL(r) (memcmp((r).r_rkey, RKEY_NULL, RKEYLEN) == 0)
+#define RKEY_AS_INT64(r,v) memcpy(&(v), (r).r_rkey, RKEYLEN)
 
 typedef INT32 FKEY; /*file key*/
 
@@ -209,7 +211,7 @@ typedef BOOLEAN(*TRAV_INDEX_FUNC)(BTREE, INDEX, void*);
 typedef BOOLEAN(*TRAV_BLOCK_FUNC)(BTREE, BLOCK, void*);
 
 typedef BOOLEAN(*TRAV_RECORD_FUNC_BYKEY)(RKEY, STRING, INT, void*);
-#define TRAV_RECORD_FUNC_BYKEY_ARGS(a,b,c,d) RKEY a, STRING b, INT c, void* d
+#define TRAV_RECORD_FUNC_BYKEY_ARGS(a,b,c,d) RKEY a, STRING b, HINT_PARAM_UNUSED INT c, void* d
 
 /*====================================
  * BTREE library function declarations 

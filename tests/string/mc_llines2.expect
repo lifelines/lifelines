@@ -1,0 +1,62 @@
+#!/usr/bin/expect -f
+# pass in OUTPUT  TESTNAME
+set OUTPUT   [lindex $argv 0]
+set TESTNAME [lindex $argv 1]
+
+# Why do we use expect?
+# normal file operations like "echo string | llexec ..."
+#    make stdin to llines a pipe, not a tty. 
+# curses doesn't process terminal specific key operations (like Up Key,
+#    Down Key) unless the input is a tty.
+# expect - opens a tty to communicate with the spawned program.
+# The test suite forces xterm as the terminal type.
+# So this script allows checking special key processing, assuming
+#    the xterm key specifications rather than having curses ignoring
+#    the special nature and having llines ignore the data as unexpected keys.
+# Note llexec doesn't work with the up/down keys as it doesn't use curses.
+
+# expect is somewhat percular in processing data returned from the 
+# spawned program. Instead of introducing delays with send_human
+# or send_slow, both witch introduce dealys
+#set send_human {.1 .3 1 .1 .2} /
+#set send_human {.01 .1 1 .01 .1}  # 99 sec
+#set send_slow {1 .001}
+#    # 90 sec
+# 5 values in send_human, 1. default, 2.  word endings, 
+#     3. measure of ariability(.1 quite variable 1 reasonably variable,
+#        10 quite invariable), last 2 4. min and 5. max values 
+
+# make it simpler to change send options.
+proc send {ignore arg} {
+    #exp_send -s -- $arg
+    #exp_send -h -- $arg
+    exp_send -- $arg
+}
+
+# capture all llines output to log file
+#log_file OUTPUT.stdout
+
+set timeout 1  ; # timeouts are bad, i.e. we don't want them to happen
+                 # however if occur 1 sec should plenty
+spawn -noecho ../../src/liflines/llines -C $TESTNAME.lines.src testdb
+sleep 1
+expect "Main Menu"
+send -- "r$TESTNAME.ll\r"
+expect "Program is running"
+send -- "1"
+
+expect "What is the name of the output file"
+send -- "$OUTPUT.out\r"
+expect "select your mood - try 1"
+send -- "1"
+expect "select your mood - try 2"
+send -- "2"
+expect "select your mood - try 3"
+send -- "1"
+expect "select your mood - try 4"
+send -- "3"
+expect "select your mood - try 0"
+send -- "OBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOAOAOAOAi"
+expect "Strike any key to continue."
+send -- "q\rq\r"
+expect eof

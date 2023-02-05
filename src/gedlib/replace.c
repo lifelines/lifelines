@@ -59,7 +59,7 @@ replace_indi (NODE indi1, NODE indi2)
 	namen = copy_nodes(name2, TRUE, TRUE);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
-	free_node(indi2);
+	free_node(indi2,"replace_indi");
 	nodechk(indi1, "replace_indi");
 
 	/* Write data to database */
@@ -114,7 +114,7 @@ replace_fam (NODE fam1, NODE fam2)
 	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_fam(fam1, refn2, husb, wife, chil, body);
-	free_node(fam2);
+	free_node(fam2,"replace_fam");
 
 	/* Write data to database */
 	

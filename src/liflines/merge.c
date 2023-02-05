@@ -243,7 +243,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 				next = nsibling(that);
 				nsibling(that) = NULL;
 				keep = nchild(that);
-				free_node(that);
+				free_node(that,"merge_two_indis");
 				if (!prev)
 					chil = next;
 				else
@@ -599,7 +599,7 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 					next = nsibling(this);
 					nsibling(this) = NULL;
 					keep = nchild(this);
-					free_node(this);
+					free_node(this,"merge_fam_links");
 					if (!prev)
 						first = next;
 					else

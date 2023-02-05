@@ -527,10 +527,9 @@ node_lineprint (INT width, void * param)
  * Created: 2001/04/15, Perry Rapp
  *===============================*/
 static STRING
-tn_lineprint (INT width, void * param)
+tn_lineprint (HINT_PARAM_UNUSED INT width, void * param)
 {
 	NODE_TEXT_PRINT_PARAM ntpp = (NODE_TEXT_PRINT_PARAM)param;
-	width=width; /* unused */
 
 	return ntpp->tn->str;
 }

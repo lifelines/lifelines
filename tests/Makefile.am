@@ -9,7 +9,8 @@ testsubdir              = date gengedcomstrong interp math pedigree-longname \
 
 TESTS_ENVIRONMENT       = top_builddir=$(top_builddir)
 
-TESTS   =               date/checkjd2date.llscr         \
+# Tests that have no external dependencies
+TESTS1  =               date/checkjd2date.llscr         \
 			gengedcomstrong/test1.llscr     \
 			interp/eqv_pvalue.llscr         \
 			interp/fullname.llscr           \
@@ -26,6 +27,14 @@ TESTS   =               date/checkjd2date.llscr         \
 			Royal92/Royal92.llscr           \
 			Royal92/Analyze.llscr           \
 			Royal92/check_lltest.llscr 
+
+# Tests that depend on 'expect'
+if HAVE_EXPECT
+TESTS2	=		string/mc_llines2.llscr
+endif
+
+TESTS	=		$(TESTS1) $(TESTS2)
+
 # make runs run_a_test file.llscr to generate file.log
 TEST_EXTENSIONS = .llscr
 LLSCR_LOG_COMPILER = $(srcdir)/run_a_test

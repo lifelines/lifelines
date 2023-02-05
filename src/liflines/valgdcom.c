@@ -256,7 +256,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
 	closelog();
+
+	// cleanup
 	strfree(&tag0);
+	strfree(&xref0);
 	return num_errors == 0;
 }
 /*=======================================
@@ -509,10 +512,8 @@ add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_head_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, STRING tag, STRING val, HINT_PARAM_UNUSED INT line)
 {
-	ifeed=ifeed; /* unused */
-	line=line; /* unused */
 	if (eqstr(tag, "CHAR")) {
 		strupdate(&gedcom_codeset_in, (val ? val : ""));
 	}
@@ -522,12 +523,8 @@ handle_head_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_trlr_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_trlr_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, HINT_PARAM_UNUSED STRING tag, HINT_PARAM_UNUSED STRING val, HINT_PARAM_UNUSED INT line)
 {
-	ifeed=ifeed; /* unused */
-	tag=tag; /* unused */
-	val=val; /* unused */
-	line=line; /* unused */
 }
 /*===========================================================
  * report_missing_value -- Report line with incorrectly empty value
@@ -633,13 +630,12 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRI
  * check_level1_tag -- Warnings for specific tags at level 1
  *========================================================*/
 static void
-check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
+check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, HINT_PARAM_UNUSED CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
 {
 	/*
 	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
 	to be correct, so warn if any of them occur in unusual locations
 	*/
-	val = val;    /* unused */
 	if (eqstr(tag, "FAMS")) {
 		if (!eqstr(tag0, "INDI"))
 			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
@@ -1038,10 +1034,13 @@ clear_structures (void)
 	}
 	for (i = 0; i < struct_len; i++) {
 		ELMNT el = index_data[i];
-		index_data[i] = 0;
+		index_data[i] = NULL;
 		free_elmnt(el);
 	}
+	stdfree(index_data);
+	index_data = NULL;
 	struct_len = 0;
+	struct_max = 0;
 }
 /*=====================================
  * set_import_log -- Specify where import errors logged

@@ -164,10 +164,8 @@ llrpt_pagemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * usage: linemode() -> VOID
  *=======================================*/
 PVALUE
-llrpt_linemode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_linemode (HINT_PARAM_UNUSED PNODE node, HINT_PARAM_UNUSED SYMTAB stab, BOOLEAN *eflg)
 {
-	node=node; /* unused */
-	stab=stab; /* unused */
 	outputmode = BUFFERED;
 	linebuflen = 0;
 	bufptr = (STRING)linebuffer;
@@ -300,10 +298,8 @@ request_file (BOOLEAN *eflg)
  * usage: outfile() -> STRING
  *===================================*/
 PVALUE
-llrpt_outfile (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_outfile (HINT_PARAM_UNUSED PNODE node, HINT_PARAM_UNUSED SYMTAB stab, BOOLEAN *eflg)
 {
-	node=node; /* unused */
-	stab=stab; /* unused */
 	if (!Poutfp) {
 		if (!request_file(eflg))
 			return NULL;
@@ -420,10 +416,8 @@ llrpt_col (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * usage: getcol() -> INT
  *================================*/
 PVALUE
-llrpt_getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_getcol (HINT_PARAM_UNUSED PNODE node, HINT_PARAM_UNUSED SYMTAB stab, BOOLEAN *eflg)
 {
-	node=node; /* unused */
-	stab=stab; /* unused */
 	*eflg = FALSE;
 	return create_pvalue_from_int(curcol);
 }
@@ -432,13 +426,11 @@ llrpt_getcol (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  * usage: pageout() -> VOID
  *====================================================*/
 PVALUE
-llrpt_pageout (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_pageout (HINT_PARAM_UNUSED PNODE node, HINT_PARAM_UNUSED SYMTAB stab, BOOLEAN *eflg)
 {
 	char scratch[MAXCOLS+2];
 	STRING p;
 	INT row, i;
-	node=node; /* unused */
-	stab=stab; /* unused */
 	*eflg = TRUE;
 	if (outputmode != PAGEMODE) return NULL;
 	if (!Poutfp) {

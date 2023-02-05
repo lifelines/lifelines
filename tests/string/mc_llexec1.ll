@@ -37,22 +37,22 @@ proc main ()
     list(options)
     setel(options,1,"Are you happy today")
     setel(options,2,"or is it a sad day for you")
-    set(resp, menuchoose(options,"select your mood - try 0:"))
+    set(resp, menuchoose(options,"select your mood - menu 1:"))
     "response was " d(resp) "\n"
 
-    set(resp, menuchoose(options,"select your mood - try 1:"))
+    set(resp, menuchoose(options,"select your mood - menu 2:"))
     "response was " d(resp) "\n"
 
-    set(resp, menuchoose(options,"select your mood - try 2:"))
+    set(resp, menuchoose(options,"select your mood - menu 3:"))
     "response was " d(resp) "\n"
 
-    set(resp, menuchoose(options,"select your mood - try 3:"))
+    set(resp, menuchoose(options,"select your mood - menu 4:"))
     "response was " d(resp) "\n"
 
     list(options)
     setel(options,1,"Are you happy today")
     setel(options,3,"or is it a sad day for you")
-    set(resp, menuchoose(options,"select your mood - try 4:"))
+    set(resp, menuchoose(options,"select your mood - menu 5:"))
 
     list(options)
     push(options,"Option 1")
@@ -80,6 +80,6 @@ proc main ()
     push(options,"Option 23")
     push(options,"Option 24")
     push(options,"Option 25")
-    set(resp, menuchoose(options,"select your mood - try 0:"))
+    set(resp, menuchoose(options,"select your mood - menu 1:"))
     "response was " d(resp) "\n"
 }

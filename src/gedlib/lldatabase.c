@@ -70,6 +70,7 @@ lldb_set_btree (LLDATABASE lldb, void *btree)
 	ASSERT(!lldb->btree);
 	lldb->btree = btree;
 	BTR = btree;
+	open_leak_log();
 }
 /*========================================
  * lldb_close -- Close any database contained. 
@@ -94,7 +95,9 @@ void lldb_close (LLDATABASE *plldb)
 	}
 	free_caches();
 	check_node_leaks();
+	term_node_allocator();
 	check_record_leaks();
+	close_leak_log();
 	closexref();
 	ASSERT(BTR == lldb->btree);
 	if (lldb->btree) {

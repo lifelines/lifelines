@@ -340,12 +340,11 @@ scanner_add_result (SCANNER * scanner, CNSTRING key)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static BOOLEAN
-ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
+ns_callback (CNSTRING key, CNSTRING name, HINT_PARAM_UNUSED BOOLEAN newset, void *param)
 {
 	INT len, ind;
 	STRING piece;
 	SCANNER * scanner = (SCANNER *)param;
-	newset=newset; /* unused */
 	if (scanner->scantype == SCAN_NAME_FULL) {
 		if (scanner_does_pattern_match(scanner, name)) {
 			scanner_add_result(scanner, key);
@@ -369,11 +368,10 @@ ns_callback (CNSTRING key, CNSTRING name, BOOLEAN newset, void *param)
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static BOOLEAN
-rs_callback (CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param)
+rs_callback (CNSTRING key, CNSTRING refn, HINT_PARAM_UNUSED BOOLEAN newset, void *param)
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);
-	newset=newset; /* unused */
 
 	if (scanner_does_pattern_match(scanner, refn)) {
 		scanner_add_result(scanner, key);

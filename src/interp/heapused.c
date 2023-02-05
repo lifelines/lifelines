@@ -62,7 +62,7 @@
  * usage: heapused() -> INT
  *==============================================*/
 PVALUE
-llrpt_heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
+llrpt_heapused (HINT_PARAM_UNUSED PNODE node, HINT_PARAM_UNUSED SYMTAB stab, BOOLEAN *eflg)
 {
 #if defined(WORKING_HEAPUSED)
 	HEAPINFO hi;
@@ -71,8 +71,6 @@ llrpt_heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	long heapcnt;
 	int repcnt;
 	static FILE *errfp = NULL;
-	node=node; /* unused */
-	stab=stab; /* unused */
 
 	if(errfp == NULL) errfp = fopen("pbm.err", LLWRITETEXT);
 
@@ -98,9 +96,7 @@ llrpt_heapused (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	return create_pvalue_from_int(heapfree);
 #else
-	/* Unsupported, what should we do? return error or give bogus value? */
-	node=node; /* unused */
-	stab=stab; /* unused */
+	/* Unsupported, return error. */
 	*eflg = TRUE;
 	return NULL;
 #endif

@@ -106,6 +106,7 @@ static RECORD history_back(struct hist * histp);
 static RECORD do_disp_history_list(struct hist * histp);
 static void history_record(RECORD rec, struct hist * histp);
 static RECORD history_fwd(struct hist * histp);
+static void init_hist_lists(void);
 static void init_hist(struct hist * histp, INT count);
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
@@ -115,6 +116,8 @@ static void pick_remove_spouse_from_family(RECORD frec);
 static void save_hist_lists(void);
 static void save_nkey_list(STRING key, struct hist * histp);
 static void setrecord(RECORD * dest, RECORD * src);
+static void term_hist_lists(void);
+static void term_hist(struct hist * histp);
 
 /*********************************************
  * local variables
@@ -165,7 +168,7 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 	ASSERT(prec);
 	ASSERT(pseq);
 	*prec = 0;
-	*pseq =0;
+	*pseq = 0;
 
 	if (*code == BROWSE_INDI) {
 		/* ctype of 'B' means any type but check persons first */
@@ -175,7 +178,7 @@ prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
 			*prec = qkey_to_record(key);
-			/* leaking sequence here, Perry, 2005-09-25 */
+			remove_indiseq(*pseq);
 			*pseq = NULL;
 			*code = BROWSE_UNK; /* not sure what we got above */
 		} else {
@@ -204,8 +207,9 @@ main_browse (RECORD rec1, INT code)
 	RECORD rec2=0;
 	INDISEQ seq = NULL;
 
-	if (!rec1)
+	if (!rec1) {
 		prompt_for_browse(&rec1, &code, &seq);
+	}
 
 	if (!rec1) {
 		if (!seq) return;
@@ -214,8 +218,6 @@ main_browse (RECORD rec1, INT code)
 			return;
 		}
 	}
-			
-
 
 	/*
 	loop here handle user browsing around through
@@ -252,8 +254,11 @@ main_browse (RECORD rec1, INT code)
 			}
 		}
 	}
+
 	setrecord(&rec1, NULL);
 	setrecord(&rec2, NULL);
+
+	ASSERT(!seq);
 }
 /*================================================
  * goto_indi_child - jump to child by number
@@ -1505,11 +1510,11 @@ choose_any_other (void)
 	return rec;
 }
 /*==================================================
- * load_hist_lists -- Load previous history from database
- * Created: 2001/12/23, Perry Rapp
+ * init_hist_lists -- initialize history lists
+ * Created: 2021/04/18, Matt Emmerton
  *================================================*/
 static void
-load_hist_lists (void)
+init_hist_lists (void)
 {
 	/* V for visit history, planning to also have a change history */
 	INT count = getlloptint("HistorySize", 20);
@@ -1517,6 +1522,14 @@ load_hist_lists (void)
 		count = 20;
 	init_hist(&vhist, count);
 	init_hist(&chist, count);
+}
+/*==================================================
+ * load_hist_lists -- Load previous history from database
+ * Created: 2001/12/23, Perry Rapp
+ *================================================*/
+static void
+load_hist_lists (void)
+{
 	if (getlloptint("SaveHistory", 0)) {
 		load_nkey_list("HISTV", &vhist);
 		load_nkey_list("HISTC", &chist);
@@ -1535,6 +1548,16 @@ save_hist_lists (void)
 	save_nkey_list("HISTC", &chist);
 }
 /*==================================================
+ * term_hist_lists -- destroy history lists
+ * Created: 2021/04/18, Matt Emmerton
+ *=================================================*/
+static void
+term_hist_lists (void)
+{
+	term_hist(&vhist);
+	term_hist(&chist);
+}
+/*==================================================
  * init_hist -- create & initialize a history list
  * Created: 2001/12/23, Perry Rapp
  *=================================================*/
@@ -1550,6 +1573,16 @@ init_hist (struct hist * histp, INT count)
 	histp->past_end = 0;
 }
 /*==================================================
+ * term_hist -- destroy a history list
+ * Created: 2021/04/18, Matt Emmerton
+ *=================================================*/
+static void
+term_hist (struct hist * histp)
+{
+	stdfree(histp->list);
+	histp->size = 0;
+}
+/*==================================================
  * load_nkey_list -- Load node list from record into NKEY array
  *  key:   [IN]  key used to store list in database
  *  histp: [IN]  history list to save
@@ -1561,17 +1594,19 @@ static void
 load_nkey_list (STRING key, struct hist * histp)
 {
 	STRING rawrec;
-	INT * ptr;
-	INT count, len, i, temp;
+	INT32 * ptr;
+	INT32 count;
+	INT32 temp;
+	INT len, i;
 
 	count = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
 		return;
 	if (len < 8 || (len % 8) != 0)
 		return;
-	ptr = (INT *)rawrec;
+	ptr = (INT32 *)rawrec;
 	temp = *ptr++;
-	if (temp<1 || temp > 9999) {
+	if (temp<0 || temp > 9999) {
 		/* #records failed sanity check */
 		msg_error("%s", _(qSbadhistcnt));
 		goto end;
@@ -1635,7 +1670,9 @@ static void
 save_nkey_list (STRING key, struct hist * histp)
 {
 	FILE * fp=0;
-	INT next, count, temp;
+	INT i, next;
+	INT32 count;	// write buffer for histp->count value
+	INT32 temp;	// write buffer for histp->list[] values
 	size_t rtn;
 
 	count = get_hist_count(histp);
@@ -1649,9 +1686,19 @@ save_nkey_list (STRING key, struct hist * histp)
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 	rtn = fwrite(&count, 4, 1, fp); ASSERT(rtn==1);
 
+	/* write entries */
 	next = histp->start;
-	while (1) {
+	for (i=0; i<count; ++i)
+	{
+		/*
+		 * Note that while keynum is an INT, the maximum (integer) key
+		 * length allowed in LifeLines is 7 bytes - 9,999,999 - which
+		 * is well below the max signed 32-bit integer value, so there
+		 * will be no actual data truncation here.
+		 */
+
 		/* write type & number, 4 bytes each */
+		/* type = char, keynum = INT (truncated!) */
 		temp = histp->list[next].ntype;
 		rtn = fwrite(&temp, 4, 1, fp); ASSERT(rtn==1);
 		temp = histp->list[next].keynum;
@@ -2031,7 +2078,7 @@ get_vhist_len (void)
 	return get_hist_count(&vhist);
 }
 /*==================================================
- * get_vhist_len -- how many records currently in change history list ?
+ * get_chist_len -- how many records currently in change history list ?
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
 INT
@@ -2048,6 +2095,7 @@ get_chist_len (void)
 void
 init_browse_module (void)
 {
+	init_hist_lists();
 	load_hist_lists();
 }
 /*==================================================
@@ -2059,4 +2107,5 @@ void
 term_browse_module (void)
 {
 	save_hist_lists();
+	term_hist_lists();
 }

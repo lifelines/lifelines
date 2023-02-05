@@ -52,18 +52,16 @@ generic_get_type_name (OBJECT obj)
  * nonrefcountable_isref -- simple isref for non-refcountable object
  *===============================================*/
 int
-nonrefcountable_isref (OBJECT obj)
+nonrefcountable_isref (HINT_PARAM_UNUSED OBJECT obj)
 {
-	obj = obj; /* NOTUSED */
 	return 0;
 }
 /*=================================================
  * refcountable_isref -- simple isref for generic refcountable object
  *===============================================*/
 int
-refcountable_isref (OBJECT obj)
+refcountable_isref (HINT_PARAM_UNUSED OBJECT obj)
 {
-	obj = obj; /* NOTUSED */
 	return 1;
 }
 /*=================================================

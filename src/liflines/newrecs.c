@@ -377,7 +377,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_othr(root1, refn2, body);
 	/* now root2 is solitary node, delete it */
-	free_node(root2); root2 = 0;
+	free_node(root2,"edit_record"); root2 = 0;
 
 /* Change the database */
 

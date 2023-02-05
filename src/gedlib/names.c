@@ -134,6 +134,7 @@ static CNSTRING *NRnames;
 static void
 allocnamerec(void)
 {
+	ASSERT(NRmax);
 	NRkeys = (RKEY *) stdalloc((NRmax)*sizeof(RKEY));
 	NRoffs = (INT32 *) stdalloc((NRmax)*sizeof(INT32));
 	NRnames = (CNSTRING *) stdalloc((NRmax)*sizeof(STRING));
@@ -146,8 +147,11 @@ static void
 freenamerec(void)
 {
 	stdfree(NRkeys);
+	NRkeys = NULL;
 	stdfree(NRoffs);
+	NRoffs = NULL;
 	stdfree((STRING)NRnames);
+	NRnames = NULL;
 	NRmax = 0;
 }
 
@@ -726,7 +730,9 @@ find_indis_by_name (CNSTRING name)
 	if ((rec = id_by_key(name, 'I'))) {
 		STRING key = rmvat(nxref(nztop(rec)));
 		enqueue_list(list, strsave(key));
-		return list;
+		/* no longer need the record */
+		release_record(rec);
+		goto finish;
 	}
 
 	for (i=0; i<soundex_count(); ++i) 	{
@@ -750,6 +756,8 @@ find_indis_by_name (CNSTRING name)
 			find_indis_worker(name, finitial, sdex, donetab, list);
 		}
 	}
+
+finish:
 	destroy_table(donetab);
 	strfree(&surname);
 	return list;
@@ -1229,11 +1237,10 @@ typedef struct
 } TRAV_NAME_PARAM;
 /* see above */
 static BOOLEAN
-traverse_name_callback (RKEY rkey, STRING data, INT len, void *param)
+traverse_name_callback (RKEY rkey, STRING data, HINT_PARAM_UNUSED INT len, void *param)
 {
 	TRAV_NAME_PARAM *tparam = (TRAV_NAME_PARAM *)param;
 	INT i;
-	len=len; /* unused */
 
 	parsenamerec(&rkey, data);
 
@@ -1257,9 +1264,17 @@ traverse_names (TRAV_NAMES_FUNC func, void *param)
  * flush_name_cache -- Clear any cached name records
  *==================================================*/
 static
-void flush_name_cache ()
+void flush_name_cache(void)
 {
 	if (NRrec) {
 		strfree(&NRrec);
 	}
+}
+/*====================================================
+ * term_namerec -- Free memory for parsing name records
+ *==================================================*/
+void term_namerec(void)
+{
+	strfree(&NRrec);
+	freenamerec();
 }
