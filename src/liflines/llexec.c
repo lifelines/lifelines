@@ -346,7 +346,7 @@ prompt_for_db:
 		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
-	
+
 	init_interpreter(); /* give interpreter its turn at initialization */
 
   	if (!int_codeset[0]) {
