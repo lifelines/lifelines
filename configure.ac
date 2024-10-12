@@ -44,15 +44,18 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
-
-dnl MTE: 01/11/04: Force the use of GNU Bison only.
-dnl MTE: AC_PROG_YACC will find any YACC, but only
-dnl MTE: Bison works for us.
 AC_PROG_YACC
+
+dnl Ensure that GNU Bison is being used.
+dnl On Linux, autoconf will use bison -y
+dnl On FreeBSD, autoconf will use bison -o y.tab.c
 if test "$YACC" != "bison -y";
 then
-  echo "LifeLines requires GNU Bison to compile src/interp/yacc.y."
-  exit
+  if test "$YACC" != "bison -o y.tab.c";
+  then
+    echo "LifeLines requires GNU Bison to compile src/interp/yacc.y."
+    exit
+  fi
 fi
 
 dnl **************************************************************

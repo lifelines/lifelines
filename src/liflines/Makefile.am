@@ -23,7 +23,8 @@ llexec_SOURCES = ask.c error.c lines_usage.c llexec.c selectdb.c miscutls.c llex
 
 # link for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
-	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a
+	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
+	../ui/libuicurses.a
 
 # link for llexec
 llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
