@@ -349,14 +349,13 @@ prompt_for_db:
 
   	init_interpreter(); /* give interpreter its turn at initialization */
 
-  if (!int_codeset[0]) {
+  	if (!int_codeset[0]) {
 		msg_info("%s", _("Warning: database codeset unspecified"));
 	} else if (!transl_are_all_conversions_ok()) {
 		msg_info("%s", _("Warning: not all conversions available"));
 	}
 	/* does not use show module */
 	/* does not use browse module */
-
 	if (exargs) {
 		set_cmd_options(exargs);
 		release_table(exargs);
