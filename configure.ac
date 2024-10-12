@@ -118,11 +118,19 @@ then
   fi
 fi
 
+dnl Specify use of static NLS libraries (libintl, libiconv)
+AC_ARG_WITH(static-nls,
+    [  --with-static-nls        Build with static NLS libraries ],
+    [build_static_nls=$withval],
+    [build_static_nls=no])
+
 dnl Specify code coverage if requested
 AC_ARG_WITH(coverage,
     [  --with-coverage             Build with code coverage ],
     [build_coverage=$withval],
     [build_coverage=no])
+
+AM_CONDITIONAL(WITH_STATIC_NLS, test "$build_static_nls" = "yes")
 
 if test "$build_coverage" = "yes"
 then
