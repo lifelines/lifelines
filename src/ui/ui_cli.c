@@ -29,6 +29,9 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#define UI_ENABLE_ASK
+#define UI_ENABLE_CHOOSE
+#define UI_ENABLE_OTHER
 #include "ui.h"
 
 /*********************************************
@@ -45,6 +48,28 @@ extern INT screen_width;
 static void outputln(const char * txt);
 static void output(const char * txt);
 static INT interact(CNSTRING ptrn);
+
+/*=============================================================
+ * Initialization and Termination
+ *===========================================================*/
+
+/*===================================================
+ * startup_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+BOOLEAN
+startup_ui (void)
+{
+	return TRUE;
+}
+
+/*===================================================
+ * shutdown_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+void
+shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
+{
+	return;
+}
 
 /*=============================================================
  * Xprintf() implementations
@@ -141,7 +166,7 @@ call_system_cmd (STRING cmd)
 		printf(_("Editor or system call failed."));
 		puts("");
 		sleep(2);
-        }
+	}
 }
 /*=============================================================
  * ASK Routines
