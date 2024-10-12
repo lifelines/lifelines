@@ -246,9 +246,8 @@ llrpt_dequeue (PNODE node, SYMTAB stab, BOOLEAN *eflg)
  *  Created: 2002/12/29 (Perry Rapp)
  *=================================*/
 static VPTR
-create_list_value_pvalue (LIST list)
+create_list_value_pvalue (HINT_PARAM_UNUSED LIST list)
 {
-	list=list; /* unused */
 	return create_pvalue_any();
 }
 /*==================================+

@@ -157,7 +157,7 @@ import_validating (void)
 	INT count=0;
 	INT row=0;
 
-	llwprintf(_("Checking GEDCOM file for errors.\n"));
+	llwprintf("%s\n", _("Checking GEDCOM file for errors."));
 	clear_rec_counts(0);
 
 	numstr = _pl("Error", "Errors", count);
@@ -279,7 +279,7 @@ save_gedcom (void)
 	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);
-		msg_error(_("The database was not saved."));
+		msg_error("%s", _("The database was not saved."));
 		return FALSE; 
 	}
 	prefix_file_for_gedcom(fp);

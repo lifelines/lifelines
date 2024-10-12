@@ -48,8 +48,12 @@
 
 #include "llinesi.h"
 #include "screen.h" /* calling initscr, noecho, ... */
+#include "ui.h"
 
-// for parser debugging
+/* for UI */
+extern BOOLEAN graphical;
+
+/* for parser debugging */
 extern int yydebug;
 
 #ifdef HAVE_GETOPT
@@ -62,7 +66,6 @@ extern int yydebug;
  * external variables (no header)
  *********************************************/
 
-extern STRING qScrdbse;
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
 extern STRING qSbaddb;
@@ -134,7 +137,6 @@ main (int argc, char **argv)
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
 	STRING progout=NULL;
-	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
 	STRING crashlog=NULL;
 	int i=0;
@@ -316,7 +318,7 @@ prompt_for_db:
 	else
 	{
 		stdstring_hardfail();
-		//yydebug = 1;
+		/* yydebug = 1; */
 	}
 
 	set_displaykeys(keyflag);
@@ -333,29 +335,22 @@ prompt_for_db:
 	crash_setcrashlog(crashlog);
 
 	/* start (n)curses and create windows */
+	if (!startup_ui())
 	{
-		char errmsg[512];
-		if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
-		{
-			endwin();
-			fprintf(stderr, "%s", errmsg);
-			goto finish;
-		}
-		set_screen_graphical(graphical);
+		goto finish;
 	}
-	init_interpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
-		llwprintf(_(qSnorwandro));
+		llwprintf("%s", _(qSnorwandro));
 		goto finish;
 	}
 	if (forceopen && lockchange) {
-		llwprintf(_(qSnofandl));
+		llwprintf("%s", _(qSnofandl));
 		goto finish;
 	}
 	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf(_(qSbdlkar));
+		llwprintf("%s", _(qSbdlkar));
 		goto finish;
 	}
 	if (forceopen)
@@ -380,9 +375,9 @@ prompt_for_db:
 		} else {
 			strupdate(&dbrequested, "");
 		}
-		if (!select_database(dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, alteration, &errmsg)) {
 			if (errmsg) {
-				llwprintf(errmsg);
+				llwprintf("%s", errmsg);
 			}
 			alldone = 0;
 			goto finish;
@@ -391,15 +386,16 @@ prompt_for_db:
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
-		llwprintf(_(qSbaddb));
+		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
 	if (!int_codeset[0]) {
-		msg_info(_("Warning: database codeset unspecified"));
+		msg_info("%s", _("Warning: database codeset unspecified"));
 	} else if (!transl_are_all_conversions_ok()) {
-		msg_info(_("Warning: not all conversions available"));
+		msg_info("%s", _("Warning: not all conversions available"));
 	}
 
+	init_interpreter(); /* give interpreter its turn at initialization */
 	init_show_module();
 	init_browse_module();
 	if (exargs) {
@@ -425,8 +421,8 @@ finish:
 	/* we free this not because we care so much about these tiny amounts
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
-	strfree(&dbused);
 	strfree(&dbrequested);
+	strfree(&dbused);
 	strfree(&readpath_file);
 	shutdown_interpreter();
 	close_lifelines();
@@ -470,22 +466,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 
 		}
 	}
-}
-/*===================================================
- * shutdown_ui -- Do whatever is necessary to close GUI
- * Created: 2001/11/08, Perry Rapp
- *=================================================*/
-void
-shutdown_ui (BOOLEAN pause)
-{
-	term_screen();
-	if (pause) /* if error, give user a second to read it */
-		sleep(1);
-	/* TO DO - signals also calls into here -- how do we figure out
-	whether or not we should call endwin ? In case something happened
-	before curses was invoked, or after it already closed ? */
-	/* Terminate Curses UI */
-	endwin();
 }
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other

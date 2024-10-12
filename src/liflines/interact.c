@@ -139,7 +139,7 @@ interact_worker (UIWINDOW uiwin, STRING str, INT screen)
 				return cmdnum;
 			}
 			if (cmdnum != CMD_PARTIAL) {
-				msg_error(_(qSmn_unkcmd));
+				msg_error("%s", _(qSmn_unkcmd));
 				offset = 0;
 			}
 		}

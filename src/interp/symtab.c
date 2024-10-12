@@ -153,7 +153,7 @@ create_symtab (CNSTRING title, SYMTAB parstab)
 
 	symtab->tab = create_table_custom_vptr(delete_vptr_pvalue);
 	symtab->parent = parstab;
-	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, title);
+	llstrncpyf(symtab->title, sizeof(symtab->title), uu8, "%s", title);
 
 	record_live_symtab(symtab);
 
@@ -194,9 +194,7 @@ void
 symbol_tables_end (void)
 {
 	/* for debugging check that no symbol tables leaked */
-	INT leaked_symtabs = length_list(live_symtabs);
-	leaked_symtabs = leaked_symtabs; /* remove unused warning */
-	/* 2005-02-06, 2200Z, Perry: No leaks here */
+	HINT_VAR_UNUSED INT leaked_symtabs = length_list(live_symtabs);
 }
 /*======================================================
  * in_symtab -- Does symbol table have this entry ?

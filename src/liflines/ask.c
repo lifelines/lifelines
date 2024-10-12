@@ -95,14 +95,14 @@ ask_for_fam (STRING pttl, STRING sttl)
 		if (!sib) return NULL;
 		fam = FAMC(nztop(sib));
 		if (!fam) {
-			message(_(qSntchld));
+			message("%s", _(qSntchld));
 			return NULL;
 		}
 		frec = key_to_frecord(rmvat(nval(fam)));
 		return frec;
 	}
 	if (!FAMS(nztop(prn))) {
-		message(_(qSntprnt));
+		message("%s", _(qSntprnt));
 		return NULL;
 	}
 	return choose_family(prn, _(qSparadox), _(qSidfbrs), TRUE);
@@ -188,7 +188,7 @@ ask_for_file_worker (STRING mode,
 	if (!rtn || !fname[0]) return NULL;
 
 	if (!expand_special_fname_chars(fname, sizeof(fname), uu8)) {
-		msg_error(_(qSfn2long));
+		msg_error("%s", _(qSfn2long));
 		return NULL;
 	}
 
@@ -309,7 +309,7 @@ ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
 			if (seq) {
 				*prc = RC_SELECT;
 			} else {
-				msg_error(_(qSnonamky));
+				msg_error("%s", _(qSnonamky));
 				continue;
 			}
 		}
@@ -412,7 +412,9 @@ ask_for_indi_key (STRING ttl, ASK1Q ask1)
 {
 	RECORD indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
-	return rmvat(nxref(nztop(indi)));
+	NODE node = nztop(indi);
+	release_record(indi);
+	return rmvat(nxref(node));
 }
 /*===============================================================
  * choose_one_from_indiseq_if_needed  -- handle ask1 cases
@@ -449,7 +451,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
-	listbadkeys=1;
+	listbadkeys = 1;
 	/* which typed value indiseq is this ? */
 	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
 	{
@@ -467,8 +469,8 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
 		if (badkeylist[0])
 			llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
 		else
-			llstrncpyf(buf, sizeof(buf), uu8, _(qSbadkeyptr));
-		message(buf);
+			llstrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
+		message("%s", buf);
 	}
 	return rec;
 }

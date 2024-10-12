@@ -130,8 +130,8 @@ repaint_search_menu (UIWINDOW uiwin)
 	n = get_vhist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl("v  Review visit history (%d record)"
-			, "v  Review visit history (%d records)"
+			, _pl("v  Review visit history (" FMT_INT " record)"
+			, "v  Review visit history (" FMT_INT " records)"
 			, n), n);
 	} else {
 		llstrncpy(buffer, _("(visit history is empty)"), sizeof(buffer), uu8);
@@ -140,8 +140,8 @@ repaint_search_menu (UIWINDOW uiwin)
 	n = get_chist_len();
 	if (n>0) {
 		llstrncpyf(buffer, sizeof(buffer), uu8
-			, _pl("c  Review change history (%d record)"
-			, "c  Review change history (%d records)"
+			, _pl("c  Review change history (" FMT_INT " record)"
+			, "c  Review change history (" FMT_INT " records)"
 			, n), n);
 	} else {
 		llstrncpy(buffer, _("(change history is empty)")
@@ -205,7 +205,7 @@ invoke_fullscan_menu (void)
 		}
 		deactivate_uiwin_and_touch_all();
 		if (!done)
-			msg_status(_(qSsts_sca_non));
+			msg_status("%s", _(qSsts_sca_non));
 	}
 	return seq;
 }
@@ -275,7 +275,7 @@ invoke_search_source_menu (void)
 
 		deactivate_uiwin_and_touch_all();
 		if (!done)
-			msg_status(_(qSsts_sca_non));
+			msg_status("%s", _(qSsts_sca_non));
 	}
 	return seq;
 }

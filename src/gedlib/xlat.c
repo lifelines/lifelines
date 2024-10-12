@@ -474,7 +474,7 @@ load_dynttlist_from_dir (STRING dir)
 			UTF-8__HTML (type 2; subcoding)
 		*/
 		if (getlloptint("TTPATH.debug", 0)) {
-			log_outf("ttpath.dbg", _("ttpath file <%s> typed as %d"), ttfile, ntype);
+			log_outf("ttpath.dbg", _("ttpath file <%s> typed as " FMT_INT), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
@@ -726,9 +726,8 @@ xl_is_xlat_valid (XLAT xlat)
  * Created: 2002/12/15 (Perry Rapp)
  *========================================================*/
 void
-xl_release_xlat (XLAT xlat)
+xl_release_xlat (HINT_PARAM_UNUSED XLAT xlat)
 {
-	xlat=xlat; /* unused */
 	/*
 	TODO: If it is an adhoc xlat, free it
 	Have to remove it from cache list, which is slightly annoying

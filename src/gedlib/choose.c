@@ -52,7 +52,7 @@ choose_child (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (irec) seq = indi_to_children(nztop(irec));
 	if (!irec && frec) seq = fam_to_children(nztop(frec));
 	if (!seq) {
-		msg_error(msg0);
+		msg_error("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
@@ -74,7 +74,7 @@ choose_spouse (RECORD irec, STRING msg0, STRING msgn)
 
 	if (!irec) return NULL;
 	if (!(seq = indi_to_spouses(nztop(irec)))) {
-		message(msg0);
+		message("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
@@ -93,7 +93,7 @@ choose_source (RECORD current, STRING msg0, STRING msgn)
 	RECORD rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_sources(nztop(current)))) {
-		message(msg0);
+		message("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
@@ -113,7 +113,7 @@ choose_note (RECORD current, STRING msg0, STRING msgn)
 	RECORD rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_notes(nztop(current)))) {
-		message(msg0);
+		message("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
@@ -134,7 +134,7 @@ choose_pointer (RECORD current, STRING msg0, STRING msgn)
 	RECORD rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_pointers(nztop(current)))) {
-		message(msg0);
+		message("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
@@ -156,7 +156,7 @@ choose_family (RECORD irec, STRING msg0, STRING msgn, BOOLEAN fams)
 	INDISEQ seq = indi_to_families(nztop(irec), fams);
 	if (!seq) {
 		if (msg0)
-			msg_error(msg0);
+			msg_error("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
@@ -180,7 +180,7 @@ choose_father (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (irec) seq = indi_to_fathers(nztop(irec));
 	if (!irec && frec) seq = fam_to_fathers(nztop(frec));
 	if (!seq) {
-		msg_error(msg0);
+		msg_error("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
@@ -204,7 +204,7 @@ choose_mother (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
 	if (irec) seq = indi_to_mothers(nztop(irec));
 	if (!irec && frec) seq = fam_to_mothers(nztop(frec));
 	if (!seq) {
-		msg_error(msg0);
+		msg_error("%s", msg0);
 		return NULL;
 	}
 	rec = choose_from_indiseq(seq, ask1, msgn, msgn);

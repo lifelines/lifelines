@@ -61,11 +61,11 @@ print_version (CNSTRING program)
         printf("%s (lifelines) %s\n", program, get_lifelines_version(48));
         printf("\n");
 
-        printf(_(qSgen_copyright));
+        printf("%s", _(qSgen_copyright));
         printf("\n");
-        printf(_(qSgen_warranty));
+        printf("%s", _(qSgen_warranty));
         printf("\n");
-        printf(_(qSgen_website));
+        printf("%s", _(qSgen_website));
         printf("\n");
 
 }

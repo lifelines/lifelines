@@ -30,13 +30,12 @@ MANUALSSRC_en = ll-reportmanual.xml \
 MANUALSSRC_sv = ll-reportmanual.sv.xml \
 		ll-userguide.sv.xml
 
-MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv) \
-		ll-html.xsl
+MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
 
 IMAGES =	listops.jpg
 
-MANUALS_static = ll-index.html \
-		 ll-index.sv.html \
+MANUALS_static = index.html \
+		 index.sv.html \
 		 $(IMAGES)
 
 ###################
@@ -64,8 +63,8 @@ CLEANFILES += $(MANUALS)
 	@TOOL_DBLATEX@ $^
 
 .xml.html:
-	@TOOL_XMLTO@ -x @srcdir@/ll-html.xsl xhtml-nochunks $^
+	@TOOL_XMLTO@ --skip-validation xhtml-nochunks $^
 
 .xml.txt:
-	@TOOL_XMLTO@ txt $^
+	@TOOL_XMLTO@ --skip-validation txt $^
 endif

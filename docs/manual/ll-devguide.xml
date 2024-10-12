@@ -1,4 +1,7 @@
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook"
+<?xml version="1.0"?>
+<book xmlns="http://docbook.org/ns/docbook"
+      version="5.0"
+      xml:id="docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <info>

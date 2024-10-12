@@ -44,8 +44,8 @@ STRING empstr71 = SS "                                                          
 ZST qSiddbse      = N_("You must identify a database.");
 ZST qSidldir      = N_("What directory holds (or will hold) the LifeLines database? (? to list)");
 ZST qSidldrp      = N_("enter path: ");
-ZST qSnodbse      = N_("There is no LifeLines database in that directory.");
-ZST qScrdbse      = N_("Do you want to create a database there?");
+ZST qSnodbse      = N_("No LifeLines database found.");
+ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
 ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
@@ -442,7 +442,7 @@ ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
 
 /* list menu */
 
-ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, i Select, q Quit");
+ZST qSchlistx     = N_("Commands:   Select by number, u Page Up, d Page Down, q Quit");
 ZST qSvwlistx     = N_("Commands:   u Page Up, d Page Down, q Quit");
 ZST qSerrlist     = N_("Messages:");
 
@@ -697,4 +697,4 @@ ZST qSgen_warranty  = N_("This is free software; see the source for copying cond
 ZST qSgen_license   = N_("Lifelines is distributed under an X/MIT Open Source license.\n"
                          "\tSee file LICENSE in the program directory.");
 ZST qSgen_website   = N_("For more information, visit our web site at https://lifelines.github.io/lifelines/");
-ZST qSgen_bugreport = N_("Please peport bugs to https://github.com/lifelines/lifelines/issues");
+ZST qSgen_bugreport = N_("Please report bugs to https://github.com/lifelines/lifelines/issues");

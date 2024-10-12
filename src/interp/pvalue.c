@@ -203,11 +203,8 @@ set_pvalue (PVALUE val, INT type, PVALUE_DATA pvd)
  * Created: 2003-02-04 (Perry Rapp)
  *======================================*/
 void
-dolock_node_in_cache (NODE node, BOOLEAN lock)
+dolock_node_in_cache (HINT_PARAM_UNUSED NODE node, HINT_PARAM_UNUSED BOOLEAN lock)
 {
-	node = node;	/* NOTUSED */
-	lock = lock;	/* NOTUSED */
-
 #if NOT_WORKING_ON_LARGE_DATA_SETS
 /* This leads to cache overflow, so there is something
 wrong here - Perry, 2003-03-07 */
@@ -332,10 +329,9 @@ clear_pv_indiseq (INDISEQ seq)
  *======================================*/
 #ifdef UNUSED
 static void
-table_pvcleaner (CNSTRING key, UNION uval)
+table_pvcleaner (HINT_PARAM_UNUSED CNSTRING key, UNION uval)
 {
 	PVALUE val = uval.w;
-	key=key; /* unused */
 	delete_pvalue(val);
 	uval.w = NULL;
 }
@@ -936,7 +932,7 @@ void
 show_pvalue (PVALUE val)
 {
 	ZSTR zstr = describe_pvalue(val);
-	llwprintf(zs_str(zstr));
+	llwprintf("%s", zs_str(zstr));
 	zs_free(&zstr);
 }
 /*=================================================
@@ -980,7 +976,7 @@ describe_pvalue (PVALUE val)
 		zs_appf(zstr, "<NULL>");
 		break;
 	case PINT:
-		zs_appf(zstr, "%d", pvalue_to_int(val));
+		zs_appf(zstr, FMT_INT, pvalue_to_int(val));
 		break;
 	case PFLOAT:
 		zs_appf(zstr, "%f", pvalue_to_float(val));
@@ -1013,7 +1009,7 @@ describe_pvalue (PVALUE val)
 		{
 			RECORD rec = pvalue_to_record(val);
 			if (rec)
-				zs_appf(zstr, nzkey(rec));
+				zs_appf(zstr, "%s", nzkey(rec));
 			else
 				zs_appf(zstr, "NULL");
 		}
@@ -1022,32 +1018,32 @@ describe_pvalue (PVALUE val)
 		{
 			LIST list = pvalue_to_list(val);
 			INT n = length_list(list);
-			zs_appf(zstr, _pl("%d item", "%d items", n), n);
+			zs_appf(zstr, _pl(FMT_INT " item", FMT_INT " items", n), n);
 		}
 		break;
 	case PTABLE:
 		{
 			TABLE table = pvalue_to_table(val);
 			INT n = get_table_count(table);
-			zs_appf(zstr, _pl("%d entry", "%d entries", n), n);
+			zs_appf(zstr, _pl(FMT_INT " entry", FMT_INT " entries", n), n);
 		}
 		break;
 	case PSET:
 		{
 			INDISEQ seq = pvalue_to_seq(val);
 			INT n = length_indiseq(seq);
-			zs_appf(zstr, _pl("%d record", "%d records", n), n);
+			zs_appf(zstr, _pl(FMT_INT " record", FMT_INT " records", n), n);
 		}
 		break;
 	case PARRAY:
 		{
 			ARRAY arr = pvalue_to_array(val);
 			INT n = get_array_size(arr);
-			zs_appf(zstr, _pl("%d element", "%d elements", n), n);
+			zs_appf(zstr, _pl(FMT_INT " element", FMT_INT " elements", n), n);
 		}
 		break;
 	default:
-		zs_appf(zstr, "%p", pvalvv(val));
+		zs_appf(zstr, "%p", (void*)&pvalvv(val));
 		break;
 	}
 	zs_appc(zstr, '>');
@@ -1195,9 +1191,8 @@ CACHEEL
 pvalue_to_cel (PVALUE val)
 {
 	RECORD rec = pvalue_to_record(val);
-	NODE root = nztop(rec); /* force record into cache */
+	HINT_VAR_UNUSED NODE root = nztop(rec); /* force record into cache */
 	CACHEEL cel = nzcel(rec);
-	root = root;	/* NOTUSED */
 	return cel;
 }
 /*==================================

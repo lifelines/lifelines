@@ -256,7 +256,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		handle_err(ifeed, qSnoname, defline);
 	check_references(ifeed);
 	closelog();
+
+	// cleanup
 	strfree(&tag0);
+	strfree(&xref0);
 	return num_errors == 0;
 }
 /*=======================================
@@ -509,10 +512,8 @@ add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_head_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, STRING tag, STRING val, HINT_PARAM_UNUSED INT line)
 {
-	ifeed=ifeed; /* unused */
-	line=line; /* unused */
 	if (eqstr(tag, "CHAR")) {
 		strupdate(&gedcom_codeset_in, (val ? val : ""));
 	}
@@ -522,12 +523,8 @@ handle_head_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_trlr_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line)
+handle_trlr_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, HINT_PARAM_UNUSED STRING tag, HINT_PARAM_UNUSED STRING val, HINT_PARAM_UNUSED INT line)
 {
-	ifeed=ifeed; /* unused */
-	tag=tag; /* unused */
-	val=val; /* unused */
-	line=line; /* unused */
 }
 /*===========================================================
  * report_missing_value -- Report line with incorrectly empty value
@@ -633,13 +630,12 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRI
  * check_level1_tag -- Warnings for specific tags at level 1
  *========================================================*/
 static void
-check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
+check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, HINT_PARAM_UNUSED CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
 {
 	/*
 	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
 	to be correct, so warn if any of them occur in unusual locations
 	*/
-	val = val;    /* unused */
 	if (eqstr(tag, "FAMS")) {
 		if (!eqstr(tag0, "INDI"))
 			handle_warn(ifeed, qSlinlev1, line, tag, tag0, xref0);
@@ -924,7 +920,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 
 	++num_errors;
-	zs_setf(zstr, _pl("%6d Error", "%6d Errors", num_errors), num_errors);
+	zs_setf(zstr, _pl(FMT_INT_6 " Error", FMT_INT_6 " Errors", num_errors), num_errors);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -952,7 +948,7 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 	}
 	
 	++num_warns;
-	zs_setf(zstr, _pl("%6d Warning", "%6d Warnings", num_warns), num_warns);
+	zs_setf(zstr, _pl(FMT_INT_6 " Warning", FMT_INT_6 " Warnings", num_warns), num_warns);
 	if (f_logopen)
 		zs_appf(zstr, _(" (see log file <%s>)"), f_logpath);
 	else
@@ -1038,10 +1034,13 @@ clear_structures (void)
 	}
 	for (i = 0; i < struct_len; i++) {
 		ELMNT el = index_data[i];
-		index_data[i] = 0;
+		index_data[i] = NULL;
 		free_elmnt(el);
 	}
+	stdfree(index_data);
+	index_data = NULL;
 	struct_len = 0;
+	struct_max = 0;
 }
 /*=====================================
  * set_import_log -- Specify where import errors logged
@@ -1075,32 +1074,32 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		lastoff = ftell(fp);
 		curlev = lev;
 		if (linno==500) {
-			*zerr = zs_newf(_("Processed %d lines without finding end of HEAD"), linno);
+			*zerr = zs_newf(_("Processed " FMT_INT " lines without finding end of HEAD"), linno);
 			break;
 		}
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
 		if (rc==DONE) {
-			*zerr = zs_newf(_("End of file at line %d"), linno);
+			*zerr = zs_newf(_("End of file at line " FMT_INT), linno);
 			break;
 		}
 		if (rc==ERROR) {
-			*zerr = zs_newf(_("Error at line %d: %s"), linno, msg);
+			*zerr = zs_newf(_("Error at line " FMT_INT ": %s"), linno, msg);
 			break;
 		}
 		if (lev < 0 || lev > curlev+1) {
-			*zerr = zs_newf(_("Bad level at line %d"), linno);
+			*zerr = zs_newf(_("Bad level at line " FMT_INT), linno);
 			break;
 		}
 		if (lev==0) {
 			if (eqstr(tag, "HEAD")) {
 				if (head) {
-					*zerr = zs_newf(_("Duplicate HEAD line at line %d"), linno);
+					*zerr = zs_newf(_("Duplicate HEAD line at line " FMT_INT), linno);
 					break;
 				} else {
 					head=1;
 				}
 			} else if (!head) {
-				*zerr = zs_newf(_("Missing HEAD line at line %d"), linno);
+				*zerr = zs_newf(_("Missing HEAD line at line " FMT_INT), linno);
 				break;
 			} else {
 				fseek(fp, lastoff, SEEK_SET);

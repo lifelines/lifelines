@@ -84,7 +84,7 @@ add_indi_by_edit (RFMT rfmt)
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 
@@ -200,8 +200,12 @@ add_indi_no_cache (NODE indi)
 	NODE node, name, refn, sex, body, famc, fams;
 	STRING str, key;
 
+	// Save INDI key value since rmvat static array entries may get reused
+	// before we write the INDI out (for example, >32 ASSO tags). This
+	// prevents us from writing the record out using the wrong key.
+	key = strsave(rmvat(nxref(indi)));
+
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	key = rmvat(nxref(indi));
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
@@ -211,6 +215,7 @@ add_indi_no_cache (NODE indi)
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
 	stdfree(str);
+	stdfree(key);
 	return TRUE;
 }
 /*========================================================
@@ -251,13 +256,17 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 	INT i;
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return NULL;
 	}
 
 /* Identify child if caller did not */
 
-	if (!child) child = nztop(ask_for_indi(_(qSidchld), DOASK1));
+	if (!child) {
+		RECORD rec = ask_for_indi(_(qSidchld), DOASK1);
+		child = nztop(rec);
+		release_record(rec);
+	}
 	if (!child) return NULL;
 
 /* Warn if child to add is already in some family */
@@ -268,7 +277,11 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 
 /* Identify family if caller did not */
 
-	if (!fam) fam = nztop(ask_for_fam(_(qSidprnt), _(qSidsbln)));
+	if (!fam) {
+		RECORD rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
+		fam = nztop(rec);
+		release_record(rec);
+	}
 	if (!fam) return NULL;
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
@@ -357,7 +370,7 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 	NODE spouse, fam = nztop(frec);
 
 	if (readonly) {
-		message(_(qSronlye));
+		message("%s", _(qSronlye));
 		return FALSE;
 	}
 
@@ -367,7 +380,7 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 	if (!sprec) return FALSE;
 	spouse = nztop(sprec);
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
-		message(_(qSnosex));
+		message("%s", _(qSnosex));
 		return FALSE;
 	}
 
@@ -383,11 +396,11 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (sex == SEX_MALE && husb) {
-			message(_(qShashsb));
+			message("%s", _(qShashsb));
 			return FALSE;
 		}
 		if (sex == SEX_FEMALE && wife) {
-			message(_(qShaswif));
+			message("%s", _(qShaswif));
 			return FALSE;
 		}
 	}
@@ -526,7 +539,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	FILE *fp=NULL;
 
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 
@@ -544,7 +557,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	if (!sprec1) 
 		return NULL;
 	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN) {
-		message(_(qSunksex));
+		message("%s", _(qSunksex));
 		return NULL;
 	}
 
@@ -555,7 +568,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	if (sprec2) {
 		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || 
 			(traditional && sex1 == sex2)) {
-			message(_(qSnotopp));
+			message("%s", _(qSnotopp));
 			return NULL;
 		}
 	}
@@ -657,7 +670,7 @@ editfam:
 	/* Add the new record to the database */
 	add_new_fam_to_db(fam2, spouse1, spouse2, child);
 
-	message(_(qSgdfadd));
+	message("%s", _(qSgdfadd));
 
 	key = rmvat(nxref(fam2));
 	return key_to_record(key);

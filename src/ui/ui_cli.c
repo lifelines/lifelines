@@ -29,6 +29,9 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#define UI_ENABLE_ASK
+#define UI_ENABLE_CHOOSE
+#define UI_ENABLE_OTHER
 #include "ui.h"
 
 /*********************************************
@@ -45,6 +48,28 @@ extern INT screen_width;
 static void outputln(const char * txt);
 static void output(const char * txt);
 static INT interact(CNSTRING ptrn);
+
+/*=============================================================
+ * Initialization and Termination
+ *===========================================================*/
+
+/*===================================================
+ * startup_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+BOOLEAN
+startup_ui (void)
+{
+	return TRUE;
+}
+
+/*===================================================
+ * shutdown_ui -- (Placeholder, we don't need it)
+ *=================================================*/
+void
+shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
+{
+	return;
+}
 
 /*=============================================================
  * Xprintf() implementations
@@ -79,6 +104,14 @@ refresh_stdout (void)
  * Message output functions
  *===========================================================*/
 void
+message (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
 msg_error (char *fmt, ...)
 {
 	va_list args;
@@ -103,10 +136,9 @@ msg_status (char *fmt, ...)
 	va_end(args);
 }
 void
-msg_output (MSG_LEVEL level, STRING fmt, ...)
+msg_output (HINT_PARAM_UNUSED MSG_LEVEL level, STRING fmt, ...)
 {
 	va_list args;
-	level=level;
 	va_start(args, fmt);
 	vprintf(fmt, args);
 	va_end(args);
@@ -134,28 +166,20 @@ call_system_cmd (STRING cmd)
 		printf(_("Editor or system call failed."));
 		puts("");
 		sleep(2);
-        }
+	}
 }
 /*=============================================================
  * ASK Routines
  *===========================================================*/
 BOOLEAN
-ask_for_program (STRING mode,
-                 STRING ttl,
-                 STRING *pfname,
-                 STRING *pfullpath,
-                 STRING path,
-                 STRING ext,
-                 BOOLEAN picklist)
+ask_for_program (HINT_PARAM_UNUSED STRING mode,
+                 HINT_PARAM_UNUSED STRING ttl,
+                 HINT_PARAM_UNUSED STRING *pfname,
+                 HINT_PARAM_UNUSED STRING *pfullpath,
+                 HINT_PARAM_UNUSED STRING path,
+                 HINT_PARAM_UNUSED STRING ext,
+                 HINT_PARAM_UNUSED BOOLEAN picklist)
 {
-	mode = mode;		/* NOTUSED */
-	ttl = ttl;		/* NOTUSED */
-	pfname = pfname;	/* NOTUSED */
-	pfullpath = pfullpath;	/* NOTUSED */
-	path = path;		/* NOTUSED */
-	ext = ext;		/* NOTUSED */
-	picklist = picklist;	/* NOTUSED */
-
 	/* TODO: We probably want to use the real implementation in askprogram.c */
 	return FALSE;
 }
@@ -210,9 +234,8 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
 	return yes_no_value(c);
 }
 BOOLEAN
-ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING basedir, STRING buffer, INT buflen)
 {
-	basedir = basedir;	/* NOTUSED */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
 BOOLEAN
@@ -289,11 +312,8 @@ choose_list_from_indiseq (STRING ttl, INDISEQ seq)
 	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
 }
 INT
-choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
+choose_one_or_list_from_indiseq (HINT_PARAM_UNUSED STRING ttl, INDISEQ seq, HINT_PARAM_UNUSED BOOLEAN multi)
 {
-	ttl = ttl;	/* NOTUSED */
-	multi = multi;	/* NOTUSED */
-
 	calc_indiseq_names(seq); /* we certainly need the names */
 
 	/* TODO: imitate choose_from_list & delegate to array chooser */
@@ -307,18 +327,21 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
 INT
 choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 {
-	/* TODO: The q ought to be localized */
 	STRING promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	STRING responses = selectable ? "0123456789udq" : "udq";
-	INT i=0;
 
-	ttl = ttl;	/* NOTUSED */
-
+	INT start=1;
 	while (1) {
+                INT end = start+(start == 1 ? 8 : 9);
+                if (end > no) {
+                        end = no;
+                }
 		INT j;
 		INT rv;
-		for (j=i; j<i+10 && j<no; ++j) {
-			printf(FMT_INT ": %s\n", j-i, pstrngs[j]);
+                printf("%s (" FMT_INT "/" FMT_INT ")\n", _(ttl),start,no);
+
+		for (j=start; j<=end; ++j) {
+			printf(FMT_INT ": %s\n", j%10, pstrngs[j-1]);
 		}
 		printf("%s\n", promptline);
 		rv = interact(responses);
@@ -333,19 +356,33 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selectable)
 		case '7':
 		case '8':
 		case '9':
-			rv = i+rv-'0';
-			if (selectable && rv < no) {
+			rv = rv-'1' + (start/10)*10;
+			if (selectable && rv < no ) {
 				return rv;
 			}
 			break;
 		case 'd':
-			if (i+10 < no)
-				i += 10;
+                        // if end == no don't slide window down
+                        if (end != no) {
+                                if (start == 1) {
+                                        start += 9;
+                                } else {
+                                        start += 10;
+                                }
+                                if (start > no) {
+                                         start = no;
+                                }
+                        }
 			break;
 		case 'u':
-			if (i>9)
-				i -= 10;
+			if (start >9)  {
+                                start -= 10;
+                        }
+                        if (start < 1) {
+                                start = 1;
+                        }
 			break;
+                case 0: /* trap EOF and treat like a q */
 		case 'q': return -1;
 		}
 	}
@@ -405,6 +442,6 @@ interact (CNSTRING ptrn)
 			if (buffer[0]==*t)
 				return buffer[0];
 		}
-		printf("Invalid option: choose one of %s\n", ptrn);
+		printf("Invalid option(%c): choose one of %s\n",buffer[0], ptrn);
 	}
 }

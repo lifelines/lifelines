@@ -99,7 +99,7 @@ vcrashlog (int newline, const char * fmt, va_list args)
 	errlog_out(NULL, buffer, NULL, -1);
 
 	/* send to screen */
-	llwprintf(buffer);
+	llwprintf("%s", buffer);
 }
 /*===============================
  * vcrashlog -- Send crash info to crash log and screen

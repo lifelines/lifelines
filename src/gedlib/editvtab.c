@@ -67,14 +67,14 @@ edit_valtab_from_db (STRING key, TABLE *ptab, INT sep, STRING ermsg, STRING (*va
 	unlink(editfile);
 
 	if (retrieve_to_textfile(key, editfile, trans_ined) == RECORD_ERROR) {
-		msg_error(_(qSdataerr));
+		msg_error("%s", _(qSdataerr));
 		return FALSE;
 	}
 	if (!edit_valtab_impl(ptab, sep, ermsg, validator, param))
 		return FALSE;
 
 	if (readonly) {
-		msg_error(_(qSronly));
+		msg_error("%s", _(qSronly));
 		return FALSE;
 	}
 	store_text_file_to_db(key, editfile, trans_edin);
@@ -139,12 +139,11 @@ edit_valtab_impl (TABLE *ptab, INT sep, STRING ermsg, STRING (*validator)(TABLE 
  * Created: 2001/07/22 (Perry Rapp)
  *============================================*/
 static STRING
-trans_edin (STRING input, INT len)
+trans_edin (STRING input, HINT_PARAM_UNUSED INT len)
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN); /* editor to internal */
 	ZSTR zstr = translate_string_to_zstring(ttmi, input);
 	STRING str = strdup(zs_str(zstr));
-	len=len; /* unused */
 	zs_free(&zstr);
 	return str;
 }
@@ -156,12 +155,11 @@ trans_edin (STRING input, INT len)
  * Created: 2001/07/22 (Perry Rapp)
  *============================================*/
 static STRING
-trans_ined (STRING input, INT len)
+trans_ined (STRING input, HINT_PARAM_UNUSED INT len)
 {
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	ZSTR zstr = translate_string_to_zstring(ttmo, input);
 	STRING str = strdup(zs_str(zstr));
-	len=len; /* unused */
 	zs_free(&zstr);
 	return str;
 }

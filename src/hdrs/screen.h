@@ -78,9 +78,6 @@
 #   define ACS_URCORNER '*'
 #endif
 
-/* box drawing character type */
-typedef unsigned long llchtype;
-
 /*=========================================
  * UIWINDOWs -- Main screen, menus and popups
  *=======================================*/
@@ -169,9 +166,8 @@ void display_2indi(RECORD irec1, RECORD irec2, INT mode);
 void display_fam(RECORD fam, INT mode, BOOLEAN reuse);
 void display_indi(RECORD indi, INT mode, BOOLEAN reuse);
 void display_screen(INT);
-void dbprintf(STRING, ...);
+void dbprintf(STRING, ...) HINT_PRINTF(1,2);
 void draw_win_box(WINDOW * win);
-llchtype get_gr_ttee(void);
 INT get_main_screen_width(void);
 int get_uitime(void);
 int init_screen(char * errmsg, int errsize);

@@ -384,7 +384,6 @@ cgn_callback (TRAV_NAMES_FUNC_ARGS(key, name, newset, param))
 	/* a name record which points at indi=key */
 	RECORD indi0 = NULL;
 	NODE indi = NULL;
-	param=param; /* unused */
 
 	/* bail out immediately if not INDI */
 	if (key[0] != 'I') {
@@ -404,7 +403,8 @@ cgn_callback (TRAV_NAMES_FUNC_ARGS(key, name, newset, param))
 
 	append_indiseq_sval(soundexseq, strsave(key), (STRING)name, strsave(name)
 		, TRUE, TRUE); /* sure, alloc */
-
+	indi = nztop(indi0);	// reload, in case finish_and_delete_nameset
+				// caused indi to drop out of cache
 	if (!indi) {
 		report_error(ERR_ORPHANNAME, _("Orphaned name: %s"), name);
 		if (todo.fix_ghosts)
@@ -442,7 +442,6 @@ cgr_callback (TRAV_REFNS_FUNC_ARGS(key, refn, newset, param))
 	/* a refn record which points at record=key */
 	RECORD rec = key_to_record(key);
 	NODE node = nztop(rec);
-	param = param; /* unused */
 
 	if (newset) {
 		finish_and_delete_refnset();
@@ -601,7 +600,6 @@ fix_nodes (void)
 static BOOLEAN
 nodes_callback(TRAV_RECORDS_FUNC_ARGS(key, rec, param))
 {
-	param=param;	/* NOTUSED */
 	if (noisy)
 		report_progress("Checking Node: %s", key);
 	switch (key[0]) {
@@ -1043,11 +1041,8 @@ check_node (CNSTRING n0key, NODE node, INT level)
  * fix_bad_pointer -- Fix bad pointer if requested
  *=================================*/
 static BOOLEAN
-fix_bad_pointer (CNSTRING key, RECORD rec, NODE node)
+fix_bad_pointer (HINT_PARAM_UNUSED CNSTRING key, HINT_PARAM_UNUSED RECORD rec, NODE node)
 {
-	key=key; /* unused */
-	rec=rec; /* unused */
-
 	if (todo.fix_alter_pointers) {
 		change_node_tag(node, "_badptr");
 		return TRUE;

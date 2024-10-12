@@ -78,7 +78,7 @@ edit_add_source (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 	str = getlloptstr("SOURREC", _(qSdefsour));
@@ -92,7 +92,7 @@ edit_add_event (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 	str = getlloptstr("EVENREC", _(qSdefeven));
@@ -106,7 +106,7 @@ edit_add_other (void)
 {
 	STRING str;
 	if (readonly) {
-		message(_(qSronlya));
+		message("%s", _(qSronlya));
 		return NULL;
 	}
 	str = getlloptstr("OTHR", _(qSdefothr));
@@ -300,7 +300,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	}
 	root1 = nztop(rec1);
 	if (!root1) {
-		message(_(qSnosuchrec));
+		message("%s", _(qSnosuchrec));
 		return FALSE;
 	}
 
@@ -313,7 +313,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	if (readonly) {
 		root2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!equal_tree(root1, root2))
-			message(_(qSronlye));
+			message("%s", _(qSronlye));
 		free_nodes(root2);
 		return FALSE;
 	}
@@ -377,7 +377,7 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	refnn = copy_nodes(refn2, TRUE, TRUE);
 	join_othr(root1, refn2, body);
 	/* now root2 is solitary node, delete it */
-	free_node(root2); root2 = 0;
+	free_node(root2,"edit_record"); root2 = 0;
 
 /* Change the database */
 
@@ -392,6 +392,6 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 	free_nodes(refn1);
 	free_nodes(refnn);
 	free_nodes(refn1n);
-	msg_info(gdmsg);
+	msg_info("%s", gdmsg);
 	return TRUE;
 }

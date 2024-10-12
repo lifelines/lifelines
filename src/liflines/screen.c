@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (c) 1991-1999 Thomas T. Wetmore IV
 
    Permission is hereby granted, free of charge, to any person
@@ -48,11 +48,13 @@
 #include "codesets.h"
 #include "charprops.h"
 #include "listui.h"
+#define UI_ENABLE_CURSES
+#include "ui.h"
 
 #define LINESREQ 24
 #define COLSREQ  80
 /*
-OVERHEAD_MENU: 
+OVERHEAD_MENU:
 1 line across top of screen
 1 line above menu
 1 line below menu
@@ -150,6 +152,7 @@ static void create_uisubwindow(UIWINDOW * puiw, CNSTRING name, UIWINDOW parent, 
 static void create_uiwindow_impl(UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
+static void delete_uiwindow_impl(UIWINDOW uiw);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
@@ -224,50 +227,11 @@ static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 static LIST list_uiwin = 0; /* list of all uiwindows */
 
-/* we ought to use chtype, but only if it is typedef'd, but there is no
-test to see if a type is typedef'd */
-static llchtype gr_btee='+', gr_ltee='+', gr_rtee='+', gr_ttee='+';
-static llchtype gr_hline='-', gr_vline= '|';
-static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
-
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
-/*============================
- * set_screen_graphical -- Specify whether to use ncurses box characters
- *  graphical:   [IN]  whether to use ncurses graphical box lines
- *==========================*/
-void
-set_screen_graphical (BOOLEAN graphical)
-{
-	if (graphical) {
-		gr_btee = ACS_BTEE;
-		gr_hline = ACS_HLINE;
-		gr_ltee = ACS_LTEE;
-		gr_rtee = ACS_RTEE;
-		gr_ttee = ACS_TTEE;
-		gr_vline = ACS_VLINE;
-		gr_llx = ACS_LLCORNER;
-		gr_lrx = ACS_LRCORNER;
-		gr_ulx = ACS_ULCORNER;
-		gr_urx = ACS_URCORNER;
-	}
-	else {
-		gr_btee = '+';
-		gr_hline = '-';
-		gr_ltee = '+';
-		gr_rtee = '+';
-		gr_ttee = '+';
-		gr_vline = '|';
-		gr_llx = '*';
-		gr_lrx = '*';
-		gr_ulx = '*';
-		gr_urx = '*';
-	}
-	
-}
 /*============================
  * init_screen -- Init screens
  *  returns 0 if current terminal is not large enough, or size requested too small
@@ -425,9 +389,9 @@ repaint_main_menu (UIWINDOW uiwin)
 	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
-		wprintw(win, _(qSdbimmut));
+		wprintw(win, "%s", _(qSdbimmut));
 	else if (readonly)
-		wprintw(win, _(qSdbrdonly));
+		wprintw(win, "%s", _(qSdbrdonly));
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
 	mvccwaddstr(win, row++, 2, _(qSplschs));
@@ -476,7 +440,7 @@ static void
 add_uiwin (UIWINDOW uiwin)
 {
 	if (!list_uiwin)
-		list_uiwin = create_list2(LISTNOFREE);
+		list_uiwin = create_list3((ELEMENT_DESTRUCTOR)delete_uiwindow_impl);
 	enqueue_list(list_uiwin, uiwin);
 }
 /*==========================================
@@ -518,7 +482,29 @@ create_boxed_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
 	uiw_boxwin(*puiw) = boxwin;
 }
 /*==========================================
- * delete_uiwindow -- Delete WINDOW wrapper & contents
+ * delete_uiwindow_impl -- Delete UIWINDOW contents
+ * Used by delete_uiwindow and list element destructor
+ *========================================*/
+static void
+delete_uiwindow_impl (UIWINDOW w)
+{
+	if (w) {
+		// delete window (curses)
+		ASSERT(uiw_win(w));
+		delwin(uiw_win(w));
+		// delete boxwin (curses)
+		if (uiw_boxwin(w))
+			delwin(uiw_boxwin(w));
+		// delete window name
+		ASSERT(w->name);
+		stdfree((STRING)w->name);
+		// delete window
+		stdfree(w);
+	}
+}
+
+/*==========================================
+ * delete_uiwindow -- Delete UIWINDOW wrapper
  * Created: 2002/01/23
  *========================================*/
 static void
@@ -526,15 +512,15 @@ delete_uiwindow (UIWINDOW * uiw)
 {
 	if (*uiw) {
 		UIWINDOW w = *uiw;
+		// remove window from master list
 		remove_uiwin(w);
-		ASSERT(uiw_win(w));
-		delwin(uiw_win(w));
-		ASSERT(w->name);
-		stdfree((STRING)w->name);
-		stdfree(w);
+		// delete window
+		delete_uiwindow_impl(w);
+		// clear pointer
 		*uiw = 0;
 	}
 }
+
 /*==========================================
  * create_newwin -- Create our WINDOW wrapper
  * Create ncurses window of specified size & location
@@ -580,13 +566,15 @@ create_uisubwindow (UIWINDOW * puiw, CNSTRING name, UIWINDOW parent
 static void
 destroy_windows (void)
 {
-	delete_uiwindow(&ask_msg_win);
-	delete_uiwindow(&ask_win);
-	delete_uiwindow(&tt_menu_win);
-	delete_uiwindow(&main_win);
-	delete_uiwindow(&debug_win);
-	delete_uiwindow(&debug_box_win);
-	delete_uiwindow(&stdout_win);
+	// As all windows are created via create_uiwindow_impl(), they are
+	// added to the global window list in add_uiwin().
+	//
+	// Since list_uiwin was created via create_list3() and has an element
+	// destructor, we can just call destroy_list(), which will remove each
+	// element from the list, destroy it, and then finally destroy the
+	// empty list itself.
+
+	destroy_list(list_uiwin);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -621,7 +609,7 @@ create_windows (void)
 	draw_win_box(uiw_win(debug_box_win));
 }
 /*=================================
- * display_screen -- 
+ * display_screen --
  * There are six screens that all use
  * the main_win. MAIN_SCREEN is the
  * intro/main menu. The other 6 are all
@@ -703,7 +691,7 @@ search_for_one_record (void)
 	}
 	/* namesort uses canonkeysort for non-persons */
 	namesort_indiseq(seq);
-	return choose_from_indiseq(seq, DOASK1, 
+	return choose_from_indiseq(seq, DOASK1,
 		_("Search results"), _("Search results"));
 }
 /*=====================================
@@ -729,11 +717,11 @@ main_menu (void)
 				main_browse(rec, BROWSE_UNK);
 		}
 		break;
-	case 'a': 
+	case 'a':
 		{
 			RECORD rec = 0;
 			if (readonly) {
-				msg_error(_(qSronlya));
+				msg_error("%s", _(qSronlya));
 				break;
 			}
 			rec = invoke_add_menu();
@@ -744,7 +732,7 @@ main_menu (void)
 	case 'd':
 		{
 			if (readonly) {
-				msg_error(_(qSronlyr));
+				msg_error("%s", _(qSronlyr));
 				break;
 			}
 			invoke_del_menu();
@@ -754,7 +742,7 @@ main_menu (void)
 	case 'r': run_report(FALSE); break;
 	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
-	case 'x': 
+	case 'x':
 		{
 			RECORD rec=0;
 			c = invoke_extra_menu(&rec);
@@ -764,7 +752,7 @@ main_menu (void)
 		}
 		break;
 	case 'q': alldone = 1; break;
-	case 'Q': 
+	case 'Q':
 		uierase(main_win);
 		alldone = 2;
 		break;
@@ -786,8 +774,8 @@ run_report (BOOLEAN picklist)
 }
 /*=========================================
  * update_browse_menu -- redraw menu if needed
- *  This is browse menu using dynamic menu 
- *  in rectangle at bottom of screen 
+ *  This is browse menu using dynamic menu
+ *  in rectangle at bottom of screen
  * Returns number lines used by menu
  *=======================================*/
 static INT
@@ -811,7 +799,7 @@ update_browse_menu (INT screen)
 			dynmenu->cur_x = strlen(_(qSplschs))+3;
 			dynmenu->cur_y = dynmenu->top - 1;
 			llstrapps(prompt, sizeof(prompt), uu8, "             ");
-			llstrappf(prompt, sizeof(prompt), uu8, _("(pg %d/%d)")
+			llstrappf(prompt, sizeof(prompt), uu8, _("(pg " FMT_INT "/" FMT_INT ")")
 				, dynmenu->page+1, dynmenu->pages);
 			/* display line across */
 			show_horz_line(uiwin, dynmenu->top-2, 0, width);
@@ -1069,9 +1057,8 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
 BOOLEAN
-ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, CNSTRING basedir, STRING buffer, INT buflen)
+ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING basedir, STRING buffer, INT buflen)
 {
-	basedir=basedir; /* unused */
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
@@ -1233,7 +1220,7 @@ ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
 /*===========================================
  * ask_for_char_msg -- Ask user for character
  *  msg:   [IN]  top line displayed (optional)
- *  ttl:   [IN]  2nd line displayed 
+ *  ttl:   [IN]  2nd line displayed
  *  prmpt: [IN]  3rd line text before cursor
  *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
@@ -1364,7 +1351,7 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
 	return rv;
 }
 /*=============================================================
- * choose_one_from_indiseq -- 
+ * choose_one_from_indiseq --
  * Choose a single person from indiseq
  * Returns index of selected item (or -1 if user quit)
  *  ttl:  [IN]  title
@@ -1627,11 +1614,15 @@ invoke_cset_display (void)
  * add_shims_info -- Add information about gettext and iconv dlls
  *====================================*/
 static void
+#if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
 add_shims_info (LIST list)
+#else
+add_shims_info (HINT_PARAM_UNUSED LIST list)
+#endif
 {
+#if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
 	ZSTR zstr=zs_newn(80);
-	list=list; /* only used on MS-Windows */
-#ifdef WIN32_INTL_SHIM
+#if defined WIN32_INTL_SHIM
 	{
 		char value[MAXPATHLEN];
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
@@ -1654,7 +1645,7 @@ add_shims_info (LIST list)
 		}
 	}
 #endif
-#ifdef WIN32_ICONV_SHIM
+#if defined WIN32_ICONV_SHIM
 	{
 		char value[MAXPATHLEN];
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
@@ -1678,6 +1669,7 @@ add_shims_info (LIST list)
 	}
 #endif
 	zs_free(&zstr);
+#endif
 }
 /*======================================
  * invoke_trans_menu -- menu for translation tables
@@ -1692,7 +1684,7 @@ invoke_trans_menu (void)
 	BOOLEAN done=FALSE;
 
 	if (!trans_menu_win) {
-		trans_menu_win = create_newwin2("trans_menu", 10,66);
+		create_newwin2(&trans_menu_win,"trans_menu",10,66);
 	}
 	uiwin = trans_menu_win;
 
@@ -1742,7 +1734,7 @@ load_tt_action (void)
 	STRING ttimportdir;
 
 	if (readonly) {
-		msg_error(_(qSronlye));
+		msg_error("%s", _(qSronlye));
 		return;
 	}
 
@@ -1750,7 +1742,7 @@ load_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 
@@ -1761,7 +1753,7 @@ load_tt_action (void)
 		fclose(fp);
 		/* Load it */
 		if (!load_new_tt(fname, ttnum))
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 	}
 	strfree(&fname);
 }
@@ -1781,11 +1773,11 @@ save_tt_action (void)
 	ttnum = choose_tt(_(qSmn_svttttl));
 	if (ttnum == -1) return;
 	if (ttnum < 0 || ttnum >= NUM_TT_MAPS) {
-		msg_error(_(qSbadttnum));
+		msg_error("%s", _(qSbadttnum));
 		return;
 	}
 	if (!transl_get_legacy_tt(ttnum)) {
-		msg_error(_(qSnosuchtt));
+		msg_error("%s", _(qSnosuchtt));
 		return;
 	}
 	/* Ask whither to save it */
@@ -1795,7 +1787,7 @@ save_tt_action (void)
 		fclose(fp);
 		/* Save it */
 		if (!save_tt_to_file(ttnum, fname)) {
-			msg_error(_(qSdataerr));
+			msg_error("%s", _(qSdataerr));
 			strfree(&fname);
 			return;
 		}
@@ -2056,7 +2048,7 @@ place_std_msg (void)
 	if (active_uiwin)
 		touch_all(TRUE);
 	else
-		wrefresh(win); 
+		wrefresh(win);
 	place_cursor_main();
 }
 /*==================================+
@@ -2066,7 +2058,7 @@ place_std_msg (void)
 void
 rpt_print (STRING str)
 {
-	llwprintf(str);
+	llwprintf("%s", str);
 }
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
@@ -2200,7 +2192,7 @@ place_cursor_main (void)
 
 	/* Position Cursor */
 	switch (cur_screen) {
-	case MAIN_SCREEN:    
+	case MAIN_SCREEN:   
 		row = 5;
 		col = strlen(_(qSplschs))+3;
 		break;
@@ -2477,6 +2469,19 @@ display_status (STRING text)
 	wrefresh(win);
 }
 /*=========================================
+ * message -- handle generic message
+ * delegates to msg_outputv
+ * TODO: replace with msg_error/info/status
+ *=======================================*/
+void
+message (STRING fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	msg_outputv(MSG_ERROR, fmt, args);
+	va_end(args);
+}
+/*=========================================
  * msg_error -- handle error message
  * delegates to msg_outputv
  *=======================================*/
@@ -2485,7 +2490,7 @@ msg_error (STRING fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	msg_outputv(MSG_ERROR, fmt, args); 
+	msg_outputv(MSG_ERROR, fmt, args);
 	va_end(args);
 }
 /*=========================================
@@ -2567,7 +2572,7 @@ msg_outputv (MSG_LEVEL level, STRING fmt, va_list args)
 		if (lock_std_msg)
 			return; /* can't display it, status bar is locked */
 		if (status_showing[0] && !status_transitory) {
-			/* we are overwriting something important 
+			/* we are overwriting something important
 			so it is already on the msg list, we just need to make
 			sure the msg list gets displayed */
 			if (!viewing_msgs)
@@ -2716,7 +2721,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	uiwin->outdated = FALSE;
 }
 /*=====================================
- * repaint_utils_menu -- 
+ * repaint_utils_menu --
  *===================================*/
 static void
 repaint_utils_menu (UIWINDOW uiwin)
@@ -2740,7 +2745,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 	uiwin->outdated = FALSE;
 }
 /*=====================================
- * repaint_extra_menu -- 
+ * repaint_extra_menu --
  *===================================*/
 static void
 repaint_extra_menu (UIWINDOW uiwin)
@@ -2763,7 +2768,7 @@ repaint_extra_menu (UIWINDOW uiwin)
 	uiwin->outdated = FALSE;
 }
 /*============================
- * activate_uiwin -- 
+ * activate_uiwin --
  *  push new uiwindow on top of current one
  *==========================*/
 void
@@ -2857,7 +2862,7 @@ touch_all (BOOLEAN includeCurrent)
 	}
 }
 /*============================
- * switch_to_uiwin -- 
+ * switch_to_uiwin --
  *  switch away from currently active uiwin
  *  to new uiwin
  *  currently active uiwin (if any) must be solo
@@ -2889,7 +2894,7 @@ switch_to_uiwin (UIWINDOW uiwin)
 	wrefresh(win);
 }
 /*============================
- * refresh_stdout -- 
+ * refresh_stdout --
  *  bring stdout to front
  *==========================*/
 void
@@ -2898,7 +2903,7 @@ refresh_stdout (void)
 	wrefresh(uiw_win(stdout_win));
 }
 /*============================
- * call_system_cmd -- 
+ * call_system_cmd --
  *  execute a shell command (for report interpreter)
  *==========================*/
 void
@@ -2922,7 +2927,7 @@ call_system_cmd (STRING cmd)
 	wrefresh(curscr);
 }
 /*============================
- * uierase -- erase window 
+ * uierase -- erase window
  *  handles manual erasing if broken_curses flag set
  *==========================*/
 void
@@ -2963,7 +2968,7 @@ wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 	}
 }
 /*============================
- * uicolor -- fill window with character 
+ * uicolor -- fill window with character
  *  if rect is nonzero, fill that rectangular area
  *  if rect is zero, fill entire window
  *==========================*/
@@ -3008,14 +3013,6 @@ get_main_screen_width (void)
 	return MAINWIN_WIDTH;
 }
 /*==================================================
- * get_gr_ttee -- current character used for box corners
- *================================================*/
-llchtype
-get_gr_ttee (void)
-{
-	return gr_ttee; /* eg, '+' */
-}
-/*==================================================
  * clear_status_display -- clear any lingering status display
  * (called by interact code after user has pressed a button)
  *================================================*/
@@ -3045,14 +3042,13 @@ register_screen_lang_callbacks (BOOLEAN registering)
 	}
 }
 /*============================
- * screen_on_lang_change -- UI language  or codeset has changed
+ * screen_on_lang_change -- UI language or codeset has changed
  *==========================*/
 static void
-screen_on_lang_change (VPTR uparm)
+screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 {
 	LIST_ITER listit=0;
 	VPTR ptr=0;
-	uparm = uparm; /* unused */
 	listit = begin_list(list_uiwin);
 	while (next_list_ptr(listit, &ptr)) {
 		UIWINDOW uiwin = (UIWINDOW)ptr;

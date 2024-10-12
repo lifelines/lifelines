@@ -9,6 +9,8 @@
 
 #include "rbtree.h"
 
+#include "standard.h"
+
 /***********************************************************************
  * Data Structures: tree & node
  ***********************************************************************/
@@ -1017,9 +1019,8 @@ SafeMalloc (size_t size)
  ***********************************************************************/
 
 void
-NullFunction(void * junk)
+NullFunction(HINT_PARAM_UNUSED void * junk)
 {
-	junk=junk; /* unused */
 }
 int
 RbGetCount (RBTREE rbtree)

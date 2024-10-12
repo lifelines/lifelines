@@ -47,6 +47,14 @@ llwprintf (char *fmt, ...)
 	va_end(args);
 }
 void
+message (char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+}
+void
 msg_error (char *fmt, ...)
 {
 	va_list args;
@@ -78,8 +86,7 @@ msg_status (char *fmt, ...)
  * this would not be needed here. - Perry, 2001/11/11
  *====================================*/
 void
-poutput (char *str, BOOLEAN *eflg)
+poutput (char *str, HINT_PARAM_UNUSED BOOLEAN *eflg)
 {
-	eflg=eflg; /* unused */
 	printf("%s", str);
 }

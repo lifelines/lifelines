@@ -85,7 +85,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'j':        /* Move down line */
 		case CMD_KY_DN:
 			if (cur >= len - 1) {
-				message(_(qSlstbot));
+				message("%s", _(qSlstbot));
 				break;
 			}
 			cur++;
@@ -94,7 +94,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'd':        /* Move down one page */
 		case CMD_KY_PGDN:
 			if (top + VIEWABLE >= len-1) {
-				message(_(qSlstbot));
+				message("%s", _(qSlstbot));
 				break;
 			}
 			cur += VIEWABLE;
@@ -105,7 +105,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'D':        /* Move down several pages */
 		case CMD_KY_SHPGDN:
 			if (top + VIEWABLE >= len-1) {
-				message(_(qSlstbot));
+				message("%s", _(qSlstbot));
 				break;
 			}
 			tmp = (len)/10;
@@ -127,7 +127,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'k':        /* Move up line */
 		case CMD_KY_UP:
 			if (cur <= 0) {
-				message(_(qSlsttop));
+				message("%s", _(qSlsttop));
 				break;
 			}
 			cur--;
@@ -136,7 +136,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'u':        /* Move up one page */
 		case CMD_KY_PGUP:
 			if (top <= 0) {
-				message(_(qSlsttop));
+				message("%s", _(qSlsttop));
 				break;
 			}
 			tmp = VIEWABLE;
@@ -147,7 +147,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		case 'U':        /* Move up several pages */
 		case CMD_KY_SHPGUP:
 			if (top <= 0) {
-				message(_(qSlsttop));
+				message("%s", _(qSlsttop));
 				break;
 			}
 			tmp = (len)/10;
@@ -199,7 +199,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		{
 			RECORD cand1=0, cand2=0;
 			if (mark == -1 || cur == mark) {
-				message(_(qSmrkrec));
+				message("%s", _(qSmrkrec));
 				break;
 			}
 			cand2 = rec;
@@ -216,14 +216,18 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				*prec2 = cand2;
 				return BROWSE_2FAM;
 			} else {
-				message(_("Tandom browse only compatible with persons or families."));
+				message("%s", _("Tandem browse only compatible with persons or families."));
 				break;
 			}
 		}
 		case 'b':        /* Browse new persons */
 			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			/* If no new indiseq was created, then the previous indiseq is still in effect. */
 			if (!newseq) break;
-			/* TODO: should we free *pseq & repoint it to newseq ? */
+			/* Otherwise, if a new indiseq was created, then the previous indiseq must be freed. */
+			if (current_seq) {
+				remove_indiseq(current_seq);
+			}
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
 			if ((len = length_indiseq(seq)) == 1) {
@@ -240,7 +244,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			CNSTRING skey=0, snam=0;
 			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
-				message(_(qSlstnad));
+				message("%s", _(qSlstnad));
 				break;
 			}
 			FORINDISEQ(newseq, el, i)
@@ -253,7 +257,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			mark = -1;
 			len = length_indiseq(seq);
 			remove_indiseq(newseq);
-			message(_(qSlstnew));
+			message("%s", _(qSlstnew));
 			break;
 		}
 		case 'n':        /* Name this list */
@@ -268,6 +272,8 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			if (cur > top + VIEWABLE - 1) top = cur;
 			break;
 		case 'q':        /* Return to main menu */
+			if (current_seq)
+				remove_indiseq(current_seq);
 			current_seq = NULL;
 			return BROWSE_QUIT;
 		}
@@ -282,7 +288,7 @@ name_the_list (INDISEQ seq)
 	char name[MAXPATHLEN];
 	if (!ask_for_string(_(qSlstwht), _(qSasknam), name, sizeof(name))
 		|| !name[0]) {
-		message(_(qSlstnon));
+		message("%s", _(qSlstnon));
 		return;
 	}
 	/* TODO: Should just let the browse list addref the indiseq */

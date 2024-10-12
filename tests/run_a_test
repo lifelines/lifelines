@@ -5,19 +5,31 @@
 #    99 hard error
 #    1 failure
 # called in the build area tests directory
-# called with 1 argument - the relative path of the llsrc file to run
+# called with 1 argument - the relative path of the llscr file to run
 #           this gives us srcdir as well as target name, with assumption
-#           we have rule testdir/testname.log: testname.llsrc
+#           we have rule testdir/testname.log: testname.llscr
+#           make thinks it's doing .../testname.llscr -> testdir/testname.log
 
 # environment variables (usually from make)
 # VERBOSE     if set (to 1) turns on lots of messages from this script
 #             written to testname.log, can be enabled with
 #             VERBOSE=1 make check
 #             VERBOSE=1 make testdir/testname.log
-# NOCAPTUREOUT Don't caputure output of running the command
-#             NOCAPTUREOUT=1 skips this check
+# CAPTUREOUT  compare llines output from running the command with reference
+#             CAPTUREOUT=1 makes this check
 #             the output is highly dependent on curses which seems to tweek
 #             things frequently in ways that don't represent failures.
+#             so default if CAPTUREOUT not defined in environment is to
+#             not compare the output (but still collects it)
+# TESTMEMCHECK If defined, run the test under valgrind, so
+#             cd tests; rm math/test1.log; TESTMEMCHECK=1 make math/test1.log
+#             will execute the test under valgrind, i.e.
+#             valgrind --log-file $testname.valgrind --num-callers=16 llines
+#             with valgrind output goint to testname.valgrind
+#             A summary of errors and malloc'ed memory usage is left in the
+#             file valgrind_summary
+#
+llines_filter=../../src/tools/xterm_decode
 # srcdir -    relative path to the src area 'tests' directory
 #
 # variables local to this script
@@ -25,8 +37,9 @@
 # addtoenv   array of name=value pairs to add to environment
 # precmds    array of names of pre commands to run
 # preargs    array of rest of the pre command lines of these commands
-# postcmds    array of names of post commands to run
-# postargs    array of rest of the post command lines of these commands
+# postcmds   array of names of post commands to run
+# postargs   array of rest of the post command lines of these commands
+# postskip   flag if non-zero exit with code 77 for test infrastructure
 #
 # testsrcdir  relative path to src directory of this test, from the test dir
 # scriptname  testname.llscr (no path, name of the test to execute.
@@ -35,115 +48,240 @@
 # llines      path to llines executable from within testdir
 # bits        set to 32 or 64 the architecture size used to compile llines
 #    reference file - note 3 possible names for reference files
-#    testname.out.ref testname.out.32.ref testname.out.64.ref
+#    testname...out.ref testname...out.32.ref testname...out.64.ref
+#             the ... is progname.stdout or progname.out
 #    refout below points to the one we need for this test
 # refout      path to reference file from test subdir
 # trefout     path to reference file from 'tests'dir
+diffcnt=0     # count number of file diffs
+failcnt=0     # count number of failed file diffs
+skipcnt=0     # count of files skipped
+
+declare -A repeatcmd  # if same command run more than once add _n to
+                      # succesive runs i.e. dbverify.log, dbverify_2.log ...
 
 # compare_file(base) using base name of file, compare output file (.out)
-#              with reference (.ref)
-function compare_file { 
-    base=$1
-    refout=$testsrcdir/$base.ref       # refout path from test subdir
-    trefout=$srcdir/$testdir/$base.ref # refout path from 'tests' dir
-    if [[ ! -f $refout ]] ; then
+#   with reference (.ref), return values:
+# 0 success
+# 1 files differ
+# 2 file missing
+# 99 unknown error
+# cmpmsg -- will contain a message indicating why it passed or failed
+#    messages begin with either PASS or FAIL followed by what happened.
+# intrepretation of these results depends on the situation
+# see comments where compare_file is called.
+function compare_file {
+    (( diffcnt++ ))    # count everything
+    base=$1   # basename of file to compare 
+    cmpmsg=
+
+    trefout=$testsrcdir/$base.ref       # refout path from tests/subdir
+    refout=$srcdir/$testdir/$base.ref # refout path from tests 
+    if [[ ! -f $base ]] ; then
+        cmpmsg="FAIL test output missing $base"
+        return 10
+    fi
+    if [[ ! -f $trefout ]] ; then
         if [[ ! -f $testsrcdir/$base.$bits.ref ]] ; then
-            echo "FAIL $testdir/$testname $base, didn't find reference file $trefout"
-            echo "     or $srcdir/$testdir/$base.$bits.ref"
-            return 99
+            cmpmsg="FAIL missing $refout or $srcdir/$testdir/$base.$bits.ref"
+            (( failcnt++ ))
+            return 10
         else 
-            refout=$testsrcdir/$base.$bits.ref 
-            trefout=$srcdir/$testdir/$base.$bits.ref
+            trefout=$testsrcdir/$base.$bits.ref 
+            refout=$srcdir/$testdir/$base.$bits.ref
         fi
     fi
-    diff $base $refout > $base.diff
+    diff $base $trefout > $base.diff
     case $? in
     0)
-        echo "PASS $testdir/$testname $base"
+        cmpmsg="PASS $testdir/$base"
         rm $base.diff
         return 0
         ;;
     1)
-        echo "FAIL $testdir/$testname $base output didn't match reference"
-        echo "    check $testdir/$base.diff or"
-        echo "    run diff $testdir/$base $trefout"
+        cmpmsg="FAIL $testdir/$base output didn't match reference: check $testdir/$base.diff or run diff $testdir/$base $refout"
+        (( failcnt++ ))
         return 1
         ;;
     2)
-        echo "FAIL $testdir/$testname FAILED maybe missing file"
+        cmpmsg="FAIL $testdir/$base FAILED maybe missing file"
+        (( failcnt++ ))
         return 99
         ;;
     *)
-        echo "FAIL $testdir/$testname unknown diff failure"
+        cmpmsg="FAIL $testdir/$base unknown diff failure"
+        (( failcnt++ ))
         return 99
         ;;
     esac
 }
 
-# run_a_command (cmd cmdin cmdout cmdout2 filter) 
-# cmd      - command to execute
-# cmdin    - name of stdin file if any
-#            if none no stdin redirection is done
-# cmdout   - output files, typically end in .out
-#            reference files have .ref appended
-#            baseout is name w/o the .out or .ref
-#            if filter is defined, cmdout is filtered with output to
-#            cmdout.out.filter (expecting a similarly named .ref file)
-# cmdout2  - second output file  (if one exists)
-#            (e.g. llines scripts generate $testname.out)
-# filter     filter cmdout.out with this filter     
+# run_a_command cmd args
+# cmd      - command name to execute (no path)
+# args     - arguments to command
 # Note: we don't exit on error, but rather just return the return value
-#   and let caller  accumulate status, so all tests are tried
+#   and let caller accumulate status, so all tests are tried
 function run_a_command {
-    cmd=$1
-    cmdin=$2
-    cmdout=$3
-    cmdout2=$4
-    filter=$5
+    cmd=$1     
+    args=$2
     rac=0
     # note: use of import filter should be an option, but for now there is
     #     only one use of filter so punt until it's needed
     import_filter="sed -r -e 's/(Import time )([0-9]*)(s \(ui )([[:digit:]]+)/\1xx\3xx/'"
-    [[ -n $VERBOSE ]] && echo "run_a_cmd $cmd $cmdin $cmdout $cmdout2 $filter"
-    
+    import_filter="$import_filter -e 's/(Report duration )([0-9]*)(s \(ui duration )([[:digit:]]+)/\1xx\3xx/'"
+#  we have either ../../../tests/gengedcomstrong/test1 or gengedcom...
+    import_filter="$import_filter -e 's, $testsrcdir, TESTS/$testdir,' -e 's, $testdir, TESTS/$testdir,'"
+    [[ -n $VERBOSE ]] && echo "run_a_command $cmd $args"
 
-    # remember cmdout since if we filter it name is differnt
-    defout=$cmdout
-    # build up the command name to execute
-    cmdstr=$cmd
+    # compute full (but relative) path to the cmd
+    if [[ ${cmd##*/}  != "$cmd" ]] ; then
+        echo "Error, $cmd contains pathname"
+        exit 99
+    fi    
+    if [[ -x ../../src/tools/$cmd ]] ; then
+        fcmd=../../src/tools/$cmd
+    elif [[ -x ../../src/liflines/$cmd ]] ; then
+        fcmd=../../src/liflines/$cmd
+    else
+        fcmd=`which $cmd`
+        if [[ $? == 1 ]] ; then
+            echo "FAIL $thistest post command '$cmd' not found aborting"
+            if [[ $ret < "1" ]] ; then
+                ret=1
+            fi
+            exit 99
+        else
+            echo "$thistest Warning post command '$cmd' found outside build tree"
+        fi
+    fi
+
+    # log files are testname.cmd.out and testname.cmd.stdout
+    # .stdout is used for captured standard out always
+    # if there is script output written to a file other than stdout
+    # the name used is testname.cmd.out
+    # likewise for programs run via the config file naming is the same
+    # testname.cmd.stdout - stdout from running cmd
+    # testname.cmd.out    - output from command 
+    #
+    # if a program is called more than once, from config file, add suffix
+    # _to $cmd _2, _3 ... to repeated invocations
+    # Only 1 occurance of llines is allowed - i.e. llines not allowed in
+    # .config file
+    if [[ ${repeatcmd[$cmd]} = '' ]] ; then
+        repeatcmd[$cmd]=1
+        cmdsuf=''
+    else
+        (( repeatcmd[$cmd] = repeatcmd[$cmd] + 1 ))
+        cmdsuf=_${repeatcmd[$cmd]}
+    fi
+    stdout_name=$testname.$cmd$cmdsuf.stdout
+    testout_name=$testname.$cmd$cmdsuf.out
+    basetest_name=$testname.$cmd$cmdsuf
+
+    # deal with OUTPUT and TESTNAME
+    # see if OUTPUT in args needs replaced with output file name
+    # or if OUTPUT in llines script needs replaced
+    # if not found assume everything goes to stdout
+    # 
+    if [[ ${args#*OUTPUT} != "$args" ]] ; then
+        args=${args//OUTPUT/$basetest_name}
+        cmdin=
+    elif [[ $cmd == "llines" ]] ; then 
+        # see if OUTPUT in llines script and replace OUTPUT and TESTNAME
+        if [[ -n $VERBOSE ]] ; then
+            echo "sed -e \"s@TESTNAME@$testsrcdir/$testname@\" -e \"s@OUTPUT@$basetest_name@\" < $testsrcdir/$scriptname >$scriptname.fix"
+        fi
+        sed -e "s@TESTNAME@$testsrcdir/$testname@" -e "s@OUTPUT@$basetest_name@" < $testsrcdir/$scriptname >$scriptname.fix
+        grep -q OUTPUT.out $testsrcdir/$scriptname
+        if [[ $? != 0 ]] ; then
+            testout_name=
+        fi
+        cmdin=$scriptname.fix
+    else
+        testout_name=
+        cmdin=
+    fi
+
+    cmdstr=
+    if [[ -n $TESTMEMCHECK ]] ; then
+        #cmdstr="valgrind --log-file=$testname-$cmd$cmdsuf-%p.valgrind --num-callers=16 --leak-check=yes"
+        # we really don't need %p as all programs are single thread now
+        cmdstr="valgrind --log-file=$testname-$cmd$cmdsuf.valgrind --num-callers=16 --leak-check=yes"
+    fi
+    cmdstr="$cmdstr $fcmd $args"
+
     if [[ -n $cmdin ]] ; then
         cmdstr="$cmdstr < $cmdin"
     fi
-    cmdstr="${addtoenv[@]} $cmdstr > $cmdout"
+    cmdstr="${addtoenv[@]} $cmdstr > $stdout_name"
     # now run the command (use eval to allow addtoenv working, and < and >)
     [[ -n $VERBOSE ]] && echo "eval $cmdstr"
     eval $cmdstr
     rac=$?
     if [[ $rac != 0 ]] ; then 
-        echo "FAIL $testdir/$testname command ($cmdstr) exited with status $rac"
+        echo "FAIL $testdir/$testname command \($cmdstr\) exited with status $rac"
+
         return 1
     fi
-    if [[ -n $filter ]] ; then
-        defout=$cmdout.filter
-        cmdstr="${addtoenv[@]} $filter < $cmdout | $import_filter > $defout"
+    if [[ $cmd == "llines" ]] ; then
+        if [[ ! -f $llines_filter ]] ; then
+            echo "FAIL $thistest $llines_filter doesn't exist"
+            ret=99
+        fi
+        cmdstr="$llines_filter < $stdout_name | $import_filter > $stdout_name.filter"
         eval $cmdstr
         rac=$?
         if [[ $rac != 0 ]] ; then
-            echo "FAIL $testdir/$testname filter($filter) failed with exit $ret"
-            return 1
+            echo "FAIL $testdir/$testname $llines_filter failed with exit $ret"
         fi
+        stdout_name=$stdout_name.filter
     fi
-    if [[ -z $NOCAPTUREOUT ]] ; then
-        compare_file $defout
+    lcmd=0
+    if [[ $cmd = llines?(\d) ]] ; then
+        lcmd=1
+    fi
+    if [[ $cmd = expect?(\d) ]] ; then
+        lcmd=1
+    fi
+    if [[ -n $CAPTUREOUT ||  $lcmd != 1 ]] ; then
+        # CAPTUREOUT is set || cmd is not llines or expect
+        compare_file $stdout_name
         rac=$?
+        if [[ -n $postskip ]] ; then
+            echo "SKIP $cmpmsg"
+            (( skipcnt++ ))
+        else
+            echo "$cmpmsg"
+        fi
     else
-        echo "SKIP $testdir/$testname $base"
+        # CAPTUREOUT is not set and file is llines or expect
+        # do compare anyway, but only report results as SKIP
+        # and don't count failures
+        compare_file $stdout_name
+        rac=$?
+        (( skipcnt++ ))
+        if [[ $rac == 0 ]] ; then
+            # I think this is a failure- either the bug
+            # the caused SKIP to be added has been fixed, or reference
+            # file was incorrectly updated. But it's possible that
+            # some tests pass, and some fail, to warrent a SKIP
+            # we can flag that in final log file message
+            echo "SKIP $cmpmsg *** but file matched reference ***"
+        else
+            echo "SKIP $cmpmsg"
+        fi
+        rac=0;
     fi
 
-    # now diff cmdout2 output if one exists
-    if [[ -n $cmdout2 ]] ; then
-        compare_file $cmdout2
+    # now diff prog output if test output was redirected to a file
+    if [[ -n $testout_name ]] ; then
+        compare_file $testout_name
         ret1=$?
+        if [[ -n $postskip ]] ; then
+            echo "SKIP $cmpmsg"
+        else
+            echo "$cmpmsg"
+        fi
         if [[ $rac < "$ret1" ]] ; then
             rac=$ret1
         fi
@@ -151,22 +289,29 @@ function run_a_command {
     return $rac;
 }
 
+# start of script
 if [[ -n $VERBOSE ]] ; then
     echo args "$@"
     echo in directory "'$PWD'"
     echo srcdir is "'$srcdir'"
     echo \$0 is "'$0'"
     echo in directory "'$PWD'"
-    set -x   # more debug info
-    #set -vx # even more info about commands executed
+    if [[ $VERBOSE -gt 1 ]] ; then
+        set -x   # more debug info
+    fi
 fi
 
 
-scriptname=${1##*/}        # strip off pathname
-testname=${scriptname%.*}  # strip of suffix of script leaving name of test
-testdir=${1%/*}            # strip off script name
-testdir=${testdir##*/}     # strip off leading path
-thistest=$testdir/$testname # convience for messaging
+# $1 is make 'src' for example  ../../tests/math/test1.llscr
+#     and make target is math/test1.log
+#     comments reflect this example
+scriptname=${1##*/}        # strip off pathname leaving (test1.llscr)
+testname=${scriptname%.*}  # strip of suffix (.llscr) leaving name of test
+                           # (test1)
+testdir=${1%/*}            # strip off script name (../../tests/math)
+testdir=${testdir##*/}     # strip off leading path leaving dir test is in
+                           # (math)
+thistest=$testdir/$testname # convience for messaging e.g. math/test1
 
 # do we have a separate build area
 if [[ -z $srcdir || $srcdir = . ]] ; then # no
@@ -198,7 +343,7 @@ else
 fi
 
 if [[ -n $VERBOSE ]] ; then
-    echo script name=$scriptname
+    echo $scriptname
     echo testdir=$testdir
     echo testname=$testname
     echo testsrcdir=$testsrcdir
@@ -224,7 +369,7 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
         #[[ -n $VERBOSE ]] && echo "key='$key' name='$name' rest='$rest'"
         case $key in
         env)
-            if [[ (${name#*=} != $name) && (${name#*=*=} == $name) && -z $rest ]] ; then
+            if [[ (${name#*=} != $name) && (${name#*=*=} == "$name") && -z $rest ]] ; then
                 addtoenv+=( $name )
             else 
                 (( cnt += 1 ))
@@ -243,6 +388,9 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
             postcmds+=($name)
             postargs+=("$rest")
             ;;
+        skip)
+            postskip=77
+            ;;
         \#*)
             #echo "skipping comment $key $name $rest"
             ;;
@@ -258,7 +406,7 @@ if [[ -f $testsrcdir/$testname.config ]] ; then
    fi
 fi
 
-if [[ -n $VERBOSE && 1 == 0 ]] ; then
+if [[ -n $VERBOSE && 1 == 0 ]] ; then # skip this, renable to debug
     if [[ ${#addtoenv[@]} ]] ; then
         echo "Environment adjustments"
         for i in ${addtoenv[@]}; do
@@ -267,91 +415,315 @@ if [[ -n $VERBOSE && 1 == 0 ]] ; then
     fi
     if [[ ${#precmds[@]} > 0 ]] ; then
         echo "pre commands"
-        for i in ${!precmds[@]}; do
+        for (( i=0; i < ${#precmds[@]}; i++ )) ; do
             echo "    ${precmds[$i]} ${preargs[$i]}"
         done
     fi
     if [[ ${#postcmds[@]} > 0 ]] ; then
         echo "post commands"
-        for i in ${!postcmds[@]}; do
+        for (( i=0; i < ${#postcmds[@]}; i++ )) ; do
             echo "    ${postcmds[$i]} ${postargs[$i]}"
         done
     fi
 fi
-# run llines with $testname.llscr, replacing TESTNAME with name with path to it
-# also prevent linesrc files from effecting the test
-if [[ ! -f $testsrcdir/$scriptname ]] ; then
-    echo "FAIL $thistest $scriptname not found"
-    ret=99
-fi
-[[ -n $VERBOSE ]] && echo "sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname >$scriptname.fix"
-sed -e "s@TESTNAME@$testsrcdir/$testname@" < $testsrcdir/$scriptname > $scriptname.fix
-# some tests don't need to write out a $testname.out file
-#    so check if one is necessary
-scriptout=""
-if grep $testname.out $scriptname.fix >& /dev/null ; then
-    scriptout=$testname.out
-fi
-if [[ -n $NOCAPTUREOUT ]] ; then
-    run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "" ""
-    ret1=$?
-    if [[ $ret < $ret1 ]] ; then
-        ret=$ret1
-    fi
-else
-    if [[ ! -f ../../src/tools/xterm_decode ]] ; then
-        echo "FAIL $thistest ../../src/tools/xterm_decode doesn't exist"
-        ret=99
-    else
-        # tell llines to use non-existant file in test source directory
-        # so not affected by any user settings. Also test writer can
-        # always add a $testname.lines.src if needed for a test
-        #run_a_command cmd cmdin cmdout cmdout2 filter
-        run_a_command "$llines -C $testsrcdir/$testname.lines.src testdb" $scriptname.fix $testname.llines.out "$scriptout" ../../src/tools/xterm_decode
-        ret1=$?
-        if [[ $ret < $ret1 ]] ; then
-            ret=$ret1
-        fi
-    fi
-fi
+# run llines using $testname.llscr to drive llines
+# the -C tell llines to use non-existant file in test source directory
+# so not affected by any user settings. Also test writer can
+# always add a testname.lines.src if needed for a test
+# run_a_command figures out input and output file setup, and filtering
+#run_a_command cmd args
+run_a_command "llines" "-C $testsrcdir/$testname.lines.src testdb" 
+ret=$?
 
 # post processing commands
 #   Look for commands in tools and liflines directories, otherwise ?? use path
-
-if [[ ${#postcmds[@]} > 0 ]] ; then
+#   to resolve command name
+if [[ ${#postcmds[@]} > 0 ]] ; then 
     echo "post commands"
     for i in ${!postcmds[@]}; do
         cmd=${postcmds[$i]}    # get the command name
-        if [[ -x ../../src/tools/$cmd ]] ; then
-            fcmd=../../src/tools/$cmd
-        elif [[ -x ../../src/liflines/$cmd ]] ; then
-            fcmd=../../src/liflines/$cmd
-        else
-            fcmd=`which $cmd`
-            if [[ $? == 1 ]] ; then
-                echo "FAIL $thistest post command $cmd not found aborting"
-                if [[ $ret < "1" ]] ; then
-                    ret=1
-                fi
-            fi
-            echo "$thistest Warning post command found outside build tree"
-        fi
         args=${postargs[$i]}
-        args=${args/TESTNAME/$testsrcdir/$testname}
-        args=${args/SRCDIR/$testsrcdir}
-        cmdout=
-        if [[ $cmd = "llexec" ]] ; then
-            if [[ $args =~ .*-o\ *"$testname.out".* ]] ; then
-                cmdout=$testname.out
-            fi
-        fi
-        #run_a_command cmd cmdin cmdout cmdout2 filter
-        #run_a_command "$fcmd ${postargs[$i]}" ""  "$testname.$cmd.out" "" ""
-        run_a_command "$fcmd ${args}" ""  "$testname.$cmd.out" "$cmdout" ""
+        # if args contains string TESTNAME, SRCDIR or OUTPUT replace 
+        # replace TESTNAME with path to srcdir/testname
+        # replace SRCDIR with path to source dir 
+        # let run_a_command handle OUTPUT as it does output file nameing
+        args=${args//TESTNAME/$testsrcdir/$testname}
+        args=${args//SRCDIR/$testsrcdir}
+        #
+        #run_a_command cmd args
+        run_a_command "$cmd" "${args}"
         ret1=$?
         if [[ $ret < $ret1 ]] ; then
             ret=$ret1
         fi
     done
 fi
-exit $ret
+if [[ -n $TESTMEMCHECK ]] ; then
+    # read valgrind output files and summarize outputs
+    #
+    # this runs after each test is run, there is no way to say
+    # run this after the last test. But it is quick enough that 
+    # compared to valgrind the time isn't noticeable.
+    # ... and the output file 'valgrind_summary' is updated atomically
+    # so you only end up with the last one that finished
+    cd ..
+
+    NAME=()     #Test name
+    ERRORS=()   #error count
+    DEF=()      #definitely lost bytes/incidents
+    INDIR=()    #indirectly lost bytes/incidents
+    POSS=()     #Possibly lost bytes/incidents
+    STILL=()    #still reachable bytes/incidents
+    SUPP=()     #suppressed bytes/incidents
+    TALLOC=()   #Total number of heap allocations made
+    TFREE=()    #Total number of frees
+    TBYTE=()    #Total number of bytes allocated
+    FILECNT=-1
+
+    for file in */*.valgrind ; do
+        (( FILECNT++ ))
+        n=${file%.*}
+        NAME[$FILECNT]=$n
+        ERRORS[$FILECNT]=0
+        while read pi tag more ; do
+            if [[ $tag = Invalid ]] ; then  # Invalid alloc/free... i.e. errors
+                (( ERRORS[$FILECNT]++ ))
+            elif [[ $tag = HEAP ]] ; then   # heap allocatons/frees
+                read pi tag more
+                read pi tag1 tag2 tag3 alloc str1 frees str2 bytes more
+                #==21784==   total heap usage: 268,453 allocs, 253,660 frees, 103,247,125 bytes allocated
+                alloc=${alloc//,}
+                free=${frees//,}
+                byte=${bytes//,}
+                TALLOC[$FILECNT]=$alloc
+                TFREE[$FILECNT]=$free
+                TBYTE[$FILECNT]=$byte
+            elif [[ $tag = LEAK ]] ; then
+                #==22974== LEAK SUMMARY:
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = definitely ]] ; then
+                    #==22974==    definitely lost: 29 bytes in 2 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    DEF[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = indirectly ]] ; then
+                    #==22974==    indirectly lost: 128 bytes in 1 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    INDIR[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = possibly ]] ; then
+                    #==22974==      possibly lost: 0 bytes in 0 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    POSS[$FILECNT]="$by/$bks"
+                fi
+                read pi tag tag1 by bys ins bks more 
+                if [[ $tag = still ]] ; then
+                    #==22974==    still reachable: 304,933 bytes in 500 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    STILL[$FILECNT]="$by/$bks"
+                fi
+                read pi tag by bys ins bks more 
+                if [[ $tag = suppressed: ]] ; then
+                    #==22974==         suppressed: 0 bytes in 0 blocks
+                    by=${by//,}
+                    bks=${bks//,}
+                    SUPP[$FILECNT]="$by/$bks"
+                fi
+            #elif [[ $tag = ERROR ]] ; then
+            #    a=1
+            fi
+
+        done < $file
+    done
+
+    len=(0 0 0 0 0 0 0 0 0 0)
+    t1=("Test Name" "Malloc"  "Definitely" "Indirectly" "Possibly" "still"
+         "surpressed" "Total" "Total" "Total")
+    t2=("" "Errors" "lost" "lost" "lost" "reachable" "" "Allocs" "Frees" "Bytes")
+
+    # first compute length for each column
+    for (( i=0; i < ${#NAME[@]}; i++ )) do
+      (( len[0] = ( len[0] < ${#NAME[$i]} ) ?  ${#NAME[$i]} : len[0] ))
+      (( len[1] = ( len[1] < ${#ERRORS[$i]} ) ?  ${#ERRORS[$i]} : len[1] ))
+      if [[ ${DEF[$i]} != 0/0 ]] ;then
+          (( len[2] = ( len[2] < ${#DEF[$i]} ) ?  ${#DEF[$i]} : len[2] ))
+      fi
+      if [[ ${INDIR[$i]} != 0/0 ]] ;then
+          (( len[3] = ( len[3] < ${#INDIR[$i]} ) ?  ${#INDIR[$i]} : len[3] ))
+      fi
+      if [[ ${POSS[$i]} != 0/0 ]] ;then
+          (( len[4] = ( len[4] < ${#POSS[$i]} ) ?  ${#POSS[$i]} : len[4] ))
+      fi
+      if [[ ${STILL[$i]} != 0/0 ]] ;then
+          (( len[5] = ( len[5] < ${#STILL[$i]} ) ?  ${#STILL[$i]} : len[5] ))
+      fi
+      if [[ ${SUPP[$i]} != 0/0 ]] ;then
+          (( len[6] = ( len[6] < ${#SUPP[$i]} ) ?  ${#SUPP[$i]} : len[6] ))
+      fi
+      if [[ ${TALLOC[$i]} != 0 ]] ;then
+          (( len[7] = ( len[7] < ${#TALLOC[$i]} ) ?  ${#TALLOC[$i]} : len[7] ))
+      fi
+      if [[ ${TFREE[$i]} != 0 ]] ;then
+          (( len[8] = ( len[8] < ${#TFREE[$i]} ) ?  ${#TFREE[$i]} : len[8] ))
+      fi
+      if [[ ${TBYTE[$i]} != 0 ]] ;then
+          (( len[9] = ( len[9] < ${#TBYTE[$i]} ) ?  ${#TBYTE[$i]} : len[9] ))
+      fi
+    done
+    for (( i=0 ; i < 10; i++ )) ; do
+        if (( ${len[$i]} != 0 )) ; then
+            (( len[$i] = ( len[$i] < ${#t1[$i]} ) ? ${#t1[$i]} : len[$i] ))
+            (( len[$i] = ( len[$i] < ${#t2[$i]} ) ? ${#t2[$i]} : len[$i] ))
+        fi
+    done
+    echo >> valgrind_summary.out
+
+    if [[ -z $VSWRAP ]]; then   # define VSWRAP=80 or.. to wrap lines 
+        VSWRAP=200
+    fi
+        
+    sum=0
+    sum1=0
+    pos1=0
+    indent=0
+    for (( i=0 ; i < 10; i++ )) ; do
+        if (( sum1 == 0 &&  sum + len[$i] > $VSWRAP )) ; then
+            (( sum1 = sum ))
+            (( pos1 = i - 1 ))
+        fi
+        (( sum += len[$i] )) 
+    done
+    #/usr/bin/printf "sum1=%d pos1=%d sum=%d\n" $sum1 $pos1 $sum >> valgrind_summary.out
+    # width of 2nd part (sum - sum1) start at ( sum - (sum-sum1))
+    (( indent = sum1 + sum1 - sum -10 ))
+    # indent second row indent after printing data at pos1
+
+    #/usr/bin/printf "indent=%d after col %d\n" $indent $pos1 >> valgrind_summary.out
+    if (( pos1 == 0 )) ; then
+        pos1=20
+    fi
+    (( len[0] = -len[0] ))
+    # print the title and column headers
+    echo "Summary of Valgrind Errors,   for memory stats numbers are num_bytes/num_events" >> valgrind_summary.out
+    echo >> valgrind_summary.out
+    for (( i=0 ; i < 10; i++ )) ; do
+        if [[ ${len[$i]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[$i]} "${t1[$i]}" >> valgrind_summary.out
+            if  (( i == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+
+        fi
+    done
+    /usr/bin/printf "\n" >> valgrind_summary.out
+    for (( i=0 ; i < 10; i++ )) ; do
+        if [[ ${len[$i]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[$i]} "${t2[$i]}" >> valgrind_summary.out
+            if  (( i == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+    done
+    /usr/bin/printf "\n" >> valgrind_summary.out
+    # or each test data we found, print values any tests had non-zero data
+    for (( i=0; i < ${#NAME[@]}; i++ )) do
+        # column zero ever elided.
+        /usr/bin/printf "%*s " ${len[0]} "${NAME[$i]}" >> valgrind_summary.out
+        if [[ ${len[1]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[1]} "${ERRORS[$i]}" >> valgrind_summary.out
+            if  (( 1 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[2]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[2]} "${DEF[$i]}" >> valgrind_summary.out
+            if  (( 2 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[3]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[3]} "${INDIR[$i]}" >> valgrind_summary.out
+            if  (( 3 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[4]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[4]} "${POSS[$i]}" >> valgrind_summary.out
+            if  (( 4 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[5]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[5]} "${STILL[$i]}" >> valgrind_summary.out
+            if  (( 5 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[6]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[6]} "${SUFF[$i]}" >> valgrind_summary.out
+            if  (( 6 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[7]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[7]} "${TALLOC[$i]}" >> valgrind_summary.out
+            if  (( 7 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[8]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[8]} "${TFREE[$i]}" >> valgrind_summary.out
+            if  (( 8 == pos1 )) ; then
+                /usr/bin/printf "%\n*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        if [[ ${len[9]} != 0 ]] ; then
+            /usr/bin/printf "%*s " ${len[9]} "${TBYTE[$i]}" >> valgrind_summary.out
+            if  (( 9 == pos1 )) ; then
+                /usr/bin/printf "\n%*s " $indent " " >> valgrind_summary.out
+            fi
+        fi
+        /usr/bin/printf "\n" >> valgrind_summary.out
+    done
+
+    mv valgrind_summary.out valgrind_summary
+fi
+# if postskip is set and there are no failures this is an error condition
+# either log file inadvertently updated or issue is fixed and SKIP need to
+# be removed.
+if [[ -n $postskip ]] ; then
+    if [[ $ret == 0 ]] ; then
+        echo -n "FAIL SKIP - config file marks test as forced SKIP but passing"
+        echo " $skipcnt diffs skipped, $failcnt failed, $passed passed, $diffcnt compared"
+        exit 1
+    else 
+        echo -n "SKIP - test marked as forced SKIP in config file"
+        echo " $skipcnt diffs skipped, $failcnt failed, $passed passed, $diffcnt compared"
+        exit 77
+    fi
+fi
+
+if [[ $ret == 0 ]] ; then
+    echo -n "PASS"
+else 
+    echo -n "FAIL"
+fi
+if [[ $skipcnt != 0 ]] ; then
+    echo -n " $testdir/$testname, $skipcnt diff's skipped"
+else 
+    echo -n " $testdir/$testname, no diff's skipped"
+fi
+
+(( passed = diffcnt - $failcnt))
+if [[ $failcnt != 0 ]] ; then
+    echo ", $failcnt failed, $passed passed, $diffcnt compared"
+else 
+    echo ", no failed, $passed passed, $diffcnt compared"
+fi
+exit $ret;

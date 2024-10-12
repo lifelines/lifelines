@@ -432,11 +432,10 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
  * returns addref'd record
  *==========================================*/
 RECORD
-string_to_record (STRING str, CNSTRING key, INT len)
+string_to_record (STRING str, CNSTRING key, HINT_PARAM_UNUSED INT len)
 {
 	RECORD rec = 0;
 	NODE node = 0;
-	len=len; /* unused */
 
 	/* we must fill in the top field */
 
@@ -453,6 +452,7 @@ string_to_record (STRING str, CNSTRING key, INT len)
 	}
 	if (node) {
 		rec = create_record_for_keyed_node(node, key);
+		ASSERT(rec);
 	}
 	return rec;
 }
@@ -489,7 +489,7 @@ string_to_node (STRING str)
 			curlev = lev;
 		} else if (lev < curlev) {
 			if (lev < lev0) {
-				llwprintf("Error: line %d: illegal level",
+				llwprintf("Error: line " FMT_INT ": illegal level",
 				    flineno);
 				goto string_to_node_fail;
 			}
@@ -501,7 +501,7 @@ string_to_node (STRING str)
 			nsibling(curnode) = node;
 			curnode = node;
 		} else {
-			llwprintf("Error: line %d: illegal level", flineno);
+			llwprintf("Error: line " FMT_INT ": illegal level", flineno);
 			goto string_to_node_fail;
 		}
 	}

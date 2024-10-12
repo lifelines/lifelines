@@ -40,6 +40,7 @@
 #include "zstr.h"
 #include "llinesi.h"
 #include "btree.h"
+#include "ui.h"
 
 extern STRING qSdbrecstats,qSdbrecords;
 extern STRING qSprogsig,qSsignal;
@@ -107,13 +108,13 @@ show_database_stats (void)
 	snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg)
 		, _(qSdbrecstats), num_indis(), num_fams()
 		, num_sours(), num_evens(), num_othrs());
-	msg_info(msg);
+	msg_info("%s", msg);
 }
 /*======================================
  * sighand_cursesui -- Catch and handle signal (UI)
  *====================================*/
 void
-sighand_cursesui(int sig)
+sighand_cursesui(HINT_PARAM_UNUSED int sig)
 {
 	char signum[20];
 	STRING signame;
@@ -146,10 +147,8 @@ sighand_cursesui(int sig)
  * sighand_cmdline - Catch and handle signal cleanly (command-line)
  *====================================*/
 void
-sighand_cmdline(int sig)
+sighand_cmdline(HINT_PARAM_UNUSED int sig)
 {
-	sig = sig;	/* UNUSED */
-
 	closebtree(BTR);
         exit(1);
 }

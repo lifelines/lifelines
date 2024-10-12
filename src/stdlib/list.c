@@ -318,12 +318,14 @@ pop_list (LIST list)
  * validate_list -- Verify list ends don't disagree
  *======================================*/
 static void
+#ifdef LIST_ASSERTS
 validate_list (LIST list)
+#else
+validate_list (HINT_PARAM_UNUSED LIST list)
+#endif
 {
 #ifdef LIST_ASSERTS
 	ASSERT(!list || (lhead(list)&&ltail(list)) || (!lhead(list)&&!ltail(list)));
-#else
-	list=list; /* unused */
 #endif
 }
 /*========================================
@@ -596,16 +598,10 @@ delete_list_element (LIST list, INT index1b, ELEMENT_DESTRUCTOR func)
 	node = nth_in_list_from_tail(list, index1b, createels, 0);
 	if (!node) return FALSE;
 	if (llocks(node)) return FALSE;
-	if (llen(list) == 1) {
-		/* removing last element of list */
-		llen(list) = 0;
-		lhead(list) = ltail(list) = 0;
-		if (func)
-			(*func)(lelement(node));
-		stdfree(node);
-		return TRUE;
-	}
 	detach_node_from_list(list, node);
+	if (func)
+		(*func)(lelement(node));
+	stdfree(node);
 	return TRUE;
 }
 #endif
@@ -658,6 +654,7 @@ find_delete_list_elements (LIST list, VPTR param,
 			if (ltype(list) == LISTDOFREE) {
 				free_list_element(lelement(lnode));
 			}
+			stdfree(lnode);
 			if (!deleteall)
 				return count;
 		}

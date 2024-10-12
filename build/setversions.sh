@@ -185,12 +185,18 @@ function applyversion {
   alterfile $ROOTDIR/docs/manual/ll-userguide.sv.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.xml "$SEDPAT"
   alterfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml "$SEDPAT"
+
+  SEDPAT="s/\(version: \)[0-9][[:alnum:].\-]*/\1$VERSION/i"
+  alterfile $ROOTDIR/reports/st/st_all.ref "$SEDPAT"
 }
 
 # Call alterfile with an sed command for each file
 function applytag {
   SEDPAT="s/^\(#define LIFELINES_VERSION_EXTRA \)\"([[:alnum:]]*)\"$/\1\"($TAG)\"/"
   alterfile $ROOTDIR/src/hdrs/version.h "$SEDPAT"
+
+  SEDPAT="s/\(version: [0-9][[:alnum:].\-]*\).*/\1 ($TAG)/i"
+  alterfile $ROOTDIR/reports/st/st_all.ref "$SEDPAT"
 }
 
 # Restore, for user to reverse last application

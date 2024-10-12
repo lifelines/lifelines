@@ -168,7 +168,7 @@ progmessage (MSG_LEVEL level, STRING msg)
 	} else {
 		llstrcatn(&ptr, msg, &mylen);
 	}
-	msg_output(level, buf);
+	msg_output(level, "%s", buf);
 }
 /*=============================================+
  * new_pathinfo -- Return new, filled-out pathinfo object
@@ -301,7 +301,7 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 		STRING str;
 		FORLIST(outstanding_parse_errors, el)
 			str = (STRING)el;
-			prog_error(NULL, str);
+			prog_error(NULL, "%s", str);
 			++Perrors;
 		ENDLIST
 		destroy_list(outstanding_parse_errors);
@@ -333,17 +333,18 @@ interp_program_list (STRING proc, INT nargs, VPTR *args, LIST lifiles
 
 	parm = ipdefn_args(first);
 	if (nargs != num_params(parm)) {
-		msg_error(_("Proc %s must be called with %d (not %d) parameters."),
+		msg_error(_("Proc %s must be called with " FMT_INT " (not " FMT_INT ") parameters."),
 			proc, num_params(parm), nargs);
 		goto interp_program_exit;
 	}
 	stab = create_symtab_proc(proc, NULL);
 	for (i = 0; i < nargs; i++) {
-		insert_symtab(stab, iident_name(parm), args[0]);
+		insert_symtab(stab, iident_name(parm), args[i]);
 		parm = inext(parm);
 	}
 
    /* Interpret top procedure */
+
 	ranit = 1;
 	progparsing = FALSE;
 	progrunning = TRUE;
@@ -436,9 +437,8 @@ wipe_pactx (PACTX pactx)
  * remove_tables -- Remove interpreter's tables
  *==========================================*/
 static void
-remove_tables (PACTX pactx)
+remove_tables (HINT_PARAM_UNUSED PACTX pactx)
 {
-	pactx=pactx; /* unused */
 	destroy_table(gproctab);
 	gproctab=NULL;
 	remove_symtab(globtab);
@@ -593,7 +593,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 	while (node) {
 		Pnode = node;
 		if (prog_trace) {
-			trace_out("d%d: ", iline(node)+1);
+			trace_out("d" FMT_INT ": ", iline(node)+1);
 			trace_pnode(node);
 			trace_endl();
 		}
@@ -601,11 +601,9 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 		case IICONS:
 			prog_error(node, _("integer constant not allowed here.  Use d(constant) instead.\n"));
 			goto interp_fail;
-			break;
 		case IFCONS:
 			prog_error(node, _("floating-point constant not allowed here.  Use f(constant) instead.\n"));
 			goto interp_fail;
-			break;
 		case ISCONS:
 			poutput(pvalue_to_string(node->vars.iscons.value), &eflg);
 			if (eflg)
@@ -899,7 +897,7 @@ interpret (PNODE node, SYMTAB stab, PVALUE *pval)
 
 interp_fail:
 	if (getlloptint("FullReportCallStack", 0) > 0) {
-		llwprintf("e%d: ", iline(node)+1);
+		llwprintf("e" FMT_INT ": ", iline(node)+1);
 		debug_show_one_pnode(node);
 		llwprintf("\n");
 	}
@@ -1796,7 +1794,7 @@ interp_call (PNODE node, SYMTAB stab, PVALUE *pval)
 		parm = inext(parm);
 	}
 	if (arg || parm) {
-		prog_error(node, "``%s'': mismatched args and params\n", iname(node));
+		prog_error(node, "``%s'': mismatched args and params\n", (char *)iname(node));
 		irc = INTERROR;
 		goto call_leave;
 	}
@@ -1910,10 +1908,9 @@ pa_handle_option (CNSTRING optname)
  * Called directly from generated parser code (ie, from code in yacc.y)
  *=============================================*/
 void
-pa_handle_char_encoding (PACTX pactx, PNODE node)
+pa_handle_char_encoding (HINT_PARAM_UNUSED PACTX pactx, PNODE node)
 {
 	CNSTRING codeset = get_internal_string_node_value(node);
-	pactx=pactx; /* unused */
 	strupdate(&irptinfo(node)->codeset, codeset);
 }
 /*=============================================+
@@ -1941,14 +1938,13 @@ make_internal_string_node (PACTX pactx, STRING str)
  *  parse-time handling of report command
  *=============================================*/
 void
-pa_handle_include (PACTX pactx, PNODE node)
+pa_handle_include (HINT_PARAM_UNUSED PACTX pactx, PNODE node)
 {
 	/*STRING fname = ifname(node); */ /* current file */
 	CNSTRING newfname = get_internal_string_node_value(node);
 	STRING fullpath=0, localpath=0;
 	ZSTR zstr=0;
 	PATHINFO pathinfo = 0;
-	pactx=pactx; /* unused */
 
 	/* if it is relative, get local path to give to find_program */
 	if (!is_path(newfname)) {
@@ -1971,12 +1967,11 @@ pa_handle_include (PACTX pactx, PNODE node)
  *  node:  [IN]  current parse node
  *=============================================*/
 void
-pa_handle_require (PACTX pactx, PNODE node)
+pa_handle_require (HINT_PARAM_UNUSED PACTX pactx, PNODE node)
 {
 	CNSTRING reqver = get_internal_string_node_value(node);
 	STRING propstr = "requires_lifelines-reports.version:";
 	TABLE tab=0;
-	pactx=pactx; /* unused */
 
 	tab = (TABLE)valueof_obj(pactx->filetab, pactx->fullpath);
 	if (!tab) {
@@ -2057,7 +2052,7 @@ void
 parse_error (PACTX pactx, STRING str)
 {
 	/* TO DO - how to pass current pnode ? */
-	prog_error(NULL, "Syntax Error (%s): %s: line %d, char %d\n"
+	prog_error(NULL, "Syntax Error (%s): %s: line " FMT_INT ", char " FMT_INT "\n"
 		, str, pactx->fullpath, pactx->lineno+1, pactx->charpos+1);
 	Perrors++;
 }

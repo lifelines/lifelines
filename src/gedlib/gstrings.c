@@ -160,12 +160,11 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	    else hasfamily = 0;
 	    if(hasfamily || hasparents) {
 		ASSERT(linelen > 5);
-		*p++ = ' '; linelen--;
-		*p++ = '['; linelen--;
-		if(hasparents) { *p++ = 'P'; linelen--; }
-		if(hasfamily) { *p++ = 'S'; linelen--; }
-		*p++ = ']'; linelen--;
-		*p = '\0';
+		char *with_p_fam    = (hasfamily ? "PS" : "P");
+		char *without_p_fam = (hasfamily ? "S"  : "" );
+		char *value = (hasparents ? with_p_fam : without_p_fam);
+		snprintf(p, linelen, " [%s]", value);
+		linelen -= (3 + strlen (value));
 		ASSERT(linelen > 0);
 	    }
 	}
@@ -211,12 +210,11 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
  * Created: 2001/12/16, Perry Rapp
  *==============================================*/
 STRING
-even_to_list_string (NODE even, INT len, STRING delim)
+even_to_list_string (NODE even, INT len, HINT_PARAM_UNUSED STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
-	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
@@ -305,13 +303,12 @@ fam_to_list_string (NODE fam, INT len, STRING delim)
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 STRING
-other_to_list_string(NODE node, INT len, STRING delim)
+other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
 	INT mylen=len;
 	NODE child;
-	delim=delim; /* unused */
 	if (mylen>(INT)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;

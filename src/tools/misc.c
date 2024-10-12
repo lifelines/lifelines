@@ -34,10 +34,8 @@ extern BTREE BTR;
  * sighand_cmdline - Catch and handle signal cleanly (command-line)
  *====================================*/
 void
-sighand_cmdline (int sig)
+sighand_cmdline (HINT_PARAM_UNUSED int sig)
 {
-	sig = sig;	/* UNUSED */
-
 	closebtree(BTR);
         exit(1);
 }

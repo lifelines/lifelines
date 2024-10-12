@@ -103,11 +103,11 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	ASSERT(eqstr("INDI", ntag(indi1)));
 	ASSERT(eqstr("INDI", ntag(indi2)));
 	if (readonly) {
-		message(_(qSronlym));
+		message("%s", _(qSronlym));
 		return NULL;
 	}
 	if (indi1 == indi2) {
-		message(_(qSnopmrg));
+		message("%s", _(qSnopmrg));
 		return NULL;
 	}
 
@@ -120,7 +120,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	if (traditional) {
 		if (famc1 && famc2 && nestr(nval(famc1), nval(famc2))) {
 			if (!ask_yes_or_no_msg(_(qSmgsfam), _(qSmgconf))) {
-				message(_(qSnoqmrg));
+				message("%s", _(qSnoqmrg));
 				return NULL;
 			}
 		}
@@ -128,7 +128,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	fams1 = FAMS(indi1);
 	fams2 = FAMS(indi2);
 	if (fams1 && fams2 && SEX(indi1) != SEX(indi2)) {
-		message(_(qSnoxmrg));
+		message("%s", _(qSnoxmrg));
 		return NULL;
 	}
 
@@ -243,7 +243,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 				next = nsibling(that);
 				nsibling(that) = NULL;
 				keep = nchild(that);
-				free_node(that);
+				free_node(that,"merge_two_indis");
 				if (!prev)
 					chil = next;
 				else
@@ -446,7 +446,7 @@ merge_two_fams (NODE fam1, NODE fam2)
 	BOOLEAN emp;
 
 	if (readonly) {
-		message(_(qSronlym));
+		message("%s", _(qSronlym));
 		return NULL;
 	}
 	ASSERT(fam1);
@@ -454,7 +454,7 @@ merge_two_fams (NODE fam1, NODE fam2)
 	ASSERT(eqstr("FAM", ntag(fam1)));
 	ASSERT(eqstr("FAM", ntag(fam2)));
 	if (fam1 == fam2) {
-		message(_(qSnofmrg));
+		message("%s", _(qSnofmrg));
 		return NULL;
 	}
 
@@ -468,11 +468,11 @@ merge_two_fams (NODE fam1, NODE fam2)
 	if (traditional) {
 		BOOLEAN ok = TRUE;
 		if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
-			message(_(qSdhusb));
+			message("%s", _(qSdhusb));
 			ok = FALSE;
 		}
 		if (ok && wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
-			message(_(qSdwife));
+			message("%s", _(qSdwife));
 			ok = FALSE;
 		}
 		if (!ok) {
@@ -599,7 +599,7 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 					next = nsibling(this);
 					nsibling(this) = NULL;
 					keep = nchild(this);
-					free_node(this);
+					free_node(this,"merge_fam_links");
 					if (!prev)
 						first = next;
 					else

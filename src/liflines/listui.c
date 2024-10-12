@@ -48,8 +48,8 @@
 #include "codesets.h"
 #include "charprops.h"
 #include "listui.h"
-
-
+#define UI_ENABLE_CURSES
+#include "ui.h"
 
 static INT LISTWIN_WIDTH=0;
 
@@ -180,6 +180,7 @@ resize_win: /* we come back here if we resize the window */
 			continue;
 		if (handle_popup_list_resize(&ld, code)) {
 			deactivate_uiwin_and_touch_all();
+                        ld.uiwin=0;
 			/* we're going to repick window & activate */
 			goto resize_win;
 		}
@@ -603,7 +604,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		/* for short lists, we show leading numbers */
 		if (ld->listlen<10) {
 			char numstr[12]="";
-			llstrncpyf(numstr, sizeof(numstr), uu8, "%d: ", i+1);
+			llstrncpyf(numstr, sizeof(numstr), uu8, FMT_INT ": ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvccwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);

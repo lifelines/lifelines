@@ -76,7 +76,7 @@ void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* selectdb.c */
 BOOLEAN open_or_create_database(INT alteration, STRING *dbused);
-BOOLEAN select_database(STRING dbrequested, INT alteration, STRING * perrmsg);
+BOOLEAN select_database(STRING * dbrequested, INT alteration, STRING * perrmsg);
 
 /* miscutls.c */
 void sighand_cursesui(int sig);

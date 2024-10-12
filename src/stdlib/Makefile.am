@@ -5,7 +5,7 @@
 
 noinst_LIBRARIES = libstdlib.a
 
-libstdlib_a_SOURCES = appendstr.c array.c \
+libstdlib_a_SOURCES = appendstr.c array.c backtrace.c \
 	dirs.c environ.c errlog.c \
 	fileops.c fpattern.c generic.c \
 	icvt.c hashtab.c list.c \

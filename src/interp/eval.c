@@ -55,7 +55,7 @@ PVALUE
 evaluate (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
 	if (prog_trace) {
-		trace_out("%d: ", iline(node)+1);
+		trace_out(FMT_INT ": ", iline(node)+1);
 		trace_pnode(node);
 		trace_endl();
 	}
@@ -195,7 +195,7 @@ evaluate_cond (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return FALSE;
 	}
 #ifdef DEBUG
-	llwprintf("interp_if: cond = ");
+	llwprintf("%s", "interp_if: cond = ");
 	show_pvalue(val);
 	wprintf("\n");
 #endif
@@ -215,8 +215,8 @@ evaluate_func (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 
 	*eflg = FALSE;
 	if (prog_trace)
-		trace_outl("evaluate_func called: %d: %s",
-		    iline(node)+1, iname(node));
+		trace_outl("evaluate_func called: " FMT_INT ": %s",
+		    iline(node)+1, (char *)iname(node));
 	val = (*(PFUNC)ifunc(node))(node, stab, eflg);
 	return val;
 }
@@ -271,7 +271,7 @@ evaluate_ufunc (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	case INTRETURN:
 	case INTOKAY:
 #ifdef DEBUG
-	llwprintf("Successful ufunc call -- val returned was ");
+	llwprintf("%s", "Successful ufunc call -- val returned was ");
 	show_pvalue(val);
 	llwprintf("\n");
 #endif
