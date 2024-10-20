@@ -83,8 +83,8 @@ static int select_tts(const struct dirent *entry);
  * local variables
  *********************************************/
 
-static LIST f_xlats=0; /* cache of conversions */
-static TABLE f_dyntts=0; /* cache of dynamic translation tables */
+static LIST f_xlats=NULL; /* cache of conversions */
+static TABLE f_dyntts=NULL; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
 
 static struct tag_vtable vtable_for_dyntt = {
@@ -144,17 +144,14 @@ create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 static void
 free_xlat (XLAT xlat)
 {
-	XLSTEP xstep=0;
 	/* free each step */
 	FORLIST(xlat->steps, el)
-		xstep = (XLSTEP)el;
-		// MTE: Double free here.  Not sure why, the string looks valid.
-		printf("DEBUG: xlat->steps el: %p src %p dest %p dyntt %p\n", xstep, xstep->iconv_src, xstep->iconv_dest, xstep->dyntt);
+		XLSTEP xstep = (XLSTEP)el;
 		ASSERT(!xstep->iconv_dest && !xstep->iconv_src);
 		strfree(&xstep->iconv_src);
 		strfree(&xstep->iconv_dest);
 		ASSERT(xstep->iconv_dest && xstep->iconv_src);
-		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
+		xstep->dyntt = NULL; /* f_dyntts owns dyntt memory */
 	ENDLIST
 	destroy_list(xlat->steps);
 	xlat->steps = NULL;
@@ -214,11 +211,10 @@ create_dyntt (TRANTABLE tt, CNSTRING name, CNSTRING path)
 XLAT
 xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 {
-	XLAT xlat=0;
+	XLAT xlat=NULL;
 	ZSTR zsrc=zs_new(), zdest=zs_new();
 	ZSTR zsrc_u=ll_toupperz(src,0),zdest_u=ll_toupperz(dest,0);
 	LIST srcsubs=0, destsubs=0;
-	STRING subcoding=0;
 	
 	if (!src || !src[0] || !dest || !dest[0]) {
 		xlat = create_null_xlat(adhoc);
@@ -228,9 +224,8 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	/* first check existing cache */
 	/* (only adhoc xlats can use the cache) */
 	if (adhoc && f_xlats) {
-		XLAT xlattemp;
 		FORLIST(f_xlats, el)
-			xlattemp = (XLAT)el;
+			XLAT xlattemp = (XLAT)el;
 			if (xlattemp->adhoc 
 				&& eqstr_ex(xlattemp->src, zs_str(zsrc_u))
 				&& eqstr_ex(xlattemp->dest, zs_str(zdest_u))
@@ -241,6 +236,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 			}
 		ENDLIST
 	}
+
 	/* create new xlat & fill it out */
 	xlat = create_xlat(zs_str(zsrc_u), zs_str(zdest_u), adhoc);
 
@@ -258,7 +254,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	/* eg, if going from UTF-8 to GUI, transliterations done in UTF-8 first */
 	if (destsubs) {
 		FORLIST(destsubs, el)
-			subcoding = (STRING)el;
+			STRING subcoding = (STRING)el;
 			add_dyntt_step(xlat
 				, get_subcoding_dyntt(zs_str(zsrc), subcoding));
 		ENDLIST
@@ -296,7 +292,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	/* eg, if going from GUI into UTF-8, transliterations undone in UTF-8 last */
 	if (srcsubs) {
 		FORLIST(srcsubs, el)
-			subcoding = (STRING)el;
+			STRING subcoding = (STRING)el;
 			add_dyntt_step(xlat
 				, get_subcoding_dyntt(zs_str(zdest), subcoding));
 		ENDLIST
@@ -403,11 +399,10 @@ BOOLEAN
 xl_do_xlat (XLAT xlat, ZSTR zstr)
 {
 	BOOLEAN cvtd=FALSE;
-	XLSTEP xstep=0;
 	if (!xlat || !xlat->valid) return cvtd;
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
-		xstep = (XLSTEP)el;
+		XLSTEP xstep = (XLSTEP)el;
 		if (xstep->iconv_src) {
 			/* an iconv step */
 			ZSTR ztemp=zs_new();
@@ -566,15 +561,13 @@ select_tts (const struct dirent *entry)
 void
 xl_free_adhoc_xlats (void)
 {
-    XLAT xlattemp=0;
-	LIST newlist=0;
 	if (!f_xlats)
 		return;
 	/* we don't have a way to delete items from a list,
 	so just copy the ones we want to a new list */
-	newlist = create_list();
+	LIST newlist = create_list();
 	FORLIST(f_xlats, el)
-		xlattemp = (XLAT)el;
+		XLAT xlattemp = (XLAT)el;
 		if (xlattemp->adhoc) {
 			free_xlat(xlattemp);
 		} else {
@@ -591,15 +584,14 @@ xl_free_adhoc_xlats (void)
 void
 xl_free_xlats (void)
 {
-	XLAT xlattemp=0;
 	if (!f_xlats)
 		return;
 	FORLIST(f_xlats, el)
-		xlattemp = (XLAT)el;
+		XLAT xlattemp = (XLAT)el;
 		free_xlat(xlattemp);
 	ENDLIST
 	destroy_list(f_xlats);
-	f_xlats = 0;
+	f_xlats = NULL;
 }
 /*==========================================================
  * free_dyntts -- Free table of dynamic translation tables
@@ -610,7 +602,7 @@ free_dyntts (void)
 {
 	if (f_dyntts) {
 		destroy_table(f_dyntts);
-		f_dyntts = 0;
+		f_dyntts = NULL;
 	}
 }
 /*==========================================================
@@ -633,7 +625,7 @@ destroy_dyntt (DYNTT dyntt)
 	strfree(&dyntt->name);
 	strfree(&dyntt->path);
 	remove_trantable(dyntt->tt);
-	dyntt->tt = 0;
+	dyntt->tt = NULL;
 	stdfree(dyntt);
 }
 /*==========================================================
@@ -656,11 +648,10 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
 				base=TRUE;
 			} else {
 				if (subcodes) {
-					ZSTR ztemp=0;
 					if (!*subcodes) {
 						*subcodes = create_list2(LISTDOFREE);
 					}
-					ztemp = zs_newsubs(prev, p-prev);
+					ZSTR ztemp = zs_newsubs(prev, p-prev);
 					enqueue_list(*subcodes, strsave(zs_str(ztemp)));
 					zs_free(&ztemp);
 				}
@@ -684,14 +675,13 @@ xlat_get_description (XLAT xlat)
 	ZSTR zrtn=zs_new();  /* final string to return */
 	ZSTR zstr=zs_new(); /* string with details of iconv conversions */
 	char stepcount[32];
-	XLSTEP xstep=0;
 	if (!xlat || !xlat->steps) {
 		zs_sets(zrtn, _("(no conversion)"));
 		goto end_get_desc;
 	}
 	/* simply cycle through & perform each step */
 	FORLIST(xlat->steps, el)
-		xstep = (XLSTEP)el;
+		XLSTEP xstep = (XLSTEP)el;
 		++count;
 		if (xstep->iconv_src) {
 			/* an iconv step */
