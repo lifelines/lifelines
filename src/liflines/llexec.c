@@ -39,9 +39,7 @@
 
 extern STRING qSmtitle,qSnorwandro,qSnofandl,qSbdlkar;
 extern STRING qSusgFinnOpt,qSusgFinnAlw,qSusgNorm;
-extern STRING qSbaddb,qSdefttl,qSiddefpath;
-extern STRING qSaskynq,qSaskynyn,qSaskyY,qSaskint;
-extern STRING qSchlistx,qSvwlistx;
+extern STRING qSbaddb;
 
 extern INT csz_indi;
 extern INT csz_fam;
@@ -75,7 +73,6 @@ BOOLEAN showusage = FALSE;     /* show usage */
 BOOLEAN showversion = FALSE;   /* show version */
 STRING  readpath_file = NULL;  /* last component of readpath */
 STRING  readpath = NULL;       /* database path used to open */
-STRING  ext_codeset = 0;       /* default codeset from locale */
 INT screen_width = 20; /* TODO */
 
 /*********************************************
@@ -87,7 +84,6 @@ static void print_usage(void);
 static void load_usage(void);
 static void main_db_notify(STRING db, BOOLEAN opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
-static void platform_init(void);
 
 /*********************************************
  * local function definitions
@@ -116,6 +112,9 @@ main (int argc, char **argv)
 	STRING crashlog=NULL;
 	int i=0;
 
+	/* initialize all the low-level platform code */
+	init_arch();
+
 	/* initialize all the low-level library code */
 	init_stdlib();
 
@@ -123,10 +122,6 @@ main (int argc, char **argv)
 	/* initialize locales */
 	setlocale(LC_ALL, "");
 #endif /* HAVE_SETLOCALE */
-	
-	/* capture user's default codeset */
-	ext_codeset = strsave(ll_langinfo());
-	/* TODO: We can use this info for default conversions */
 
 #if ENABLE_NLS
 	/* setup gettext translation */
@@ -285,7 +280,6 @@ prompt_for_db:
 		/* yydebug = 1; */
 	}
 
-	platform_init();
 	set_displaykeys(keyflag);
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
@@ -297,7 +291,11 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llexec", NULL);
 	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
-	init_interpreter(); /* give interpreter its turn at initialization */
+
+	if (!startup_ui())
+	{
+		goto finish;
+	}
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -348,6 +346,14 @@ prompt_for_db:
 		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
+
+	init_interpreter(); /* give interpreter its turn at initialization */
+
+  	if (!int_codeset[0]) {
+		msg_info("%s", _("Warning: database codeset unspecified"));
+	} else if (!transl_are_all_conversions_ok()) {
+		msg_info("%s", _("Warning: not all conversions available"));
+	}
 	/* does not use show module */
 	/* does not use browse module */
 	if (exargs) {
@@ -379,7 +385,6 @@ finish:
 	if (alldone == 2)
 		goto prompt_for_db; /* changing databases */
 	termlocale();
-	strfree(&ext_codeset);
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
@@ -416,22 +421,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 
 		}
 	}
-}
-/*===================================================
- * shutdown_ui -- (Placeholder, we don't need it)
- *=================================================*/
-void
-shutdown_ui (HINT_PARAM_UNUSED BOOLEAN pause)
-{
-}
-/*==================================================
- * platform_init -- platform specific initialization
- *================================================*/
-static void
-platform_init (void)
-{
-	/* TODO: We could do wtitle just like llines, but its declaration needs
-	to be moved somewhere more sensible for that (ie, not in curses.h!) */
 }
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other

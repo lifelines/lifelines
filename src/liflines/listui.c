@@ -48,8 +48,8 @@
 #include "codesets.h"
 #include "charprops.h"
 #include "listui.h"
-
-
+#define UI_ENABLE_CURSES
+#include "ui.h"
 
 static INT LISTWIN_WIDTH=0;
 
