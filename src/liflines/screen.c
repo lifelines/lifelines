@@ -369,7 +369,6 @@ resize_screen_impl (char * errmsg, int errsize)
 	listui_init_windows(extralines);
 	create_windows();
 	brwsmenu_initialize(ll_lines, ll_cols);
-
 	
 	return 1; /* succeed */
 }
@@ -454,21 +453,36 @@ create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, IN
 	UIWINDOW uiwin=0;
 	ASSERT(puiw);
 	uiwin = *puiw;
-	if (!uiwin) {
+
+	// allocate UI window if needed
+	if (!uiwin)
+	{
 		*puiw = uiwin = (UIWINDOW)stdalloc(sizeof(*uiwin));
 		memset(uiwin, 0, sizeof(*uiwin));
 		add_uiwin(uiwin);
 	}
+
+	// free existing UI window name if needed
 	if (uiwin->name)
+	{
 		stdfree((STRING)uiwin->name);
+		uiwin->name = NULL;
+	}
+
+	// set UI window name
+	ASSERT(!uiwin->name);
 	uiwin->name = strsave(name);
+
+	// set UI window properties
+	uiw_rows(uiwin) = rows;
+	uiw_cols(uiwin) = cols;
+
+	// map to parent window
 	if (uiw_win(uiwin) != win) {
 		if (uiw_win(uiwin))
 			delwin(uiw_win(uiwin));
 		uiw_win(uiwin) = win;
 	}
-	uiw_rows(uiwin) = rows;
-	uiw_cols(uiwin) = cols;
 }
 /*==========================================
  * add_uiwin -- Record new uiwin into master list
@@ -612,6 +626,17 @@ destroy_windows (void)
 	// empty list itself.
 
 	destroy_list(list_uiwin);
+
+	// We need to NULL out the global UIWINDOW pointers for the windows
+	// that we just destroyed, or else we will end up using garbage
+	// memory if we attempt to reuse them.
+	stdout_win = NULL;
+	debug_box_win = NULL;
+	debug_win = NULL;
+	main_win = NULL;
+	tt_menu_win = NULL;
+	ask_win = NULL;
+	ask_msg_win = NULL;
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -638,7 +663,6 @@ create_windows (void)
 	create_newwin2(&ask_win, "ask", 4, 73);
 
 	create_newwin2(&ask_msg_win, "ask_msg", 5, 73);
-
 
 	/* tt_menu_win is drawn dynamically */
 	draw_win_box(uiw_win(ask_win));
