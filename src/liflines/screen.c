@@ -589,6 +589,7 @@ destroy_windows (void)
 	// empty list itself.
 
 	destroy_list(list_uiwin);
+	list_uiwin = NULL;
 
 	// We need to NULL out the global UIWINDOW pointers for the windows
 	// that we just destroyed, or else we will end up using garbage
