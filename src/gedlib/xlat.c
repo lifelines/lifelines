@@ -148,11 +148,14 @@ free_xlat (XLAT xlat)
 	/* free each step */
 	FORLIST(xlat->steps, el)
 		xstep = (XLSTEP)el;
+		ASSERT(!xstep->iconv_dest && !xstep->iconv_src);
 		strfree(&xstep->iconv_src);
 		strfree(&xstep->iconv_dest);
+		ASSERT(xstep->iconv_dest && xstep->iconv_src);
 		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
 	destroy_list(xlat->steps);
+	xlat->steps = NULL;
 	strfree(&xlat->src);
 	strfree(&xlat->dest);
 	stdfree(xlat);
@@ -169,6 +172,7 @@ create_iconv_step (CNSTRING src, CNSTRING dest)
 	memset(xstep, 0, sizeof(*xstep));
 	xstep->iconv_dest = strsave(dest);
 	xstep->iconv_src = strsave(src);
+	ASSERT(xstep->iconv_dest && xstep->iconv_src);
 	return xstep;
 }
 /*==========================================================
@@ -235,6 +239,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 			}
 		ENDLIST
 	}
+
 	/* create new xlat & fill it out */
 	xlat = create_xlat(zs_str(zsrc_u), zs_str(zdest_u), adhoc);
 
