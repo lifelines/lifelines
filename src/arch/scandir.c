@@ -136,7 +136,6 @@ scandir(const char *dir, struct dirent ***namelist,
   struct dirent *current;
   struct dirent **names = NULL;
   int pos = 0;
-  int result = -1;
 
   if (NULL == d)
     return -1;
@@ -158,7 +157,7 @@ scandir(const char *dir, struct dirent ***namelist,
       pos++;
     }
   }
-  result = closedir(d);
+  closedir(d);
 
   *namelist = names;
 
