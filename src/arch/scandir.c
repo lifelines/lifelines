@@ -27,6 +27,9 @@
  * scandir.c -- if scandir() is missing, make a replacement
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #ifndef HAVE_SCANDIR
 
@@ -34,15 +37,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 #include "arch.h"
+#include "standard.h"
 
 #ifdef HAVE_DIRENT_H
 #  include <dirent.h>
 #endif
-
 
 #ifdef HAVE_WINDOWS_H
 
@@ -58,58 +58,51 @@ scandir (const char *dir, struct dirent ***namelist,
 {
   WIN32_FIND_DATA file_data;
   HANDLE handle;
-  int count, pos;
+  int pos = 0;
   struct dirent **names;
+  struct dirent cur;
+  struct dirent *current = &cur;
   char *pattern;
+
+  cur.d_reclen = sizeof(struct dirent);
 
   /* 3 for "*.*", 1 for "\", 1 for zero termination */
   pattern = (char*)malloc(strlen(dir) + 3 +1 +1);
+  if (NULL == pattern)
+    return -1;
+
   strcpy(pattern, dir);
   if (pattern[ strlen(pattern) - 1] != '\\')
     strcat(pattern, "\\");
   strcat(pattern, "*.*");
 
-  /* 1st pass thru is just to count them */
   handle = FindFirstFile(pattern, &file_data);
   if (handle == INVALID_HANDLE_VALUE)
-    {
+  {
       free(pattern);
       return -1;
-    }
+  }
 
-  count = 0;
   while (1)
-    {
-      count++;
-      if (!FindNextFile(handle, &file_data))
-        break;
-    }
-  FindClose(handle);
-
-  /* Now we know how many, we can alloc & make 2nd pass to copy them */
-  names = (struct dirent**)malloc(sizeof(struct dirent*) * count);
-  memset(names, 0, sizeof(*names));
-  handle = FindFirstFile(pattern, &file_data);
-  if (handle == INVALID_HANDLE_VALUE)
-    {
-      free(pattern);
-      free(names);
-      return -1;
-    }
-
-  /* Now let caller filter them if requested */
-  pos = 0;
-  while (1)
-    {
+  {
       int rtn;
-      struct dirent current;
 
-      strcpy(current.d_name, file_data.cFileName);
+      strncpy(current->d_name, file_data.cFileName, sizeof(current->d_name));
 
-      if (!select || select(&current))
-        {
-          struct dirent *copyentry = malloc(sizeof(struct dirent));
-          strcpy(copyentry->d_name, current.d_name);
+      if (!select || select(current))
+      {
+          struct dirent **newnames = realloc(names, sizeof(*names) * (pos + 1));
+          if (NULL == newnames)
+              continue;
+
+          names = newnames;
+
+          struct dirent *copyentry = malloc(current->d_reclen);
+          if (NULL == copyentry)
+             continue;
+
+          memcpy(copyentry, current, current->d_reclen);
+
           names[pos] = copyentry;
           pos++;
         }
@@ -117,12 +110,14 @@ scandir (const char *dir, struct dirent ***namelist,
       rtn = FindNextFile(handle, &file_data);
       if (!rtn || rtn==ERROR_NO_MORE_FILES)
         break;
-    }
+  }
 
   free(pattern);
+
   /* Now sort them */
   if (compar)
     qsort(names, pos, sizeof(names[0]), compar);
+
   *namelist = names;
   return pos;
 }
@@ -130,7 +125,7 @@ scandir (const char *dir, struct dirent ***namelist,
 int
 scandir(const char *dir, struct dirent ***namelist,
         int (*select)(const struct dirent *),
-        int (*compar)(const struct dirent **, const struct dirent **))
+        HINT_PARAM_UNUSED int (*compar)(const struct dirent **, const struct dirent **))
 {
   DIR *d = opendir(dir);
   struct dirent *current;
@@ -140,11 +135,14 @@ scandir(const char *dir, struct dirent ***namelist,
   if (NULL == d)
     return -1;
 
-  while (NULL != (current = readdir(d))) {
-    if ( NULL == select || select(current) ) {
-      struct dirent **newnames = realloc(names, sizeof(*names) * (pos + 1))
+  while (NULL != (current = readdir(d)))
+  {
+    if ( NULL == select || select(current) )
+    {
+      struct dirent **newnames = realloc(names, sizeof(*names) * (pos + 1));
       if (NULL == newnames)
         continue;
+
       names = newnames;
 
       struct dirent *copyentry = malloc(current->d_reclen);
