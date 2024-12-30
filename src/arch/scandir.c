@@ -87,7 +87,7 @@ scandir (const char *dir, struct dirent ***namelist,
   {
       int rtn;
 
-      strcpy(current->d_name, file_data.cFileName);
+      strncpy(current->d_name, file_data.cFileName, sizeof(current->d_name));
 
       if (!select || select(current))
       {
@@ -101,7 +101,7 @@ scandir (const char *dir, struct dirent ***namelist,
           if (NULL == copyentry)
              continue;
 
-          memcpy(copyentry, &current, current->d_reclen);
+          memcpy(copyentry, current, current->d_reclen);
 
           names[pos] = copyentry;
           pos++;
