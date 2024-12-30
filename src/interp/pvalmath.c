@@ -181,10 +181,10 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 	if (is_numeric_zero(val2)) { illegal_value("mod", val2, eflg, zerr); return; }
 	switch (ptype(val1)) {
 	case PINT:
-		{
-			INT i1 = pvalue_to_int(val1) % pvalue_to_int(val2);
-			set_pvalue_int(val1, i1);
-		}
+		set_pvalue_int(val1, pvalue_to_int(val1) % pvalue_to_int(val2));
+		break;
+	case PFLOAT:
+		set_pvalue_float(val1, pvalue_to_float(val1) % pvalue_to_float(val2));
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}

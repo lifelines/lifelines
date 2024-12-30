@@ -145,6 +145,6 @@ dispversion (void)
 	printf("the input filename, and the second as the output filename.\n");
 	printf("If an argument is -w, it will ignore leading whitespace.\n");
 	printf("This is oriented towards use with files from konwert:\n");
-	printf("http://kki.net.pl/qrczak/programy/dos/konwert/index.html");
+	printf("https://sourceforge.net/projects/konwert/");
 }
 

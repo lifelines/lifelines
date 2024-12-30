@@ -2296,17 +2296,17 @@ do_edit (void)
  *  except trim it to no more than maxlen wide
  *==============================================*/
 static void
-mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
+mvwaddstr_lim (WINDOW *wp, int y, int x, char *cp, INT maxlen)
 {
 	char buffer[60];
 	if ((INT)strlen(cp)<=maxlen)
-		mvccwaddstr(wp, x, y, cp);
+		mvccwaddstr(wp, y, x, cp);
 	else {
 		if (maxlen > (INT)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
 		llstrncpy(buffer, cp, maxlen-1, uu8);
 		strcat(buffer, "*");
-		mvccwaddstr(wp, x, y, buffer);
+		mvccwaddstr(wp, y, x, buffer);
 	}
 }
 /*================================================

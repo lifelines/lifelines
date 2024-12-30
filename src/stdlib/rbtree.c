@@ -456,7 +456,7 @@ RbTreePredecessor (RBTREE tree, RBNODE x)
 /**/
 /*    Modifies Input: none */
 /**/
-/*    Note:    This function should only be called from RBTreePrint */
+/*    Note:    This function should only be called from RbTreePrint */
 /***********************************************************************/
 
 static void
@@ -511,7 +511,7 @@ TreeDestHelper (RBTREE tree, RBNODE x)
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBTreeDestroy */
+/*  FUNCTION:  RbTreeDestroy */
 /**/
 /*    INPUTS:  tree is the tree to destroy */
 /**/
@@ -593,7 +593,7 @@ RbExactQuery (RBTREE tree, RBKEY q)
 /*  FUNCTION:  RbDeleteFixUp */
 /**/
 /*    INPUTS:  tree is the tree to fix and x is the child of the spliced */
-/*             out node in RBTreeDelete. */
+/*             out node in RbTreeDelete. */
 /**/
 /*    OUTPUT:  none */
 /**/
@@ -1014,14 +1014,16 @@ SafeMalloc (size_t size)
 
 /***********************************************************************
  *  NullFunction does nothing it is included so that it can be passed
- *  as a function to RBTreeCreate when no other suitable function has
+ *  as a function to RbTreeCreate when no other suitable function has
  *  been defined
  ***********************************************************************/
 
 void
 NullFunction(HINT_PARAM_UNUSED void * junk)
 {
+	return;
 }
+
 int
 RbGetCount (RBTREE rbtree)
 {

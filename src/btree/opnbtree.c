@@ -44,7 +44,9 @@
 struct _lldberrstr
 {
   STRING errstr;
-} lldberrstr[] = {
+};
+
+struct _lldberrstr lldberrstr[] = {
   { "" }, /* 0 */
   { "" }, /* 1 */
   { "" }, /* 2 */

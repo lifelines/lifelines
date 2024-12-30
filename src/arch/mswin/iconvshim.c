@@ -42,13 +42,15 @@ typedef int (*iconv_close_type)(iconv_t cd);
 typedef int (*iconvctl_type)(iconv_t cd, int request, void* argument);
 
 
-static struct iconv_fncs_s
+struct iconv_fncs_s
 {
 	iconv_open_type iconv_open_x;
 	iconv_type iconv_x;
 	iconv_close_type iconv_close_x;
 	iconvctl_type iconvctl_x;
-} f_iconv_fncs;
+};
+
+static struct iconv_fncs_s f_iconv_fncs;
 
 
 /* Allocates descriptor for code conversion from encoding `fromcode' to

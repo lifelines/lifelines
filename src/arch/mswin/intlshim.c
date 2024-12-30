@@ -49,7 +49,7 @@ typedef int (*gt_notify_language_change_type)(void);
 typedef int (*gt_get_property_type)(const char *name, char *value, int valuelen);
 typedef int (*gt_set_property_type)(const char *name, const char *value);
 
-static struct gettext_fncs_s
+struct gettext_fncs_s
 {
 	gettext_type gettext_x;
 	dgettext_type dgettext_x;
@@ -63,8 +63,9 @@ static struct gettext_fncs_s
 	gt_notify_language_change_type gt_notify_language_change_x;
 	gt_get_property_type gt_get_property_x;
 	gt_set_property_type gt_set_property_x;
-} f_gettext_fncs;
+};
 
+static struct gettext_fncs_s f_gettext_fncs;
 
 /* Look up MSGID in the current default message catalog for the current
    LC_MESSAGES locale.  If not found, returns MSGID itself (the default
