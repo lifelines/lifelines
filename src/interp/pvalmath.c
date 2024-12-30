@@ -184,7 +184,7 @@ mod_pvalues (PVALUE val1, PVALUE val2, BOOLEAN *eflg, ZSTR * zerr)
 		set_pvalue_int(val1, pvalue_to_int(val1) % pvalue_to_int(val2));
 		break;
 	case PFLOAT:
-		set_pvalue_float(val1, pvalue_to_float(val1) % pvalue_to_float(val2));
+		set_pvalue_float(val1, fmod(pvalue_to_float(val1),pvalue_to_float(val2)));
 		break;
 	default: invalid_numeric_type("mod", val1, eflg, zerr); return;
 	}
