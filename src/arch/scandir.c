@@ -134,26 +134,22 @@ scandir(const char *dir, struct dirent ***namelist,
 {
   DIR *d = opendir(dir);
   struct dirent *current;
-  struct dirent **names;
-  int count = 0;
+  struct dirent **names = NULL;
   int pos = 0;
-  int result = -1;
 
-  if (NULL == d)
-    return -1;
-
-  while (NULL != readdir(d)) count++;
-
-  names = malloc(sizeof(struct dirent *) * count);
-
-  closedir(d);
-  d = opendir(dir);
   if (NULL == d)
     return -1;
 
   while (NULL != (current = readdir(d))) {
     if ( NULL == select || select(current) ) {
+      struct dirent **newnames = realloc(names, sizeof(*names) * (pos + 1))
+      if (NULL == newnames)
+        continue;
+      names = newnames;
+
       struct dirent *copyentry = malloc(current->d_reclen);
+      if (NULL == copyentry)
+        continue;
 
       memcpy(copyentry, current, current->d_reclen);
 
@@ -161,10 +157,7 @@ scandir(const char *dir, struct dirent ***namelist,
       pos++;
     }
   }
-  result = closedir(d);
-
-  if (pos != count)
-    names = realloc(names, sizeof(struct dirent *)*pos);
+  closedir(d);
 
   *namelist = names;
 
