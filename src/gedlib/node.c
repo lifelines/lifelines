@@ -335,12 +335,12 @@ set_temp_node (NODE node, BOOLEAN temp)
 		nflag(node) ^= ND_TEMP;
 	}
 
-	// Propagate to child
+	// Propagate to child(ren)
 	if ((n2 = nchild(node))) {
 		set_temp_node(n2, temp);
 	}
 
-	// Propagate to sibling
+	// Propagate to sibling(s)
 	if ((n2 = nsibling(node))) {
 		set_temp_node(n2, temp);
 	}
