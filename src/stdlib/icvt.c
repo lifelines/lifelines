@@ -88,14 +88,12 @@ iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HI
 		return FALSE;
 	}
 
-	if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
-		if (inlen) {
+	if (inlen) {
+		if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
 			/* assume MS-Windows makenarrow call */
 			inlen = 2 * wcslen((const wchar_t *)sin);
 		}
-	}
-	if (!strncmp(src, "UCS-4", strlen("UCS-4"))) {
-		if (inlen) {
+		if (!strncmp(src, "UCS-4", strlen("UCS-4"))) {
 			/* assume UNIX makenarrow call */
 			inlen = 4 * wcslen((const wchar_t *)sin);
 		}
