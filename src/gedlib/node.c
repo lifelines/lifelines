@@ -328,9 +328,21 @@ validate_temp_node_tree (NODE node, BOOLEAN temp)
 void
 set_temp_node (NODE node, BOOLEAN temp)
 {
+	NODE n2;
+
 	// Set this node as requested
 	if (is_temp_node(node) ^ temp) {
 		nflag(node) ^= ND_TEMP;
+	}
+
+	// Propagate to child
+	if ((n2 = nchild(node))) {
+		set_temp_node(n2, temp);
+	}
+
+	// Propagate to sibling
+	if ((n2 = nsibling(node))) {
+		set_temp_node(n2, temp);
 	}
 
 	// Validate that all sibling and child nodes are the same
