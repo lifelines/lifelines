@@ -21,16 +21,24 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 # what goes into llexec ?
 llexec_SOURCES = ask.c error.c lines_usage.c llexec.c selectdb.c miscutls.c llexec.h
 
-# extra stuff for lines
+# link for lines
 llines_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
-	@LIBINTL@ @LIBICONV@
+	../ui/libuicurses.a
 
-# extra stuff for llexec
+# link for llexec
 llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	../btree/libbtree.a ../stdlib/libstdlib.a ../arch/libarch.a \
-	../ui/libuicli.a \
-	@LIBINTL@ @LIBICONV@
+	../ui/libuicli.a
+
+# add static/shared libintl/libiconv
+if WITH_STATIC_NLS
+llines_LDADD += @LIBINTL@ @LIBICONV@
+llexec_LDADD += @LIBINTL@ @LIBICONV@
+else
+llines_LDADD += @LTLIBINTL@ @LTLIBICONV@
+llexec_LDADD += @LTLIBINTL@ @LTLIBICONV@
+endif
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/src/hdrs for headers

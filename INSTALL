@@ -7,15 +7,15 @@ Contents:
 1. General (UNIX) installation
  1a) Dependencies
  1b) Specific Issues
+ 1c) Compilers
 2. Platform specific notes
- 2a) Platforms supported out-of-the-box
+ 2a) Platforms supported
  2b) Microsoft Windows
  2c) cygwin
- 2d) rpm packages
- 2e) Debian binaries
- 2f) gcc 2.7.2.1
- 2g) curses
- 2h) Mac OS X
+ 2d) RPM packages
+ 2e) Debian packages
+ 2f) FreeBSD port
+ 2g) Mac OS X
 ********************************
 
 ******************************
@@ -68,7 +68,7 @@ lldump   -- dumps the database contents in symbolic format
 
 llines is the main LifeLines program.
 
-lllexec is a non-interactive version of the main program, and is
+llexec is a non-interactive version of the main program, and is
 handy for automatically running reports against a given database.
 
 dverify can be used to verify the correctness of a LifeLines database. This
@@ -83,18 +83,28 @@ lldump is an administration tool used for diagnosing mangled databases.
 You should only use this program under the expert guidance of a LifeLines
 developer, or if you're curious about the internal database format.
 
-******************************
+****************
 1a) Dependencies
-******************************
+****************
 
 lifelines has a number of dependencies and they vary depending on
 how you obtain and build lifelines.
 
-1. General
+1. Generic
 
    ncursesw (or any curses with wide character support)
 
-2. Build Tools
+2. National Language Support (NLS)
+
+   Use of NLS, or regeneration of the language files, requires the following:
+
+   gettext (or gettext-devel)
+   iconv
+
+   By default, NLS support is enabled.  If you want to disable NLS support,
+   run configure with the '--disable-nls' option.
+
+3. Building from source code repository
 
    If you are building directly from the source code repository, and
    not from a release package, you will require these tools:
@@ -103,7 +113,7 @@ how you obtain and build lifelines.
    autoconf
    bison (2.7+ or 3.1+)
 
-3. Document Generation
+4. Building documentation
 
    Generation of the documentation requires tools to convert from xml to html,
    pdf, and text.  Currently the tools being used are:
@@ -117,19 +127,10 @@ how you obtain and build lifelines.
    By default, these tools are not required.  If you want to edit and rebuild
    documentation, run configure with the '--with-docs' option.
 
-4. National Language Support (NLS)
 
-   Use of NLS, or regeneration of the language files, requires the following:
-
-   gettext
-   iconv
-
-   By default, NLS support is enabled.  If you want to disable NLS support,
-   run configure with the '--disable-nls' option.
-
-******************************
+*******************
 1b) Specific Issues
-******************************
+*******************
 
 1. gettext
 
@@ -161,18 +162,25 @@ how you obtain and build lifelines.
   redhat, but ubuntu has make it optional.  You'll need to install
   expect if it's not installed.
 
+*************
+1c) Compilers
+*************
+
+Recent versions of gcc and clang build the source cleanly, although there may
+be plenty of warnings.
+
 **************************
 2. Platform specific notes
 **************************
 
-*********************
-2a) Platforms supported out-of-the-box
-*********************
+***********************
+2a) Platforms supported
+***********************
 
-Many UNIX systems should be supported out-of-the-box with the tarball
-(lifelines-x.y.z.tar.gz) distribution.
+Most UNIX-derived Linux/BSD/MacOS systems should be supported out-of-the-box
+with the tarball (lifelines-x.y.z.tar.gz) distribution.
 
-The primary development platforms are Ubuntu 20.04 and FreeBSD 12.2.
+The primary development platforms are Ubuntu 22.04 and FreeBSD 13.3.
 
 *********************
 2b) Microsoft Windows
@@ -211,65 +219,28 @@ To compile libiconv on cygwin, I had to compile it statically, eg,
 (in libiconv directory)
    ./configure --enable-static --disable-shared
 
-***************
-2d) rpm packages
-***************
+****************
+2d) RPM packages
+****************
 
 The source distribution includes the spec file to create rpm
 packages.
 
-***************
+*******************
 2e) Debian packages
-***************
+*******************
 
 Christian Perrier maintains a Debian port of linux.
-See:
-http://packages.debian.org/cgi-bin/search_packages.pl?searchon=names&version=all&exact=1&keywords=lifelines
+See https://packages.debian.org/search?keywords=lifelines&searchon=names&suite=stable&section=all
 
-***************
-2f) compilers
-***************
+****************
+2f) FreeBSD port
+****************
 
-Currently lifelines compiles well with gcc.
-Your experience with other compilers may vary.
+LifeLines is included in the FreeBSD ports collection in misc/lifelines.
 
-**********
-2g) curses
-**********
+************
+2g) Mac OS X
+************
 
-Compiling with curses (lacking ncurses) on a BSDI 3.1 box,
-I had to add
-    -ltermcap
-to the LIBS line in liflines/Makefile. (The symptom was
-"unknown symbol... _tputs.)
-However, I wound up core dumping at run-time, so I don't know
-what is going on.
-(Perry, Jan, 2002)
-
-********************
-2h) Mac OS X / macOS
-********************
-
-Please see the following page about LifeLines on Mac OS X:
-    http://homepage.mac.com/shrubbery/LifeLines
-(which is also available via the Apple downloads site and Stepwise.)
-This page offers both precompiled binaries and instructions for
-compilation.
-NB: Because the gnu tests for platform didn't recognize Darwin,
-on older versions, perhaps before 10.2.x, it was necessary to pass
-an argument to configure, eg,
-   ./configure ppc
-There is no specific code needed for Darwin; this is just to avoid
-the macros getting angry at the unknown output from "uname -a".
-
-If you get this error while building lifelines from source:
-
-lifelines/src/interp/yacc.y:78.9-22: syntax error, unexpected identifier, expecting string
-
-Then your installed version of bison is too old.  (For example,
-macOS 10.15 "Catalina" only has bison 2.3 in the base system.)
-You must install bison 2.7 or later and then recompile.
-
-  brew install bison
-  echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.bash_profile
-  export LDFLAGS="-L/usr/local/opt/bison/lib"
+As of lifelines-3.2.0, LifeLines is fully supported on on 64-bit MacOSX.
