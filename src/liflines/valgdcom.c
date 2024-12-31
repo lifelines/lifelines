@@ -525,6 +525,7 @@ handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, STRING tag, STRING va
 static void
 handle_trlr_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, HINT_PARAM_UNUSED STRING tag, HINT_PARAM_UNUSED STRING val, HINT_PARAM_UNUSED INT line)
 {
+	return;
 }
 /*===========================================================
  * report_missing_value -- Report line with incorrectly empty value

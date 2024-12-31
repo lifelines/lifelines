@@ -512,7 +512,7 @@ chop_path (CNSTRING path, STRING dirs)
 	CNSTRING q;
 	char c=0;
 	ndirs=0;
-	p = dirs;;
+	p = dirs;
 	q = path;
 	while ((c = *q)) {
 		if (is_path_sep(c)) {

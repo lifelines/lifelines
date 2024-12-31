@@ -125,8 +125,11 @@ alloc_out (STRING str)
 		logfp = fopen("alloc.log", LLWRITETEXT);
 		logopen = TRUE;
 	}
-	fprintf(logfp, "%s\n", str);
-	fflush(logfp);
+	if (logopen)
+	{
+		fprintf(logfp, "%s\n", str);
+		fflush(logfp);
+	}
 }
 /*============================================
  * alloc_count -- Count of live alloc'd blocks

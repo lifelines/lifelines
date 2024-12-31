@@ -87,14 +87,18 @@ iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HI
 	if (ict == (iconv_t)-1) {
 		return FALSE;
 	}
-	if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
-		/* assume MS-Windows makenarrow call */
-		inlen = 2 * wcslen((const wchar_t *)sin);
+
+	if (inlen) {
+		if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
+			/* assume MS-Windows makenarrow call */
+			inlen = 2 * wcslen((const wchar_t *)sin);
+		}
+		if (!strncmp(src, "UCS-4", strlen("UCS-4"))) {
+			/* assume UNIX makenarrow call */
+			inlen = 4 * wcslen((const wchar_t *)sin);
+		}
 	}
-	if (!strncmp(src, "UCS-4", strlen("UCS-4"))) {
-		/* assume UNIX makenarrow call */
-		inlen = 4 * wcslen((const wchar_t *)sin);
-	}
+
 	if (!strncmp(dest, "UCS-2", strlen("UCS-2"))) {
 		chwidth = expand = 2;
 	}
@@ -118,7 +122,6 @@ iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HI
 #ifdef ICONV_SET_TRANSLITERATE
 	iconvctl(ict, ICONV_SET_TRANSLITERATE, &transliterate);
 #endif
-
 
 	inptr = (char *)sin;
 	outptr = zs_str(zout);

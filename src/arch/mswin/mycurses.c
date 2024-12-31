@@ -469,7 +469,9 @@ int waddch(WINDOW *wp, chtype ch)
 				}
 				i = wp->_maxy-1;
 				for(j = 0; j < wp->_maxx; j++)
-				setw(wp, i, j, ' ');
+				{
+					setw(wp, i, j, ' ');
+				}
 			}
 			wp->_cury = wp->_maxy-1;
 		}
@@ -771,14 +773,17 @@ static int mycur_init(int fullscreen)
 		*/
 
 #ifdef DEBUG
-		fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
-			ConScreenBuffer.dwSize.X, ConScreenBuffer.dwSize.Y,
-			ConScreenBuffer.dwCursorPosition.X, ConScreenBuffer.dwCursorPosition.Y);
-		fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
-			ConScreenBuffer.srWindow.Left, ConScreenBuffer.srWindow.Right,
-			ConScreenBuffer.srWindow.Top, ConScreenBuffer.srWindow.Bottom,
-			ConScreenBuffer.dwMaximumWindowSize.X,
-			ConScreenBuffer.dwMaximumWindowSize.Y);
+		if (errfp)
+		{
+			fprintf(errfp, "Screen buffer: (%d,%d) pos=(%d,%d)\n",
+				ConScreenBuffer.dwSize.X, ConScreenBuffer.dwSize.Y,
+				ConScreenBuffer.dwCursorPosition.X, ConScreenBuffer.dwCursorPosition.Y);
+			fprintf(errfp, "Window: (%d-%d,%d-%d) max=(%d,%d)\n",
+				ConScreenBuffer.srWindow.Left, ConScreenBuffer.srWindow.Right,
+				ConScreenBuffer.srWindow.Top, ConScreenBuffer.srWindow.Bottom,
+				ConScreenBuffer.dwMaximumWindowSize.X,
+				ConScreenBuffer.dwMaximumWindowSize.Y);
+		}
 #endif
 		if (ConScreenBuffer.srWindow.Left || ConScreenBuffer.srWindow.Top)
 		{
