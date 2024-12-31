@@ -270,18 +270,21 @@ free_temp_node_tree (NODE node)
 
 	NODE n2;
 
-	if ((n2 = nchild(node))) {
+	// Free child(ren)
+	if ((n2 = nchild(node) && nrefcnt(n2) == 0) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
 		nchild(node) = NULL;
 	}
 
-	if ((n2 = nsibling(node))) {
+	// Free sibling(s)
+	if ((n2 = nsibling(node) && nrefcnt(n2) == 0) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
 		nsibling(node) = NULL;
 	}
 
+	// Free node
 	free_node(node,"free_temp_node_tree");
 }
 /*===================================
@@ -331,7 +334,13 @@ set_temp_node (NODE node, BOOLEAN temp)
 	NODE n2;
 
 	// Set this node as requested
-	if (is_temp_node(node) ^ temp) {
+	//
+	// node	temp result
+	// F    F    F (unchanged)
+	// F    T    T (changed via XOR)
+	// T    F    F (changed via XOR)
+	// T    T    T (unchanged)
+	if (is_temp_node(node) != temp) {
 		nflag(node) ^= ND_TEMP;
 	}
 

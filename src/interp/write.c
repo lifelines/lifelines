@@ -172,13 +172,18 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		else
 			nsibling(prev) = next;
 	}
+
 	/* unparent node, but ensure its locking is only releative to new parent */
 	dolock_node_in_cache(dead, FALSE);
 	nparent(dead) = NULL;
 	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
-	/* delete pvalue and the node that it contains */
-	delete_pvalue(val);
+
+	/* mark tree rooted at node as temp */
+	set_temp_node(dead, TRUE);
+
+	/* we don't actually delete the node, garbage collection must get it */
+	/* leak pvalue val ? */
 	return NULL;
 }
 /*======================================
