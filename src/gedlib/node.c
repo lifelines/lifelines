@@ -262,8 +262,11 @@ free_temp_node_tree (NODE node)
 	// It is an error to pass a NULL node
 	ASSERT(node != NULL);
 
-	// It is an error to delete a node if it still has a parent.
+	// It is an error to delete a node if it still has a parent
 	ASSERT(nparent(node) == NULL);
+
+	// It is an error to delete a node that is not marked TEMP
+	ASSERT(is_temp_node(node));
 
 	// It is an error to delete a node that has a positive refcnt
 	ASSERT(nrefcnt(node) == 0);

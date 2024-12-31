@@ -144,7 +144,7 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*============================================
  * llrpt_detachnode -- Remove node from GEDCOM tree
  * usage: detachnode(NODE) -> VOID
- * (This is the historic deletenode)
+ * (This is the historic deletenode which was renamed to better reflect behaviour)
  *==========================================*/
 PVALUE
 llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -183,7 +183,6 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	set_temp_node(dead, TRUE);
 
 	/* we don't actually delete the node, garbage collection must get it */
-	/* leak pvalue val ? */
 	return NULL;
 }
 /*======================================
