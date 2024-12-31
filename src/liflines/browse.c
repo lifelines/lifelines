@@ -989,7 +989,7 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 	}
 		/* don't confirm again if they just confirmed candidate */
 	confirm = (candidate == NULL); 
-	prompt_add_spouse(candidate, fam, confirm);;
+	prompt_add_spouse(candidate, fam, confirm);
 }
 /*===============================================
  * prompt_add_child_check_save -- 

@@ -315,7 +315,7 @@ init_display_indi (RECORD irec, INT width)
 	lock_cache(icel);
 	FORFAMSS(pers, fam, sp, num)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
-	        if (this_fam != fam) {
+		if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
 			FORCHILDREN(fam, chld, nm)
 				if(chld) add_child_line(++nch, chld, width);
