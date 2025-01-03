@@ -517,9 +517,9 @@ bytecode_exit:
 }
 /*===========================================+
  * llrpt_convertcode -- Convert string to another codeset
- *  eg, convertcode(str, "UTF-8//html")
+ *  eg, convertcode(str, "UTF-8/html")
  *  or for use in self-tests, convertcode(bytecode("$C3$B1$C3$A1"), "UTF-8", "ISO-8859-1")
- *  (which should come out "ñá"
+ *  (which should come out as bytecode("$F1$E1"))
  * usage: convertcode(STRING, STRING, [STRING]) -> STRING
  *==========================================*/
 PVALUE
