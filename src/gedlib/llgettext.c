@@ -21,8 +21,10 @@
  * local variables
  *********************************************/
 
+#if ENABLE_NLS
 static TABLE gt_localeDirs = NULL; /* most recent */ /* leaks */
 static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
+#endif
 static STRING gt_defLocaleDir = 0; /* compiled default */ /* leak */
 
 /*********************************************
@@ -45,21 +47,22 @@ llgettext_set_default_localedir (CNSTRING localeDir)
  *  domain:  [IN]  package domain (eg, "lifelines")
  *  codeset: [IN]  codeset to use
  *================================================*/
+#if ENABLE_NLS
 void
 llgettext_init (CNSTRING domain, CNSTRING codeset)
 {
-#if ENABLE_NLS
 	/* until we have an internal codeset (which is until we open a database)
 	we want output in display codeset */
 	set_gettext_codeset(domain, codeset);
 
 	update_textdomain_localedir(domain, "Ui");
-
-#else /* ENABLE_NLS */
-	domain = domain;
-	codeset = codeset;
-#endif /* ENABLE_NLS */
 }
+#else /* ENABLE_NLS */
+void
+llgettext_init (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRING codeset)
+{
+}
+#endif /* ENABLE_NLS */
 /*==================================================
  * llgettext_term -- cleans up memory allocation
  * that may have been performed in llgettext_init
@@ -112,10 +115,10 @@ update_textdomain_localedir (CNSTRING domain, CNSTRING prefix)
  * ll_bindtextdomain -- interceptor for bindtextdomain calls
  *  to send ui callbacks
  *===============================*/
+#if ENABLE_NLS
 void
 ll_bindtextdomain (CNSTRING domain, CNSTRING localeDir)
 {
-#if ENABLE_NLS
 	STRING oldLocaleDir = 0;
 
 	if (!gt_localeDirs) {
@@ -129,8 +132,13 @@ ll_bindtextdomain (CNSTRING domain, CNSTRING localeDir)
 
 	bindtextdomain(domain, localeDir);
 	locales_notify_language_change();
-#endif /* ENABLE_NLS */
 }
+#else
+void
+ll_bindtextdomain (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRING localeDir)
+{
+}
+#endif /* ENABLE_NLS */
 /*=================================
  * init_win32_gettext_shim -- 
  *  Handle user-specified iconv dll path
@@ -215,5 +223,9 @@ set_gettext_codeset (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRI
 CNSTRING
 get_gettext_codeset (void)
 {
+#if ENABLE_NLS
 	return gt_codeset;
+#else
+	return NULL;
+#endif
 }

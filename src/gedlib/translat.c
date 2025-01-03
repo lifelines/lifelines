@@ -436,7 +436,7 @@ transl_get_predefined_name (INT trnum)
 static const char *
 sgettext (const char *msgid)
 {
-	char *msgval = _(msgid);
+	char *msgval = (char*)_(msgid);
 	if (msgval == msgid)
 		msgval = strrchr (msgid, '|') + 1;
 	return msgval;

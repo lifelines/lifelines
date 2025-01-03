@@ -32,6 +32,7 @@
 #include "liflines.h"
 #include "feedback.h"
 #include "arch.h"
+#include "ui.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
