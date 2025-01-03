@@ -7,8 +7,8 @@ dnl **************************************************************
 dnl Autoconf Section
 dnl **************************************************************
 
-AC_INIT(lifelines, 3.2.0)
-AC_PREREQ(2.50)
+AC_INIT([lifelines],[3.2.0])
+AC_PREREQ([2.69])
 AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
@@ -19,7 +19,7 @@ dnl **************************************************************
 
 dnl Use 'foreign' to avoid requiring GNU files in top-level.
 AM_INIT_AUTOMAKE([foreign])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AM_MAINTAINER_MODE
 
 dnl **************************************************************
@@ -63,7 +63,7 @@ dnl OS/Compiler-Specific Section
 dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
-if test "${ac_cv_prog_gcc}" = "yes"; then
+if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -W -Wall -Wextra"
   CFLAGS="${CFLAGS} -Wcast-align -Wmissing-declarations -Wmissing-prototypes"
   CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
@@ -74,15 +74,10 @@ fi
 
 # OS-Specific Fixups
 # Cygwin - fixes linker problems
-# Darwin - will pick up Fink-installed headers and libraries
 case $host in
   *pc-cygwin*)
     CFLAGS="${CFLAGS} -DBROKEN_LINKER"
     ;;  
-  *apple-darwin*)
-    CPPFLAGS="${CPPFLAGS} -I/sw/include";
-    LDFLAGS="${LDFLAGS} -L/sw/lib"
-    ;;
 esac
 
 dnl Specify bit width if requested
@@ -98,7 +93,7 @@ AC_ARG_WITH(64bit,
 
 if test "$build_32bit" = "yes"
 then
-  if test "${ac_cv_prog_gcc}" = "yes"; then
+  if test "${ac_cv_c_compiler_gnu}" = "yes"; then
     CFLAGS="${CFLAGS} -m32"
     LDFLAGS="${LDFLAGS} -m32"
   else
@@ -109,7 +104,7 @@ fi
 
 if test "$build_64bit" = "yes"
 then
-  if test "${ac_cv_prog_gcc}" = "yes"; then
+  if test "${ac_cv_c_compiler_gnu}" = "yes"; then
     CFLAGS="${CFLAGS} -m64"
     LDFLAGS="${LDFLAGS} -m64"
   else
@@ -134,7 +129,7 @@ AM_CONDITIONAL(WITH_STATIC_NLS, test "$build_static_nls" = "yes")
 
 if test "$build_coverage" = "yes"
 then
-  if test "${ac_cv_prog_gcc}" = "yes"; then
+  if test "${ac_cv_c_compiler_gnu}" = "yes"; then
     CFLAGS="${CFLAGS} --coverage"
   else
     echo "The use of --with-coverage is only supported when using gcc!"
@@ -150,7 +145,7 @@ AC_ARG_WITH(full-debug,
 
 if test "$build_full_debug" = "yes"
 then
-  if test "${ac_cv_prog_gcc}" = "yes"; then
+  if test "${ac_cv_c_compiler_gnu}" = "yes"; then
     CFLAGS="${CFLAGS} -rdynamic"
   else
     echo "The use of --with-full-debug only supported when using gcc!"
@@ -212,7 +207,7 @@ dnl **************************************************************
 AC_ARG_WITH(profiling,
   [  --with-profiling        Compile with profiling support],
   [# Does it work for other compilers then GCC? [pere 2000-12-30]
-   if test "${ac_cv_prog_gcc}" = "yes"; then
+   if test "${ac_cv_c_compiler_gnu}" = "yes"; then
       CFLAGS="${CFLAGS} -pg -a"
       LDFLAGS="${LDFLAGS} -pg -a"
 
@@ -339,7 +334,7 @@ dnl **************************************************************
 dnl Generate Makefiles
 dnl **************************************************************
 
-AC_OUTPUT(Makefile \
+AC_CONFIG_FILES([Makefile \
         src/Makefile \
         src/arch/Makefile \
         src/arch/mswin/Makefile \
@@ -365,4 +360,5 @@ AC_OUTPUT(Makefile \
         tt/Makefile \
         build/Makefile \
         tests/Makefile \
-        po/Makefile.in)
+        po/Makefile.in])
+AC_OUTPUT
