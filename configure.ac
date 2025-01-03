@@ -59,7 +59,26 @@ then
 fi
 
 dnl **************************************************************
-dnl OS/Compiler-Specific Section
+dnl OS-Specific Section
+dnl **************************************************************
+
+dnl MacOS systems need to be explicitly pointed to homebrew paths
+case $host in
+  *apple-darwin*)
+    CFLAGS="${CFLAGS} -I/opt/homebrew/include"
+    LDFLAGS="${LDFLAGS} -L/opt/homebrew/lib"
+    ;;
+esac
+
+# Cygwin has linker issues
+case $host in
+  *pc-cygwin*)
+    CFLAGS="${CFLAGS} -DBROKEN_LINKER"
+    ;;
+esac
+
+dnl **************************************************************
+dnl Compiler-Specific Section
 dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
@@ -72,15 +91,6 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -g"
 fi
 
-# OS-Specific Fixups
-# Cygwin - fixes linker problems
-case $host in
-  *pc-cygwin*)
-    CFLAGS="${CFLAGS} -DBROKEN_LINKER"
-    ;;  
-esac
-
-dnl Specify bit width if requested
 AC_ARG_WITH(32bit,
     [  --with-32bit             Build in 32-bit mode ],
     [build_32bit=$withval],
@@ -119,13 +129,13 @@ AC_ARG_WITH(static-nls,
     [build_static_nls=$withval],
     [build_static_nls=no])
 
+AM_CONDITIONAL(WITH_STATIC_NLS, test "$build_static_nls" = "yes")
+
 dnl Specify code coverage if requested
 AC_ARG_WITH(coverage,
     [  --with-coverage             Build with code coverage ],
     [build_coverage=$withval],
     [build_coverage=no])
-
-AM_CONDITIONAL(WITH_STATIC_NLS, test "$build_static_nls" = "yes")
 
 if test "$build_coverage" = "yes"
 then
@@ -228,10 +238,12 @@ echo Looking for header files
 AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
+AC_CHECK_HEADERS( alloc.h malloc.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
 AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
+AC_CHECK_FUNCS( heapwalk _heapwalk )
 AC_CHECK_FUNCS( backtrace backtrace_symbols )
 AC_SEARCH_LIBS( sin, m )
 AC_SEARCH_LIBS( cos, m )
@@ -240,23 +252,6 @@ AC_SEARCH_LIBS( asin, m )
 AC_SEARCH_LIBS( acos, m )
 AC_SEARCH_LIBS( atan, m )
 
-echo Looking for header files and libraries to support heap walking
-dnl We need to cheat on OSX/Darwin.  The standard configure
-dnl check brings in a C++ header which bombs and causes
-dnl configure to display a particularly nasty warning, which
-dnl we don't want to expose to end-users.
-case $host in
-  *apple-darwin*)
-    HAVE_ALLOC_H=no
-    HAVE_MALLOC_H=no
-    HAVE_HEAPWALK=no
-    HAVE__HEAPWALK=no
-    ;;
-  *)
-    AC_CHECK_HEADERS( alloc.h malloc.h )
-    AC_CHECK_FUNCS( heapwalk _heapwalk )
-    ;;
-esac
 
 dnl **************************************************************
 dnl Check for curses
