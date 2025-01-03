@@ -1298,7 +1298,8 @@ llrpt_nfamilies (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 PVALUE
 llrpt_nspouses (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 {
-	INT nspouses=0, nactual=0;
+	HINT_VAR_UNUSED INT nspouses=0;
+	INT nactual=0;
 	PNODE argvar = builtin_args(node);
 	NODE indi = eval_indi(argvar, stab, eflg, NULL);
 	if (*eflg) {
