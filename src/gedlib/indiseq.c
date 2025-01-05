@@ -188,7 +188,6 @@ static INDISEQ
 create_indiseq_impl (INT valtype, INDISEQ_VALUE_FNCTABLE fnctable)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
-	ASSERT(seq);
 	memset(seq, 0, sizeof(*seq));
 	IMax(seq) = 20;
 	IData(seq) = (SORTEL *) stdalloc(20*sizeof(SORTEL));
@@ -767,7 +766,6 @@ void
 keysort_indiseq (INDISEQ seq)
 {
 	HINT_VAR_UNUSED INT inum;
-	if (!seq) return;
 	if (IFlags(seq) & KEYSORT) return;
 	FORINDISEQ(seq, el, inum)
 		spri(el) = atoi(skey(el) + 1);
@@ -2235,9 +2233,6 @@ void
 calc_indiseq_names (INDISEQ seq)
 {
 	HINT_VAR_UNUSED INT inum;
-
-	if (!seq)
-		return;
 
 	if (IFlags(seq) & WITHNAMES)
 		return;

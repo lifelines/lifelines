@@ -216,12 +216,14 @@ void write_nonlink_indi(NODE);
 */
 
 #define FORINDISEQ(s,e,i)\
-	{	INT _n = ISize((INDISEQ)s);\
+	{\
+		if (s) {\
+		INT _n = ISize((INDISEQ)s);\
 		SORTEL *_d = IData((INDISEQ)s);\
 		i = 0;\
 		for (i = 0; i < _n; i++) {\
 			SORTEL e = _d[i];
 
-#define ENDINDISEQ }}
+#define ENDINDISEQ }}}
 
 #endif /* _INDISEQ_H */
