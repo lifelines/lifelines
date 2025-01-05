@@ -61,6 +61,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	STRING key, name, lname="";
 	RECORD rec=0;
 	INDISEQ seq, newseq;
+	HINT_VAR_UNUSED INT inum;
 
 	ASSERT(prec1);
 	ASSERT(!*prec1);
@@ -247,7 +248,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				message("%s", _(qSlstnad));
 				break;
 			}
-			FORINDISEQ(newseq, el, i)
+			FORINDISEQ(newseq, el, inum)
 				skey = element_skey(el);
 				snam = element_name(el);
 				append_indiseq_null(seq, strsave(skey), snam, FALSE, TRUE);

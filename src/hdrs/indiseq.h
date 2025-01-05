@@ -208,12 +208,22 @@ void write_nonlink_indi(NODE);
  * INDISEQ -- Macros
  *================*/
 
+/*
+  All of the FOR* macros are written with the following assumptions:
+  1) First argument is the input variable, provided by the caller
+  2) Middle arguments are data variables, local to the macro
+  3) Last argument is a count variable, provided by the caller
+*/
+
 #define FORINDISEQ(s,e,i)\
-	{	int i, _n;\
-		SORTEL e, *_d;\
-		_d = IData((INDISEQ)s);\
-		for (i = 0, _n = ISize((INDISEQ)s); i < _n; i++) {\
-			e = _d[i];
-#define ENDINDISEQ }}
+	{\
+		if (s) {\
+		INT _n = ISize((INDISEQ)s);\
+		SORTEL *_d = IData((INDISEQ)s);\
+		i = 0;\
+		for (i = 0; i < _n; i++) {\
+			SORTEL e = _d[i];
+
+#define ENDINDISEQ }}}
 
 #endif /* _INDISEQ_H */

@@ -484,7 +484,7 @@ fam_to_wife (RECORD frec, RECORD * prec)
 NODE
 fam_to_spouse (NODE fam, NODE indi)
 {
-	INT num;
+	HINT_VAR_UNUSED INT num;
 	if (!fam) return NULL;
 	FORHUSBS(fam, husb, num)
 		if(husb != indi) return(husb);

@@ -99,7 +99,7 @@ how you obtain and build lifelines.
    Use of NLS, or regeneration of the language files, requires the following:
 
    gettext (or gettext-devel)
-   iconv
+   iconv (or libiconv)
 
    By default, NLS support is enabled.  If you want to disable NLS support,
    run configure with the '--disable-nls' option.
@@ -140,7 +140,7 @@ how you obtain and build lifelines.
   mv: cannot stat `t-da.gmo': No such file or directory
   ...
 
-  Then you probably do not have the gettext tools -- the commandline
+  Then you probably do not have the gettext tools -- the command-line
   tools needed for development, which are needed to compile, and
   are generally a separate package from the runtime libraries needed
   by running programs.
@@ -156,11 +156,11 @@ how you obtain and build lifelines.
   be regenerated using the bison that is installed on your system which
   should resolve the problem.
 
-3. expect
+3. expect, bash
 
-  The test suite needs expect to be installed. It's the default for
-  redhat, but ubuntu has make it optional.  You'll need to install
-  expect if it's not installed.
+  The test suite needs expect and bash to be installed. These may or may
+  not be part of the default install on your system.  Both need to be
+  installed for the test suite to function properly..
 
 *************
 1c) Compilers
@@ -244,3 +244,11 @@ LifeLines is included in the FreeBSD ports collection in misc/lifelines.
 ************
 
 As of lifelines-3.2.0, LifeLines is fully supported on on 64-bit MacOSX.
+
+When installing packages from homebrew, you need to unlink and relink the
+binaries so that they take precedence over those found in the base system.
+
+eg:
+brew unlink bison && brew link bison --force
+brew unlink gettext && brew link gettext --force
+brew unlink bash && brew link bash --force

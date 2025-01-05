@@ -474,6 +474,7 @@ finish_and_delete_nameset (void)
 	CNSTRING name="";
 	CNSTRING skey="";
 	TABLE table = create_table_int();
+	HINT_VAR_UNUSED INT inum;
 	prevkey[0]=0;
 	calc_indiseq_names(soundexseq);
 	keysort_indiseq(soundexseq);
@@ -482,7 +483,7 @@ finish_and_delete_nameset (void)
 	and for each person, table all their names, watching for
 	duplicates
 	*/
-	FORINDISEQ(soundexseq, el, num)
+	FORINDISEQ(soundexseq, el, inum)
 		name = element_sval(el);
 		skey = element_skey(el);
 		if (!eqstr(skey, prevkey)) {
@@ -515,9 +516,10 @@ finish_and_delete_refnset (void)
 	CNSTRING refn="";
 	CNSTRING skey="";
 	TABLE table = create_table_int();
+	HINT_VAR_UNUSED INT inum;
 	prevkey[0]=0;
 	canonkeysort_indiseq(soundexseq);
-	FORINDISEQ(soundexseq, el, num)
+	FORINDISEQ(soundexseq, el, inum)
 		refn = element_sval(el);
 		skey = element_skey(el);
 		if (!eqstr(skey, prevkey)) {
@@ -1057,9 +1059,10 @@ static void
 check_set (INDISEQ seq, char ctype)
 {
 	INT i=0;
+	HINT_VAR_UNUSED INT inum;
 	keysort_indiseq(seq); /* spri now valid */
 	i = xref_next(ctype, i);
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		while (i<element_ikey(el)) {
 			report_error(ERR_UNDELETED
 				, _("Missing undeleted record %c%d")

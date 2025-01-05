@@ -270,9 +270,10 @@ copy_indiseq (INDISEQ seq)
 {
 	INDISEQ newseq;
 	UNION uval;
+	HINT_VAR_UNUSED INT inum;
 	if (!seq) return NULL;
 	newseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		uval = copyval(seq, sval(el));
 		append_indiseq_impl(newseq, skey(el), snam(el), uval,
 		    TRUE, FALSE);
@@ -747,9 +748,10 @@ value_compare (SORTEL el1, SORTEL el2, VPTR param)
 void
 namesort_indiseq (INDISEQ seq)
 {
+	HINT_VAR_UNUSED INT inum;
 	calc_indiseq_names(seq);
 	if ((IFlags(seq) & NAMESORT) && is_locale_current(seq)) return;
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), name_compare, seq);
@@ -763,8 +765,9 @@ namesort_indiseq (INDISEQ seq)
 void
 keysort_indiseq (INDISEQ seq)
 {
+	HINT_VAR_UNUSED INT inum;
 	if (IFlags(seq) & KEYSORT) return;
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), key_compare, seq);
@@ -779,8 +782,9 @@ keysort_indiseq (INDISEQ seq)
 void
 canonkeysort_indiseq (INDISEQ seq)
 {
+	HINT_VAR_UNUSED INT inum;
 	if (IFlags(seq) & CANONKEYSORT) return;
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	partition_sort(IData(seq), ISize(seq), canonkey_compare, seq);
@@ -1014,6 +1018,7 @@ INDISEQ
 union_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
+	HINT_VAR_UNUSED INT inum;
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
@@ -1073,7 +1078,7 @@ union_indiseq (INDISEQ one, INDISEQ two)
 		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		j++;
 	}
-	FORINDISEQ(three, el, num)
+	FORINDISEQ(three, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	IFlags(three) = KEYSORT|UNIQUED;
@@ -1087,6 +1092,7 @@ INDISEQ
 intersect_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
+	HINT_VAR_UNUSED INT inum;
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
@@ -1117,7 +1123,7 @@ intersect_indiseq (INDISEQ one, INDISEQ two)
 			i++, j++;
 		}
 	}
-	FORINDISEQ(three, el, num)
+	FORINDISEQ(three, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	IFlags(three) = KEYSORT|UNIQUED;
@@ -1131,6 +1137,7 @@ INDISEQ
 difference_indiseq (INDISEQ one, INDISEQ two)
 {
 	INT n, m, i, j, rel;
+	HINT_VAR_UNUSED INT inum;
 	STRING key;
 	INDISEQ three;
 	SORTEL *u, *v;
@@ -1171,7 +1178,7 @@ difference_indiseq (INDISEQ one, INDISEQ two)
 		append_indiseq_impl(three, key, NULL, uval, TRUE, TRUE);
 		i++;
 	}
-	FORINDISEQ(three, el, num)
+	FORINDISEQ(three, el, inum)
 		spri(el) = atoi(skey(el) + 1);
 	ENDINDISEQ
 	IFlags(three) = KEYSORT|UNIQUED;
@@ -1187,13 +1194,15 @@ parent_indiseq (INDISEQ seq)
 	TABLE tab=0; /* table of people inserted (values not used) */
 	INDISEQ par=0;
 	NODE indi=0;
-	INT fnum=0, snum=0;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT snum;
 	STRING key=0;
 	UNION uval;
 	if (!seq) return NULL;
 	tab = create_table_vptr();
 	par = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		indi = key_to_indi(skey(el));
 		FORFAMCS(indi, fam, fath, moth, fnum)
 			FORFAMSPOUSES(fam, spouse, snum)
@@ -1217,7 +1226,9 @@ parent_indiseq (INDISEQ seq)
 INDISEQ
 child_indiseq (INDISEQ seq)
 {
-	INT num1, num2;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT cnum;
 	TABLE tab=0; /* table of people already inserted (values not used) */
 	INDISEQ cseq=0;
 	NODE indi=0;
@@ -1226,10 +1237,10 @@ child_indiseq (INDISEQ seq)
 	if (!seq) return NULL;
 	tab = create_table_vptr();
 	cseq = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		indi = key_to_indi(skey(el));
-		FORFAMS(indi, fam, num1)
-			FORCHILDRENx(fam, chil, num2)
+		FORFAMS(indi, fam, fnum)
+			FORCHILDRENx(fam, chil, cnum)
 				key = indi_to_key(chil);
 				if (!in_table(tab, key)) {
 					key = strsave(key);
@@ -1252,12 +1263,14 @@ INDISEQ
 indi_to_children (NODE indi)
 {
 	INDISEQ seq;
-	INT num1, num2, len = 0;
+	INT len = 0;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT cnum;
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq_null();
-	FORFAMS(indi, fam, num1)
-		FORCHILDRENx(fam, chil, num2)
+	FORFAMS(indi, fam, fnum)
+		FORCHILDRENx(fam, chil, cnum)
 			len++;
 			key = indi_to_key(chil);
 			append_indiseq_null(seq, key, NULL, FALSE, FALSE);
@@ -1277,13 +1290,16 @@ INDISEQ
 indi_to_spouses (NODE indi)
 {
 	INDISEQ seq=0;
-	INT num, num1, val, len = 0;
+	INT val;
+	INT len = 0;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT snum;
 	STRING key=0;
 	if (!indi) return NULL;
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_SPOUSESEQ;
-	FORFAMS(indi, fam, num)
-		FORFAMSPOUSES(fam, spouse, num1)
+	FORFAMS(indi, fam, fnum)
+		FORFAMSPOUSES(fam, spouse, snum)
 			if (spouse != indi) {
 				len++;
 				key = indi_to_key(spouse);
@@ -1306,11 +1322,12 @@ INDISEQ
 fam_to_spouses (NODE fam)
 {
 	INDISEQ seq=0;
-	INT num1, len = 0;
+	HINT_VAR_UNUSED INT snum;
+	INT len = 0;
 	STRING key=0;
 	if (!fam) return NULL;
 	seq = create_indiseq_ival();
-	FORFAMSPOUSES(fam, spouse, num1)
+	FORFAMSPOUSES(fam, spouse, snum)
 		len++;
 		key = indi_to_key(spouse);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
@@ -1328,12 +1345,14 @@ INDISEQ
 indi_to_fathers (NODE indi)
 {
 	INDISEQ seq;
-	INT num1, num2, len = 0;
+	INT len = 0;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT hnum;
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq_null();
-	FORFAMCS(indi, fam, fath, moth, num1)
-		FORHUSBS(fam, husb, num2)
+	FORFAMCS(indi, fam, fath, moth, fnum)
+		FORHUSBS(fam, husb, hnum)
 			len++;
 			key = indi_to_key(husb);
 			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
@@ -1350,12 +1369,14 @@ INDISEQ
 indi_to_mothers (NODE indi)
 {
 	INDISEQ seq;
-	INT num1, num2, len = 0;
+	INT len = 0;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT wnum;
 	STRING key;
 	if (!indi) return NULL;
 	seq = create_indiseq_null();
-	FORFAMCS(indi, fam, fath, moth, num1)
-		FORWIFES(fam, wife, num2)
+	FORFAMCS(indi, fam, fath, moth, fnum)
+		FORWIFES(fam, wife, wnum)
 			len++;
 			key = indi_to_key(wife);
 			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
@@ -1376,7 +1397,8 @@ INDISEQ
 indi_to_families (NODE indi, BOOLEAN fams)
 {
 	INDISEQ seq=0;
-	INT num, val;
+	INT val;
+	INT fnum;
 	STRING key=0;
 	INT mykeynum=0;
 	if (!indi) return NULL;
@@ -1384,7 +1406,7 @@ indi_to_families (NODE indi, BOOLEAN fams)
 	seq = create_indiseq_ival();
 	IPrntype(seq) = ISPRN_FAMSEQ;
 	if (fams) {
-		FORFAMS(indi, fam, num)
+		FORFAMS(indi, fam, fnum)
 		{
 			STRING fkey = strsave(fam_to_key(fam));
 /* MTE: When processing FAMS, we don't care if there is a spouse
@@ -1392,9 +1414,9 @@ indi_to_families (NODE indi, BOOLEAN fams)
  */
 #if 0
 			INT spkeynum=0;
-			INT num2=0;
+			HINT_VAR_UNUSED INT snum;
 			/* look for a spouse besides indi */
-			FORFAMSPOUSES(fam, spouse, num2)
+			FORFAMSPOUSES(fam, spouse, snum)
 			{
 				INT temp = atoi(indi_to_key(spouse) + 1);
 				if (temp && temp != mykeynum)
@@ -1407,13 +1429,13 @@ indi_to_families (NODE indi, BOOLEAN fams)
 		}
 		ENDFAMS
 	} else {
-		FORFAMCS(indi, fam, fath, moth, num)
+		FORFAMCS(indi, fam, fath, moth, fnum)
 			key = fam_to_key(fam);
 			val = fath ? atoi(indi_to_key(fath) + 1) : 0;
 			append_indiseq_ival(seq, key, NULL, val, TRUE, FALSE);
 		ENDFAMCS
 	}
-	if (num && ISize(seq)) return seq;
+	if (fnum && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1424,15 +1446,15 @@ INDISEQ
 fam_to_children (NODE fam)
 {
 	INDISEQ seq;
-	INT num;
+	INT cnum;
 	STRING key;
 	if (!fam) return NULL;
 	seq = create_indiseq_null();
-	FORCHILDRENx(fam, chil, num)
+	FORCHILDRENx(fam, chil, cnum)
 		key = indi_to_key(chil);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDCHILDRENx
-	if (num && ISize(seq)) return seq;
+	if (cnum && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1443,15 +1465,15 @@ INDISEQ
 fam_to_fathers (NODE fam)
 {
 	INDISEQ seq;
-	INT num;
+	INT hnum;
 	STRING key;
 	if (!fam) return NULL;
 	seq = create_indiseq_null();
-	FORHUSBS(fam, husb, num)
+	FORHUSBS(fam, husb, hnum)
 		key = indi_to_key(husb);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDHUSBS
-	if (num && ISize(seq)) return seq;
+	if (hnum && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1462,15 +1484,15 @@ INDISEQ
 fam_to_mothers (NODE fam)
 {
 	INDISEQ seq;
-	INT num;
+	INT wnum;
 	STRING key;
 	if (!fam) return NULL;
 	seq = create_indiseq_null();
-	FORWIFES(fam, wife, num)
+	FORWIFES(fam, wife, wnum)
 		key = indi_to_key(wife);
 		append_indiseq_null(seq, key, NULL, TRUE, FALSE);
 	ENDWIFES
-	if (num && ISize(seq)) return seq;
+	if (wnum && ISize(seq)) return seq;
 	remove_indiseq(seq);
 	return NULL;
 }
@@ -1484,12 +1506,13 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 	INDISEQ fseq=0, sseq=0;
 	NODE indi=0, fam=0;
 	STRING key=0, fkey=0;
-	INT num2=0;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT cnum;
 	/* table lists people already listed (values unused) */
 	TABLE tab = create_table_vptr();
 	fseq = create_indiseq_null(); /* temporary */
 	sseq = create_indiseq_null();
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		indi = key_to_indi(skey(el));
 		if ((fam = indi_to_famc(indi))) {
 			fkey = fam_to_key(fam);
@@ -1497,9 +1520,9 @@ sibling_indiseq (INDISEQ seq, BOOLEAN close)
 		}
 		if (!close) insert_table_ptr(tab, skey(el), 0);
 	ENDINDISEQ
-	FORINDISEQ(fseq, el, num)
+	FORINDISEQ(fseq, el, inum)
 		fam = key_to_fam(skey(el));
-		FORCHILDRENx(fam, chil, num2)
+		FORCHILDRENx(fam, chil, cnum)
 			key = indi_to_key(chil);
 			if (!in_table(tab, key)) {
 				key = strsave(key);
@@ -1527,7 +1550,9 @@ ancestor_indiseq (INDISEQ seq)
 	NODE indi=0;
 	STRING key, pkey;
 	INTPTR gen=0;
-	INT fnum=0, snum=0;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT snum;
 	UNION uval;
 	if (!seq) return NULL;
 		/* table of people already added */
@@ -1536,7 +1561,7 @@ ancestor_indiseq (INDISEQ seq)
 	anclist = create_list();
 	genlist = create_list();
 	anc = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		enqueue_list(anclist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
@@ -1580,6 +1605,7 @@ descendent_indiseq (INDISEQ seq)
 	NODE indi;
 	STRING key, dkey, fkey;
 	UNION uval;
+	HINT_VAR_UNUSED INT inum;
 	if (!seq) return NULL;
 		/* itab = people already added, value irrelevant */
 	itab = create_table_vptr();
@@ -1597,22 +1623,23 @@ descendent_indiseq (INDISEQ seq)
 		/* result indiseq */
 	des = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
 		/* add everyone from original seq to processing list */
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		enqueue_list(deslist, (VPTR)skey(el));
 		enqueue_list(genlist, (VPTR)gen);
 	ENDINDISEQ
 		/* loop until processing list is empty */
 	while (!is_empty_list(deslist)) {
-		INT num1, num2;
+		HINT_VAR_UNUSED INT fnum;
+		HINT_VAR_UNUSED INT cnum;
 		key = (STRING) dequeue_list(deslist);
 		gen = (INTPTR)dequeue_list(genlist) + 1;
 		indi = key_to_indi(key);
-		FORFAMS(indi, fam, num1)
+		FORFAMS(indi, fam, fnum)
 				/* skip families already processed */
 			if (in_table(ftab, fkey = fam_to_key(fam)))
 				continue;
 			insert_table_ptr(ftab, fkey, 0);
-			FORCHILDRENx(fam, child, num2)
+			FORCHILDRENx(fam, child, cnum)
 					/* only do people not processed */
 				if (!in_table(itab,
 				    dkey = indi_to_key(child))) {
@@ -1642,13 +1669,14 @@ spouse_indiseq (INDISEQ seq)
 	INDISEQ sps;
 	STRING spkey;
 	NODE indi;
-	INT num1;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT snum;
 	if (!seq) return NULL;
 	tab = create_table_vptr();
 	sps = create_indiseq_impl(IValtype(seq), IValfnctbl(seq));
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		indi = key_to_indi(skey(el));
-		FORSPOUSES(indi, spouse, fam, num1)
+		FORSPOUSES(indi, spouse, fam, snum)
 			spkey = indi_to_key(spouse);
 			if (!in_table(tab, spkey)) {
 				UNION u;
@@ -1739,7 +1767,9 @@ famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 {
 	NODE fam=0;
 	STRING key=0, name=0, str=0;
-	INT val=0, num1=0;
+	INT val=0;
+	HINT_VAR_UNUSED INT snum;
+	HINT_VAR_UNUSED INT inum;
 	INT spkeynum=0;
 	INDISEQ spseq = create_indiseq_null();
 	NODE indi=0;
@@ -1749,7 +1779,7 @@ famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 	fam = key_to_fam(key);
 
 	/* build sequence of other spouses in this family */
-	FORFAMSPOUSES(fam, spouse, num1)
+	FORFAMSPOUSES(fam, spouse, snum)
 		len++;
 		key = indi_to_key(spouse);
 		spkeynum = atoi(key + 1);
@@ -1759,7 +1789,7 @@ famseq_print_el (INDISEQ seq, INT i, INT len, RFMT rfmt)
 	ENDFAMSPOUSES
 	
 	/* build string list of spouses */
-	FORINDISEQ(spseq, el, num)
+	FORINDISEQ(spseq, el, inum)
 		indi = key_to_indi(skey(el));
 		str = indi_to_list_string(indi, fam, len/length_indiseq(spseq), rfmt, TRUE);
 		if (zs_len(zstr)) zs_apps(zstr, ", ");
@@ -1830,8 +1860,9 @@ print_indiseq_element (INDISEQ seq, INT i, STRING buf, INT len, RFMT rfmt)
 void
 preprint_indiseq (INDISEQ seq, INT len, RFMT rfmt)
 {
-	FORINDISEQ(seq, el, num)
-		sprn(el) = get_print_el(seq, num, len, rfmt);
+	INT inum;
+	FORINDISEQ(seq, el, inum)
+		sprn(el) = get_print_el(seq, inum, len, rfmt);
 	ENDINDISEQ
 }
 /*==============================================================
@@ -2201,16 +2232,19 @@ default_compare_values (VPTR ptr1, VPTR ptr2, HINT_PARAM_UNUSED INT valtype)
 void
 calc_indiseq_names (INDISEQ seq)
 {
+	HINT_VAR_UNUSED INT inum;
+
 	if (IFlags(seq) & WITHNAMES)
 		return;
 
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		if (*skey(el)=='I' && !snam(el)) {
 			STRING name = qkey_to_name(skey(el));
 			if (name)
 				snam(el) = strsave(name);
 		}
 	ENDINDISEQ
+
 	IFlags(seq) |= WITHNAMES;
 }
 /*=======================================================

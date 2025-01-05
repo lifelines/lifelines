@@ -34,3 +34,6 @@ John F. Chandler (jchbn@cuvmb.cc.columbia.edu)
 
 David A. Bright (dabright@users.sourceforge.net)
 - book-latex.ll and other report improvements
+
+nabijaczleweli@nabijaczleweli.xyz
+- fixed race condition and OOM issue due to malloc mis-handling in scandir()

@@ -49,7 +49,7 @@
 *	    david.tribble@beasys.com
 *	    dtribble@flash.net
 *
-* Copyright ©1997-1998 by David R. Tribble, all rights reserved.
+* Copyright 1997-1998 by David R. Tribble, all rights reserved
 */
 
 
