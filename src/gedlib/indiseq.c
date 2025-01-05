@@ -188,6 +188,7 @@ static INDISEQ
 create_indiseq_impl (INT valtype, INDISEQ_VALUE_FNCTABLE fnctable)
 {
 	INDISEQ seq = (INDISEQ) stdalloc(sizeof *seq);
+	ASSERT(seq);
 	memset(seq, 0, sizeof(*seq));
 	IMax(seq) = 20;
 	IData(seq) = (SORTEL *) stdalloc(20*sizeof(SORTEL));
@@ -1290,7 +1291,8 @@ INDISEQ
 indi_to_spouses (NODE indi)
 {
 	INDISEQ seq=0;
-	INT val, len = 0;
+	INT val;
+	INT len = 0;
 	HINT_VAR_UNUSED INT fnum;
 	HINT_VAR_UNUSED INT snum;
 	STRING key=0;

@@ -436,7 +436,8 @@ init_display_fam (RECORD frec, INT width)
 	NODE husb=0, wife=0;
 	STRING s=0;
 	ZSTR famkey = zs_news(key_of_record(fam));
-	INT nch, wtemp;
+	INT nch;
+	INT wtemp;
 	HINT_VAR_UNUSED INT cnum;
 	STRING father = _(qSdspl_fath);
 	STRING mother = _(qSdspl_moth);
