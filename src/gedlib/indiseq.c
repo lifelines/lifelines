@@ -767,6 +767,7 @@ void
 keysort_indiseq (INDISEQ seq)
 {
 	HINT_VAR_UNUSED INT inum;
+	if (!seq) return;
 	if (IFlags(seq) & KEYSORT) return;
 	FORINDISEQ(seq, el, inum)
 		spri(el) = atoi(skey(el) + 1);
@@ -2235,6 +2236,9 @@ calc_indiseq_names (INDISEQ seq)
 {
 	HINT_VAR_UNUSED INT inum;
 
+	if (!seq)
+		return;
+
 	if (IFlags(seq) & WITHNAMES)
 		return;
 
@@ -2245,6 +2249,7 @@ calc_indiseq_names (INDISEQ seq)
 				snam(el) = strsave(name);
 		}
 	ENDINDISEQ
+
 	IFlags(seq) |= WITHNAMES;
 }
 /*=======================================================
