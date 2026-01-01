@@ -148,10 +148,10 @@ free_xlat (XLAT xlat)
 	/* free each step */
 	FORLIST(xlat->steps, el)
 		xstep = (XLSTEP)el;
-		ASSERT(!xstep->iconv_dest && !xstep->iconv_src);
+		ASSERT(xstep->iconv_dest && xstep->iconv_src);
 		strfree(&xstep->iconv_src);
 		strfree(&xstep->iconv_dest);
-		ASSERT(xstep->iconv_dest && xstep->iconv_src);
+		ASSERT(!xstep->iconv_dest && !xstep->iconv_src);
 		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
 	destroy_list(xlat->steps);
