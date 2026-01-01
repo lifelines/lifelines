@@ -273,14 +273,14 @@ free_temp_node_tree (NODE node)
 
 	NODE n2;
 
-	// Free child(ren)
+	// Free child(ren) if no longer referenced
 	if ((n2 = nchild(node)) && nrefcnt(n2) == 0) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
 		nchild(node) = NULL;
 	}
 
-	// Free sibling(s)
+	// Free sibling(s) if no longer referenced
 	if ((n2 = nsibling(node)) && nrefcnt(n2) == 0) {
 		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
