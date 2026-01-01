@@ -1,6 +1,6 @@
 /*
 @progname ifelse.ll
-@author Matt Emmerton and Jimm Eggert
+@author Matt Emmerton and Jim Eggert
 @description Test if/else and if/elsif/else
 */
 

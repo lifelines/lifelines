@@ -996,11 +996,16 @@ describe_pvalue (PVALUE val)
 				zs_apps(zstr, "NULL");
 			else {
 				STRING tag = ntag(node);
+				INT refcnt = nrefcnt(node);
 				if (!tag)
 					zs_apps(zstr, "null tag");
 				else
 					zs_appf(zstr, "tag='%s'", tag);
-			}
+				if (refcnt)
+					zs_appf(zstr, ",refcnt='" FMT_INT "'", refcnt);
+				if (is_temp_node(node))
+					zs_appf(zstr, ",temp");
+			     }
 		}
 		break;
 	case PINDI:

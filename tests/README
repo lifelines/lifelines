@@ -45,3 +45,8 @@ interp/ifelse
 -- Status: Complete
 -- Issue: 374
 -- Purpose: Ensure that if/else and if/elsif/else works in varb and non-varb forms
+
+interp/tempnode
+-- Status: Under development
+-- Issue: 433/434
+-- Purpose: Ensure that TEMP nodes are marked properly, and not deleted if in use
