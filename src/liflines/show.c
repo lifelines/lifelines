@@ -282,14 +282,15 @@ init_display_indi (RECORD irec, INT width)
 {
 	NODE pers=nztop(irec);
 	NODE this_fam = 0;
-	INT nsp, nch, num, nm;
+	INT nsp, nch;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT cnum;
 	STRING s;
 	NODE fth;
 	NODE mth;
 	CACHEEL icel;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
-
 
 	ASSERT(pers);
 
@@ -313,11 +314,11 @@ init_display_indi (RECORD irec, INT width)
 	nsp = nch = 0;
 	icel = indi_to_cacheel_old(pers);
 	lock_cache(icel);
-	FORFAMSS(pers, fam, sp, num)
+	FORFAMSS(pers, fam, sp, fnum)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
 		if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
-			FORCHILDREN(fam, chld, nm)
+			FORCHILDREN(fam, chld, cnum)
 				if(chld) add_child_line(++nch, chld, width);
 			ENDCHILDREN
 		}
@@ -435,7 +436,9 @@ init_display_fam (RECORD frec, INT width)
 	NODE husb=0, wife=0;
 	STRING s=0;
 	ZSTR famkey = zs_news(key_of_record(fam));
-	INT nch, nm, wtemp;
+	INT nch;
+	INT wtemp;
+	HINT_VAR_UNUSED INT cnum;
 	STRING father = _(qSdspl_fath);
 	STRING mother = _(qSdspl_moth);
 	RECORD ihusb=0, iwife=0;
@@ -520,7 +523,7 @@ init_display_fam (RECORD frec, INT width)
 
 	Solen = 0;
 	nch = 0;
-	FORCHILDREN(fam, chld, nm)
+	FORCHILDREN(fam, chld, cnum)
 		add_child_line(++nch, chld, width);
 	ENDCHILDREN
 	release_record(ihusb);

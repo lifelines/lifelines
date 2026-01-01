@@ -407,7 +407,8 @@ process_any_node (CLOSURE * closure, NODE node)
 void
 gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 {
-	INT num1=0;
+	HINT_VAR_UNUSED INT inum;
+	HINT_VAR_UNUSED INT fnum;
 	NODE indi=0, famc=0;
 	NODE node=0;
 	CLOSURE closure;
@@ -419,19 +420,19 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 
 	/* must load closure with all indis first
 	 for succeeding logic to pick out what families to include */
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		closure_add_key(&closure, element_skey(el), "INDI");
 	ENDINDISEQ
 	/* now go thru all indis and figure out which
 	families to keep */
 
 	famstab = create_table_int();
-	FORINDISEQ(seq, el, num)
+	FORINDISEQ(seq, el, inum)
 		indi = key_to_indi(element_skey(el));
 		famc = indi_to_famc(indi);
 		if (famc)
 			increment_table_int(famstab, fam_to_key(famc));
-		FORFAMS(indi, fam, num1)
+		FORFAMS(indi, fam, fnum)
 			increment_table_int(famstab, fam_to_key(fam));
 		ENDFAMS
 	ENDINDISEQ
@@ -460,7 +461,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 		/* move all from to-process list to
 		temporary processing list, because the
 		processing will add stuff to the to-process list */
-		FORINDISEQ(closure.seq, el, num)
+		FORINDISEQ(closure.seq, el, inum)
 			sval = element_sval(el);
 			skey = element_skey(el);
 			/* during gengedcom, all append_indiseqs alloc their own keys & vals (tags) */
@@ -470,7 +471,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 		/* clear to-process list */
 		closure_wipe_processlist(&closure);
 		/* cycle thru temp processing list & process each */
-		FORINDISEQ(tempseq, el, num)
+		FORINDISEQ(tempseq, el, inum)
 			skey = element_skey(el);
 			/* tag was stored in the value */
 			node = key_to_type(skey, FALSE);
@@ -481,7 +482,7 @@ gen_gedcom (INDISEQ seq, int gengedcl, BOOLEAN * eflg)
 		tempseq=NULL;
 	}
 	canonkeysort_indiseq(closure.outseq);
-	FORINDISEQ(closure.outseq, el, num)
+	FORINDISEQ(closure.outseq, el, inum)
 		node = key_to_type(element_skey(el), FALSE);
 		output_top_node(&closure, node, eflg);
 		if (*eflg) {

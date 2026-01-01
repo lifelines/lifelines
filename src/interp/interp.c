@@ -1124,7 +1124,7 @@ INTERPTYPE
 interp_fathers (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
-	INT nfams;
+	HINT_VAR_UNUSED INT nfams;
 	INT ncount = 1;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
@@ -1183,7 +1183,7 @@ INTERPTYPE
 interp_mothers (PNODE node, SYMTAB stab, PVALUE *pval)
 {
 	BOOLEAN eflg = FALSE;
-	INT nfams;
+	HINT_VAR_UNUSED INT nfams;
 	INT ncount = 1;
 	CACHEEL icel, fcel, scel;
 	INTERPTYPE irc;
@@ -1601,6 +1601,7 @@ interp_indisetloop (PNODE node, SYMTAB stab, PVALUE *pval)
 	INTERPTYPE irc;
 	PVALUE indival=0, loopval=0;
 	INDISEQ seq = NULL;
+	INT ncount;
 	PVALUE val = evaluate(iloopexp(node), stab, &eflg);
 	if (eflg || !val || ptype(val) != PSET) {
 		prog_error(node, "1st arg to forindiset must be set expr");

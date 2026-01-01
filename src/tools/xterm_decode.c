@@ -137,7 +137,7 @@ void usage(int e) {
 }
 
 // flushtext - look at character set and decode line drawing characters
-void flushtext() {
+void flushtext(void) {
     char textname[90];
     if(textlen == 0) return;
     textbuf[textlen] = 0;

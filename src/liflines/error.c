@@ -33,6 +33,7 @@
 #include "feedback.h"
 #include "ui.h"
 #include "arch.h"
+#include "ui.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>

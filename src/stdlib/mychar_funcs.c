@@ -77,8 +77,8 @@ mych_tolower (const int c1)
 int
 mych_toupper (const int c1)
 {
-  /* BUG: ß is not converted to SS. */
-  /* Note that ÿ does not have an   */
+  /* BUG: $DF is not converted to SS. */
+  /* Note that $FF does not have an   */
   /* uppercase form in ISO Latin 1. */
 	int c = make8char(c1);
 	return current_charset[c].toup;

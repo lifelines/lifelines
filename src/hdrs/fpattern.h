@@ -129,7 +129,7 @@
 *	    david.tribble@beasys.com
 *	    dtribble@flash.net
 *
-* Copyright ©1997 by David R. Tribble, all rights reserved.
+* Copyright 1997 by David R. Tribble, all rights reserved
 */
 
 

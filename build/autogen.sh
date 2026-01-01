@@ -27,8 +27,11 @@ rm -f config.*
 rm -f configure
 rm -f stamp-h1
 
+echo "Running autoupdate..."
+autoupdate
+
 echo "Running autoreconf..."
 echo "(This replaces aclocal, autoheader, automake, autoconf, and autopoint)"
-autoreconf -i
+autoreconf -if
 
 cd $SAVEDIR

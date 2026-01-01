@@ -76,7 +76,7 @@ iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HI
 #endif
 	double expand=1.3;
 	int chwidth=1;
-	int badchars=0; /* count # illegal placeholders inserted */
+	HINT_VAR_UNUSED int badchars=0; /* count # illegal placeholders inserted */
 	int inlen = sin ? strlen(sin) : 0;
 
 	ASSERT(src);

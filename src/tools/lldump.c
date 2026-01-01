@@ -714,8 +714,8 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			n,akey.rname, akey.rkeyfirst,
 			(INT32)offs(block,n), (INT32)lens(block,n));
 		if (*akey.rkeyfirst ==  'N' || *akey.rkeyfirst == 'R') {
-			// name / REFN data consists of
-			// INT16 nnames : number of names
+			// NAME / REFN data consists of
+			// INT32 nnames : number of names
 			// RKEY[nnames] : INDI keys of the name/REFN
 			// offset[nnames] : offset to the name
 			//
@@ -727,7 +727,7 @@ void print_block(BTREE btree, BLOCK block, INT32 *offset)
 			INT32 Ncount = EXTRACT_INT32(&rec[0]);
 			INT32 col1 = sizeof(INT32);
 			INT32 col2 = col1 + Ncount * sizeof(RKEY);
-			INT32 lennames = 0;
+			HINT_VAR_UNUSED INT32 lennames = 0;
 			INT m;
 			// print out Keys/string offsets
 			printf("   " FMT_INT32_HEX ": Ncount " FMT_INT32 "\n",

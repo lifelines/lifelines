@@ -44,8 +44,8 @@ static STRING llsetenv(STRING name, STRING value);
 #endif /* ! (defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) ) */
 #endif /* ENABLE_NLS */
 static void notify_gettext_language_changed(void);
-static void send_uilang_callbacks(void);
 #ifdef ENABLE_NLS
+static void send_uilang_callbacks(void);
 static STRING setmsgs(STRING localename);
 #endif /* ENABLE_NLS */
 static char * win32_setlocale(int category, char * locale);

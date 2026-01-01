@@ -27,6 +27,9 @@
 #include <libintl.h>
 #endif
 
+/* Note that [n]gettext() will discard const, so we need to ensure that in */
+/* the N_ case and the !ENABLE_NLS case that the same is done so that we */
+/* can consistently deal with loss-of-const or useless-cast warnings. */
 
 /* _() is used for normally translated strings */
 #define _(String) gettext(String)
@@ -37,14 +40,14 @@
 /* We can't use _N() for nonstranslated strings (eg "%d") -- TODO */
 
 /* N_() is used for strings needing translation elsewhere, eg static inits */
-#define N_(String) (String)
+#define N_(String) (char*)(String)
 
 #else /* ENABLE_NLS */
 /*** No NLS (National Language Support) ***/
 
-#define _(String) String
-#define N_(String) (String)
-#define _pl(Singular, Plural, Num) (Num > 1 ? Plural : Singular)
+#define _(String) (char*)(String)
+#define N_(String) (char*)(String)
+#define _pl(Singular, Plural, Num) (Num > 1 ? (char*)Plural : (char*)Singular)
 
 #endif /* ENABLE_NLS */
 

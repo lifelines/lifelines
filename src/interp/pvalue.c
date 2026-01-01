@@ -313,6 +313,7 @@ static void
 clear_pv_indiseq (INDISEQ seq)
 {
 	PVALUE val=NULL;
+	HINT_VAR_UNUSED INT ncount;
 	/* NUL value indiseqs can get into reports via getindiset */
 	ASSERT(IValtype(seq) == ISVAL_PTR || IValtype(seq) == ISVAL_NUL);
 	FORINDISEQ(seq, el, ncount)

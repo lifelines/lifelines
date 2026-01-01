@@ -149,7 +149,6 @@ typedef unsigned char uchar;
 #define FMT_INT_2	"%2" PRId64
 #define FMT_INT_3	"%3" PRId64
 #define FMT_INT_6	"%6" PRId64
-#define FMT_SIZET	FMT_INT64
 #else
 #define FMT_INT		FMT_INT32
 #define FMT_INT_LEN	12		/* sign + 10 digits + NULL */
@@ -160,7 +159,18 @@ typedef unsigned char uchar;
 #define FMT_INT_2	"%2" PRId32
 #define FMT_INT_3	"%3" PRId32
 #define FMT_INT_6	"%6" PRId32
+#endif
+
+/* SIZE_T PRINTF FORMAT DEFINITIONS */
+#if __STDC_VERSION__ >= 199901L
+#define FMT_SZT	"%zu"
+#define FMT_SIZET	FMT_SZT
+#else
+#if __WORDSIZE == 64
+#define FMT_SIZET	FMT_INT64
+#else
 #define FMT_SIZET	FMT_INT32
+#endif
 #endif
 
 /* INTEGER SCANF FORMAT DEFINITIONS */

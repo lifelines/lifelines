@@ -267,13 +267,15 @@ main_browse (RECORD rec1, INT code)
 static RECORD
 goto_indi_child (RECORD irec, int childno)
 {
-	INT num1, num2, i = 0;
+	INT i = 0;
+	HINT_VAR_UNUSED INT fnum;
+	HINT_VAR_UNUSED INT cnum;
 	RECORD answer = 0;
 	INT akeynum=0; /* answer key */
 	NODE indi = nztop(irec);
 	if (!irec) return NULL;
-	FORFAMS(indi, fam, num1)
-		FORCHILDREN(fam, chil, num2)
+	FORFAMS(indi, fam, fnum)
+		FORCHILDREN(fam, chil, cnum)
 			i++;
 			if (i == childno) 
 				akeynum = nzkeynum(chil);
@@ -292,12 +294,13 @@ goto_indi_child (RECORD irec, int childno)
 static RECORD
 goto_fam_child (RECORD frec, int childno)
 {
-	INT num, i = 0;
+	INT i = 0;
+	HINT_VAR_UNUSED INT cnum;
 	RECORD answer = 0;
 	INT akeynum=0;
 	NODE fam = nztop(frec);
 	if (!frec) return NULL;
-	FORCHILDREN(fam, chil, num)
+	FORCHILDREN(fam, chil, cnum)
 		i++;
 		if (i == childno) 
 			akeynum = nzkeynum(chil);
