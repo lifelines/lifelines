@@ -2,14 +2,13 @@ Note: See top of README.DEVELOPERS for required
 software; maintainers need the same software.
 
 These instructions are for building a new lifelines 
-release, in your cvs working directory, and actually
+release, in your working directory, and actually
 releasing it.
 
-Fetch latest cvs if desired, eg:
-$ git checkout master
-$ git pull
+PART 1 - Build and Test
 
-Compile and test current source, using report st/st_all.
+Check out the latest code (or version branch) as required:
+  $ git checkout master
 
 Edit the version number, setting it to the new release:
 (Running, eg, "cd build; sh setversions.sh 3.0.19; cd .." does this)
@@ -35,10 +34,25 @@ Edit the version number, setting it to the new release:
 Run autotools:
   $ sh autogen.sh
 
+Build:
+
+  $ ./configure
+  $ make
+
+Run and test using the st/st_all report:
+
+  $ src/liflines/llines
+
+
+PART 2 - Build and Package
+
 Note: There are several reports which do not build
 correctly in UTF-8 locale. Therefore, if you use
 a UTF-8 locale, do something like so:
 export LANG=en_US.ISO-8859-1
+
+Ensure that the main repository is clean, or else this confuses the local build in ./bld:
+  $ make distclean
 
 Build local copy in ./bld subdirectory:
   $ rm -rf bld
@@ -47,30 +61,19 @@ Build local copy in ./bld subdirectory:
   $ ../configure
   $ make
 
-Update master message catalog template (for i18n):
-  $ mv ../po/lifelines.pot ../po/lifelines.old.pot
-  $ cd po
-  $ make lifelines.pot
-  $ cd ..
-
 Build distribution tarball:
   $ make dist
   $ cd ..
 
-Add an entry mentioning the new version in the
-  ChangeLog
+PART 3 - Update and Merge
 
-Commit changes (new version number, new message catalogs):
+Add an entry mentioning the new version in the ChangeLog.
+
+Commit changes (new version number, new message catalogs, ChangeLog):
 $ git add ...
 $ git commit
 
-Announce new version to Free Translation Project.
-Per: http://translationproject.org/html/maintainers.html
-
-<< Whenever you make a new release of your package, you should announce
-   it to the TP coordinators at <coordinator@translationproject.org> by
-   sending them the URL of the release tarball -- this tarball should
-   contain an up to date POT file. >>
+PART 4 - Package and Distribute
 
 Build any other files (eg, other tarball formats,
 MS-Windows binary packages, rpm packages).
@@ -78,7 +81,7 @@ MS-Windows binary packages, rpm packages).
 rpm:  See README.MAINTAINERS.rpm
 
 debian: lifelines is a supported debian package
-         and has a debian maintainer (q.v.)
+         and has a debian maintainer.
 
 FreeBSD: lifelines is a support FreeBsd port
          and has a FreeBSD maintainer.
@@ -91,6 +94,16 @@ $ git tag X.Y.Z
 
 Create a release at github, and upload the release packages.
 (Should be at least a source tgz, but there could be Windows and MacOSX binaries).
+
+PART 5 - Announce
+
+Announce new version to Free Translation Project.
+Per: http://translationproject.org/html/maintainers.html
+
+<< Whenever you make a new release of your package, you should announce
+   it to the TP coordinators at <coordinator@translationproject.org> by
+   sending them the URL of the release tarball -- this tarball should
+   contain an up to date POT file. >>
 
 Send an announcement to the LINES-L mailing list
  (send to user LINES-L at domain LISTSERV.NODAK.EDU).

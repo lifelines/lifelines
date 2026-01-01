@@ -34,17 +34,18 @@ MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
 
 IMAGES =	listops.jpg
 
-MANUALS_static = index.html \
-		 index.sv.html \
-		 $(IMAGES)
+MANUALSSTATIC_en = index.html $(IMAGES)
+MANUALSSTATIC_sv = index.sv.html ($IMAGES)
+
+MANUALSSTATIC =	$(MANUALSSTATIC_en) $(MANUALSSTATIC_sv)
 
 ###################
 # Rules
 ###################
 
-# Install static files and generated manuals, but only when docs are built
+# Install static files and generated English manuals, but only when docs are built
 if BUILD_DOCS
-doc_DATA = $(MANUALS_static) $(MANUALS)
+doc_DATA = $(MANUALSSTATIC_en) $(MANUALS_en)
 else
 doc_DATA =
 endif

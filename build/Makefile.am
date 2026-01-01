@@ -6,22 +6,37 @@
 
 EXTRA_DIST = rpm/lifelines.spec \
              \
-             gettext/README gettext/codeset.m4 gettext/gettext.m4 \
-             gettext/glibc21.m4 gettext/iconv.m4 \
-             gettext/intdiv0.m4 \
-             gettext/inttypes-pri.m4 \
-             gettext/inttypes.m4 \
-             gettext/inttypes_h.m4 \
-             gettext/isc-posix.m4 \
-             gettext/lcmessage.m4 gettext/lib-ld.m4 gettext/lib-link.m4 \
-             gettext/lib-prefix.m4 gettext/progtest.m4 \
-             gettext/stdint_h.m4 \
-             gettext/uintmax_t.m4 \
-             gettext/ulonglong.m4 \
+             gettext/README \
              \
-             autotools/config.sub autotools/config.guess autotools/depcomp \
-             autotools/missing autotools/mkinstalldirs autotools/install-sh \
-             autotools/acinclude.m4 autotools/config.rpath autotools/README \
+             autotools/codeset.m4 \
+             autotools/gettext.m4 \
+             autotools/glibc21.m4 \
+             autotools/iconv.m4 \
+             autotools/intdiv0.m4 \
+             autotools/inttypes-pri.m4 \
+             autotools/inttypes.m4 \
+             autotools/inttypes_h.m4 \
+             autotools/isc-posix.m4 \
+             autotools/lcmessage.m4 \
+             autotools/lib-ld.m4 \
+             autotools/lib-link.m4 \
+             autotools/lib-prefix.m4 \
+             autotools/progtest.m4 \
+             autotools/stdint_h.m4 \
+             autotools/uintmax_t.m4 \
+             autotools/ulonglong.m4 \
+             \
+             autotools/README \
+             autotools/compile \
+             autotools/config.sub \
+             autotools/config.guess \
+             autotools/config.rpath \
+             autotools/depcomp \
+             autotools/install-sh \
+             autotools/missing \
+             autotools/mkinstalldirs \
+             autotools/test-driver \
+             autotools/ylwrap \
              \
              msvc6/dbverify/config.h msvc6/dbverify/dbVerify.rc \
              msvc6/dbverify/dbverifyCmd.dsp msvc6/dbverify/dbverifyCmd.dsw \
