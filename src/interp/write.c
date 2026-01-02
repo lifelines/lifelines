@@ -75,7 +75,7 @@ llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=======================================
  * llrpt_addnode -- Add a node to a GEDCOM tree
  * usage: addnode(NODE, NODE, NODE) -> VOID
- * args: (node being added, parent, previous child)
+ * args: (node being added, parent, previous sibling)
  *=====================================*/
 PVALUE
 llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -116,11 +116,19 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	prev = remove_node_and_delete_pvalue(&val);
-
 	if (prev) {
-		/* Check that previous sibling actually is child of new parent */
+		/* Check that previous sibling is actually child of new parent */
 		if (prnt != nparent(prev)) {
 			prog_error(node, "2nd arg to addnode must be parent of 3rd arg");
+			*eflg = 1;
+			return NULL;
+		}
+	}
+	else
+	{
+		/* Check that the new node is actually not a child of new parent */
+		if ( newchild == nchild(prnt)) {
+			prog_error(node, "2nd arg to addnode must not be parent of 1st arg");
 			*eflg = 1;
 			return NULL;
 		}
@@ -132,6 +140,8 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	newchild->n_cel = prnt->n_cel;
 	set_temp_node(newchild, is_temp_node(prnt));
 	dolock_node_in_cache(newchild, TRUE);
+
+	/* add node */
 	if (prev == NULL) {
 		next = nchild(prnt);
 		nchild(prnt) = newchild;
@@ -140,12 +150,13 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		nsibling(prev) = newchild;
 	}
 	nsibling(newchild) = next;
+
 	return NULL;
 }
 /*============================================
  * llrpt_detachnode -- Remove node from GEDCOM tree
  * usage: detachnode(NODE) -> VOID
- * (This is the historic deletenode)
+ * (This is the historic deletenode which was renamed to better reflect behaviour)
  *==========================================*/
 PVALUE
 llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -160,7 +171,8 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	dead = pvalue_to_node(val);
 	if ((prnt = nparent(dead))) {
-		NODE prev = NULL, next;
+		NODE prev = NULL;
+		NODE next = NULL;
 		NODE curs = nchild(prnt);
 		while (curs && curs != dead) {
 			prev = curs;
@@ -173,13 +185,17 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		else
 			nsibling(prev) = next;
 	}
+
 	/* unparent node, but ensure its locking is only releative to new parent */
 	dolock_node_in_cache(dead, FALSE);
 	nparent(dead) = NULL;
 	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
+
+	/* mark tree rooted at node as temp */
+	set_temp_node(dead, TRUE);
+
 	/* we don't actually delete the node, garbage collection must get it */
-	/* leak pvalue val ? */
 	return NULL;
 }
 /*======================================

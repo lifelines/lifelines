@@ -1,0 +1,47 @@
+Starting Test
+Initial State
+<PGNODE,tag='INDI',refcnt='2'>
+<PGNODE,tag='TAG1',refcnt='3',temp>
+<PGNODE,tag='TAG2',refcnt='4',temp>
+<PGNODE,tag='TAG3',refcnt='3',temp>
+After addnode()
+<PGNODE,tag='INDI',refcnt='4'>
+<PGNODE,tag='TAG1',refcnt='5'>
+<PGNODE,tag='TAG2',refcnt='5'>
+<PGNODE,tag='TAG3',refcnt='4'>
+After detachnode()
+<PGNODE,tag='INDI',refcnt='5'>
+<PGNODE,tag='TAG1',refcnt='7',temp>
+<PGNODE,tag='TAG2',refcnt='6',temp>
+<PGNODE,tag='TAG3',refcnt='5',temp>
+Initial State
+<PGNODE,tag='INDI',refcnt='6'>
+<PGNODE,tag='INDI',refcnt='2'>
+<PGNODE,tag='TAG1',refcnt='3',temp>
+<PGNODE,tag='TAG2',refcnt='4',temp>
+<PGNODE,tag='TAG3',refcnt='3',temp>
+After addnode() to n1
+<PGNODE,tag='INDI',refcnt='8'>
+<PGNODE,tag='INDI',refcnt='3'>
+<PGNODE,tag='TAG1',refcnt='5'>
+<PGNODE,tag='TAG2',refcnt='5'>
+<PGNODE,tag='TAG3',refcnt='4'>
+After detachnode() from n9
+<PGNODE,tag='INDI',refcnt='9'>
+<PGNODE,tag='INDI',refcnt='4'>
+<PGNODE,tag='TAG1',refcnt='7',temp>
+<PGNODE,tag='TAG2',refcnt='6',temp>
+<PGNODE,tag='TAG3',refcnt='5',temp>
+After addnode() to n9
+<PGNODE,tag='INDI',refcnt='10'>
+<PGNODE,tag='INDI',refcnt='6'>
+<PGNODE,tag='TAG1',refcnt='9'>
+<PGNODE,tag='TAG2',refcnt='7'>
+<PGNODE,tag='TAG3',refcnt='6'>
+After detachnode() from n0
+<PGNODE,tag='INDI',refcnt='11'>
+<PGNODE,tag='INDI',refcnt='7'>
+<PGNODE,tag='TAG1',refcnt='11',temp>
+<PGNODE,tag='TAG2',refcnt='8',temp>
+<PGNODE,tag='TAG3',refcnt='7',temp>
+Ending Test

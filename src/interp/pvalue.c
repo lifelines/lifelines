@@ -259,6 +259,7 @@ release_pvalue_contents (PVALUE val)
 				dolock_node_in_cache(node, FALSE);
 				--nrefcnt(node);
 				if (!nrefcnt(node) && is_temp_node(node)) {
+					nparent(node) = NULL;
 					free_temp_node_tree(node);
 				}
 			}
@@ -995,11 +996,16 @@ describe_pvalue (PVALUE val)
 				zs_apps(zstr, "NULL");
 			else {
 				STRING tag = ntag(node);
+				INT refcnt = nrefcnt(node);
 				if (!tag)
 					zs_apps(zstr, "null tag");
 				else
 					zs_appf(zstr, "tag='%s'", tag);
-			}
+				if (refcnt)
+					zs_appf(zstr, ",refcnt='" FMT_INT "'", refcnt);
+				if (is_temp_node(node))
+					zs_appf(zstr, ",temp");
+			     }
 		}
 		break;
 	case PINDI:

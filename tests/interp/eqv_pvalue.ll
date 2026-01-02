@@ -94,6 +94,8 @@ proc main ()
   set(birth2, birth(indi2))
   call testeq(eq(birth1,birth1), TRUE, "NODE equality (pointer)")
   call testeq(ne(birth1,birth2), TRUE, "NODE inequality (pointer)")
+
+  "Ending Test" nl()
 }
 
 proc testeq (testcond, result, message)

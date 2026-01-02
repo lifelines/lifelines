@@ -259,15 +259,36 @@ create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
 void
 free_temp_node_tree (NODE node)
 {
-	NODE n2;
-	if ((n2 = nchild(node))) {
-		free_temp_node_tree(n2);
-		nchild(node) = 0;
+	// It is an error to pass a NULL node
+	ASSERT(node != NULL);
+
+	// It is an error to delete a node if it still has a parent
+	ASSERT(nparent(node) == NULL);
+
+	// It is an error to delete a node that is not marked TEMP
+	ASSERT(is_temp_node(node));
+
+	// It is an error to delete a node that has a non-zero refcnt
+	ASSERT(nrefcnt(node) == 0);
+
+	// Recursively free child nodes if no longer referenced */
+	NODE child = nchild(node);
+	if (child && nrefcnt(child) == 0) {
+		nparent(child) = NULL;
+		free_temp_node_tree(child);
+		nchild(node) = NULL;
 	}
-	if ((n2 = nsibling(node))) {
-		free_temp_node_tree(n2);
-		nsibling(node) = 0;
+
+	// Recursively free sibling nodes if no longer referenced */
+	NODE sib = nsibling(node);
+	if (sib && nrefcnt(sib) == 0) {
+		nparent(sib) = NULL;
+		free_temp_node_tree(sib);
+		nsibling(node) = NULL;
 	}
+
+	// Free this node
+	nparent(node) = NULL;
 	free_node(node,"free_temp_node_tree");
 }
 /*===================================
@@ -280,14 +301,69 @@ is_temp_node (NODE node)
 	return !!(nflag(node) & ND_TEMP);
 }
 /*===================================
+ * validate_temp_node_tree -- validate that node tree has consistent temp marking
+ * Created: 2022-12-30 (Matt Emmerton)
+ *=================================*/
+static BOOLEAN
+validate_temp_node_tree (NODE node, BOOLEAN temp)
+{
+	// All children of this node must be temp (or not).
+	NODE child = nchild(node);
+	if (child) {
+		if (is_temp_node(child) != temp) {
+			return FALSE;
+		}
+		if (!validate_temp_node_tree(child,temp)) {
+			return FALSE;
+		}
+	}
+
+	// All siblings of this node must be temp (or not).
+	NODE sib = nsibling(node);
+	if (sib) {
+		if (is_temp_node(sib) != temp) {
+			return FALSE;
+		}
+		if (!validate_temp_node_tree(sib,temp)) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+/*===================================
  * set_temp_node -- make node temp (or not)
  * Created: 2003-02-04 (Perry Rapp)
  *=================================*/
 void
 set_temp_node (NODE node, BOOLEAN temp)
 {
-	if (is_temp_node(node) ^ temp)
+	// Set this node as requested
+	//
+	// node	temp result
+	// F    F    F (unchanged)
+	// F    T    T (changed via XOR)
+	// T    F    F (changed via XOR)
+	// T    T    T (unchanged)
+	//
+	if (is_temp_node(node) != temp) {
 		nflag(node) ^= ND_TEMP;
+	}
+
+	// Propagate to child(ren)
+	NODE child = nchild(node);
+	if (child) {
+		set_temp_node(child, temp);
+	}
+
+	// Propagate to sibling(s)
+	NODE sib = nsibling(node);
+	if (sib) {
+		set_temp_node(sib, temp);
+	}
+
+	// Validate that all sibling and child nodes are the same
+	ASSERT(validate_temp_node_tree(node,temp));
 }
 /*=====================================
  * free_nodes -- Free all NODEs in tree
@@ -295,13 +371,28 @@ set_temp_node (NODE node, BOOLEAN temp)
 void
 free_nodes (NODE node)
 {
-	NODE sib;
-	while (node) {
-		if (nchild(node)) free_nodes(nchild(node));
-		sib = nsibling(node);
-		free_node(node,"free_nodes");
-		node = sib;
+	// The strict checks used in free_temp_node_tree are not used
+	// here as they break too many assumptions.
+
+	/* Recursively free child nodes */
+	NODE child = nchild(node);
+	if (child) {
+		nparent(child) = NULL;
+		free_nodes(child);
+		nchild(node) = NULL;
 	}
+
+	/* Recursively free sibling nodes */
+	NODE sib = nsibling(node);
+	if (sib) {
+		nparent(sib) = NULL;
+		free_nodes(sib);
+		nsibling(node) = NULL;
+	}
+
+	/* Free this node */
+	nparent(node) = NULL;
+	free_node(node,"free_nodes");
 }
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
