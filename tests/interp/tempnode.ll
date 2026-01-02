@@ -20,52 +20,37 @@ proc test1a() {
   addnode(n2, n1, 0)
   addnode(n3, n2, 0)
 
-  print("Initial State")
-  print(nl())
+  "Initial State" nl()
 
-  print(pvalue(n0))
-  print(nl())
+  pvalue(n0) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is added to n0, n1/n2/n3 should become non-temp nodes */
 
   addnode(n1, n0, 0)
 
-  print("After addnode()")
-  print(nl())
+  "After addnode()" nl()
 
-  print(pvalue(n0))
-  print(nl())
+  pvalue(n0) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is removed from n0, n1/n2/n3 should become temp nodes again */
 
   detachnode(n1)
 
-  print("After detachnode()")
-  print(nl())
+  "After detachnode()" nl()
 
-  print(pvalue(n0))
-  print(nl())
+  pvalue(n0) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 }
 
 /* test 1b: test addnode/deletenode with reuse */
@@ -88,96 +73,66 @@ proc test1b() {
   addnode(n2, n1, 0)
   addnode(n3, n2, 0)
 
-  print("Initial State")
-  print(nl())
+  "Initial State" nl()
 
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
+  pvalue(n0) nl()
+  pvalue(n9) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is added to n0, n1/n2/n3 should become non-temp nodes */
 
   addnode(n1, n0, 0)
 
-  print("After addnode() to n1")
-  print(nl())
+  "After addnode() to n1" nl()
 
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
+  pvalue(n0) nl()
+  pvalue(n9) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is detached from n0, n1/n2/n3 should become temp nodes again */
 
   detachnode(n1)
 
-  print("After detachnode() from n9")
-  print(nl())
+  "After detachnode() from n9" nl()
 
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
+  pvalue(n0) nl()
+  pvalue(n9) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is added to n9, n1/n2/n3 should become non-temp nodes again */
 
   addnode(n1, n9, 0)
 
-  print("After addnode() to n9")
-  print(nl())
+  "After addnode() to n9" nl()
 
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
+  pvalue(n0) nl()
+  pvalue(n9) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 
   /* Once n1 is detached from n0, n1/n2/n3 should become temp nodes again */
 
   detachnode(n1)
 
-  print("After detachnode() from n0")
-  print(nl())
+  "After detachnode() from n0" nl()
 
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
+  pvalue(n0) nl()
+  pvalue(n9) nl()
 
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
+  pvalue(n1) nl()
+  pvalue(n2) nl()
+  pvalue(n3) nl()
 }
 
 proc main() {
