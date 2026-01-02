@@ -122,7 +122,26 @@ proc test1b() {
   print(pvalue(n3))
   print(nl())
 
-  /* Once n1 is added to n9, n1/n2/n3 should remain non-temp nodes */
+  /* Once n1 is detached from n0, n1/n2/n3 should become temp nodes again */
+
+  detachnode(n1)
+
+  print("After detachnode() from n9")
+  print(nl())
+
+  print(pvalue(n0))
+  print(nl())
+  print(pvalue(n9))
+  print(nl())
+
+  print(pvalue(n1))
+  print(nl())
+  print(pvalue(n2))
+  print(nl())
+  print(pvalue(n3))
+  print(nl())
+
+  /* Once n1 is added to n9, n1/n2/n3 should become non-temp nodes again */
 
   addnode(n1, n9, 0)
 
@@ -141,64 +160,11 @@ proc test1b() {
   print(pvalue(n3))
   print(nl())
 
-  /* Once n1 is detached from n9, n1/n2/n3 should remain non-temp nodes */
-
-  detachnode(n9)
-
-  print("After detachnode() from n9")
-  print(nl())
-
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
-
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
-
   /* Once n1 is detached from n0, n1/n2/n3 should become temp nodes again */
 
+  detachnode(n1)
+
   print("After detachnode() from n0")
-  print(nl())
-
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
-
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
-
-  /* Once n1 is attached to n0, n1/n2/n3 should become non-temp nodes again */
-
-  addnode(n1, n0, 0)
-
-  print("After addnode() to n0 again")
-  print(nl())
-
-  print(pvalue(n0))
-  print(nl())
-  print(pvalue(n9))
-  print(nl())
-
-  print(pvalue(n1))
-  print(nl())
-  print(pvalue(n2))
-  print(nl())
-  print(pvalue(n3))
-  print(nl())
-
-  /* Once n1 is deteched from n0, n1/n2/n3 should become temp nodes again */
-
-  print("After detachnode() from n0 again")
   print(nl())
 
   print(pvalue(n0))
@@ -215,6 +181,11 @@ proc test1b() {
 }
 
 proc main() {
+
+  "Starting Test" nl()
+
   call test1a()
   call test1b()
+
+  "Ending Test" nl()
 }

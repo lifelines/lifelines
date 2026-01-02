@@ -124,6 +124,15 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 			return NULL;
 		}
 	}
+	else
+	{
+		/* Check that the new node actually is not a child of new parent */
+		if ( newchild == nchild(prnt)) {
+			prog_error(node, "2nd arg to addnode must not be parent of 1st arg");
+			*eflg = 1;
+			return NULL;
+		}
+	}
 
 	/* reparent node, but ensure its locking is only relative to new parent */
 	dolock_node_in_cache(newchild, FALSE);
@@ -131,6 +140,8 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	newchild->n_cel = prnt->n_cel;
 	set_temp_node(newchild, is_temp_node(prnt));
 	dolock_node_in_cache(newchild, TRUE);
+
+	/* add node */
 	if (prev == NULL) {
 		next = nchild(prnt);
 		nchild(prnt) = newchild;
@@ -139,6 +150,7 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		nsibling(prev) = newchild;
 	}
 	nsibling(newchild) = next;
+
 	return NULL;
 }
 /*============================================
@@ -159,7 +171,8 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	dead = pvalue_to_node(val);
 	if ((prnt = nparent(dead))) {
-		NODE prev = NULL, next;
+		NODE prev = NULL;
+		NODE next = NULL;
 		NODE curs = nchild(prnt);
 		while (curs && curs != dead) {
 			prev = curs;
