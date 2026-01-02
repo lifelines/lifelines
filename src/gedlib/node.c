@@ -382,7 +382,7 @@ free_nodes (NODE node)
 		nchild(node) = NULL;
 	}
 
-	/* Recusively free sibling nodes */
+	/* Recursively free sibling nodes */
 	NODE sib = nsibling(node);
 	if (sib) {
 		nparent(sib) = NULL;

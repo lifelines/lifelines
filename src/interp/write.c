@@ -117,7 +117,7 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	prev = remove_node_and_delete_pvalue(&val);
 	if (prev) {
-		/* Check that previous sibling actually is child of new parent */
+		/* Check that previous sibling is actually child of new parent */
 		if (prnt != nparent(prev)) {
 			prog_error(node, "2nd arg to addnode must be parent of 3rd arg");
 			*eflg = 1;
@@ -126,7 +126,7 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	else
 	{
-		/* Check that the new node actually is not a child of new parent */
+		/* Check that the new node is actually not a child of new parent */
 		if ( newchild == nchild(prnt)) {
 			prog_error(node, "2nd arg to addnode must not be parent of 1st arg");
 			*eflg = 1;
