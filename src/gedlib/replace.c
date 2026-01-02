@@ -48,12 +48,12 @@ replace_indi (NODE indi1, NODE indi2)
 	NODE node, namen, refnn, name1n, refn1n, indi0;
 	STRING key;
 
-
-	/* Move indi1 data into indi0 & delete it (saving names & refns */
+	/* Move indi1 data into indi0 & delete it (saving names & refns) */
 	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
 	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
 	free_nodes(indi0);
+
 	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, TRUE, TRUE);
@@ -63,9 +63,9 @@ replace_indi (NODE indi1, NODE indi2)
 	nodechk(indi1, "replace_indi");
 
 	/* Write data to database */
-
 	indi_to_dbase(indi1);
 	key = rmvat(nxref(indi1));
+
 	/* update name & refn info */
 	/* classify does a diff on its first two arguments, repopulating all three
 	arguments -- first is left-only, second is right-only, third is shared */
@@ -76,13 +76,13 @@ replace_indi (NODE indi1, NODE indi2)
 		remove_name(nval(node), key);
 	for (node = namen; node; node = nsibling(node))
 		add_name(nval(node), key);
-	rename_from_browse_lists(key);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
+	rename_from_browse_lists(key);
 
-/* now cleanup (indi1 tree is now composed of indi2 data) */
+	/* now cleanup (indi1 tree is now composed of indi2 data) */
 	free_nodes(name1);
 	free_nodes(namen);
 	free_nodes(name1n);

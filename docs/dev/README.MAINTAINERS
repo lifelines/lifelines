@@ -2,18 +2,31 @@ Note: See top of README.DEVELOPERS for required
 software; maintainers need the same software.
 
 These instructions are for building a new lifelines 
-release, in your cvs working directory, and actually
+release, in your working directory, and actually
 releasing it.
 
-Fetch latest cvs if desired, eg:
-$ git checkout master
-$ git pull
+-------------------------------
+PART 1 - Build, Test and Update
+-------------------------------
 
-Compile and test current source, using report st/st_all.
+Check out the latest code (or version branch) as required:
 
-Edit the version number, setting it to the new release:
-(Running, eg, "cd build; sh setversions.sh 3.0.19; cd .." does this)
-(NB: setversions.sh requires bash3)
+  $ git checkout master
+
+Clean the build tree:
+
+  $ git clean -xdf
+
+Set the new version number and tag:
+
+  $ cd build
+  $ setversions.sh X.Y.Z
+  $ setversions.sh release
+  $ cd ..
+
+The script looks after setting the version number (and tag and date) in the
+following files:
+
   NEWS
   INSTALL
   README
@@ -24,45 +37,90 @@ Edit the version number, setting it to the new release:
   build/msvc6/dbverify/dbVerify.rc (4 occurrences)
   build/msvc6/llexec/llexec.rc (4 occurrences)
   build/msvc6/llines/llines.rc (4 occurrences)
-  docs/ll-devguide.xml (2 occurrences)
-  docs/ll-reportmanual.xml (2 occurrences)
-  docs/ll-userguide.xml (2 occurrences)
+  docs/manual/version
   docs/man/btedit.1 (& year & month as well)
   docs/man/llexec.1 (& year & month as well)
   docs/man/dbverify.1 (& year & month as well)
   docs/man/llines.1 (& year & month as well)
 
 Run autotools:
-  $ sh autogen.sh
+  $ sh build/autogen.sh
 
-Note: There are several reports which do not build
-correctly in UTF-8 locale. Therefore, if you use
-a UTF-8 locale, do something like so:
-export LANG=en_US.ISO-8859-1
+Build:
+
+  $ ./configure --with-docs
+  $ make
+
+Add an entry mentioning the new version in the ChangeLog.
+
+  $ vi Changelog
+
+  $ git commit "Update version to X.Y.Z-release"
+
+Test using the st/st_all report:
+
+  $ src/liflines/llexec -o st_all.out -x reports/st/st_all.ll testdb
+
+  Currently all failures are in codeset functions which can be ignored for now.
+
+Test using the unit tests:
+
+  $ cd tests
+  $ make check
+
+  Currently all failures are in codeset issues which can be ignored for now.
+
+Check in all files with version number changes:
+
+  $ git add <.. files from above ..>
+
+Tag the repository at github using the version number used.
+
+  $ git tag X.Y.Z
+
+--------------------------
+PART 2 - Build and Package
+--------------------------
+
+Ensure that the main repository is clean, or else this confuses the local build in ./bld:
+  $ make distclean
 
 Build local copy in ./bld subdirectory:
   $ rm -rf bld
   $ mkdir bld
   $ cd bld
-  $ ../configure
+  $ ../configure --with-docs
   $ make
-
-Update master message catalog template (for i18n):
-  $ mv ../po/lifelines.pot ../po/lifelines.old.pot
-  $ cd po
-  $ make lifelines.pot
-  $ cd ..
 
 Build distribution tarball:
   $ make dist
   $ cd ..
 
-Add an entry mentioning the new version in the
-  ChangeLog
+Note that the distribution tarball will contain regenerated documentation, but
+these files are NOT checked into the repository above.
 
-Commit changes (new version number, new message catalogs):
-$ git add ...
-$ git commit
+Build any other files (eg, other tarball formats,
+MS-Windows binary packages, rpm packages).
+
+rpm:  See README.MAINTAINERS.rpm
+
+debian: lifelines is a supported debian package
+         and has a debian maintainer.
+
+FreeBSD: lifelines is a support FreeBsd port
+         and has a FreeBSD maintainer.
+
+MS-Windows: See README.MAINTAINERS.win32
+
+-------------------
+PART 3 - Distribute
+-------------------
+
+Create a release at github using the distribution tarball created in PART 2.
+
+-----------------
+PART 4 - Announce
+-----------------
 
 Announce new version to Free Translation Project.
 Per: http://translationproject.org/html/maintainers.html
@@ -71,26 +129,6 @@ Per: http://translationproject.org/html/maintainers.html
    it to the TP coordinators at <coordinator@translationproject.org> by
    sending them the URL of the release tarball -- this tarball should
    contain an up to date POT file. >>
-
-Build any other files (eg, other tarball formats,
-MS-Windows binary packages, rpm packages).
-
-rpm:  See README.MAINTAINERS.rpm
-
-debian: lifelines is a supported debian package
-         and has a debian maintainer (q.v.)
-
-FreeBSD: lifelines is a support FreeBsd port
-         and has a FreeBSD maintainer.
-
-MS-Windows: See README.MAINTAINERS.win32
-
-Tag the repository at github using the version number used.
-
-$ git tag X.Y.Z
-
-Create a release at github, and upload the release packages.
-(Should be at least a source tgz, but there could be Windows and MacOSX binaries).
 
 Send an announcement to the LINES-L mailing list
  (send to user LINES-L at domain LISTSERV.NODAK.EDU).
