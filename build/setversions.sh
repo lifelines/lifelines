@@ -152,7 +152,7 @@ function getversion {
 
 # Call alterfile with an sed command for each file
 function applyversion {
-  SEDPAT="s/^\(LifeLines Source Release, Version \)[[:alnum:].\-]*$/\1$VERSION/" 
+  SEDPAT="s/^\(LifeLines Source Release, Version \)[[:alnum:].\-]*$/\1$VERSION/"
   alterfile $ROOTDIR/AUTHORS "$SEDPAT"
   alterfile $ROOTDIR/ChangeLog "$SEDPAT"
   alterfile $ROOTDIR/INSTALL "$SEDPAT"
@@ -179,12 +179,8 @@ function applyversion {
   altermansrc $ROOTDIR/docs/man/llines.1 llines
   altermansrc $ROOTDIR/docs/man/llexec.1 llexec
 
-  SEDPAT="s/\(<\!ENTITY llversion[[:space:]]*['\"']\)[0-9][[:alnum:].\-]*/\1$VERSION/i"
-  alterfile $ROOTDIR/docs/manual/ll-devguide.xml "$SEDPAT"
-  alterfile $ROOTDIR/docs/manual/ll-userguide.xml "$SEDPAT"
-  alterfile $ROOTDIR/docs/manual/ll-userguide.sv.xml "$SEDPAT"
-  alterfile $ROOTDIR/docs/manual/ll-reportmanual.xml "$SEDPAT"
-  alterfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml "$SEDPAT"
+  SEDPAT="s/^[[:alnum:].\-]*$/$VERSION/"
+  alterfile $ROOTDIR/docs/manual/version "$SEDPAT"
 
   SEDPAT="s/\(version: \)[0-9][[:alnum:].\-]*/\1$VERSION/i"
   alterfile $ROOTDIR/reports/st/st_all.ref "$SEDPAT"
@@ -217,11 +213,8 @@ function restore {
   restorefile $ROOTDIR/docs/man/dbverify.1
   restorefile $ROOTDIR/docs/man/llines.1
   restorefile $ROOTDIR/docs/man/llexec.1
-  restorefile $ROOTDIR/docs/manual/ll-devguide.xml
-  restorefile $ROOTDIR/docs/manual/ll-reportmanual.xml
-  restorefile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
-  restorefile $ROOTDIR/docs/manual/ll-userguide.xml
-  restorefile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  restorefile $ROOTDIR/docs/manual/version
+  restorefile $ROOTDIR/reports/st/st_all.ref
   restorefile $ROOTDIR/src/hdrs/version.h
 }
 
@@ -243,11 +236,8 @@ function cleanup {
   cleanupfile $ROOTDIR/docs/man/dbverify.1
   cleanupfile $ROOTDIR/docs/man/llines.1
   cleanupfile $ROOTDIR/docs/man/llexec.1
-  cleanupfile $ROOTDIR/docs/manual/ll-devguide.xml
-  cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.xml
-  cleanupfile $ROOTDIR/docs/manual/ll-reportmanual.sv.xml
-  cleanupfile $ROOTDIR/docs/manual/ll-userguide.xml
-  cleanupfile $ROOTDIR/docs/manual/ll-userguide.sv.xml
+  cleanupfile $ROOTDIR/docs/manual/version
+  cleanupfile $ROOTDIR/reports/st/st_all.ref
   cleanupfile $ROOTDIR/src/hdrs/version.h
 }
 
@@ -295,9 +285,9 @@ else
     applyversion
   fi
 
-  if [ $TAGFOUND -eq 1 ] 
+  if [ $TAGFOUND -eq 1 ]
   then
     echo "Appyling tag change..."
     applytag
   fi
-fi 
+fi
