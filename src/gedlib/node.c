@@ -273,7 +273,6 @@ free_temp_node_tree (NODE node)
 
 	// Recursively free child nodes if no longer referenced */
 	NODE child = nchild(node);
-
 	if (child && nrefcnt(child) == 0) {
 		nparent(child) = NULL;
 		free_temp_node_tree(child);
@@ -308,25 +307,28 @@ is_temp_node (NODE node)
 static BOOLEAN
 validate_temp_node_tree (NODE node, BOOLEAN temp)
 {
-	// All siblings / children of this node must be temp (or not).
-	// The parent can be different so it is not checked.
-	NODE n2;
-	if ((n2 = nchild(node))) {
-		if (is_temp_node(n2) != temp) {
+	// All children of this node must be temp (or not).
+	NODE child = nchild(node);
+	if (child) {
+		if (is_temp_node(child) != temp) {
 			return FALSE;
 		}
-		if (!validate_temp_node_tree(n2,temp)) {
-			return FALSE;
-		}
-	}
-	if ((n2 = nsibling(node))) {
-		if (temp != is_temp_node(n2)) {
-			return FALSE;
-		}
-		if (!validate_temp_node_tree(n2,temp)) {
+		if (!validate_temp_node_tree(child,temp)) {
 			return FALSE;
 		}
 	}
+
+	// All siblings of this node must be temp (or not).
+	NODE sib = nsibling(node);
+	if (sib) {
+		if (is_temp_node(sib) != temp) {
+			return FALSE;
+		}
+		if (!validate_temp_node_tree(sib,temp)) {
+			return FALSE;
+		}
+	}
+
 	return TRUE;
 }
 /*===================================
@@ -336,8 +338,6 @@ validate_temp_node_tree (NODE node, BOOLEAN temp)
 void
 set_temp_node (NODE node, BOOLEAN temp)
 {
-	NODE n2;
-
 	// Set this node as requested
 	//
 	// node	temp result
@@ -345,18 +345,21 @@ set_temp_node (NODE node, BOOLEAN temp)
 	// F    T    T (changed via XOR)
 	// T    F    F (changed via XOR)
 	// T    T    T (unchanged)
+	//
 	if (is_temp_node(node) != temp) {
 		nflag(node) ^= ND_TEMP;
 	}
 
 	// Propagate to child(ren)
-	if ((n2 = nchild(node))) {
-		set_temp_node(n2, temp);
+	NODE child = nchild(node);
+	if (child) {
+		set_temp_node(child, temp);
 	}
 
 	// Propagate to sibling(s)
-	if ((n2 = nsibling(node))) {
-		set_temp_node(n2, temp);
+	NODE sib = nsibling(node);
+	if (sib) {
+		set_temp_node(sib, temp);
 	}
 
 	// Validate that all sibling and child nodes are the same
