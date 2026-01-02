@@ -268,26 +268,28 @@ free_temp_node_tree (NODE node)
 	// It is an error to delete a node that is not marked TEMP
 	ASSERT(is_temp_node(node));
 
-	// It is an error to delete a node that has a positive refcnt
+	// It is an error to delete a node that has a non-zero refcnt
 	ASSERT(nrefcnt(node) == 0);
 
-	NODE n2;
+	// Recursively free child nodes if no longer referenced */
+	NODE child = nchild(node);
 
-	// Free child(ren) if no longer referenced
-	if ((n2 = nchild(node)) && nrefcnt(n2) == 0) {
-		nparent(n2) = NULL;
-		free_temp_node_tree(n2);
+	if (child && nrefcnt(child) == 0) {
+		nparent(child) = NULL;
+		free_temp_node_tree(child);
 		nchild(node) = NULL;
 	}
 
-	// Free sibling(s) if no longer referenced
-	if ((n2 = nsibling(node)) && nrefcnt(n2) == 0) {
-		nparent(n2) = NULL;
-		free_temp_node_tree(n2);
+	// Recursively free sibling nodes if no longer referenced */
+	NODE sib = nsibling(node);
+	if (sib && nrefcnt(sib) == 0) {
+		nparent(sib) = NULL;
+		free_temp_node_tree(sib);
 		nsibling(node) = NULL;
 	}
 
-	// Free node
+	// Free this node
+	nparent(node) = NULL;
 	free_node(node,"free_temp_node_tree");
 }
 /*===================================
@@ -369,22 +371,24 @@ free_nodes (NODE node)
 	// The strict checks used in free_temp_node_tree are not used
 	// here as they break too many assumptions.
 
-	NODE n2;
-
-	if (!node) return;
-
-	if ((n2 = nchild(node))) {
-		nparent(n2) = NULL;
-		free_nodes(n2);
+	/* Recursively free child nodes */
+	NODE child = nchild(node);
+	if (child) {
+		nparent(child) = NULL;
+		free_nodes(child);
 		nchild(node) = NULL;
 	}
 
-	if ((n2 = nsibling(node))) {
-		nparent(n2) = NULL;
-		free_nodes(n2);
+	/* Recusively free sibling nodes */
+	NODE sib = nsibling(node);
+	if (sib) {
+		nparent(sib) = NULL;
+		free_nodes(sib);
 		nsibling(node) = NULL;
 	}
 
+	/* Free this node */
+	nparent(node) = NULL;
 	free_node(node,"free_nodes");
 }
 /*==============================================================
