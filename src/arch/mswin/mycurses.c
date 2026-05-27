@@ -421,7 +421,8 @@ int wprintw(WINDOW *wp, ...)
 	
 	va_start(ap, wp);
 	fmtp = va_arg(ap, char *);
-	vsprintf(tmpbuf, fmtp, ap);
+	_vsnprintf(tmpbuf, sizeof(tmpbuf), fmtp, ap);
+	tmpbuf[sizeof(tmpbuf)-1] = 0;
 	waddstr(wp, tmpbuf);
 	va_end(ap);
 	return(0);
