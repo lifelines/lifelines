@@ -244,7 +244,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	 *  end in ext.  I.E. we need to check for name + ext and name
 	 */
 
-	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
+	if ((size_t)nlen + strlen(path) + (size_t)elen + 2 > sizeof(buf1)) return NULL;
 
 	/* for absolute and relative path names we first check the
 	 * pathname for validity relative to the current directory
@@ -575,20 +575,22 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 		}
 		/* check for ~name/... and resolve the ~name */
 		if ((sep = strchr(buffer,LLCHRDIRSEPARATOR))) {
+			INT userlen;
 			STRING username = strsave(buffer+1);
 			STRING homedir;
-			username[sep-buffer+1] = 0;
+			userlen = (INT)(sep-buffer-1);
+			username[userlen] = 0;
 			homedir = get_user_homedir(username);
 			strfree(&username);
 			if (homedir) {
 				STRING tmp=0;
-				if ((INT)strlen(homedir) + 1 + (INT)strlen(sep+1) > buflen) {
+				if ((INT)strlen(homedir) + 1 + (INT)strlen(sep) > buflen) {
 					return FALSE;
 				}
-				tmp = strsave(sep+1);
+				tmp = strsave(sep);
 				buffer[0] = 0;
 				llstrapps(buffer, buflen, utf8, homedir);
-				llstrapps(buffer, buflen, utf8, tmp+(sep-buffer+1));
+				llstrapps(buffer, buflen, utf8, tmp);
 				strfree(&tmp);
 				return TRUE;
 			}

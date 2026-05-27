@@ -30,19 +30,31 @@
 
 #include <process.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int w32system(const char *cp)
 {
-  char argbuf[256];
-  char *argv[32];
-  char *tp;
-  int argc;
+  char *argbuf = NULL;
+  char **argv = NULL;
+  char *tp = NULL;
+  int argc = 0;
+  int rval = -1;
+  size_t len;
+  size_t maxargv;
+
+  if (!cp) return -1;
+
+  len = strlen(cp);
+  maxargv = len + 2;
+  if ((argbuf = (char *)malloc(len + 1)) == NULL) goto done;
+  if ((argv = (char **)malloc(maxargv * sizeof(*argv))) == NULL) goto done;
 
   tp = argbuf;
-  argc = 0;
   while(*cp) {
     while(*cp && (*cp == ' ')) cp++;
     if(*cp) {
+      if ((size_t)argc + 1 >= maxargv) goto done;
       argv[argc++] = tp;
       if(*cp == '"') {
        cp++;
@@ -55,7 +67,13 @@ int w32system(const char *cp)
       *tp++ = '\0';
     }
   }
-  argv[argc] = NULL;
 
-  return(spawnvp(P_WAIT, argv[0], argv));
+  if (!argc) goto done;
+  argv[argc] = NULL;
+  rval = spawnvp(P_WAIT, argv[0], argv);
+
+done:
+  if (argv) free(argv);
+  if (argbuf) free(argbuf);
+  return rval;
 }

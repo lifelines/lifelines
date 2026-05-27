@@ -170,7 +170,12 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 		*pmsg = scratch;
 		return ERROR;
 	}
-	while (*p != '@') p++;
+	while (*p && *p != '@') p++;
+	if (*p == 0) {
+		snprintf(scratch, sizeof(scratch), _(qSrerinc), flineno);
+		*pmsg = scratch;
+		return ERROR;
+	}
 	p++;
 	if (*p == 0) {
 		snprintf(scratch, sizeof(scratch), _(qSrerinc), flineno);
@@ -776,4 +781,3 @@ write_fam_to_file (NODE fam, CNSTRING file)
 	join_fam(fam, refn, husb, wife, chil, body);
 	fclose(fp);
 }
-
