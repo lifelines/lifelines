@@ -75,7 +75,7 @@ llrpt_createnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*=======================================
  * llrpt_addnode -- Add a node to a GEDCOM tree
  * usage: addnode(NODE, NODE, NODE) -> VOID
- * args: (node being added, parent, previous child)
+ * args: (node being added, parent, previous sibling)
  *=====================================*/
 PVALUE
 llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -116,7 +116,6 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		return NULL;
 	}
 	prev = remove_node_and_delete_pvalue(&val);
-
 	if (prev) {
 		/* Check that previous sibling actually is child of new parent */
 		if (prnt != nparent(prev)) {
@@ -145,7 +144,7 @@ llrpt_addnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 /*============================================
  * llrpt_detachnode -- Remove node from GEDCOM tree
  * usage: detachnode(NODE) -> VOID
- * (This is the historic deletenode)
+ * (This is the historic deletenode which was renamed to better reflect behaviour)
  *==========================================*/
 PVALUE
 llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
@@ -173,13 +172,17 @@ llrpt_detachnode (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		else
 			nsibling(prev) = next;
 	}
+
 	/* unparent node, but ensure its locking is only releative to new parent */
 	dolock_node_in_cache(dead, FALSE);
 	nparent(dead) = NULL;
 	dolock_node_in_cache(dead, TRUE);
 	nsibling(dead) = NULL;
+
+	/* mark tree rooted at node as temp */
+	set_temp_node(dead, TRUE);
+
 	/* we don't actually delete the node, garbage collection must get it */
-	/* leak pvalue val ? */
 	return NULL;
 }
 /*======================================

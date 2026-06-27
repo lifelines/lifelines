@@ -3675,10 +3675,7 @@ hh is a hexadecimal character value
 </para>
 </glossdef></glossentry>
 
-<glossentry><glossterm>\ #</glossterm><glossdef>
-<!-- note above has extra space between \ and # - without this 
-     conversion to pdf gets confused openjade does some tex processing...
--->
+<glossentry><glossterm>\#</glossterm><glossdef>
 
 <para>
 represents the # character

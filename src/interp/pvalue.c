@@ -259,6 +259,7 @@ release_pvalue_contents (PVALUE val)
 				dolock_node_in_cache(node, FALSE);
 				--nrefcnt(node);
 				if (!nrefcnt(node) && is_temp_node(node)) {
+					nparent(node) = NULL;
 					free_temp_node_tree(node);
 				}
 			}

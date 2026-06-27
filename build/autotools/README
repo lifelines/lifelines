@@ -4,6 +4,6 @@ using whatever version of autotools and gettext are present on your
 system.
 
 The current set of helper tools are from:
-- automake-1.13.4
+- automake-1.16.1
 - autoconf-2.69
-- gettext-0.18.2
+- gettext-0.19.8.1

@@ -22,7 +22,7 @@
   </provides>
 
   <releases>
-    <release version="3.2.0" date="2019-09-17">
+    <release version="3.2.0" date="2026-06-27">
       <description>
         <p>Fixes documentation and report install issues.</p>
       </description>

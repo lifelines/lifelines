@@ -12,14 +12,18 @@ XXXX-YY-ZZ Matt Emmerton
 
 	This release includes full 64-bit support, without database migration!
 
-	Main Program:
+	General:
 	- Make LifeLines 64-bit clean
-	- Improve parser error for random out-of-palce number
+	- Massive cleanup of compiler warnings
+
+	Main Program:
+	- Improve parser error for random out-of-place number
 	- Allow empty block bodies in reports
 	- Allow fullname() to be used with an invalid INDI
 	- Make manip_name() UTF-8 aware (fixes to limit_width and name_string)
 	- Fix bug in j2date()
-	- Massive cleanup of compiler warnings
+	- Fix incorrect assertions in free_xlat()
+	- Fix handling of TEMP nodes
 
 	Infrastructure:
 	- Improve curses detection for wide character support

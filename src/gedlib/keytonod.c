@@ -1282,6 +1282,7 @@ clear_cel (CACHE cache, CACHEEL cel)
 
 	/* Clear all node tree info */
 	if (cnode(cel)) {
+		/* cel holds the original reference to the node */
 		NODE node = cnode(cel);
 		set_all_nodetree_to_cel(node, 0);
 		free_nodes(node);

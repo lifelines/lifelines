@@ -34,23 +34,24 @@ MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
 
 IMAGES =	listops.jpg
 
-MANUALS_static = index.html \
-		 index.sv.html \
-		 $(IMAGES)
+MANUALSSTATIC_en = index.html $(IMAGES)
+MANUALSSTATIC_sv = index.sv.html $(IMAGES)
+
+MANUALSSTATIC =	$(MANUALSSTATIC_en) $(MANUALSSTATIC_sv)
 
 ###################
 # Rules
 ###################
 
-# Install static files and generated manuals, but only when docs are built
+# Build all manuals by default.
 if BUILD_DOCS
-doc_DATA = $(MANUALS_static) $(MANUALS)
+doc_DATA = $(MANUALSSTATIC) $(MANUALS)
 else
 doc_DATA =
 endif
 
-# We distribute the above, plus sources.
-EXTRA_DIST = $(doc_DATA) $(MANUALSSRC)
+# But only distribute the English docs and all sources.
+EXTRA_DIST = $(MANUALSSTATIC_en) $(MANUALS_en) $(MANUALSSRC)
 
 # By default, documentation cannot be cleaned.
 CLEANFILES =

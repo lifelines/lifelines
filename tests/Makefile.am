@@ -1,6 +1,6 @@
 ## Makefile.am -- Run tests in the tests subdirectory
 
-EXTRA_DIST              = defs $(TESTS)
+EXTRA_DIST              = $(TESTS)
 MAINTAINERCLEANFILES    = Makefile.in
 SHELL                   = /bin/bash
 

@@ -259,15 +259,35 @@ create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
 void
 free_temp_node_tree (NODE node)
 {
+	// It is an error to pass a NULL node
+	ASSERT(node != NULL);
+
+	// It is an error to delete a node if it still has a parent
+	ASSERT(nparent(node) == NULL);
+
+	// It is an error to delete a node that is not marked TEMP
+	ASSERT(is_temp_node(node));
+
+	// It is an error to delete a node that has a positive refcnt
+	ASSERT(nrefcnt(node) == 0);
+
 	NODE n2;
-	if ((n2 = nchild(node))) {
+
+	// Free child(ren) if no longer referenced
+	if ((n2 = nchild(node)) && nrefcnt(n2) == 0) {
+		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
-		nchild(node) = 0;
+		nchild(node) = NULL;
 	}
-	if ((n2 = nsibling(node))) {
+
+	// Free sibling(s) if no longer referenced
+	if ((n2 = nsibling(node)) && nrefcnt(n2) == 0) {
+		nparent(n2) = NULL;
 		free_temp_node_tree(n2);
-		nsibling(node) = 0;
+		nsibling(node) = NULL;
 	}
+
+	// Free node
 	free_node(node,"free_temp_node_tree");
 }
 /*===================================
@@ -280,14 +300,65 @@ is_temp_node (NODE node)
 	return !!(nflag(node) & ND_TEMP);
 }
 /*===================================
+ * validate_temp_node_tree -- validate that node tree has consistent temp marking
+ * Created: 2022-12-30 (Matt Emmerton)
+ *=================================*/
+static BOOLEAN
+validate_temp_node_tree (NODE node, BOOLEAN temp)
+{
+	// All siblings / children of this node must be temp (or not).
+	// The parent can be different so it is not checked.
+	NODE n2;
+	if ((n2 = nchild(node))) {
+		if (is_temp_node(n2) != temp) {
+			return FALSE;
+		}
+		if (!validate_temp_node_tree(n2,temp)) {
+			return FALSE;
+		}
+	}
+	if ((n2 = nsibling(node))) {
+		if (temp != is_temp_node(n2)) {
+			return FALSE;
+		}
+		if (!validate_temp_node_tree(n2,temp)) {
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+/*===================================
  * set_temp_node -- make node temp (or not)
  * Created: 2003-02-04 (Perry Rapp)
  *=================================*/
 void
 set_temp_node (NODE node, BOOLEAN temp)
 {
-	if (is_temp_node(node) ^ temp)
+	NODE n2;
+
+	// Set this node as requested
+	//
+	// node	temp result
+	// F    F    F (unchanged)
+	// F    T    T (changed via XOR)
+	// T    F    F (changed via XOR)
+	// T    T    T (unchanged)
+	if (is_temp_node(node) != temp) {
 		nflag(node) ^= ND_TEMP;
+	}
+
+	// Propagate to child(ren)
+	if ((n2 = nchild(node))) {
+		set_temp_node(n2, temp);
+	}
+
+	// Propagate to sibling(s)
+	if ((n2 = nsibling(node))) {
+		set_temp_node(n2, temp);
+	}
+
+	// Validate that all sibling and child nodes are the same
+	ASSERT(validate_temp_node_tree(node,temp));
 }
 /*=====================================
  * free_nodes -- Free all NODEs in tree
@@ -295,13 +366,26 @@ set_temp_node (NODE node, BOOLEAN temp)
 void
 free_nodes (NODE node)
 {
-	NODE sib;
-	while (node) {
-		if (nchild(node)) free_nodes(nchild(node));
-		sib = nsibling(node);
-		free_node(node,"free_nodes");
-		node = sib;
+	// The strict checks used in free_temp_node_tree are not used
+	// here as they break too many assumptions.
+
+	NODE n2;
+
+	if (!node) return;
+
+	if ((n2 = nchild(node))) {
+		nparent(n2) = NULL;
+		free_nodes(n2);
+		nchild(node) = NULL;
 	}
+
+	if ((n2 = nsibling(node))) {
+		nparent(n2) = NULL;
+		free_nodes(n2);
+		nsibling(node) = NULL;
+	}
+
+	free_node(node,"free_nodes");
 }
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
