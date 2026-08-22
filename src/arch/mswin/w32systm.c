@@ -33,6 +33,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+static const char *copy_argument(const char *cp, char **tp)
+{
+  char delimiter = ' ';
+
+  if (*cp == '"') {
+    delimiter = '"';
+    cp++;
+  }
+
+  while (*cp && *cp != delimiter) {
+    *(*tp)++ = *cp++;
+  }
+  if (delimiter == '"' && *cp == '"') cp++;
+  *(*tp)++ = '\0';
+  return cp;
+}
+
 int w32system(const char *cp)
 {
   char *argbuf = NULL;
@@ -53,19 +70,10 @@ int w32system(const char *cp)
   tp = argbuf;
   while(*cp) {
     while(*cp && (*cp == ' ')) cp++;
-    if(*cp) {
-      if (argc + 1 >= maxargv) goto done;
-      argv[argc++] = tp;
-      if(*cp == '"') {
-       cp++;
-       while(*cp && (*cp != '"')) *tp++ = *cp++;
-       if(*cp == '"') cp++;
-      }
-      else {
-       while(*cp &&  (*cp != ' ')) *tp++ = *cp++;
-      }
-      *tp++ = '\0';
-    }
+    if (!*cp) break;
+    if (argc + 1 >= maxargv) goto done;
+    argv[argc++] = tp;
+    cp = copy_argument(cp, &tp);
   }
 
   if (argc == 0) goto done;

@@ -103,7 +103,8 @@ string_to_line (STRING *ps, INT *plev, STRING *pxref, STRING *ptag
 {
 	STRING s0, s;
 	*pmsg = NULL;
-	s0 = s = *ps;
+	s0 = *ps;
+	s = s0;
 	if (!s || *s == 0) return FALSE;
 	while (*s && *s != '\n') s++;
 	if (*s == 0)
@@ -131,7 +132,9 @@ buffer_to_line (STRING p, INT *plev, STRING *pxref
 	INT lev;
 	static char scratch[MAXLINELEN+40];
 
-	*pmsg = *pxref = *pval = 0;
+	*pmsg = 0;
+	*pxref = 0;
+	*pval = 0;
 	if (!p || *p == 0) {
 		snprintf(scratch, sizeof(scratch), _(qSreremp), flineno);
 		*pmsg = scratch;
@@ -313,7 +316,8 @@ do_first_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	*peof = FALSE;
 	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 	if (rc == DONE) {
-		*peof = ateof = TRUE;
+		ateof = TRUE;
+		*peof = TRUE;
 		*pmsg = _(qSfileof);
 		return NULL;
 	} else if (rc == ERROR)
@@ -359,14 +363,16 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 	*pmsg = NULL;
 	*peof = FALSE;
 	if (ateof) {
-		ateof = *peof = TRUE;
+		ateof = TRUE;
+		*peof = TRUE;
 		lahead = FALSE;
 		return NULL;
 	}
 	if (!lahead) {
 		rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 		if (rc == DONE) {
-			ateof = *peof = TRUE;
+			ateof = TRUE;
+			*peof = TRUE;
 			return NULL;
 		} else if (rc == ERROR)
 			return NULL;
@@ -377,7 +383,8 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 		*pmsg = _(qSrerwlv);
 		return NULL;
 	}
-	root = curnode = create_node(xref, tag, val, NULL);
+	root = create_node(xref, tag, val, NULL);
+	curnode = root;
 	bcode = OKAY;
 	rc = file_to_line(fp, ttm, &lev, &xref, &tag, &val, pmsg);
 	while (rc == OKAY) {
@@ -426,7 +433,8 @@ next_fp_to_node (FILE *fp, BOOLEAN list, XLAT ttm,
 		return NULL;
 	}
 	lahead = FALSE;
-	ateof = *peof = TRUE;
+	ateof = TRUE;
+	*peof = TRUE;
 	return root;
 }
 /*============================================
@@ -480,8 +488,10 @@ string_to_node (STRING str)
 	flineno = 0;
 	if (!string_to_line(&str, &lev, &xref, &tag, &val, &msg))
 		goto string_to_node_fail;
-	lev0 = curlev = lev;
-	root = curnode = create_node(xref, tag, val, NULL);
+	lev0 = lev;
+	curlev = lev;
+	root = create_node(xref, tag, val, NULL);
+	curnode = root;
 	while (string_to_line(&str, &lev, &xref, &tag, &val, &msg)) {
 		if (lev == curlev) {
 			node = create_node(xref, tag, val, nparent(curnode));

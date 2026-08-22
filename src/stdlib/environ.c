@@ -30,7 +30,7 @@
 
 #include "llstdlib.h"
 #ifdef WIN32
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 /*=======================================================
@@ -80,21 +80,27 @@ environ_determine_editor (HINT_PARAM_UNUSED INT program)
 #endif
 {
 	STRING e;
+	static char vi[] = "vi";
+#ifdef WIN32
+	static char notepad[] = "notepad.exe";
+#endif
 
-	e = (STRING) getenv("LLEDITOR");
-	if (ISNULL(e)) e = (STRING) getenv("ED");
-	if (ISNULL(e)) e = (STRING) getenv("EDITOR");
+	e = getenv("LLEDITOR");
+	if (ISNULL(e)) e = getenv("ED");
+	if (ISNULL(e)) e = getenv("EDITOR");
 #ifdef WIN32
 	/* win32 fallback is notepad for LifeLines */
-	if (program == PROGRAM_LIFELINES) {
-		if (ISNULL(e)) e = (STRING) "notepad.exe";
-	} else if (program == PROGRAM_BTEDIT) {
-		/* btedit requires a binary editor */
-		if (ISNULL(e)) e = (STRING) "vi";
+	if (ISNULL(e)) {
+		if (program == PROGRAM_LIFELINES) {
+			e = notepad;
+		} else if (program == PROGRAM_BTEDIT) {
+			/* btedit requires a binary editor */
+			e = vi;
+		}
 	}
 #else
 	/* unix fallback is vi for all programs */
-	if (ISNULL(e)) e = (STRING) "vi";
+	if (ISNULL(e)) e = vi;
 #endif
 	return e;
 }

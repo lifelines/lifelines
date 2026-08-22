@@ -839,8 +839,10 @@ static void check_for_resize (void)
 	if (CurrentScreenWidth != ConScreenBuffer.dwSize.X
 		|| CurrentScreenHeight != ConScreenBuffer.dwSize.Y) {
 		/* screen has been resized */
-		LINES = CurrentScreenHeight= ConScreenBuffer.dwSize.Y;
-		COLS = CurrentScreenWidth = ConScreenBuffer.dwSize.X;
+		CurrentScreenHeight = ConScreenBuffer.dwSize.Y;
+		LINES = CurrentScreenHeight;
+		CurrentScreenWidth = ConScreenBuffer.dwSize.X;
+		COLS = CurrentScreenWidth;
 		adjust_linescols();
 		console_resize_callback();
 	}
