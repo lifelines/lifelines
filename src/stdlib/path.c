@@ -19,7 +19,7 @@
 /*********************************************
  * local function prototypes
  *********************************************/
-static STRING get_user_homedir(STRING username);
+static STRING get_user_homedir(CNSTRING username);
 static INT zero_separate_path(STRING path);
 
 /*===========================================
@@ -603,7 +603,7 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
  *==========================================*/
 static STRING
 get_user_homedir (
-	STRING username)
+	CNSTRING username)
 {
 	STRING homedir = 0;
 #ifndef WIN32
