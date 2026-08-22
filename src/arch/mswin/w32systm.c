@@ -38,7 +38,7 @@ int w32system(const char *cp)
   char *argbuf = NULL;
   char **argv = NULL;
   char *tp = NULL;
-  int argc = 0;
+  size_t argc = 0;
   int rval = -1;
   size_t len;
   size_t maxargv;
@@ -54,7 +54,7 @@ int w32system(const char *cp)
   while(*cp) {
     while(*cp && (*cp == ' ')) cp++;
     if(*cp) {
-      if ((size_t)argc + 1 >= maxargv) goto done;
+      if (argc + 1 >= maxargv) goto done;
       argv[argc++] = tp;
       if(*cp == '"') {
        cp++;
@@ -68,7 +68,7 @@ int w32system(const char *cp)
     }
   }
 
-  if (!argc) goto done;
+  if (argc == 0) goto done;
   argv[argc] = NULL;
   rval = spawnvp(P_WAIT, argv[0], argv);
 
