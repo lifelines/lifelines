@@ -50,6 +50,12 @@ static const char *copy_argument(const char *cp, char **tp)
   return cp;
 }
 
+static const char *skip_spaces(const char *cp)
+{
+  while (*cp == ' ') cp++;
+  return cp;
+}
+
 int w32system(const char *cp)
 {
   char *argbuf = NULL;
@@ -68,12 +74,11 @@ int w32system(const char *cp)
   if ((argv = (char **)malloc(maxargv * sizeof(*argv))) == NULL) goto done;
 
   tp = argbuf;
-  while(*cp) {
-    while(*cp && (*cp == ' ')) cp++;
-    if (!*cp) break;
-    if (argc + 1 >= maxargv) goto done;
+  cp = skip_spaces(cp);
+  while (*cp) {
     argv[argc++] = tp;
     cp = copy_argument(cp, &tp);
+    cp = skip_spaces(cp);
   }
 
   if (argc == 0) goto done;

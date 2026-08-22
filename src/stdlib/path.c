@@ -603,11 +603,7 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
  *==========================================*/
 static STRING
 get_user_homedir (
-#ifdef WIN32
-	HINT_PARAM_UNUSED STRING username)
-#else
 	STRING username)
-#endif
 {
 	STRING homedir = 0;
 #ifndef WIN32
@@ -628,6 +624,7 @@ get_user_homedir (
 		endpwent();
 	}
 #else
+	(void)username;
 	/*
 	This could be implemented for NT+ class	using NetUserGetInfo,
 	but I doubt it's worth the trouble. Perry, 2005-11-25.

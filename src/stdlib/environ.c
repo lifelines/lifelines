@@ -85,9 +85,10 @@ environ_determine_editor (HINT_PARAM_UNUSED INT program)
 	static char notepad[] = "notepad.exe";
 #endif
 
-	e = getenv("LLEDITOR");
-	if (ISNULL(e)) e = getenv("ED");
-	if (ISNULL(e)) e = getenv("EDITOR");
+	/* getenv is required for compatibility with the supported legacy MSVC. */
+	e = getenv("LLEDITOR"); /* NOSONAR */
+	if (ISNULL(e)) e = getenv("ED"); /* NOSONAR */
+	if (ISNULL(e)) e = getenv("EDITOR"); /* NOSONAR */
 #ifdef WIN32
 	/* win32 fallback is notepad for LifeLines */
 	if (ISNULL(e)) {
