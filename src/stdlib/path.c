@@ -227,11 +227,12 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 {
 	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
-	INT nlen, elen;
+	INT nlen, elen, namelen;
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
 	nlen = strlen(name);
+	namelen = nlen;
 	if (ext && *ext) {
 		elen = strlen(ext);
 		if ((nlen > elen) && path_match(name+nlen-elen, ext)) {
@@ -287,18 +288,20 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		strcpy(q, p);
 		expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 		q += strlen(q);
-		if (q>buf2 && !is_dir_sep(q[-1])) {
+		if (q>buf2 && !is_dir_sep(q[-1]) && (size_t)(q-buf2)+1 < sizeof(buf2)) {
 			strcpy(q, LLSTRDIRSEPARATOR);
 			q++;
 		}
-		strcpy(q, name);
-		if (ext) {
-			nlen = strlen(buf2);
-			strcat(buf2, ext);
+		if ((size_t)(q-buf2) + (size_t)namelen + (size_t)elen < sizeof(buf2)) {
+			strcpy(q, name);
+			if (ext) {
+				nlen = strlen(buf2);
+				strcat(buf2, ext);
+				if (access(buf2, 0) == 0) return strsave(buf2);
+				buf2[nlen] = '\0'; /* remove extension */
+			}
 			if (access(buf2, 0) == 0) return strsave(buf2);
-			buf2[nlen] = '\0'; /* remove extension */
 		}
-		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
 		p++;
 	}
@@ -308,10 +311,11 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	strcpy(q, p);
 	expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 	q += strlen(q);
-	if (q>buf2 && !is_dir_sep(q[-1])) {
+	if (q>buf2 && !is_dir_sep(q[-1]) && (size_t)(q-buf2)+1 < sizeof(buf2)) {
 		strcpy(q, LLSTRDIRSEPARATOR);
 		q++;
 	}
+	if ((size_t)(q-buf2) + (size_t)namelen + (size_t)elen >= sizeof(buf2)) return NULL;
 	strcpy(q, name);
 	if (ext) strcat(q, ext);
 	return strsave(buf2);
