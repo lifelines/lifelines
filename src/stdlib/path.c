@@ -602,8 +602,7 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
  *  returns alloc'd value
  *==========================================*/
 static STRING
-get_user_homedir (
-	CNSTRING username)
+get_user_homedir (CNSTRING username)
 {
 	STRING homedir = 0;
 #ifndef WIN32
