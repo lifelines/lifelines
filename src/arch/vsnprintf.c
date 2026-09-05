@@ -17,7 +17,6 @@
 
 #include <sys/types.h>
 #include <stdio.h>
-#include "standard.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
@@ -39,9 +38,10 @@ vsnprintf(char *buffer, size_t count, const char *fmt, va_list args)
 }
 #else
 int
-vsnprintf(char *buffer, size_t count, HINT_PARAM_UNUSED const char *fmt,
-	HINT_PARAM_UNUSED va_list args)
+vsnprintf(char *buffer, size_t count, const char *fmt, va_list args)
 {
+	(void)fmt;
+	(void)args;
 	if (count)
 		buffer[0] = 0;
 	return -1;
