@@ -87,8 +87,10 @@ environ_determine_editor (HINT_PARAM_UNUSED INT program)
 
 	/* getenv is required for compatibility with the supported legacy MSVC. */
 	e = getenv("LLEDITOR"); /* NOSONAR */
-	if (ISNULL(e)) e = getenv("ED"); /* NOSONAR */
+	if (ISNULL(e)) e = getenv("VISUAL"); /* NOSONAR */
 	if (ISNULL(e)) e = getenv("EDITOR"); /* NOSONAR */
+	/* ED is not standard; kept last so existing profiles still work. */
+	if (ISNULL(e)) e = getenv("ED"); /* NOSONAR */
 #ifdef WIN32
 	/* win32 fallback is notepad for LifeLines */
 	if (ISNULL(e)) {
