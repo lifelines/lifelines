@@ -11,30 +11,39 @@
 #endif
 
 /*
- * vsnprintf.c -- substitute implementation of vsnprintf via vsprintf
-                  (but not a very good one)
+ * vsnprintf.c -- substitute implementation of vsnprintf
  */
 
 
 #include <sys/types.h>
 #include <stdio.h>
+#include "standard.h"
 
 #ifndef INCLUDED_STDARG_H
 #include <stdarg.h>
 #define INCLUDED_STDARG_H
 #endif
 
+#ifdef vsnprintf
+#undef vsnprintf
+#endif
+
 #if defined(HAVE__VSNPRINTF)
 int
 vsnprintf(char *buffer, size_t count, const char *fmt, va_list args)
 {
-	return _vsnprintf(buffer, count, fmt, args);
+	int retval = _vsnprintf(buffer, count, fmt, args);
+	if (count && (retval < 0 || (size_t)retval >= count))
+		buffer[count-1] = 0;
+	return retval;
 }
 #else
 int
-vsnprintf(char *buffer, size_t /*count*/, const char *fmt, va_list args)
+vsnprintf(char *buffer, size_t count, HINT_PARAM_UNUSED const char *fmt,
+	HINT_PARAM_UNUSED va_list args)
 {
-	return vsprintf(buffer, fmt, args);
+	if (count)
+		buffer[0] = 0;
+	return -1;
 }
 #endif
-

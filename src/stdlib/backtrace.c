@@ -64,7 +64,8 @@ dump_backtrace(FILE* fp)
 
 	for (int frameno=0; frameno<actual_num_frames; frameno++)
 	{
-		fprintf(fp,"%d: %p %s\n",frameno,frames[frameno],symbols[frameno]?symbols[frameno]:"(none)");
+		const char *symbol = (symbols && symbols[frameno]) ? symbols[frameno] : "(none)";
+		fprintf(fp,"%d: %p %s\n",frameno,frames[frameno],symbol);
 	}
 	fprintf(fp,"---------------\n");
 

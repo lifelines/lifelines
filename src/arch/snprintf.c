@@ -39,19 +39,33 @@
 #define INCLUDED_STDARG_H
 #endif
 
+#ifdef snprintf
+#undef snprintf
+#endif
+#ifdef vsnprintf
+#undef vsnprintf
+#endif
+
+#ifndef HAVE_VSNPRINTF
+int vsnprintf(char *buffer, size_t count, const char *fmt, va_list args);
+#endif
+
 /*
- * Implemented using vsprintf(), and ignoring the size restriction.
+ * Implemented using bounded formatting primitives.
  */
 int
 snprintf(char *str, size_t size, const char *format, ...)
 {
   int retval;
   va_list ap;
+  if (!size) return -1;
   va_start(ap, format);
 #if defined(HAVE__VSNPRINTF)
   retval = _vsnprintf(str, size, format, ap);
+  if (retval < 0 || (size_t)retval >= size)
+    str[size-1] = 0;
 #else
-  retval = vsprintf(str, format, ap);
+  retval = vsnprintf(str, size, format, ap);
 #endif
   va_end(ap);
   return retval;

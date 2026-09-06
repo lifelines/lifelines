@@ -19,7 +19,7 @@
 /*********************************************
  * local function prototypes
  *********************************************/
-static STRING get_user_homedir(STRING username);
+static STRING get_user_homedir(CNSTRING username);
 static INT zero_separate_path(STRING path);
 
 /*===========================================
@@ -97,9 +97,9 @@ BOOLEAN
 path_match (CNSTRING path1, CNSTRING path2)
 {
 #ifdef WIN32
-	return !stricmp((STRING)path1, (STRING)path2);
+	return !_stricmp(path1, path2);
 #else
-	return !strcmp((STRING)path1, (STRING)path2);
+	return !strcmp(path1, path2);
 #endif
 }
 /*=================================
@@ -227,11 +227,12 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 {
 	char buf1[MAXPATHLEN], buf2[MAXPATHLEN];
 	STRING p, q;
-	INT nlen, elen;
+	INT nlen, elen, namelen;
 
 	if (ISNULL(name)) return NULL;
 	if (ISNULL(path)) return strsave(name);
 	nlen = strlen(name);
+	namelen = nlen;
 	if (ext && *ext) {
 		elen = strlen(ext);
 		if ((nlen > elen) && path_match(name+nlen-elen, ext)) {
@@ -244,7 +245,7 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	 *  end in ext.  I.E. we need to check for name + ext and name
 	 */
 
-	if (nlen + strlen(path) + elen >= MAXLINELEN) return NULL;
+	if ((size_t)nlen + strlen(path) + (size_t)elen + 2 > sizeof(buf1)) return NULL;
 
 	/* for absolute and relative path names we first check the
 	 * pathname for validity relative to the current directory
@@ -287,18 +288,20 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 		strcpy(q, p);
 		expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 		q += strlen(q);
-		if (q>buf2 && !is_dir_sep(q[-1])) {
+		if (q>buf2 && !is_dir_sep(q[-1]) && (size_t)(q-buf2)+1 < sizeof(buf2)) {
 			strcpy(q, LLSTRDIRSEPARATOR);
 			q++;
 		}
-		strcpy(q, name);
-		if (ext) {
-			nlen = strlen(buf2);
-			strcat(buf2, ext);
+		if ((size_t)(q-buf2) + (size_t)namelen + (size_t)elen < sizeof(buf2)) {
+			strcpy(q, name);
+			if (ext) {
+				nlen = strlen(buf2);
+				strcat(buf2, ext);
+				if (access(buf2, 0) == 0) return strsave(buf2);
+				buf2[nlen] = '\0'; /* remove extension */
+			}
 			if (access(buf2, 0) == 0) return strsave(buf2);
-			buf2[nlen] = '\0'; /* remove extension */
 		}
-		if (access(buf2, 0) == 0) return strsave(buf2);
 		p += strlen(p);
 		p++;
 	}
@@ -308,10 +311,11 @@ filepath (CNSTRING name, CNSTRING mode, CNSTRING path, CNSTRING  ext, INT utf8)
 	strcpy(q, p);
 	expand_special_fname_chars(buf2, sizeof(buf2), utf8);
 	q += strlen(q);
-	if (q>buf2 && !is_dir_sep(q[-1])) {
+	if (q>buf2 && !is_dir_sep(q[-1]) && (size_t)(q-buf2)+1 < sizeof(buf2)) {
 		strcpy(q, LLSTRDIRSEPARATOR);
 		q++;
 	}
+	if ((size_t)(q-buf2) + (size_t)namelen + (size_t)elen >= sizeof(buf2)) return NULL;
 	strcpy(q, name);
 	if (ext) strcat(q, ext);
 	return strsave(buf2);
@@ -543,10 +547,10 @@ get_home (void)
 	STRING home;
 #ifdef WIN32
 	/* replace ~ with user's home directory, if present */
-	/* TODO: Or HOMEPATH, HOMESHARE, or USERPROFILE ? */
-	home = (STRING)getenv("APPDATA");
+	/* APPDATA preserves the historical behavior on supported Windows builds. */
+	home = getenv("APPDATA"); /* NOSONAR: keep compatibility with legacy MSVC. */
 #else
-	home = (STRING)getenv("HOME");
+	home = getenv("HOME");
 #endif
 	return home;
 }
@@ -556,43 +560,43 @@ get_home (void)
 BOOLEAN
 expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
 {
-	char * sep=0;
-	if (buffer[0]=='~') {
-		if (is_dir_sep(buffer[1])) {
-			STRING home = get_home();
-			if (home && home[0]) {
-				STRING tmp;
-				if ((INT)strlen(home) + 1 + (INT)strlen(buffer) > buflen) {
-					return FALSE;
-				}
-				tmp = strsave(buffer);
-				buffer[0] = 0;
-				llstrapps(buffer, buflen, utf8, home);
-				llstrapps(buffer, buflen, utf8, tmp+1);
-				strfree(&tmp);
-				return TRUE;
-			}
+	char *sep;
+	STRING tmp;
+
+	if (buffer[0] != '~') return TRUE;
+
+	if (is_dir_sep(buffer[1])) {
+		STRING home = get_home();
+		if (!home || !home[0]) return TRUE;
+		if ((INT)strlen(home) + 1 + (INT)strlen(buffer) > buflen) return FALSE;
+		tmp = strsave(buffer);
+		buffer[0] = 0;
+		llstrapps(buffer, buflen, utf8, home);
+		llstrapps(buffer, buflen, utf8, tmp+1);
+		strfree(&tmp);
+		return TRUE;
+	}
+
+	/* check for ~name/... and resolve the ~name */
+	sep = strchr(buffer, LLCHRDIRSEPARATOR);
+	if (sep) {
+		INT userlen = (INT)(sep-buffer-1);
+		STRING username = strsave(buffer+1);
+		STRING homedir;
+		username[userlen] = 0;
+		homedir = get_user_homedir(username);
+		strfree(&username);
+		if (!homedir) return TRUE;
+		if ((INT)strlen(homedir) + 1 + (INT)strlen(sep) > buflen) {
+			strfree(&homedir);
+			return FALSE;
 		}
-		/* check for ~name/... and resolve the ~name */
-		if ((sep = strchr(buffer,LLCHRDIRSEPARATOR))) {
-			STRING username = strsave(buffer+1);
-			STRING homedir;
-			username[sep-buffer+1] = 0;
-			homedir = get_user_homedir(username);
-			strfree(&username);
-			if (homedir) {
-				STRING tmp=0;
-				if ((INT)strlen(homedir) + 1 + (INT)strlen(sep+1) > buflen) {
-					return FALSE;
-				}
-				tmp = strsave(sep+1);
-				buffer[0] = 0;
-				llstrapps(buffer, buflen, utf8, homedir);
-				llstrapps(buffer, buflen, utf8, tmp+(sep-buffer+1));
-				strfree(&tmp);
-				return TRUE;
-			}
-		}
+		tmp = strsave(sep);
+		buffer[0] = 0;
+		llstrapps(buffer, buflen, utf8, homedir);
+		llstrapps(buffer, buflen, utf8, tmp);
+		strfree(&homedir);
+		strfree(&tmp);
 	}
 	return TRUE;
 }
@@ -602,30 +606,32 @@ expand_special_fname_chars (STRING buffer, INT buflen, INT utf8)
  *  returns alloc'd value
  *==========================================*/
 static STRING
-get_user_homedir (STRING username)
+get_user_homedir (CNSTRING username)
 {
+	STRING homedir = 0;
+#ifndef WIN32
 	struct passwd *pw=0;
-	if (!username) return 0;
-#ifdef WIN32
+	if (username) {
+		setpwent();
+		/* loop through the password file/database
+		 * to see if the string following ~ matches
+		 * a login name -
+		 */
+		while ((pw = getpwent())) {
+			if (eqstr(pw->pw_name,username)) {
+				/* found user in passwd file */
+				homedir = strsave(pw->pw_dir);
+				break;
+			}
+		}
+		endpwent();
+	}
+#else
+	(void)username;
 	/*
 	This could be implemented for NT+ class	using NetUserGetInfo,
 	but I doubt it's worth the trouble. Perry, 2005-11-25.
 	*/
-#else /* not WIN32 */
-	setpwent();
-	/* loop through the password file/database
-	 * to see if the string following ~ matches
-	 * a login name - 
-	 */
-	while ((pw = getpwent())) {
-		if (eqstr(pw->pw_name,username)) {
-			/* found user in passwd file */
-			STRING homedir = strsave(pw->pw_dir);
-			endpwent();
-			return homedir;
-		}
-	}
-	endpwent();
 #endif
-	return 0;
+	return homedir;
 }

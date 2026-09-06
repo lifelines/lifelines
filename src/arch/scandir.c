@@ -59,7 +59,7 @@ scandir (const char *dir, struct dirent ***namelist,
   WIN32_FIND_DATA file_data;
   HANDLE handle;
   int pos = 0;
-  struct dirent **names;
+  struct dirent **names = NULL;
   struct dirent cur;
   struct dirent *current = &cur;
   char *pattern;
@@ -88,6 +88,7 @@ scandir (const char *dir, struct dirent ***namelist,
       int rtn;
 
       strncpy(current->d_name, file_data.cFileName, sizeof(current->d_name));
+      current->d_name[sizeof(current->d_name) - 1] = 0;
 
       if (!select || select(current))
       {
@@ -113,6 +114,7 @@ scandir (const char *dir, struct dirent ***namelist,
   }
 
   free(pattern);
+  FindClose(handle);
 
   /* Now sort them */
   if (compar)

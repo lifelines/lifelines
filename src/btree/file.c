@@ -31,6 +31,7 @@
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "btreei.h"
+#include <limits.h>
 
 
 /*********************************************
@@ -86,6 +87,7 @@ addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC tran
 	FILE *fp = NULL;
 	STRING mem = 0, mem1 = 0;
 	INT siz;
+	size_t filesiz;
 	struct stat buf;
 	BOOLEAN result=FALSE;
 	ASSERT(bwrite(btree) == 1);
@@ -97,12 +99,14 @@ addfile_impl (BTREE btree, RKEY rkey, CNSTRING file, STRING mode, TRANSLFNC tran
 		result = TRUE;
 		goto end;
 	}
-	if ((mem = stdalloc(buf.st_size+1)) == NULL) goto end;
+	if (buf.st_size < 0 || buf.st_size > INT_MAX-1) goto end;
+	filesiz = (size_t)buf.st_size;
+	if ((mem = stdalloc((int)filesiz + 1)) == NULL) goto end;
 	/* WARNING: with WIN32 reading in TEXT mode, fewer characters
 	 * will be read than expected because of conversion of
 	 * \r\n to \n
 	 */
-	siz = fread(mem, 1, buf.st_size, fp);
+	siz = (INT)fread(mem, 1, filesiz, fp);
 	mem1 = mem;
 	if (ferror(fp)) goto end;
 	mem[siz]=0;

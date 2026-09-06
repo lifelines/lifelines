@@ -29,6 +29,9 @@
  *===========================================================*/
 
 #include "llstdlib.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 /*=======================================================
  * environ_determine_tempfile -- calculate temporary file
@@ -40,21 +43,17 @@ STRING
 environ_determine_tempfile (void)
 {
 #ifdef WIN32
-	STRING e;
-	/*
-	NB: This string must be modifiable - eg, on the stack.
-	Do not use a string constant, as the unix code below does.
-	*/
 	static char win32_tempfile[_MAX_PATH];
-	/* windows has per-user temporary directory, depending on version */
-	e = (STRING)getenv("TEMP");
-	if (ISNULL(e)) e = (STRING)getenv("TMP");
-	if (ISNULL(e)) e = "\\temp"; /* fallback is \temp */
-	strcpy(win32_tempfile, e);
-/* limit to 8.3 for edit.com, in case someone uses it */
-/* also use .txt extension, otherwise notepad SaveAs UTF-8 is problematic */
-	strcat(win32_tempfile, "\\lltXXXXX.txt");
-	mktemp(win32_tempfile);
+	char win32_tempdir[_MAX_PATH];
+	DWORD dirlen;
+	UINT fileid;
+
+	dirlen = GetTempPathA(sizeof(win32_tempdir), win32_tempdir);
+	if (dirlen == 0 || dirlen >= sizeof(win32_tempdir))
+		return 0;
+	fileid = GetTempFileNameA(win32_tempdir, "llt", 0, win32_tempfile);
+	if (!fileid)
+		return 0;
 	return win32_tempfile;
 #else
 	static char template[] = "/tmp/lltmpXXXXXX";
@@ -81,21 +80,30 @@ environ_determine_editor (HINT_PARAM_UNUSED INT program)
 #endif
 {
 	STRING e;
+	static char vi[] = "vi";
+#ifdef WIN32
+	static char notepad[] = "notepad.exe";
+#endif
 
-	e = (STRING) getenv("LLEDITOR");
-	if (ISNULL(e)) e = (STRING) getenv("ED");
-	if (ISNULL(e)) e = (STRING) getenv("EDITOR");
+	/* getenv is required for compatibility with the supported legacy MSVC. */
+	e = getenv("LLEDITOR"); /* NOSONAR */
+	if (ISNULL(e)) e = getenv("VISUAL"); /* NOSONAR */
+	if (ISNULL(e)) e = getenv("EDITOR"); /* NOSONAR */
+	/* ED is not standard; kept last so existing profiles still work. */
+	if (ISNULL(e)) e = getenv("ED"); /* NOSONAR */
 #ifdef WIN32
 	/* win32 fallback is notepad for LifeLines */
-	if (program == PROGRAM_LIFELINES) {
-		if (ISNULL(e)) e = (STRING) "notepad.exe";
-	} else if (program == PROGRAM_BTEDIT) {
-		/* btedit requires a binary editor */
-		if (ISNULL(e)) e = (STRING) "vi";
+	if (ISNULL(e)) {
+		if (program == PROGRAM_LIFELINES) {
+			e = notepad;
+		} else if (program == PROGRAM_BTEDIT) {
+			/* btedit requires a binary editor */
+			e = vi;
+		}
 	}
 #else
 	/* unix fallback is vi for all programs */
-	if (ISNULL(e)) e = (STRING) "vi";
+	if (ISNULL(e)) e = vi;
 #endif
 	return e;
 }
