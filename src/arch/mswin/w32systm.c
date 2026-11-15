@@ -30,32 +30,63 @@
 
 #include <process.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+static const char *copy_argument(const char *cp, char **tp)
+{
+  char delimiter = ' ';
+
+  if (*cp == '"') {
+    delimiter = '"';
+    cp++;
+  }
+
+  while (*cp && *cp != delimiter) {
+    *(*tp)++ = *cp++;
+  }
+  if (delimiter == '"' && *cp == '"') cp++;
+  *(*tp)++ = '\0';
+  return cp;
+}
+
+static const char *skip_spaces(const char *cp)
+{
+  while (*cp == ' ') cp++;
+  return cp;
+}
 
 int w32system(const char *cp)
 {
-  char argbuf[256];
-  char *argv[32];
-  char *tp;
-  int argc;
+  char *argbuf = NULL;
+  char **argv = NULL;
+  char *tp = NULL;
+  size_t argc = 0;
+  int rval = -1;
+  size_t len;
+  size_t maxargv;
+
+  if (!cp) return -1;
+
+  len = strlen(cp);
+  maxargv = len + 2;
+  if ((argbuf = (char *)malloc(len + 1)) == NULL) goto done;
+  if ((argv = (char **)malloc(maxargv * sizeof(*argv))) == NULL) goto done;
 
   tp = argbuf;
-  argc = 0;
-  while(*cp) {
-    while(*cp && (*cp == ' ')) cp++;
-    if(*cp) {
-      argv[argc++] = tp;
-      if(*cp == '"') {
-       cp++;
-       while(*cp && (*cp != '"')) *tp++ = *cp++;
-       if(*cp == '"') cp++;
-      }
-      else {
-       while(*cp &&  (*cp != ' ')) *tp++ = *cp++;
-      }
-      *tp++ = '\0';
-    }
+  cp = skip_spaces(cp);
+  while (*cp) {
+    argv[argc++] = tp;
+    cp = copy_argument(cp, &tp);
+    cp = skip_spaces(cp);
   }
-  argv[argc] = NULL;
 
-  return(spawnvp(P_WAIT, argv[0], argv));
+  if (argc == 0) goto done;
+  argv[argc] = NULL;
+  rval = spawnvp(P_WAIT, argv[0], argv);
+
+done:
+  if (argv) free(argv);
+  if (argbuf) free(argbuf);
+  return rval;
 }

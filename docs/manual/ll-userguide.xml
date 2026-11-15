@@ -1380,11 +1380,13 @@ SCREEN EDITORS AND ENVIRONMENT VARIABLES
      <application>LifeLines</application> is
      <application>vi</application>. (The <acronym>MS-Windows</acronym>
      version defaults instead to notepad.exe.) This can be overridden by the
-     <envar>ED</envar>, <envar>EDITOR</envar> or
-     <envar>LLEDITOR</envar> environment variables. For example, if
+     <envar>LLEDITOR</envar>, <envar>VISUAL</envar> or
+     <envar>EDITOR</envar> environment variables, which are consulted in
+     that order. The non-standard <envar>ED</envar> variable is still
+     checked after those three. For example, if
      you prefer the emacs screen editor, and if you use a bourne-compatible
      shell, you may add the line:
-     <userinput><envar>ED</envar>=<replaceable>emacs</replaceable></userinput>
+     <userinput><envar>VISUAL</envar>=<replaceable>emacs</replaceable></userinput>
      to your login profile file, and
      <application>LifeLines</application> will use
      <application>emacs</application> for editing.

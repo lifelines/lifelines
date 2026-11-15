@@ -83,8 +83,9 @@ add_path_files_to_proplist (CNSTRING path, SELECT_FNC selectfnc, LIST list)
 	dirs = (STRING)stdalloc(strlen(path)+2);
 	chop_path(path, dirs);
 	for (p=dirs; *p; p+=strlen(p)+1) {
-		add_dir_files_to_proplist(p, selectfnc, list);
+		ct += add_dir_files_to_proplist(p, selectfnc, list);
 	}
+	stdfree(dirs);
 	return ct;
 }
 /*===================================================

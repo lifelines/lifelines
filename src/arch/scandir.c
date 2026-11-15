@@ -59,7 +59,7 @@ scandir (const char *dir, struct dirent ***namelist,
   WIN32_FIND_DATA file_data;
   HANDLE handle;
   int pos = 0;
-  struct dirent **names;
+  struct dirent **names = NULL;
   struct dirent cur;
   struct dirent *current = &cur;
   char *pattern;
@@ -88,18 +88,21 @@ scandir (const char *dir, struct dirent ***namelist,
       int rtn;
 
       strncpy(current->d_name, file_data.cFileName, sizeof(current->d_name));
+      current->d_name[sizeof(current->d_name) - 1] = 0;
 
       if (!select || select(current))
       {
+          /* On allocation failure, fail the whole scan: a bare continue
+             would skip FindNextFile and retry the same entry forever. */
           struct dirent **newnames = realloc(names, sizeof(*names) * (pos + 1));
           if (NULL == newnames)
-              continue;
+              goto fail;
 
           names = newnames;
 
           struct dirent *copyentry = malloc(current->d_reclen);
           if (NULL == copyentry)
-             continue;
+             goto fail;
 
           memcpy(copyentry, current, current->d_reclen);
 
@@ -113,6 +116,7 @@ scandir (const char *dir, struct dirent ***namelist,
   }
 
   free(pattern);
+  FindClose(handle);
 
   /* Now sort them */
   if (compar)
@@ -120,6 +124,14 @@ scandir (const char *dir, struct dirent ***namelist,
 
   *namelist = names;
   return pos;
+
+fail:
+  while (pos > 0)
+    free(names[--pos]);
+  free(names);
+  free(pattern);
+  FindClose(handle);
+  return -1;
 }
 #else
 int
