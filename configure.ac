@@ -307,6 +307,11 @@ dnl **************************************************************
 echo Checking for replacement functions
 dnl Standard libraries
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+dnl The vsnprintf replacement wraps _vsnprintf; there is no safe fallback
+dnl without one, so stop here instead of failing later in the compile.
+if test "x$ac_cv_func_vsnprintf" != xyes && test "x$ac_cv_func__vsnprintf" != xyes; then
+  AC_MSG_ERROR([lifelines needs vsnprintf or _vsnprintf])
+fi
 dnl Standard libraries - internationalization / wchar
 AC_REPLACE_FUNCS( nl_langinfo wcslen )
 dnl Standard libraries - curses
