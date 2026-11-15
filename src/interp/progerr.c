@@ -37,7 +37,7 @@
 
 extern INT progerror;
 extern BOOLEAN progparsing;
-extern INT rpt_cancelled;
+extern BOOLEAN rpt_cancelled;
 
 /*********************************************
  * local types

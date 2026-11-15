@@ -51,7 +51,7 @@
  *********************************************/
 
 extern STRING qSwhtout;
-extern INT rpt_cancelled;
+extern BOOLEAN rpt_cancelled;
 
 /*********************************************
  * local enums & defines
