@@ -64,7 +64,7 @@ STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
 extern BOOLEAN writeable;
 extern STRING readpath,readpath_file;
 extern STRING illegal_char;
-extern INT opt_finnish, opt_mychar;
+extern BOOLEAN opt_finnish, opt_mychar;
 
 /*********************************************
  * local function prototypes

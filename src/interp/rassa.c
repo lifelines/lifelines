@@ -51,7 +51,7 @@
  *********************************************/
 
 extern STRING qSwhtout;
-extern INT rpt_cancelled;
+extern BOOLEAN rpt_cancelled;
 
 /*********************************************
  * local enums & defines
@@ -494,13 +494,14 @@ poutput (STRING str, BOOLEAN *eflg)
 			bufptr = (STRING)linebuffer;
 		}
 		linebuflen += len;
-		while ((c = *bufptr++ = *str++)) {
+		while ((c = *str++)) {
+			*bufptr++ = c;
 			if (c == '\n')
 				curcol = 1;
 			else
 				curcol++;
 		}
-		--bufptr;
+		*bufptr = '\0';
 		goto exit_poutput;
 	case PAGEMODE:
 		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
